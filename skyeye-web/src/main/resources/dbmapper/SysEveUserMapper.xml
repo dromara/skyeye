@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.authority.dao.SysEveUserDao">
+	
+	<select id="querySysUserList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNumEnc,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			CASE WHEN a.user_sex = '0' THEN '保密' WHEN a.user_sex = '1' THEN '男' WHEN a.user_sex = '2' THEN '女' ELSE '保密' END sexName,
+			a.user_lock userLock,
+			(SELECT c.user_name FROM sys_eve_user c WHERE a.creater = c.id) createName,
+			group_concat(distinct b.name) roleName,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_user a
+			LEFT JOIN sys_eve_role b ON INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.id, ','))
+		WHERE 1 = 1
+		<if test="userName != '' and userName != null">
+			a.user_name like '%${userName}%'
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySysUserLockStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_lock userLock
+		FROM
+			sys_eve_user a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editSysUserLockStateToLockById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			user_lock = #{userLock}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSysUserLockStateToUnLockById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			user_lock = #{userLock}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysUserMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNumEnc,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.user_sex userSex
+		FROM
+			sys_eve_user a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editSysUserMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			user_name = #{userName},
+			user_idcard = #{userIdCard},
+			user_sex = #{userSex},
+			<if test="userPhoto != '' and userPhoto != null">
+				user_photo = #{userPhoto},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

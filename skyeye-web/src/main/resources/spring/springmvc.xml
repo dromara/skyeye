@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd  
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd  
+        http://code.alibabatech.com/schema/dubbo 
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+    
+    <context:property-placeholder location="classpath:resource/resource.properties"/>
+    
+    <!-- 配置文件上传解析器 -->  
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+        <!-- 设定默认编码 -->  
+        <property name="defaultEncoding" value="UTF-8"></property>  
+        <!-- 设定文件上传的最大值5MB，5*1024*1024 -->  
+        <property name="maxUploadSize" value="5242880"></property>  
+    </bean> 
+
+	<!-- 配置包扫描器，以便注册带有@Controller、@Service、@repository、@Component等注解的类成为spring的bean -->
+	<context:component-scan base-package="com.skyeye.*.controller" />
+	
+	<!-- 配置资源映射 -->  
+    <mvc:resources location="/assets/" mapping="/assets/**"></mvc:resources>  
+    <mvc:resources location="/html/" mapping="/html/**"></mvc:resources>  
+    <mvc:resources location="/js/" mapping="/js/**"></mvc:resources> 
+    <mvc:resources location="/tpl/" mapping="/tpl/**"></mvc:resources> 
+    
+    <mvc:interceptors>
+		<!-- 多个拦截器，按顺序执行 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/post/**" /> <!-- 表示拦截所有的url包括子url路径>>拦截ajax请求 -->
+			<bean class="com.skyeye.common.interceptor.HandlerInterceptorMain" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	<!-- 配置注解驱动 -->
+	<mvc:annotation-driven />
+	<!-- 视图解析器 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+</beans>  
