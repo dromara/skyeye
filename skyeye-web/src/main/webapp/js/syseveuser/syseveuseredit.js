@@ -62,7 +62,7 @@ layui.config({
 		 			}
 		 		});
 		 		form.render();
-		 	    form.on('submit(formEditMenu)', function (data) {
+		 	    form.on('submit(formEditUser)', function (data) {
 //		 	    	console.log(data.elem);
 		 	    	//表单验证
 		 	        if (winui.verifyForm(data.elem)) {

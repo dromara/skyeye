@@ -22,5 +22,10 @@
 		<property id="userName" name="userName" ref="required" var="用户名" />
 		<property id="userPhoto" name="userPhoto" ref="required" var="头像" />
 	</url>
+	<url id="sys006" path="/post/SysEveMenuController/querySysMenuList" val="获取菜单列表">
+		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="menuName" name="menuName" ref="" var="菜单名称"/>
+	</url>
 	
 </controller>

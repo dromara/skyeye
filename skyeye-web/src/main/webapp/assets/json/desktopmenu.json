@@ -48,7 +48,7 @@
     },
     {
       "title": "系统菜单",
-      "pageURL": "../../menu/list_iframe.html",
+      "pageURL": "../../tpl/sysevemenu/sysevemenulist.html",
       "name": "系统菜单",
       "icon": "fa-navicon",
       "openType": 2,
@@ -70,7 +70,7 @@
     },
     {
       "title": "更新日志",
-      "pageURL": "../../systemlog/index",
+      "pageURL": "../../systemlog/index.html",
       "name": "更新日志",
       "icon": "fa-clock-o",
       "openType": 1,

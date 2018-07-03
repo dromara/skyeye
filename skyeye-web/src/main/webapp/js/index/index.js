@@ -155,7 +155,7 @@
                     }
                     $.ajax({
                         type: 'get',
-                        url: 'error/' + page,
+                        url: reqBasePath + 'tpl/sysmessage/' + page,
                         async: false,
                         success: function (data) {
                             content = data;

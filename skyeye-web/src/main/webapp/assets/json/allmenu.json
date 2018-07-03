@@ -34,7 +34,7 @@
     },
     {
       "title": "更新日志",
-      "pageURL": "../../systemlog/index",
+      "pageURL": "../../systemlog/index.html",
       "name": "更新日志",
       "icon": "fa-clock-o",
       "openType": 1,
