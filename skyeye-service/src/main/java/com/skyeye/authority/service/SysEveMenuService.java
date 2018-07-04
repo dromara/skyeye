@@ -7,4 +7,6 @@ public interface SysEveMenuService {
 
 	public void querySysMenuList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void insertSysMenuMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

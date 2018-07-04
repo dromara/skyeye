@@ -9,4 +9,6 @@ public interface SysEveMenuDao {
 
 	public List<Map<String, Object>> querySysMenuList(Map<String, Object> map, PageBounds pageBounds) throws Exception;
 
+	public void insertSysMenuMation(Map<String, Object> map) throws Exception;
+
 }

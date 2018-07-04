@@ -3,18 +3,20 @@ var rowId = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'form'], function (exports) {
 	
 	winui.renderColor();
 	
 	var $ = layui.$,
+	form = layui.form,
 	table = layui.table;
 	//表格渲染
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
+	    method: 'post',
 	    url: reqBasePath + 'sys001',
-	    where:{userName:""},
+	    where:{userCode:$("#userCode").val(), userName:$("#userName").val()},
 	    even:true,  //隔行变色
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -32,7 +34,17 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'userIdCard', title: '身份证', width: 160 },
-	        { field: 'sexName', title: '性别', width: 60 },
+	        { field: 'sexName', title: '性别', width: 60, templet: function(d){
+	        	if(d.sexName == '0'){
+	        		return "保密";
+	        	}else if(d.sexName == '1'){
+	        		return "男";
+	        	}else if(d.sexName == '2'){
+	        		return "女";
+	        	}else{
+	        		return "参数错误";
+	        	}
+	        }},
 	        { field: 'userLock', title: '锁定', width: 60, templet: function(d){
 	        	if(d.userLock == 0){
 	        		return '否';
@@ -48,6 +60,7 @@ layui.config({
 	        { title: '操作', fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
 	    ]]
 	});
+	
 	table.on('tool(messageTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
         var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值
@@ -60,12 +73,22 @@ layui.config({
         }
     });
 	
+	//搜索表单
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+    	//表单验证
+        if (winui.verifyForm(data.elem)) {
+        	loadTable();
+        }
+        return false;
+	});
+	
 	//锁定
 	function lock(data){
 		AjaxPostUtil.request({url:reqBasePath + "sys002", params:{rowId:data.id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				top.winui.window.msg("已成功锁定，该账号目前无法登录。", {icon: 1,time: 2000});
-				table.reload("messageTable", {});
+				loadTable();
 			}else{
 				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 			}
@@ -77,7 +100,7 @@ layui.config({
 		AjaxPostUtil.request({url:reqBasePath + "sys003", params:{rowId:data.id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				top.winui.window.msg("账号恢复正常。", {icon: 1,time: 2000});
-				table.reload("messageTable", {});
+				loadTable();
 			}else{
 				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 			}
@@ -94,7 +117,7 @@ layui.config({
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
-                	table.reload("messageTable", {userName:""});
+                	loadTable();
                 } else if (refreshCode == '-9999') {
                 	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
                 }
@@ -102,7 +125,12 @@ layui.config({
 	}
 	
     $("body").on("click", "#reloadTable", function(){
-    	table.reload("messageTable", {userName:""});
+    	loadTable();
     });
+    
+    function loadTable(){
+    	table.reload("messageTable", {where:{userCode:$("#userCode").val(), userName:$("#userName").val()}});
+    }
+    
     exports('syseveuserlist', {});
 });

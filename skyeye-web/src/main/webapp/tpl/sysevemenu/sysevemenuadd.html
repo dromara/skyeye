@@ -9,8 +9,76 @@
 </head>
 <body>
 	<div style="width:600px;margin:0 auto;padding-top:20px;">
-	    <form class="layui-form" action="" id="showForm">
-	        
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">菜单名称</label>
+	            <div class="layui-input-block">
+	                <input type="text" id="menuName" name="menuName" win-verify="required" placeholder="请输入菜单名称" class="layui-input" />
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">窗口标题</label>
+	            <div class="layui-input-block">
+	                <input type="text" id="menuTitle" name="menuTitle" win-verify="required" placeholder="请输入菜单名称" class="layui-input" />
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">菜单图标</label>
+	            <div class="layui-input-block">
+	                <input type="text" id="menuIcon" name="menuIcon" win-verify="required" placeholder="请输入图标src或者class" class="layui-input" />
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">菜单地址</label>
+	            <div class="layui-input-block">
+	                <input type="text" id="menuUrl" name="menuUrl" win-verify="required" placeholder="请输入菜单地址" class="layui-input" />
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">菜单级别</label>
+	            <div class="layui-input-block winui-radio">
+	                <input type="radio" name="menuLevel" value="1" title="创世菜单" lay-filter="menuLevel" checked/>
+	                <input type="radio" name="menuLevel" value="2" title="子菜单" lay-filter="menuLevel" />
+	            </div>
+	        </div>
+	        <div class="layui-form-item" id="parentIdBox">
+	            <label class="layui-form-label">上级菜单</label>
+	            <div class="layui-input-block">
+	                <select id="parentIdOne" name="parentIdOne" >
+	                    <option value="0">请选择上级菜单</option>
+	                    <option value="1">&#x4E2A;&#x6027;&#x5316;</option>
+	                    <option value="3">&#x6253;&#x8D4F;&#x4F5C;&#x8005;</option>
+	                    <option value="4">&#x57FA;&#x672C;&#x8BF4;&#x660E;</option>
+	                    <option value="23">&#x7CFB;&#x7EDF;&#x8BBE;&#x7F6E;</option>
+	                    <option value="27">Font Awesome&#x56FE;&#x6807;&#x5C55;&#x793A;</option>
+	                    <option value="43">Font Awesome&#x7B2C;&#x4E09;&#x65B9;LOGO</option>
+	                    <option value="53">&#x81EA;&#x5B9A;&#x4E49;&#x56FE;&#x7247;&#x83DC;&#x5355;</option>
+	                    <option value="60">&#x7CFB;&#x7EDF;&#x65E5;&#x5FD7;</option>
+	                    <option value="62">&#x70B9;&#x8D5E;</option>
+	                    <option value="63">123</option>
+	                    <option value="66">&#x4F5C;&#x8005;&#x535A;&#x5BA2;</option>
+	                </select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">菜单类型</label>
+	            <div class="layui-input-block winui-radio">
+	                <input type="radio" name="menuType" value="html" title="HTML" lay-filter="menuType" checked/>
+	                <input type="radio" name="menuType" value="iframe" title="Iframe" lay-filter="menuType" />
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">系统菜单</label>
+	            <div class="layui-input-block winui-switch">
+	                <input id="menuSysType" name="menuSysType" lay-filter="isNecessary" type="checkbox" lay-skin="switch" lay-text="是|否" value="false" />
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" lay-submit lay-filter="formAddMenu">确定</button>
+	                <button class="winui-btn" id="cancle">取消</button>
+	            </div>
+	        </div>
 	    </form>
 	</div>
 	<script src="../../assets/lib/layui/layui.js"></script>

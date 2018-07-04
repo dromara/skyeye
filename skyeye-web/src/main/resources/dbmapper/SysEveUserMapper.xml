@@ -10,17 +10,19 @@
 			a.user_name userName,
 			a.user_photo userPhoto,
 			a.user_idcard userIdCard,
-			CASE WHEN a.user_sex = '0' THEN '保密' WHEN a.user_sex = '1' THEN '男' WHEN a.user_sex = '2' THEN '女' ELSE '保密' END sexName,
+			a.user_sex sexName,
 			a.user_lock userLock,
 			(SELECT c.user_name FROM sys_eve_user c WHERE a.creater = c.id) createName,
-			group_concat(distinct b.name) roleName,
+			(SELECT group_concat(distinct b.name) FROM sys_eve_role b WHERE INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.id, ','))) roleName,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			sys_eve_user a
-			LEFT JOIN sys_eve_role b ON INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.id, ','))
 		WHERE 1 = 1
+		<if test="userCode != '' and userCode != null">
+			AND a.user_code like '%${userCode}%'
+		</if>
 		<if test="userName != '' and userName != null">
-			a.user_name like '%${userName}%'
+			AND a.user_name like '%${userName}%'
 		</if>
 		ORDER BY a.create_time DESC
 	</select>

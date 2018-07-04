@@ -19,10 +19,19 @@
 			LEFT JOIN sys_eve_user b ON a.creater = a.id
 		WHERE 1=1
 		<if test="menuName != '' and menuName != null">
-			a.menu_name like '%${menuName}%'
+			AND a.menu_name LIKE '%${menuName}%'
+		</if>
+		<if test="menuUrl != '' and menuUrl != null">
+			AND a.menu_url LIKE '%${menuUrl}%'
 		</if>
 		ORDER BY a.create_time DESC
 	</select>
 	
+	<insert id="insertSysMenuMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_menu 
+	     (id, menu_name, title_name, menu_icon, menu_url, menu_type, menu_sys_type, menu_parent_id, menu_level, open_type, creater, create_time)
+	     VALUES
+	     (#{id}, #{menuName}, #{titleName}, #{menuIcon}, #{menuUrl}, #{menuType}, #{menuSysType}, #{parentId}, #{menuLevel}, #{openType}, #{createId}, #{createTime})
+	</insert>
 	
 </mapper>

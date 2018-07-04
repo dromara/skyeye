@@ -56,5 +56,17 @@ public class Constants {
 	 */
 	public static final String SYS_USER_LOCK_STATE_ISUNLOCK = "0";//未锁定
 	public static final String SYS_USER_LOCK_STATE_ISLOCK = "1";//锁定
+	
+	/**
+	 * 菜单类型
+	 */
+	public static final String SYS_MENU_TYPE_IS_IFRAME = "iframe";
+	public static final String SYS_MENU_TYPE_IS_HTML = "html";
+	
+	/**
+	 * 菜单链接打开类型，父菜单默认为1.1：打开iframe，2：打开html。
+	 */
+	public static final String SYS_MENU_OPEN_TYPE_IS_IFRAME = "1";
+	public static final String SYS_MENU_OPEN_TYPE_IS_HTML = "2";
 
 }
