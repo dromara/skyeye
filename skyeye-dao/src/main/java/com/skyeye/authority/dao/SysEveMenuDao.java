@@ -11,4 +11,14 @@ public interface SysEveMenuDao {
 
 	public void insertSysMenuMation(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> querySysMenuMationToEditById(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> querySysMenuMationBySimpleLevel(Map<String, Object> map) throws Exception;
+
+	public void editSysMenuMationById(Map<String, Object> map) throws Exception;
+
+	public void deleteSysMenuChildMationById(Map<String, Object> map) throws Exception;
+
+	public void deleteSysMenuMationById(Map<String, Object> map) throws Exception;
+
 }

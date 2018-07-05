@@ -9,4 +9,12 @@ public interface SysEveMenuService {
 
 	public void insertSysMenuMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void querySysMenuMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void querySysMenuMationBySimpleLevel(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editSysMenuMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void deleteSysMenuMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

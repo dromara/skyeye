@@ -15,7 +15,7 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/syseveuser/syseveusereditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
-		 		hdb.registerHelper("compare1", function(v1,options){
+		 		hdb.registerHelper("compare1", function(v1, options){
 					if(isNull(v1)){
 						return path + "assets/img/uploadPic.png";
 					}else{

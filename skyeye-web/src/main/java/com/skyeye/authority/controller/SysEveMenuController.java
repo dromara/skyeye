@@ -47,4 +47,68 @@ public class SysEveMenuController {
 		sysEveMenuService.insertSysMenuMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysMenuMationBySimpleLevel
+	     * @Description: 查看同级菜单
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveMenuController/querySysMenuMationBySimpleLevel")
+	@ResponseBody
+	public void querySysMenuMationBySimpleLevel(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveMenuService.querySysMenuMationBySimpleLevel(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: querySysMenuMationToEditById
+	     * @Description: 编辑菜单时进行信息回显
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveMenuController/querySysMenuMationToEditById")
+	@ResponseBody
+	public void querySysMenuMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveMenuService.querySysMenuMationToEditById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editSysMenuMationById
+	     * @Description: 编辑菜单信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveMenuController/editSysMenuMationById")
+	@ResponseBody
+	public void editSysMenuMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveMenuService.editSysMenuMationById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: deleteSysMenuMationById
+	     * @Description: 删除菜单信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveMenuController/deleteSysMenuMationById")
+	@ResponseBody
+	public void deleteSysMenuMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveMenuService.deleteSysMenuMationById(inputObject, outputObject);
+	}
+	
 }

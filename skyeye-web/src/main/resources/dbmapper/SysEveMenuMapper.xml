@@ -13,10 +13,13 @@
 			a.menu_sys_type menuSysType,
 			a.menu_parent_id parentId,
 			a.menu_url menuUrl,
-			CONVERT(a.create_time, char) createTime
+			CONVERT(a.create_time, char) createTime,
+			b.user_name userName,
+			IFNULL(GROUP_CONCAT(c.menu_name separator '->'), '创世菜单') menuParentName
 		FROM
 			sys_eve_menu a
-			LEFT JOIN sys_eve_user b ON a.creater = a.id
+			LEFT JOIN sys_eve_user b ON a.creater = b.id
+			LEFT JOIN sys_eve_menu c ON INSTR(CONCAT(',', a.menu_parent_id, ','), CONCAT(',', c.id, ','))
 		WHERE 1=1
 		<if test="menuName != '' and menuName != null">
 			AND a.menu_name LIKE '%${menuName}%'
@@ -24,6 +27,7 @@
 		<if test="menuUrl != '' and menuUrl != null">
 			AND a.menu_url LIKE '%${menuUrl}%'
 		</if>
+		GROUP BY a.id
 		ORDER BY a.create_time DESC
 	</select>
 	
@@ -33,5 +37,88 @@
 	     VALUES
 	     (#{id}, #{menuName}, #{titleName}, #{menuIcon}, #{menuUrl}, #{menuType}, #{menuSysType}, #{parentId}, #{menuLevel}, #{openType}, #{createId}, #{createTime})
 	</insert>
+	
+	<select id="querySysMenuMationBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.menu_name menuName,
+			a.menu_level menuLevel
+		FROM
+			sys_eve_menu a
+			<if test="parentId != &quot;0&quot;">
+				,sys_eve_menu b
+			</if>
+		WHERE INSTR(CONCAT(',', a.menu_parent_id, ','), CONCAT(',', #{parentId}, ','))
+		<if test="parentId != &quot;0&quot;">
+			AND b.id = #{parentId}
+			AND (b.menu_level + 1) = a.menu_level
+		</if>
+	</select>
+	
+	<select id="querySysMenuMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.menu_name menuName,
+			a.menu_icon menuIcon,
+			a.title_name titleName,
+			a.menu_level menuLevel,
+			a.menu_type menuType,
+			a.menu_sys_type menuSysType,
+			a.menu_parent_id parentId,
+			a.menu_url menuUrl
+		FROM
+			sys_eve_menu a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editSysMenuMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_menu
+		<set>
+			<if test="menuName != '' and menuName != null">
+				menu_name = #{menuName},
+			</if>
+			<if test="menuIcon != '' and menuIcon != null">
+				menu_icon = #{menuIcon},
+			</if>
+			<if test="titleName != '' and titleName != null">
+				title_name = #{titleName},
+			</if>
+			<if test="menuLevel != '' and menuLevel != null">
+				menu_level = #{menuLevel},
+			</if>
+			<if test="menuType != '' and menuType != null">
+				menu_type = #{menuType},
+			</if>
+			<if test="menuSysType != '' and menuSysType != null">
+				menu_sys_type = #{menuSysType},
+			</if>
+			<if test="parentId != '' and parentId != null">
+				menu_parent_id = #{parentId},
+			</if>
+			<if test="menuUrl != '' and menuUrl != null">
+				menu_url = #{menuUrl},
+			</if>
+			<if test="openType != '' and openType != null">
+				open_type = #{openType},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteSysMenuChildMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_menu
+		WHERE
+			INSTR(CONCAT(',', menu_parent_id, ','), CONCAT(',', #{id}, ','))
+	</delete>
+	
+	<delete id="deleteSysMenuMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_menu
+		WHERE
+			id = #{id}
+	</delete>
 	
 </mapper>

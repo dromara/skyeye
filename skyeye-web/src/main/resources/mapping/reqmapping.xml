@@ -38,5 +38,24 @@
 		<property id="menuSysType" name="menuSysType" ref="required,num" var="是否为系统菜单"/>
 		<property id="parentId" name="parentId" ref="required" var="菜单父ID"/>
 	</url>
+	<url id="sys008" path="/post/SysEveMenuController/querySysMenuMationToEditById" val="编辑菜单时进行信息回显">
+		<property id="rowId" name="id" ref="required" var="菜单ID" />
+	</url>
+	<url id="sys009" path="/post/SysEveMenuController/querySysMenuMationBySimpleLevel" val="查看同级菜单">
+		<property id="parentId" name="parentId" ref="required" var="父菜单ID" />
+	</url>
+	<url id="sys010" path="/post/SysEveMenuController/editSysMenuMationById" val="编辑菜单">
+		<property id="menuName" name="menuName" ref="required" var="菜单名称"/>
+		<property id="titleName" name="titleName" ref="required" var="标题名称" />
+		<property id="menuIcon" name="menuIcon" ref="required" var="菜单logo"/>
+		<property id="menuUrl" name="menuUrl" ref="required" var="菜单链接"/>
+		<property id="menuType" name="menuType" ref="required" var="菜单类型"/>
+		<property id="menuSysType" name="menuSysType" ref="required,num" var="是否为系统菜单"/>
+		<property id="parentId" name="parentId" ref="required" var="菜单父ID"/>
+		<property id="rowId" name="id" ref="required" var="菜单ID" />
+	</url>
+	<url id="sys011" path="/post/SysEveMenuController/deleteSysMenuMationById" val="删除菜单信息">
+		<property id="rowId" name="id" ref="required" var="菜单ID" />
+	</url>
 	
 </controller>

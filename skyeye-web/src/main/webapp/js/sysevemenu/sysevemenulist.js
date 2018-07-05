@@ -26,15 +26,16 @@ layui.config({
 	        { field: 'menuName', title: '菜单名称', width: 120 },
 	        { field: 'menuIcon', title: '图标码', width: 120 },
 	        { field: 'titleName', title: '标题名称', width: 120 },
-	        { field: 'menuLevel', title: '菜单级别', width: 120, templet: function(d){
+	        { field: 'menuLevel', title: '菜单级别', width: 180, templet: function(d){
 	        	if(d.parentId == '0'){
 	        		return "创世菜单";
 	        	}else{
 	        		return "子菜单-->" + d.menuLevel + "级子菜单";
 	        	}
 	        }},
+	        { field: 'menuParentName', title: '父菜单', width: 100 },
 	        { field: 'menuType', title: '菜单类型', width: 100 },
-	        { field: 'menuUrl', title: '菜单链接', width: 100 },
+	        { field: 'menuUrl', title: '菜单链接', width: 160 },
 	        { field: 'menuSysType', title: '系统菜单', width: 100, templet: function(d){
 	        	if(d.menuSysType == 2){
 	        		return '否';
@@ -45,6 +46,7 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'userName', title: '创建人', width: 150 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
 	    ]]
 	});
@@ -53,7 +55,7 @@ layui.config({
         var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值
         if (layEvent === 'del') { //删除
-        	del(data);
+        	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
         }
@@ -70,17 +72,29 @@ layui.config({
 	});
 	
 	//删除
-	function del(data){
-		
+	function del(data, obj){
+		var msg = obj ? '确认删除菜单【' + obj.data.menuName + '】吗？' : '确认删除选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '删除系统菜单' }, function (index) {
+			layer.close(index);
+            //向服务端发送删除指令
+            AjaxPostUtil.request({url:reqBasePath + "sys011", params:{rowId: data.id}, type:'json', callback:function(json){
+    			if(json.returnCode == 0){
+    				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
+    				loadTable();
+    			}else{
+    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			}
+    		}});
+		});
 	}
 	
 	//编辑
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuser/syseveuseredit.html", 
+			url: "../../tpl/sysevemenu/sysevemenuedit.html", 
 			title: "编辑用户",
-			pageId: "syseveuseredit",
+			pageId: "sysevemenuedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
