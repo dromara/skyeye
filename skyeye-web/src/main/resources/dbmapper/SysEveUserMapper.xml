@@ -13,7 +13,7 @@
 			a.user_sex sexName,
 			a.user_lock userLock,
 			(SELECT c.user_name FROM sys_eve_user c WHERE a.creater = c.id) createName,
-			(SELECT group_concat(distinct b.name) FROM sys_eve_role b WHERE INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.id, ','))) roleName,
+			(SELECT group_concat(distinct b.role_name) FROM sys_eve_role b WHERE INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.id, ','))) roleName,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			sys_eve_user a

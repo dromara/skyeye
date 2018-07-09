@@ -161,5 +161,25 @@ public class SysEveMenuServiceImpl implements SysEveMenuService{
 		//删除自身菜单
 		sysEveMenuDao.deleteSysMenuMationById(map);
 	}
+	
+	/**
+	 * 
+	     * @Title: queryTreeSysMenuMationBySimpleLevel
+	     * @Description: 查看同级菜单
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryTreeSysMenuMationBySimpleLevel(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysEveMenuDao.queryTreeSysMenuMationBySimpleLevel(map);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
 
 }

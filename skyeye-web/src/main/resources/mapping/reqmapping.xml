@@ -57,5 +57,8 @@
 	<url id="sys011" path="/post/SysEveMenuController/deleteSysMenuMationById" val="删除菜单信息">
 		<property id="rowId" name="id" ref="required" var="菜单ID" />
 	</url>
+	<url id="sys012" path="/post/SysEveMenuController/queryTreeSysMenuMationBySimpleLevel" val="异步加载树查看同级菜单">
+		<property id="parentId" name="parentId" ref="required" var="父菜单ID" />
+	</url>
 	
 </controller>

@@ -21,4 +21,6 @@ public interface SysEveMenuDao {
 
 	public void deleteSysMenuMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryTreeSysMenuMationBySimpleLevel(Map<String, Object> map) throws Exception;
+
 }

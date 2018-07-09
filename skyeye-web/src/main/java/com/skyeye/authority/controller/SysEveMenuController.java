@@ -111,4 +111,20 @@ public class SysEveMenuController {
 		sysEveMenuService.deleteSysMenuMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryTreeSysMenuMationBySimpleLevel
+	     * @Description: 异步加载树查看同级菜单
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveMenuController/queryTreeSysMenuMationBySimpleLevel")
+	@ResponseBody
+	public void queryTreeSysMenuMationBySimpleLevel(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveMenuService.queryTreeSysMenuMationBySimpleLevel(inputObject, outputObject);
+	}
+	
 }

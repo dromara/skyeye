@@ -17,4 +17,6 @@ public interface SysEveMenuService {
 
 	public void deleteSysMenuMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryTreeSysMenuMationBySimpleLevel(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

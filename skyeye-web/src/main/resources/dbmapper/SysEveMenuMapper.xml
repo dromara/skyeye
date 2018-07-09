@@ -121,4 +121,21 @@
 			id = #{id}
 	</delete>
 	
+	<select id="queryTreeSysMenuMationBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.menu_name name,
+			a.menu_parent_id pId
+		FROM
+			sys_eve_menu a
+			<if test="parentId != &quot;0&quot;">
+				,sys_eve_menu b
+			</if>
+		WHERE INSTR(CONCAT(',', a.menu_parent_id, ','), CONCAT(',', #{parentId}, ','))
+		<if test="parentId != &quot;0&quot;">
+			AND b.id = #{parentId}
+			AND (b.menu_level + 1) = a.menu_level
+		</if>
+	</select>
+	
 </mapper>
