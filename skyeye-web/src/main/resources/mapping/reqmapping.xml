@@ -61,5 +61,10 @@
 	<url id="sys012" path="/post/SysEveMenuController/queryTreeSysMenuMationBySimpleLevel" val="异步加载树查看同级菜单">
 		<property id="parentId" name="parentId" ref="required" var="父菜单ID" />
 	</url>
+	<url id="sys013" path="/post/SysEveRoleController/querySysRoleList" val="获取角色列表">
+		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="roleName" name="roleName" ref="" var="角色名称"/>
+	</url>
 	
 </controller>

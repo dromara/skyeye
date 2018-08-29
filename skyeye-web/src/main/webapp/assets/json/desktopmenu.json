@@ -58,9 +58,9 @@
       "id": 2
     },
     {
-      "title": "角色管理",
-      "pageURL": "../../tpl/syseveuser/syseveuserlist.html",
-      "name": "角色管理",
+      "title": "角色管理11",
+      "pageURL": "../../tpl/syseverole/syseverolelist.html",
+      "name": "角色管理1",
       "icon": "fa-th-large",
       "openType": 2,
       "maxOpen": -1,

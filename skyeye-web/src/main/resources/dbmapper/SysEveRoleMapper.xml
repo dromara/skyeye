@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.authority.dao.SysEveRoleDao">
+	
+	<select id="querySysRoleList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.role_name roleName,
+			a.role_desc roleDesc,
+			CONVERT(a.create_time, char) createTime,
+			IFNULL((SELECT b.role_name FROM sys_eve_role b WHERE a.role_parent_id = b.id), '主角色') parentName
+		FROM
+			sys_eve_role a
+		WHERE 1 = 1
+		<if test="roleName != '' and roleName != null">
+			AND a.role_name LIKE '%${roleName}%'
+		</if>
+		<if test="parentId != '' and parentId != null and parentId != '0'.toString()">
+			AND role_parent_id = #{parentId}
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+</mapper>

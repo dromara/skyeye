@@ -15,18 +15,18 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'sys006',
-	    where:{menuName:$("#menuName").val(), menuUrl:$("#menuUrl").val()},
+	    url: reqBasePath + 'sys013',
+	    where:{roleName:$("#roleName").val()},
 	    even:true,  //隔行变色
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
 	        { field: 'id', type: 'checkbox' },
-	        { field: 'menuName', title: '角色名称', width: 120 },
-	        { field: 'menuIcon', title: '角色描述', width: 520 },
+	        { field: 'roleName', title: '角色名称', width: 120 },
+	        { field: 'roleDesc', title: '角色描述', width: 520 },
+	        { field: 'parentName', title: '父角色', width: 150 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
-	        { field: 'userName', title: '创建人', width: 150 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
 	    ]]
 	});
@@ -53,8 +53,8 @@ layui.config({
 	
 	//删除
 	function del(data, obj){
-		var msg = obj ? '确认删除菜单【' + obj.data.menuName + '】吗？' : '确认删除选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '删除系统菜单' }, function (index) {
+		var msg = obj ? '确认删除角色【' + obj.data.roleName + '】吗？' : '确认删除选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '删除角色' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
             AjaxPostUtil.request({url:reqBasePath + "sys011", params:{rowId: data.id}, type:'json', callback:function(json){
@@ -68,12 +68,12 @@ layui.config({
 		});
 	}
 	
-	//编辑
+	//编辑角色
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysevemenu/sysevemenuedit.html", 
-			title: "编辑用户",
+			title: "编辑角色",
 			pageId: "sysevemenuedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -90,11 +90,11 @@ layui.config({
     	loadTable();
     });
     
-    //新增菜单
+    //新增角色
     $("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/sysevemenu/sysevemenuadd.html", 
-			title: "新增菜单",
+			url: "../../tpl/syseverole/syseveroleadd.html", 
+			title: "新增角色",
 			pageId: "sysevemenuadd",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -107,8 +107,8 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{menuName:$("#menuName").val(), menuUrl:$("#menuUrl").val()}});
+    	table.reload("messageTable", {where:{roleName:$("#roleName").val()}});
     }
     
-    exports('sysevemenulist', {});
+    exports('syseverolelist', {});
 });
