@@ -14,6 +14,12 @@ public interface SysEveUserService {
 	public void querySysUserMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void editSysUserMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void queryUserToLogin(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void queryUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void deleteUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception;
 	
 	
 	

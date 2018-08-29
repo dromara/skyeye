@@ -17,7 +17,7 @@ public class SysEveRoleController {
 	
 	/**
 	 * 
-	     * @Title: querySysMenuList
+	     * @Title: querySysRoleList
 	     * @Description: 获取角色列表
 	     * @param @param inputObject
 	     * @param @param outputObject

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <controller name="notIntercept">
+
+	<url id="login001" path="/post/SysEveUserController/queryUserToLogin" val="登录">
+		<property id="userCode" name="userCode" ref="" var="账号"/>
+		<property id="password" name="password" ref="" var="密码"/>
+	</url>
+	<url id="login002" path="/post/SysEveUserController/queryUserMationBySession" val="从session中获取用户信息">
+	</url>
+	<url id="login003" path="/post/SysEveUserController/deleteUserMationBySession" val="退出">
+	</url>
 	
 	<url id="sys001" path="/post/SysEveUserController/querySysUserList" val="获取用户列表">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />

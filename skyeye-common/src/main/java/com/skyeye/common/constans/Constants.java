@@ -34,7 +34,12 @@ public class Constants {
 	/**
 	 * 登录页面
 	 */
-	public static final String LOGIN_PAGE = "/tpl/index/index.html";
+	public static final String LOGIN_PAGE = "/tpl/index/login.html";
+	
+	/**
+	 * 控制页面
+	 */
+	public static final String INDEX_PAGE = "/tpl/index/index.html";
 
 	/**
 	 * 系统请求参数集合

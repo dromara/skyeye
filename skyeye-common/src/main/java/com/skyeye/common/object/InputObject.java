@@ -125,6 +125,10 @@ public class InputObject extends PutObject implements Serializable{
 		return (List<Map<String, Object>>) getRequest().getSession().getAttribute("admTsyPermissionMenu");
 	}
 	
+	public void removeSession() throws Exception {
+		getRequest().getSession().invalidate();
+	}
+	
 	public Set<String> getKeyForRequestMap(){
 		return keySet;
 	}

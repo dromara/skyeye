@@ -95,4 +95,52 @@ public class SysEveUserController {
 		sysEveUserService.editSysUserMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryUserToLogin
+	     * @Description: 登录
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/queryUserToLogin")
+	@ResponseBody
+	public void queryUserToLogin(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.queryUserToLogin(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: queryUserMationBySession
+	     * @Description: 从session中获取用户信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/queryUserMationBySession")
+	@ResponseBody
+	public void queryUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.queryUserMationBySession(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: deleteUserMationBySession
+	     * @Description: 退出
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/deleteUserMationBySession")
+	@ResponseBody
+	public void deleteUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.deleteUserMationBySession(inputObject, outputObject);
+	}
+	
 }

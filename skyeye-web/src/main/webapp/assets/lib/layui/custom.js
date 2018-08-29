@@ -9,53 +9,59 @@ var refreshCode = "";
  * @param title
  */
 function _openNewWindows(mation){
-	var index = layer.load(1);
-	if(isNull(mation.url)){
-		top.winui.window.msg("页面路径不能为空", {icon: 2,time: 2000});
-		return;
-	}
-	if(isNull(mation.pageId)){
-		top.winui.window.msg("缺少页面ID", {icon: 2,time: 2000});
-		return;
-	}
-	if(isNull(mation.title)){
-		mation.title = "窗口";
-	}
-	if(!isNull(mation.params)){
-		var s = "";
-		for(var param in mation.params)
-			s += "&" + param + "=" + mation.params[param];
-		mation.url = mation.url + "?" + s.slice(1);
-	}
-    var index = layer.load(1);
-    refreshCode = "";
-    layui.$.ajax({
-        type: 'get',
-        url: mation.url,
-        async: true,
-        success: function (data) {
-            layer.close(index);
-            //从桌面打开
-//            top.winui.window.open
-            layer.open({
-            	id: mation.pageId,
-                type: 2,
-                title: mation.title,
-                content: mation.url,
-                area: [window.screen.width / 2 + 'px', window.screen.height / 2 + 'px'],
-                offset: ['15vh', '20vw'],
-                end: function(){
-                	if(typeof(mation.callBack) == "function") {
-                		mation.callBack(refreshCode);
-        			}
-                }
-            });
-        },
-        error: function (xml) {
-            layer.close(index);
-            top.winui.window.msg("获取页面失败", {icon: 2,time: 2000});
-        }
-    });
+	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+		if(json.returnCode == 0){
+			var index = layer.load(1);
+			if(isNull(mation.url)){
+				top.winui.window.msg("页面路径不能为空", {icon: 2,time: 2000});
+				return;
+			}
+			if(isNull(mation.pageId)){
+				top.winui.window.msg("缺少页面ID", {icon: 2,time: 2000});
+				return;
+			}
+			if(isNull(mation.title)){
+				mation.title = "窗口";
+			}
+			if(!isNull(mation.params)){
+				var s = "";
+				for(var param in mation.params)
+					s += "&" + param + "=" + mation.params[param];
+				mation.url = mation.url + "?" + s.slice(1);
+			}
+		    var index = layer.load(1);
+		    refreshCode = "";
+		    layui.$.ajax({
+		        type: 'get',
+		        url: mation.url,
+		        async: true,
+		        success: function (data) {
+		            layer.close(index);
+		            //从桌面打开
+//		            top.winui.window.open
+		            layer.open({
+		            	id: mation.pageId,
+		                type: 2,
+		                title: mation.title,
+		                content: mation.url,
+		                area: [window.screen.width / 2 + 'px', window.screen.height / 2 + 'px'],
+		                offset: ['15vh', '20vw'],
+		                end: function(){
+		                	if(typeof(mation.callBack) == "function") {
+		                		mation.callBack(refreshCode);
+		        			}
+		                }
+		            });
+		        },
+		        error: function (xml) {
+		            layer.close(index);
+		            top.winui.window.msg("获取页面失败", {icon: 2,time: 2000});
+		        }
+		    });
+		}else{
+			location.href = "login.html";
+		}
+	}});
 }
 
 /**

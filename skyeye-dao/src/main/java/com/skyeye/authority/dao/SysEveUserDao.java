@@ -18,6 +18,8 @@ public interface SysEveUserDao {
 	public Map<String, Object> querySysUserMationToEditById(Map<String, Object> map) throws Exception;
 
 	public void editSysUserMationById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryMationByUserCode(Map<String, Object> map) throws Exception;
 	
 	
 	

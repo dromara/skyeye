@@ -1,10 +1,4 @@
-﻿/**
-
- @Name：winui.dektop 桌面模块
- @Author：Leo
- @License：MIT
-    
- */
+﻿/** 桌面模块*/
 layui.define(['jquery', 'layer', 'winui'], function (exports) {
     "use strict";
 

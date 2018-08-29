@@ -13,6 +13,7 @@ import com.skyeye.authority.service.SysEveUserService;
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.ToolUtil;
 
 @Service
 public class SysEveUserServiceImpl implements SysEveUserService{
@@ -117,6 +118,75 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 	public void editSysUserMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		sysEveUserDao.editSysUserMationById(map);
+	}
+
+	/**
+	 * 
+	     * @Title: queryUserToLogin
+	     * @Description: 登录
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryUserToLogin(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> userMation = sysEveUserDao.queryMationByUserCode(map);
+		if(userMation == null){
+			outputObject.setreturnMessage("请确保用户名输入无误！");
+		}else{
+			int pwdNum = Integer.parseInt(userMation.get("pwdNum").toString());
+			String password = map.get("password").toString();
+			for(int i = 0; i < pwdNum; i++){
+				password = ToolUtil.MD5(password);
+			}
+			if(password.equals(userMation.get("password").toString())){
+				if(Constants.SYS_USER_LOCK_STATE_ISLOCK.equals(userMation.get("userLock").toString())){
+					outputObject.setreturnMessage("您的账号已被锁定，请联系管理员解除！");
+				}else{
+					outputObject.setLogParams(userMation);
+				}
+			}else{
+				outputObject.setreturnMessage("密码输入错误！");
+			}
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryUserMationBySession
+	     * @Description: 从session中获取用户信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> userMation = inputObject.getLogParams();
+		if(userMation == null){
+			outputObject.setreturnMessage("请重新登录");
+		}else{
+			outputObject.setBean(userMation);
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: deleteUserMationBySession
+	     * @Description: 退出
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception {
+		inputObject.removeSession();
 	}
 	
 	

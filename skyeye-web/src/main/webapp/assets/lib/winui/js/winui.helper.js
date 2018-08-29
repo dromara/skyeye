@@ -206,7 +206,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
                     $('.helper-menu li').eq(0).on('mousedown', function (e) {
                         layui.stope(e);
                         if (e.button == 0) {
-                            $.get(winui.path + 'html/helper/settings.html', {}, function (res) {
+                            $.get(winui.path + '../../../tpl/index/settings.html', {}, function (res) {
                                 layer.open({
                                     id: 'helpersettings',
                                     title: '桌面助手设置中心',
@@ -340,9 +340,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         }
     }
 
-    var helper = {
-
-    };
+    var helper = {};
 
     helper.creat = function (options) {
         var othis = this
@@ -385,11 +383,8 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
 
     //自动创建
     helper.creat();
-
     winui.helper = helper;
-
     exports('helper', {});
-
     $(document).on('mousedown click', function () {
         $('.helper-menu').remove();
     });

@@ -79,4 +79,17 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryMationByUserCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNum,
+			a.`password`,
+			a.user_lock userLock
+		FROM
+			sys_eve_user a
+		WHERE
+			a.user_code = #{userCode}
+	</select>
+	
 </mapper>

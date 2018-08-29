@@ -1,10 +1,6 @@
 ﻿/*!
 
- @Title: Winui
  @Description：Win10风格前端模板
- @Site: www.win-ui.com
- @Author: Leo
- @License：MIT
 
  */
 
@@ -16,9 +12,7 @@
         , getPath = function () {
             var doc = document;
             var jsPath = doc.currentScript ? doc.currentScript.src : function () {
-                var js = doc.scripts
-                    , last = js.length - 1
-                    , src;
+                var js = doc.scripts, last = js.length - 1, src;
                 for (var i = last; i > 0; i--) {
                     if (js[i].readyState === 'interactive') {
                         src = js[i].src;
@@ -43,8 +37,7 @@
         }
 
     layui.define(['jquery', 'layer', 'element', 'form'], function (exports) {
-        var $ = layui.jquery
-            , form = layui.form
+        var $ = layui.jquery, form = layui.form
 
             //开始磁贴
             , tile = {
@@ -532,7 +525,7 @@
             , lockScreen: function (callback) {
                 var self = this;
                 $('.winui-taskbar').css('zIndex', '0');
-                $.get(winui.path + 'html/system/lockscreen.html', {}, function (content) {
+                $.get(winui.path + '../../../tpl/index/lockscreen.html', {}, function (content) {
                     layer.open({
                         id: 'winui-lockscreen',
                         type: 1,

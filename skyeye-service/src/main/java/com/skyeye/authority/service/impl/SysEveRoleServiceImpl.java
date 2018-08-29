@@ -21,7 +21,7 @@ public class SysEveRoleServiceImpl implements SysEveRoleService{
 
 	/**
 	 * 
-	     * @Title: querySysMenuList
+	     * @Title: querySysRoleList
 	     * @Description: 获取角色列表
 	     * @param @param inputObject
 	     * @param @param outputObject
