@@ -27,6 +27,9 @@
 		<if test="menuUrl != '' and menuUrl != null">
 			AND a.menu_url LIKE '%${menuUrl}%'
 		</if>
+		<if test="parentId != '' and parentId != null and parentId != '0'.toString()">
+			AND INSTR(CONCAT(',', a.menu_parent_id, ','), CONCAT(',', #{parentId}, ','))
+		</if>
 		GROUP BY a.id
 		ORDER BY a.create_time DESC
 	</select>

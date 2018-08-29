@@ -8,7 +8,8 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				url: undefined, //请求url地址
 				id: "",
 				isRoot: true, //是否显示更目录，默认显示
-				clickCallback: undefined //点击回掉函数
+				clickCallback: undefined, //点击回调函数
+				onDblClick: undefined,//双击之后的回调函数
 			}
 		};
 
@@ -39,7 +40,6 @@ layui.define(['layer', "fsCommon"], function(exports) {
 	 * 右键菜单
 	 */
 	FsTree.prototype.rightMenu = function() {
-
 		var _this = this;
 		//查询菜单列表
 		var treeDom = $("#" + _this.config.id);
@@ -70,7 +70,6 @@ layui.define(['layer', "fsCommon"], function(exports) {
 			var disabled = thisMenu.attr("disabledType"); //禁用模式
 			if(!isNull(disabled)) {
 				obj["disabled"] = function() {
-
 					var disableds = disabled.split("|");
 					for(var i = 0; i < disableds.length; i++) {
 						if(disableds[i] == "parent") { //父栏目禁用
@@ -81,7 +80,6 @@ layui.define(['layer', "fsCommon"], function(exports) {
 								return true;
 							}
 						} else if(disableds[i] == "rootNode") {
-
 							var tid = $(this).parent().attr("id");
 							var zTree = $.fn.zTree.getZTreeObj(_this.config.id);
 							var node = zTree.getNodeByTId(tid);
@@ -123,16 +121,15 @@ layui.define(['layer', "fsCommon"], function(exports) {
 		if(!isNull(servletUrl)) {
 			url = servletUrl + url;
 		}
-
 		var checkType = _this.config.checkType;
-
 		var setting = {
 			view: {
-				showLine: false
+				showLine: true,
 			},
 			data: {
 				key: {
-					name: _this.config.treeName
+					name: _this.config.treeName,
+					isParent: true
 				},
 				simpleData: {
 					enable: true,
@@ -159,7 +156,8 @@ layui.define(['layer', "fsCommon"], function(exports) {
 							zTree.refresh();
 						}
 					}
-				}
+				},
+				onDblClick: _this.config.onDblClick,
 			}
 		};
 
@@ -235,7 +233,7 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				if(isNull(otherParam.parentId)){
 					otherParam.parentId = "0";
 				}
-			}debugger
+			}
 			fsCommon.invoke(url, otherParam, function(data) {
 				if(data.returnCode == 0) {
 					var array = data.rows;

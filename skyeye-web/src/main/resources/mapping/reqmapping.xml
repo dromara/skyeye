@@ -28,6 +28,7 @@
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 		<property id="menuName" name="menuName" ref="" var="菜单名称"/>
 		<property id="menuUrl" name="menuUrl" ref="" var="菜单链接"/>
+		<property id="parentId" name="parentId" ref="" var="菜单父ID"/>
 	</url>
 	<url id="sys007" path="/post/SysEveMenuController/insertSysMenuMation" val="添加菜单">
 		<property id="menuName" name="menuName" ref="required" var="菜单名称"/>
