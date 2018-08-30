@@ -31,4 +31,20 @@ public class SysEveRoleController {
 		sysEveRoleService.querySysRoleList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysRoleBandMenuList
+	     * @Description: 获取角色需要绑定的菜单列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveRoleController/querySysRoleBandMenuList")
+	@ResponseBody
+	public void querySysRoleBandMenuList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveRoleService.querySysRoleBandMenuList(inputObject, outputObject);
+	}
+	
 }

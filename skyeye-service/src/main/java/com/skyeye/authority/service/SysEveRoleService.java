@@ -7,4 +7,6 @@ public interface SysEveRoleService {
 
 	public void querySysRoleList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void querySysRoleBandMenuList(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

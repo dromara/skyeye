@@ -6,6 +6,8 @@
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
 </head>
 <body>
 	<div style="width:600px;margin:0 auto;padding-top:20px;">
@@ -25,7 +27,7 @@
 	        <div class="layui-form-item">
 	            <label class="layui-form-label">权限分配</label>
 	            <div class="layui-input-block winui-radio">
-	                <ul id="treeDemo" class="ztree fsTree" method="get" isRoot="1" url="sys012" 
+	                <ul id="treeDemo" class="ztree fsTree" method="get" isRoot="1" url="sys014" 
     				treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
 	            </div>
 	        </div>
@@ -39,6 +41,9 @@
 	</div>
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
    	<script type="text/javascript">
         layui.config({base: '../../js/syseverole/'}).use('syseveroleadd');
     </script>

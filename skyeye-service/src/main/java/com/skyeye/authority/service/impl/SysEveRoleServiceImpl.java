@@ -39,5 +39,26 @@ public class SysEveRoleServiceImpl implements SysEveRoleService{
 		outputObject.setBeans(beans);
 		outputObject.settotal(total);
 	}
+
+	/**
+	 * 
+	     * @Title: querySysRoleBandMenuList
+	     * @Description: 获取角色需要绑定的菜单列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysRoleBandMenuList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysEveRoleDao.querySysRoleBandMenuList(map);
+		for(Map<String, Object> bean : beans){
+			String[] str = bean.get("pId").toString().split(",");
+			bean.put("pId", str[str.length-1]);
+		}
+		outputObject.setBeans(beans);
+	}
 	
 }

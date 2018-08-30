@@ -155,35 +155,12 @@ layui.config({
 	
 	//异步加载的方法
 	function onClickTree(event, treeId, treeNode) {
-		var url = reqBasePath + "sys012?parentId=";
 		if(treeNode == undefined) {
-			url += "0"; //默认ID是1.
 			parentId = "";
 		} else {
-			url += treeNode.id; //动态获取选中节点的ID
 			parentId = treeNode.id;
 		}
-		AjaxPostUtil.request({url:url, params:"", type:'json', callback:function(jsonData){
-			if(jsonData.returnCode == 0){
-				var tree = $.fn.zTree.getZTreeObj(treeId);
-				if(!isNull(treeNode.children)){
-					while(treeNode.children.length > 0){
-						tree.removeNode(treeNode.children[0]);
-					}
-				}
-				if(jsonData.total != 0) {
-					if(treeNode == undefined) {
-						$.fn.zTree.getZTreeObj(treeId).addNodes(null, jsonData.rows, true);
-					} else {
-						$.fn.zTree.getZTreeObj(treeId).addNodes(treeNode, jsonData.rows, true); //这里注意，不要添加#
-					}
-				}
-				$.fn.zTree.getZTreeObj(treeId).expandAll(true);
-				loadTable();
-			}else{
-				top.winui.window.msg(jsonData.returnMessage, {icon: 2,time: 2000});
-			}
-		}});
+		loadTable();
 	}
 	
 	/********* tree 处理   end *************/

@@ -1,6 +1,5 @@
 
 layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
-
 	var form = layui.form,
 		layer = layui.layer,
 		fsButtonCommon = layui.fsButtonCommon;

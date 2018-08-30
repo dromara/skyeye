@@ -75,5 +75,7 @@
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 		<property id="roleName" name="roleName" ref="" var="角色名称"/>
 	</url>
+	<url id="sys014" path="/post/SysEveRoleController/querySysRoleBandMenuList" val="获取角色需要绑定的菜单列表">
+	</url>
 	
 </controller>

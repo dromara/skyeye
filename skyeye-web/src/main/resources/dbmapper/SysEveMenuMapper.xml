@@ -128,7 +128,8 @@
 		SELECT
 			a.id,
 			a.menu_name name,
-			a.menu_parent_id pId
+			a.menu_parent_id pId,
+			'true' isParent
 		FROM
 			sys_eve_menu a
 			<if test="parentId != &quot;0&quot;">

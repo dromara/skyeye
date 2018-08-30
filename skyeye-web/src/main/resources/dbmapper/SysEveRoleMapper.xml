@@ -21,4 +21,15 @@
 		ORDER BY a.create_time DESC
 	</select>
 	
+	<select id="querySysRoleBandMenuList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.menu_name name,
+			a.menu_parent_id pId,
+			'true' isParent,
+			(a.menu_level + 1) type
+		FROM
+			sys_eve_menu a
+	</select>
+	
 </mapper>

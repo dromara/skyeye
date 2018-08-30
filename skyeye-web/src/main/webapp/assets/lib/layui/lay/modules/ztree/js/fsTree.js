@@ -7,9 +7,12 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				funcNo: undefined, //功能号
 				url: undefined, //请求url地址
 				id: "",
-				isRoot: true, //是否显示更目录，默认显示
+				isRoot: true, //是否显示根目录，默认显示
 				clickCallback: undefined, //点击回调函数
 				onDblClick: undefined,//双击之后的回调函数
+				enable: true,//异步还是同步加载，默认同步
+				checkEnable: false,//是否显示复选框,默认为否
+				loadEnable: true,//数据是否异步加载,默认为是
 			}
 		};
 
@@ -129,15 +132,34 @@ layui.define(['layer', "fsCommon"], function(exports) {
 			data: {
 				key: {
 					name: _this.config.treeName,
-					isParent: true
 				},
 				simpleData: {
-					enable: true,
+					enable: _this.config.enable,
 					idKey: _this.config.treeIdKey,
 					pIdKey: _this.config.treePIdKey,
 					rootPId: 0
 				}
 			},
+			async: { //异步加载
+                type: "get",
+                enable: _this.config.loadEnable,
+                url: reqBasePath + _this.config.url,
+                autoParam : ["id=parentId"],//异步加载时需要自动提交父节点属性的参数
+                dataType:"json",
+                dataFilter: function(treeId, treeNode, responseData) {
+                	if (responseData.rows.length > 0) {
+                		$.fn.zTree.getZTreeObj(treeId).addNodes(treeNode, responseData.rows);
+                	}
+                },
+			},
+			check : {
+	            enable : _this.config.checkEnable,
+	            chkStyle : "checkbox",    //复选框
+	            chkboxType : {
+	                "Y" : "ps",
+	                "N" : "ps"
+	            }
+	        },
 			edit: edit,
 			callback: {
 				onClick: _this.config.clickCallback,
@@ -177,7 +199,6 @@ layui.define(['layer', "fsCommon"], function(exports) {
 			setting["edit"] = edit;
 
 		}
-
 		$.fn.zTree.init($("#" + _this.config.id), setting, data);
 	};
 
