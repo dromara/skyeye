@@ -72,9 +72,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/sysevemenu/sysevemenuedit.html", 
+			url: "../../tpl/syseverole/syseveroleedit.html", 
 			title: "编辑角色",
-			pageId: "sysevemenuedit",
+			pageId: "syseveroleedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -95,7 +95,7 @@ layui.config({
     	_openNewWindows({
 			url: "../../tpl/syseverole/syseveroleadd.html", 
 			title: "新增角色",
-			pageId: "sysevemenuadd",
+			pageId: "syseveroleadd",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});

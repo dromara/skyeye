@@ -47,4 +47,36 @@ public class SysEveRoleController {
 		sysEveRoleService.querySysRoleBandMenuList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: insertSysRoleMation
+	     * @Description: 新增角色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveRoleController/insertSysRoleMation")
+	@ResponseBody
+	public void insertSysRoleMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveRoleService.insertSysRoleMation(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: querySysRoleMationToEditById
+	     * @Description: 编辑角色时进行回显
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveRoleController/querySysRoleMationToEditById")
+	@ResponseBody
+	public void querySysRoleMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveRoleService.querySysRoleMationToEditById(inputObject, outputObject);
+	}
+	
 }

@@ -9,4 +9,8 @@ public interface SysEveRoleService {
 
 	public void querySysRoleBandMenuList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void insertSysRoleMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void querySysRoleMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

@@ -12,7 +12,7 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "sys008",
-		 	params: {rowId:parent.rowId},
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysevemenu/sysevemenueditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){

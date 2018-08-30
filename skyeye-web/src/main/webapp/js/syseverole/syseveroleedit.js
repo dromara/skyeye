@@ -54,8 +54,8 @@ layui.config({
 	    /********* tree 处理   start *************/
 	
 		var trees = {};
-	
 		var treeDoms = $("ul.fsTree");
+		
 		if(treeDoms.length > 0) {
 			$(treeDoms).each(function(i) {
 				var treeId = $(this).attr("id");
@@ -79,6 +79,25 @@ layui.config({
 			//绑定按钮事件
 			fsCommon.buttonEvent("tree", getTree);
 		}
+		
+		AjaxPostUtil.request({url:reqBasePath + "sys016", params:{rowId: parent.rowId}, type:'json', callback:function(json){
+   			if(json.returnCode == 0){
+   				$("#roleName").val(json.bean.roleName);
+   				$("#roleDesc").val(json.bean.roleDesc);
+   				var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
+			    var zTree = zTreeObj.getCheckedNodes(false);  
+			    for (var i = 0; i < zTree.length; i++) {
+			    	for(var j = 0; j < json.rows.length; j++){
+			    		if(zTree[i].id == json.rows[j].menuId){
+			    			zTreeObj.checkNode(zTree[i], true);
+			    			json.rows.splice(j, 1);
+			    		}
+			    	}
+			    }  
+   			}else{
+   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			}
+   		}});
 		
 		function getTree(treeId) {
 			if($.isEmpty(trees)) {

@@ -11,4 +11,15 @@ public interface SysEveRoleDao {
 
 	public List<Map<String, Object>> querySysRoleBandMenuList(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> querySysRoleNameByName(Map<String, Object> map) throws Exception;
+
+	public int insertSysRoleMation(Map<String, Object> map) throws Exception;
+
+	public int insertSysRoleMenuMation(List<Map<String, Object>> beans) throws Exception;
+
+	public Map<String, Object> querySysRoleMationByRoleId(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> querySysRoleMenuIdByRoleId(Map<String, Object> map) throws Exception;
+
+
 }

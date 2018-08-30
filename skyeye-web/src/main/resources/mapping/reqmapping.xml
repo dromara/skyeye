@@ -77,5 +77,13 @@
 	</url>
 	<url id="sys014" path="/post/SysEveRoleController/querySysRoleBandMenuList" val="获取角色需要绑定的菜单列表">
 	</url>
+	<url id="sys015" path="/post/SysEveRoleController/insertSysRoleMation" val="新增角色">
+		<property id="roleName" name="roleName" ref="required" var="角色名称"/>
+		<property id="roleDesc" name="roleDesc" ref="" var="角色描述"/>
+		<property id="menuIds" name="menuIds" ref="required" var="菜单权限"/>
+	</url>
+	<url id="sys016" path="/post/SysEveRoleController/querySysRoleMationToEditById" val="编辑角色时的信息回显">
+		<property id="rowId" name="id" ref="required" var="角色ID"/>
+	</url>
 	
 </controller>

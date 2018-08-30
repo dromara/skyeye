@@ -27,9 +27,56 @@
 			a.menu_name name,
 			a.menu_parent_id pId,
 			'true' isParent,
-			(a.menu_level + 1) type
+			(a.menu_level + 1) type,
+			'true' open
 		FROM
 			sys_eve_menu a
+	</select>
+	
+	<select id="querySysRoleNameByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.role_name roleName
+		FROM
+			sys_eve_role a
+		WHERE
+			a.role_name = #{roleName}
+	</select>
+	
+	<insert id="insertSysRoleMation" parameterType="java.util.Map">
+	     insert into sys_eve_role 
+	     (id, role_name, role_desc, role_parent_id, creater, create_time)
+	     values(#{id}, #{roleName}, #{roleDesc}, '', #{createId}, #{createTime})
+	</insert>
+	
+	<insert id="insertSysRoleMenuMation" parameterType="java.util.Map">
+	     insert into sys_eve_role_menu
+	     (id, role_id, menu_id, creater, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.roleId}, #{item.menuId}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="querySysRoleMationByRoleId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.role_name roleName,
+			a.role_desc roleDesc
+		FROM
+			sys_eve_role a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<select id="querySysRoleMenuIdByRoleId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.menu_id menuId
+		FROM
+			sys_eve_role_menu a
+		WHERE
+			a.role_id = #{id}
 	</select>
 	
 </mapper>

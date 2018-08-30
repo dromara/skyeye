@@ -55,6 +55,7 @@ public class SysEveMenuServiceImpl implements SysEveMenuService{
 	@Override
 	public void insertSysMenuMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
 		if(Constants.SYS_MENU_TYPE_IS_IFRAME.equals(map.get("menuType").toString())){//iframe
 			map.put("openType", Constants.SYS_MENU_OPEN_TYPE_IS_IFRAME);//1：打开iframe
 		}else if(Constants.SYS_MENU_TYPE_IS_HTML.equals(map.get("menuType").toString())){//html
@@ -71,7 +72,7 @@ public class SysEveMenuServiceImpl implements SysEveMenuService{
 		}
 		map.put("id", ToolUtil.getSurFaceId());
 		map.put("createTime", ToolUtil.getTimeAndToString());
-		map.put("createId", "0dc9dd4cd4d446ae9455215fe753c44e");
+		map.put("createId", user.get("id"));
 		sysEveMenuDao.insertSysMenuMation(map);
 	}
 	
