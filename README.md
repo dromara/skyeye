@@ -33,3 +33,16 @@ Nginx: 反向代理服务器</br>
 Varnish: HTTP加速器</br>
 IntelliJ IDEA|Eclipse: 开发IDE</br>
 Navicat for MySQL: 数据库客户端</br>
+
+#### 资源下载
+JDK7 http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html</br>
+Maven http://maven.apache.org/download.cgi</br>
+Redis https://redis.io/download</br>
+Nginx http://nginx.org/en/download.html</br>
+
+#### 在线文档
+[JDK7英文文档](http://tool.oschina.net/apidocs/apidoc?api=jdk_7u4)</br>
+[Spring4.x文档](http://spring.oschina.mopaas.com/)</br>
+[Mybatis3官网](http://www.mybatis.org/mybatis-3/zh/index.html)</br>
+[Nginx中文文档](http://tool.oschina.net/apidocs/apidoc?api=nginx-zh)</br>
+[Git官网中文文档](https://git-scm.com/book/zh/v2)</br>
