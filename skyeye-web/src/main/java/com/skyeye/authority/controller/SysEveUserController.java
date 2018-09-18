@@ -143,4 +143,36 @@ public class SysEveUserController {
 		sysEveUserService.deleteUserMationBySession(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryRoleAndBindRoleByUserId
+	     * @Description: 获取角色和当前已经绑定的角色信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/queryRoleAndBindRoleByUserId")
+	@ResponseBody
+	public void queryRoleAndBindRoleByUserId(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.queryRoleAndBindRoleByUserId(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editRoleIdsByUserId
+	     * @Description: 编辑用户绑定的角色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/editRoleIdsByUserId")
+	@ResponseBody
+	public void editRoleIdsByUserId(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.editRoleIdsByUserId(inputObject, outputObject);
+	}
+	
 }

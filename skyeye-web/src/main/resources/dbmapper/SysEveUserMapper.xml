@@ -92,4 +92,30 @@
 			a.user_code = #{userCode}
 	</select>
 	
+	<select id="queryRoleList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.role_name roleName,
+			a.role_desc roleDesc
+		FROM
+			sys_eve_role a
+	</select>
+	
+	<select id="queryBindRoleMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			IFNULL(a.role_id, "") roleIds
+		FROM
+			sys_eve_user a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editRoleIdsByUserId" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			role_id = #{roleIds}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
 </mapper>

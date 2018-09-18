@@ -1,5 +1,6 @@
 package com.skyeye.authority.service.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -187,6 +188,47 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 	@Override
 	public void deleteUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception {
 		inputObject.removeSession();
+	}
+
+	/**
+	 * 
+	     * @Title: queryRoleAndBindRoleByUserId
+	     * @Description: 获取角色和当前已经绑定的角色信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryRoleAndBindRoleByUserId(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> roles = sysEveUserDao.queryRoleList(map);//获取角色列表
+		Map<String, Object> userRole = sysEveUserDao.queryBindRoleMationByUserId(map);//获取用户绑定的角色ID串
+		String[] roleIds = userRole.get("roleIds").toString().split(",");
+		for(Map<String, Object> bean : roles){
+			if(Arrays.asList(roleIds).contains(bean.get("id").toString())){
+				bean.put("isCheck", "checked");
+			}
+		}
+		outputObject.setBeans(roles);
+		outputObject.settotal(roles.size());
+	}
+
+	/**
+	 * 
+	     * @Title: editRoleIdsByUserId
+	     * @Description: 编辑用户绑定的角色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editRoleIdsByUserId(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		sysEveUserDao.editRoleIdsByUserId(map);
 	}
 	
 	

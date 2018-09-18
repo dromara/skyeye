@@ -94,5 +94,12 @@
 	<url id="sys018" path="/post/SysEveRoleController/deleteSysRoleMationById" val="删除角色">
 		<property id="rowId" name="id" ref="required" var="角色ID"/>
 	</url>
+	<url id="sys019" path="/post/SysEveUserController/queryRoleAndBindRoleByUserId" val="获取角色和当前已经绑定的角色信息">
+		<property id="rowId" name="id" ref="required" var="账号ID" />
+	</url>
+	<url id="sys020" path="/post/SysEveUserController/editRoleIdsByUserId" val="编辑用户绑定的角色">
+		<property id="rowId" name="id" ref="required" var="账号ID" />
+		<property id="roleIds" name="roleIds" ref="required" var="角色ID串" />
+	</url>
 	
 </controller>

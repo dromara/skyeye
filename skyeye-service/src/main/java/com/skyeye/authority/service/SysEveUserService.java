@@ -20,6 +20,10 @@ public interface SysEveUserService {
 	public void queryUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void deleteUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void queryRoleAndBindRoleByUserId(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editRoleIdsByUserId(InputObject inputObject, OutputObject outputObject) throws Exception;
 	
 	
 	

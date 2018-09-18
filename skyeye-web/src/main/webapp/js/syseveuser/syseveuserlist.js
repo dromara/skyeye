@@ -57,7 +57,7 @@ layui.config({
 	        { field: 'roleName', title: '角色'},
 	        { field: 'createName', title: '创建人', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
-	        { title: '操作', fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
+	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]
 	});
 	
@@ -70,6 +70,8 @@ layui.config({
         	unlock(data);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
+        }else if (layEvent === 'bindRole') { //绑定角色
+        	bindRole(data);
         }
     });
 	
@@ -114,6 +116,23 @@ layui.config({
 			url: "../../tpl/syseveuser/syseveuseredit.html", 
 			title: "编辑用户",
 			pageId: "syseveuseredit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+	}
+	
+	//绑定角色
+	function bindRole(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/syseveuser/syseveuserrolebind.html", 
+			title: "绑定角色",
+			pageId: "syseveuserrolebind",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
