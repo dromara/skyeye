@@ -26,6 +26,10 @@ public interface SysEveUserDao {
 	public Map<String, Object> queryBindRoleMationByUserId(Map<String, Object> map) throws Exception;
 
 	public int editRoleIdsByUserId(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> queryDeskTopsMenuByUserId(Map<String, Object> userMation) throws Exception;
+
+	public List<Map<String, Object>> queryAllMenuByUserId(Map<String, Object> userMation) throws Exception;
 	
 	
 	

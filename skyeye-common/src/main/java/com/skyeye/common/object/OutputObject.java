@@ -71,20 +71,16 @@ public class OutputObject extends PutObject implements Serializable{
 		return OutputObject.object.get("returnMessage").toString();
 	}
 	
-	public void setWechatLogParams(Map<String,Object> login) throws Exception {
-		getRequest().getSession().setAttribute("admTsyWechatUser", login);
-	}
-	
 	public void setLogParams(Map<String,Object> login) throws Exception {
-		getRequest().getSession().setAttribute("admTsyUser", login);
+		getRequest().getSession().setAttribute("admUser", login);
 	}
 	
-	public void setLogMenuParams(List<Map<String, Object>> beans) throws Exception {
-		getRequest().getSession().setAttribute("admTsyUserMenu", beans);
+	public void setLogDeskTopMenuParams(List<Map<String, Object>> beans) throws Exception {
+		getRequest().getSession().setAttribute("admDeskUserMenu", beans);
 	}
 	
-	public void setLogPermissionParams(List<Map<String, Object>> beans) throws Exception {
-		getRequest().getSession().setAttribute("admTsyPermissionMenu", beans);
+	public void setLogAllMenuParams(List<Map<String, Object>> beans) throws Exception {
+		getRequest().getSession().setAttribute("admAllMenu", beans);
 	}
 	
 	public static void put(){

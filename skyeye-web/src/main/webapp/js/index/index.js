@@ -3,7 +3,7 @@
     , version: skyeyeVersion
 }).extend({  //指定js别名
     window: 'js/winui.window',
-    desktop: 'js/winui.desktop',
+    desktop: 'js/winui.desktop',//煮面加载模块
     start: 'js/winui.start',
     helper: 'js/winui.helper'
 }).define(['window', 'desktop', 'start', 'helper'], function (exports) {
@@ -13,32 +13,30 @@
     	
     	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
    			if(json.returnCode == 0){
-   				
+   				winui.window.msg('Welcome To WinAdmin', {
+   		            time: 4500,
+   		            offset: '40px',
+   		            btn: ['点击进入全屏'],
+   		            btnAlign: 'c',
+   		            yes: function (index) {
+   		                winui.fullScreen(document.documentElement);
+   		                layer.close(index);
+   		            }
+   		        });
+
+//   		        winui.window.open({
+//   		            id: '公告',
+//   		            type: 1,
+//   		            title: '演示公告',
+//   		            content: '<p style="padding:20px;">半成品仅供参观，多数设置本地存储，清除浏览器缓存即失效。<br/><br/>慢工出细活，如有需要的朋友请耐心等待。<br/><br/>望社区案例多多点赞，谢谢各位！<br/><br/>特色很多，如：<span style="color:#FF5722">桌面助手，主题设置</span>，大家慢慢参观</p>',
+//   		            area: ['400px', '400px']
+//   		        });
+   		        initWinConfig();
    			}else{
    				location.href = "login.html";
    			}
    		}});
     	
-        winui.window.msg('Welcome To WinAdmin', {
-            time: 4500,
-            offset: '40px',
-            btn: ['点击进入全屏'],
-            btnAlign: 'c',
-            yes: function (index) {
-                winui.fullScreen(document.documentElement);
-                layer.close(index);
-            }
-        });
-
-//        winui.window.open({
-//            id: '公告',
-//            type: 1,
-//            title: '演示公告',
-//            content: '<p style="padding:20px;">半成品仅供参观，多数设置本地存储，清除浏览器缓存即失效。<br/><br/>慢工出细活，如有需要的朋友请耐心等待。<br/><br/>望社区案例多多点赞，谢谢各位！<br/><br/>特色很多，如：<span style="color:#FF5722">桌面助手，主题设置</span>，大家慢慢参观</p>',
-//            area: ['400px', '400px']
-//        });
-        initWinConfig();
-        
     });
     
     //初始化配置信息
@@ -53,12 +51,11 @@
             },  //如果本地配置为空则给默认值
             desktop: {//桌面菜单栏
                 options: {
-                	url: '../../assets/json/desktopmenu.json',
+                	url: reqBasePath + 'login004',
                     method: 'get',
                     data: { nihaoa: '' }
                 },    //可以为{}  默认 请求 json/desktopmenu.json
                 done: function (desktopApp) {
-                	console.log(desktopApp);
                     desktopApp.ondblclick(function (id, elem) {
                         OpenWindow(elem);
                     });
@@ -81,7 +78,7 @@
             },
             menu: {//左下角菜单栏右键效果
                 options: {
-                    url: '../../assets/json/allmenu.json',
+                    url: reqBasePath + 'login005',
                     method: 'get',
                     data: { nihaoa: '' }
                 },

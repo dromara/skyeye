@@ -24,6 +24,10 @@ public interface SysEveUserService {
 	public void queryRoleAndBindRoleByUserId(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void editRoleIdsByUserId(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void queryDeskTopMenuBySession(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void queryAllMenuBySession(InputObject inputObject, OutputObject outputObject) throws Exception;
 	
 	
 	

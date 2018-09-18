@@ -1,9 +1,5 @@
 ﻿/**
-
- @Name：winui.window 窗口管理模块
- @Author：Leo
- @License：MIT
-    
+ * 窗口管理模块
  */
 layui.define(['layer', 'winui'], function (exports) {
     "use strict";

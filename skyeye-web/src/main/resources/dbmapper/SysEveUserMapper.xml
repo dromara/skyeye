@@ -118,4 +118,51 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryDeskTopsMenuByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.id,
+			c.menu_name `name`,
+			c.title_name title,
+			c.menu_icon icon,
+			c.menu_url pageURL,
+			c.open_type openType,
+			'-1' maxOpen,
+			'false' extend,
+			'' childs
+		FROM
+			sys_eve_user a,
+			sys_eve_role_menu b,
+			sys_eve_menu c
+		WHERE
+			a.id = #{id}
+		AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+		AND b.menu_id = c.id AND c.menu_sys_type = '1'
+		GROUP BY c.id
+	</select>
+	
+	<select id="queryAllMenuByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.id,
+			c.menu_name `name`,
+			c.title_name title,
+			c.menu_icon icon,
+			c.menu_url pageURL,
+			c.open_type openType,
+			'-1' maxOpen,
+			'false' extend,
+			null childs,
+			c.menu_parent_id parentId,
+			c.menu_level menuLevel
+		FROM
+			sys_eve_user a,
+			sys_eve_role_menu b,
+			sys_eve_menu c
+		WHERE
+			a.id = #{id}
+		AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+		AND b.menu_id = c.id
+		GROUP BY c.id
+		ORDER BY LENGTH(c.menu_parent_id) ASC
+	</select>
+	
 </mapper>

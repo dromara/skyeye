@@ -112,17 +112,17 @@ public class InputObject extends PutObject implements Serializable{
 	
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getLogParams() throws Exception {
-		return (Map<String, Object>) getRequest().getSession().getAttribute("admTsyUser");
+		return (Map<String, Object>) getRequest().getSession().getAttribute("admUser");
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> getLogMenuParams() throws Exception {
-		return (List<Map<String, Object>>) getRequest().getSession().getAttribute("admTsyUserMenu");
+	public List<Map<String, Object>> getLogDeskTopMenuParams() throws Exception {
+		return (List<Map<String, Object>>) getRequest().getSession().getAttribute("admDeskUserMenu");
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Map<String, Object>> getLogPermissionParams() throws Exception {
-		return (List<Map<String, Object>>) getRequest().getSession().getAttribute("admTsyPermissionMenu");
+	public List<Map<String, Object>> getLogAllMenuParams() throws Exception {
+		return (List<Map<String, Object>>) getRequest().getSession().getAttribute("admAllMenu");
 	}
 	
 	public void removeSession() throws Exception {

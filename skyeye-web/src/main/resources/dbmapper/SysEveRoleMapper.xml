@@ -122,7 +122,7 @@
 		FROM
 			sys_eve_user a
 		WHERE
-			INSTR(CONCAT(',', #{id}, ','), CONCAT(',', a.role_id, ','))
+			INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', #{id}, ','))
 	</select>
 	
 </mapper>

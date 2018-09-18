@@ -3,10 +3,8 @@ package com.skyeye.authority.service.impl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.skyeye.authority.dao.SysEveUserDao;
@@ -147,7 +145,12 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 				if(Constants.SYS_USER_LOCK_STATE_ISLOCK.equals(userMation.get("userLock").toString())){
 					outputObject.setreturnMessage("您的账号已被锁定，请联系管理员解除！");
 				}else{
+					List<Map<String, Object>> deskTops = sysEveUserDao.queryDeskTopsMenuByUserId(userMation);//桌面菜单列表
+					List<Map<String, Object>> allMenu = sysEveUserDao.queryAllMenuByUserId(userMation);
+					allMenu = ToolUtil.allMenuToTree(allMenu);
+					outputObject.setLogDeskTopMenuParams(deskTops);
 					outputObject.setLogParams(userMation);
+					outputObject.setLogAllMenuParams(allMenu);
 				}
 			}else{
 				outputObject.setreturnMessage("密码输入错误！");
@@ -229,6 +232,38 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 	public void editRoleIdsByUserId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		sysEveUserDao.editRoleIdsByUserId(map);
+	}
+
+	/**
+	 * 
+	     * @Title: queryDeskTopMenuBySession
+	     * @Description: 获取桌面菜单列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryDeskTopMenuBySession(InputObject inputObject, OutputObject outputObject) throws Exception {
+		List<Map<String, Object>> deskTops = inputObject.getLogDeskTopMenuParams();
+		outputObject.setBeans(deskTops);
+	}
+
+	/**
+	 * 
+	     * @Title: queryAllMenuBySession
+	     * @Description: 获取全部菜单列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryAllMenuBySession(InputObject inputObject, OutputObject outputObject) throws Exception {
+		List<Map<String, Object>> deskTops = inputObject.getLogAllMenuParams();
+		outputObject.setBeans(deskTops);
 	}
 	
 	

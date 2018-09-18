@@ -175,4 +175,36 @@ public class SysEveUserController {
 		sysEveUserService.editRoleIdsByUserId(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryDeskTopMenuBySession
+	     * @Description: 获取桌面菜单列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/queryDeskTopMenuBySession")
+	@ResponseBody
+	public void queryDeskTopMenuBySession(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.queryDeskTopMenuBySession(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: queryAllMenuBySession
+	     * @Description: 获取全部菜单列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/queryAllMenuBySession")
+	@ResponseBody
+	public void queryAllMenuBySession(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.queryAllMenuBySession(inputObject, outputObject);
+	}
+	
 }

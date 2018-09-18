@@ -57,7 +57,7 @@
       "pageURL": null,
       "name": "系统设置",
       "icon": "fa-cog",
-      "openType": 1,
+      "openType": 2,
       "extend": false,
       "childs": [
         {

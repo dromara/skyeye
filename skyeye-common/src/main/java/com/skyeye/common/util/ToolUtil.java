@@ -3,8 +3,10 @@ package com.skyeye.common.util;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
@@ -352,6 +354,45 @@ public class ToolUtil {
 		}
 		return sbf.toString();
 	}
+	
+	/**
+     * 使用递归方法建树
+     * @param treeNodes
+     * @return
+     */
+	public static List<Map<String, Object>> allMenuToTree(List<Map<String, Object>> allMenu){
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		for(Map<String, Object> bean : allMenu){
+			if ("0".equals(bean.get("parentId").toString())) {
+				resultList.add(findChildren(bean, allMenu, 0));
+            }
+		}
+		return resultList;
+	}
+	
+	/**
+     * 递归查找子节点
+     * @param treeNodes
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+	public static Map<String, Object> findChildren(Map<String, Object> treeNode, List<Map<String, Object>> treeNodes, int level) {
+    	List<Map<String, Object>> child = null;
+        for (Map<String, Object> it : treeNodes) {
+        	if(Integer.parseInt(it.get("menuLevel").toString()) == level + 1){
+        		if(treeNode.get("id").toString().equals(it.get("parentId").toString().split(",")[level])) {
+        			child = (List<Map<String, Object>>) treeNode.get("childs");
+        			if (child == null) {
+        				child = new ArrayList<>();
+        			}
+        			child.add(findChildren(it, treeNodes, level + 1));
+        			treeNode.put("childs", child);
+        		}
+        	}
+        }
+        return treeNode;
+    }
+
 	
 	public static void main(String[] args) throws Exception {
 		String str = "123456";

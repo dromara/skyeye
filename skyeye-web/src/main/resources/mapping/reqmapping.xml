@@ -9,6 +9,10 @@
 	</url>
 	<url id="login003" path="/post/SysEveUserController/deleteUserMationBySession" val="退出">
 	</url>
+	<url id="login004" path="/post/SysEveUserController/queryDeskTopMenuBySession" val="获取桌面菜单列表">
+	</url>
+	<url id="login005" path="/post/SysEveUserController/queryAllMenuBySession" val="获取全部菜单列表">
+	</url>
 	
 	<url id="sys001" path="/post/SysEveUserController/querySysUserList" val="获取用户列表">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />

@@ -1,4 +1,6 @@
-﻿/** 桌面模块*/
+﻿/**
+ * 桌面模块
+ */
 layui.define(['jquery', 'layer', 'winui'], function (exports) {
     "use strict";
 
@@ -53,8 +55,9 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
             type: currOptions.method,
             data: $.extend({}, currOptions.data),
             dataType: 'json',
+            async: false,
             success: function (res) {
-                res = res.data;
+                res = res.rows;
                 if (typeof res === "string") {
                     obj.data = JSON.parse(res);
                     if (typeof callback === 'function')

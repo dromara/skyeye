@@ -16,3 +16,5 @@ getTimeAndToString();					获取当前日期(2016-12-29 11:23:09)
 getProperties();						读取.properties 结尾的配置文件用，getP, getParam
 getSurFaceId();							获取ID
 MD5();									加密
+allMenuToTree();						使用递归方法建树
+findChildren();							递归查找子节点
