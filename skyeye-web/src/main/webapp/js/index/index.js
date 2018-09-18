@@ -58,6 +58,7 @@
                     data: { nihaoa: '' }
                 },    //可以为{}  默认 请求 json/desktopmenu.json
                 done: function (desktopApp) {
+                	console.log(desktopApp);
                     desktopApp.ondblclick(function (id, elem) {
                         OpenWindow(elem);
                     });

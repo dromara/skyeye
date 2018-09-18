@@ -18,12 +18,12 @@
 		<property name="username" value="${jdbc.username}" />
 		<property name="password" value="${jdbc.password}" />
 		<property name="driverClassName" value="${jdbc.driver}" />
-		<property name="maxActive" value="10" />
-		<property name="minIdle" value="5" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
 		<!-- 获取连接最大等待时间 -->
-		<property name="maxWait" value="60000" />
-		<property name="poolPreparedStatements" value="true" />
-		<property name="maxPoolPreparedStatementPerConnectionSize" value="33" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="poolPreparedStatements" value="${jdbc.poolPreparedStatements}" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="${jdbc.maxPoolPreparedStatementPerConnectionSize}" />
 		<!-- 用来检测有效sql -->
 		<property name="validationQuery" value="${validationQuery}" />
 		<property name="testOnBorrow" value="false" />
