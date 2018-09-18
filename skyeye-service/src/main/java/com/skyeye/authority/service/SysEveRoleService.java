@@ -13,4 +13,8 @@ public interface SysEveRoleService {
 
 	public void querySysRoleMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void editSysRoleMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void deleteSysRoleMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

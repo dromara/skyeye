@@ -79,4 +79,36 @@ public class SysEveRoleController {
 		sysEveRoleService.querySysRoleMationToEditById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editSysRoleMationById
+	     * @Description: 编辑角色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveRoleController/editSysRoleMationById")
+	@ResponseBody
+	public void editSysRoleMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveRoleService.editSysRoleMationById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: deleteSysRoleMationById
+	     * @Description: 删除角色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveRoleController/deleteSysRoleMationById")
+	@ResponseBody
+	public void deleteSysRoleMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveRoleService.deleteSysRoleMationById(inputObject, outputObject);
+	}
+	
 }

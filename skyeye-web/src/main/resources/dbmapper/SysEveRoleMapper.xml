@@ -79,4 +79,50 @@
 			a.role_id = #{id}
 	</select>
 	
+	<select id="queryRoleNameByIdAndName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.role_name roleName,
+			a.role_desc roleDesc
+		FROM
+			sys_eve_role a
+		WHERE
+			a.id != #{id}
+		AND a.role_name = #{roleName}
+	</select>
+	
+	<update id="editSysRoleMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_role
+		<set>
+			role_name = #{roleName},
+			role_desc = #{roleDesc},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteRoleMenuByRoleId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_role_menu
+		WHERE
+			role_id = #{id}
+	</delete>
+	
+	<delete id="deleteRoleByRoleId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_role
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryUserRoleByRoleId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			IFNULL(COUNT(*), 0) num
+		FROM
+			sys_eve_user a
+		WHERE
+			INSTR(CONCAT(',', #{id}, ','), CONCAT(',', a.role_id, ','))
+	</select>
+	
 </mapper>

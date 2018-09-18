@@ -21,5 +21,15 @@ public interface SysEveRoleDao {
 
 	public List<Map<String, Object>> querySysRoleMenuIdByRoleId(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryRoleNameByIdAndName(Map<String, Object> map) throws Exception;
+
+	public int editSysRoleMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteRoleMenuByRoleId(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryUserRoleByRoleId(Map<String, Object> map) throws Exception;
+
+	public int deleteRoleByRoleId(Map<String, Object> map) throws Exception;
+
 
 }

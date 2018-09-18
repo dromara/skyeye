@@ -125,5 +125,67 @@ public class SysEveRoleServiceImpl implements SysEveRoleService{
 		outputObject.setBeans(roleMenuId);
 		outputObject.settotal(roleMenuId.size());
 	}
+
+	/**
+	 * 
+	     * @Title: editSysRoleMationById
+	     * @Description: 编辑角色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editSysRoleMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		Map<String, Object> roleName = sysEveRoleDao.queryRoleNameByIdAndName(map);
+		if(roleName == null){
+			List<Map<String,Object>> beans = new ArrayList<>();
+			String[] menuIds = map.get("menuIds").toString().split(",");
+			if(menuIds.length > 0){
+				for(String str : menuIds){
+					Map<String,Object> item = new HashMap<>();
+					item.put("id", ToolUtil.getSurFaceId());
+					item.put("roleId", map.get("id").toString());
+					item.put("menuId", str);
+					item.put("createId", user.get("id"));
+					item.put("createTime", ToolUtil.getTimeAndToString());
+					beans.add(item);
+				}
+				sysEveRoleDao.deleteRoleMenuByRoleId(map);//删除角色菜单关联表信息
+				sysEveRoleDao.editSysRoleMationById(map);
+				sysEveRoleDao.insertSysRoleMenuMation(beans);
+			}else{
+				outputObject.setreturnMessage("请选择该角色即将拥有的权限！");
+			}
+		}else{
+			outputObject.setreturnMessage("该角色名称已存在，请更换！");
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: deleteSysRoleMationById
+	     * @Description: 删除角色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteSysRoleMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		//判断当前是否有用户在使用该角色
+		Map<String, Object> bean = sysEveRoleDao.queryUserRoleByRoleId(map);
+		if(Integer.parseInt(bean.get("num").toString()) == 0){
+			sysEveRoleDao.deleteRoleMenuByRoleId(map);//删除角色菜单关联表信息
+			sysEveRoleDao.deleteRoleByRoleId(map);//删除角色信息
+		}else{
+			outputObject.setreturnMessage("该角色下有用户正在使用，只能对角色进行维护。");
+		}
+	}
 	
 }

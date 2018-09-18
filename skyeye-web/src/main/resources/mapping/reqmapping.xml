@@ -85,5 +85,14 @@
 	<url id="sys016" path="/post/SysEveRoleController/querySysRoleMationToEditById" val="编辑角色时的信息回显">
 		<property id="rowId" name="id" ref="required" var="角色ID"/>
 	</url>
+	<url id="sys017" path="/post/SysEveRoleController/editSysRoleMationById" val="编辑角色">
+		<property id="roleName" name="roleName" ref="required" var="角色名称"/>
+		<property id="roleDesc" name="roleDesc" ref="" var="角色描述"/>
+		<property id="menuIds" name="menuIds" ref="required" var="菜单权限"/>
+		<property id="rowId" name="id" ref="required" var="角色ID"/>
+	</url>
+	<url id="sys018" path="/post/SysEveRoleController/deleteSysRoleMationById" val="删除角色">
+		<property id="rowId" name="id" ref="required" var="角色ID"/>
+	</url>
 	
 </controller>
