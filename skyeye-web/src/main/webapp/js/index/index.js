@@ -13,16 +13,16 @@
     	
     	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
    			if(json.returnCode == 0){
-   				winui.window.msg('Welcome To WinAdmin', {
-   		            time: 4500,
-   		            offset: '40px',
-   		            btn: ['点击进入全屏'],
-   		            btnAlign: 'c',
-   		            yes: function (index) {
-   		                winui.fullScreen(document.documentElement);
-   		                layer.close(index);
-   		            }
-   		        });
+//   				winui.window.msg('Welcome To WinAdmin', {
+//   		            time: 4500,
+//   		            offset: '40px',
+//   		            btn: ['点击进入全屏'],
+//   		            btnAlign: 'c',
+//   		            yes: function (index) {
+//   		                winui.fullScreen(document.documentElement);
+//   		                layer.close(index);
+//   		            }
+//   		        });
 
 //   		        winui.window.open({
 //   		            id: '公告',
