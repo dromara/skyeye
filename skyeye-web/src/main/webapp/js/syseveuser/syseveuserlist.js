@@ -22,7 +22,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { field: 'id', type: 'checkbox' },
+	        { title: '序号', type: 'numbers'},
 	        { field: 'userCode', title: '账号', width: 120 },
 	        { field: 'pwdNumEnc', title: '加密次数', width: 120 },
 	        { field: 'userName', title: '用户名', width: 120 },

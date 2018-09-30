@@ -71,7 +71,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { field: 'id', type: 'checkbox' },
+		        { title: '序号', type: 'numbers'},
 		        { field: 'menuName', title: '菜单名称', width: 120 },
 		        { field: 'menuIcon', title: '图标码', width: 120 },
 		        { field: 'titleName', title: '标题名称', width: 120 },

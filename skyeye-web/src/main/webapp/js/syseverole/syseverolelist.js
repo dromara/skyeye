@@ -22,7 +22,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { field: 'id', type: 'checkbox' },
+	        { title: '序号', type: 'numbers'},
 	        { field: 'roleName', title: '角色名称', width: 120 },
 	        { field: 'roleDesc', title: '角色描述', width: 520 },
 	        { field: 'parentName', title: '父角色', width: 150 },
