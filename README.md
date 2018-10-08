@@ -2,6 +2,8 @@
 
 #### 项目介绍
 win10风格的一套系统，刚开始开发，内容慢慢添加，已完成用户的删除，查看，编辑功能。</br>
+##### 启动方式
+在项目skyeye上右键选用maven-build，在Goals中输入命令tomcat7:run，启动完成后，访问http://localhost:8081即可。
 #### 目前功能
 
 - 菜单管理
@@ -27,6 +29,10 @@ jQuery|函式库|http://jquery.com/
 zTree|树插件|http://www.treejs.cn/v3/
 layui|模块化前端UI|https://www.layui.com/
 winui|win10风格UI|http://win10ui.yuri2.cn/
+
+#### 效果图
+- 1.登陆效果图
+![登陆效果图](https://images.gitee.com/uploads/images/2018/1008/100922_8c9afcf1_1541735.png "微信截图_20181008100902.png")
 
 #### 环境搭建
 ##### 开发工具:
