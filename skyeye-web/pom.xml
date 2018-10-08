@@ -29,7 +29,7 @@
 			<artifactId>fastdfs-client-java</artifactId>
 			<version>1.27-SNAPSHOT</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.eve</groupId>
 			<artifactId>eve-manager-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -43,7 +43,7 @@
 			<groupId>com.eve</groupId>
 			<artifactId>eve-search-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		</dependency> -->
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
