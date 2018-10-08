@@ -1,14 +1,19 @@
 package com.skyeye.common.interceptor;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
+import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.ObjectConstant;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.object.PutObject;
+import com.skyeye.common.util.ToolUtil;
 
 
 /**
@@ -23,10 +28,47 @@ public class HandlerInterceptorMain implements HandlerInterceptor{
 	
 	//在进入Handler方法之前执行  
 	//用于身份认证、身份授权、  
-	//比如身份认证，如果认证不通过表示当前用户没有登录，需要此方法拦截不再向下执行
+	//比如身份认证，IP黑名单过滤，如果认证不通过表示当前用户没有登录，需要此方法拦截不再向下执行
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     	new PutObject(request, response);
+    	/**IP黑名单过滤开始**/
+    	String ip;
+		ip = request.getHeader("x-forwarded-for");
+		// 针对IP是否使用代理访问进行处理
+		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		if (ip != null && ip.indexOf(",") != -1) {
+			ip = ip.substring(0, ip.indexOf(","));
+		}
+		for(String str : Constants.FILTER_FILE_IP_OPTION) {
+			if (ip.indexOf(str) != -1) {
+				ip = request.getParameter("loginPCIp");
+				break;
+			}
+		}
+		
+		Properties prop = new Properties();
+		String path = ToolUtil.getIPPropertiesPath();
+		InputStream in = new BufferedInputStream(new FileInputStream(path));
+		prop.load(in); /// 加载属性列表
+		Iterator<String> it = prop.stringPropertyNames().iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			if (prop.getProperty(key).equals(ip)) {
+				return false;
+			}
+		}
+		in.close();
+		/**IP黑名单过滤结束**/
+		
     	HttpServletRequest servletRequest = (HttpServletRequest) request;
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");

@@ -392,7 +392,21 @@ public class ToolUtil {
         }
         return treeNode;
     }
-
+    
+    /**
+     * 获取ip.properties路径
+     * @return
+     */
+    public static String getIPPropertiesPath(){
+    	String contextPath = new Object() {
+    		public String getPath() {
+    			return this.getClass().getResource("/").getPath();
+    		}
+	    }.getPath().substring(1);
+	    System.out.println(contextPath);
+		String path = contextPath + "/properties/ip.properties";
+    	return path;
+    }
 	
 	public static void main(String[] args) throws Exception {
 		String str = "123456";

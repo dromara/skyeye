@@ -25,6 +25,11 @@ public class Constants {
 			".js", ".gif", ".jpg", ".eot", ".svg", ".ttf", ".woff", ".woff2",
 			".mp4", ".rmvb", ".avi", "3gp", ".html", ".less", ".otf", ".scss",
 			".ico" };
+	
+	/**
+	 * IP过滤
+	 */
+	public static final String[] FILTER_FILE_IP_OPTION = { "0:0:0:0:0:0:0:1", "127.0.0.1"};
 
 	/**
 	 * 过滤器过滤请求类型项

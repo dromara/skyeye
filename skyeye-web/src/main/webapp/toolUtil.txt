@@ -18,3 +18,4 @@ getSurFaceId();							获取ID
 MD5();									加密
 allMenuToTree();						使用递归方法建树
 findChildren();							递归查找子节点
+getIPPropertiesPath();					获取ip.properties路径
