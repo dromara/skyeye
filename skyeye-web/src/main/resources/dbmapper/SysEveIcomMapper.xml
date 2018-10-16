@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.authority.dao.SysEveIconDao">
+	
+	<select id="querySysIconList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.icon_class iconClass
+		FROM
+			sys_eve_icon a
+		WHERE 1 = 1
+			<if test="iconClass != '' and iconClass != null">
+				AND a.icon_class LIKE '%${iconClass}%'
+			</if>
+	</select>
+	
+	<insert id="insertSysIconMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_icon 
+	     (id, icon_class, creater, create_time)
+	     VALUES
+	     (#{id}, #{iconClass}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySysIconMationByIconClass" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.icon_class iconClass
+		FROM
+			sys_eve_icon a
+		WHERE
+			a.icon_class = #{iconClass}
+	</select>
+	
+	<delete id="deleteSysMenuChildMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_icon
+		WHERE
+			id = #{id}
+	</delete>
+	
+</mapper>

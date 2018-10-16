@@ -106,6 +106,18 @@
 		<property id="roleIds" name="roleIds" ref="required" var="角色ID串" />
 	</url>
 	
+	<url id="icon001" path="/post/SysEveIconController/querySysIconList" val="获取ICON列表">
+		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="iconClass" name="iconClass" ref="" var="icon属性"/>
+	</url>
+	<url id="icon002" path="/post/SysEveIconController/insertSysIconMation" val="添加ICON信息">
+		<property id="iconClass" name="iconClass" ref="required" var="icon属性"/>
+	</url>
+	<url id="icon003" path="/post/SysEveIconController/deleteSysIconMationById" val="删除ICON信息">
+		<property id="rowId" name="id" ref="required" var="icon属性id"/>
+	</url>
+	
 	<url id="database001" path="/post/SysDataBaseController/querySysDataBaseList" val="获取数据库信息">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>

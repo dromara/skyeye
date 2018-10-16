@@ -149,7 +149,7 @@ dataGrid.prototype = {
 	},
 	//初始化元素
 	InitializeElement: function() {
-		layui.$("#" + this._id + "").empty().html("<div class='row row-model' id='" + _op.settings.id + "showBody'></div><div class='row row-model' id='" + _op.settings.id + "showFoot' style='text-align: center;'><div class='pagec' id='pagearea'><ul class='pagination'></ul></div></div>");
+		layui.$("#" + this._id + "").empty().html("<div class='layui-col-xs12 row-model' id='" + _op.settings.id + "showBody'></div><div class='layui-col-xs12 row-model' id='" + _op.settings.id + "showFoot' style='text-align: center;'><div class='pagec layui-col-xs12' id='pagearea'><ul class='pagination layui-col-xs6'></ul></div></div>");
 	},
 	//初始化元素
 	createBodyNoFoot: function(pn) {
@@ -159,7 +159,8 @@ dataGrid.prototype = {
 		var offset = (_op.settings.pageindex - 1) * _op.settings.pagesize;
 		var pageParams = {
 				offset: offset,
-				limit: _op.settings.pagesize
+				limit: _op.settings.pagesize,
+				page: _op.settings.pageindex
 		};
 		_op.settings.params = layui.$.extend({}, _op.settings.params, pageParams);
 		var json = this.getAjaxDate(_op.settings.url, _op.settings.params);
@@ -195,7 +196,8 @@ dataGrid.prototype = {
 		var offset = (_op.settings.pageindex - 1) * _op.settings.pagesize;
 		var pageParams = {
 				offset: offset,
-				limit: _op.settings.pagesize
+				limit: _op.settings.pagesize,
+				page: _op.settings.pageindex
 		};
 		_op.settings.params = layui.$.extend({}, _op.settings.params, pageParams);
 		var json = this.getAjaxDate(_op.settings.url, _op.settings.params);
@@ -272,7 +274,7 @@ dataGrid.prototype = {
 		//添加全选全不选事件
 	},
 	//自定义按钮事件
-	customClickPage: function(json){
+	customClickPage: function(json){debugger
 		var options = _op.settings.options;
 		for(var _option in options){
 			if(typeof(options[_option]) == "function") {
@@ -474,8 +476,8 @@ var _createObject = function(id, settings){
 
 var getObject = function(id){
 	for(var i in dataGrid_setting){
-		if(i.id == id){
-			return i.settings;
+		if(dataGrid_setting[i].id == id){
+			return dataGrid_setting[i].settings;
 		}
 	}
 }

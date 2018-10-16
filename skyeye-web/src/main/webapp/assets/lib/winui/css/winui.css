@@ -1,11 +1,4 @@
-﻿/**
- 
- @Name: winui
- @Author: Leo
- @Site: www.leo96.com
- 
- */
-
+﻿
 html,
 body {
     height: 100%;
@@ -14,6 +7,10 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+button{
+	cursor: pointer !important;
 }
 
 .winui-task-item,
@@ -2008,6 +2005,85 @@ body .layer-ext-winconfirm {
     -o-transition-timing-function: linear;
 }
 /***图片上传样式end***/
+
+/***系统icon样式start***/
+
+.item{
+	padding-top: 10px;
+}
+
+.icon-item{
+	text-align: center;
+}
+
+.icon-item>i{
+    height: 60px;
+    width: 60px;
+    font-size: 50px;
+}
+
+.icon-item>div{
+	text-align: center;
+	margin-top: 10px;
+}
+
+/***系统icon样式end***/
+
+
+/***common start***/
+.noMation{
+	text-align: center;
+}
+
+.red{
+    color: #fb5553;
+}
+
+.yl{
+	margin-top: 8px;
+    margin-left: 8px;
+}
+/***common end***/
+
+/***showmode start***/
+
+.pagination{
+	width: 100%;
+}
+
+.ali{
+	float: left;
+    width: 35px;
+    height: 35px;
+}
+
+.ali>a{
+	padding: 0px !important;
+	height: 30px;
+    width: 30px;
+    line-height: 30px;
+    font-weight: 300;
+    color: grey;
+}
+
+.pageBtn{
+	width: 200px !important;
+}
+
+#skippage{
+	height: 30px !important;
+    line-height: 30px !important;
+}
+
+#showFormshowFoot{
+	margin-top: 20px;
+}
+
+.pagec>ul{
+	text-align: center;
+}
+
+/***showmode end***/
 
 
 /*******************************************自定义样式end********************************************/
