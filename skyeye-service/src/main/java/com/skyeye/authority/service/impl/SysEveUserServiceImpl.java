@@ -3,8 +3,11 @@ package com.skyeye.authority.service.impl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.skyeye.authority.dao.SysEveUserDao;
@@ -13,12 +16,16 @@ import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
+import com.skyeye.jedis.service.JedisClient;
 
 @Service
 public class SysEveUserServiceImpl implements SysEveUserService{
 	
 	@Autowired
 	public SysEveUserDao sysEveUserDao;
+	
+	@Autowired
+	public JedisClient jedisClient;
 	
 	/**
 	 * 
@@ -148,6 +155,8 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 					List<Map<String, Object>> deskTops = sysEveUserDao.queryDeskTopsMenuByUserId(userMation);//桌面菜单列表
 					List<Map<String, Object>> allMenu = sysEveUserDao.queryAllMenuByUserId(userMation);
 					allMenu = ToolUtil.allMenuToTree(allMenu);
+					jedisClient.set(userMation.get("id").toString() + ":userMation", JSON.toJSONString(userMation));
+					jedisClient.expire(userMation.get("id").toString() + ":userMation", 30);
 					outputObject.setLogDeskTopMenuParams(deskTops);
 					outputObject.setLogParams(userMation);
 					outputObject.setLogAllMenuParams(allMenu);

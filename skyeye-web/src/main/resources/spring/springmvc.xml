@@ -14,7 +14,7 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-4.2.xsd">
     
-    <context:property-placeholder location="classpath:resource/resource.properties"/>
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:resource/resource.properties"/>
     
     <!-- 配置文件上传解析器 -->  
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  

@@ -9,33 +9,36 @@
     http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd  
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
+	<!-- 加载配置文件 -->
+	<context:property-placeholder ignore-unresolvable="true" location="classpath:properties/redis.properties" />
+	
 	<!-- redis集群版 -->
 	<bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">
 		<constructor-arg>
 			<set>
 				<bean class="redis.clients.jedis.HostAndPort">
-					<constructor-arg name="host" value="192.168.116.20" />
-					<constructor-arg name="port" value="7000" />
+					<constructor-arg name="host" value="${redis.ip1}" />
+					<constructor-arg name="port" value="${redis.host1}" />
 				</bean>
 				<bean class="redis.clients.jedis.HostAndPort">
-					<constructor-arg name="host" value="192.168.116.20" />
-					<constructor-arg name="port" value="7001" />
+					<constructor-arg name="host" value="${redis.ip2}" />
+					<constructor-arg name="port" value="${redis.host2}" />
 				</bean>
 				<bean class="redis.clients.jedis.HostAndPort">
-					<constructor-arg name="host" value="192.168.116.20" />
-					<constructor-arg name="port" value="7002" />
+					<constructor-arg name="host" value="${redis.ip3}" />
+					<constructor-arg name="port" value="${redis.host3}" />
 				</bean>
 				<bean class="redis.clients.jedis.HostAndPort">
-					<constructor-arg name="host" value="192.168.116.20" />
-					<constructor-arg name="port" value="7003" />
+					<constructor-arg name="host" value="${redis.ip4}" />
+					<constructor-arg name="port" value="${redis.host4}" />
 				</bean>
 				<bean class="redis.clients.jedis.HostAndPort">
-					<constructor-arg name="host" value="192.168.116.20" />
-					<constructor-arg name="port" value="7004" />
+					<constructor-arg name="host" value="${redis.ip5}" />
+					<constructor-arg name="port" value="${redis.host5}" />
 				</bean>
 				<bean class="redis.clients.jedis.HostAndPort">
-					<constructor-arg name="host" value="192.168.116.20" />
-					<constructor-arg name="port" value="7005" />
+					<constructor-arg name="host" value="${redis.ip6}" />
+					<constructor-arg name="port" value="${redis.host6}" />
 				</bean>
 			</set>
 		</constructor-arg>
