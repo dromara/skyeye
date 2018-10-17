@@ -10,8 +10,10 @@ public interface SysEveIconService {
 	public void insertSysIconMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void deleteSysIconMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
-	
-	
-	
+
+	public void querySysIconMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editSysIconMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 	
 }

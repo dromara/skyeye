@@ -62,7 +62,7 @@ public class SysEveIconServiceImpl implements SysEveIconService{
 			map.put("createTime", ToolUtil.getTimeAndToString());
 			sysEveIconDao.insertSysIconMation(map);
 		}else{
-			outputObject.setreturnMessage("该ICON属性已存在，不可进行二次添加");
+			outputObject.setreturnMessage("该ICON属性已存在，不可进行二次保存");
 		}
 	}
 
@@ -80,6 +80,45 @@ public class SysEveIconServiceImpl implements SysEveIconService{
 	public void deleteSysIconMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		sysEveIconDao.deleteSysIconMationById(map);
+	}
+
+	/**
+	 * 
+	     * @Title: querySysIconMationToEditById
+	     * @Description: 编辑ICON信息时进行回显
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysIconMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = sysEveIconDao.querySysIconMationToEditById(map);
+		outputObject.setBean(bean);
+		outputObject.settotal(1);
+	}
+
+	/**
+	 * 
+	     * @Title: editSysIconMationById
+	     * @Description: 编辑ICON信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editSysIconMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = sysEveIconDao.querySysIconMationByIconClassAndId(map);
+		if(bean == null){
+			sysEveIconDao.editSysIconMationById(map);
+		}else{
+			outputObject.setreturnMessage("该ICON属性已存在，不可进行二次保存");
+		}
 	}
 	
 	

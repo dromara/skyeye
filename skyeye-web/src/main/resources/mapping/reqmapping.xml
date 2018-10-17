@@ -119,6 +119,13 @@
 	<url id="icon003" path="/post/SysEveIconController/deleteSysIconMationById" val="删除ICON信息" allUse="1">
 		<property id="rowId" name="id" ref="required" var="icon属性id"/>
 	</url>
+	<url id="icon004" path="/post/SysEveIconController/querySysIconMationToEditById" val="编辑ICON信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="icon属性id"/>
+	</url>
+	<url id="icon005" path="/post/SysEveIconController/editSysIconMationById" val="编辑ICON信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="icon属性id"/>
+		<property id="iconClass" name="iconClass" ref="required" var="icon属性"/>
+	</url>
 	
 	<url id="database001" path="/post/SysDataBaseController/querySysDataBaseList" val="获取数据库信息" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />

@@ -16,6 +16,7 @@ layui.config({
 	 	url: reqBasePath + "icon001",
 	 	params: {iconClass:$("#iconClass").val()},
 	 	pagination: true,
+	 	pagesize: 18,
 	 	template: getFileContent('tpl/syseveicon/icon-item.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 		
@@ -32,6 +33,8 @@ layui.config({
 		    			}
 		    		}});
 				});
+	 		},'click .edit':function(index, row){
+	 			edit(row);
 	 		}
 	 	},
 	 	ajaxSendAfter:function(json){
@@ -52,8 +55,8 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuser/syseveuseredit.html", 
-			title: "编辑用户",
+			url: "../../tpl/syseveicon/syseveiconedit.html", 
+			title: "编辑ICON",
 			pageId: "syseveuseredit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {

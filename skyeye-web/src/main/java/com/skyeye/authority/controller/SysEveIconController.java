@@ -63,4 +63,36 @@ public class SysEveIconController {
 		sysEveIconService.deleteSysIconMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysIconMationToEditById
+	     * @Description: 编辑ICON信息时进行回显
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveIconController/querySysIconMationToEditById")
+	@ResponseBody
+	public void querySysIconMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveIconService.querySysIconMationToEditById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editSysIconMationById
+	     * @Description: 编辑ICON信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveIconController/editSysIconMationById")
+	@ResponseBody
+	public void editSysIconMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveIconService.editSysIconMationById(inputObject, outputObject);
+	}
+	
 }
