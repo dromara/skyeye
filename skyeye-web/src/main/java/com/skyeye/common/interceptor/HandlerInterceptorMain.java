@@ -39,7 +39,7 @@ public class HandlerInterceptorMain implements HandlerInterceptor{
     	new PutObject(request, response);
     	//用户是否为空判断
     	if("1".equals(request.getParameter("allUse").toString())){//是否需要登录才能使用   1是   0否    默认为否
-			if(jedisClient.get("userMation:" + request.getParameter("userToken").toString()) == null){
+			if(!jedisClient.exists("userMation:" + request.getParameter("userToken").toString())){
 				return false;
 			}
 		}

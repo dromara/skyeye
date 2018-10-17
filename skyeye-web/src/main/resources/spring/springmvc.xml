@@ -26,6 +26,7 @@
 
 	<!-- 配置包扫描器，以便注册带有@Controller、@Service、@repository、@Component等注解的类成为spring的bean -->
 	<context:component-scan base-package="com.skyeye.*.controller" />
+	<context:component-scan base-package="com.skyeye.common.filter" />
 	
 	<!-- 配置资源映射 -->  
     <mvc:resources location="/assets/" mapping="/assets/**"></mvc:resources>  

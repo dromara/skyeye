@@ -658,6 +658,14 @@ var AjaxPostUtil = {
 
 	// 状态改变的处理  
 	readystatechange: function(xmlhttp) {
+		var sessionstatus = xmlhttp.getResponseHeader("SESSIONSTATUS");
+		if (sessionstatus == "TIMEOUT") {//超时跳转
+			var win = window;
+			while (win != win.top){
+				win = win.top;
+			}
+			win.location.href = "login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");  
+		}
 		// 获取返回值  
 		var returnValue;
 		if(xmlhttp.readyState == 4 && (xmlhttp.status == 200 || xmlhttp.status == 0)) {
@@ -771,6 +779,14 @@ var AjaxGetUtil = {
 
 	// 状态改变的处理  
 	readystatechange: function(xmlhttp) {
+		var sessionstatus = xmlhttp.getResponseHeader("SESSIONSTATUS");
+		if (sessionstatus == "TIMEOUT") {//超时跳转
+			var win = window;
+			while (win != win.top){
+				win = win.top;
+			}
+			win.location.href = "login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");  
+		}
 		// 获取返回值  
 		var returnValue;
 		if(xmlhttp.readyState == 4 && (xmlhttp.status == 200 || xmlhttp.status == 0)) {

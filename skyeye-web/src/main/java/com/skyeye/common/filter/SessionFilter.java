@@ -3,7 +3,6 @@ package com.skyeye.common.filter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -14,12 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.alibaba.fastjson.JSON;
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.jedis.JedisClient;
+import com.skyeye.jedis.impl.JedisClientCluster;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -36,9 +36,6 @@ import net.sf.json.JSONObject;
 public class SessionFilter implements Filter {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(SessionFilter.class);
-	
-	@Autowired
-	public JedisClient jedisClient;
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -89,8 +86,11 @@ public class SessionFilter implements Filter {
 		if(pass){
 			//用户是否为空判断
 			if("1".equals(request.getParameter("allUse").toString())){//是否需要登录才能使用   1是   0否    默认为否
-				if(jedisClient.get("userMation:" + request.getParameter("userToken").toString()) == null){
-					servletResponse.sendRedirect(Constants.LOGIN_PAGE);
+				ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(servletRequest.getSession().getServletContext());
+				JedisClient jedisClient = (JedisClient)ac.getBean("jedisClient");
+				if(!jedisClient.exists("userMation:" + request.getParameter("userToken").toString())){
+					servletResponse.setHeader("SESSIONSTATUS", "TIMEOUT");
+					return;
 				}else{
 					//重置redis时间
 					Map<String, Object> userMation = JSONObject.fromObject(jedisClient.get("userMation:" + request.getParameter("userToken").toString()));//用户信息
@@ -118,15 +118,42 @@ public class SessionFilter implements Filter {
 				}else{
 					if(Constants.REQUEST_MAPPING.containsKey(url.replaceAll("/", ""))){
 						String key = url.replaceAll("/", "");
-						String allUse = Constants.REQUEST_MAPPING.get(url.replaceAll("/", "")).get("allUse").toString();
-						url = Constants.REQUEST_MAPPING.get(url.replaceAll("/", "")).get("path").toString();
-						String queryString = servletRequest.getQueryString();
-						if(ToolUtil.isBlank(queryString)){
-							request.getRequestDispatcher(url + "?sessionKey=" + key + "&allUse=" + allUse).forward(request, response);
+						String allUse = Constants.REQUEST_MAPPING.get(key).get("allUse").toString();
+						if("1".equals(allUse)){//是否需要登录才能使用   1是   0否    默认为否
+							ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(servletRequest.getSession().getServletContext());
+							JedisClientCluster jedisClient = (JedisClientCluster)ac.getBean("jedisClientCluster");
+							if(!jedisClient.exists("userMation:" + request.getParameter("userToken").toString())){
+								servletResponse.setHeader("SESSIONSTATUS", "TIMEOUT");
+								return;
+							}else{
+								//重置redis时间
+								Map<String, Object> userMation = JSONObject.fromObject(jedisClient.get("userMation:" + request.getParameter("userToken").toString()));//用户信息
+								List<Map<String, Object>> deskTops = JSONArray.fromObject(jedisClient.get("deskTopsMation:" + request.getParameter("userToken").toString()));//桌面菜单信息
+								List<Map<String, Object>> allMenu = JSONArray.fromObject(jedisClient.get("allMenuMation:" + request.getParameter("userToken").toString()));//所有菜单信息
+								jedisClient.set("userMation:" + request.getParameter("userToken").toString(), JSON.toJSONString(userMation));
+								jedisClient.expire("userMation:" + request.getParameter("userToken").toString(), 1800);//时间为30分钟
+								jedisClient.set("deskTopsMation:" + request.getParameter("userToken").toString(), JSON.toJSONString(deskTops));
+								jedisClient.expire("deskTopsMation:" + request.getParameter("userToken").toString(), 1800);//时间为30分钟
+								jedisClient.set("allMenuMation:" + request.getParameter("userToken").toString(), JSON.toJSONString(allMenu));
+								jedisClient.expire("allMenuMation:" + request.getParameter("userToken").toString(), 1800);//时间为30分钟
+								
+								url = Constants.REQUEST_MAPPING.get(key).get("path").toString();
+								String queryString = servletRequest.getQueryString();
+								if(ToolUtil.isBlank(queryString)){
+									request.getRequestDispatcher(url + "?sessionKey=" + key + "&allUse=" + allUse).forward(request, response);
+								}else{
+									request.getRequestDispatcher(url + "?sessionKey=" + key + "&allUse=" + allUse).forward(request, response);
+								}
+							}
 						}else{
-							request.getRequestDispatcher(url + "?sessionKey=" + key + "&allUse=" + allUse).forward(request, response);
+							url = Constants.REQUEST_MAPPING.get(key).get("path").toString();
+							String queryString = servletRequest.getQueryString();
+							if(ToolUtil.isBlank(queryString)){
+								request.getRequestDispatcher(url + "?sessionKey=" + key + "&allUse=" + allUse).forward(request, response);
+							}else{
+								request.getRequestDispatcher(url + "?sessionKey=" + key + "&allUse=" + allUse).forward(request, response);
+							}
 						}
-						
 					}else{
 						servletResponse.sendRedirect(Constants.LOGIN_PAGE);
 					}

@@ -68,7 +68,7 @@ public class AOPOutputObjectput {
 				if(ToolUtil.isBlank(result)){
 					Map<String, Object> params = InputObject.getMap();
 					if("1".equals(params.get("urlUseJurisdiction").toString())){//是否需要登录才能使用   1是   0否    默认为否
-						if(jedisClient.get("userMation:" + params.get("userToken").toString()) == null){
+						if(!jedisClient.exists("userMation:" + params.get("userToken").toString())){
 							OutputObject.setMessage("登录超时，请重新登录。");
 						}else{
 							Map<String, Object> userMation = JSONObject.fromObject(jedisClient.get("userMation:" + params.get("userToken").toString()));//用户信息
