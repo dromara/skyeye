@@ -274,7 +274,7 @@ dataGrid.prototype = {
 		//添加全选全不选事件
 	},
 	//自定义按钮事件
-	customClickPage: function(json){debugger
+	customClickPage: function(json){
 		var options = _op.settings.options;
 		for(var _option in options){
 			if(typeof(options[_option]) == "function") {
@@ -295,7 +295,6 @@ dataGrid.prototype = {
 	 */
 	addEventHandler: function(objs, eventName, fun, param, callFun) {
 		var fn = fun;
-		param = '';
 		var obj = null;
 		for(var i = 0; i<objs.length; i++){
 			obj = objs[i];

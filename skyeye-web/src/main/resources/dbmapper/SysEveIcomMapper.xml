@@ -31,7 +31,7 @@
 			a.icon_class = #{iconClass}
 	</select>
 	
-	<delete id="deleteSysMenuChildMationById" parameterType="java.util.Map">
+	<delete id="deleteSysIconMationById" parameterType="java.util.Map">
 		DELETE
 		FROM
 			sys_eve_icon
