@@ -104,6 +104,7 @@ function isNull(str){
 	    fsTree: 'modules/ztree/js/fsTree',//ztree树
 	    mobile: 'modules/mobile', // 移动大模块 | 若当前为开发目录，则为移动模块入口，否则为移动模块集合
 	    'layui.all': '../layui.all', // PC模块合并版
+	    cookie: 'modules/cookie',//cookie
 	};
 
 	// 记录基础数据
@@ -581,6 +582,24 @@ function isNull(str){
   
 }(window);
 
+/**
+ * 获取cookie值
+ * @param name
+ * @returns
+ */
+function getCookie(name){
+	var strcookie = document.cookie;//获取cookie字符串
+	var arrcookie = strcookie.split("; ");//分割
+	//遍历匹配
+	for ( var i = 0; i < arrcookie.length; i++) {
+		var arr = arrcookie[i].split("=");
+		if (arr[0] == name){
+			return arr[1];
+		}
+	}
+	return "";
+}
+
 //ajax请求
 var AjaxPostUtil = {
 	// 基础选项  
@@ -632,6 +651,7 @@ var AjaxPostUtil = {
 			}*/
 			paramsArray.push(pro + "=" + paramValue);
 		}
+		paramsArray.push("userToken=" + getCookie('userToken'));
 		paramsArray.push("loginPCIp=" + returnCitySN["cip"]);
 		return paramsArray.join("&");
 	},
@@ -744,6 +764,8 @@ var AjaxGetUtil = {
 			}*/
 			paramsArray.push(pro + "=" + paramValue);
 		}
+		paramsArray.push("userToken=" + getCookie('userToken'));
+		paramsArray.push("loginPCIp=" + returnCitySN["cip"]);
 		return paramsArray.join("&");
 	},
 

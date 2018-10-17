@@ -43,5 +43,5 @@
 			</set>
 		</constructor-arg>
 	</bean>
-	<bean id="jedisClientCluster" class="com.skyeye.jedis.service.impl.JedisClientCluster"></bean>
+	<bean id="jedisClientCluster" class="com.skyeye.jedis.impl.JedisClientCluster"></bean>
 </beans>

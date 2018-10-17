@@ -71,18 +71,6 @@ public class OutputObject extends PutObject implements Serializable{
 		return OutputObject.object.get("returnMessage").toString();
 	}
 	
-	public void setLogParams(Map<String,Object> login) throws Exception {
-		getRequest().getSession().setAttribute("admUser", login);
-	}
-	
-	public void setLogDeskTopMenuParams(List<Map<String, Object>> beans) throws Exception {
-		getRequest().getSession().setAttribute("admDeskUserMenu", beans);
-	}
-	
-	public void setLogAllMenuParams(List<Map<String, Object>> beans) throws Exception {
-		getRequest().getSession().setAttribute("admAllMenu", beans);
-	}
-	
 	public static void put(){
 		Object context = JSON.toJSON(object);
 		PrintWriter out = null;

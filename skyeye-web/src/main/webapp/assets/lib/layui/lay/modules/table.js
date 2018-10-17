@@ -411,7 +411,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       var params = {};
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
-      
+      options.where.userToken = getCookie('userToken');
       $.ajax({
         type: options.method || 'get'
         ,url: options.url

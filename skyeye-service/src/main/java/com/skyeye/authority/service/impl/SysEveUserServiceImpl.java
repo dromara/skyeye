@@ -16,7 +16,7 @@ import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
-import com.skyeye.jedis.service.JedisClient;
+import com.skyeye.jedis.JedisClient;
 
 @Service
 public class SysEveUserServiceImpl implements SysEveUserService{
@@ -155,11 +155,13 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 					List<Map<String, Object>> deskTops = sysEveUserDao.queryDeskTopsMenuByUserId(userMation);//桌面菜单列表
 					List<Map<String, Object>> allMenu = sysEveUserDao.queryAllMenuByUserId(userMation);
 					allMenu = ToolUtil.allMenuToTree(allMenu);
-					jedisClient.set(userMation.get("id").toString() + ":userMation", JSON.toJSONString(userMation));
-					jedisClient.expire(userMation.get("id").toString() + ":userMation", 30);
-					outputObject.setLogDeskTopMenuParams(deskTops);
-					outputObject.setLogParams(userMation);
-					outputObject.setLogAllMenuParams(allMenu);
+					jedisClient.set("userMation:" + userMation.get("id").toString(), JSON.toJSONString(userMation));
+					jedisClient.expire("userMation:" + userMation.get("id").toString(), 1800);//时间为30分钟
+					jedisClient.set("deskTopsMation:" + userMation.get("id").toString(), JSON.toJSONString(deskTops));
+					jedisClient.expire("deskTopsMation:" + userMation.get("id").toString(), 1800);//时间为30分钟
+					jedisClient.set("allMenuMation:" + userMation.get("id").toString(), JSON.toJSONString(allMenu));
+					jedisClient.expire("allMenuMation:" + userMation.get("id").toString(), 1800);//时间为30分钟
+					outputObject.setBean(userMation);
 				}
 			}else{
 				outputObject.setreturnMessage("密码输入错误！");
@@ -181,7 +183,7 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 	public void queryUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> userMation = inputObject.getLogParams();
 		if(userMation == null){
-			outputObject.setreturnMessage("请重新登录");
+			outputObject.setreturnMessage("登录超时，请重新登录。");
 		}else{
 			outputObject.setBean(userMation);
 		}

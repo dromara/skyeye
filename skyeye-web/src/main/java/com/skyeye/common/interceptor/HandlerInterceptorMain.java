@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import com.skyeye.common.constans.Constants;
@@ -14,6 +15,7 @@ import com.skyeye.common.object.ObjectConstant;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.object.PutObject;
 import com.skyeye.common.util.ToolUtil;
+import com.skyeye.jedis.JedisClient;
 
 
 /**
@@ -26,12 +28,21 @@ import com.skyeye.common.util.ToolUtil;
  */
 public class HandlerInterceptorMain implements HandlerInterceptor{
 	
+	@Autowired
+	public JedisClient jedisClient;
+	
 	//在进入Handler方法之前执行  
 	//用于身份认证、身份授权、  
 	//比如身份认证，IP黑名单过滤，如果认证不通过表示当前用户没有登录，需要此方法拦截不再向下执行
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
     	new PutObject(request, response);
+    	//用户是否为空判断
+    	if("1".equals(request.getParameter("allUse").toString())){//是否需要登录才能使用   1是   0否    默认为否
+			if(jedisClient.get("userMation:" + request.getParameter("userToken").toString()) == null){
+				return false;
+			}
+		}
     	/**IP黑名单过滤开始**/
     	String ip;
 		ip = request.getHeader("x-forwarded-for");
@@ -69,7 +80,6 @@ public class HandlerInterceptorMain implements HandlerInterceptor{
 		in.close();
 		/**IP黑名单过滤结束**/
 		
-    	HttpServletRequest servletRequest = (HttpServletRequest) request;
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 //		String url = servletRequest.getContextPath() + servletRequest.getServletPath();

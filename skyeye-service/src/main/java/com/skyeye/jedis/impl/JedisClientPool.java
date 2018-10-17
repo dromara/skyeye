@@ -1,11 +1,11 @@
-package com.skyeye.jedis.service.impl;
+package com.skyeye.jedis.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.skyeye.jedis.JedisClient;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import com.skyeye.jedis.service.JedisClient;
 
 public class JedisClientPool implements JedisClient {
 	

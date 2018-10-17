@@ -62,12 +62,18 @@ public class TokenThread implements Runnable{
 				for(int j = 0;j < actionNodes.getLength(); j++){
 					actionBean = new HashMap<String, Object>();
 					Element property = (Element)actionNodes.item(j);
-					actionBean.put("id", property.getAttribute("id"));
-					actionBean.put("name", property.getAttribute("name"));
-					actionBean.put("ref", property.getAttribute("ref"));
+					actionBean.put("id", property.getAttribute("id"));//前端传递的key
+					actionBean.put("name", property.getAttribute("name"));//后端接收的key
+					actionBean.put("ref", property.getAttribute("ref"));//参数要求：require、num等
 					controllerBeans.add(actionBean);
 				}
 				controllerBean.put("list", controllerBeans);
+				//是否需要登录才能使用
+				if(action.getAttribute("allUse") != null && !"".equals(action.getAttribute("allUse"))){
+					controllerBean.put("allUse", action.getAttribute("allUse"));
+				}else{
+					controllerBean.put("allUse", 0);//是否需要登录才能使用   1是   0否    默认为否
+				}
 				controllerBean.put("path", action.getAttribute("path"));
 				System.out.println(("请求信息："+ i + JSONObject.fromObject(controllerBean).toString()));
 				Constants.REQUEST_MAPPING.put(action.getAttribute("id").toString(), controllerBean);

@@ -5,12 +5,14 @@ layui.config({
 	version: skyeyeVersion
 }).extend({  //指定js别名
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'cookie'], function (exports) {
 	winui.renderColor();
 	
 	layui.use(['form'], function (form) {
 		var $ = layui.$;
 		form.render();
+		
+		$.cookie('userToken', "", {path: '/' });
 		
 		form.on('submit(login)', function (data) {
 			//表单验证
@@ -26,7 +28,10 @@ layui.config({
  	        		};
  	        		AjaxPostUtil.request({url:reqBasePath + "login001", params:params, type:'json', callback:function(json){
  		 	   			if(json.returnCode == 0){
- 			 	   			location.href = "index.html";
+ 		 	   				$.cookie('userToken', json.bean.id, {path: '/' });//浏览器关闭之后此cookie就失效
+ 		 	   				if(!isNull(json.bean.id)){
+ 		 	   					location.href = "index.html";
+ 		 	   				}
  		 	   			}else{
  		 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
  		 	   			}

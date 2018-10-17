@@ -1,4 +1,4 @@
-package com.skyeye.jedis.service;
+package com.skyeye.jedis;
 
 public interface JedisClient {
 	

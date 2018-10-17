@@ -1,10 +1,4 @@
-/**
-
- @Name：layui.tree 树组件
- @Author：贤心
- @License：MIT
-    
- */
+/** 树组件 **/
  
  
 layui.define('jquery', function(exports){

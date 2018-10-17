@@ -3,8 +3,8 @@
     , version: skyeyeVersion
 }).extend({  //指定js别名
     window: 'js/winui.window',
-    desktop: 'js/winui.desktop',//煮面加载模块
-    start: 'js/winui.start',
+    desktop: 'js/winui.desktop',//桌面加载模块
+    start: 'js/winui.start',//左下角开始菜单
     helper: 'js/winui.helper'
 }).define(['window', 'desktop', 'start', 'helper'], function (exports) {
     var $ = layui.jquery;

@@ -423,6 +423,7 @@ dataGrid.prototype = {
 		//定义一个全局变量来接受$post的返回值
 		var result;
 		//用ajax的同步方式
+		parms.userToken = getCookie('userToken');
 		layui.$.ajax({
 			url: url,
 			async: false, //改为同步方式

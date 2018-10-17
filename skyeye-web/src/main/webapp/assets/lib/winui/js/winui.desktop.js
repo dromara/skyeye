@@ -45,11 +45,10 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
 
     //设置数据
     Desktop.prototype.setData = function (callback) {
-        var obj = this
-            , currOptions = obj.options;
-
+        var obj = this, currOptions = obj.options;
         if (!currOptions.url || !currOptions.method)
-            return
+            return;
+        currOptions.data.userToken = getCookie('userToken');
         $.ajax({
             url: currOptions.url,
             type: currOptions.method,

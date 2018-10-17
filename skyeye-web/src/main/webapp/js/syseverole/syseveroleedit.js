@@ -65,7 +65,7 @@ layui.config({
 				var tree = fsTree.render({
 					id: treeId,
 					funcNo: funcNo,
-					url: url,
+					url: url + "?userToken=" + getCookie('userToken'),
 					getTree: getTree,
 					checkEnable: true,
 					loadEnable: false

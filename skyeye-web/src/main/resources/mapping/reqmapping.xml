@@ -1,49 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <controller name="notIntercept">
-
-	<url id="login001" path="/post/SysEveUserController/queryUserToLogin" val="登录">
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否    默认为否
+	 -->
+	<url id="login001" path="/post/SysEveUserController/queryUserToLogin" val="登录" allUse="0">
 		<property id="userCode" name="userCode" ref="" var="账号"/>
 		<property id="password" name="password" ref="" var="密码"/>
 	</url>
-	<url id="login002" path="/post/SysEveUserController/queryUserMationBySession" val="从session中获取用户信息">
+	<url id="login002" path="/post/SysEveUserController/queryUserMationBySession" val="从session中获取用户信息" allUse="1">
 	</url>
-	<url id="login003" path="/post/SysEveUserController/deleteUserMationBySession" val="退出">
+	<url id="login003" path="/post/SysEveUserController/deleteUserMationBySession" val="退出" allUse="1">
 	</url>
-	<url id="login004" path="/post/SysEveUserController/queryDeskTopMenuBySession" val="获取桌面菜单列表">
+	<url id="login004" path="/post/SysEveUserController/queryDeskTopMenuBySession" val="获取桌面菜单列表" allUse="1">
 	</url>
-	<url id="login005" path="/post/SysEveUserController/queryAllMenuBySession" val="获取全部菜单列表">
+	<url id="login005" path="/post/SysEveUserController/queryAllMenuBySession" val="获取全部菜单列表" allUse="1">
 	</url>
 	
-	<url id="sys001" path="/post/SysEveUserController/querySysUserList" val="获取用户列表">
+	<url id="sys001" path="/post/SysEveUserController/querySysUserList" val="获取用户列表" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 		<property id="userCode" name="userCode" ref="" var="用户账号"/>
 		<property id="userName" name="userName" ref="" var="用户名称"/>
 	</url>
-	<url id="sys002" path="/post/SysEveUserController/editSysUserLockStateToLockById" val="锁定账号">
+	<url id="sys002" path="/post/SysEveUserController/editSysUserLockStateToLockById" val="锁定账号" allUse="1">
 		<property id="rowId" name="id" ref="required" var="账号ID" />
 	</url>
-	<url id="sys003" path="/post/SysEveUserController/editSysUserLockStateToUnLockById" val="解锁账号">
+	<url id="sys003" path="/post/SysEveUserController/editSysUserLockStateToUnLockById" val="解锁账号" allUse="1">
 		<property id="rowId" name="id" ref="required" var="账号ID" />
 	</url>
-	<url id="sys004" path="/post/SysEveUserController/querySysUserMationToEditById" val="编辑账号时获取账号信息">
+	<url id="sys004" path="/post/SysEveUserController/querySysUserMationToEditById" val="编辑账号时获取账号信息" allUse="1">
 		<property id="rowId" name="id" ref="required" var="账号ID" />
 	</url>
-	<url id="sys005" path="/post/SysEveUserController/editSysUserMationById" val="编辑账号">
+	<url id="sys005" path="/post/SysEveUserController/editSysUserMationById" val="编辑账号" allUse="1">
 		<property id="rowId" name="id" ref="required" var="账号ID" />
 		<property id="userSex" name="userSex" ref="required,num" var="性别" />
 		<property id="userIdCard" name="userIdCard" ref="required,idcard" var="身份证" />
 		<property id="userName" name="userName" ref="required" var="用户名" />
 		<property id="userPhoto" name="userPhoto" ref="required" var="头像" />
 	</url>
-	<url id="sys006" path="/post/SysEveMenuController/querySysMenuList" val="获取菜单列表">
+	<url id="sys006" path="/post/SysEveMenuController/querySysMenuList" val="获取菜单列表" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 		<property id="menuName" name="menuName" ref="" var="菜单名称"/>
 		<property id="menuUrl" name="menuUrl" ref="" var="菜单链接"/>
 		<property id="parentId" name="parentId" ref="" var="菜单父ID"/>
 	</url>
-	<url id="sys007" path="/post/SysEveMenuController/insertSysMenuMation" val="添加菜单">
+	<url id="sys007" path="/post/SysEveMenuController/insertSysMenuMation" val="添加菜单" allUse="1">
 		<property id="menuName" name="menuName" ref="required" var="菜单名称"/>
 		<property id="titleName" name="titleName" ref="required" var="标题名称" />
 		<property id="menuIcon" name="menuIcon" ref="required" var="菜单logo"/>
@@ -52,13 +54,13 @@
 		<property id="menuSysType" name="menuSysType" ref="required,num" var="是否为系统菜单"/>
 		<property id="parentId" name="parentId" ref="required" var="菜单父ID"/>
 	</url>
-	<url id="sys008" path="/post/SysEveMenuController/querySysMenuMationToEditById" val="编辑菜单时进行信息回显">
+	<url id="sys008" path="/post/SysEveMenuController/querySysMenuMationToEditById" val="编辑菜单时进行信息回显" allUse="1">
 		<property id="rowId" name="id" ref="required" var="菜单ID" />
 	</url>
-	<url id="sys009" path="/post/SysEveMenuController/querySysMenuMationBySimpleLevel" val="查看同级菜单">
+	<url id="sys009" path="/post/SysEveMenuController/querySysMenuMationBySimpleLevel" val="查看同级菜单" allUse="1">
 		<property id="parentId" name="parentId" ref="required" var="父菜单ID" />
 	</url>
-	<url id="sys010" path="/post/SysEveMenuController/editSysMenuMationById" val="编辑菜单">
+	<url id="sys010" path="/post/SysEveMenuController/editSysMenuMationById" val="编辑菜单" allUse="1">
 		<property id="menuName" name="menuName" ref="required" var="菜单名称"/>
 		<property id="titleName" name="titleName" ref="required" var="标题名称" />
 		<property id="menuIcon" name="menuIcon" ref="required" var="菜单logo"/>
@@ -68,65 +70,65 @@
 		<property id="parentId" name="parentId" ref="required" var="菜单父ID"/>
 		<property id="rowId" name="id" ref="required" var="菜单ID" />
 	</url>
-	<url id="sys011" path="/post/SysEveMenuController/deleteSysMenuMationById" val="删除菜单信息">
+	<url id="sys011" path="/post/SysEveMenuController/deleteSysMenuMationById" val="删除菜单信息" allUse="1">
 		<property id="rowId" name="id" ref="required" var="菜单ID" />
 	</url>
-	<url id="sys012" path="/post/SysEveMenuController/queryTreeSysMenuMationBySimpleLevel" val="异步加载树查看同级菜单">
+	<url id="sys012" path="/post/SysEveMenuController/queryTreeSysMenuMationBySimpleLevel" val="异步加载树查看同级菜单" allUse="1">
 		<property id="parentId" name="parentId" ref="required" var="父菜单ID" />
 	</url>
-	<url id="sys013" path="/post/SysEveRoleController/querySysRoleList" val="获取角色列表">
+	<url id="sys013" path="/post/SysEveRoleController/querySysRoleList" val="获取角色列表" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 		<property id="roleName" name="roleName" ref="" var="角色名称"/>
 	</url>
-	<url id="sys014" path="/post/SysEveRoleController/querySysRoleBandMenuList" val="获取角色需要绑定的菜单列表">
+	<url id="sys014" path="/post/SysEveRoleController/querySysRoleBandMenuList" val="获取角色需要绑定的菜单列表" allUse="1">
 	</url>
-	<url id="sys015" path="/post/SysEveRoleController/insertSysRoleMation" val="新增角色">
+	<url id="sys015" path="/post/SysEveRoleController/insertSysRoleMation" val="新增角色" allUse="1">
 		<property id="roleName" name="roleName" ref="required" var="角色名称"/>
 		<property id="roleDesc" name="roleDesc" ref="" var="角色描述"/>
 		<property id="menuIds" name="menuIds" ref="required" var="菜单权限"/>
 	</url>
-	<url id="sys016" path="/post/SysEveRoleController/querySysRoleMationToEditById" val="编辑角色时的信息回显">
+	<url id="sys016" path="/post/SysEveRoleController/querySysRoleMationToEditById" val="编辑角色时的信息回显" allUse="1">
 		<property id="rowId" name="id" ref="required" var="角色ID"/>
 	</url>
-	<url id="sys017" path="/post/SysEveRoleController/editSysRoleMationById" val="编辑角色">
+	<url id="sys017" path="/post/SysEveRoleController/editSysRoleMationById" val="编辑角色" allUse="1">
 		<property id="roleName" name="roleName" ref="required" var="角色名称"/>
 		<property id="roleDesc" name="roleDesc" ref="" var="角色描述"/>
 		<property id="menuIds" name="menuIds" ref="required" var="菜单权限"/>
 		<property id="rowId" name="id" ref="required" var="角色ID"/>
 	</url>
-	<url id="sys018" path="/post/SysEveRoleController/deleteSysRoleMationById" val="删除角色">
+	<url id="sys018" path="/post/SysEveRoleController/deleteSysRoleMationById" val="删除角色" allUse="1">
 		<property id="rowId" name="id" ref="required" var="角色ID"/>
 	</url>
-	<url id="sys019" path="/post/SysEveUserController/queryRoleAndBindRoleByUserId" val="获取角色和当前已经绑定的角色信息">
+	<url id="sys019" path="/post/SysEveUserController/queryRoleAndBindRoleByUserId" val="获取角色和当前已经绑定的角色信息" allUse="1">
 		<property id="rowId" name="id" ref="required" var="账号ID" />
 	</url>
-	<url id="sys020" path="/post/SysEveUserController/editRoleIdsByUserId" val="编辑用户绑定的角色">
+	<url id="sys020" path="/post/SysEveUserController/editRoleIdsByUserId" val="编辑用户绑定的角色" allUse="1">
 		<property id="rowId" name="id" ref="required" var="账号ID" />
 		<property id="roleIds" name="roleIds" ref="required" var="角色ID串" />
 	</url>
 	
-	<url id="icon001" path="/post/SysEveIconController/querySysIconList" val="获取ICON列表">
+	<url id="icon001" path="/post/SysEveIconController/querySysIconList" val="获取ICON列表" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 		<property id="iconClass" name="iconClass" ref="" var="icon属性"/>
 	</url>
-	<url id="icon002" path="/post/SysEveIconController/insertSysIconMation" val="添加ICON信息">
+	<url id="icon002" path="/post/SysEveIconController/insertSysIconMation" val="添加ICON信息" allUse="1">
 		<property id="iconClass" name="iconClass" ref="required" var="icon属性"/>
 	</url>
-	<url id="icon003" path="/post/SysEveIconController/deleteSysIconMationById" val="删除ICON信息">
+	<url id="icon003" path="/post/SysEveIconController/deleteSysIconMationById" val="删除ICON信息" allUse="1">
 		<property id="rowId" name="id" ref="required" var="icon属性id"/>
 	</url>
 	
-	<url id="database001" path="/post/SysDataBaseController/querySysDataBaseList" val="获取数据库信息">
+	<url id="database001" path="/post/SysDataBaseController/querySysDataBaseList" val="获取数据库信息" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 		<property id="tableName" name="tableName" ref="" var="表名"/>
 		<property id="tableDesc" name="tableDesc" ref="" var="表备注"/>
 	</url>
-	<url id="database002" path="/post/SysDataBaseController/querySysDataBaseSelectList" val="获取数据库表名信息">
+	<url id="database002" path="/post/SysDataBaseController/querySysDataBaseSelectList" val="获取数据库表名信息" allUse="1">
 	</url>
-	<url id="database003" path="/post/SysDataBaseController/querySysDataBaseDescSelectList" val="获取数据库表备注信息">
+	<url id="database003" path="/post/SysDataBaseController/querySysDataBaseDescSelectList" val="获取数据库表备注信息" allUse="1">
 	</url>
 	
 	

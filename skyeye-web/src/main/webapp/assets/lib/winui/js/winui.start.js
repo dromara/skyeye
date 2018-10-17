@@ -72,7 +72,8 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
             , currOptions = obj.options;
 
         if (!currOptions.url || !currOptions.method)
-            return
+            return;
+        currOptions.data.userToken = getCookie('userToken');
         $.ajax({
             url: currOptions.url,
             type: currOptions.method,

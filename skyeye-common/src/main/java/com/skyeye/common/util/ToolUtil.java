@@ -403,7 +403,6 @@ public class ToolUtil {
     			return this.getClass().getResource("/").getPath();
     		}
 	    }.getPath().substring(1);
-	    System.out.println(contextPath);
 		String path = contextPath + "/properties/ip.properties";
     	return path;
     }
