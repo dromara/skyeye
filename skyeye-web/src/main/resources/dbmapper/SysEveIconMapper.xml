@@ -12,6 +12,7 @@
 			<if test="iconClass != '' and iconClass != null">
 				AND a.icon_class LIKE '%${iconClass}%'
 			</if>
+			ORDER BY a.create_time DESC
 	</select>
 	
 	<insert id="insertSysIconMation" parameterType="java.util.Map">
@@ -76,6 +77,7 @@
 			a.icon_class iconClass
 		FROM
 			sys_eve_icon a
+			ORDER BY a.create_time DESC
 	</select>
 	
 </mapper>
