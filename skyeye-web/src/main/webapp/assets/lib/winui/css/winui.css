@@ -2010,6 +2010,7 @@ body .layer-ext-winconfirm {
 
 .item{
 	padding-top: 10px;
+	height: 140px;
 }
 
 .icon-item{
@@ -2020,6 +2021,13 @@ body .layer-ext-winconfirm {
     height: 60px;
     width: 60px;
     font-size: 50px;
+}
+
+.icon-class{
+	height: 30px;
+}
+
+.icon-item>span{
 }
 
 .icon-item>div{

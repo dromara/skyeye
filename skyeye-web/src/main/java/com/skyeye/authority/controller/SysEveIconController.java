@@ -95,4 +95,20 @@ public class SysEveIconController {
 		sysEveIconService.editSysIconMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysIconListToMenu
+	     * @Description: 获取ICON列表供menu菜单使用
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveIconController/querySysIconListToMenu")
+	@ResponseBody
+	public void querySysIconListToMenu(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveIconService.querySysIconListToMenu(inputObject, outputObject);
+	}
+	
 }

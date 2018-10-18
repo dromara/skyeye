@@ -46,7 +46,7 @@ var getFileContent = function(url){
 
 //判断内容是否为空
 function isNull(str){
-	if(str == null || str == "" || str == '' || str == "null"){
+	if(str == null || str == "" || str == '' || str == "null" || str == "undefined"){
 		return true;
 	}else{
 		return false;

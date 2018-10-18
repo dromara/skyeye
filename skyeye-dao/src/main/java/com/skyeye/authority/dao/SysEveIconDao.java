@@ -21,4 +21,6 @@ public interface SysEveIconDao {
 
 	public int editSysIconMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> querySysIconListToMenu(Map<String, Object> map, PageBounds pageBounds) throws Exception;
+
 }

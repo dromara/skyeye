@@ -70,4 +70,12 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="querySysIconListToMenu" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.icon_class iconClass
+		FROM
+			sys_eve_icon a
+	</select>
+	
 </mapper>

@@ -29,6 +29,12 @@ function _openNewWindows(mation){
 					s += "&" + param + "=" + mation.params[param];
 				mation.url = mation.url + "?" + s.slice(1);
 			}
+			if(isNull(mation.area)){
+				mation.area = [window.screen.width / 2 + 'px', window.screen.height / 2 + 'px'];
+			}
+			if(isNull(mation.offset)){
+				mation.offset = ['15vh', '20vw'];
+			}
 		    var index = layer.load(1);
 		    refreshCode = "";
 		    layui.$.ajax({
@@ -44,8 +50,8 @@ function _openNewWindows(mation){
 		                type: 2,
 		                title: mation.title,
 		                content: mation.url,
-		                area: [window.screen.width / 2 + 'px', window.screen.height / 2 + 'px'],
-		                offset: ['15vh', '20vw'],
+		                area: mation.area,
+		                offset: mation.offset,
 		                end: function(){
 		                	if(typeof(mation.callBack) == "function") {
 		                		mation.callBack(refreshCode);

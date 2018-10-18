@@ -120,6 +120,27 @@ public class SysEveIconServiceImpl implements SysEveIconService{
 			outputObject.setreturnMessage("该ICON属性已存在，不可进行二次保存");
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: querySysIconListToMenu
+	     * @Description: 获取ICON列表供menu菜单使用
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysIconListToMenu(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysEveIconDao.querySysIconListToMenu(map, 
+				new PageBounds(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString())));
+		PageList<Map<String, Object>> beansPageList = (PageList<Map<String, Object>>)beans;
+		int total = beansPageList.getPaginator().getTotalCount();
+		outputObject.setBeans(beans);
+		outputObject.settotal(total);
+	}
 	
 	
 	

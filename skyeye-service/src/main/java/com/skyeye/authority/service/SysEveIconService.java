@@ -15,5 +15,7 @@ public interface SysEveIconService {
 
 	public void editSysIconMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void querySysIconListToMenu(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 	
 }

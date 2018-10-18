@@ -74,6 +74,9 @@ layui.config({
 		        { title: '序号', type: 'numbers'},
 		        { field: 'menuName', title: '菜单名称', width: 120 },
 		        { field: 'menuIcon', title: '图标码', width: 120 },
+		        { field: 'menuIcon', title: '图标', width: 120, templet: function(d){
+		        	return '<i class="fa fa-fw ' + d.menuIcon + '"></i>';
+		        }},
 		        { field: 'titleName', title: '标题名称', width: 120 },
 		        { field: 'menuLevel', title: '菜单级别', width: 180, templet: function(d){
 		        	if(d.parentId == '0'){

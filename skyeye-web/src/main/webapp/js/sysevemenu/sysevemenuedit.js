@@ -1,3 +1,6 @@
+
+var childIcon = "";
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -194,6 +197,22 @@ layui.config({
  	   			}
  	   		}});
  	    }
+ 	    
+ 	    //菜单图标选中事件
+ 	    $("body").on("focus", "#menuIcon", function(e){
+ 	    	_openNewWindows({
+ 				url: "../../tpl/sysevemenu/icon.html", 
+ 				title: "选择ICON图标",
+ 				pageId: "icon",
+ 				area: ['640px', '360px'],
+ 				callBack: function(refreshCode){
+ 	                if (refreshCode == '0') {
+ 	                	$("#menuIcon").val(childIcon);
+ 	                } else if (refreshCode == '-9999') {
+ 	                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+ 	                }
+ 				}});
+ 	    });
  	    
  	    //获取菜单级别
  	    function getMenuLevelName(level){
