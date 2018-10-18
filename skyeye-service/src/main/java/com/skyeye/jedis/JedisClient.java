@@ -1,5 +1,6 @@
 package com.skyeye.jedis;
 
+
 public interface JedisClient {
 	
 	/**
@@ -106,4 +107,17 @@ public interface JedisClient {
 	     * @throws
 	 */
 	public Long hdel(String key, String... field);
+	
+	/**
+	 * 
+	     * @Title: del
+	     * @Description: 删除给定的一个 key 不存在的 key 会被忽略。
+	     * @param @param key
+	     * @param @param field
+	     * @param @return    参数
+	     * @return Long    返回类型
+	     * @throws
+	 */
+	public Long del(String key);
+	
 }

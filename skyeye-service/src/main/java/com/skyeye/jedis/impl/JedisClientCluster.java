@@ -1,9 +1,7 @@
 package com.skyeye.jedis.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.skyeye.jedis.JedisClient;
-
 import redis.clients.jedis.JedisCluster;
 
 public class JedisClientCluster implements JedisClient {
@@ -55,4 +53,10 @@ public class JedisClientCluster implements JedisClient {
 	public Long hdel(String key, String... field) {
 		return jedisCluster.hdel(key, field);
 	}
+
+	@Override
+	public Long del(String key) {
+        return jedisCluster.del(key);
+	}
+
 }

@@ -201,6 +201,10 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 	 */
 	@Override
 	public void deleteUserMationBySession(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		jedisClient.del("userMation:" + map.get("userToken").toString());
+		jedisClient.del("deskTopsMation:" + map.get("userToken").toString());
+		jedisClient.del("allMenuMation:" + map.get("userToken").toString());
 		inputObject.removeSession();
 	}
 

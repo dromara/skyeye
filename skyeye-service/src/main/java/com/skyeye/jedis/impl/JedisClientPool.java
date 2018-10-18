@@ -1,11 +1,10 @@
 package com.skyeye.jedis.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.skyeye.jedis.JedisClient;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.util.SafeEncoder;
 
 public class JedisClientPool implements JedisClient {
 	
@@ -83,4 +82,13 @@ public class JedisClientPool implements JedisClient {
 		jedis.close();
 		return result;
 	}
+
+	@Override
+	public Long del(String key) {
+		Jedis jedis = jedisPool.getResource();
+		Long result = jedis.del(SafeEncoder.encode(key));
+		jedis.close();
+		return result;
+	}
+
 }
