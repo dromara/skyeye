@@ -25,6 +25,7 @@ layui.config({
 	        { title: '序号', type: 'numbers'},
 	        { field: 'roleName', title: '角色名称', width: 120 },
 	        { field: 'roleDesc', title: '角色描述', width: 520 },
+	        { field: 'userNum', title: '使用用户数量', width: 150 },
 	        { field: 'parentName', title: '父角色', width: 150 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
