@@ -15,7 +15,8 @@
 			a.menu_url menuUrl,
 			CONVERT(a.create_time, char) createTime,
 			b.user_name userName,
-			IFNULL(GROUP_CONCAT(c.menu_name separator '->'), '创世菜单') menuParentName
+			IFNULL(GROUP_CONCAT(c.menu_name separator '->'), '创世菜单') menuParentName,
+			(SELECT COUNT(*) FROM sys_eve_role_menu d WHERE d.menu_id = a.id) roleNum
 		FROM
 			sys_eve_menu a
 			LEFT JOIN sys_eve_user b ON a.creater = b.id

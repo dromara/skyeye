@@ -82,6 +82,7 @@ layui.config({
 		        		return "子菜单-->" + d.menuLevel + "级子菜单";
 		        	}
 		        }},
+		        { field: 'roleNum', title: '使用角色数量', width: 150 },
 		        { field: 'menuParentName', title: '父菜单', width: 100 },
 		        { field: 'menuType', title: '菜单类型', width: 100 },
 		        { field: 'menuUrl', title: '菜单链接', width: 160 },
