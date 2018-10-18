@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.authority.dao.RmTypeDao">
+	
+	<select id="queryRmTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name rmTypeName,
+			(SELECT COUNT(*) FROM rm_group b WHERE b.rm_type_id = a.id) groupNum,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			rm_type a
+		WHERE 1 = 1
+			<if test="rmTypeName != '' and rmTypeName != null">
+				AND a.name LIKE '%${rmTypeName}%'
+			</if>
+			ORDER BY a.sort DESC, a.create_time DESC
+	</select>
+	
+	
+</mapper>
