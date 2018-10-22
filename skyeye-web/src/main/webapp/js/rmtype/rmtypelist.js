@@ -26,7 +26,7 @@ layui.config({
 	        { field: 'rmTypeName', title: '分类名称', width: 120 },
 	        { field: 'groupNum', title: '组件数量', width: 520 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
-	        { title: '操作', fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
+	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]
 	});
 	
@@ -37,6 +37,10 @@ layui.config({
         	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
+        }else if (layEvent === 'top') { //上移
+        	topOne(data);
+        }else if (layEvent === 'lower') { //下移
+        	lowerOne(data);
         }
     });
 	
@@ -56,7 +60,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除分类' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
-            AjaxPostUtil.request({url:reqBasePath + "sys018", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "rmxcx003", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
     				loadTable();
@@ -67,13 +71,37 @@ layui.config({
 		});
 	}
 	
+	//上移
+	function topOne(data){
+		AjaxPostUtil.request({url:reqBasePath + "rmxcx006", params:{rowId: data.id}, type:'json', callback:function(json){
+			if(json.returnCode == 0){
+				top.winui.window.msg("上移成功", {icon: 1,time: 2000});
+				loadTable();
+			}else{
+				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			}
+		}});
+	}
+	
+	//下移
+	function lowerOne(data){
+		AjaxPostUtil.request({url:reqBasePath + "rmxcx007", params:{rowId: data.id}, type:'json', callback:function(json){
+			if(json.returnCode == 0){
+				top.winui.window.msg("下移成功", {icon: 1,time: 2000});
+				loadTable();
+			}else{
+				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			}
+		}});
+	}
+	
 	//编辑分类
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseverole/syseveroleedit.html", 
+			url: "../../tpl/rmtype/rmtypeedit.html", 
 			title: "编辑分类",
-			pageId: "syseveroleedit",
+			pageId: "rmtypeedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -92,9 +120,9 @@ layui.config({
     //新增分类
     $("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/syseverole/syseveroleadd.html", 
+			url: "../../tpl/rmtype/rmtypeadd.html", 
 			title: "新增分类",
-			pageId: "syseveroleadd",
+			pageId: "rmtypeadd",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -109,5 +137,5 @@ layui.config({
     	table.reload("messageTable", {where:{rmTypeName:$("#rmTypeName").val()}});
     }
     
-    exports('syseverolelist', {});
+    exports('rmtypelist', {});
 });

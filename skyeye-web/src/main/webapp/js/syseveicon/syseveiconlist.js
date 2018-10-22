@@ -57,7 +57,7 @@ layui.config({
 		_openNewWindows({
 			url: "../../tpl/syseveicon/syseveiconedit.html", 
 			title: "编辑ICON",
-			pageId: "syseveuseredit",
+			pageId: "syseveiconedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});

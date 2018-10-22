@@ -16,6 +16,7 @@
 	<url id="login005" path="/post/SysEveUserController/queryAllMenuBySession" val="获取全部菜单列表" allUse="1">
 	</url>
 	
+	<!-- 系统角色用户管理开始 -->
 	<url id="sys001" path="/post/SysEveUserController/querySysUserList" val="获取用户列表" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
@@ -130,7 +131,9 @@
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 	</url>
+	<!-- 系统角色用户管理结束 -->
 	
+	<!-- 系统数据库管理开始 -->
 	<url id="database001" path="/post/SysDataBaseController/querySysDataBaseList" val="获取数据库信息" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
@@ -141,12 +144,32 @@
 	</url>
 	<url id="database003" path="/post/SysDataBaseController/querySysDataBaseDescSelectList" val="获取数据库表备注信息" allUse="1">
 	</url>
+	<!-- 系统数据库管理结束 -->
 	
 	<!-- 小程序系列开始 -->
 	<url id="rmxcx001" path="/post/RmTypeController/queryRmTypeList" val="获取小程序分类列表" allUse="1">
 		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
 		<property id="rmTypeName" name="rmTypeName" ref="" var="小程序分类名称"/>
+	</url>
+	<url id="rmxcx002" path="/post/RmTypeController/insertRmTypeMation" val="新增小程序分类列表" allUse="1">
+		<property id="rmTypeName" name="rmTypeName" ref="required" var="小程序分类名称"/>
+	</url>
+	<url id="rmxcx003" path="/post/RmTypeController/deleteRmTypeById" val="删除小程序分类信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分类id"/>
+	</url>
+	<url id="rmxcx004" path="/post/RmTypeController/queryRmTypeMationToEditById" val="编辑小程序分类信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分类id"/>
+	</url>
+	<url id="rmxcx005" path="/post/RmTypeController/editRmTypeMationById" val="编辑小程序分类信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分类id"/>
+		<property id="rmTypeName" name="rmTypeName" ref="required" var="小程序分类名称"/>
+	</url>
+	<url id="rmxcx006" path="/post/RmTypeController/editRmTypeSortTopById" val="小程序分类展示顺序上移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分类id"/>
+	</url>
+	<url id="rmxcx007" path="/post/RmTypeController/editRmTypeSortLowerById" val="小程序分类展示顺序下移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分类id"/>
 	</url>
 	
 	<!-- 小程序系列结束 -->

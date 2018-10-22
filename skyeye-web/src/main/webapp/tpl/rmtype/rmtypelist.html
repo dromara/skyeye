@@ -34,6 +34,8 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
+			<a class="layui-btn layui-btn-xs" lay-event="top">上移</a>
+			<a class="layui-btn layui-btn-xs" lay-event="lower">下移</a>
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 			{{# if(d.groupNum == 0){ }}
 				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
