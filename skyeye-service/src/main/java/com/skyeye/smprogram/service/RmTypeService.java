@@ -19,4 +19,6 @@ public interface RmTypeService {
 
 	public void editRmTypeSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryRmTypeAllList(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

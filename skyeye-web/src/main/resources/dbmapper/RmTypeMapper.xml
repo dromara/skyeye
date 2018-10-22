@@ -127,4 +127,13 @@
 		ORDER BY a.sort DESC LIMIT 1
 	</select>
 	
+	<select id="queryRmTypeAllList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name
+		FROM
+			rm_type a
+		ORDER BY a.sort DESC, a.create_time DESC
+	</select>
+	
 </mapper>

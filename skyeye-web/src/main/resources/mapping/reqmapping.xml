@@ -3,6 +3,7 @@
 	<!-- 
 		- allUse  是否需要登录才能使用   1是   0否    默认为否
 	 -->
+	<!-- 登录开始 -->
 	<url id="login001" path="/post/SysEveUserController/queryUserToLogin" val="登录" allUse="0">
 		<property id="userCode" name="userCode" ref="" var="账号"/>
 		<property id="password" name="password" ref="" var="密码"/>
@@ -15,6 +16,12 @@
 	</url>
 	<url id="login005" path="/post/SysEveUserController/queryAllMenuBySession" val="获取全部菜单列表" allUse="1">
 	</url>
+	<!-- 登录结束 -->
+	
+	<!-- 公共请求开始 -->
+	<url id="common001" path="/post/RmTypeController/queryRmTypeAllList" val="获取所有小程序分类" allUse="1">
+	</url>
+	<!-- 公共请求结束 -->
 	
 	<!-- 系统角色用户管理开始 -->
 	<url id="sys001" path="/post/SysEveUserController/querySysUserList" val="获取用户列表" allUse="1">

@@ -31,4 +31,6 @@ public interface RmTypeDao {
 
 	public Map<String, Object> queryRmTypeISLowerByThisId(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryRmTypeAllList(Map<String, Object> map) throws Exception;
+
 }

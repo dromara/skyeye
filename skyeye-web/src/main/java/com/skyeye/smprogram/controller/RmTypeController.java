@@ -127,4 +127,20 @@ public class RmTypeController {
 		rmTypeService.editRmTypeSortLowerById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryRmTypeAllList
+	     * @Description: 获取所有小程序分类
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmTypeController/queryRmTypeAllList")
+	@ResponseBody
+	public void queryRmTypeAllList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmTypeService.queryRmTypeAllList(inputObject, outputObject);
+	}
+	
 }
