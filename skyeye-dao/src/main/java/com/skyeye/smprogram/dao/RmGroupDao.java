@@ -31,4 +31,6 @@ public interface RmGroupDao {
 
 	public Map<String, Object> queryRmGroupISLowerByThisId(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryRmGroupAllList(Map<String, Object> map) throws Exception;
+
 }

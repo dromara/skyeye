@@ -139,4 +139,14 @@
 		ORDER BY a.sort DESC LIMIT 1
 	</select>
 	
+	<select id="queryRmGroupAllList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name
+		FROM
+			rm_group a
+		WHERE a.rm_type_id = #{id}
+		ORDER BY a.sort DESC, a.create_time DESC
+	</select>
+	
 </mapper>

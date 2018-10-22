@@ -19,4 +19,6 @@ public interface RmGroupService {
 
 	public void editRmGroupSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryRmGroupAllList(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

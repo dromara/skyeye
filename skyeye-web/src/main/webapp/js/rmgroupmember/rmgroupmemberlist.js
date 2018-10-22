@@ -23,7 +23,18 @@ layui.config({
 	 		//搜索表单
 	 		form.render();
 	 		form.on('select(selectParent)', function(data){
-	 			
+	 			showGrid({
+	 	    	 	id: "rmGroupId",
+	 	    	 	url: reqBasePath + "common002",
+	 	    	 	params: {parentId: data.value},
+	 	    	 	pagination: false,
+	 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
+	 	    	 	ajaxSendLoadBefore: function(hdb){
+	 	    	 	},
+	 	    	 	ajaxSendAfter:function(json){
+	 	    	 		form.render('select');
+	 	    	 	}
+	 	        });
 	 		});
 	 		form.on('submit(formSearch)', function (data) {
 	 	    	//表单验证
@@ -40,21 +51,30 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'rmxcx008',
-	    where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()},
+	    url: reqBasePath + 'rmxcx015',
+	    where:{rmGroupId:$("#rmGroupId").val(), rmTypeId:$("#rmTypeId").val()},
 	    even:true,  //隔行变色
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
-	        { field: 'rmGroupName', title: '分组名称', width: 120 },
-	        { field: 'icon', title: '图标码', width: 520 },
-	        { field: 'icon', title: '图标', width: 120, templet: function(d){
-	        	return '<i class="fa fa-fw ' + d.icon + '"></i>';
+	        { field: 'printsPicUrl', title: '效果图', width: 120 },
+	        { field: 'htmlContent', title: 'HTML内容', width: 150, templet: function(d){
+	        	return '<i class="fa fa-fw 1"></i>';
+	        }},
+	        { field: 'htmlJsContent', title: 'HTML-JS内容', width: 150, templet: function(d){
+	        	return '<i class="fa fa-fw 1"></i>';
+	        }},
+	        { field: 'wxmlContent', title: 'WXML内容', width: 150, templet: function(d){
+	        	return '<i class="fa fa-fw 1"></i>';
+	        }},
+	        { field: 'wxmlJsContent', title: 'WXML-JS内容', width: 150, templet: function(d){
+	        	return '<i class="fa fa-fw 1"></i>';
 	        }},
 	        { field: 'typeName', title: '所属分类', width: 120 },
-	        { field: 'groupMemberNum', title: '组件数量', width: 120 },
+	        { field: 'groupName', title: '所属分组', width: 120 },
+	        { field: 'memberUseNum', title: '使用次数', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]
@@ -119,9 +139,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/rmgroup/rmgroupedit.html", 
-			title: "编辑分组",
-			pageId: "rmgroupedit",
+			url: "../../tpl/rmgroupmember/rmgroupmemberedit.html", 
+			title: "编辑组件",
+			pageId: "rmgroupmemberedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -140,9 +160,9 @@ layui.config({
     //新增
     $("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/rmgroup/rmgroupadd.html", 
-			title: "新增分组",
-			pageId: "rmgroupadd",
+			url: "../../tpl/rmgroupmember/rmgroupmemberadd.html", 
+			title: "新增组件",
+			pageId: "rmgroupmemberadd",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -154,7 +174,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()}});
+    	table.reload("messageTable", {where:{rmGroupId:$("#rmGroupId").val(), rmTypeId:$("#rmTypeId").val()}});
     }
     
     exports('rmgrouplist', {});

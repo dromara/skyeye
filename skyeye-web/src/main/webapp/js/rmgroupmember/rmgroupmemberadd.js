@@ -22,8 +22,20 @@ layui.config({
 		 	ajaxSendAfter:function(json){
 		 		//搜索表单
 		 		form.render();
+		 		//小程序分类变化事件
 		 		form.on('select(selectParent)', function(data){
-		 			
+		 			showGrid({
+		 	    	 	id: "rmGroupId",
+		 	    	 	url: reqBasePath + "common002",
+		 	    	 	params: {parentId: data.value},
+		 	    	 	pagination: false,
+		 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
+		 	    	 	ajaxSendLoadBefore: function(hdb){
+		 	    	 	},
+		 	    	 	ajaxSendAfter:function(json){
+		 	    	 		form.render('select');
+		 	    	 	}
+		 	        });
 		 		});
 				
 			    form.on('submit(formAddBean)', function (data) {
@@ -49,21 +61,10 @@ layui.config({
 		 	}
 	    });
 	    
-	    //菜单图标选中事件
- 	    $("body").on("focus", "#rmGroupIcon", function(e){
- 	    	_openNewWindows({
- 				url: "../../tpl/sysevemenu/icon.html", 
- 				title: "选择ICON图标",
- 				pageId: "icon",
- 				area: ['640px', '360px'],
- 				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	$("#rmGroupIcon").val(childIcon);
- 	                } else if (refreshCode == '-9999') {
- 	                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
- 	                }
- 				}});
- 	    });
+	    //HTML内容变化事件
+	    $("body").on("input", "#htmlContent", function(){
+	    	console.log(1);
+	    });
 	    
 	    //取消
 	    $("body").on("click", "#cancle", function(){

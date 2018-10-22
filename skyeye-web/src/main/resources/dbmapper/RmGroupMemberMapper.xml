@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.smprogram.dao.RmGroupMemberDao">
+	
+	<select id="queryRmGroupMemberList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.prints_pic_url printsPicUrl,
+			(SELECT COUNT(*) FROM sm_project_page_mode b WHERE b.rm_group_member_id = a.id) memberUseNum,
+			CONVERT(a.create_time, char) createTime,
+			(SELECT c.name FROM rm_type c WHERE c.id = a.sm_type_id) typeName,
+			(SELECT d.name FROM rm_group d WHERE d.id = a.sm_group_id) groupName,
+			a.html_content htmlContent,
+			a.html_js_content htmlJsContent,
+			a.wxml_content wxmlContent,
+			a.wxml_js_content wxmlJsContent
+		FROM
+			rm_group_member a
+		WHERE 1 = 1
+			<if test="rmTypeId != '' and rmTypeId != null">
+				AND a.sm_type_id = #{rmTypeId}
+			</if>
+			<if test="rmGroupId != '' and rmGroupId != null">
+				AND a.sm_group_id = #{rmGroupId}
+			</if>
+			ORDER BY a.sort DESC, a.create_time DESC
+	</select>
+	
+</mapper>

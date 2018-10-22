@@ -127,4 +127,20 @@ public class RmGroupController {
 		rmGroupService.editRmGroupSortLowerById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryRmGroupAllList
+	     * @Description: 获取所有小程序分组根据小程序分类ID
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupController/queryRmGroupAllList")
+	@ResponseBody
+	public void queryRmGroupAllList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupService.queryRmGroupAllList(inputObject, outputObject);
+	}
+	
 }

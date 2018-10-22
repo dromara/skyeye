@@ -21,6 +21,9 @@
 	<!-- 公共请求开始 -->
 	<url id="common001" path="/post/RmTypeController/queryRmTypeAllList" val="获取所有小程序分类" allUse="1">
 	</url>
+	<url id="common002" path="/post/RmGroupController/queryRmGroupAllList" val="获取所有小程序分组根据小程序分类ID" allUse="1">
+		<property id="parentId" name="id" ref="required" var="小程序分类ID"/>
+	</url>
 	<!-- 公共请求结束 -->
 	
 	<!-- 系统角色用户管理开始 -->
@@ -206,6 +209,12 @@
 	</url>
 	<url id="rmxcx014" path="/post/RmGroupController/editRmGroupSortLowerById" val="小程序分组展示顺序下移" allUse="1">
 		<property id="rowId" name="id" ref="required" var="小程序分组id"/>
+	</url>
+	<url id="rmxcx015" path="/post/RmGroupMemberController/queryRmGroupMemberList" val="获取小程序组件列表" allUse="1">
+		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="rmGroupId" name="rmGroupId" ref="" var="小程序分组id"/>
+		<property id="rmTypeId" name="rmTypeId" ref="" var="小程序分类id"/>
 	</url>
 	
 	<!-- 小程序系列结束 -->
