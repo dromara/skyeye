@@ -24,7 +24,7 @@ layui.config({
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
 	        { field: 'rmTypeName', title: '分类名称', width: 120 },
-	        { field: 'groupNum', title: '组件数量', width: 520 },
+	        { field: 'groupNum', title: '分组数量', width: 520 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]
