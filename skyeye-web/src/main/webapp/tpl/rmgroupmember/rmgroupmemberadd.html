@@ -42,6 +42,28 @@
                 </div>
 	        </div>
 	        <div class="layui-form-item">
+	            <label class="layui-form-label">效果图<i class="red">*</i></label>
+	            <div class="layui-col-xs6">
+		            <div class="layui-col-xs10" id="printPic">
+		                
+		            </div>
+		            <div class="layui-col-xs2">
+		            	<a href="javascript:;" class="layui-btn layui-btn-xs" id="createPic" style="margin-left: 10px;margin-top: 10px;">生成图片</a>
+		            </div>
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">预览图<i class="red">*</i></label>
+	            <div class="layui-col-xs6">
+		            <div class="layui-col-xs10" id="images">
+		                
+		            </div>
+		            <div class="layui-col-xs2">
+		            	<a href="javascript:;" class="layui-btn layui-btn-xs" id="download" style="margin-left: 10px;margin-top: 10px;">下载</a>
+		            </div>
+	            </div>
+	        </div>
+	        <div class="layui-form-item">
 	            <label class="layui-form-label">WXML内容<i class="red">*</i></label>
 	            <div class="layui-input-block">
                 	<textarea id="wxmlContent" name="wxmlContent" win-verify="required" placeholder="请填写代码块" class="layui-textarea" style="height: 100px;"></textarea>
@@ -51,12 +73,6 @@
 	            <label class="layui-form-label">WXML-JS内容<i class="red">*</i></label>
 	            <div class="layui-input-block">
                 	<textarea id="wxmlJsContent" name="wxmlJsContent" win-verify="required" placeholder="请填写代码块" class="layui-textarea" style="height: 100px;"></textarea>
-                </div>
-	        </div>
-	        <div class="layui-form-item">
-	            <label class="layui-form-label">效果图<i class="red">*</i></label>
-	            <div class="layui-input-block">
-                	
                 </div>
 	        </div>
 	        <div class="layui-form-item">
@@ -71,6 +87,11 @@
    	<script src="../../assets/lib/layui/custom.js"></script>
    	<script src="../../assets/winui/jweixin-1.0.0.js"></script>
    	<script src="../../assets/winui/weui.min.js"></script>
+   	<!-- html2canvas将Dom节点在Canvas里边画出来 -->
+   	<script src="../../assets/html2canvas/js/html2canvas.min.js"></script>
+   	<!-- 将canvas图片保存成图片 -->
+   	<script src="../../assets/html2canvas/js/canvas2image.js"></script>
+   	<script src="../../assets/html2canvas/js/base64.js"></script>
    	<script type="text/javascript">
         layui.config({base: '../../js/rmgroupmember/'}).use('rmgroupmemberadd');
     </script>

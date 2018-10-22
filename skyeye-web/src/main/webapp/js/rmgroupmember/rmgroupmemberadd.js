@@ -11,6 +11,8 @@ layui.config({
 	    var $ = layui.$,
 	    form = layui.form;
 	    
+	    $("#download").hide();
+	    
 	    showGrid({
 		 	id: "rmTypeId",
 		 	url: reqBasePath + "common001",
@@ -39,6 +41,9 @@ layui.config({
 		 		});
 				
 			    form.on('submit(formAddBean)', function (data) {
+			    	var oCanvas = document.getElementById("thecanvas");
+			    	var img_data1 = Canvas2Image.saveAsPNG(oCanvas, true).getAttribute('src');
+			    	saveFile(img_data1, 'richer.png');
 			    	//表单验证
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
@@ -63,8 +68,43 @@ layui.config({
 	    
 	    //HTML内容变化事件
 	    $("body").on("input", "#htmlContent", function(){
-	    	console.log(1);
+	    	$("#printPic").html($(this).val());
 	    });
+	    
+	    //下载canvas图片
+	    $("body").on("click", "#download", function(){
+	    	var oCanvas = document.getElementById("thecanvas");
+	    	var img_data1 = Canvas2Image.saveAsPNG(oCanvas, true).getAttribute('src');
+	    	saveFile(img_data1, 'richer.png');
+	    });
+	    
+	    //生成图片
+	    $("body").on("click", "#createPic", function(){
+	    	if(isNull($("#printPic").html().trim())){
+	    		top.winui.window.msg('请填写HTML内容', {icon: 2,time: 2000});
+	    	}else{
+	    		html2canvas($("#printPic"), {
+	    			onrendered: function(canvas) {
+	    				//添加属性
+	    				canvas.setAttribute('id','thecanvas');
+	    				//读取属性值
+	    				document.getElementById('images').innerHTML = '';
+	    				document.getElementById('images').appendChild(canvas);
+	    				$("#download").show();
+	    			}
+	    		});
+	    	}
+	    });
+	    
+	    // 保存文件函数
+	    var saveFile = function(data, filename){
+	    	var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+	    	save_link.href = data;
+	        save_link.download = filename;
+	        var event = document.createEvent('MouseEvents');
+	        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	        save_link.dispatchEvent(event);
+	    };
 	    
 	    //取消
 	    $("body").on("click", "#cancle", function(){
