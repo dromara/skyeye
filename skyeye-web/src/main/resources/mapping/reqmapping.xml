@@ -178,6 +178,35 @@
 	<url id="rmxcx007" path="/post/RmTypeController/editRmTypeSortLowerById" val="小程序分类展示顺序下移" allUse="1">
 		<property id="rowId" name="id" ref="required" var="小程序分类id"/>
 	</url>
+	<url id="rmxcx008" path="/post/RmGroupController/queryRmGroupList" val="获取小程序分组列表" allUse="1">
+		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="rmGroupName" name="rmGroupName" ref="" var="小程序分组名称"/>
+		<property id="rmTypeId" name="rmTypeId" ref="" var="小程序分类id"/>
+	</url>
+	<url id="rmxcx009" path="/post/RmGroupController/insertRmGroupMation" val="添加小程序分组" allUse="1">
+		<property id="icon" name="icon" ref="required" var="小程序分组icon"/>
+		<property id="rmGroupName" name="rmGroupName" ref="required" var="小程序分组名称"/>
+		<property id="rmTypeId" name="rmTypeId" ref="required" var="小程序分类id"/>
+	</url>
+	<url id="rmxcx010" path="/post/RmGroupController/deleteRmGroupById" val="删除小程序分组信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分组id"/>
+	</url>
+	<url id="rmxcx011" path="/post/RmGroupController/queryRmGroupMationToEditById" val="编辑小程序分组信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分组id"/>
+	</url>
+	<url id="rmxcx012" path="/post/RmGroupController/editRmGroupMationById" val="编辑小程序分组" allUse="1">
+		<property id="icon" name="icon" ref="required" var="小程序分组icon"/>
+		<property id="rmGroupName" name="rmGroupName" ref="required" var="小程序分组名称"/>
+		<property id="rmTypeId" name="rmTypeId" ref="required" var="小程序分类id"/>
+		<property id="rowId" name="id" ref="required" var="小程序分组id"/>
+	</url>
+	<url id="rmxcx013" path="/post/RmGroupController/editRmGroupSortTopById" val="小程序分组展示顺序上移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分组id"/>
+	</url>
+	<url id="rmxcx014" path="/post/RmGroupController/editRmGroupSortLowerById" val="小程序分组展示顺序下移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序分组id"/>
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	
