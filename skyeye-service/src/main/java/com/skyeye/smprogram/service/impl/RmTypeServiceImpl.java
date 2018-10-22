@@ -1,4 +1,4 @@
-package com.skyeye.authority.service.impl;
+package com.skyeye.smprogram.service.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
-import com.skyeye.authority.dao.RmTypeDao;
-import com.skyeye.authority.service.RmTypeService;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.smprogram.dao.RmTypeDao;
+import com.skyeye.smprogram.service.RmTypeService;
 
 @Service
 public class RmTypeServiceImpl implements RmTypeService{

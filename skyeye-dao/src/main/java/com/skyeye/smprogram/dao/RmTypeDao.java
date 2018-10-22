@@ -1,4 +1,4 @@
-package com.skyeye.authority.dao;
+package com.skyeye.smprogram.dao;
 
 import java.util.List;
 import java.util.Map;
