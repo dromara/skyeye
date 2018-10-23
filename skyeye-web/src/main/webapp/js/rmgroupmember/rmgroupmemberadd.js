@@ -1,6 +1,8 @@
 
 var childIcon = "";//分组ICON
 
+var isPic = false;//是否执行生成图片
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -41,40 +43,38 @@ layui.config({
 		 		});
 		 		
 			    form.on('submit(formAddBean)', function (data) {
-			    	var oCanvas = document.getElementById("thecanvas");
-			    	var blob = getBlob(oCanvas);
-			    	var oMyForm = new FormData();
-			    	var fileName = mobile+ '.jpg'
-			    	oMyForm.append("uploadFile", blob); 
-			    	oMyForm.append("fileName", fileName);
-			    	oMyForm.append("fileType", 'image');
-			    	$.ajax({
-			    		type: "POST",
-			    		url: reqBasePath + "common003", //后台接口路径
-			    		data: oMyForm,
-			    		contentType: false,
-			    		processData: false,
-			    		cache: false,
-			    		success:function(res){
-			    			
-			    		}
-			    	});
 			    	//表单验证
 			        if (winui.verifyForm(data.elem)) {
-			        	var params = {
-		        			rmTypeId: $("#rmTypeId").val(),
-		        			rmGroupName: $("#rmGroupName").val(),
-		        			icon: $("#rmGroupIcon").val(),
-			        	};
-			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "rmxcx009", params:params, type:'json', callback:function(json){
-			 	   			if(json.returnCode == 0){
-				 	   			parent.layer.close(index);
-				 	        	parent.refreshCode = '0';
-			 	   			}else{
-			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-			 	   			}
-			 	   		}});
+			        	if(isPic){
+			        		var oCanvas = document.getElementById("thecanvas");
+					    	var imgData = oCanvas.toDataURL();
+					    	AjaxPostUtil.request({url:reqBasePath + "common004", params:{images:imgData, type:1}, type:'json', callback:function(json1){
+				 	   			if(json1.returnCode == 0){
+					 	   			var params = {
+					 	   				rmTypeId: $("#rmTypeId").val(),
+					 	   				rmGroupId: $("#rmGroupId").val(),
+					 	   				htmlContent: $("#htmlContent").val(),
+					 	   				htmlJsContent: $("#htmlJsContent").val(),
+					 	   				wxmlContent: $("#wxmlContent").val(),
+					 	   				wxmlJsContent: $("#wxmlJsContent").val(),
+					        			img: json1.bean.picUrl
+						        	};
+						        	
+						        	AjaxPostUtil.request({url:reqBasePath + "rmxcx016", params:params, type:'json', callback:function(json){
+						 	   			if(json.returnCode == 0){
+							 	   			parent.layer.close(index);
+							 	        	parent.refreshCode = '0';
+						 	   			}else{
+						 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+						 	   			}
+						 	   		}});
+				 	   			}else{
+				 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				 	   			}
+				 	   		}});
+			        	}else{
+			        		top.winui.window.msg("请先生成预览图", {icon: 2,time: 2000});
+			        	}
 			        }
 			        return false;
 			    });
@@ -113,6 +113,7 @@ layui.config({
 	    				$("#download").show();
 	    			}
 	    		});
+	    		isPic = true;
 	    	}
 	    });
 	    

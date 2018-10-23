@@ -24,8 +24,12 @@
 	<url id="common002" path="/post/RmGroupController/queryRmGroupAllList" val="获取所有小程序分组根据小程序分类ID" allUse="1">
 		<property id="parentId" name="id" ref="required" var="小程序分类ID"/>
 	</url>
-	<url id="common003" path="/post/CommonController/uploadFile" val="上传文件" allUse="1">
-		<property id="type" name="type" ref="" var="图片类型"/>
+	<url id="common003" path="/post/CommonController/uploadFile" val="上传文件" allUse="0">
+		<property id="type" name="type" ref="required,num" var="图片类型"/>
+	</url>
+	<url id="common004" path="/post/CommonController/uploadFileBase64" val="上传文件Base64" allUse="1">
+		<property id="type" name="type" ref="required,num" var="图片类型"/>
+		<property id="images" name="images" ref="required" var="图片Base64"/>
 	</url>
 	<!-- 公共请求结束 -->
 	
@@ -53,8 +57,8 @@
 		<property id="userPhoto" name="userPhoto" ref="required" var="头像" />
 	</url>
 	<url id="sys006" path="/post/SysEveMenuController/querySysMenuList" val="获取菜单列表" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="menuName" name="menuName" ref="" var="菜单名称"/>
 		<property id="menuUrl" name="menuUrl" ref="" var="菜单链接"/>
 		<property id="parentId" name="parentId" ref="" var="菜单父ID"/>
@@ -91,8 +95,8 @@
 		<property id="parentId" name="parentId" ref="required" var="父菜单ID" />
 	</url>
 	<url id="sys013" path="/post/SysEveRoleController/querySysRoleList" val="获取角色列表" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="roleName" name="roleName" ref="" var="角色名称"/>
 	</url>
 	<url id="sys014" path="/post/SysEveRoleController/querySysRoleBandMenuList" val="获取角色需要绑定的菜单列表" allUse="1">
@@ -123,8 +127,8 @@
 	</url>
 	
 	<url id="icon001" path="/post/SysEveIconController/querySysIconList" val="获取ICON列表" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="iconClass" name="iconClass" ref="" var="icon属性"/>
 	</url>
 	<url id="icon002" path="/post/SysEveIconController/insertSysIconMation" val="添加ICON信息" allUse="1">
@@ -141,15 +145,15 @@
 		<property id="iconClass" name="iconClass" ref="required" var="icon属性"/>
 	</url>
 	<url id="icon006" path="/post/SysEveIconController/querySysIconListToMenu" val="获取ICON列表供menu菜单使用" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
 	<!-- 系统角色用户管理结束 -->
 	
 	<!-- 系统数据库管理开始 -->
 	<url id="database001" path="/post/SysDataBaseController/querySysDataBaseList" val="获取数据库信息" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="tableName" name="tableName" ref="" var="表名"/>
 		<property id="tableDesc" name="tableDesc" ref="" var="表备注"/>
 	</url>
@@ -161,8 +165,8 @@
 	
 	<!-- 小程序系列开始 -->
 	<url id="rmxcx001" path="/post/RmTypeController/queryRmTypeList" val="获取小程序分类列表" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="rmTypeName" name="rmTypeName" ref="" var="小程序分类名称"/>
 	</url>
 	<url id="rmxcx002" path="/post/RmTypeController/insertRmTypeMation" val="新增小程序分类列表" allUse="1">
@@ -185,8 +189,8 @@
 		<property id="rowId" name="id" ref="required" var="小程序分类id"/>
 	</url>
 	<url id="rmxcx008" path="/post/RmGroupController/queryRmGroupList" val="获取小程序分组列表" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="rmGroupName" name="rmGroupName" ref="" var="小程序分组名称"/>
 		<property id="rmTypeId" name="rmTypeId" ref="" var="小程序分类id"/>
 	</url>
@@ -214,10 +218,19 @@
 		<property id="rowId" name="id" ref="required" var="小程序分组id"/>
 	</url>
 	<url id="rmxcx015" path="/post/RmGroupMemberController/queryRmGroupMemberList" val="获取小程序组件列表" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="rmGroupId" name="rmGroupId" ref="" var="小程序分组id"/>
 		<property id="rmTypeId" name="rmTypeId" ref="" var="小程序分类id"/>
+	</url>
+	<url id="rmxcx016" path="/post/RmGroupMemberController/insertRmGroupMemberMation" val="添加小程序组件" allUse="1">
+		<property id="rmTypeId" name="rmTypeId" ref="required" var="小程序分类id"/>
+		<property id="rmGroupId" name="rmGroupId" ref="required" var="小程序分组id"/>
+		<property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
+		<property id="htmlJsContent" name="htmlJsContent" ref="required" var="html对应的js内容"/>
+		<property id="wxmlContent" name="wxmlContent" ref="required" var="wxml内容"/>
+		<property id="wxmlJsContent" name="wxmlJsContent" ref="required" var="wxml对应的js内容"/>
+		<property id="img" name="img" ref="required" var="小程序分组id"/>
 	</url>
 	
 	<!-- 小程序系列结束 -->

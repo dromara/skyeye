@@ -5,7 +5,7 @@
 	<select id="queryRmGroupMemberList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
-			a.prints_pic_url printsPicUrl,
+			CONCAT(#{basePath}, a.prints_pic_url) printsPicUrl,
 			(SELECT COUNT(*) FROM sm_project_page_mode b WHERE b.rm_group_member_id = a.id) memberUseNum,
 			CONVERT(a.create_time, char) createTime,
 			(SELECT c.name FROM rm_type c WHERE c.id = a.sm_type_id) typeName,
@@ -25,5 +25,21 @@
 			</if>
 			ORDER BY a.sort DESC, a.create_time DESC
 	</select>
+	
+	<select id="queryRmGroupMemberISTop" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.prints_pic_url printsPicUrl
+		FROM
+			rm_group_member a
+		ORDER BY a.sort DESC LIMIT 1
+	</select>
+	
+	<insert id="insertRmGroupMemberMation" parameterType="java.util.Map">
+	     INSERT into rm_group_member 
+	     (id, sm_type_id, sm_group_id, prints_pic_url, html_content, html_js_content, wxml_content, wxml_js_content, sort, create_id, create_time)
+	     VALUES
+	     (#{id}, #{rmTypeId}, #{rmGroupId}, #{img}, #{htmlContent}, #{htmlJsContent}, #{wxmlContent}, #{wxmlJsContent}, #{sort}, #{createId}, #{createTime})
+	</insert>
 	
 </mapper>

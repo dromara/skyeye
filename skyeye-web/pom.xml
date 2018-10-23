@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.eve</groupId>
@@ -19,31 +18,12 @@
 			<artifactId>skyeye-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-		</dependency>
 		<!-- fastdfs-client 参考https://blog.csdn.net/doc_wei/article/details/79776472 -->
 		<dependency>
 			<groupId>org.csource</groupId>
 			<artifactId>fastdfs-client-java</artifactId>
 			<version>1.27-SNAPSHOT</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>com.eve</groupId>
-			<artifactId>eve-manager-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.eve</groupId>
-			<artifactId>eve-content-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.eve</groupId>
-			<artifactId>eve-search-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency> -->
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>

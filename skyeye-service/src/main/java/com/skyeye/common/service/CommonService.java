@@ -7,4 +7,6 @@ public interface CommonService {
 
 	public void uploadFile(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void uploadFileBase64(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

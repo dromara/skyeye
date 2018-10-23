@@ -78,5 +78,11 @@ public class Constants {
 	 */
 	public static final String SYS_MENU_OPEN_TYPE_IS_IFRAME = "1";
 	public static final String SYS_MENU_OPEN_TYPE_IS_HTML = "2";
+	
+	/**
+	 * 项目web层名称
+	 */
+	public static final String PROJECT_WEB = "\\skyeye\\skyeye-web";
+	
 
 }

@@ -31,4 +31,20 @@ public class RmGroupMemberController {
 		rmGroupMemberService.queryRmGroupMemberList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: insertRmGroupMemberMation
+	     * @Description: 添加小程序组件
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupMemberController/insertRmGroupMemberMation")
+	@ResponseBody
+	public void insertRmGroupMemberMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupMemberService.insertRmGroupMemberMation(inputObject, outputObject);
+	}
+	
 }

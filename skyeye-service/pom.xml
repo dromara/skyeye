@@ -8,11 +8,13 @@
 	</parent>
 	<artifactId>skyeye-service</artifactId>
 	<dependencies>
+	
 		<dependency>
 			<groupId>com.eve</groupId>
 			<artifactId>skyeye-dao</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -51,6 +53,7 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 		</dependency>
+		
 		<!-- servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -66,5 +69,6 @@
 			<artifactId>skyeye-common</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		
 	</dependencies>
 </project>

@@ -59,7 +59,9 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
-	        { field: 'printsPicUrl', title: '效果图', width: 120 },
+	        { field: 'printsPicUrl', title: '效果图', width: 200,templet: function(d){
+	        	return '<img src="' + fileBasePath + d.printsPicUrl + '" style="width:100%;height:auto">';
+	        }},
 	        { field: 'htmlContent', title: 'HTML内容', width: 150, templet: function(d){
 	        	return '<i class="fa fa-fw 1"></i>';
 	        }},

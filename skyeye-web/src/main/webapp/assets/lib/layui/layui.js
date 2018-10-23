@@ -609,7 +609,7 @@ var AjaxPostUtil = {
 		params: {}, // 请求的参数  
 		async: false,//同步
 		type: 'text', // 返回的内容的类型,text,xml,json  
-		callback: function() {} // 回调函数 required  
+		callback: function() {}, // 回调函数 required  
 	},
 
 	// 创建XMLHttpRequest对象  

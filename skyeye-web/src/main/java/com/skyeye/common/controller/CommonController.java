@@ -30,4 +30,20 @@ public class CommonController {
 		commonService.uploadFile(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: uploadFileBase64
+	     * @Description: 上传文件Base64
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CommonController/uploadFileBase64")
+	@ResponseBody
+	public void uploadFileBase64(InputObject inputObject, OutputObject outputObject) throws Exception{
+		commonService.uploadFileBase64(inputObject, outputObject);
+	}
+	
 }

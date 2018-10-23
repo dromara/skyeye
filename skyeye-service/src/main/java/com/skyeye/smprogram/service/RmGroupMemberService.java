@@ -7,4 +7,6 @@ public interface RmGroupMemberService {
 
 	public void queryRmGroupMemberList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void insertRmGroupMemberMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }
