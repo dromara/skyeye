@@ -24,6 +24,9 @@
 	<url id="common002" path="/post/RmGroupController/queryRmGroupAllList" val="获取所有小程序分组根据小程序分类ID" allUse="1">
 		<property id="parentId" name="id" ref="required" var="小程序分类ID"/>
 	</url>
+	<url id="common003" path="/post/CommonController/uploadFile" val="上传文件" allUse="1">
+		<property id="type" name="type" ref="" var="图片类型"/>
+	</url>
 	<!-- 公共请求结束 -->
 	
 	<!-- 系统角色用户管理开始 -->

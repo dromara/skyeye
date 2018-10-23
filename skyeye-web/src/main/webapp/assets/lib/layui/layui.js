@@ -78,7 +78,7 @@ function isNull(str){
 		return jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
 	}(),
 	error = function(msg){// 异常提示
-		win.console && console.error && console.error('Layui hint: ' + msg);
+//		win.console && console.error && console.error('Layui hint: ' + msg);
 	},
 	isOpera = typeof opera !== 'undefined' && opera.toString() === '[object Opera]',
 	modules = {// 内置模块

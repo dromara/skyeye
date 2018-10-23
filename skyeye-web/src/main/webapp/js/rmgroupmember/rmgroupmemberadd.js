@@ -39,11 +39,26 @@ layui.config({
 		 	    	 	}
 		 	        });
 		 		});
-				
+		 		
 			    form.on('submit(formAddBean)', function (data) {
 			    	var oCanvas = document.getElementById("thecanvas");
-			    	var img_data1 = Canvas2Image.saveAsPNG(oCanvas, true).getAttribute('src');
-			    	saveFile(img_data1, 'richer.png');
+			    	var blob = getBlob(oCanvas);
+			    	var oMyForm = new FormData();
+			    	var fileName = mobile+ '.jpg'
+			    	oMyForm.append("uploadFile", blob); 
+			    	oMyForm.append("fileName", fileName);
+			    	oMyForm.append("fileType", 'image');
+			    	$.ajax({
+			    		type: "POST",
+			    		url: reqBasePath + "common003", //后台接口路径
+			    		data: oMyForm,
+			    		contentType: false,
+			    		processData: false,
+			    		cache: false,
+			    		success:function(res){
+			    			
+			    		}
+			    	});
 			    	//表单验证
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
@@ -69,6 +84,11 @@ layui.config({
 	    //HTML内容变化事件
 	    $("body").on("input", "#htmlContent", function(){
 	    	$("#printPic").html($(this).val());
+	    });
+	    
+	    //HTML-JS内容变化事件
+	    $("body").on("change", "#htmlJsContent", function(){
+	    	$("#htmlJsContent").val(do_js_beautify($(this).val()));
 	    });
 	    
 	    //下载canvas图片
@@ -105,6 +125,19 @@ layui.config({
 	        event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
 	        save_link.dispatchEvent(event);
 	    };
+	    
+	    function getBlob(canvas) { //获取blob对象
+		  	var data = canvas.toDataURL("image/jpeg", 1);
+		  	data = data.split(',')[1];
+		  	data = window.atob(data);
+		  	var ia = new Uint8Array(data.length);
+		  	for (var i = 0; i < data.length; i++) {
+		  		ia[i] = data.charCodeAt(i);
+		  	}
+		  	return new Blob([ia], {
+		  		type: "image/jpeg"
+		  	});
+	    }
 	    
 	    //取消
 	    $("body").on("click", "#cancle", function(){
