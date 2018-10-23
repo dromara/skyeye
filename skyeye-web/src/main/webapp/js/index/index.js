@@ -1,6 +1,6 @@
 ﻿layui.config({
-    base: basePath //指定 winui 路径
-    , version: skyeyeVersion
+    base: basePath, //指定 winui 路径
+    version: skyeyeVersion
 }).extend({  //指定js别名
     window: 'js/winui.window',
     desktop: 'js/winui.desktop',//桌面加载模块

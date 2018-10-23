@@ -3,7 +3,9 @@ var rowId = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui', 'form'], function (exports) {
+}).extend({  //指定 js 别名
+	window: 'js/winui.window',
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	
 	winui.renderColor();
 	
@@ -59,20 +61,20 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
-	        { field: 'printsPicUrl', title: '效果图', width: 200,templet: function(d){
+	        { field: 'printsPicUrl', title: '效果图', width: 200, align: 'center', templet: function(d){
 	        	return '<img src="' + fileBasePath + d.printsPicUrl + '" style="width:100%;height:auto">';
 	        }},
-	        { field: 'htmlContent', title: 'HTML内容', width: 150, templet: function(d){
-	        	return '<i class="fa fa-fw 1"></i>';
+	        { field: 'id', title: 'HTML内容', width: 150, align: 'center', templet: function(d){
+	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        }},
-	        { field: 'htmlJsContent', title: 'HTML-JS内容', width: 150, templet: function(d){
-	        	return '<i class="fa fa-fw 1"></i>';
+	        { field: 'id', title: 'HTML-JS内容', width: 150, align: 'center', templet: function(d){
+	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlJsContent"></i>';
 	        }},
-	        { field: 'wxmlContent', title: 'WXML内容', width: 150, templet: function(d){
-	        	return '<i class="fa fa-fw 1"></i>';
+	        { field: 'id', title: 'WXML内容', width: 150, align: 'center', templet: function(d){
+	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlContent"></i>';
 	        }},
-	        { field: 'wxmlJsContent', title: 'WXML-JS内容', width: 150, templet: function(d){
-	        	return '<i class="fa fa-fw 1"></i>';
+	        { field: 'id', title: 'WXML-JS内容', width: 150, align: 'center', templet: function(d){
+	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsContent"></i>';
 	        }},
 	        { field: 'typeName', title: '所属分类', width: 120 },
 	        { field: 'groupName', title: '所属分组', width: 120 },
@@ -93,6 +95,42 @@ layui.config({
         	topOne(data);
         }else if (layEvent === 'lower') { //下移
         	lowerOne(data);
+        }else if (layEvent === 'htmlContent') { //HTML内容
+        	layer.open({
+	            id: 'HTML内容',
+	            type: 1,
+	            title: 'HTML内容',
+	            shade: 0.3,
+	            area: ['500px', '300px'],
+	            content: '<xmp style="white-space:normal;">' + data.htmlContent + '</xmp>',
+	        });
+        }else if (layEvent === 'htmlJsContent') { //HTML-JS内容
+        	layer.open({
+	            id: 'HTML-JS内容',
+	            type: 1,
+	            title: 'HTML-JS内容',
+	            shade: 0.3,
+	            area: ['500px', '300px'],
+	            content: '<xmp style="white-space:normal;">' + data.htmlJsContent + '</xmp>',
+	        });
+        }else if (layEvent === 'wxmlContent') { //WXML内容
+        	layer.open({
+	            id: 'WXML内容',
+	            type: 1,
+	            title: 'WXML内容',
+	            shade: 0.3,
+	            area: ['500px', '300px'],
+	            content: '<xmp style="white-space:normal;">' + data.wxmlContent + '</xmp>',
+	        });
+        }else if (layEvent === 'wxmlJsContent') { //WXML-JS内容
+        	layer.open({
+	            id: 'WXML-JS内容',
+	            type: 1,
+	            title: 'WXML-JS内容',
+	            shade: 0.3,
+	            area: ['500px', '300px'],
+	            content: '<xmp style="white-space:normal;">' + data.wxmlJsContent + '</xmp>',
+	        });
         }
     });
 	
