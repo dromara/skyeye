@@ -83,11 +83,13 @@ layui.config({
 	    
 	    //HTML内容变化事件
 	    $("body").on("input", "#htmlContent", function(){
+	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $("#htmlJsContent").val() + '})(jQuery);});</script>');
 	    	$("#printPic").html($(this).val());
 	    });
 	    
 	    //HTML-JS内容变化事件
 	    $("body").on("change", "#htmlJsContent", function(){
+	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $("#htmlJsContent").val() + '})(jQuery);});</script>');
 	    	$("#htmlJsContent").val(do_js_beautify($(this).val()));
 	    });
 	    
