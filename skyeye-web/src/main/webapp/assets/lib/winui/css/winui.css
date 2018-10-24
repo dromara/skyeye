@@ -2093,6 +2093,333 @@ body .layer-ext-winconfirm {
 
 /***showmode end***/
 
+/*** 上传 start ***/
+.upload,.upload li {
+	margin: 0;
+	padding: 0;
+	list-style-type: none
+}
+
+.upload {
+	border: 1px solid #d7d7d7;
+	padding: 2px 2px 2px 2px;
+	zoom: 1;
+	position: relative;
+	width: 100%;
+	background-color: #fff
+}
+
+.upload:after {
+	display: block;
+	clear: both;
+	content: "";
+	visibility: hidden;
+	height: 0
+}
+
+.upload .item {
+    width: 60px;
+    height: 60px;
+	float: left;
+	margin: 0 5px 0px 0;
+	background: #f8f8f8;
+	position: relative;
+	border-radius: 4px;
+	background-size: contain;
+	background-position: center center;
+	background-repeat: no-repeat;
+	border: 1px solid #d7d7d7;
+	overflow: hidden
+}
+
+.upload .item .filename {
+	font-size: 12px;
+	width: 90%;
+	left: 5%;
+	position: absolute;
+	top: 70%;
+	line-height: 1.3em;
+	height: 2.6em;
+	overflow: hidden;
+	text-align: center
+}
+
+.upload .item.error {
+	border-color: #f20
+}
+
+.upload .item.error::after {
+	content: "";
+	background: rgba(255,255,255,.8);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 9;
+	display: block;
+	line-height: 100%;
+	text-align: center
+}
+
+.upload .item.error::before {
+	content: attr(data-error);
+	position: absolute;
+	padding: 10px;
+	z-index: 10;
+	display: block;
+	font-size: 12px;
+	color: #f20;
+	top: 0
+}
+
+.upload .item svg.icon {
+	position: absolute;
+	height: 40%;
+	top: 20%;
+	left: 0;
+	width: 100%
+}
+
+.upload .item svg.progress {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 50%
+}
+
+.upload .item .progressnum {
+	width: 40px;
+	height: 40px;
+	border-radius: 40px;
+	text-align: center;
+	line-height: 40px;
+	font-size: 12px;
+	color: #fff;
+	position: absolute;
+	left: 50%;
+	margin-left: -20px;
+	top: 50%;
+	margin-top: -20px;
+	background: rgba(17,89,164,.5)
+}
+
+.upload .item.add svg {
+	top: 30%
+}
+
+.upload .item.success::after {
+	position: absolute;
+	background: rgba(0,0,0,.6);
+	content: "";
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	opacity: 0;
+	transition: all .3s
+}
+
+.upload .item.success:hover::after {
+	opacity: 1
+}
+
+.upload .item.success svg.delete,.upload .item.success svg.look {
+	position: absolute;
+	height: 30px;
+	top: 50%;
+	margin-top: -15px;
+	left: 50%;
+	color: #fff;
+	z-index: 10;
+	transition: all .3s;
+	cursor: pointer
+}
+
+.upload .item.success svg.delete {
+	margin-left: -35px;
+	height: 26px;
+	margin-top: -14px;
+	left: -30px
+}
+
+.upload .item.success svg.look {
+	margin-left: 10px;
+	left: 105%
+}
+
+.upload .item.success:hover svg.delete {
+	margin-left: -35px;
+	left: 50%;
+	height: 26px;
+	margin-top: -14px;
+	transition: all .3s
+}
+
+.upload .item.success:hover svg.look {
+	margin-left: 10px;
+	left: 50%;
+	transition: all .3s
+}
+
+.upload .item.delete {
+	opacity: .2;
+	transition: all .3s
+}
+
+.upload input[type=file] {
+	display: none
+}
+
+.upload.multiple.empty {
+    height: 60px;
+	width: 100%
+}
+
+.upload.multiple.empty .add {
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	margin-top: -30px;
+	height: 36px;
+	background: 0;
+	border: 0;
+	left: 0;
+	overflow: inherit
+}
+
+.upload.multiple.empty .add::after {
+	content: "选择";
+	width: 20%;
+    top: 10px;
+	position: absolute;
+	height: 36px;
+	background: #0e90d2;
+	left: 40%;
+	/*margin-left: -90px;*/
+	display: block;
+	z-index: 9;
+	visibility: visible;
+	text-align: center;
+	color: #fff;
+	line-height: 36px;
+	font-size: 14px;
+	border: 0;
+	border-radius: 0
+}
+
+.upload.multiple.empty .add:hover::after {
+	background-color: #0a70c2
+}
+
+.upload.multiple.empty .add svg {
+	display: none
+}
+
+/*.upload.multiple.empty .add::before {
+	!*content: "点击此处选择文件,最多可以上传 "attr(data-num) " 个" attr(data-type) "格式文件";*!
+	content: "点击此处选择文件";
+	width: 100%;
+	text-align: center;
+	position: absolute;
+	bottom: -30px;
+	font-size: 12px;
+	margin-top: 14px;
+	left: 0;
+	color: #999;
+	white-space: nowrap
+}*/
+
+.upload.one {
+    width: 70px;
+    height: 70px;
+	padding: 0
+}
+
+.upload.one li {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0
+}
+
+.upload.one li.add svg {
+	opacity: 0;
+	transition: all .3s;
+	margin-top: -30px
+}
+
+.upload.one li.add:hover svg {
+	opacity: 1;
+	transition: all .3s
+}
+
+.upload.one.empty li.add svg {
+	opacity: 1;
+	transition: all .3s
+}
+
+.upload.one .item {
+	border: 0;
+	border-radius: 0
+}
+
+.upload.one .add {
+	position: absolute;
+	top: 30px;
+	right: 0;
+	left: 0;
+	background: 0
+}
+
+.upload.one .item.success svg.delete,.upload.one .item.success svg.look {
+	top: 0;
+	margin-top: 5px
+}
+
+.upload.one .item.success svg.look {
+	margin-top: 3px
+}
+
+.upload.dragenter {
+	border: 2px dashed #d7d7d7;
+	box-shadow: 0 1px 5px rgba(0,0,0,.7);
+	display: table
+}
+
+.upload.dragenter::after {
+	content: "";
+	background: rgba(255,255,255,.9);
+	z-index: 998;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	vertical-align: middle;
+	display: table-cell;
+	visibility: visible
+}
+
+.upload.dragenter::before {
+	content: "将文件拖到这里上传";
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	z-index: 999;
+	width: 100%;
+	text-align: center;
+	margin-top: -12px;
+	color: #999
+}
+
+.upload.one li.add svg{
+	margin-top: unset;
+}
+.upload.one .add{
+	top: unset;
+}
+
+/*** 上传 end ***/
+
 .cursor{
 	cursor: pointer;
 }

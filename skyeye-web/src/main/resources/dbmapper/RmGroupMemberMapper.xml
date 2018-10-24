@@ -98,7 +98,8 @@
 	<select id="queryRmGroupMemberMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
-			CONCAT(#{basePath}, a.prints_pic_url) printsPicUrl,
+			a.prints_pic_url printsPicUrl,
+			a.prints_pic_url printsPicUrlOld,
 			(SELECT COUNT(*) FROM sm_project_page_mode b WHERE b.rm_group_member_id = a.id) memberUseNum,
 			CONVERT(a.create_time, char) createTime,
 			(SELECT c.name FROM rm_type c WHERE c.id = a.sm_type_id) typeName,
@@ -120,6 +121,9 @@
 			</if>
 			<if test="wxmlJsContent != '' and wxmlJsContent != null">
 				wxml_js_content = #{wxmlJsContent},
+			</if>
+			<if test="img != '' and img != null">
+				prints_pic_url = #{img},
 			</if>
 		</set>
 		WHERE id = #{id}

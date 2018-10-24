@@ -29,7 +29,7 @@ layui.config({
 		 		//初始化上传
 		 		$("#showForm").find('.fileUploadContent').each(function(i, dom) {
 		 			if($.inArray($(dom).attr("id"), picArray) < 0){
-		        		  picArray.push($(dom).attr("id"));
+		        		picArray.push($(dom).attr("id"));
 			 			var fileType = "*";
 			 			if($(dom).attr("id") == "userPhoto")//图片上传
 			 				fileType = filePicType;

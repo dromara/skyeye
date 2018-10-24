@@ -26,9 +26,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">预览图<i class="red">*</i></label>
         <div class="layui-col-xs6">
-            <div class="layui-col-xs10" id="images">
-                {{#compare1 printsPicUrl}}{{/compare1}}
-            </div>
+        	<div class="upload" id="printsPicUrl"></div>
+            <span class="help-block m-b-none">格式：png,jpg,jpeg,gif</span>
         </div>
     </div>
     <div class="layui-form-item">

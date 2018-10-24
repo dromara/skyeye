@@ -182,9 +182,17 @@ public class RmGroupMemberServiceImpl implements RmGroupMemberService{
 	     * @return void    返回类型
 	     * @throws
 	 */
+	@SuppressWarnings("static-access")
 	@Override
 	public void editRmGroupMemberMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> item = rmGroupMemberDao.queryRmGroupMemberMationById(map);
+		if(!item.get("printsPicUrl").toString().equals(map.get("img").toString())){//保存的图片和原来的图片不符
+			//删除原来的图片
+			String tPath = inputObject.getRequest().getSession().getServletContext().getRealPath("/");
+			String basePath = tPath + "\\assets\\smpropic\\" + item.get("printsPicUrl").toString();
+			ToolUtil.deleteFile(basePath);
+		}
 		rmGroupMemberDao.editRmGroupMemberMationById(map);
 	}
 	

@@ -2,7 +2,7 @@
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'fileUpload'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
@@ -16,23 +16,36 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmgroupmember/rmgroupmembereditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
-		 		hdb.registerHelper("compare1", function(v1, options){
-					return '<img src="' + fileBasePath + v1 + '" style="width:100%;height:auto" class="cursor">';
-				});
 		 	},
 		 	ajaxSendAfter:function(json){
+		 		//初始化上传
+		 		$("#printsPicUrl").upload({
+		            "action": reqBasePath + "common003",
+		            "data-num": "1",
+		            "data-type": "PNG,JPG,jpeg,gif",
+		            "uploadType": 1,
+		            "data-value": json.bean.printsPicUrl,
+		            //该函数为点击放大镜的回调函数，如没有该函数，则不显示放大镜
+		            "function": function (_this, data) {
+		                show("#printsPicUrl", data);
+		            }
+		        });
+		 		
 		 		//搜索表单
 		 		form.render();
 		 		
 			    form.on('submit(formEditBean)', function (data) {
 			    	//表单验证
 			        if (winui.verifyForm(data.elem)) {
+			        	
 		 	   			var params = {
 		 	   				wxmlContent: encodeURI($("#wxmlContent").val()),
 		 	   				wxmlJsContent: encodeURI($("#wxmlJsContent").val()),
-		        			rowId: parent.rowId
+		        			rowId: parent.rowId,
 			        	};
-			        	
+		 	   			
+		 	   			params.img = $("#printsPicUrl").find("input[type='hidden'][name='upload']").attr("oldurl");
+		 	   			
 			        	AjaxPostUtil.request({url:reqBasePath + "rmxcx021", params:params, type:'json', callback:function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
@@ -50,19 +63,6 @@ layui.config({
 	    //取消
 	    $("body").on("click", "#cancle", function(){
 	    	parent.layer.close(index);
-	    });
-	    
-	    //图片点击
-	    $("body").on("click", ".cursor", function(){
-	    	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + $(this).attr("src") + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
 	    });
 	    
 	});

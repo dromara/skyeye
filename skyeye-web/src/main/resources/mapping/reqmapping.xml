@@ -230,7 +230,7 @@
 		<property id="htmlJsContent" name="htmlJsContent" ref="" var="html对应的js内容"/>
 		<property id="wxmlContent" name="wxmlContent" ref="required" var="wxml内容"/>
 		<property id="wxmlJsContent" name="wxmlJsContent" ref="" var="wxml对应的js内容"/>
-		<property id="img" name="img" ref="required" var="小程序分组id"/>
+		<property id="img" name="img" ref="required" var="小程序组件图片"/>
 	</url>
 	<url id="rmxcx017" path="/post/RmGroupMemberController/editRmGroupMemberSortTopById" val="小程序组件展示顺序上移" allUse="1">
 		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
@@ -248,6 +248,7 @@
 		<property id="wxmlContent" name="wxmlContent" ref="required" var="wxml内容"/>
 		<property id="wxmlJsContent" name="wxmlJsContent" ref="" var="wxml对应的js内容"/>
 		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
+		<property id="img" name="img" ref="required" var="小程序组件图片"/>
 	</url>
 	
 	<!-- 小程序系列结束 -->
