@@ -227,9 +227,9 @@
 		<property id="rmTypeId" name="rmTypeId" ref="required" var="小程序分类id"/>
 		<property id="rmGroupId" name="rmGroupId" ref="required" var="小程序分组id"/>
 		<property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
-		<property id="htmlJsContent" name="htmlJsContent" ref="required" var="html对应的js内容"/>
+		<property id="htmlJsContent" name="htmlJsContent" ref="" var="html对应的js内容"/>
 		<property id="wxmlContent" name="wxmlContent" ref="required" var="wxml内容"/>
-		<property id="wxmlJsContent" name="wxmlJsContent" ref="required" var="wxml对应的js内容"/>
+		<property id="wxmlJsContent" name="wxmlJsContent" ref="" var="wxml对应的js内容"/>
 		<property id="img" name="img" ref="required" var="小程序分组id"/>
 	</url>
 	

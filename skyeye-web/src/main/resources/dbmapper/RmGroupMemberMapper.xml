@@ -29,7 +29,8 @@
 	<select id="queryRmGroupMemberISTop" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
-			a.prints_pic_url printsPicUrl
+			a.prints_pic_url printsPicUrl,
+			a.sort
 		FROM
 			rm_group_member a
 		ORDER BY a.sort DESC LIMIT 1
