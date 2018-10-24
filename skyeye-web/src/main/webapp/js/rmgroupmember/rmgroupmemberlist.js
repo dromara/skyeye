@@ -144,7 +144,7 @@ layui.config({
         		type:1,
         		title:false,
         		closeBtn:0,
-        		skin:'layui-layer-nobg',
+        		skin: 'demo-class',
         		shadeClose:true,
         		content:'<img src="' + fileBasePath + data.printsPicUrl + '" style="max-height:600px;max-width:100%;">',
         		scrollbar:false

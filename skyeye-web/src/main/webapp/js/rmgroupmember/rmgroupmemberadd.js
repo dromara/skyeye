@@ -53,10 +53,10 @@ layui.config({
 					 	   			var params = {
 					 	   				rmTypeId: $("#rmTypeId").val(),
 					 	   				rmGroupId: $("#rmGroupId").val(),
-					 	   				htmlContent: $("#htmlContent").val(),
-					 	   				htmlJsContent: $("#htmlJsContent").val(),
-					 	   				wxmlContent: $("#wxmlContent").val(),
-					 	   				wxmlJsContent: $("#wxmlJsContent").val(),
+					 	   				htmlContent: encodeURI($("#htmlContent").val()),
+					 	   				htmlJsContent: encodeURI($("#htmlJsContent").val()),
+					 	   				wxmlContent: encodeURI($("#wxmlContent").val()),
+					 	   				wxmlJsContent: encodeURI($("#wxmlJsContent").val()),
 					        			img: json1.bean.picUrl
 						        	};
 						        	
