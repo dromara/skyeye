@@ -154,11 +154,11 @@ layui.config({
 	
 	//删除
 	function del(data, obj){
-		var msg = obj ? '确认删除分组【' + obj.data.rmGroupName + '】吗？' : '确认删除选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '删除分组' }, function (index) {
+		var msg = '确认删除选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '删除组件' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
-            AjaxPostUtil.request({url:reqBasePath + "rmxcx010", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "rmxcx019", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
     				loadTable();
@@ -171,7 +171,7 @@ layui.config({
 	
 	//上移
 	function topOne(data){
-		AjaxPostUtil.request({url:reqBasePath + "rmxcx013", params:{rowId: data.id}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "rmxcx017", params:{rowId: data.id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				top.winui.window.msg("上移成功", {icon: 1,time: 2000});
 				loadTable();
@@ -183,7 +183,7 @@ layui.config({
 	
 	//下移
 	function lowerOne(data){
-		AjaxPostUtil.request({url:reqBasePath + "rmxcx014", params:{rowId: data.id}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "rmxcx018", params:{rowId: data.id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				top.winui.window.msg("下移成功", {icon: 1,time: 2000});
 				loadTable();

@@ -68,5 +68,124 @@ public class RmGroupMemberServiceImpl implements RmGroupMemberService{
 		}
 		rmGroupMemberDao.insertRmGroupMemberMation(map);
 	}
+
+	/**
+	 * 
+	     * @Title: editRmGroupMemberSortTopById
+	     * @Description: 小程序组件展示顺序上移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editRmGroupMemberSortTopById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> topBean = rmGroupMemberDao.queryRmGroupMemberISTopByThisId(map);//根据排序获取这条数据的上一条数据
+		if(topBean == null){
+			outputObject.setreturnMessage("已经是最靠前组件，无法移动。");
+		}else{
+			map.put("sort", topBean.get("sort"));
+			topBean.put("sort", topBean.get("thisSort"));
+			rmGroupMemberDao.editRmGroupMemberSortTopById(map);
+			rmGroupMemberDao.editRmGroupMemberSortTopById(topBean);
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: editRmGroupMemberSortLowerById
+	     * @Description: 小程序组件展示顺序下移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editRmGroupMemberSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> topBean = rmGroupMemberDao.queryRmGroupMemberISLowerByThisId(map);//根据排序获取这条数据的下一条数据
+		if(topBean == null){
+			outputObject.setreturnMessage("已经是最靠后组件，无法移动。");
+		}else{
+			map.put("sort", topBean.get("sort"));
+			topBean.put("sort", topBean.get("thisSort"));
+			rmGroupMemberDao.editRmGroupMemberSortTopById(map);
+			rmGroupMemberDao.editRmGroupMemberSortTopById(topBean);
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: deleteRmGroupMemberById
+	     * @Description: 删除小程序组件信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings("static-access")
+	@Override
+	public void deleteRmGroupMemberById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = rmGroupMemberDao.queryUseRmGroupMemberNumById(map);
+		if(bean == null){
+			String tPath = inputObject.getRequest().getSession().getServletContext().getRealPath("/");
+			Map<String, Object> item = rmGroupMemberDao.queryRmGroupMemberMationById(map);
+			String basePath = tPath + "\\assets\\smpropic\\" + item.get("printsPicUrl").toString();
+			ToolUtil.deleteFile(basePath);
+			rmGroupMemberDao.deleteRmGroupMemberById(map);
+			
+		}else{
+			if(Integer.parseInt(bean.get("groupUseMemberNum").toString()) == 0){//该组件没有正在使用中
+				String tPath = inputObject.getRequest().getSession().getServletContext().getRealPath("/");
+				Map<String, Object> item = rmGroupMemberDao.queryRmGroupMemberMationById(map);
+				String basePath = tPath + "\\assets\\smpropic\\" + item.get("printsPicUrl").toString();
+				ToolUtil.deleteFile(basePath);
+				rmGroupMemberDao.deleteRmGroupMemberById(map);
+			}else{
+				outputObject.setreturnMessage("该组件正在使用中，无法删除。");
+			}
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryRmGroupMemberMationToEditById
+	     * @Description: 编辑小程序组件信息时进行回显
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryRmGroupMemberMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		String tPath = "assets/smpropic/" ;
+		map.put("basePath", tPath);
+		Map<String, Object> bean = rmGroupMemberDao.queryRmGroupMemberMationToEditById(map);
+		outputObject.setBean(bean);
+		outputObject.settotal(1);
+	}
+
+	/**
+	 * 
+	     * @Title: editRmGroupMemberMationById
+	     * @Description: 编辑小程序组件信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editRmGroupMemberMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		rmGroupMemberDao.editRmGroupMemberMationById(map);
+	}
 	
 }

@@ -13,4 +13,20 @@ public interface RmGroupMemberDao {
 
 	public int insertRmGroupMemberMation(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryRmGroupMemberISLowerByThisId(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryRmGroupMemberISTopByThisId(Map<String, Object> map) throws Exception;
+
+	public int editRmGroupMemberSortTopById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryUseRmGroupMemberNumById(Map<String, Object> map) throws Exception;
+
+	public int deleteRmGroupMemberById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryRmGroupMemberMationToEditById(Map<String, Object> map) throws Exception;
+
+	public int editRmGroupMemberMationById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryRmGroupMemberMationById(Map<String, Object> map) throws Exception;
+
 }

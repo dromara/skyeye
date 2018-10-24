@@ -1,6 +1,4 @@
 
-var childIcon = "";//分组ICON
-
 var isPic = false;//是否执行生成图片
 
 layui.config({

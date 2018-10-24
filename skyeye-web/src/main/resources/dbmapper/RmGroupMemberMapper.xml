@@ -43,4 +43,103 @@
 	     (#{id}, #{rmTypeId}, #{rmGroupId}, #{img}, #{htmlContent}, #{htmlJsContent}, #{wxmlContent}, #{wxmlJsContent}, #{sort}, #{createId}, #{createTime})
 	</insert>
 	
+	<select id="queryRmGroupMemberISTopByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sort,
+			b.sort thisSort
+		FROM
+			rm_group_member a,
+			rm_group_member b
+		WHERE a.sort > b.sort
+			AND b.id = #{id}
+		ORDER BY a.sort ASC LIMIT 1
+	</select>
+	
+	<update id="editRmGroupMemberSortTopById" parameterType="java.util.Map">
+		UPDATE rm_group_member
+		<set>
+			<if test="sort != '' and sort != null">
+				sort = #{sort},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryRmGroupMemberISLowerByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sort,
+			b.sort thisSort
+		FROM
+			rm_group_member a,
+			rm_group_member b
+		WHERE a.sort &lt; b.sort
+			AND b.id = #{id}
+		ORDER BY a.sort DESC LIMIT 1
+	</select>
+	
+	<select id="queryUseRmGroupMemberNumById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) groupUseMemberNum 
+		FROM
+			sm_project_page_mode b
+		WHERE b.rm_group_member_id = #{id}
+	</select>
+	
+	<delete id="deleteRmGroupMemberById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			rm_group_member
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryRmGroupMemberMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			CONCAT(#{basePath}, a.prints_pic_url) printsPicUrl,
+			(SELECT COUNT(*) FROM sm_project_page_mode b WHERE b.rm_group_member_id = a.id) memberUseNum,
+			CONVERT(a.create_time, char) createTime,
+			(SELECT c.name FROM rm_type c WHERE c.id = a.sm_type_id) typeName,
+			(SELECT d.name FROM rm_group d WHERE d.id = a.sm_group_id) groupName,
+			a.html_content htmlContent,
+			a.html_js_content htmlJsContent,
+			a.wxml_content wxmlContent,
+			a.wxml_js_content wxmlJsContent
+		FROM
+			rm_group_member a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editRmGroupMemberMationById" parameterType="java.util.Map">
+		UPDATE rm_group_member
+		<set>
+			<if test="wxmlContent != '' and wxmlContent != null">
+				wxml_content = #{wxmlContent},
+			</if>
+			<if test="wxmlJsContent != '' and wxmlJsContent != null">
+				wxml_js_content = #{wxmlJsContent},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryRmGroupMemberMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.prints_pic_url printsPicUrl,
+			(SELECT COUNT(*) FROM sm_project_page_mode b WHERE b.rm_group_member_id = a.id) memberUseNum,
+			CONVERT(a.create_time, char) createTime,
+			(SELECT c.name FROM rm_type c WHERE c.id = a.sm_type_id) typeName,
+			(SELECT d.name FROM rm_group d WHERE d.id = a.sm_group_id) groupName,
+			a.html_content htmlContent,
+			a.html_js_content htmlJsContent,
+			a.wxml_content wxmlContent,
+			a.wxml_js_content wxmlJsContent
+		FROM
+			rm_group_member a
+		WHERE a.id = #{id}
+	</select>
+	
 </mapper>

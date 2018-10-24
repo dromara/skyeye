@@ -232,6 +232,23 @@
 		<property id="wxmlJsContent" name="wxmlJsContent" ref="" var="wxml对应的js内容"/>
 		<property id="img" name="img" ref="required" var="小程序分组id"/>
 	</url>
+	<url id="rmxcx017" path="/post/RmGroupMemberController/editRmGroupMemberSortTopById" val="小程序组件展示顺序上移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
+	</url>
+	<url id="rmxcx018" path="/post/RmGroupMemberController/editRmGroupMemberSortLowerById" val="小程序组件展示顺序下移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
+	</url>
+	<url id="rmxcx019" path="/post/RmGroupMemberController/deleteRmGroupMemberById" val="删除小程序组件信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
+	</url>
+	<url id="rmxcx020" path="/post/RmGroupMemberController/queryRmGroupMemberMationToEditById" val="编辑小程序组件信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
+	</url>
+	<url id="rmxcx021" path="/post/RmGroupMemberController/editRmGroupMemberMationById" val="编辑小程序组件信息" allUse="1">
+		<property id="wxmlContent" name="wxmlContent" ref="required" var="wxml内容"/>
+		<property id="wxmlJsContent" name="wxmlJsContent" ref="" var="wxml对应的js内容"/>
+		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	

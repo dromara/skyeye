@@ -47,4 +47,84 @@ public class RmGroupMemberController {
 		rmGroupMemberService.insertRmGroupMemberMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editRmGroupMemberSortTopById
+	     * @Description: 小程序组件展示顺序上移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupMemberController/editRmGroupMemberSortTopById")
+	@ResponseBody
+	public void editRmGroupMemberSortTopById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupMemberService.editRmGroupMemberSortTopById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editRmGroupMemberSortLowerById
+	     * @Description: 小程序组件展示顺序下移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupMemberController/editRmGroupMemberSortLowerById")
+	@ResponseBody
+	public void editRmGroupMemberSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupMemberService.editRmGroupMemberSortLowerById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: deleteRmGroupMemberById
+	     * @Description: 删除小程序组件信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupMemberController/deleteRmGroupMemberById")
+	@ResponseBody
+	public void deleteRmGroupMemberById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupMemberService.deleteRmGroupMemberById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: queryRmGroupMemberMationToEditById
+	     * @Description: 编辑小程序组件信息时进行回显
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupMemberController/queryRmGroupMemberMationToEditById")
+	@ResponseBody
+	public void queryRmGroupMemberMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupMemberService.queryRmGroupMemberMationToEditById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editRmGroupMemberMationById
+	     * @Description: 编辑小程序组件信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupMemberController/editRmGroupMemberMationById")
+	@ResponseBody
+	public void editRmGroupMemberMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupMemberService.editRmGroupMemberMationById(inputObject, outputObject);
+	}
+	
 }
