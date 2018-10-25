@@ -250,6 +250,26 @@
 		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
 		<property id="img" name="img" ref="required" var="小程序组件图片"/>
 	</url>
+	<url id="rmxcx022" path="/post/SmProjectController/querySmProjectList" val="获取小程序列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="proName" name="proName" ref="" var="小程序名称"/>
+	</url>
+	<url id="rmxcx023" path="/post/SmProjectController/insertSmProjectMation" val="新增小程序" allUse="1">
+		<property id="proDesc" name="proDesc" ref="" var="小程序简介"/>
+		<property id="proName" name="proName" ref="required" var="小程序名称"/>
+	</url>
+	<url id="rmxcx024" path="/post/SmProjectController/deleteSmProjectById" val="删除小程序" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序id"/>
+	</url>
+	<url id="rmxcx025" path="/post/SmProjectController/querySmProjectMationToEditById" val="编辑小程序信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序id"/>
+	</url>
+	<url id="rmxcx026" path="/post/SmProjectController/editSmProjectMationById" val="编辑小程序信息" allUse="1">
+		<property id="proDesc" name="proDesc" ref="" var="小程序简介"/>
+		<property id="proName" name="proName" ref="required" var="小程序名称"/>
+		<property id="rowId" name="id" ref="required" var="小程序id"/>
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	
