@@ -2424,6 +2424,116 @@ body .layer-ext-winconfirm {
 	cursor: pointer;
 }
 
+/*** 小程序页面管理start ***/
+.smpro{
+    height: calc(100vh - 45px);
+}
+
+.hei-100-per{
+	height: 100%;
+	margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.left-menu{
+	border-right: 2px solid gainsboro;
+    height: 100%;
+}
+
+.center-content{
+	height: 100%;
+}
+
+.right-menu{
+	border-left: 2px solid gainsboro;
+	height: 100%;
+}
+
+.blue{
+	color: blue;
+    margin-left: 10px;
+}
+
+.tab__item{
+    background-color: rgb(248,248,248);
+    height: 100%;
+}
+
+.page__bd li{
+	background-color: white;
+    margin-top: 10px;
+}
+
+.page__bd li.js_show .weui-flex {
+	opacity:.4
+}
+
+.page__bd li.js_show .page__category {
+	height:auto
+}
+
+.page__bd li.js_show .page__category-content {
+	opacity:1;
+	-webkit-transform:translateY(0);
+	transform:translateY(0);
+    padding-left: 20px;
+}
+
+.page__category-content>a{
+	
+}
+
+.page__category-content>a>.weui-cell__bd{
+	border-bottom: 1px solid gainsboro;
+	height: 30px;
+}
+
+.page__bd li:first-child {
+	margin-top:0
+}
+
+.page__category {
+	height:0;
+	overflow:hidden
+}
+
+.page__category-content {
+	opacity:0;
+	-webkit-transform:translateY(-50%);
+	transform:translateY(-50%);
+	-webkit-transition:.3s;
+	transition:.3s
+}
+
+.weui-flex {
+	padding: 10px 20px;
+	-webkit-box-align:center;
+	-webkit-align-items:center;
+	align-items:center;
+	-webkit-transition:.3s;
+	transition:.3s
+}
+
+.weui-cells {
+	margin-top:0
+}
+
+.weui-cells:after,.page.home .weui-cells:before {
+	display:none
+}
+
+ .weui-cell {
+	padding-left:20px;
+	padding-right:20px
+}
+
+.weui-cell:before {
+	left:20px;
+	right:20px
+}
+
+/*** 小程序页面管理end ***/
+
 /*******************************************自定义样式end********************************************/
 
 

@@ -270,6 +270,8 @@
 		<property id="proName" name="proName" ref="required" var="小程序名称"/>
 		<property id="rowId" name="id" ref="required" var="小程序id"/>
 	</url>
+	<url id="rmxcx027" path="/post/SmProjectController/queryGroupMationList" val="获取小程序组件信息" allUse="1">
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	

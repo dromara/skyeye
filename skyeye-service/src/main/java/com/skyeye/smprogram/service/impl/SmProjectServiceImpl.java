@@ -14,6 +14,8 @@ import com.skyeye.common.util.ToolUtil;
 import com.skyeye.smprogram.dao.SmProjectDao;
 import com.skyeye.smprogram.service.SmProjectService;
 
+import net.sf.json.JSONArray;
+
 @Service
 public class SmProjectServiceImpl implements SmProjectService{
 	
@@ -137,6 +139,29 @@ public class SmProjectServiceImpl implements SmProjectService{
 			smProjectDao.editSmProjectMationById(map);
 		}else{
 			outputObject.setreturnMessage("该类型名称已存在，请更换。");
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryGroupMationList
+	     * @Description: 获取小程序组件信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryGroupMationList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = smProjectDao.queryGroupMationList(map);
+		if(beans != null && !beans.isEmpty()){
+			for(Map<String, Object> bean : beans){
+				bean.put("groupList", JSONArray.fromObject(bean.get("groupList").toString()));
+			}
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
 		}
 	}
 	

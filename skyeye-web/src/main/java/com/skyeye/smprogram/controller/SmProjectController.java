@@ -95,4 +95,20 @@ public class SmProjectController {
 		smProjectService.editSmProjectMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryGroupMationList
+	     * @Description: 获取小程序组件信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectController/queryGroupMationList")
+	@ResponseBody
+	public void queryGroupMationList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectService.queryGroupMationList(inputObject, outputObject);
+	}
+	
 }

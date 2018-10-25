@@ -98,4 +98,22 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryGroupMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			IFNULL(
+			CONCAT(
+				'[',
+				GROUP_CONCAT(
+					CONCAT(CONCAT('{"id":"', b.id, '",'), CONCAT('"name":"', b.`name`, '",'), CONCAT('"icon":"', b.icon, '"}'))
+				),
+			']'
+			), '[]') groupList
+		FROM
+			rm_type a
+			LEFT JOIN rm_group b ON b.rm_type_id = a.id
+		GROUP BY a.id
+	</select>
+	
 </mapper>

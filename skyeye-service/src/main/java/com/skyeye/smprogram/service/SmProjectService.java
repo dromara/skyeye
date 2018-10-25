@@ -15,4 +15,6 @@ public interface SmProjectService {
 
 	public void editSmProjectMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryGroupMationList(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

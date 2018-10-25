@@ -7,7 +7,7 @@
     <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
-<body>
+<body style="overflow: hidden;">
     <div class="winui-toolbar">
         <div class="winui-tool">
             <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i>刷新数据</button>
@@ -15,11 +15,41 @@
         </div>
     </div>
     
-    <div class="txtcenter" style="width:700px;margin:0 auto;padding-top:20px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        
-	    </form>
-	</div>
+    <div class="layui-row smpro">
+    	<div class="layui-col-xs3 left-menu">
+    		<div class="layui-tab layui-tab-card hei-100-per">
+				<ul class="layui-tab-title">
+					<li class="layui-this">页面管理<i class="fa fa-refresh blue" aria-hidden="true"></i></li>
+					<li>组件管理<i class="fa fa-refresh blue" aria-hidden="true"></i></li>
+				</ul>
+				<div class="layui-tab-content tab__item">
+					<div class="layui-tab-item layui-show">1</div>
+					<div class="layui-tab-item">
+						<div class="page__bd page__bd_spacing">
+					        <ul id="groupMember">
+					            
+					         </ul>
+					     </div>
+					</div>
+				</div>
+			</div>
+    	</div>
+    	<div class="layui-col-xs6 center-content">
+	    	22
+    	</div>
+    	<div class="layui-col-xs3 right-menu">
+    		<div class="layui-tab layui-tab-card hei-100-per">
+				<ul class="layui-tab-title">
+					<li class="layui-this">页面属性<i class="fa fa-refresh blue" aria-hidden="true"></i></li>
+					<li>图层管理<i class="fa fa-refresh blue" aria-hidden="true"></i></li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">1</div>
+					<div class="layui-tab-item">2</div>
+				</div>
+			</div>
+    	</div>
+   	</div>
     
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
