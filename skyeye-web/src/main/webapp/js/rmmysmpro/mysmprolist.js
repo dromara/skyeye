@@ -40,6 +40,8 @@ layui.config({
         	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
+        }else if (layEvent === 'consolePro') { //管理项目
+        	consolePro(data);
         }
     });
 	
@@ -68,6 +70,25 @@ layui.config({
     			}
     		}});
 		});
+	}
+	
+	//管理项目
+	function consolePro(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/rmmysmpropage/mysmpropagelist.html", 
+			title: "管理项目",
+			pageId: "rmmysmproconsolePro",
+			area:[],
+			maxmin: true,
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
 	}
 	
 	//编辑
@@ -112,5 +133,5 @@ layui.config({
     	table.reload("messageTable", {where:{proName:$("#proName").val()}});
     }
     
-    exports('rmtypelist', {});
+    exports('mysmprolist', {});
 });

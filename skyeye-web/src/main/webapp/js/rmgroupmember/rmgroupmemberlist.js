@@ -235,5 +235,5 @@ layui.config({
     	table.reload("messageTable", {where:{rmGroupId:$("#rmGroupId").val(), rmTypeId:$("#rmTypeId").val()}});
     }
     
-    exports('rmgrouplist', {});
+    exports('rmgroupmemberlist', {});
 });
