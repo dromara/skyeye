@@ -73,8 +73,8 @@ layui.config({
 		    cols: [[
 		        { title: '序号', type: 'numbers'},
 		        { field: 'menuName', title: '菜单名称', width: 120 },
-		        { field: 'menuIcon', title: '图标码', width: 120 },
-		        { field: 'menuIcon', title: '图标', width: 120, templet: function(d){
+		        { field: 'menuIcon', title: '图标码', width: 180 },
+		        { field: 'id', title: '图标', width: 60, templet: function(d){
 		        	return '<i class="fa fa-fw ' + d.menuIcon + '"></i>';
 		        }},
 		        { field: 'titleName', title: '标题名称', width: 120 },
