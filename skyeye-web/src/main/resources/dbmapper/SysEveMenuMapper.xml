@@ -109,6 +109,14 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryUseThisMenuRoleById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) roleNum
+		FROM 
+			sys_eve_role_menu d 
+		WHERE d.menu_id = #{id}
+	</select>
+	
 	<delete id="deleteSysMenuChildMationById" parameterType="java.util.Map">
 		DELETE
 		FROM

@@ -23,4 +23,6 @@ public interface SysEveMenuDao {
 
 	public List<Map<String, Object>> queryTreeSysMenuMationBySimpleLevel(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryUseThisMenuRoleById(Map<String, Object> map) throws Exception;
+
 }

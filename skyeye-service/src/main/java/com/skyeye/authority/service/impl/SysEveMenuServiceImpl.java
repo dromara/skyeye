@@ -157,10 +157,22 @@ public class SysEveMenuServiceImpl implements SysEveMenuService{
 	@Override
 	public void deleteSysMenuMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		//删除子菜单
-		sysEveMenuDao.deleteSysMenuChildMationById(map);
-		//删除自身菜单
-		sysEveMenuDao.deleteSysMenuMationById(map);
+		Map<String, Object> menuBean = sysEveMenuDao.queryUseThisMenuRoleById(map);
+		if(menuBean == null){
+			//删除子菜单
+			sysEveMenuDao.deleteSysMenuChildMationById(map);
+			//删除自身菜单
+			sysEveMenuDao.deleteSysMenuMationById(map);
+		}else{
+			if(Integer.parseInt(menuBean.get("roleNum").toString()) == 0){//该菜单没有角色使用
+				//删除子菜单
+				sysEveMenuDao.deleteSysMenuChildMationById(map);
+				//删除自身菜单
+				sysEveMenuDao.deleteSysMenuMationById(map);
+			}else{
+				outputObject.setreturnMessage("该菜单正在被一个或多个角色使用，无法删除。");
+			}
+		}
 	}
 	
 	/**
