@@ -79,7 +79,6 @@ layui.config({
 			url: "../../tpl/rmmysmpropage/mysmpropagelist.html", 
 			title: "管理项目",
 			pageId: "rmmysmproconsolePro",
-			area:[],
 			maxmin: true,
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {

@@ -35,6 +35,9 @@ function _openNewWindows(mation){
 			if(isNull(mation.offset)){
 				mation.offset = ['15vh', '20vw'];
 			}
+			if(isNull(mation.maxmin)){
+				mation.maxmin = false;
+			}
 		    var index = layer.load(1);
 		    refreshCode = "";
 		    layui.$.ajax({
@@ -45,19 +48,23 @@ function _openNewWindows(mation){
 		            layer.close(index);
 		            //从桌面打开
 //		            top.winui.window.open
-		            layer.open({
+		            var pageIndex = layer.open({
 		            	id: mation.pageId,
 		                type: 2,
 		                title: mation.title,
 		                content: mation.url,
 		                area: mation.area,
 		                offset: mation.offset,
+		                maxmin: mation.maxmin,
 		                end: function(){
 		                	if(typeof(mation.callBack) == "function") {
 		                		mation.callBack(refreshCode);
 		        			}
 		                }
 		            });
+		            if(mation.maxmin){
+		            	layer.full(pageIndex);
+		            }
 		        },
 		        error: function (xml) {
 		            layer.close(index);

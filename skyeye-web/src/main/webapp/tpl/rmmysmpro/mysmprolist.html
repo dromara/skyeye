@@ -34,7 +34,8 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs" lay-event="edit">编辑项目</a>
+			<a class="layui-btn layui-btn-xs" lay-event="consolePro">管理项目</a>
 			{{# if(d.pageNum == 0 && d.modelNum == 0){ }}
 				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 			{{# } }}
