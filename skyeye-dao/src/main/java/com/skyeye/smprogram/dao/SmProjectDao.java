@@ -27,4 +27,6 @@ public interface SmProjectDao {
 
 	public List<Map<String, Object>> queryGroupMationList(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryGroupMemberMationList(Map<String, Object> map) throws Exception;
+
 }

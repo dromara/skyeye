@@ -10,12 +10,14 @@ layui.config({
 	form = layui.form,
 	table = layui.table;
 	
+	$("#groupMemberTab").hide();
+	
 	showGrid({
 	 	id: "groupMember",
 	 	url: reqBasePath + "rmxcx027",
 	 	params: {},
 	 	pagination: false,
-	 	template: getFileContent('tpl/rmmysmpropage/groupMemberTemplate.tpl'),
+	 	template: getFileContent('tpl/rmmysmpropage/groupTemplate.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
 	 	ajaxSendAfter:function(json){
@@ -29,7 +31,58 @@ layui.config({
     //二级菜单点击
     $('body').on('click', '.js_item', function(){
         var id = $(this).data('id');
-        window.pageManager.go(id);
+        var title = $(this).data('name');
+        showGrid({
+    	 	id: "memberList",
+    	 	url: reqBasePath + "rmxcx028",
+    	 	params: {rowId: id},
+    	 	pagination: false,
+    	 	template: getFileContent('tpl/rmmysmpropage/groupMemberTemplate.tpl'),
+    	 	ajaxSendLoadBefore: function(hdb){
+    	 		hdb.registerHelper("compare1", function(v1, options){
+					return fileBasePath + "assets/smpropic/" + v1;
+				});
+    	 	},
+    	 	ajaxSendAfter:function(json){
+    	 	}
+    	});
+        $("#groupTitle").html(title);
+        $("#groupTab").animate({  
+            width : "hide",  
+            opacity: "0",
+            paddingLeft : "hide",  
+            paddingRight : "hide",  
+            marginLeft : "hide",  
+            marginRight : "hide"  
+        }, 500);
+        $("#groupMemberTab").animate({  
+            width : "show",  
+            opacity: "1",
+            paddingLeft : "show",  
+            paddingRight : "show",  
+            marginLeft : "show",  
+            marginRight : "show"  
+        }, 500); 
+    });
+    
+    //返回分组列表
+    $('body').on('click', '#returnGroupTab', function(){
+    	$("#groupMemberTab").animate({  
+            width : "hide",  
+            opacity: "0",
+            paddingLeft : "hide",  
+            paddingRight : "hide",  
+            marginLeft : "hide",  
+            marginRight : "hide"  
+        }, 500);
+        $("#groupTab").animate({  
+            width : "show",  
+            opacity: "1",
+            paddingLeft : "show",  
+            paddingRight : "show",  
+            marginLeft : "show",  
+            marginRight : "show"  
+        }, 500); 
     });
     
     //展开一级菜单
@@ -64,6 +117,19 @@ layui.config({
                 $page.scrollTop(scrollTop);
             }
         }
+    });
+    
+    //图片预览
+    $('body').on('click', '.cursor', function(){
+    	layer.open({
+    		type:1,
+    		title:false,
+    		closeBtn:0,
+    		skin: 'demo-class',
+    		shadeClose:true,
+    		content:'<img src="' + $(this).attr("src") + '" style="max-height:600px;max-width:100%;">',
+    		scrollbar:false
+        });
     });
     
     function loadTable(){

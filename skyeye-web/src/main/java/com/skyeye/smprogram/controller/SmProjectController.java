@@ -98,7 +98,7 @@ public class SmProjectController {
 	/**
 	 * 
 	     * @Title: queryGroupMationList
-	     * @Description: 获取小程序组件信息
+	     * @Description: 获取小程序组信息
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -109,6 +109,22 @@ public class SmProjectController {
 	@ResponseBody
 	public void queryGroupMationList(InputObject inputObject, OutputObject outputObject) throws Exception{
 		smProjectService.queryGroupMationList(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: queryGroupMemberMationList
+	     * @Description: 根据分组获取小程序组件信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectController/queryGroupMemberMationList")
+	@ResponseBody
+	public void queryGroupMemberMationList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectService.queryGroupMemberMationList(inputObject, outputObject);
 	}
 	
 }

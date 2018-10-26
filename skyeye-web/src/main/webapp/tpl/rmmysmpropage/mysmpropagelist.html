@@ -10,7 +10,6 @@
 <body style="overflow: hidden;">
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i>刷新数据</button>
             <button id="addBean" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增项目</button>
         </div>
     </div>
@@ -19,16 +18,29 @@
     	<div class="layui-col-xs3 left-menu">
     		<div class="layui-tab layui-tab-card hei-100-per">
 				<ul class="layui-tab-title">
-					<li class="layui-this">页面管理<i class="fa fa-refresh blue" aria-hidden="true"></i></li>
-					<li>组件管理<i class="fa fa-refresh blue" aria-hidden="true"></i></li>
+					<li class="layui-this">页面管理</li>
+					<li>组件管理</li>
 				</ul>
 				<div class="layui-tab-content tab__item">
-					<div class="layui-tab-item layui-show">1</div>
-					<div class="layui-tab-item">
-						<div class="page__bd page__bd_spacing">
-					        <ul id="groupMember">
+					<div class="layui-tab-item layui-show hei-100-per">1</div>
+					<div class="layui-tab-item hei-100-per">
+						<div class="page__bd page__bd_spacing hei-100-per" id="groupTab">
+					        <ul id="groupMember" style="overflow-y: scroll;height: 100%;">
 					            
 					         </ul>
+					     </div>
+					     <div class="page__bd page__bd_spacing hei-100-per" id="groupMemberTab">
+					     	<div class="winui-toolbar">
+						        <div class="winui-tool">
+						            <button class="winui-toolbtn" id="returnGroupTab"><i class="fa fa-chevron-left" aria-hidden="true"></i>返回</button>
+						            <font id="groupTitle" class="winui-toolbtn"></font>
+						        </div>
+						    </div>
+						    <div class="page__bd page__bd_spacing member-list-div">
+						    	<div class="layui-row layui-col-space10 member-list" id="memberList" style="overflow-y: scroll;height: 100%;">
+								    
+								</div>
+						    </div>
 					     </div>
 					</div>
 				</div>
@@ -40,8 +52,8 @@
     	<div class="layui-col-xs3 right-menu">
     		<div class="layui-tab layui-tab-card hei-100-per">
 				<ul class="layui-tab-title">
-					<li class="layui-this">页面属性<i class="fa fa-refresh blue" aria-hidden="true"></i></li>
-					<li>图层管理<i class="fa fa-refresh blue" aria-hidden="true"></i></li>
+					<li class="layui-this">页面属性</li>
+					<li>图层管理</li>
 				</ul>
 				<div class="layui-tab-content">
 					<div class="layui-tab-item layui-show">1</div>

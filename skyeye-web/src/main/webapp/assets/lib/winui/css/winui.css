@@ -2456,7 +2456,7 @@ body .layer-ext-winconfirm {
 
 .tab__item{
     background-color: rgb(248,248,248);
-    height: 100%;
+    height: calc(100vh - 105px);
 }
 
 .page__bd li{
@@ -2532,6 +2532,24 @@ body .layer-ext-winconfirm {
 	right:20px
 }
 
+#groupTitle{
+	float: right;
+}
+
+.member-list>div>.layui-card{
+	background-color: white;
+	width: 100%;
+    height: 110px;
+    overflow: hidden;
+}
+
+.layui-col-space10>* {
+    padding: 5px;
+}
+
+.member-list-div{
+	height: calc(100vh - 140px);
+}
 /*** 小程序页面管理end ***/
 
 /*******************************************自定义样式end********************************************/

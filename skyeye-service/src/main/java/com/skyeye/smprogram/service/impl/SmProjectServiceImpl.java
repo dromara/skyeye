@@ -145,7 +145,7 @@ public class SmProjectServiceImpl implements SmProjectService{
 	/**
 	 * 
 	     * @Title: queryGroupMationList
-	     * @Description: 获取小程序组件信息
+	     * @Description: 获取小程序组信息
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -160,6 +160,26 @@ public class SmProjectServiceImpl implements SmProjectService{
 			for(Map<String, Object> bean : beans){
 				bean.put("groupList", JSONArray.fromObject(bean.get("groupList").toString()));
 			}
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryGroupMemberMationList
+	     * @Description: 根据分组获取小程序组件信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryGroupMemberMationList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = smProjectDao.queryGroupMemberMationList(map);
+		if(beans != null && !beans.isEmpty()){
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());
 		}

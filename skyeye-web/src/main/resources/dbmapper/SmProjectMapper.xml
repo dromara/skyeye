@@ -116,4 +116,16 @@
 		GROUP BY a.id
 	</select>
 	
+	<select id="queryGroupMemberMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.prints_pic_url printsPicUrl,
+			a.html_content htmlContent,
+			a.html_js_content htmlJsContent
+		FROM
+			rm_group_member a
+		WHERE
+			a.sm_group_id = #{id}
+	</select>
+	
 </mapper>

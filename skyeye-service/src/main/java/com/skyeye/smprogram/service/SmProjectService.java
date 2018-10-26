@@ -17,4 +17,6 @@ public interface SmProjectService {
 
 	public void queryGroupMationList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryGroupMemberMationList(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }
