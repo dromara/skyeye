@@ -33,7 +33,6 @@ layui.config({
 			return source === document.getElementById('memberList');
 		},
 		accepts: function (el, target) {//移动
-			console.log(el);
 			return target !== document.getElementById('memberList');
 		}
 	}).on('drop', function (el, container) {//放置
