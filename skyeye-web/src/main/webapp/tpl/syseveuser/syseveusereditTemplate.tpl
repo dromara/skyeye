@@ -28,7 +28,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">头像</label>
         <div class="layui-input-block">
-        	<div id="userPhoto" validate="{vali:{type:'fileUpload',minnum:1,maxnum:1}}"  class="fileUploadContent"></div>
+        	<div class="upload" id="userPhoto"></div>
         </div>
     </div>
     <div class="layui-form-item">
