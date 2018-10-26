@@ -2,7 +2,7 @@
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'form', 'dragula'], function (exports) {
 	
 	winui.renderColor();
 	
@@ -27,6 +27,23 @@ layui.config({
 	
 	var winH = $(window).height();
     var categorySpace = 10;
+    
+    dragula([document.getElementById('memberList'), document.getElementById('centerText')], {
+		copy: function (el, source) {//复制
+			return source === document.getElementById('memberList');
+		},
+		accepts: function (el, target) {//移动
+			console.log(el);
+			return target !== document.getElementById('memberList');
+		}
+	}).on('drop', function (el, container) {//放置
+		if($(container).attr("id") == 'centerText'){//放置在手机里面
+			el.className = 'layui-col-md12';
+			var content = $(el).attr("htmlContent");
+			var JsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $(el).attr("htmlJsContent") + '})(jQuery);});</script>'
+			$(el).html(content + JsContent);
+		}
+	});
     
     //二级菜单点击
     $('body').on('click', '.js_item', function(){

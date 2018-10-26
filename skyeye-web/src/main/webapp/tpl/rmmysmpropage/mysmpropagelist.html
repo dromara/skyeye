@@ -6,6 +6,7 @@
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/winui/weui.css" rel="stylesheet" />
 </head>
 <body style="overflow: hidden;">
     <div class="winui-toolbar">
@@ -37,7 +38,7 @@
 						        </div>
 						    </div>
 						    <div class="page__bd page__bd_spacing member-list-div">
-						    	<div class="layui-row layui-col-space10 member-list" id="memberList" style="overflow-y: scroll;height: 100%;">
+						    	<div class="layui-row member-list" id="memberList" style="overflow-y: scroll;height: 100%;">
 								    
 								</div>
 						    </div>
@@ -50,7 +51,7 @@
 	    	<div class="iphone layui-col-xs8 layui-col-xs-offset2 layui-col-sm6 layui-col-sm-offset3 layui-col-md4 layui-col-md-offset4">
 				<div class="iphone-top"> <span class="camera"></span> <span class="sensor"></span> <span class="speaker"></span> </div>
 				<div class="top-bar"></div>
-				<div class="iphone-screen">
+				<div class="iphone-screen" id="centerText">
 					
 				</div>
 				<div class="buttons"> <span class="on-off"></span> <span class="sleep"></span> <span class="up"></span> <span class="down"></span> </div>
@@ -73,6 +74,8 @@
     
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
+    <script src="../../assets/winui/jweixin-1.0.0.js"></script>
+   	<script src="../../assets/winui/weui.min.js"></script>
     <script type="text/javascript">
         layui.config({base: '../../js/rmmysmpropage/'}).use('mysmpropagelist');
     </script>

@@ -2480,11 +2480,11 @@ body .layer-ext-winconfirm {
 }
 
 .page__category-content>a{
-	
+    font-size: 15px !important;
+    padding-bottom: 5px;
 }
 
 .page__category-content>a>.weui-cell__bd{
-	border-bottom: 1px solid gainsboro;
 	height: 30px;
 }
 
@@ -2534,6 +2534,10 @@ body .layer-ext-winconfirm {
 
 #groupTitle{
 	float: right;
+}
+
+#memberList>div{
+	padding: 10px;
 }
 
 .member-list>div>.layui-card{
@@ -2609,14 +2613,14 @@ body .layer-ext-winconfirm {
     bottom: 65px;
 }
 .iphone-screen {
-    background: #eee;
+    background: white;
     border: 1px solid #fff;
+    overflow: auto;
     height: calc(100vh - 145px);
     width: 100%;
     margin: 0 auto;
     border: 2px solid rgba(0, 0, 0, 0.9);
     border-radius: 3px;
-    overflow: hidden;
 }
 .iphone-screen img {
     width: 100%;
@@ -2650,6 +2654,30 @@ body .layer-ext-winconfirm {
     top: 170px;
     border-radius: 0px 2px 2px 0px;
 }
+
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
+
 
 
 /*** 小程序页面管理end ***/
