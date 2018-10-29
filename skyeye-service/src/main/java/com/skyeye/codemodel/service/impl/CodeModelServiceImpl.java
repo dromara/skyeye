@@ -2,28 +2,26 @@ package com.skyeye.codemodel.service.impl;
 
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
-import com.skyeye.codemodel.dao.CodeModelGroupDao;
-import com.skyeye.codemodel.service.CodeModelGroupService;
+import com.skyeye.codemodel.dao.CodeModelDao;
+import com.skyeye.codemodel.service.CodeModelService;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
 
 @Service
-public class CodeModelGroupServiceImpl implements CodeModelGroupService{
+public class CodeModelServiceImpl implements CodeModelService{
 	
 	@Autowired
-	private CodeModelGroupDao codeModelGroupDao;
+	private CodeModelDao codeModelDao;
 
 	/**
 	 * 
 	     * @Title: queryCodeModelGroupList
-	     * @Description: 获取模板分组列表
+	     * @Description: 获取模板列表
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -31,9 +29,9 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 	     * @throws
 	 */
 	@Override
-	public void queryCodeModelGroupList(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void queryCodeModelList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		List<Map<String, Object>> beans = codeModelGroupDao.queryCodeModelGroupList(map, 
+		List<Map<String, Object>> beans = codeModelDao.queryCodeModelList(map, 
 				new PageBounds(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString())));
 		PageList<Map<String, Object>> beansPageList = (PageList<Map<String, Object>>)beans;
 		int total = beansPageList.getPaginator().getTotalCount();
@@ -43,8 +41,8 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 	
 	/**
 	 * 
-	     * @Title: insertCodeModelGroupMation
-	     * @Description: 新增模板分组列表
+	     * @Title: insertCodeModelMationMation
+	     * @Description: 新增模板列表
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -52,25 +50,24 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 	     * @throws
 	 */
 	@Override
-	public void insertCodeModelGroupMation(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void insertCodeModelMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = codeModelGroupDao.queryCodeModelGroupMationByName(map);
+		Map<String, Object> bean = codeModelDao.queryCodeModelMationByName(map);
 		if(bean == null){
 			Map<String, Object> user = inputObject.getLogParams();
 			map.put("id", ToolUtil.getSurFaceId());
 			map.put("createId", user.get("id"));
 			map.put("createTime", ToolUtil.getTimeAndToString());
-			map.put("groupNum", ToolUtil.card());
-			codeModelGroupDao.insertCodeModelGroupMation(map);
+			codeModelDao.insertCodeModelMation(map);
 		}else{
-			outputObject.setreturnMessage("该模板分组已存在，请更换。");
+			outputObject.setreturnMessage("该模板已存在，请更换。");
 		}
 	}
 
 	/**
 	 * 
-	     * @Title: deleteCodeModelGroupMationById
-	     * @Description: 删除模板分组信息
+	     * @Title: deleteCodeModelMationMationById
+	     * @Description: 删除模板信息
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -78,24 +75,15 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 	     * @throws
 	 */
 	@Override
-	public void deleteCodeModelGroupById(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void deleteCodeModelById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = codeModelGroupDao.queryCodeModelNumById(map);
-		if(bean == null){
-			codeModelGroupDao.deleteCodeModelGroupById(map);
-		}else{
-			if(Integer.parseInt(bean.get("modelNum").toString()) == 0){//该模板分组下没有模板
-				codeModelGroupDao.deleteCodeModelGroupById(map);
-			}else{
-				outputObject.setreturnMessage("该模板分组下存在模板，无法删除。");
-			}
-		}
+		codeModelDao.deleteCodeModelById(map);
 	}
 
 	/**
 	 * 
-	     * @Title: queryCodeModelGroupMationToEditById
-	     * @Description: 编辑模板分组信息时进行回显
+	     * @Title: queryCodeModelMationToEditById
+	     * @Description: 编辑模板信息时进行回显
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -103,17 +91,17 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 	     * @throws
 	 */
 	@Override
-	public void queryCodeModelGroupMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void queryCodeModelMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = codeModelGroupDao.queryCodeModelGroupMationToEditById(map);
+		Map<String, Object> bean = codeModelDao.queryCodeModelMationToEditById(map);
 		outputObject.setBean(bean);
 		outputObject.settotal(1);
 	}
 
 	/**
 	 * 
-	     * @Title: editCodeModelGroupMationById
-	     * @Description: 编辑模板分组信息
+	     * @Title: editCodeModelMationMationById
+	     * @Description: 编辑模板信息
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -121,13 +109,13 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 	     * @throws
 	 */
 	@Override
-	public void editCodeModelGroupMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void editCodeModelMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = codeModelGroupDao.queryCodeModelGroupMationByIdAndName(map);
+		Map<String, Object> bean = codeModelDao.queryCodeModelMationByIdAndName(map);
 		if(bean == null){
-			codeModelGroupDao.editCodeModelGroupMationById(map);
+			codeModelDao.editCodeModelMationById(map);
 		}else{
-			outputObject.setreturnMessage("该模板分组已存在，请更换。");
+			outputObject.setreturnMessage("该模板已存在，请更换。");
 		}
 	}
 	

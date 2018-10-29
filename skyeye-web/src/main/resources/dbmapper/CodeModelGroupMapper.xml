@@ -72,7 +72,7 @@
 		FROM
 			code_model_group a
 		WHERE a.id != #{id}
-			AND a.group_name = #{rmTypeName}
+			AND a.group_name = #{groupName}
 	</select>
 	
 	<update id="editCodeModelGroupMationById" parameterType="java.util.Map">
@@ -81,9 +81,7 @@
 			<if test="groupName != '' and groupName != null">
 				group_name = #{groupName},
 			</if>
-			<if test="groupDesc != '' and groupDesc != null">
-				group_desc = #{groupDesc},
-			</if>
+			group_desc = #{groupDesc},
 		</set>
 		WHERE id = #{id}
 	</update>

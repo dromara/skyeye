@@ -4,38 +4,20 @@ layui.config({
 	version: skyeyeVersion
 }).define(['table', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	layui.use(['form', 'layedit'], function (form) {
+	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	    var $ = layui.$,
 	    form = layui.form;
 	    
-	    layedit = layui.layedit;
-	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "codemodel004",
+		 	url: reqBasePath + "codemodel009",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/codemodelgroup/codemodelgroupeditTemplate.tpl'),
+		 	template: getFileContent('tpl/codemodel/codemodeleditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function(json){
-		 		
-		 		var layContent = layedit.build('groupDesc', {
-			    	tool: [
-			    	       'strong' //加粗
-			    	       ,'italic' //斜体
-			    	       ,'underline' //下划线
-			    	       ,'del' //删除线
-			    	       ,'|' //分割线
-			    	       ,'left' //左对齐
-			    	       ,'center' //居中对齐
-			    	       ,'right' //右对齐
-			    	       ,'link' //超链接
-			    	       ,'unlink' //清除链接
-			    	       ,'face' //表情
-			    	     ]
-			    });
 		 		
 		 		form.render();
 		 		
@@ -43,12 +25,14 @@ layui.config({
 			    	//表单验证
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
-		        			groupName: $("#groupName").val(),
-		        			groupDesc: encodeURI(layedit.getContent(layContent)),
+		        			modelName: $("#modelName").val(),
+		        			modelContent: encodeURI($("#modelContent").val()),
+		        			modelText: encodeURI($("#modelContent").val()),
+		        			groupId: parent.groupId,
 		        			rowId: parent.rowId
 			        	};
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "codemodel005", params:params, type:'json', callback:function(json){
+			        	AjaxPostUtil.request({url:reqBasePath + "codemodel010", params:params, type:'json', callback:function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

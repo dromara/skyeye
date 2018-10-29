@@ -1,12 +1,13 @@
 
-var rowId = "";
+var groupId = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
 }).define(['table', 'jquery', 'winui', 'form'], function (exports) {
 	
 	winui.renderColor();
-	
+	//模板分组ID
+	groupId = parent.rowId;
 	var $ = layui.$,
 	form = layui.form,
 	table = layui.table;
@@ -15,18 +16,16 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'codemodel001',
-	    where:{groupName:$("#groupName").val(), groupNum:$("#groupNum").val()},
+	    url: reqBasePath + 'codemodel006',
+	    where:{groupId:groupId},
 	    even:true,  //隔行变色
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
-	        { field: 'groupNum', title: '分组编号', width: 120 },
-	        { field: 'groupName', title: '分组名称', width: 120 },
-	        { field: 'groupDesc', title: '分组简介', width: 120 },
-	        { field: 'modelNum', title: '模板数量', width: 120 },
+	        { field: 'modelName', title: '模板别名', width: 120 },
+	        { field: 'modelContent', title: '模板内容', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]
@@ -39,8 +38,6 @@ layui.config({
         	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'modelConcle') { //模板管理
-        	modelConcle(data);
         }
     });
 	
@@ -56,11 +53,11 @@ layui.config({
 	
 	//删除
 	function del(data, obj){
-		var msg = obj ? '确认删除分组【' + obj.data.groupName + '】吗？' : '确认删除选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '删除分组' }, function (index) {
+		var msg = obj ? '确认删除模板【' + obj.data.modelName + '】吗？' : '确认删除选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '删除模板' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
-            AjaxPostUtil.request({url:reqBasePath + "codemodel003", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "codemodel008", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
     				loadTable();
@@ -75,9 +72,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/codemodelgroup/codemodelgroupedit.html", 
-			title: "编辑模块组",
-			pageId: "codemodelgroupedit",
+			url: "../../tpl/codemodel/codemodeledit.html", 
+			title: "编辑模板",
+			pageId: "codemodeledit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -88,17 +85,6 @@ layui.config({
 			}});
 	}
 	
-	//模板管理
-	function modelConcle(data){
-		rowId = data.id;
-		_openNewWindows({
-			url: "../../tpl/codemodel/codemodellist.html", 
-			title: "模板管理",
-			maxmin: true,
-			pageId: "codemodelgroupmodelconcle",
-		});
-	}
-	
 	//刷新数据
     $("body").on("click", "#reloadTable", function(){
     	loadTable();
@@ -107,9 +93,9 @@ layui.config({
     //新增
     $("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/codemodelgroup/codemodelgroupadd.html", 
-			title: "新增模块组",
-			pageId: "codemodelgroupadd",
+			url: "../../tpl/codemodel/codemodeladd.html", 
+			title: "新增模板",
+			pageId: "codemodeladd",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -124,5 +110,5 @@ layui.config({
     	table.reload("messageTable", {where:{groupName:$("#groupName").val(), groupNum:$("#groupNum").val()}});
     }
     
-    exports('codemodelgrouplist', {});
+    exports('codemodellist', {});
 });

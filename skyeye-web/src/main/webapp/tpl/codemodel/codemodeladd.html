@@ -13,15 +13,15 @@
 	<div style="width:600px;margin:0 auto;padding-top:20px;">
 	    <form class="layui-form" action="" id="showForm" autocomplete="off">
 	        <div class="layui-form-item">
-	            <label class="layui-form-label">分组名称<i class="red">*</i></label>
+	            <label class="layui-form-label">模板别名<i class="red">*</i></label>
 	            <div class="layui-input-block">
-                	<input type="text" id="groupName" name="groupName" win-verify="required" placeholder="请输入模块分组名" class="layui-input" maxlength="20"/>
+                	<input type="text" id="modelName" name="modelName" win-verify="required" placeholder="请输入模板别名" class="layui-input" maxlength="20"/>
                 </div>
 	        </div>
 	        <div class="layui-form-item">
-	            <label class="layui-form-label">分组描述</label>
+	            <label class="layui-form-label">模板内容<i class="red">*</i></label>
 	            <div class="layui-input-block">
-                	<textarea id="groupDesc" name="groupDesc" style="display: none;"></textarea>
+                	<textarea id="modelContent" name="modelContent" class="layui-input"></textarea>
                 </div>
 	        </div>
 	        <div class="layui-form-item">
@@ -35,7 +35,7 @@
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
    	<script type="text/javascript">
-        layui.config({base: '../../js/codemodelgroup/'}).use('codemodelgroupadd');
+        layui.config({base: '../../js/codemodel/'}).use('codemodeladd');
     </script>
 </body>
 </html>
