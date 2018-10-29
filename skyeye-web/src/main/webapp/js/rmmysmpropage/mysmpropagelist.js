@@ -20,6 +20,23 @@ layui.config({
 	 	template: getFileContent('tpl/rmmysmpropage/pageTemplate.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
+	 	options: {
+	 		'click .reName':function(index, row){//重命名
+	 		
+	 		},
+	 		'click .toUp':function(index, row){//上移
+		 		
+	 		},
+	 		'click .toDown':function(index, row){//下移
+		 		
+	 		},
+	 		'click .copyPage':function(index, row){//复制
+		 		
+	 		},
+	 		'click .delPage':function(index, row){//删除
+		 		
+	 		}
+	 	},
 	 	ajaxSendAfter:function(json){
 	 		//初始化加载小程序组件分组
 	 		showGrid({
