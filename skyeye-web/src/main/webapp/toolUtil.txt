@@ -20,3 +20,4 @@ allMenuToTree();						使用递归方法建树
 findChildren();							递归查找子节点
 getIPPropertiesPath();					获取ip.properties路径
 deleteFile();							删除单个文件
+card();									随机不重复的6-8位

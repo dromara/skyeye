@@ -281,4 +281,28 @@
 	
 	<!-- 小程序系列结束 -->
 	
+	<!-- 代码生成器系列开始 -->
+	<url id="codemodel001" path="/post/CodeModelGroupController/queryCodeModelGroupList" val="获取模板分组列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="groupName" name="groupName" ref="" var="分组名称"/>
+		<property id="groupNum" name="groupNum" ref="" var="分组编号"/>
+	</url>
+	<url id="codemodel002" path="/post/CodeModelGroupController/insertCodeModelGroupMation" val="新增模板分组列表" allUse="1">
+		<property id="groupDesc" name="groupDesc" ref="required" var="分组简介"/>
+		<property id="groupName" name="groupName" ref="required" var="分组名称"/>
+	</url>
+	<url id="codemodel003" path="/post/CodeModelGroupController/deleteCodeModelGroupById" val="删除模板分组信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel004" path="/post/CodeModelGroupController/queryCodeModelGroupMationToEditById" val="编辑模板分组信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel005" path="/post/CodeModelGroupController/editCodeModelGroupMationById" val="编辑模板分组信息" allUse="1">
+		<property id="groupDesc" name="groupDesc" ref="required" var="分组简介"/>
+		<property id="groupName" name="groupName" ref="required" var="分组名称"/>
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<!-- 代码生成器系列结束 -->
+	
 </controller>

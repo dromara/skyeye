@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -430,6 +431,26 @@ public class ToolUtil {
 			System.out.println("删除单个文件失败：" + fileName + "不存在！");
 			return false;
 		}
+	}
+	
+	/**
+	 * 随机不重复的6-8位
+	 * @return
+	 */
+	public static int card() {
+		int[] array = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		Random rand = new Random();
+		for (int i = 10; i > 1; i--) {
+			int index = rand.nextInt(i);
+			int tmp = array[index];
+			array[index] = array[i - 1];
+			array[i - 1] = tmp;
+		}
+		int result = 0;
+		for (int i = 0; i < 6; i++) {
+			result = result * 10 + array[i];
+		}
+		return result;
 	}
 	
 	public static void main(String[] args) throws Exception {
