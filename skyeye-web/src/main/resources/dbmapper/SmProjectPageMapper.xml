@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.smprogram.dao.SmProjectPageDao">
+	
+	<select id="queryProPageMationByProIdList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			sm_project_page a
+		WHERE
+			a.sm_project_id = #{proId}
+		ORDER BY a.sort DESC
+	</select>
+	
+</mapper>

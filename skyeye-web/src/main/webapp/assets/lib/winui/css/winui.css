@@ -2678,7 +2678,17 @@ body .layer-ext-winconfirm {
   filter: alpha(opacity=20);
 }
 
+.tab-btn-mar-left-3{
+	margin-left: 3px !important;
+}
 
+.page-li{
+    width: 100%;
+    height: 50px;
+    line-height: 25px;
+    background-color: beige;
+    margin-top: 10px;
+}
 
 /*** 小程序页面管理end ***/
 

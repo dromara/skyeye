@@ -275,6 +275,9 @@
 	<url id="rmxcx028" path="/post/SmProjectController/queryGroupMemberMationList" val="根据分组获取小程序组件信息" allUse="1">
 		<property id="rowId" name="id" ref="required" var="小程序分组id"/>
 	</url>
+	<url id="rmxcx029" path="/post/SmProjectPageController/queryProPageMationByProIdList" val="根据项目获取项目内部的页面" allUse="1">
+		<property id="rowId" name="proId" ref="required" var="小程序项目id"/>
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	

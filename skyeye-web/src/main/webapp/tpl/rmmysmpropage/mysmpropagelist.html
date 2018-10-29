@@ -11,7 +11,7 @@
 <body style="overflow: hidden;">
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="addBean" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增项目</button>
+            <button id="addPageBean" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增页面</button>
         </div>
     </div>
     
@@ -24,7 +24,8 @@
 				</ul>
 				<div class="layui-tab-content tab__item">
 					<div class="layui-tab-item layui-show hei-100-per">
-						11
+						<ul style="overflow-y: scroll;height: 100%;" id="pageList">
+						</ul>
 					</div>
 					<div class="layui-tab-item hei-100-per">
 						<div class="page__bd page__bd_spacing hei-100-per" id="groupTab">

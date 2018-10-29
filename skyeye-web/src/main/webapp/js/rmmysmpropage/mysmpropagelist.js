@@ -11,17 +11,29 @@ layui.config({
 	table = layui.table;
 	
 	$("#groupMemberTab").hide();
-	
+	//初始化加载该项目的所有页面
 	showGrid({
-	 	id: "groupMember",
-	 	url: reqBasePath + "rmxcx027",
-	 	params: {},
+	 	id: "pageList",
+	 	url: reqBasePath + "rmxcx029",
+	 	params: {rowId: parent.rowId},
 	 	pagination: false,
-	 	template: getFileContent('tpl/rmmysmpropage/groupTemplate.tpl'),
+	 	template: getFileContent('tpl/rmmysmpropage/pageTemplate.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
 	 	ajaxSendAfter:function(json){
-	 		
+	 		//初始化加载小程序组件分组
+	 		showGrid({
+	 		 	id: "groupMember",
+	 		 	url: reqBasePath + "rmxcx027",
+	 		 	params: {},
+	 		 	pagination: false,
+	 		 	template: getFileContent('tpl/rmmysmpropage/groupTemplate.tpl'),
+	 		 	ajaxSendLoadBefore: function(hdb){
+	 		 	},
+	 		 	ajaxSendAfter:function(json){
+	 		 		
+	 		 	}
+	 		});
 	 	}
 	});
 	
