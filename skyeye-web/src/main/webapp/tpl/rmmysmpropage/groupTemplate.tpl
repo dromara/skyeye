@@ -1,7 +1,7 @@
 {{#each rows}}
 	<li>
         <div class="weui-flex js_category">
-            <p class="weui-flex__item">{{name}}</p>
+            <p class="weui-flex__item">{{name}}<span class="weui-badge" style="margin-left: 5px;">{{groupList.length}}</span></p>
         </div>
         <div class="page__category js_categoryInner">
             <div class="weui-cells page__category-content">
