@@ -1,6 +1,8 @@
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: https://codemirror.net/LICENSE
-
+layui.define(["jquery"], function(exports) {
+	var jQuery = layui.jquery;
+	(function($) {
 (function(mod) {
   if (typeof exports == "object" && typeof module == "object") // CommonJS
     mod(require("../../lib/codemirror"));
@@ -876,4 +878,7 @@ CodeMirror.defineMode("clike", function(config, parserConfig) {
     }
   });
 
+});
+	})(jQuery);
+	exports('clike', null);
 });

@@ -3,7 +3,8 @@ var groupId = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
+           'solr', 'sql', 'vue'], function (exports) {
 	
 	winui.renderColor();
 	//模板分组ID
@@ -25,11 +26,27 @@ layui.config({
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
 	        { field: 'modelName', title: '模板别名', width: 120 },
-	        { field: 'modelContent', title: '模板内容', width: 120 },
+	        { field: 'modelType', title: '模板类型', width: 120 },
+	        { field: 'id', title: '模板内容', width: 120, templet: function(d){
+	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="modelContent"></i>';
+	        }},
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]
 	});
+	
+	var editor = CodeMirror.fromTextArea(document.getElementById("modelContent"), {
+        mode : "text/x-java",  // 模式
+        theme : "eclipse",  // CSS样式选择
+        indentUnit : 2,  // 缩进单位，默认2
+        smartIndent : true,  // 是否智能缩进
+        tabSize : 4,  // Tab缩进，默认4
+        readOnly : false,  // 是否只读，默认false
+        showCursorWhenSelecting : true,
+        lineNumbers : true,  // 是否显示行号
+        styleActiveLine: true, //line选择是是否加亮
+        matchBrackets: true,
+    });
 	
 	table.on('tool(messageTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
         var data = obj.data; //获得当前行数据
@@ -38,6 +55,20 @@ layui.config({
         	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
+        }else if (layEvent === 'modelContent') { //查看代码内容
+        	var mode = returnModel(data.modelType);
+        	if (!isNull(mode.length)) {
+				editor.setOption('mode', mode)
+			} 
+        	editor.setValue(data.modelContent);
+        	layer.open({
+	            id: '模板内容',
+	            type: 1,
+	            title: '模板内容',
+	            shade: 0.3,
+	            area: ['1200px', '600px'],
+	            content: $("#modelContentDiv").html(),
+	        });
         }
     });
 	
@@ -105,6 +136,61 @@ layui.config({
                 }
 			}});
     });
+    
+    function returnModel(lang){
+		var mode = '';
+		switch (lang) {
+		case 'Java':
+			mode = 'text/x-java';
+			break;
+		case 'C/C++':
+			mode = 'text/x-c++src';
+			break;
+		case 'Objective-C':
+			mode = '';
+			break;
+		case 'Scala':
+			mode = 'text/x-scala';
+			break;
+		case 'Kotlin':
+			mode = 'text/x-kotlin';
+			break;
+		case 'Ceylon':
+			mode = 'text/x-ceylon';
+			break;
+		case 'xml':
+			mode = 'xml';
+			break;
+		case 'html':
+			mode = 'xml';
+			break;
+		case 'css':
+			mode = 'text/css';
+			break;
+		case 'htmlmixed':
+			mode = 'htmlmixed';
+			break;
+		case 'htmlhh':
+			mode = 'htmlmixed';
+			break;
+		case 'javascript':
+			mode = 'text/javascript';
+			break;
+		case 'nginx':
+			mode = 'text/x-nginx-conf';
+			break;
+		case 'solr':
+			mode = 'text/x-solr';
+			break;
+		case 'sql':
+			mode = 'text/x-sql';
+			break;
+		case 'vue':
+			mode = 'text/x-vue';
+			break;
+		}
+		return mode;
+    }
     
     function loadTable(){
     	table.reload("messageTable", {where:{groupName:$("#groupName").val(), groupNum:$("#groupNum").val()}});

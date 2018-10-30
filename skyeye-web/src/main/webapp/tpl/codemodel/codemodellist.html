@@ -6,6 +6,7 @@
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/css/codemirror.css" rel="stylesheet" />
 </head>
 <body>
     <div class="winui-toolbar">
@@ -14,6 +15,11 @@
             <button id="addBean" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增模板</button>
         </div>
     </div>
+    
+    <div id="modelContentDiv" style="height:auto; position: fixed; left: 10000px;">
+    	<textarea id="modelContent"></textarea>
+    </div>
+    
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">

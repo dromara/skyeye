@@ -24,29 +24,87 @@ layui.config({
         });
 	    
 		form.render();
-		form.on('select', function(data){
- 			
+		form.on('select(selectParent)', function(data){
+			var lang = $("#modelType").val();
+			var mode = '';
+			switch (lang) {
+			case 'Java':
+				mode = 'text/x-java';
+				break;
+			case 'C/C++':
+				mode = 'text/x-c++src';
+				break;
+			case 'Objective-C':
+				mode = '';
+				break;
+			case 'Scala':
+				mode = 'text/x-scala';
+				break;
+			case 'Kotlin':
+				mode = 'text/x-kotlin';
+				break;
+			case 'Ceylon':
+				mode = 'text/x-ceylon';
+				break;
+			case 'xml':
+				mode = 'xml';
+				break;
+			case 'html':
+				mode = 'xml';
+				break;
+			case 'css':
+				mode = 'text/css';
+				break;
+			case 'htmlmixed':
+				mode = 'htmlmixed';
+				break;
+			case 'htmlhh':
+				mode = 'htmlmixed';
+				break;
+			case 'javascript':
+				mode = 'text/javascript';
+				break;
+			case 'nginx':
+				mode = 'text/x-nginx-conf';
+				break;
+			case 'solr':
+				mode = 'text/x-solr';
+				break;
+			case 'sql':
+				mode = 'text/x-sql';
+				break;
+			case 'vue':
+				mode = 'text/x-vue';
+				break;
+			}
+			if (!isNull(mode.length)) {
+				editor.setOption('mode', mode)
+			} 
  		});
 		
 	    form.on('submit(formAddBean)', function (data) {
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
-	        	var params = {
-        			modelName: $("#modelName").val(),
-        			modelContent: encodeURI($("#modelContent").val()),
-        			modelText: encodeURI($("#modelContent").val()),
-        			modelType: $("#modelType").val(),
-        			groupId: parent.groupId,
-	        	};
-	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "codemodel007", params:params, type:'json', callback:function(json){
-	 	   			if(json.returnCode == 0){
-		 	   			parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	 	   			}else{
-	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-	 	   			}
-	 	   		}});
+	        	if(isNull(editor.getValue())){
+	        		top.winui.window.msg('请输入模板内容', {icon: 2,time: 2000});
+	        	}else{
+	        		var params = {
+	        				modelName: $("#modelName").val(),
+	        				modelContent: encodeURI(editor.getValue()),
+	        				modelText: encodeURI(editor.getValue()),
+	        				modelType: $("#modelType").val(),
+	        				groupId: parent.groupId,
+	        		};
+	        		
+	        		AjaxPostUtil.request({url:reqBasePath + "codemodel007", params:params, type:'json', callback:function(json){
+	        			if(json.returnCode == 0){
+	        				parent.layer.close(index);
+	        				parent.refreshCode = '0';
+	        			}else{
+	        				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	        			}
+	        		}});
+	        	}
 	        }
 	        return false;
 	    });

@@ -2693,6 +2693,7 @@ body .layer-ext-winconfirm {
 /*** 小程序页面管理end ***/
 
 /*** 代码生成器样式start ***/
+.cm-s-eclipse{height: 100% !important;}
 .cm-s-eclipse span.cm-meta { color: #FF1717; }
 .cm-s-eclipse span.cm-keyword { line-height: 1em; font-weight: bold; color: #7F0055; }
 .cm-s-eclipse span.cm-atom { color: #219; }

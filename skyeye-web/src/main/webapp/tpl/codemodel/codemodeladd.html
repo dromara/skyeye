@@ -20,14 +20,13 @@
                 </div>
 	        </div>
 	        <div class="layui-form-item">
-	            <label class="layui-form-label">模板内容<i class="red">*</i></label>
+	            <label class="layui-form-label">模板类型<i class="red">*</i></label>
 	            <div class="layui-input-block">
-                	<select id="modelType" name="modelType" class="layui-input" win-verify="required">
+                	<select id="modelType" name="modelType" class="layui-input" win-verify="required" lay-filter="selectParent">
                 		<option value=""></option>
                 		<optgroup label="CLIKE">
-		                    <option value="Java">Java</option>
-		                    <option value="C">C</option>
-		                    <option value="C++">C++</option>
+		                    <option value="Java" selected="selected">Java</option>
+		                    <option value="C/C++">C++</option>
 		                    <option value="Objective-C">Objective-C</option>
 		                    <option value="Scala">Scala</option>
 		                    <option value="Kotlin">Kotlin</option>
@@ -42,7 +41,7 @@
                 		</optgroup>
                 		<optgroup label="HTMLMIXED">
 		                    <option value="htmlmixed">htmlmixed</option>
-		                    <option value="html混合模式">html混合模式</option>
+		                    <option value="htmlhh">html混合模式</option>
                 		</optgroup>
                 		<optgroup label="JAVASCRIPT">
 		                    <option value="javascript">javascript</option>
