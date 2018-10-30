@@ -312,6 +312,7 @@
 		<property id="modelName" name="modelName" ref="required" var="模板别名"/>
 		<property id="modelContent" name="modelContent" ref="required" var="模板内容"/>
 		<property id="modelText" name="modelText" ref="required" var="模板纯文本"/>
+		<property id="modelType" name="modelType" ref="required" var="模板类型"/>
 		<property id="groupId" name="groupId" ref="required" var="分组id"/>
 	</url>
 	<url id="codemodel008" path="/post/CodeModelController/deleteCodeModelById" val="删除模板信息" allUse="1">

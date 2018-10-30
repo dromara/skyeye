@@ -6,7 +6,9 @@
 //
 // You can find some technical background for some of the code below
 // at http://marijnhaverbeke.nl/blog/#cm-internals .
-
+layui.define(["jquery"], function(exports) {
+	var jQuery = layui.jquery;
+	(function($) {
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
@@ -9696,3 +9698,6 @@
   return CodeMirror;
 
 })));
+})(jQuery);
+exports('codemirror', null);
+});

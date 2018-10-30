@@ -8,6 +8,7 @@
 			a.model_name modelName,
 			a.model_content modelContent,
 			a.model_text modelText,
+			a.model_type modelType,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			code_model a
@@ -27,9 +28,9 @@
 	
 	<insert id="insertCodeModelMation" parameterType="java.util.Map">
 	     INSERT into code_model 
-	     (id, group_id, model_name, model_content, model_text, create_id, create_time)
+	     (id, group_id, model_name, model_content, model_text, model_type, create_id, create_time)
 	     VALUES
-	     (#{id}, #{groupId}, #{modelName}, #{modelContent}, #{modelText}, #{createId}, #{createTime})
+	     (#{id}, #{groupId}, #{modelName}, #{modelContent}, #{modelText}, #{modelType}, #{createId}, #{createTime})
 	</insert>
 	
 	<delete id="deleteCodeModelById" parameterType="java.util.Map">
@@ -45,7 +46,8 @@
 			a.id,
 			a.model_name modelName,
 			a.model_content modelContent,
-			a.model_text modelText
+			a.model_text modelText,
+			a.model_type modelType
 		FROM
 			code_model a
 		WHERE a.id = #{id}

@@ -107,6 +107,16 @@ function isNull(str){
 	    cookie: 'modules/cookie',//cookie
 	    fileUpload: 'modules/jQuery.upload.min',//上传
 	    dragula: 'modules/dragula',//拖拽
+	    codemirror: 'modules/codemirror/codemirror',//代码格式编辑器
+	    xml: 'modules/codemirror/xml',//代码格式编辑器xml，html支持
+	    clike: 'modules/codemirror/clike',//代码格式编辑器clike支持C，C++，Objective-C，Java，Scala，Kotlin，Ceylon高亮
+	    css: 'modules/codemirror/css',//代码格式编辑器css支持CSS
+	    htmlmixed: 'modules/codemirror/htmlmixed',//代码格式编辑器htmlmixed，HTML混合模式取决于XML，JavaScript和CSS模式支持
+	    javascript: 'modules/codemirror/javascript',//代码格式编辑器javascript支持js
+	    nginx: 'modules/codemirror/nginx',//代码格式编辑器nginx支持nginx
+	    solr: 'modules/codemirror/solr',//代码格式编辑器solr支持solr
+	    sql: 'modules/codemirror/sql',//代码格式编辑器sql支持sql
+	    vue: 'modules/codemirror/vue',//代码格式编辑器vue支持vue
 	};
 
 	// 记录基础数据
