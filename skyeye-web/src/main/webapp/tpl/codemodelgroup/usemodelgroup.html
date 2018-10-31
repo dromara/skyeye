@@ -12,14 +12,20 @@
 	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
 	        <div class="layui-form-item">
 	            <div class="layui-inline">
-	                <label class="layui-form-label">分组编号</label>
+	                <label class="layui-form-label">数据库表</label>
 	                <div class="layui-input-inline">
-	                    <input type="text" id="groupNum" name="groupNum" placeholder="请输入分组编号" class="layui-input" />
+	                    <select id="tableName" name="tableName"></select>
 	                </div>
 	            </div>
 	            <div class="layui-inline">
 	                <div class="layui-input-inline">
-	                    <button class="layui-btn" id="jsCreate">检索生成</button>
+	                    <button class="layui-btn" lay-submit lay-filter="formSearch">检索生成</button>
+	                </div>
+	            </div>
+	            <div class="layui-inline">
+	                <label class="layui-form-label">表名转换</label>
+	                <div class="layui-input-inline" id="tableZhName">
+	                    
 	                </div>
 	            </div>
 	        </div>

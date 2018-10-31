@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import com.skyeye.common.object.ObjectConstant;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ClassPathResource;  
 import org.springframework.core.io.Resource;  
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -453,12 +454,36 @@ public class ToolUtil {
 		return result;
 	}
 	
-	public static void main(String[] args) throws Exception {
-		String str = "123456";
-		for(int i = 0; i < 5; i++){
-			str = MD5(str);
+	/**
+	 * 将表名转为Java经常使用的名字，如code_model转CodeModel
+	 * @param str
+	 * @return
+	 */
+	public static String replaceUnderLineAndUpperCase(String str) {
+		StringBuffer sb = new StringBuffer();
+		sb.append(str);
+		int count = sb.indexOf("_");
+		while (count != 0) {
+			int num = sb.indexOf("_", count);
+			count = num + 1;
+			if (num != -1) {
+				char ss = sb.charAt(count);
+				char ia = (char) (ss - 32);
+				sb.replace(count, count + 1, ia + "");
+			}
 		}
-		System.out.println(str);
+		String result = sb.toString().replaceAll("_", "");
+		return StringUtils.capitalize(result);
+	}
+
+	
+	public static void main(String[] args) throws Exception {
+//		String str = "123456";
+//		for(int i = 0; i < 5; i++){
+//			str = MD5(str);
+//		}
+//		System.out.println(str);
+		System.out.println(replaceUnderLineAndUpperCase("code_model"));
 	}
 
 }

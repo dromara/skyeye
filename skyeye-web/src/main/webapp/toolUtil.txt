@@ -21,3 +21,4 @@ findChildren();							递归查找子节点
 getIPPropertiesPath();					获取ip.properties路径
 deleteFile();							删除单个文件
 card();									随机不重复的6-8位
+replaceUnderLineAndUpperCase();			将表名转为Java经常使用的名字，如code_model转CodeModel
