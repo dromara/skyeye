@@ -475,6 +475,18 @@ public class ToolUtil {
 		String result = sb.toString().replaceAll("_", "");
 		return StringUtils.capitalize(result);
 	}
+	
+	/**
+	 * 首字母转小写
+	 * @param s
+	 * @return
+	 */
+	public static String toLowerCaseFirstOne(String s) {
+		if (Character.isLowerCase(s.charAt(0)))
+			return s;
+		else
+			return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+	}
 
 	
 	public static void main(String[] args) throws Exception {
