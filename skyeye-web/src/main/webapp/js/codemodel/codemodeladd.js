@@ -9,7 +9,18 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	    var $ = layui.$,
 	    form = layui.form;
-	    
+
+	    layer.open({
+			type: 1,
+			closeBtn: 0,//关闭按钮
+			resize: false,//是否允许拉伸
+			offset: 'l', // 具体配置参考：offset参数项
+			content: $("#modelContentDiv").html(),
+			area: ['200px', '400px'],
+			shade: 0, //不显示遮罩
+			title: '注意事项'
+		});
+
 	    var editor = CodeMirror.fromTextArea(document.getElementById("modelContent"), {
             mode : "text/x-java",  // 模式
             theme : "eclipse",  // CSS样式选择
