@@ -17,4 +17,6 @@ public interface CodeModelGroupService {
 
 	public void queryTableParameterByTableName(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryTableMationByTableName(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

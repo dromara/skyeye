@@ -111,4 +111,20 @@ public class CodeModelGroupController {
 		codeModelGroupService.queryTableParameterByTableName(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryTableMationByTableName
+	     * @Description: 根据表名获取表的相关转换信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CodeModelGroupController/queryTableMationByTableName")
+	@ResponseBody
+	public void queryTableMationByTableName(InputObject inputObject, OutputObject outputObject) throws Exception{
+		codeModelGroupService.queryTableMationByTableName(inputObject, outputObject);
+	}
+	
 }

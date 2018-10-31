@@ -24,7 +24,13 @@ layui.config({
         	 	ajaxSendLoadBefore: function(hdb){
         	 	},
         	 	ajaxSendAfter:function(json){
-        	 		$("#tableZhName").html();
+        	 		AjaxPostUtil.request({url:reqBasePath + "codemodel012", params:{tableName: $("#tableName").val()}, type:'json', callback:function(json){
+    	 	   			if(json.returnCode == 0){
+    	 	   				$("#tableZhName").val(json.bean.tableName);
+    	 	   			}else{
+    	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    	 	   			}
+    	 	   		}});
         	 	}
         	});
         }

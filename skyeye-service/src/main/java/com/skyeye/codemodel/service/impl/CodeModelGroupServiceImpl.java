@@ -1,5 +1,6 @@
 package com.skyeye.codemodel.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -154,6 +155,30 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());
 		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryTableMationByTableName
+	     * @Description: 根据表名获取表的相关转换信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryTableMationByTableName(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = new HashMap<>();
+		//将表名转化为Controller名
+		bean.put("tableName", ToolUtil.replaceUnderLineAndUpperCase(map.get("tableName").toString()));
+		//包名
+		bean.put("ControllerPackageName", "com.skyeye." + ToolUtil.replaceUnderLineAndUpperCase(map.get("tableName").toString()).toLowerCase() + ".controller" );
+		bean.put("ServicePackageName", "com.skyeye." + ToolUtil.replaceUnderLineAndUpperCase(map.get("tableName").toString()).toLowerCase() + ".service" );
+		bean.put("ServiceImplPackageName", "com.skyeye." + ToolUtil.replaceUnderLineAndUpperCase(map.get("tableName").toString()).toLowerCase() + ".service.impl" );
+		bean.put("DaoPackageName", "com.skyeye." + ToolUtil.replaceUnderLineAndUpperCase(map.get("tableName").toString()).toLowerCase() + ".dao" );
+		outputObject.setBean(bean);
 	}
 	
 }
