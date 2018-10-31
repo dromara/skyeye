@@ -180,5 +180,25 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 		bean.put("DaoPackageName", "com.skyeye." + ToolUtil.replaceUnderLineAndUpperCase(map.get("tableName").toString()).toLowerCase() + ".dao" );
 		outputObject.setBean(bean);
 	}
+
+	/**
+	 * 
+	     * @Title: queryCodeModelListByGroupId
+	     * @Description: 根据分组id获取模板列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryCodeModelListByGroupId(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = codeModelGroupDao.queryCodeModelListByGroupId(map);
+		if(beans != null){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
 	
 }

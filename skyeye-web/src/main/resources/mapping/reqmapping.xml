@@ -334,6 +334,9 @@
 	<url id="codemodel012" path="/post/CodeModelGroupController/queryTableMationByTableName" val="根据表名获取表的相关转换信息" allUse="1">
 		<property id="tableName" name="tableName" ref="required" var="表名"/>
 	</url>
+	<url id="codemodel013" path="/post/CodeModelGroupController/queryCodeModelListByGroupId" val="根据分组id获取模板列表" allUse="1">
+		<property id="groupId" name="groupId" ref="required" var="分组id"/>
+	</url>
 	<!-- 代码生成器系列结束 -->
 	
 </controller>

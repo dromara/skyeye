@@ -38,6 +38,18 @@ layui.config({
 	});
 	
 	showGrid({
+	 	id: "modelList",
+	 	url: reqBasePath + "codemodel013",
+	 	params: {groupId: parent.rowId},
+	 	pagination: false,
+	 	template: getFileContent('tpl/codemodelgroup/usemodelgroupmodel.tpl'),
+	 	ajaxSendLoadBefore: function(hdb){
+	 	},
+	 	ajaxSendAfter:function(json){
+	 	}
+	});
+	
+	showGrid({
 	 	id: "tableName",
 	 	url: reqBasePath + "database002",
 	 	params: {},

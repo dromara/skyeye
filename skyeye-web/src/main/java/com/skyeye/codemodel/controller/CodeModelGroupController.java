@@ -127,4 +127,20 @@ public class CodeModelGroupController {
 		codeModelGroupService.queryTableMationByTableName(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryCodeModelListByGroupId
+	     * @Description: 根据分组id获取模板列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CodeModelGroupController/queryCodeModelListByGroupId")
+	@ResponseBody
+	public void queryCodeModelListByGroupId(InputObject inputObject, OutputObject outputObject) throws Exception{
+		codeModelGroupService.queryCodeModelListByGroupId(inputObject, outputObject);
+	}
+	
 }

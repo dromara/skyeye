@@ -19,4 +19,6 @@ public interface CodeModelGroupService {
 
 	public void queryTableMationByTableName(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryCodeModelListByGroupId(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

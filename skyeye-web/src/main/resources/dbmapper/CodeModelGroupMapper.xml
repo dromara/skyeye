@@ -107,4 +107,18 @@
 			AND a.TABLE_NAME = #{tableName}
 	</select>
 	
+	<select id="queryCodeModelListByGroupId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.model_name modelName,
+			a.model_content modelContent,
+			a.model_text modelText,
+			a.model_type modelType,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			code_model a
+		WHERE a.group_id = #{groupId}
+			ORDER BY a.create_time DESC
+	</select>
+	
 </mapper>
