@@ -105,7 +105,7 @@ layui.config({
 	function useModelGroup(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/codemodel/usemodelgroup.html", 
+			url: "../../tpl/codemodelgroup/usemodelgroup.html", 
 			title: "代码生成",
 			maxmin: true,
 			pageId: "usemodelgroup",
