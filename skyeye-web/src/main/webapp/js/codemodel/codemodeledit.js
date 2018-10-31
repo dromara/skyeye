@@ -11,6 +11,17 @@ layui.config({
 	    form = layui.form;
 	    var editor;
 	    
+	    layer.open({
+			type: 1,
+			closeBtn: 0,//关闭按钮
+			resize: false,//是否允许拉伸
+			offset: 'l', // 具体配置参考：offset参数项
+			content: $("#modelContentDiv").html(),
+			area: ['200px', '400px'],
+			shade: 0, //不显示遮罩
+			title: '注意事项'
+		});
+	    
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "codemodel009",
