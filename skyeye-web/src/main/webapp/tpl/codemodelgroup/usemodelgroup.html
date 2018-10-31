@@ -8,7 +8,7 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="width:700px;margin:0 auto;padding-top:20px;">
+	<div class="txtcenter" style="width:1200px;margin:0 auto;padding-top:20px;">
 	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
 	        <div class="layui-form-item">
 	            <div class="layui-inline">
@@ -31,8 +31,43 @@
 	        </div>
 	    </form>
 	</div>
-    <div style="margin:auto 10px;">
-        
+    <div class="layui-row smpro">
+        <div class="layui-col-xs3 left-menu">
+    		<div class="winui-toolbar">
+		        <div class="winui-tool">模板</div>
+		    </div>
+		    
+		    
+    	</div>
+    	<div class="layui-col-xs6 center-content">
+	    	<div class="winui-toolbar">
+		        <div class="winui-tool">参数设置</div>
+		    </div>
+		    
+    	</div>
+    	<div class="layui-col-xs3 right-menu">
+    		<div class="winui-toolbar">
+		        <div class="winui-tool">表参数</div>
+		    </div>
+			<table class="layui-table">
+				<tbody id="tableParameterBody" style="height: calc(100vh - 85px);overflow-y: auto;position: absolute;">
+					
+				</tbody>
+			</table>
+		</div>
+    </div>
+    <div class="layui-row" style="height: 120px">
+    	<div class="winui-toolbar">
+	        <div class="winui-tool">请求链接</div>
+	    </div>
+	    
+    </div>
+    <div class="layui-row" style="height: 50px;text-align: center;">
+	    <div class="layui-inline">
+            <div class="layui-input-inline">
+                <button class="layui-btn" id="saveConsole">保存结果</button>
+            </div>
+        </div>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>

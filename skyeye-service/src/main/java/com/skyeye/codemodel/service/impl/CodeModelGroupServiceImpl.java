@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
@@ -19,6 +20,9 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 	
 	@Autowired
 	private CodeModelGroupDao codeModelGroupDao;
+	
+	@Value("${jdbc.database.name}")  
+    private String dbName;
 
 	/**
 	 * 
@@ -128,6 +132,27 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 			codeModelGroupDao.editCodeModelGroupMationById(map);
 		}else{
 			outputObject.setreturnMessage("该模板分组已存在，请更换。");
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryTableParameterByTableName
+	     * @Description: 根据表名获取表的相关信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryTableParameterByTableName(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		map.put("dbName", dbName);
+		List<Map<String, Object>> beans = codeModelGroupDao.queryTableParameterByTableName(map);
+		if(beans != null){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
 		}
 	}
 	

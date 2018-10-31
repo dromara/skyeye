@@ -15,7 +15,18 @@ layui.config({
 	form.on('submit(formSearch)', function (data) {
     	//表单验证
         if (winui.verifyForm(data.elem)) {
-        	$("#tableName").html();
+        	showGrid({
+        	 	id: "tableParameterBody",
+        	 	url: reqBasePath + "codemodel011",
+        	 	params: {tableName: $("#tableName").val()},
+        	 	pagination: false,
+        	 	template: getFileContent('tpl/codemodelgroup/usemodelgrouptableparameter.tpl'),
+        	 	ajaxSendLoadBefore: function(hdb){
+        	 	},
+        	 	ajaxSendAfter:function(json){
+        	 		$("#tableZhName").html();
+        	 	}
+        	});
         }
         return false;
 	});

@@ -86,4 +86,25 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryTableParameterByTableName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.TABLE_SCHEMA AS tableSchema,
+			a.TABLE_NAME AS tableName,
+			a.COLUMN_NAME AS columnName,
+			a.ORDINAL_POSITION AS ordinalPosition,
+			a.COLUMN_DEFAULT AS columnDefault,
+			a.IS_NULLABLE AS isNullable,
+			a.COLUMN_TYPE AS columnType,
+			a.COLUMN_COMMENT AS columnComment,
+			a.COLUMN_KEY AS columnKey,
+			a.EXTRA AS extra,
+			b.TABLE_COMMENT AS tableComment
+		FROM
+			information_schema.COLUMNS a
+		LEFT JOIN information_schema.TABLES b ON a.TABLE_NAME = b.TABLE_NAME
+		WHERE
+			a.TABLE_SCHEMA = #{dbName}
+			AND a.TABLE_NAME = #{tableName}
+	</select>
+	
 </mapper>

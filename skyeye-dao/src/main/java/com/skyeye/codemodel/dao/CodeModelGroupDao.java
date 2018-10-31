@@ -23,4 +23,6 @@ public interface CodeModelGroupDao {
 
 	public int editCodeModelGroupMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryTableParameterByTableName(Map<String, Object> map) throws Exception;
+
 }

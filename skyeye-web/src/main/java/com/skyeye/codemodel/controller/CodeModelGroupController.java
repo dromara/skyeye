@@ -95,4 +95,20 @@ public class CodeModelGroupController {
 		codeModelGroupService.editCodeModelGroupMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryTableParameterByTableName
+	     * @Description: 根据表名获取表的相关信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CodeModelGroupController/queryTableParameterByTableName")
+	@ResponseBody
+	public void queryTableParameterByTableName(InputObject inputObject, OutputObject outputObject) throws Exception{
+		codeModelGroupService.queryTableParameterByTableName(inputObject, outputObject);
+	}
+	
 }
