@@ -41,6 +41,8 @@ layui.config({
         	edit(data);
         }else if (layEvent === 'modelConcle') { //模板管理
         	modelConcle(data);
+        }else if (layEvent === 'useModelGroup') { //使用模板
+        	useModelGroup(data);
         }
     });
 	
@@ -96,6 +98,17 @@ layui.config({
 			title: "模板管理",
 			maxmin: true,
 			pageId: "codemodelgroupmodelconcle",
+		});
+	}
+	
+	//使用模板
+	function useModelGroup(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/codemodel/usemodelgroup.html", 
+			title: "代码生成",
+			maxmin: true,
+			pageId: "usemodelgroup",
 		});
 	}
 	
