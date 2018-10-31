@@ -9,8 +9,8 @@
 	        </div>
 	    </div>
 	    <div class="weui-flex js_category layui-col-xs4 right">
-	    	<button class="layui-btn layui-btn-sm tab-btn-mar-left-3 selModel" title="查看模板"><i class="fa fa-files-o"></i></button>
-	    	<button class="layui-btn layui-btn-sm tab-btn-mar-left-3 selResult" title="查看转换结果"><i class="fa fa-pencil-square-o"></i></button>
+	    	<button class="layui-btn layui-btn-sm tab-btn-mar-left-3 selModel" title="查看模板" type="button"><i class="fa fa-files-o"></i></button>
+	    	<button class="layui-btn layui-btn-sm tab-btn-mar-left-3 selResult" title="查看转换结果" type="button"><i class="fa fa-pencil-square-o"></i></button>
 	    </div>
 	</li>
 {{/each}}

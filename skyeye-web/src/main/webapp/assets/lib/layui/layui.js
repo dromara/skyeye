@@ -856,5 +856,60 @@ var AjaxGetUtil = {
 	}
 };
 
+function returnModel(lang){
+	var mode = '';
+	switch (lang) {
+	case 'Java':
+		mode = 'text/x-java';
+		break;
+	case 'C/C++':
+		mode = 'text/x-c++src';
+		break;
+	case 'Objective-C':
+		mode = '';
+		break;
+	case 'Scala':
+		mode = 'text/x-scala';
+		break;
+	case 'Kotlin':
+		mode = 'text/x-kotlin';
+		break;
+	case 'Ceylon':
+		mode = 'text/x-ceylon';
+		break;
+	case 'xml':
+		mode = 'xml';
+		break;
+	case 'html':
+		mode = 'xml';
+		break;
+	case 'css':
+		mode = 'text/css';
+		break;
+	case 'htmlmixed':
+		mode = 'htmlmixed';
+		break;
+	case 'htmlhh':
+		mode = 'htmlmixed';
+		break;
+	case 'javascript':
+		mode = 'text/javascript';
+		break;
+	case 'nginx':
+		mode = 'text/x-nginx-conf';
+		break;
+	case 'solr':
+		mode = 'text/x-solr';
+		break;
+	case 'sql':
+		mode = 'text/x-sql';
+		break;
+	case 'vue':
+		mode = 'text/x-vue';
+		break;
+	}
+	return mode;
+}
+
 
 

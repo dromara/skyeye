@@ -6,10 +6,11 @@
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/css/codemirror.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="width:1200px;margin:0 auto;padding-top:20px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+		<div class="txtcenter" style="width:1200px;margin:0 auto;padding-top:20px;">
 	        <div class="layui-form-item">
 	            <div class="layui-inline">
 	                <label class="layui-form-label">数据库表</label>
@@ -19,58 +20,99 @@
 	            </div>
 	            <div class="layui-inline">
 	                <div class="layui-input-inline">
-	                    <button class="layui-btn" lay-submit lay-filter="formSearch">检索生成</button>
-	                </div>
-	            </div>
-	            <div class="layui-inline">
-	                <label class="layui-form-label">表名转换</label>
-	                <div class="layui-input-inline">
-	                	<input type="text" id="tableZhName" name="tableZhName" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                    <button class="layui-btn" id="jsCreate" type="button">检索生成</button>
 	                </div>
 	            </div>
 	        </div>
-	    </form>
-	</div>
-    <div class="layui-row smpro">
-        <div class="layui-col-xs3 left-menu">
-    		<div class="winui-toolbar">
-		        <div class="winui-tool">模板</div>
-		    </div>
-		    <div class="layui-row">
-		    	<ul style="overflow-y: scroll;height: 100%;" id="modelList">
-		    		
-				</ul>
-		    </div>
-    	</div>
-    	<div class="layui-col-xs6 center-content">
+		</div>
+		<div class="txtcenter" style="width:1200px;margin:0 auto;">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">类、方法名</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="tableZhName" name="tableZhName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                </div>
+	            </div>
+	            <div class="layui-inline">
+	                <label class="layui-form-label">接口对象名</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="tableFirstISlowerName" name="tableFirstISlowerName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                </div>
+	            </div>
+	        </div>
+		</div>
+		<div class="txtcenter" style="width:1500px;margin:0 auto;">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">Controller包名</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="ControllerPackageName" name="ControllerPackageName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                </div>
+	            </div>
+	            <div class="layui-inline">
+	                <label class="layui-form-label">Service包名</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="ServicePackageName" name="ServicePackageName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                </div>
+	            </div>
+	            <div class="layui-inline">
+	                <label class="layui-form-label">ServiceImpl包名</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="ServiceImplPackageName" name="ServiceImplPackageName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                </div>
+	            </div>
+	            <div class="layui-inline">
+	                <label class="layui-form-label">Dao包名</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="DaoPackageName" name="DaoPackageName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                </div>
+	            </div>
+	        </div>
+		</div>
+	    <div class="layui-row smpro">
+	        <div class="layui-col-xs3 left-menu">
+	    		<div class="winui-toolbar">
+			        <div class="winui-tool">模板</div>
+			    </div>
+			    <div class="layui-row">
+			    	<ul style="overflow-y: scroll;height: 100%;" id="modelList">
+			    		
+					</ul>
+			    </div>
+	    	</div>
+	    	<div class="layui-col-xs6 center-content">
+		    	<div class="winui-toolbar">
+			        <div class="winui-tool">参数设置</div>
+			    </div>
+			    
+	    	</div>
+	    	<div class="layui-col-xs3 right-menu">
+	    		<div class="winui-toolbar">
+			        <div class="winui-tool">表参数</div>
+			    </div>
+				<table class="layui-table">
+					<tbody id="tableParameterBody" style="height: calc(100vh - 85px);overflow-y: auto;position: absolute;">
+						
+					</tbody>
+				</table>
+			</div>
+	    </div>
+	    <div class="layui-row" style="height: 120px">
 	    	<div class="winui-toolbar">
-		        <div class="winui-tool">参数设置</div>
+		        <div class="winui-tool">请求链接</div>
 		    </div>
 		    
-    	</div>
-    	<div class="layui-col-xs3 right-menu">
-    		<div class="winui-toolbar">
-		        <div class="winui-tool">表参数</div>
-		    </div>
-			<table class="layui-table">
-				<tbody id="tableParameterBody" style="height: calc(100vh - 85px);overflow-y: auto;position: absolute;">
-					
-				</tbody>
-			</table>
-		</div>
-    </div>
-    <div class="layui-row" style="height: 120px">
-    	<div class="winui-toolbar">
-	        <div class="winui-tool">请求链接</div>
 	    </div>
-	    
-    </div>
-    <div class="layui-row" style="height: 50px;text-align: center;">
-	    <div class="layui-inline">
-            <div class="layui-input-inline">
-                <button class="layui-btn" id="saveConsole">保存结果</button>
-            </div>
-        </div>
+	    <div class="layui-row" style="height: 50px;text-align: center;">
+		    <div class="layui-inline">
+	            <div class="layui-input-inline">
+	                <button class="layui-btn" lay-submit lay-filter="formSearch">保存结果</button>
+	            </div>
+	        </div>
+	    </div>
+    </form>
+    <div id="modelContentDiv" style="height:auto; position: fixed; left: 10000px;">
+    	<textarea id="modelContent"></textarea>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
