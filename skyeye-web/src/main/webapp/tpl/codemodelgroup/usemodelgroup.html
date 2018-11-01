@@ -25,7 +25,7 @@
 	            </div>
 	        </div>
 		</div>
-		<div class="txtcenter" style="width:1200px;margin:0 auto;">
+		<div class="txtcenter" style="width:1500px;margin:0 auto;">
 	        <div class="layui-form-item">
 	            <div class="layui-inline">
 	                <label class="layui-form-label">类、方法名</label>
@@ -37,6 +37,18 @@
 	                <label class="layui-form-label">接口对象名</label>
 	                <div class="layui-input-inline">
 	                	<input type="text" id="tableFirstISlowerName" name="tableFirstISlowerName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                </div>
+	            </div>
+	            <div class="layui-inline">
+	                <label class="layui-form-label">URL请求对象名</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="tableISlowerName" name="tableISlowerName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
+	                </div>
+	            </div>
+	            <div class="layui-inline">
+	                <label class="layui-form-label">表备注</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="tableBzName" name="tableBzName" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" />
 	                </div>
 	            </div>
 	        </div>
@@ -84,7 +96,9 @@
 		    	<div class="winui-toolbar">
 			        <div class="winui-tool">参数设置</div>
 			    </div>
-			    
+			    <div class="layui-row" style="height: 100%">
+			    	<textarea id="textContent"></textarea>
+			    </div>
 	    	</div>
 	    	<div class="layui-col-xs3 right-menu">
 	    		<div class="winui-toolbar">

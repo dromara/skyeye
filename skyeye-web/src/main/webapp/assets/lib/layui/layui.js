@@ -911,5 +911,21 @@ function returnModel(lang){
 	return mode;
 }
 
+/**
+ * 替换代码生成器模板内容
+ * @param str
+ */
+function replaceModelContent(str, ControllerPackageName, ServicePackageName, ServiceImplPackageName,
+		DaoPackageName, tableZhName, tableFirstISlowerName, tableISlowerName, tableBzName){
+	str = str.replace(/[$]{{controllerPackage}}/g, ControllerPackageName);
+	str = str.replace(/[$]{{servicePackage}}/g, ServicePackageName);
+	str = str.replace(/[$]{{serviceImplPackage}}/g, ServiceImplPackageName);
+	str = str.replace(/[$]{{daoPackage}}/g, DaoPackageName);
+	str = str.replace(/[$]{{tableName}}/g, tableZhName);
+	str = str.replace(/[$]{{objectName}}/g, tableFirstISlowerName);
+	str = str.replace(/[$]{{urlName}}/g, tableISlowerName);
+	str = str.replace(/[$]{{notesName}}/g, tableBzName);
+	return str;
+}
 
 

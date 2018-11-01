@@ -27,4 +27,6 @@ public interface CodeModelGroupDao {
 
 	public List<Map<String, Object>> queryCodeModelListByGroupId(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryTableBzByTableName(Map<String, Object> map) throws Exception;
+
 }

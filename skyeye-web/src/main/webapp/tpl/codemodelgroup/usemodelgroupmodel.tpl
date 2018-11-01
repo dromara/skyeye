@@ -1,6 +1,6 @@
 {{#each rows}}
 	<li class="page-li">
-	    <div class="weui-flex js_category layui-col-xs8 padd-le-ri">
+	    <div class="weui-flex js_category layui-col-xs7 padd-le-ri">
 	        <div>
 	            <label class="layui-form-label" relation="{{id}}" thiscontent="{{modelName}}">{{modelName}}<i class="red">*</i></label>
 	            <div class="layui-input-block">
@@ -8,9 +8,10 @@
 	            </div>
 	        </div>
 	    </div>
-	    <div class="weui-flex js_category layui-col-xs4 right">
+	    <div class="weui-flex js_category layui-col-xs5 right">
 	    	<button class="layui-btn layui-btn-sm tab-btn-mar-left-3 selModel" title="查看模板" type="button"><i class="fa fa-files-o"></i></button>
 	    	<button class="layui-btn layui-btn-sm tab-btn-mar-left-3 selResult" title="查看转换结果" type="button"><i class="fa fa-pencil-square-o"></i></button>
+	    	<button class="layui-btn layui-btn-sm tab-btn-mar-left-3 createResult" title="转换结果" type="button"><i class="fa fa-clipboard"></i></button>
 	    </div>
 	</li>
 {{/each}}

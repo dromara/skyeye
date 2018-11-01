@@ -12,6 +12,18 @@ layui.config({
 	form = layui.form,
 	table = layui.table;
 	
+	var jsCreateClick = false;//是否检索生成
+	
+	var list = [];//存储模板生成集合
+	//集合内容
+	//var s = {
+	//		modelId:模板id,
+	//		content:当前内容,
+	//		tableName:表名,
+	//		groupId:模板所属分组id
+	//		modelName:模板别名
+	//}
+	
 	form.render();
 	form.on('submit(formSearch)', function (data) {
     	//表单验证
@@ -27,7 +39,20 @@ layui.config({
         indentUnit : 2,  // 缩进单位，默认2
         smartIndent : true,  // 是否智能缩进
         tabSize : 4,  // Tab缩进，默认4
-        readOnly : false,  // 是否只读，默认false
+        readOnly : true,  // 是否只读，默认false
+        showCursorWhenSelecting : true,
+        lineNumbers : true,  // 是否显示行号
+        styleActiveLine: true, //line选择是是否加亮
+        matchBrackets: true,
+    });
+	
+	var textEditor = CodeMirror.fromTextArea(document.getElementById("textContent"), {
+        mode : "text/x-java",  // 模式
+        theme : "eclipse",  // CSS样式选择
+        indentUnit : 2,  // 缩进单位，默认2
+        smartIndent : true,  // 是否智能缩进
+        tabSize : 4,  // Tab缩进，默认4
+        readOnly : true,  // 是否只读，默认false
         showCursorWhenSelecting : true,
         lineNumbers : true,  // 是否显示行号
         styleActiveLine: true, //line选择是是否加亮
@@ -47,7 +72,7 @@ layui.config({
 	 		'click .selModel':function(index, row){//查看模板
 	 			var mode = returnModel(row.modelType);
 	        	if (!isNull(mode.length)) {
-					editor.setOption('mode', mode)
+					editor.setOption('mode', mode);
 				} 
 	        	editor.setValue(row.modelContent);
 	        	layer.open({
@@ -60,8 +85,36 @@ layui.config({
 		        });
 	 		},
 	 		'click .selResult':function(index, row){//查看转换结果
-		 		
+	 			if(jsCreateClick){
+	 				var mode = returnModel(row.modelType);
+		        	if (!isNull(mode.length)) {
+		        		textEditor.setOption('mode', mode);
+					} 
+		        	textEditor.setOption('readOnly', false);
+		        	textEditor.setValue(row.modelContent);
+	 			}else{
+	 				top.winui.window.msg('请先选择数据库表名检索生成', {icon: 2,time: 2000});
+	 			}
 	 		},
+	 		'click .createResult':function(index, row){//转换结果
+	 			if(jsCreateClick){
+	 				var content = replaceModelContent(row.modelContent, $("#ControllerPackageName").val(), $("#ServicePackageName").val(),
+	 						$("#ServiceImplPackageName").val(), $("#DaoPackageName").val(), $("#tableZhName").val(),
+	 						$("#tableFirstISlowerName").val(), $("#tableISlowerName").val(), $("#tableBzName").val());
+	 				var s = {
+ 						modelId: row.id,
+ 						content: content,
+ 						tableName: $("#tableName").val(),
+ 						groupId: parent.rowId,
+ 						modelName: row.modelName
+	 				};
+	 				insertListIn(list, s);
+	 				top.winui.window.msg('转换成功', {icon: 1,time: 2000});
+	 				console.log(list);
+	 			}else{
+	 				top.winui.window.msg('请先选择数据库表名检索生成', {icon: 2,time: 2000});
+	 			}
+	 		}
 	 	},
 	 	ajaxSendAfter:function(json){
 	 	}
@@ -81,6 +134,13 @@ layui.config({
 	 	}
 	});
 	
+	//转换结果效果切换
+	$("body").on("click", ".createResult", function(e){
+		if(jsCreateClick){
+			$(this).addClass("layui-btn-normal");
+		}
+	});
+	
 	//检索生成
 	$("body").on("click", "#jsCreate", function(e){
 		showGrid({
@@ -94,18 +154,23 @@ layui.config({
     	 	ajaxSendAfter:function(json){
     	 		AjaxPostUtil.request({url:reqBasePath + "codemodel012", params:{tableName: $("#tableName").val()}, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
+	 	   				$(".createResult").removeClass("layui-btn-normal");
+	 	   				jsCreateClick = true;
+	 	   				list = [];
 	 	   				$("#tableZhName").val(json.bean.tableName);
 	 	   				$("#tableFirstISlowerName").val(json.bean.tableFirstISlowerName);
 	 	   				$("#ControllerPackageName").val(json.bean.ControllerPackageName);
 	 	   				$("#ServicePackageName").val(json.bean.ServicePackageName);
     	 	   			$("#ServiceImplPackageName").val(json.bean.ServiceImplPackageName);
     	 	   			$("#DaoPackageName").val(json.bean.DaoPackageName);
+    	 	   			$("#tableISlowerName").val(json.bean.tableISlowerName);
+    	 	   			$("#tableBzName").val(json.bean.tableBzName);
     	 	   			//遍历模板
 						$('#modelList').find('li').each(function() {
 							var label = $(this).find("label");
 							$("#" + label.attr("relation")).val(json.bean.tableName + label.attr("thiscontent"));
 						});
-
+						top.winui.window.msg('检索成功', {icon: 1,time: 2000});
 	 	   			}else{
 	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 	 	   			}
@@ -113,6 +178,23 @@ layui.config({
     	 	}
     	});
 	});
+	
+	/**
+	 * 向集合中添加新元素
+	 */
+	function insertListIn(list, s){
+		var isIn = false;
+		for(var i = 0; i < list.length; i++){
+			if(list[i].modelId == s.modelId){
+				list[i].content = s.content;
+				isIn = true;
+				break;
+			}
+		}
+		if(!isIn){//不存在
+			list.push(s);
+		}
+	}
 	
     exports('usemodelgroup', {});
 });
