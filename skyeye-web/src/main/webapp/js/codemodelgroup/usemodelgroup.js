@@ -5,7 +5,7 @@ layui.config({
 	version: skyeyeVersion
 }).define(['table', 'jquery', 'winui', 'form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
            'solr', 'sql', 'vue'], function (exports) {
-	
+	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	winui.renderColor();
 	
 	var $ = layui.$,
@@ -25,13 +25,27 @@ layui.config({
 	//		groupId:模板所属分组id
 	//		modelName:模板别名
 	//		modelContent:默认内容
+	//		fileName:文件名称
+	//		modelType:模板类型
 	//}
 	
 	form.render();
 	form.on('submit(formSearch)', function (data) {
     	//表单验证
         if (winui.verifyForm(data.elem)) {
-        	
+        	var subData = list;
+        	for(var i = 0; i < subData.length; i++){
+        		subData[i].modelContent = "";
+        	}
+        	AjaxPostUtil.request({url:reqBasePath + "codemodel014", params:{jsonData: JSON.stringify(subData)}, type:'json', callback:function(json){
+ 	   			if(json.returnCode == 0){
+ 	   				top.winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1,time: 2000});
+	 	   			parent.layer.close(index);
+					parent.refreshCode = '0';
+ 	   			}else{
+ 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   			}
+ 	   		}});
         }
         return false;
 	});
@@ -125,7 +139,9 @@ layui.config({
  						tableName: $("#tableName").val(),
  						groupId: parent.rowId,
  						modelName: row.modelName,
- 						modelContent: row.modelContent
+ 						modelContent: row.modelContent,
+ 						fileName: $("#tableZhName").val() + row.modelName,
+ 						modelType: row.modelType,
 	 				};
 	 				insertListIn(list, s);
 	 				top.winui.window.msg('转换成功', {icon: 1,time: 2000});
@@ -165,6 +181,7 @@ layui.config({
 			list[i].content = replaceModelContent(list[i].modelContent, $("#ControllerPackageName").val(), $("#ServicePackageName").val(),
 								$("#ServiceImplPackageName").val(), $("#DaoPackageName").val(), $("#tableZhName").val(),
 		 						$("#tableFirstISlowerName").val(), $("#tableISlowerName").val(), $("#tableBzName").val());
+			list[i].fileName = $("#tableZhName").val() + list[i].modelName;
 			if(list[i].modelId == editId){
 				textEditor.setOption('readOnly', false);
 				textEditor.setValue(list[i].content);

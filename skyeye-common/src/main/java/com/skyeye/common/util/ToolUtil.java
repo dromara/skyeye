@@ -1,6 +1,8 @@
 package com.skyeye.common.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -486,6 +488,32 @@ public class ToolUtil {
 			return s;
 		else
 			return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+	}
+	
+	/**
+	 * 写入内容到文件
+	 * @param content
+	 * @param fileName
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean writeTxtFile(String content, File fileName) throws Exception {
+		RandomAccessFile mm = null;
+		boolean flag = false;
+		FileOutputStream o = null;
+		try {
+			o = new FileOutputStream(fileName);
+			o.write(content.getBytes("GBK"));
+			o.close();
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (mm != null) {
+				mm.close();
+			}
+		}
+		return flag;
 	}
 
 	

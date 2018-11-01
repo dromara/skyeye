@@ -46,4 +46,20 @@ public class CommonController {
 		commonService.uploadFileBase64(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: downloadFileByJsonData
+	     * @Description: 代码生成器下载
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CommonController/downloadFileByJsonData")
+	@ResponseBody
+	public void downloadFileByJsonData(InputObject inputObject, OutputObject outputObject) throws Exception{
+		commonService.downloadFileByJsonData(inputObject, outputObject);
+	}
+	
 }

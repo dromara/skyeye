@@ -9,4 +9,6 @@ public interface CommonService {
 
 	public void uploadFileBase64(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void downloadFileByJsonData(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

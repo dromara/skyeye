@@ -1,23 +1,39 @@
 package com.skyeye.common.service.impl;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.dao.CommonDao;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.service.CommonService;
 import com.skyeye.common.util.ToolUtil;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 
 @Service
@@ -178,6 +194,73 @@ public class CommonServiceImpl implements CommonService{
         }else{
         	outputObject.setreturnMessage("上传失败，数据不合法");
         }
+	}
+
+	/**
+	 * 
+	     * @Title: downloadFileByJsonData
+	     * @Description: 代码生成器下载
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings({ "static-access" })
+	@Override
+	public void downloadFileByJsonData(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		JSONArray array = JSONArray.fromObject(map.get("jsonData").toString());
+		String tPath = inputObject.getRequest().getSession().getServletContext().getRealPath("/");
+		String basePath = tPath.substring(0, inputObject.getRequest().getSession().getServletContext().getRealPath("/").indexOf(Constants.PROJECT_WEB)); 
+		List<Map<String, Object>> inBeans = new ArrayList<>();
+		Map<String, Object> user = inputObject.getLogParams();
+		String zipName = ToolUtil.getSurFaceId() + ".zip";
+		String strZipPath = basePath + "/" + zipName;
+		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(strZipPath));
+		byte[] buffer = new byte[1024];
+		
+		for(int i = 0; i < array.size(); i++){
+			JSONObject object = (JSONObject) array.get(i);
+			//加入压缩包
+			ByteArrayInputStream stream = new ByteArrayInputStream(object.getString("content").getBytes());
+			out.putNextEntry(new ZipEntry(object.getString("fileName") + "." + object.getString("modelType").toLowerCase()));
+			int len;
+			// 读入需要下载的文件的内容，打包到zip文件
+			while ((len = stream.read(buffer)) > 0) {
+				out.write(buffer, 0, len);
+			}
+			out.closeEntry();
+			Map<String, Object> bean = new HashMap<>();
+			bean.put("id", ToolUtil.getSurFaceId());
+			bean.put("tableName", object.getString("tableName"));
+			bean.put("groupId", object.getString("groupId"));
+			bean.put("modelId", object.getString("modelId"));
+			bean.put("content", object.getString("content"));
+			bean.put("createId", user.get("id"));
+			bean.put("filePath", zipName);
+			bean.put("createTime", ToolUtil.getTimeAndToString());
+			inBeans.add(bean);
+		}
+		out.close();
+		commonDao.insertCodeModelHistory(inBeans);
+		
+//		//下载
+//		//获取输入流  
+//		InputStream bis = new BufferedInputStream(new FileInputStream(new File(strZipPath)));
+//		inputObject.getResponse().setHeader("REQUESTMATION", "DOWNLOAD");
+//		// 转码，免得文件名中文乱码
+//		String filename = URLEncoder.encode(zipName, "UTF-8");
+//		// 设置文件下载头
+//		inputObject.getResponse().addHeader("Content-Disposition", "attachment;filename=" + filename);
+//		// 1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
+//		inputObject.getResponse().setContentType("multipart/form-data");
+//		BufferedOutputStream out1 = new BufferedOutputStream(inputObject.getResponse().getOutputStream());
+//		int len = 0;
+//		while ((len = bis.read()) != -1) {
+//			out1.write(len);
+//			out1.flush();
+//		}
 	}
 	
 }

@@ -23,3 +23,4 @@ deleteFile();							删除单个文件
 card();									随机不重复的6-8位
 replaceUnderLineAndUpperCase();			将表名转为Java经常使用的名字，如code_model转CodeModel
 toLowerCaseFirstOne();					字符串首字母转小写
+writeTxtFile();							写入内容到文件

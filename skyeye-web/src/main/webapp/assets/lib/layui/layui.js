@@ -672,6 +672,7 @@ var AjaxPostUtil = {
 	// 状态改变的处理  
 	readystatechange: function(xmlhttp) {
 		var sessionstatus = xmlhttp.getResponseHeader("SESSIONSTATUS");
+		var requestmation = xmlhttp.getResponseHeader("REQUESTMATION");
 		if (sessionstatus == "TIMEOUT") {//超时跳转
 			var win = window;
 			while (win != win.top){
@@ -688,8 +689,12 @@ var AjaxPostUtil = {
 					break;
 				case "json":
 					var jsonText = xmlhttp.responseText;
-					if(jsonText) {
-						returnValue = eval("(" + jsonText + ")");
+					if(requestmation == 'DOWNLOAD'){
+						returnValue = eval('(' + '{"returnMessage":"成功","returnCode":0,"total":0,"rows":"","bean":""}' + ')');
+					}else{
+						if(jsonText) {
+							returnValue = eval("(" + jsonText + ")");
+						}
 					}
 					break;
 				default:
