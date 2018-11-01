@@ -100,6 +100,12 @@ layui.config({
 	 	   				$("#ServicePackageName").val(json.bean.ServicePackageName);
     	 	   			$("#ServiceImplPackageName").val(json.bean.ServiceImplPackageName);
     	 	   			$("#DaoPackageName").val(json.bean.DaoPackageName);
+    	 	   			//遍历模板
+						$('#modelList').find('li').each(function() {
+							var label = $(this).find("label");
+							$("#" + label.attr("relation")).val(json.bean.tableName + label.attr("thiscontent"));
+						});
+
 	 	   			}else{
 	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 	 	   			}

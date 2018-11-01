@@ -25,7 +25,9 @@ layui.config({
 	        { title: '序号', type: 'numbers'},
 	        { field: 'groupNum', title: '分组编号', width: 120 },
 	        { field: 'groupName', title: '分组名称', width: 120 },
-	        { field: 'groupDesc', title: '分组简介', width: 120 },
+	        { field: 'groupDesc', title: '分组简介', width: 120, templet: function(d){
+	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="groupDesc"></i>';
+	        }},
 	        { field: 'modelNum', title: '模板数量', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
@@ -43,6 +45,15 @@ layui.config({
         	modelConcle(data);
         }else if (layEvent === 'useModelGroup') { //使用模板
         	useModelGroup(data);
+        }else if (layEvent === 'groupDesc') { //查看分组简介
+        	layer.open({
+	            id: '分组简介',
+	            type: 1,
+	            title: '分组简介',
+	            shade: 0.3,
+	            area: ['800px', '500px'],
+	            content: data.groupDesc,
+	        });
         }
     });
 	
