@@ -14,6 +14,8 @@ layui.config({
 	
 	var jsCreateClick = false;//是否检索生成
 	
+	var editId = "";//当前编辑的模板id
+	
 	var list = [];//存储模板生成集合
 	//集合内容
 	//var s = {
@@ -22,6 +24,7 @@ layui.config({
 	//		tableName:表名,
 	//		groupId:模板所属分组id
 	//		modelName:模板别名
+	//		modelContent:默认内容
 	//}
 	
 	form.render();
@@ -59,6 +62,15 @@ layui.config({
         matchBrackets: true,
     });
 	
+	textEditor.on("change",function(){
+		for(var i = 0; i < list.length; i++){
+			if(list[i].modelId == editId){
+				list[i].content = textEditor.getValue();
+				break;
+			}
+		}
+	});
+	
 	//加载模块
 	showGrid({
 	 	id: "modelList",
@@ -86,12 +98,18 @@ layui.config({
 	 		},
 	 		'click .selResult':function(index, row){//查看转换结果
 	 			if(jsCreateClick){
-	 				var mode = returnModel(row.modelType);
-		        	if (!isNull(mode.length)) {
-		        		textEditor.setOption('mode', mode);
-					} 
-		        	textEditor.setOption('readOnly', false);
-		        	textEditor.setValue(row.modelContent);
+	 				var s = getListItem(list, row.id);
+	 				if(isNull(s)){
+	 					top.winui.window.msg('请先转换模板', {icon: 2,time: 2000});
+	 				}else{
+	 					editId = row.id;
+	 					var mode = returnModel(row.modelType);
+	 					if (!isNull(mode.length)) {
+	 						textEditor.setOption('mode', mode);
+	 					} 
+	 					textEditor.setOption('readOnly', false);
+	 					textEditor.setValue(s.content);
+	 				}
 	 			}else{
 	 				top.winui.window.msg('请先选择数据库表名检索生成', {icon: 2,time: 2000});
 	 			}
@@ -106,11 +124,11 @@ layui.config({
  						content: content,
  						tableName: $("#tableName").val(),
  						groupId: parent.rowId,
- 						modelName: row.modelName
+ 						modelName: row.modelName,
+ 						modelContent: row.modelContent
 	 				};
 	 				insertListIn(list, s);
 	 				top.winui.window.msg('转换成功', {icon: 1,time: 2000});
-	 				console.log(list);
 	 			}else{
 	 				top.winui.window.msg('请先选择数据库表名检索生成', {icon: 2,time: 2000});
 	 			}
@@ -141,6 +159,19 @@ layui.config({
 		}
 	});
 	
+	//txtcenter DIV内的输入框内容变化事件
+	$("body").on("keyup", ".txtcenter input", function(e){
+		for(var i = 0; i < list.length; i++){
+			list[i].content = replaceModelContent(list[i].modelContent, $("#ControllerPackageName").val(), $("#ServicePackageName").val(),
+								$("#ServiceImplPackageName").val(), $("#DaoPackageName").val(), $("#tableZhName").val(),
+		 						$("#tableFirstISlowerName").val(), $("#tableISlowerName").val(), $("#tableBzName").val());
+			if(list[i].modelId == editId){
+				textEditor.setOption('readOnly', false);
+				textEditor.setValue(list[i].content);
+			}
+		}
+	});
+	
 	//检索生成
 	$("body").on("click", "#jsCreate", function(e){
 		showGrid({
@@ -157,6 +188,9 @@ layui.config({
 	 	   				$(".createResult").removeClass("layui-btn-normal");
 	 	   				jsCreateClick = true;
 	 	   				list = [];
+	 	   				editId = "";
+		 	   			textEditor.setOption('readOnly', true);
+	 					textEditor.setValue('');
 	 	   				$("#tableZhName").val(json.bean.tableName);
 	 	   				$("#tableFirstISlowerName").val(json.bean.tableFirstISlowerName);
 	 	   				$("#ControllerPackageName").val(json.bean.ControllerPackageName);
@@ -194,6 +228,18 @@ layui.config({
 		if(!isIn){//不存在
 			list.push(s);
 		}
+	}
+	
+	/**
+	 * 获取集合中的一项
+	 */
+	function getListItem(list, id){
+		for(var i = 0; i < list.length; i++){
+			if(list[i].modelId == id){
+				return list[i];
+			}
+		}
+		return null;
 	}
 	
     exports('usemodelgroup', {});
