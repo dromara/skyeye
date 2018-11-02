@@ -24,7 +24,9 @@
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+			{{# if(d.useNum == 0){ }}
 			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			{{# } }}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>

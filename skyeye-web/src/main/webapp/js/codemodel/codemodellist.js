@@ -30,6 +30,7 @@ layui.config({
 	        { field: 'id', title: '模板内容', width: 120, templet: function(d){
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="modelContent"></i>';
 	        }},
+	        { field: 'useNum', title: '调用次数', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]

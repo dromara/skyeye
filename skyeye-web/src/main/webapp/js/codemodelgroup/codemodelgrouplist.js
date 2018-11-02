@@ -29,6 +29,7 @@ layui.config({
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="groupDesc"></i>';
 	        }},
 	        { field: 'modelNum', title: '模板数量', width: 120 },
+	        { field: 'useNum', title: '调用次数', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]

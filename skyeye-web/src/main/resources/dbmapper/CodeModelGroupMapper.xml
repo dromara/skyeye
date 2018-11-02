@@ -9,7 +9,8 @@
 			a.group_num groupNum,
 			a.group_desc groupDesc,
 			CONVERT(a.create_time, char) createTime,
-			(SELECT COUNT(*) FROM code_model b WHERE b.group_id = a.id) modelNum
+			(SELECT COUNT(*) FROM code_model b WHERE b.group_id = a.id) modelNum,
+			(SELECT COUNT(*) FROM (SELECT COUNT(*), c.group_id FROM code_model_history c GROUP BY c.file_path) d WHERE d.group_id = a.id) useNum
 		FROM
 			code_model_group a
 		WHERE 1 = 1

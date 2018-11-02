@@ -34,18 +34,22 @@ layui.config({
     	//表单验证
         if (winui.verifyForm(data.elem)) {
         	var subData = list;
-        	for(var i = 0; i < subData.length; i++){
-        		subData[i].modelContent = "";
+        	if(subData.length == 0){
+        		top.winui.window.msg('请先生成转换结果', {icon: 2,time: 2000});
+        	}else{
+        		for(var i = 0; i < subData.length; i++){
+        			subData[i].modelContent = "";
+        		}
+        		AjaxPostUtil.request({url:reqBasePath + "codemodel014", params:{jsonData: JSON.stringify(subData)}, type:'json', callback:function(json){
+        			if(json.returnCode == 0){
+        				top.winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1,time: 2000});
+        				parent.layer.close(index);
+        				parent.refreshCode = '0';
+        			}else{
+        				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+        			}
+        		}});
         	}
-        	AjaxPostUtil.request({url:reqBasePath + "codemodel014", params:{jsonData: JSON.stringify(subData)}, type:'json', callback:function(json){
- 	   			if(json.returnCode == 0){
- 	   				top.winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1,time: 2000});
-	 	   			parent.layer.close(index);
-					parent.refreshCode = '0';
- 	   			}else{
- 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
- 	   			}
- 	   		}});
         }
         return false;
 	});
