@@ -128,7 +128,9 @@
 			c.open_type openType,
 			'-1' maxOpen,
 			'false' extend,
-			'' childs
+			null childs,
+			c.menu_parent_id parentId,
+			c.menu_level menuLevel
 		FROM
 			sys_eve_user a,
 			sys_eve_role_menu b,

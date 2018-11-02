@@ -155,6 +155,7 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 					List<Map<String, Object>> deskTops = sysEveUserDao.queryDeskTopsMenuByUserId(userMation);//桌面菜单列表
 					List<Map<String, Object>> allMenu = sysEveUserDao.queryAllMenuByUserId(userMation);
 					allMenu = ToolUtil.allMenuToTree(allMenu);
+					deskTops = ToolUtil.deskTopsTree(deskTops);
 					jedisClient.set("userMation:" + userMation.get("id").toString(), JSON.toJSONString(userMation));
 					jedisClient.expire("userMation:" + userMation.get("id").toString(), 1800);//时间为30分钟
 					jedisClient.set("deskTopsMation:" + userMation.get("id").toString(), JSON.toJSONString(deskTops));

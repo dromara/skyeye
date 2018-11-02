@@ -45,6 +45,19 @@ layui.define(['layer', 'winui'], function (exports) {
         if (!winui.taskAuto()) {
             return;
         }
+        if(isNull(options.shadeClose)){
+        	options.shadeClose = false;
+        }
+        if(isNull(options.skin)){
+        	options.skin = 'winui-window';
+        }
+        if(isNull(options.closeBtn) && options.closeBtn != 0){
+        	options.closeBtn = '1';
+        }
+        if(isNull(options.maxmin) && options.maxmin != false){
+        	options.maxmin = true;
+        }
+
         //打开窗口
         var windowIndex = layer.open({
             id: options.id || winui.guid(),
@@ -56,10 +69,13 @@ layui.define(['layer', 'winui'], function (exports) {
             anim: options.anim || this.settings.anim,
             move: MOVE,
             shade: options.shade || 0,
-            maxmin: true,   //允许最大最小化
+            maxmin: options.maxmin,   //允许最大最小化
             moveOut: true,  //允许拖出窗外
-            skin: 'winui-window',   //窗口皮肤
+            skin: options.skin,   //窗口皮肤
             zIndex: layer.zIndex,
+            shadeClose: options.shadeClose, 	//点击空白处关闭
+            scrollbar: false,
+            closeBtn: options.closeBtn,
             //销毁回调
             end: options.end || function () {
 
@@ -127,91 +143,93 @@ layui.define(['layer', 'winui'], function (exports) {
                 common.setWindowBody(window);
             }
         });
-
-        //重新获取window
         var windowDom = common.getWindow(options.id);
-        if (((options.type || this.settings.type) == 2) && (options.refresh === undefined ? this.settings.refresh : options.refresh)) {
-            $(windowDom).find('.layui-layer-setwin').prepend('<a class="layui-layer-ico layui-layer-refresh"><i class="layui-icon" style="font-size:14px;left:17px;font-weight:600;">&#x1002;<i></a>');
-            $(windowDom).find('.layui-layer-refresh').on('click', function (e) {
-                var $iframe = $(windowDom).find('iframe');
-                try {
-                    $iframe.attr('src', $iframe[0].contentWindow.location.href);
-                } catch (e) {
-                    $iframe.attr('src', $iframe.attr('src'));
-                }
-            });
-        }
-        $(windowDom).find('.layui-layer-max').html('<i class="layui-icon" style="font-size:12px;left:18px;" >&#xe626;<i>');
-        $(windowDom).find('.layui-layer-close').html('<i class="layui-icon">&#x1006;<i>');
-        //打开最大化
-        switch ((options.maxOpen || this.settings.maxOpen)) {
-            case 1:
-                if ((options.anim || this.settings.anim) !== -1) {
-                    $(windowDom).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+        if(!isNull(windowDom)){
+        	//重新获取window
+            if (((options.type || this.settings.type) == 2) && (options.refresh === undefined ? this.settings.refresh : options.refresh)) {
+                $(windowDom).find('.layui-layer-setwin').prepend('<a class="layui-layer-ico layui-layer-refresh"><i class="layui-icon" style="font-size:14px;left:17px;font-weight:600;">&#x1002;<i></a>');
+                $(windowDom).find('.layui-layer-refresh').on('click', function (e) {
+                    var $iframe = $(windowDom).find('iframe');
+                    try {
+                        $iframe.attr('src', $iframe[0].contentWindow.location.href);
+                    } catch (e) {
+                        $iframe.attr('src', $iframe.attr('src'));
+                    }
+                });
+            }
+            $(windowDom).find('.layui-layer-max').html('<i class="layui-icon" style="font-size:12px;left:18px;" >&#xe626;<i>');
+            $(windowDom).find('.layui-layer-close').html('<i class="layui-icon">&#x1006;<i>');
+            //打开最大化
+            switch ((options.maxOpen || this.settings.maxOpen)) {
+                case 1:
+                    if ((options.anim || this.settings.anim) !== -1) {
+                        $(windowDom).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
+                            $(windowDom).find('.layui-layer-max').trigger('click');
+                        });
+                    } else {
                         $(windowDom).find('.layui-layer-max').trigger('click');
+                    }
+                    break;
+                case 2:
+                    var top;
+                    //根据任务栏模式调整位置
+                    switch (winui.settings.taskbarMode) {
+                        case 'top':
+                            top = taskbarHeight + 'px';
+                            break;
+                        case 'bottom':
+                            top = '0';
+                            break;
+                        case 'left':
+                            break;
+                        case 'right':
+                            break;
+                        default:
+                    }
+                    layer.style(windowIndex, {
+                        'top': top,
+                        'left': '0',
+                        'width': $(window).width() + 'px',
+                        'height': $(window).height() - taskbarHeight + 'px'
                     });
-                } else {
+                    break;
+                default:
+            };
+            //去除最小化按钮
+            if (!(options.min === undefined ? this.settings.min : options.min))
+                $(windowDom).find('.layui-layer-min').remove();
+            //去除最大化按钮
+            if (!(options.max === undefined ? this.settings.max : options.max))
+                $(windowDom).find('.layui-layer-max').remove();
+            //增加任务项
+            var taskItem = common.addTaskItem(options.id, options.title);
+            //选中任务项
+            common.selectDom(taskItem);
+            //绑定任务项mouseup事件
+            common.resetMouseUp(taskItem, call.taskItemMouseUp);
+            //双击窗口标题栏最大化(由于不明原因，标题栏的拖动好像阻碍了标题栏的双击事件，所以这里用mousedown模拟双击)
+            var lastTime = 0;
+            $(windowDom).find(MOVE).on('mousedown', function () {
+                $('.layui-layer-move').css('cursor', 'default');
+                var thisTime = new Date().getTime();
+                if (thisTime - lastTime < 300) {
                     $(windowDom).find('.layui-layer-max').trigger('click');
                 }
-                break;
-            case 2:
-                var top;
-                //根据任务栏模式调整位置
-                switch (winui.settings.taskbarMode) {
-                    case 'top':
-                        top = taskbarHeight + 'px';
-                        break;
-                    case 'bottom':
-                        top = '0';
-                        break;
-                    case 'left':
-                        break;
-                    case 'right':
-                        break;
-                    default:
-                }
-                layer.style(windowIndex, {
-                    'top': top,
-                    'left': '0',
-                    'width': $(window).width() + 'px',
-                    'height': $(window).height() - taskbarHeight + 'px'
-                });
-                break;
-            default:
-        };
-        //去除最小化按钮
-        if (!(options.min === undefined ? this.settings.min : options.min))
-            $(windowDom).find('.layui-layer-min').remove();
-        //去除最大化按钮
-        if (!(options.max === undefined ? this.settings.max : options.max))
-            $(windowDom).find('.layui-layer-max').remove();
-        //增加任务项
-        var taskItem = common.addTaskItem(options.id, options.title);
-        //选中任务项
-        common.selectDom(taskItem);
-        //绑定任务项mouseup事件
-        common.resetMouseUp(taskItem, call.taskItemMouseUp);
-        //双击窗口标题栏最大化(由于不明原因，标题栏的拖动好像阻碍了标题栏的双击事件，所以这里用mousedown模拟双击)
-        var lastTime = 0;
-        $(windowDom).find(MOVE).on('mousedown', function () {
-            $('.layui-layer-move').css('cursor', 'default');
-            var thisTime = new Date().getTime();
-            if (thisTime - lastTime < 300) {
-                $(windowDom).find('.layui-layer-max').trigger('click');
-            }
-            lastTime = thisTime;
-        });
-        //移除最小化最大化关闭按钮a标签的href属性
-        $(windowDom).find('.layui-layer-setwin').children('a').removeAttr('href');
-        //点击置顶
-        layer.setTop($(windowDom));
-        //手动置顶windowDom
-        windowfunc.setTop(windowDom);
-        //鼠标按下窗口时选中对应任务栏
-        $(windowDom).on('mousedown', function () {
-            var taskItem = common.getTaskItemByWindowDom(this);
-            common.selectDom(taskItem);
-        });
+                lastTime = thisTime;
+            });
+            //移除最小化最大化关闭按钮a标签的href属性
+            $(windowDom).find('.layui-layer-setwin').children('a').removeAttr('href');
+            //点击置顶
+            layer.setTop($(windowDom));
+            //手动置顶windowDom
+            windowfunc.setTop(windowDom);
+            //鼠标按下窗口时选中对应任务栏
+            $(windowDom).on('mousedown', function () {
+                var taskItem = common.getTaskItemByWindowDom(this);
+                common.selectDom(taskItem);
+            });
+        }
+        
         //隐藏开始菜单
         $('.winui-start').addClass('layui-hide');
         //移除开始按钮的选中样式

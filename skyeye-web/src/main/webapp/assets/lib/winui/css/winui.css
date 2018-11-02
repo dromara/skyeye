@@ -312,12 +312,12 @@ button{
     height: 40px;
     position: fixed;
     bottom: 0;
-    z-index: 201704011157;
+    z-index: 9998;
 }
 
-    .winui-taskbar > * {
-        display: inline-block;
-    }
+.winui-taskbar > * {
+    display: inline-block;
+}
 
 
 /*开始按钮*/
@@ -330,20 +330,20 @@ button{
     position: absolute;
 }
 
-    .winui-taskbar-start:hover {
-        color: #1E91EA;
-    }
+.winui-taskbar-start:hover {
+    color: #1E91EA;
+}
 
 
-    /*开始按钮选中*/
+/*开始按钮选中*/
 
-    .winui-taskbar-start.winui-this {
-        /*background: #004275;*/
-    }
+.winui-taskbar-start.winui-this {
+    /*background: #004275;*/
+}
 
-    .winui-taskbar-start i {
-        font-size: 18px;
-    }
+.winui-taskbar-start i {
+    font-size: 18px;
+}
 
 
 /*任务栏任务*/
@@ -2422,6 +2422,28 @@ body .layer-ext-winconfirm {
 
 .cursor{
 	cursor: pointer;
+}
+
+.icon-drawer {
+    width: 35px;
+    height: 35px;
+    margin: 0px auto;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+    padding: 4px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.19);
+}
+
+.icon-drawer-icon{
+	width: 50%;
+    height: 50%;
+    float: left;
+    margin-top: 2px;
+}
+
+.icon-child{
+	display: none;
 }
 
 /*** 小程序页面管理start ***/

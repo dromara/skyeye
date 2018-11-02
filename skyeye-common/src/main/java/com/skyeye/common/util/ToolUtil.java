@@ -399,6 +399,52 @@ public class ToolUtil {
     }
     
     /**
+     * 使用递归建树
+     * @param deskTops
+     * @return
+     */
+    public static List<Map<String, Object>> deskTopsTree(List<Map<String, Object>> deskTops){
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		for(Map<String, Object> bean : deskTops){
+			if ("0".equals(bean.get("parentId").toString())) {
+				resultList.add(findChildren(bean, deskTops, 0));
+            }
+		}
+		for(Map<String, Object> bean : deskTops){
+			if(!findChildren(resultList, bean.get("id").toString())){
+				resultList.add(bean);
+			}
+		}
+		return resultList;
+	}
+    
+    /**
+     * 递归判断id是否在集合中存在
+     * @param treeNode
+     * @param id
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+	public static boolean findChildren(List<Map<String, Object>> treeNode, String id){
+    	List<Map<String, Object>> child = null;
+    	for(Map<String, Object> bean : treeNode){
+    		if(id.equals(bean.get("id").toString())){
+    			return true;
+    		}else{
+    			child = (List<Map<String, Object>>) bean.get("childs");
+    			if(child != null){
+    				boolean in = findChildren(child, id);
+    				if(in){
+    					return in;
+    				}
+    			}
+			}
+		}
+    	return false;
+    }
+	
+    
+    /**
      * 获取ip.properties路径
      * @return
      */

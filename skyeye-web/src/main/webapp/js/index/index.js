@@ -57,7 +57,12 @@
                 },    //可以为{}  默认 请求 json/desktopmenu.json
                 done: function (desktopApp) {
                     desktopApp.ondblclick(function (id, elem) {
-                        OpenWindow(elem);
+                    	var item = $(elem);
+                    	if(item.find(".icon-drawer").length > 0){
+                    		showBigWin(elem);
+                    	}else{
+                    		OpenWindow(elem);
+                    	}
                     });
                     desktopApp.contextmenu({
                         item: ["打开", "删除", '右键菜单可自定义'],
@@ -187,18 +192,39 @@
    		            id: id,
    		            type: type,
    		            title: title,
-   		            content: content
+   		            content: content,
    		            //,area: ['70vw','80vh']
    		            //,offset: ['10vh', '15vw']
-   		            , maxOpen: maxOpen
+   		            maxOpen: maxOpen,
    		            //, max: false
    		            //, min: false
-   		            , refresh:true
+   		            refresh:true
    		        });
    			}else{
    				location.href = "login.html";
    			}
    		}});
+    }
+    
+    function showBigWin(menuItem){
+    	var menu = $(menuItem);
+    	winui.window.config({
+            anim: 0,
+            miniAnim: 0,
+            maxOpen: -1
+        }).open({
+        	id: '1',
+            type: 1,
+    		title: false,
+    		closeBtn: 0,
+            content: '1111',
+            area: ['30vw', '40vh'],
+            shadeClose: true,
+            skin: 'demo-class',
+            scrollbar: false,
+            shade: 0.5,
+            maxmin: false
+        });
     }
 
     //注销登录

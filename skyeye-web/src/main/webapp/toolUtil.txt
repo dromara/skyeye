@@ -1,26 +1,28 @@
 
-useLoop();								检查数组是否包含某个值的方法
-getUrlParams();							将url参数转换成map
-isBlank();								判断字符串是否为空
-isNumeric();							判断是不是数字
-isPhone();								检测手机号是否合格
-isEmail();								验证邮箱
-isIP();									验证IP地址
-isDate();								验证日期时间
-isUrl();								验证网址Url
-isPostalcode();							验证输入邮政编号
-match();								如果str 符合 regex的正则表达式格式,返回true, 否则返回 false;
-isIDcard();								验证输入身份证号
-containsBoolean();						请求xml参数判断
-getTimeAndToString();					获取当前日期(2016-12-29 11:23:09)
-getProperties();						读取.properties 结尾的配置文件用，getP, getParam
-getSurFaceId();							获取ID
-MD5();									加密
-allMenuToTree();						使用递归方法建树
-findChildren();							递归查找子节点
-getIPPropertiesPath();					获取ip.properties路径
-deleteFile();							删除单个文件
-card();									随机不重复的6-8位
-replaceUnderLineAndUpperCase();			将表名转为Java经常使用的名字，如code_model转CodeModel
-toLowerCaseFirstOne();					字符串首字母转小写
-writeTxtFile();							写入内容到文件
+useLoop();																																	检查数组是否包含某个值的方法
+getUrlParams();																																将url参数转换成map
+isBlank();																																	判断字符串是否为空
+isNumeric();																																判断是不是数字
+isPhone();																																	检测手机号是否合格
+isEmail();																																	验证邮箱
+isIP();																																		验证IP地址
+isDate();																																	验证日期时间
+isUrl();																																	验证网址Url
+isPostalcode();																																验证输入邮政编号
+match();																																	如果str 符合 regex的正则表达式格式,返回true, 否则返回 false;
+isIDcard();																																	验证输入身份证号
+containsBoolean();																															请求xml参数判断
+getTimeAndToString();																														获取当前日期(2016-12-29 11:23:09)
+getProperties();																															读取.properties 结尾的配置文件用，getP, getParam
+getSurFaceId();																																获取ID
+MD5();																																		加密
+allMenuToTree();																															使用递归方法建树
+findChildren(Map<String, Object> treeNode, List<Map<String, Object>> treeNodes, int level);													递归查找子节点
+deskTopsTree();																																使用递归建树
+findChildren(List<Map<String, Object>> treeNode, String id);																				递归判断id是否在集合中存在
+getIPPropertiesPath();																														获取ip.properties路径
+deleteFile();																																删除单个文件
+card();																																		随机不重复的6-8位
+replaceUnderLineAndUpperCase();																												将表名转为Java经常使用的名字，如code_model转CodeModel
+toLowerCaseFirstOne();																														字符串首字母转小写
+writeTxtFile();																																写入内容到文件

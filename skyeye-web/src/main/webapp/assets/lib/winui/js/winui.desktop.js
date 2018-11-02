@@ -20,20 +20,55 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         if (this.data === null) return;
         var html = '';
         $(this.data).each(function (index, item) {
-            var id = (item.id == '' || item.id == undefined) ? '' : 'win-id="' + item.id + '"',
-                url = (item.pageURL == '' || item.pageURL == undefined) ? '' : 'win-url="' + item.pageURL + '"',
-                title = (item.title == '' || item.title == undefined) ? '' : 'win-title="' + item.title + '"',
-                opentype = (item.openType == '' || item.openType == undefined) ? '' : 'win-opentype="' + item.openType + '"',
-                maxOpen = (item.maxOpen == '' || item.maxOpen == undefined) ? '' : 'win-maxOpen="' + item.maxOpen + '"',
-                //icon的算法存在纰漏，但出现错误几率较小
-                isFaIcon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1),
-                icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
-            html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + '>';
-            html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
-            html += icon;
-            html += '</div>';
-            html += '<p>' + item.name + '</p>';
-            html += '</div>';
+        	var id = (item.id == '' || item.id == undefined) ? '' : 'win-id="' + item.id + '"',
+        		url = (item.pageURL == '' || item.pageURL == undefined) ? '' : 'win-url="' + item.pageURL + '"',
+        		title = (item.title == '' || item.title == undefined) ? '' : 'win-title="' + item.title + '"',
+        		opentype = (item.openType == '' || item.openType == undefined) ? '' : 'win-opentype="' + item.openType + '"',
+        		maxOpen = (item.maxOpen == '' || item.maxOpen == undefined) ? '' : 'win-maxOpen="' + item.maxOpen + '"',
+        		//icon的算法存在纰漏，但出现错误几率较小
+        		isFaIcon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1),
+        		icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
+        	if(isNull(item.childs)){
+        		html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + '>';
+        		html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
+        		html += icon;
+        		html += '</div>';
+        		html += '<p>' + item.name + '</p>';
+        		html += '</div>';
+        	}else{
+        		html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + '>';
+        		html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
+        		html += '<div class="icon-drawer">';
+        		var childsIconContent = '';
+        		var childsHtml = '';
+        		$(item.childs).each(function (index, bean) {
+    				var childsid = (bean.id == '' || bean.id == undefined) ? '' : 'win-id="' + bean.id + '"',
+						childsurl = (bean.pageURL == '' || bean.pageURL == undefined) ? '' : 'win-url="' + bean.pageURL + '"',
+						childstitle = (bean.title == '' || bean.title == undefined) ? '' : 'win-title="' + bean.title + '"',
+						childsopentype = (bean.openType == '' || bean.openType == undefined) ? '' : 'win-opentype="' + bean.openType + '"',
+						childsmaxOpen = (bean.maxOpen == '' || bean.maxOpen == undefined) ? '' : 'win-maxOpen="' + bean.maxOpen + '"',
+		        		//icon的算法存在纰漏，但出现错误几率较小
+						childsisFaIcon = (bean.icon.indexOf('fa-') != -1 && bean.icon.indexOf('.') == -1),
+						childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw"></i>' : '<img src="' + bean.icon + '" />',
+						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon"></i>' : '<img src="' + bean.icon + '" />';
+    				
+    				childsIconContent += childsiconsmall;
+    				childsHtml += '<div class="winui-desktop-item" ' + childsid + ' ' + childsurl + ' ' + childstitle + ' ' + childsopentype + ' ' + childsmaxOpen + '>';
+    				childsHtml += '<div class="winui-icon ' + (childsisFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
+    				childsHtml += childsicon;
+    				childsHtml += '</div>';
+    				childsHtml += '<p>' + bean.name + '</p>';
+    				childsHtml += '</div>';
+        		});
+        		html += childsIconContent;
+        		html += '</div>';
+        		html += '<div class="icon-child">';
+        		html += childsHtml;
+        		html += '</div>';
+        		html += '</div>';
+        		html += '<p>' + item.name + '</p>';
+        		html += '</div>';
+        	}
         });
         $('.winui-desktop').html(html);
         //定位应用
