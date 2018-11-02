@@ -337,7 +337,7 @@
 	<url id="codemodel013" path="/post/CodeModelGroupController/queryCodeModelListByGroupId" val="根据分组id获取模板列表" allUse="1">
 		<property id="groupId" name="groupId" ref="required" var="分组id"/>
 	</url>
-	<url id="codemodel014" path="/post/CommonController/downloadFileByJsonData" val="代码生成器下载" allUse="1">
+	<url id="codemodel014" path="/post/CommonController/downloadFileByJsonData" val="代码生成器生成下载文件" allUse="1">
 		<property id="jsonData" name="jsonData" ref="required" var="json数据"/>
 	</url>
 	<!-- 代码生成器系列结束 -->

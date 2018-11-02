@@ -4,10 +4,10 @@
 	
 	<insert id="insertCodeModelHistory" parameterType="java.util.Map">
 	     insert into code_model_history
-	     (id, table_name, group_id, model_id, content, file_path, create_id, create_time)
+	     (id, table_name, group_id, model_id, content, file_path, file_name, file_type, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.tableName}, #{item.groupId}, #{item.modelId}, #{item.content}, #{item.filePath}, #{item.createId}, #{item.createTime})  
+			(#{item.id}, #{item.tableName}, #{item.groupId}, #{item.modelId}, #{item.content}, #{item.filePath}, #{item.fileName}, #{item.fileType}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
 	

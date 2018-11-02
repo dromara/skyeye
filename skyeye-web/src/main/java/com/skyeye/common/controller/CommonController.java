@@ -49,7 +49,7 @@ public class CommonController {
 	/**
 	 * 
 	     * @Title: downloadFileByJsonData
-	     * @Description: 代码生成器下载
+	     * @Description: 代码生成器生成下载文件
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数

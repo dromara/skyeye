@@ -199,7 +199,7 @@ public class CommonServiceImpl implements CommonService{
 	/**
 	 * 
 	     * @Title: downloadFileByJsonData
-	     * @Description: 代码生成器下载
+	     * @Description: 代码生成器生成下载文件
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -238,6 +238,8 @@ public class CommonServiceImpl implements CommonService{
 			bean.put("modelId", object.getString("modelId"));
 			bean.put("content", object.getString("content"));
 			bean.put("createId", user.get("id"));
+			bean.put("fileName", object.getString("fileName"));
+			bean.put("fileType", object.getString("modelType").toLowerCase());
 			bean.put("filePath", zipName);
 			bean.put("createTime", ToolUtil.getTimeAndToString());
 			inBeans.add(bean);
