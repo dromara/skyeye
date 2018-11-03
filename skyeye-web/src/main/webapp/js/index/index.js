@@ -8,7 +8,7 @@
     helper: 'js/winui.helper'
 }).define(['window', 'desktop', 'start', 'helper'], function (exports) {
     var $ = layui.jquery;
-
+    
     $(function () {
     	
     	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
@@ -41,6 +41,13 @@
     
     //初始化配置信息
     function initWinConfig(){
+    	
+    	//设置窗口点击事件
+    	$("body").on("dblclick", ".sec-clsss-btn", function(e){
+    		winui.window.close($('#childWindow').parent());
+    		OpenWindow($(this).prop("outerHTML"));
+    	});
+    	
     	winui.config({
             settings: layui.data('winui').settings || {
                 color: 32,
@@ -59,15 +66,25 @@
                     desktopApp.ondblclick(function (id, elem) {
                     	var item = $(elem);
                     	if(item.find(".icon-drawer").length > 0){
-                    		showBigWin(elem);
                     	}else{
                     		OpenWindow(elem);
                     	}
                     });
+                    desktopApp.onclick(function (id, elem) {
+                    	var item = $(elem);
+                    	if(item.find(".icon-drawer").length > 0){
+                    		showBigWin(elem);
+                    	}
+                    }),
                     desktopApp.contextmenu({
                         item: ["打开", "删除", '右键菜单可自定义'],
                         item1: function (id, elem) {
-                            OpenWindow(elem);
+                        	var item = $(elem);
+                        	if(item.find(".icon-drawer").length > 0){
+                        		showBigWin(elem);
+                        	}else{
+                        		OpenWindow(elem);
+                        	}
                         },
                         item2: function (id, elem, events) {
                             winui.window.msg('删除回调');
@@ -213,14 +230,14 @@
             miniAnim: 0,
             maxOpen: -1
         }).open({
-        	id: '1',
+        	id: 'childWindow',
             type: 1,
     		title: false,
-    		closeBtn: 0,
-            content: '1111',
+    		closeBtn: 1,
+            content: menu.find(".icon-child").html(),
             area: ['30vw', '40vh'],
             shadeClose: true,
-            skin: 'demo-class',
+            skin: 'sec-clsss',
             scrollbar: false,
             shade: 0.5,
             maxmin: false

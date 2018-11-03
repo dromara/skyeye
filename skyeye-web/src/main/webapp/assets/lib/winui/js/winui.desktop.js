@@ -53,7 +53,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
 						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon"></i>' : '<img src="' + bean.icon + '" />';
     				
     				childsIconContent += childsiconsmall;
-    				childsHtml += '<div class="winui-desktop-item" ' + childsid + ' ' + childsurl + ' ' + childstitle + ' ' + childsopentype + ' ' + childsmaxOpen + '>';
+    				childsHtml += '<div class="winui-desktop-item sec-clsss-btn" ' + childsid + ' ' + childsurl + ' ' + childstitle + ' ' + childsopentype + ' ' + childsmaxOpen + '>';
     				childsHtml += '<div class="winui-icon ' + (childsisFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
     				childsHtml += childsicon;
     				childsHtml += '</div>';

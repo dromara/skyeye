@@ -473,8 +473,7 @@ layui.define(['layer', 'winui'], function (exports) {
     };
 
     var winLayer = new WinLayer();
-
-
+    
     //置顶窗口（显示窗口且置于顶层）
     winLayer.setTop = function (param) {
         var windowDom = common.getWindow(param);
