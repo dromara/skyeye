@@ -210,7 +210,7 @@
    		            type: type,
    		            title: title,
    		            content: content,
-   		            //,area: ['70vw','80vh']
+   		            area: ['90vw','90vh'],
    		            //,offset: ['10vh', '15vw']
    		            maxOpen: maxOpen,
    		            //, max: false
