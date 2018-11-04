@@ -19,4 +19,6 @@ public interface SysEveMenuService {
 
 	public void queryTreeSysMenuMationBySimpleLevel(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void querySysMenuLevelList(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

@@ -61,6 +61,7 @@
 		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="menuName" name="menuName" ref="" var="菜单名称"/>
 		<property id="menuUrl" name="menuUrl" ref="" var="菜单链接"/>
+		<property id="menuLevel" name="menuLevel" ref="" var="菜单级别"/>
 		<property id="parentId" name="parentId" ref="" var="菜单父ID"/>
 	</url>
 	<url id="sys007" path="/post/SysEveMenuController/insertSysMenuMation" val="添加菜单" allUse="1">
@@ -124,6 +125,8 @@
 	<url id="sys020" path="/post/SysEveUserController/editRoleIdsByUserId" val="编辑用户绑定的角色" allUse="1">
 		<property id="rowId" name="id" ref="required" var="账号ID" />
 		<property id="roleIds" name="roleIds" ref="required" var="角色ID串" />
+	</url>
+	<url id="sys021" path="/post/SysEveMenuController/querySysMenuLevelList" val="获取菜单级别列表" allUse="1">
 	</url>
 	
 	<url id="icon001" path="/post/SysEveIconController/querySysIconList" val="获取ICON列表" allUse="1">

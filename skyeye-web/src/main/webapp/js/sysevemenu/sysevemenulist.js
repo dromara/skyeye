@@ -65,7 +65,7 @@ layui.config({
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: reqBasePath + 'sys006',
-		    where:{menuName:$("#menuName").val(), menuUrl:$("#menuUrl").val(), parentId:parentId},
+		    where:{menuName:$("#menuName").val(), menuUrl:$("#menuUrl").val(), parentId:parentId, menuLevel:$("#menuLevel").val()},
 		    even:true,  //隔行变色
 		    page: true,
 		    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -113,6 +113,20 @@ layui.config({
 	        	edit(data);
 	        }
 	    });
+		
+		showGrid({
+		 	id: "menuLevel",
+		 	url: reqBasePath + "sys021",
+		 	params: {},
+		 	pagination: false,
+		 	template: getFileContent('tpl/template/select-option.tpl'),
+		 	ajaxSendLoadBefore: function(hdb){
+		 	},
+		 	ajaxSendAfter:function(json){
+		 		console.log(json);
+		 		form.render('select');
+		 	}
+		});
 	}
 	
 	/********* tree 处理   start *************/
@@ -191,7 +205,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{menuName:$("#menuName").val(), menuUrl:$("#menuUrl").val(), parentId:parentId}});
+    	table.reload("messageTable", {where:{menuName:$("#menuName").val(), menuUrl:$("#menuUrl").val(), parentId:parentId, menuLevel:$("#menuLevel").val()}});
     }
     
     exports('sysevemenulist', {});

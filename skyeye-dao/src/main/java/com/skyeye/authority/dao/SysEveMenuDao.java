@@ -25,4 +25,6 @@ public interface SysEveMenuDao {
 
 	public Map<String, Object> queryUseThisMenuRoleById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> querySysMenuLevelList(Map<String, Object> map) throws Exception;
+
 }

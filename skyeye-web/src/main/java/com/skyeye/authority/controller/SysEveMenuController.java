@@ -127,4 +127,20 @@ public class SysEveMenuController {
 		sysEveMenuService.queryTreeSysMenuMationBySimpleLevel(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysMenuLevelList
+	     * @Description: 获取菜单级别列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveMenuController/querySysMenuLevelList")
+	@ResponseBody
+	public void querySysMenuLevelList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveMenuService.querySysMenuLevelList(inputObject, outputObject);
+	}
+	
 }

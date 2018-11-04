@@ -10,13 +10,17 @@
     <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="width:700px;margin:0 auto;padding-top:20px;">
+	<div class="txtcenter" style="width:100%;margin:0 auto;padding-top:20px;">
 	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
 	        <div class="layui-form-item">
 	            <div class="layui-inline">
 	                <label class="layui-form-label">菜单名称</label>
 	                <div class="layui-input-inline">
 	                    <input type="text" id="menuName" name="menuName" placeholder="请输入菜单名称" class="layui-input" />
+	                </div>
+	                <label class="layui-form-label">菜单级别</label>
+	                <div class="layui-input-inline">
+	                	<select id="menuLevel" name="menuLevel"></select>
 	                </div>
 	                <label class="layui-form-label">菜单链接</label>
 	                <div class="layui-input-inline">

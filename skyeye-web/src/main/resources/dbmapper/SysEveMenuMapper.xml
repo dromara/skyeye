@@ -28,6 +28,9 @@
 		<if test="menuUrl != '' and menuUrl != null">
 			AND a.menu_url LIKE '%${menuUrl}%'
 		</if>
+		<if test="menuLevel != '' and menuLevel != null">
+			AND a.menu_level = #{menuLevel}
+		</if>
 		<if test="parentId != '' and parentId != null and parentId != '0'.toString()">
 			AND INSTR(CONCAT(',', a.menu_parent_id, ','), CONCAT(',', #{parentId}, ','))
 		</if>
@@ -149,6 +152,15 @@
 			AND b.id = #{parentId}
 			AND (b.menu_level + 1) = a.menu_level
 		</if>
+	</select>
+	
+	<select id="querySysMenuLevelList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.menu_level id,
+			CASE a.menu_level WHEN '0' THEN '创世菜单' ELSE CONCAT(CONVERT(a.menu_level, char), '级子菜单') END name
+		FROM
+			sys_eve_menu a
+		GROUP BY a.menu_level
 	</select>
 	
 </mapper>
