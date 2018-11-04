@@ -27,10 +27,14 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                 opentype = (item.openType == '' || item.openType == undefined) ? '' : 'win-opentype="' + item.openType + '"',
                 maxopen = (item.maxOpen == '' || item.maxOpen == undefined) ? '' : 'win-maxopen="' + item.maxOpen + '"',
                 winIcon = (item.icon == '' || item.icon == undefined) ? '' : 'win-icon="' + item.icon + '"',
-                extend = item.extend ? ' layui-nav-itemed' : '',
                 isParent = item.childs ? ' parent' : '',
                 //icon的算法存在纰漏，但出现错误几率较小
                 icon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1) ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
+            if(index == 0){
+            	var extend = item.extend ? ' layui-nav-itemed' : '';
+            }else{
+            	var extend = '';
+            }
             html += '<li class="layui-nav-item ' + isParent + ' ' + extend + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxopen + ' ' + winIcon + '>';
             html += '<a><div class="winui-menu-icon">'
             html += icon;
