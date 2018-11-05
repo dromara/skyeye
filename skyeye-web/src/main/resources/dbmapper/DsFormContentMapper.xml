@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dsform.dao.DsFormContentDao">
+	
+	<select id="queryDsFormContentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` contentName,
+			a.html_content htmlContent,
+			a.html_type htmlType,
+			a.js_content jsContent,
+			a.js_type jsType,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			ds_form_content a
+		WHERE 1 = 1
+			<if test="contentName != '' and contentName != null">
+				AND a.`name` LIKE '%${contentName}%'
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryDsFormContentMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` contentName
+		FROM
+			ds_form_content a
+		WHERE
+			a.`name` = #{contentName}
+	</select>
+	
+	<insert id="insertDsFormContentMation" parameterType="java.util.Map">
+	     INSERT into ds_form_content 
+	     (id, `name`, html_content, html_type, js_content, js_type, create_id, create_time)
+	     VALUES
+	     (#{id}, #{contentName}, #{htmlContent}, #{htmlType}, #{jsContent}, #{jsType}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteDsFormContentMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			ds_form_content
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryDsFormContentMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` contentName,
+			a.html_content htmlContent,
+			a.js_content jsContent
+		FROM
+			ds_form_content a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<select id="queryDsFormContentMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` contentName
+		FROM
+			ds_form_content a
+		WHERE
+			a.`name` = #{contentName}
+			AND a.id != #{id}
+	</select>
+	
+	<update id="editDsFormContentMationById" parameterType="java.util.Map">
+		UPDATE ds_form_content
+		<set>
+			<if test="contentName != '' and contentName != null">
+				`name` = #{contentName},
+			</if>
+			<if test="htmlContent != '' and htmlContent != null">
+				html_content = #{htmlContent},
+			</if>
+			js_content = #{jsContent}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	
+</mapper>

@@ -78,21 +78,26 @@ public class CodeModelHistoryServiceImpl implements CodeModelHistoryService{
 		String tPath = inputObject.getRequest().getSession().getServletContext().getRealPath("/");
 		String basePath = tPath.substring(0, inputObject.getRequest().getSession().getServletContext().getRealPath("/").indexOf(Constants.PROJECT_WEB)); 
 		String strZipPath = basePath + "/" + map.get("filePath").toString();
-		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(strZipPath));
-		byte[] buffer = new byte[1024];
-		List<Map<String, Object>> beans = codeModelHistoryDao.queryCodeModelHistoryListByFilePath(map);
-		for(Map<String, Object> bean : beans){
-			//加入压缩包
-			ByteArrayInputStream stream = new ByteArrayInputStream(bean.get("content").toString().getBytes());
-			out.putNextEntry(new ZipEntry(bean.get("fileName").toString() + "." + bean.get("fileType").toString().toLowerCase()));
-			int len;
-			// 读入需要下载的文件的内容，打包到zip文件
-			while ((len = stream.read(buffer)) > 0) {
-				out.write(buffer, 0, len);
+		File zipFile = new File(strZipPath);
+		if(zipFile.exists()){
+			outputObject.setreturnMessage("该文件已存在，生成失败。");
+		}else{
+			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(strZipPath));
+			byte[] buffer = new byte[1024];
+			List<Map<String, Object>> beans = codeModelHistoryDao.queryCodeModelHistoryListByFilePath(map);
+			for(Map<String, Object> bean : beans){
+				//加入压缩包
+				ByteArrayInputStream stream = new ByteArrayInputStream(bean.get("content").toString().getBytes());
+				out.putNextEntry(new ZipEntry(bean.get("fileName").toString() + "." + bean.get("fileType").toString().toLowerCase()));
+				int len;
+				// 读入需要下载的文件的内容，打包到zip文件
+				while ((len = stream.read(buffer)) > 0) {
+					out.write(buffer, 0, len);
+				}
+				out.closeEntry();
 			}
-			out.closeEntry();
+			out.close();
 		}
-		out.close();
 	}
 
 	/**
