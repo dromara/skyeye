@@ -383,4 +383,20 @@
 	</url>
 	<!-- 动态表单系列结束 -->
 	
+	<!-- 系统各部分说明开始 -->
+	<url id="exexplaintocodemodel001" path="/post/ExExplainToCodeModelController/insertExExplainToCodeModelMation" val="添加代码生成器说明信息" allUse="1">
+		<property id="title" name="title" ref="required" var="代码生成器说明标题"/>
+		<property id="content" name="content" ref="required" var="代码生成器说明内容"/>
+	</url>
+	<url id="exexplaintocodemodel002" path="/post/ExExplainToCodeModelController/queryExExplainToCodeModelMation" val="编辑代码生成器说明信息时进行回显" allUse="1">
+	</url>
+	<url id="exexplaintocodemodel003" path="/post/ExExplainToCodeModelController/editExExplainToCodeModelMationById" val="编辑代码生成器说明信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="代码生成器说明id"/>
+	    <property id="title" name="title" ref="required" var="代码生成器说明标题"/>
+		<property id="content" name="content" ref="required" var="代码生成器说明内容"/>
+	</url>
+	<url id="exexplaintocodemodel004" path="/post/ExExplainToCodeModelController/queryExExplainToCodeModelMationToShow" val="获取代码生成器说明信息供展示" allUse="1">
+	</url>
+	<!-- 系统各部分说明结束 -->
+	
 </controller>

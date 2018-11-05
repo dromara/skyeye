@@ -84,5 +84,10 @@ public class Constants {
 	 */
 	public static final String PROJECT_WEB = "\\skyeye\\skyeye-web";
 	
+	/**
+	 * 保存模板说明的redis的key
+	 */
+	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTOCODEMODEL = "exexplaintocodemodel";
+	
 
 }
