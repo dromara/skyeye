@@ -10,7 +10,7 @@ layui.config({
 	    var $ = layui.$,
 	    form = layui.form;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "exexplaintocodemodel002", params:{}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url:reqBasePath + "exexplaintocodemodel004", params:{}, type:'json', callback:function(json){
    			if(json.returnCode == 0){
    				layer.open({
    					type: 1,
