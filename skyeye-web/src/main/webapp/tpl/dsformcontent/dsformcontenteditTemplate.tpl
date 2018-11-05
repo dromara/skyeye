@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">JS内容类型<i class="red">*</i></label>
+        <label class="layui-form-label">JS内容类型</label>
         <div class="layui-input-block">
         	<select id="jsType" name="jsType" class="layui-input" win-verify="required" lay-filter="selectParent">
                 <option value="javascript">javascript</option>
@@ -28,7 +28,7 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">JS模板内容<i class="red">*</i></label>
+        <label class="layui-form-label">JS模板内容</label>
         <div class="layui-input-block">
         	<textarea id="jsContent">{{jsContent}}</textarea>
         </div>

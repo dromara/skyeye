@@ -27,10 +27,10 @@ layui.config({
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
 	        { field: 'contentName', title: '模板标题', width: 120 },
-	        { field: 'htmlContent', title: 'HTML内容', width: 120, templet: function(d){
+	        { title: 'HTML内容', width: 120, templet: function(d){
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        }},
-	        { field: 'jsContent', title: 'JS内容', width: 120, templet: function(d){
+	        { title: 'JS内容', width: 120, templet: function(d){
 	        	if(!isNull(d.jsContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsContent"></i>';
 	        	}else{
