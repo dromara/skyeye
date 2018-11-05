@@ -87,7 +87,8 @@ public class Constants {
 	/**
 	 * 保存模板说明的redis的key
 	 */
-	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTOCODEMODEL = "exexplaintocodemodel";
+	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTOCODEMODEL = "exexplaintocodemodel";//代码生成器模板规范说明key
+	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTODSFORMCONTENT = "exexplaintodsformcontent";//动态表单内容项模板规范说明key
 	
 
 }

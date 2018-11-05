@@ -397,6 +397,19 @@
 	</url>
 	<url id="exexplaintocodemodel004" path="/post/ExExplainToCodeModelController/queryExExplainToCodeModelMationToShow" val="获取代码生成器说明信息供展示" allUse="1">
 	</url>
+	<url id="exexplaintodsformcontent001" path="/post/ExExplainToDsFormContentController/insertExExplainToDsFormContentMation" val="添加动态表单内容项说明信息" allUse="1">
+		<property id="title" name="title" ref="required" var="动态表单内容项说明标题"/>
+		<property id="content" name="content" ref="required" var="动态表单内容项说明内容"/>
+	</url>
+	<url id="exexplaintodsformcontent002" path="/post/ExExplainToDsFormContentController/queryExExplainToDsFormContentMation" val="编辑动态表单内容项说明信息时进行回显" allUse="1">
+	</url>
+	<url id="exexplaintodsformcontent003" path="/post/ExExplainToDsFormContentController/editExExplainToDsFormContentMationById" val="编辑动态表单内容项说明信息" allUse="1">
+		<property id="title" name="title" ref="required" var="动态表单内容项说明标题"/>
+		<property id="content" name="content" ref="required" var="动态表单内容项说明内容"/>
+	    <property id="rowId" name="id" ref="required" var="动态表单内容项说明id"/>
+	</url>
+	<url id="exexplaintodsformcontent004" path="/post/ExExplainToDsFormContentController/queryExExplainToDsFormContentMationToShow" val="获取动态表单内容项说明信息供展示" allUse="1">
+	</url>
 	<!-- 系统各部分说明结束 -->
 	
 </controller>

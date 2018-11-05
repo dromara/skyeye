@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import com.skyeye.exexplain.dao.ExExplainToCodeModelDao;
 import com.skyeye.exexplain.service.ExExplainToCodeModelService;
 import com.skyeye.jedis.JedisClient;
-
 import net.sf.json.JSONObject;
-
 import com.alibaba.fastjson.JSON;
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
