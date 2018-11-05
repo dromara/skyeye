@@ -1,13 +1,8 @@
 package com.skyeye.common.service.impl;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,23 +10,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.dao.CommonDao;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.service.CommonService;
 import com.skyeye.common.util.ToolUtil;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -246,23 +236,6 @@ public class CommonServiceImpl implements CommonService{
 		}
 		out.close();
 		commonDao.insertCodeModelHistory(inBeans);
-		
-//		//下载
-//		//获取输入流  
-//		InputStream bis = new BufferedInputStream(new FileInputStream(new File(strZipPath)));
-//		inputObject.getResponse().setHeader("REQUESTMATION", "DOWNLOAD");
-//		// 转码，免得文件名中文乱码
-//		String filename = URLEncoder.encode(zipName, "UTF-8");
-//		// 设置文件下载头
-//		inputObject.getResponse().addHeader("Content-Disposition", "attachment;filename=" + filename);
-//		// 1.设置文件ContentType类型，这样设置，会自动判断下载文件类型
-//		inputObject.getResponse().setContentType("multipart/form-data");
-//		BufferedOutputStream out1 = new BufferedOutputStream(inputObject.getResponse().getOutputStream());
-//		int len = 0;
-//		while ((len = bis.read()) != -1) {
-//			out1.write(len);
-//			out1.flush();
-//		}
 	}
 	
 }

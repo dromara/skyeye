@@ -31,7 +31,7 @@ layui.config({
 	        { field: 'modelNum', title: '模板数量', width: 120 },
 	        { field: 'useNum', title: '调用次数', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
-	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+	        { title: '操作', fixed: 'right', align: 'center', width: 280, toolbar: '#tableBar'}
 	    ]]
 	});
 	
@@ -55,6 +55,8 @@ layui.config({
 	            area: ['800px', '500px'],
 	            content: data.groupDesc,
 	        });
+        }else if (layEvent === 'createHistory') {//生成历史
+        	createHistory(data);
         }
     });
 	
@@ -110,6 +112,17 @@ layui.config({
 			title: "模板管理",
 			maxmin: true,
 			pageId: "codemodelgroupmodelconcle",
+		});
+	}
+	
+	//生成历史
+	function createHistory(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/codemodelhistory/codemodelhistorylist.html", 
+			title: "生成历史",
+			maxmin: true,
+			pageId: "codemodelhistorylist",
 		});
 	}
 	

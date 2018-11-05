@@ -139,7 +139,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{groupName:$("#groupName").val(), groupNum:$("#groupNum").val()}});
+    	table.reload("messageTable", {where:{groupId:groupId}});
     }
     
     exports('codemodellist', {});

@@ -1104,7 +1104,6 @@ function js_beautify(js_source_text, indent_size, indent_character, indent_level
 }
 
 
-
 	
 
 

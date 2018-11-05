@@ -343,6 +343,17 @@
 	<url id="codemodel014" path="/post/CommonController/downloadFileByJsonData" val="代码生成器生成下载文件" allUse="1">
 		<property id="jsonData" name="jsonData" ref="required" var="json数据"/>
 	</url>
+	<url id="codemodel015" path="/post/CodeModelHistoryController/queryCodeModelHistoryList" val="获取模板生成历史列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="groupId" name="groupId" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel016" path="/post/CodeModelHistoryController/insertCodeModelHistoryCreate" val="重新生成文件" allUse="1">
+		<property id="filePath" name="filePath" ref="required" var="文件路径名"/>
+	</url>
+	<url id="codemodel017" path="/post/CodeModelHistoryController/downloadCodeModelHistory" val="下载文件" allUse="0">
+		<property id="filePath" name="filePath" ref="required" var="文件路径名"/>
+	</url>
 	<!-- 代码生成器系列结束 -->
 	
 </controller>
