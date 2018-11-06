@@ -33,6 +33,18 @@
                 </div>
 	        </div>
 	        <div class="layui-form-item">
+	            <label class="layui-form-label">文本提示<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" id="placeholderName" name="placeholderName" placeholder="请输入文本提示" class="layui-input" maxlength="20"/>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">默认值<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" id="valueName" name="valueName" placeholder="请输入默认值" class="layui-input" maxlength="20"/>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
 	            <label class="layui-form-label">HTML模板展示</label>
 	            <div class="layui-input-block">
                 	<textarea id="htmlModelEditor" name="htmlModelEditor"></textarea>
@@ -59,7 +71,7 @@
 	        <div class="layui-form-item">
 	            <div class="layui-input-block">
 	                <button class="winui-btn" id="cancle">取消</button>
-	                <button class="winui-btn" lay-submit lay-filter="formAddBean">保存</button>
+	                <button class="winui-btn" lay-submit lay-filter="formAddBean">加入模板</button>
 	            </div>
 	        </div>
 	    </form>

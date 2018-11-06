@@ -1115,6 +1115,15 @@ function showDataUseHandlebars(id, source, data){
 	layui.$("#" + id).html(html);
 }
 
+function getDataUseHandlebars(source, data){
+	//预编译模板
+	var template = Handlebars.compile(source);
+	//匹配json内容
+	var html = template(data);
+	//输入模板
+	return html;
+}
+
 
 	
 

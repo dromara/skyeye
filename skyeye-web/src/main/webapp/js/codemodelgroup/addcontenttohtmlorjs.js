@@ -1,4 +1,6 @@
 
+var params = '';
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -16,7 +18,7 @@ layui.config({
 		form.render('select');
 		
 		form.on('select(tableColumn)', function(data){
- 			console.log(1);
+			returnResult();
  		});
 		
 		form.on('select(showModel)', function(data){
@@ -35,7 +37,7 @@ layui.config({
     					jsSuccessEditor.setOption('mode', mode);
     				} 
     				jsModelEditor.setValue(json.bean.jsContent);
-    				
+    				returnResult();
     			}else{
     				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
     			}
@@ -43,7 +45,7 @@ layui.config({
  		});
 		
 		form.on('checkbox(checkboxLimit)', function(data){
- 			console.log(2);
+			returnResult();
  		});
 		
 		//展现形式
@@ -127,15 +129,79 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
-	        	
+	        	var result = {
+        			formermation: params.require,
+        			aftermation: params.aftermation,
+        			htmlContent: htmlSuccessEditor.getValue(),
+        			jsContent: jsSuccessEditor.getValue(),
+	        	};
+	        	parent.result = result;
+	        	parent.layer.close(index);
+				parent.refreshCode = '0';
 	        }
 	        return false;
 	    });
+	    
+	    $("body").on("keyup", "#placeholderName", function(e){
+	    	returnResult();
+	    });
+	    
+	    $("body").on("keyup", "#valueName", function(e){
+	    	returnResult();
+	    })
+	    
+	    function returnResult(){
+	    	var tableColumn = $("#tableColumn").val();
+	    	var labelName = "", id = "", name = "", formermation = "", aftermation = "";
+	    	if(!isNull(tableColumn)){
+	    		labelName = tableColumn.split('--')[0];
+	    		id = replaceUnderLineAndUpperCase(tableColumn.split('--')[1]);
+	    		name = replaceUnderLineAndUpperCase(tableColumn.split('--')[1]);
+	    	}
+	    	
+	    	if(!isNull(htmlModelEditor.getValue())){
+	    		$.each($('input:checkbox:checked'),function(){
+		    		formermation = formermation + $(this).attr("formermation") + "|";
+		    		aftermation = aftermation + $(this).attr("aftermation") + ",";
+	            });
+	    		params = {
+    				labelContent: labelName,
+    				id: id,
+    				name: name,
+    				require: formermation,
+    				aftermation: aftermation,
+    				value: $("#valueName").val(),
+    				placeholder: $("#placeholderName").val(),
+	    		};
+	    		htmlSuccessEditor.setValue(getDataUseHandlebars(htmlModelEditor.getValue(), params));
+	    		if(!isNull(jsModelEditor.getValue())){
+	    			jsSuccessEditor.setValue(getDataUseHandlebars(jsModelEditor.getValue(), params));
+	    		}
+	    	}
+	    }
 	    
 	    //取消
 	    $("body").on("click", "#cancle", function(){
 	    	parent.layer.close(index);
 	    });
+	    
+	    /**
+	     * 将字段转为Java经常使用的名字，如code_model转codeModel
+	     */
+	    function replaceUnderLineAndUpperCase(str){
+	    	str = str.split("");
+	    	var count = str.indexOf("_");
+	    	while (count != 0) {
+				var num = str.indexOf("_", count);
+				count = num + 1;
+				if (num != -1) {
+					var ss = str[count];
+					var ia = ss.toUpperCase();
+					str.splice(count, 1, ia);
+				}
+			}
+	    	return str.join("").replace(/[_]/g, "");
+	    }
 	    
 	});
 	    

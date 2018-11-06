@@ -1,6 +1,8 @@
 
 var tableColumn = '';//数据库表中的列
 
+var result = '';//html/xml/js添加的内容项
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -195,7 +197,7 @@ layui.config({
 			pageId: "addcontenttohtmlorjs",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	
+                	console.log(result);
                 } else if (refreshCode == '-9999') {
                 	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
                 }
