@@ -381,6 +381,30 @@
 		<property id="jsContent" name="jsContent" ref="" var="js内容"/>
 	    <property id="rowId" name="id" ref="required" var="动态表单内容id"/>
 	</url>
+	<url id="dsformlimitrequirement001" path="/post/DsFormLimitRequirementController/queryDsFormLimitRequirementList" val="获取动态表单条件限制类型列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="requireName" name="requireName" ref="" var="类型名称"/>
+	    <property id="formerRequirement" name="formerRequirement" ref="" var="前端限制条件标签"/>
+	    <property id="afterRequirement" name="afterRequirement" ref="" var="后端限制条件标签"/>
+	</url>
+	<url id="dsformlimitrequirement002" path="/post/DsFormLimitRequirementController/insertDsFormLimitRequirementMation" val="添加动态表单条件限制类型信息" allUse="1">
+		<property id="requireName" name="requireName" ref="required" var="类型名称"/>
+	    <property id="formerRequirement" name="formerRequirement" ref="required" var="前端限制条件标签"/>
+	    <property id="afterRequirement" name="afterRequirement" ref="required" var="后端限制条件标签"/>
+	</url>
+	<url id="dsformlimitrequirement003" path="/post/DsFormLimitRequirementController/deleteDsFormLimitRequirementMationById" val="删除动态表单条件限制类型信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单条件限制类型id"/>
+	</url>
+	<url id="dsformlimitrequirement004" path="/post/DsFormLimitRequirementController/queryDsFormLimitRequirementMationToEditById" val="编辑动态表单条件限制类型信息时进行回显" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单条件限制类型id"/>
+	</url>
+	<url id="dsformlimitrequirement005" path="/post/DsFormLimitRequirementController/editDsFormLimitRequirementMationById" val="编辑动态表单条件限制类型信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单条件限制类型id"/>
+	    <property id="requireName" name="requireName" ref="required" var="类型名称"/>
+	    <property id="formerRequirement" name="formerRequirement" ref="required" var="前端限制条件标签"/>
+	    <property id="afterRequirement" name="afterRequirement" ref="required" var="后端限制条件标签"/>
+	</url>
 	<!-- 动态表单系列结束 -->
 	
 	<!-- 系统各部分说明开始 -->
