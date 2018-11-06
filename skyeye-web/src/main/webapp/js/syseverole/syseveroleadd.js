@@ -13,7 +13,7 @@ layui.config({
 	    
 		form.render();
 		
-	    form.on('submit(formAddMenu)', function (data) {
+	    form.on('submit(formAddBean)', function (data) {
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
 	        	var tree = $.fn.zTree.getZTreeObj("treeDemo");

@@ -39,7 +39,7 @@ layui.config({
 		            }
 		        });
 		 		form.render();
-		 	    form.on('submit(formEditUser)', function (data) {
+		 	    form.on('submit(formEditBean)', function (data) {
 		 	    	//表单验证
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
