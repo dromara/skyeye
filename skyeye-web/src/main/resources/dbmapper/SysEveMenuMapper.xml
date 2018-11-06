@@ -35,14 +35,25 @@
 			AND INSTR(CONCAT(',', a.menu_parent_id, ','), CONCAT(',', #{parentId}, ','))
 		</if>
 		GROUP BY a.id
-		ORDER BY a.create_time DESC
+		ORDER BY a.order_num ASC
+	</select>
+	
+	<select id="querySysMenuAfterOrderBumByParentId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_num orderNum
+		FROM
+			sys_eve_menu a
+		WHERE
+			a.menu_parent_id = #{parentId}
+		ORDER BY a.order_num DESC 
+		LIMIT 1
 	</select>
 	
 	<insert id="insertSysMenuMation" parameterType="java.util.Map">
 	     INSERT into sys_eve_menu 
-	     (id, menu_name, title_name, menu_icon, menu_url, menu_type, menu_sys_type, menu_parent_id, menu_level, open_type, creater, create_time)
+	     (id, menu_name, title_name, menu_icon, menu_url, menu_type, menu_sys_type, menu_parent_id, menu_level, open_type, order_num, creater, create_time)
 	     VALUES
-	     (#{id}, #{menuName}, #{titleName}, #{menuIcon}, #{menuUrl}, #{menuType}, #{menuSysType}, #{parentId}, #{menuLevel}, #{openType}, #{createId}, #{createTime})
+	     (#{id}, #{menuName}, #{titleName}, #{menuIcon}, #{menuUrl}, #{menuType}, #{menuSysType}, #{parentId}, #{menuLevel}, #{openType}, #{orderNum}, #{createId}, #{createTime})
 	</insert>
 	
 	<select id="querySysMenuMationBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
@@ -60,6 +71,7 @@
 			AND b.id = #{parentId}
 			AND (b.menu_level + 1) = a.menu_level
 		</if>
+		ORDER BY a.order_num ASC
 	</select>
 	
 	<select id="querySysMenuMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
@@ -108,6 +120,9 @@
 			<if test="openType != '' and openType != null">
 				open_type = #{openType},
 			</if>
+			<if test="orderNum != '' and orderNum != null">
+				order_num = #{orderNum},
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>
@@ -152,6 +167,7 @@
 			AND b.id = #{parentId}
 			AND (b.menu_level + 1) = a.menu_level
 		</if>
+		ORDER BY a.order_num ASC
 	</select>
 	
 	<select id="querySysMenuLevelList" parameterType="java.util.Map" resultType="java.util.Map">
@@ -161,6 +177,15 @@
 		FROM
 			sys_eve_menu a
 		GROUP BY a.menu_level
+	</select>
+	
+	<select id="queryOldParentIdById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.menu_parent_id parentId
+		FROM
+			sys_eve_menu a
+		WHERE
+			a.id = #{id}
 	</select>
 	
 </mapper>

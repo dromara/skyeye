@@ -70,6 +70,16 @@ public class SysEveMenuServiceImpl implements SysEveMenuService{
 			String[] str = map.get("parentId").toString().split(",");
 			map.put("menuLevel", str.length);
 		}
+		Map<String, Object> orderNum = sysEveMenuDao.querySysMenuAfterOrderBumByParentId(map);
+		if(orderNum == null){
+			map.put("orderNum", 0);
+		}else{
+			if(orderNum.containsKey("orderNum")){
+				map.put("orderNum", Integer.parseInt(orderNum.get("orderNum").toString()) + 1);
+			}else{
+				map.put("orderNum", 0);
+			}
+		}
 		map.put("id", ToolUtil.getSurFaceId());
 		map.put("createTime", ToolUtil.getTimeAndToString());
 		map.put("createId", user.get("id"));
@@ -140,6 +150,19 @@ public class SysEveMenuServiceImpl implements SysEveMenuService{
 		}else{
 			String[] str = map.get("parentId").toString().split(",");
 			map.put("menuLevel", str.length);
+		}
+		Map<String, Object> oldParent = sysEveMenuDao.queryOldParentIdById(map);
+		if(!oldParent.get("parentId").toString().equals(map.get("parentId").toString())){//修改之后不再是之前父类的子菜单
+			Map<String, Object> orderNum = sysEveMenuDao.querySysMenuAfterOrderBumByParentId(map);
+			if(orderNum == null){
+				map.put("orderNum", 0);
+			}else{
+				if(orderNum.containsKey("orderNum")){
+					map.put("orderNum", Integer.parseInt(orderNum.get("orderNum").toString()) + 1);
+				}else{
+					map.put("orderNum", 0);
+				}
+			}
 		}
 		sysEveMenuDao.editSysMenuMationById(map);
 	}

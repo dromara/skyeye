@@ -140,6 +140,7 @@
 		AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
 		AND b.menu_id = c.id AND c.menu_sys_type = '1'
 		GROUP BY c.id
+		ORDER BY c.order_num ASC
 	</select>
 	
 	<select id="queryAllMenuByUserId" parameterType="java.util.Map" resultType="java.util.Map">
@@ -164,7 +165,7 @@
 		AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
 		AND b.menu_id = c.id
 		GROUP BY c.id
-		ORDER BY LENGTH(c.menu_parent_id) ASC
+		ORDER BY c.order_num ASC
 	</select>
 	
 </mapper>

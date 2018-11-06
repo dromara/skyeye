@@ -27,4 +27,8 @@ public interface SysEveMenuDao {
 
 	public List<Map<String, Object>> querySysMenuLevelList(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> querySysMenuAfterOrderBumByParentId(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryOldParentIdById(Map<String, Object> map) throws Exception;
+
 }
