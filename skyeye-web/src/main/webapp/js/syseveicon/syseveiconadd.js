@@ -11,7 +11,7 @@ layui.config({
 	    
 		form.render();
 		
-	    form.on('submit(formAddIcon)', function (data) {
+	    form.on('submit(formAddBean)', function (data) {
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {

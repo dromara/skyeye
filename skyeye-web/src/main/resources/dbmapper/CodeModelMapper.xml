@@ -25,6 +25,7 @@
 			code_model a
 		WHERE a.group_id = #{groupId}
 			AND a.model_name = #{modelName}
+			AND a.model_type = #{modelType}
 	</select>
 	
 	<insert id="insertCodeModelMation" parameterType="java.util.Map">
