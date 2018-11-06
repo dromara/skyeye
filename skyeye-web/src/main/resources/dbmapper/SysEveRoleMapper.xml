@@ -29,6 +29,7 @@
 			'true' open
 		FROM
 			sys_eve_menu a
+		ORDER BY a.order_num ASC
 	</select>
 	
 	<select id="querySysRoleNameByName" parameterType="java.util.Map" resultType="java.util.Map">
