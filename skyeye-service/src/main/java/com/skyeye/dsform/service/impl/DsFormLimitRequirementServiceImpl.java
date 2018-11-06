@@ -118,5 +118,25 @@ public class DsFormLimitRequirementServiceImpl implements DsFormLimitRequirement
 			outputObject.setreturnMessage("该动态表单条件限制类型名称已存在，不可进行二次保存");
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: queryDsFormLimitRequirementMationToShow
+	     * @Description: 获取动态表单内容供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryDsFormLimitRequirementMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = dsFormLimitRequirementDao.queryDsFormLimitRequirementMationToShow(map);
+		if(beans != null){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
 	
 }

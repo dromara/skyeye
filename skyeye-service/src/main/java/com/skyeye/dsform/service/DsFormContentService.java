@@ -15,4 +15,8 @@ public interface DsFormContentService {
 
 	public void editDsFormContentMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryDsFormContentMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void queryDsFormContentDetailedMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

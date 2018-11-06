@@ -88,4 +88,16 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryDsFormLimitRequirementMationToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` requireName,
+			a.former_requirement formerRequirement,
+			a.after_requirement afterRequirement,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			ds_form_limit_requirement a
+		ORDER BY a.create_time DESC
+	</select>
+	
 </mapper>

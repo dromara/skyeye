@@ -1,5 +1,6 @@
 
-var rowId = "";
+var tableColumn = '';//数据库表中的列
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -15,6 +16,8 @@ layui.config({
 	var jsCreateClick = false;//是否检索生成
 	
 	var editId = "";//当前编辑的模板id
+	
+	$("#addContentToHTMLorJS").hide();
 	
 	var list = [];//存储模板生成集合
 	//集合内容
@@ -120,6 +123,11 @@ layui.config({
 	 				if(isNull(s)){
 	 					top.winui.window.msg('请先转换模板', {icon: 2,time: 2000});
 	 				}else{
+	 					if(row.modelType == 'xml' || row.modelType == 'javascript' || row.modelType == 'htmlmixed' || row.modelType == 'htmlhh'){
+	 						$("#addContentToHTMLorJS").show();
+	 					}else{
+	 						$("#addContentToHTMLorJS").hide();
+	 					}
 	 					editId = row.id;
 	 					var mode = returnModel(row.modelType);
 	 					if (!isNull(mode.length)) {
@@ -179,6 +187,21 @@ layui.config({
 		}
 	});
 	
+	//给html、xml或者js添加内容
+	$("body").on("click", "#addContentToHTMLorJS", function(e){
+		_openNewWindows({
+			url: "../../tpl/codemodelgroup/addcontenttohtmlorjs.html", 
+			title: "添加内容",
+			pageId: "addcontenttohtmlorjs",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+	});
+	
 	//txtcenter DIV内的输入框内容变化事件
 	$("body").on("keyup", ".txtcenter input", function(e){
 		for(var i = 0; i < list.length; i++){
@@ -204,6 +227,7 @@ layui.config({
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
     	 	ajaxSendAfter:function(json){
+    	 		tableColumn = json;
     	 		AjaxPostUtil.request({url:reqBasePath + "codemodel012", params:{tableName: $("#tableName").val()}, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				$(".createResult").removeClass("layui-btn-normal");

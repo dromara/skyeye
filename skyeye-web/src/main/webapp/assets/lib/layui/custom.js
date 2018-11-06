@@ -1103,6 +1103,18 @@ function js_beautify(js_source_text, indent_size, indent_character, indent_level
 
 }
 
+/**
+ * 根据数据展示
+ */
+function showDataUseHandlebars(id, source, data){
+	//预编译模板
+	var template = Handlebars.compile(source);
+	//匹配json内容
+	var html = template(data);
+	//输入模板
+	layui.$("#" + id).html(html);
+}
+
 
 	
 

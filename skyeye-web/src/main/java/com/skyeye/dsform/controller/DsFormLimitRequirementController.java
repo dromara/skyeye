@@ -94,4 +94,20 @@ public class DsFormLimitRequirementController {
 		dsFormLimitRequirementService.editDsFormLimitRequirementMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryDsFormLimitRequirementMationToShow
+	     * @Description: 获取动态表单内容供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DsFormLimitRequirementController/queryDsFormLimitRequirementMationToShow")
+	@ResponseBody
+	public void queryDsFormLimitRequirementMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dsFormLimitRequirementService.queryDsFormLimitRequirementMationToShow(inputObject, outputObject);
+	}
+	
 }

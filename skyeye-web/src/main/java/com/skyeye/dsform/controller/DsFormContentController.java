@@ -94,4 +94,36 @@ public class DsFormContentController {
 		dsFormContentService.editDsFormContentMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryDsFormContentMationToShow
+	     * @Description: 获取动态表单内容供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DsFormContentController/queryDsFormContentMationToShow")
+	@ResponseBody
+	public void queryDsFormContentMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dsFormContentService.queryDsFormContentMationToShow(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: queryDsFormContentDetailedMationToShow
+	     * @Description: 获取动态表单内容详细信息供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DsFormContentController/queryDsFormContentDetailedMationToShow")
+	@ResponseBody
+	public void queryDsFormContentDetailedMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dsFormContentService.queryDsFormContentDetailedMationToShow(inputObject, outputObject);
+	}
+	
 }

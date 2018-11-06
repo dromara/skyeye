@@ -82,5 +82,29 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryDsFormContentMationToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			ds_form_content a
+		WHERE 1 = 1
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryDsFormContentDetailedMationToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` contentName,
+			a.html_content htmlContent,
+			a.html_type htmlType,
+			a.js_content jsContent,
+			a.js_type jsType,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			ds_form_content a
+		WHERE a.id = #{id}
+	</select>
+	
 	
 </mapper>

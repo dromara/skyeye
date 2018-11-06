@@ -381,6 +381,11 @@
 		<property id="jsContent" name="jsContent" ref="" var="js内容"/>
 	    <property id="rowId" name="id" ref="required" var="动态表单内容id"/>
 	</url>
+	<url id="dsform006" path="/post/DsFormContentController/queryDsFormContentMationToShow" val="获取动态表单内容供展示" allUse="1">
+	</url>
+	<url id="dsform007" path="/post/DsFormContentController/queryDsFormContentDetailedMationToShow" val="获取动态表单内容详细信息供展示" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单内容id"/>
+	</url>
 	<url id="dsformlimitrequirement001" path="/post/DsFormLimitRequirementController/queryDsFormLimitRequirementList" val="获取动态表单条件限制类型列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
@@ -404,6 +409,8 @@
 	    <property id="requireName" name="requireName" ref="required" var="类型名称"/>
 	    <property id="formerRequirement" name="formerRequirement" ref="required" var="前端限制条件标签"/>
 	    <property id="afterRequirement" name="afterRequirement" ref="required" var="后端限制条件标签"/>
+	</url>
+	<url id="dsformlimitrequirement006" path="/post/DsFormLimitRequirementController/queryDsFormLimitRequirementMationToShow" val="获取动态表单内容供展示" allUse="1">
 	</url>
 	<!-- 动态表单系列结束 -->
 	

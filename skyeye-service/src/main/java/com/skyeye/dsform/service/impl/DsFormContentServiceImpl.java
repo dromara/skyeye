@@ -118,5 +118,42 @@ public class DsFormContentServiceImpl implements DsFormContentService{
 			outputObject.setreturnMessage("该动态表单内容名称已存在，不可进行二次保存");
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: queryDsFormContentMationToShow
+	     * @Description: 获取动态表单内容供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryDsFormContentMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = dsFormContentDao.queryDsFormContentMationToShow(map);
+		if(beans != null){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryDsFormContentDetailedMationToShow
+	     * @Description: 获取动态表单内容详细信息供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryDsFormContentDetailedMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = dsFormContentDao.queryDsFormContentDetailedMationToShow(map);
+		outputObject.setBean(bean);
+	}
 	
 }

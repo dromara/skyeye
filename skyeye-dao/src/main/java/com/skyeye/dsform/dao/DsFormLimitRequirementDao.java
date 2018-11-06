@@ -20,4 +20,6 @@ public interface DsFormLimitRequirementDao {
 
 	public int editDsFormLimitRequirementMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryDsFormLimitRequirementMationToShow(Map<String, Object> map) throws Exception;
+
 }

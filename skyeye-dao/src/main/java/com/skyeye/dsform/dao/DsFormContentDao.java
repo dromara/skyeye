@@ -20,4 +20,8 @@ public interface DsFormContentDao {
 
 	public int editDsFormContentMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryDsFormContentMationToShow(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryDsFormContentDetailedMationToShow(Map<String, Object> map) throws Exception;
+
 }

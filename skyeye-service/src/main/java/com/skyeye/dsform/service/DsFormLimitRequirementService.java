@@ -15,4 +15,6 @@ public interface DsFormLimitRequirementService {
 
 	public void editDsFormLimitRequirementMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryDsFormLimitRequirementMationToShow(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }
