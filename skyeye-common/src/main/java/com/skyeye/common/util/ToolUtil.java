@@ -226,6 +226,20 @@ public class ToolUtil {
 	
 	/**
 	 * 
+	     * @Title: isDouble
+	     * @Description: 验证小数点后两位,一般用于金钱验证
+	     * @param @param str
+	     * @param @return    参数
+	     * @return boolean    返回类型
+	     * @throws
+	 */
+	public static boolean isDouble(String str) {
+		String regex = "^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$";
+		return match(regex, str);
+	}
+	
+	/**
+	 * 
 	     * @Title: getTimeAndToString
 	     * @Description: 获取当前日期(2016-12-29 11:23:09)
 	     * @param @return    参数
@@ -313,6 +327,11 @@ public class ToolUtil {
 				if (!ToolUtil.isBlank(str))
 					if(!ToolUtil.isPostalcode(str))
 						return "国内邮编类型不正确";
+				break;
+			case ObjectConstant.DOUBLE://验证小数点后两位,一般用于金钱验证不正确
+				if (!ToolUtil.isBlank(str))
+					if(!ToolUtil.isDouble(str))
+						return "小数格式类型不正确";
 				break;
 			default:
 				break;

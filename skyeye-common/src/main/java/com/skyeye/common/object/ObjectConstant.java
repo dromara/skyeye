@@ -19,5 +19,6 @@ public class ObjectConstant {
 	public static final String URL = "url";//请求参数url校验
 	public static final String IP = "ip";//请求参数ip校验
 	public static final String POSTCODE = "postcode";//请求参数国内邮编校验
+	public static final String DOUBLE = "double";//请求参数验证小数点后两位,一般用于金钱验证
 	
 }

@@ -7,6 +7,7 @@ phone		手机号校验
 url			url校验
 ip			ip地址校验
 postcode	国内邮编校验
+double		验证小数点后两位,一般用于金钱验证
 
 状态码属性：  HTML->CSS    新建：state-new    线上：state-up    线下：state-down   错误码：state-error
 
