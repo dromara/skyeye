@@ -4,7 +4,7 @@
 	        <div>
 	            <label class="layui-form-label" relation="{{id}}" thiscontent="{{modelName}}">{{modelName}}<i class="red">*</i></label>
 	            <div class="layui-input-block">
-	            	<input type="text" id="{{id}}" name="{{id}}" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" maxlength="50"/>
+	            	<input type="text" id="{{id}}" name="{{id}}" modeltype="{{modelType}}" modelname="{{modelName}}" win-verify="required" placeholder="请选择数据库表检所生成" class="layui-input" maxlength="50"/>
 	            </div>
 	        </div>
 	    </div>

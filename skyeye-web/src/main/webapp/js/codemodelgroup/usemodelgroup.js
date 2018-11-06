@@ -125,7 +125,7 @@ layui.config({
 	 				if(isNull(s)){
 	 					top.winui.window.msg('请先转换模板', {icon: 2,time: 2000});
 	 				}else{
-	 					if(row.modelType == 'xml' || row.modelType == 'javascript' || row.modelType == 'htmlmixed' || row.modelType == 'htmlhh'){
+	 					if(row.modelType == 'xml' || row.modelType == 'javascript' || row.modelType == 'html'){
 	 						$("#addContentToHTMLorJS").show();
 	 					}else{
 	 						$("#addContentToHTMLorJS").hide();
@@ -249,7 +249,13 @@ layui.config({
     	 	   			//遍历模板
 						$('#modelList').find('li').each(function() {
 							var label = $(this).find("label");
-							$("#" + label.attr("relation")).val(json.bean.tableName + label.attr("thiscontent"));
+							if(($("#" + label.attr("relation")).attr('modeltype') == 'javascript'
+								|| $("#" + label.attr("relation")).attr('modeltype') == 'xml'
+								|| $("#" + label.attr("relation")).attr('modeltype') == 'html') && $("#" + label.attr("relation")).attr('modelname') != 'Mapper'){
+								$("#" + label.attr("relation")).val(json.bean.tableISlowerName + label.attr("thiscontent"));
+							}else{
+								$("#" + label.attr("relation")).val(json.bean.tableName + label.attr("thiscontent"));
+							}
 						});
 						top.winui.window.msg('检索成功', {icon: 1,time: 2000});
 	 	   			}else{
