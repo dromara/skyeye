@@ -329,6 +329,7 @@
 		<property id="modelContent" name="modelContent" ref="required" var="模板内容"/>
 		<property id="modelText" name="modelText" ref="required" var="模板纯文本"/>
 		<property id="groupId" name="groupId" ref="required" var="分组id"/>
+		<property id="modelType" name="modelType" ref="required" var="模板类型"/>
 		<property id="rowId" name="id" ref="required" var="模板id"/>
 	</url>
 	<url id="codemodel011" path="/post/CodeModelGroupController/queryTableParameterByTableName" val="根据表名获取表的相关信息" allUse="1">

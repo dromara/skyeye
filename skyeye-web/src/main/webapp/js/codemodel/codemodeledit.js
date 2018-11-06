@@ -71,6 +71,7 @@ layui.config({
 			        			modelName: $("#modelName").val(),
 			        			modelContent: encodeURI(editor.getValue()),
 			        			modelText: encodeURI(editor.getValue()),
+			        			modelType: $("#modelType").val(),
 			        			groupId: parent.groupId,
 			        			rowId: parent.rowId
 				        	};

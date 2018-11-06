@@ -64,6 +64,7 @@
 		WHERE a.id != #{id}
 			AND a.group_id = #{groupId}
 			AND a.model_name = #{modelName}
+			AND a.model_type = #{modelType}
 	</select>
 	
 	<update id="editCodeModelMationById" parameterType="java.util.Map">
