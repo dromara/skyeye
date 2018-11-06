@@ -15,6 +15,37 @@ layui.config({
 		showDataUseHandlebars("tableColumn", getFileContent('tpl/template/table-column.tpl'), parent.tableColumn);
 		form.render('select');
 		
+		form.on('select(tableColumn)', function(data){
+ 			console.log(1);
+ 		});
+		
+		form.on('select(showModel)', function(data){
+ 			AjaxPostUtil.request({url:reqBasePath + "dsform007", params:{rowId: data.value}, type:'json', callback:function(json){
+    			if(json.returnCode == 0){
+    				var mode = returnModel(json.bean.htmlType);
+    				if (!isNull(mode.length)) {
+    					htmlModelEditor.setOption('mode', mode);
+    					htmlSuccessEditor.setOption('mode', mode);
+    				} 
+    				htmlModelEditor.setValue(json.bean.htmlContent);
+    				
+    				mode = returnModel(json.bean.jsType);
+    				if (!isNull(mode.length)) {
+    					jsModelEditor.setOption('mode', mode);
+    					jsSuccessEditor.setOption('mode', mode);
+    				} 
+    				jsModelEditor.setValue(json.bean.jsContent);
+    				
+    			}else{
+    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			}
+    		}});
+ 		});
+		
+		form.on('checkbox(checkboxLimit)', function(data){
+ 			console.log(2);
+ 		});
+		
 		//展现形式
 		showGrid({
     	 	id: "showModel",
@@ -25,7 +56,7 @@ layui.config({
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
     	 	ajaxSendAfter:function(json){
-    	 		
+    	 		form.render('select');
     	 		//限制条件
     	 		showGrid({
 	 	    	 	id: "limitRequire",
@@ -36,32 +67,9 @@ layui.config({
 	 	    	 	ajaxSendLoadBefore: function(hdb){
 	 	    	 	},
 	 	    	 	ajaxSendAfter:function(json){
-	 	    	 		form.render();
+	 	    	 		form.render('checkbox');
 	 	    	 	}
 	 	        });
-    	 		
-    	 		form.on('select(selectParent)', function(data){
-    	 			AjaxPostUtil.request({url:reqBasePath + "dsform007", params:{rowId: data.value}, type:'json', callback:function(json){
-            			if(json.returnCode == 0){
-            				var mode = returnModel(json.bean.htmlType);
-            				if (!isNull(mode.length)) {
-            					htmlModelEditor.setOption('mode', mode);
-            					htmlSuccessEditor.setOption('mode', mode);
-            				} 
-            				htmlModelEditor.setValue(json.bean.htmlContent);
-            				
-            				mode = returnModel(json.bean.jsType);
-            				if (!isNull(mode.length)) {
-            					jsModelEditor.setOption('mode', mode);
-            					jsSuccessEditor.setOption('mode', mode);
-            				} 
-            				jsModelEditor.setValue(json.bean.jsContent);
-            				
-            			}else{
-            				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-            			}
-            		}});
-    	 		});
     	 	}
         });
 		
