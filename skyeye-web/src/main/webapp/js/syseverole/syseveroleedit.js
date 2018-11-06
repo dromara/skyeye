@@ -11,6 +11,8 @@ layui.config({
 		fsTree = layui.fsTree,
 		fsCommon = layui.fsCommon;
 	    
+	    var checkeRows = '';
+	    
 		form.render();
 		
 	    form.on('submit(formAddMenu)', function (data) {
@@ -57,47 +59,50 @@ layui.config({
 		var trees = {};
 		var treeDoms = $("ul.fsTree");
 		
-		if(treeDoms.length > 0) {
-			$(treeDoms).each(function(i) {
-				var treeId = $(this).attr("id");
-				var funcNo = $(this).attr("funcNo");
-				var url = $(this).attr("url");
-				var tree = fsTree.render({
-					id: treeId,
-					funcNo: funcNo,
-					url: url + "?userToken=" + getCookie('userToken'),
-					getTree: getTree,
-					checkEnable: true,
-					loadEnable: false
-				});
-				if(treeDoms.length == 1) {
-					trees[treeId] = tree;
-				} else {
-					//深度拷贝对象
-					trees[treeId] = $.extend(true, {}, tree);
-				}
-			});
-			//绑定按钮事件
-			fsCommon.buttonEvent("tree", getTree);
-			AjaxPostUtil.request({url:reqBasePath + "sys016", params:{rowId: parent.rowId}, type:'json', callback:function(json){
-	   			if(json.returnCode == 0){
-	   				$("#roleName").val(json.bean.roleName);
-	   				$("#roleDesc").val(json.bean.roleDesc);
-	   				var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
-				    var zTree = zTreeObj.getCheckedNodes(false);  
-				    for (var i = 0; i < zTree.length; i++) {
-				    	for(var j = 0; j < json.rows.length; j++){
-				    		if(zTree[i].id == json.rows[j].menuId){
-				    			zTreeObj.checkNode(zTree[i], true);
-				    			json.rows.splice(j, 1);
-				    		}
-				    	}
-				    }  
-	   			}else{
-	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-	   			}
-	   		}});
-		}
+		
+		AjaxPostUtil.request({url:reqBasePath + "sys016", params:{rowId: parent.rowId}, type:'json', callback:function(json){
+   			if(json.returnCode == 0){
+   				$("#roleName").val(json.bean.roleName);
+   				$("#roleDesc").val(json.bean.roleDesc);
+   				checkeRows = json.rows;
+   				if(treeDoms.length > 0) {
+   					$(treeDoms).each(function(i) {
+   						var treeId = $(this).attr("id");
+   						var funcNo = $(this).attr("funcNo");
+   						var url = $(this).attr("url");
+   						var tree = fsTree.render({
+   							id: treeId,
+   							funcNo: funcNo,
+   							url: url + "?userToken=" + getCookie('userToken'),
+   							getTree: getTree,
+   							checkEnable: true,
+   							loadEnable: false
+   						}, function(id){
+   							var zTreeObj = $.fn.zTree.getZTreeObj(id);
+   						    var zTree = zTreeObj.getCheckedNodes(false);  
+   						    for (var i = 0; i < zTree.length; i++) {
+   						    	for(var j = 0; j < checkeRows.length; j++){
+   						    		if(zTree[i].id == checkeRows[j].menuId){
+   						    			zTreeObj.checkNode(zTree[i], true);
+   						    			checkeRows.splice(j, 1);
+   						    		}
+   						    	}
+   						    }  
+   						});
+   						if(treeDoms.length == 1) {
+   							trees[treeId] = tree;
+   						} else {
+   							//深度拷贝对象
+   							trees[treeId] = $.extend(true, {}, tree);
+   						}
+   					});
+   					//绑定按钮事件
+   					fsCommon.buttonEvent("tree", getTree);
+   				}
+   			}else{
+   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			}
+   		}});
 		
 		function getTree(treeId) {
 			if($.isEmpty(trees)) {

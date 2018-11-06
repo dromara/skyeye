@@ -123,7 +123,6 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function(json){
-		 		console.log(json);
 		 		form.render('select');
 		 	}
 		});
@@ -146,6 +145,8 @@ layui.config({
 				clickCallback: onClickTree,
 				onDblClick: onClickTree,
 				getTree: getTree
+			}, function(id){
+				initLoadTable();
 			});
 			if(treeDoms.length == 1) {
 				trees[treeId] = tree;
@@ -158,8 +159,6 @@ layui.config({
 		fsCommon.buttonEvent("tree", getTree);
 	}
 	
-	initLoadTable();
-
 	function getTree(treeId) {
 		if($.isEmpty(trees)) {
 			fsCommon.warnMsg("未配置tree！");
@@ -186,6 +185,7 @@ layui.config({
 	//刷新数据
     $("body").on("click", "#reloadTable", function(){
     	loadTable();
+    	fsTree.refresh("treeDemo");
     });
     
     //新增菜单

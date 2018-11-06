@@ -13,13 +13,14 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				enable: true,//异步还是同步加载，默认同步
 				checkEnable: false,//是否显示复选框,默认为否
 				loadEnable: true,//数据是否异步加载,默认为是
+				callback:null,//回调函数
 			}
 		};
 
 	/**
 	 * 渲染tree
 	 */
-	FsTree.prototype.render = function(options) {
+	FsTree.prototype.render = function(options, callback) {
 		var _this = this;
 
 		$.extend(true, _this.config, options);
@@ -33,9 +34,11 @@ layui.define(['layer', "fsCommon"], function(exports) {
 		_this.config.treePIdKey = domTree.attr("treePIdKey");
 		_this.config.checkType = domTree.attr("checkType");
 		_this.config.isDrag = domTree.attr("isDrag"); //是否拖拽
+		_this.config.callback = callback;
 
 		_this.queryTree();
 		_this.rightMenu();
+		
 		return _this;
 	};
 
@@ -200,6 +203,11 @@ layui.define(['layer', "fsCommon"], function(exports) {
 
 		}
 		$.fn.zTree.init($("#" + _this.config.id), setting, data);
+		
+		if(typeof(_this.config.callback) == "function") {
+			_this.config.callback(_this.config.id);
+		}
+		
 	};
 
 	//查询菜单树列表
