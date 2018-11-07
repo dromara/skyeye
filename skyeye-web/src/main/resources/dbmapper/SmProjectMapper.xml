@@ -112,9 +112,9 @@
 			), '[]') groupList
 		FROM
 			rm_type a
-			LEFT JOIN rm_group b ON b.rm_type_id = a.id
+			LEFT JOIN (SELECT c.id, c.`name`, c.icon, c.rm_type_id FROM rm_group c ORDER BY c.sort DESC) b ON b.rm_type_id = a.id
 		GROUP BY a.id
-		ORDER BY a.sort DESC, b.sort DESC
+		ORDER BY a.sort DESC
 	</select>
 	
 	<select id="queryGroupMemberMationList" parameterType="java.util.Map" resultType="java.util.Map">
