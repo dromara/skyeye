@@ -24,39 +24,18 @@ layui.config({
         return false;
 	});
 	
-	//删除
-	function del(data, obj){
-		var msg = obj ? '确认删除菜单【' + obj.data.menuName + '】吗？' : '确认删除选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '删除系统菜单' }, function (index) {
-			layer.close(index);
-            //向服务端发送删除指令
-            AjaxPostUtil.request({url:reqBasePath + "sys011", params:{rowId: data.id}, type:'json', callback:function(json){
-    			if(json.returnCode == 0){
-    				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
-    				loadTable();
-    			}else{
-    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-    			}
-    		}});
-		});
-	}
-	
-	//编辑
-	function edit(data){
-		rowId = data.id;
-		_openNewWindows({
-			url: "../../tpl/sysevemenu/sysevemenuedit.html", 
-			title: "编辑菜单",
-			pageId: "sysevemenuedit",
-			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
-                }
-			}});
-	}
+	showGrid({
+	 	id: "menuLevel",
+	 	url: reqBasePath + "sys021",
+	 	params: {},
+	 	pagination: false,
+	 	template: getFileContent('tpl/template/select-option.tpl'),
+	 	ajaxSendLoadBefore: function(hdb){
+	 	},
+	 	ajaxSendAfter:function(json){
+	 		form.render('select');
+	 	}
+	});
 	
 	function initLoadTable(){
 		//表格渲染
@@ -100,7 +79,7 @@ layui.config({
 		        }},
 		        { field: 'createTime', title: '创建时间', width: 180 },
 		        { field: 'userName', title: '创建人', width: 150 },
-		        { title: '操作', fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
+		        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 		    ]]
 		});
 		
@@ -111,21 +90,13 @@ layui.config({
 	        	del(data, obj);
 	        }else if (layEvent === 'edit') { //编辑
 	        	edit(data);
+	        }else if (layEvent === 'top') { //上移
+	        	topOne(data);
+	        }else if (layEvent === 'lower') { //下移
+	        	lowerOne(data);
 	        }
 	    });
 		
-		showGrid({
-		 	id: "menuLevel",
-		 	url: reqBasePath + "sys021",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function(json){
-		 		form.render('select');
-		 	}
-		});
 	}
 	
 	/********* tree 处理   start *************/
@@ -188,6 +159,68 @@ layui.config({
     	fsTree.refresh("treeDemo");
     });
     
+    //删除
+	function del(data, obj){
+		var msg = obj ? '确认删除菜单【' + obj.data.menuName + '】吗？' : '确认删除选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '删除系统菜单' }, function (index) {
+			layer.close(index);
+            //向服务端发送删除指令
+            AjaxPostUtil.request({url:reqBasePath + "sys011", params:{rowId: data.id}, type:'json', callback:function(json){
+    			if(json.returnCode == 0){
+    				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
+    				loadTable();
+    				fsTree.refresh("treeDemo");
+    			}else{
+    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			}
+    		}});
+		});
+	}
+	
+	//编辑
+	function edit(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/sysevemenu/sysevemenuedit.html", 
+			title: "编辑菜单",
+			pageId: "sysevemenuedit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                	fsTree.refresh("treeDemo");
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+	}
+	
+	//上移
+	function topOne(data){
+		AjaxPostUtil.request({url:reqBasePath + "sys022", params:{rowId: data.id}, type:'json', callback:function(json){
+			if(json.returnCode == 0){
+				top.winui.window.msg("上移成功", {icon: 1,time: 2000});
+				loadTable();
+				fsTree.refresh("treeDemo");
+			}else{
+				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			}
+		}});
+	}
+	
+	//下移
+	function lowerOne(data){
+		AjaxPostUtil.request({url:reqBasePath + "sys023", params:{rowId: data.id}, type:'json', callback:function(json){
+			if(json.returnCode == 0){
+				top.winui.window.msg("下移成功", {icon: 1,time: 2000});
+				loadTable();
+				fsTree.refresh("treeDemo");
+			}else{
+				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			}
+		}});
+	}
+    
     //新增菜单
     $("body").on("click", "#addBean", function(){
     	_openNewWindows({
@@ -198,6 +231,7 @@ layui.config({
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
                 	loadTable();
+                	fsTree.refresh("treeDemo");
                 } else if (refreshCode == '-9999') {
                 	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
                 }
