@@ -145,7 +145,7 @@ public class SmProjectServiceImpl implements SmProjectService{
 	/**
 	 * 
 	     * @Title: queryGroupMationList
-	     * @Description: 获取小程序组信息
+	     * @Description: 获取小程序组信息供展示
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
