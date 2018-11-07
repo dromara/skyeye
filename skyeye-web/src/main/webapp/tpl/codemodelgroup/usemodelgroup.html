@@ -96,7 +96,7 @@
 		    	<div class="winui-toolbar">
 			        <div class="winui-tool">参数设置(最终保存内容)<button type="button" class="layui-btn layui-btn-xs" style="float: right;" id="addContentToHTMLorJS">添加参数</button></div>
 			    </div>
-			    <div class="layui-row" style="height: 100%">
+			    <div class="layui-row" style="height: calc(100vh - 75px);">
 			    	<textarea id="textContent"></textarea>
 			    </div>
 	    	</div>
@@ -111,11 +111,31 @@
 				</table>
 			</div>
 	    </div>
-	    <div class="layui-row" style="height: 120px">
-	    	<div class="winui-toolbar">
-		        <div class="winui-tool">请求链接</div>
-		    </div>
-		    
+	    <div class="layui-row" style="height: 150px">
+	    	<div class="layui-col-xs3 left-menu">
+	    		<div class="winui-toolbar">
+			        <div class="winui-tool">限制条件</div>
+			    </div>
+			    <div class="layui-row" style="height: calc(42vh - 85px);">
+			    	<textarea id="showCreateRequireMation"></textarea>
+			    </div>
+	    	</div>
+	    	<div class="layui-col-xs6 center-content">
+		    	<div class="winui-toolbar">
+			        <div class="winui-tool">html代码</div>
+			    </div>
+			    <div class="layui-row" style="height: calc(42vh - 85px);">
+			    	<textarea id="showCreateHtmlMation"></textarea>
+			    </div>
+	    	</div>
+	    	<div class="layui-col-xs3 right-menu">
+	    		<div class="winui-toolbar">
+			        <div class="winui-tool">js代码</div>
+			    </div>
+				<div class="layui-row" style="height: calc(42vh - 85px);">
+			    	<textarea id="showCreateJsMation"></textarea>
+			    </div>
+			</div>
 	    </div>
 	    <div class="layui-row" style="height: 50px;text-align: center;">
 		    <div class="layui-inline">

@@ -41,6 +41,8 @@ layui.config({
         	var subData = list;
         	if(subData.length == 0){
         		top.winui.window.msg('请先生成转换结果', {icon: 2,time: 2000});
+        	}else if($('#modelList').find('li').length > subData.length){
+        		top.winui.window.msg('您有模板未生成代码文件，请检查。', {icon: 2,time: 2000});
         	}else{
         		for(var i = 0; i < subData.length; i++){
         			subData[i].modelContent = "";
@@ -93,6 +95,45 @@ layui.config({
 			}
 		}
 	});
+	
+	var showCreateHtmlMation = CodeMirror.fromTextArea(document.getElementById("showCreateHtmlMation"), {
+        mode : "xml",  // 模式
+        theme : "eclipse",  // CSS样式选择
+        indentUnit : 2,  // 缩进单位，默认2
+        smartIndent : true,  // 是否智能缩进
+        tabSize : 4,  // Tab缩进，默认4
+        readOnly : false,  // 是否只读，默认false
+        showCursorWhenSelecting : true,
+        lineNumbers : true,  // 是否显示行号
+        styleActiveLine: true, //line选择是是否加亮
+        matchBrackets: true,
+    });
+	
+	var showCreateRequireMation = CodeMirror.fromTextArea(document.getElementById("showCreateRequireMation"), {
+        mode : "xml",  // 模式
+        theme : "eclipse",  // CSS样式选择
+        indentUnit : 2,  // 缩进单位，默认2
+        smartIndent : true,  // 是否智能缩进
+        tabSize : 4,  // Tab缩进，默认4
+        readOnly : false,  // 是否只读，默认false
+        showCursorWhenSelecting : true,
+        lineNumbers : true,  // 是否显示行号
+        styleActiveLine: true, //line选择是是否加亮
+        matchBrackets: true,
+    });
+	
+	var showCreateJsMation = CodeMirror.fromTextArea(document.getElementById("showCreateJsMation"), {
+        mode : "text/javascript",  // 模式
+        theme : "eclipse",  // CSS样式选择
+        indentUnit : 2,  // 缩进单位，默认2
+        smartIndent : true,  // 是否智能缩进
+        tabSize : 4,  // Tab缩进，默认4
+        readOnly : false,  // 是否只读，默认false
+        showCursorWhenSelecting : true,
+        lineNumbers : true,  // 是否显示行号
+        styleActiveLine: true, //line选择是是否加亮
+        matchBrackets: true,
+    });
 	
 	//加载模块
 	showGrid({
@@ -197,7 +238,9 @@ layui.config({
 			pageId: "addcontenttohtmlorjs",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	console.log(result);
+                	showCreateHtmlMation.setValue(result.htmlContent);
+                	showCreateRequireMation.setValue("前端限制参数：" + result.formermation + "\n后端限制参数：" + result.aftermation);
+                	showCreateJsMation.setValue(result.jsContent);
                 } else if (refreshCode == '-9999') {
                 	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
                 }

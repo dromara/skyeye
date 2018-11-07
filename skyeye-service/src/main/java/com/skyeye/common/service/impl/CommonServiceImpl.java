@@ -214,7 +214,11 @@ public class CommonServiceImpl implements CommonService{
 			JSONObject object = (JSONObject) array.get(i);
 			//加入压缩包
 			ByteArrayInputStream stream = new ByteArrayInputStream(object.getString("content").getBytes());
-			out.putNextEntry(new ZipEntry(object.getString("fileName") + "." + object.getString("modelType").toLowerCase()));
+			if("javascript".equals(object.getString("modelType").toLowerCase())){
+				out.putNextEntry(new ZipEntry(object.getString("fileName") + ".js"));
+			}else{
+				out.putNextEntry(new ZipEntry(object.getString("fileName") + "." + object.getString("modelType").toLowerCase()));
+			}
 			int len;
 			// 读入需要下载的文件的内容，打包到zip文件
 			while ((len = stream.read(buffer)) > 0) {
@@ -229,7 +233,11 @@ public class CommonServiceImpl implements CommonService{
 			bean.put("content", object.getString("content"));
 			bean.put("createId", user.get("id"));
 			bean.put("fileName", object.getString("fileName"));
-			bean.put("fileType", object.getString("modelType").toLowerCase());
+			if("javascript".equals(object.getString("modelType").toLowerCase())){
+				bean.put("fileType", "js");
+			}else{
+				bean.put("fileType", object.getString("modelType").toLowerCase());
+			}
 			bean.put("filePath", zipName);
 			bean.put("createTime", ToolUtil.getTimeAndToString());
 			inBeans.add(bean);
