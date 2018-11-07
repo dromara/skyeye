@@ -2657,6 +2657,9 @@ body .layer-ext-winconfirm {
     border: 2px solid rgba(0, 0, 0, 0.9);
     border-radius: 3px;
 }
+.iphone-screen>.check-item:HOVER{
+	border: 1px black solid;
+}
 .iphone-screen img {
     width: 100%;
 }

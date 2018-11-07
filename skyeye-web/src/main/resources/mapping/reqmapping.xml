@@ -254,6 +254,8 @@
 		<property id="rowId" name="id" ref="required" var="小程序组件id"/>
 	</url>
 	<url id="rmxcx021" path="/post/RmGroupMemberController/editRmGroupMemberMationById" val="编辑小程序组件信息" allUse="1">
+		<property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
+		<property id="htmlJsContent" name="htmlJsContent" ref="" var="html对应的js内容"/>
 		<property id="wxmlContent" name="wxmlContent" ref="required" var="wxml内容"/>
 		<property id="wxmlJsContent" name="wxmlJsContent" ref="" var="wxml对应的js内容"/>
 		<property id="rowId" name="id" ref="required" var="小程序组件id"/>

@@ -66,7 +66,7 @@ layui.config({
 		}
 	}).on('drop', function (el, container) {//放置
 		if($(container).attr("id") == 'centerText'){//放置在手机里面
-			el.className = 'layui-col-md12';
+			el.className = 'layui-col-md12 check-item';
 			var content = $(el).attr("htmlContent");
 			var JsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $(el).attr("htmlJsContent") + '})(jQuery);});</script>'
 			$(el).html(content + JsContent);

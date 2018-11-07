@@ -116,12 +116,14 @@
 	<update id="editRmGroupMemberMationById" parameterType="java.util.Map">
 		UPDATE rm_group_member
 		<set>
+			<if test="htmlContent != '' and htmlContent != null">
+				html_content = #{htmlContent},
+			</if>
+			html_js_content = #{htmlJsContent},
 			<if test="wxmlContent != '' and wxmlContent != null">
 				wxml_content = #{wxmlContent},
 			</if>
-			<if test="wxmlJsContent != '' and wxmlJsContent != null">
-				wxml_js_content = #{wxmlJsContent},
-			</if>
+			wxml_js_content = #{wxmlJsContent},
 			<if test="img != '' and img != null">
 				prints_pic_url = #{img},
 			</if>

@@ -39,6 +39,8 @@ layui.config({
 			        if (winui.verifyForm(data.elem)) {
 			        	
 		 	   			var params = {
+		 	   				htmlContent: encodeURI($("#htmlContent").val()),
+		 	   				htmlJsContent: encodeURI($("#htmlJsContent").val()),
 		 	   				wxmlContent: encodeURI($("#wxmlContent").val()),
 		 	   				wxmlJsContent: encodeURI($("#wxmlJsContent").val()),
 		        			rowId: parent.rowId,
@@ -58,6 +60,18 @@ layui.config({
 			        return false;
 			    });
 		 	}
+	    });
+	    
+	    //HTML内容变化事件
+	    $("body").on("input", "#htmlContent", function(){
+	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $("#htmlJsContent").val() + '})(jQuery);});</script>');
+	    	$("#printPic").html($(this).val());
+	    });
+	    
+	    //HTML-JS内容变化事件
+	    $("body").on("change", "#htmlJsContent", function(){
+	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $("#htmlJsContent").val() + '})(jQuery);});</script>');
+//	    	$("#htmlJsContent").val(do_js_beautify($(this).val()));
 	    });
 	    
 	    //取消
