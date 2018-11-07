@@ -26,8 +26,8 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">效果图<i class="red">*</i></label>
-        <div class="layui-col-xs6">
-            <div class="layui-col-xs10" id="printPic">
+        <div class="layui-col-xs8">
+            <div class="layui-col-xs12" id="printPic">
                 
             </div>
         </div>
