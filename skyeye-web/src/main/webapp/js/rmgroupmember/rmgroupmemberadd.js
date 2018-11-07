@@ -6,12 +6,65 @@ layui.config({
 	version: skyeyeVersion
 }).define(['table', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	layui.use(['form'], function (form) {
+	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
+	           'solr', 'sql', 'vue'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	    var $ = layui.$,
 	    form = layui.form;
 	    
 	    $("#download").hide();
+	    
+	    var htmlContent = CodeMirror.fromTextArea(document.getElementById("htmlContent"), {
+            mode : "xml",  // 模式
+            theme : "eclipse",  // CSS样式选择
+            indentUnit : 4,  // 缩进单位，默认2
+            smartIndent : true,  // 是否智能缩进
+            tabSize : 4,  // Tab缩进，默认4
+            readOnly : false,  // 是否只读，默认false
+            showCursorWhenSelecting : true,
+            lineNumbers : true,  // 是否显示行号
+            styleActiveLine: true, //line选择是是否加亮
+            matchBrackets: true,
+        });
+ 		
+ 		var htmlJsContent = CodeMirror.fromTextArea(document.getElementById("htmlJsContent"), {
+            mode : "text/javascript",  // 模式
+            theme : "eclipse",  // CSS样式选择
+            indentUnit : 4,  // 缩进单位，默认2
+            smartIndent : true,  // 是否智能缩进
+            tabSize : 4,  // Tab缩进，默认4
+            readOnly : false,  // 是否只读，默认false
+            showCursorWhenSelecting : true,
+            lineNumbers : true,  // 是否显示行号
+            styleActiveLine: true, //line选择是是否加亮
+            matchBrackets: true,
+        });
+ 		
+ 		var wxmlContent = CodeMirror.fromTextArea(document.getElementById("wxmlContent"), {
+            mode : "xml",  // 模式
+            theme : "eclipse",  // CSS样式选择
+            indentUnit : 4,  // 缩进单位，默认2
+            smartIndent : true,  // 是否智能缩进
+            tabSize : 4,  // Tab缩进，默认4
+            readOnly : false,  // 是否只读，默认false
+            showCursorWhenSelecting : true,
+            lineNumbers : true,  // 是否显示行号
+            styleActiveLine: true, //line选择是是否加亮
+            matchBrackets: true,
+        });
+ 		
+ 		var wxmlJsContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsContent"), {
+            mode : "text/javascript",  // 模式
+            theme : "eclipse",  // CSS样式选择
+            indentUnit : 4,  // 缩进单位，默认2
+            smartIndent : true,  // 是否智能缩进
+            tabSize : 4,  // Tab缩进，默认4
+            readOnly : false,  // 是否只读，默认false
+            showCursorWhenSelecting : true,
+            lineNumbers : true,  // 是否显示行号
+            styleActiveLine: true, //line选择是是否加亮
+            matchBrackets: true,
+        });
 	    
 	    showGrid({
 		 	id: "rmTypeId",
@@ -43,36 +96,40 @@ layui.config({
 			    form.on('submit(formAddBean)', function (data) {
 			    	//表单验证
 			        if (winui.verifyForm(data.elem)) {
-			        	if(isPic){
-			        		var oCanvas = document.getElementById("thecanvas");
-					    	var imgData = oCanvas.toDataURL();
-					    	AjaxPostUtil.request({url:reqBasePath + "common004", params:{images:imgData, type:1}, type:'json', callback:function(json1){
-				 	   			if(json1.returnCode == 0){
-					 	   			var params = {
-					 	   				rmTypeId: $("#rmTypeId").val(),
-					 	   				rmGroupId: $("#rmGroupId").val(),
-					 	   				htmlContent: encodeURI($("#htmlContent").val()),
-					 	   				htmlJsContent: encodeURI($("#htmlJsContent").val()),
-					 	   				wxmlContent: encodeURI($("#wxmlContent").val()),
-					 	   				wxmlJsContent: encodeURI($("#wxmlJsContent").val()),
-					        			img: json1.bean.picUrl
-						        	};
-						        	
-						        	AjaxPostUtil.request({url:reqBasePath + "rmxcx016", params:params, type:'json', callback:function(json){
-						 	   			if(json.returnCode == 0){
-							 	   			parent.layer.close(index);
-							 	        	parent.refreshCode = '0';
-						 	   			}else{
-						 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-						 	   			}
-						 	   		}});
-				 	   			}else{
-				 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-				 	   			}
-				 	   		}});
-			        	}else{
+			        	if(!isPic){
 			        		top.winui.window.msg("请先生成预览图", {icon: 2,time: 2000});
-			        	}
+			        	}else if(isNull(htmlContent.getValue())){
+		        			top.winui.window.msg("请填写HTML内容", {icon: 2,time: 2000});
+		        		}else if(isNull(wxmlContent.getValue())){
+		        			top.winui.window.msg("请填写WXML内容", {icon: 2,time: 2000});
+		        		}else{
+		        			var oCanvas = document.getElementById("thecanvas");
+		        			var imgData = oCanvas.toDataURL();
+		        			AjaxPostUtil.request({url:reqBasePath + "common004", params:{images:imgData, type:1}, type:'json', callback:function(json1){
+		        				if(json1.returnCode == 0){
+		        					var params = {
+		        							rmTypeId: $("#rmTypeId").val(),
+		        							rmGroupId: $("#rmGroupId").val(),
+		        							htmlContent: encodeURI(htmlContent.getValue()),
+		        							htmlJsContent: encodeURI(htmlJsContent.getValue()),
+		        							wxmlContent: encodeURI(wxmlContent.getValue()),
+		        							wxmlJsContent: encodeURI(wxmlJsContent.getValue()),
+		        							img: json1.bean.picUrl
+		        					};
+		        					
+		        					AjaxPostUtil.request({url:reqBasePath + "rmxcx016", params:params, type:'json', callback:function(json){
+		        						if(json.returnCode == 0){
+		        							parent.layer.close(index);
+		        							parent.refreshCode = '0';
+		        						}else{
+		        							top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		        						}
+		        					}});
+		        				}else{
+		        					top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		        				}
+		        			}});
+		        		}
 			        }
 			        return false;
 			    });
@@ -80,16 +137,16 @@ layui.config({
 	    });
 	    
 	    //HTML内容变化事件
-	    $("body").on("input", "#htmlContent", function(){
-	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $("#htmlJsContent").val() + '})(jQuery);});</script>');
-	    	$("#printPic").html($(this).val());
-	    });
+	    htmlContent.on("change",function(){
+	    	$("#printPic").html(htmlContent.getValue());
+	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + htmlJsContent.getValue() + '})(jQuery);});</script>');
+		});
 	    
 	    //HTML-JS内容变化事件
-	    $("body").on("change", "#htmlJsContent", function(){
-	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $("#htmlJsContent").val() + '})(jQuery);});</script>');
-//	    	$("#htmlJsContent").val(do_js_beautify($(this).val()));
-	    });
+	    htmlJsContent.on("change",function(){
+	    	$("#printPic").html(htmlContent.getValue());
+	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + htmlJsContent.getValue() + '})(jQuery);});</script>');
+		});
 	    
 	    //下载canvas图片
 	    $("body").on("click", "#download", function(){

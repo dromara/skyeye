@@ -4,10 +4,12 @@ layui.config({
 	version: skyeyeVersion
 }).define(['table', 'jquery', 'winui', 'fileUpload'], function (exports) {
 	winui.renderColor();
-	layui.use(['form'], function (form) {
+	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
+	           'solr', 'sql', 'vue'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	    var $ = layui.$,
 	    form = layui.form;
+	    var htmlContent, htmlJsContent, wxmlContent, wxmlJsContent;
 	    
 	    showGrid({
 		 	id: "showForm",
@@ -31,31 +33,92 @@ layui.config({
 		            }
 		        });
 		 		
+		 		htmlContent = CodeMirror.fromTextArea(document.getElementById("htmlContent"), {
+		            mode : "xml",  // 模式
+		            theme : "eclipse",  // CSS样式选择
+		            indentUnit : 4,  // 缩进单位，默认2
+		            smartIndent : true,  // 是否智能缩进
+		            tabSize : 4,  // Tab缩进，默认4
+		            readOnly : false,  // 是否只读，默认false
+		            showCursorWhenSelecting : true,
+		            lineNumbers : true,  // 是否显示行号
+		            styleActiveLine: true, //line选择是是否加亮
+		            matchBrackets: true,
+		        });
+		 		
+		 		htmlJsContent = CodeMirror.fromTextArea(document.getElementById("htmlJsContent"), {
+		            mode : "text/javascript",  // 模式
+		            theme : "eclipse",  // CSS样式选择
+		            indentUnit : 4,  // 缩进单位，默认2
+		            smartIndent : true,  // 是否智能缩进
+		            tabSize : 4,  // Tab缩进，默认4
+		            readOnly : false,  // 是否只读，默认false
+		            showCursorWhenSelecting : true,
+		            lineNumbers : true,  // 是否显示行号
+		            styleActiveLine: true, //line选择是是否加亮
+		            matchBrackets: true,
+		        });
+		 		
+		 		wxmlContent = CodeMirror.fromTextArea(document.getElementById("wxmlContent"), {
+		            mode : "xml",  // 模式
+		            theme : "eclipse",  // CSS样式选择
+		            indentUnit : 4,  // 缩进单位，默认2
+		            smartIndent : true,  // 是否智能缩进
+		            tabSize : 4,  // Tab缩进，默认4
+		            readOnly : false,  // 是否只读，默认false
+		            showCursorWhenSelecting : true,
+		            lineNumbers : true,  // 是否显示行号
+		            styleActiveLine: true, //line选择是是否加亮
+		            matchBrackets: true,
+		        });
+		 		
+		 		wxmlJsContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsContent"), {
+		            mode : "text/javascript",  // 模式
+		            theme : "eclipse",  // CSS样式选择
+		            indentUnit : 4,  // 缩进单位，默认2
+		            smartIndent : true,  // 是否智能缩进
+		            tabSize : 4,  // Tab缩进，默认4
+		            readOnly : false,  // 是否只读，默认false
+		            showCursorWhenSelecting : true,
+		            lineNumbers : true,  // 是否显示行号
+		            styleActiveLine: true, //line选择是是否加亮
+		            matchBrackets: true,
+		        });
+		 		
+		 		//初始化效果图
+		 		$("#printPic").html(htmlContent.getValue());
+		    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + htmlJsContent.getValue() + '})(jQuery);});</script>');
+		 		
 		 		//搜索表单
 		 		form.render();
 		 		
 			    form.on('submit(formEditBean)', function (data) {
 			    	//表单验证
 			        if (winui.verifyForm(data.elem)) {
-			        	
-		 	   			var params = {
-		 	   				htmlContent: encodeURI($("#htmlContent").val()),
-		 	   				htmlJsContent: encodeURI($("#htmlJsContent").val()),
-		 	   				wxmlContent: encodeURI($("#wxmlContent").val()),
-		 	   				wxmlJsContent: encodeURI($("#wxmlJsContent").val()),
-		        			rowId: parent.rowId,
-			        	};
-		 	   			
-		 	   			params.img = $("#printsPicUrl").find("input[type='hidden'][name='upload']").attr("oldurl");
-		 	   			
-			        	AjaxPostUtil.request({url:reqBasePath + "rmxcx021", params:params, type:'json', callback:function(json){
-			 	   			if(json.returnCode == 0){
-				 	   			parent.layer.close(index);
-				 	        	parent.refreshCode = '0';
-			 	   			}else{
-			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-			 	   			}
-			 	   		}});
+			        	if(isNull(htmlContent.getValue())){
+		        			top.winui.window.msg("请填写HTML内容", {icon: 2,time: 2000});
+		        		}else if(isNull(wxmlContent.getValue())){
+		        			top.winui.window.msg("请填写WXML内容", {icon: 2,time: 2000});
+		        		}else{
+			 	   			var params = {
+			 	   				htmlContent: encodeURI(htmlContent.getValue()),
+			 	   				htmlJsContent: encodeURI(htmlJsContent.getValue()),
+			 	   				wxmlContent: encodeURI(wxmlContent.getValue()),
+			 	   				wxmlJsContent: encodeURI(wxmlJsContent.getValue()),
+			        			rowId: parent.rowId,
+				        	};
+			 	   			
+			 	   			params.img = $("#printsPicUrl").find("input[type='hidden'][name='upload']").attr("oldurl");
+			 	   			
+				        	AjaxPostUtil.request({url:reqBasePath + "rmxcx021", params:params, type:'json', callback:function(json){
+				 	   			if(json.returnCode == 0){
+					 	   			parent.layer.close(index);
+					 	        	parent.refreshCode = '0';
+				 	   			}else{
+				 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				 	   			}
+				 	   		}});
+		        		}
 			        }
 			        return false;
 			    });
@@ -63,16 +126,16 @@ layui.config({
 	    });
 	    
 	    //HTML内容变化事件
-	    $("body").on("input", "#htmlContent", function(){
-	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $("#htmlJsContent").val() + '})(jQuery);});</script>');
-	    	$("#printPic").html($(this).val());
-	    });
+	    htmlContent.on("change",function(){
+	    	$("#printPic").html(htmlContent.getValue());
+	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + htmlJsContent.getValue() + '})(jQuery);});</script>');
+		});
 	    
 	    //HTML-JS内容变化事件
-	    $("body").on("change", "#htmlJsContent", function(){
-	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $("#htmlJsContent").val() + '})(jQuery);});</script>');
-//	    	$("#htmlJsContent").val(do_js_beautify($(this).val()));
-	    });
+	    htmlJsContent.on("change",function(){
+	    	$("#printPic").html(htmlContent.getValue());
+	    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + htmlJsContent.getValue() + '})(jQuery);});</script>');
+		});
 	    
 	    //取消
 	    $("body").on("click", "#cancle", function(){
