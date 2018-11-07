@@ -2651,7 +2651,7 @@ body .layer-ext-winconfirm {
     background: white;
     border: 1px solid #fff;
     overflow: auto;
-    height: calc(100vh - 145px);
+    height: calc(100vh - 25px);
     width: 100%;
     margin: 0 auto;
     border: 2px solid rgba(0, 0, 0, 0.9);
