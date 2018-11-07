@@ -238,4 +238,52 @@ public class SysEveMenuServiceImpl implements SysEveMenuService{
 		}
 	}
 
+	/**
+	 * 
+	     * @Title: editSysEveMenuSortTopById
+	     * @Description: 菜单展示顺序上移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editSysEveMenuSortTopById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> topBean = sysEveMenuDao.querySysEveMenuISTopByThisId(map);//根据同一级排序获取这条数据的上一条数据
+		if(topBean == null){
+			outputObject.setreturnMessage("已经是最靠前菜单，无法移动。");
+		}else{
+			map.put("orderNum", topBean.get("orderNum"));
+			topBean.put("orderNum", topBean.get("thisOrderNum"));
+			sysEveMenuDao.editSysEveMenuSortTopById(map);
+			sysEveMenuDao.editSysEveMenuSortTopById(topBean);
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: editSysEveMenuSortLowerById
+	     * @Description: 菜单展示顺序下移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editSysEveMenuSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> topBean = sysEveMenuDao.querySysEveMenuISLowerByThisId(map);//根据同一级排序获取这条数据的下一条数据
+		if(topBean == null){
+			outputObject.setreturnMessage("已经是最靠后菜单，无法移动。");
+		}else{
+			map.put("orderNum", topBean.get("orderNum"));
+			topBean.put("orderNum", topBean.get("thisOrderNum"));
+			sysEveMenuDao.editSysEveMenuSortLowerById(map);
+			sysEveMenuDao.editSysEveMenuSortLowerById(topBean);
+		}
+	}
+
 }

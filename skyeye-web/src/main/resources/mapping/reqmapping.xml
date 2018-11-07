@@ -128,6 +128,12 @@
 	</url>
 	<url id="sys021" path="/post/SysEveMenuController/querySysMenuLevelList" val="获取菜单级别列表" allUse="1">
 	</url>
+	<url id="sys022" path="/post/SysEveMenuController/editSysEveMenuSortTopById" val="菜单展示顺序上移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="菜单ID" />
+	</url>
+	<url id="sys023" path="/post/SysEveMenuController/editSysEveMenuSortLowerById" val="菜单展示顺序下移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="菜单ID" />
+	</url>
 	
 	<url id="icon001" path="/post/SysEveIconController/querySysIconList" val="获取ICON列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />

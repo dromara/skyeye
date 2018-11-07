@@ -9,17 +9,17 @@ public interface SysEveMenuDao {
 
 	public List<Map<String, Object>> querySysMenuList(Map<String, Object> map, PageBounds pageBounds) throws Exception;
 
-	public void insertSysMenuMation(Map<String, Object> map) throws Exception;
+	public int insertSysMenuMation(Map<String, Object> map) throws Exception;
 
 	public Map<String, Object> querySysMenuMationToEditById(Map<String, Object> map) throws Exception;
 
 	public List<Map<String, Object>> querySysMenuMationBySimpleLevel(Map<String, Object> map) throws Exception;
 
-	public void editSysMenuMationById(Map<String, Object> map) throws Exception;
+	public int editSysMenuMationById(Map<String, Object> map) throws Exception;
 
-	public void deleteSysMenuChildMationById(Map<String, Object> map) throws Exception;
+	public int deleteSysMenuChildMationById(Map<String, Object> map) throws Exception;
 
-	public void deleteSysMenuMationById(Map<String, Object> map) throws Exception;
+	public int deleteSysMenuMationById(Map<String, Object> map) throws Exception;
 
 	public List<Map<String, Object>> queryTreeSysMenuMationBySimpleLevel(Map<String, Object> map) throws Exception;
 
@@ -30,5 +30,13 @@ public interface SysEveMenuDao {
 	public Map<String, Object> querySysMenuAfterOrderBumByParentId(Map<String, Object> map) throws Exception;
 
 	public Map<String, Object> queryOldParentIdById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> querySysEveMenuISTopByThisId(Map<String, Object> map) throws Exception;
+
+	public int editSysEveMenuSortTopById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> querySysEveMenuISLowerByThisId(Map<String, Object> map) throws Exception;
+
+	public int editSysEveMenuSortLowerById(Map<String, Object> map) throws Exception;
 
 }

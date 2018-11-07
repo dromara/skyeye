@@ -143,4 +143,36 @@ public class SysEveMenuController {
 		sysEveMenuService.querySysMenuLevelList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editSysEveMenuSortTopById
+	     * @Description: 菜单展示顺序上移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveMenuController/editSysEveMenuSortTopById")
+	@ResponseBody
+	public void editSysEveMenuSortTopById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveMenuService.editSysEveMenuSortTopById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editSysEveMenuSortLowerById
+	     * @Description: 菜单展示顺序下移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveMenuController/editSysEveMenuSortLowerById")
+	@ResponseBody
+	public void editSysEveMenuSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveMenuService.editSysEveMenuSortLowerById(inputObject, outputObject);
+	}
+	
 }

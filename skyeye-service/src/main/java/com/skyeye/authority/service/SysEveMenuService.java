@@ -21,4 +21,8 @@ public interface SysEveMenuService {
 
 	public void querySysMenuLevelList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void editSysEveMenuSortTopById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editSysEveMenuSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }
