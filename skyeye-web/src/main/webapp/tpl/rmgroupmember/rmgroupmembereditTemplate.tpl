@@ -1,13 +1,13 @@
 {{#bean}}
     <div class="layui-form-item">
         <label class="layui-form-label">分类<i class="red">*</i></label>
-        <div class="layui-input-block">
+        <div class="layui-input-block ver-center">
         	{{typeName}}
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">分组<i class="red">*</i></label>
-        <div class="layui-input-block">
+        <div class="layui-input-block ver-center">
         	{{groupName}}
         </div>
     </div>
