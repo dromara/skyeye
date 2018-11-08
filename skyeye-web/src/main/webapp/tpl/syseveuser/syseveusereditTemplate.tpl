@@ -1,8 +1,8 @@
 {{#bean}}
 	<div class="layui-form-item">
-        <label class="layui-form-label">账号</label>
-        <div class="layui-input-block">
-            <input type="text" win-verify="required" autocomplete="off" class="layui-input disabled" value="{{userCode}}"/>
+        <label class="layui-form-label">账号<i class="red">*</i></label>
+        <div class="layui-input-block ver-center">
+        	{{userCode}}
         </div>
     </div>
     <div class="layui-form-item">
