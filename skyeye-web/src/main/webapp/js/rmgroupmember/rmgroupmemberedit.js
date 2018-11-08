@@ -111,10 +111,6 @@ layui.config({
 		            matchBrackets: true,
 		        });
 		 		
-		 		//初始化效果图
-		 		$("#printPic").html(htmlContent.getValue());
-		    	$("#htmlJsContentScript").html('<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + htmlJsContent.getValue() + '})(jQuery);});</script>');
-		 		
 		 		//搜索表单
 		 		form.render();
 		 		
