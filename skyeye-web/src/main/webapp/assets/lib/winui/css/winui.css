@@ -2415,7 +2415,7 @@ body .layer-ext-winconfirm {
 	margin-top: unset;
 }
 .upload.one .add{
-	top: unset;
+	top: 20%;
 }
 
 /*** 上传 end ***/

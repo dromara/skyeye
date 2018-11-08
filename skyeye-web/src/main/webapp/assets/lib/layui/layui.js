@@ -933,4 +933,37 @@ function replaceModelContent(str, ControllerPackageName, ServicePackageName, Ser
 	return str;
 }
 
+function show(id, url) {
+    var imgSuffix = ["png", "jpg", "jpeg", "gif", "bmp"];
+    if (imgSuffix.indexOf(url.substring(url.lastIndexOf(".") + 1).toLowerCase()) < 0) {
+        window.open(url);
+        return false;
+    }
+
+    var imgs = layui.$(id).find("input[type='hidden'][name='upload']").val().split(",");
+    var data = [];
+    layui.$.each(imgs, function (k, v) {
+        var suffix = v.substring(v.lastIndexOf(".") + 1);
+        if (imgSuffix.indexOf(suffix.toLowerCase()) > -1) {
+            var json = {
+                "alt": "",
+                "pid": k, //图片id
+                "src": v, //原图地址
+                "thumb": "" //缩略图地址
+            }
+            data.push(json);
+        }
+    })
+
+    layer.photos({
+        photos: {
+            "title": "", //相册标题
+            "id": 123, //相册id
+            "start": 0, //初始显示的图片序号，默认0
+            "data": data
+        } //格式见API文档手册页
+        , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机
+    });
+}
+
 
