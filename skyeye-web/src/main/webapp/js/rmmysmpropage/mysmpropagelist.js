@@ -66,10 +66,15 @@ layui.config({
 		}
 	}).on('drop', function (el, container) {//放置
 		if($(container).attr("id") == 'centerText'){//放置在手机里面
-			el.className = 'layui-col-md12 check-item';
-			var content = $(el).attr("htmlContent");
+			el.className = 'layui-col-md12';
+			var content = '<div class="layui-col-md12 check-item">' + $(el).attr("htmlContent") + '</div>';//内容
+			var operationContent = '<div class="check-item-operation btn-group btn-group-xs btn-base">' +
+								'<button type="button" class="btn btn-primary" rel="editHandler" title="编辑"><i class="fa fa-edit"></i></button>' + 
+								'<button type="button" class="btn btn-danger" rel="removeHandler" title="删除"><i class="fa fa-trash"></i></button>' + 
+								'</div>';
 			var JsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $(el).attr("htmlJsContent") + '})(jQuery);});</script>'
-			$(el).html(content + JsContent);
+			$(el).html(content + operationContent + JsContent);
+			$(el).find(".check-item-operation").hide();
 		}
 	});
     
@@ -176,6 +181,19 @@ layui.config({
     		scrollbar:false
         });
     });
+    
+    //页面内组件选中组件项
+    $('body').on('click', '.check-item', function(){
+    	$(".check-item").removeClass("check-item-shoose");//移除之前被选中的组件
+    	$(".check-item").parent().find(".check-item-operation").hide();//隐藏之前选中的组件的操作
+    	$(this).addClass("check-item-shoose");//给当前组件添加选中样式
+    	$(this).parent().find(".check-item-operation").show();//显示当前选中的组件的操作
+    });
+    
+    //页面内组件移除按钮
+    $('body').on('click', 'button[rel="removeHandler"]', function(){
+    	$(this).parent().parent().remove();
+    })
     
     function loadTable(){
     	table.reload("messageTable", {where:{proName:$("#proName").val()}});

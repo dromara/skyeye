@@ -2659,11 +2659,27 @@ body .layer-ext-winconfirm {
     height: calc(100vh - 25px);
     width: 100%;
     margin: 0 auto;
-    border: 2px solid rgba(0, 0, 0, 0.9);
+    border: 2px solid gainsboro;
     border-radius: 3px;
 }
-.iphone-screen>.check-item:HOVER{
-	border: 1px black solid;
+.iphone-screen .check-item:HOVER{
+	border: 1px #357ebd dashed;
+}
+.check-item-shoose{
+	border: 1px #d9534f dashed;
+}
+.check-item-operation{
+    text-align: right;
+    width: 100%;
+    position: absolute;
+}
+.check-item-operation button{
+    width: 25px;
+    height: 25px;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    margin-left: 2px;
 }
 .iphone-screen img {
     width: 100%;
