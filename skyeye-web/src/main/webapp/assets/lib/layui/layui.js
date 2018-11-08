@@ -657,7 +657,7 @@ var AjaxPostUtil = {
 		var paramsArray = [];
 		var params = this.options.params;
 		for(var pro in params) {
-			var paramValue = params[pro];
+			var paramValue = params[pro].replace(/\+/g, "%2B").replace(/\&/g, "%26");
 			/*if(this.options.method.toUpperCase() === "GET")  
 			{  
 			    paramValue = encodeURIComponent(params[pro]);  
