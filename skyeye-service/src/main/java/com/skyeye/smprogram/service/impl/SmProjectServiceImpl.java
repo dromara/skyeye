@@ -155,10 +155,10 @@ public class SmProjectServiceImpl implements SmProjectService{
 	@Override
 	public void queryGroupMationList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		List<Map<String, Object>> beans = smProjectDao.queryGroupMationList(map);
+		List<Map<String, Object>> beans = smProjectDao.queryGroupTypeMationList(map);
 		if(beans != null && !beans.isEmpty()){
 			for(Map<String, Object> bean : beans){
-				bean.put("groupList", JSONArray.fromObject(bean.get("groupList").toString()));
+				bean.put("groupList", smProjectDao.queryGroupMationListByTypeId(bean));
 			}
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());

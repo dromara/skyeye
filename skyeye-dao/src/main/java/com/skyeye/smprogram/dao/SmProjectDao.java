@@ -25,8 +25,11 @@ public interface SmProjectDao {
 
 	public Map<String, Object> querySmProjectPageModelNumById(Map<String, Object> map) throws Exception;
 
-	public List<Map<String, Object>> queryGroupMationList(Map<String, Object> map) throws Exception;
+	public List<Map<String, Object>> queryGroupTypeMationList(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> queryGroupMationListByTypeId(Map<String, Object> map) throws Exception;
 
 	public List<Map<String, Object>> queryGroupMemberMationList(Map<String, Object> map) throws Exception;
+
 
 }

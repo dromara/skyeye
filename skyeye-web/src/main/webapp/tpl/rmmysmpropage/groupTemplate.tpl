@@ -8,7 +8,7 @@
             	{{#each groupList}}
 	                <a class="weui-cell weui-cell_access js_item" data-id="{{id}}" data-name="{{name}}" href="javascript:;">
 	                    <div class="weui-cell__bd">
-	                        <p>{{name}}</p>
+	                        <p>{{name}}<span class="weui-badge" style="margin-left: 5px;">{{memberNum}}</span></p>
 	                    </div>
 	                </a>
 	            {{/each}}

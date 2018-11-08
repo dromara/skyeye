@@ -98,21 +98,26 @@
 		WHERE id = #{id}
 	</update>
 	
-	<select id="queryGroupMationList" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="queryGroupTypeMationList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
-			a.`name`,
-			IFNULL(
-			CONCAT(
-				'[',
-				GROUP_CONCAT(
-					CONCAT(CONCAT('{"id":"', b.id, '",'), CONCAT('"name":"', b.`name`, '",'), CONCAT('"icon":"', b.icon, '"}'))
-				),
-			']'
-			), '[]') groupList
+			a.`name`
 		FROM
 			rm_type a
-			LEFT JOIN (SELECT c.id, c.`name`, c.icon, c.rm_type_id FROM rm_group c ORDER BY c.sort DESC) b ON b.rm_type_id = a.id
+		ORDER BY a.sort DESC
+	</select>
+	
+	<select id="queryGroupMationListByTypeId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			a.id, 
+			a.`name`, 
+			a.icon, 
+			COUNT(*) memberNum
+		FROM 
+			rm_group a
+			LEFT JOIN rm_group_member b ON b.sm_group_id = a.id
+		WHERE 
+			a.rm_type_id  = #{id}
 		GROUP BY a.id
 		ORDER BY a.sort DESC
 	</select>
