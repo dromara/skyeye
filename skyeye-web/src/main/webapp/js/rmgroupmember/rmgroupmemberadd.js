@@ -53,7 +53,33 @@ layui.config({
             matchBrackets: true,
         });
  		
- 		var wxmlJsContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsContent"), {
+ 		var wxmlJsDataContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsDataContent"), {
+            mode : "text/javascript",  // 模式
+            theme : "eclipse",  // CSS样式选择
+            indentUnit : 4,  // 缩进单位，默认2
+            smartIndent : true,  // 是否智能缩进
+            tabSize : 4,  // Tab缩进，默认4
+            readOnly : false,  // 是否只读，默认false
+            showCursorWhenSelecting : true,
+            lineNumbers : true,  // 是否显示行号
+            styleActiveLine: true, //line选择是是否加亮
+            matchBrackets: true,
+        });
+ 		
+ 		var wxmlJsMethodContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsMethodContent"), {
+            mode : "text/javascript",  // 模式
+            theme : "eclipse",  // CSS样式选择
+            indentUnit : 4,  // 缩进单位，默认2
+            smartIndent : true,  // 是否智能缩进
+            tabSize : 4,  // Tab缩进，默认4
+            readOnly : false,  // 是否只读，默认false
+            showCursorWhenSelecting : true,
+            lineNumbers : true,  // 是否显示行号
+            styleActiveLine: true, //line选择是是否加亮
+            matchBrackets: true,
+        });
+ 		
+ 		var wxmlJsMethodCreateContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsMethodCreateContent"), {
             mode : "text/javascript",  // 模式
             theme : "eclipse",  // CSS样式选择
             indentUnit : 4,  // 缩进单位，默认2
@@ -108,13 +134,15 @@ layui.config({
 		        			AjaxPostUtil.request({url:reqBasePath + "common004", params:{images:imgData, type:1}, type:'json', callback:function(json1){
 		        				if(json1.returnCode == 0){
 		        					var params = {
-		        							rmTypeId: $("#rmTypeId").val(),
-		        							rmGroupId: $("#rmGroupId").val(),
-		        							htmlContent: encodeURI(htmlContent.getValue()),
-		        							htmlJsContent: encodeURI(htmlJsContent.getValue()),
-		        							wxmlContent: encodeURI(wxmlContent.getValue()),
-		        							wxmlJsContent: encodeURI(wxmlJsContent.getValue()),
-		        							img: json1.bean.picUrl
+	        							rmTypeId: $("#rmTypeId").val(),
+	        							rmGroupId: $("#rmGroupId").val(),
+	        							htmlContent: encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+	        							htmlJsContent: encodeURI(htmlJsContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+	        							wxmlContent: encodeURI(wxmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+	        							wxmlJsDataContent: encodeURI(wxmlJsDataContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+	        							wxmlJsMethodContent: encodeURI(wxmlJsMethodContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+	        							wxmlJsMethodCreateContent: encodeURI(wxmlJsMethodCreateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+	        							img: json1.bean.picUrl
 		        					};
 		        					
 		        					AjaxPostUtil.request({url:reqBasePath + "rmxcx016", params:params, type:'json', callback:function(json){

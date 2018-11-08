@@ -77,9 +77,23 @@ layui.config({
 	        { field: 'id', title: 'WXML内容', width: 150, align: 'center', templet: function(d){
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlContent"></i>';
 	        }},
-	        { field: 'id', title: 'WXML-JS内容', width: 150, align: 'center', templet: function(d){
-	        	if(!isNull(d.wxmlJsContent)){
-	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsContent"></i>';
+	        { field: 'id', title: 'WXML-JS数据内容', width: 150, align: 'center', templet: function(d){
+	        	if(!isNull(d.wxmlJsDataContent)){
+	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsDataContent"></i>';
+	        	}else{
+	        		return '无';
+	        	}
+	        }},
+	        { field: 'id', title: 'WXML-JS方法内容', width: 150, align: 'center', templet: function(d){
+	        	if(!isNull(d.wxmlJsMethodContent)){
+	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsMethodContent"></i>';
+	        	}else{
+	        		return '无';
+	        	}
+	        }},
+	        { field: 'id', title: 'WXML-JS初始化方法内容', width: 150, align: 'center', templet: function(d){
+	        	if(!isNull(d.wxmlJsMethodCreateContent)){
+	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsMethodCreateContent"></i>';
 	        	}else{
 	        		return '无';
 	        	}
@@ -130,14 +144,32 @@ layui.config({
 	            area: ['500px', '300px'],
 	            content: '<xmp style="white-space:normal;">' + data.wxmlContent + '</xmp>',
 	        });
-        }else if (layEvent === 'wxmlJsContent') { //WXML-JS内容
+        }else if (layEvent === 'wxmlJsDataContent') { //WXML-JS数据内容
         	layer.open({
-	            id: 'WXML-JS内容',
+	            id: 'WXML-JS数据内容',
 	            type: 1,
-	            title: 'WXML-JS内容',
+	            title: 'WXML-JS数据内容',
 	            shade: 0.3,
 	            area: ['500px', '300px'],
-	            content: '<xmp style="white-space:normal;">' + data.wxmlJsContent + '</xmp>',
+	            content: '<xmp style="white-space:normal;">' + data.wxmlJsDataContent + '</xmp>',
+	        });
+        }else if (layEvent === 'wxmlJsMethodContent') { //WXML-JS方法内容
+        	layer.open({
+	            id: 'WXML-JS方法内容',
+	            type: 1,
+	            title: 'WXML-JS方法内容',
+	            shade: 0.3,
+	            area: ['500px', '300px'],
+	            content: '<xmp style="white-space:normal;">' + data.wxmlJsMethodContent + '</xmp>',
+	        });
+        }else if (layEvent === 'wxmlJsMethodCreateContent') { //WXML-JS初始化方法内容
+        	layer.open({
+	            id: 'WXML-JS初始化方法内容',
+	            type: 1,
+	            title: 'WXML-JS初始化方法内容',
+	            shade: 0.3,
+	            area: ['500px', '300px'],
+	            content: '<xmp style="white-space:normal;">' + data.wxmlJsMethodCreateContent + '</xmp>',
 	        });
         }else if (layEvent === 'printsPicUrl') { //图片预览
         	layer.open({

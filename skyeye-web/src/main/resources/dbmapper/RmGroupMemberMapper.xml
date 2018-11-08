@@ -13,7 +13,9 @@
 			a.html_content htmlContent,
 			a.html_js_content htmlJsContent,
 			a.wxml_content wxmlContent,
-			a.wxml_js_content wxmlJsContent
+			a.wxml_js_data_content wxmlJsDataContent,
+			a.wxml_js_method_content wxmlJsMethodContent,
+			a.wxml_js_method_create_content wxmlJsMethodCreateContent
 		FROM
 			rm_group_member a
 		WHERE 1 = 1
@@ -38,9 +40,9 @@
 	
 	<insert id="insertRmGroupMemberMation" parameterType="java.util.Map">
 	     INSERT into rm_group_member 
-	     (id, sm_type_id, sm_group_id, prints_pic_url, html_content, html_js_content, wxml_content, wxml_js_content, sort, create_id, create_time)
+	     (id, sm_type_id, sm_group_id, prints_pic_url, html_content, html_js_content, wxml_content, wxml_js_data_content, wxml_js_method_content, wxml_js_method_create_content, sort, create_id, create_time)
 	     VALUES
-	     (#{id}, #{rmTypeId}, #{rmGroupId}, #{img}, #{htmlContent}, #{htmlJsContent}, #{wxmlContent}, #{wxmlJsContent}, #{sort}, #{createId}, #{createTime})
+	     (#{id}, #{rmTypeId}, #{rmGroupId}, #{img}, #{htmlContent}, #{htmlJsContent}, #{wxmlContent}, #{wxmlJsDataContent}, #{wxmlJsMethodContent}, #{wxmlJsMethodCreateContent}, #{sort}, #{createId}, #{createTime})
 	</insert>
 	
 	<select id="queryRmGroupMemberISTopByThisId" parameterType="java.util.Map" resultType="java.util.Map">
@@ -107,7 +109,9 @@
 			a.html_content htmlContent,
 			a.html_js_content htmlJsContent,
 			a.wxml_content wxmlContent,
-			a.wxml_js_content wxmlJsContent
+			a.wxml_js_data_content wxmlJsDataContent,
+			a.wxml_js_method_content wxmlJsMethodContent,
+			a.wxml_js_method_create_content wxmlJsMethodCreateContent
 		FROM
 			rm_group_member a
 		WHERE a.id = #{id}
@@ -123,7 +127,9 @@
 			<if test="wxmlContent != '' and wxmlContent != null">
 				wxml_content = #{wxmlContent},
 			</if>
-			wxml_js_content = #{wxmlJsContent},
+			wxml_js_data_content = #{wxmlJsDataContent},
+			wxml_js_method_content = #{wxmlJsMethodContent},
+			wxml_js_method_create_content = #{wxmlJsMethodCreateContent},
 			<if test="img != '' and img != null">
 				prints_pic_url = #{img},
 			</if>
@@ -142,7 +148,9 @@
 			a.html_content htmlContent,
 			a.html_js_content htmlJsContent,
 			a.wxml_content wxmlContent,
-			a.wxml_js_content wxmlJsContent
+			a.wxml_js_data_content wxmlJsDataContent,
+			a.wxml_js_method_content wxmlJsMethodContent,
+			a.wxml_js_method_create_content wxmlJsMethodCreateContent
 		FROM
 			rm_group_member a
 		WHERE a.id = #{id}

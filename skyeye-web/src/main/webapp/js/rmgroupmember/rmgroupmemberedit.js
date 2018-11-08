@@ -9,7 +9,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	    var $ = layui.$,
 	    form = layui.form;
-	    var htmlContent, htmlJsContent, wxmlContent, wxmlJsContent;
+	    var htmlContent, htmlJsContent, wxmlContent, wxmlJsDataContent, wxmlJsMethodContent, wxmlJsMethodCreateContent;
 	    
 	    showGrid({
 		 	id: "showForm",
@@ -72,7 +72,33 @@ layui.config({
 		            matchBrackets: true,
 		        });
 		 		
-		 		wxmlJsContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsContent"), {
+		 		wxmlJsDataContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsDataContent"), {
+		            mode : "text/javascript",  // 模式
+		            theme : "eclipse",  // CSS样式选择
+		            indentUnit : 4,  // 缩进单位，默认2
+		            smartIndent : true,  // 是否智能缩进
+		            tabSize : 4,  // Tab缩进，默认4
+		            readOnly : false,  // 是否只读，默认false
+		            showCursorWhenSelecting : true,
+		            lineNumbers : true,  // 是否显示行号
+		            styleActiveLine: true, //line选择是是否加亮
+		            matchBrackets: true,
+		        });
+		 		
+		 		wxmlJsMethodContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsMethodContent"), {
+		            mode : "text/javascript",  // 模式
+		            theme : "eclipse",  // CSS样式选择
+		            indentUnit : 4,  // 缩进单位，默认2
+		            smartIndent : true,  // 是否智能缩进
+		            tabSize : 4,  // Tab缩进，默认4
+		            readOnly : false,  // 是否只读，默认false
+		            showCursorWhenSelecting : true,
+		            lineNumbers : true,  // 是否显示行号
+		            styleActiveLine: true, //line选择是是否加亮
+		            matchBrackets: true,
+		        });
+		 		
+		 		wxmlJsMethodCreateContent = CodeMirror.fromTextArea(document.getElementById("wxmlJsMethodCreateContent"), {
 		            mode : "text/javascript",  // 模式
 		            theme : "eclipse",  // CSS样式选择
 		            indentUnit : 4,  // 缩进单位，默认2
@@ -101,10 +127,12 @@ layui.config({
 		        			top.winui.window.msg("请填写WXML内容", {icon: 2,time: 2000});
 		        		}else{
 			 	   			var params = {
-			 	   				htmlContent: encodeURI(htmlContent.getValue()),
-			 	   				htmlJsContent: encodeURI(htmlJsContent.getValue()),
-			 	   				wxmlContent: encodeURI(wxmlContent.getValue()),
-			 	   				wxmlJsContent: encodeURI(wxmlJsContent.getValue()),
+			 	   				htmlContent: encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+			 	   				htmlJsContent: encodeURI(htmlJsContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+			 	   				wxmlContent: encodeURI(wxmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+				 	   			wxmlJsDataContent: encodeURI(wxmlJsDataContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+								wxmlJsMethodContent: encodeURI(wxmlJsMethodContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+								wxmlJsMethodCreateContent: encodeURI(wxmlJsMethodCreateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
 			        			rowId: parent.rowId,
 				        	};
 			 	   			

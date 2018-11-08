@@ -46,9 +46,21 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">WXML-JS内容</label>
+        <label class="layui-form-label">WXML-JS数据内容</label>
         <div class="layui-input-block">
-        	<textarea id="wxmlJsContent" name="wxmlJsContent" placeholder="请填写代码块" class="layui-textarea" style="height: 100px;">{{wxmlJsContent}}</textarea>
+        	<textarea id="wxmlJsDataContent" name="wxmlJsDataContent" placeholder="请填写代码块" class="layui-textarea" style="height: 100px;">{{wxmlJsDataContent}}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">WXML-JS方法内容</label>
+        <div class="layui-input-block">
+        	<textarea id="wxmlJsMethodContent" name="wxmlJsMethodContent" placeholder="请填写代码块" class="layui-textarea" style="height: 100px;">{{wxmlJsMethodContent}}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">WXML-JS初始化内容</label>
+        <div class="layui-input-block">
+        	<textarea id="wxmlJsMethodCreateContent" name="wxmlJsMethodCreateContent" placeholder="请填写代码块" class="layui-textarea" style="height: 100px;">{{wxmlJsMethodCreateContent}}</textarea>
         </div>
     </div>
     <div class="layui-form-item">
