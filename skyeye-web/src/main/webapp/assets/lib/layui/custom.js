@@ -196,10 +196,10 @@ dataGrid.prototype = {
 		}
 		layui.$("#" + this._id + "").empty().html(myTemplate(json));
 		this.registermousehover();
+		this.customClickPage(json);
 		if(typeof(_op.settings.ajaxSendAfter) == "function") {
 			_op.settings.ajaxSendAfter(json);
 		}
-		this.customClickPage(json);
 	},
 	//循环添加行
 	createBody: function(pn) {
@@ -233,10 +233,10 @@ dataGrid.prototype = {
 		}
 		layui.$("#" + _op.settings.id + "showBody").empty().html(myTemplate(json));
 		this.registermousehover();
+		this.customClickPage(json);
 		if(typeof(_op.settings.ajaxSendAfter) == "function") {
 			_op.settings.ajaxSendAfter(json);
 		}
-		this.customClickPage(json);
 	},
 	//初始化分页
 	createFoot: function() {

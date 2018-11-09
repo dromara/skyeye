@@ -299,6 +299,14 @@
 		<property id="filePath" name="filePath" ref="" var="文件将来的导出路径"/>
 		<property id="fileName" name="fileName" ref="" var="文件将来的导出名"/>
 	</url>
+	<url id="rmxcx031" path="/post/SmProjectPageController/editSmProjectPageSortTopById" val="小程序页面展示顺序上移" allUse="1">
+		<property id="proId" name="proId" ref="required" var="小程序项目id"/>
+		<property id="rowId" name="id" ref="required" var="页面id"/>
+	</url>
+	<url id="rmxcx032" path="/post/SmProjectPageController/editSmProjectPageSortLowerById" val="小程序页面展示顺序下移" allUse="1">
+		<property id="proId" name="proId" ref="required" var="小程序项目id"/>
+		<property id="rowId" name="id" ref="required" var="页面id"/>
+	</url>
 	
 	
 	<!-- 小程序系列结束 -->

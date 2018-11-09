@@ -29,10 +29,30 @@ layui.config({
 	 		
 	 		},
 	 		'click .toUp':function(index, row){//上移
-		 		
+	 			var params = {
+        			proId: proId,
+        			rowId: row.id,
+	        	};
+	        	AjaxPostUtil.request({url:reqBasePath + "rmxcx031", params:params, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+	 	   				refreshGrid("pageList", {params:{rowId: parent.rowId}});
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	 		},
 	 		'click .toDown':function(index, row){//下移
-		 		
+	 			var params = {
+        			proId: proId,
+        			rowId: row.id,
+	        	};
+	        	AjaxPostUtil.request({url:reqBasePath + "rmxcx032", params:params, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+	 	   				refreshGrid("pageList", {params:{rowId: parent.rowId}});
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	 		},
 	 		'click .copyPage':function(index, row){//复制
 		 		

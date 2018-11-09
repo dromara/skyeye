@@ -15,4 +15,12 @@ public interface SmProjectPageDao {
 
 	public int insertProPageMationByProId(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> querySmProjectPageISTopByThisId(Map<String, Object> map) throws Exception;
+
+	public void editSmProjectPageSortTopById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> querySmProjectPageISLowerByThisId(Map<String, Object> map) throws Exception;
+
+	public void editSmProjectPageSortLowerById(Map<String, Object> topBean) throws Exception;
+
 }

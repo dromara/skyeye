@@ -9,4 +9,8 @@ public interface SmProjectPageService {
 
 	public void insertProPageMationByProId(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void editSmProjectPageSortTopById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editSmProjectPageSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

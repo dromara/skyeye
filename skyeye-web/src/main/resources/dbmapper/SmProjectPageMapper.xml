@@ -54,4 +54,55 @@
 	     (#{id}, #{name}, #{filePath}, #{fileName}, #{defaultFilePath}, #{defaultFileName}, #{defaultFilePathNum}, #{defaultFileNameNum}, #{proId}, #{sort}, #{createId}, #{createTime})
 	</insert>
 	
+	<select id="querySmProjectPageISTopByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sort sort,
+			b.sort thisSort
+		FROM
+			sm_project_page a,
+			sm_project_page b
+		WHERE 
+			b.sm_project_id = #{proId}
+			AND b.id = #{id}
+			AND a.sort > b.sort
+		ORDER BY
+			a.sort ASC
+		LIMIT 1
+	</select>
+	
+	<update id="editSmProjectPageSortTopById" parameterType="java.util.Map">
+		UPDATE sm_project_page
+		<set>
+			sort = #{sort},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySmProjectPageISLowerByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sort sort,
+			b.sort thisSort
+		FROM
+			sm_project_page a,
+			sm_project_page b
+		WHERE 
+			b.sm_project_id = #{proId}
+			AND b.id = #{id}
+			AND b.sort > a.sort
+		ORDER BY
+			a.sort DESC
+		LIMIT 1
+	</select>
+	
+	<update id="editSmProjectPageSortLowerById" parameterType="java.util.Map">
+		UPDATE sm_project_page
+		<set>
+			sort = #{sort},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	
 </mapper>

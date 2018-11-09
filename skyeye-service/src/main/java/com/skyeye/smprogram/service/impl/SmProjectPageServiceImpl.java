@@ -103,6 +103,54 @@ public class SmProjectPageServiceImpl implements SmProjectPageService{
 		map.put("createTime", ToolUtil.getTimeAndToString());
 		smProjectPageDao.insertProPageMationByProId(map);
 	}
+
+	/**
+	 * 
+	     * @Title: editSmProjectPageSortTopById
+	     * @Description: 小程序页面展示顺序上移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editSmProjectPageSortTopById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> topBean = smProjectPageDao.querySmProjectPageISTopByThisId(map);//根据排序获取这条数据的上一条数据
+		if(topBean == null){
+			outputObject.setreturnMessage("已经是最靠前页面，无法移动。");
+		}else{
+			map.put("sort", topBean.get("sort"));
+			topBean.put("sort", topBean.get("thisSort"));
+			smProjectPageDao.editSmProjectPageSortTopById(map);
+			smProjectPageDao.editSmProjectPageSortTopById(topBean);
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: editSmProjectPageSortLowerById
+	     * @Description: 小程序页面展示顺序下移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editSmProjectPageSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> topBean = smProjectPageDao.querySmProjectPageISLowerByThisId(map);//根据排序获取这条数据的上一条数据
+		if(topBean == null){
+			outputObject.setreturnMessage("已经是最靠后页面，无法移动。");
+		}else{
+			map.put("sort", topBean.get("sort"));
+			topBean.put("sort", topBean.get("thisSort"));
+			smProjectPageDao.editSmProjectPageSortLowerById(map);
+			smProjectPageDao.editSmProjectPageSortLowerById(topBean);
+		}
+	}
 	
 	
 	

@@ -47,5 +47,37 @@ public class SmProjectPageController {
 		smProjectPageService.insertProPageMationByProId(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editSmProjectPageSortTopById
+	     * @Description: 小程序页面展示顺序上移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectPageController/editSmProjectPageSortTopById")
+	@ResponseBody
+	public void editSmProjectPageSortTopById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectPageService.editSmProjectPageSortTopById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editSmProjectPageSortLowerById
+	     * @Description: 小程序页面展示顺序下移
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectPageController/editSmProjectPageSortLowerById")
+	@ResponseBody
+	public void editSmProjectPageSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectPageService.editSmProjectPageSortLowerById(inputObject, outputObject);
+	}
+	
 	
 }
