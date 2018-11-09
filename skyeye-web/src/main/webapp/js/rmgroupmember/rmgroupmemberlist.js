@@ -5,13 +5,27 @@ layui.config({
 	version: skyeyeVersion
 }).extend({  //指定 js 别名
 	window: 'js/winui.window',
-}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
+           'solr', 'sql', 'vue'], function (exports) {
 	
 	winui.renderColor();
 	
 	var $ = layui.$,
 	form = layui.form,
 	table = layui.table;
+	
+	var editor = CodeMirror.fromTextArea(document.getElementById("modelContent"), {
+        mode : "text/x-java",  // 模式
+        theme : "eclipse",  // CSS样式选择
+        indentUnit : 2,  // 缩进单位，默认2
+        smartIndent : true,  // 是否智能缩进
+        tabSize : 4,  // Tab缩进，默认4
+        readOnly : true,  // 是否只读，默认false
+        showCursorWhenSelecting : true,
+        lineNumbers : true,  // 是否显示行号
+        styleActiveLine: true, //line选择是是否加亮
+        matchBrackets: true,
+    });
 	
 	showGrid({
 	 	id: "rmTypeId",
@@ -118,58 +132,88 @@ layui.config({
         }else if (layEvent === 'lower') { //下移
         	lowerOne(data);
         }else if (layEvent === 'htmlContent') { //HTML内容
+        	var mode = returnModel('html');
+        	if (!isNull(mode.length)) {
+				editor.setOption('mode', mode)
+			} 
+        	editor.setValue(data.htmlContent);
         	layer.open({
 	            id: 'HTML内容',
 	            type: 1,
 	            title: 'HTML内容',
 	            shade: 0.3,
-	            area: ['500px', '300px'],
-	            content: '<xmp style="white-space:normal;">' + data.htmlContent + '</xmp>',
+	            area: ['1200px', '600px'],
+	            content: $("#modelContentDiv").html(),
 	        });
         }else if (layEvent === 'htmlJsContent') { //HTML-JS内容
+        	var mode = returnModel('javascript');
+        	if (!isNull(mode.length)) {
+				editor.setOption('mode', mode)
+			} 
+        	editor.setValue(data.htmlJsContent);
         	layer.open({
 	            id: 'HTML-JS内容',
 	            type: 1,
 	            title: 'HTML-JS内容',
 	            shade: 0.3,
-	            area: ['500px', '300px'],
-	            content: '<xmp style="white-space:normal;">' + data.htmlJsContent + '</xmp>',
+	            area: ['1200px', '600px'],
+	            content: $("#modelContentDiv").html(),
 	        });
         }else if (layEvent === 'wxmlContent') { //WXML内容
+        	var mode = returnModel('html');
+        	if (!isNull(mode.length)) {
+				editor.setOption('mode', mode)
+			} 
+        	editor.setValue(data.wxmlContent);
         	layer.open({
 	            id: 'WXML内容',
 	            type: 1,
 	            title: 'WXML内容',
 	            shade: 0.3,
-	            area: ['500px', '300px'],
-	            content: '<xmp style="white-space:normal;">' + data.wxmlContent + '</xmp>',
+	            area: ['1200px', '600px'],
+	            content: $("#modelContentDiv").html(),
 	        });
         }else if (layEvent === 'wxmlJsDataContent') { //WXML-JS数据内容
+        	var mode = returnModel('javascript');
+        	if (!isNull(mode.length)) {
+				editor.setOption('mode', mode)
+			} 
+        	editor.setValue(data.wxmlJsDataContent);
         	layer.open({
 	            id: 'WXML-JS数据内容',
 	            type: 1,
 	            title: 'WXML-JS数据内容',
 	            shade: 0.3,
-	            area: ['500px', '300px'],
-	            content: '<xmp style="white-space:normal;">' + data.wxmlJsDataContent + '</xmp>',
+	            area: ['1200px', '600px'],
+	            content: $("#modelContentDiv").html(),
 	        });
         }else if (layEvent === 'wxmlJsMethodContent') { //WXML-JS方法内容
+        	var mode = returnModel('javascript');
+        	if (!isNull(mode.length)) {
+				editor.setOption('mode', mode)
+			} 
+        	editor.setValue(data.wxmlJsMethodContent);
         	layer.open({
 	            id: 'WXML-JS方法内容',
 	            type: 1,
 	            title: 'WXML-JS方法内容',
 	            shade: 0.3,
-	            area: ['500px', '300px'],
-	            content: '<xmp style="white-space:normal;">' + data.wxmlJsMethodContent + '</xmp>',
+	            area: ['1200px', '600px'],
+	            content: $("#modelContentDiv").html(),
 	        });
         }else if (layEvent === 'wxmlJsMethodCreateContent') { //WXML-JS初始化方法内容
+        	var mode = returnModel('javascript');
+        	if (!isNull(mode.length)) {
+				editor.setOption('mode', mode)
+			} 
+        	editor.setValue(data.wxmlJsMethodCreateContent);
         	layer.open({
 	            id: 'WXML-JS初始化方法内容',
 	            type: 1,
 	            title: 'WXML-JS初始化方法内容',
 	            shade: 0.3,
-	            area: ['500px', '300px'],
-	            content: '<xmp style="white-space:normal;">' + data.wxmlJsMethodCreateContent + '</xmp>',
+	            area: ['1200px', '600px'],
+	            content: $("#modelContentDiv").html(),
 	        });
         }else if (layEvent === 'printsPicUrl') { //图片预览
         	layer.open({
