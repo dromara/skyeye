@@ -1,4 +1,6 @@
 
+var proId = "";
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -9,6 +11,8 @@ layui.config({
 	var $ = layui.$,
 	form = layui.form,
 	table = layui.table;
+	
+	proId = parent.rowId;//项目id
 	
 	$("#groupMemberTab").hide();
 	//初始化加载该项目的所有页面
@@ -195,9 +199,21 @@ layui.config({
     	$(this).parent().parent().remove();
     })
     
-    function loadTable(){
-    	table.reload("messageTable", {where:{proName:$("#proName").val()}});
-    }
+    //添加页面按钮
+    $('body').on('click', '#addPageBean', function(){
+		_openNewWindows({
+			url: "../../tpl/rmmysmpropage/addpagebeanitem.html", 
+			title: "新增页面",
+			pageId: "addpagebeanitem",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	refreshGrid("pageList", {params:{rowId: parent.rowId}});
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+    });
     
     exports('mysmpropagelist', {});
 });

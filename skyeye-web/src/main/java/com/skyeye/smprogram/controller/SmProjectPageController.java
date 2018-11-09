@@ -30,4 +30,22 @@ public class SmProjectPageController {
 	public void queryProPageMationByProIdList(InputObject inputObject, OutputObject outputObject) throws Exception{
 		smProjectPageService.queryProPageMationByProIdList(inputObject, outputObject);
 	}
+	
+	/**
+	 * 
+	     * @Title: insertProPageMationByProId
+	     * @Description: 添加项目内部的页面
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectPageController/insertProPageMationByProId")
+	@ResponseBody
+	public void insertProPageMationByProId(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectPageService.insertProPageMationByProId(inputObject, outputObject);
+	}
+	
+	
 }

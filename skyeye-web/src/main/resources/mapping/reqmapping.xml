@@ -293,6 +293,13 @@
 	<url id="rmxcx029" path="/post/SmProjectPageController/queryProPageMationByProIdList" val="根据项目获取项目内部的页面" allUse="1">
 		<property id="rowId" name="proId" ref="required" var="小程序项目id"/>
 	</url>
+	<url id="rmxcx030" path="/post/SmProjectPageController/insertProPageMationByProId" val="添加项目内部的页面" allUse="1">
+		<property id="rowId" name="proId" ref="required" var="小程序项目id"/>
+		<property id="name" name="name" ref="required" var="页面名称"/>
+		<property id="filePath" name="filePath" ref="" var="文件将来的导出路径"/>
+		<property id="fileName" name="fileName" ref="" var="文件将来的导出名"/>
+	</url>
+	
 	
 	<!-- 小程序系列结束 -->
 	

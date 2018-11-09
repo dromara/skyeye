@@ -2748,6 +2748,12 @@ body .layer-ext-winconfirm {
     line-height: 25px;
     background-color: ghostwhite;
     margin-top: 10px;
+   	background: rgba(0.5,0.3,0.2,0.1) none repeat scroll !important;
+}
+
+.page-li:HOVER{
+	cursor: pointer;
+	border: 1px #357ebd dashed;
 }
 
 .code-model-li{

@@ -471,7 +471,7 @@ var refreshGrid = function (id, option){
         	dataGrid_setting[index].settings.pageindex = 1;
         	showGrid.settings = dataGrid_setting[index].settings;
         	showGrid.settings.params = layui.$.extend({}, showGrid.settings.params, option.params);
-        	dataGrid_setting.splice(index, 1);
+        	dataGrid_setting.splice(index, 1, showGrid);
         	return;
 		}
 	});

@@ -5,12 +5,53 @@
 	<select id="queryProPageMationByProIdList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
-			a.`name`
+			a.`name`,
+			IFNULL(a.file_path, a.default_file_path) filePath,
+			IFNULL(a.file_name, a.default_file_name) fileName
 		FROM
 			sm_project_page a
 		WHERE
 			a.sm_project_id = #{proId}
 		ORDER BY a.sort DESC
 	</select>
+	
+	<select id="queryFilePathNumMaxMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.default_file_path_num redisFilePathNum
+		FROM
+			sm_project_page a
+		ORDER BY
+			a.default_file_path_num DESC
+		LIMIT 1
+	</select>
+	
+	<select id="queryFileNameNumMaxMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.default_file_name_num redisFileNameNum
+		FROM
+			sm_project_page a
+		ORDER BY
+			a.default_file_name_num DESC
+		LIMIT 1
+	</select>
+	
+	<select id="querySortMaxMationByProjectId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.sort sort
+		FROM
+			sm_project_page a
+		WHERE 
+			a.sm_project_id = #{proId}
+		ORDER BY
+			a.sort DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="insertProPageMationByProId" parameterType="java.util.Map">
+	     INSERT into sm_project_page 
+	     (id, name, file_path, file_name, default_file_path, default_file_name, default_file_path_num, default_file_name_num, sm_project_id, sort, create_id, create_time)
+	     VALUES
+	     (#{id}, #{name}, #{filePath}, #{fileName}, #{defaultFilePath}, #{defaultFileName}, #{defaultFilePathNum}, #{defaultFileNameNum}, #{proId}, #{sort}, #{createId}, #{createTime})
+	</insert>
 	
 </mapper>

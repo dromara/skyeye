@@ -7,4 +7,6 @@ public interface SmProjectPageService {
 
 	public void queryProPageMationByProIdList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void insertProPageMationByProId(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

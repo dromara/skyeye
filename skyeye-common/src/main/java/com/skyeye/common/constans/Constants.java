@@ -90,5 +90,13 @@ public class Constants {
 	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTOCODEMODEL = "exexplaintocodemodel";//代码生成器模板规范说明key
 	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTODSFORMCONTENT = "exexplaintodsformcontent";//动态表单内容项模板规范说明key
 	
+	/**
+	 * 微信小程序页面id的序列号
+	 */
+	public static final String REDIS_PROJECT_PAGE_FILE_PATH = "projectpagefilepath";//页面路径的序列号key
+	public static final String REDIS_PROJECT_PAGE_FILE_NAME = "projectpagefilename";//页面名称的序列号key
+	public static final String REDIS_PROJECT_PAGE_FILE_PATH_NUM = "1000";//页面路径的序列号默认值
+	public static final String REDIS_PROJECT_PAGE_FILE_NAME_NUM = "1000";//页面名称的序列号默认值
+	
 
 }
