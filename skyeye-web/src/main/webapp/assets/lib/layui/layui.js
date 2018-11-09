@@ -118,6 +118,7 @@ function isNull(str){
 	    sql: 'modules/codemirror/sql',//代码格式编辑器sql支持sql
 	    vue: 'modules/codemirror/vue',//代码格式编辑器vue支持vue
 	    zclip: 'modules/jquery.zclip',//复制插件
+	    swiper: 'modules/swiper/swiper.min',//滚动插件
 	};
 
 	// 记录基础数据

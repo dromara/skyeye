@@ -2,7 +2,7 @@
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui', 'fileUpload'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'fileUpload', 'swiper'], function (exports) {
 	winui.renderColor();
 	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
 	           'solr', 'sql', 'vue'], function (form) {

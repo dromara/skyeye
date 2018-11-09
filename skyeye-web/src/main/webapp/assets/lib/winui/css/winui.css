@@ -2672,6 +2672,7 @@ body .layer-ext-winconfirm {
     text-align: right;
     width: 100%;
     position: absolute;
+    z-index: 999999;
 }
 .check-item-operation button{
     width: 25px;

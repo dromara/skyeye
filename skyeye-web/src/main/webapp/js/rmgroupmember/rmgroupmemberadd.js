@@ -4,7 +4,7 @@ var isPic = false;//是否执行生成图片
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'swiper'], function (exports) {
 	winui.renderColor();
 	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
 	           'solr', 'sql', 'vue'], function (form) {

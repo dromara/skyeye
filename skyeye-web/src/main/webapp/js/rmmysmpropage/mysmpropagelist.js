@@ -2,7 +2,7 @@
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui', 'form', 'dragula'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'form', 'dragula', 'swiper'], function (exports) {
 	
 	winui.renderColor();
 	
