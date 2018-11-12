@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.smprogram.dao.RmPropertyDao">
+	
+	<select id="queryRmPropertyList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			
+		WHERE 
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryRmPropertyMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			
+		WHERE 
+	</select>
+	
+	<insert id="insertRmPropertyMation" parameterType="java.util.Map">
+	     INSERT into  
+	     (id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteRmPropertyMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryRmPropertyMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryRmPropertyMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			
+		WHERE a.id != #{id}
+	</select>
+	
+	<update id="editRmPropertyMationById" parameterType="java.util.Map">
+		UPDATE 
+		<set>
+			
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

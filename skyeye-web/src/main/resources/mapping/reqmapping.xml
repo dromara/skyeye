@@ -326,6 +326,21 @@
 		<property id="pageId" name="pageId" ref="required" var="小程序页面id"/>
 		<property id="jsonData" name="jsonData" ref="required" var="小程序页面和模块绑定的json字符串"/>
 	</url>
+	<url id="rmproperty001" path="/post/RmPropertyController/queryRmPropertyList" val="获取小程序样式属性列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="rmproperty002" path="/post/RmPropertyController/insertRmPropertyMation" val="添加小程序样式属性信息" allUse="1">
+	</url>
+	<url id="rmproperty003" path="/post/RmPropertyController/deleteRmPropertyMationById" val="删除小程序样式属性信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="小程序样式属性id"/>
+	</url>
+	<url id="rmproperty004" path="/post/RmPropertyController/queryRmPropertyMationToEditById" val="编辑小程序样式属性信息时进行回显" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="小程序样式属性id"/>
+	</url>
+	<url id="rmproperty005" path="/post/RmPropertyController/editRmPropertyMationById" val="编辑小程序样式属性信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="小程序样式属性id"/>
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	
