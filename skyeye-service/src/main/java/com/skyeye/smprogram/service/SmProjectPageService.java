@@ -13,4 +13,8 @@ public interface SmProjectPageService {
 
 	public void editSmProjectPageSortLowerById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void querySmProjectPageMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editSmProjectPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

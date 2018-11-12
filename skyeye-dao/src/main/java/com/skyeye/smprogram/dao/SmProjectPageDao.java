@@ -17,10 +17,14 @@ public interface SmProjectPageDao {
 
 	public Map<String, Object> querySmProjectPageISTopByThisId(Map<String, Object> map) throws Exception;
 
-	public void editSmProjectPageSortTopById(Map<String, Object> map) throws Exception;
+	public int editSmProjectPageSortTopById(Map<String, Object> map) throws Exception;
 
 	public Map<String, Object> querySmProjectPageISLowerByThisId(Map<String, Object> map) throws Exception;
 
-	public void editSmProjectPageSortLowerById(Map<String, Object> topBean) throws Exception;
+	public int editSmProjectPageSortLowerById(Map<String, Object> topBean) throws Exception;
+
+	public Map<String, Object> querySmProjectPageMationToEditById(Map<String, Object> map) throws Exception;
+
+	public int editSmProjectPageMationById(Map<String, Object> map) throws Exception;
 
 }

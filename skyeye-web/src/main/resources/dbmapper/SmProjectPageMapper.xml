@@ -104,5 +104,29 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="querySmProjectPageMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` pageName,
+			a.file_path filePath,
+			a.file_name fileName
+		FROM
+			sm_project_page a
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="editSmProjectPageMationById" parameterType="java.util.Map">
+		UPDATE sm_project_page
+		<set>
+			<if test="name != '' and name != null">
+				`name` = #{name},
+			</if>
+			file_path = #{filePath},
+			file_name = #{fileName},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
 	
 </mapper>

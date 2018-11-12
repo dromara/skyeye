@@ -79,5 +79,37 @@ public class SmProjectPageController {
 		smProjectPageService.editSmProjectPageSortLowerById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryDsFormLimitRequirementMationToEditById
+	     * @Description: 编辑小程序页面信息时进行回显
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectPageController/querySmProjectPageMationToEditById")
+	@ResponseBody
+	public void querySmProjectPageMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectPageService.querySmProjectPageMationToEditById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editDsFormLimitRequirementMationById
+	     * @Description: 编辑小程序页面信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectPageController/editSmProjectPageMationById")
+	@ResponseBody
+	public void editSmProjectPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectPageService.editSmProjectPageMationById(inputObject, outputObject);
+	}
+	
 	
 }

@@ -1,5 +1,7 @@
 
-var proId = "";
+var proId = "";//项目id
+
+var pageId = "";//页面id
 
 layui.config({
 	base: basePath, 
@@ -26,7 +28,19 @@ layui.config({
 	 	},
 	 	options: {
 	 		'click .reName':function(index, row){//重命名
-	 		
+	 			pageId = row.id;
+	 			_openNewWindows({
+	 				url: "../../tpl/rmmysmpropage/editpagebeanitem.html", 
+	 				title: "重命名页面",
+	 				pageId: "editpagebeanitem",
+	 				callBack: function(refreshCode){
+	 	                if (refreshCode == '0') {
+	 	                	refreshGrid("pageList", {params:{rowId: proId}});
+	 	                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+	 	                } else if (refreshCode == '-9999') {
+	 	                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+	 	                }
+	 				}});
 	 		},
 	 		'click .toUp':function(index, row){//上移
 	 			var params = {
@@ -35,7 +49,7 @@ layui.config({
 	        	};
 	        	AjaxPostUtil.request({url:reqBasePath + "rmxcx031", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
-	 	   				refreshGrid("pageList", {params:{rowId: parent.rowId}});
+	 	   				refreshGrid("pageList", {params:{rowId: proId}});
 	 	   			}else{
 	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 	 	   			}
@@ -48,7 +62,7 @@ layui.config({
 	        	};
 	        	AjaxPostUtil.request({url:reqBasePath + "rmxcx032", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
-	 	   				refreshGrid("pageList", {params:{rowId: parent.rowId}});
+	 	   				refreshGrid("pageList", {params:{rowId: proId}});
 	 	   			}else{
 	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 	 	   			}
@@ -227,7 +241,7 @@ layui.config({
 			pageId: "addpagebeanitem",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	refreshGrid("pageList", {params:{rowId: parent.rowId}});
+                	refreshGrid("pageList", {params:{rowId: proId}});
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
                 } else if (refreshCode == '-9999') {
                 	top.winui.window.msg("操作失败", {icon: 2,time: 2000});

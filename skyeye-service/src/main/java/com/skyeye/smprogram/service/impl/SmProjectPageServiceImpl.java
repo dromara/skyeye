@@ -151,6 +151,40 @@ public class SmProjectPageServiceImpl implements SmProjectPageService{
 			smProjectPageDao.editSmProjectPageSortLowerById(topBean);
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: queryDsFormLimitRequirementMationToEditById
+	     * @Description: 编辑小程序页面信息时进行回显
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySmProjectPageMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = smProjectPageDao.querySmProjectPageMationToEditById(map);
+		outputObject.setBean(bean);
+		outputObject.settotal(1);
+	}
+
+	/**
+	 * 
+	     * @Title: editDsFormLimitRequirementMationById
+	     * @Description: 编辑小程序页面信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editSmProjectPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		smProjectPageDao.editSmProjectPageMationById(map);
+	}
 	
 	
 	

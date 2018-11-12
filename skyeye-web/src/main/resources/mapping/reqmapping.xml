@@ -307,7 +307,15 @@
 		<property id="proId" name="proId" ref="required" var="小程序项目id"/>
 		<property id="rowId" name="id" ref="required" var="页面id"/>
 	</url>
-	
+	<url id="rmxcx033" path="/post/SmProjectPageController/querySmProjectPageMationToEditById" val="编辑小程序页面信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="页面id"/>
+	</url>
+	<url id="rmxcx034" path="/post/SmProjectPageController/editSmProjectPageMationById" val="编辑小程序页面信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="页面id"/>
+		<property id="name" name="name" ref="required" var="页面名称"/>
+		<property id="filePath" name="filePath" ref="" var="文件将来的导出路径"/>
+		<property id="fileName" name="fileName" ref="" var="文件将来的导出名"/>
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	
