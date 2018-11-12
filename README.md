@@ -35,21 +35,21 @@ codemirror|codemirror代码编辑器|https://codemirror.net/
 handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-js-templating-engine/
 
 #### 效果图
-- 1.登陆效果图
+- 1.登陆效果图</br>
 ![登陆效果图](https://images.gitee.com/uploads/images/2018/1008/100922_8c9afcf1_1541735.png "微信截图_20181008100902.png")
-- 2.系统icon
+- 2.系统icon</br>
 ![系统icon](https://images.gitee.com/uploads/images/2018/1018/085200_c2e72494_1541735.png "微信截图_20181018085136.png")
-- 3.角色管理
+- 3.角色管理</br>
 ![角色管理](https://images.gitee.com/uploads/images/2018/1018/085328_123d813e_1541735.png "微信截图_20181018085305.png")
-- 4.小程序组件配置
+- 4.小程序组件配置</br>
 ![小程序组件配置](https://images.gitee.com/uploads/images/2018/1107/104615_286c0cf4_1541735.png "1.png")
-- 5.小程序拖拽
+- 5.小程序拖拽</br>
 ![小程序拖拽](https://images.gitee.com/uploads/images/2018/1107/104734_d9304e60_1541735.png "2.png")
-- 5-1.小程序拖拽第一版
+- 5-1.小程序拖拽第一版</br>
 ![小程序拖拽](https://images.gitee.com/uploads/images/2018/1112/125615_8f51a2a6_1541735.gif "soogif1.gif")
-- 6.代码生成器
+- 6.代码生成器</br>
 ![代码生成器](https://images.gitee.com/uploads/images/2018/1107/104903_f244dfde_1541735.png "3.png")
-- 7.桌面二级菜单展示
+- 7.桌面二级菜单展示</br>
 ![桌面二级菜单](https://images.gitee.com/uploads/images/2018/1107/104946_0b1ee5d2_1541735.png "4.png")
 
 #### 环境搭建
