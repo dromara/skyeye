@@ -45,6 +45,8 @@ handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-j
 ![小程序组件配置](https://images.gitee.com/uploads/images/2018/1107/104615_286c0cf4_1541735.png "1.png")
 - 5.小程序拖拽
 ![小程序拖拽](https://images.gitee.com/uploads/images/2018/1107/104734_d9304e60_1541735.png "2.png")
+- 5-1.小程序拖拽第一版
+![小程序拖拽](https://images.gitee.com/uploads/images/2018/1112/125615_8f51a2a6_1541735.gif "soogif1.gif")
 - 6.代码生成器
 ![代码生成器](https://images.gitee.com/uploads/images/2018/1107/104903_f244dfde_1541735.png "3.png")
 - 7.桌面二级菜单展示
