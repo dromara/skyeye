@@ -320,7 +320,7 @@
 		<property id="rowId" name="id" ref="required" var="页面id"/>
 	</url>
 	<url id="rmxcx036" path="/post/SmProjectPageModeController/queryProPageModeMationByPageIdList" val="根据项目页面获取该页面拥有的组件列表" allUse="1">
-		<property id="pageId" name="pageId" ref="required" var="小程序页面id"/>
+		<property id="pageId" name="pageId" ref="" var="小程序页面id"/>
 	</url>
 	<url id="rmxcx037" path="/post/SmProjectPageModeController/editProPageModeMationByPageIdList" val="插入项目页面对应的模块内容" allUse="1">
 		<property id="pageId" name="pageId" ref="required" var="小程序页面id"/>
