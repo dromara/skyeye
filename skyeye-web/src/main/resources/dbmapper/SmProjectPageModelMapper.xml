@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.smprogram.dao.SmProjectPageModeDao">
+	
+	<select id="queryProPageModeMationByPageIdList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id modelId,
+			b.html_content htmlContent,
+			b.html_js_content htmlJsContent
+		FROM
+			sm_project_page_mode a,
+			rm_group_member b
+		WHERE a.sm_project_page_id = #{pageId}
+		AND a.rm_group_member_id = b.id
+		ORDER BY a.sort ASC
+	</select>
+	
+	<delete id="deletePageModelMationListByPageId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sm_project_page_mode
+		WHERE
+			sm_project_page_id = #{pageId}
+	</delete>
+	
+	<insert id="editProPageModeMationByPageIdList" parameterType="java.util.Map">
+	     insert into sm_project_page_mode
+	     (id, rm_group_member_id, sm_project_page_id, sort, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.modelId}, #{item.pageId}, #{item.sort}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+</mapper>

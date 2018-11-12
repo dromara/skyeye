@@ -3,6 +3,9 @@ var proId = "";//项目id
 
 var pageId = "";//页面id
 
+var editPageModelSelectId = "";//正在编辑模板中的页面id
+var editPageModelSelectChange = false;//选中的页面，模板是否修改
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -27,6 +30,40 @@ layui.config({
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
 	 	options: {
+	 		'click .page-click-item':function(index, row){//选择编辑模板中的页面
+	 			if(row.id == editPageModelSelectId){//如果选中的页面正是当前编辑模板中的页面，则不做任何操作
+	 				
+	 			}else{
+	 				if(editPageModelSelectChange == true){//编辑了页面但没有保存
+	 		 			layer.confirm('当前修改页面没有保存，是否继续吗？', { icon: 3, title: '小程序页面编辑通知' }, function (i) {
+	 		 				layer.close(i);
+	 		 				$(".page-click-item").removeClass("check-item-shoose");
+	 		 				$("#pageList>li:eq(" + index + ")").addClass("check-item-shoose");
+	 		 				editPageModelSelectId = row.id;
+	 		 				editPageModelSelectChange = false;
+	 			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type:'json', callback:function(json){
+	 			 	   			if(json.returnCode == 0){
+	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+	 			 	   			}else{
+	 			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 			 	   			}
+	 			 	   		}});
+	 		 			});
+	 				}else{
+	 					$(".page-click-item").removeClass("check-item-shoose");
+	 					$("#pageList>li:eq(" + index + ")").addClass("check-item-shoose");
+	 					editPageModelSelectId = row.id;
+	 					editPageModelSelectChange = false;
+	 		 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type:'json', callback:function(json){
+	 		 	   			if(json.returnCode == 0){
+	 		 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+	 		 	   			}else{
+	 		 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 		 	   			}
+	 		 	   		}});
+	 				}
+	 			}
+	 		},
 	 		'click .reName':function(index, row){//重命名
 	 			pageId = row.id;
 	 			_openNewWindows({
@@ -37,6 +74,16 @@ layui.config({
 	 	                if (refreshCode == '0') {
 	 	                	refreshGrid("pageList", {params:{rowId: proId}});
 	 	                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+	 	                	//重置中间模块
+	 	    				editPageModelSelectId = "";
+	 			 			editPageModelSelectChange = false;
+	 			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type:'json', callback:function(json){
+	 			 	   			if(json.returnCode == 0){
+	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+	 			 	   			}else{
+	 			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 			 	   			}
+	 			 	   		}});
 	 	                } else if (refreshCode == '-9999') {
 	 	                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
 	 	                }
@@ -50,6 +97,16 @@ layui.config({
 	        	AjaxPostUtil.request({url:reqBasePath + "rmxcx031", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				refreshGrid("pageList", {params:{rowId: proId}});
+	 	   				//重置中间模块
+ 	    				editPageModelSelectId = "";
+ 			 			editPageModelSelectChange = false;
+ 			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type:'json', callback:function(json){
+ 			 	   			if(json.returnCode == 0){
+ 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+ 			 	   			}else{
+ 			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 			 	   			}
+ 			 	   		}});
 	 	   			}else{
 	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 	 	   			}
@@ -63,6 +120,16 @@ layui.config({
 	        	AjaxPostUtil.request({url:reqBasePath + "rmxcx032", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				refreshGrid("pageList", {params:{rowId: proId}});
+	 	   				//重置中间模块
+ 	    				editPageModelSelectId = "";
+ 			 			editPageModelSelectChange = false;
+ 			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type:'json', callback:function(json){
+ 			 	   			if(json.returnCode == 0){
+ 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+ 			 	   			}else{
+ 			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 			 	   			}
+ 			 	   		}});
 	 	   			}else{
 	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 	 	   			}
@@ -80,6 +147,16 @@ layui.config({
 	 	    			if(json.returnCode == 0){
 	 	    				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
 	 	    				refreshGrid("pageList", {params:{rowId: proId}});
+	 	    				//重置中间模块
+	 	    				editPageModelSelectId = "";
+	 			 			editPageModelSelectChange = false;
+	 			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type:'json', callback:function(json){
+	 			 	   			if(json.returnCode == 0){
+	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+	 			 	   			}else{
+	 			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 			 	   			}
+	 			 	   		}});
 	 	    			}else{
 	 	    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 	 	    			}
@@ -116,15 +193,20 @@ layui.config({
 		}
 	}).on('drop', function (el, container) {//放置
 		if($(container).attr("id") == 'centerText'){//放置在手机里面
-			el.className = 'layui-col-md12';
-			var content = '<div class="layui-col-md12 check-item">' + $(el).attr("htmlContent") + '</div>';//内容
-			var operationContent = '<div class="check-item-operation btn-group btn-group-xs btn-base">' +
-								'<button type="button" class="btn btn-primary" rel="editHandler" title="编辑"><i class="fa fa-edit"></i></button>' + 
-								'<button type="button" class="btn btn-danger" rel="removeHandler" title="删除"><i class="fa fa-trash"></i></button>' + 
-								'</div>';
-			var JsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $(el).attr("htmlJsContent") + '})(jQuery);});</script>'
-			$(el).html(content + operationContent + JsContent);
-			$(el).find(".check-item-operation").hide();
+			if(isNull(editPageModelSelectId)){
+				top.winui.window.msg('请先选择要编辑的页面', {icon: 2,time: 2000});
+				$("#centerText").empty();
+			}else{
+				el.className = 'layui-col-md12 import-item';
+				var content = '<div class="layui-col-md12 check-item">' + $(el).attr("htmlContent") + '</div>';//内容
+				var operationContent = '<div class="check-item-operation btn-group btn-group-xs btn-base">' +
+				'<button type="button" class="btn btn-primary" rel="editHandler" title="编辑"><i class="fa fa-edit"></i></button>' + 
+				'<button type="button" class="btn btn-danger" rel="removeHandler" title="删除"><i class="fa fa-trash"></i></button>' + 
+				'</div>';
+				var JsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + $(el).attr("htmlJsContent") + '})(jQuery);});</script>'
+				$(el).html(content + operationContent + JsContent);
+				$(el).find(".check-item-operation").hide();
+			}
 		}
 	});
     
@@ -245,6 +327,15 @@ layui.config({
     	$(this).parent().parent().remove();
     })
     
+    //监听页面内容是否变化
+    $('body').on('DOMNodeInserted', '#centerText', function(){
+    	if(isNull(editPageModelSelectId)){//如果没有选中页面，则不做任何操作
+    		
+    	}else{
+    		editPageModelSelectChange = true;
+    	}
+    });
+    
     //添加页面按钮
     $('body').on('click', '#addPageBean', function(){
 		_openNewWindows({
@@ -259,6 +350,30 @@ layui.config({
                 	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
                 }
 			}});
+    });
+    
+    //保存页面
+    $('body').on('click', '#savePageModelBean', function(){
+    	if(!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
+    		editPageModelSelectChange = false;
+    		var list = [];//存储模板生成集合
+    		$('#centerText').find('.import-item').each(function() {
+    			var s = {
+    				modelId: $(this).attr("rowId"),
+    				pageId: editPageModelSelectId,
+    			};
+    			list.push(s);
+    		});
+    		AjaxPostUtil.request({url:reqBasePath + "rmxcx037", params:{jsonData: JSON.stringify(list), pageId: editPageModelSelectId}, type:'json', callback:function(json){
+    			if(json.returnCode == 0){
+    				top.winui.window.msg("保存成功", {icon: 1,time: 2000});
+    			}else{
+    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			}
+    		}});
+    	}else{
+    		top.winui.window.msg('请先选择要编辑的页面', {icon: 2,time: 2000});
+    	}
     });
     
     exports('mysmpropagelist', {});

@@ -6,8 +6,8 @@
 		SELECT
 			a.id,
 			a.`name`,
-			IFNULL(a.file_path, a.default_file_path) filePath,
-			IFNULL(a.file_name, a.default_file_name) fileName
+			IF(ISNULL(a.file_path) || LENGTH(TRIM(a.file_path)) &lt; 1, a.default_file_path, a.file_path) filePath,
+			IF(ISNULL(a.file_name) || LENGTH(TRIM(a.file_name)) &lt; 1, a.default_file_name, a.file_name) fileName
 		FROM
 			sm_project_page a
 		WHERE

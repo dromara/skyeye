@@ -2744,11 +2744,18 @@ body .layer-ext-winconfirm {
 
 .page-li{
     width: 100%;
-    height: 50px;
+    height: 80px;
     line-height: 25px;
     background-color: ghostwhite;
     margin-top: 10px;
    	background: rgba(0.5,0.3,0.2,0.1) none repeat scroll !important;
+}
+
+.file-content{
+	font-size: 10px;
+    color: darkgoldenrod;
+    font-family: monospace;
+    margin-left: 20px;
 }
 
 .page-li:HOVER{
