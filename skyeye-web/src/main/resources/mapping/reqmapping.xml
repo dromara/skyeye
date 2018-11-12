@@ -316,6 +316,9 @@
 		<property id="filePath" name="filePath" ref="" var="文件将来的导出路径"/>
 		<property id="fileName" name="fileName" ref="" var="文件将来的导出名"/>
 	</url>
+	<url id="rmxcx035" path="/post/SmProjectPageController/deleteSmProjectPageMationById" val="删除小程序页面信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="页面id"/>
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	

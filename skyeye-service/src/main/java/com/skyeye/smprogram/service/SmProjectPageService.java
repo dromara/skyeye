@@ -17,4 +17,6 @@ public interface SmProjectPageService {
 
 	public void editSmProjectPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void deleteSmProjectPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

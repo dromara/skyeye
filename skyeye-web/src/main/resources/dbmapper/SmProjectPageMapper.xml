@@ -128,5 +128,21 @@
 		WHERE id = #{id}
 	</update>
 	
+	<delete id="deleteSmProjectPageMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sm_project_page
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<delete id="deleteSmProjectPageModeMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sm_project_page_mode
+		WHERE
+			sm_project_page_id = #{id}
+	</delete>
+	
 	
 </mapper>

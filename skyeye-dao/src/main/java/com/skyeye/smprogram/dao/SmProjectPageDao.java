@@ -27,4 +27,8 @@ public interface SmProjectPageDao {
 
 	public int editSmProjectPageMationById(Map<String, Object> map) throws Exception;
 
+	public int deleteSmProjectPageMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteSmProjectPageModeMationById(Map<String, Object> map) throws Exception;
+
 }

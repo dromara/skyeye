@@ -185,6 +185,23 @@ public class SmProjectPageServiceImpl implements SmProjectPageService{
 		Map<String, Object> map = inputObject.getParams();
 		smProjectPageDao.editSmProjectPageMationById(map);
 	}
+
+	/**
+	 * 
+	     * @Title: deleteSmProjectPageMationById
+	     * @Description: 删除小程序页面信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteSmProjectPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		smProjectPageDao.deleteSmProjectPageMationById(map);//删除页面
+		smProjectPageDao.deleteSmProjectPageModeMationById(map);//删除页面绑定的小程序组件
+	}
 	
 	
 	

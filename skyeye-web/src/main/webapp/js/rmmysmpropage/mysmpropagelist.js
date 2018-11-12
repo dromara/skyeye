@@ -72,7 +72,19 @@ layui.config({
 		 		
 	 		},
 	 		'click .delPage':function(index, row){//删除
-		 		
+	 			var msg = row ? '确认删除页面【' + row.name + '】吗？' : '确认删除选中数据吗？';
+	 			layer.confirm(msg, { icon: 3, title: '删除小程序页面' }, function (index) {
+	 				layer.close(index);
+	 	            //向服务端发送删除指令
+	 	            AjaxPostUtil.request({url:reqBasePath + "rmxcx035", params:{rowId: row.id}, type:'json', callback:function(json){
+	 	    			if(json.returnCode == 0){
+	 	    				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
+	 	    				refreshGrid("pageList", {params:{rowId: proId}});
+	 	    			}else{
+	 	    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	    			}
+	 	    		}});
+	 			});
 	 		}
 	 	},
 	 	ajaxSendAfter:function(json){

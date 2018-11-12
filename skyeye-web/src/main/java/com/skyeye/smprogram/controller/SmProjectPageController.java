@@ -81,7 +81,7 @@ public class SmProjectPageController {
 	
 	/**
 	 * 
-	     * @Title: queryDsFormLimitRequirementMationToEditById
+	     * @Title: querySmProjectPageMationToEditById
 	     * @Description: 编辑小程序页面信息时进行回显
 	     * @param @param inputObject
 	     * @param @param outputObject
@@ -97,7 +97,7 @@ public class SmProjectPageController {
 	
 	/**
 	 * 
-	     * @Title: editDsFormLimitRequirementMationById
+	     * @Title: editSmProjectPageMationById
 	     * @Description: 编辑小程序页面信息
 	     * @param @param inputObject
 	     * @param @param outputObject
@@ -109,6 +109,22 @@ public class SmProjectPageController {
 	@ResponseBody
 	public void editSmProjectPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
 		smProjectPageService.editSmProjectPageMationById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: deleteSmProjectPageMationById
+	     * @Description: 删除小程序页面信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectPageController/deleteSmProjectPageMationById")
+	@ResponseBody
+	public void deleteSmProjectPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectPageService.deleteSmProjectPageMationById(inputObject, outputObject);
 	}
 	
 	
