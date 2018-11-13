@@ -60,7 +60,7 @@ public class RmPropertyServiceImpl implements RmPropertyService{
 			map.put("createTime", ToolUtil.getTimeAndToString());
 			rmPropertyDao.insertRmPropertyMation(map);
 		}else{
-			outputObject.setreturnMessage("该样式属性名称或者标签已存在，不可进行二次保存");
+			outputObject.setreturnMessage("该样式属性名称已存在，不可进行二次保存");
 		}
 	}
 
@@ -115,7 +115,7 @@ public class RmPropertyServiceImpl implements RmPropertyService{
 		if(bean == null){
 			rmPropertyDao.editRmPropertyMationById(map);
 		}else{
-			outputObject.setreturnMessage("该样式属性名称或者标签已存在，不可进行二次保存");
+			outputObject.setreturnMessage("该样式属性名称已存在，不可进行二次保存");
 		}
 	}
 	
