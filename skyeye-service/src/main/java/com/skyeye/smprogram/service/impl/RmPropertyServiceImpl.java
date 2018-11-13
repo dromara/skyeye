@@ -77,7 +77,17 @@ public class RmPropertyServiceImpl implements RmPropertyService{
 	@Override
 	public void deleteRmPropertyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		rmPropertyDao.deleteRmPropertyMationById(map);
+		Map<String, Object> bean = rmPropertyDao.queryRmPropertyValueNumById(map);
+		if(bean == null){
+			rmPropertyDao.deleteRmPropertyMationById(map);
+		}else{
+			if(Integer.parseInt(bean.get("propertyValueNum").toString()) == 0){//该样式属性下有值
+				rmPropertyDao.deleteRmPropertyMationById(map);
+			}else{
+				outputObject.setreturnMessage("该样式属性下存在值，无法删除。");
+			}
+		}
+		
 	}
 
 	/**

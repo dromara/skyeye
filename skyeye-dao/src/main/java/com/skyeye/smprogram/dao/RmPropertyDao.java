@@ -22,4 +22,6 @@ public interface RmPropertyDao {
 
 	public List<Map<String, Object>> queryRmPropertyListToShow(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryRmPropertyValueNumById(Map<String, Object> map) throws Exception;
+
 }

@@ -13,6 +13,7 @@
 			a.js_content jsContent,
 			a.js_rely_on jsRelyOn,
 			a.property_unit propertyUnit,
+			(SELECT COUNT(*) FROM rm_property_value c WHERE c.property_id = a.id) propertyValueNum,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			rm_property a
@@ -47,6 +48,14 @@
 	     VALUES
 	     (#{id}, #{title}, #{propertyTag}, #{propertyOut}, #{propertyUnit}, #{dsFormContentId}, #{htmlContent}, #{jsContent}, #{jsRelyOn}, #{createId}, #{createTime})
 	</insert>
+	
+	<select id="queryRmPropertyValueNumById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) propertyValueNum
+		FROM 
+			rm_property_value a 
+		WHERE a.property_id = #{id}
+	</select>
 	
 	<delete id="deleteRmPropertyMationById" parameterType="java.util.Map">
 		DELETE
