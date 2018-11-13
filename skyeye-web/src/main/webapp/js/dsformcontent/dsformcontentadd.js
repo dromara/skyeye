@@ -30,7 +30,7 @@ layui.config({
 	    var htmlEditor = CodeMirror.fromTextArea(document.getElementById("htmlContent"), {
             mode : "xml",  // 模式
             theme : "eclipse",  // CSS样式选择
-            indentUnit : 2,  // 缩进单位，默认2
+            indentUnit : 4,  // 缩进单位，默认2
             smartIndent : true,  // 是否智能缩进
             tabSize : 4,  // Tab缩进，默认4
             readOnly : false,  // 是否只读，默认false
@@ -43,7 +43,7 @@ layui.config({
 	    var jsEditor = CodeMirror.fromTextArea(document.getElementById("jsContent"), {
             mode : "text/javascript",  // 模式
             theme : "eclipse",  // CSS样式选择
-            indentUnit : 2,  // 缩进单位，默认2
+            indentUnit : 4,  // 缩进单位，默认2
             smartIndent : true,  // 是否智能缩进
             tabSize : 4,  // Tab缩进，默认4
             readOnly : false,  // 是否只读，默认false
