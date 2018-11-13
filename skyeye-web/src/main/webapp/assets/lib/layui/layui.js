@@ -90,6 +90,7 @@ function isNull(str){
 	    layedit: 'modules/layedit', // 富文本编辑器
 	    ueditor: 'modules/ueditor.all', // 百度富文本编辑器
 	    form: 'modules/form', // 表单集
+	    colorpicker: 'modules/colorpicker', //颜色选择器
 	    upload: 'modules/upload', // 上传
 	    tree: 'modules/tree', // 树结构
 	    table: 'modules/table', // 表格
