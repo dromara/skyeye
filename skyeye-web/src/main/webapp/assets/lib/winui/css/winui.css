@@ -3,10 +3,6 @@ html,
 body {
     height: 100%;
     background-size: cover;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 button{
@@ -2658,6 +2654,210 @@ body .layer-ext-winconfirm {
 	color: #666
 }
 /*** 颜色选择器结束 ***/
+
+/*** 滑块开始 ***/
+.layui-slider {
+	height: 4px;
+	background: #e2e2e2;
+	border-radius: 3px;
+	position: relative;
+	cursor: pointer
+}
+
+.layui-slider-bar {
+	border-radius: 3px;
+	position: absolute;
+	height: 100%
+}
+
+.layui-slider-step {
+	position: absolute;
+	top: 0;
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background: #FFF;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%)
+}
+
+.layui-slider-wrap {
+	width: 36px;
+	height: 36px;
+	position: absolute;
+	top: -16px;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+	z-index: 10;
+	text-align: center
+}
+
+.layui-slider-wrap-btn {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: #FFF;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+	transition: .3s
+}
+
+.layui-slider-wrap:after {
+	content: "";
+	height: 100%;
+	display: inline-block;
+	vertical-align: middle
+}
+
+.layui-slider-wrap-btn .layui-slider-hover,
+.layui-slider-wrap-btn:hover {
+	transform: scale(1.2)
+}
+
+.layui-slider-wrap-btn .layui-disabled:hover {
+	transform: scale(1)!important
+}
+
+.layui-slider-tips {
+	position: absolute;
+	top: -42px;
+	z-index: 66666666;
+	white-space: nowrap;
+	display: none;
+	-webkit-transform: translateX(-50%);
+	transform: translateX(-50%);
+	color: #FFF;
+	background: #000;
+	border-radius: 3px;
+	height: 25px;
+	line-height: 25px;
+	padding: 0 10px
+}
+
+.layui-slider-tips:after {
+	content: '';
+	position: absolute;
+	bottom: -12px;
+	left: 50%;
+	margin-left: -6px;
+	width: 0;
+	height: 0;
+	border-width: 6px;
+	border-style: solid;
+	border-color: #000 transparent transparent
+}
+
+.layui-slider-input {
+	width: 70px;
+	height: 32px;
+	border: 1px solid #e6e6e6;
+	border-radius: 3px;
+	font-size: 16px;
+	line-height: 32px;
+	position: absolute;
+	right: 0;
+	top: -15px
+}
+
+.layui-slider-input-btn {
+	display: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 100%;
+	border-left: 1px solid #d2d2d2
+}
+
+.layui-slider-input-btn i {
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 20px;
+	height: 50%;
+	font-size: 12px;
+	line-height: 16px;
+	text-align: center;
+	color: #999
+}
+
+.layui-slider-input-btn i:first-child {
+	top: 0;
+	border-bottom: 1px solid #d2d2d2
+}
+
+.layui-slider-input-txt {
+	height: 100%;
+	font-size: 14px
+}
+
+.layui-slider-input-txt input {
+	height: 100%;
+	border: none
+}
+
+.layui-slider-input-btn i:hover {
+	color: #009688
+}
+
+.layui-slider-vertical {
+	width: 4px;
+	margin-left: 34px
+}
+
+.layui-slider-vertical .layui-slider-bar {
+	width: 4px
+}
+
+.layui-slider-vertical .layui-slider-step {
+	top: auto;
+	left: 0;
+	-webkit-transform: translateY(50%);
+	transform: translateY(50%)
+}
+
+.layui-slider-vertical .layui-slider-wrap {
+	top: auto;
+	left: -16px;
+	-webkit-transform: translateY(50%);
+	transform: translateY(50%)
+}
+
+.layui-slider-vertical .layui-slider-tips {
+	top: auto;
+	left: 2px
+}
+
+@media \0screen {
+	.layui-slider-wrap-btn {
+		margin-left: -20px
+	}
+	.layui-slider-vertical .layui-slider-wrap-btn {
+		margin-left: 0;
+		margin-bottom: -20px
+	}
+	.layui-slider-vertical .layui-slider-tips {
+		margin-left: -8px
+	}
+	.layui-slider>span {
+		margin-left: 8px
+	}
+}
+
+.layui-auxiliar-moving {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	background: 0 0;
+	z-index: 9999999999
+}
+/*** 滑块结束 ***/
 
 /*** 小程序页面管理start ***/
 .smpro{
