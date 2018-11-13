@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.smprogram.dao.RmPropertyValueDao">
+	
+	<select id="queryRmPropertyValueList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.property_value propertyValue,
+			b.title propertyTitle,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			rm_property_value a
+			LEFT JOIN rm_property b ON a.property_id = b.id
+		WHERE 1 = 1
+			<if test="title != '' and title != null">
+				AND a.title LIKE '%${title}%'
+			</if>
+			<if test="propertyValue != '' and propertyValue != null">
+				AND a.property_value LIKE '%${propertyValue}%'
+			</if>
+			<if test="propertyId != '' and propertyId != null">
+				AND a.property_id = #{propertyId}
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryRmPropertyValueMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title
+		FROM
+			rm_property_value a
+		WHERE a.title = #{title}
+	</select>
+	
+	<insert id="insertRmPropertyValueMation" parameterType="java.util.Map">
+	     INSERT into rm_property_value
+	     (id, title, property_value, property_id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{title}, #{propertyValue}, #{propertyId}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteRmPropertyValueMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			rm_property_value
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryRmPropertyValueMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.property_value propertyValue,
+			a.property_id propertyId
+		FROM
+			rm_property_value a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryRmPropertyValueMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title
+		FROM
+			rm_property_value a
+		WHERE a.id != #{id}
+			AND a.title = #{title}
+	</select>
+	
+	<update id="editRmPropertyValueMationById" parameterType="java.util.Map">
+		UPDATE rm_property_value
+		<set>
+			title = #{title},
+			<if test="propertyValue != '' and propertyValue != null">
+				property_value = #{propertyValue},
+			</if>
+			<if test="propertyId != '' and propertyId != null">
+				property_id = #{propertyId},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

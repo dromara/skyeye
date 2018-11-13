@@ -94,4 +94,20 @@ public class RmPropertyController {
 		rmPropertyService.editRmPropertyMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryRmPropertyListToShow
+	     * @Description: 获取小程序样式属性供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmPropertyController/queryRmPropertyListToShow")
+	@ResponseBody
+	public void queryRmPropertyListToShow(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmPropertyService.queryRmPropertyListToShow(inputObject, outputObject);
+	}
+	
 }

@@ -20,4 +20,6 @@ public interface RmPropertyDao {
 
 	public int editRmPropertyMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryRmPropertyListToShow(Map<String, Object> map) throws Exception;
+
 }

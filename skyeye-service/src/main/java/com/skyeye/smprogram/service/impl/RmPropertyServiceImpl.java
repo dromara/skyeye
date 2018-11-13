@@ -118,5 +118,25 @@ public class RmPropertyServiceImpl implements RmPropertyService{
 			outputObject.setreturnMessage("该样式属性名称已存在，不可进行二次保存");
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: queryRmPropertyListToShow
+	     * @Description: 获取小程序样式属性供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryRmPropertyListToShow(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = rmPropertyDao.queryRmPropertyListToShow(map);
+		if(beans != null && !beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
 	
 }

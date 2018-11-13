@@ -111,4 +111,12 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryRmPropertyListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			CONCAT(a.title, '-->', a.property_tag) name
+		FROM
+			rm_property a
+	</select>
+	
 </mapper>

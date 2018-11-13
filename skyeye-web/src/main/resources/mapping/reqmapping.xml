@@ -360,6 +360,32 @@
 	    <property id="jsRelyOn" name="jsRelyOn" ref="" var="js依赖的js包"/>
 	    <property id="propertyUnit" name="propertyUnit" ref="" var="样式属性单位"/>
 	</url>
+	<url id="rmproperty006" path="/post/RmPropertyController/queryRmPropertyListToShow" val="获取小程序样式属性供展示" allUse="1">
+	</url>
+	<url id="rmpropertyvalue001" path="/post/RmPropertyValueController/queryRmPropertyValueList" val="获取小程序样式属性值列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="title" name="title" ref="" var="样式属性值标题"/>
+	    <property id="propertyValue" name="propertyValue" ref="" var="样式属性标签值"/>
+	    <property id="propertyId" name="propertyId" ref="" var="所属属性标签"/>
+	</url>
+	<url id="rmpropertyvalue002" path="/post/RmPropertyValueController/insertRmPropertyValueMation" val="添加小程序样式属性值信息" allUse="1">
+		<property id="title" name="title" ref="" var="样式属性值标题"/>
+	    <property id="propertyValue" name="propertyValue" ref="required" var="样式属性标签值"/>
+	    <property id="propertyId" name="propertyId" ref="required" var="所属属性标签"/>
+	</url>
+	<url id="rmpropertyvalue003" path="/post/RmPropertyValueController/deleteRmPropertyValueMationById" val="删除小程序样式属性值信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="小程序样式属性值id"/>
+	</url>
+	<url id="rmpropertyvalue004" path="/post/RmPropertyValueController/queryRmPropertyValueMationToEditById" val="编辑小程序样式属性值信息时进行回显" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="小程序样式属性值id"/>
+	</url>
+	<url id="rmpropertyvalue005" path="/post/RmPropertyValueController/editRmPropertyValueMationById" val="编辑小程序样式属性值信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="小程序样式属性值id"/>
+	    <property id="title" name="title" ref="" var="样式属性值标题"/>
+	    <property id="propertyValue" name="propertyValue" ref="required" var="样式属性标签值"/>
+	    <property id="propertyId" name="propertyId" ref="required" var="所属属性标签"/>
+	</url>
 	
 	<!-- 小程序系列结束 -->
 	

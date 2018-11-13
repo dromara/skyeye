@@ -15,4 +15,6 @@ public interface RmPropertyService {
 
 	public void editRmPropertyMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryRmPropertyListToShow(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

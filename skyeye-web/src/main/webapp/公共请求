@@ -12,3 +12,17 @@ showGrid({
  	}
 });
 
+//属性标签
+showGrid({
+ 	id: "propertyId",
+ 	url: reqBasePath + "rmproperty006",
+ 	params: {},
+ 	pagination: false,
+ 	template: getFileContent('tpl/template/select-option.tpl'),
+ 	ajaxSendLoadBefore: function(hdb){
+ 	},
+ 	ajaxSendAfter:function(json){
+ 		form.render('select');
+ 	}
+});
+
