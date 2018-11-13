@@ -28,7 +28,7 @@
 	<div class="layui-form-item">
         <label class="layui-form-label">展现形式<i class="red">*</i></label>
         <div class="layui-input-block">
-            <select id="dsFormContentId" name="dsFormContentId" class="layui-input" win-verify="required" lay-filter="selectParent">
+            <select id="dsFormContentId" name="dsFormContentId" class="layui-input" win-verify="required" lay-filter="selectParent" lay-search>
                 <option value="">全部</option>
             </select>
         </div>
