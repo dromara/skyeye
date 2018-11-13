@@ -370,7 +370,7 @@
 	    <property id="propertyId" name="propertyId" ref="" var="所属属性标签"/>
 	</url>
 	<url id="rmpropertyvalue002" path="/post/RmPropertyValueController/insertRmPropertyValueMation" val="添加小程序样式属性值信息" allUse="1">
-		<property id="title" name="title" ref="" var="样式属性值标题"/>
+		<property id="title" name="title" ref="required" var="样式属性值标题"/>
 	    <property id="propertyValue" name="propertyValue" ref="required" var="样式属性标签值"/>
 	    <property id="propertyId" name="propertyId" ref="required" var="所属属性标签"/>
 	</url>
@@ -382,7 +382,7 @@
 	</url>
 	<url id="rmpropertyvalue005" path="/post/RmPropertyValueController/editRmPropertyValueMationById" val="编辑小程序样式属性值信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="小程序样式属性值id"/>
-	    <property id="title" name="title" ref="" var="样式属性值标题"/>
+	    <property id="title" name="title" ref="required" var="样式属性值标题"/>
 	    <property id="propertyValue" name="propertyValue" ref="required" var="样式属性标签值"/>
 	    <property id="propertyId" name="propertyId" ref="required" var="所属属性标签"/>
 	</url>

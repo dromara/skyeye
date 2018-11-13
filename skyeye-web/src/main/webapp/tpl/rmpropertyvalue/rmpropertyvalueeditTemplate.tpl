@@ -1,6 +1,6 @@
 {{#bean}}
     <div class="layui-form-item">
-        <label class="layui-form-label">属性值别名</label>
+        <label class="layui-form-label">属性值别名<i class="red">*</i></label>
         <div class="layui-input-block">
             <input type="text" id="title" name="title" placeholder="请输入属性值别名" class="layui-input" value="{{title}}"/>
         </div>
