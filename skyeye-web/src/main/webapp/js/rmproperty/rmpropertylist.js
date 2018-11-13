@@ -27,6 +27,7 @@ layui.config({
 	        { title: '序号', type: 'numbers'},
 	        { field: 'title', title: '属性别名', width: 180 },
 	        { field: 'propertyTag', title: '属性标签', width: 180 },
+	        { field: 'propertyUnit', title: '属性单位', width: 180 },
 	        { field: 'propertyOut', title: '外部属性', width: 150 },
 	        { field: 'contentName', title: '展现形式', width: 180 },
 	        { field: 'id', title: 'HTML内容', width: 180, templet: function(d){

@@ -341,6 +341,7 @@
 	    <property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
 	    <property id="jsContent" name="jsContent" ref="" var="js内容"/>
 	    <property id="jsRelyOn" name="jsRelyOn" ref="" var="js依赖的js包"/>
+	    <property id="propertyUnit" name="propertyUnit" ref="" var="样式属性单位"/>
 	</url>
 	<url id="rmproperty003" path="/post/RmPropertyController/deleteRmPropertyMationById" val="删除小程序样式属性信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="小程序样式属性id"/>
@@ -357,6 +358,7 @@
 	    <property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
 	    <property id="jsContent" name="jsContent" ref="" var="js内容"/>
 	    <property id="jsRelyOn" name="jsRelyOn" ref="" var="js依赖的js包"/>
+	    <property id="propertyUnit" name="propertyUnit" ref="" var="样式属性单位"/>
 	</url>
 	
 	<!-- 小程序系列结束 -->

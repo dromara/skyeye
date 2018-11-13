@@ -109,6 +109,7 @@ layui.config({
 	        	var params = {
         			title:$("#title").val(),
         			propertyTag:$("#propertyTag").val(),
+        			propertyUnit:encodeURI($("#propertyUnit").val()),
         			dsFormContentId:$("#dsFormContentId").val(),
         			propertyOut:data.field.propertyOut,
         			htmlContent:encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),

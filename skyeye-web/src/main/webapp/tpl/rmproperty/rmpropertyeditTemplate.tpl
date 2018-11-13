@@ -11,6 +11,13 @@
             <input type="text" id="propertyTag" name="propertyTag" win-verify="required" placeholder="请输入属性标签" class="layui-input" value="{{propertyTag}}"/>
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">属性单位</label>
+        <div class="layui-input-block">
+            <input type="text" id="propertyUnit" name="propertyUnit" placeholder="请输入属性单位" class="layui-input" value="{{propertyUnit}}"/>
+            <div class="layui-form-mid layui-word-aux">例如：width:100%;单位为：%</div>
+        </div>
+    </div>
 	<div class="layui-form-item">
         <label class="layui-form-label">外部属性<i class="red">*</i></label>
         <div class="layui-input-block winui-radio">
