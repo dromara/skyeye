@@ -5,56 +5,106 @@
 	<select id="queryRmPropertyList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
+			a.title,
+			a.property_tag propertyTag,
+			CASE a.property_out WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '否' END propertyOut,
+			b.`name` contentName,
+			a.html_content htmlContent,
+			a.js_content jsContent,
+			a.js_rely_on jsRelyOn,
 			CONVERT(a.create_time, char) createTime
 		FROM
-			
-		WHERE 
+			rm_property a
+			LEFT JOIN ds_form_content b ON a.ds_form_content_id = b.id
+		WHERE 1 = 1
+			<if test="title != '' and title != null">
+				AND a.title LIKE '%${title}%'
+			</if>
+			<if test="propertyTag != '' and propertyTag != null">
+				AND a.property_tag LIKE '%${propertyTag}%'
+			</if>
+			<if test="dsFormContentId != '' and dsFormContentId != null">
+				AND a.ds_form_content_id = #{dsFormContentId}
+			</if>
 			ORDER BY a.create_time DESC
 	</select>
 	
 	<select id="queryRmPropertyMationByName" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
-			a.id
+			a.id,
+			a.title,
+			a.property_tag propertyTag
 		FROM
-			
+			rm_property a
 		WHERE 
+			a.title = #{title}
+			OR a.property_tag = #{propertyTag}
 	</select>
 	
 	<insert id="insertRmPropertyMation" parameterType="java.util.Map">
-	     INSERT into  
-	     (id, create_id, create_time)
+	     INSERT into rm_property
+	     (id, title, property_tag, property_out, ds_form_content_id, html_content, js_content, js_rely_on, create_id, create_time)
 	     VALUES
-	     (#{id}, #{createId}, #{createTime})
+	     (#{id}, #{title}, #{propertyTag}, #{propertyOut}, #{dsFormContentId}, #{htmlContent}, #{jsContent}, #{jsRelyOn}, #{createId}, #{createTime})
 	</insert>
 	
 	<delete id="deleteRmPropertyMationById" parameterType="java.util.Map">
 		DELETE
 		FROM
-			
+			rm_property
 		WHERE
 			id = #{id}
 	</delete>
 	
 	<select id="queryRmPropertyMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
-			a.id
+			a.id,
+			a.title,
+			a.property_tag propertyTag,
+			a.property_out propertyOut,
+			a.ds_form_content_id dsFormContentId,
+			a.html_content htmlContent,
+			a.js_content jsContent,
+			a.js_rely_on jsRelyOn,
+			b.html_content htmlModelContent,
+			b.js_content jsModelContent
 		FROM
-			
+			rm_property a
+			LEFT JOIN ds_form_content b ON a.ds_form_content_id = b.id
 		WHERE a.id = #{id}
 	</select>
 	
 	<select id="queryRmPropertyMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
-			a.id
+			a.id,
+			a.title,
+			a.property_tag propertyTag
 		FROM
-			
+			rm_property a
 		WHERE a.id != #{id}
+			AND (a.title = #{title} OR a.property_tag = #{propertyTag})
 	</select>
 	
 	<update id="editRmPropertyMationById" parameterType="java.util.Map">
-		UPDATE 
+		UPDATE rm_property
 		<set>
-			
+			<if test="title != '' and title != null">
+				title = #{title},
+			</if>
+			<if test="propertyTag != '' and propertyTag != null">
+				property_tag = #{propertyTag},
+			</if>
+			<if test="propertyOut != '' and propertyOut != null">
+				property_out = #{propertyOut},
+			</if>
+			<if test="dsFormContentId != '' and dsFormContentId != null">
+				ds_form_content_id = #{dsFormContentId},
+			</if>
+			<if test="htmlContent != '' and htmlContent != null">
+				html_content = #{htmlContent},
+			</if>
+			js_content = #{jsContent},
+			js_rely_on = #{jsRelyOn},
 		</set>
 		WHERE id = #{id}
 	</update>

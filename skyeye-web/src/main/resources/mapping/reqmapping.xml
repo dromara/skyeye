@@ -329,8 +329,18 @@
 	<url id="rmproperty001" path="/post/RmPropertyController/queryRmPropertyList" val="获取小程序样式属性列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="title" name="title" ref="" var="样式属性别名"/>
+	    <property id="propertyTag" name="propertyTag" ref="" var="样式属性标签"/>
+	    <property id="dsFormContentId" name="dsFormContentId" ref="" var="样式属性展现形式"/>
 	</url>
 	<url id="rmproperty002" path="/post/RmPropertyController/insertRmPropertyMation" val="添加小程序样式属性信息" allUse="1">
+		<property id="title" name="title" ref="required" var="样式属性别名"/>
+	    <property id="propertyTag" name="propertyTag" ref="required" var="样式属性标签"/>
+	    <property id="dsFormContentId" name="dsFormContentId" ref="required" var="样式属性展现形式"/>
+	    <property id="propertyOut" name="propertyOut" ref="required,num" var="是否为外部属性   1是 2否"/>
+	    <property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
+	    <property id="jsContent" name="jsContent" ref="" var="js内容"/>
+	    <property id="jsRelyOn" name="jsRelyOn" ref="" var="js依赖的js包"/>
 	</url>
 	<url id="rmproperty003" path="/post/RmPropertyController/deleteRmPropertyMationById" val="删除小程序样式属性信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="小程序样式属性id"/>
@@ -340,6 +350,13 @@
 	</url>
 	<url id="rmproperty005" path="/post/RmPropertyController/editRmPropertyMationById" val="编辑小程序样式属性信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="小程序样式属性id"/>
+	    <property id="title" name="title" ref="required" var="样式属性别名"/>
+	    <property id="propertyTag" name="propertyTag" ref="required" var="样式属性标签"/>
+	    <property id="dsFormContentId" name="dsFormContentId" ref="required" var="样式属性展现形式"/>
+	    <property id="propertyOut" name="propertyOut" ref="required,num" var="是否为外部属性   1是 2否"/>
+	    <property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
+	    <property id="jsContent" name="jsContent" ref="" var="js内容"/>
+	    <property id="jsRelyOn" name="jsRelyOn" ref="" var="js依赖的js包"/>
 	</url>
 	
 	<!-- 小程序系列结束 -->

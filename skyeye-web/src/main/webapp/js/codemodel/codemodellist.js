@@ -39,7 +39,7 @@ layui.config({
 	var editor = CodeMirror.fromTextArea(document.getElementById("modelContent"), {
         mode : "text/x-java",  // 模式
         theme : "eclipse",  // CSS样式选择
-        indentUnit : 2,  // 缩进单位，默认2
+        indentUnit : 4,  // 缩进单位，默认2
         smartIndent : true,  // 是否智能缩进
         tabSize : 4,  // Tab缩进，默认4
         readOnly : true,  // 是否只读，默认false

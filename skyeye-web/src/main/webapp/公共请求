@@ -1,0 +1,14 @@
+//展现形式   例如：输入框，选择框
+showGrid({
+ 	id: "showModel",
+ 	url: reqBasePath + "dsform006",
+ 	params: {},
+ 	pagination: false,
+ 	template: getFileContent('tpl/template/select-option.tpl'),
+ 	ajaxSendLoadBefore: function(hdb){
+ 	},
+ 	ajaxSendAfter:function(json){
+ 		form.render('select');
+ 	}
+});
+

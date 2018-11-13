@@ -78,7 +78,7 @@ layui.config({
 		var htmlModelEditor = CodeMirror.fromTextArea(document.getElementById("htmlModelEditor"), {
             mode : "text/x-java",  // 模式
             theme : "eclipse",  // CSS样式选择
-            indentUnit : 2,  // 缩进单位，默认2
+            indentUnit : 4,  // 缩进单位，默认2
             smartIndent : true,  // 是否智能缩进
             tabSize : 4,  // Tab缩进，默认4
             readOnly : true,  // 是否只读，默认false
@@ -90,7 +90,7 @@ layui.config({
 		var jsModelEditor = CodeMirror.fromTextArea(document.getElementById("jsModelEditor"), {
             mode : "text/x-java",  // 模式
             theme : "eclipse",  // CSS样式选择
-            indentUnit : 2,  // 缩进单位，默认2
+            indentUnit : 4,  // 缩进单位，默认2
             smartIndent : true,  // 是否智能缩进
             tabSize : 4,  // Tab缩进，默认4
             readOnly : true,  // 是否只读，默认false
@@ -103,7 +103,7 @@ layui.config({
 		var htmlSuccessEditor = CodeMirror.fromTextArea(document.getElementById("htmlSuccessEditor"), {
             mode : "text/x-java",  // 模式
             theme : "eclipse",  // CSS样式选择
-            indentUnit : 2,  // 缩进单位，默认2
+            indentUnit : 4,  // 缩进单位，默认2
             smartIndent : true,  // 是否智能缩进
             tabSize : 4,  // Tab缩进，默认4
             readOnly : false,  // 是否只读，默认false
@@ -116,7 +116,7 @@ layui.config({
 		var jsSuccessEditor = CodeMirror.fromTextArea(document.getElementById("jsSuccessEditor"), {
             mode : "text/x-java",  // 模式
             theme : "eclipse",  // CSS样式选择
-            indentUnit : 2,  // 缩进单位，默认2
+            indentUnit : 4,  // 缩进单位，默认2
             smartIndent : true,  // 是否智能缩进
             tabSize : 4,  // Tab缩进，默认4
             readOnly : false,  // 是否只读，默认false
