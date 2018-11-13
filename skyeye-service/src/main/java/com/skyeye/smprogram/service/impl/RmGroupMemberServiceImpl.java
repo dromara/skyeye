@@ -1,5 +1,7 @@
 package com.skyeye.smprogram.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -194,6 +196,40 @@ public class RmGroupMemberServiceImpl implements RmGroupMemberService{
 			ToolUtil.deleteFile(basePath);
 		}
 		rmGroupMemberDao.editRmGroupMemberMationById(map);
+	}
+
+	/**
+	 * 
+	     * @Title: editRmGroupMemberAndPropertyMationById
+	     * @Description: 编辑小程序组件和标签属性的绑定信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editRmGroupMemberAndPropertyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		String[] propertyIds = map.get("propertyIds").toString().split(",");
+		List<Map<String, Object>> beans = new ArrayList<>();
+		Map<String, Object> bean = null;
+		for(String str : propertyIds){
+			if(!ToolUtil.isBlank(str)){
+				bean = new HashMap<>();
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("propertyId", str);
+				bean.put("memberId", map.get("memberId"));
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				beans.add(bean);
+			}
+		}
+		if(!beans.isEmpty()){
+			rmGroupMemberDao.deleteRmGroupMemberAndPropertyMationById(map);//删除之前的绑定信息
+			rmGroupMemberDao.insertRmGroupMemberAndPropertyMationById(beans);//新增绑定信息
+		}
 	}
 	
 }

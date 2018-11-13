@@ -127,4 +127,20 @@ public class RmGroupMemberController {
 		rmGroupMemberService.editRmGroupMemberMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editRmGroupMemberAndPropertyMationById
+	     * @Description: 编辑小程序组件和标签属性的绑定信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupMemberController/editRmGroupMemberAndPropertyMationById")
+	@ResponseBody
+	public void editRmGroupMemberAndPropertyMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupMemberService.editRmGroupMemberAndPropertyMationById(inputObject, outputObject);
+	}
+	
 }

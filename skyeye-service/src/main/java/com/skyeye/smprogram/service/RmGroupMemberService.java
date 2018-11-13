@@ -19,4 +19,6 @@ public interface RmGroupMemberService {
 
 	public void editRmGroupMemberMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void editRmGroupMemberAndPropertyMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

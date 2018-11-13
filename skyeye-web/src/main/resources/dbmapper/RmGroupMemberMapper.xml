@@ -156,4 +156,21 @@
 		WHERE a.id = #{id}
 	</select>
 	
+	<delete id="deleteRmGroupMemberAndPropertyMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			rm_group_member_property
+		WHERE
+			member_id = #{memberId}
+	</delete>
+	
+	<insert id="insertRmGroupMemberAndPropertyMationById" parameterType="java.util.Map">
+	     insert into rm_group_member_property
+	     (id, member_id, property_id, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.memberId}, #{item.propertyId}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
 </mapper>

@@ -116,7 +116,7 @@ layui.config({
 	        { field: 'groupName', title: '所属分组', width: 120 },
 	        { field: 'memberUseNum', title: '使用次数', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
-	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+	        { title: '操作', fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 	    ]]
 	});
 	
@@ -127,6 +127,8 @@ layui.config({
         	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
+        }else if (layEvent === 'bindProperty') { //绑定属性
+        	bindProperty(data);
         }else if (layEvent === 'top') { //上移
         	topOne(data);
         }else if (layEvent === 'lower') { //下移
@@ -276,6 +278,23 @@ layui.config({
 			url: "../../tpl/rmgroupmember/rmgroupmemberedit.html", 
 			title: "编辑组件",
 			pageId: "rmgroupmemberedit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+	}
+	
+	//绑定属性
+	function bindProperty(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/rmgroupmember/bindproperty.html", 
+			title: "绑定属性",
+			pageId: "bindproperty",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});

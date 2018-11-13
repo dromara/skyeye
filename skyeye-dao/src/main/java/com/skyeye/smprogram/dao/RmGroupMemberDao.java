@@ -29,4 +29,8 @@ public interface RmGroupMemberDao {
 
 	public Map<String, Object> queryRmGroupMemberMationById(Map<String, Object> map) throws Exception;
 
+	public int deleteRmGroupMemberAndPropertyMationById(Map<String, Object> map) throws Exception;
+
+	public int insertRmGroupMemberAndPropertyMationById(List<Map<String, Object>> beans) throws Exception;
+
 }

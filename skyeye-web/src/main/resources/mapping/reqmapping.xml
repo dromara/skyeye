@@ -326,6 +326,10 @@
 		<property id="pageId" name="pageId" ref="required" var="小程序页面id"/>
 		<property id="jsonData" name="jsonData" ref="required" var="小程序页面和模块绑定的json字符串"/>
 	</url>
+	<url id="rmxcx038" path="/post/RmGroupMemberController/editRmGroupMemberAndPropertyMationById" val="编辑小程序组件和标签属性的绑定信息" allUse="1">
+		<property id="propertyIds" name="propertyIds" ref="required" var="小程序标签属性id"/>
+		<property id="rowId" name="memberId" ref="required" var="小程序组件成员id"/>
+	</url>
 	<url id="rmproperty001" path="/post/RmPropertyController/queryRmPropertyList" val="获取小程序样式属性列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
