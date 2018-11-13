@@ -46,7 +46,7 @@ layui.config({
         	}else{
         		for(var i = 0; i < subData.length; i++){
         			subData[i].modelContent = "";
-        			subData[i].content = encodeURI(subData[i].content.replace(/\+/g, "%2B").replace(/\&/g, "%26"));
+        			subData[i].content = subData[i].content.replace(/\+/g, "%2B").replace(/\&/g, "%26");
         		}
         		AjaxPostUtil.request({url:reqBasePath + "codemodel014", params:{jsonData: JSON.stringify(subData)}, type:'json', callback:function(json){
         			if(json.returnCode == 0){
