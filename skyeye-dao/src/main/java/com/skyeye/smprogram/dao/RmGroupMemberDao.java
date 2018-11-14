@@ -33,4 +33,6 @@ public interface RmGroupMemberDao {
 
 	public int insertRmGroupMemberAndPropertyMationById(List<Map<String, Object>> beans) throws Exception;
 
+	public List<Map<String, Object>> queryRmGroupMemberAndPropertyMationById(Map<String, Object> map) throws Exception;
+
 }

@@ -143,4 +143,20 @@ public class RmGroupMemberController {
 		rmGroupMemberService.editRmGroupMemberAndPropertyMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryRmGroupMemberAndPropertyMationById
+	     * @Description: 获取小程序组件和标签属性的绑定信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/RmGroupMemberController/queryRmGroupMemberAndPropertyMationById")
+	@ResponseBody
+	public void queryRmGroupMemberAndPropertyMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		rmGroupMemberService.queryRmGroupMemberAndPropertyMationById(inputObject, outputObject);
+	}
+	
 }

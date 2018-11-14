@@ -7,6 +7,7 @@
 			a.id,
 			CONCAT(#{basePath}, a.prints_pic_url) printsPicUrl,
 			(SELECT COUNT(*) FROM sm_project_page_mode b WHERE b.rm_group_member_id = a.id) memberUseNum,
+			(SELECT COUNT(*) FROM rm_group_member_property c WHERE c.member_id = a.id) propertyNum,
 			CONVERT(a.create_time, char) createTime,
 			(SELECT c.name FROM rm_type c WHERE c.id = a.sm_type_id) typeName,
 			(SELECT d.name FROM rm_group d WHERE d.id = a.sm_group_id) groupName,
@@ -172,5 +173,14 @@
 			(#{item.id}, #{item.memberId}, #{item.propertyId}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
+	
+	<select id="queryRmGroupMemberAndPropertyMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.property_id propertyId
+		FROM
+			rm_group_member_property a
+		WHERE
+			a.member_id = #{id}
+	</select>
 	
 </mapper>

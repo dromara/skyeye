@@ -115,6 +115,7 @@ layui.config({
 	        { field: 'typeName', title: '所属分类', width: 120 },
 	        { field: 'groupName', title: '所属分组', width: 120 },
 	        { field: 'memberUseNum', title: '使用次数', width: 120 },
+	        { field: 'propertyNum', title: '标签属性数量', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 	    ]]

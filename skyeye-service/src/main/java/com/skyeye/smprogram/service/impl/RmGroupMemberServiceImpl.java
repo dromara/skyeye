@@ -231,5 +231,25 @@ public class RmGroupMemberServiceImpl implements RmGroupMemberService{
 			rmGroupMemberDao.insertRmGroupMemberAndPropertyMationById(beans);//新增绑定信息
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: queryRmGroupMemberAndPropertyMationById
+	     * @Description: 获取小程序组件和标签属性的绑定信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryRmGroupMemberAndPropertyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = rmGroupMemberDao.queryRmGroupMemberAndPropertyMationById(map);
+		if(beans != null && !beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
 	
 }
