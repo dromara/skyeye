@@ -31,6 +31,7 @@ layui.config({
 	        { field: 'propertyOut', title: '外部属性', width: 150 },
 	        { field: 'contentName', title: '展现形式', width: 180 },
 	        { field: 'propertyValueNum', title: '属性值数量', width: 150 },
+	        { field: 'useNum', title: '使用数量', width: 150 },
 	        { field: 'id', title: 'HTML内容', width: 180, templet: function(d){
 	        	if(!isNull(d.htmlContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';

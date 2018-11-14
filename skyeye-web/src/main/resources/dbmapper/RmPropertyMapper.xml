@@ -14,6 +14,7 @@
 			a.js_rely_on jsRelyOn,
 			a.property_unit propertyUnit,
 			(SELECT COUNT(*) FROM rm_property_value c WHERE c.property_id = a.id) propertyValueNum,
+			(SELECT COUNT(*) FROM rm_group_member_property d WHERE d.property_id = a.id) useNum,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			rm_property a
@@ -54,6 +55,14 @@
 			COUNT(*) propertyValueNum
 		FROM 
 			rm_property_value a 
+		WHERE a.property_id = #{id}
+	</select>
+	
+	<select id="queryUseRmPropertyNumById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) usePropertyNum
+		FROM 
+			rm_group_member_property a 
 		WHERE a.property_id = #{id}
 	</select>
 	
