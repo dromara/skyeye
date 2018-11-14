@@ -32,4 +32,21 @@
 		</foreach>  
 	</insert>
 	
+	<select id="queryPropertyListByMemberId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.title,
+			b.property_tag propertyTag,
+			b.property_out propertyOut,
+			b.property_unit propertyUnit,
+			b.html_content htmlContent,
+			b.js_content jsContent,
+			b.js_rely_on jsRelyOn
+		FROM
+			rm_group_member_property a,
+			rm_property b
+		WHERE a.member_id = #{id}
+		AND b.id = a.property_id
+	</select>
+	
 </mapper>

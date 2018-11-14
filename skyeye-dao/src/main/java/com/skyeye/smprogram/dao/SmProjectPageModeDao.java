@@ -11,4 +11,6 @@ public interface SmProjectPageModeDao {
 
 	public int editProPageModeMationByPageIdList(List<Map<String, Object>> beans) throws Exception;
 
+	public List<Map<String, Object>> queryPropertyListByMemberId(Map<String, Object> map) throws Exception;
+
 }

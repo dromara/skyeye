@@ -10,6 +10,23 @@ layui.config({
 	    form = layui.form;
 	    
 		form.render();
+		
+		AjaxPostUtil.request({url:reqBasePath + "exexplaintormproperty004", params:{}, type:'json', callback:function(json){
+   			if(json.returnCode == 0){
+   				layer.open({
+   					type: 1,
+   					closeBtn: 0,//关闭按钮
+   					resize: false,//是否允许拉伸
+   					offset: 'l', // 具体配置参考：offset参数项
+   					content: json.bean.content,
+   					area: ['200px', '400px'],
+   					shade: 0, //不显示遮罩
+   					title: json.bean.title
+   				});
+   			}else{
+   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			}
+   		}});
       	
       	var htmlModelContent = CodeMirror.fromTextArea(document.getElementById("htmlModelContent"), {
             mode : "xml",  // 模式

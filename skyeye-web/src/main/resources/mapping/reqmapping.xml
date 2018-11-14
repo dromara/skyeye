@@ -333,6 +333,9 @@
 	<url id="rmxcx039" path="/post/RmGroupMemberController/queryRmGroupMemberAndPropertyMationById" val="获取小程序组件和标签属性的绑定信息" allUse="1">
 		<property id="rowId" name="id" ref="required" var="小程序组件成员id"/>
 	</url>
+	<url id="rmxcx040" path="/post/SmProjectPageModeController/queryPropertyListByMemberId" val="根据组件id获取标签属性" allUse="1">
+		<property id="rowId" name="id" ref="required" var="小程序组件成员id"/>
+	</url>
 	
 	<url id="rmproperty001" path="/post/RmPropertyController/queryRmPropertyList" val="获取小程序样式属性列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
@@ -554,6 +557,19 @@
 	    <property id="rowId" name="id" ref="required" var="动态表单内容项说明id"/>
 	</url>
 	<url id="exexplaintodsformcontent004" path="/post/ExExplainToDsFormContentController/queryExExplainToDsFormContentMationToShow" val="获取动态表单内容项说明信息供展示" allUse="1">
+	</url>
+	<url id="exexplaintormproperty001" path="/post/ExExplainToRmPropertyController/insertExExplainToRmPropertyMation" val="添加标签属性说明信息" allUse="1">
+		<property id="title" name="title" ref="required" var="标签属性说明标题"/>
+		<property id="content" name="content" ref="required" var="标签属性说明内容"/>
+	</url>
+	<url id="exexplaintormproperty002" path="/post/ExExplainToRmPropertyController/queryExExplainToRmPropertyMation" val="编辑标签属性说明信息时进行回显" allUse="1">
+	</url>
+	<url id="exexplaintormproperty003" path="/post/ExExplainToRmPropertyController/editExExplainToRmPropertyMationById" val="编辑标签属性说明信息" allUse="1">
+		<property id="title" name="title" ref="required" var="标签属性说明标题"/>
+		<property id="content" name="content" ref="required" var="标签属性说明内容"/>
+	    <property id="rowId" name="id" ref="required" var="标签属性说明id"/>
+	</url>
+	<url id="exexplaintormproperty004" path="/post/ExExplainToRmPropertyController/queryExExplainToRmPropertyMationToShow" val="获取标签属性说明信息供展示" allUse="1">
 	</url>
 	<!-- 系统各部分说明结束 -->
 	

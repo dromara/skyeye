@@ -320,6 +320,16 @@ layui.config({
     	$(".check-item").parent().find(".check-item-operation").hide();//隐藏之前选中的组件的操作
     	$(this).addClass("check-item-shoose");//给当前组件添加选中样式
     	$(this).parent().find(".check-item-operation").show();//显示当前选中的组件的操作
+    	var memberId = $(this).parent().attr("rowId");
+    	AjaxPostUtil.request({url:reqBasePath + "rmxcx040", params:{rowId: memberId}, type:'json', callback:function(json){
+   			if(json.returnCode == 0){
+   				if(json.total != 0){
+   					console.log(json);
+   				}
+   			}else{
+   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			}
+   		}});
     });
     
     //页面内组件移除按钮

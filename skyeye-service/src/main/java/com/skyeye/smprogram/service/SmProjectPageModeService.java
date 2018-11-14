@@ -9,4 +9,6 @@ public interface SmProjectPageModeService {
 
 	public void editProPageModeMationByPageIdList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryPropertyListByMemberId(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

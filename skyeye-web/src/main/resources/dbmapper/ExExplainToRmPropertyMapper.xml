@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.exexplain.dao.ExExplainToRmPropertyDao">
+	
+	<select id="queryExExplainToRmPropertyMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.content
+		FROM
+			ex_explain_to_rm_property a
+		LIMIT 1
+	</select>
+	
+	<insert id="insertExExplainToRmPropertyMation" parameterType="java.util.Map">
+	     INSERT into ex_explain_to_rm_property 
+	     (id, title, content, create_id, create_time)
+	     VALUES
+	     (#{id}, #{title}, #{content}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="editExExplainToRmPropertyMationById" parameterType="java.util.Map">
+		UPDATE ex_explain_to_rm_property
+		<set>
+			<if test="title != '' and title != null">
+				title = #{title},
+			</if>
+			<if test="content != '' and content != null">
+				content = #{content},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

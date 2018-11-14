@@ -73,4 +73,24 @@ public class SmProjectPageModeServiceImpl implements SmProjectPageModeService{
 		}
 	}
 
+	/**
+	 * 
+	     * @Title: queryPropertyListByMemberId
+	     * @Description: 根据组件id获取标签属性
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryPropertyListByMemberId(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = smProjectPageModeDao.queryPropertyListByMemberId(map);
+		if(beans != null && !beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
+
 }

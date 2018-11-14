@@ -47,4 +47,20 @@ public class SmProjectPageModeController {
 		smProjectPageModeService.editProPageModeMationByPageIdList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryPropertyListByMemberId
+	     * @Description: 根据组件id获取标签属性
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SmProjectPageModeController/queryPropertyListByMemberId")
+	@ResponseBody
+	public void queryPropertyListByMemberId(InputObject inputObject, OutputObject outputObject) throws Exception{
+		smProjectPageModeService.queryPropertyListByMemberId(inputObject, outputObject);
+	}
+	
 }

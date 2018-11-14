@@ -2570,17 +2570,17 @@ input[type="search"]::-webkit-search-results-decoration{
     
 }
 .swiper-slide img {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  -ms-transform: translate(-50%, -50%);
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  position: absolute;
-  left: 50%;
-  top: 50%;
+	width: 100%;
+	height: auto;
+	max-width: 100%;
+	max-height: 100%;
+	-ms-transform: translate(-50%, -50%);
+	-webkit-transform: translate(-50%, -50%);
+	-moz-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	position: absolute;
+	left: 50%;
+	top: 50%;
 }
 
 /** 扩展插件样式结束 **/
