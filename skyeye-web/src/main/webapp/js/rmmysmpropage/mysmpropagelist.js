@@ -324,7 +324,23 @@ layui.config({
     	AjaxPostUtil.request({url:reqBasePath + "rmxcx040", params:{rowId: memberId}, type:'json', callback:function(json){
    			if(json.returnCode == 0){
    				if(json.total != 0){
-   					console.log(json);
+   					var str = "";
+   					var jsRelyOn = "";
+   					var jsContent = "";
+   					for(var i in json.rows){
+   						str = str + json.rows[i].htmlContent.replace(/{{id}}/g, json.rows[i].id).replace(/{{labelContent}}/g, json.rows[i].title)
+   									.replace(/{{placeholder}}/g, json.rows[i].title).replace(/{{tag}}/g, json.rows[i].propertyTag)
+   									.replace(/{{unit}}/g, json.rows[i].propertyUnit).replace(/{{out}}/g, json.rows[i].propertyOut);
+   						jsRelyOn = jsRelyOn + json.rows[i].jsRelyOn;
+   						jsContent = jsContent + json.rows[i].jsContent.replace(/{{id}}/g, json.rows[i].id);
+   					}
+   					if(isNull(str)){
+   						$("#showForm").html(noMatchingBeansMation);
+   					}else{
+   						$("#showForm").html(str);
+   					}
+   				}else{
+   					$("#showForm").html(noMatchingBeansMation);
    				}
    			}else{
    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});

@@ -14,6 +14,7 @@ var fileDocType = ['txt', 'docx', 'doc', 'xlsx', 'xls', 'pdf', 'ppt', 'TXT', 'DO
 
 //showmodel.js没有数据时的默认展示
 var noBeansMation = "<div class='noMation col-lg-12 col-sm-12 col-xs-12'><img src='../../assets/images/noMation.png' style='max-width:100px'/><br/><font class='noMationFont'>暂无数据</font></div>";
+var noMatchingBeansMation = "<div class='noMation col-lg-12 col-sm-12 col-xs-12'><img src='../../assets/images/noMation.png' style='max-width:100px'/><br/><font class='noMationFont'>暂无匹配项</font></div>";
 
 //动态引入获取IP的路径
 document.write("<script type=\"text/javascript\" src=\"http://pv.sohu.com/cityjson?ie=utf-8\"></script>");
