@@ -9,7 +9,7 @@ var editPageModelSelectChange = false;//选中的页面，模板是否修改
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui', 'form', 'dragula', 'swiper'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'form', 'dragula', 'swiper', 'slider', 'colorpicker', 'fileUpload', 'layedit'], function (exports) {
 	
 	winui.renderColor();
 	
@@ -336,7 +336,7 @@ layui.config({
    						jsRelyOn = jsRelyOn + json.rows[i].jsRelyOn;
    						jsContent = jsContent + json.rows[i].jsContent.replace(/{{id}}/g, json.rows[i].id).replace(/%2B/g, '\+').replace(/%26/g, "\&");
    					}
-   					jsContent = '<script>layui.define([' + jsRelyOn + '"jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + jsContent + '})(jQuery);});</script>';
+   					jsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + jsContent + '})(jQuery);});</script>';
    					if(isNull(str)){
    						$("#showForm").html(noMatchingBeansMation);
    					}else{
