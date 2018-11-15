@@ -26,27 +26,27 @@ layui.config({
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
 	        { field: 'title', title: '属性别名', width: 180 },
-	        { field: 'propertyTag', title: '属性标签', width: 180 },
-	        { field: 'propertyUnit', title: '属性单位', width: 180 },
-	        { field: 'propertyOut', title: '外部属性', width: 150 },
-	        { field: 'contentName', title: '展现形式', width: 180 },
-	        { field: 'propertyValueNum', title: '属性值数量', width: 150 },
-	        { field: 'useNum', title: '使用数量', width: 150 },
-	        { field: 'id', title: 'HTML内容', width: 180, templet: function(d){
+	        { field: 'propertyTag', title: '属性标签', width: 100 },
+	        { field: 'propertyUnit', title: '属性单位', width: 100 },
+	        { field: 'propertyOut', title: '外部属性', width: 100 },
+	        { field: 'contentName', title: '展现形式', width: 120 },
+	        { field: 'propertyValueNum', title: '属性值数量', width: 100 },
+	        { field: 'useNum', title: '使用数量', width: 100 },
+	        { field: 'id', title: 'HTML内容', width: 100, templet: function(d){
 	        	if(!isNull(d.htmlContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        	}else{
 	        		return '无';
 	        	}
 	        }},
-	        { field: 'id', title: 'JS内容', width: 180, templet: function(d){
+	        { field: 'id', title: 'JS内容', width: 80, templet: function(d){
 	        	if(!isNull(d.jsContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsContent"></i>';
 	        	}else{
 	        		return '无';
 	        	}
 	        }},
-	        { field: 'id', title: 'JS依赖文件', width: 180, templet: function(d){
+	        { field: 'id', title: 'JS依赖文件', width: 120, templet: function(d){
 	        	if(!isNull(d.jsRelyOn)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsRelyOn"></i>';
 	        	}else{
