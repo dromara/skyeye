@@ -316,9 +316,11 @@ layui.config({
     
     //页面内组件选中组件项
     $('body').on('click', '.check-item', function(){
+    	$(".check-item").removeClass("show-operation");
     	$(".check-item").removeClass("check-item-shoose");//移除之前被选中的组件
     	$(".check-item").parent().find(".check-item-operation").hide();//隐藏之前选中的组件的操作
     	$(this).addClass("check-item-shoose");//给当前组件添加选中样式
+    	$(this).addClass("show-operation");
     	$(this).parent().find(".check-item-operation").show();//显示当前选中的组件的操作
     	var memberId = $(this).parent().attr("rowId");
     	AjaxPostUtil.request({url:reqBasePath + "rmxcx040", params:{rowId: memberId}, type:'json', callback:function(json){
@@ -332,12 +334,23 @@ layui.config({
    									.replace(/{{placeholder}}/g, json.rows[i].title).replace(/{{tag}}/g, json.rows[i].propertyTag)
    									.replace(/{{unit}}/g, json.rows[i].propertyUnit).replace(/{{out}}/g, json.rows[i].propertyOut);
    						jsRelyOn = jsRelyOn + json.rows[i].jsRelyOn;
-   						jsContent = jsContent + json.rows[i].jsContent.replace(/{{id}}/g, json.rows[i].id);
+   						jsContent = jsContent + json.rows[i].jsContent.replace(/{{id}}/g, json.rows[i].id).replace(/%2B/g, '\+').replace(/%26/g, "\&");
    					}
+   					jsContent = '<script>layui.define([' + jsRelyOn + '"jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + jsContent + '})(jQuery);});</script>';
    					if(isNull(str)){
    						$("#showForm").html(noMatchingBeansMation);
    					}else{
-   						$("#showForm").html(str);
+   						str = str + '<div class="layui-form-item"><div class="layui-input-block"><button class="winui-btn" lay-submit lay-filter="saveProperty">保存属性</button></div></div>';
+   						$("#showForm").html(str + jsContent);
+   						form.render();
+   						form.on('submit(saveProperty)', function (data) {
+   					    	//表单验证
+   							console.log(data);
+   					        if (winui.verifyForm(data.elem)) {
+   					        	
+   					        }
+   					        return false;
+   						});
    					}
    				}else{
    					$("#showForm").html(noMatchingBeansMation);

@@ -34,6 +34,7 @@ layui.config({
    		    	       ,'link' //超链接
    		    	       ,'unlink' //清除链接
    		    	       ,'face' //表情
+   		    	       ,'code'
    		    	     ]
    			    });
    			}else{
