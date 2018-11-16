@@ -6,6 +6,8 @@ var pageId = "";//页面id
 var editPageModelSelectId = "";//正在编辑模板中的页面id
 var editPageModelSelectChange = false;//选中的页面，模板是否修改
 
+var form = "";//表单属性
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -14,8 +16,8 @@ layui.config({
 	winui.renderColor();
 	
 	var $ = layui.$,
-	form = layui.form,
 	table = layui.table;
+	form = layui.form;
 	
 	proId = parent.rowId;//项目id
 	
@@ -330,6 +332,10 @@ layui.config({
    					var jsRelyOn = "";
    					var jsContent = "";
    					for(var i in json.rows){
+   						if(json.rows[i].selChildData == '1'){
+   							var modeContent = getDataUseHandlebars(json.rows[i].templateContent, json.rows[i].propertyValue);
+   							json.rows[i].htmlContent = json.rows[i].htmlContent.replace(/{{content}}/g, modeContent);
+   						}
    						str = str + json.rows[i].htmlContent.replace(/{{id}}/g, json.rows[i].id).replace(/{{labelContent}}/g, json.rows[i].title)
    									.replace(/{{placeholder}}/g, json.rows[i].title).replace(/{{tag}}/g, json.rows[i].propertyTag)
    									.replace(/{{unit}}/g, json.rows[i].propertyUnit).replace(/{{out}}/g, json.rows[i].propertyOut);

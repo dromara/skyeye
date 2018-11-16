@@ -90,7 +90,7 @@ public class SmProjectPageModeServiceImpl implements SmProjectPageModeService{
 		if(beans != null && !beans.isEmpty()){
 			for(Map<String, Object> bean : beans){
 				if("1".equals(bean.get("selChildData").toString())){//子查询设置为是
-					List<Map<String, Object>> propertyValues = smProjectPageModeDao.queryPropertyValuesListByPropertyId(map);
+					List<Map<String, Object>> propertyValues = smProjectPageModeDao.queryPropertyValuesListByPropertyId(bean);
 					bean.put("propertyValue", propertyValues);
 				}
 			}

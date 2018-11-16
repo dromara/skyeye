@@ -42,16 +42,19 @@
 			b.html_content htmlContent,
 			b.js_content jsContent,
 			b.js_rely_on jsRelyOn,
-			b.wether_sel_child_data selChildData
+			b.wether_sel_child_data selChildData,
+			c.template_content templateContent
 		FROM
 			rm_group_member_property a,
 			rm_property b
+			LEFT JOIN ds_form_display_template c ON c.id = b.ds_form_display_template_id
 		WHERE a.member_id = #{id}
 		AND b.id = a.property_id
 	</select>
 	
 	<select id="queryPropertyValuesListByPropertyId" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
+			a.id,
 			a.property_value name
 		FROM
 			rm_property_value a
