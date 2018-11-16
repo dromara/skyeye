@@ -50,4 +50,12 @@
 		AND b.id = a.property_id
 	</select>
 	
+	<select id="queryPropertyValuesListByPropertyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.property_value name
+		FROM
+			rm_property_value a
+		WHERE a.property_id = #{id}
+	</select>
+	
 </mapper>

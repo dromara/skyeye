@@ -13,4 +13,6 @@ public interface SmProjectPageModeDao {
 
 	public List<Map<String, Object>> queryPropertyListByMemberId(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryPropertyValuesListByPropertyId(Map<String, Object> map) throws Exception;
+
 }
