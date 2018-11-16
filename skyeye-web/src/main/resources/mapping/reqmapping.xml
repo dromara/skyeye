@@ -531,6 +531,26 @@
 	</url>
 	<url id="dsformlimitrequirement006" path="/post/DsFormLimitRequirementController/queryDsFormLimitRequirementMationToShow" val="获取动态表单内容供展示" allUse="1">
 	</url>
+	<url id="dsformdisplaytemplate001" path="/post/DsFormDisplayTemplateController/queryDsFormDisplayTemplateList" val="获取动态表单数据展示模板列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="templateName" name="templateName" ref="" var="模板名称"/>
+	</url>
+	<url id="dsformdisplaytemplate002" path="/post/DsFormDisplayTemplateController/insertDsFormDisplayTemplateMation" val="添加动态表单数据展示模板信息" allUse="1">
+		<property id="templateName" name="templateName" ref="required" var="模板名称"/>
+	    <property id="templateContent" name="templateContent" ref="required" var="模板内容"/>
+	</url>
+	<url id="dsformdisplaytemplate003" path="/post/DsFormDisplayTemplateController/deleteDsFormDisplayTemplateMationById" val="删除动态表单数据展示模板信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单数据展示模板id"/>
+	</url>
+	<url id="dsformdisplaytemplate004" path="/post/DsFormDisplayTemplateController/queryDsFormDisplayTemplateMationToEditById" val="编辑动态表单数据展示模板信息时进行回显" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单数据展示模板id"/>
+	</url>
+	<url id="dsformdisplaytemplate005" path="/post/DsFormDisplayTemplateController/editDsFormDisplayTemplateMationById" val="编辑动态表单数据展示模板信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单数据展示模板id"/>
+	    <property id="templateName" name="templateName" ref="required" var="模板名称"/>
+	    <property id="templateContent" name="templateContent" ref="required" var="模板内容"/>
+	</url>
 	<!-- 动态表单系列结束 -->
 	
 	<!-- 系统各部分说明开始 -->
