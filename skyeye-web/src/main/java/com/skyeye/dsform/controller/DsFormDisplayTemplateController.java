@@ -94,4 +94,20 @@ public class DsFormDisplayTemplateController {
 		dsFormDisplayTemplateService.editDsFormDisplayTemplateMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryDisplayTemplateListToShow
+	     * @Description: 获取动态表单数据展示模板
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DsFormDisplayTemplateController/queryDisplayTemplateListToShow")
+	@ResponseBody
+	public void queryDisplayTemplateListToShow(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dsFormDisplayTemplateService.queryDisplayTemplateListToShow(inputObject, outputObject);
+	}
+	
 }

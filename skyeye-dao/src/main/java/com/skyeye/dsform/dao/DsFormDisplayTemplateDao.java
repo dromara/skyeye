@@ -20,4 +20,6 @@ public interface DsFormDisplayTemplateDao {
 
 	public int editDsFormDisplayTemplateMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryDisplayTemplateListToShow(Map<String, Object> map) throws Exception;
+
 }

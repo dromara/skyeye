@@ -40,8 +40,16 @@
             <div class="layui-form-item">
 		        <label class="layui-form-label">子查询<i class="red">*</i></label>
 		        <div class="layui-input-block winui-radio">
-		            <input type="radio" name="selChildData" value="1" title="是" />
-		            <input type="radio" name="selChildData" value="2" title="否" checked/>
+		            <input type="radio" name="selChildData" value="1" title="是" lay-filter="selChildData" />
+		            <input type="radio" name="selChildData" value="2" title="否" lay-filter="selChildData" checked/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item" id="dataShowModel">
+		        <label class="layui-form-label">数据展示模板<i class="red">*</i></label>
+		        <div class="layui-input-block winui-radio">
+		            <select id="displayTemplateId" name="displayTemplateId" class="layui-input" win-verify="required" lay-search>
+		                <option value="">全部</option>
+		            </select>
 		        </div>
 		    </div>
           	<div class="layui-form-item">

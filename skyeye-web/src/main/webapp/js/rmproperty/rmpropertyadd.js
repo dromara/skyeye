@@ -11,6 +11,8 @@ layui.config({
 	    
 		form.render();
 		
+		$("#dataShowModel").hide();
+		
 		AjaxPostUtil.request({url:reqBasePath + "exexplaintormproperty004", params:{}, type:'json', callback:function(json){
    			if(json.returnCode == 0){
    				layer.open({
@@ -105,6 +107,30 @@ layui.config({
     	 	ajaxSendAfter:function(json){
     	 		form.render('select');
     	 	}
+        });
+      	
+      	//子查询变化
+ 		form.on('radio(selChildData)', function (data) {
+ 			var val = data.value;
+	    	if(val == '1'){//是
+	    		$("#dataShowModel").show();
+	    		showGrid({
+	    		 	id: "displayTemplateId",
+	    		 	url: reqBasePath + "dsformdisplaytemplate006",
+	    		 	params: {},
+	    		 	pagination: false,
+	    		 	template: getFileContent('tpl/template/select-option.tpl'),
+	    		 	ajaxSendLoadBefore: function(hdb){
+	    		 	},
+	    		 	ajaxSendAfter:function(json){
+	    		 		form.render('select');
+	    		 	}
+	    		});
+	    	}else if(val == '2'){//否
+	    		$("#dataShowModel").hide();
+	    	}else{
+	    		top.winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    	}
         });
       	
       	form.on('select(selectParent)', function(data){

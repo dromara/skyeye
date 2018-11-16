@@ -375,6 +375,7 @@
 	</url>
 	<url id="rmproperty006" path="/post/RmPropertyController/queryRmPropertyListToShow" val="获取小程序样式属性供展示" allUse="1">
 	</url>
+	
 	<url id="rmpropertyvalue001" path="/post/RmPropertyValueController/queryRmPropertyValueList" val="获取小程序样式属性值列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
@@ -550,6 +551,8 @@
 	    <property id="rowId" name="id" ref="required" var="动态表单数据展示模板id"/>
 	    <property id="templateName" name="templateName" ref="required" var="模板名称"/>
 	    <property id="templateContent" name="templateContent" ref="required" var="模板内容"/>
+	</url>
+	<url id="dsformdisplaytemplate006" path="/post/DsFormDisplayTemplateController/queryDisplayTemplateListToShow" val="获取动态表单数据展示模板" allUse="1">
 	</url>
 	<!-- 动态表单系列结束 -->
 	

@@ -15,4 +15,6 @@ public interface DsFormDisplayTemplateService {
 
 	public void editDsFormDisplayTemplateMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryDisplayTemplateListToShow(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

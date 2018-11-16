@@ -75,4 +75,12 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryDisplayTemplateListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.template_name name
+		FROM
+			ds_form_display_template a
+	</select>
+	
 </mapper>
