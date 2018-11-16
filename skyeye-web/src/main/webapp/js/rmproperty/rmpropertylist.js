@@ -28,6 +28,7 @@ layui.config({
 	        { field: 'title', title: '属性别名', width: 180 },
 	        { field: 'propertyTag', title: '属性标签', width: 100 },
 	        { field: 'propertyUnit', title: '属性单位', width: 100 },
+	        { field: 'selChildData', title: '子查询', width: 100 },
 	        { field: 'propertyOut', title: '外部属性', width: 100 },
 	        { field: 'contentName', title: '展现形式', width: 120 },
 	        { field: 'propertyValueNum', title: '属性值数量', width: 100 },

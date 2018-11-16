@@ -25,6 +25,13 @@
             <input type="radio" name="propertyOut" value="2" title="否" />
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">子查询<i class="red">*</i></label>
+        <div class="layui-input-block winui-radio">
+            <input type="radio" name="selChildData" value="1" title="是" />
+            <input type="radio" name="selChildData" value="2" title="否" />
+        </div>
+    </div>
 	<div class="layui-form-item">
         <label class="layui-form-label">展现形式<i class="red">*</i></label>
         <div class="layui-input-block">

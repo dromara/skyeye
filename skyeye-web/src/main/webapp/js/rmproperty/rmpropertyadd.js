@@ -129,6 +129,7 @@ layui.config({
         			propertyUnit:encodeURI($("#propertyUnit").val()),
         			dsFormContentId:$("#dsFormContentId").val(),
         			propertyOut:data.field.propertyOut,
+        			selChildData:data.field.selChildData,
         			htmlContent:encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
         			jsContent:encodeURI(jsContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
         			jsRelyOn:encodeURI(jsRelyOnContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),

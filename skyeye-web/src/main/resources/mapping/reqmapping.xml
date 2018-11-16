@@ -349,6 +349,7 @@
 	    <property id="propertyTag" name="propertyTag" ref="required" var="样式属性标签"/>
 	    <property id="dsFormContentId" name="dsFormContentId" ref="required" var="样式属性展现形式"/>
 	    <property id="propertyOut" name="propertyOut" ref="required,num" var="是否为外部属性   1是 2否"/>
+	    <property id="selChildData" name="selChildData" ref="required,num" var="子查询   1是 2否"/>
 	    <property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
 	    <property id="jsContent" name="jsContent" ref="" var="js内容"/>
 	    <property id="jsRelyOn" name="jsRelyOn" ref="" var="js依赖的js包"/>
@@ -366,6 +367,7 @@
 	    <property id="propertyTag" name="propertyTag" ref="required" var="样式属性标签"/>
 	    <property id="dsFormContentId" name="dsFormContentId" ref="required" var="样式属性展现形式"/>
 	    <property id="propertyOut" name="propertyOut" ref="required,num" var="是否为外部属性   1是 2否"/>
+	    <property id="selChildData" name="selChildData" ref="required,num" var="子查询   1是 2否"/>
 	    <property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
 	    <property id="jsContent" name="jsContent" ref="" var="js内容"/>
 	    <property id="jsRelyOn" name="jsRelyOn" ref="" var="js依赖的js包"/>
