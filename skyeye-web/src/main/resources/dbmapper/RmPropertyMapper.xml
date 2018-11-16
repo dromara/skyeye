@@ -16,10 +16,12 @@
 			(SELECT COUNT(*) FROM rm_property_value c WHERE c.property_id = a.id) propertyValueNum,
 			(SELECT COUNT(*) FROM rm_group_member_property d WHERE d.property_id = a.id) useNum,
 			CASE a.wether_sel_child_data WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '否' END selChildData,
+			c.template_name templateName,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			rm_property a
 			LEFT JOIN ds_form_content b ON a.ds_form_content_id = b.id
+			LEFT JOIN ds_form_display_template c ON c.id = a.ds_form_display_template_id
 		WHERE 1 = 1
 			<if test="title != '' and title != null">
 				AND a.title LIKE '%${title}%'
@@ -46,9 +48,9 @@
 	
 	<insert id="insertRmPropertyMation" parameterType="java.util.Map">
 	     INSERT into rm_property
-	     (id, title, property_tag, property_out, property_unit, ds_form_content_id, html_content, js_content, js_rely_on, wether_sel_child_data, create_id, create_time)
+	     (id, title, property_tag, property_out, property_unit, ds_form_content_id, html_content, js_content, js_rely_on, wether_sel_child_data, ds_form_display_template_id, create_id, create_time)
 	     VALUES
-	     (#{id}, #{title}, #{propertyTag}, #{propertyOut}, #{propertyUnit}, #{dsFormContentId}, #{htmlContent}, #{jsContent}, #{jsRelyOn}, #{selChildData}, #{createId}, #{createTime})
+	     (#{id}, #{title}, #{propertyTag}, #{propertyOut}, #{propertyUnit}, #{dsFormContentId}, #{htmlContent}, #{jsContent}, #{jsRelyOn}, #{selChildData}, #{displayTemplateId}, #{createId}, #{createTime})
 	</insert>
 	
 	<select id="queryRmPropertyValueNumById" parameterType="java.util.Map" resultType="java.util.Map">
@@ -88,7 +90,8 @@
 			a.property_unit propertyUnit,
 			b.html_content htmlModelContent,
 			b.js_content jsModelContent,
-			a.wether_sel_child_data selChildData
+			a.wether_sel_child_data selChildData,
+			a.ds_form_display_template_id displayTemplateId
 		FROM
 			rm_property a
 			LEFT JOIN ds_form_content b ON a.ds_form_content_id = b.id
@@ -130,6 +133,7 @@
 			js_content = #{jsContent},
 			js_rely_on = #{jsRelyOn},
 			property_unit = #{propertyUnit},
+			ds_form_display_template_id = #{displayTemplateId},
 		</set>
 		WHERE id = #{id}
 	</update>

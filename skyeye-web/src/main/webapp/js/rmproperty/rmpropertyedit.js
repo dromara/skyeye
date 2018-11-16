@@ -37,8 +37,6 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function(json){
 		 		
-		 		$("#dataShowModel").hide();
-		 		
 		 		htmlModelContent = CodeMirror.fromTextArea(document.getElementById("htmlModelContent"), {
 		            mode : "xml",  // 模式
 		            theme : "eclipse",  // CSS样式选择
@@ -106,6 +104,25 @@ layui.config({
 		      	
 		      	$("input:radio[name=propertyOut][value=" + json.bean.propertyOut + "]").prop("checked", true);
 		      	$("input:radio[name=selChildData][value=" + json.bean.selChildData + "]").prop("checked", true);
+		      	
+		      	if(json.bean.selChildData == '1'){//是
+		      		$("#dataShowModel").show();
+		      		showGrid({
+		    		 	id: "displayTemplateId",
+		    		 	url: reqBasePath + "dsformdisplaytemplate006",
+		    		 	params: {},
+		    		 	pagination: false,
+		    		 	template: getFileContent('tpl/template/select-option.tpl'),
+		    		 	ajaxSendLoadBefore: function(hdb){
+		    		 	},
+		    		 	ajaxSendAfter:function(json1){
+		    		 		$("#displayTemplateId").val(json.bean.displayTemplateId);
+		    		 		form.render('select');
+		    		 	}
+		    		});
+		      	}else{
+		      		$("#dataShowModel").hide();
+		      	}
 		 		
 		 		//子查询变化
 		 		form.on('radio(selChildData)', function (data) {
@@ -176,6 +193,16 @@ layui.config({
 		        			jsRelyOn:encodeURI(jsRelyOnContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
 		        			rowId:parent.rowId
 			        	};
+			        	if(data.field.selChildData == '1'){
+			        		if(isNull($("#displayTemplateId").val())){
+			        			top.winui.window.msg('请选择子查询数据展示模板', {icon: 2,time: 2000});
+			        			return false;
+			        		}else{
+			        			params.displayTemplateId = $("#displayTemplateId").val();
+			        		}
+			        	}else{
+			        		params.displayTemplateId = "";
+			        	}
 			        	
 			        	AjaxPostUtil.request({url:reqBasePath + "rmproperty005", params:params, type:'json', callback:function(json){
 			 	   			if(json.returnCode == 0){

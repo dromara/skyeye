@@ -161,6 +161,17 @@ layui.config({
         			jsRelyOn:encodeURI(jsRelyOnContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
 	        	};
 	        	
+	        	if(data.field.selChildData == '1'){
+	        		if(isNull($("#displayTemplateId").val())){
+	        			top.winui.window.msg('请选择子查询数据展示模板', {icon: 2,time: 2000});
+	        			return false;
+	        		}else{
+	        			params.displayTemplateId = $("#displayTemplateId").val();
+	        		}
+	        	}else{
+	        		params.displayTemplateId = "";
+	        	}
+	        	
 	        	AjaxPostUtil.request({url:reqBasePath + "rmproperty002", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
