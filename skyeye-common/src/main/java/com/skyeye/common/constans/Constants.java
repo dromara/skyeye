@@ -90,6 +90,7 @@ public class Constants {
 	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTOCODEMODEL = "exexplaintocodemodel";//代码生成器模板规范说明key
 	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTODSFORMCONTENT = "exexplaintodsformcontent";//动态表单内容项模板规范说明key
 	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTORMPROPERTY = "exexplaintormproperty";//小程序标签属性模板规范说明key
+	public static final String REDIS_CODEMODEL_EXPLAIN_EXEXPLAINTODSFORMDISPLAYTEMPLATE = "exexplaintodsformdisplaytemplate";//动态表单数据展示模板规范说明key
 	
 	/**
 	 * 微信小程序页面id的序列号

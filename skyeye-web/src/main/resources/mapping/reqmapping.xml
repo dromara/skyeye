@@ -573,6 +573,19 @@
 	</url>
 	<url id="exexplaintormproperty004" path="/post/ExExplainToRmPropertyController/queryExExplainToRmPropertyMationToShow" val="获取标签属性说明信息供展示" allUse="1">
 	</url>
+	<url id="exexplaintodsformdisplaytemplate001" path="/post/ExExplainToDsFormDisplayTemplateController/insertExExplainToDsFormDisplayTemplateMation" val="添加动态表单数据展示模板说明信息" allUse="1">
+		<property id="title" name="title" ref="required" var="动态表单数据展示模板说明标题"/>
+		<property id="content" name="content" ref="required" var="动态表单数据展示模板说明内容"/>
+	</url>
+	<url id="exexplaintodsformdisplaytemplate002" path="/post/ExExplainToDsFormDisplayTemplateController/queryExExplainToDsFormDisplayTemplateMation" val="编辑动态表单数据展示模板说明信息时进行回显" allUse="1">
+	</url>
+	<url id="exexplaintodsformdisplaytemplate003" path="/post/ExExplainToDsFormDisplayTemplateController/editExExplainToDsFormDisplayTemplateMationById" val="编辑动态表单数据展示模板说明信息" allUse="1">
+		<property id="title" name="title" ref="required" var="动态表单数据展示模板说明标题"/>
+		<property id="content" name="content" ref="required" var="动态表单数据展示模板说明内容"/>
+	    <property id="rowId" name="id" ref="required" var="动态表单数据展示模板说明id"/>
+	</url>
+	<url id="exexplaintodsformdisplaytemplate004" path="/post/ExExplainToDsFormDisplayTemplateController/queryExExplainToDsFormDisplayTemplateMationToShow" val="获取动态表单数据展示模板说明信息供展示" allUse="1">
+	</url>
 	<!-- 系统各部分说明结束 -->
 	
 </controller>
