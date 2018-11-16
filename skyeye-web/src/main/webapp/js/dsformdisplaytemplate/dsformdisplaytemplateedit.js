@@ -9,23 +9,6 @@ layui.config({
 	    var $ = layui.$,
 	    form = layui.form;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "exexplaintodsformdisplaytemplate004", params:{}, type:'json', callback:function(json){
-   			if(json.returnCode == 0){
-   				layer.open({
-   					type: 1,
-   					closeBtn: 0,//关闭按钮
-   					resize: false,//是否允许拉伸
-   					offset: 'l', // 具体配置参考：offset参数项
-   					content: json.bean.content,
-   					area: ['200px', '400px'],
-   					shade: 0, //不显示遮罩
-   					title: json.bean.title
-   				});
-   			}else{
-   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-   			}
-   		}});
-	    
 		showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "dsformdisplaytemplate004",
@@ -50,6 +33,24 @@ layui.config({
 		        });
 		 		
 		 		form.render();
+		 		
+		 		//模板规范说明
+		 		AjaxPostUtil.request({url:reqBasePath + "exexplaintodsformdisplaytemplate004", params:{}, type:'json', callback:function(json){
+		   			if(json.returnCode == 0){
+		   				layer.open({
+		   					type: 1,
+		   					closeBtn: 0,//关闭按钮
+		   					resize: false,//是否允许拉伸
+		   					offset: 'l', // 具体配置参考：offset参数项
+		   					content: json.bean.content,
+		   					area: ['200px', '400px'],
+		   					shade: 0, //不显示遮罩
+		   					title: json.bean.title
+		   				});
+		   			}else{
+		   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		   			}
+		   		}});
 		 		
 		 		form.on('submit(formEditBean)', function (data) {
 			    	//表单验证
