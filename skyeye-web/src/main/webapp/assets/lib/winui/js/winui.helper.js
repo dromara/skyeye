@@ -86,7 +86,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         var configs = {
             id: 'helper',
             type: 1,
-            title: '桌面助手',
+            title: '管家助手',
             skin: 'layer-ext-winhelper',
             shade: 0,
             closeBtn: 0,
@@ -113,7 +113,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
                             layer.msg('最多只能存五条便签', { zIndex: layer.zIndex });
                             return;
                         }
-                        $(CONTENT).append('<hr /><div class="tags-content"><textarea placeholder="输入内容，如：桌面助手真牛逼"></textarea></div>');
+                        $(CONTENT).append('<hr /><div class="tags-content"><textarea placeholder="记录自己的备忘录"></textarea></div>');
                         var $currTextarea = $(CONTENT).children('.tags-content').eq(tagsCount).children('textarea');
                         $currTextarea.focus();
                         $currTextarea.on('blur', function () {
@@ -197,7 +197,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
                     layui.stope(e);
                     var left = e.clientX,
                         top = e.clientY,
-                        html = '<ul class="helper-menu" style="top:' + top + 'px;left:' + left + 'px;"><li><i class="fa fa-fw fa-cog"></i>设置</li><li><i class="fa fa-fw fa-outdent"></i>退出桌面助手</li></ul>';
+                        html = '<ul class="helper-menu" style="top:' + top + 'px;left:' + left + 'px;"><li><i class="fa fa-fw fa-cog"></i>设置</li></ul>';
                     //移除之前菜单
                     $('.helper-menu').remove();
                     //渲染当前菜单
