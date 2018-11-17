@@ -1,11 +1,25 @@
 package com.skyeye.jedis.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import com.skyeye.jedis.JedisClient;
+
+import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.util.SafeEncoder;
+import redis.clients.util.Slowlog;
 
+/**
+ * 
+     * @ClassName: JedisClientPool
+     * @Description: redis集群
+     * @author 卫志强
+     * @date 2018年11月17日
+     *
+ */
 public class JedisClientPool implements JedisClient {
 	
 	@Autowired
@@ -89,6 +103,74 @@ public class JedisClientPool implements JedisClient {
 		Long result = jedis.del(SafeEncoder.encode(key));
 		jedis.close();
 		return result;
+	}
+	
+	@Override
+	public String getRedisInfo() {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			Client client = jedis.getClient();
+			client.info();
+			String info = client.getBulkReply();
+			return info;
+		} finally {
+			// 返还到连接池
+			jedis.close();
+		}
+	}
+
+	@Override
+	public List<Slowlog> getLogs(long entries) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			List<Slowlog> logList = jedis.slowlogGet(entries);
+			return logList;
+		} finally {
+			// 返还到连接池
+			jedis.close();
+		}
+	}
+
+	@Override
+	public Long getLogsLen() {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			long logLen = jedis.slowlogLen();
+			return logLen;
+		} finally {
+			// 返还到连接池
+			jedis.close();
+		}
+	}
+
+	@Override
+	public String logEmpty() {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			return jedis.slowlogReset();
+		} finally {
+			// 返还到连接池
+			jedis.close();
+		}
+	}
+
+	@Override
+	public Long dbSize() {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+			//配置redis服务信息
+			Client client = jedis.getClient();
+			client.dbSize();
+			return client.getIntegerReply();
+		} finally {
+			// 返还到连接池
+			jedis.close();
+		}
 	}
 
 }

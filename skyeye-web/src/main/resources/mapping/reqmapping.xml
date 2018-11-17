@@ -157,6 +157,11 @@
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
+	
+	<url id="redis001" path="/post/SysRedisMonitorController/queryRedisInfoList" val="获取redis服务器信息" allUse="0">
+	</url>
+	<url id="redis002" path="/post/SysRedisMonitorController/queryRedisLogsList" val="获取redis日志信息" allUse="0">
+	</url>
 	<!-- 系统角色用户管理结束 -->
 	
 	<!-- 系统数据库管理开始 -->

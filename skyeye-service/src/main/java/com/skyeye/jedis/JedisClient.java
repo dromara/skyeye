@@ -1,5 +1,9 @@
 package com.skyeye.jedis;
 
+import java.util.List;
+
+import redis.clients.util.Slowlog;
+
 
 public interface JedisClient {
 	
@@ -120,4 +124,59 @@ public interface JedisClient {
 	 */
 	public Long del(String key);
 	
+	/**
+	 * 
+	     * @Title: getRedisInfo
+	     * @Description: 获取redis 服务器信息
+	     * @param @return
+	     * @param @throws Exception    参数
+	     * @return String    返回类型
+	     * @throws
+	 */
+	public String getRedisInfo();
+
+	/**
+	 * 
+	     * @Title: getLogs
+	     * @Description: 获取日志列表
+	     * @param @param entries
+	     * @param @return
+	     * @param @throws Exception    参数
+	     * @return List<Slowlog>    返回类型
+	     * @throws
+	 */
+	public List<Slowlog> getLogs(long entries);
+
+	/**
+	 * 
+	     * @Title: getLogsLen
+	     * @Description: 获取日志条数
+	     * @param @return
+	     * @param @throws Exception    参数
+	     * @return Long    返回类型
+	     * @throws
+	 */
+	public Long getLogsLen();
+
+	/**
+	 * 
+	     * @Title: logEmpty
+	     * @Description: 清空日志
+	     * @param @return
+	     * @param @throws Exception    参数
+	     * @return String    返回类型
+	     * @throws
+	 */
+	public String logEmpty();
+
+	/**
+	 * 
+	     * @Title: dbSize
+	     * @Description: 获取占用内存大小
+	     * @param @return
+	     * @param @throws Exception    参数
+	     * @return Long    返回类型
+	     * @throws
+	 */
+	public Long dbSize();
 }
