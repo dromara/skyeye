@@ -122,6 +122,10 @@ public class SessionFilter implements Filter {
 						if("1".equals(allUse)){//是否需要登录才能使用   1是   0否    默认为否
 							ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(servletRequest.getSession().getServletContext());
 							JedisClientCluster jedisClient = (JedisClientCluster)ac.getBean("jedisClientCluster");
+							if(ToolUtil.isBlank(request.getParameter("userToken"))){
+								servletResponse.sendRedirect(Constants.LOGIN_PAGE);
+								return;
+							}
 							if(!jedisClient.exists("userMation:" + request.getParameter("userToken").toString())){
 								servletResponse.setHeader("SESSIONSTATUS", "TIMEOUT");
 								return;
