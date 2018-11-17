@@ -34,11 +34,11 @@ public interface JedisClientClusterService {
 	 * 
 	     * @Title: dbSize
 	     * @Description: 获取占用内存大小
-	     * @param @return
-	     * @param @throws Exception    参数
+	     * @param @param ip
+	     * @param @return    参数
 	     * @return Long    返回类型
 	     * @throws
 	 */
-	public Long dbSize(String ip);
-	
+	public Map<String, Object> dbSize(String ip);
+
 }

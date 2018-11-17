@@ -9,4 +9,6 @@ public interface SysRedisMonitorService {
 
 	public void queryRedisLogsList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryRedisKeysList(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

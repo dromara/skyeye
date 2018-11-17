@@ -48,4 +48,20 @@ public class SysRedisMonitorController {
 		sysRedisMonitorService.queryRedisLogsList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryRedisKeysList
+	     * @Description: 获取当前数据库中key的数量
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysRedisMonitorController/queryRedisKeysList")
+	@ResponseBody
+	public void queryRedisKeysList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysRedisMonitorService.queryRedisKeysList(inputObject, outputObject);
+	}
+	
 }

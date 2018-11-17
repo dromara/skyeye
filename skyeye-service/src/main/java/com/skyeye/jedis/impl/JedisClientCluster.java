@@ -7,17 +7,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import net.sf.json.JSONArray;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
 import com.alibaba.fastjson.JSON;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.jedis.JedisClient;
 import com.skyeye.jedis.JedisClientClusterService;
-
 import redis.clients.jedis.Client;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
@@ -234,7 +230,28 @@ public class JedisClientCluster implements JedisClient, JedisClientClusterServic
 	}
 
 	@Override
-	public Long dbSize(String ip) {
+	public Map<String, Object> dbSize(String ip) {
+		Jedis jedis = null;
+		try {
+			Map<String, JedisPool> jedisPools = jedisCluster.getClusterNodes();
+			Iterator<Map.Entry<String, JedisPool>> entries = jedisPools.entrySet().iterator(); 
+			while (entries.hasNext()) {
+				Entry<String, JedisPool> entry = entries.next(); 
+				if(entry.getKey().indexOf(ip) != -1){
+					jedis = entry.getValue().getResource();
+					//配置redis服务信息
+					Client client = jedis.getClient();
+					client.dbSize();
+					long dbSize = client.getIntegerReply();
+					jedis.close();
+					Map<String,Object> map = new HashMap<String, Object>();
+					map.put("createTime", ToolUtil.getTimeAndToString());
+					map.put("dbSize", dbSize);
+					return map;
+				}
+			}
+		} finally {
+		}
 		return null;
 	}
 

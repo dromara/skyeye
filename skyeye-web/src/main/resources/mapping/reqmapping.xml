@@ -160,7 +160,9 @@
 	
 	<url id="redis001" path="/post/SysRedisMonitorController/queryRedisInfoList" val="获取redis服务器信息" allUse="1">
 	</url>
-	<url id="redis002" path="/post/SysRedisMonitorController/queryRedisLogsList" val="获取redis日志信息" allUse="0">
+	<url id="redis002" path="/post/SysRedisMonitorController/queryRedisLogsList" val="获取redis日志信息" allUse="1">
+	</url>
+	<url id="redis003" path="/post/SysRedisMonitorController/queryRedisKeysList" val="获取当前数据库中key的数量" allUse="0">
 	</url>
 	<!-- 系统角色用户管理结束 -->
 	

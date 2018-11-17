@@ -64,4 +64,24 @@ public class SysRedisMonitorServiceImpl implements SysRedisMonitorService{
 		outputObject.settotal(beans.size());
 	}
 
+	/**
+	 * 
+	     * @Title: queryRedisKeysList
+	     * @Description: 获取当前数据库中key的数量
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryRedisKeysList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		List<Map<String, Object>> beans = jedisClientClusterService.getClusterNodes();
+		for(Map<String, Object> bean : beans){
+			bean.put("keys", jedisClientClusterService.dbSize(bean.get("ip").toString()));
+		}
+		outputObject.setBeans(beans);
+		outputObject.settotal(beans.size());
+	}
+
 }
