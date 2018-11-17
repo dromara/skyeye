@@ -118,6 +118,7 @@ public class JedisClientCluster implements JedisClient, JedisClientClusterServic
 					Client client = jedis.getClient();
 					client.info();
 					String info = client.getBulkReply();
+					jedis.close();
 					List<Map<String, Object>> ridList = new ArrayList<>();
 					Map<String, Object> redisMation = new HashMap<>();
 					String[] strs = info.split("\n");
@@ -140,8 +141,6 @@ public class JedisClientCluster implements JedisClient, JedisClientClusterServic
 			}
 			return JSONArray.fromObject(ridMationList).toString();
 		} finally {
-			// 返还到连接池
-			jedis.close();
 		}
 	}
 

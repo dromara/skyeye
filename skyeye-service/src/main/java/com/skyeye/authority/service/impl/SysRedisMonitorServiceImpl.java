@@ -41,6 +41,7 @@ public class SysRedisMonitorServiceImpl implements SysRedisMonitorService{
 		String info = jedisClient.getRedisInfo();
 		List<Map<String, Object>> beans = JSONArray.fromObject(info);
 		outputObject.setBeans(beans);
+		outputObject.settotal(beans.size());
 	}
 
 	/**
