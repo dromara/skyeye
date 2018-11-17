@@ -3,6 +3,7 @@ package com.skyeye.jedis.impl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,6 +13,8 @@ import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.alibaba.fastjson.JSON;
+import com.skyeye.common.util.ToolUtil;
 import com.skyeye.jedis.JedisClient;
 import com.skyeye.jedis.JedisClientClusterService;
 
@@ -146,57 +149,22 @@ public class JedisClientCluster implements JedisClient, JedisClientClusterServic
 
 	@Override
 	public List<Slowlog> getLogs(long entries) {
-		Jedis jedis = null;
-		try {
-//			jedis = jedisPool.getResource();
-//			List<Slowlog> logList = jedis.slowlogGet(entries);
-			return null;
-		} finally {
-			// 返还到连接池
-			jedis.close();
-		}
+		return null;
 	}
 
 	@Override
 	public Long getLogsLen() {
-		Jedis jedis = null;
-		try {
-//			jedis = jedisPool.getResource();
-//			long logLen = jedis.slowlogLen();
-			return new Long(10);
-		} finally {
-			// 返还到连接池
-			jedis.close();
-		}
+		return new Long(1);
 	}
 
 	@Override
 	public String logEmpty() {
-		Jedis jedis = null;
-		try {
-//			jedis = jedisPool.getResource();
-//			return jedis.slowlogReset();
-			return "";
-		} finally {
-			// 返还到连接池
-			jedis.close();
-		}
+		return "";
 	}
 
 	@Override
 	public Long dbSize() {
-		Jedis jedis = null;
-		try {
-//			jedis = jedisPool.getResource();
-//			//配置redis服务信息
-//			Client client = jedis.getClient();
-//			client.dbSize();
-//			return client.getIntegerReply();
-			return new Long(10);
-		} finally {
-			// 返还到连接池
-			jedis.close();
-		}
+		return new Long(1);
 	}
 
 	@Override
@@ -215,6 +183,59 @@ public class JedisClientCluster implements JedisClient, JedisClientClusterServic
 			}
 		}
 		return ridPoolList;
+	}
+
+	@Override
+	public List<Map<String, Object>> getLogs(String ip) {
+		Jedis jedis = null;
+		try {
+			Map<String, JedisPool> jedisPools = jedisCluster.getClusterNodes();
+			Iterator<Map.Entry<String, JedisPool>> entries = jedisPools.entrySet().iterator(); 
+			while (entries.hasNext()) {
+				Entry<String, JedisPool> entry = entries.next(); 
+				if(entry.getKey().indexOf(ip) != -1){
+					jedis = entry.getValue().getResource();
+					long logLen = jedis.slowlogLen();
+					List<Slowlog> logList = jedis.slowlogGet(logLen);
+					jedis.close();
+					List<Map<String, Object>> opList = null;
+					Map<String, Object> op  = null;
+					boolean flag = false;
+					if (logList != null && !logList.isEmpty()) {
+						opList = new LinkedList<>();
+						for (Slowlog sl : logList) {
+							String args = JSON.toJSONString(sl.getArgs());
+							if (args.equals("[\"PING\"]") || args.equals("[\"SLOWLOG\",\"get\"]") || args.equals("[\"DBSIZE\"]") || args.equals("[\"INFO\"]")) {
+								continue;
+							}	
+							op = new HashMap<>();
+							flag = true;
+							op.put("id", sl.getId());
+							op.put("executeTime", ToolUtil.getDateStr(sl.getTimeStamp() * 1000));
+							op.put("usedTime", sl.getExecutionTime()/1000.0 + "ms");
+							op.put("args", args);
+							opList.add(op);
+						}
+					} 
+					if (flag) 
+						return opList;
+					else 
+						return null;
+				}
+			}
+		} finally {
+		}
+		return null;
+	}
+
+	@Override
+	public String logEmpty(String ip) {
+		return null;
+	}
+
+	@Override
+	public Long dbSize(String ip) {
+		return null;
 	}
 
 }

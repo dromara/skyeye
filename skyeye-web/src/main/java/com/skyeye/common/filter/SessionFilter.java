@@ -123,7 +123,7 @@ public class SessionFilter implements Filter {
 							ApplicationContext ac = WebApplicationContextUtils.getWebApplicationContext(servletRequest.getSession().getServletContext());
 							JedisClientCluster jedisClient = (JedisClientCluster)ac.getBean("jedisClientCluster");
 							if(ToolUtil.isBlank(request.getParameter("userToken"))){
-								servletResponse.sendRedirect(Constants.LOGIN_PAGE);
+								servletResponse.setHeader("SESSIONSTATUS", "TIMEOUT");
 								return;
 							}
 							if(!jedisClient.exists("userMation:" + request.getParameter("userToken").toString())){

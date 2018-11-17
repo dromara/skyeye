@@ -57,7 +57,11 @@ public class SysRedisMonitorServiceImpl implements SysRedisMonitorService{
 	@Override
 	public void queryRedisLogsList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		List<Map<String, Object>> beans = jedisClientClusterService.getClusterNodes();
+		for(Map<String, Object> bean : beans){
+			bean.put("log", jedisClientClusterService.getLogs(bean.get("ip").toString()));
+		}
 		outputObject.setBeans(beans);
+		outputObject.settotal(beans.size());
 	}
 
 }

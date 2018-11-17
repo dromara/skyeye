@@ -580,6 +580,20 @@ public class ToolUtil {
 		}
 		return flag;
 	}
+	
+	/**
+	 * 
+	     * @Title: getDateStr
+	     * @Description: 将日期转化为正常的年月日时分秒
+	     * @param @param timeStmp
+	     * @param @return    参数
+	     * @return String    返回类型
+	     * @throws
+	 */
+	public static String getDateStr(long timeStmp) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return dateFormat.format(new Date(timeStmp));
+	}
 
 	
 	public static void main(String[] args) throws Exception {
