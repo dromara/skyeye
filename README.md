@@ -51,6 +51,10 @@ handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-j
 ![代码生成器](https://images.gitee.com/uploads/images/2018/1107/104903_f244dfde_1541735.png "3.png")
 - 7.桌面二级菜单展示</br>
 ![桌面二级菜单](https://images.gitee.com/uploads/images/2018/1107/104946_0b1ee5d2_1541735.png "4.png")
+- 8.Redis数据实时监控</br>
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191625_d7cb1a47_1541735.png "微信图片_20181118191506.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191634_497ea929_1541735.png "微信图片_20181118191516.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191641_fba2a593_1541735.png "微信图片_20181118191521.png")
 
 #### 环境搭建
 ##### 开发工具:
