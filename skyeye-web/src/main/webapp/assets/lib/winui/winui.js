@@ -1,7 +1,5 @@
 ﻿/*!
-
  @Description：Win10风格前端模板
-
  */
 
 ; !function () {
