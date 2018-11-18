@@ -3198,20 +3198,26 @@ body .layer-ext-winconfirm {
 /*** 小程序页面管理end ***/
 
 /*** 带滚动条的表格end ***/
-.custom-table tbody{
+.custom-table>tbody{
 	display:block;
     height:400px;
     overflow-y:scroll;
     overflow-x: hidden; 
 }
 
-.custom-table thead,tbody tr{
+.custom-table>thead>tr{
 	display:table;
     width:100%;
     table-layout:fixed;
 }
 
-.custom-table thead{
+.custom-table>tbody>tr{
+	display:table;
+    width:100%;
+    table-layout:fixed;
+}
+
+.custom-table>thead{
 	width: calc(100% - 0.5em);
 }
 /*** 带滚动条的表格end ***/
