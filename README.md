@@ -43,6 +43,10 @@ handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-j
 ![角色管理](https://images.gitee.com/uploads/images/2018/1018/085328_123d813e_1541735.png "微信截图_20181018085305.png")
 - 4.小程序组件配置</br>
 ![小程序组件配置](https://images.gitee.com/uploads/images/2018/1107/104615_286c0cf4_1541735.png "1.png")
+- 4-1.小程序组件分组
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/192844_8a93da60_1541735.png "微信截图_20181118192755.png")
+- 4-2.小程序组件分类
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/192945_fdaae233_1541735.png "1.png")
 - 5.小程序拖拽</br>
 ![小程序拖拽](https://images.gitee.com/uploads/images/2018/1107/104734_d9304e60_1541735.png "2.png")
 - 5-1.小程序拖拽第一版</br>
@@ -55,6 +59,14 @@ handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-j
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191625_d7cb1a47_1541735.png "微信图片_20181118191506.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191634_497ea929_1541735.png "微信图片_20181118191516.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191641_fba2a593_1541735.png "微信图片_20181118191521.png")
+- 9.动态表单</br>
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193127_57fd0a4b_1541735.png "微信截图_20181118193117.png")
+- 9-1.动态表单限制条件
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193153_77249ba4_1541735.png "1.png")
+- 9-2.动态表单Form表单内容项
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193301_72d0bb49_1541735.png "微信截图_20181118193254.png")
+- 9-3.动态表单数据展示模板配置
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193420_9d666e05_1541735.png "1.png")
 
 #### 环境搭建
 ##### 开发工具:
