@@ -539,6 +539,19 @@ layui.define(['layer', 'winui'], function (exports) {
             });
         });
     }
+    
+    //打开个人中心
+    winLayer.openSysPersonal = function () {
+        var that = this;
+        $.get(winui.path + '../../../tpl/syspersonal/syspersonal.html', {}, function (content) {
+            that.open({
+                id: 'winui-syspersonal',
+                type: 1,
+                title: '个人中心',
+                content: content,
+            });
+        });
+    }
 
     winui.window = winLayer;
 

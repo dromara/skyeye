@@ -144,6 +144,11 @@
     $('.winui-start-item.winui-start-individuation').on('click', function () {
         winui.window.openTheme();
     });
+    
+    //个人中心点击
+    $('.winui-start-item.winui-start-syspersonal').on('click', function () {
+        winui.window.openSysPersonal();
+    });
 
     //打开窗口的方法（可自己根据需求来写）
     function OpenWindow(menuItem) {
