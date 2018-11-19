@@ -34,6 +34,15 @@ winui|win10风格UI|http://win10ui.yuri2.cn/
 codemirror|codemirror代码编辑器|https://codemirror.net/
 handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-js-templating-engine/
 
+#### 代码描述
+##### 前后台接口映射
+```
+<url id="前端请求id" path="后台接口" val="备注" allUse="是否需要登录">
+	<property id="前端请求key" name="后台接收key" ref="限制条件（参考项目内文档）" var="key含义"/>
+</url>
+```
+
+
 #### 效果图
 - 1.登陆效果图</br>
 ![登陆效果图](https://images.gitee.com/uploads/images/2018/1008/100922_8c9afcf1_1541735.png "微信截图_20181008100902.png")
