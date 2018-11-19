@@ -31,7 +31,12 @@
 //   		            content: '<p style="padding:20px;">半成品仅供参观，多数设置本地存储，清除浏览器缓存即失效。<br/><br/>慢工出细活，如有需要的朋友请耐心等待。<br/><br/>望社区案例多多点赞，谢谢各位！<br/><br/>特色很多，如：<span style="color:#FF5722">桌面助手，主题设置</span>，大家慢慢参观</p>',
 //   		            area: ['400px', '400px']
 //   		        });
-   		        initWinConfig();
+   				if(isNull(json.bean.winBgPicUrl)){
+   					json.bean.winBgPicUrl = fileBasePath + '/assets/winbgpic/default.jpg';
+   				}else{
+   					json.bean.winBgPicUrl = fileBasePath + json.bean.winBgPicUrl;
+   				}
+   		        initWinConfig(json);
    			}else{
    				location.href = "login.html";
    			}
@@ -40,7 +45,7 @@
     });
     
     //初始化配置信息
-    function initWinConfig(){
+    function initWinConfig(json){
     	
     	//设置窗口点击事件
     	$("body").on("dblclick", ".sec-clsss-btn", function(e){
@@ -53,7 +58,7 @@
                 color: 32,
                 taskbarMode: 'bottom',
                 startSize: 'sm',
-                bgSrc: '../../assets/images/bg_01.jpg',
+                bgSrc: json.bean.winBgPicUrl,
                 lockBgSrc: '../../assets/images/bg_04.jpg'
             },  //如果本地配置为空则给默认值
             desktop: {//桌面菜单栏

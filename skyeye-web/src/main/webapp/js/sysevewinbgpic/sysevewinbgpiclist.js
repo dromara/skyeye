@@ -1,5 +1,4 @@
 
-var rowId = "";
 
 layui.config({
 	base: basePath, 
@@ -58,7 +57,6 @@ layui.config({
     	loadTable();
     });
     
-
 	var uploadInst = upload.render({
 		elem: '#addBean', // 绑定元素
 		url: reqBasePath + 'common003', // 上传接口
