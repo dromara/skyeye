@@ -182,6 +182,9 @@
 	</url>
 	<url id="sysevewinbgpic006" path="/post/SysEveWinBgPicController/querySysEveWinBgPicCustomList" val="获取win系统桌面图片列表用户自定义" allUse="1">
 	</url>
+	<url id="sysevewinbgpic007" path="/post/SysEveWinBgPicController/deleteSysEveWinBgPicMationCustomById" val="删除win系统桌面图片信息用户自定义" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="win系统桌面图片id"/>
+	</url>
 	
 	<url id="sysevewinlockbgpic001" path="/post/SysEveWinLockBgPicController/querySysEveWinLockBgPicList" val="获取win系统锁屏桌面图片列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />

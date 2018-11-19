@@ -8,6 +8,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.skyeye.authority.dao.SysEveWinBgPicDao;
 import com.skyeye.authority.service.SysEveWinBgPicService;
+import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
@@ -140,6 +141,27 @@ public class SysEveWinBgPicServiceImpl implements SysEveWinBgPicService{
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());
 		}
+	}
+
+	/**
+	 * 
+	     * @Title: deleteSysEveWinBgPicMationById
+	     * @Description: 删除win系统桌面图片信息用户自定义
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings("static-access")
+	@Override
+	public void deleteSysEveWinBgPicMationCustomById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = sysEveWinBgPicDao.querySysEveMationById(map);
+		String tPath = inputObject.getRequest().getSession().getServletContext().getRealPath("/");
+		String basePath = tPath.substring(0, inputObject.getRequest().getSession().getServletContext().getRealPath("/").indexOf(Constants.PROJECT_WEB)) + bean.get("picUrl").toString();
+		ToolUtil.deleteFile(basePath);
+		sysEveWinBgPicDao.deleteSysEveWinBgPicMationById(map);
 	}
 	
 }

@@ -110,4 +110,20 @@ public class SysEveWinBgPicController {
 		sysEveWinBgPicService.querySysEveWinBgPicCustomList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: deleteSysEveWinBgPicMationById
+	     * @Description: 删除win系统桌面图片信息用户自定义
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveWinBgPicController/deleteSysEveWinBgPicMationCustomById")
+	@ResponseBody
+	public void deleteSysEveWinBgPicMationCustomById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveWinBgPicService.deleteSysEveWinBgPicMationCustomById(inputObject, outputObject);
+	}
+	
 }
