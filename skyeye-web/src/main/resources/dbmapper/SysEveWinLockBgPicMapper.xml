@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.authority.dao.SysEveWinLockBgPicDao">
+	
+	<select id="querySysEveWinLockBgPicList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.pic_url picUrl,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_win_lock_bg_pic a
+		WHERE a.pic_type = '1'
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<insert id="insertSysEveWinLockBgPicMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_win_lock_bg_pic
+	     (id, pic_url, pic_type, create_id, create_time)
+	     VALUES
+	     (#{id}, #{picUrl}, '1', #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteSysEveWinLockBgPicMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_win_lock_bg_pic
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="querySysEveMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.pic_url picUrl
+		FROM
+			sys_eve_win_lock_bg_pic a
+		WHERE a.id = #{id}
+	</select>
+	
+</mapper>

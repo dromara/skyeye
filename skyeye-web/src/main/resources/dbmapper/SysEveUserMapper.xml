@@ -86,7 +86,8 @@
 			a.pwd_num_enc pwdNum,
 			a.`password`,
 			a.user_lock userLock,
-			b.win_bg_pic_url winBgPicUrl
+			b.win_bg_pic_url winBgPicUrl,
+			b.win_lock_bg_pic_url winLockBgPicUrl
 		FROM
 			sys_eve_user a
 			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id

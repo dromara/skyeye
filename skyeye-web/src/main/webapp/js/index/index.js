@@ -36,6 +36,11 @@
    				}else{
    					json.bean.winBgPicUrl = fileBasePath + json.bean.winBgPicUrl;
    				}
+   				if(isNull(json.bean.winLockBgPicUrl)){
+   					json.bean.winLockBgPicUrl = fileBasePath + '/assets/winbgpic/default.jpg';
+   				}else{
+   					json.bean.winLockBgPicUrl = fileBasePath + json.bean.winLockBgPicUrl;
+   				}
    		        initWinConfig(json);
    			}else{
    				location.href = "login.html";
@@ -59,7 +64,7 @@
                 taskbarMode: 'bottom',
                 startSize: 'sm',
                 bgSrc: json.bean.winBgPicUrl,
-                lockBgSrc: '../../assets/images/bg_04.jpg'
+                lockBgSrc: json.bean.winLockBgPicUrl
             },  //如果本地配置为空则给默认值
             desktop: {//桌面菜单栏
                 options: {
