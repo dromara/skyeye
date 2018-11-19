@@ -79,5 +79,67 @@ public class SysEveWinBgPicServiceImpl implements SysEveWinBgPicService{
 		ToolUtil.deleteFile(basePath);
 		sysEveWinBgPicDao.deleteSysEveWinBgPicMationById(map);
 	}
+
+	/**
+	 * 
+	     * @Title: querySysEveWinBgPicList
+	     * @Description: 获取win系统桌面图片列表供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysEveWinBgPicListToShow(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysEveWinBgPicDao.querySysEveWinBgPicListToShow(map);
+		if(beans != null && !beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: insertSysEveWinBgPicMationByCustom
+	     * @Description: 添加win系统桌面图片信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void insertSysEveWinBgPicMationByCustom(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("id", ToolUtil.getSurFaceId());
+		map.put("createId", user.get("id"));
+		map.put("createTime", ToolUtil.getTimeAndToString());
+		sysEveWinBgPicDao.insertSysEveWinBgPicMationByCustom(map);
+	}
+
+	/**
+	 * 
+	     * @Title: querySysEveWinBgPicCustomList
+	     * @Description: 获取win系统桌面图片列表用户自定义
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysEveWinBgPicCustomList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("createId", user.get("id"));
+		List<Map<String, Object>> beans = sysEveWinBgPicDao.querySysEveWinBgPicCustomList(map);
+		if(beans != null && !beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
 	
 }

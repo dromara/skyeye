@@ -16,7 +16,7 @@ public class Constants {
 	 * 过滤器过滤文件目录请求项
 	 */
 	public static final String[] FILTER_FILE_CATALOG_OPTION = { "/html",
-			"/css", "/js", "/assets", "/tpl" };
+			"/css", "/js", "/assets", "/tpl", "/images" };
 
 	/**
 	 * 过滤器过滤文件后缀请求项

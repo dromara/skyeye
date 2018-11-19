@@ -29,6 +29,7 @@
 	<context:component-scan base-package="com.skyeye.common.filter" />
 	
 	<!-- 配置资源映射 -->  
+	<mvc:resources location="file:///${IMAGES_PATH}" mapping="/images/**" />
     <mvc:resources location="/assets/" mapping="/assets/**"></mvc:resources>  
     <mvc:resources location="/html/" mapping="/html/**"></mvc:resources>  
     <mvc:resources location="/js/" mapping="/js/**"></mvc:resources> 

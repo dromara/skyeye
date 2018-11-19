@@ -5,7 +5,7 @@
 
  */
 
-var fileBasePath = getBaseRootPath();
+var fileBasePath = getBaseRootPath();//上传文件展示路径
 var reqBasePath = getBaseRootPath();
 var basePath = "../../assets/lib/winui/";
 var skyeyeVersion = "1.0.0-beta";

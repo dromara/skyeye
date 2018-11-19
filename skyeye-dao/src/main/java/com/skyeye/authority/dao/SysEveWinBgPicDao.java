@@ -14,4 +14,10 @@ public interface SysEveWinBgPicDao {
 
 	public Map<String, Object> querySysEveMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> querySysEveWinBgPicListToShow(Map<String, Object> map) throws Exception;
+
+	public int insertSysEveWinBgPicMationByCustom(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> querySysEveWinBgPicCustomList(Map<String, Object> map) throws Exception;
+
 }
