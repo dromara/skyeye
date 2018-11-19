@@ -62,6 +62,12 @@ public class CommonServiceImpl implements CommonService{
 			case 1://小程序上传
 				basePath = tPath + "\\assets\\smpropic" ;
 				break;
+			case 2://系统桌面背景自定义图片上传
+				basePath = tPath + "\\assets\\winbgpic" ;
+				break;
+			case 3://系统桌面锁屏背景自定义图片上传
+				basePath = tPath + "\\assets\\winlockbgpic" ;
+				break;
 			default:
 				basePath = tPath.substring(0, inputObject.getRequest().getSession().getServletContext().getRealPath("/").indexOf(Constants.PROJECT_WEB));
 				break;
@@ -84,6 +90,18 @@ public class CommonServiceImpl implements CommonService{
 					String path = basePath + "\\" + newFileName;
 					// 上传
 					file.transferTo(new File(path));
+					switch (type) {
+					case 1://小程序上传
+						break;
+					case 2://系统桌面背景自定义图片上传
+						newFileName = "/assets/winbgpic/" + newFileName ;
+						break;
+					case 3://系统桌面锁屏背景自定义图片上传
+						newFileName = "/assets/winlockbgpic/" + newFileName ;
+						break;
+					default:
+						break;
+					}
 					if(ToolUtil.isBlank(trueFileName)){
 						trueFileName = newFileName;
 					}else{

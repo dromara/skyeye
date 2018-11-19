@@ -2033,6 +2033,29 @@ body .layer-ext-winconfirm {
 
 /***系统icon样式end***/
 
+/***系统桌面背景图片样式start***/
+
+.pic-item{
+	padding-top: 10px;
+	height: 140px;
+}
+
+.pic-item-div-top{
+	text-align: center;
+}
+
+.win-bg-pic{
+    width: 70%;
+    height: 90px;
+}
+
+.pic-item-div>div{
+	text-align: center;
+	margin-top: 10px;
+}
+
+/***系统桌面背景图片样式end***/
+
 
 /***common start***/
 .noMation{

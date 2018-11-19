@@ -1,0 +1,83 @@
+package com.skyeye.authority.service.impl;
+
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
+import com.skyeye.authority.dao.SysEveWinBgPicDao;
+import com.skyeye.authority.service.SysEveWinBgPicService;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.ToolUtil;
+
+@Service
+public class SysEveWinBgPicServiceImpl implements SysEveWinBgPicService{
+	
+	@Autowired
+	private SysEveWinBgPicDao sysEveWinBgPicDao;
+
+	/**
+	 * 
+	     * @Title: querySysEveWinBgPicList
+	     * @Description: 获取win系统桌面图片列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysEveWinBgPicList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysEveWinBgPicDao.querySysEveWinBgPicList(map, 
+				new PageBounds(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString())));
+		PageList<Map<String, Object>> beansPageList = (PageList<Map<String, Object>>)beans;
+		int total = beansPageList.getPaginator().getTotalCount();
+		outputObject.setBeans(beans);
+		outputObject.settotal(total);
+	}
+
+	/**
+	 * 
+	     * @Title: insertSysEveWinBgPicMation
+	     * @Description: 添加win系统桌面图片信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void insertSysEveWinBgPicMation(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("id", ToolUtil.getSurFaceId());
+		map.put("createId", user.get("id"));
+		map.put("createTime", ToolUtil.getTimeAndToString());
+		sysEveWinBgPicDao.insertSysEveWinBgPicMation(map);
+	}
+
+	/**
+	 * 
+	     * @Title: deleteSysEveWinBgPicMationById
+	     * @Description: 删除win系统桌面图片信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings("static-access")
+	@Override
+	public void deleteSysEveWinBgPicMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = sysEveWinBgPicDao.querySysEveMationById(map);
+		String tPath = inputObject.getRequest().getSession().getServletContext().getRealPath("/");
+		String basePath = tPath + bean.get("picUrl").toString();
+		ToolUtil.deleteFile(basePath);
+		sysEveWinBgPicDao.deleteSysEveWinBgPicMationById(map);
+	}
+	
+}
