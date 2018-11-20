@@ -31,7 +31,7 @@ layui.config({
 		            "action": reqBasePath + "common003",
 		            "data-num": "1",
 		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 2,
+		            "uploadType": 6,
 		            "data-value": json.bean.userPhoto,
 		            //该函数为点击放大镜的回调函数，如没有该函数，则不显示放大镜
 		            "function": function (_this, data) {
@@ -47,7 +47,6 @@ layui.config({
 		 	        		userName: $("#userName").val(),
 		 	        		userIdCard: $("#userIdCard").val(),
 		 	        		userSex: $("input[name='userSex']:checked").val(),
-		 	        		userPhoto: "11"
 		 	        	};
 		 	        	params.userPhoto = $("#userPhoto").find("input[type='hidden'][name='upload']").attr("oldurl");
 

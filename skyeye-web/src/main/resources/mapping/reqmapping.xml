@@ -52,7 +52,15 @@
 	<url id="sys005" path="/post/SysEveUserController/editSysUserMationById" val="编辑账号" allUse="1">
 		<property id="rowId" name="id" ref="required" var="账号ID" />
 		<property id="userSex" name="userSex" ref="required,num" var="性别" />
-		<property id="userIdCard" name="userIdCard" ref="required,idcard" var="身份证" />
+		<property id="userIdCard" name="userIdCard" ref="idcard" var="身份证" />
+		<property id="userName" name="userName" ref="required" var="用户名" />
+		<property id="userPhoto" name="userPhoto" ref="required" var="头像" />
+	</url>
+	<url id="sysAdd005" path="/post/SysEveUserController/insertSysUserMationById" val="创建账号" allUse="1">
+		<property id="userCode" name="userCode" ref="required" var="账号" />
+		<property id="userSex" name="userSex" ref="required,num" var="性别" />
+		<property id="password" name="password" ref="required" var="密码" />
+		<property id="userIdCard" name="userIdCard" ref="idcard" var="身份证" />
 		<property id="userName" name="userName" ref="required" var="用户名" />
 		<property id="userPhoto" name="userPhoto" ref="required" var="头像" />
 	</url>

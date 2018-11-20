@@ -61,6 +61,7 @@
 		FROM
 			sys_eve_win_lock_bg_pic a
 		WHERE a.pic_type = '2'
+			AND a.create_id = #{createId}
 			ORDER BY a.create_time DESC
 	</select>
 	

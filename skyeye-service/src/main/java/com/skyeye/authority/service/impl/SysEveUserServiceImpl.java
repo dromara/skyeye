@@ -1,6 +1,7 @@
 package com.skyeye.authority.service.impl;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,6 +109,52 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 		Map<String, Object> bean = sysEveUserDao.querySysUserMationToEditById(map);
 		outputObject.setBean(bean);
 		outputObject.settotal(1);
+	}
+	
+	/**
+	 * 
+	     * @Title: insertSysUserMationById
+	     * @Description: 创建账号
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void insertSysUserMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> userCode = sysEveUserDao.querySysUserCodeByMation(map);
+		if(userCode == null){
+			Map<String, Object> user = inputObject.getLogParams();
+			int pwdNum = (int)(Math.random()*100);
+			String password = map.get("password").toString();
+			for(int i = 0; i < pwdNum; i++){
+				password = ToolUtil.MD5(password);
+			}
+			String userId = ToolUtil.getSurFaceId();
+			map.put("id", userId);
+			map.put("password", password);
+			map.put("pwdNum", pwdNum);
+			map.put("userLock", 0);
+			map.put("createId", user.get("id"));
+			map.put("createTime", ToolUtil.getTimeAndToString());
+			
+			Map<String, Object> bean = new HashMap<>();
+			bean.put("id", ToolUtil.getSurFaceId());
+			bean.put("userId", userId);
+			bean.put("winBgPicUrl", "/assets/winbgpic/default.jpg");
+			bean.put("winLockBgPicUrl", "/assets/winlockbgpic/default.jpg");
+			bean.put("winThemeColor", "31");
+			bean.put("winStartMenuSize", "sm");
+			bean.put("winTaskPosition", "bottom");
+			bean.put("createId", user.get("id"));
+			bean.put("createTime", ToolUtil.getTimeAndToString());
+			sysEveUserDao.insertSysUserMation(map);
+			sysEveUserDao.insertSysUserInstallMation(bean);
+		}else{
+			outputObject.setreturnMessage("该账号已存在，请更换！");
+		}
 	}
 
 	/**
@@ -391,7 +438,5 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 		jedisClient.expire("userMation:" + user.get("id").toString(), 1800);//时间为30分钟
 		sysEveUserDao.editUserInstallWinTaskPosition(map);
 	}
-	
-	
-	
+
 }

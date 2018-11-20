@@ -40,6 +40,12 @@ public interface SysEveUserDao {
 	public int editUserInstallWinStartMenuSize(Map<String, Object> map) throws Exception;
 
 	public int editUserInstallWinTaskPosition(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> querySysUserCodeByMation(Map<String, Object> map) throws Exception;
+
+	public int insertSysUserMation(Map<String, Object> map) throws Exception;
+
+	public int insertSysUserInstallMation(Map<String, Object> map) throws Exception;
 	
 	
 	

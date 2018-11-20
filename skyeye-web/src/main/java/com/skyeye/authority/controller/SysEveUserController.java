@@ -81,6 +81,22 @@ public class SysEveUserController {
 	
 	/**
 	 * 
+	     * @Title: insertSysUserMationById
+	     * @Description: 创建账号
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/insertSysUserMationById")
+	@ResponseBody
+	public void insertSysUserMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.insertSysUserMationById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
 	     * @Title: editSysUserMationById
 	     * @Description: 编辑账号
 	     * @param @param inputObject

@@ -214,4 +214,28 @@
 		WHERE user_id = #{userId}
 	</update>
 	
+	<select id="querySysUserCodeByMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode
+		FROM
+			sys_eve_user a
+		WHERE
+			a.user_code = #{userCode}
+	</select>
+	
+	<insert id="insertSysUserMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_user 
+	     (id, user_code, pwd_num_enc, password, user_name, user_photo, user_idcard, user_sex, user_lock, creater, create_time)
+	     VALUES
+	     (#{id}, #{userCode}, #{pwdNum}, #{password}, #{userName}, #{userPhoto}, #{userIdCard}, #{userSex}, #{userLock}, #{createId}, #{createTime})
+	</insert>
+	
+	<insert id="insertSysUserInstallMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_user_install 
+	     (id, user_id, win_bg_pic_url, win_lock_bg_pic_url, win_theme_color, win_start_menu_size, win_task_position, create_id, create_time)
+	     VALUES
+	     (#{id}, #{userId}, #{winBgPicUrl}, #{winLockBgPicUrl}, #{winThemeColor}, #{winStartMenuSize}, #{winTaskPosition}, #{createId}, #{createTime})
+	</insert>
+	
 </mapper>

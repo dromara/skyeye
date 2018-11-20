@@ -14,7 +14,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">身份证</label>
         <div class="layui-input-block">
-            <input type="text" id="userIdCard" name="userIdCard" win-verify="required|identity" placeholder="请输入身份证" class="layui-input" value="{{userIdCard}}"/>
+            <input type="text" id="userIdCard" name="userIdCard" placeholder="请输入身份证" class="layui-input" value="{{userIdCard}}"/>
         </div>
     </div>
     <div class="layui-form-item" pane>

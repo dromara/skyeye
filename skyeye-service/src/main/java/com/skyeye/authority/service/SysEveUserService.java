@@ -38,6 +38,8 @@ public interface SysEveUserService {
 	public void editUserInstallWinStartMenuSize(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void editUserInstallWinTaskPosition(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void insertSysUserMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 	
 	
 	
