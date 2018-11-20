@@ -75,8 +75,8 @@ layui.config({
 	    			});
 	    	 	},
 	    	 	options: {'click .del':function(index, row){
-	    				layer.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
-	    					layer.close(index);
+		    	 		top.winui.window.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
+		    	 			top.winui.window.close(index);
 	    		            AjaxPostUtil.request({url:reqBasePath + "sysevewinbgpic007", params:{rowId: row.id}, type:'json', callback:function(json){
 	    		    			if(json.returnCode == 0){
 	    		    				top.winui.window.msg("删除成功", {icon: 1,time: 2000});

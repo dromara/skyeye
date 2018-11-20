@@ -22,7 +22,7 @@
 .lockscreen-preview {
     width: 415px;
     height: 235px;
-    background: url(../../../images/bg_01.jpg) no-repeat;
+    background: url(../../../winlockbgpic/default.jpg) no-repeat;
     background-size: cover;
     position: relative;
 }
@@ -50,7 +50,7 @@
 .background-preview {
     width: 415px;
     height: 235px;
-    background: url(../../../images/bg_01.jpg) no-repeat;
+    background: url(../../../winlockbgpic/default.jpg) no-repeat;
     background-size: cover;
     position: relative;
 }

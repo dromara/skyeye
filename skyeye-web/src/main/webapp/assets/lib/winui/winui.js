@@ -80,8 +80,8 @@
             this.settings = layui.data('winui').settings || {
                 color: 31,
                 taskbarMode: 'bottom',
-                bgSrc: '../assets/images/bg_01.jpg',
-                lockBgSrc: '../assets/images/bg_01.jpg',
+                bgSrc: '../assets/winbgpic/default.jpg',
+                lockBgSrc: '../assets/winlockbgpic/default.jpg/',
                 audioSrc: this.path + 'audio/236',
                 startSize: 'sm'
             }; //设置
