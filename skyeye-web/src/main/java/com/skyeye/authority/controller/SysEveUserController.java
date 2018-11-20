@@ -207,4 +207,84 @@ public class SysEveUserController {
 		sysEveUserService.queryAllMenuBySession(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editUserInstallThemeColor
+	     * @Description: 自定义设置主题颜色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/editUserInstallThemeColor")
+	@ResponseBody
+	public void editUserInstallThemeColor(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.editUserInstallThemeColor(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editUserInstallWinBgPic
+	     * @Description: 自定义设置win背景图片
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/editUserInstallWinBgPic")
+	@ResponseBody
+	public void editUserInstallWinBgPic(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.editUserInstallWinBgPic(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editUserInstallWinLockBgPic
+	     * @Description: 自定义设置win锁屏背景图片
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/editUserInstallWinLockBgPic")
+	@ResponseBody
+	public void editUserInstallWinLockBgPic(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.editUserInstallWinLockBgPic(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editUserInstallWinStartMenuSize
+	     * @Description: 自定义设置win开始菜单尺寸
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/editUserInstallWinStartMenuSize")
+	@ResponseBody
+	public void editUserInstallWinStartMenuSize(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.editUserInstallWinStartMenuSize(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editUserInstallWinTaskPosition
+	     * @Description: 自定义设置win任务栏在屏幕的位置
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/editUserInstallWinTaskPosition")
+	@ResponseBody
+	public void editUserInstallWinTaskPosition(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.editUserInstallWinTaskPosition(inputObject, outputObject);
+	}
+	
 }

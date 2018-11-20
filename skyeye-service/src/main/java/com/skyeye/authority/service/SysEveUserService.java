@@ -28,6 +28,16 @@ public interface SysEveUserService {
 	public void queryDeskTopMenuBySession(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void queryAllMenuBySession(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editUserInstallThemeColor(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editUserInstallWinBgPic(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editUserInstallWinLockBgPic(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editUserInstallWinStartMenuSize(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editUserInstallWinTaskPosition(InputObject inputObject, OutputObject outputObject) throws Exception;
 	
 	
 	

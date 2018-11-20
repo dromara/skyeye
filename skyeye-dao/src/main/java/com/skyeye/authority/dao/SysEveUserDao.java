@@ -30,6 +30,16 @@ public interface SysEveUserDao {
 	public List<Map<String, Object>> queryDeskTopsMenuByUserId(Map<String, Object> userMation) throws Exception;
 
 	public List<Map<String, Object>> queryAllMenuByUserId(Map<String, Object> userMation) throws Exception;
+
+	public int editUserInstallThemeColor(Map<String, Object> map) throws Exception;
+
+	public int editUserInstallWinBgPic(Map<String, Object> map) throws Exception;
+
+	public int editUserInstallWinLockBgPic(Map<String, Object> map) throws Exception;
+
+	public int editUserInstallWinStartMenuSize(Map<String, Object> map) throws Exception;
+
+	public int editUserInstallWinTaskPosition(Map<String, Object> map) throws Exception;
 	
 	
 	

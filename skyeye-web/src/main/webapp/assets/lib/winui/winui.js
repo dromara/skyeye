@@ -4,10 +4,9 @@
 
 ; !function () {
     "use strict";
-    var THIS = 'winui-this', SHOW = 'layui-show', MOVE = '.layui-layer-title', MOD_NAME = 'winui', taskbarHeight = 40
-
+    var THIS = 'winui-this', SHOW = 'layui-show', MOVE = '.layui-layer-title', MOD_NAME = 'winui', taskbarHeight = 40, 
         //获取winui路径
-        , getPath = function () {
+        getPath = function () {
             var doc = document;
             var jsPath = doc.currentScript ? doc.currentScript.src : function () {
                 var js = doc.scripts, last = js.length - 1, src;
@@ -20,40 +19,37 @@
                 return src || js[last].src;
             }();
             return jsPath.substring(0, jsPath.lastIndexOf('/') + 1);
-        }()
+        }(), 
 
         //判断变量是否是Dom对象
-        , isDom = (typeof HTMLElement === 'object') ? function (obj) {
+        isDom = (typeof HTMLElement === 'object') ? function (obj) {
             return obj instanceof HTMLElement;
         } : function (obj) {
             return (obj && typeof obj === 'object' && obj.nodeType === 1 && typeof obj.nodeName === 'string');
-        }
+        }, 
 
         //判断变量是否是Jq对象
-        , isJquery = function (obj) {
+        isJquery = function (obj) {
             return obj instanceof $;
         }
 
     layui.define(['jquery', 'layer', 'element', 'form'], function (exports) {
-        var $ = layui.jquery, form = layui.form
-
+        var $ = layui.jquery, form = layui.form, 
             //开始磁贴
-            , tile = {
+            tile = {
                 data: null,
                 setData: function (options) {
                     common.setData(this, '/json/tile-item.json', options);
                 }
-            }
-
+            }, 
             //任务栏
-            , taskItem = {
+            taskItem = {
                 on: function (eventname, callback) {
                     call.on('taskItem(' + eventname + ')', callback);
                 }
-            }
-
+            }, 
             //tab
-            , tab = {
+            tab = {
                 init: function () {
                     //Tab单击事件
                     common.resetClick('.winui-tab-nav li', function () {
@@ -77,7 +73,7 @@
         var Winui = function () {
             this.v = '1.0.0';  //版本号
             this.path = getPath;
-            this.settings = layui.data('winui').settings || {
+            this.settings = {
                 color: 31,
                 taskbarMode: 'bottom',
                 bgSrc: '../assets/winbgpic/default.jpg',
@@ -91,36 +87,36 @@
                 required: [
                     /[\S]+/
                     , '必填项不能为空'
-                ]
-                , phone: [
+                ], 
+                phone: [
                     /^1\d{10}$/
                     , '请输入正确的手机号'
-                ]
-                , email: [
+                ], 
+                email: [
                     /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
                     , '邮箱格式不正确'
-                ]
-                , url: [
+                ], 
+                url: [
                     /(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)/
                     , '链接格式不正确'
-                ]
-                , number: [
+                ], 
+                number: [
                     /^\d+$/
                     , '只能填写数字'
-                ]
-                , date: [
+                ], 
+                date: [
                     /^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/
                     , '日期格式不正确'
-                ]
-                , identity: [
+                ], 
+                identity: [
                     /(^\d{15}$)|(^\d{17}(x|X|\d)$)/
                     , '请输入正确的身份证号'
-                ]
-            	, double: [//验证小数点后两位,一般用于金钱验证
+                ], 
+            	double: [//验证小数点后两位,一般用于金钱验证
                      /^[0-9]+(.[0-9]{1,2})?$/
                      , '请输入正确正数,小数点后最多两位'
-                ]
-            	, postcode: [
+                ], 
+            	postcode: [
                      /^\d{6}$/
                      , '请输入正确邮编'
                 ]
@@ -148,10 +144,10 @@
                     this.settings[key] = settings[key];
                 }
                 return this;
-            }
+            }, 
 
             //初始化
-            , init: function (options, callback) {
+            init: function (options, callback) {
                 var othis = this;
                 var configs = othis.configs,
                     settings = othis.settings,
@@ -229,14 +225,12 @@
                 //初始化完毕回调
                 if (typeof callback === 'function')
                     callback.call(othis);
-            }
+            }, 
 
             //重置主题色
-            , resetColor: function (color) {
+            resetColor: function (color) {
                 if (color) {
                     this.settings.color = color;
-                    //缓存数据
-                    layui.data('winui', { key: 'settings', value: this.settings });
                 }
                 this.renderColor();
                 //重置所有iframe的颜色
@@ -246,35 +240,33 @@
                         window.frames[i].winui.renderColor();
                     }
                 }
-            }
+            }, 
 
             //渲染主题色
-            , renderColor: function () {
+            renderColor: function () {
                 if (this.settings.color) {
                     if ($('body').attr('class')) {
                         $('body').attr('class', $('body').attr('class').replace(/\bwinui-color.*?\b/g, '').replace(/(^\s*)|(\s*$)/g, ""));
                     }
                     $('body').addClass('winui-color' + this.settings.color);
                 }
-            }
+            }, 
 
             //重置任务栏模式
-            , resetTaskbar: function (taskbarMode) {
+            resetTaskbar: function (taskbarMode) {
                 if (taskbarMode) {
                     if (this.settings.taskbarMode === taskbarMode)
                         return;
                     this.settings.taskbarMode = taskbarMode;
-                    //缓存数据
-                    layui.data('winui', { key: 'settings', value: this.settings });
                 }
                 this.renderTaskbar();
                 if (taskbarMode) {
                     this.taskbarChange();
                 }
-            }
+            }, 
 
             //渲染任务栏模式
-            , renderTaskbar: function () {
+            renderTaskbar: function () {
                 if ($('body').attr('class')) {
                     $('body').attr('class', $('body').attr('class').replace(/\btaskbarIn.*?\b/g, '').replace(/(^\s*)|(\s*$)/g, ""));
                 }
@@ -292,25 +284,23 @@
                     default:
                         $('body').addClass('taskbarInBottom');
                 }
-            }
+            }, 
 
             //重置开始菜单尺寸
-            , resetStartSize: function (startSize) {
+            resetStartSize: function (startSize) {
                 if (startSize) {
                     if (this.settings.startSize === startSize)
                         return;
                     this.settings.startSize = startSize;
-                    //缓存数据
-                    layui.data('winui', { key: 'settings', value: this.settings });
 
                     $('.preview-start').removeClass('xs sm lg');
                     $('.preview-start').addClass(startSize);
                 }
                 this.renderStartSize();
-            }
+            }, 
 
             //渲染开始菜单尺寸
-            , renderStartSize: function () {
+            renderStartSize: function () {
                 if ($('.winui-start').attr('class')) {
                     $('.winui-start').attr('class', $('.winui-start').attr('class').replace(/\winui-start-size.*?\b/g, '').replace(/(^\s*)|(\s*$)/g, ""));  //去掉winui-start-size的class后去除两边空格
                 }
@@ -323,36 +313,32 @@
                         break;
                     default:
                 }
-            }
+            }, 
 
             //重置背景图
-            , resetBg: function (bgSrc) {
+            resetBg: function (bgSrc) {
                 if (bgSrc) {
                     this.settings.bgSrc = bgSrc;
-                    //缓存数据
-                    layui.data('winui', { key: 'settings', value: this.settings });
                 }
                 this.renderBg();
-            }
+            }, 
 
             //渲染背景图
-            , renderBg: function () {
+            renderBg: function () {
                 var bgSrc = this.settings.bgSrc;
                 if (bgSrc)
                     $('body').css('background-image', 'url(' + bgSrc + ')');
-            }
+            }, 
 
             //重置锁屏图
-            , resetLockBg: function (bgSrc) {
+            resetLockBg: function (bgSrc) {
                 if (bgSrc) {
                     this.settings.lockBgSrc = bgSrc;
-                    //缓存数据
-                    layui.data('winui', { key: 'settings', value: this.settings });
                 }
-            }
+            }, 
 
             //全屏
-            , fullScreen: function (element) {
+            fullScreen: function (element) {
                 // 判断各种浏览器，找到正确的方法
                 var requestMethod = element.requestFullScreen || //W3C
                     element.webkitRequestFullScreen || //Chrome等
@@ -367,10 +353,10 @@
                         wscript.SendKeys("{F11}");
                     }
                 }
-            }
+            }, 
 
             //退出全屏
-            , exitFullScreen: function () {
+            exitFullScreen: function () {
                 // 判断各种浏览器，找到正确的方法
                 var exitMethod = document.exitFullscreen || //W3C
                     document.mozCancelFullScreen ||    //Chrome等
@@ -385,23 +371,23 @@
                         wscript.SendKeys("{F11}");
                     }
                 }
-            }
+            }, 
 
             //隐藏开始菜单
-            , hideStartMenu: function () {
+            hideStartMenu: function () {
                 $('.winui-start').addClass('layui-hide');
-            }
+            }, 
 
             //返回GUID
-            , guid: function () {
+            guid: function () {
                 return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
                     return v.toString(16);
                 });
-            }
+            }, 
 
             //验证表单
-            , verifyForm: function (button) {
+            verifyForm: function (button) {
                 var button = $(button),
                     stop = null,
                     device = layui.device(),
@@ -431,10 +417,10 @@
                     if (stop) return stop;
                 });
                 return !stop;
-            }
+            }, 
 
             //显示系统时间
-            , sysTime: function (selector, formatStr) {
+            sysTime: function (selector, formatStr) {
                 return setInterval(function () {
                     //获取系统时间。
                     var dateTime = new Date();
@@ -477,15 +463,15 @@
                     //将时间显示到指定的位置，时间格式形如：19:18:02
                     $(selector).html(str);
                 }, 1000);
-            }
+            }, 
 
             //停止显示时间
-            , stopSysTime: function (obj) {
+            stopSysTime: function (obj) {
                 window.clearInterval(obj);
-            }
+            }, 
 
             //任务栏自适应
-            , taskAuto: function () {
+            taskAuto: function () {
                 var res = true;
                 $('.winui-taskbar-task').each(function () {
                     var thisWidth = parseInt($(this).prop('scrollWidth'));
@@ -498,10 +484,10 @@
                     }
                 });
                 return res;
-            }
+            }, 
 
             //任务栏改变
-            , taskbarChange: function () {
+            taskbarChange: function () {
                 //根据任务栏模式调整位置
                 switch (this.settings.taskbarMode) {
                     case 'top':
@@ -520,15 +506,15 @@
                         break;
                     default:
                 }
-            }
+            }, 
 
             //获取Winui设置
-            , getSetting: function (settingKey) {
+            getSetting: function (settingKey) {
                 return this.settings[settingKey];
-            }
+            }, 
 
             //锁屏
-            , lockScreen: function (callback) {
+            lockScreen: function (callback) {
                 var self = this;
                 $('.winui-taskbar').css('zIndex', '0');
                 $.get(winui.path + '../../../tpl/index/lockscreen.html', {}, function (content) {
@@ -838,13 +824,9 @@
         //阻止冒泡
         $('.sp').off('click mousedown').on('click mousedown', call.sp);
 
-
         window.winui = new Winui();
-
         winui.tab.init();
-
         exports('winui', {});
-
         delete layui.winui;
     });
 }(window);

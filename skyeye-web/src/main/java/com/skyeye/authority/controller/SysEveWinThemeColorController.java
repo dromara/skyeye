@@ -94,4 +94,20 @@ public class SysEveWinThemeColorController {
 		sysEveWinThemeColorService.editSysEveWinThemeColorMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysEveWinThemeColorListToShow
+	     * @Description: 获取win系统主题颜色列表供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveWinThemeColorController/querySysEveWinThemeColorListToShow")
+	@ResponseBody
+	public void querySysEveWinThemeColorListToShow(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveWinThemeColorService.querySysEveWinThemeColorListToShow(inputObject, outputObject);
+	}
+	
 }

@@ -118,5 +118,25 @@ public class SysEveWinThemeColorServiceImpl implements SysEveWinThemeColorServic
 			outputObject.setreturnMessage("该win系统主题颜色名称已存在，不可进行二次保存");
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: querySysEveWinThemeColorListToShow
+	     * @Description: 获取win系统主题颜色列表供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysEveWinThemeColorListToShow(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysEveWinThemeColorDao.querySysEveWinThemeColorListToShow(map);
+		if(beans != null && !beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
 	
 }

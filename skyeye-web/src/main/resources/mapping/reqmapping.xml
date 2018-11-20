@@ -135,6 +135,22 @@
 		<property id="rowId" name="id" ref="required" var="菜单ID" />
 	</url>
 	
+	<url id="sys024" path="/post/SysEveUserController/editUserInstallThemeColor" val="自定义设置主题颜色" allUse="1">
+		<property id="themeColor" name="themeColor" ref="required,num" var="颜色的color数字" />
+	</url>
+	<url id="sys025" path="/post/SysEveUserController/editUserInstallWinBgPic" val="自定义设置win背景图片" allUse="1">
+		<property id="winBgPicUrl" name="winBgPicUrl" ref="required" var="图片url链接" />
+	</url>
+	<url id="sys026" path="/post/SysEveUserController/editUserInstallWinLockBgPic" val="自定义设置win锁屏背景图片" allUse="1">
+		<property id="winLockBgPicUrl" name="winLockBgPicUrl" ref="required" var="图片url链接" />
+	</url>
+	<url id="sys027" path="/post/SysEveUserController/editUserInstallWinStartMenuSize" val="自定义设置win开始菜单尺寸" allUse="1">
+		<property id="winStartMenuSize" name="winStartMenuSize" ref="required" var="尺寸size" />
+	</url>
+	<url id="sys028" path="/post/SysEveUserController/editUserInstallWinTaskPosition" val="自定义设置win任务栏在屏幕的位置" allUse="1">
+		<property id="winTaskPosition" name="winTaskPosition" ref="required" var="位置属性" />
+	</url>
+	
 	<url id="icon001" path="/post/SysEveIconController/querySysIconList" val="获取ICON列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
@@ -224,6 +240,8 @@
 	<url id="sysevewinthemecolor005" path="/post/SysEveWinThemeColorController/editSysEveWinThemeColorMationById" val="编辑win系统主题颜色信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="win系统主题颜色id"/>
 	    <property id="colorClass" name="colorClass" ref="required" var="win系统主题颜色属性"/>
+	</url>
+	<url id="sysevewinthemecolor006" path="/post/SysEveWinThemeColorController/querySysEveWinThemeColorListToShow" val="获取win系统主题颜色列表供展示" allUse="1">
 	</url>
 	<!-- 系统角色用户管理结束 -->
 	

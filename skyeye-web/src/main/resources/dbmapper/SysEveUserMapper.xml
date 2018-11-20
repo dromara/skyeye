@@ -87,7 +87,10 @@
 			a.`password`,
 			a.user_lock userLock,
 			b.win_bg_pic_url winBgPicUrl,
-			b.win_lock_bg_pic_url winLockBgPicUrl
+			b.win_lock_bg_pic_url winLockBgPicUrl,
+			b.win_theme_color winThemeColor,
+			b.win_start_menu_size winStartMenuSize,
+			b.win_task_position winTaskPosition
 		FROM
 			sys_eve_user a
 			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id
@@ -170,5 +173,45 @@
 		GROUP BY c.id
 		ORDER BY c.order_num ASC
 	</select>
+	
+	<update id="editUserInstallThemeColor" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_theme_color = #{themeColor}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinBgPic" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_bg_pic_url = #{winBgPicUrl}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinLockBgPic" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_lock_bg_pic_url = #{winLockBgPicUrl}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinStartMenuSize" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_start_menu_size = #{winStartMenuSize}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinTaskPosition" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_task_position = #{winTaskPosition}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
 	
 </mapper>

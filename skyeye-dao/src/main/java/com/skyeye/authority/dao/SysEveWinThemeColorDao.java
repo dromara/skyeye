@@ -20,4 +20,6 @@ public interface SysEveWinThemeColorDao {
 
 	public int editSysEveWinThemeColorMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> querySysEveWinThemeColorListToShow(Map<String, Object> map) throws Exception;
+
 }

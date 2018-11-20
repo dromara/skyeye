@@ -70,4 +70,13 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="querySysEveWinThemeColorListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.color_class colorClass
+		FROM
+			sys_eve_win_theme_color a
+		ORDER BY a.create_time DESC
+	</select>
+	
 </mapper>

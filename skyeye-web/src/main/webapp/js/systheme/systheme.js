@@ -45,8 +45,14 @@ layui.config({
 			 	},
 			 	options: {'click .bgPicItem':function(index, row){
 				        var bgSrc = row.picUrl;
-				        $('.background-preview').css('background-image', 'url(' + bgSrc + ')');
-				        winui.resetBg(bgSrc);
+				        AjaxPostUtil.request({url:reqBasePath + "sys025", params:{winBgPicUrl: bgSrc}, type:'json', callback:function(json){
+			 	   			if(json.returnCode == 0){
+				 	   			$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
+						        winui.resetBg(bgSrc);
+			 	   			}else{
+			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   			}
+			 	   		}});
 			 		}
 			 	},
 			 	ajaxSendAfter:function(json){
@@ -65,12 +71,42 @@ layui.config({
 					 	},
 					 	options: {'click .lockBgPicItem':function(index, row){
 						        var bgSrc = row.picUrl;
-						        $('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
-						        winui.resetLockBg(bgSrc);
+						        AjaxPostUtil.request({url:reqBasePath + "sys026", params:{winLockBgPicUrl: bgSrc}, type:'json', callback:function(json){
+					 	   			if(json.returnCode == 0){
+						 	   			$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
+								        winui.resetLockBg(bgSrc);
+					 	   			}else{
+					 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					 	   			}
+					 	   		}});
 					 		}
 					 	},
 					 	ajaxSendAfter:function(json){
 					 		initCustomLockBackGroundPic();
+					 		//初始化主题色
+					 		showGrid({
+							 	id: "color-choose",
+							 	url: reqBasePath + "sysevewinthemecolor006",
+							 	params: {},
+							 	pagination: false,
+							 	template: getFileContent('tpl/systheme/color-choose.tpl'),
+							 	ajaxSendLoadBefore: function(hdb){
+							 	},
+							 	ajaxSendAfter:function(json){
+							 		//颜色选择
+								    $('.color-choose>div').on('click', function () {
+								        var color = Number($(this)[0].classList[0].replace('theme-color-', ''));
+								        AjaxPostUtil.request({url:reqBasePath + "sys024", params:{themeColor: color}, type:'json', callback:function(json){
+							 	   			if(json.returnCode == 0){
+							 	   				winui.resetColor(color);
+							 	   			}else{
+							 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+							 	   			}
+							 	   		}});
+								        
+								    });
+							 	}
+						    });
 					 	}
 				    });
 			 	}
@@ -109,8 +145,14 @@ layui.config({
 	    				});
 	    	 		}, 'click .bgPicItem1':function(index, row){
 				        var bgSrc = row.picUrl;
-				        $('.background-preview').css('background-image', 'url(' + bgSrc + ')');
-				        winui.resetBg(bgSrc);
+				        AjaxPostUtil.request({url:reqBasePath + "sys025", params:{winBgPicUrl: bgSrc}, type:'json', callback:function(json){
+			 	   			if(json.returnCode == 0){
+				 	   			$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
+						        winui.resetBg(bgSrc);
+			 	   			}else{
+			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   			}
+			 	   		}});
 			 		}
 	    	 	},
 	    	 	ajaxSendAfter:function(json){
@@ -145,8 +187,14 @@ layui.config({
 	    				});
 	    	 		}, 'click .lockBgPicItem1':function(index, row){
 	    	 			var bgSrc = row.picUrl;
-				        $('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
-				        winui.resetLockBg(bgSrc);
+	    	 			AjaxPostUtil.request({url:reqBasePath + "sys026", params:{winLockBgPicUrl: bgSrc}, type:'json', callback:function(json){
+			 	   			if(json.returnCode == 0){
+				 	   			$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
+						        winui.resetLockBg(bgSrc);
+			 	   			}else{
+			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   			}
+			 	   		}});
 			 		}
 	    	 	},
 	    	 	ajaxSendAfter:function(json){
@@ -206,49 +254,25 @@ layui.config({
 			}
 		});
 	    
-	    //颜色选择
-	    $('.color-choose>div').on('click', function () {
-	        var color = Number($(this)[0].classList[0].replace('theme-color-', ''));
-	        winui.resetColor(color);
-	    });
-	
-	    form.on('switch(toggleTransparent)', function (data) {
-	        if (data.elem.checked) {
-	            $(data.elem).siblings('span').text('开');
-	        } else {
-	            $(data.elem).siblings('span').text('关');
-	        }
-	        layer.msg(unfinished);
-	    });
-	
-	    form.on('switch(toggleTaskbar)', function (data) {
-	        if (data.elem.checked) {
-	            $(data.elem).siblings('span').text('开');
-	        } else {
-	            $(data.elem).siblings('span').text('关');
-	        }
-	    });
 	    //任务栏位置
 	    form.on('radio(taskPosition)', function (data) {
-	        switch (data.value) {
-	            case 'top':
-	                winui.resetTaskbar(data.value);
-	                break;
-	            case 'bottom':
-	                winui.resetTaskbar(data.value);
-	                break;
-	            case 'left':
-	                winui.window.msg(unfinished);
-	                break;
-	            case 'right':
-	                winui.window.msg(unfinished);
-	                break;
-	            default:
-	        }
+	    	AjaxPostUtil.request({url:reqBasePath + "sys028", params:{winTaskPosition: data.value}, type:'json', callback:function(json){
+ 	   			if(json.returnCode == 0){
+ 	   				winui.resetTaskbar(data.value);
+ 	   			}else{
+ 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   			}
+ 	   		}});
 	    });
 	    //开始菜单尺寸
 	    form.on('radio(startSize)', function (data) {
-	        winui.resetStartSize(data.value);
+	    	AjaxPostUtil.request({url:reqBasePath + "sys027", params:{winStartMenuSize: data.value}, type:'json', callback:function(json){
+ 	   			if(json.returnCode == 0){
+ 	   				winui.resetStartSize(data.value);
+ 	   			}else{
+ 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   			}
+ 	   		}});
 	    });
 	});
 });

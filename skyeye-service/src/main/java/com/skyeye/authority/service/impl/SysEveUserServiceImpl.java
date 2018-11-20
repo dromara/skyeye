@@ -281,6 +281,116 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 		List<Map<String, Object>> deskTops = inputObject.getLogAllMenuParams();
 		outputObject.setBeans(deskTops);
 	}
+
+	/**
+	 * 
+	     * @Title: editUserInstallThemeColor
+	     * @Description: 自定义设置主题颜色
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editUserInstallThemeColor(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("userId", user.get("id"));
+		//修改reids中的用户信息
+		user.put("winThemeColor", map.get("themeColor"));
+		jedisClient.set("userMation:" + user.get("id").toString(), JSON.toJSONString(user));
+		jedisClient.expire("userMation:" + user.get("id").toString(), 1800);//时间为30分钟
+		sysEveUserDao.editUserInstallThemeColor(map);
+	}
+
+	/**
+	 * 
+	     * @Title: editUserInstallWinBgPic
+	     * @Description: 自定义设置win背景图片
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editUserInstallWinBgPic(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("userId", user.get("id"));
+		//修改reids中的用户信息
+		user.put("winBgPicUrl", map.get("winBgPicUrl"));
+		jedisClient.set("userMation:" + user.get("id").toString(), JSON.toJSONString(user));
+		jedisClient.expire("userMation:" + user.get("id").toString(), 1800);//时间为30分钟
+		sysEveUserDao.editUserInstallWinBgPic(map);
+	}
+
+	/**
+	 * 
+	     * @Title: editUserInstallWinLockBgPic
+	     * @Description: 自定义设置win锁屏背景图片
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editUserInstallWinLockBgPic(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("userId", user.get("id"));
+		//修改reids中的用户信息
+		user.put("winLockBgPicUrl", map.get("winLockBgPicUrl"));
+		jedisClient.set("userMation:" + user.get("id").toString(), JSON.toJSONString(user));
+		jedisClient.expire("userMation:" + user.get("id").toString(), 1800);//时间为30分钟
+		sysEveUserDao.editUserInstallWinLockBgPic(map);
+	}
+
+	/**
+	 * 
+	     * @Title: editUserInstallWinStartMenuSize
+	     * @Description: 自定义设置win开始菜单尺寸
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editUserInstallWinStartMenuSize(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("userId", user.get("id"));
+		//修改reids中的用户信息
+		user.put("winStartMenuSize", map.get("winStartMenuSize"));
+		jedisClient.set("userMation:" + user.get("id").toString(), JSON.toJSONString(user));
+		jedisClient.expire("userMation:" + user.get("id").toString(), 1800);//时间为30分钟
+		sysEveUserDao.editUserInstallWinStartMenuSize(map);
+	}
+
+	/**
+	 * 
+	     * @Title: editUserInstallWinTaskPosition
+	     * @Description: 自定义设置win任务栏在屏幕的位置
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editUserInstallWinTaskPosition(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("userId", user.get("id"));
+		//修改reids中的用户信息
+		user.put("winTaskPosition", map.get("winTaskPosition"));
+		jedisClient.set("userMation:" + user.get("id").toString(), JSON.toJSONString(user));
+		jedisClient.expire("userMation:" + user.get("id").toString(), 1800);//时间为30分钟
+		sysEveUserDao.editUserInstallWinTaskPosition(map);
+	}
 	
 	
 	

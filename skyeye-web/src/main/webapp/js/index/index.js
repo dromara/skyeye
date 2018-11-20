@@ -59,13 +59,13 @@
     	});
     	
     	winui.config({
-            settings: layui.data('winui').settings || {
-                color: 32,
-                taskbarMode: 'bottom',
-                startSize: 'sm',
+            settings: {
+                color: json.bean.winThemeColor,
+                taskbarMode: json.bean.winTaskPosition,
+                startSize: json.bean.winStartMenuSize,
                 bgSrc: json.bean.winBgPicUrl,
                 lockBgSrc: json.bean.winLockBgPicUrl
-            },  //如果本地配置为空则给默认值
+            },
             desktop: {//桌面菜单栏
                 options: {
                 	url: reqBasePath + 'login004',
