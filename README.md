@@ -10,6 +10,7 @@ win10风格的一套系统，刚开始开发，内容慢慢添加。</br>
 - 系统ICON管理（目前只支持系统内部样式icon）
 - 代码生成器完成（只能适用于该框架的代码生成器，配置模板即可生成，然后下载压缩包解压复制到项目中即可。）
 - 拖拽生成小程序静态版完成，可自定义配置小程序组件
+- 用户可根据自己的爱好自定义设置界面样式
 
 #### 软件架构
 软件架构说明
@@ -76,6 +77,9 @@ handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-j
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193301_72d0bb49_1541735.png "微信截图_20181118193254.png")
 - 9-3.动态表单数据展示模板配置
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193420_9d666e05_1541735.png "1.png")
+- 10.用户自定义win界面样式
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1120/154901_4fdce714_1541735.png "微信截图_20181120154643.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1120/154913_24bf0938_1541735.png "微信截图_20181120154653.png")
 
 #### 环境搭建
 ##### 开发工具:
