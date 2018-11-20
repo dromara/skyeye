@@ -206,6 +206,25 @@
 	<url id="sysevewinlockbgpic007" path="/post/SysEveWinLockBgPicController/deleteSysEveWinBgPicMationCustomById" val="删除win系统锁屏桌面图片信息用户自定义" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="win系统桌面图片id"/>
 	</url>
+	
+	<url id="sysevewinthemecolor001" path="/post/SysEveWinThemeColorController/querySysEveWinThemeColorList" val="获取win系统主题颜色列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="colorClass" name="colorClass" ref="" var="win系统主题颜色属性"/>
+	</url>
+	<url id="sysevewinthemecolor002" path="/post/SysEveWinThemeColorController/insertSysEveWinThemeColorMation" val="添加win系统主题颜色信息" allUse="1">
+		<property id="colorClass" name="colorClass" ref="required" var="win系统主题颜色属性"/>
+	</url>
+	<url id="sysevewinthemecolor003" path="/post/SysEveWinThemeColorController/deleteSysEveWinThemeColorMationById" val="删除win系统主题颜色信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="win系统主题颜色id"/>
+	</url>
+	<url id="sysevewinthemecolor004" path="/post/SysEveWinThemeColorController/querySysEveWinThemeColorMationToEditById" val="编辑win系统主题颜色信息时进行回显" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="win系统主题颜色id"/>
+	</url>
+	<url id="sysevewinthemecolor005" path="/post/SysEveWinThemeColorController/editSysEveWinThemeColorMationById" val="编辑win系统主题颜色信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="win系统主题颜色id"/>
+	    <property id="colorClass" name="colorClass" ref="required" var="win系统主题颜色属性"/>
+	</url>
 	<!-- 系统角色用户管理结束 -->
 	
 	<!-- 系统数据库管理开始 -->
