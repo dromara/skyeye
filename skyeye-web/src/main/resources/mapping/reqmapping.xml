@@ -196,6 +196,16 @@
 	<url id="sysevewinlockbgpic003" path="/post/SysEveWinLockBgPicController/deleteSysEveWinLockBgPicMationById" val="删除win系统锁屏桌面图片信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="win系统锁屏桌面图片id"/>
 	</url>
+	<url id="sysevewinlockbgpic004" path="/post/SysEveWinLockBgPicController/querySysEveWinBgPicListToShow" val="获取win系统锁屏桌面图片列表供展示" allUse="1">
+	</url>
+	<url id="sysevewinlockbgpic005" path="/post/SysEveWinLockBgPicController/insertSysEveWinBgPicMationByCustom" val="用户自定义上传win系统锁屏桌面图片信息" allUse="1">
+		<property id="picUrl" name="picUrl" ref="required" var="图片路径"/>
+	</url>
+	<url id="sysevewinlockbgpic006" path="/post/SysEveWinLockBgPicController/querySysEveWinBgPicCustomList" val="获取win系统锁屏桌面图片列表用户自定义" allUse="1">
+	</url>
+	<url id="sysevewinlockbgpic007" path="/post/SysEveWinLockBgPicController/deleteSysEveWinBgPicMationCustomById" val="删除win系统锁屏桌面图片信息用户自定义" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="win系统桌面图片id"/>
+	</url>
 	<!-- 系统角色用户管理结束 -->
 	
 	<!-- 系统数据库管理开始 -->

@@ -26,10 +26,12 @@ layui.config({
 	        $('.start-size input[value=' + startSize + ']').prop('checked', true);
 	        $('.preview-start').removeClass('xs sm lg');
 	        $('.preview-start').addClass(startSize);
-	
+	        
+	        $(".preview-start").html(getFileContent('tpl/systheme/menu-model.tpl'));
+	        
 	        form.render();
 	        
-	        //初始化背景图片
+	        //初始化桌面背景图片
 		    showGrid({
 			 	id: "background-choose",
 			 	url: reqBasePath + "sysevewinbgpic004",
@@ -42,16 +44,35 @@ layui.config({
 					});
 			 	},
 			 	options: {'click .bgPicItem':function(index, row){
-				 		//获取当前图片路径
 				        var bgSrc = row.picUrl;
-				        //改变预览背景
 				        $('.background-preview').css('background-image', 'url(' + bgSrc + ')');
-				        //改变父页面背景
 				        winui.resetBg(bgSrc);
 			 		}
 			 	},
 			 	ajaxSendAfter:function(json){
 			 		initCustomBackGroundPic();
+			 		//初始化桌面锁屏背景图片
+				    showGrid({
+					 	id: "lockscreen-choose",
+					 	url: reqBasePath + "sysevewinlockbgpic004",
+					 	params: {},
+					 	pagination: false,
+					 	template: getFileContent('tpl/systheme/lock-bg-pic.tpl'),
+					 	ajaxSendLoadBefore: function(hdb){
+					 		hdb.registerHelper("compare1", function(v1, options){
+								return fileBasePath + v1;
+							});
+					 	},
+					 	options: {'click .lockBgPicItem':function(index, row){
+						        var bgSrc = row.picUrl;
+						        $('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
+						        winui.resetLockBg(bgSrc);
+					 		}
+					 	},
+					 	ajaxSendAfter:function(json){
+					 		initCustomLockBackGroundPic();
+					 	}
+				    });
 			 	}
 		    });
 	
@@ -87,11 +108,8 @@ layui.config({
 	    		    		}});
 	    				});
 	    	 		}, 'click .bgPicItem1':function(index, row){
-				 		//获取当前图片路径
 				        var bgSrc = row.picUrl;
-				        //改变预览背景
 				        $('.background-preview').css('background-image', 'url(' + bgSrc + ')');
-				        //改变父页面背景
 				        winui.resetBg(bgSrc);
 			 		}
 	    	 	},
@@ -100,7 +118,43 @@ layui.config({
 	        });
 	    }
 	    
-	    //背景图片上传
+	    //自定义上传的桌面锁屏背景图片
+	    function initCustomLockBackGroundPic(){
+	    	showGrid({
+	    	 	id: "cus-lockscreen-choose",
+	    	 	url: reqBasePath + "sysevewinlockbgpic006",
+	    	 	params: {},
+	    	 	pagination: false,
+	    	 	template: getFileContent('tpl/systheme/custom-lockbgpic-item.tpl'),
+	    	 	ajaxSendLoadBefore: function(hdb){
+	    	 		hdb.registerHelper("compare1", function(v1, options){
+	    				return fileBasePath + v1;
+	    			});
+	    	 	},
+	    	 	options: {'click .lockDel':function(index, row){
+		    	 		top.winui.window.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
+		    	 			top.winui.window.close(index);
+	    		            AjaxPostUtil.request({url:reqBasePath + "sysevewinlockbgpic007", params:{rowId: row.id}, type:'json', callback:function(json){
+	    		    			if(json.returnCode == 0){
+	    		    				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
+	    		    				refreshGrid("cus-lockscreen-choose", {params:{}});
+	    		    			}else{
+	    		    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	    		    			}
+	    		    		}});
+	    				});
+	    	 		}, 'click .lockBgPicItem1':function(index, row){
+	    	 			var bgSrc = row.picUrl;
+				        $('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
+				        winui.resetLockBg(bgSrc);
+			 		}
+	    	 	},
+	    	 	ajaxSendAfter:function(json){
+	    	 	}
+	        });
+	    }
+	    
+	    //桌面背景图片上传
 	    var uploadInst = upload.render({
 			elem: '#addBean', // 绑定元素
 			url: reqBasePath + 'common003', // 上传接口
@@ -125,31 +179,33 @@ layui.config({
 				console.log(e);
 			}
 		});
-	    //锁屏界面点击
-	    $('.lockscreen-choose>img').on('click', function () {
-	        //获取当前图片路径
-	        var bgSrc = $(this).prop('src');
-	        //改变锁屏预览
-	        $('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
-	        //设置锁屏背景
-	        winui.resetLockBg(bgSrc);
-	    })
-	    //锁屏界面图片上传
-	    $('.lockscreen-upload').on('click', function () {
-	        var input = $(this).prev('input[type=file]');
-	        input.trigger('click');
-	        input.on('change', function () {
-	            var src = $(this).val();
-	            if (src) {
-	                layer.msg('选择了路径【' + src + '】下的图片，返回一张性感的Girl给你')
-	                //改变锁屏预览
-	                $('.lockscreen-preview').css('background-image', 'url(images/sexy_girl.jpg');
-	                //设置锁屏背景
-	                winui.resetLockBg('images/sexy_girl.jpg');
-	                $(this).val('').off('change');
-	            }
-	        })
-	    });
+	    
+	    //桌面锁屏背景图片上传
+	    var uploadInst1 = upload.render({
+			elem: '#addBean1', // 绑定元素
+			url: reqBasePath + 'common003', // 上传接口
+			data: {type: 5},
+			done: function(json) {
+				// 上传完毕回调
+				if(json.returnCode == 0){
+					AjaxPostUtil.request({url:reqBasePath + "sysevewinlockbgpic005", params:{picUrl: json.bean.picUrl}, type:'json', callback:function(json){
+		    			if(json.returnCode == 0){
+		    				top.winui.window.msg("上传成功", {icon: 1,time: 2000});
+		    				refreshGrid("cus-lockscreen-choose", {params:{}});
+		    			}else{
+		    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		    			}
+		    		}});
+				}else{
+					top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				}
+			},
+			error: function(e) {
+				// 请求异常回调
+				console.log(e);
+			}
+		});
+	    
 	    //颜色选择
 	    $('.color-choose>div').on('click', function () {
 	        var color = Number($(this)[0].classList[0].replace('theme-color-', ''));

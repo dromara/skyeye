@@ -71,6 +71,9 @@ public class CommonServiceImpl implements CommonService{
 			case 4://系统桌面背景自定义图片上传用户自定义
 				basePath = tPath.substring(0, inputObject.getRequest().getSession().getServletContext().getRealPath("/").indexOf(Constants.PROJECT_WEB)) + "\\images\\upload\\winbgpic" ;
 				break;
+			case 5://系统桌面锁屏背景自定义图片上传用户自定义
+				basePath = tPath.substring(0, inputObject.getRequest().getSession().getServletContext().getRealPath("/").indexOf(Constants.PROJECT_WEB)) + "\\images\\upload\\winlockbgpic" ;
+				break;
 			default:
 				basePath = tPath.substring(0, inputObject.getRequest().getSession().getServletContext().getRealPath("/").indexOf(Constants.PROJECT_WEB));
 				break;
@@ -103,6 +106,9 @@ public class CommonServiceImpl implements CommonService{
 						break;
 					case 4://系统桌面背景自定义图片上传用户自定义
 						newFileName = "/images/upload/winbgpic/" + newFileName ;
+						break;
+					case 5://系统桌面锁屏背景自定义图片上传用户自定义
+						newFileName = "/images/upload/winlockbgpic/" + newFileName ;
 						break;
 					default:
 						break;

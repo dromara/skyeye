@@ -62,4 +62,68 @@ public class SysEveWinLockBgPicController {
 		sysEveWinLockBgPicService.deleteSysEveWinLockBgPicMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysEveWinBgPicListToShow
+	     * @Description: 获取win系统锁屏桌面图片列表供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveWinLockBgPicController/querySysEveWinBgPicListToShow")
+	@ResponseBody
+	public void querySysEveWinBgPicListToShow(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveWinLockBgPicService.querySysEveWinBgPicListToShow(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: insertSysEveWinBgPicMationByCustom
+	     * @Description: 用户自定义上传win系统锁屏桌面图片信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveWinLockBgPicController/insertSysEveWinBgPicMationByCustom")
+	@ResponseBody
+	public void insertSysEveWinBgPicMationByCustom(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveWinLockBgPicService.insertSysEveWinBgPicMationByCustom(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: querySysEveWinBgPicCustomList
+	     * @Description: 获取win系统锁屏桌面图片列表用户自定义
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveWinLockBgPicController/querySysEveWinBgPicCustomList")
+	@ResponseBody
+	public void querySysEveWinBgPicCustomList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveWinLockBgPicService.querySysEveWinBgPicCustomList(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: deleteSysEveWinBgPicMationCustomById
+	     * @Description: 删除win系统锁屏桌面图片信息用户自定义
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveWinLockBgPicController/deleteSysEveWinBgPicMationCustomById")
+	@ResponseBody
+	public void deleteSysEveWinBgPicMationCustomById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveWinLockBgPicService.deleteSysEveWinBgPicMationCustomById(inputObject, outputObject);
+	}
+	
 }

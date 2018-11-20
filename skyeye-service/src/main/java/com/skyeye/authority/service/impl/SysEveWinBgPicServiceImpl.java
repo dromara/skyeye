@@ -104,7 +104,7 @@ public class SysEveWinBgPicServiceImpl implements SysEveWinBgPicService{
 	/**
 	 * 
 	     * @Title: insertSysEveWinBgPicMationByCustom
-	     * @Description: 添加win系统桌面图片信息
+	     * @Description: 用户自定义上传添加win系统桌面图片信息
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
