@@ -336,11 +336,19 @@ layui.config({
    							var modeContent = getDataUseHandlebars(json.rows[i].templateContent, json.rows[i].propertyValue);
    							json.rows[i].htmlContent = json.rows[i].htmlContent.replace(/{{content}}/g, modeContent);
    						}
+   						var defaultValue = "";
+   						if(json.rows[i].propertyUnit == '%'){//百分号计算获取宽高百分比
+   							defaultValue = Math.ceil($("div#centerText .show-operation").children().width() / $("div#centerText .show-operation").width() * 100);
+   						}else{
+   							defaultValue = $("div#centerText .show-operation").children().css(json.rows[i].propertyTag).replace(json.rows[i].propertyUnit, '');
+   						}
    						str = str + json.rows[i].htmlContent.replace(/{{id}}/g, json.rows[i].id).replace(/{{labelContent}}/g, json.rows[i].title)
    									.replace(/{{placeholder}}/g, json.rows[i].title).replace(/{{tag}}/g, json.rows[i].propertyTag)
-   									.replace(/{{unit}}/g, json.rows[i].propertyUnit).replace(/{{out}}/g, json.rows[i].propertyOut);
+   									.replace(/{{unit}}/g, json.rows[i].propertyUnit).replace(/{{out}}/g, json.rows[i].propertyOut)
+   									.replace(/{{defaultValue}}/g, defaultValue);
    						jsRelyOn = jsRelyOn + json.rows[i].jsRelyOn;
-   						jsContent = jsContent + json.rows[i].jsContent.replace(/{{id}}/g, json.rows[i].id).replace(/%2B/g, '\+').replace(/%26/g, "\&");
+   						jsContent = jsContent + json.rows[i].jsContent.replace(/{{id}}/g, json.rows[i].id).replace(/%2B/g, '\+').replace(/%26/g, "\&")
+   															.replace(/{{defaultValue}}/g, defaultValue);
    					}
    					jsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + jsContent + '})(jQuery);});</script>';
    					if(isNull(str)){
