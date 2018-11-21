@@ -11,6 +11,7 @@ win10风格的一套系统，刚开始开发，内容慢慢添加。</br>
 - 代码生成器完成（只能适用于该框架的代码生成器，配置模板即可生成，然后下载压缩包解压复制到项目中即可。）
 - 拖拽生成小程序静态版完成，可自定义配置小程序组件
 - 用户可根据自己的爱好自定义设置界面样式
+- 日志管理
 
 #### 软件架构
 软件架构说明
@@ -80,6 +81,8 @@ handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-j
 - 10.用户自定义win界面样式
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1120/154901_4fdce714_1541735.png "微信截图_20181120154643.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1120/154913_24bf0938_1541735.png "微信截图_20181120154653.png")
+- 11.系统日志管理
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/105120_65de9434_1541735.png "1.png")
 
 #### 环境搭建
 ##### 开发工具:
@@ -107,3 +110,6 @@ handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-j
 - [Mybatis3官网](http://www.mybatis.org/mybatis-3/zh/index.html)</br>
 - [Nginx中文文档](http://tool.oschina.net/apidocs/apidoc?api=nginx-zh)</br>
 - [Git官网中文文档](https://git-scm.com/book/zh/v2)</br>
+
+#### 作者微信：
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/105033_fa16d4a1_1541735.jpeg "微信图片_20181121104949.jpg")
