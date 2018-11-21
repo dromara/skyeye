@@ -19868,13 +19868,6 @@ UE.plugins['video'] = function (){
 
 
 // plugins/table.action.js
-/**
- * Created with JetBrains PhpStorm.
- * User: taoqili
- * Date: 12-10-12
- * Time: 上午10:05
- * To change this template use File | Settings | File Templates.
- */
 UE.plugins['table'] = function () {
     var me = this,
         tabTimer = null,

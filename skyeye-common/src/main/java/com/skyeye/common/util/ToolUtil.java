@@ -17,6 +17,9 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.ObjectConstant;
 
 import org.apache.commons.lang3.StringUtils;
@@ -593,6 +596,36 @@ public class ToolUtil {
 	public static String getDateStr(long timeStmp) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return dateFormat.format(new Date(timeStmp));
+	}
+	
+	/**
+	 * 根据request获取ip
+	 * @param request
+	 * @return
+	 */
+	public static String getIpByRequest(HttpServletRequest request){
+		String ip;
+		ip = request.getHeader("x-forwarded-for");
+		// 针对IP是否使用代理访问进行处理
+		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		if (ip != null && ip.indexOf(",") != -1) {
+			ip = ip.substring(0, ip.indexOf(","));
+		}
+		for(String str : Constants.FILTER_FILE_IP_OPTION) {
+			if (ip.indexOf(str) != -1) {
+				ip = request.getParameter("loginPCIp");
+				break;
+			}
+		}
+		return ip;
 	}
 
 	

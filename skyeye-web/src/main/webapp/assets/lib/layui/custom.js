@@ -436,6 +436,7 @@ dataGrid.prototype = {
 		var result;
 		//用ajax的同步方式
 		parms.userToken = getCookie('userToken');
+		parms.loginPCIp = returnCitySN["cip"];
 		layui.$.ajax({
 			url: url,
 			async: false, //改为同步方式

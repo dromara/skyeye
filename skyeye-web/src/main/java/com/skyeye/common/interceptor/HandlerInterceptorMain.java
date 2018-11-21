@@ -44,27 +44,7 @@ public class HandlerInterceptorMain implements HandlerInterceptor{
 			}
 		}
     	/**IP黑名单过滤开始**/
-    	String ip;
-		ip = request.getHeader("x-forwarded-for");
-		// 针对IP是否使用代理访问进行处理
-		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ToolUtil.isBlank(ip) || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-		if (ip != null && ip.indexOf(",") != -1) {
-			ip = ip.substring(0, ip.indexOf(","));
-		}
-		for(String str : Constants.FILTER_FILE_IP_OPTION) {
-			if (ip.indexOf(str) != -1) {
-				ip = request.getParameter("loginPCIp");
-				break;
-			}
-		}
+    	String ip = ToolUtil.getIpByRequest(request);
 		
 		Properties prop = new Properties();
 		String path = ToolUtil.getIPPropertiesPath();

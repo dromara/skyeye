@@ -27,3 +27,4 @@ replaceUnderLineAndUpperCase();																												将表名转为Java�
 toLowerCaseFirstOne();																														字符串首字母转小写
 writeTxtFile();																																写入内容到文件
 getDateStr();																																将日期转化为正常的年月日时分秒
+getIpByRequest();																															根据request获取ip

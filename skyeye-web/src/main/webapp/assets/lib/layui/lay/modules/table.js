@@ -1,9 +1,5 @@
 /**
-
  @Name：layui.table 表格操作
- @Author：贤心
- @License：MIT
-    
  */
  
 layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
@@ -412,6 +408,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
       params[request.pageName] = curr;
       params[request.limitName] = options.limit;
       options.where.userToken = getCookie('userToken');
+      options.where.loginPCIp = returnCitySN["cip"];
       $.ajax({
         type: options.method || 'get'
         ,url: options.url

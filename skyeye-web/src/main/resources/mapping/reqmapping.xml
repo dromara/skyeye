@@ -16,6 +16,10 @@
 	</url>
 	<url id="login005" path="/post/SysEveUserController/queryAllMenuBySession" val="获取全部菜单列表" allUse="1">
 	</url>
+	<url id="login006" path="/post/SysWorkLogController/querySysWorkLogList" val="获取日志列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
 	<!-- 登录结束 -->
 	
 	<!-- 公共请求开始 -->
@@ -35,8 +39,8 @@
 	
 	<!-- 系统角色用户管理开始 -->
 	<url id="sys001" path="/post/SysEveUserController/querySysUserList" val="获取用户列表" allUse="1">
-		<property id="limit" name="limit" ref="required" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required" var="分页参数,第几页"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="userCode" name="userCode" ref="" var="用户账号"/>
 		<property id="userName" name="userName" ref="" var="用户名称"/>
 	</url>

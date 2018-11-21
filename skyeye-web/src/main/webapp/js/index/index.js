@@ -70,7 +70,7 @@
                 options: {
                 	url: reqBasePath + 'login004',
                     method: 'get',
-                    data: { nihaoa: '' }
+                    data: {loginPCIp: returnCitySN["cip"]}
                 },    //可以为{}  默认 请求 json/desktopmenu.json
                 done: function (desktopApp) {
                     desktopApp.ondblclick(function (id, elem) {
@@ -112,7 +112,7 @@
                 options: {
                     url: reqBasePath + 'login005',
                     method: 'get',
-                    data: { nihaoa: '' }
+                    data: {loginPCIp: returnCitySN["cip"]}
                 },
                 done: function (menuItem) {
                     //监听开始菜单点击
