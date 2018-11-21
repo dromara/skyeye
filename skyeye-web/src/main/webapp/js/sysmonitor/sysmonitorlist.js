@@ -229,7 +229,7 @@ layui.config({
    	                				   data: totalThreadYdata
    	                			   }]
    	                		   });
-   	                		   cpuRatioYdata.setOption({
+   	                		   cpuRatioChart.setOption({
    	                			   xAxis: {data: xdata},
    	                			   series: [{
    	                				   data: cpuRatioYdata
