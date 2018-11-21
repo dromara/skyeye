@@ -2,6 +2,8 @@ package com.skyeye.common.util;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.text.DateFormat;
@@ -16,16 +18,13 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
-
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.ObjectConstant;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.io.ClassPathResource;  
-import org.springframework.core.io.Resource;  
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 public class ToolUtil {
 	
@@ -626,6 +625,94 @@ public class ToolUtil {
 			}
 		}
 		return ip;
+	}
+	
+	/**
+	 * 获得CPU使用率.
+	 * @return
+	 */
+	public static double getCpuRatioForWindows() {
+		try {
+			String procCmd = System.getenv("windir") + "//system32//wbem//wmic.exe process get Caption,CommandLine,"
+					+ "KernelModeTime,ReadOperationCount,ThreadCount,UserModeTime,WriteOperationCount";
+			// 取进程信息
+			long[] c0 = readCpu(Runtime.getRuntime().exec(procCmd));
+//			Thread.sleep(Constants.CPUTIME);
+			long[] c1 = readCpu(Runtime.getRuntime().exec(procCmd));
+			if (c0 != null && c1 != null) {
+				long idletime = c1[0] - c0[0];
+				long busytime = c1[1] - c0[1];
+				return Double.valueOf(Constants.PERCENT * (busytime) / (busytime + idletime)).doubleValue();
+			} else {
+				return 0.0;
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			return 0.0;
+		}
+	}
+	
+	/**
+	 * 读取CPU信息
+	 * @param proc
+	 * @return
+	 */
+	public static long[] readCpu(final Process proc) {
+		long[] retn = new long[2];
+		try {
+			proc.getOutputStream().close();
+			InputStreamReader ir = new InputStreamReader(proc.getInputStream());
+			LineNumberReader input = new LineNumberReader(ir);
+			String line = input.readLine();
+			if (line == null || line.length() < Constants.FAULTLENGTH) {
+				return null;
+			}
+			int capidx = line.indexOf("Caption");
+			int cmdidx = line.indexOf("CommandLine");
+			int rocidx = line.indexOf("ReadOperationCount");
+			int umtidx = line.indexOf("UserModeTime");
+			int kmtidx = line.indexOf("KernelModeTime");
+			int wocidx = line.indexOf("WriteOperationCount");
+			long idletime = 0;
+			long kneltime = 0;
+			long usertime = 0;
+			while ((line = input.readLine()) != null) {
+				if (line.length() < wocidx) {
+					continue;
+				}
+				// 字段出现顺序：Caption,CommandLine,KernelModeTime,ReadOperationCount,
+				// ThreadCount,UserModeTime,WriteOperation
+				String caption = Bytes.substring(line, capidx, cmdidx - 1).trim();
+				String cmd = Bytes.substring(line, cmdidx, kmtidx - 1).trim();
+				if (cmd.indexOf("wmic.exe") >= 0) {
+					continue;
+				}
+				// log.info("line="+line);
+				if (caption.equals("System Idle Process") || caption.equals("System")) {
+					idletime += Long.valueOf(Bytes.substring(line, kmtidx, rocidx - 1).trim()).longValue();
+					idletime += Long.valueOf(Bytes.substring(line, umtidx, wocidx - 1).trim()).longValue();
+					continue;
+				}
+				if(!isBlank(Bytes.substring(line, kmtidx, rocidx - 1).trim())){
+					kneltime += Long.valueOf(Bytes.substring(line, kmtidx, rocidx - 1).trim()).longValue();
+				}
+				if(!isBlank(Bytes.substring(line, umtidx, wocidx - 1).trim())){
+					usertime += Long.valueOf(Bytes.substring(line, umtidx, wocidx - 1).trim()).longValue();
+				}
+			}
+			retn[0] = idletime;
+			retn[1] = kneltime + usertime;
+			return retn;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				proc.getInputStream().close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	

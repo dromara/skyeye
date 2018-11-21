@@ -100,5 +100,12 @@ public class Constants {
 	public static final String REDIS_PROJECT_PAGE_FILE_PATH_NUM = "1000";//页面路径的序列号默认值
 	public static final String REDIS_PROJECT_PAGE_FILE_NAME_NUM = "1000";//页面名称的序列号默认值
 	
+	/**
+	 * 可以设置长些，防止读到运行此次系统检查时的cpu占用率，就不准了
+	 */
+	public static final int CPUTIME = 5000;
+	public static final int PERCENT = 100;
+	public static final int FAULTLENGTH = 10;
+	
 
 }

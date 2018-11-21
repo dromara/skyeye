@@ -40,9 +40,16 @@
 		<netjson.version>2.4</netjson.version>
 		<jackjson.version>1.9.13</jackjson.version>
 		<fastjson.version>1.2.3</fastjson.version>
+		<javaee.version>7.0</javaee.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>javax</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>${javaee.version}</version>
+				<scope>provided</scope>
+			</dependency>
 			<!--json-lib -->
 			<dependency>
 				<groupId>net.sf.json-lib</groupId>

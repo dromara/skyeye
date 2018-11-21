@@ -4027,6 +4027,20 @@ body .layer-ext-winconfirm {
 
 /*** 个人中心样式end ***/
 
+.layui-this li{
+	height: 100px;
+    text-align: center;
+    background-color: ghostwhite;
+    margin-left: 20px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.layui-this li a h3{
+	font-size: 21px;
+    margin-top: 20px;
+}
+
 /*******************************************自定义样式end********************************************/
 
 

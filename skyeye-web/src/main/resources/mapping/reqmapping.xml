@@ -711,4 +711,11 @@
 	</url>
 	<!-- 系统各部分说明结束 -->
 	
+	<!-- 系统性能监控开始 -->
+	<url id="websocket001" path="/websocket" val="WebSocketContext获取服务器信息" allUse="1">
+	</url>
+	<url id="sysmonitor001" path="/post/SysMonitorController/queryMonitorInfoMation" val="获取系统信息的业务逻辑实现类" allUse="1">
+	</url>
+	<!-- 系统性能监控结束 -->
+	
 </controller>

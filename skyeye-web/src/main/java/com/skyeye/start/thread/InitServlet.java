@@ -32,6 +32,8 @@ public class InitServlet extends HttpServlet {
 		//启动线程读取配置文件
 		new Thread(new TokenThread(REQUEST_URL)).start();
 		log.info("启动线程读取配置文件成功");
+		new Thread(new MonitorThread()).start();
+		log.info("启动系统信息获取成功");
 	}
 
 	@Override
