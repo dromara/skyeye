@@ -13,6 +13,7 @@ win10风格的一套系统，刚开始开发，内容慢慢添加。</br>
 - 用户可根据自己的爱好自定义设置界面样式
 - 日志管理
 - Java应用的在线性能监控
+- 行政区划（四级行政区划，数据量四万多条，界面只展示三级行政区划。获取行政区划的工具在公共项目中 **skyeye-common** ）
 
 #### 软件架构
 软件架构说明
@@ -89,6 +90,8 @@ webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.co
 - 12.Java应用的在线服务器性能监控
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/173442_c1c842b4_1541735.png "1.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/173447_347bfaac_1541735.png "5.png")
+- 13.行政区划
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1122/210207_93200209_1541735.png "微信截图_20181122210047.png")
 
 #### 环境搭建
 ##### 开发工具:
