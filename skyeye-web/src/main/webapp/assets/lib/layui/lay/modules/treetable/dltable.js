@@ -756,11 +756,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
         }, options.request)
         //响应数据的自定义格式
         options.response = $.extend({
-            statusName: 'code'
-            ,statusCode: 0
-            ,msgName: 'msg'
-            ,dataName: 'data'
-            ,countName: 'count'
+        	statusName: 'returnCode'
+        	,statusCode: 0
+        	,msgName: 'returnMessage'
+        	,dataName: 'rows'
+        	,countName: 'total'
         }, options.response);
         //如果 page 传入 laypage 对象
         if(typeof options.page === 'object'){
@@ -1184,6 +1184,8 @@ layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
             var params = {};
             params[request.pageName] = curr;
             params[request.limitName] = options.limit;
+            options.where.userToken = getCookie('userToken');
+            options.where.loginPCIp = returnCitySN["cip"];
             //行内过滤条件
             var list=that.layFilter.find("[name^='filter_']");
             layui.each(list,function (i, o) {

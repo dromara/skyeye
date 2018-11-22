@@ -501,6 +501,10 @@
 	    <property id="propertyId" name="propertyId" ref="required" var="所属属性标签"/>
 	</url>
 	
+	<url id="systarea001" path="/post/SysTAreaController/querySysTAreaList" val="获取行政区划信息" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
 	<!-- 小程序系列结束 -->
 	
 	<!-- 代码生成器系列开始 -->
