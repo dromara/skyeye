@@ -122,6 +122,7 @@ function isNull(str){
 	    vue: 'modules/codemirror/vue',//代码格式编辑器vue支持vue
 	    zclip: 'modules/jquery.zclip',//复制插件
 	    swiper: 'modules/swiper/swiper.min',//滚动插件
+	    tableSelect: 'modules/tableSelect.js',//tableSelect 下拉表格选择器
 	};
 
 	// 记录基础数据
