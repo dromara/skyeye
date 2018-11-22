@@ -6,21 +6,11 @@
 		SELECT
 			a.code_id id,
 			IFNULL(a.parent_code_id, '0') pId,
-			a.`name`
+			a.`name`,
+			false lay_is_open
 		FROM
 			t_area a
-		WHERE a.level = '0'
-	</select>
-	
-	<select id="querySysTAreaSecondList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.code_id id,
-			a.parent_code_id pId,
-			a.`name`
-		FROM
-			t_area a
-		WHERE a.level = '1'
-			AND a.parent_code_id = #{id}
+		WHERE 3 > a.level
 	</select>
 	
 </mapper>

@@ -689,15 +689,15 @@ public class ToolUtil {
 				}
 				// log.info("line="+line);
 				if (caption.equals("System Idle Process") || caption.equals("System")) {
-					idletime += Long.valueOf(Bytes.substring(line, kmtidx, rocidx - 1).trim()).longValue();
-					idletime += Long.valueOf(Bytes.substring(line, umtidx, wocidx - 1).trim()).longValue();
+					idletime += Long.valueOf(Bytes.substring(line, kmtidx, rocidx - 1).replaceAll(" ", "").trim()).longValue();
+					idletime += Long.valueOf(Bytes.substring(line, umtidx, wocidx - 1).replaceAll(" ", "").trim()).longValue();
 					continue;
 				}
 				if(!isBlank(Bytes.substring(line, kmtidx, rocidx - 1).trim())){
-					kneltime += Long.valueOf(Bytes.substring(line, kmtidx, rocidx - 1).trim()).longValue();
+					kneltime += Long.valueOf(Bytes.substring(line, kmtidx, rocidx - 1).replaceAll(" ", "").trim()).longValue();
 				}
 				if(!isBlank(Bytes.substring(line, umtidx, wocidx - 1).trim())){
-					usertime += Long.valueOf(Bytes.substring(line, umtidx, wocidx - 1).trim()).longValue();
+					usertime += Long.valueOf(Bytes.substring(line, umtidx, wocidx - 1).replaceAll(" ", "").trim()).longValue();
 				}
 			}
 			retn[0] = idletime;

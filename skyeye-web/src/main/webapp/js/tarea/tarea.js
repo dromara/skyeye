@@ -23,7 +23,7 @@ layui.config({
 	treeGrid.render({
         id: 'messageTable',
         elem: '#messageTable',
-        method: 'get',
+        method: 'post',
         idField: 'id',
         url: reqBasePath + 'systarea001',
         cellMinWidth: 100,
@@ -35,7 +35,7 @@ layui.config({
             {field:'id', width:100, title: 'id'},
             {field:'pId', title: 'pId'},
         ]],
-        page:false
+        isPage:false
     });
 	
     function loadTable(){
