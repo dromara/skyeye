@@ -2,10 +2,8 @@ package com.skyeye.smprogram.service.impl;
 
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.skyeye.common.object.InputObject;
@@ -13,8 +11,6 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.smprogram.dao.SmProjectDao;
 import com.skyeye.smprogram.service.SmProjectService;
-
-import net.sf.json.JSONArray;
 
 @Service
 public class SmProjectServiceImpl implements SmProjectService{

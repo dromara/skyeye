@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.ObjectConstant;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.object.PutObject;
