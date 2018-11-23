@@ -4041,6 +4041,63 @@ body .layer-ext-winconfirm {
     margin-top: 20px;
 }
 
+/*** 流程图样式start ***/
+.lct-toolBar{
+	position: absolute;
+	z-index: 10;
+	height: 35px;
+	border-bottom: 1px solid gainsboro;
+}
+
+.lct-toolBar ul{
+	height: 100%;
+	width: 100%;
+	margin-left: 10px;
+}
+
+.lct-toolBar ul li{
+	height: 100%;
+	line-height: 100%;
+	width: 35px;
+    float: left;
+}
+
+.lct-toolBar ul li button{
+	height: 100%;
+	line-height: 100%;
+	width: 100%;
+	border: 0px;
+}
+
+.coverModel{
+	margin-top: 35px;
+}
+
+
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1542985580470'); /* IE9*/
+  src: url('iconfont.eot?t=1542985580470#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAATAAAsAAAAAByQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8k0iFY21hcAAAAYAAAABcAAABlM3eNVNnbHlmAAAB3AAAANgAAADopAxsYGhlYWQAAAK0AAAAMQAAADYUXLTUaGhlYQAAAugAAAAgAAAAJAjgBIFobXR4AAADCAAAABAAAAAQEQH//WxvY2EAAAMYAAAACgAAAAoAigAmbWF4cAAAAyQAAAAfAAAAIAEPADpuYW1lAAADRAAAAUUAAAJtPlT+fXBvc3QAAASMAAAAMwAAAEi3GinzeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkcWCcwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByeyTwLZm7438AQw9zA0AgUZgTJAQD6YwyTeJztkMENgDAMAy9tQQgxAt0A8WKT/ngxfdYoacIYWLpYdn4GJiAbh1FAHoSh21rxPrN6Xzgtz+ZC0qqtd9A93CT2W9wzyWzm1+b3+lIeewVjW62B9y0gvYUsESZ4nGNgZGD4v5f5MLMzAxsDAyO7OCMQMh+apv7ntQKzqDqzkwaUxQAECLXMQI44ozrzIoU/cxSYnUAkSP7/3//1rCzMDQy6QI4eozofo6gYGzsfo7IakzoQsTEB2exscox2jPaMZkLmcoziYkLiRmbmdoysDIxqkrLKjLJaEjZqzilqug2V6/cbcQlzcYob6YtwSypNyTKNUTLsa7fPUAuWY5SSVGMEalCfZCIhysXI3X2IUZyd/1/ZQTUHYUkDYTFDJZ+JjFH8XD9rj/w7y6mhnXIVADeUMVl4nGNgZGBgAOKQvdpc8fw2Xxm4WRhA4IacRQ6M/v/3fz0rC3MDkMvBwAQSBQANBQo7AAAAeJxjYGRgYG7438AQw8rw/+//P6wsDEARFMACAKC9BmoEAAAABAAAAAQBAAAFAP/9AAAAAAAWACYAdAAAeJxjYGRgYGBh0GMA0QwMTEDMBYQMDP/BfAYADUsBSgB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICFkYmRmZGFkZWBLz8vVTcnE0gkFhXll7OAmGyFpRWZiXkMDACdqwnoAA==') format('woff'),
+  url('iconfont.ttf?t=1542985580470') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1542985580470#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-one-line-arrow:before { content: "\e61c"; }
+.icon-line:before { content: "\e653"; }
+.icon-quxian:before { content: "\e61d"; }
+
+
+
+/*** 流程图样式end ***/
+
 /*******************************************自定义样式end********************************************/
 
 

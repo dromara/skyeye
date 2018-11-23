@@ -6,19 +6,54 @@
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
-    <link href="../../assets/lib/layui/lay/modules/flowchart/base.css" rel="stylesheet" />
 </head>
 <body>
-    <div style="margin:auto 10px;">
-    	<div class="layui-col-xs12" id="mountNode">
+    <div class="layui-col-xs12">
+    	<div id="toolBar" class="lct-toolBar layui-col-xs12">
+			<ul>
+				<li>
+					<button class="layui-btn layui-btn-primary layui-btn-sm" id="addCircle"><i class="fa fa-circle-o"></i></button>
+				</li>
+				<li>
+					<button class="layui-btn layui-btn-primary layui-btn-sm" id="addRect"><i class="fa fa-object-ungroup"></i></button>
+				</li>
+				<li>
+					<button class="layui-btn layui-btn-primary layui-btn-sm" id="addLine"><i class="iconfont icon-line"></i></button>
+				</li>
+				<li>
+					<button class="layui-btn layui-btn-primary layui-btn-sm" id="addArrowLine"><i class="iconfont icon-one-line-arrow"></i></button>
+				</li>
+				<li>
+					<button class="layui-btn layui-btn-primary layui-btn-sm" id="addSmooth"><i class="iconfont icon-quxian"></i></button>
+				</li>
+				<li>
+					<button class="layui-btn layui-btn-primary layui-btn-sm" id="drag"><i class="fa fa-arrows"></i></button>
+				</li>
+				<li>
+					<button class="layui-btn layui-btn-primary layui-btn-sm" id="edit"><i class="fa fa-edit"></i></button>
+				</li>
+				<li>
+					<button class="layui-btn layui-btn-primary layui-btn-sm" id="consoleJSON"><i class="fa fa-save"></i></button>
+				</li>
+			</ul>
+		</div>
+	    
+	        <!-- 
+	        <button id="delete">删除</button>
+	        <button id="addCustom1">自定义形1</button>
+	        <button id="addCustom2">自定义形2</button>
+	        <button id="addCustom3">自定义形3</button> -->
+        <div class="layui-col-xs12">
+        	<div class="layui-col-xs2 left-div">
+	        </div>
+	    	<div class="layui-col-xs8 coverModel" id="mountNode">
+	        </div>
+	        <div class="layui-col-xs2 right-div">
+	        </div>
         </div>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
-    
-    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/react-16.4.0/react.production.min.js"></script>
-	<script src="https://gw.alipayobjects.com/os/antv/assets/lib/react-16.4.0/react-dom.production.min.js"></script>
-	<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-editor-1.0.7/build/base.js"></script>
     <script type="text/javascript">
         layui.config({base: '../../js/flowchart/'}).use('makeflowchart');
     </script>
