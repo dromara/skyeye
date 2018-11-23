@@ -11,6 +11,8 @@ layui.config({
     
     var tip_index = 0;//鼠标移上去的tip的index
     
+    var sel = null;//选中项
+    
 	// 关闭 G6 的体验改进计划打点请求
     G6.track(false);
     
@@ -44,6 +46,12 @@ layui.config({
 	});
 	net.read(data);
 	net.render();
+	
+	//设置点击选中项
+	net.on("itemactived", function(e){
+		sel = e.item;
+		console.log(sel);
+	});
 	
 	var i = 1;//位置坐标
 	$("body").on("mouseenter", "#addCircle", function(e){//添加圆形节点
@@ -84,9 +92,14 @@ layui.config({
 	        net.refresh();
 	    }
 	});
-
-	$('#addCustom1').on('click', function() {//添加自定义节点图形
-	    net.beginAdd('node', {
+	
+	$("body").on("mouseenter", "#addCustom1", function(e){//添加自定义节点图形
+		tip_index = layer.tips('添加自定义节点图形', '#addCustom1', {time: 0, tips: 3});
+	}).on('mouseleave', '#addCustom1', function(){
+        layer.close(tip_index);
+    });
+	$("body").on("click", "#addCustom1", function(e){//添加自定义节点图形
+		net.beginAdd('node', {
 	        label: '[未定义]',
 	        shape: 'circle'
 	    });
