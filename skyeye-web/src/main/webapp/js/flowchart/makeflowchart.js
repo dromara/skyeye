@@ -50,74 +50,60 @@ layui.config({
 	//设置点击选中项
 	net.on("itemactived", function(e){
 		sel = e.item;
-		console.log(sel);
 	});
 	
-	var i = 1;//位置坐标
-	$("body").on("mouseenter", "#addCircle", function(e){//添加圆形节点
-		tip_index = layer.tips('添加圆形', '#addCircle', {time: 0, tips: 3});
-	}).on('mouseleave', '#addCircle', function(){
+	$("body").on("mouseenter", "#delete", function(e){//删除
+		tip_index = layer.tips('删除', '#delete', {time: 0, tips: 3});
+	}).on('mouseleave', '#delete', function(){
         layer.close(tip_index);
     });
-	$("body").on("click", "#addCircle", function(e){//添加圆形节点
-		net.add('node', {
-	        shape: 'circle',
-	        id: 'id' + i++,
-	        x: 50 + i * 10,
-	        y: 50 + i * 10
-	    });
-	    net.refresh();
+	$("body").on("click", "#delete", function(e){//删除
+		if(sel){
+			net.remove(sel);
+		}
+		sel = null;
 	});
 	
-	$("body").on("mouseenter", "#addRect", function(e){//添加矩形
-		tip_index = layer.tips('添加矩形', '#addRect', {time: 0, tips: 3});
-	}).on('mouseleave', '#addRect', function(){
-        layer.close(tip_index);
-    });
-	$("body").on("click", "#addRect", function(e){//添加矩形
-		net.add('node', {
-	        shape: 'rect',
-	        id: 'id' + i++,
-	        x: 50 + i * 10,
-	        y: 50 + i * 10
-	    });
-	    net.refresh();
-	});
-
-	$('#delete').on('click', function() {//根据添加顺序删除
-	    if (i > 1) {
-	        i = i - 1;
-	        const item = net.find('id' + i);
-	        net.remove(item);
-	        net.refresh();
-	    }
-	});
-	
-	$("body").on("mouseenter", "#addCustom1", function(e){//添加自定义节点图形
-		tip_index = layer.tips('添加自定义节点图形', '#addCustom1', {time: 0, tips: 3});
+	$("body").on("mouseenter", "#addCustom1", function(e){//添加起止节点
+		tip_index = layer.tips('起止节点', '#addCustom1', {time: 0, tips: 3});
 	}).on('mouseleave', '#addCustom1', function(){
         layer.close(tip_index);
     });
-	$("body").on("click", "#addCustom1", function(e){//添加自定义节点图形
+	$("body").on("click", "#addCustom1", function(e){//添加起止节点
 		net.beginAdd('node', {
-	        label: '[未定义]',
-	        shape: 'circle'
-	    });
-	});
-
-	$('#addCustom2').on('click', function() {//添加自定义节点图形
-		console.log(1);
-	    net.beginAdd('node', {label: '[未定义]'});
-	    net.refresh();
-	});
-
-	$('#addCustom3').on('click', function() {//添加自定义节点图形
-	    net.beginAdd('node', {
-	        label: '[未定义]',
-	        shape: 'customNode1'//<====
+	        label: '[起止节点]',
+	        shape: 'circle',
+	        color: '#EE4000'
 	    });
 	});
 	
+	$("body").on("mouseenter", "#addCustom2", function(e){//添加常规节点
+		tip_index = layer.tips('常规节点', '#addCustom2', {time: 0, tips: 3});
+	}).on('mouseleave', '#addCustom2', function(){
+        layer.close(tip_index);
+    });
+	$("body").on("click", "#addCustom2", function(e){//添加常规节点
+		net.beginAdd('node', {
+			label: '[常规节点]',
+			shape: 'rect',
+			color: '#5CACEE',
+		});
+	    net.refresh();
+	});
+	
+	$("body").on("mouseenter", "#addCustom3", function(e){//添加条件节点
+		tip_index = layer.tips('条件节点', '#addCustom3', {time: 0, tips: 3});
+	}).on('mouseleave', '#addCustom3', function(){
+        layer.close(tip_index);
+    });
+	$("body").on("click", "#addCustom3", function(e){//添加条件节点
+		net.beginAdd('node', {
+	        label: '[条件节点]',
+	        shape: 'rhombus',
+	        color: '#54FF9F',
+	    });
+	});
+
 	$("body").on("mouseenter", "#addLine", function(e){//添加普通直线
 		tip_index = layer.tips('添加普通直线', '#addLine', {time: 0, tips: 3});
 	}).on('mouseleave', '#addLine', function(){
@@ -125,7 +111,8 @@ layui.config({
     });
 	$("body").on("click", "#addLine", function(e){//添加普通直线
 		net.beginAdd('edge', {
-	        shape: 'line'
+	        shape: 'line',
+	        color: 'red',
 	    });
 	});
 	
@@ -136,7 +123,7 @@ layui.config({
     });
 	$("body").on("click", "#addArrowLine", function(e){//添加箭头直线
 		net.beginAdd('edge', {
-	        shape: 'arrow'
+	        shape: 'arrow',
 	    });
 	});
 	
@@ -148,6 +135,17 @@ layui.config({
 	$("body").on("click", "#addSmooth", function(e){//添加曲线
 		net.beginAdd('edge', {
 	        shape: 'smooth'
+	    });
+	});
+	
+	$("body").on("mouseenter", "#addArrowSmooth", function(e){//添加箭头曲线
+		tip_index = layer.tips('添加箭头曲线', '#addArrowSmooth', {time: 0, tips: 3});
+	}).on('mouseleave', '#addArrowSmooth', function(){
+        layer.close(tip_index);
+    });
+	$("body").on("click", "#addArrowSmooth", function(e){//添加箭头曲线
+		net.beginAdd('edge', {
+	        shape: 'smoothArrow'
 	    });
 	});
 	
@@ -177,8 +175,139 @@ layui.config({
 	$("body").on("click", "#consoleJSON", function(e){//保存
 		const saveData = net.save();
 	    const json = JSON.stringify(saveData, null, 2);
-	    console.log(saveData, json); // eslint-disable-line no-console
+	    console.log(saveData, json);
 	});
 	
-    exports('makeflowchart', {});
+	//可编辑标签属性
+	var Util = G6.Util;
+	var input = Util.createDOM('<input class="g6-label-input" />', {
+		position : 'absolute',
+		zIndex : 10,
+		display : 'none'
+	});
+	function hasClass(shape, className) {
+		if (shape) {
+			const
+			clasees = shape.get('class');
+			if (clasees && clasees.indexOf(className) !== -1) {
+				return true;
+			}
+		}
+		return false;
+	}
+	function showInputLabel(node) {
+		if (!node) {
+			return;
+		}
+		const group = node.get('group');
+		const label = group.findBy(function(child) {
+			if (hasClass(child, 'label')) {
+				return true;
+			}
+			return false;
+		});
+		const rootGroup = net.get('rootGroup');
+		const bbox = Util.getBBox(label, rootGroup);
+		const borderWidth = 1;
+		const text = label.attr('text');
+		clearAllActived();
+		input.value = text;
+		input.show();
+		input.css({
+			top : bbox.minY - borderWidth + 'px',
+			left : bbox.minX - borderWidth + 'px',
+			width : bbox.width + 'px',
+			height : bbox.height + 'px',
+			padding : '0px',
+			margin : '0px',
+			border : borderWidth + 'px solid #999'
+		});
+		input.focus();
+		input.node = node;
+	}
+	function updateLabel() {
+		if (input.visibility) {
+			const node = input.node;
+			clearAllActived();
+			if (input.value !== node.get('model').name) {
+				if (input.value) {
+					net.update(node, {
+						label : input.value
+					});
+				}
+			}
+			input.hide();
+		}
+	}
+	function clearAllActived() {
+		net.clearAllActived();
+		net.refresh(false);
+	}
+	input.hide = function() {
+		input.css({
+			display : 'none'
+		});
+		input.visibility = false;
+	};
+	input.show = function() {
+		input.css({
+			display : 'block'
+		});
+		input.visibility = true;
+	};
+	input.on('keydown', function(ev) {
+		if (ev.keyCode === 13) {
+			updateLabel();
+		}
+	});
+	input.on('blur', function(ev) {
+		updateLabel();
+	});
+	const graphContainer = net.get('graphContainer');//获取图表内部容器
+	graphContainer.appendChild(input);//追加input输入框
+	graphContainer.oncontextmenu = function (e) { return false; }//阻止默认右键菜单
+	net.on('contextmenu', function(ev) {// 鼠标右键点击事件
+	    console.log("选中类型:", ev.itemType);
+	    console.log(ev);
+	});
+	net.on('itemmouseenter', function(ev) {//子项鼠标悬浮
+	    const item = ev.item;
+	    net.update(item, {
+//	        color: 'red',
+	    });
+	    net.refresh();
+	});
+	net.on('itemmouseleave', function(ev) {//子项鼠标离开事件
+	    const item = ev.item;
+	    net.update(item, {
+//	        color: null
+	    });
+	    net.refresh();
+	});
+	net.on('itemmousedown', function(ev) {//子项鼠标按下
+	    const item = ev.item;
+	    net.update(item, {
+//	        color: '#9ef'
+	    });
+	    net.refresh();
+	});
+	net.on('itemmouseup', function(ev) {//子项鼠标弹起
+	    const item = ev.item;
+	    net.update(item, {
+//	        color: 'null'
+	    });
+	    net.refresh();
+	});
+	net.on('dragmove', function(ev) {//拖拽隐藏
+	    input.hide();
+	});
+	net.on('dblclick', function(ev) {//双击显示
+	    const item = ev.item;
+	    const shape = ev.shape;
+	    if (hasClass(shape, 'label') && item && item.get('type') === 'node') {//节点的情况下
+	        showInputLabel(item);
+	    }
+	});
+	
+	exports('makeflowchart', {});
 });
