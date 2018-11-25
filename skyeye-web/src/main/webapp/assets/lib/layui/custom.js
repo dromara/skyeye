@@ -30,7 +30,8 @@ function _openNewWindows(mation){
 				mation.url = mation.url + "?" + s.slice(1);
 			}
 			if(isNull(mation.area)){
-				mation.area = [window.screen.width / 3 * 2 + 'px', window.screen.height / 2 + 'px'];
+//				mation.area = [window.screen.width / 3 * 2 + 'px', window.screen.height / 2 + 'px'];
+				mation.area = [window.screen.width / 3 * 2 + 'px', (layui.$(window.parent.window).height() - 200) + 'px'];
 			}
 			if(isNull(mation.offset)){
 				mation.offset = 'auto';
