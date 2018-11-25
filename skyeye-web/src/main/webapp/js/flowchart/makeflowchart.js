@@ -17,8 +17,8 @@ layui.config({
     G6.track(false);
     
     //左右框高度
-    $(".left-div").css({height:window.innerHeight});
-    $(".right-div").css({height:window.innerHeight});
+    /*$(".left-div").css({height:window.innerHeight});
+    $(".right-div").css({height:window.innerHeight});*/
     
 	var data = {
 		"source" : {
@@ -146,6 +146,28 @@ layui.config({
 	$("body").on("click", "#addArrowSmooth", function(e){//添加箭头曲线
 		net.beginAdd('edge', {
 	        shape: 'smoothArrow'
+	    });
+	});
+	
+	/*$("body").on("mouseenter", "#addLineFlow", function(e){//添加折线
+		tip_index = layer.tips('添加折线', '#addLineFlow', {time: 0, tips: 3});
+	}).on('mouseleave', '#addLineFlow', function(){
+        layer.close(tip_index);
+    });
+	$("body").on("click", "#addLineFlow", function(e){//添加折线
+		net.beginAdd('edge', {
+	        shape: 'polyLine'
+	    });
+	});*/
+	
+	$("body").on("mouseenter", "#addPolyLineFlow", function(e){//添加箭头折线
+		tip_index = layer.tips('添加箭头折线', '#addPolyLineFlow', {time: 0, tips: 3});
+	}).on('mouseleave', '#addPolyLineFlow', function(){
+        layer.close(tip_index);
+    });
+	$("body").on("click", "#addPolyLineFlow", function(e){//添加箭头折线
+		net.beginAdd('edge', {
+	        shape: 'polyLineFlow'
 	    });
 	});
 	
