@@ -34,5 +34,85 @@ public class SysTAreaServiceImpl implements SysTAreaService{
 			outputObject.settotal(beans.size());
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: querySysTAreaProvinceList
+	     * @Description: 获取一级省行政区划信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysTAreaProvinceList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysTAreaDao.querySysTAreaProvinceList(map);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: querySysTAreaCityList
+	     * @Description: 获取二级市行政区划信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysTAreaCityList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysTAreaDao.querySysTAreaCityList(map);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: querySysTAreaChildAreaList
+	     * @Description: 获取三级县行政区划信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysTAreaChildAreaList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysTAreaDao.querySysTAreaChildAreaList(map);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: querySysTAreaTownShipList
+	     * @Description: 获取四级镇行政区划信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysTAreaTownShipList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = sysTAreaDao.querySysTAreaTownShipList(map);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
 	
 }

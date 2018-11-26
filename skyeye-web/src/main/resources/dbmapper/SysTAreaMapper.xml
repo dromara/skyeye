@@ -13,4 +13,49 @@
 		WHERE 3 > a.level
 	</select>
 	
+	<select id="querySysTAreaProvinceList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			t_area a
+		WHERE a.level = '0'
+	</select>
+	
+	<select id="querySysTAreaCityList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			t_area a,
+			t_area b
+		WHERE a.level = '1'
+			AND a.parent_code_id = b.code_id
+			AND b.id = #{id}
+	</select>
+	
+	<select id="querySysTAreaChildAreaList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			t_area a,
+			t_area b
+		WHERE a.level = '2'
+			AND a.parent_code_id = b.code_id
+			AND b.id = #{id}
+	</select>
+	
+	<select id="querySysTAreaTownShipList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			t_area a,
+			t_area b
+		WHERE a.level = '3'
+			AND a.parent_code_id = b.code_id
+			AND b.id = #{id}
+	</select>
+	
 </mapper>

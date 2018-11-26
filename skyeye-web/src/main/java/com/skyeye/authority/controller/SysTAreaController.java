@@ -31,4 +31,68 @@ public class SysTAreaController {
 		sysTAreaService.querySysTAreaList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysTAreaProvinceList
+	     * @Description: 获取一级省行政区划信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysTAreaController/querySysTAreaProvinceList")
+	@ResponseBody
+	public void querySysTAreaProvinceList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysTAreaService.querySysTAreaProvinceList(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: querySysTAreaCityList
+	     * @Description: 获取二级市行政区划信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysTAreaController/querySysTAreaCityList")
+	@ResponseBody
+	public void querySysTAreaCityList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysTAreaService.querySysTAreaCityList(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: querySysTAreaChildAreaList
+	     * @Description: 获取三级县行政区划信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysTAreaController/querySysTAreaChildAreaList")
+	@ResponseBody
+	public void querySysTAreaChildAreaList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysTAreaService.querySysTAreaChildAreaList(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: querySysTAreaTownShipList
+	     * @Description: 获取四级镇行政区划信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysTAreaController/querySysTAreaTownShipList")
+	@ResponseBody
+	public void querySysTAreaTownShipList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysTAreaService.querySysTAreaTownShipList(inputObject, outputObject);
+	}
+	
 }

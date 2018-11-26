@@ -36,7 +36,16 @@
 		<property id="images" name="images" ref="required" var="图片Base64"/>
 	</url>
 	
-	<url id="commontarea001" path="/post/RmTypeController/queryRmTypeAllList" val="获取所有小程序分类" allUse="1">
+	<url id="commontarea001" path="/post/SysTAreaController/querySysTAreaProvinceList" val="获取一级省行政区划信息" allUse="1">
+	</url>
+	<url id="commontarea002" path="/post/SysTAreaController/querySysTAreaCityList" val="获取二级市行政区划信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="省级行政区划id"/>
+	</url>
+	<url id="commontarea003" path="/post/SysTAreaController/querySysTAreaChildAreaList" val="获取三级县行政区划信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="市级行政区划id"/>
+	</url>
+	<url id="commontarea004" path="/post/SysTAreaController/querySysTAreaTownShipList" val="获取四级镇行政区划信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="县级行政区划id"/>
 	</url>
 	<!-- 公共请求结束 -->
 	
