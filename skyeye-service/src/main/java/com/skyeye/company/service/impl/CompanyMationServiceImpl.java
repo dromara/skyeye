@@ -4,23 +4,21 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.github.miemiedev.mybatis.paginator.domain.PageList;
-import com.skyeye.company.dao.CompanyMatonDao;
-import com.skyeye.company.service.CompanyMatonService;
+import com.skyeye.company.dao.CompanyMationDao;
+import com.skyeye.company.service.CompanyMationService;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
 
 @Service
-public class CompanyMatonServiceImpl implements CompanyMatonService{
+public class CompanyMationServiceImpl implements CompanyMationService{
 	
 	@Autowired
-	private CompanyMatonDao companyMatonDao;
+	private CompanyMationDao companyMationDao;
 
 	/**
 	 * 
-	     * @Title: queryCompanyMatonList
+	     * @Title: queryCompanyMationList
 	     * @Description: 获取公司信息列表
 	     * @param @param inputObject
 	     * @param @param outputObject
@@ -29,19 +27,18 @@ public class CompanyMatonServiceImpl implements CompanyMatonService{
 	     * @throws
 	 */
 	@Override
-	public void queryCompanyMatonList(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void queryCompanyMationList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		List<Map<String, Object>> beans = companyMatonDao.queryCompanyMatonList(map, 
-				new PageBounds(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString())));
-		PageList<Map<String, Object>> beansPageList = (PageList<Map<String, Object>>)beans;
-		int total = beansPageList.getPaginator().getTotalCount();
-		outputObject.setBeans(beans);
-		outputObject.settotal(total);
+		List<Map<String, Object>> beans = companyMationDao.queryCompanyMationList(map);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
 	}
 
 	/**
 	 * 
-	     * @Title: insertCompanyMatonMation
+	     * @Title: insertCompanyMation
 	     * @Description: 添加公司信息信息
 	     * @param @param inputObject
 	     * @param @param outputObject
@@ -50,23 +47,23 @@ public class CompanyMatonServiceImpl implements CompanyMatonService{
 	     * @throws
 	 */
 	@Override
-	public void insertCompanyMatonMation(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void insertCompanyMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = companyMatonDao.queryCompanyMatonMationByName(map);
+		Map<String, Object> bean = companyMationDao.queryCompanyMationByName(map);
 		if(bean == null){
 			Map<String, Object> user = inputObject.getLogParams();
 			map.put("id", ToolUtil.getSurFaceId());
 			map.put("createId", user.get("id"));
 			map.put("createTime", ToolUtil.getTimeAndToString());
-			companyMatonDao.insertCompanyMatonMation(map);
+			companyMationDao.insertCompanyMation(map);
 		}else{
-			outputObject.setreturnMessage("该公司信息名称已存在，不可进行二次保存");
+			outputObject.setreturnMessage("该公司信息已注册，请确认。");
 		}
 	}
 
 	/**
 	 * 
-	     * @Title: deleteCompanyMatonMationById
+	     * @Title: deleteCompanyMationById
 	     * @Description: 删除公司信息信息
 	     * @param @param inputObject
 	     * @param @param outputObject
@@ -75,14 +72,14 @@ public class CompanyMatonServiceImpl implements CompanyMatonService{
 	     * @throws
 	 */
 	@Override
-	public void deleteCompanyMatonMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void deleteCompanyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		companyMatonDao.deleteCompanyMatonMationById(map);
+		companyMationDao.deleteCompanyMationById(map);
 	}
 
 	/**
 	 * 
-	     * @Title: queryCompanyMatonMationToEditById
+	     * @Title: queryCompanyMationToEditById
 	     * @Description: 编辑公司信息信息时进行回显
 	     * @param @param inputObject
 	     * @param @param outputObject
@@ -91,16 +88,16 @@ public class CompanyMatonServiceImpl implements CompanyMatonService{
 	     * @throws
 	 */
 	@Override
-	public void queryCompanyMatonMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void queryCompanyMationToEditById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = companyMatonDao.queryCompanyMatonMationToEditById(map);
+		Map<String, Object> bean = companyMationDao.queryCompanyMationToEditById(map);
 		outputObject.setBean(bean);
 		outputObject.settotal(1);
 	}
 
 	/**
 	 * 
-	     * @Title: editCompanyMatonMationById
+	     * @Title: editCompanyMationById
 	     * @Description: 编辑公司信息信息
 	     * @param @param inputObject
 	     * @param @param outputObject
@@ -109,13 +106,13 @@ public class CompanyMatonServiceImpl implements CompanyMatonService{
 	     * @throws
 	 */
 	@Override
-	public void editCompanyMatonMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+	public void editCompanyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = companyMatonDao.queryCompanyMatonMationByNameAndId(map);
+		Map<String, Object> bean = companyMationDao.queryCompanyMationByNameAndId(map);
 		if(bean == null){
-			companyMatonDao.editCompanyMatonMationById(map);
+			companyMationDao.editCompanyMationById(map);
 		}else{
-			outputObject.setreturnMessage("该公司信息名称已存在，不可进行二次保存");
+			outputObject.setreturnMessage("该公司信息已注册，请确认。");
 		}
 	}
 	

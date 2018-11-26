@@ -29,8 +29,10 @@ public class SysTAreaServiceImpl implements SysTAreaService{
 	public void querySysTAreaList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		List<Map<String, Object>> beans = sysTAreaDao.querySysTAreaList(map);
-		outputObject.setBeans(beans);
-		outputObject.settotal(beans.size());
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
 	}
 	
 }

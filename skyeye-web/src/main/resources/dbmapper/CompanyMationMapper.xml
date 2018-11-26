@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.company.dao.CompanyMationDao">
+	
+	<select id="queryCompanyMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name companyName,
+			a.company_desc companyDesc,
+			a.p_id pId,
+			b.`name` provinceName,
+			c.`name` cityName,
+			d.`name` areaName,
+			e.`name` townshipName,
+			a.address_detailed addressDetailed,
+			(SELECT COUNT(*) FROM company_mation b WHERE a.id = b.p_id) childsNum,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			company_mation a
+			LEFT JOIN t_area b ON a.address_province = b.id
+			LEFT JOIN t_area c ON a.address_city = c.id
+			LEFT JOIN t_area d ON a.address_area = d.id
+			LEFT JOIN t_area e ON a.address_township = e.id
+		WHERE 1=1
+			<if test="companyName != '' and companyName != null">
+				AND a.company_name LIKE '%${companyName}%'
+			</if>
+			<if test="provinceId != '' and provinceId != null">
+				AND a.address_province = #{provinceId}
+			</if>
+			<if test="cityId != '' and cityId != null">
+				AND a.address_city = #{cityId}
+			</if>
+			<if test="areaId != '' and areaId != null">
+				AND a.address_area = #{areaId}
+			</if>
+			<if test="townshipId != '' and townshipId != null">
+				AND a.address_township = #{townshipId}
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryCompanyMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name companyName
+		FROM
+			company_mation a
+		WHERE 
+			a.company_name = #{companyName}
+	</select>
+	
+	<insert id="insertCompanyMation" parameterType="java.util.Map">
+	     INSERT into company_mation
+	     (id, company_name, company_desc, p_id, address_province, address_city, address_area, address_township, address_detailed, create_id, create_time)
+	     VALUES
+	     (#{id}, #{companyName}, #{companyDesc}, #{pId}, #{provinceId}, #{cityId}, #{areaId}, #{townshipId}, #{addressDetailed}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteCompanyMationMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			company_mation
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryCompanyMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name companyName,
+			a.company_desc companyDesc,
+			a.p_id pId,
+			a.address_province provinceId,
+			a.address_city cityId,
+			a.address_area areaId,
+			a.address_township townshipId,
+			a.address_detailed addressDetailed,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			company_mation a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryCompanyMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name companyName
+		FROM
+			company_mation a
+		WHERE 
+			a.company_name = #{companyName}
+			AND a.id != #{id}
+	</select>
+	
+	<update id="editCompanyMationById" parameterType="java.util.Map">
+		UPDATE company_mation
+		<set>
+			<if test="companyName != '' and companyName != null">
+				company_name = #{companyName},
+			</if>
+			address_province = #{provinceId},
+			address_city = #{cityId},
+			address_area = #{areaId},
+			address_township = #{townshipId},
+			address_detailed = #{addressDetailed},
+			p_id = #{pId},
+			company_desc = #{companyDesc},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

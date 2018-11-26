@@ -38,8 +38,13 @@ layui.config({
         isPage:false
     });
 	
-    function loadTable(){
-    	
+	//刷新数据
+    $("body").on("click", "#reloadTable", function(){
+    	loadTable();
+    });
+	
+	function loadTable(){
+    	treeGrid.query("messageTable", {where:{}});
     }
     
     exports('tarea', {});

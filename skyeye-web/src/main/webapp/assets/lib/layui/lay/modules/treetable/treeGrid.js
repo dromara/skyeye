@@ -1086,41 +1086,43 @@ layui.config({
     * @param list
     * @return {{}}
     */
-   Class.prototype.resetDataMap=function(list) {
+   Class.prototype.resetDataMap = function(list) {
        var that = this
            ,options = that.config;
        var field_Id=options.idField;
        var map={};
-       list.forEach(function (o) {
-           map[o[field_Id]]=o;
-       });
+       if(!isNull(list)){
+    	   list.forEach(function (o) {
+    		   map[o[field_Id]]=o;
+    	   });
+       }
        return map;
    }
-   Class.prototype.resetDataresetRoot=true;//是否重新确定根节点
+   Class.prototype.resetDataresetRoot = true;//是否重新确定根节点
    /**
     * 确定根节点id(重新登录根节点)
     */
-   Class.prototype.resetDataRoot=function (list) {
+   Class.prototype.resetDataRoot = function (list) {
        var that = this
            ,options = that.config;
-       var field_Id=options[TREE_ID];
-       var field_upId=options[TREE_UPID];
-       var map=table.getDataMap(that.config.id);//列表map，fieldId为key  //设置map数据集合
-       var rootList=table.cache[options.id].data.upIds||[];//根节点list集合
-       var rootMap={};//根节点map集合
+       var field_Id = options[TREE_ID];
+       var field_upId = options[TREE_UPID];
+       var map = table.getDataMap(that.config.id);//列表map，fieldId为key  //设置map数据集合
+       var rootList = table.cache[options.id].data.upIds||[];//根节点list集合
+       var rootMap = {};//根节点map集合
        table.cache[options.id].data.upIds=[];
-       rootList=table.cache[options.id].data.upIds;
-       for(var i=0;i<list.length;i++){
-           var temo=list[i];
+       rootList = table.cache[options.id].data.upIds;
+       for(var i = 0; i < list.length; i++){
+           var temo = list[i];
            if(!map[temo[field_upId]]){//没有找到父节点
                if(!rootMap[temo[field_upId]]){//还不存在
-                   var temis=true;
+                   var temis = true;
                    rootList.forEach(function (temoo) {
-                       if(temoo===temo[field_upId])temis=false;
+                       if(temoo === temo[field_upId])temis = false;
                    });
                    if(temis)rootList.push(temo[field_upId]);
                }
-               rootMap[temo[field_upId]]=temo[field_upId];
+               rootMap[temo[field_upId]] = temo[field_upId];
            }
        }
        return rootList;

@@ -32,13 +32,15 @@
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-          	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			{{# if(d.childsNum == 0){ }}
+          		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+			{{# } }}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/companymaton/'}).use('companymatonlist');
+        layui.config({base: '../../js/companymation/'}).use('companymationlist');
     </script>
 </body>
 </html>

@@ -35,6 +35,9 @@
 		<property id="type" name="type" ref="required,num" var="图片类型"/>
 		<property id="images" name="images" ref="required" var="图片Base64"/>
 	</url>
+	
+	<url id="commontarea001" path="/post/RmTypeController/queryRmTypeAllList" val="获取所有小程序分类" allUse="1">
+	</url>
 	<!-- 公共请求结束 -->
 	
 	<!-- 系统角色用户管理开始 -->
@@ -721,19 +724,19 @@
 	<!-- 系统性能监控结束 -->
 	
 	<!-- 公司管理开始 -->
-	<url id="companymaton001" path="/post/CompanyMatonController/queryCompanyMatonList" val="获取公司信息列表" allUse="1">
+	<url id="companymation001" path="/post/CompanyMationController/queryCompanyMationList" val="获取公司信息列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
-	<url id="companymaton002" path="/post/CompanyMatonController/insertCompanyMatonMation" val="添加公司信息信息" allUse="1">
+	<url id="companymation002" path="/post/CompanyMationController/insertCompanyMation" val="添加公司信息信息" allUse="1">
 	</url>
-	<url id="companymaton003" path="/post/CompanyMatonController/deleteCompanyMatonMationById" val="删除公司信息信息" allUse="1">
+	<url id="companymation003" path="/post/CompanyMationController/deleteCompanyMationById" val="删除公司信息信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="公司信息id"/>
 	</url>
-	<url id="companymaton004" path="/post/CompanyMatonController/queryCompanyMatonMationToEditById" val="编辑公司信息信息时进行回显" allUse="1">
+	<url id="companymation004" path="/post/CompanyMationController/queryCompanyMationToEditById" val="编辑公司信息信息时进行回显" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="公司信息id"/>
 	</url>
-	<url id="companymaton005" path="/post/CompanyMatonController/editCompanyMatonMationById" val="编辑公司信息信息" allUse="1">
+	<url id="companymation005" path="/post/CompanyMationController/editCompanyMationById" val="编辑公司信息信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="公司信息id"/>
 	</url>
 	<!-- 公司管理结束 -->

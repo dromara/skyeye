@@ -4,33 +4,49 @@ var rowId = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['treeGrid', 'jquery', 'winui', 'form'], function (exports) {
 	
 	winui.renderColor();
 	
 	var $ = layui.$,
 	form = layui.form,
-	table = layui.table;
+	treeGrid = layui.treeGrid;
 	//表格渲染
-	table.render({
-	    id: 'messageTable',
-	    elem: '#messageTable',
-	    method: 'post',
-	    url: reqBasePath   'rmxcx001',
-	    where:{},
-	    even:true,  //隔行变色
-	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
-	    cols: [[
-	        { title: '序号', type: 'numbers'},
-          	
-	        { field: 'createTime', title: '创建时间', width: 180 },
-	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
-	    ]]
-	});
+	treeGrid.render({
+        id: 'messageTable',
+        elem: '#messageTable',
+        method: 'post',
+        idField: 'id',
+        url: reqBasePath + 'companymation001',
+        cellMinWidth: 100,
+        treeId: 'id',//树形id字段名称
+        treeUpId: 'pId',//树形父id字段名称
+        treeShowName: 'companyName',//以树形式显示的字段
+        cols: [[
+            { field:'companyName', width:150, title: '公司名称'},
+            { field:'companyDesc', width:200, title: '公司简介'},
+            { field:'id', width:200, title: '公司地址', templet: function(d){
+            	var str = d.provinceName + " ";
+            	if(!isNull(d.cityName)){
+            		str += d.cityName + " ";
+            	}
+            	if(!isNull(d.areaName)){
+            		str += d.areaName + " ";
+            	}
+            	if(!isNull(d.townshipName)){
+            		str += d.townshipName + " ";
+            	}
+            	if(!isNull(d.addressDetailed)){
+            		str += d.addressDetailed;
+            	}
+	        	return str;
+	        }},
+            { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+        ]],
+        isPage:false
+    });
 	
-	table.on('tool(messageTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	treeGrid.on('tool(messageTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
         var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值
         if (layEvent === 'del') { //删除
@@ -52,11 +68,11 @@ layui.config({
 	
 	//删除
 	function del(data, obj){
-		var msg = obj ? '确认删除公司信息【'   obj.data.rmTypeName   '】吗？' : '确认删除选中数据吗？';
+		var msg = obj ? '确认删除公司信息【' + obj.data.companyName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除公司信息' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
-            AjaxPostUtil.request({url:reqBasePath   "rmxcx003", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "companymation003", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
     				loadTable();
@@ -71,9 +87,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/companymaton/companymatonedit.html", 
+			url: "../../tpl/companymation/companymationedit.html", 
 			title: "编辑公司信息",
-			pageId: "companymatonedit",
+			pageId: "companymationedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -92,9 +108,9 @@ layui.config({
     //新增
     $("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/companymaton/companymatonadd.html", 
+			url: "../../tpl/companymation/companymationadd.html", 
 			title: "新增公司信息",
-			pageId: "companymatonadd",
+			pageId: "companymationadd",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -106,8 +122,8 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{}});
+    	treeGrid.query("messageTable", {where:{}});
     }
     
-    exports('companymatonlist', {});
+    exports('companymationlist', {});
 });
