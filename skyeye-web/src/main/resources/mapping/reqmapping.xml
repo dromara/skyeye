@@ -754,6 +754,14 @@
 	</url>
 	<url id="companymation005" path="/post/CompanyMationController/editCompanyMationById" val="编辑公司信息信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="公司信息id"/>
+	    <property id="companyName" name="companyName" ref="required" var="公司名称"/>
+		<property id="companyDesc" name="companyDesc" ref="" var="公司简介"/>
+		<property id="pId" name="pId" ref="required" var="公司总公司"/>
+		<property id="provinceId" name="provinceId" ref="required" var="行政区划省"/>
+		<property id="cityId" name="cityId" ref="" var="行政区划市"/>
+		<property id="areaId" name="areaId" ref="" var="行政区划县"/>
+		<property id="townshipId" name="townshipId" ref="" var="行政区划镇"/>
+		<property id="addressDetailed" name="addressDetailed" ref="required" var="行政区划具体地址"/>
 	</url>
 	<url id="companymation006" path="/post/CompanyMationController/queryOverAllCompanyMationList" val="获取总公司信息列表" allUse="1">
 	</url>
