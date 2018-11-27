@@ -2312,7 +2312,9 @@ layui.config({
            var index=$(this).attr("data-index");
            var list=table.getDataList(that.config.id);
            var o=list[index];
-           that.config.onDblClickRow(index,o);
+           if(!isNull(that.config.onDblClickRow)){
+        	   that.config.onDblClickRow(index,o);
+           }
        });
        //拖拽调整宽度
        th.unbind('mousemove').on('mousemove', function(e){

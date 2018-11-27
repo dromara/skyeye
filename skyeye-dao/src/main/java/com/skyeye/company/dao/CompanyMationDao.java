@@ -19,4 +19,8 @@ public interface CompanyMationDao {
 
 	public int editCompanyMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryOverAllCompanyMationList(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryCompanyMationById(Map<String, Object> map) throws Exception;
+
 }

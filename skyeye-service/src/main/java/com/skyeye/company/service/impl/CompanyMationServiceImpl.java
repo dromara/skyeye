@@ -74,7 +74,12 @@ public class CompanyMationServiceImpl implements CompanyMationService{
 	@Override
 	public void deleteCompanyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		companyMationDao.deleteCompanyMationById(map);
+		Map<String, Object> bean = companyMationDao.queryCompanyMationById(map);
+		if(Integer.parseInt(bean.get("childsNum").toString()) == 0){
+			companyMationDao.deleteCompanyMationById(map);
+		}else{
+			outputObject.setreturnMessage("该公司下存在子公司，无法直接删除。");
+		}
 	}
 
 	/**
@@ -113,6 +118,26 @@ public class CompanyMationServiceImpl implements CompanyMationService{
 			companyMationDao.editCompanyMationById(map);
 		}else{
 			outputObject.setreturnMessage("该公司信息已注册，请确认。");
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryOverAllCompanyMationList
+	     * @Description: 获取总公司信息列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryOverAllCompanyMationList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = companyMationDao.queryOverAllCompanyMationList(map);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
 		}
 	}
 	

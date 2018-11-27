@@ -19,13 +19,16 @@ layui.config({
         idField: 'id',
         url: reqBasePath + 'companymation001',
         cellMinWidth: 100,
+        where:{companyName: $("#companyName").val()},
         treeId: 'id',//树形id字段名称
         treeUpId: 'pId',//树形父id字段名称
         treeShowName: 'companyName',//以树形式显示的字段
         cols: [[
-            { field:'companyName', width:150, title: '公司名称'},
-            { field:'companyDesc', width:200, title: '公司简介'},
-            { field:'id', width:200, title: '公司地址', templet: function(d){
+            { field:'companyName', width:300, title: '公司名称'},
+            { field:'companyDesc', width:100, title: '公司简介', templet: function(d){
+	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
+	        }},
+            { field:'id', width:400, title: '公司地址', templet: function(d){
             	var str = d.provinceName + " ";
             	if(!isNull(d.cityName)){
             		str += d.cityName + " ";
@@ -41,6 +44,7 @@ layui.config({
             	}
 	        	return str;
 	        }},
+	        { field:'createTime', width:150, title: '录入时间'},
             { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],
         isPage:false
@@ -53,6 +57,15 @@ layui.config({
         	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
+        }else if (layEvent === 'companyDesc') { //公司简介
+        	layer.open({
+	            id: '公司简介',
+	            type: 1,
+	            title: '公司简介',
+	            shade: 0.3,
+	            area: ['1200px', '600px'],
+	            content: data.companyDesc,
+	        });
         }
     });
 	
@@ -122,7 +135,7 @@ layui.config({
     });
     
     function loadTable(){
-    	treeGrid.query("messageTable", {where:{}});
+    	treeGrid.query("messageTable", {where:{companyName: $("#companyName").val()}});
     }
     
     exports('companymationlist', {});

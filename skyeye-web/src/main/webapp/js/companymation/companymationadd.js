@@ -26,6 +26,19 @@ layui.config({
 	    });
 	    
 	    form.render();
+
+	    showGrid({
+    	 	id: "OverAllCompany",
+    	 	url: reqBasePath + "companymation006",
+    	 	params: {},
+    	 	pagination: false,
+    	 	template: getFileContent('tpl/template/select-option.tpl'),
+    	 	ajaxSendLoadBefore: function(hdb){
+    	 	},
+    	 	ajaxSendAfter:function(json){
+    	 		form.render('select');
+    	 	}
+        });
 	    
 	    //默认隐藏子公司
 	    $("#parentIdBox").addClass("layui-hide");
@@ -47,11 +60,40 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
+	        	var pId = '0';
+	        	if($("input[name='companyType']:checked").val() == '2'){
+	        		if(isNull($("#OverAllCompany").val())){
+	        			top.winui.window.msg('请选择总公司', {icon: 2,time: 2000});
+	        			return false;
+	        		}else{
+	        			pId = $("#OverAllCompany").val();
+	        		}
+	        	}
+	        	var provinceId = "", cityId = "", areaId = "", townshipId = "";
+	        	if(!isNull($("#provinceId").val())){
+	        		provinceId = $("#provinceId").val();
+	        	}
+	        	if(!isNull($("#cityId").val())){
+	        		cityId = $("#cityId").val();
+	        	}
+	        	if(!isNull($("#areaId").val())){
+	        		areaId = $("#areaId").val();
+	        	}
+	        	if(!isNull($("#townshipId").val())){
+	        		townshipId = $("#townshipId").val();
+	        	}
 	        	var params = {
-        			
+        			companyName: $("#companyName").val(),
+        			companyDesc: encodeURI(layedit.getContent(layContent)),
+        			pId: pId,
+        			provinceId: provinceId,
+        			cityId: cityId,
+        			areaId: areaId,
+        			townshipId: townshipId,
+        			addressDetailed: $("#addressDetailed").val(),
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "icon002", params:params, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url:reqBasePath + "companymation002", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
@@ -89,7 +131,7 @@ layui.config({
 	    function loadChildProvinceArea(){
  	    	AjaxPostUtil.request({url:reqBasePath + "commontarea001", params:{}, type:'json', callback:function(json){
  	   			if(json.returnCode == 0){
- 	   				var str = '<dd class="layui-col-xs3"><select class="areaProvince" id="provinceId" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
+ 	   				var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
 	 	   			}
@@ -106,7 +148,7 @@ layui.config({
 	    function loadChildCityArea(){
  	    	AjaxPostUtil.request({url:reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type:'json', callback:function(json){
  	   			if(json.returnCode == 0){
- 	   				var str = '<dd class="layui-col-xs3"><select class="areaCity" id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
+ 	   				var str = '<dd class="layui-col-xs3"><select id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
 	 	   			}
@@ -123,7 +165,7 @@ layui.config({
 	    function loadChildArea(){
  	    	AjaxPostUtil.request({url:reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type:'json', callback:function(json){
  	   			if(json.returnCode == 0){
- 	   				var str = '<dd class="layui-col-xs3"><select class="area" id="areaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
+ 	   				var str = '<dd class="layui-col-xs3"><select id="areaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
 	 	   			}
@@ -140,7 +182,7 @@ layui.config({
 	    function loadChildAreaTownShip(){
  	    	AjaxPostUtil.request({url:reqBasePath + "commontarea004", params:{rowId: $("#areaId").val()}, type:'json', callback:function(json){
  	   			if(json.returnCode == 0){
- 	   				var str = '<dd class="layui-col-xs3"><select class="areaTownShip" id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
+ 	   				var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
 	 	   			}

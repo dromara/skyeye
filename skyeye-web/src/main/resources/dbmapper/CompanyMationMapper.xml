@@ -25,18 +25,6 @@
 			<if test="companyName != '' and companyName != null">
 				AND a.company_name LIKE '%${companyName}%'
 			</if>
-			<if test="provinceId != '' and provinceId != null">
-				AND a.address_province = #{provinceId}
-			</if>
-			<if test="cityId != '' and cityId != null">
-				AND a.address_city = #{cityId}
-			</if>
-			<if test="areaId != '' and areaId != null">
-				AND a.address_area = #{areaId}
-			</if>
-			<if test="townshipId != '' and townshipId != null">
-				AND a.address_township = #{townshipId}
-			</if>
 			ORDER BY a.create_time DESC
 	</select>
 	
@@ -57,7 +45,18 @@
 	     (#{id}, #{companyName}, #{companyDesc}, #{pId}, #{provinceId}, #{cityId}, #{areaId}, #{townshipId}, #{addressDetailed}, #{createId}, #{createTime})
 	</insert>
 	
-	<delete id="deleteCompanyMationMationById" parameterType="java.util.Map">
+	<select id="queryCompanyMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name companyName,
+			a.p_id pId,
+			(SELECT COUNT(*) FROM company_mation b WHERE b.p_id = a.id) childsNum
+		FROM
+			company_mation a
+		WHERE a.id = #{id}
+	</select>
+	
+	<delete id="deleteCompanyMationById" parameterType="java.util.Map">
 		DELETE
 		FROM
 			company_mation
@@ -109,5 +108,15 @@
 		</set>
 		WHERE id = #{id}
 	</update>
+	
+	<select id="queryOverAllCompanyMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name name
+		FROM
+			company_mation a
+		WHERE a.p_id = '0'
+			ORDER BY a.create_time DESC
+	</select>
 	
 </mapper>

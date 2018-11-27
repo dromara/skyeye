@@ -94,4 +94,20 @@ public class CompanyMationController {
 		companyMationService.editCompanyMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryOverAllCompanyMationList
+	     * @Description: 获取总公司信息列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CompanyMationController/queryOverAllCompanyMationList")
+	@ResponseBody
+	public void queryOverAllCompanyMationList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		companyMationService.queryOverAllCompanyMationList(inputObject, outputObject);
+	}
+	
 }
