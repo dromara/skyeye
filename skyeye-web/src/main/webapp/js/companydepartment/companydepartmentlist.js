@@ -1,6 +1,8 @@
 
 var rowId = "";
 
+var companyId = "";
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -17,43 +19,52 @@ layui.config({
 		elem: "#demoTree1",  //绑定元素
 		url: reqBasePath + 'companymation007', //异步接口
 		dataStyle: 'layuiStyle',
+		done: function(){
+			initLoatTable();//初始化加载表格
+			if(!isNull($("#demoTree1 li").eq(0))){
+				$("#demoTree1 li").eq(0).children('div').click();
+			}
+		}
 	});
 
 	//单击节点 监听事件
 	dtree.on("node('demoTree1')" ,function(param){
-		layer.msg(JSON.stringify(param));
-	});
-	        
-	//表格渲染
-	table.render({
-	    id: 'messageTable',
-	    elem: '#messageTable',
-	    method: 'post',
-	    url: reqBasePath + 'companydepartment001',
-	    where:{departmentName: $("#departmentName").val()},
-	    even:true,  //隔行变色
-	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
-	    cols: [[
-	        { title: '序号', type: 'numbers'},
-	        { field: 'departmentName', title: '部门名称', width: 180 },
-	        { field: 'departmentDesc', title: '部门简介', width: 180 },
-	        { field: 'userNum', title: '员工数', width: 180 },
-	        { field: 'createTime', title: '创建时间', width: 180 },
-	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
-	    ]]
+		companyId = param.nodeId;
+		loadTable();
 	});
 	
-	table.on('tool(messageTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-        var data = obj.data; //获得当前行数据
-        var layEvent = obj.event; //获得 lay-event 对应的值
-        if (layEvent === 'del') { //删除
-        	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
-        	edit(data);
-        }
-    });
+	function initLoatTable(){
+		//表格渲染
+		table.render({
+		    id: 'messageTable',
+		    elem: '#messageTable',
+		    method: 'post',
+		    url: reqBasePath + 'companydepartment001',
+		    where:{departmentName: $("#departmentName").val(), companyId: companyId},
+		    even:true,  //隔行变色
+		    page: true,
+		    limits: [8, 16, 24, 32, 40, 48, 56],
+		    limit: 8,
+		    cols: [[
+		        { title: '序号', type: 'numbers'},
+		        { field: 'departmentName', title: '部门名称', width: 180 },
+		        { field: 'departmentDesc', title: '部门简介', width: 400 },
+		        { field: 'userNum', title: '员工数', width: 180 },
+		        { field: 'createTime', title: '创建时间', width: 180 },
+		        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+		    ]]
+		});
+		
+		table.on('tool(messageTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+	        var data = obj.data; //获得当前行数据
+	        var layEvent = obj.event; //获得 lay-event 对应的值
+	        if (layEvent === 'del') { //删除
+	        	del(data, obj);
+	        }else if (layEvent === 'edit') { //编辑
+	        	edit(data);
+	        }
+	    });
+	}
 	
 	//搜索表单
 	form.render();
@@ -121,7 +132,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{departmentName: $("#departmentName").val()}});
+    	table.reload("messageTable", {where:{departmentName: $("#departmentName").val(), companyId: companyId}});
     }
     
     exports('companydepartmentlist', {});

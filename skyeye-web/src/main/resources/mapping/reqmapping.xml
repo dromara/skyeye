@@ -772,6 +772,7 @@
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	    <property id="departmentName" name="departmentName" ref="" var="部门名称"/>
+	    <property id="companyId" name="companyId" ref="" var="公司id"/>
 	</url>
 	<url id="companydepartment002" path="/post/CompanyDepartmentController/insertCompanyDepartmentMation" val="添加公司部门信息信息" allUse="1">
 	</url>
