@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.skyeye.company.dao.CompanyMationDao;
 import com.skyeye.company.service.CompanyMationService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
@@ -135,6 +137,29 @@ public class CompanyMationServiceImpl implements CompanyMationService{
 	public void queryOverAllCompanyMationList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		List<Map<String, Object>> beans = companyMationDao.queryOverAllCompanyMationList(map);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
+	}
+	
+	/**
+	 * 
+	     * @Title: queryCompanyMationListTree
+	     * @Description: 获取公司信息列表展示为树
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public void queryCompanyMationListTree(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = companyMationDao.queryCompanyMationListTree(map);
+		JSONArray result = ToolUtil.listToTree(JSONArray.parseArray(JSON.toJSONString(beans)), "id", "parentId", "children");
+		beans = (List)result;
 		if(!beans.isEmpty()){
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());

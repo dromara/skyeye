@@ -125,6 +125,7 @@ function isNull(str){
 	    tableSelect: 'modules/tableSelect',//tableSelect 下拉表格选择器
 	    treeGrid: 'modules/treetable/treeGrid',//树表格
 	    g6: 'modules/flowchart/g6.min',//流程图
+	    dtree: 'modules/dtree/dtree',//
 	};
 
 	// 记录基础数据

@@ -4,27 +4,42 @@ var rowId = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'form', 'dtree'], function (exports) {
 	
 	winui.renderColor();
 	
 	var $ = layui.$,
 	form = layui.form,
+	dtree = layui.dtree,
 	table = layui.table;
+	
+	dtree.render({
+		elem: "#demoTree1",  //绑定元素
+		url: reqBasePath + 'companymation007', //异步接口
+		dataStyle: 'layuiStyle',
+	});
+
+	//单击节点 监听事件
+	dtree.on("node('demoTree1')" ,function(param){
+		layer.msg(JSON.stringify(param));
+	});
+	        
 	//表格渲染
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath   'rmxcx001',
-	    where:{},
+	    url: reqBasePath + 'companydepartment001',
+	    where:{departmentName: $("#departmentName").val()},
 	    even:true,  //隔行变色
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
-          	
+	        { field: 'departmentName', title: '部门名称', width: 180 },
+	        { field: 'departmentDesc', title: '部门简介', width: 180 },
+	        { field: 'userNum', title: '员工数', width: 180 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]
@@ -52,11 +67,11 @@ layui.config({
 	
 	//删除
 	function del(data, obj){
-		var msg = obj ? '确认删除公司部门信息【'   obj.data.rmTypeName   '】吗？' : '确认删除选中数据吗？';
+		var msg = obj ? '确认删除公司部门信息【' + obj.data.departmentName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除公司部门信息' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
-            AjaxPostUtil.request({url:reqBasePath   "rmxcx003", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "companydepartment003", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
     				loadTable();
@@ -106,7 +121,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{}});
+    	table.reload("messageTable", {where:{departmentName: $("#departmentName").val()}});
     }
     
     exports('companydepartmentlist', {});

@@ -110,4 +110,20 @@ public class CompanyMationController {
 		companyMationService.queryOverAllCompanyMationList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryCompanyMationListTree
+	     * @Description: 获取公司信息列表展示为树
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CompanyMationController/queryCompanyMationListTree")
+	@ResponseBody
+	public void queryCompanyMationListTree(InputObject inputObject, OutputObject outputObject) throws Exception{
+		companyMationService.queryCompanyMationListTree(inputObject, outputObject);
+	}
+	
 }

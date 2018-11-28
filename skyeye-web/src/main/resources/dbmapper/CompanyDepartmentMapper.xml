@@ -12,6 +12,9 @@
 		FROM
 			company_department a
 		WHERE a.company_id = #{companyId}
+			<if test="departmentName != '' and departmentName != null">
+				AND a.department_name LIKE '%${departmentName}%'
+			</if>
 			ORDER BY a.create_time DESC
 	</select>
 	

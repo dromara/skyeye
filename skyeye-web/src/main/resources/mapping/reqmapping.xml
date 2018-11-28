@@ -765,10 +765,13 @@
 	</url>
 	<url id="companymation006" path="/post/CompanyMationController/queryOverAllCompanyMationList" val="获取总公司信息列表" allUse="1">
 	</url>
+	<url id="companymation007" path="/post/CompanyMationController/queryCompanyMationListTree" val="获取公司信息列表展示为树" allUse="1">
+	</url>
 	
 	<url id="companydepartment001" path="/post/CompanyDepartmentController/queryCompanyDepartmentList" val="获取公司部门信息列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="departmentName" name="departmentName" ref="" var="部门名称"/>
 	</url>
 	<url id="companydepartment002" path="/post/CompanyDepartmentController/insertCompanyDepartmentMation" val="添加公司部门信息信息" allUse="1">
 	</url>

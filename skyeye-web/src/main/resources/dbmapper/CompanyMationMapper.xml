@@ -119,4 +119,15 @@
 			ORDER BY a.create_time DESC
 	</select>
 	
+	<select id="queryCompanyMationListTree" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name title,
+			a.p_id parentId,
+			CASE a.p_id WHEN '0' THEN false ELSE true END isLast
+		FROM
+			company_mation a
+		ORDER BY a.p_id ASC
+	</select>
+	
 </mapper>

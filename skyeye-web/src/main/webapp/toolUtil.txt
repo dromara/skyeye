@@ -30,4 +30,5 @@ getDateStr();																																将日期转化为正常的年月�
 getIpByRequest();																															根据request获取ip
 getCpuRatioForWindows();																													获得CPU使用率
 readCpu();																																	读取CPU信息
+listToTree();																																将JSONArray数组转为树状结构
 

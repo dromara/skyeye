@@ -17,4 +17,6 @@ public interface CompanyMationService {
 
 	public void queryOverAllCompanyMationList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryCompanyMationListTree(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }
