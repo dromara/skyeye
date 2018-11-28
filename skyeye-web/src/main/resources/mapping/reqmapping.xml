@@ -765,6 +765,22 @@
 	</url>
 	<url id="companymation006" path="/post/CompanyMationController/queryOverAllCompanyMationList" val="获取总公司信息列表" allUse="1">
 	</url>
+	
+	<url id="companydepartment001" path="/post/CompanyDepartmentController/queryCompanyDepartmentList" val="获取公司部门信息列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="companydepartment002" path="/post/CompanyDepartmentController/insertCompanyDepartmentMation" val="添加公司部门信息信息" allUse="1">
+	</url>
+	<url id="companydepartment003" path="/post/CompanyDepartmentController/deleteCompanyDepartmentMationById" val="删除公司部门信息信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公司部门信息id"/>
+	</url>
+	<url id="companydepartment004" path="/post/CompanyDepartmentController/queryCompanyDepartmentMationToEditById" val="编辑公司部门信息信息时进行回显" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公司部门信息id"/>
+	</url>
+	<url id="companydepartment005" path="/post/CompanyDepartmentController/editCompanyDepartmentMationById" val="编辑公司部门信息信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公司部门信息id"/>
+	</url>
 	<!-- 公司管理结束 -->
 	
 </controller>
