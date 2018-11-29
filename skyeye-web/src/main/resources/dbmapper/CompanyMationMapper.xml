@@ -15,6 +15,7 @@
 			a.address_detailed addressDetailed,
 			(SELECT COUNT(*) FROM company_mation f WHERE a.id = f.p_id) childsNum,
 			(SELECT COUNT(*) FROM company_user g WHERE g.company_id = a.id) userNum,
+			(SELECT COUNT(*) FROM company_department h WHERE a.id = h.company_id) departmentNum,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			company_mation a
@@ -55,6 +56,14 @@
 		FROM
 			company_mation a
 		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryCompanyDepartMentNumMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) departmentNum
+		FROM 
+			company_department a 
+		WHERE a.company_id = #{id}
 	</select>
 	
 	<select id="queryCompanyUserNumMationById" parameterType="java.util.Map" resultType="java.util.Map">
