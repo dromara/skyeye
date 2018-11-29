@@ -30,14 +30,19 @@ function _openNewWindows(mation){
 				mation.url = mation.url + "?" + s.slice(1);
 			}
 			if(isNull(mation.area)){
-//				mation.area = [window.screen.width / 3 * 2 + 'px', window.screen.height / 2 + 'px'];
 				mation.area = [window.screen.width / 3 * 2 + 'px', (layui.$(window.parent.window).height() - 200) + 'px'];
 			}
 			if(isNull(mation.offset)){
 				mation.offset = 'auto';
 			}
-			if(isNull(mation.maxmin)){
+			if(isNull(mation.maxmin)){//是否最大化
 				mation.maxmin = false;
+			}
+			if(isNull(mation.zIndex)){//是否在桌面打开
+				mation.zIndex = false;
+			}
+			if(isNull(mation.shade)){//遮罩层
+				mation.shade = 0.5;
 			}
 		    var index = layer.load(1);
 		    refreshCode = "";
@@ -47,24 +52,47 @@ function _openNewWindows(mation){
 		        async: true,
 		        success: function (data) {
 		            layer.close(index);
+		            var pageIndex;
 		            //从桌面打开
-//		            top.winui.window.open
-		            var pageIndex = layer.open({
-		            	id: mation.pageId,
-		                type: 2,
-		                title: mation.title,
-		                content: mation.url,
-		                area: mation.area,
-		                offset: mation.offset,
-		                maxmin: mation.maxmin,
-		                end: function(){
-		                	if(typeof(mation.callBack) == "function") {
-		                		mation.callBack(refreshCode);
-		        			}
-		                }
-		            });
+		            if(mation.zIndex){
+		            	pageIndex = top.winui.window.open({
+			            	id: mation.pageId,
+			                type: 2,
+			                title: mation.title,
+			                content: mation.url,
+			                area: mation.area,
+			                offset: mation.offset,
+			                maxmin: mation.maxmin,
+			                shade: mation.shade,
+			                end: function(){
+			                	if(typeof(mation.callBack) == "function") {
+			                		mation.callBack(refreshCode);
+			        			}
+			                }
+			            });
+		            }else{
+		            	pageIndex = layer.open({
+			            	id: mation.pageId,
+			                type: 2,
+			                title: mation.title,
+			                content: mation.url,
+			                area: mation.area,
+			                offset: mation.offset,
+			                maxmin: mation.maxmin,
+			                shade: mation.shade,
+			                end: function(){
+			                	if(typeof(mation.callBack) == "function") {
+			                		mation.callBack(refreshCode);
+			        			}
+			                }
+			            });
+		            }
 		            if(mation.maxmin){
-		            	layer.full(pageIndex);
+		            	if(mation.zIndex){
+		            		top.winui.window.full(pageIndex);
+		            	}else{
+		            		layer.full(pageIndex);
+		            	}
 		            }
 		        },
 		        error: function (xml) {
