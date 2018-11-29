@@ -28,6 +28,7 @@ layui.config({
             { field:'companyDesc', width:100, title: '公司简介', templet: function(d){
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
 	        }},
+	        { field: 'userNum', title: '员工数', width: 180 },
             { field:'id', width:400, title: '公司地址', templet: function(d){
             	var str = d.provinceName + " ";
             	if(!isNull(d.cityName)){

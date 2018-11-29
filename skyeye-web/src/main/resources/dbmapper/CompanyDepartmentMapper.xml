@@ -30,7 +30,7 @@
 	</select>
 	
 	<insert id="insertCompanyDepartmentMation" parameterType="java.util.Map">
-	     INSERT into  
+	     INSERT into company_department
 	     (id, company_id, department_name, department_desc, p_id, create_id, create_time)
 	     VALUES
 	     (#{id}, #{companyId}, #{departmentName}, #{departmentDesc}, #{pId}, #{createId}, #{createTime})

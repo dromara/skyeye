@@ -775,6 +775,9 @@
 	    <property id="companyId" name="companyId" ref="" var="公司id"/>
 	</url>
 	<url id="companydepartment002" path="/post/CompanyDepartmentController/insertCompanyDepartmentMation" val="添加公司部门信息信息" allUse="1">
+		<property id="departmentName" name="departmentName" ref="required" var="部门名称"/>
+		<property id="departmentDesc" name="departmentDesc" ref="" var="部门简介"/>
+		<property id="companyId" name="companyId" ref="required" var="公司id"/>
 	</url>
 	<url id="companydepartment003" path="/post/CompanyDepartmentController/deleteCompanyDepartmentMationById" val="删除公司部门信息信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="公司部门信息id"/>

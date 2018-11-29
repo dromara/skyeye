@@ -3,10 +3,27 @@ layui.config({
 	version: skyeyeVersion
 }).define(['jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	layui.use(['form'], function (form) {
+	layui.use(['form', 'layedit'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	    var $ = layui.$,
-	    form = layui.form;
+	    form = layui.form,
+	    layedit = layui.layedit;
+	    
+	    var layContent = layedit.build('content', {
+	    	tool: [
+    	       'strong' //加粗
+    	       ,'italic' //斜体
+    	       ,'underline' //下划线
+    	       ,'del' //删除线
+    	       ,'|' //分割线
+    	       ,'left' //左对齐
+    	       ,'center' //居中对齐
+    	       ,'right' //右对齐
+    	       ,'link' //超链接
+    	       ,'unlink' //清除链接
+    	       ,'face' //表情
+    	     ]
+	    });
 	    
 		form.render();
 		
@@ -14,10 +31,12 @@ layui.config({
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
-        			
+        			departmentName: $("#departmentName").val(),
+        			departmentDesc: encodeURI(layedit.getContent(layContent)),
+        			companyId: parent.companyId,
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath   "icon002", params:params, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url:reqBasePath + "companydepartment002", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

@@ -77,8 +77,13 @@ public class CompanyMationServiceImpl implements CompanyMationService{
 	public void deleteCompanyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = companyMationDao.queryCompanyMationById(map);
-		if(Integer.parseInt(bean.get("childsNum").toString()) == 0){
-			companyMationDao.deleteCompanyMationById(map);
+		if(Integer.parseInt(bean.get("childsNum").toString()) == 0){//判断是否有子公司
+			Map<String, Object> item = companyMationDao.queryCompanyUserNumMationById(map);
+			if(Integer.parseInt(item.get("companyUserNum").toString()) == 0){//判断是否有员工
+				companyMationDao.deleteCompanyMationById(map);
+			}else{
+				outputObject.setreturnMessage("该公司下存在员工，无法直接删除。");
+			}
 		}else{
 			outputObject.setreturnMessage("该公司下存在子公司，无法直接删除。");
 		}
