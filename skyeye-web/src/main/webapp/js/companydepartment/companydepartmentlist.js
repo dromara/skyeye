@@ -48,7 +48,9 @@ layui.config({
 		    cols: [[
 		        { title: '序号', type: 'numbers'},
 		        { field: 'departmentName', title: '部门名称', width: 180 },
-		        { field: 'departmentDesc', title: '部门简介', width: 400 },
+		        { field: 'departmentDesc', title: '部门简介', width: 100, templet: function(d){
+		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="departmentDesc"></i>';
+		        }},
 		        { field: 'userNum', title: '员工数', width: 180 },
 		        { field: 'createTime', title: '创建时间', width: 180 },
 		        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
@@ -62,6 +64,15 @@ layui.config({
 	        	del(data, obj);
 	        }else if (layEvent === 'edit') { //编辑
 	        	edit(data);
+	        }else if (layEvent === 'departmentDesc') { //部门简介
+	        	layer.open({
+		            id: '部门简介',
+		            type: 1,
+		            title: '部门简介',
+		            shade: 0.3,
+		            area: ['1200px', '600px'],
+		            content: data.departmentDesc,
+		        });
 	        }
 	    });
 	}
