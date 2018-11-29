@@ -16,7 +16,6 @@ layui.config({
 			url: "../../tpl/syspersonal/editpassword.html", 
 			title: "修改密码",
 			pageId: "editpassword",
-			zIndex: true,
 			area: ['700px', '300px'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {

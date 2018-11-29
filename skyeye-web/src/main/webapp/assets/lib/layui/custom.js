@@ -38,9 +38,6 @@ function _openNewWindows(mation){
 			if(isNull(mation.maxmin)){//是否最大化
 				mation.maxmin = false;
 			}
-			if(isNull(mation.zIndex)){//是否在桌面打开
-				mation.zIndex = false;
-			}
 			if(isNull(mation.shade)){//遮罩层
 				mation.shade = 0.5;
 			}
@@ -52,47 +49,24 @@ function _openNewWindows(mation){
 		        async: true,
 		        success: function (data) {
 		            layer.close(index);
-		            var pageIndex;
-		            //从桌面打开
-		            if(mation.zIndex){
-		            	pageIndex = top.winui.window.open({
-			            	id: mation.pageId,
-			                type: 2,
-			                title: mation.title,
-			                content: mation.url,
-			                area: mation.area,
-			                offset: mation.offset,
-			                maxmin: mation.maxmin,
-			                shade: mation.shade,
-			                end: function(){
-			                	if(typeof(mation.callBack) == "function") {
-			                		mation.callBack(refreshCode);
-			        			}
-			                }
-			            });
-		            }else{
-		            	pageIndex = layer.open({
-			            	id: mation.pageId,
-			                type: 2,
-			                title: mation.title,
-			                content: mation.url,
-			                area: mation.area,
-			                offset: mation.offset,
-			                maxmin: mation.maxmin,
-			                shade: mation.shade,
-			                end: function(){
-			                	if(typeof(mation.callBack) == "function") {
-			                		mation.callBack(refreshCode);
-			        			}
-			                }
-			            });
-		            }
+		            var pageIndex = layer.open({
+		            	id: mation.pageId,
+		                type: 2,
+		                title: mation.title,
+		                content: mation.url,
+		                area: mation.area,
+		                offset: mation.offset,
+		                maxmin: mation.maxmin,
+		                shade: mation.shade,
+		                zIndex: 20000000000,
+		                end: function(){
+		                	if(typeof(mation.callBack) == "function") {
+		                		mation.callBack(refreshCode);
+		        			}
+		                }
+		            });
 		            if(mation.maxmin){
-		            	if(mation.zIndex){
-		            		top.winui.window.full(pageIndex);
-		            	}else{
-		            		layer.full(pageIndex);
-		            	}
+	            		layer.full(pageIndex);
 		            }
 		        },
 		        error: function (xml) {

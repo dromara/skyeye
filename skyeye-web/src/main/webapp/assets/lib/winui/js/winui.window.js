@@ -57,6 +57,12 @@ layui.define(['layer', 'winui'], function (exports) {
         if(isNull(options.maxmin) && options.maxmin != false){
         	options.maxmin = true;
         }
+        if(isNull(options.zIndex)){
+        	options.zIndex = layer.zIndex;
+        }
+        if(isNull(options.addToButtomMenu) && options.addToButtomMenu != false){
+        	options.addToButtomMenu = true;
+        }
 
         //打开窗口
         var windowIndex = layer.open({
@@ -72,7 +78,7 @@ layui.define(['layer', 'winui'], function (exports) {
             maxmin: options.maxmin,   //允许最大最小化
             moveOut: true,  //允许拖出窗外
             skin: options.skin,   //窗口皮肤
-            zIndex: layer.zIndex,
+            zIndex: options.zIndex,
             shadeClose: options.shadeClose, 	//点击空白处关闭
             scrollbar: false,
             closeBtn: options.closeBtn,
@@ -82,7 +88,7 @@ layui.define(['layer', 'winui'], function (exports) {
             },
             //打开回调
             success: function (layero, index) {
-                common.setWindowBody(layero);
+        		common.setWindowBody(layero);
             },
             //关闭回调
             cancel: function (index, windowDom) {
@@ -201,12 +207,14 @@ layui.define(['layer', 'winui'], function (exports) {
             //去除最大化按钮
             if (!(options.max === undefined ? this.settings.max : options.max))
                 $(windowDom).find('.layui-layer-max').remove();
-            //增加任务项
-            var taskItem = common.addTaskItem(options.id, options.title);
-            //选中任务项
-            common.selectDom(taskItem);
-            //绑定任务项mouseup事件
-            common.resetMouseUp(taskItem, call.taskItemMouseUp);
+            if(options.addToButtomMenu){
+            	//增加任务项
+            	var taskItem = common.addTaskItem(options.id, options.title);
+            	//选中任务项
+            	common.selectDom(taskItem);
+            	//绑定任务项mouseup事件
+            	common.resetMouseUp(taskItem, call.taskItemMouseUp);
+            }
             //双击窗口标题栏最大化(由于不明原因，标题栏的拖动好像阻碍了标题栏的双击事件，所以这里用mousedown模拟双击)
             var lastTime = 0;
             $(windowDom).find(MOVE).on('mousedown', function () {
