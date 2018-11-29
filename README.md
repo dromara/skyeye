@@ -92,6 +92,8 @@ webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.co
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/173447_347bfaac_1541735.png "5.png")
 - 13.行政区划
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1122/210207_93200209_1541735.png "微信截图_20181122210047.png")
+- 14.公司部门管理
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1129/110931_618e0f4b_1541735.png "2.png")
 
 #### 环境搭建
 ##### 开发工具:
