@@ -8,6 +8,7 @@
 			a.department_name departmentName,
 			a.department_desc departmentDesc,
 			(SELECT COUNT(*) FROM company_user b WHERE b.department_id = a.id) userNum,
+			(SELECT COUNT(*) FROM company_job c WHERE c.department_id = a.id) jobNum,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			company_department a
@@ -41,6 +42,14 @@
 			COUNT(*) childsNum
 		FROM
 			company_user b 
+		WHERE b.department_id = #{id}
+	</select>
+	
+	<select id="queryCompanyJobNumMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) companyJobNum
+		FROM
+			company_job b 
 		WHERE b.department_id = #{id}
 	</select>
 	
@@ -84,5 +93,19 @@
 		</set>
 		WHERE id = #{id}
 	</update>
+	
+	<select id="queryCompanyDepartmentListTreeByCompanyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.department_name title,
+			a.p_id parentId,
+			CASE a.p_id WHEN '0' THEN false ELSE true END isLast,
+			'[{"type": "0", "isChecked": "0"}]' checkArr,
+			CASE a.p_id WHEN '0' THEN '1' ELSE '2' END level
+		FROM
+			company_department a
+		WHERE a.company_id = #{companyId}
+		ORDER BY a.p_id ASC
+	</select>
 	
 </mapper>

@@ -94,4 +94,20 @@ public class CompanyDepartmentController {
 		companyDepartmentService.editCompanyDepartmentMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryCompanyDepartmentListTreeByCompanyId
+	     * @Description: 获取公司部门信息列表展示为树根据公司id
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CompanyDepartmentController/queryCompanyDepartmentListTreeByCompanyId")
+	@ResponseBody
+	public void queryCompanyDepartmentListTreeByCompanyId(InputObject inputObject, OutputObject outputObject) throws Exception{
+		companyDepartmentService.queryCompanyDepartmentListTreeByCompanyId(inputObject, outputObject);
+	}
+	
 }

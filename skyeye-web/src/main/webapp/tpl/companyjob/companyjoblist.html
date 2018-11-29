@@ -12,14 +12,17 @@
 		<div class="layui-col-xs2" style="min-height: 100px;">
 			<ul id="demoTree1" class="dtree" data-id="0"></ul>
 		</div>
-		<div class="layui-col-xs10">
-			<div class="txtcenter" style="margin:0 auto;padding-top:20px;">
+		<div class="layui-col-xs2" style="min-height: 100px;">
+			<ul id="demoTree2" class="dtree" data-id="0"></ul>
+		</div>
+		<div class="layui-col-xs8">
+			<div class="txtcenter" style="width:700px;margin:0 auto;padding-top:20px;">
 			    <form class="layui-form layui-form-pane" action="" autocomplete="off">
 			        <div class="layui-form-item">
 			            <div class="layui-inline">
-			                <label class="layui-form-label">部门名称</label>
+			                <label class="layui-form-label">职位名称</label>
 			                <div class="layui-input-inline">
-			                    <input id="departmentName" name="departmentName" class="layui-input" />
+			                    <input id="jobName" name="jobName" class="layui-input" />
 			                </div>
 			            </div>
 			        </div>
@@ -33,24 +36,22 @@
 		    <div class="winui-toolbar">
 		        <div class="winui-tool">
 		            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i>刷新数据</button>
-		            <button id="addBean" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增公司部门信息</button>
+		            <button id="addBean" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增职位信息</button>
 		        </div>
 		    </div>
 		    <div style="margin:auto 10px;">
 		        <table id="messageTable" lay-filter="messageTable"></table>
 		        <script type="text/html" id="tableBar">
             		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-					{{# if(d.jobNum == 0 && d.userNum == 0){ }}
-          				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-					{{# } }}
+          			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         		</script>
 		    </div>
-	    </div>
+		</div>
 	</div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/companydepartment/'}).use('companydepartmentlist');
+        layui.config({base: '../../js/companyjob/'}).use('companyjoblist');
     </script>
 </body>
 </html>

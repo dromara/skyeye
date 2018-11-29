@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.skyeye.company.dao.CompanyDepartmentDao;
@@ -79,8 +82,13 @@ public class CompanyDepartmentServiceImpl implements CompanyDepartmentService{
 	public void deleteCompanyDepartmentMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = companyDepartmentDao.queryCompanyDepartmentUserMationById(map);
-		if(Integer.parseInt(bean.get("childsNum").toString()) == 0){
-			companyDepartmentDao.deleteCompanyDepartmentMationById(map);
+		if(Integer.parseInt(bean.get("childsNum").toString()) == 0){//判断是否有员工
+			bean = companyDepartmentDao.queryCompanyJobNumMationById(map);
+			if(Integer.parseInt(bean.get("companyJobNum").toString()) == 0){//判断是否有职位
+				companyDepartmentDao.deleteCompanyDepartmentMationById(map);
+			}else{
+				outputObject.setreturnMessage("该部门下存在职位，无法直接删除。");
+			}
 		}else{
 			outputObject.setreturnMessage("该部门下存在员工，无法直接删除。");
 		}
@@ -122,6 +130,29 @@ public class CompanyDepartmentServiceImpl implements CompanyDepartmentService{
 			companyDepartmentDao.editCompanyDepartmentMationById(map);
 		}else{
 			outputObject.setreturnMessage("该公司部门信息名称已存在，不可进行二次保存");
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryCompanyDepartmentListTreeByCompanyId
+	     * @Description: 获取公司部门信息列表展示为树根据公司id
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void queryCompanyDepartmentListTreeByCompanyId(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = companyDepartmentDao.queryCompanyDepartmentListTreeByCompanyId(map);
+		JSONArray result = ToolUtil.listToTree(JSONArray.parseArray(JSON.toJSONString(beans)), "id", "parentId", "children");
+		beans = (List)result;
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
 		}
 	}
 	

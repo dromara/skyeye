@@ -22,4 +22,8 @@ public interface CompanyDepartmentDao {
 
 	public Map<String, Object> queryCompanyDepartmentUserMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryCompanyDepartmentListTreeByCompanyId(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryCompanyJobNumMationById(Map<String, Object> map) throws Exception;
+
 }

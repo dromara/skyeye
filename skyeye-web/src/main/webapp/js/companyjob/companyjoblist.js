@@ -2,6 +2,7 @@
 var rowId = "";
 
 var companyId = "";
+var departmentId = "";
 
 layui.config({
 	base: basePath, 
@@ -20,7 +21,6 @@ layui.config({
 		url: reqBasePath + 'companymation007', //异步接口
 		dataStyle: 'layuiStyle',
 		done: function(){
-			initLoatTable();//初始化加载表格
 			if(!isNull($("#demoTree1 li").eq(0))){
 				$("#demoTree1 li").eq(0).children('div').click();
 			}
@@ -30,6 +30,22 @@ layui.config({
 	//单击节点 监听事件
 	dtree.on("node('demoTree1')" ,function(param){
 		companyId = param.nodeId;
+		dtree.render({
+			elem: "#demoTree2",  //绑定元素
+			url: reqBasePath + 'companydepartment006?companyId=' + companyId, //异步接口
+			dataStyle: 'layuiStyle',
+			done: function(){
+				departmentId = "";
+				initLoatTable();//初始化加载表格
+				if(!isNull($("#demoTree2 li").eq(0))){
+					$("#demoTree2 li").eq(0).children('div').click();
+				}
+			}
+		});
+	});
+	
+	dtree.on("node('demoTree2')" ,function(param){
+		departmentId = param.nodeId;
 		loadTable();
 	});
 	
@@ -39,19 +55,18 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'companydepartment001',
-		    where:{departmentName: $("#departmentName").val(), companyId: companyId},
+		    url: reqBasePath + 'companyjob001',
+		    where:{departmentId: departmentId, jobName: $("#jobName").val()},
 		    even:true,  //隔行变色
 		    page: true,
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
 		        { title: '序号', type: 'numbers'},
-		        { field: 'departmentName', title: '部门名称', width: 180 },
-		        { field: 'departmentDesc', title: '部门简介', width: 100, templet: function(d){
-		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="departmentDesc"></i>';
+		        { field: 'jobName', title: '职位名称', width: 180 },
+		        { field: 'jobDesc', title: '职位简介', width: 100, templet: function(d){
+		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="jobDesc"></i>';
 		        }},
-		        { field: 'jobNum', title: '职位数', width: 180 },
 		        { field: 'userNum', title: '员工数', width: 180 },
 		        { field: 'createTime', title: '创建时间', width: 180 },
 		        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
@@ -65,14 +80,14 @@ layui.config({
 	        	del(data, obj);
 	        }else if (layEvent === 'edit') { //编辑
 	        	edit(data);
-	        }else if (layEvent === 'departmentDesc') { //部门简介
+	        }else if (layEvent === 'jobDesc') { //职位简介
 	        	layer.open({
-		            id: '部门简介',
+		            id: '职位简介',
 		            type: 1,
-		            title: '部门简介',
+		            title: '职位简介',
 		            shade: 0.3,
 		            area: ['1200px', '600px'],
-		            content: data.departmentDesc,
+		            content: data.jobDesc,
 		        });
 	        }
 	    });
@@ -90,11 +105,11 @@ layui.config({
 	
 	//删除
 	function del(data, obj){
-		var msg = obj ? '确认删除公司部门信息【' + obj.data.departmentName + '】吗？' : '确认删除选中数据吗？';
-		layer.confirm(msg, { icon: 3, title: '删除公司部门信息' }, function (index) {
+		var msg = obj ? '确认删除公司部门职位信息【' + obj.data.jobName + '】吗？' : '确认删除选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '删除公司部门职位信息' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
-            AjaxPostUtil.request({url:reqBasePath + "companydepartment003", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "companyjob003", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
     				loadTable();
@@ -109,9 +124,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/companydepartment/companydepartmentedit.html", 
-			title: "编辑公司部门信息",
-			pageId: "companydepartmentedit",
+			url: "../../tpl/companyjob/companyjobedit.html", 
+			title: "编辑公司部门职位信息",
+			pageId: "companyjobedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -130,9 +145,9 @@ layui.config({
     //新增
     $("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/companydepartment/companydepartmentadd.html", 
-			title: "新增公司部门信息",
-			pageId: "companydepartmentadd",
+			url: "../../tpl/companyjob/companyjobadd.html", 
+			title: "新增公司部门职位信息",
+			pageId: "companyjobadd",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
@@ -144,8 +159,8 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{departmentName: $("#departmentName").val(), companyId: companyId}});
+    	table.reload("messageTable", {where:{departmentId: departmentId, jobName: $("#jobName").val()}});
     }
     
-    exports('companydepartmentlist', {});
+    exports('companyjoblist', {});
 });

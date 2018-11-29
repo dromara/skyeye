@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.company.dao.CompanyJobDao">
+	
+	<select id="queryCompanyJobList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.job_name jobName,
+			a.job_desc jobDesc,
+			(SELECT COUNT(*) FROM company_user b WHERE b.job_id = a.id) userNum,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			company_job a
+		WHERE a.department_id = #{departmentId}
+			<if test="jobName != '' and jobName != null">
+				AND a.job_name LIKE '%${jobName}%'
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryCompanyJobMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			company_job a
+		WHERE a.job_name = #{jobName}
+			AND a.department_id = #{departmentId}
+	</select>
+	
+	<insert id="insertCompanyJobMation" parameterType="java.util.Map">
+	     INSERT into company_job
+	     (id, company_id, department_id, job_name, job_desc, p_id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{companyId}, #{departmentId}, #{jobName}, #{jobDesc}, #{pId}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteCompanyJobMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			company_job
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryCompanyJobMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.job_name jobName,
+			a.job_desc jobDesc
+		FROM
+			company_job a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryCompanyJobMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			company_job a
+		WHERE a.job_name = #{jobName}
+			AND a.id != #{id}
+	</select>
+	
+	<update id="editCompanyJobMationById" parameterType="java.util.Map">
+		UPDATE company_job
+		<set>
+			<if test="jobName != '' and jobName != null">
+				job_name = #{jobName},
+			</if>
+			job_desc = #{jobDesc},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

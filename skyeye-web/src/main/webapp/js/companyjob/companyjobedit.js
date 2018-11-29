@@ -13,10 +13,10 @@ layui.config({
 	    
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "companydepartment004",
+		 	url: reqBasePath + "companyjob004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/companydepartment/companydepartmenteditTemplate.tpl'),
+		 	template: getFileContent('tpl/companyjob/companyjobeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function(json){
@@ -43,13 +43,12 @@ layui.config({
 			    	//表单验证
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
-		        			departmentName: $("#departmentName").val(),
-		        			departmentDesc: encodeURI(layedit.getContent(layContent)),
-		        			companyId: parent.companyId,
-		        			rowId: parent.rowId,
+		        			jobName: $("#jobName").val(),
+		        			jobDesc: encodeURI(layedit.getContent(layContent)),
+		        			rowId: parent.rowId
 			        	};
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "companydepartment005", params:params, type:'json', callback:function(json){
+			        	AjaxPostUtil.request({url:reqBasePath + "companyjob005", params:params, type:'json', callback:function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
