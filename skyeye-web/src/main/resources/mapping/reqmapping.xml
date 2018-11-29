@@ -787,6 +787,9 @@
 	</url>
 	<url id="companydepartment005" path="/post/CompanyDepartmentController/editCompanyDepartmentMationById" val="编辑公司部门信息信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="公司部门信息id"/>
+	    <property id="departmentName" name="departmentName" ref="required" var="部门名称"/>
+		<property id="departmentDesc" name="departmentDesc" ref="" var="部门简介"/>
+		<property id="companyId" name="companyId" ref="required" var="公司id"/>
 	</url>
 	<!-- 公司管理结束 -->
 	
