@@ -824,4 +824,29 @@
 	</url>
 	<!-- 公司管理结束 -->
 	
+	<!-- 项目规划开始 -->
+	<url id="planproject001" path="/post/PlanProjectController/queryPlanProjectList" val="获取项目规划-项目表列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="projectName" name="projectName" ref="" var="项目名称"/>
+	</url>
+	<url id="planproject002" path="/post/PlanProjectController/insertPlanProjectMation" val="添加项目规划-项目表信息" allUse="1">
+		<property id="projectName" name="projectName" ref="required" var="项目名称"/>
+		<property id="projectDesc" name="projectDesc" ref="" var="项目简介"/>
+		<property id="isShare" name="isShare" ref="required,num" var="是否分享"/>
+	</url>
+	<url id="planproject003" path="/post/PlanProjectController/deletePlanProjectMationById" val="删除项目规划-项目表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目规划-项目表id"/>
+	</url>
+	<url id="planproject004" path="/post/PlanProjectController/queryPlanProjectMationToEditById" val="编辑项目规划-项目表信息时进行回显" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目规划-项目表id"/>
+	</url>
+	<url id="planproject005" path="/post/PlanProjectController/editPlanProjectMationById" val="编辑项目规划-项目表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目规划-项目表id"/>
+	    <property id="projectName" name="projectName" ref="required" var="项目名称"/>
+		<property id="projectDesc" name="projectDesc" ref="" var="项目简介"/>
+		<property id="isShare" name="isShare" ref="required,num" var="是否分享"/>
+	</url>
+	<!-- 项目规划结束 -->
+	
 </controller>
