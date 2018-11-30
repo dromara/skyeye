@@ -47,6 +47,8 @@ layui.config({
         	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
+        }else if (layEvent === 'flowChart') { //流程图设计
+        	flowChart(data);
         }else if (layEvent === 'projectDesc') { //项目简介
         	layer.open({
 	            id: '项目简介',
@@ -93,6 +95,24 @@ layui.config({
 			url: "../../tpl/planproject/planprojectedit.html", 
 			title: "编辑项目",
 			pageId: "planprojectedit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+	}
+	
+	//流程图设计
+	function flowChart(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/flowchart/makeflowchart.html", 
+			title: "流程图设计",
+			pageId: "planprojectedit",
+			maxmin: true,
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
