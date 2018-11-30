@@ -105,7 +105,7 @@ layui.config({
 		});
 	}
 	
-	//编辑分类
+	//编辑
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
