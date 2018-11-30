@@ -45,7 +45,8 @@
 		SELECT
 			a.id,
 			a.project_name projectName,
-			a.project_desc projectDesc
+			a.project_desc projectDesc,
+			a.is_share isShare
 		FROM
 			plan_project a
 		WHERE a.id = #{id}
@@ -64,9 +65,12 @@
 		UPDATE plan_project
 		<set>
 			<if test="projectName != '' and projectName != null">
-				a.project_name = #{projectName},
+				project_name = #{projectName},
 			</if>
 			project_desc = #{projectDesc},
+			<if test="isShare != '' and isShare != null">
+				is_share = #{isShare},
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>

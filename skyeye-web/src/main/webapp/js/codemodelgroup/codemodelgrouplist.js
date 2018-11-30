@@ -25,7 +25,7 @@ layui.config({
 	        { title: '序号', type: 'numbers'},
 	        { field: 'groupNum', title: '分组编号', width: 120 },
 	        { field: 'groupName', title: '分组名称', width: 120 },
-	        { field: 'groupDesc', title: '分组简介', width: 120, templet: function(d){
+	        { field: 'id', title: '分组简介', width: 120, templet: function(d){
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="groupDesc"></i>';
 	        }},
 	        { field: 'modelNum', title: '模板数量', width: 120 },

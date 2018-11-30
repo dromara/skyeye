@@ -64,7 +64,7 @@ layui.config({
 		    cols: [[
 		        { title: '序号', type: 'numbers'},
 		        { field: 'jobName', title: '职位名称', width: 180 },
-		        { field: 'jobDesc', title: '职位简介', width: 100, templet: function(d){
+		        { field: 'id', title: '职位简介', width: 100, templet: function(d){
 		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="jobDesc"></i>';
 		        }},
 		        { field: 'userNum', title: '员工数', width: 180 },

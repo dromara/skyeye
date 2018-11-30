@@ -25,7 +25,7 @@ layui.config({
         treeShowName: 'companyName',//以树形式显示的字段
         cols: [[
             { field:'companyName', width:300, title: '公司名称'},
-            { field:'companyDesc', width:100, title: '公司简介', templet: function(d){
+            { field:'id', width:100, title: '公司简介', templet: function(d){
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
 	        }},
 	        { field: 'departmentNum', title: '部门数', width: 180 },

@@ -27,6 +27,12 @@ layui.config({
 	    
 		form.render();
 		
+		//是否共享
+ 		form.on('switch(isShare)', function (data) {
+ 			//同步开关值
+ 			$(data.elem).val(data.elem.checked);
+ 		});
+		
 	    form.on('submit(formAddBean)', function (data) {
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
@@ -34,6 +40,11 @@ layui.config({
         			projectName: $("#projectName").val(),
         			projectDesc: encodeURI(layedit.getContent(layContent)),
 	        	};
+	        	if(data.field.isShare){
+	        		params.isShare = '2';
+	        	}else{
+	        		params.isShare = '1';
+	        	}
 	        	
 	        	AjaxPostUtil.request({url:reqBasePath + "planproject002", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
