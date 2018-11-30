@@ -439,4 +439,40 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 		sysEveUserDao.editUserInstallWinTaskPosition(map);
 	}
 
+	/**
+	 * 
+	     * @Title: editUserPassword
+	     * @Description: 修改密码
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editUserPassword(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("userCode", user.get("userCode"));
+		Map<String, Object> userMation = sysEveUserDao.queryMationByUserCode(map);//根据redis中的用户信息userCode获取用户信息
+		int pwdNum = Integer.parseInt(userMation.get("pwdNum").toString());
+		String password = map.get("oldPassword").toString();
+		for(int i = 0; i < pwdNum; i++){
+			password = ToolUtil.MD5(password);
+		}
+		if(password.equals(userMation.get("password").toString())){//输入的旧密码数据库中的旧密码一致
+			//转化新密码
+			String newPassword = map.get("newPassword").toString();
+			for(int i = 0; i < pwdNum; i++){
+				newPassword = ToolUtil.MD5(newPassword);
+			}
+			Map<String, Object> bean = new HashMap<>();
+			bean.put("id", user.get("id"));
+			bean.put("password", newPassword);
+			sysEveUserDao.editUserPassword(bean);
+		}else{
+			outputObject.setreturnMessage("旧密码输入错误.");
+		}
+	}
+
 }

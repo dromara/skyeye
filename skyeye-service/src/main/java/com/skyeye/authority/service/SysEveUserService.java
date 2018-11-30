@@ -40,6 +40,8 @@ public interface SysEveUserService {
 	public void editUserInstallWinTaskPosition(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void insertSysUserMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editUserPassword(InputObject inputObject, OutputObject outputObject) throws Exception;
 	
 	
 	

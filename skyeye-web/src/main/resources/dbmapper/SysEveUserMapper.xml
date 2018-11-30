@@ -238,4 +238,12 @@
 	     (#{id}, #{userId}, #{winBgPicUrl}, #{winLockBgPicUrl}, #{winThemeColor}, #{winStartMenuSize}, #{winTaskPosition}, #{createId}, #{createTime})
 	</insert>
 	
+	<update id="editUserPassword" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			password = #{password}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
 </mapper>

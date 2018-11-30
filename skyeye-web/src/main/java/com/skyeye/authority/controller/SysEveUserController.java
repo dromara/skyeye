@@ -303,4 +303,20 @@ public class SysEveUserController {
 		sysEveUserService.editUserInstallWinTaskPosition(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editUserPassword
+	     * @Description: 修改密码
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/editUserPassword")
+	@ResponseBody
+	public void editUserPassword(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.editUserPassword(inputObject, outputObject);
+	}
+	
 }

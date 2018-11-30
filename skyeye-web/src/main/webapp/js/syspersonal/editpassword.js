@@ -8,19 +8,35 @@ layui.config({
 	    var $ = layui.$,
 	    form = layui.form;
 	    
+		form.verify({
+			oldPassword : function(value, item){
+				if(value.length < 6){
+	                return "密码长度不能小于6位";
+	            }
+            },
+            newPassword : function(value, item){
+	            if(value.length < 6){
+	                return "密码长度不能小于6位";
+	            }
+	        },
+	        confirmPwd : function(value, item){
+	            if($("#newPassword").val() != value){
+	                return "两次输入密码不一致，请重新输入！";
+	            }
+	        }
+	    });
+		
 		form.render();
 		
 	    form.on('submit(formAddBean)', function (data) {
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
-        			companyId: parent.companyId,
-        			departmentId: parent.departmentId,
-        			jobName: $("#jobName").val(),
-        			jobDesc: encodeURI(layedit.getContent(layContent))
+        			newPassword: $("#newPassword").val(),
+        			oldPassword: $("#oldPassword").val(),
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "companyjob002", params:params, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url:reqBasePath + "login007", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

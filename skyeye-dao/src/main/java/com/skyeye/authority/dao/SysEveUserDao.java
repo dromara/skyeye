@@ -46,6 +46,8 @@ public interface SysEveUserDao {
 	public int insertSysUserMation(Map<String, Object> map) throws Exception;
 
 	public int insertSysUserInstallMation(Map<String, Object> map) throws Exception;
+
+	public int editUserPassword(Map<String, Object> bean) throws Exception;
 	
 	
 	

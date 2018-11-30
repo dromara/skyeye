@@ -20,6 +20,10 @@
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
+	<url id="login007" path="/post/SysEveUserController/editUserPassword" val="修改密码" allUse="1">
+		<property id="newPassword" name="newPassword" ref="required" var="新密码"/>
+		<property id="oldPassword" name="oldPassword" ref="required" var="旧密码"/>
+	</url>
 	<!-- 登录结束 -->
 	
 	<!-- 公共请求开始 -->
