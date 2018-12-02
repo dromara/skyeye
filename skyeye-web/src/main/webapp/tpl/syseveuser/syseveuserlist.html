@@ -37,16 +37,14 @@
     </div>
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
+        
+		<script type="text/html" id="checkboxTpl">
+			<input type="checkbox" name="lock" value="{{d.id}}" title="锁定" lay-filter="lockDemo" {{d.userLock == 1 ? 'checked': ''}}>
+		</script>
+        
         <script type="text/html" id="tableBar">
             <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 			<a class="layui-btn layui-btn-xs" lay-event="bindRole">绑定角色</a>
-			{{# if(d.userLock == 0){ }}
-				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="lock">锁定</a>
-			{{# }else if(d.userLock == 1){ }}
-            	<a class="layui-btn layui-btn-xs" lay-event="unlock">解锁</a>
-			{{# }else{ }}
-			
-			{{# }}}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>

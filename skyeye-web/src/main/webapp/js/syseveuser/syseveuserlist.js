@@ -45,15 +45,7 @@ layui.config({
 	        		return "参数错误";
 	        	}
 	        }},
-	        { field: 'userLock', title: '锁定', width: 60, templet: function(d){
-	        	if(d.userLock == 0){
-	        		return '否';
-	        	}else if(d.userLock == 1){
-	        		return '是';
-	        	}else{
-	        		return '参数错误';
-	        	}
-	        }},
+	        { field: 'userLock', title: '是否锁定', width: 120, templet: '#checkboxTpl', unresize: true},
 	        { field: 'roleName', title: '角色'},
 	        { field: 'createName', title: '创建人', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
@@ -64,9 +56,7 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
         var data = obj.data; //获得当前行数据
         var layEvent = obj.event; //获得 lay-event 对应的值
-        if (layEvent === 'lock') { //锁定
-        	lock(data);
-        }else if (layEvent === 'unlock') { //解锁
+        if (layEvent === 'unlock') { //解锁
         	unlock(data);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
@@ -85,12 +75,20 @@ layui.config({
         return false;
 	});
 	
+	// 监听锁定操作
+	form.on('checkbox(lockDemo)', function(obj) {
+		if(obj.elem.checked){//锁定
+			lock(obj.value);
+		}else{//解锁
+			unlock(obj.value);
+		}
+	});
+	
 	//锁定
-	function lock(data){
-		AjaxPostUtil.request({url:reqBasePath + "sys002", params:{rowId:data.id}, type:'json', callback:function(json){
+	function lock(id){
+		AjaxPostUtil.request({url:reqBasePath + "sys002", params:{rowId: id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				top.winui.window.msg("已成功锁定，该账号目前无法登录。", {icon: 1,time: 2000});
-				loadTable();
 			}else{
 				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 			}
@@ -98,11 +96,10 @@ layui.config({
 	}
 	
 	//解锁
-	function unlock(data){
-		AjaxPostUtil.request({url:reqBasePath + "sys003", params:{rowId:data.id}, type:'json', callback:function(json){
+	function unlock(id){
+		AjaxPostUtil.request({url:reqBasePath + "sys003", params:{rowId: id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				top.winui.window.msg("账号恢复正常。", {icon: 1,time: 2000});
-				loadTable();
 			}else{
 				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 			}
