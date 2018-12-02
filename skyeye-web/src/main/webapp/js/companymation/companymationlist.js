@@ -28,8 +28,8 @@ layui.config({
             { field:'id', width:100, title: '公司简介', templet: function(d){
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
 	        }},
-	        { field: 'departmentNum', title: '部门数', width: 180 },
-	        { field: 'userNum', title: '员工数', width: 180 },
+	        { field: 'departmentNum', title: '部门数', width: 100 },
+	        { field: 'userNum', title: '员工数', width: 100 },
             { field:'id', width:400, title: '公司地址', templet: function(d){
             	var str = d.provinceName + " ";
             	if(!isNull(d.cityName)){
