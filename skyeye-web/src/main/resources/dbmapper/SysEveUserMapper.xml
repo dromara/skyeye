@@ -14,9 +14,25 @@
 			a.user_lock userLock,
 			(SELECT c.user_name FROM sys_eve_user c WHERE a.creater = c.id) createName,
 			(SELECT group_concat(distinct b.role_name) FROM sys_eve_role b WHERE INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.id, ','))) roleName,
+			m.company_name companyName,
+			m.department_name departmentName,
+			m.job_name jobName,
 			CONVERT(a.create_time, char) createTime
 		FROM
 			sys_eve_user a
+			LEFT JOIN (SELECT 
+						o.user_id,
+						p.job_name,
+						q.department_name,
+						u.company_name
+					FROM 
+						company_user o, 
+						company_job p, 
+						company_department q, 
+						company_mation u 
+					WHERE o.company_id = u.id 
+						AND o.department_id = q.id 
+						AND o.job_id = p.id) m ON a.id = m.user_id
 		WHERE 1 = 1
 		<if test="userCode != '' and userCode != null">
 			AND a.user_code like '%${userCode}%'
@@ -60,9 +76,13 @@
 			a.user_name userName,
 			a.user_photo userPhoto,
 			a.user_idcard userIdCard,
-			a.user_sex userSex
+			a.user_sex userSex,
+			b.company_id companyId,
+			b.department_id departmentId,
+			b.job_id jobId
 		FROM
 			sys_eve_user a
+			LEFT JOIN company_user b ON b.user_id = a.id
 		WHERE a.id = #{id}
 	</select>
 	
@@ -77,6 +97,30 @@
 			</if>
 		</set>
 		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysUserJobMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			a.id
+		FROM 
+			company_user a
+		WHERE a.user_id = #{id}
+	</select>
+	
+	<update id="editSysUserJobMationById" parameterType="java.util.Map">
+		UPDATE company_user
+		<set>
+			<if test="companyId != '' and companyId != null">
+				company_id = #{companyId},
+			</if>
+			<if test="departmentId != '' and departmentId != null">
+				department_id = #{departmentId},
+			</if>
+			<if test="jobId != '' and jobId != null">
+				job_id = #{jobId},
+			</if>
+		</set>
+		WHERE user_id = #{id}
 	</update>
 	
 	<select id="queryMationByUserCode" parameterType="java.util.Map" resultType="java.util.Map">
@@ -223,6 +267,13 @@
 		WHERE
 			a.user_code = #{userCode}
 	</select>
+	
+	<insert id="insertSysUserJobMation" parameterType="java.util.Map">
+	     INSERT into company_user 
+	     (id, company_id, department_id, job_id, user_id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{companyId}, #{departmentId}, #{jobId}, #{userId}, #{createId}, #{createTime})
+	</insert>
 	
 	<insert id="insertSysUserMation" parameterType="java.util.Map">
 	     INSERT into sys_eve_user 

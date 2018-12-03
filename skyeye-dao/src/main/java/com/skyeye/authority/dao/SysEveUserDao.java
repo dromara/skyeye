@@ -48,6 +48,12 @@ public interface SysEveUserDao {
 	public int insertSysUserInstallMation(Map<String, Object> map) throws Exception;
 
 	public int editUserPassword(Map<String, Object> bean) throws Exception;
+
+	public int insertSysUserJobMation(Map<String, Object> jobBean) throws Exception;
+
+	public int editSysUserJobMationById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> querySysUserJobMationById(Map<String, Object> map) throws Exception;
 	
 	
 	

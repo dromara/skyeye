@@ -21,7 +21,7 @@ layui.config({
 		dataStyle: 'layuiStyle',
 		done: function(){
 			initLoatTable();//初始化加载表格
-			if(!isNull($("#demoTree1 li").eq(0))){
+			if($("#demoTree1 li").length > 0){
 				$("#demoTree1 li").eq(0).children('div').click();
 			}
 		}

@@ -94,4 +94,20 @@ public class CompanyJobController {
 		companyJobService.editCompanyJobMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryCompanyJobListTreeByDepartmentId
+	     * @Description: 获取公司部门职位信息列表展示为树根据公司id
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CompanyJobController/queryCompanyJobListTreeByDepartmentId")
+	@ResponseBody
+	public void queryCompanyJobListTreeByDepartmentId(InputObject inputObject, OutputObject outputObject) throws Exception{
+		companyJobService.queryCompanyJobListTreeByDepartmentId(inputObject, outputObject);
+	}
+	
 }

@@ -72,4 +72,18 @@
 		WHERE id = #{id}
 	</update>
 	
+	<select id="queryCompanyJobListTreeByDepartmentId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.job_name title,
+			a.p_id parentId,
+			CASE a.p_id WHEN '0' THEN false ELSE true END isLast,
+			'[{"type": "0", "isChecked": "0"}]' checkArr,
+			CASE a.p_id WHEN '0' THEN '1' ELSE '2' END level
+		FROM
+			company_job a
+		WHERE a.department_id = #{departmentId}
+		ORDER BY a.p_id ASC
+	</select>
+	
 </mapper>

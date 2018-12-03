@@ -1815,6 +1815,7 @@ body .layer-ext-winconfirm {
 .photo-img{
     width: 30px;
     height: 30px;
+    cursor: pointer;
 }
 
 /***非表格分页加载插件start***/
@@ -2881,6 +2882,10 @@ body .layer-ext-winconfirm {
 	z-index: 9999999999
 }
 /*** 滑块结束 ***/
+
+.layui-form-item{
+	clear: none;
+}
 
 /*** 小程序页面管理start ***/
 .smpro{
@@ -4154,6 +4159,17 @@ body .layer-ext-winconfirm {
 
 
 /*** 公司展示列表样式end ***/
+
+.mar-left-5px{
+	margin-left: 4.22222%;
+}
+
+.hr-title{
+	font-size: 15px;
+    font-style: oblique;
+    color: #6379bb;
+	margin: 10px 0px 0px 10px;
+}
 
 /*******************************************自定义样式end********************************************/
 

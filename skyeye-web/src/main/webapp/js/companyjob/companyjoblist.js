@@ -21,7 +21,7 @@ layui.config({
 		url: reqBasePath + 'companymation007', //异步接口
 		dataStyle: 'layuiStyle',
 		done: function(){
-			if(!isNull($("#demoTree1 li").eq(0))){
+			if($("#demoTree1 li").length > 0){
 				$("#demoTree1 li").eq(0).children('div').click();
 			}
 		}
@@ -37,7 +37,7 @@ layui.config({
 			done: function(){
 				departmentId = "";
 				initLoatTable();//初始化加载表格
-				if(!isNull($("#demoTree2 li").eq(0))){
+				if($("#demoTree2 li").length > 0){
 					$("#demoTree2 li").eq(0).children('div').click();
 				}
 			}

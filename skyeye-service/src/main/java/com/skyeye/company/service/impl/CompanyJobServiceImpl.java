@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.skyeye.company.dao.CompanyJobDao;
@@ -117,6 +120,29 @@ public class CompanyJobServiceImpl implements CompanyJobService{
 			companyJobDao.editCompanyJobMationById(map);
 		}else{
 			outputObject.setreturnMessage("该公司部门职位信息名称已存在，不可进行二次保存");
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryCompanyJobListTreeByDepartmentId
+	     * @Description: 获取公司部门职位信息列表展示为树根据公司id
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void queryCompanyJobListTreeByDepartmentId(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> beans = companyJobDao.queryCompanyJobListTreeByDepartmentId(map);
+		JSONArray result = ToolUtil.listToTree(JSONArray.parseArray(JSON.toJSONString(beans)), "id", "parentId", "children");
+		beans = (List)result;
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
 		}
 	}
 	

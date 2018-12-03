@@ -16,21 +16,21 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: reqBasePath + 'sys001',
-	    where:{userCode:$("#userCode").val(), userName:$("#userName").val()},
-	    even:true,  //隔行变色
+	    where: {userCode:$("#userCode").val(), userName:$("#userName").val()},
+	    even: true,  //隔行变色
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
 	        { field: 'userCode', title: '账号', width: 120 },
-	        { field: 'pwdNumEnc', title: '加密次数', width: 120 },
-	        { field: 'userName', title: '用户名', width: 120 },
-	        { field: 'userPhoto', title: '头像', align: 'center', width: 120, templet: function(d){
+	        { field: 'pwdNumEnc', title: '加密次数', width: 100 },
+	        { field: 'userName', title: '用户名', width: 100 },
+	        { field: 'userPhoto', title: '头像', align: 'center', width: 60, templet: function(d){
 	        	if(isNull(d.userPhoto)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 	        	}else{
-	        		return '<img src="' + fileBasePath + d.userPhoto + '" class="photo-img">';
+	        		return '<img src="' + fileBasePath + d.userPhoto + '" class="photo-img" lay-event="userPhoto">';
 	        	}
 	        }},
 	        { field: 'userIdCard', title: '身份证', width: 160 },
@@ -45,8 +45,11 @@ layui.config({
 	        		return "参数错误";
 	        	}
 	        }},
+	        { field: 'companyName', title: '所属公司', width: 120},
+	        { field: 'departmentName', title: '所属部门', width: 120},
+	        { field: 'jobName', title: '担任职位', width: 120},
 	        { field: 'userLock', title: '是否锁定', width: 120, templet: '#checkboxTpl', unresize: true},
-	        { field: 'roleName', title: '角色'},
+	        { field: 'roleName', title: '角色', width: 120},
 	        { field: 'createName', title: '创建人', width: 120 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
@@ -62,6 +65,16 @@ layui.config({
         	edit(data);
         }else if (layEvent === 'bindRole') { //绑定角色
         	bindRole(data);
+        }else if (layEvent === 'userPhoto') { //头像预览
+        	layer.open({
+        		type:1,
+        		title:false,
+        		closeBtn:0,
+        		skin: 'demo-class',
+        		shadeClose:true,
+        		content:'<img src="' + fileBasePath + data.userPhoto + '" style="max-height:600px;max-width:100%;">',
+        		scrollbar:false
+            });
         }
     });
 	

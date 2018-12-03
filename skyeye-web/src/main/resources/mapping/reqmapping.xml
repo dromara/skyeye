@@ -75,6 +75,9 @@
 		<property id="userIdCard" name="userIdCard" ref="idcard" var="身份证" />
 		<property id="userName" name="userName" ref="required" var="用户名" />
 		<property id="userPhoto" name="userPhoto" ref="required" var="头像" />
+		<property id="companyId" name="companyId" ref="required" var="所属公司" />
+		<property id="departmentId" name="departmentId" ref="required" var="所属部门" />
+		<property id="jobId" name="jobId" ref="required" var="所属职位" />
 	</url>
 	<url id="sysAdd005" path="/post/SysEveUserController/insertSysUserMationById" val="创建账号" allUse="1">
 		<property id="userCode" name="userCode" ref="required" var="账号" />
@@ -83,6 +86,9 @@
 		<property id="userIdCard" name="userIdCard" ref="idcard" var="身份证" />
 		<property id="userName" name="userName" ref="required" var="用户名" />
 		<property id="userPhoto" name="userPhoto" ref="required" var="头像" />
+		<property id="companyId" name="companyId" ref="required" var="所属公司" />
+		<property id="departmentId" name="departmentId" ref="required" var="所属部门" />
+		<property id="jobId" name="jobId" ref="required" var="所属职位" />
 	</url>
 	<url id="sys006" path="/post/SysEveMenuController/querySysMenuList" val="获取菜单列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
@@ -821,6 +827,9 @@
 	    <property id="rowId" name="id" ref="required" var="公司部门职位信息id"/>
 		<property id="jobName" name="jobName" ref="" var="部门职位名称"/>
 		<property id="jobDesc" name="jobDesc" ref="" var="部门职位简介"/>
+	</url>
+	<url id="companyjob006" path="/post/CompanyJobController/queryCompanyJobListTreeByDepartmentId" val="获取公司部门职位信息列表展示为树根据公司id" allUse="1">
+	    <property id="departmentId" name="departmentId" ref="required" var="部门id"/>
 	</url>
 	<!-- 公司管理结束 -->
 	

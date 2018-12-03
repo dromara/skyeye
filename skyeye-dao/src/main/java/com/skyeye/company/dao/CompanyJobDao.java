@@ -20,4 +20,6 @@ public interface CompanyJobDao {
 
 	public int editCompanyJobMationById(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryCompanyJobListTreeByDepartmentId(Map<String, Object> map) throws Exception;
+
 }

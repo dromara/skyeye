@@ -15,4 +15,6 @@ public interface CompanyJobService {
 
 	public void editCompanyJobMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryCompanyJobListTreeByDepartmentId(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

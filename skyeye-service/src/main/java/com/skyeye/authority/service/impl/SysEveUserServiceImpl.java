@@ -150,6 +150,17 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 			bean.put("winTaskPosition", "bottom");
 			bean.put("createId", user.get("id"));
 			bean.put("createTime", ToolUtil.getTimeAndToString());
+			
+			Map<String, Object> jobBean = new HashMap<>();
+			jobBean.put("id", ToolUtil.getSurFaceId());
+			jobBean.put("userId", userId);
+			jobBean.put("createId", user.get("id"));
+			jobBean.put("createTime", ToolUtil.getTimeAndToString());
+			jobBean.put("companyId", map.get("companyId"));
+			jobBean.put("departmentId", map.get("departmentId"));
+			jobBean.put("jobId", map.get("jobId"));
+			
+			sysEveUserDao.insertSysUserJobMation(jobBean);
 			sysEveUserDao.insertSysUserMation(map);
 			sysEveUserDao.insertSysUserInstallMation(bean);
 		}else{
@@ -171,6 +182,21 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 	public void editSysUserMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		sysEveUserDao.editSysUserMationById(map);
+		Map<String, Object> userJob = sysEveUserDao.querySysUserJobMationById(map);
+		if(userJob == null){
+			Map<String, Object> user = inputObject.getLogParams();
+			Map<String, Object> jobBean = new HashMap<>();
+			jobBean.put("id", ToolUtil.getSurFaceId());
+			jobBean.put("userId", map.get("id"));
+			jobBean.put("createId", user.get("id"));
+			jobBean.put("createTime", ToolUtil.getTimeAndToString());
+			jobBean.put("companyId", map.get("companyId"));
+			jobBean.put("departmentId", map.get("departmentId"));
+			jobBean.put("jobId", map.get("jobId"));
+			sysEveUserDao.insertSysUserJobMation(jobBean);
+		}else{
+			sysEveUserDao.editSysUserJobMationById(map);
+		}
 	}
 
 	/**
