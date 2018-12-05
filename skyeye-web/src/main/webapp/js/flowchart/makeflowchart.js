@@ -2,12 +2,13 @@
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['jquery', 'winui', 'g6'], function (exports) {
+}).define(['treeGrid', 'jquery', 'winui', 'g6'], function (exports) {
 	
 	winui.renderColor();
 	
 	var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-    var $ = layui.$;
+    var $ = layui.$,
+    treeGrid = layui.treeGrid;
     
     var tip_index = 0;//鼠标移上去的tip的index
     
@@ -16,18 +17,22 @@ layui.config({
 	// 关闭 G6 的体验改进计划打点请求
     G6.track(false);
     
-//    showGrid({
-//	 	id: "groupList",
-//	 	url: reqBasePath + 'planprojectflow001',
-//	 	params: {projectId: parent.rowId},
-//	 	pagination: false,
-//	 	template: getFileContent('tpl/planprojectflow/planprojectfloweditTemplate.tpl'),
-//	 	ajaxSendLoadBefore: function(hdb){
-//	 	},
-//	 	ajaxSendAfter:function(json){
-//	 		
-//	 	}
-//    });
+    treeGrid.render({
+        id: 'messageTable',
+        elem: '#messageTable',
+        method: 'post',
+        idField: 'id',
+        url: reqBasePath + 'planprojectflow001?projectId=' + parent.rowId,
+        cellMinWidth: 100,
+        treeId: 'id',//树形id字段名称
+        treeUpId: 'pId',//树形父id字段名称
+        treeShowName: 'title',//以树形式显示的字段
+        cols: [[
+            {field:'title', width:80, title: '名称'},
+            {field:'type', width:60, title: '类型'},
+        ]],
+        isPage:false
+    });
     
     //左右框高度
     /*$(".left-div").css({height:window.innerHeight});

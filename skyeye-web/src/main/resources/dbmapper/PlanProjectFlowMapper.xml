@@ -6,12 +6,9 @@
 		SELECT
 			a.id,
 			a.title title,
-			a.p_id parentId,
-			CASE a.type WHEN 1 THEN
-				(CASE a.p_id WHEN '0' THEN false ELSE true END) ELSE true END isLast,
-			'[{"type": "0", "isChecked": "0"}]' checkArr,
-			CASE a.p_id WHEN '0' THEN '1' ELSE '2' END level,
-			a.`type`
+			a.p_id pId,
+			a.`type`,
+			false lay_is_open
 		FROM
 			plan_project_flow a
 		WHERE a.project_id = #{projectId}

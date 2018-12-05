@@ -31,13 +31,10 @@ public class PlanProjectFlowServiceImpl implements PlanProjectFlowService{
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void queryPlanProjectFlowList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		List<Map<String, Object>> beans = planProjectFlowDao.queryPlanProjectFlowList(map);
-		JSONArray result = ToolUtil.listToTree(JSONArray.parseArray(JSON.toJSONString(beans)), "id", "parentId", "children");
-		beans = (List)result;
 		if(!beans.isEmpty()){
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());
