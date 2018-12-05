@@ -856,6 +856,21 @@
 		<property id="projectDesc" name="projectDesc" ref="" var="项目简介"/>
 		<property id="isShare" name="isShare" ref="required,num" var="是否分享"/>
 	</url>
+	
+	<url id="planprojectflow001" path="/post/PlanProjectFlowController/queryPlanProjectFlowList" val="获取项目规划-项目流程图表列表" allUse="1">
+		<property id="projectId" name="projectId" ref="required" var="项目id" />
+	</url>
+	<url id="planprojectflow002" path="/post/PlanProjectFlowController/insertPlanProjectFlowMation" val="添加项目规划-项目流程图表信息" allUse="1">
+	</url>
+	<url id="planprojectflow003" path="/post/PlanProjectFlowController/deletePlanProjectFlowMationById" val="删除项目规划-项目流程图表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
+	</url>
+	<url id="planprojectflow004" path="/post/PlanProjectFlowController/queryPlanProjectFlowMationToEditById" val="编辑项目规划-项目流程图表信息时进行回显" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
+	</url>
+	<url id="planprojectflow005" path="/post/PlanProjectFlowController/editPlanProjectFlowMationById" val="编辑项目规划-项目流程图表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
+	</url>
 	<!-- 项目规划结束 -->
 	
 </controller>

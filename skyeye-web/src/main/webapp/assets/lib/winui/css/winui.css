@@ -4154,11 +4154,28 @@ body .layer-ext-winconfirm {
 
 /*** 流程图样式end ***/
 
-/*** 公司展示列表样式start ***/
+/*** 折叠面板列表样式start ***/
 
+.skyeye-collapse{
+	
+}
 
+.skyeye-collapse .layui-colla-title{
+	height: 30px !important;
+	line-height: 30px !important;
+}
 
-/*** 公司展示列表样式end ***/
+.skyeye-collapse .layui-colla-content{
+    padding: 10px 10px !important;
+}
+
+.operater{
+	float: right;
+    position: relative;
+    right: 10px;
+}
+
+/*** 折叠面板列表样式end ***/
 
 .mar-left-5px{
 	margin-left: 4.22222%;

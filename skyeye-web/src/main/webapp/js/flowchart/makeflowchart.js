@@ -16,6 +16,19 @@ layui.config({
 	// 关闭 G6 的体验改进计划打点请求
     G6.track(false);
     
+//    showGrid({
+//	 	id: "groupList",
+//	 	url: reqBasePath + 'planprojectflow001',
+//	 	params: {projectId: parent.rowId},
+//	 	pagination: false,
+//	 	template: getFileContent('tpl/planprojectflow/planprojectfloweditTemplate.tpl'),
+//	 	ajaxSendLoadBefore: function(hdb){
+//	 	},
+//	 	ajaxSendAfter:function(json){
+//	 		
+//	 	}
+//    });
+    
     //左右框高度
     /*$(".left-div").css({height:window.innerHeight});
     $(".right-div").css({height:window.innerHeight});*/
