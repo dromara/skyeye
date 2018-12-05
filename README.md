@@ -121,6 +121,8 @@ webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.co
 - [Mybatis3官网](http://www.mybatis.org/mybatis-3/zh/index.html)</br>
 - [Nginx中文文档](http://tool.oschina.net/apidocs/apidoc?api=nginx-zh)</br>
 - [Git官网中文文档](https://git-scm.com/book/zh/v2)</br>
+#### QQ群：
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1205/145236_4fce6966_1541735.jpeg "微信图片_20181205145217.jpg")
 
 #### 作者微信：
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/105033_fa16d4a1_1541735.jpeg "微信图片_20181121104949.jpg")
