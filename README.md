@@ -1,9 +1,9 @@
 # skyeye
 
 #### 项目介绍
-win10风格的一套系统，刚开始开发，内容慢慢添加。</br>
+win10风格的一套系统，前端采用layui作为前端框架，后端采用SpringBoot作为服务框架，采用自封装的xml对所有请求进行参数校验，以保证接口安全性。</br>
 ##### 启动方式
-在项目skyeye上右键选用maven-build，在Goals中输入命令tomcat7:run，启动完成后，访问http://localhost:8081即可。
+直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081即可。
 #### 目前功能
 
 - 菜单管理、用户管理、角色管理、角色绑定菜单管理、用户多角色管理
@@ -13,7 +13,7 @@ win10风格的一套系统，刚开始开发，内容慢慢添加。</br>
 - 用户可根据自己的爱好自定义设置界面样式
 - 日志管理
 - Java应用的在线性能监控
-- 行政区划（四级行政区划，数据量四万多条，界面只展示三级行政区划。获取行政区划的工具在公共项目中 **skyeye-common** ）
+- 行政区划（四级行政区划，数据量四万多条，界面只展示三级行政区划。获取行政区划的工具在 **com.skyeye.common.util.AreaUtil** ）
 
 #### 软件架构
 软件架构说明
@@ -22,7 +22,7 @@ win10风格的一套系统，刚开始开发，内容慢慢添加。</br>
 ##### 后端技术:
 技术|名称|官网
 ---|---|---
-SpringMVC|MVC框架|http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/#mvc
+SpringBoot|SpringBoot框架|http://spring.io/projects/spring-boot
 MyBatis|ORM框架|http://www.mybatis.org/mybatis-3/zh/index.html
 Druid|数据库连接池|https://github.com/alibaba/druid
 Maven|项目构建管理|http://maven.apache.org/
