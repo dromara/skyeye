@@ -36,6 +36,32 @@ layui.config({
         isPage:false
     });
     
+    //新增一级目录
+    $("body").on("click", "#addFolder", function(){
+    	folderId = "0";
+		_openNewWindows({
+			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
+			title: "新增目录",
+			pageId: "companyjobedit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+    });
+    
+	//新增流程图
+    $("body").on("click", "#addFlower", function(){
+    	
+    });
+    
+    function loadTable(){
+    	treeGrid.query("messageTable", {where:{}});
+    }
+    
     //左右框高度
     /*$(".left-div").css({height:window.innerHeight});
     $(".right-div").css({height:window.innerHeight});*/
