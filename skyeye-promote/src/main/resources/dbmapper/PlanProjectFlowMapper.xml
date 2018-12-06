@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.PlanProjectFlowDao">
+	
+	<select id="queryPlanProjectFlowList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title title,
+			a.p_id pId,
+			a.`type`,
+			false lay_is_open
+		FROM
+			plan_project_flow a
+		WHERE a.project_id = #{projectId}
+			ORDER BY a.create_time ASC
+	</select>
+	
+	<select id="queryPlanProjectFlowMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			
+		WHERE 
+	</select>
+	
+	<insert id="insertPlanProjectFlowMation" parameterType="java.util.Map">
+	     INSERT into  
+	     (id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deletePlanProjectFlowMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryPlanProjectFlowMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryPlanProjectFlowMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			
+		WHERE a.id != #{id}
+	</select>
+	
+	<update id="editPlanProjectFlowMationById" parameterType="java.util.Map">
+		UPDATE 
+		<set>
+			
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

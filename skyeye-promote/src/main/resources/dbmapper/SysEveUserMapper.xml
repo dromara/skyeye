@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveUserDao">
+	
+	<select id="querySysUserList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNumEnc,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.user_sex sexName,
+			a.user_lock userLock,
+			(SELECT c.user_name FROM sys_eve_user c WHERE a.creater = c.id) createName,
+			(SELECT group_concat(distinct b.role_name) FROM sys_eve_role b WHERE INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.id, ','))) roleName,
+			m.company_name companyName,
+			m.department_name departmentName,
+			m.job_name jobName,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_user a
+			LEFT JOIN (SELECT 
+						o.user_id,
+						p.job_name,
+						q.department_name,
+						u.company_name
+					FROM 
+						company_user o, 
+						company_job p, 
+						company_department q, 
+						company_mation u 
+					WHERE o.company_id = u.id 
+						AND o.department_id = q.id 
+						AND o.job_id = p.id) m ON a.id = m.user_id
+		WHERE 1 = 1
+		<if test="userCode != '' and userCode != null">
+			AND a.user_code like '%${userCode}%'
+		</if>
+		<if test="userName != '' and userName != null">
+			AND a.user_name like '%${userName}%'
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySysUserLockStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_lock userLock
+		FROM
+			sys_eve_user a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editSysUserLockStateToLockById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			user_lock = #{userLock}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSysUserLockStateToUnLockById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			user_lock = #{userLock}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysUserMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNumEnc,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.user_sex userSex,
+			b.company_id companyId,
+			b.department_id departmentId,
+			b.job_id jobId
+		FROM
+			sys_eve_user a
+			LEFT JOIN company_user b ON b.user_id = a.id
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editSysUserMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			user_name = #{userName},
+			user_idcard = #{userIdCard},
+			user_sex = #{userSex},
+			<if test="userPhoto != '' and userPhoto != null">
+				user_photo = #{userPhoto},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysUserJobMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			a.id
+		FROM 
+			company_user a
+		WHERE a.user_id = #{id}
+	</select>
+	
+	<update id="editSysUserJobMationById" parameterType="java.util.Map">
+		UPDATE company_user
+		<set>
+			<if test="companyId != '' and companyId != null">
+				company_id = #{companyId},
+			</if>
+			<if test="departmentId != '' and departmentId != null">
+				department_id = #{departmentId},
+			</if>
+			<if test="jobId != '' and jobId != null">
+				job_id = #{jobId},
+			</if>
+		</set>
+		WHERE user_id = #{id}
+	</update>
+	
+	<select id="queryMationByUserCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNum,
+			a.`password`,
+			a.user_lock userLock,
+			b.win_bg_pic_url winBgPicUrl,
+			b.win_lock_bg_pic_url winLockBgPicUrl,
+			b.win_theme_color winThemeColor,
+			b.win_start_menu_size winStartMenuSize,
+			b.win_task_position winTaskPosition
+		FROM
+			sys_eve_user a
+			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id
+		WHERE
+			a.user_code = #{userCode}
+	</select>
+	
+	<select id="queryRoleList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.role_name roleName,
+			a.role_desc roleDesc
+		FROM
+			sys_eve_role a
+	</select>
+	
+	<select id="queryBindRoleMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			IFNULL(a.role_id, "") roleIds
+		FROM
+			sys_eve_user a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editRoleIdsByUserId" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			role_id = #{roleIds}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryDeskTopsMenuByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.id,
+			c.menu_name `name`,
+			c.title_name title,
+			c.menu_icon icon,
+			c.menu_url pageURL,
+			c.open_type openType,
+			'-1' maxOpen,
+			'false' extend,
+			null childs,
+			c.menu_parent_id parentId,
+			c.menu_level menuLevel
+		FROM
+			sys_eve_user a,
+			sys_eve_role_menu b,
+			sys_eve_menu c
+		WHERE
+			a.id = #{id}
+		AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+		AND b.menu_id = c.id AND c.menu_sys_type = '1'
+		GROUP BY c.id
+		ORDER BY c.order_num ASC
+	</select>
+	
+	<select id="queryAllMenuByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.id,
+			c.menu_name `name`,
+			c.title_name title,
+			c.menu_icon icon,
+			c.menu_url pageURL,
+			c.open_type openType,
+			'-1' maxOpen,
+			'false' extend,
+			null childs,
+			c.menu_parent_id parentId,
+			c.menu_level menuLevel
+		FROM
+			sys_eve_user a,
+			sys_eve_role_menu b,
+			sys_eve_menu c
+		WHERE
+			a.id = #{id}
+		AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+		AND b.menu_id = c.id
+		GROUP BY c.id
+		ORDER BY c.order_num ASC
+	</select>
+	
+	<update id="editUserInstallThemeColor" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_theme_color = #{themeColor}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinBgPic" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_bg_pic_url = #{winBgPicUrl}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinLockBgPic" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_lock_bg_pic_url = #{winLockBgPicUrl}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinStartMenuSize" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_start_menu_size = #{winStartMenuSize}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinTaskPosition" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_task_position = #{winTaskPosition}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<select id="querySysUserCodeByMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode
+		FROM
+			sys_eve_user a
+		WHERE
+			a.user_code = #{userCode}
+	</select>
+	
+	<insert id="insertSysUserJobMation" parameterType="java.util.Map">
+	     INSERT into company_user 
+	     (id, company_id, department_id, job_id, user_id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{companyId}, #{departmentId}, #{jobId}, #{userId}, #{createId}, #{createTime})
+	</insert>
+	
+	<insert id="insertSysUserMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_user 
+	     (id, user_code, pwd_num_enc, password, user_name, user_photo, user_idcard, user_sex, user_lock, creater, create_time)
+	     VALUES
+	     (#{id}, #{userCode}, #{pwdNum}, #{password}, #{userName}, #{userPhoto}, #{userIdCard}, #{userSex}, #{userLock}, #{createId}, #{createTime})
+	</insert>
+	
+	<insert id="insertSysUserInstallMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_user_install 
+	     (id, user_id, win_bg_pic_url, win_lock_bg_pic_url, win_theme_color, win_start_menu_size, win_task_position, create_id, create_time)
+	     VALUES
+	     (#{id}, #{userId}, #{winBgPicUrl}, #{winLockBgPicUrl}, #{winThemeColor}, #{winStartMenuSize}, #{winTaskPosition}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="editUserPassword" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			password = #{password}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

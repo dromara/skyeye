@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.DsFormDisplayTemplateDao">
+	
+	<select id="queryDsFormDisplayTemplateList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.template_name templateName,
+			a.template_content templateContent,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			ds_form_display_template a
+		WHERE 1=1
+			<if test="templateName != '' and templateName != null">
+				AND a.template_name LIKE '%${templateName}%'
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryDsFormDisplayTemplateMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.template_name templateName
+		FROM
+			ds_form_display_template a
+		WHERE 
+			a.template_name = #{templateName}
+	</select>
+	
+	<insert id="insertDsFormDisplayTemplateMation" parameterType="java.util.Map">
+	     INSERT into ds_form_display_template
+	     (id, template_name, template_content, create_id, create_time)
+	     VALUES
+	     (#{id}, #{templateName}, #{templateContent}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteDsFormDisplayTemplateMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			ds_form_display_template
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryDsFormDisplayTemplateMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.template_name templateName,
+			a.template_content templateContent
+		FROM
+			ds_form_display_template a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryDsFormDisplayTemplateMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.template_name templateName
+		FROM
+			ds_form_display_template a
+		WHERE a.id != #{id}
+			AND a.template_name = #{templateName}
+	</select>
+	
+	<update id="editDsFormDisplayTemplateMationById" parameterType="java.util.Map">
+		UPDATE ds_form_display_template
+		<set>
+			<if test="templateName != '' and templateName != null">
+				template_name = #{templateName},
+			</if>
+			<if test="templateContent != '' and templateContent != null">
+				template_content = #{templateContent},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryDisplayTemplateListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.template_name name
+		FROM
+			ds_form_display_template a
+	</select>
+	
+</mapper>

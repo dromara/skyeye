@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveWinThemeColorDao">
+	
+	<select id="querySysEveWinThemeColorList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.color_class colorClass,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_win_theme_color a
+		WHERE 1 = 1
+			<if test="colorClass != '' and colorClass != null">
+				AND a.color_class LIKE '%${colorClass}%'
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySysEveWinThemeColorMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.color_class colorClass
+		FROM
+			sys_eve_win_theme_color a
+		WHERE 
+			a.color_class = #{colorClass}
+	</select>
+	
+	<insert id="insertSysEveWinThemeColorMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_win_theme_color
+	     (id, color_class, create_id, create_time)
+	     VALUES
+	     (#{id}, #{colorClass}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteSysEveWinThemeColorMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_win_theme_color
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="querySysEveWinThemeColorMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.color_class colorClass
+		FROM
+			sys_eve_win_theme_color a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="querySysEveWinThemeColorMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.color_class colorClass
+		FROM
+			sys_eve_win_theme_color a
+		WHERE a.id != #{id}
+			AND a.color_class = #{colorClass}
+	</select>
+	
+	<update id="editSysEveWinThemeColorMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_win_theme_color
+		<set>
+			<if test="colorClass != '' and colorClass != null">
+				color_class = #{colorClass},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysEveWinThemeColorListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.color_class colorClass
+		FROM
+			sys_eve_win_theme_color a
+		ORDER BY a.create_time DESC
+	</select>
+	
+</mapper>

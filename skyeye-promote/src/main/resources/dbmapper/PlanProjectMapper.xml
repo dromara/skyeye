@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.PlanProjectDao">
+	
+	<select id="queryPlanProjectList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.project_name projectName,
+			a.project_desc projectDesc,
+			a.is_share isShare,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			plan_project a
+		WHERE 1 = 1
+			<if test="projectName != '' and projectName != null">
+				AND a.project_name LIKE '%${projectName}%'
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryPlanProjectMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			plan_project a
+		WHERE a.project_name = #{projectName}
+	</select>
+	
+	<insert id="insertPlanProjectMation" parameterType="java.util.Map">
+	     INSERT into plan_project
+	     (id, project_name, project_desc, is_share, create_id, create_time)
+	     VALUES
+	     (#{id}, #{projectName}, #{projectDesc}, #{isShare}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deletePlanProjectMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			plan_project
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryPlanProjectMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.project_name projectName,
+			a.project_desc projectDesc,
+			a.is_share isShare
+		FROM
+			plan_project a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryPlanProjectMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			plan_project a
+		WHERE a.id != #{id}
+			AND a.project_name = #{projectName}
+	</select>
+	
+	<update id="editPlanProjectMationById" parameterType="java.util.Map">
+		UPDATE plan_project
+		<set>
+			<if test="projectName != '' and projectName != null">
+				project_name = #{projectName},
+			</if>
+			project_desc = #{projectDesc},
+			<if test="isShare != '' and isShare != null">
+				is_share = #{isShare},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

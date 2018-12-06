@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SmProjectPageModeDao">
+	
+	<select id="queryProPageModeMationByPageIdList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id modelId,
+			b.html_content htmlContent,
+			b.html_js_content htmlJsContent
+		FROM
+			sm_project_page_mode a,
+			rm_group_member b
+		WHERE a.sm_project_page_id = #{pageId}
+		AND a.rm_group_member_id = b.id
+		ORDER BY a.sort ASC
+	</select>
+	
+	<delete id="deletePageModelMationListByPageId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sm_project_page_mode
+		WHERE
+			sm_project_page_id = #{pageId}
+	</delete>
+	
+	<insert id="editProPageModeMationByPageIdList" parameterType="java.util.Map">
+	     insert into sm_project_page_mode
+	     (id, rm_group_member_id, sm_project_page_id, sort, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.modelId}, #{item.pageId}, #{item.sort}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryPropertyListByMemberId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.title,
+			b.property_tag propertyTag,
+			b.property_out propertyOut,
+			b.property_unit propertyUnit,
+			b.html_content htmlContent,
+			b.js_content jsContent,
+			b.js_rely_on jsRelyOn,
+			b.wether_sel_child_data selChildData,
+			c.template_content templateContent
+		FROM
+			rm_group_member_property a,
+			rm_property b
+			LEFT JOIN ds_form_display_template c ON c.id = b.ds_form_display_template_id
+		WHERE a.member_id = #{id}
+		AND b.id = a.property_id
+	</select>
+	
+	<select id="queryPropertyValuesListByPropertyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.property_value name
+		FROM
+			rm_property_value a
+		WHERE a.property_id = #{id}
+	</select>
+	
+</mapper>

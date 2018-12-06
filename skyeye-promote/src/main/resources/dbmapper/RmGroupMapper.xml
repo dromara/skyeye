@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.RmGroupDao">
+	
+	<select id="queryRmGroupList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name rmGroupName,
+			a.icon icon,
+			(SELECT COUNT(*) FROM rm_group_member b WHERE b.sm_group_id = a.id) groupMemberNum,
+			CONVERT(a.create_time, char) createTime,
+			(SELECT c.name FROM rm_type c WHERE c.id = a.rm_type_id) typeName
+		FROM
+			rm_group a
+		WHERE 1 = 1
+			<if test="rmGroupName != '' and rmGroupName != null">
+				AND a.name LIKE '%${rmGroupName}%'
+			</if>
+			<if test="rmTypeId != '' and rmTypeId != null">
+				AND a.rm_type_id = #{rmTypeId}
+			</if>
+			ORDER BY a.sort DESC, a.create_time DESC
+	</select>
+	
+	<select id="queryRmGroupByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name rmGroupName
+		FROM
+			rm_group a
+		WHERE a.name = #{rmGroupName}
+	</select>
+	
+	<select id="queryRmGroupISTop" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name rmGroupName,
+			a.sort
+		FROM
+			rm_group a
+		ORDER BY a.sort DESC LIMIT 1
+	</select>
+	
+	<insert id="insertRmGroupMation" parameterType="java.util.Map">
+	     INSERT into rm_group 
+	     (id, name, create_id, create_time, sort, icon, rm_type_id)
+	     VALUES
+	     (#{id}, #{rmGroupName}, #{createId}, #{createTime}, #{sort}, #{icon}, #{rmTypeId})
+	</insert>
+	
+	<select id="queryRmGroupMemberNumById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) groupMemberNum 
+		FROM
+			rm_group_member b
+		WHERE b.sm_group_id = #{id}
+	</select>
+	
+	<delete id="deleteRmGroupById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			rm_group
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryRmGroupMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name rmGroupName,
+			a.icon icon,
+			a.rm_type_id rmTypeId
+		FROM
+			rm_group a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryRmGroupMationByIdAndName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name rmGroupName
+		FROM
+			rm_group a
+		WHERE a.id != #{id}
+			AND a.name = #{rmGroupName}
+	</select>
+	
+	<update id="editRmGroupMationById" parameterType="java.util.Map">
+		UPDATE rm_group
+		<set>
+			<if test="rmGroupName != '' and rmGroupName != null">
+				name = #{rmGroupName},
+			</if>
+			<if test="icon != '' and icon != null">
+				icon = #{icon},
+			</if>
+			<if test="rmTypeId != '' and rmTypeId != null">
+				rm_type_id = #{rmTypeId},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryRmGroupISTopByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name rmGroupName,
+			a.sort,
+			b.sort thisSort
+		FROM
+			rm_group a,
+			rm_group b
+		WHERE a.sort > b.sort
+			AND b.id = #{id}
+		ORDER BY a.sort ASC LIMIT 1
+	</select>
+	
+	<update id="editRmGroupSortTopById" parameterType="java.util.Map">
+		UPDATE rm_group
+		<set>
+			<if test="sort != '' and sort != null">
+				sort = #{sort},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryRmGroupISLowerByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name rmGroupName,
+			a.sort,
+			b.sort thisSort
+		FROM
+			rm_group a,
+			rm_group b
+		WHERE a.sort &lt; b.sort
+			AND b.id = #{id}
+		ORDER BY a.sort DESC LIMIT 1
+	</select>
+	
+	<select id="queryRmGroupAllList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name
+		FROM
+			rm_group a
+		WHERE a.rm_type_id = #{id}
+		ORDER BY a.sort DESC, a.create_time DESC
+	</select>
+	
+</mapper>

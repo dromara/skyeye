@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SmProjectDao">
+	
+	<select id="querySmProjectList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` proName,
+			a.`desc` proDesc,
+			(SELECT COUNT(*) FROM sm_project_page b WHERE b.sm_project_id = a.id) pageNum,
+			(SELECT COUNT(*) FROM sm_project_page c, sm_project_page_mode d WHERE c.sm_project_id = a.id AND d.sm_project_page_id = c.id) modelNum,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sm_project a
+		WHERE a.create_id = #{createId}
+			<if test="proName != '' and proName != null">
+				AND a.name LIKE '%${proName}%'
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySmProjectByNameAndUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` proName
+		FROM
+			sm_project a
+		WHERE a.name = #{proName}
+			AND a.create_id = #{createId}
+	</select>
+	
+	<insert id="insertSmProjectMation" parameterType="java.util.Map">
+	     INSERT into sm_project 
+	     (id, `name`, create_id, create_time, `desc`)
+	     VALUES
+	     (#{id}, #{proName}, #{createId}, #{createTime}, #{proDesc})
+	</insert>
+	
+	<select id="querySmProjectPageNumById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) pageNum
+		FROM 
+			sm_project_page b 
+		WHERE 
+			b.sm_project_id = #{id} 
+	</select>
+	
+	<select id="querySmProjectPageModelNumById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) modelNum
+		FROM 
+			sm_project_page b,
+			sm_project_page_mode c
+		WHERE 
+			b.sm_project_id = #{id} 
+			AND c.sm_project_page_id = b.id
+	</select>
+	
+	<delete id="deleteSmProjectById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sm_project
+		WHERE
+			id = #{id}
+			AND create_id = #{createId}
+	</delete>
+	
+	<select id="querySmProjectMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` proName,
+			a.`desc` proDesc
+		FROM
+			sm_project a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="querySmProjectMationByIdAndName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` proName
+		FROM
+			sm_project a
+		WHERE a.id != #{id}
+			AND a.name = #{proName}
+	</select>
+	
+	<update id="editSmProjectMationById" parameterType="java.util.Map">
+		UPDATE sm_project
+		<set>
+			<if test="proName != '' and proName != null">
+				`name` = #{proName},
+			</if>
+			<if test="proDesc != '' and proDesc != null">
+				`desc` = #{proDesc},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryGroupTypeMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			rm_type a
+		ORDER BY a.sort DESC
+	</select>
+	
+	<select id="queryGroupMationListByTypeId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			a.id, 
+			a.`name`, 
+			a.icon, 
+			COUNT(*) memberNum
+		FROM 
+			rm_group a
+			LEFT JOIN rm_group_member b ON b.sm_group_id = a.id
+		WHERE 
+			a.rm_type_id  = #{id}
+		GROUP BY a.id
+		ORDER BY a.sort DESC
+	</select>
+	
+	<select id="queryGroupMemberMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.prints_pic_url printsPicUrl,
+			a.html_content htmlContent,
+			a.html_js_content htmlJsContent
+		FROM
+			rm_group_member a
+		WHERE
+			a.sm_group_id = #{id}
+	</select>
+	
+</mapper>
