@@ -217,14 +217,15 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				type: 1,
 				title: !1,
 				id: "layui-layim-close",
-				skin: "layui-box layui-layim-min layui-layim-close",
+				skin: "layui-box layui-layim-min layui-layim-close talk-btn",
 				shade: !1,
 				closeBtn: !1,
 				anim: 2,
 				offset: "rb",
 				resize: !1,
-				content: '<img src="' + (j.mine.avatar || layui.cache.dir + "css/pc/layim/skin/logo.jpg") + '"><span>' + (i || j.base.title || "天眼通讯") + "</span>",
-				move: "#layui-layim-close img",
+				area: ["50px", "40px"],
+				content: '<img src="' + fileBasePath + '/assets//images//qq_32.png" class="qq_32"/>',
+				move: false,
 				success: function(i, a) {
 					b = i, j.base.right && i.css("margin-left", "-" + j.base.right), i.on("click", function() {
 						t.close(a), x.show();

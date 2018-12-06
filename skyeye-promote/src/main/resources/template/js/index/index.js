@@ -70,6 +70,7 @@
     function initTalk(){
     	layim.config({
 			brief: false,// 是否简约模式（如果true则不显示主面板）
+			title: '天眼',
 			init: {
 				url: 'getList.json',
 				data: {}

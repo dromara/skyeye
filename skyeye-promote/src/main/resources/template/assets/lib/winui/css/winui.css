@@ -409,7 +409,7 @@ button{
     cursor: default;
     padding-top: 3px;
     position: absolute;
-    right: 53px;
+    right: 85px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -429,7 +429,7 @@ button{
     width: 40px;
     height: 40px;
     position: absolute;
-    right: 13px;
+    right: 50px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -4167,6 +4167,24 @@ body .layer-ext-winconfirm {
     font-style: oblique;
     color: #6379bb;
 	margin: 10px 0px 0px 10px;
+}
+
+.talk-btn{
+	height: 40px !important;
+	background-color: rgba(0,0,0,0) !important;
+    border: 0px !important;
+    box-shadow: 1px 1px 50px rgba(0,0,0,0) !important;
+}
+
+.qq_32{
+	height: 20px !important;
+	width: 20px !important;
+}
+
+.talk-btn .layui-layer-content{
+	overflow: hidden !important;
+    padding: 0 !important;
+    padding-top: 9px !important;
 }
 
 /*******************************************自定义样式end********************************************/
