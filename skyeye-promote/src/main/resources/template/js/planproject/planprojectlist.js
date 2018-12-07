@@ -36,6 +36,8 @@ layui.config({
 	        		return '公开分享';
 	        	}
 	        }},
+	        { field:'childsTypeOneNum', width:140, title: '目录数量'},
+	        { field:'childsTypeTwoNum', width:140, title: '流程图数量'},
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]

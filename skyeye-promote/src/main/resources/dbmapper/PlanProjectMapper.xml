@@ -8,7 +8,10 @@
 			a.project_name projectName,
 			a.project_desc projectDesc,
 			a.is_share isShare,
-			CONVERT(a.create_time, char) createTime
+			CONVERT(a.create_time, char) createTime,
+			(SELECT COUNT(*) FROM plan_project_flow b WHERE b.project_id = a.id) childsNum,
+			(SELECT COUNT(*) FROM plan_project_flow b WHERE b.project_id = a.id AND b.type = '1') childsTypeOneNum,
+			(SELECT COUNT(*) FROM plan_project_flow b WHERE b.project_id = a.id AND b.type = '2') childsTypeTwoNum
 		FROM
 			plan_project a
 		WHERE 1 = 1
