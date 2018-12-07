@@ -4187,6 +4187,35 @@ body .layer-ext-winconfirm {
     padding-top: 9px !important;
 }
 
+.state-new{
+	color: blue !important;
+}
+
+.state-up{
+	color: green !important;
+}
+
+.state-down{
+	color: red !important;
+}
+
+.state-error{
+	color: orange !important;
+}
+
+.zzc{
+	width:100%;
+    height:100%;
+    background-color:#000;
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1000;
+    opacity:0.3;
+    /*兼容IE8及以下版本浏览器*/
+    filter: alpha(opacity=30);
+}
+
 /*******************************************自定义样式end********************************************/
 
 

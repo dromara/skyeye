@@ -22,9 +22,9 @@ layui.config({
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
 	        { field: 'userName', title: '操作人', width: 120 },
-	        { field: 'ip', title: '操作ip', width: 520 },
-	        { field: 'message', title: '日志信息', width: 150 },
-	        { field: 'realPath', title: '真实链接', width: 150 },
+	        { field: 'ip', title: '操作ip', width: 150 },
+	        { field: 'message', title: '日志信息', width: 250 },
+	        { field: 'realPath', title: '真实链接', width: 500 },
 	        { field: 'logLevel', title: '日志类型', width: 150 },
 	        { field: 'createTime', title: '创建时间', width: 180 },
 	    ]]

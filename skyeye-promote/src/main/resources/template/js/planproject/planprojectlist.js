@@ -1,5 +1,6 @@
 
 var rowId = "";
+var projectName = "";
 
 layui.config({
 	base: basePath, 
@@ -108,6 +109,7 @@ layui.config({
 	//流程图设计
 	function flowChart(data){
 		rowId = data.id;
+		projectName = data.projectName;
 		_openNewWindows({
 			url: "../../tpl/flowchart/makeflowchart.html", 
 			title: "流程图设计",

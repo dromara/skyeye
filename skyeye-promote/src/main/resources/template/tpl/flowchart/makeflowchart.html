@@ -6,6 +6,11 @@
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <style type="text/css">
+    	.layui-table-cell {
+            height: auto;
+        }
+    </style>
 </head>
 <body>
 	<div class="layui-col-xs12">
@@ -16,11 +21,26 @@
 		            <button id="addFlower" class="winui-toolbtn"><i class="fa fa-plus" aria-hidden="true"></i>新增流程图</button>
 		        </div>
 				<table id="messageTable" lay-filter="messageTable"></table>
+				<script type="text/html" id="tableBar">
+					{{# if(d.type == 2){ }}
+						<a class="layui-btn layui-btn-xs" lay-event="design">设计</a>
+					{{# } }}
+           			<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+					{{# if(d.childNum == 0){ }}
+						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+					{{# } }}
+					{{# if(d.type == 1){ }}
+						<br/>
+						<a class="layui-btn layui-btn-xs" lay-event="addChildFolder">新增目录</a>
+						<a class="layui-btn layui-btn-xs" lay-event="addChildFlower">新增流程图</a>
+					{{# } }}
+        		</script>
 			</div>
 		</div>
 	    <div class="layui-col-xs9">
 	    	<div id="toolBar" class="lct-toolBar layui-col-xs12">
 				<ul>
+					<li id="flowName" style="width: auto; line-height: 33px;">流程图</li>
 					<li>
 						<button class="layui-btn layui-btn-primary layui-btn-sm" id="addCustom1"><i class="iconfont icon-tuoyuan"></i></button>
 					</li>
@@ -58,6 +78,9 @@
 					</li>
 					<li class="s-line">|</li>
 					<li>
+						<button class="layui-btn layui-btn-primary layui-btn-sm" id="reLayout"><i class="fa fa-list-ol"></i></button>
+					</li>
+					<li>
 						<button class="layui-btn layui-btn-primary layui-btn-sm" id="delete"><i class="fa fa-trash-o"></i></button>
 					</li>
 					<li>
@@ -67,12 +90,11 @@
 			</div>
 			
 	        <div class="layui-col-xs12">
-	        	<!-- <div class="layui-col-xs2 left-div">
-		        </div> -->
 		    	<div class="layui-col-xs12 coverModel" id="mountNode">
 		        </div>
-		        <!-- <div class="layui-col-xs2 right-div">
-		        </div> -->
+	        </div>
+	        <div id="zzc" class="zzc layui-col-xs12">
+	        	
 	        </div>
 	    </div>
 	</div>

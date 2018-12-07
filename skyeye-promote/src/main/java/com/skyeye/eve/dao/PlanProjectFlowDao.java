@@ -24,4 +24,10 @@ public interface PlanProjectFlowDao {
 
 	public int editPlanProjectFlowMationById(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryChildNumMationById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryPlanProjectFlowJsonContentMationById(Map<String, Object> map) throws Exception;
+
+	public int editPlanProjectFlowJsonContentMationById(Map<String, Object> map) throws Exception;
+
 }

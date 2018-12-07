@@ -8,7 +8,9 @@
 			a.title title,
 			a.p_id pId,
 			a.`type`,
-			false lay_is_open
+			false lay_is_open,
+			a.is_share isShare,
+			(SELECT COUNT(*) FROM plan_project_flow b WHERE b.p_id = a.id) childNum
 		FROM
 			plan_project_flow a
 		WHERE a.project_id = #{projectId}
@@ -19,30 +21,41 @@
 		SELECT
 			a.id
 		FROM
-			
-		WHERE 
+			plan_project_flow a
+		WHERE a.title = #{title}
+			AND a.project_id = #{projectId}
 	</select>
 	
 	<insert id="insertPlanProjectFlowMation" parameterType="java.util.Map">
-	     INSERT into  
-	     (id, create_id, create_time)
+	     INSERT into plan_project_flow
+	     (id, project_id, title, p_id, type, json_content, is_share, create_id, create_time)
 	     VALUES
-	     (#{id}, #{createId}, #{createTime})
+	     (#{id}, #{projectId}, #{title}, #{pId}, #{type}, #{jsonContent}, #{isShare}, #{createId}, #{createTime})
 	</insert>
+	
+	<select id="queryChildNumMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			COUNT(*) childNum
+		FROM 
+			plan_project_flow a 
+		WHERE a.p_id = #{id}
+	</select>
 	
 	<delete id="deletePlanProjectFlowMationById" parameterType="java.util.Map">
 		DELETE
 		FROM
-			
+			plan_project_flow
 		WHERE
 			id = #{id}
 	</delete>
 	
 	<select id="queryPlanProjectFlowMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
-			a.id
+			a.id,
+			a.title title,
+			a.is_share isShare
 		FROM
-			
+			plan_project_flow a
 		WHERE a.id = #{id}
 	</select>
 	
@@ -50,14 +63,43 @@
 		SELECT
 			a.id
 		FROM
-			
+			plan_project_flow a
 		WHERE a.id != #{id}
+			AND a.project_id = #{projectId}
+			AND a.title = #{title}
 	</select>
 	
 	<update id="editPlanProjectFlowMationById" parameterType="java.util.Map">
-		UPDATE 
+		UPDATE plan_project_flow
 		<set>
-			
+			<if test="title != '' and title != null">
+				title = #{title},
+			</if>
+			<if test="isShare != '' and isShare != null">
+				is_share = #{isShare},
+			</if>
+			<if test="jsonContent != '' and jsonContent != null">
+				json_content = #{jsonContent},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryPlanProjectFlowJsonContentMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.json_content jsonContent
+		FROM
+			plan_project_flow a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editPlanProjectFlowJsonContentMationById" parameterType="java.util.Map">
+		UPDATE plan_project_flow
+		<set>
+			<if test="jsonContent != '' and jsonContent != null">
+				json_content = #{jsonContent},
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>

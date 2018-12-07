@@ -44,9 +44,9 @@ restart:
     #启用/禁用自动配置更改的记录
     log-condition-evaluation-delta: false
     #排除那个目录的文件不需要restart
-    #exclude: template/**
+    exclude: template/**
     #添加那个目录的文件需要restart
-    #additional-paths: src/main/java
+    additional-paths: src/main/java
 
 mvc:
     #出现错误时, 直接抛出异常

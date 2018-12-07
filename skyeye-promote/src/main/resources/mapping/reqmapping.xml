@@ -861,6 +861,12 @@
 		<property id="projectId" name="projectId" ref="required" var="项目id" />
 	</url>
 	<url id="planprojectflow002" path="/post/PlanProjectFlowController/insertPlanProjectFlowMation" val="添加项目规划-项目流程图表信息" allUse="1">
+		<property id="projectId" name="projectId" ref="required" var="项目id" />
+		<property id="title" name="title" ref="required" var="流程图标题或者目录标题" />
+		<property id="pId" name="pId" ref="required" var="所属父id" />
+		<property id="type" name="type" ref="required,num" var="类型   1目录    2流程图" />
+		<property id="jsonContent" name="jsonContent" ref="" var="流程图内容" />
+		<property id="isShare" name="isShare" ref="required,num" var="是否分享" />
 	</url>
 	<url id="planprojectflow003" path="/post/PlanProjectFlowController/deletePlanProjectFlowMationById" val="删除项目规划-项目流程图表信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
@@ -870,6 +876,15 @@
 	</url>
 	<url id="planprojectflow005" path="/post/PlanProjectFlowController/editPlanProjectFlowMationById" val="编辑项目规划-项目流程图表信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
+	    <property id="title" name="title" ref="required" var="流程图标题或者目录标题" />
+		<property id="isShare" name="isShare" ref="required,num" var="是否分享" />
+	</url>
+	<url id="planprojectflow006" path="/post/PlanProjectFlowController/queryPlanProjectFlowJsonContentMationById" val="获取项目流程图内容进行设计" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
+	</url>
+	<url id="planprojectflow007" path="/post/PlanProjectFlowController/editPlanProjectFlowJsonContentMationById" val="设计项目流程图" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
+	    <property id="jsonContent" name="jsonContent" ref="required" var="流程图内容" />
 	</url>
 	<!-- 项目规划结束 -->
 	

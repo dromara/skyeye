@@ -15,4 +15,8 @@ public interface PlanProjectFlowService {
 
 	public void editPlanProjectFlowMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryPlanProjectFlowJsonContentMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void editPlanProjectFlowJsonContentMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

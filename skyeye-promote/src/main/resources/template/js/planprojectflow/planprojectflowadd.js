@@ -8,16 +8,34 @@ layui.config({
 	    var $ = layui.$,
 	    form = layui.form;
 	    
+	    $("#projectName").html(parent.projectName);
+	    
 		form.render();
+		
+		//是否共享
+ 		form.on('switch(isShare)', function (data) {
+ 			//同步开关值
+ 			$(data.elem).val(data.elem.checked);
+ 		});
 		
 	    form.on('submit(formAddBean)', function (data) {
 	    	//表单验证
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
-        			
+        			projectId: parent.projectId,
+        			pId: parent.folderId,
+        			title: $("#title").val(),
+        			type: parent.type,
+        			jsonContent: "",
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath   "icon002", params:params, type:'json', callback:function(json){
+	        	if(data.field.isShare){
+	        		params.isShare = '2';
+	        	}else{
+	        		params.isShare = '1';
+	        	}
+	        	
+	        	AjaxPostUtil.request({url:reqBasePath + "planprojectflow002", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

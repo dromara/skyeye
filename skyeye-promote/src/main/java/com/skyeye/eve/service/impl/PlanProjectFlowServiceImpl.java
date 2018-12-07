@@ -74,7 +74,13 @@ public class PlanProjectFlowServiceImpl implements PlanProjectFlowService{
 	@Override
 	public void deletePlanProjectFlowMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		planProjectFlowDao.deletePlanProjectFlowMationById(map);
+		Map<String, Object> bean = planProjectFlowDao.queryChildNumMationById(map);
+		if(Integer.parseInt(bean.get("childNum").toString()) == 0){//判断是否有子项
+			planProjectFlowDao.deletePlanProjectFlowMationById(map);
+		}else{
+			outputObject.setreturnMessage("该目录下存在子项，无法直接删除。");
+		}
+		
 	}
 
 	/**
@@ -114,6 +120,39 @@ public class PlanProjectFlowServiceImpl implements PlanProjectFlowService{
 		}else{
 			outputObject.setreturnMessage("该项目规划-项目流程图表名称已存在，不可进行二次保存");
 		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryPlanProjectFlowJsonContentMationById
+	     * @Description: 获取项目流程图内容进行设计
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryPlanProjectFlowJsonContentMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> bean = planProjectFlowDao.queryPlanProjectFlowJsonContentMationById(map);
+		outputObject.setBean(bean);
+	}
+
+	/**
+	 * 
+	     * @Title: editPlanProjectFlowJsonContentMationById
+	     * @Description: 设计项目流程图
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editPlanProjectFlowJsonContentMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		planProjectFlowDao.editPlanProjectFlowJsonContentMationById(map);
 	}
 	
 }

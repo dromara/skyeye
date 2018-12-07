@@ -94,4 +94,36 @@ public class PlanProjectFlowController {
 		planProjectFlowService.editPlanProjectFlowMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryPlanProjectFlowJsonContentMationById
+	     * @Description: 获取项目流程图内容进行设计
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/PlanProjectFlowController/queryPlanProjectFlowJsonContentMationById")
+	@ResponseBody
+	public void queryPlanProjectFlowJsonContentMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		planProjectFlowService.queryPlanProjectFlowJsonContentMationById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: editPlanProjectFlowJsonContentMationById
+	     * @Description: 设计项目流程图
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/PlanProjectFlowController/editPlanProjectFlowJsonContentMationById")
+	@ResponseBody
+	public void editPlanProjectFlowJsonContentMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		planProjectFlowService.editPlanProjectFlowJsonContentMationById(inputObject, outputObject);
+	}
+	
 }

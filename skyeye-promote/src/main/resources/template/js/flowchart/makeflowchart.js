@@ -1,10 +1,19 @@
 
-var folderId = "0";//目录id
+var folderId = "0";//父目录id
+
+var type = "1";//类型  1目录  2流程图
+
+var projectName = "";//项目名称
+var projectId = "";//项目id
+
+var rowId = "";//编辑中的id
+
+var designId = "";//设计中的id
 
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['treeGrid', 'jquery', 'winui', 'g6'], function (exports) {
+}).define(['treeGrid', 'jquery', 'winui', 'g6Plugins'], function (exports) {
 	
 	winui.renderColor();
 	
@@ -19,6 +28,9 @@ layui.config({
 	// 关闭 G6 的体验改进计划打点请求
     G6.track(false);
     
+    projectId = parent.rowId;
+    projectName = parent.projectName;
+    
     treeGrid.render({
         id: 'messageTable',
         elem: '#messageTable',
@@ -30,15 +42,155 @@ layui.config({
         treeUpId: 'pId',//树形父id字段名称
         treeShowName: 'title',//以树形式显示的字段
         cols: [[
-            {field:'title', width:80, title: '名称'},
-            {field:'type', width:60, title: '类型'},
+            {field:'title', width:140, title: '名称'},
+            {field:'type', width:60, title: '类型', templet: function(d){
+	        	if(d.type == "1"){
+	        		return "目录";
+	        	}else{
+	        		return "流程图";
+	        	}
+	        }},
+	        {field:'isShare', width:60, title: '分享', templet: function(d){
+	        	if(d.isShare == "1"){
+	        		return "<span class='state-new'>私有</span>";
+	        	}else{
+	        		return "<span class='state-up'>公开</span>";
+	        	}
+	        }},
+	        { title: '操作', fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
         ]],
         isPage:false
     });
     
+    treeGrid.on('tool(messageTable)', function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值
+        if (layEvent === 'del') { //删除
+        	del(data, obj);
+        }else if (layEvent === 'edit') { //编辑
+        	edit(data);
+        }else if (layEvent === 'design') { //设计
+        	designId = data.id;
+        	$("#flowName").html(data.title);
+        	AjaxPostUtil.request({url:reqBasePath + "planprojectflow006", params:{rowId: data.id}, type:'json', callback:function(json){
+    			if(json.returnCode == 0){
+    				$("#zzc").removeClass("zzc");
+    				net.changeData();
+    				if(isNull(json.bean.jsonContent)){
+    					net.source({});
+    				}else{
+    					var jsonData = JSON.parse(json.bean.jsonContent);
+    					net.source(jsonData.source.nodes, jsonData.source.edges);
+    				}
+    	            net.render();
+    			}else{
+    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			}
+    		}});
+        }else if(layEvent === 'addChildFolder'){ //新增目录
+        	addChildFolder(data);
+        }else if(layEvent === 'addChildFlower'){ //新增流程图
+        	addChildFlower(data);
+        }
+    });
+    
+    //删除
+	function del(data, obj){
+		var msg = "";
+		var title = '';
+		if(data.type == '1'){
+			title = '删除目录';
+			msg = obj ? '确认删除目录【' + obj.data.title + '】吗？' : '确认删除选中数据吗？';
+		}else{
+			title = '删除流程图';
+			msg = obj ? '确认删除流程图【' + obj.data.title + '】吗？' : '确认删除选中数据吗？';
+		}
+		layer.confirm(msg, { icon: 3, title: title }, function (index) {
+			layer.close(index);
+            //向服务端发送删除指令
+            AjaxPostUtil.request({url:reqBasePath + "planprojectflow003", params:{rowId: data.id}, type:'json', callback:function(json){
+    			if(json.returnCode == 0){
+    				top.winui.window.msg("删除成功", {icon: 1,time: 2000});
+    				if(data.id === designId){
+    					$("#flowName").html("流程图");
+    					$("#zzc").addClass("zzc");
+    					net.changeData();
+    					net.source({});
+						net.render();
+    				}
+    				loadTable();
+    			}else{
+    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			}
+    		}});
+		});
+	}
+	
+	//编辑
+	function edit(data){
+		rowId = data.id;
+		folderId = data.pId;
+    	type = data.type;
+		var title = '';
+		if(data.type == '1'){
+			title = '编辑目录';
+		}else{
+			title = '编辑流程图';
+		}
+		_openNewWindows({
+			url: "../../tpl/planprojectflow/planprojectflowedit.html", 
+			title: title,
+			pageId: "rmgroupedit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+	}
+	
+	//新增子目录
+	function addChildFolder(data){
+		folderId = data.id;
+    	type = "1";
+		_openNewWindows({
+			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
+			title: "新增目录",
+			pageId: "companyjobedit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+	}
+	
+	//新增子流程图
+	function addChildFlower(data){
+		folderId = data.id;
+    	type = "2";
+		_openNewWindows({
+			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
+			title: "新增流程图",
+			pageId: "companyjobedit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
+	}
+    
     //新增一级目录
     $("body").on("click", "#addFolder", function(){
     	folderId = "0";
+    	type = "1";
 		_openNewWindows({
 			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
 			title: "新增目录",
@@ -53,45 +205,60 @@ layui.config({
 			}});
     });
     
-	//新增流程图
+	//新增一级流程图
     $("body").on("click", "#addFlower", function(){
-    	
+    	folderId = "0";
+    	type = "2";
+		_openNewWindows({
+			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
+			title: "新增流程图",
+			pageId: "companyjobedit",
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
     });
     
     function loadTable(){
     	treeGrid.query("messageTable", {where:{}});
     }
     
-    //左右框高度
-    /*$(".left-div").css({height:window.innerHeight});
-    $(".right-div").css({height:window.innerHeight});*/
-    
-	var data = {
-		"source" : {
-			"nodes" : [ {
-				"shape" : "circle",// 所用图形
-				"label" : "文本",// 文本标签 || 文本图形配置
-				"x" : 925.8749997662843,
-				"y" : 286.9586341796129,
-				"id" : "8b2a15da",// id 必须唯一
-				"size" : [ 116.25000046743139, 108.08273164077423 ]// 尺寸 || [宽, 高]
-			} ],
-			"edges" : []
-		}
-	};
+	var data = {};
+	
+	const layout_dagre = new G6.Plugins['layout.dagre']({
+        rankdir: 'TB',//可取值为： 'TB', 'BT', 'LR', or 'RL' 默认值为 'TB'
+        //nodesep:10,//节点间距
+        // useEdgeControlPoint:false,//生成边控制点 默认值为 true
+    });
 	
 	var net = new G6.Net({
 		id : "mountNode", // 此处替换容器id
 		height: window.innerHeight, // 此处替换高度
 		rollback : true, // 是否启用回滚机制
 		mode : "edit", // 编辑模式
+		fitView: 'cc', // 自适应视口为左上
 		grid: {//背景网格
 	        forceAlign: true, // 是否支持网格对齐
 	        cell: 10,         // 网格大小 
 	    },
+	    plugins: [layout_dagre],
 	});
 	net.read(data);
 	net.render();
+	
+	net.tooltip({
+        title: '节点信息', // @type {String} 标题
+        split: ':',  // @type {String} 分割符号
+        dx: 10,       // @type {Number} 水平偏移
+        dy: 10        // @type {Number} 竖直偏移
+    });
+	
+	net.node().tooltip(['label']);
+    net.edge().tooltip(['label']);
 	
 	//设置点击选中项
 	net.on("itemactived", function(e){
@@ -235,6 +402,26 @@ layui.config({
 		net.changeMode('edit');
 	});
 	
+	$("body").on("mouseenter", "#reLayout", function(e){//自动布局
+		tip_index = layer.tips('自动布局', '#reLayout', {time: 0, tips: 3});
+	}).on('mouseleave', '#reLayout', function(){
+        layer.close(tip_index);
+    });
+	$("body").on("click", "#reLayout", function(e){//自动布局
+		var a = net.save();
+		net.changeData();
+		$.each(a.source.edges, function(index, item){
+			delete item.x;
+			delete item.y;
+		});
+		$.each(a.source.nodes, function(index, item){
+			delete item.x;
+			delete item.y;
+		});
+        net.source(a.source.nodes, a.source.edges);
+        net.render();
+	});
+	
 	$("body").on("mouseenter", "#consoleJSON", function(e){//保存
 		tip_index = layer.tips('保存', '#consoleJSON', {time: 0, tips: 3});
 	}).on('mouseleave', '#consoleJSON', function(){
@@ -243,7 +430,13 @@ layui.config({
 	$("body").on("click", "#consoleJSON", function(e){//保存
 		const saveData = net.save();
 	    const json = JSON.stringify(saveData, null, 2);
-	    console.log(saveData, json);
+	    AjaxPostUtil.request({url:reqBasePath + "planprojectflow007", params:{rowId: designId, jsonContent: json}, type:'json', callback:function(json){
+			if(json.returnCode == 0){
+				top.winui.window.msg("保存成功", {icon: 1,time: 2000});
+			}else{
+				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			}
+		}});
 	});
 	
 	//可编辑标签属性
@@ -335,8 +528,8 @@ layui.config({
 	graphContainer.appendChild(input);//追加input输入框
 	graphContainer.oncontextmenu = function (e) { return false; }//阻止默认右键菜单
 	net.on('contextmenu', function(ev) {// 鼠标右键点击事件
-	    console.log("选中类型:", ev.itemType);
-	    console.log(ev);
+//	    console.log("选中类型:", ev.itemType);
+//	    console.log(ev);
 	});
 	net.on('itemmouseenter', function(ev) {//子项鼠标悬浮
 	    const item = ev.item;
