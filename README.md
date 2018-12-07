@@ -14,6 +14,7 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 - 日志管理
 - Java应用的在线性能监控
 - 行政区划（四级行政区划，数据量四万多条，界面只展示三级行政区划。获取行政区划的工具在 **com.skyeye.common.util.AreaUtil** ）
+- 项目流程图规划
 
 #### 软件架构
 软件架构说明
@@ -39,6 +40,7 @@ winui|win10风格UI|http://win10ui.yuri2.cn/
 codemirror|codemirror代码编辑器|https://codemirror.net/
 handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-js-templating-engine/
 webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.com/html/html5-websocket.html
+G6|流程图开发|https://antv.alipay.com/zh-cn/index.html
 
 #### 代码描述
 ##### 前后台接口映射
@@ -94,6 +96,8 @@ webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.co
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1122/210207_93200209_1541735.png "微信截图_20181122210047.png")
 - 14.公司部门管理
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1129/110931_618e0f4b_1541735.png "2.png")
+- 15.项目流程图
+![输入图片说明](https://images.gitee.com/uploads/images/2018/1207/123501_3248346e_1541735.png "微信截图_20181207123447.png")
 
 #### 环境搭建
 ##### 开发工具:
