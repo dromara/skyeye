@@ -19,17 +19,26 @@ layui.config({
 	    url: reqBasePath + 'activitimode002',
 	    where:{},
 	    even:true,  //隔行变色
-	    page: false,
+	    page: true,
+	    limits: [8, 16, 24, 32, 40, 48, 56],
+	    limit: 8,
 	    cols: [[
 	        { title: '序号', type: 'numbers'},
 	        { field: 'id', title: '模型编号', width: 120 },
 	        { field: 'name', title: '模型名称', width: 120 },
 	        { field: 'version', title: '版本', width: 120},
+	        { field: 'deploymentId', title: '状态', width: 120, templet: function(d){
+	        	if(isNull(d.deploymentId)){
+	        		return "<span class='state-new'>未发布</span>";
+	        	}else{
+	        		return "<span class='state-up'>已发布</span>";
+	        	}
+	        }},
 	        { field: 'createTime', title: '创建时间', width: 180, templet: function(d){
 	        	var str = d.createTime.toString();
 	        	str = str.substring(0, str.length - 3);
 	        	return date('Y-m-d H:i:s', str);
-	        } },
+	        }},
 	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]]
 	});
@@ -41,6 +50,8 @@ layui.config({
         	del(data, obj);
         }else if (layEvent === 'edit') { //编辑
         	edit(data);
+        }else if (layEvent === 'fb') { //发布
+        	fb(data);
         }
     });
 	
@@ -87,6 +98,23 @@ layui.config({
                 	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
                 }
 			}});
+	}
+	
+	//发布
+	function fb(data){
+		rowId = data.id;
+		var msg = data ? '确认发布模型【' + data.name + '】吗？' : '确认发布选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '发布模型' }, function (index) {
+			layer.close(index);
+			AjaxPostUtil.request({url:reqBasePath + "activitimode003", params:{modelId: rowId}, type:'json', callback:function(json){
+				if(json.returnCode == 0){
+					top.winui.window.msg("发布成功", {icon: 1,time: 2000});
+					loadTable();
+				}else{
+					top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				}
+			}});
+		});
 	}
 	
 	//刷新数据

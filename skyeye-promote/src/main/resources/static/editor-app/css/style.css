@@ -284,7 +284,7 @@ div.propertySection {
 .property-row > span {
 	display: block;
 	float: left;
-	margin: 2px 2%;
+	margin: 0px 2%;
 	padding: 0;	
 	min-height: 25px;
 }
@@ -301,7 +301,7 @@ div.propertySection {
 }
 
 .property-row span.title {
-	font-size: 13px;
+	font-size: 12px;
 	font-weight: bold;
 	width: 46%;
 }

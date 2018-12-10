@@ -20,8 +20,8 @@ public class OutputObject extends PutObject implements Serializable{
 		setNull();
 	}
 
-	public void settotal(int total){
-		OutputObject.object.put("total",total);
+	public void settotal(Object total){
+		OutputObject.object.put("total", total);
 	}
 	
 	public void setreturnMessage(Object returnMessage){

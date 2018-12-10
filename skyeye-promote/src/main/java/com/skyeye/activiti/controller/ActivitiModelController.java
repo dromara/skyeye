@@ -111,4 +111,20 @@ public class ActivitiModelController {
 		activitiModelService.deleteActivitiModelById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryReleasedActivitiModelList
+	     * @Description: 获取已经发布的模型
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/ActivitiModelController/queryReleasedActivitiModelList")
+	@ResponseBody
+	public void queryReleasedActivitiModelList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		activitiModelService.queryReleasedActivitiModelList(inputObject, outputObject);
+	}
+	
 }

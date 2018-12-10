@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.skyeye.activiti.entity.DeploymentResponse;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -92,13 +93,19 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	 */
 	@Override
 	public void queryActivitiModelList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
 		RepositoryService repositoryService = processEngine.getRepositoryService();
-		List<Model> beans = repositoryService.createModelQuery().list();
+		List<Model> beans = repositoryService.createModelQuery()
+				.listPage(Integer.parseInt(map.get("limit").toString()) * (Integer.parseInt(map.get("page").toString()) - 1), Integer.parseInt(map.get("limit").toString()));
+		long count = repositoryService.createModelQuery().count() - repositoryService.createDeploymentQuery().count();
 		List<Map<String, Object>> rows = new ArrayList<>();
 		for(Model model : beans){
-			rows.add(ToolUtil.javaBean2Map(model));
+			if(ToolUtil.isBlank(model.getDeploymentId())){
+				rows.add(ToolUtil.javaBean2Map(model));
+			}
 		}
 		outputObject.setBeans(rows);
+		outputObject.settotal(count);
 	}
 
 	/**
@@ -197,6 +204,34 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();
 		repositoryService.deleteModel(id);
+	}
+
+	/**
+	 * 
+	     * @Title: queryReleasedActivitiModelList
+	     * @Description: 获取已经发布的模型
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryReleasedActivitiModelList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Deployment> deployments = repositoryService.createDeploymentQuery()
+				.listPage(Integer.parseInt(map.get("limit").toString()) * (Integer.parseInt(map.get("page").toString()) - 1), Integer.parseInt(map.get("limit").toString()));
+		long count = repositoryService.createDeploymentQuery().count();
+		List<DeploymentResponse> list = new ArrayList<>();
+        for(Deployment deployment: deployments){
+            list.add(new DeploymentResponse(deployment));
+        }
+		List<Map<String, Object>> rows = new ArrayList<>();
+		for(DeploymentResponse deploymentResponse : list){
+			rows.add(ToolUtil.javaBean2Map(deploymentResponse));
+		}
+		outputObject.setBeans(rows);
+		outputObject.settotal(count);
 	}
     
 	

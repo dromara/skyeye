@@ -892,6 +892,8 @@
 	<url id="activitimode001" path="/post/ActivitiModelController/insertNewActivitiModel" val="新建一个空模型" allUse="1">
 	</url>
 	<url id="activitimode002" path="/post/ActivitiModelController/queryActivitiModelList" val="获取所有模型" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
 	<url id="activitimode003" path="/post/ActivitiModelController/editActivitiModelToDeploy" val="发布模型为流程定义" allUse="1">
 		<property id="modelId" name="modelId" ref="required" var="模型id"/>
@@ -904,6 +906,10 @@
 	</url>
 	<url id="activitimode006" path="/post/ActivitiModelController/deleteActivitiModelById" val="删除模型" allUse="1">
 		<property id="rowId" name="id" ref="required" var="模型id"/>
+	</url>
+	<url id="activitimode007" path="/post/ActivitiModelController/queryReleasedActivitiModelList" val="获取已经发布的模型" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
 	<!-- 工作流结束 -->
 	

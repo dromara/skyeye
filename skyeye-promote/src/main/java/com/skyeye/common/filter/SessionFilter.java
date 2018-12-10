@@ -83,7 +83,7 @@ public class SessionFilter implements Filter {
 		}else{
 			for(String str : Constants.FILTER_FILE_NO_SESSION_REQUEST_OPTION){
 				if (url.contains(str)) {
-					chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest) request), response);
+					chain.doFilter(request, response);
 					return;
 				}
 			}
