@@ -4,6 +4,12 @@
 win10风格的一套系统，前端采用layui作为前端框架，后端采用SpringBoot作为服务框架，采用自封装的xml对所有请求进行参数校验，以保证接口安全性。</br>
 ##### 启动方式
 直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081即可。
+
+##### 注意事项
+如果是eclipse导入发现pom文件报错，
+错误：org.apache.maven.archiver.MavenArchiver.getManifest
+解决办法：https://blog.csdn.net/doc_wei/article/details/84936514
+
 #### 目前功能
 
 - 菜单管理、用户管理、角色管理、角色绑定菜单管理、用户多角色管理
