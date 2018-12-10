@@ -6,9 +6,9 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081即可。
 
 ##### 注意事项
-如果是eclipse导入发现pom文件报错，
-错误：org.apache.maven.archiver.MavenArchiver.getManifest
-解决办法：https://blog.csdn.net/doc_wei/article/details/84936514
+如果是eclipse导入发现pom文件报错。</br>
+错误：org.apache.maven.archiver.MavenArchiver.getManifest</br>
+解决办法：https://blog.csdn.net/doc_wei/article/details/84936514</br>
 
 #### 目前功能
 
