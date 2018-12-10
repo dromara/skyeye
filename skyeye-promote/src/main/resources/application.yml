@@ -3,13 +3,12 @@ server:
     port: ${server.port}
     tomcat:
         uri-encoding: utf-8
-    servlet:
     context-path: /
 
 #数据源
 spring:
     datasource:
-        url: jdbc:mysql://localhost:3306/${jdbc.database.name}?useUnicode=true&characterEncoding=utf8
+        jdbc-url: jdbc:mysql://localhost:3306/${jdbc.database.name}?useUnicode=true&characterEncoding=utf8
         driver-class-name: ${jdbc.database.driverClassName}
         username: ${jdbc.database.username}
         password: ${jdbc.database.password}
@@ -35,6 +34,14 @@ spring:
         #通过connectProperties属性来打开mergeSql功能；慢SQL记录
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
         
+        activiti:
+            check-process-definitions: false
+            url: jdbc:mysql://localhost:3306/${activiti.database.name}?useUnicode=true&characterEncoding=utf8&useSSL=false
+            username: ${activiti.database.username}
+            password: ${activiti.database.password}
+            driver-class-name: com.mysql.jdbc.Driver
+            type: com.alibaba.druid.pool.DruidDataSource
+        
 
 #热部署配置
 devtools:
@@ -56,11 +63,6 @@ servlet:
         max-file-size: 100Mb
         max-request-size: 100Mb
         
-#mybaits映射配置
-mybatis:
-    mapper-locations: classpath*:dbmapper/*.xml
-    config-location: classpath:mybatis-config.xml
-    
 #redis集群
 redis:
     clusterNodes: ${redis.ip1}:${redis.host1},${redis.ip2}:${redis.host2},${redis.ip3}:${redis.host3},${redis.ip4}:${redis.host4},${redis.ip5}:${redis.host5},${redis.ip6}:${redis.host6}

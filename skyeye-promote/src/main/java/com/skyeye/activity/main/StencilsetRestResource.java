@@ -12,7 +12,6 @@
  */
 package com.skyeye.activity.main;
 
-
 import java.io.InputStream;
 
 import org.activiti.engine.ActivitiException;
@@ -24,18 +23,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Tijs Rademakers
+ * 获取编辑器组件及配置项信息
  */
 @RestController
 @RequestMapping(value = "/service")
 public class StencilsetRestResource {
-  
-  @RequestMapping(value="/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
-  public @ResponseBody String getStencilset() {
-    InputStream stencilsetStream = this.getClass().getClassLoader().getResourceAsStream("stencilset.json");
-    try {
-      return IOUtils.toString(stencilsetStream, "utf-8");
-    } catch (Exception e) {
-      throw new ActivitiException("Error while loading stencil set", e);
-    }
-  }
+
+	@RequestMapping(value = "/editor/stencilset", method = RequestMethod.GET, produces = "application/json;charset=utf-8")
+	public @ResponseBody String getStencilset() {
+		InputStream stencilsetStream = this.getClass().getClassLoader().getResourceAsStream("stencilset.json");
+		try {
+			return IOUtils.toString(stencilsetStream, "utf-8");
+		} catch (Exception e) {
+			throw new ActivitiException("Error while loading stencil set", e);
+		}
+	}
 }

@@ -34,7 +34,7 @@ public class Constants {
 	/**
 	 * 过滤器过滤请求类型项
 	 */
-	public static final String[] FILTER_FILE_REQUEST_OPTION = { "/post", "/websocket" };
+	public static final String[] FILTER_FILE_REQUEST_OPTION = { "/post", "/websocket", "/service" };
 
 	/**
 	 * 登录页面

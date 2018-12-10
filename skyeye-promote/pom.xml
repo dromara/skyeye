@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.6.RELEASE</version>
+		<version>2.0.3.RELEASE</version>
 	</parent>
 	
 	<properties>
@@ -97,6 +97,11 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/dcharts-widget-0.10.0.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.activiti</groupId>
+            <artifactId>activiti-modeler</artifactId>
+            <version>${activiti.version}</version>
+        </dependency>
 		<dependency>
 		    <groupId>org.activiti</groupId>
 		    <artifactId>activiti-diagram-rest</artifactId>
@@ -163,7 +168,6 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
 		</dependency>
 		
 		<!--poi-->
@@ -209,7 +213,6 @@
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
-			<version>${quartz.version}</version>
 		</dependency>
 		
 		<!-- 单元测试 -->

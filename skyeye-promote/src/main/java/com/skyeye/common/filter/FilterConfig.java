@@ -18,6 +18,7 @@ public class FilterConfig {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Bean
 	public FilterRegistrationBean someFilterRegistration() {
 		FilterRegistrationBean registration = new FilterRegistrationBean();

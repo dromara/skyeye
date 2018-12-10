@@ -30,43 +30,45 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * @author Tijs Rademakers
+ * 根据modelId获取model的节点信息，编辑器根据返回的json进行绘图
  */
 @RestController
 @RequestMapping(value = "/service")
 public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
-  
-  protected static final Logger LOGGER = LoggerFactory.getLogger(ModelEditorJsonRestResource.class);
-  
-  @Autowired
-  private RepositoryService repositoryService;
-  
-  @Autowired
-  private ObjectMapper objectMapper;
-  
-  @RequestMapping(value="/model/{modelId}/json", method = RequestMethod.GET, produces = "application/json")
-  public ObjectNode getEditorJson(@PathVariable String modelId) {
-    ObjectNode modelNode = null;
-    
-    Model model = repositoryService.getModel(modelId);
-      
-    if (model != null) {
-      try {
-        if (StringUtils.isNotEmpty(model.getMetaInfo())) {
-          modelNode = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
-        } else {
-          modelNode = objectMapper.createObjectNode();
-          modelNode.put(MODEL_NAME, model.getName());
-        }
-        modelNode.put(MODEL_ID, model.getId());
-        ObjectNode editorJsonNode = (ObjectNode) objectMapper.readTree(
-            new String(repositoryService.getModelEditorSource(model.getId()), "utf-8"));
-        modelNode.put("model", editorJsonNode);
-        
-      } catch (Exception e) {
-        LOGGER.error("Error creating model JSON", e);
-        throw new ActivitiException("Error creating model JSON", e);
-      }
-    }
-    return modelNode;
-  }
+
+	protected static final Logger LOGGER = LoggerFactory.getLogger(ModelEditorJsonRestResource.class);
+
+	@Autowired
+	private RepositoryService repositoryService;
+
+	@Autowired
+	private ObjectMapper objectMapper;
+
+	@SuppressWarnings("deprecation")
+	@RequestMapping(value = "/model/{modelId}/json", method = RequestMethod.GET, produces = "application/json")
+	public ObjectNode getEditorJson(@PathVariable String modelId) {
+		ObjectNode modelNode = null;
+
+		Model model = repositoryService.getModel(modelId);
+
+		if (model != null) {
+			try {
+				if (StringUtils.isNotEmpty(model.getMetaInfo())) {
+					modelNode = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
+				} else {
+					modelNode = objectMapper.createObjectNode();
+					modelNode.put(MODEL_NAME, model.getName());
+				}
+				modelNode.put(MODEL_ID, model.getId());
+				ObjectNode editorJsonNode = (ObjectNode) objectMapper
+						.readTree(new String(repositoryService.getModelEditorSource(model.getId()), "utf-8"));
+				modelNode.put("model", editorJsonNode);
+
+			} catch (Exception e) {
+				LOGGER.error("Error creating model JSON", e);
+				throw new ActivitiException("Error creating model JSON", e);
+			}
+		}
+		return modelNode;
+	}
 }
