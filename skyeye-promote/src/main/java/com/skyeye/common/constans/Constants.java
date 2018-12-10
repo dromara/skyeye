@@ -16,7 +16,7 @@ public class Constants {
 	 * 过滤器过滤文件目录请求项
 	 */
 	public static final String[] FILTER_FILE_CATALOG_OPTION = { "/html",
-			"/css", "/js", "/assets", "/tpl", "/images", "/template" };
+			"/css", "/js", "/assets", "/tpl", "/images", "/template", "/static" };
 
 	/**
 	 * 过滤器过滤文件后缀请求项
@@ -35,6 +35,7 @@ public class Constants {
 	 * 过滤器过滤请求类型项
 	 */
 	public static final String[] FILTER_FILE_REQUEST_OPTION = { "/post", "/websocket", "/service" };
+	public static final String[] FILTER_FILE_NO_SESSION_REQUEST_OPTION = { "/service" };
 
 	/**
 	 * 登录页面

@@ -80,6 +80,13 @@ public class SessionFilter implements Filter {
 					return;
 				}
 			}
+		}else{
+			for(String str : Constants.FILTER_FILE_NO_SESSION_REQUEST_OPTION){
+				if (url.contains(str)) {
+					chain.doFilter(new XssHttpServletRequestWrapper((HttpServletRequest) request), response);
+					return;
+				}
+			}
 		}
 		
 		//4.请求过滤

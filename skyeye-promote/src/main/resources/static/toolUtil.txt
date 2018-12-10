@@ -31,4 +31,4 @@ getIpByRequest();																															根据request获取ip
 getCpuRatioForWindows();																													获得CPU使用率
 readCpu();																																	读取CPU信息
 listToTree();																																将JSONArray数组转为树状结构
-
+javaBean2Map();																																实体类转map

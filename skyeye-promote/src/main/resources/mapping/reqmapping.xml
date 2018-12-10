@@ -888,4 +888,23 @@
 	</url>
 	<!-- 项目规划结束 -->
 	
+	<!-- 工作流开始 -->
+	<url id="activitimode001" path="/post/ActivitiModelController/insertNewActivitiModel" val="新建一个空模型" allUse="1">
+	</url>
+	<url id="activitimode002" path="/post/ActivitiModelController/queryActivitiModelList" val="获取所有模型" allUse="1">
+	</url>
+	<url id="activitimode003" path="/post/ActivitiModelController/editActivitiModelToDeploy" val="发布模型为流程定义" allUse="1">
+		<property id="modelId" name="modelId" ref="required" var="模型id"/>
+	</url>
+	<url id="activitimode004" path="/post/ActivitiModelController/editActivitiModelToStartProcess" val="启动流程" allUse="1">
+		<property id="keyName" name="keyName" ref="required" var="模型key"/>
+	</url>
+	<url id="activitimode005" path="/post/ActivitiModelController/editActivitiModelToRun" val="提交任务" allUse="1">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="模型运行id"/>
+	</url>
+	<url id="activitimode006" path="/post/ActivitiModelController/deleteActivitiModelById" val="删除模型" allUse="1">
+		<property id="rowId" name="id" ref="required" var="模型id"/>
+	</url>
+	<!-- 工作流结束 -->
+	
 </controller>

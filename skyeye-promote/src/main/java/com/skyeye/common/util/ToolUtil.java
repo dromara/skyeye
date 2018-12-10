@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.RandomAccessFile;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -761,6 +762,30 @@ public class ToolUtil {
 			}
 		}
 		return r;
+	}
+	
+	/**
+	 * javaBean2Map
+	 * @param javaBean
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static <K, V> Map<K, V> javaBean2Map(Object javaBean) {
+		Map<K, V> ret = new HashMap<>();
+		try {
+			Method[] methods = javaBean.getClass().getDeclaredMethods();// 获取所有的属性
+			for (Method method : methods) {
+				if (method.getName().startsWith("get")) {
+					String field = method.getName();
+					field = field.substring(field.indexOf("get") + 3);
+					field = field.toLowerCase().charAt(0) + field.substring(1);
+					Object value = method.invoke(javaBean, (Object[]) null);// invoke(调用)就是调用Method类代表的方法。它可以让你实现动态调用
+					ret.put((K) field, (V) (null == value ? "" : value));
+				}
+			}
+		} catch (Exception e) {
+		}
+		return ret;
 	}
 
 	

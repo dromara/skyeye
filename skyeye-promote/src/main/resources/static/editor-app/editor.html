@@ -14,7 +14,7 @@
         	</button>
   		  </div>
         </div>
-        <div class="btn-group pull-right" ng-show="!secondaryItems.length">
+        <!-- <div class="btn-group pull-right" ng-show="!secondaryItems.length">
 	        <div class="btn-toolbar pull-right" ng-controller="ToolbarController">
         	<button title="{{item.title | translate}}" ng-repeat="item in secondaryItems" ng-switch on="item.type" class="btn btn-inverse" ng-class="{'separator': item.type == 'separator'}"
                 ng-disabled="item.type == 'separator'" ng-click="toolbarSecondaryButtonClicked($index)" id="{{item.id}}">
@@ -22,11 +22,11 @@
 	            <div ng-switch-when="separator" ng-class="item.cssClass"></div>
         	</button>
   		  </div>
-        </div>
+        </div> -->
   </div>
   <div class="full">
       <div class="row row-no-gutter">
-	      <div id="paletteHelpWrapper" class="col-xs-3">
+	      <div id="paletteHelpWrapper" class="col-xs-2">
 	      	<div class="stencils" id="paletteSection">
 			    <div ng-if="stencilItemGroups.length > 1">
                     <div ng-repeat="group in stencilItemGroups">
@@ -56,7 +56,7 @@
 			     </div>
 		      </div>
 	      </div>
-	      <div id="canvasHelpWrapper" class="col-xs-9">
+	      <div id="canvasHelpWrapper" class="col-xs-10" style="padding-left: 0px; padding-right: 0px;">
 	      	<div class="canvas-wrapper" id="canvasSection" 
 	      		ng-model="droppedElement"
                   ng-model="droppedElement"
@@ -92,7 +92,7 @@
 	             </div>
 	         </div>
            </div>
-           <div id="propertiesHelpWrapper" class="col-xs-9">
+           <div id="propertiesHelpWrapper" class="col-xs-10"  style="padding-left: 0px; padding-right: 0px;">
             	<div class="propertySection" id="propertySection"
                 	ng-class="{collapsed: propertyWindowState.collapsed}">
 	                <div class="selected-item-section">

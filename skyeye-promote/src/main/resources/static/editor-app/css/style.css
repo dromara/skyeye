@@ -47,7 +47,7 @@
 }
 
 .editor-toolbar .btn.btn-inverse {
-	font-size: 24px;
+	font-size: 15px;
 	color: #FFFFFF;
     border-color: rgba(0, 0, 0, 0);
     padding: 3px 6px 0px 6px;
@@ -56,8 +56,8 @@
     text-align: center;
     border: none;
     margin: 0px 0px 0px 5px;
-    height: 36px;
-    min-width: 36px;
+    height: 24px;
+    min-width: 24px;
 }
 .editor-toolbar .btn.btn-inverse.pressed {
 	background-color: #287d92;
@@ -79,7 +79,7 @@
 .editor-toolbar .toolbar-separator {
 	background: #a4acb9;
 	width: 1px;
-	height: 30px;
+	height: 20px;
 }
 
 .stencils {
@@ -228,9 +228,9 @@ div.propertySection {
 }
 
 .selected-item-title {
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
-    padding: 8px 0 8px 8px;
+    padding: 0px 0 8px 8px;
     border-bottom: 1px solid #a4acb9;
     cursor: pointer;
 }
@@ -407,7 +407,6 @@ li.x-menu-list-item.x-menu-item-active a {
 /* Editor icon font */
 .editor-icon {
 	position: relative;
-	top: 1px;
 	display: inline-block;
 	font-family: 'ActivitiModeler';
 	font-style: normal;
