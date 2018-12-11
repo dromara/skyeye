@@ -44,6 +44,7 @@ public class CodeModelController {
 	@RequestMapping("/post/CodeModelController/insertCodeModelMation")
 	@ResponseBody
 	public void insertCodeModelMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+
 		codeModelService.insertCodeModelMation(inputObject, outputObject);
 	}
 	
