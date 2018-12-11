@@ -1,6 +1,6 @@
 # skyeye
 
-#### 项目介绍
+#### 项目介绍 
 win10风格的一套系统，前端采用layui作为前端框架，后端采用SpringBoot作为服务框架，采用自封装的xml对所有请求进行参数校验，以保证接口安全性。</br>
 ##### 启动方式
 直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081即可。
