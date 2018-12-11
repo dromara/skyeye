@@ -19,4 +19,6 @@ public interface ActivitiModelService {
 
 	public void queryReleasedActivitiModelList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void deleteReleasedActivitiModelById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

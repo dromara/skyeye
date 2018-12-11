@@ -127,4 +127,20 @@ public class ActivitiModelController {
 		activitiModelService.queryReleasedActivitiModelList(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: deleteReleasedActivitiModelById
+	     * @Description: 取消发布
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/ActivitiModelController/deleteReleasedActivitiModelById")
+	@ResponseBody
+	public void deleteReleasedActivitiModelById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		activitiModelService.deleteReleasedActivitiModelById(inputObject, outputObject);
+	}
+	
 }
