@@ -233,6 +233,23 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 		outputObject.setBeans(rows);
 		outputObject.settotal(count);
 	}
+
+	/**
+	 * 
+	     * @Title: deleteReleasedActivitiModelById
+	     * @Description: 取消发布
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteReleasedActivitiModelById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		String deploymentId = map.get("deploymentId").toString();
+		repositoryService.deleteDeployment(deploymentId);
+	}
     
 	
 }

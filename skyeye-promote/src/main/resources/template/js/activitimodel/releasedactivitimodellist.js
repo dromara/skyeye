@@ -62,7 +62,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '取消发布' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
-            AjaxPostUtil.request({url:reqBasePath + "activitimode006", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "activitimode008", params:{deploymentId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				top.winui.window.msg("取消发布成功", {icon: 1,time: 2000});
     				loadTable();
