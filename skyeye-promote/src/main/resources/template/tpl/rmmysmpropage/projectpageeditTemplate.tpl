@@ -15,6 +15,10 @@
         <label class="layui-form-label">路径</label>
         <div class="layui-input-block">
         	<input type="text" id="filePath" name="filePath" placeholder="请输入路径" class="layui-input" maxlength="50" value="{{filePath}}"/>
+        	<div class="layui-form-mid layui-word-aux">
+        		小程序导出路径为：page/路径/文件名.文件类型（文件类型：js、json、wxml、wxss）<br>
+        		H5页面导出路径为：html/路径/文件名.html；对应JS导出路径为：js/路径/文件名.js
+        	</div>
         </div>
     </div>
     <div class="layui-form-item">
