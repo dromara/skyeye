@@ -1644,9 +1644,10 @@ a.weui-media-box:active{
   display:flex;
 }
 .weui-flex__item{
-  -webkit-box-flex:1;
-  -webkit-flex:1;
-          flex:1;
+	-webkit-box-flex:1;
+	-webkit-flex:1;
+	flex:1;
+	cursor: pointer;
 }
 .weui-dialog{
   position:fixed;
