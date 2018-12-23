@@ -787,6 +787,28 @@ public class ToolUtil {
 		}
 		return ret;
 	}
+	
+	/**
+	 * 
+	     * @Title: randomStr
+	     * @Description: 获取指定的随机值
+	     * @param @param minLen
+	     * @param @param maxLen
+	     * @param @return    参数
+	     * @return String    返回类型
+	     * @throws
+	 */
+	public static String randomStr(int minLen, int maxLen) {
+		String base = "abcdefghijklmnopqrstuvwxyz0123456789";
+		Random random = new Random();
+		StringBuffer sb = new StringBuffer();
+		int length = random.nextInt(maxLen - minLen) + minLen;
+		for (int i = 0; i < length; i++) {
+			int number = random.nextInt(base.length());
+			sb.append(base.charAt(number));
+		}
+		return sb.toString();
+	}
 
 	
 	public static void main(String[] args) throws Exception {

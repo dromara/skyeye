@@ -1,0 +1,51 @@
+package com.skyeye.eve.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
+import com.skyeye.eve.service.DwSurveyDirectoryService;
+
+
+@Controller
+public class DwSurveyDirectoryController {
+	
+	@Autowired
+	private DwSurveyDirectoryService dwSurveyDirectoryService;
+	
+	/**
+	 * 
+	     * @Title: queryDwSurveyDirectoryList
+	     * @Description: 获取调查问卷列表
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/queryDwSurveyDirectoryList")
+	@ResponseBody
+	public void queryDwSurveyDirectoryList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.queryDwSurveyDirectoryList(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: insertDwSurveyDirectoryMation
+	     * @Description: 新增调查问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/insertDwSurveyDirectoryMation")
+	@ResponseBody
+	public void insertDwSurveyDirectoryMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.insertDwSurveyDirectoryMation(inputObject, outputObject);
+	}
+	
+}

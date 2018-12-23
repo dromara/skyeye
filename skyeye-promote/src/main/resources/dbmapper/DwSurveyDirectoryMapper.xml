@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.DwSurveyDirectoryDao">
+	
+	<select id="queryDwSurveyDirectoryList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.survey_name surveyName,
+			a.sid,
+			b.user_name userName,
+			CONVERT(a.create_time, char) createTime,
+			a.answer_num answerNum,
+			CASE a.survey_state WHEN '0' THEN '设计' WHEN '1' THEN '执行中' WHEN '2' THEN '结束' ELSE '' END surveyState
+		FROM
+			dw_survey_directory a
+			LEFT JOIN sys_eve_user b ON a.create_id = b.id
+		WHERE a.visibility = '1'<!-- 显示 -->
+			AND a.dir_type = '2'<!-- 问卷 -->
+			AND a.survey_model = '1'<!-- 问卷模块 -->
+			<if test="surveyName != '' and surveyName != null">
+				AND a.survey_name LIKE '%${surveyName}%'
+			</if>
+			<if test="surveyState != '' and surveyState != null">
+				AND a.survey_state = #{surveyState}
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<insert id="insertDwSurveyDirectoryMation" parameterType="java.util.Map">
+	     INSERT into dw_survey_directory 
+	     (id, survey_name, sid, dir_type, survey_model, create_id, create_time)
+	     VALUES
+	     (#{id}, #{surveyName}, #{sId}, #{dirType}, #{surveyModel}, #{createId}, #{createTime})
+	</insert>
+	
+</mapper>
