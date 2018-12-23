@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding-top:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	        <div id="tools_wrap">
+				<div id="tools">
+					<div class="tools_tabs">
+						<div class="tools_tabs_left">
+							<ul id="tabType">
+								<li class="current" id="tools_tab1_li">基本</li>
+								<li id="tools_tab2_li">常用</li>
+							</ul>
+						</div>
+					</div>
+					<div class="tools_contents">
+						<div id="tools_tab1" class="tools_tab_div" style="display: inline;">
+							<div id="toolsBashQu" class="tools_item">
+								<div class="tooltext">基本题型</div>
+								<div class="toolbars">
+									<ul class="dragQuUl" id="_basemodel"></ul>
+								</div>
+							</div>
+							<div id="toolsChenQu" class="tools_item">
+								<div class="tooltext">矩阵题型</div>
+								<div class="toolbars">
+									<ul class="dragQuUl" id="_rectanglemodel"></ul>
+								</div>
+							</div>
+							<div id="toolsAuxiliaryQu" class="tools_item">
+								<div class="tooltext">辅助组件</div>
+								<div class="toolbars">
+									<ul class="dragQuUl" id="_auxiliarymodel"></ul>
+								</div>
+							</div>
+							<div id="toolsEvent" class="tools_item">
+								<div class="tooltext">操作</div>
+								<div class="toolbars">
+									<ul id="_operationmodel"></ul>
+								</div>
+							</div>
+						</div>
+						<div id="tools_tab2" class="tools_tab_div">
+							<div id="contactPersonQuestion" class="tools_item">
+								<div class="tooltext">常用题型</div>
+								<div class="toolbars">
+									<ul class="dragQuUl" id="_commonlyusedmodel"></ul>
+								</div>
+							</div>
+						</div>
+						
+						<div id="toolsPubBtn" >
+							<div class="toolbars" style="padding:10px  15px 10px 0px;">
+								<ul>
+									<li id="publishBtn" >
+										<div class="dwToolbar_icon"></div>
+									</li>
+									<li id="saveＭodelBtn" style="display: none;" class="saveＭodelBtn_li">
+										<div class="dwToolbar_icon"></div>
+									</li>
+									<li id="saveBtn" >
+										<div class="dwToolbar_icon"></div>
+									</li>
+							    </ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+					        
+	        <div class="layui-form-item">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" id="cancle">取消</button>
+	                <button class="winui-btn" lay-submit lay-filter="formAddBean">保存</button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/dwsurveydesign/'}).use('dwsurveydesign');
+    </script>
+</body>
+</html>

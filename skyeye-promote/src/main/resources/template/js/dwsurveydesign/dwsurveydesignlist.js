@@ -80,9 +80,10 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/planproject/planprojectedit.html", 
+			url: "../../tpl/dwsurveydesign/dwsurveydesign.html", 
 			title: "设计问卷",
-			pageId: "dwsurveydesignedit",
+			pageId: "dwsurveydesign",
+			maxmin: true,
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
