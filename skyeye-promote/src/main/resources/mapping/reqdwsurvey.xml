@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否    默认为否
+	 -->
+	 
+	<!-- 问卷调查开始 -->
+	<url id="dwsurveydirectory001" path="/post/DwSurveyDirectoryController/queryDwSurveyDirectoryList" val="获取调查问卷列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="surveyState" name="surveyState" ref="" var="问卷状态"/>
+	    <property id="surveyName" name="surveyName" ref="" var="问卷名称"/>
+	</url>
+	<url id="dwsurveydirectory002" path="/post/DwSurveyDirectoryController/insertDwSurveyDirectoryMation" val="新增调查问卷" allUse="1">
+	    <property id="surveyName" name="surveyName" ref="required" var="问卷名称"/>
+	</url>
+	<!-- 问卷调查结束 -->
+	
+</controller>

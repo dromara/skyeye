@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否    默认为否
+	 -->
+	<!-- 代码生成器系列开始 -->
+	<url id="codemodel001" path="/post/CodeModelGroupController/queryCodeModelGroupList" val="获取模板分组列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="groupName" name="groupName" ref="" var="分组名称"/>
+		<property id="groupNum" name="groupNum" ref="" var="分组编号"/>
+	</url>
+	<url id="codemodel002" path="/post/CodeModelGroupController/insertCodeModelGroupMation" val="新增模板分组列表" allUse="1">
+		<property id="groupDesc" name="groupDesc" ref="" var="分组简介"/>
+		<property id="groupName" name="groupName" ref="required" var="分组名称"/>
+	</url>
+	<url id="codemodel003" path="/post/CodeModelGroupController/deleteCodeModelGroupById" val="删除模板分组信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel004" path="/post/CodeModelGroupController/queryCodeModelGroupMationToEditById" val="编辑模板分组信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel005" path="/post/CodeModelGroupController/editCodeModelGroupMationById" val="编辑模板分组信息" allUse="1">
+		<property id="groupDesc" name="groupDesc" ref="" var="分组简介"/>
+		<property id="groupName" name="groupName" ref="required" var="分组名称"/>
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel006" path="/post/CodeModelController/queryCodeModelList" val="获取模板列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="groupId" name="groupId" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel007" path="/post/CodeModelController/insertCodeModelMation" val="新增模板列表" allUse="1">
+		<property id="modelName" name="modelName" ref="required" var="模板别名"/>
+		<property id="modelContent" name="modelContent" ref="required" var="模板内容"/>
+		<property id="modelText" name="modelText" ref="required" var="模板纯文本"/>
+		<property id="modelType" name="modelType" ref="required" var="模板类型"/>
+		<property id="groupId" name="groupId" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel008" path="/post/CodeModelController/deleteCodeModelById" val="删除模板信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="模板id"/>
+	</url>
+	<url id="codemodel009" path="/post/CodeModelController/queryCodeModelMationToEditById" val="编辑模板信息时进行回显" allUse="1">
+		<property id="rowId" name="id" ref="required" var="模板id"/>
+	</url>
+	<url id="codemodel010" path="/post/CodeModelController/editCodeModelMationById" val="编辑模板信息" allUse="1">
+		<property id="modelName" name="modelName" ref="required" var="模板别名"/>
+		<property id="modelContent" name="modelContent" ref="required" var="模板内容"/>
+		<property id="modelText" name="modelText" ref="required" var="模板纯文本"/>
+		<property id="groupId" name="groupId" ref="required" var="分组id"/>
+		<property id="modelType" name="modelType" ref="required" var="模板类型"/>
+		<property id="rowId" name="id" ref="required" var="模板id"/>
+	</url>
+	<url id="codemodel011" path="/post/CodeModelGroupController/queryTableParameterByTableName" val="根据表名获取表的相关信息" allUse="1">
+		<property id="tableName" name="tableName" ref="required" var="表名"/>
+	</url>
+	<url id="codemodel012" path="/post/CodeModelGroupController/queryTableMationByTableName" val="根据表名获取表的相关转换信息" allUse="1">
+		<property id="tableName" name="tableName" ref="required" var="表名"/>
+	</url>
+	<url id="codemodel013" path="/post/CodeModelGroupController/queryCodeModelListByGroupId" val="根据分组id获取模板列表" allUse="1">
+		<property id="groupId" name="groupId" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel014" path="/post/CommonController/downloadFileByJsonData" val="代码生成器生成下载文件" allUse="1">
+		<property id="jsonData" name="jsonData" ref="required" var="json数据"/>
+	</url>
+	<url id="codemodel015" path="/post/CodeModelHistoryController/queryCodeModelHistoryList" val="获取模板生成历史列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="groupId" name="groupId" ref="required" var="分组id"/>
+	</url>
+	<url id="codemodel016" path="/post/CodeModelHistoryController/insertCodeModelHistoryCreate" val="重新生成文件" allUse="1">
+		<property id="filePath" name="filePath" ref="required" var="文件路径名"/>
+	</url>
+	<url id="codemodel017" path="/post/CodeModelHistoryController/downloadCodeModelHistory" val="下载文件" allUse="0">
+		<property id="filePath" name="filePath" ref="required" var="文件路径名"/>
+	</url>
+	<!-- 代码生成器系列结束 -->
+</controller>

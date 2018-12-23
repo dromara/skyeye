@@ -7,6 +7,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import com.skyeye.common.util.ToolUtil;
+
 /**
  * 
      * @ClassName: InitServlet
@@ -26,7 +28,13 @@ public class InitServlet implements ApplicationRunner{
 	@Override
 	public void run(ApplicationArguments arg0) throws Exception {
 		String basePath = InitServlet.class.getClassLoader().getResource("./").getPath();
-		REQUEST_URL = basePath + REQUEST_URL;
+		String[] filePath = REQUEST_URL.split(",");
+		REQUEST_URL = "";
+		for(String str : filePath){
+			if(!ToolUtil.isBlank(str)){
+				REQUEST_URL = REQUEST_URL + basePath + str + ",";
+			}
+		}
 		//启动线程读取配置文件
 		new Thread(new TokenThread(REQUEST_URL)).start();
 		log.info("启动线程读取配置文件成功");
