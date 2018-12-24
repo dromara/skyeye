@@ -307,6 +307,24 @@
 			<version>${aliyun.java.sdk.dysmsapi.version}</version>
 		</dependency>
 		
+		<!-- pdf导出jar -->
+		<!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+		<dependency>
+		    <groupId>com.lowagie</groupId>
+		    <artifactId>itext</artifactId>
+		    <version>4.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.itextpdf</groupId>
+			<artifactId>itext-asian</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.itextpdf</groupId>
+		    <artifactId>itextpdf</artifactId>
+		    <version>5.4.3</version>
+		</dependency>
+		
 	</dependencies>
 	
 	<build>
