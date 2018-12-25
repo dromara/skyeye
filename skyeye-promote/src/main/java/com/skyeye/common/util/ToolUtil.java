@@ -8,8 +8,10 @@ import java.io.RandomAccessFile;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,9 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -809,7 +813,124 @@ public class ToolUtil {
 		}
 		return sb.toString();
 	}
+	
+	/**
+	 * 
+	     * @Title: getTime
+	     * @Description: 转化cron
+	     * @param @param date
+	     * @param @param foramt
+	     * @param @return    参数
+	     * @return int    返回类型
+	     * @throws
+	 */
+	public static int getTime(Date date, String foramt) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		if ("y".equals(foramt)) {
+			return cal.get(Calendar.YEAR);// 获取年份
+		} else if ("M".equals(foramt)) {
+			return cal.get(Calendar.MONTH) + 1;// 获取月
+		} else if ("d".equals(foramt)) {
+			return cal.get(Calendar.DAY_OF_MONTH);// 获取日
+		} else if ("H".equals(foramt)) {
+			return cal.get(Calendar.HOUR_OF_DAY);// 获取时
+		} else if ("m".equals(foramt)) {
+			return cal.get(Calendar.MINUTE);// 获取分
+		} else if ("s".equals(foramt)) {
+			return cal.get(Calendar.SECOND);// 获取秒
+		} else {
+			return -1;
+		}
+	}
+	
+	/**
+	 * 
+	     * @Title: getAfDate
+	     * @Description: 获取指定日期 前/后n天|分钟的日期
+	     * @param @param date
+	     * @param @param n
+	     * @param @param format
+	     * @param @return    参数
+	     * @return Date    返回类型
+	     * @throws
+	 */
+	public static Date getAfDate(Date date, int n, String format) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		if ("d".equals(format)) {
+			calendar.add(Calendar.DAY_OF_MONTH, n);// 天
+		} else if ("m".equals(format)) {
+			calendar.add(Calendar.MINUTE, n);// 分钟
+		}
+		date = calendar.getTime();
+		return date;
+	}
+	
+	/**
+	 * 
+	     * @Title: formatDateByPattern
+	     * @Description: 日期转换cron表达式  e.g:yyyy-MM-dd HH:mm:ss 
+	     * @param @param date
+	     * @param @param dateFormat
+	     * @param @return    参数
+	     * @return String    返回类型
+	     * @throws
+	 */
+	public static String formatDateByPattern(Date date, String dateFormat) {
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		String formatTimeStr = null;
+		if (date != null) {
+			formatTimeStr = sdf.format(date);
+		}
+		return formatTimeStr;
+	}
+    
+    /**
+     * 
+         * @Title: getCron
+         * @Description: convert Date to cron ,eg.  "0 07 10 15 1 ? 2016" 
+         * @param @param date
+         * @param @return
+         * @param @throws ParseException    参数
+         * @return String    返回类型
+         * @throws
+     */
+	public static String getCron(String date) throws ParseException {
+		DateFormat df = new SimpleDateFormat("dd hh:mm");
+		String dateFormat = "ss mm HH dd * ? *";
+		return formatDateByPattern(df.parse(date), dateFormat);
+	}
 
+	public static String getCrons(String date) throws ParseException {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String dateFormat = "ss mm HH dd  MM ? yyyy";
+		Date parse = df.parse(date);
+		return formatDateByPattern(parse, dateFormat);
+	}
+
+	public static String getCrons1(String date) throws ParseException {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateFormat = "ss mm HH dd MM ? yyyy";
+		Date parse = df.parse(date);
+		return formatDateByPattern(parse, dateFormat);
+	}
+	
+	/**
+	 * 
+	     * @Title: getThirtyMinuteByNow
+	     * @Description: 获取指定分钟后的时间
+	     * @param @return    参数
+	     * @return String    返回类型
+	     * @throws
+	 */
+	public static String getMinuteByNow(int minute) {
+		Calendar now = Calendar.getInstance();
+		now.add(Calendar.MINUTE, minute);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateStr = sdf.format(now.getTimeInMillis());
+		return dateStr;
+	}
 	
 	public static void main(String[] args) throws Exception {
 		List<Map<String, Object>> data = new ArrayList<>();
