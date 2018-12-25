@@ -29,12 +29,15 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 ##### 后端技术:
 技术|名称|官网
 ---|---|---
-SpringBoot|SpringBoot框架|http://spring.io/projects/spring-boot
+SpringBoot|核心框架|http://spring.io/projects/spring-boot
 MyBatis|ORM框架|http://www.mybatis.org/mybatis-3/zh/index.html
 Druid|数据库连接池|https://github.com/alibaba/druid
 Maven|项目构建管理|http://maven.apache.org/
 redis|key-value存储系统|https://redis.io/
 webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.com/html/html5-websocket.html
+Activiti|工作流引擎|https://www.activiti.org/
+spring mvc|视图框架|http://spring.io/
+quartz 2.2.2|定时任务|http://www.quartz-scheduler.org/
 
 ##### 前端技术：
 技术|名称|官网
