@@ -8,6 +8,7 @@ layui.config({
 	    var $ = layui.$,
 	    form = layui.form;
 	    
+	    //基本题型
 	    var _basemodel = getFileContent('tpl/dwsurveydesign/dragmodel/basemodel/radioQuModel.tpl')
 	    				+ getFileContent('tpl/dwsurveydesign/dragmodel/basemodel/checkboxQuModel.tpl')
 	    				+ getFileContent('tpl/dwsurveydesign/dragmodel/basemodel/fillblankQuModel.tpl')
@@ -15,17 +16,21 @@ layui.config({
 	    				+ getFileContent('tpl/dwsurveydesign/dragmodel/basemodel/orderQuModel.tpl')
 	    				+ getFileContent('tpl/dwsurveydesign/dragmodel/basemodel/mfillblankQuModel.tpl');
 	    
+	    //矩阵题型
 	    var _rectanglemodel = getFileContent('tpl/dwsurveydesign/dragmodel/rectanglemodel/chenRadioQuModel.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/rectanglemodel/chenCheckboxQuModel.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/rectanglemodel/chenScoreQuModel.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/rectanglemodel/chenFillblankQuModel.tpl');
 	    
+	    //辅助组件
 	    var _auxiliarymodel = getFileContent('tpl/dwsurveydesign/dragmodel/auxiliarymodel/pageQuModel.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/auxiliarymodel/paragraphQuModel.tpl');
 	    
+	    //操作
 	    var _operationmodel = getFileContent('tpl/dwsurveydesign/dragmodel/operationmodel/surveyAttrSetToolbar.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/operationmodel/surveyStyleEditToolbar.tpl');
 	    
+	    //常用题型
 	    var _commonlyusedmodel = getFileContent('tpl/dwsurveydesign/dragmodel/commonlyusedmodel/userNameQuModel.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/commonlyusedmodel/phoneNoQuModel.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/commonlyusedmodel/addressQuModel.tpl')
@@ -39,30 +44,46 @@ layui.config({
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/commonlyusedmodel/salaryQuModel.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/commonlyusedmodel/dateQuModel.tpl');
 	    
+	    //各种模板
+	    var _varioustemplates = getFileContent('tpl/dwsurveydesign/varioustemplates.tpl');
+	    
 	    $("#_basemodel").html(_basemodel);
 	    $("#_rectanglemodel").html(_rectanglemodel);
 	    $("#_auxiliarymodel").html(_auxiliarymodel);
 	    $("#_operationmodel").html(_operationmodel);
 	    $("#_commonlyusedmodel").html(_commonlyusedmodel);
+	    $("body").append(_varioustemplates);
 	    
-		form.render();
-		
-	    form.on('submit(formAddBean)', function (data) {
-	    	//表单验证
-	        if (winui.verifyForm(data.elem)) {
-	        	var params = {
-        			surveyName: $("#surveyName").val(),
-	        	};
-//	        	AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory002", params:params, type:'json', callback:function(json){
-//	 	   			if(json.returnCode == 0){
-//		 	   			parent.layer.close(index);
-//		 	        	parent.refreshCode = '0';
-//	 	   			}else{
-//	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-//	 	   			}
-//	 	   		}});
-	        }
-	        return false;
+	    showGrid({
+		 	id: "showForm",
+		 	url: reqBasePath + "dwsurveydirectory003",
+		 	params: {rowId: parent.rowId},
+		 	pagination: false,
+		 	template: getFileContent('tpl/dwsurveydesign/dwsurveydesignbean.tpl'),
+		 	ajaxSendLoadBefore: function(hdb){
+		 	},
+		 	ajaxSendAfter:function(json){
+		 		
+		 		
+		 		form.render();
+			    form.on('submit(formAddBean)', function (data) {
+			    	//表单验证
+			        if (winui.verifyForm(data.elem)) {
+			        	var params = {
+		        			surveyName: $("#surveyName").val(),
+			        	};
+//			        	AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory002", params:params, type:'json', callback:function(json){
+//			 	   			if(json.returnCode == 0){
+//				 	   			parent.layer.close(index);
+//				 	        	parent.refreshCode = '0';
+//			 	   			}else{
+//			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+//			 	   			}
+//			 	   		}});
+			        }
+			        return false;
+			    });
+		 	}
 	    });
 	    
 	    //取消

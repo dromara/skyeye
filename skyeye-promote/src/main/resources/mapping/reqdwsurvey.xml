@@ -14,6 +14,9 @@
 	<url id="dwsurveydirectory002" path="/post/DwSurveyDirectoryController/insertDwSurveyDirectoryMation" val="新增调查问卷" allUse="1">
 	    <property id="surveyName" name="surveyName" ref="required" var="问卷名称"/>
 	</url>
+	<url id="dwsurveydirectory003" path="/post/DwSurveyDirectoryController/queryDwSurveyDirectoryMationById" val="获取调查问卷题目信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
 	<!-- 问卷调查结束 -->
 	
 </controller>

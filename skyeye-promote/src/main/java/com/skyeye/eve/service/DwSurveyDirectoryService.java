@@ -9,4 +9,6 @@ public interface DwSurveyDirectoryService {
 
 	public void insertDwSurveyDirectoryMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryDwSurveyDirectoryMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

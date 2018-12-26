@@ -4229,6 +4229,15 @@ body .layer-ext-winconfirm {
 	margin: 0px;
 	list-style: none;
 }
+
+#tools_wrap{
+	position: fixed;
+    top: 0px;
+    z-index: 999;
+    width: 100%;
+    background-color: white;
+}
+
 #tools .tools_tabs_left{
 	float: left;
 	padding-left: 65px;
@@ -4665,7 +4674,6 @@ body .layer-ext-winconfirm {
 }
 #dw_body{
 	margin-top: 135px;
-	/* padding-bottom: 50px; */
 	padding-bottom: 40px;
 }
 #dw_body .dw_body_title{

@@ -16,4 +16,28 @@ public interface DwSurveyDirectoryDao {
 
 	public int insertDwSurveyDirectoryMation(Map<String, Object> map) throws Exception;
 
+	public List<Map<String, Object>> queryQuestionListByBelongId(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionLogicListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionChenRowListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionChenColumnListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionMultiFillBlankListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionRadioListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionCheckBoxListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionChenOptionListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionScoreListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionOrderByListByQuestionId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryChildQuestionListByBelongId(Map<String, Object> question) throws Exception;
+
+	public Map<String, Object> querySurveyMationById(Map<String, Object> map) throws Exception;
+
 }
