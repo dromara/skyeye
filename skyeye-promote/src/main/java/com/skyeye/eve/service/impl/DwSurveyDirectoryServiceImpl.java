@@ -138,5 +138,23 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		question.put("questionLogic", questionLogic);
 		return question;
 	}
+
+	/**
+	 * 
+	     * @Title: queryDwSurveyMationById
+	     * @Description: 获取调查问卷信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryDwSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		outputObject.setBean(surveyMation);
+		outputObject.settotal(1);
+	}
 	
 }

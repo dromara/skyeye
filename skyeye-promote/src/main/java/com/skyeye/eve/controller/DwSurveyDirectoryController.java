@@ -64,4 +64,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.queryDwSurveyDirectoryMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryDwSurveyMationById
+	     * @Description: 获取调查问卷信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/queryDwSurveyMationById")
+	@ResponseBody
+	public void queryDwSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.queryDwSurveyMationById(inputObject, outputObject);
+	}
+	
 }

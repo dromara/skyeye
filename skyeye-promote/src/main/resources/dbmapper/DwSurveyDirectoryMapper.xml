@@ -283,9 +283,15 @@
 			a.mail_only mailOnly,
 			a.rule,
 			a.rule_code ruleCode,
+			a.refresh,
 			a.survey_tag surveyTag,
 			a.view_answer viewAnswer,
-			a.visibility
+			a.visibility,
+			a.yn_end_num ynEndNum,
+			a.end_num endNum,
+			a.yn_end_time ynEndTime,
+			a.end_time endTime,
+			a.view_answer viewAnswer
 		FROM
 			dw_survey_directory a
 		WHERE a.id = #{id}
