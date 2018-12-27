@@ -87,7 +87,7 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
 		outputObject.setBean(surveyMation);
 		outputObject.setBeans(questions);
-		outputObject.settotal(questions.size());
+		outputObject.settotal(1);
 	}
 	
 	/**

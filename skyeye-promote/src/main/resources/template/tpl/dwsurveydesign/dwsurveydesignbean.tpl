@@ -35,12 +35,7 @@
 		</div>
 		<div id="dwSurveyQuContent" style="min-height: 500px;">
 			<ul id="dwSurveyQuContentAppUl">
-				{{#each }}
-					{{#if isActive}}
-						1
-					{{else if isInactive}}
-						2
-					{{/if}}
+				{{#each rows}}
 				{{/each}}
 			</ul>
 		</div>

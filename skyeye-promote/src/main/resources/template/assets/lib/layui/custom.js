@@ -59,6 +59,7 @@ function _openNewWindows(mation){
 		                maxmin: mation.maxmin,
 		                shade: mation.shade,
 		                zIndex: 20000000000,
+		                scrollbar: false,
 		                end: function(){
 		                	if(typeof(mation.callBack) == "function") {
 		                		mation.callBack(refreshCode);
