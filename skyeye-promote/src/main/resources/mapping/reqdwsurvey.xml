@@ -20,6 +20,18 @@
 	<url id="dwsurveydirectory004" path="/post/DwSurveyDirectoryController/queryDwSurveyMationById" val="获取调查问卷信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="问卷id"/>
 	</url>
+	<url id="dwsurveydirectory005" path="/post/DwSurveyDirectoryController/editDwSurveyMationById" val="编辑调查问卷信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="问卷id"/>
+	    <property id="effective" name="effective" ref="required,num" var="每台电脑或手机只能答一次"/>
+	    <property id="effectiveIp" name="effectiveIp" ref="required,num" var="每个IP只能答一次"/>
+	    <property id="rule" name="rule" ref="required,num" var="启用访问密码"/>
+	    <property id="ruleCode" name="ruleCode" ref="" var="密码"/>
+	    <property id="refresh" name="refresh" ref="required,num" var="有重复回答启用验证码"/>
+	    <property id="ynEndNum" name="ynEndNum" ref="required,num" var="是否依据收到的份数结束   1是   0否"/>
+	    <property id="endNum" name="endNum" ref="" var="依据收到的份数"/>
+	    <property id="ynEndTime" name="ynEndTime" ref="required,num" var="是否依据收到的份数结束"/>
+	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
+	</url>
 	<!-- 问卷调查结束 -->
 	
 </controller>

@@ -24,11 +24,12 @@
 			<div class="p_DialogContentRoot">
 				<div class="p_DialogContentItem">
 					<input type="checkbox" name="ynEndNum" {{#compare1 ynEndNum '1'}}{{/compare1}} value="1" lay-filter="ynEndNum" /> 收集到&nbsp;
-					<input type="text" size="12" class="inputSytle_1" id="endNum" name="endNum" value="{{endNum}}" {{#compare2 ynEndNum '1'}}{{/compare2}}>&nbsp;份答卷时结束
+					<input type="number" size="11" class="inputSytle_1" id="endNum" name="endNum" value="{{endNum}}" {{#compare2 ynEndNum '1'}}{{/compare2}}>&nbsp;份答卷时结束
 				</div>
 				<div class="p_DialogContentItem">
 					<input type="checkbox" name="ynEndTime" {{#compare1 ynEndTime '1'}}{{/compare1}} value="1" lay-filter="ynEndTime" /> 到&nbsp;
-					<input type="text" size="20" class="inputSytle_1" id="endTime" name="endTime" value="{{endTime}}" {{#compare2 ynEndTime '1'}}{{/compare2}}>&nbsp;时结束
+					<input type="text" size="20" class="inputSytle_1" id="endTime" name="endTime" value="{{#compare3 ynEndTime '1' endTime}}{{/compare3}}" {{#compare2 ynEndTime '1'}}{{/compare2}}>&nbsp;时结束
+					<input type="text" size="20" class="inputSytle_1" id="endTimeHide" readonly style="position: absolute; margin-left: 68px; margin-top: -30px; display: block;"/>
 				</div>
 			</div>
 		</div>

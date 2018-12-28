@@ -13,4 +13,6 @@ public interface DwSurveyDirectoryService {
 
 	public void queryDwSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void editDwSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

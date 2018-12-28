@@ -391,6 +391,7 @@
     ,zIndex: null //控件层叠顺序
     ,done: null //控件选择完毕后的回调，点击清空/现在/确定也均会触发
     ,change: null //日期时间改变后的回调
+    ,choose: null
   };
   
   //多语言

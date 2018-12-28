@@ -40,4 +40,6 @@ public interface DwSurveyDirectoryDao {
 
 	public Map<String, Object> querySurveyMationById(Map<String, Object> map) throws Exception;
 
+	public int editDwSurveyMationById(Map<String, Object> map) throws Exception;
+
 }

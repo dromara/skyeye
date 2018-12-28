@@ -157,4 +157,20 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		outputObject.settotal(1);
 	}
 	
+	/**
+	 * 
+	     * @Title: editDwSurveyMationById
+	     * @Description: 编辑调查问卷信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editDwSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		dwSurveyDirectoryDao.editDwSurveyMationById(map);//编辑问卷信息
+	}
+	
 }

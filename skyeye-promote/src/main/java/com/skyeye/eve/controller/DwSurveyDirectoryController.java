@@ -80,4 +80,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.queryDwSurveyMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editDwSurveyMationById
+	     * @Description: 编辑调查问卷信息
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/editDwSurveyMationById")
+	@ResponseBody
+	public void editDwSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.editDwSurveyMationById(inputObject, outputObject);
+	}
+	
 }

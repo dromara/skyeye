@@ -290,11 +290,29 @@
 			a.yn_end_num ynEndNum,
 			a.end_num endNum,
 			a.yn_end_time ynEndTime,
-			a.end_time endTime,
+			CONVERT(a.end_time, char) endTime,
 			a.view_answer viewAnswer
 		FROM
 			dw_survey_directory a
 		WHERE a.id = #{id}
 	</select>
+	
+	<update id="editDwSurveyMationById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			effective = #{effective},
+			effective_ip = #{effectiveIp},
+			rule = #{rule},
+			rule_code = #{ruleCode},
+			refresh = #{refresh},
+			yn_end_num = #{ynEndNum},
+			end_num = #{endNum},
+			yn_end_time = #{ynEndTime},
+			<if test="endTime != '' and endTime != null">
+				end_time = #{endTime},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
 	
 </mapper>
