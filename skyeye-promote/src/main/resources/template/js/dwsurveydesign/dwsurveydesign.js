@@ -77,6 +77,13 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/dwsurveydesign/dwsurveydesignbean.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
+		 		hdb.registerHelper('compare1', function(v1, v2, options) {
+		 			if(v1 == v2){
+		 				return options.fn(this);
+		 			}else{
+		 				return options.inverse(this);
+		 			}
+		 		});
 		 	},
 		 	ajaxSendAfter:function(json){
 		 		
