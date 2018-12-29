@@ -101,7 +101,7 @@
 									<div class="surveyQuItemContent">
 										<div class="quCoTitle">
 											<div class="quCoNum">{{count}}、</div>
-											<div class="editAble quCoTitleEdit">{{quTitle}</div>
+											<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 											<input type="hidden" name="quTitleSaveTag" value="1">
 										</div>
 										<div class="quCoItem">
@@ -116,10 +116,10 @@
 																		<c:set var="quOptionIndex" value="${(j+k-1)}}"></c:set>
 																		<c:choose>
 																			<c:when test="${quOptionIndex < fn:length(en.quRadios)}}">
-																				<input type="radio"><label style="width:${600/en.cellCount-10}}px;" class="editAble quCoOptionEdit">{{quRadios[quOptionIndex].optionName}}</label>
-																				<input type='text' class='optionInpText' style="{{isNote eq 1 ? '':'display: none;'}" />
+																				<!-- <input type="radio"><label style="width:${600/en.cellCount-10}}px;" class="editAble quCoOptionEdit">${quRadios[quOptionIndex].optionName}}</label>-->
+																				<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
 																				<div class="quItemInputCase">
-																					<input type="hidden" name="quItemId" value="{{quRadios[quOptionIndex].id}}"><input type="hidden" name="quItemSaveTag" value="1">
+																					<!-- <input type="hidden" name="quItemId" value="${quRadios[quOptionIndex].id}}"><input type="hidden" name="quItemSaveTag" value="1">-->
 																					<input type="hidden" name="isNote" value="{{isNote}}">
 																					<input type="hidden" name="checkType" value="{{checkType}}">
 																					<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
@@ -139,8 +139,8 @@
 													<ul class="transverse">
 														<c:forEach items="{{quRadios}}" var="item">
 															<li class="quCoItemUlLi">
-																<input type="radio"><label class="editAble quCoOptionEdit">{{optionName}}</label>
-																<input type='text' class='optionInpText' style="{{isNote eq 1 ? '':'display: none;'}" />
+																<!-- <input type="radio"><label class="editAble quCoOptionEdit">{{optionName}}</label>-->
+																<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
 																<div class="quItemInputCase">
 																	<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">
 																	<input type="hidden" name="isNote" value="{{isNote}}">
@@ -156,7 +156,7 @@
 														<c:forEach items="{{quRadios}}" var="item">
 															<li class="quCoItemUlLi">
 																<input type="radio"><label class="editAble quCoOptionEdit">{{optionName}}</label>
-																<input type='text' class='optionInpText' style="{{isNote eq 1 ? '':'display: none;'}" />
+																<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
 																<div class="quItemInputCase">
 																	<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">
 																	<input type="hidden" name="isNote" value="{{isNote}}">
@@ -247,7 +247,7 @@
 											<div class="surveyQuItemContent">
 												<div class="quCoTitle">
 													<div class="quCoNum">{{count}}、</div>
-													<div class="editAble quCoTitleEdit">{{quTitle}</div>
+													<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 													<input type="hidden" name="quTitleSaveTag" value="1">
 												</div>
 												<div class="quCoItem">
@@ -262,10 +262,10 @@
 																				<c:set var="quOptionIndex" value="${(j+k-1)}}"></c:set>
 																				<c:choose>
 																					<c:when test="${quOptionIndex < fn:length(en.quCheckboxs)}}">
-																						<input type="checkbox"><label style="width:${600/en.cellCount-10}}px;" class="editAble quCoOptionEdit">{{quCheckboxs[quOptionIndex].optionName}}</label>
-																						<input type='text' class='optionInpText' style="{{isNote eq 1 ? '':'display: none;'}" />
+																						<!-- <input type="checkbox"><label style="width:${600/en.cellCount-10}}px;" class="editAble quCoOptionEdit">${quCheckboxs[quOptionIndex].optionName}}</label>-->
+																						<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
 																						<div class="quItemInputCase">
-																							<input type="hidden" name="quItemId" value="{{quCheckboxs[quOptionIndex].id}}"><input type="hidden" name="quItemSaveTag" value="1">
+																							<!-- <input type="hidden" name="quItemId" value="${quCheckboxs[quOptionIndex].id}}"><input type="hidden" name="quItemSaveTag" value="1">-->
 																							<input type="hidden" name="isNote" value="{{isNote}}">
 																							<input type="hidden" name="checkType" value="{{checkType}}">
 																							<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
@@ -286,7 +286,7 @@
 																<c:forEach items="{{quCheckboxs}}" var="item">
 																	<li class="quCoItemUlLi">
 																		<input type="checkbox"><label class="editAble quCoOptionEdit">{{optionName}}</label>
-																		<input type='text' class='optionInpText' style="{{isNote eq 1 ? '':'display: none;'}" />
+																		<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
 																		<div class="quItemInputCase">
 																			<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">
 																			<input type="hidden" name="isNote" value="{{isNote}}">
@@ -302,7 +302,7 @@
 																<c:forEach items="{{quCheckboxs}}" var="item">
 																	<li class="quCoItemUlLi">
 																		<input type="checkbox"><label class="editAble quCoOptionEdit">{{optionName}}</label>
-																		<input type='text' class='optionInpText' style="{{isNote eq 1 ? '':'display: none;'}" />
+																		<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
 																		<div class="quItemInputCase">
 																			<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">
 																			<input type="hidden" name="isNote" value="{{isNote}}">
@@ -350,7 +350,7 @@
 													<input type="hidden" name="contactsField" value="{{contactsField}}">
 													<div class="quLogicInputCase">
 														<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-														{{each questionLogics}}
+														{{#each questionLogics}}
 															<div class="quLogicItem quLogicItem_{{count}}">
 																<input type="hidden" name="quLogicId" value="{{id}}" />
 																<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -396,7 +396,7 @@
 													<div class="surveyQuItemContent">
 														<div class="quCoTitle">
 															<div class="quCoNum">{{count}}、</div>
-															<div class="editAble quCoTitleEdit">{{quTitle}</div>
+															<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 															<input type="hidden" name="quTitleSaveTag" value="1">
 														</div>
 														<div class="quCoItem">
@@ -404,7 +404,7 @@
 																<li class="quCoItemUlLi">
 																	<div class="quFillblankItem">
 																		<c:choose>
-																			<c:when test="{{answerInputRow > 1}}">
+																			<c:when test="${answerInputRow > 1}}">
 																				<input type="text" style="width:${empty(en.answerInputWidth)?'300':en.answerInputWidth}px;padding:5px;display: none;" class="quFillblankAnswerInput">
 																				<textarea rows="{{answerInputRow}}" style="width:${empty(en.answerInputWidth)?'300':en.answerInputWidth}px;" class="quFillblankAnswerTextarea"></textarea>
 																			</c:when>
@@ -479,7 +479,7 @@
 															<div class="surveyQuItemContent">
 																<div class="quCoTitle">
 																	<div class="quCoNum">{{count}}、</div>
-																	<div class="editAble quCoTitleEdit">{{quTitle}</div>
+																	<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																	<input type="hidden" name="quTitleSaveTag" value="1">
 																</div>
 																<div class="quCoItem">
@@ -624,7 +624,7 @@
 																			<div class="surveyQuItemContent" style="min-height: 45px;">
 																				<div class="quCoTitle">
 																					<div class="quCoNum" style="display: none;">{{count}}、</div>
-																					<div class="editAble quCoTitleEdit">{{quTitle}</div>
+																					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																					<input type="hidden" name="quTitleSaveTag" value="1">
 																				</div>
 																			</div>
@@ -695,7 +695,7 @@
 																					<div class="surveyQuItemContent">
 																						<div class="quCoTitle">
 																							<div class="quCoNum">{{count}}、</div>
-																							<div class="editAble quCoTitleEdit">{{quTitle}</div>
+																							<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																							<input type="hidden" name="quTitleSaveTag" value="1">
 																						</div>
 																						<div class="quCoItem">
@@ -786,7 +786,7 @@
 																							<div class="surveyQuItemContent">
 																								<div class="quCoTitle">
 																									<div class="quCoNum">{{count}}、</div>
-																									<div class="editAble quCoTitleEdit">{{quTitle}</div>
+																									<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																									<input type="hidden" name="quTitleSaveTag" value="1">
 																								</div>
 																								<div class="quCoItem">
@@ -800,7 +800,7 @@
 																													</td>
 																												{{/each}}
 																											</tr>
-																											{{#each rows}
+																											{{#each rows1}}
 																												<tr class="quChenRowTr">
 																													<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																														<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
@@ -809,7 +809,7 @@
 																														<td><input type="radio"> </td>
 																													</c:forEach>
 																												</tr>
-																											{{each}}
+																											{{/each}}
 																										</table>
 																									</div>
 																									<div class="quCoRightTools">
@@ -900,7 +900,7 @@
 																									<div class="surveyQuItemContent">
 																										<div class="quCoTitle">
 																											<div class="quCoNum">{{count}}、</div>
-																											<div class="editAble quCoTitleEdit">{{quTitle}</div>
+																											<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																											<input type="hidden" name="quTitleSaveTag" value="1">
 																										</div>
 																										<div class="quCoItem">
@@ -914,7 +914,7 @@
 																															</td>
 																														{{/each}}
 																													</tr>
-																													{{#each rows}}
+																													{{#each rows1}}
 																														<tr class="quChenRowTr">
 																															<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
@@ -967,7 +967,7 @@
 																											<input type="hidden" name="randOrder" value="{{randOrder}}">
 																											<input type="hidden" name="cellCount" value="{{cellCount}}">
 																											<div class="quLogicInputCase">
-																												<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}">
+																												<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
 																												{{#each questionLogics}}
 																													<div class="quLogicItem quLogicItem_{{count}}">
 																														<input type="hidden" name="quLogicId" value="{{id}}" />
@@ -1014,7 +1014,7 @@
 																											<div class="surveyQuItemContent">
 																												<div class="quCoTitle">
 																													<div class="quCoNum">{{count}}、</div>
-																													<div class="editAble quCoTitleEdit">{{quTitle}</div>
+																													<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																													<input type="hidden" name="quTitleSaveTag" value="1">
 																												</div>
 																												<div class="quCoItem">
@@ -1028,7 +1028,7 @@
 																																	</td>
 																																{{/each}}
 																															</tr>
-																															{{#each rows}}
+																															{{#each rows1}}
 																																<tr class="quChenRowTr">
 																																	<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																		<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
@@ -1123,7 +1123,7 @@
 																													<div class="surveyQuItemContent">
 																														<div class="quCoTitle">
 																															<div class="quCoNum">{{count}}、</div>
-																															<div class="editAble quCoTitleEdit">{{quTitle}</div>
+																															<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																															<input type="hidden" name="quTitleSaveTag" value="1">
 																														</div>
 																														<div class="quCoItem">
@@ -1137,7 +1137,7 @@
 																																			</td>
 																																		{{/each}}
 																																	</tr>
-																																	{{#each rows}}
+																																	{{#each rows1}}
 																																		<tr class="quChenRowTr">
 																																			<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																				<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
@@ -1241,7 +1241,7 @@
 																															<div class="surveyQuItemContent">
 																																<div class="quCoTitle">
 																																	<div class="quCoNum">{{count}}、</div>
-																																	<div class="editAble quCoTitleEdit">{{quTitle}</div>
+																																	<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																																	<input type="hidden" name="quTitleSaveTag" value="1">
 																																</div>
 																																<div class="quCoItem">

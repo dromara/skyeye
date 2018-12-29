@@ -22,7 +22,7 @@ var noMatchingBeansMation = "<div class='noMation col-lg-12 col-sm-12 col-xs-12'
 document.write("<script type=\"text/javascript\" src=\"http://pv.sohu.com/cityjson?ie=utf-8\"></script>");
 
 //动态引入模板引擎
-document.write("<script type=\"text/javascript\" src=\"../../assets/lib/layui/lay/modules/hdb/handlebars-v4.0.5.js\"></script>");
+document.write("<script type=\"text/javascript\" src=\"" + reqBasePath + "/assets/lib/layui/lay/modules/hdb/handlebars-v4.0.5.js\"></script>");
 
 function getBaseRootPath(){
 	var curWwwPath = window.document.location.href;  
