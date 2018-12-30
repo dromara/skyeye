@@ -137,31 +137,7 @@
 		</td>
 	</tr>
 </table>
-<div id="dwCommonEditRoot">
-	<div class="dwCommonEdit">
-		<ul class="dwComEditMenuUl">
-			<li>
-				<a href="javascript:;" class="SeniorEdit"><i class="menu_edit2_icon"></i>高级编辑</a>
-			</li>
-			<li class="option_Set_Li">
-				<a href="javascript:;" class="option_Set"><i class="menu_edit4_icon"></i>选项设置</a>
-			</li>
-		</ul>
-		<ul class="dwComEditOptionUl">
-			<li class="dwOptionUp">
-				<div class=dwQuIcon></div>
-			</li>
-			<li class="dwOptionDown">
-				<div class=dwQuIcon></div>
-			</li>
-			<li class="dwOptionDel">
-				<div class=dwQuIcon></div>
-			</li>
-		</ul>
-		<div class="dwComEditMenuBtn"></div>
-		<div id="dwComEditContent" contenteditable="true">请问你的年级是？</div>
-	</div>
-</div>
+
 <div id="dialog" title="Basic dialog" style="display:none">
 	<div id="editDialogCenter" class="editDialogCenter">
 		<div id="dialogUeditor"></div>
@@ -296,31 +272,6 @@
 				<li class="quOptionFillRequiredLi"><label style="padding-left:15px;"><input type="checkbox" name="quOption_isRequiredFill" checked="checked" >&nbsp;该空可不填</label>&nbsp;</li>
 			</ul>
 			<div class="dwQuDialogBtnCon"><input type="button" value="保存" class="quDialogBtn" id="dwDialogQuOptionSetSave" /></div>
-		</div>
-		<div class="dwSurveyAttrSetDialog dwQuFormSetDialog dwQuDialogCon">
-			<div class="tabbarDialog_1">
-				<div class="p_DialogContent">
-					<input type="hidden" name="svyAttrSaveTag" value="1">
-					<div class="p_DialogContentTitle">回答限制</div>
-					<div class="p_DialogContentRoot">
-						<div class="p_DialogContentItem"><label><input type="checkbox" name="effective" value="4"> 每台电脑或手机只能答一次</label></div>
-						<div class="p_DialogContentItem"><label><input type="checkbox" name="effectiveIp" value="1"> 每个IP只能答一次</label></div>
-						<div class="p_DialogContentItem"><label><input type="checkbox" name="rule" value="3"> 启用访问密码</label> &nbsp;&nbsp;&nbsp;设置密码：
-							<input type="text" size="10" name="ruleCode" class="inputSytle_1">
-						</div>
-						<div class="p_DialogContentItem"><label><input type="checkbox" name="refresh" value="1"> 有重复回答启用验证码</label></div>
-						<div class="p_DialogContentItem" style="display: none;"><label><input type="checkbox" name="mailOnly" value="1"> 只有邮件邀请唯一链接的受访者可回答</label></div>
-					</div>
-				</div>
-				<div class="p_DialogContent">
-					<div class="p_DialogContentTitle">何时结束</div>
-					<div class="p_DialogContentRoot">
-						<div class="p_DialogContentItem"><label><input type="checkbox" name="ynEndNum" value="1"> 收集到&nbsp;<input type="text" size="12"  class="inputSytle_1" name="endNum">&nbsp;份答卷时结束</label></div>
-						<div class="p_DialogContentItem"><label><input type="checkbox" name="ynEndTime" value="1"> 到&nbsp;<input type="text" size="20"  class="inputSytle_1 Wdate" onfocus="WdatePicker({minDate:'%y-%M-{%d+1}',dateFmt:'yyyy-MM-dd HH:mm:ss'})" name="endTime">&nbsp;时结束 </label></div>
-					</div>
-				</div>
-			</div>
-			<div class="dwQuDialogBtnCon"><input type="button" value="保存" class="quDialogBtn" id="dwDialogSurveyAttrSave" /></div>
 		</div>
 	</div>
 </div>

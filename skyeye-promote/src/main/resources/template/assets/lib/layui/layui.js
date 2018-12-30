@@ -130,6 +130,7 @@ function isNull(str){
 	    g6Plugins: 'modules/flowchart/g6-plugins.min',//流程图
 	    dtree: 'modules/dtree/dtree',//
 	    jqueryUI: 'modules/jquery-ui-1.10.3.custom',//jQuery拖拽
+	    validate: 'modules/validate/jquery.validate',//验证
 	};
 
 	// 记录基础数据
