@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding-top:20px;">
+	    <form class="layui-form" action="" id="showForm1" autocomplete="off" style="padding-left: 10px; padding-right: 10px;">
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">问卷名称<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" name="qu_inputWidth" win-verify="required" value="300" class="layui-input">
+                	<div class="layui-form-mid layui-word-aux">字符</div>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">输入框高<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" name="qu_inputRow" win-verify="required" value="1" class="layui-input">
+                	<div class="layui-form-mid layui-word-aux">行</div>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">数据类型<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<select class="option_range" name="quFill_checkType" win-verify="required">
+						<option value="NO">无验证</option>
+						<option value="EMAIL">Email</option>
+						<option value="UNSTRCN">禁止中文</option>
+						<option value="STRCN">仅许中文</option>
+						<option value="NUM">数值</option>
+						<option value="TELENUM">电话号码</option>
+						<option value="PHONENUM">手机号码</option>
+						<option value="DATE">日期</option>
+						<option value="IDENTCODE">身份证号</option>
+						<option value="ZIPCODE">邮政编码</option>
+						<option value="URL">网址</option>
+					</select>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" id="cancle">取消</button>
+	                <button class="winui-btn" lay-submit lay-filter="formAddBean1">保存</button>
+	            </div>
+	        </div>
+	    </form>
+	    
+	    <form class="layui-form" action="" id="showForm2" autocomplete="off" style="padding-left: 10px; padding-right: 10px;">
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">选项设置<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="checkbox" name="quOption_isNote" class="layui-input" lay-filter="quOption_isNote">选项后添加填空
+                </div>
+	        </div>
+	        <div class="layui-form-item" id="quOption_checkType_div">
+	            <label class="layui-form-label">填空内容<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<select class="option_range" name="quOption_checkType" style="width:120px;">
+						<option value="NO">无限制</option>
+						<option value="EMAIL">Email</option>
+						<option value="UNSTRCN">禁止中文</option>
+						<option value="STRCN">仅许中文</option>
+						<option value="NUM">数值</option>
+						<option value="TELENUM">电话号码</option>
+						<option value="PHONENUM">手机号码</option>
+						<option value="DATE">日期</option>
+						<option value="IDENTCODE">身份证号</option>
+						<option value="ZIPCODE">邮政编码</option>
+						<option value="URL">网址</option>
+					</select>
+                </div>
+	        </div>
+	        <div class="layui-form-item" id="quOption_isRequiredFill_div">
+	            <div class="layui-input-block">
+                	<input type="checkbox" name="quOption_isRequiredFill" class="layui-input" lay-filter="quOption_isRequiredFill">&nbsp;该空可不填
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" id="cancle">取消</button>
+	                <button class="winui-btn" lay-submit lay-filter="formAddBean2">保存</button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/dwsurveydesign/'}).use('modelUIDialog');
+    </script>
+</body>
+</html>

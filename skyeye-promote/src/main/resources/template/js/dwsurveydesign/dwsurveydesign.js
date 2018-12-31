@@ -1,6 +1,8 @@
 
 var ueEditObj = null;//即将编辑的内容
 
+var quOptionDesign = null;//问题选项设置
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -850,28 +852,31 @@ layui.config({
 			curEditObj=null;
 		}
 
-		function setShowDialogOffset(thDialogObj){
-			var thObjClass=thDialogObj.attr("class");
-			if(thObjClass.indexOf("dwFbMenuBtn")<0 && thObjClass.indexOf("quCoOptionEdit")<0){
-				var thOffset=thDialogObj.offset();
-				$("#dwCommonDialog").show(0,function(){
-					var thOffsetTop=thOffset.top;
-					var thOffsetLeft=thOffset.left+40;
-					var dwCommonRefIcon=$("#dwCommonDialog").find(".dwCommonRefIcon");
+		function setShowDialogOffset(thDialogObj) {
+			var thObjClass = thDialogObj.attr("class");
+			if(thObjClass.indexOf("dwFbMenuBtn") < 0 && thObjClass.indexOf("quCoOptionEdit") < 0) {
+				var thOffset = thDialogObj.offset();
+				$("#dwCommonDialog").show(0, function() {
+					var thOffsetTop = thOffset.top;
+					var thOffsetLeft = thOffset.left + 40;
+					var dwCommonRefIcon = $("#dwCommonDialog").find(".dwCommonRefIcon");
 					dwCommonRefIcon.removeClass("right");
 					dwCommonRefIcon.removeClass("left");
-					browseWidth=$(window).width();			
-					browseHeight=$(window).height();
-					if((thOffsetLeft-100)>browseWidth/2){
-						thOffsetLeft=thOffsetLeft-$("#dwCommonDialog").width()-50;
+					browseWidth = $(window).width();
+					browseHeight = $(window).height();
+					if((thOffsetLeft - 100) > browseWidth / 2) {
+						thOffsetLeft = thOffsetLeft - $("#dwCommonDialog").width() - 50;
 						dwCommonRefIcon.addClass("right");
-					}else{
+					} else {
 						dwCommonRefIcon.addClass("left");
 					}
-					$("#dwCommonDialog").offset({ top: thOffsetTop, left: thOffsetLeft });
+					$("#dwCommonDialog").offset({
+						top: thOffsetTop,
+						left: thOffsetLeft
+					});
 				});
 			}
-			
+
 		}
 		
 		//加载地域
@@ -985,68 +990,20 @@ layui.config({
 		}
 		
 		//显示模式窗口
-		function showUIDialog(thDialogObj){
-			var thObjClass = thDialogObj.attr("class");
-			$("#modelUIDialog").dialog("open");
-			$(".dwQuDialogCon").hide();
-			if(thObjClass.indexOf("dwFbMenuBtn") >= 0){
-				$("#modelUIDialog .dwQuFillDataTypeOption").show();
-				$("#modelUIDialog").dialog("open");
-				var quItemBody = $(thDialogObj).parents(".surveyQuItemBody");
-				var checkType_val = quItemBody.find("input[name='checkType']").val();
-				var answerInputWidth_val = quItemBody.find("input[name='answerInputWidth']").val();
-				var answerInputRow_val = quItemBody.find("input[name='answerInputRow']").val();
-				if(checkType_val == ""){
-					checkType_val = "NO";
-				}
-				var checkType = $("#modelUIDialog select[name='quFill_checkType']");
-				checkType.val(checkType_val);
-				var qu_inputWidth = $("#modelUIDialog input[name='qu_inputWidth']");
-				var qu_inputRow = $("#modelUIDialog input[name='qu_inputRow']");
-				if(answerInputWidth_val == ""){
-					answerInputWidth_val = "300";
-				}
-				if(answerInputRow_val == ""){
-					answerInputRow_val = "1";
-				}
-				qu_inputWidth.val(answerInputWidth_val);
-				qu_inputRow.val(answerInputRow_val);
-				resetQuItemHover(quItemBody);
-				$(thDialogObj).parents(".quCoItemUlLi").addClass("menuBtnClick");
-				$("#modelUIDialog").dialog("option","height",220);
-			}else if(thObjClass.indexOf("quCoOptionEdit")>=0) {
-				$("#modelUIDialog .dwQuRadioCheckboxOption").show();
-				//设置回显值 isNote checkType
-				var quOption_isNote=$("#modelUIDialog input[name='quOption_isNote']");
-				var quOption_checkType=$("#modelUIDialog select[name='quOption_checkType']");
-				var quOption_isRequiredFill=$("#modelUIDialog input[name='quOption_isRequiredFill']");
-				var quOptionParent=$(thDialogObj).parent();
-				var isNote_val=quOptionParent.find("input[name='isNote']").val();
-				var checkType_val=quOptionParent.find("input[name='checkType']").val();
-				var isRequiredFill_val=quOptionParent.find("input[name='isRequiredFill']").val();
-				if(isNote_val=="1"){
-					quOption_isNote.prop("checked",true);
-					$(".quOptionFillContentLi,.quOptionFillRequiredLi").show();
-					$("#modelUIDialog").dialog("option","height",250);
-				}else{
-					quOption_isNote.prop("checked",false);
-					$(".quOptionFillContentLi,.quOptionFillRequiredLi").hide();
-					$("#modelUIDialog").dialog("option","height",180);
-				}
-				if(checkType_val==""){
-					checkType_val="NO";
-				}
-				quOption_checkType.val(checkType_val);
-				if(isRequiredFill_val=="1"){
-					quOption_isRequiredFill.prop("checked",true);
-				}else{
-					quOption_isRequiredFill.prop("checked",false);
-				}
-			}else if(thObjClass.indexOf("surveyAttrSetToolbar_li")>=0){
-				$("#modelUIDialog .dwSurveyAttrSetDialog").show();
-				$("#modelUIDialog").dialog("option","height",390);
-			}
-			dwDialogObj=thDialogObj;
+		function showUIDialog(thDialogObj) {
+			quOptionDesign = thDialogObj;
+			_openNewWindows({
+				url: "../../tpl/dwsurveydesign/modelUIDialog.html", 
+				title: "选项设置",
+				area: ['500px', '500px'],
+				pageId: "modelUIDialog",
+				callBack: function(refreshCode){
+	                if (refreshCode == '0') {
+	                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+	                } else if (refreshCode == '-9999') {
+	                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+	                }
+				}});
 		}
 	    
 		/** 添加列选项 **/
