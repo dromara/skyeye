@@ -64,7 +64,7 @@ layui.config({
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/commonlyusedmodel/salaryQuModel.tpl')
 						+ getFileContent('tpl/dwsurveydesign/dragmodel/commonlyusedmodel/dateQuModel.tpl');
 	    
-//	    //各种模板
+	    //各种模板
 	    var _varioustemplates = getFileContent('tpl/dwsurveydesign/dwcommon/dwCommonEditRoot.tpl');
 	    
 	    $("#_basemodel").html(_basemodel);
@@ -515,8 +515,10 @@ layui.config({
 				if(quType == "RADIO") {
 					//添加单选选项
 					editAble(addRadioItem(quItemBody, ""));
+					form.render('radio');
 				} else if(quType == "CHECKBOX") {
 					editAble(addCheckboxItem(quItemBody, ""));
+					form.render('checkbox');
 				} else if(quType == "SCORE") {
 					editAble(addScoreItem(quItemBody, "新选项"));
 				} else if(quType == "ORDERQU") {
@@ -525,6 +527,8 @@ layui.config({
 					editAble(addMultiFillblankItem(quItemBody, "新选项"));
 				} else if(quType == "CHENRADIO" || quType == "CHENCHECKBOX" || quType == "CHENFBK" || quType == "CHENSCORE") { //矩陈单选题,矩阵多选题
 					editAble(addChenItem($(this), quItemBody, "新选项"));
+					form.render('radio');
+					form.render('checkbox');
 				}
 				bindQuHoverItem();
 				return false;
@@ -534,7 +538,7 @@ layui.config({
 			$(".addMoreOption,.addMoreRowOption,.addMoreColumnOption").unbind();
 			$(".addMoreOption,.addMoreRowOption,.addMoreColumnOption").click(function(){
 				showDialog($(this));
-				var quItemBody=$(this).parents(".surveyQuItemBody");
+				var quItemBody = $(this).parents(".surveyQuItemBody");
 				resetQuItemHover(quItemBody);
 				return false;
 			});
@@ -935,7 +939,7 @@ layui.config({
 			dwCommonDialogHide();
 			curEditCallback();
 
-			var quItemBody=$(editAbleObj).parents(".surveyQuItemBody");
+			var quItemBody = $(editAbleObj).parents(".surveyQuItemBody");
 			resetQuItemHover(quItemBody);
 
 			var thClass = $(editAbleObj).attr("class");
