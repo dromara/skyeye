@@ -315,4 +315,24 @@
 		WHERE id = #{id}
 	</update>
 	
+	<insert id="addQuestionMation" parameterType="java.util.Map">
+	     INSERT into dw_question 
+	     (id, answer_input_row, answer_input_width, belong_id, cell_count, check_type, contacts_attr, contacts_field, copy_from_id, hv, is_required,
+	     	keywords, order_by_id, param_int01, param_int02, parent_qu_id, qu_name, qu_note, qu_tag, qu_title, qu_type, rand_order, tag, visibility,
+	     	yesno_option, create_time)
+	     VALUES
+	     (#{id}, #{answerInputRow}, #{answerInputWidth}, #{belongId}, #{cellCount}, #{checkType}, #{contactsAttr}, #{contactsField}, #{copyFormId}, #{hv}, #{isRequired},
+	     	#{keywords}, #{orderById}, #{paramInt01}, #{paramInt02}, #{parentQuId}, #{quName}, #{quNote}, #{quTag}, #{quTitle}, #{quType}, #{randOrder}, #{tag}, #{visibility},
+	     	#{yesnoOption}, #{createTime})
+	</insert>
+	
+	<insert id="addQuestionLogicsMationList" parameterType="java.util.Map">
+	     insert into dw_question_logic
+	     (id, title, cg_qu_item_id, ck_qu_id, qu_logic_id, ge_le, logic_type, score_num, sk_qu_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.title}, #{item.ckQuId}, #{item.quLogicId}, #{quLogicId}, #{geLe}, #{logicType}, #{scoreNum}, #{skQuId}, #{visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
 </mapper>

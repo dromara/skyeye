@@ -1,50 +1,5 @@
 
-<table id="setQuLogicItem" style="display: none;">
-	<tr id="setQuLogicItemTrModel">
-		<td class="ifSpanText1">如果本题回答</td>
-		<td>
-			<select name="option_id" class="logicQuOptionSel"></select>
-		</td>
-		<td>则&nbsp;
-			<select name="option_id" class="logicType" style="width: 60px;">
-				<option value="2">显示</option>
-				<option value="1">跳到</option>
-			</select>
-		</td>
-		<td>
-			<select name="jump_to_qid" class="logicQuSel"></select>
-		</td>
-		<td>
-			<div class="dialogRemoveLogic"></div>
-		</td>
-	</tr>
-	<tr id="setQuLogicItemTrModel_score">
-		<td class="ifSpanText1">如果选项</td>
-		<td>
-			<select name="option_id" class="logicQuOptionSel" style="width: 120px;"></select>
-			评分&nbsp;
-			<select name="logicScoreGtLt" class="logicScoreGtLt" style="width: 80px;">
-				<option value="le">小等于</option>
-				<option value="ge">大等于</option>
-			</select>
-			<select name="logicScoreNum" class="logicScoreNum" style="width: 40px;">
-				<option>2</option>
-				<option>3</option>
-			</select>&nbsp;分,</td>
-		<td>则&nbsp;
-			<select name="logicEvent" class="logicType" style="width: 60px;">
-				<option value="2">显示</option>
-				<option value="1">跳到</option>
-			</select>
-		</td>
-		<td>
-			<select name="jump_to_qid" class="logicQuSel"></select>
-		</td>
-		<td>
-			<div class="dialogRemoveLogic"></div>
-		</td>
-	</tr>
-</table>
+
 
 <div id="dialog" title="Basic dialog" style="display:none">
 	<div id="editDialogCenter" class="editDialogCenter">

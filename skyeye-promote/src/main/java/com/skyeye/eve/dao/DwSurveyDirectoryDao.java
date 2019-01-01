@@ -42,4 +42,8 @@ public interface DwSurveyDirectoryDao {
 
 	public int editDwSurveyMationById(Map<String, Object> map) throws Exception;
 
+	public int addQuestionMation(Map<String, Object> map) throws Exception;
+
+	public int addQuestionLogicsMationList(List<Map<String, Object>> quLogics) throws Exception;
+
 }

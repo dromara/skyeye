@@ -13,7 +13,7 @@ layui.config({
 	    var $ = layui.$,
 	    form = layui.form;
 	    
-	    var svTag=2;//表示题目是问卷题还是题库中题
+	    var svTag = 2;//表示题目是问卷题还是题库中题
 
 	    // 题目保存后回调时机比较参数
 		var quCBNum = 0;// 比较值1
@@ -23,8 +23,6 @@ layui.config({
 		var dwDialogObj = null;
 		var isDrag = false;
 		var appQuObj = null;
-		var myeditor = null;
-		var ueDialog = null;
 		
 		var isSort = false;
 
@@ -332,22 +330,22 @@ layui.config({
 			$("#dwSurveyQuContent .surveyQuItemBody").hover(function(){
 				//显示
 				if(isDrag){
-					appQuObj=$(this);
+					appQuObj = $(this);
 				}else{
 					//显示
 					$(this).addClass("hover");
 					$(".pageBorderTop").removeClass("nohover");
 					//如果是填空
-					appQuObj=$(this);
+					appQuObj = $(this);
 				}
 			},function(){
 				$(".pageBorderTop").addClass("nohover");
 				$(this).removeClass("showLine");
-				var hoverTag=$(this).find("input[name='hoverTag']").val();
-				if(hoverTag!="hover"){
+				var hoverTag = $(this).find("input[name='hoverTag']").val();
+				if(hoverTag != "hover"){
 					$(this).removeClass("hover");
 				}
-				appQuObj=null;
+				appQuObj = null;
 			});
 			
 			$("#dwSurveyQuContent .surveyQuItemBody").click(function(){
@@ -380,11 +378,11 @@ layui.config({
 			//绑定题目删除事件
 			$(".dwQuDelete").unbind();
 			$(".dwQuDelete").click(function(){
-				var quBody=$(this).parents(".surveyQuItemBody");
+				var quBody = $(this).parents(".surveyQuItemBody");
 				if(confirm("确认要删除此题吗？")){
-					var quId=quBody.find("input[name='quId']").val();
-					if(quId!=""){
-						var url=ctx+"/design/question!ajaxDelete.action";
+					var quId = quBody.find("input[name='quId']").val();
+					if(quId != ""){
+						var url = reqBasePath+"/design/question!ajaxDelete.action";
 						var data="quId="+quId;
 						$.ajax({
 							url:url,
@@ -455,52 +453,51 @@ layui.config({
 			//逻辑设置 
 			$(".dwQuLogic").unbind();
 			$(".dwQuLogic").click(function(){
-				showDialog($(this));
-				var quItemBody=$(this).parents(".surveyQuItemBody");
-				var quType=quItemBody.find("input[name='quType']").val();
+				var quItemBody = $(this).parents(".surveyQuItemBody");
+				var quType = quItemBody.find("input[name='quType']").val();
 				//默认加载图标
-				var fristQuItemBody=$("#dwSurveyQuContent .li_surveyQuItemBody").first();
-				saveQus(fristQuItemBody,function(){
+				var fristQuItemBody = $("#dwSurveyQuContent .li_surveyQuItemBody").first();
+				saveQus(fristQuItemBody, function() {
 					$(".dwQuDialogCon").hide();
 					$("#dwCommonDialog .dwQuDialogLogic").show();
 					resetQuItemHover(quItemBody);
 					bindDialogRemoveLogic();
 					$("#dwQuLogicTable").empty();
 					//逻辑数据回显示
-					var quLogicItems=quItemBody.find(".quLogicItem");
-					if(quLogicItems[0]){
-						$.each(quLogicItems,function(){
-							var skQuId=$(this).find("input[name='skQuId']").val();
-							var cgQuItemId=$(this).find("input[name='cgQuItemId']").val();
-							var logicType=$(this).find("input[name='logicType']").val();
+					var quLogicItems = quItemBody.find(".quLogicItem");
+					if(quLogicItems[0]) {
+						$.each(quLogicItems, function() {
+							var skQuId = $(this).find("input[name='skQuId']").val();
+							var cgQuItemId = $(this).find("input[name='cgQuItemId']").val();
+							var logicType = $(this).find("input[name='logicType']").val();
 							// 设置分数 geLe scoreNum
-							var geLe="";
-							var scoreNum="";
-							if(quType==="SCORE"){
-								geLe=$(this).find("input[name='geLe']").val();
-								scoreNum=$(this).find("input[name='scoreNum']").val();
+							var geLe = "";
+							var scoreNum = "";
+							if(quType === "SCORE") {
+								geLe = $(this).find("input[name='geLe']").val();
+								scoreNum = $(this).find("input[name='scoreNum']").val();
 							}
-							var thClass=$(this).attr("class");
-							thClass=thClass.replace("quLogicItem", "");
-							thClass=thClass.replace(" ", "");
+							var thClass = $(this).attr("class");
+							thClass = thClass.replace("quLogicItem", "");
+							thClass = thClass.replace(" ", "");
 							//回显相应的选项
-							addQuDialogLogicTr(false,function(){
+							addQuDialogLogicTr(false, function() {
 								//执行成功--设置值
-								var lastTr=$("#dwQuLogicTable").find("tr").last();
-								lastTr.attr("class",thClass);
+								var lastTr = $("#dwQuLogicTable").find("tr").last();
+								lastTr.attr("class", thClass);
 								lastTr.find(".logicQuOptionSel").val(cgQuItemId);
 								lastTr.find(".logicQuSel").val(skQuId);
 								lastTr.find(".logicType").val(logicType);
 								lastTr.find(".logicQuOptionSel").change();
 								lastTr.find(".logicQuSel").change();
 								// 设置分数 geLe scoreNum
-								if(quType==="SCORE"){
+								if(quType === "SCORE") {
 									lastTr.find(".logicScoreGtLt").val(geLe);
 									lastTr.find(".logicScoreNum").val(scoreNum);
 								}
-							},function(){});
+							}, function() {});
 						});
-					}else{
+					} else {
 						$(".dwQuDialogAddLogic").click();
 					}
 				});
@@ -1106,7 +1103,7 @@ layui.config({
 			optionParent=$(curEditObj).parents("td.quChenColumnTd");
 			var quOptionId=$(optionParent).find("input[name='quItemId']").val();
 			if(quOptionId!="" && quOptionId!="0" ){
-				var url=ctx+"/design/qu-chen!ajaxDeleteColumn.action";
+				var url=reqBasePath+"/design/qu-chen!ajaxDeleteColumn.action";
 				var data="quItemId="+quOptionId;
 				$.ajax({
 					url:url,
@@ -1128,7 +1125,7 @@ layui.config({
 			optionParent=$(curEditObj).parents("td.quChenRowTd");
 			var quOptionId=$(optionParent).find("input[name='quItemId']").val();
 			if(quOptionId!="" && quOptionId!="0" ){
-				var url=ctx+"/design/qu-chen!ajaxDeleteRow.action";
+				var url=reqBasePath+"/design/qu-chen!ajaxDeleteRow.action";
 				var data="quItemId="+quOptionId;
 				$.ajax({
 					url:url,
@@ -1525,7 +1522,7 @@ layui.config({
 	    function saveRadio(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = ctx + "/design/qu-radio!ajaxSave.action";
+	    		var url = reqBasePath + "/design/qu-radio!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();
@@ -1699,7 +1696,7 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = ctx + "/design/qu-radio!ajaxDelete.action";
+	    		var url = reqBasePath + "/design/qu-radio!ajaxDelete.action";
 	    		var data = "quItemId=" + quOptionId;
 	    		$.ajax({
 	    			url: url,
@@ -1724,7 +1721,7 @@ layui.config({
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
 
-	    		var url = ctx + "/design/qu-checkbox!ajaxSave.action";
+	    		var url = reqBasePath + "/design/qu-checkbox!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();;
@@ -1897,7 +1894,7 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = ctx + "/design/qu-checkbox!ajaxDelete.action";
+	    		var url = reqBasePath + "/design/qu-checkbox!ajaxDelete.action";
 	    		var data = "quItemId=" + quOptionId;
 	    		$.ajax({
 	    			url: url,
@@ -1982,12 +1979,11 @@ layui.config({
 
 	    //*******填空题*******//
 	    /**
-	     ** 新保存填空题
+	     * 新保存填空题
 	     **/
 	    function saveFillblank(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = ctx + "/design/qu-fillblank!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();;
@@ -2004,7 +2000,7 @@ layui.config({
 
 	    		var checkType = quItemBody.find("input[name='checkType']").val();
 
-	    		var data = "belongId=" + questionBelongId + "&orderById=" + orderById + "&tag=" + svTag + "&quType=" + quType + "&quId=" + quId;
+	    		var data = "belongId=" + parent.rowId + "&orderById=" + orderById + "&tag=" + svTag + "&quType=" + quType + "&quId=" + quId;
 	    		data += "&isRequired=" + isRequired + "&hv=" + hv + "&randOrder=" + randOrder + "&cellCount=" + cellCount;
 	    		data += "&answerInputWidth=" + answerInputWidth + "&answerInputRow=" + answerInputRow;
 	    		data += "&contactsAttr=" + contactsAttr + "&contactsField=" + contactsField + "&checkType=" + checkType;
@@ -2017,6 +2013,7 @@ layui.config({
 	    		}
 	    		//逻辑选项
 	    		var quLogicItems = quItemBody.find(".quLogicItem");
+	    		var list = [];
 	    		$.each(quLogicItems, function(i) {
 	    			var thClass = $(this).attr("class");
 	    			thClass = thClass.replace("quLogicItem quLogicItem_", "");
@@ -2029,44 +2026,41 @@ layui.config({
 	    			var logicType = $(this).find("input[name='logicType']").val();
 	    			var itemIndex = thClass;
 	    			if(logicSaveTag == 0) {
-	    				data += "&quLogicId_" + itemIndex + "=" + quLogicId;
-	    				data += "&cgQuItemId_" + itemIndex + "=" + cgQuItemId;
-	    				data += "&skQuId_" + itemIndex + "=" + skQuId;
-	    				data += "&visibility_" + itemIndex + "=" + visibility;
-	    				data += "&logicType_" + itemIndex + "=" + logicType;
-	    			}
-
-	    		});
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: 'post',
-	    			success: function(msg) {
-	    				//alert(msg);// resultJson quItemId
-	    				if(msg != "error") {
-	    					var jsons = eval("(" + msg + ")");
-	    					//alert(jsons);
-	    					var quId = jsons.id;
-	    					quItemBody.find("input[name='quId']").val(quId);
-
-	    					//同步logic Id信息
-	    					var quLogics = jsons.quLogics;
-	    					$.each(quLogics, function(i, item) {
-	    						var logicItem = quItemBody.find(".quLogicItem_" + item.title);
-	    						logicItem.find("input[name='quLogicId']").val(item.id);
-	    						logicItem.find("input[name='logicSaveTag']").val(1);
-	    					});
-
-	    					quItemBody.find("input[name='saveTag']").val(1);
-	    					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-	    					//执行保存下一题
-	    					saveQus(quItemBody.next(), callback);
-	    					//同步-更新题目排序号
-	    					quCBNum2++;
-	    					exeQuCBNum();
-	    				}
+	    				var s = {
+    						quLogicId: quLogicId,
+    						cgQuItemId: cgQuItemId,
+    						skQuId: skQuId,
+    						visibility: visibility,
+    						logicType: logicType,
+    						key: itemIndex,
+    	    			};
+    	    			list.push(s);
 	    			}
 	    		});
+	    		data += "&logic=" + JSON.stringify(list);
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory006", params:data, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+		 	   			var quId = json.bean.id;
+						quItemBody.find("input[name='quId']").val(quId);
+						//同步logic Id信息
+						var quLogics = json.bean.quLogics;
+						$.each(quLogics, function(i, item) {
+							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
+							logicItem.find("input[name='quLogicId']").val(item.id);
+							logicItem.find("input[name='logicSaveTag']").val(1);
+						});
+	
+						quItemBody.find("input[name='saveTag']").val(1);
+						quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+						//执行保存下一题
+						saveQus(quItemBody.next(), callback);
+						//同步-更新题目排序号
+						quCBNum2++;
+						exeQuCBNum();
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
 	    	}
@@ -2079,7 +2073,7 @@ layui.config({
 	    function saveScore(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = ctx + "/design/qu-score!ajaxSave.action";
+	    		var url = reqBasePath + "/design/qu-score!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();
@@ -2221,7 +2215,7 @@ layui.config({
 
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = ctx + "/design/qu-score!ajaxDelete.action";
+	    		var url = reqBasePath + "/design/qu-score!ajaxDelete.action";
 	    		var data = "quItemId=" + quOptionId;
 	    		$.ajax({
 	    			url: url,
@@ -2245,7 +2239,7 @@ layui.config({
 	    function saveOrderqu(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = ctx + "/design/qu-orderqu!ajaxSave.action";
+	    		var url = reqBasePath + "/design/qu-orderqu!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();
@@ -2382,7 +2376,7 @@ layui.config({
 
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = ctx + "/design/qu-orderqu!ajaxDelete.action";
+	    		var url = reqBasePath + "/design/qu-orderqu!ajaxDelete.action";
 	    		var data = "quItemId=" + quOptionId;
 	    		$.ajax({
 	    			url: url,
@@ -2408,7 +2402,7 @@ layui.config({
 	    function savePagetag(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = ctx + "/design/qu-pagetag!ajaxSave.action";
+	    		var url = reqBasePath + "/design/qu-pagetag!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();;
@@ -2489,7 +2483,7 @@ layui.config({
 	    function saveParagraph(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = ctx + "/design/qu-paragraph!ajaxSave.action";
+	    		var url = reqBasePath + "/design/qu-paragraph!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();;
@@ -2572,7 +2566,7 @@ layui.config({
 	    function saveMultiFillblank(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = ctx + "/design/qu-multi-fillblank!ajaxSave.action";
+	    		var url = reqBasePath + "/design/qu-multi-fillblank!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();
@@ -2695,7 +2689,7 @@ layui.config({
 
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = ctx + "/design/qu-multi-fillblank!ajaxDelete.action";
+	    		var url = reqBasePath + "/design/qu-multi-fillblank!ajaxDelete.action";
 	    		var data = "quItemId=" + quOptionId;
 	    		$.ajax({
 	    			url: url,
@@ -2719,7 +2713,7 @@ layui.config({
 	    function saveChen(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = ctx + "/design/qu-chen!ajaxSave.action";
+	    		var url = reqBasePath + "/design/qu-chen!ajaxSave.action";
 	    		var quType = quItemBody.find("input[name='quType']").val();
 	    		var quId = quItemBody.find("input[name='quId']").val();
 	    		var orderById = quItemBody.find("input[name='orderById']").val();
@@ -2934,7 +2928,7 @@ layui.config({
 	    	optionParent = $(curEditObj).parents("td.quChenColumnTd");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = ctx + "/design/qu-chen!ajaxDeleteColumn.action";
+	    		var url = reqBasePath + "/design/qu-chen!ajaxDeleteColumn.action";
 	    		var data = "quItemId=" + quOptionId;
 	    		$.ajax({
 	    			url: url,
@@ -2956,7 +2950,7 @@ layui.config({
 	    	optionParent = $(curEditObj).parents("td.quChenRowTd");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = ctx + "/design/qu-chen!ajaxDeleteRow.action";
+	    		var url = reqBasePath + "/design/qu-chen!ajaxDeleteRow.action";
 	    		var data = "quItemId=" + quOptionId;
 	    		$.ajax({
 	    			url: url,

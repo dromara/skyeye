@@ -96,4 +96,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.editDwSurveyMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuFillblankMation
+	     * @Description: 添加填空题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuFillblankMation")
+	@ResponseBody
+	public void addQuFillblankMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuFillblankMation(inputObject, outputObject);
+	}
+	
 }
