@@ -46,4 +46,6 @@ public interface DwSurveyDirectoryDao {
 
 	public int addQuestionLogicsMationList(List<Map<String, Object>> quLogics) throws Exception;
 
+	public int addQuestionScoreMationList(List<Map<String, Object>> quScore) throws Exception;
+
 }

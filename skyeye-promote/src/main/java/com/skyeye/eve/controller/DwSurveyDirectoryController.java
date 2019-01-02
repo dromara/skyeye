@@ -112,4 +112,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.addQuFillblankMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuScoreMation
+	     * @Description: 添加评分题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuScoreMation")
+	@ResponseBody
+	public void addQuScoreMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuScoreMation(inputObject, outputObject);
+	}
+	
 }

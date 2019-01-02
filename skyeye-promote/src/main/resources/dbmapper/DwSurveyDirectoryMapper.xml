@@ -200,7 +200,8 @@
 			a.option_name optionName,
 			a.option_title optionTitle,
 			a.order_by_id orderById,
-			a.visibility
+			a.visibility,
+			#{paramInt02} paramInt02
 		FROM
 			dw_qu_score a
 		WHERE
@@ -333,6 +334,15 @@
 		<foreach collection="list" item="item" index="index" separator="," >  
 			(#{item.id}, #{item.title}, #{item.cgQuItemId}, #{item.ckQuId}, #{item.quLogicId}, #{item.geLe}, #{item.logicType}, 
 					#{item.scoreNum}, #{item.skQuId}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<insert id="addQuestionScoreMationList" parameterType="java.util.Map">
+	     insert into dw_qu_score
+	     (id, qu_id, option_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
 	

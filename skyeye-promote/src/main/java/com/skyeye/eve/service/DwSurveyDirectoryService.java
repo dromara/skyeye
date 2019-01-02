@@ -17,4 +17,6 @@ public interface DwSurveyDirectoryService {
 
 	public void addQuFillblankMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void addQuScoreMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

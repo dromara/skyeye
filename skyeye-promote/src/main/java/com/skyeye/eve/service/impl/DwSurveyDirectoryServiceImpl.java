@@ -135,7 +135,7 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			}
 		} else if (quType.equals(QuType.SCORE.getActionName())) {
 			List<Map<String, Object>> questionScore = dwSurveyDirectoryDao.queryQuestionScoreListByQuestionId(question);//获取评分题
-			question.put("questionScore", questionScore);
+			question.put("quScores", questionScore);
 		} else if (quType.equals(QuType.ORDERQU.getActionName())) {
 			List<Map<String, Object>> questionOrderBy = dwSurveyDirectoryDao.queryQuestionOrderByListByQuestionId(question);//获取排序题
 			question.put("questionOrderBy", questionOrderBy);
@@ -196,8 +196,6 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		map.put("checkType", CheckType.valueOf(map.get("checkType").toString()).getIndex());
 		if(ToolUtil.isBlank(map.get("quId").toString())){
 			map.put("id", ToolUtil.getSurFaceId());
-			map.put("paramInt01", 3);
-			map.put("paramInt02", 10);
 			map.put("quTag", 1);
 			map.put("visibility", 1);
 			map.put("createTime", ToolUtil.getTimeAndToString());
@@ -224,6 +222,80 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 				quLogics.add(bean);
 			}
 			dwSurveyDirectoryDao.addQuestionLogicsMationList(quLogics);
+			map.put("quLogics", quLogics);
+		}
+		outputObject.setBean(map);
+	}
+
+	/**
+	 * 
+	     * @Title: addQuScoreMation
+	     * @Description: 添加评分题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void addQuScoreMation(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		map.put("quType", QuType.SCORE.getIndex());
+		String quId = "";
+		if(ToolUtil.isBlank(map.get("quId").toString())){
+			quId = ToolUtil.getSurFaceId();
+			map.put("id", quId);
+			map.put("quTag", 1);
+			map.put("visibility", 1);
+			map.put("createTime", ToolUtil.getTimeAndToString());
+			dwSurveyDirectoryDao.addQuestionMation(map);
+		}else{
+			
+		}
+		
+		JSONArray score = JSONArray.fromObject(map.get("scoreTd").toString());//获取模板绑定信息
+		if(score.size() > 0){
+			List<Map<String, Object>> quScore = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < score.size(); i++){
+				JSONObject object = (JSONObject) score.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("optionId", object.getString("optionId"));
+				bean.put("orderById", object.getString("key"));
+				bean.put("optionName", object.getString("optionValue"));
+				bean.put("quId", quId);
+				bean.put("visibility", 1);
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quScore.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionScoreMationList(quScore);
+			map.put("quItems", quScore);
+		}
+		
+		JSONArray array = JSONArray.fromObject(map.get("logic").toString());//获取模板绑定信息
+		if(array.size() > 0){
+			List<Map<String, Object>> quLogics = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < array.size(); i++){
+				JSONObject object = (JSONObject) array.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("quLogicId", object.getString("quLogicId"));
+				bean.put("cgQuItemId", object.getString("cgQuItemId"));
+				bean.put("skQuId", object.getString("skQuId"));
+				bean.put("visibility", object.getString("visibility"));
+				bean.put("logicType", object.getString("logicType"));
+				bean.put("title", object.getString("key"));
+				bean.put("geLe", object.getString("geLe"));
+				bean.put("scoreNum", object.getString("scoreNum"));
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quLogics.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionLogicsMationList(quLogics);
+			map.put("quLogics", quLogics);
 		}
 		outputObject.setBean(map);
 	}
