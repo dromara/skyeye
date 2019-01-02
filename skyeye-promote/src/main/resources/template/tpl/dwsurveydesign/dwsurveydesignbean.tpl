@@ -33,6 +33,7 @@
 			<div id="dwSurveyNoteEdit" class="editAble dwSvyNoteEdit">{{surveyNote}}</div>
 			<input type="hidden" name="svyNoteSaveTag" value="1">
 		</div>
+{{/bean}}
 		<div id="dwSurveyQuContent" style="min-height: 500px;">
 			<ul id="dwSurveyQuContentAppUl">
 				{{#each rows}}
@@ -350,7 +351,7 @@
 													<input type="hidden" name="contactsField" value="{{contactsField}}">
 													<div class="quLogicInputCase">
 														<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-														{{#each questionLogics}}
+														{{#each questionLogic}}
 															<div class="quLogicItem quLogicItem_{{count}}">
 																<input type="hidden" name="quLogicId" value="{{id}}" />
 																<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -395,7 +396,7 @@
 													</div>
 													<div class="surveyQuItemContent">
 														<div class="quCoTitle">
-															<div class="quCoNum">{{count}}、</div>
+															<div class="quCoNum">{{showIndex @index}}、</div>
 															<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 															<input type="hidden" name="quTitleSaveTag" value="1">
 														</div>
@@ -403,16 +404,15 @@
 															<ul>
 																<li class="quCoItemUlLi">
 																	<div class="quFillblankItem">
-																		<c:choose>
-																			<c:when test="${answerInputRow > 1}}">
-																				<input type="text" style="width:${empty(en.answerInputWidth)?'300':en.answerInputWidth}px;padding:5px;display: none;" class="quFillblankAnswerInput">
-																				<textarea rows="{{answerInputRow}}" style="width:${empty(en.answerInputWidth)?'300':en.answerInputWidth}px;" class="quFillblankAnswerTextarea"></textarea>
-																			</c:when>
-																			<c:otherwise>
-																				<input type="text" style="width:${empty(en.answerInputWidth)?'300':en.answerInputWidth}px;padding:5px;" class="quFillblankAnswerInput">
-																				<textarea rows="${empty(en.answerInputRow)?'1':en.answerInputRow}}" style="width:${empty(en.answerInputWidth)?'300':en.answerInputWidth}px;display: none;" class="quFillblankAnswerTextarea"></textarea>
-																			</c:otherwise>
-																		</c:choose>
+																		{{#if answerInputRow}}
+																			{{#compare1 answerInputRow '1'}}
+																					<input type="text" style="width:{{answerInputWidth}}px;padding:5px;" class="quFillblankAnswerInput">
+																					<textarea rows="{{answerInputRow}}" style="width:{{answerInputWidth}}px;display: none;" class="quFillblankAnswerTextarea"></textarea>
+																				{{else}}
+																					<input type="text" style="width:{{answerInputWidth}}px;padding:5px;display: none;" class="quFillblankAnswerInput">
+																					<textarea rows="{{answerInputRow}}" style="width:{{answerInputWidth}}px;" class="quFillblankAnswerTextarea"></textarea>
+																			{{/compare1}}
+																		{{/if}}
 																		<div class="dwFbMenuBtn"></div>
 																	</div>
 																</li>
@@ -1309,4 +1309,3 @@
 			</ul>
 		</div>
 	</div>
-{{/bean}}

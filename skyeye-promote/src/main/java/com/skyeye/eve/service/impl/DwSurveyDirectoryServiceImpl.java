@@ -193,9 +193,14 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	public void addQuFillblankMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		map.put("quType", QuType.FILLBLANK.getIndex());
-		map.put("checkType", CheckType.valueOf(map.get("checkType").toString()));
+		map.put("checkType", CheckType.valueOf(map.get("checkType").toString()).getIndex());
 		if(ToolUtil.isBlank(map.get("quId").toString())){
 			map.put("id", ToolUtil.getSurFaceId());
+			map.put("paramInt01", 3);
+			map.put("paramInt02", 10);
+			map.put("quTag", 1);
+			map.put("visibility", 1);
+			map.put("createTime", ToolUtil.getTimeAndToString());
 			dwSurveyDirectoryDao.addQuestionMation(map);
 		}else{
 			
@@ -220,6 +225,7 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			}
 			dwSurveyDirectoryDao.addQuestionLogicsMationList(quLogics);
 		}
+		outputObject.setBean(map);
 	}
 	
 }

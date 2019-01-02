@@ -331,7 +331,8 @@
 	     (id, title, cg_qu_item_id, ck_qu_id, qu_logic_id, ge_le, logic_type, score_num, sk_qu_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.title}, #{item.ckQuId}, #{item.quLogicId}, #{quLogicId}, #{geLe}, #{logicType}, #{scoreNum}, #{skQuId}, #{visibility}, #{item.createId}, #{item.createTime})  
+			(#{item.id}, #{item.title}, #{item.cgQuItemId}, #{item.ckQuId}, #{item.quLogicId}, #{item.geLe}, #{item.logicType}, 
+					#{item.scoreNum}, #{item.skQuId}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
 	

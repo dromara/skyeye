@@ -79,6 +79,9 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/dwsurveydesign/dwsurveydesignbean.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
+		 		hdb.registerHelper("showIndex",function(index, options){
+		 			return parseInt(index) + 1;
+		 		});
 		 		hdb.registerHelper('compare1', function(v1, v2, options) {
 		 			if(v1 == v2){
 		 				return options.fn(this);
@@ -1984,60 +1987,47 @@ layui.config({
 	    function saveFillblank(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var quType = quItemBody.find("input[name='quType']").val();
-	    		var quId = quItemBody.find("input[name='quId']").val();
-	    		var orderById = quItemBody.find("input[name='orderById']").val();;
-	    		var isRequired = quItemBody.find("input[name='isRequired']").val();
-	    		var hv = quItemBody.find("input[name='hv']").val();
-	    		var randOrder = quItemBody.find("input[name='randOrder']").val();
-	    		var cellCount = quItemBody.find("input[name='cellCount']").val();
-
-	    		var answerInputWidth = quItemBody.find("input[name='answerInputWidth']").val();
-	    		var answerInputRow = quItemBody.find("input[name='answerInputRow']").val();
-
-	    		var contactsAttr = quItemBody.find("input[name='contactsAttr']").val();
-	    		var contactsField = quItemBody.find("input[name='contactsField']").val();
-
-	    		var checkType = quItemBody.find("input[name='checkType']").val();
-
-	    		var data = "belongId=" + parent.rowId + "&orderById=" + orderById + "&tag=" + svTag + "&quType=" + quType + "&quId=" + quId;
-	    		data += "&isRequired=" + isRequired + "&hv=" + hv + "&randOrder=" + randOrder + "&cellCount=" + cellCount;
-	    		data += "&answerInputWidth=" + answerInputWidth + "&answerInputRow=" + answerInputRow;
-	    		data += "&contactsAttr=" + contactsAttr + "&contactsField=" + contactsField + "&checkType=" + checkType;
+	    		var data = {
+    				belongId: parent.rowId,
+    				orderById: quItemBody.find("input[name='orderById']").val(),
+    				tag: svTag,
+    				quType: quItemBody.find("input[name='quType']").val(),
+    				quId: quItemBody.find("input[name='quId']").val(),
+    				isRequired: quItemBody.find("input[name='isRequired']").val(),
+    				hv: quItemBody.find("input[name='hv']").val(),
+    				randOrder: quItemBody.find("input[name='randOrder']").val(),
+    				cellCount: quItemBody.find("input[name='cellCount']").val(),
+    				answerInputWidth: quItemBody.find("input[name='answerInputWidth']").val(),
+    				answerInputRow: quItemBody.find("input[name='answerInputRow']").val(),
+    				contactsAttr: quItemBody.find("input[name='contactsAttr']").val(),
+    				contactsField: quItemBody.find("input[name='contactsField']").val(),
+    				checkType: quItemBody.find("input[name='checkType']").val(),
+    				quTitle: '',
+	    		};
 
 	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
 	    		if(quTitleSaveTag == 0) {
 	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			quTitle = escape(encodeURIComponent(quTitle));
-	    			data += "&quTitle=" + quTitle;
+	    			data.quTitle = encodeURI(quTitle);
 	    		}
 	    		//逻辑选项
 	    		var quLogicItems = quItemBody.find(".quLogicItem");
 	    		var list = [];
 	    		$.each(quLogicItems, function(i) {
-	    			var thClass = $(this).attr("class");
-	    			thClass = thClass.replace("quLogicItem quLogicItem_", "");
-
-	    			var quLogicId = $(this).find("input[name='quLogicId']").val();
-	    			var cgQuItemId = $(this).find("input[name='cgQuItemId']").val();
-	    			var skQuId = $(this).find("input[name='skQuId']").val();
 	    			var logicSaveTag = $(this).find("input[name='logicSaveTag']").val();
-	    			var visibility = $(this).find("input[name='visibility']").val();
-	    			var logicType = $(this).find("input[name='logicType']").val();
-	    			var itemIndex = thClass;
 	    			if(logicSaveTag == 0) {
 	    				var s = {
-    						quLogicId: quLogicId,
-    						cgQuItemId: cgQuItemId,
-    						skQuId: skQuId,
-    						visibility: visibility,
-    						logicType: logicType,
-    						key: itemIndex,
+    						quLogicId: $(this).find("input[name='quLogicId']").val(),
+    						cgQuItemId: $(this).find("input[name='cgQuItemId']").val(),
+    						skQuId: $(this).find("input[name='skQuId']").val(),
+    						visibility: $(this).find("input[name='visibility']").val(),
+    						logicType: $(this).find("input[name='logicType']").val(),
+    						key: $(this).attr("class").replace("quLogicItem quLogicItem_", ""),
     	    			};
     	    			list.push(s);
 	    			}
 	    		});
-	    		data += "&logic=" + JSON.stringify(list);
+	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory006", params:data, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.id;
