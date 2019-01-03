@@ -21,4 +21,6 @@ public interface DwSurveyDirectoryService {
 
 	public void addQuOrderquMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void addQuPagetagMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

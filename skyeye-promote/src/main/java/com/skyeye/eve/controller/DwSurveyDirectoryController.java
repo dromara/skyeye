@@ -144,4 +144,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.addQuOrderquMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuPagetagMation
+	     * @Description: 添加分页标记
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuPagetagMation")
+	@ResponseBody
+	public void addQuPagetagMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuPagetagMation(inputObject, outputObject);
+	}
+	
 }

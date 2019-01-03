@@ -2366,80 +2366,62 @@ layui.config({
 
 	    //*******分页标记*******//
 	    /**
-	     ** 新保存分页标记
+	     * 新保存分页标记
 	     **/
 	    function savePagetag(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = reqBasePath + "/design/qu-pagetag!ajaxSave.action";
-	    		var quType = quItemBody.find("input[name='quType']").val();
-	    		var quId = quItemBody.find("input[name='quId']").val();
-	    		var orderById = quItemBody.find("input[name='orderById']").val();;
-	    		var isRequired = quItemBody.find("input[name='isRequired']").val();
-	    		var hv = quItemBody.find("input[name='hv']").val();
-	    		var randOrder = quItemBody.find("input[name='randOrder']").val();
-	    		var cellCount = quItemBody.find("input[name='cellCount']").val();
-
-	    		var data = "belongId=" + questionBelongId + "&orderById=" + orderById + "&tag=" + svTag + "&quType=" + quType + "&quId=" + quId;
-	    		data += "&isRequired=" + isRequired + "&hv=" + hv + "&randOrder=" + randOrder + "&cellCount=" + cellCount;
-
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			quTitle = escape(encodeURIComponent(quTitle));
-	    			data += "&quTitle=" + quTitle;
-	    		}
+	    		var data = {
+    				belongId: parent.rowId,
+    				orderById: quItemBody.find("input[name='orderById']").val(),
+    				tag: svTag,
+    				quId: quItemBody.find("input[name='quId']").val(),
+    				isRequired: quItemBody.find("input[name='isRequired']").val(),
+    				hv: quItemBody.find("input[name='hv']").val(),
+    				randOrder: quItemBody.find("input[name='randOrder']").val(),
+    				cellCount: quItemBody.find("input[name='cellCount']").val(),
+	    		};
 	    		//逻辑选项
 	    		var quLogicItems = quItemBody.find(".quLogicItem");
+	    		var list = [];
 	    		$.each(quLogicItems, function(i) {
-	    			var thClass = $(this).attr("class");
-	    			thClass = thClass.replace("quLogicItem quLogicItem_", "");
-
-	    			var quLogicId = $(this).find("input[name='quLogicId']").val();
-	    			var cgQuItemId = $(this).find("input[name='cgQuItemId']").val();
-	    			var skQuId = $(this).find("input[name='skQuId']").val();
 	    			var logicSaveTag = $(this).find("input[name='logicSaveTag']").val();
-	    			var visibility = $(this).find("input[name='visibility']").val();
-	    			var logicType = $(this).find("input[name='logicType']").val();
-	    			var itemIndex = thClass;
 	    			if(logicSaveTag == 0) {
-	    				data += "&quLogicId_" + itemIndex + "=" + quLogicId;
-	    				data += "&cgQuItemId_" + itemIndex + "=" + cgQuItemId;
-	    				data += "&skQuId_" + itemIndex + "=" + skQuId;
-	    				data += "&visibility_" + itemIndex + "=" + visibility;
-	    				data += "&logicType_" + itemIndex + "=" + logicType;
-	    			}
-
-	    		});
-
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: 'post',
-	    			success: function(msg) {
-	    				if(msg != "error") {
-	    					var jsons = eval("(" + msg + ")");
-	    					var quId = jsons.id;
-	    					quItemBody.find("input[name='quId']").val(quId);
-
-	    					//同步logic Id信息
-	    					var quLogics = jsons.quLogics;
-	    					$.each(quLogics, function(i, item) {
-	    						var logicItem = quItemBody.find(".quLogicItem_" + item.title);
-	    						logicItem.find("input[name='quLogicId']").val(item.id);
-	    						logicItem.find("input[name='logicSaveTag']").val(1);
-	    					});
-
-	    					quItemBody.find("input[name='saveTag']").val(1);
-	    					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-	    					//执行保存下一题
-	    					saveQus(quItemBody.next(), callback);
-	    					//同步-更新题目排序号
-	    					quCBNum2++;
-	    					exeQuCBNum();
-	    				}
+	    				var s = {
+    						quLogicId: $(this).find("input[name='quLogicId']").val(),
+    						cgQuItemId: $(this).find("input[name='cgQuItemId']").val(),
+    						skQuId: $(this).find("input[name='skQuId']").val(),
+    						visibility: $(this).find("input[name='visibility']").val(),
+    						logicType: $(this).find("input[name='logicType']").val(),
+    						key: $(this).attr("class").replace("quLogicItem quLogicItem_", ""),
+    	    			};
+    	    			list.push(s);
 	    			}
 	    		});
+	    		data.logic = JSON.stringify(list);
+	    		
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory009", params:data, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+		 	   			var quId = json.bean.id;
+		 	   			quItemBody.find("input[name='saveTag']").val(1);
+		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+			 	   		quItemBody.find("input[name='quId']").val(quId);
+						//同步logic Id信息
+						var quLogics = json.bean.quLogics;
+						$.each(quLogics, function(i, item) {
+							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
+							logicItem.find("input[name='quLogicId']").val(item.id);
+							logicItem.find("input[name='logicSaveTag']").val(1);
+						});
+						//执行保存下一题
+						saveQus(quItemBody.next(), callback);
+						//同步-更新题目排序号
+						quCBNum2++;
+						exeQuCBNum();
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
 	    	}
