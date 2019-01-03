@@ -160,4 +160,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.addQuPagetagMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuRadioMation
+	     * @Description: 添加单选题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuRadioMation")
+	@ResponseBody
+	public void addQuRadioMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuRadioMation(inputObject, outputObject);
+	}
+	
 }

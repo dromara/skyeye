@@ -23,4 +23,6 @@ public interface DwSurveyDirectoryService {
 
 	public void addQuPagetagMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void addQuRadioMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

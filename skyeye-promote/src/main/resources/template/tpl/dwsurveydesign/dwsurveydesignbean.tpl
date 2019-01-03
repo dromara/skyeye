@@ -106,69 +106,51 @@
 											<input type="hidden" name="quTitleSaveTag" value="1">
 										</div>
 										<div class="quCoItem">
-											<c:choose>
-												<c:when test="{{hv eq 3}}">
+											{{#if hv}}
+											{{#compare1 hv '3'}}
 													<table class='tableQuColItem'>
-														{{#each quRadios}}
+														{{#each questionRadio}}
 															<tr>
-																<c:forEach begin="1" end="{{cellCount}}" var="k">
-																	<td width="${600/en.cellCount}}">
-																		<!-- 判断不为空，访止数组越界 -->
-																		<c:set var="quOptionIndex" value="${(j+k-1)}}"></c:set>
-																		<c:choose>
-																			<c:when test="${quOptionIndex < fn:length(en.quRadios)}}">
-																				<!-- <input type="radio"><label style="width:${600/en.cellCount-10}}px;" class="editAble quCoOptionEdit">${quRadios[quOptionIndex].optionName}}</label>-->
-																				<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
-																				<div class="quItemInputCase">
-																					<!-- <input type="hidden" name="quItemId" value="${quRadios[quOptionIndex].id}}"><input type="hidden" name="quItemSaveTag" value="1">-->
-																					<input type="hidden" name="isNote" value="{{isNote}}">
-																					<input type="hidden" name="checkType" value="{{checkType}}">
-																					<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
-																				</div>
-																			</c:when>
-																			<c:otherwise>
-																				<div class="emptyTd"></div>
-																			</c:otherwise>
-																		</c:choose>
-																	</td>
-																</c:forEach>
+																{{#cellCount001 cellCount}}{{/cellCount001}}
 															</tr>
 														{{/each}}
 													</table>
-												</c:when>
-												<c:when test="{{hv eq 1}}">
-													<ul class="transverse">
-														<c:forEach items="{{quRadios}}" var="item">
-															<li class="quCoItemUlLi">
-																<!-- <input type="radio"><label class="editAble quCoOptionEdit">{{optionName}}</label>-->
-																<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
-																<div class="quItemInputCase">
-																	<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">
-																	<input type="hidden" name="isNote" value="{{isNote}}">
-																	<input type="hidden" name="checkType" value="{{checkType}}">
-																	<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
-																</div>
-															</li>
-														</c:forEach>
-													</ul>
-												</c:when>
-												<c:otherwise>
-													<ul>
-														<c:forEach items="{{quRadios}}" var="item">
-															<li class="quCoItemUlLi">
-																<input type="radio"><label class="editAble quCoOptionEdit">{{optionName}}</label>
-																<!-- <input type='text' class='optionInpText' style="${isNote eq 1 ? '':'display: none;'}" />-->
-																<div class="quItemInputCase">
-																	<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">
-																	<input type="hidden" name="isNote" value="{{isNote}}">
-																	<input type="hidden" name="checkType" value="{{checkType}}">
-																	<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
-																</div>
-															</li>
-														</c:forEach>
-													</ul>
-												</c:otherwise>
-											</c:choose>
+												{{else}}
+													{{#if hv}}
+													{{#compare1 hv '1'}}
+															<ul class="transverse">
+																{{#each questionRadio}}
+																	<li class="quCoItemUlLi">
+																		<input type="radio"><label class="editAble quCoOptionEdit">{{optionName}}</label>
+																		<input type='text' class='optionInpText' style="{{#compare2 isNote 0}}{{/compare2}}" />
+																		<div class="quItemInputCase">
+																			<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">
+																			<input type="hidden" name="isNote" value="{{isNote}}">
+																			<input type="hidden" name="checkType" value="{{checkType}}">
+																			<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
+																		</div>
+																	</li>
+																{{/each}}
+															</ul>
+														{{else}}
+															<ul>
+																{{#each questionRadio}}
+																	<li class="quCoItemUlLi">
+																		<input type="radio"><label class="editAble quCoOptionEdit">{{optionName}}</label>
+																		<input type='text' class='optionInpText' style="{{#compare2 isNote 0}}{{/compare2}}" />
+																		<div class="quItemInputCase">
+																			<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">
+																			<input type="hidden" name="isNote" value="{{isNote}}">
+																			<input type="hidden" name="checkType" value="{{checkType}}">
+																			<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
+																		</div>
+																	</li>
+																{{/each}}
+															</ul>
+													{{/compare1}}
+													{{/if}}
+											{{/compare1}}
+											{{/if}}
 										</div>
 										<div class="quCoBottomTools">
 											<ul class="quCoBottomToolsUl">

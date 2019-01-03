@@ -149,7 +149,8 @@
 			a.option_title optionTitle,
 			a.order_by_id orderById,
 			a.qu_id quId,
-			a.visibility
+			a.visibility,
+			#{cellCount} cellCount
 		FROM
 			dw_qu_radio a
 		WHERE

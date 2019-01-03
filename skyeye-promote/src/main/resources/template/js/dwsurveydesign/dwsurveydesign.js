@@ -98,6 +98,33 @@ layui.config({
 		 				return options.inverse(this);
 		 			}
 		 		});
+		 		
+		 		hdb.registerHelper('compare2', function(v1, v2, options) {
+		 			if(v1 == v2){
+		 				return 'display: none;';
+		 			}else{
+		 				return '';
+		 			}
+		 		});
+		 		
+		 		hdb.registerHelper("cellCount001",function(v1, options){
+		 			var str = "";
+		 			var width = 600 / v1;
+		 			for(var i = 1; i <= v1; i++){
+		 				str += '<td width="' + width + 'px">' + 
+									'<input type="radio"><label style="width:' + width + 'px;" class="editAble quCoOptionEdit">{{optionName}}</label>' + 
+									'<input type="text" class="optionInpText" style="{{#compare2 isNote 0}}{{/compare2}}" />' + 
+									'<div class="quItemInputCase">' + 
+										'<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">' + 
+										'<input type="hidden" name="isNote" value="{{isNote}}">' + 
+										'<input type="hidden" name="checkType" value="{{checkType}}">' + 
+										'<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">' + 
+									'</div>' + 
+								'</td>';
+		 			}
+		 			str += '<div class="emptyTd"></div>';
+		 			return str;
+		 		});
 		 	},
 		 	ajaxSendAfter:function(json){
 		 		
@@ -1529,116 +1556,106 @@ layui.config({
 	    }
 	    
 	    /**
-	     ** 新保存单选题
+	     * 新保存单选题
 	     **/
 	    function saveRadio(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
 	    	if(saveTag == 0) {
-	    		var url = reqBasePath + "/design/qu-radio!ajaxSave.action";
-	    		var quType = quItemBody.find("input[name='quType']").val();
-	    		var quId = quItemBody.find("input[name='quId']").val();
-	    		var orderById = quItemBody.find("input[name='orderById']").val();
-	    		var isRequired = quItemBody.find("input[name='isRequired']").val();
-	    		var hv = quItemBody.find("input[name='hv']").val();
-	    		var randOrder = quItemBody.find("input[name='randOrder']").val();
-	    		var cellCount = quItemBody.find("input[name='cellCount']").val();
-	    		var contactsAttr = quItemBody.find("input[name='contactsAttr']").val();
-	    		var contactsField = quItemBody.find("input[name='contactsField']").val();
-
-	    		var data = "belongId=" + questionBelongId + "&orderById=" + orderById + "&tag=" + svTag + "&quType=" + quType + "&quId=" + quId;
-	    		data += "&isRequired=" + isRequired + "&hv=" + hv + "&randOrder=" + randOrder + "&cellCount=" + cellCount;
-	    		data += "&contactsAttr=" + contactsAttr + "&contactsField=" + contactsField;
+	    		var data = {
+    				belongId: parent.rowId,
+    				orderById: quItemBody.find("input[name='orderById']").val(),
+    				tag: svTag,
+    				quId: quItemBody.find("input[name='quId']").val(),
+    				isRequired: quItemBody.find("input[name='isRequired']").val(),
+    				hv: quItemBody.find("input[name='hv']").val(),
+    				randOrder: quItemBody.find("input[name='randOrder']").val(),
+    				cellCount: quItemBody.find("input[name='cellCount']").val(),
+    				contactsAttr: quItemBody.find("input[name='contactsAttr']").val(),
+    				contactsField: quItemBody.find("input[name='contactsField']").val(),
+    				quTitle: '',
+	    		};
 
 	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
 	    		if(quTitleSaveTag == 0) {
 	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			quTitle = escape(encodeURIComponent(quTitle));
-	    			data += "&quTitle=" + quTitle;
+	    			data.quTitle = encodeURI(quTitle);
 	    		}
 
 	    		var quItemOptions = null;
-	    		if(hv == 3) {
+	    		if(quItemBody.find("input[name='hv']").val() == 3) {
 	    			//还有是table的情况需要处理
 	    			quItemOptions = quItemBody.find(".quCoItem table.tableQuColItem tr td");
 	    		} else {
 	    			quItemOptions = quItemBody.find(".quCoItem li.quCoItemUlLi");
 	    		}
-
+	    		var radioTd = [];
 	    		$.each(quItemOptions, function(i) {
-	    			var optionValue = $(this).find("label.quCoOptionEdit").html();
-	    			var optionId = $(this).find(".quItemInputCase input[name='quItemId']").val();
 	    			var quItemSaveTag = $(this).find(".quItemInputCase input[name='quItemSaveTag']").val();
-	    			var isNote = $(this).find(".quItemInputCase input[name='isNote']").val();
-	    			var checkType = $(this).find(".quItemInputCase input[name='checkType']").val();
-	    			var isRequiredFill = $(this).find(".quItemInputCase input[name='isRequiredFill']").val();
 	    			if(quItemSaveTag == 0) {
-	    				optionValue = escape(encodeURIComponent(optionValue));
-	    				data += "&optionValue_" + i + "=" + optionValue;
-	    				data += "&optionId_" + i + "=" + optionId;
-	    				data += "&isNote_" + i + "=" + isNote;
-	    				data += "&checkType_" + i + "=" + checkType;
-	    				data += "&isRequiredFill_" + i + "=" + isRequiredFill;
+	    				var s = {
+    						optionValue: encodeURI($(this).find("label.quCoOptionEdit").html()),
+    						optionId: $(this).find(".quItemInputCase input[name='quItemId']").val(),
+    						isNote: $(this).find(".quItemInputCase input[name='isNote']").val(),
+    						checkType: $(this).find(".quItemInputCase input[name='checkType']").val(),
+    						isRequiredFill: $(this).find(".quItemInputCase input[name='isRequiredFill']").val(),
+    						key: i,
+    	    			};
+	    				radioTd.push(s);
 	    			}
 	    			//更新 字母 title标记到选项上.
 	    			$(this).addClass("quOption_" + i);
 	    		});
-
+	    		data.radioTd = JSON.stringify(radioTd);
+	    		
 	    		//逻辑选项
 	    		var quLogicItems = quItemBody.find(".quLogicItem");
+	    		var list = [];
 	    		$.each(quLogicItems, function(i) {
-	    			var thClass = $(this).attr("class");
-	    			thClass = thClass.replace("quLogicItem quLogicItem_", "");
-
-	    			var quLogicId = $(this).find("input[name='quLogicId']").val();
-	    			var cgQuItemId = $(this).find("input[name='cgQuItemId']").val();
-	    			var skQuId = $(this).find("input[name='skQuId']").val();
 	    			var logicSaveTag = $(this).find("input[name='logicSaveTag']").val();
-	    			var visibility = $(this).find("input[name='visibility']").val();
-	    			var logicType = $(this).find("input[name='logicType']").val();
-	    			var itemIndex = thClass;
 	    			if(logicSaveTag == 0) {
-	    				data += "&quLogicId_" + itemIndex + "=" + quLogicId;
-	    				data += "&cgQuItemId_" + itemIndex + "=" + cgQuItemId;
-	    				data += "&skQuId_" + itemIndex + "=" + skQuId;
-	    				data += "&visibility_" + itemIndex + "=" + visibility;
-	    				data += "&logicType_" + itemIndex + "=" + logicType;
+	    				var s = {
+    						quLogicId: $(this).find("input[name='quLogicId']").val(),
+    						cgQuItemId: $(this).find("input[name='cgQuItemId']").val(),
+    						skQuId: $(this).find("input[name='skQuId']").val(),
+    						visibility: $(this).find("input[name='visibility']").val(),
+    						logicType: $(this).find("input[name='logicType']").val(),
+    						key: $(this).attr("class").replace("quLogicItem quLogicItem_", ""),
+    	    			};
+    	    			list.push(s);
 	    			}
 	    		});
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: 'post',
-	    			success: function(msg) {
-	    				if(msg != "error") {
-	    					var jsons = eval("(" + msg + ")");
-	    					var quId = jsons.id;
-	    					quItemBody.find("input[name='quId']").val(quId);
-	    					var quItems = jsons.quItems;
-	    					$.each(quItems, function(i, item) {
-	    						var quItemOption = quItemBody.find(".quOption_" + item.title);
-	    						quItemOption.find("input[name='quItemId']").val(item.id);
-	    						quItemOption.find(".quItemInputCase input[name='quItemSaveTag']").val(1);
-	    					});
-
-	    					//同步logic Id信息
-	    					var quLogics = jsons.quLogics;
-	    					$.each(quLogics, function(i, item) {
-	    						var logicItem = quItemBody.find(".quLogicItem_" + item.title);
-	    						logicItem.find("input[name='quLogicId']").val(item.id);
-	    						logicItem.find("input[name='logicSaveTag']").val(1);
-	    					});
-
-	    					quItemBody.find("input[name='saveTag']").val(1);
-	    					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-
-	    					//执行保存下一题
-	    					saveQus(quItemBody.next(), callback);
-	    					//同步-更新题目排序号
-	    					quCBNum2++;
-	    					exeQuCBNum();
-	    				}
-	    			}
-	    		});
+	    		data.logic = JSON.stringify(list);
+	    		
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory010", params:data, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+		 	   			var quId = json.bean.id;
+		 	   			quItemBody.find("input[name='saveTag']").val(1);
+		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+			 	   		quItemBody.find("input[name='quId']").val(quId);
+						var quItems = json.bean.quItems;
+						$.each(quItems, function(i, item) {
+							var quItemOption = quItemBody.find(".quOption_" + item.title);
+							quItemOption.find("input[name='quItemId']").val(item.id);
+							quItemOption.find(".quItemInputCase input[name='quItemSaveTag']").val(1);
+						});
+	
+						//同步logic Id信息
+						var quLogics = json.bean.quLogics;
+						$.each(quLogics, function(i, item) {
+							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
+							logicItem.find("input[name='quLogicId']").val(item.id);
+							logicItem.find("input[name='logicSaveTag']").val(1);
+						});
+	
+						//执行保存下一题
+						saveQus(quItemBody.next(), callback);
+						//同步-更新题目排序号
+						quCBNum2++;
+						exeQuCBNum();
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
 	    	}
