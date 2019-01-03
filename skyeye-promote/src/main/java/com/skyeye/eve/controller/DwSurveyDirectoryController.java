@@ -128,4 +128,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.addQuScoreMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuOrderquMation
+	     * @Description: 添加排序题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuOrderquMation")
+	@ResponseBody
+	public void addQuOrderquMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuOrderquMation(inputObject, outputObject);
+	}
+	
 }

@@ -346,4 +346,23 @@
 		</foreach>  
 	</insert>
 	
+	<insert id="addQuestionOrderquMationList" parameterType="java.util.Map">
+	     insert into dw_qu_orderby
+	     (id, qu_id, option_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<insert id="addQuestionRadioMationList" parameterType="java.util.Map">
+	     insert into dw_qu_radio
+	     (id, qu_id, option_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
+				#{item.isRequiredFill}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
 </mapper>

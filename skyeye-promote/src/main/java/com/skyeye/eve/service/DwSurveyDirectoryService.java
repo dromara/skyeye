@@ -19,4 +19,6 @@ public interface DwSurveyDirectoryService {
 
 	public void addQuScoreMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void addQuOrderquMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

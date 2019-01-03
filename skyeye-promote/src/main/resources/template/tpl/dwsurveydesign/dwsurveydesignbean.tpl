@@ -54,8 +54,8 @@
 									<input type="hidden" name="contactsAttr" value="{{contactsAttr}}">
 									<input type="hidden" name="contactsField" value="{{contactsField}}">
 									<div class="quLogicInputCase">
-										<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-										{{#each questionLogics}}
+										<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+										{{#each questionLogic}}
 											<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 												<input type="hidden" name="quLogicId" value="{{id}}" />
 												<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -80,7 +80,7 @@
 											</li>
 											<li title="逻辑" class="dwQuLogic">
 												<div class="dwQuIcon">
-													<div class="quLogicInfo">{{questionLogics.length}}</div>
+													<div class="quLogicInfo">{{questionLogic.length}}</div>
 												</div>
 											</l}}
 											<li title="删除" class="dwQuDelete">
@@ -201,8 +201,8 @@
 											<input type="hidden" name="contactsAttr" value="{{contactsAttr}}">
 											<input type="hidden" name="contactsField" value="{{contactsField}}">
 											<div class="quLogicInputCase">
-												<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-												{{#each questionLogics}}
+												<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+												{{#each questionLogic}}
 													<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 														<input type="hidden" name="quLogicId" value="{{id}}" />
 														<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -227,7 +227,7 @@
 													</li>
 													<li title="逻辑" class="dwQuLogic">
 														<div class="dwQuIcon">
-															<div class="quLogicInfo">{{questionLogics.length}}</div>
+															<div class="quLogicInfo">{{questionLogic.length}}</div>
 														</div>
 													</li>
 													<li title="删除" class="dwQuDelete">
@@ -350,7 +350,7 @@
 													<input type="hidden" name="contactsAttr" value="{{contactsAttr}}">
 													<input type="hidden" name="contactsField" value="{{contactsField}}">
 													<div class="quLogicInputCase">
-														<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
+														<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
 														{{#each questionLogic}}
 															<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																<input type="hidden" name="quLogicId" value="{{id}}" />
@@ -376,7 +376,7 @@
 															</li>
 															<li title="逻辑" class="dwQuLogic">
 																<div class="dwQuIcon">
-																	<div class="quLogicInfo">{{questionLogics.length}}</div>
+																	<div class="quLogicInfo">{{questionLogic.length}}</div>
 																</div>
 															</li>
 															<li title="删除" class="dwQuDelete">
@@ -437,8 +437,8 @@
 															<input type="hidden" name="randOrder" value="{{randOrder}}">
 															<input type="hidden" name="cellCount" value="{{cellCount}}">
 															<div class="quLogicInputCase">
-																<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-																{{#each questionLogics}}
+																<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+																{{#each questionLogic}}
 																	<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																		<input type="hidden" name="quLogicId" value="{{id}}" />
 																		<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -485,7 +485,7 @@
 																<div class="quCoItem">
 																	<div class="quOrderByLeft">
 																		<ul>
-																			{{#each quOrderbys}}
+																			{{#each questionOrderBy}}
 																				<li class="quCoItemUlLi"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																					<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
 																				</li>
@@ -494,7 +494,7 @@
 																	</div>
 																	<div class="quOrderByRight">
 																		<table class="quOrderByTable">
-																			{{#each quOrderbys}}
+																			{{#each questionOrderBy}}
 																				<tr>
 																					<td class="quOrderyTableTd">{{showIndex @index}}</td>
 																					<td></td>
@@ -533,8 +533,8 @@
 																	<input type="hidden" name="randOrder" value="{{randOrder}}">
 																	<input type="hidden" name="cellCount" value="{{cellCount}}">
 																	<div class="quLogicInputCase">
-																		<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-																		{{#each questionLogics}}
+																		<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+																		{{#each questionLogic}}
 																			<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																				<input type="hidden" name="quLogicId" value="{{id}}" />
 																				<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -588,8 +588,8 @@
 																			<input type="hidden" name="randOrder" value="{{randOrder}}">
 																			<input type="hidden" name="cellCount" value="{{cellCount}}">
 																			<div class="quLogicInputCase">
-																				<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-																				{{#each questionLogics}}
+																				<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+																				{{#each questionLogic}}
 																					<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																						<input type="hidden" name="quLogicId" value="{{id}}" />
 																						<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -648,8 +648,8 @@
 																					<input type="hidden" name="paramInt01" value="{{paramInt01}}">
 																					<input type="hidden" name="paramInt02" value="{{paramInt02}}">
 																					<div class="quLogicInputCase">
-																						<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-																						{{#each questionLogics}}
+																						<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+																						{{#each questionLogic}}
 																							<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																								<input type="hidden" name="quLogicId" value="{{id}}" />
 																								<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -674,7 +674,7 @@
 																							</li>
 																							<li title="逻辑" class="dwQuLogic">
 																								<div class="dwQuIcon">
-																									<div class="quLogicInfo">{{questionLogics.length}}</div>
+																									<div class="quLogicInfo">{{questionLogic.length}}</div>
 																								</div>
 																							</li>
 																							<li title="删除" class="dwQuDelete">
@@ -739,8 +739,8 @@
 																							<input type="hidden" name="randOrder" value="{{randOrder}}">
 																							<input type="hidden" name="cellCount" value="{{cellCount}}">
 																							<div class="quLogicInputCase">
-																								<input type="hidden" name="quLogicItemNum" value="${fn:length(en.questionLogics)}}">
-																								{{#each questionLogics}}
+																								<input type="hidden" name="quLogicItemNum" value="${fn:length(en.questionLogic)}}">
+																								{{#each questionLogic}}
 																									<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																										<input type="hidden" name="quLogicId" value="{{id}}" />
 																										<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -765,7 +765,7 @@
 																									</li>
 																									<li title="逻辑" class="dwQuLogic">
 																										<div class="dwQuIcon">
-																											<div class="quLogicInfo">{{questionLogics.length}}</div>
+																											<div class="quLogicInfo">{{questionLogic.length}}</div>
 																										</div>
 																									</li>
 																									<li title="删除" class="dwQuDelete">
@@ -853,8 +853,8 @@
 																									<input type="hidden" name="randOrder" value="{{randOrder}}">
 																									<input type="hidden" name="cellCount" value="{{cellCount}}">
 																									<div class="quLogicInputCase">
-																										<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-																										{{#each questionLogics}}
+																										<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+																										{{#each questionLogic}}
 																											<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																												<input type="hidden" name="quLogicId" value="{{id}}" />
 																												<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -879,7 +879,7 @@
 																											</li>
 																											<li title="逻辑" class="dwQuLogic">
 																												<div class="dwQuIcon">
-																													<div class="quLogicInfo">{{questionLogics.length}}</div>
+																													<div class="quLogicInfo">{{questionLogic.length}}</div>
 																												</div>
 																											</li>
 																											<li title="删除" class="dwQuDelete">
@@ -967,8 +967,8 @@
 																											<input type="hidden" name="randOrder" value="{{randOrder}}">
 																											<input type="hidden" name="cellCount" value="{{cellCount}}">
 																											<div class="quLogicInputCase">
-																												<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-																												{{#each questionLogics}}
+																												<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+																												{{#each questionLogic}}
 																													<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																														<input type="hidden" name="quLogicId" value="{{id}}" />
 																														<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -993,7 +993,7 @@
 																													</li>
 																													<li title="逻辑" class="dwQuLogic">
 																														<div class="dwQuIcon">
-																															<div class="quLogicInfo">{{questionLogics.length}}</div>
+																															<div class="quLogicInfo">{{questionLogic.length}}</div>
 																														</div>
 																													</li>
 																													<li title="删除" class="dwQuDelete">
@@ -1081,8 +1081,8 @@
 																													<input type="hidden" name="randOrder" value="{{randOrder}}">
 																													<input type="hidden" name="cellCount" value="{{cellCount}}">
 																													<div class="quLogicInputCase">
-																														<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-																														{{#each questionLogics}}
+																														<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+																														{{#each questionLogic}}
 																															<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																																<input type="hidden" name="quLogicId" value="{{id}}" />
 																																<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -1194,8 +1194,8 @@
 																															<input type="hidden" name="paramInt01" value="{{paramInt01}}">
 																															<input type="hidden" name="paramInt02" value="{{paramInt02}}">
 																															<div class="quLogicInputCase">
-																																<input type="hidden" name="quLogicItemNum" value="{{questionLogics.length}}">
-																																{{#each questionLogics}}
+																																<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
+																																{{#each questionLogic}}
 																																	<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																																		<input type="hidden" name="quLogicId" value="{{id}}" />
 																																		<input type="hidden" name="cgQuItemId" value="{{cgQuItemId}}" />
@@ -1220,7 +1220,7 @@
 																																	</li>
 																																	<li title="逻辑" class="dwQuLogic">
 																																		<div class="dwQuIcon">
-																																			<div class="quLogicInfo">{{questionLogics.length}}</div>
+																																			<div class="quLogicInfo">{{questionLogic.length}}</div>
 																																		</div>
 																																	</li>
 																																	<li title="删除" class="dwQuDelete">

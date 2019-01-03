@@ -299,5 +299,78 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		}
 		outputObject.setBean(map);
 	}
+
+	/**
+	 * 
+	     * @Title: addQuOrderquMation
+	     * @Description: 添加排序题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void addQuOrderquMation(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		map.put("quType", QuType.ORDERQU.getIndex());
+		String quId = "";
+		if(ToolUtil.isBlank(map.get("quId").toString())){
+			quId = ToolUtil.getSurFaceId();
+			map.put("id", quId);
+			map.put("quTag", 1);
+			map.put("visibility", 1);
+			map.put("createTime", ToolUtil.getTimeAndToString());
+			dwSurveyDirectoryDao.addQuestionMation(map);
+		}else{
+			
+		}
+		
+		JSONArray orderqu = JSONArray.fromObject(map.get("orderquTd").toString());//获取模板绑定信息
+		if(orderqu.size() > 0){
+			List<Map<String, Object>> quOrderqu = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < orderqu.size(); i++){
+				JSONObject object = (JSONObject) orderqu.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("optionId", object.getString("optionId"));
+				bean.put("orderById", object.getString("key"));
+				bean.put("optionName", object.getString("optionValue"));
+				bean.put("quId", quId);
+				bean.put("visibility", 1);
+				bean.put("isNote", 0);
+				bean.put("isRequiredFill", 0);
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quOrderqu.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionOrderquMationList(quOrderqu);
+			map.put("quItems", quOrderqu);
+		}
+		
+		JSONArray array = JSONArray.fromObject(map.get("logic").toString());//获取模板绑定信息
+		if(array.size() > 0){
+			List<Map<String, Object>> quLogics = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < array.size(); i++){
+				JSONObject object = (JSONObject) array.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("quLogicId", object.getString("quLogicId"));
+				bean.put("cgQuItemId", object.getString("cgQuItemId"));
+				bean.put("skQuId", object.getString("skQuId"));
+				bean.put("visibility", object.getString("visibility"));
+				bean.put("logicType", object.getString("logicType"));
+				bean.put("title", object.getString("key"));
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quLogics.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionLogicsMationList(quLogics);
+			map.put("quLogics", quLogics);
+		}
+		outputObject.setBean(map);
+	}
 	
 }

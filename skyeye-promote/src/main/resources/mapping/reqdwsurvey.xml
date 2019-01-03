@@ -64,6 +64,19 @@
 	    <property id="scoreTd" name="scoreTd" ref="" var="评分题选项td json串"/>
 	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
 	</url>
+	<url id="dwsurveydirectory008" path="/post/DwSurveyDirectoryController/addQuOrderquMation" val="添加排序题" allUse="1">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="orderquTd" name="orderquTd" ref="" var="排序题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
 	<!-- 问卷调查结束 -->
 	
 </controller>
