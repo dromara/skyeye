@@ -127,6 +127,9 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 				|| quType.equals(QuType.CHENFBK.getActionName()) || quType.equals(QuType.COMPCHENRADIO.getActionName())) {// 矩阵单选，矩阵多选，矩阵填空题，复合矩阵单选
 			List<Map<String, Object>> questionChenRow = dwSurveyDirectoryDao.queryQuestionChenRowListByQuestionId(question);//获取行选项
 			List<Map<String, Object>> questionChenColumn = dwSurveyDirectoryDao.queryQuestionChenColumnListByQuestionId(question);//获取列选项
+			for(Map<String, Object> bean : questionChenRow){
+				bean.put("questionChenColumn", questionChenColumn);
+			}
 			question.put("questionChenRow", questionChenRow);
 			question.put("questionChenColumn", questionChenColumn);
 			if(quType.equals(QuType.COMPCHENRADIO.getActionName())){//如果是复合矩阵单选题， 则还有题选项
@@ -664,6 +667,98 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			dwSurveyDirectoryDao.addQuestionMation(map);
 		}else{
 			
+		}
+		
+		JSONArray array = JSONArray.fromObject(map.get("logic").toString());//获取模板绑定信息
+		if(array.size() > 0){
+			List<Map<String, Object>> quLogics = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < array.size(); i++){
+				JSONObject object = (JSONObject) array.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("quLogicId", object.getString("quLogicId"));
+				bean.put("cgQuItemId", object.getString("cgQuItemId"));
+				bean.put("skQuId", object.getString("skQuId"));
+				bean.put("visibility", object.getString("visibility"));
+				bean.put("logicType", object.getString("logicType"));
+				bean.put("title", object.getString("key"));
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quLogics.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionLogicsMationList(quLogics);
+			map.put("quLogics", quLogics);
+		}
+		outputObject.setBean(map);
+	}
+
+	/**
+	 * 
+	     * @Title: addQuChenMation
+	     * @Description: 添加矩阵单选题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void addQuChenMation(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		map.put("quType", QuType.CHENRADIO.getIndex());
+		String quId = "";
+		if(ToolUtil.isBlank(map.get("quId").toString())){
+			quId = ToolUtil.getSurFaceId();
+			map.put("id", quId);
+			map.put("quTag", 1);
+			map.put("visibility", 1);
+			map.put("createTime", ToolUtil.getTimeAndToString());
+			dwSurveyDirectoryDao.addQuestionMation(map);
+		}else{
+			
+		}
+		
+		JSONArray column = JSONArray.fromObject(map.get("column").toString());//获取模板绑定信息
+		if(column.size() > 0){
+			List<Map<String, Object>> quColumn = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < column.size(); i++){
+				JSONObject object = (JSONObject) column.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("optionId", object.getString("optionId"));
+				bean.put("orderById", object.getString("key"));
+				bean.put("optionName", object.getString("optionValue"));
+				bean.put("quId", quId);
+				bean.put("visibility", 1);
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quColumn.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionColumnMationList(quColumn);
+			map.put("quColumnItems", quColumn);
+		}
+		
+		JSONArray row = JSONArray.fromObject(map.get("row").toString());//获取模板绑定信息
+		if(row.size() > 0){
+			List<Map<String, Object>> quRow = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < row.size(); i++){
+				JSONObject object = (JSONObject) row.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("optionId", object.getString("optionId"));
+				bean.put("orderById", object.getString("key"));
+				bean.put("optionName", object.getString("optionValue"));
+				bean.put("quId", quId);
+				bean.put("visibility", 1);
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quRow.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionRowMationList(quRow);
+			map.put("quRowItems", quRow);
 		}
 		
 		JSONArray array = JSONArray.fromObject(map.get("logic").toString());//获取模板绑定信息

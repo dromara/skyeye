@@ -31,4 +31,6 @@ public interface DwSurveyDirectoryService {
 
 	public void addQuParagraphMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void addQuChenMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

@@ -56,4 +56,8 @@ public interface DwSurveyDirectoryDao {
 
 	public int addQuestionMultiFillblankMationList(List<Map<String, Object>> quMultiFillblank) throws Exception;
 
+	public int addQuestionColumnMationList(List<Map<String, Object>> quColumn) throws Exception;
+
+	public int addQuestionRowMationList(List<Map<String, Object>> quRow) throws Exception;
+
 }

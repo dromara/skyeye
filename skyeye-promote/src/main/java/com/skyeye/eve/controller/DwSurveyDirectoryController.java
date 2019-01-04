@@ -224,4 +224,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.addQuParagraphMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuChenMation
+	     * @Description: 添加矩阵单选题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuChenMation")
+	@ResponseBody
+	public void addQuChenMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuChenMation(inputObject, outputObject);
+	}
+	
 }

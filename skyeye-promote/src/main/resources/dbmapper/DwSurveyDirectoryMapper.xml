@@ -385,4 +385,22 @@
 		</foreach>  
 	</insert>
 	
+	<insert id="addQuestionColumnMationList" parameterType="java.util.Map">
+	     insert into dw_qu_chen_column
+	     (id, qu_id, option_id, option_name, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<insert id="addQuestionRowMationList" parameterType="java.util.Map">
+	     insert into dw_qu_chen_row
+	     (id, qu_id, option_id, option_name, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
 </mapper>
