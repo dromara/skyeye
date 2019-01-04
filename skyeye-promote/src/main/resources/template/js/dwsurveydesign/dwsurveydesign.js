@@ -2651,7 +2651,6 @@ layui.config({
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
     				quTitle: '',
 	    		};
-	    		console.log(data);
 	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
 	    		if(quTitleSaveTag == 0) {
 	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
