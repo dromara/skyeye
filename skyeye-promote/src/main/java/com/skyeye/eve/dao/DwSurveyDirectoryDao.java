@@ -52,4 +52,6 @@ public interface DwSurveyDirectoryDao {
 	
 	public int addQuestionRadioMationList(List<Map<String, Object>> quRadio) throws Exception;
 
+	public int addQuestionCheckBoxMationList(List<Map<String, Object>> quCheckBox) throws Exception;
+
 }

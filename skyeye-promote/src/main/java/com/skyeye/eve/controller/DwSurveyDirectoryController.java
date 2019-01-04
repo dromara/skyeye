@@ -176,4 +176,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.addQuRadioMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuCheckBoxMation
+	     * @Description: 添加多选题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuCheckBoxMation")
+	@ResponseBody
+	public void addQuCheckBoxMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuCheckBoxMation(inputObject, outputObject);
+	}
+	
 }

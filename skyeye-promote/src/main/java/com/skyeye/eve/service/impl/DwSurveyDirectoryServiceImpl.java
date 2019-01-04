@@ -494,5 +494,79 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		}
 		outputObject.setBean(map);
 	}
+
+	/**
+	 * 
+	     * @Title: addQuCheckBoxMation
+	     * @Description: 添加多选题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void addQuCheckBoxMation(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		map.put("quType", QuType.CHECKBOX.getIndex());
+		String quId = "";
+		if(ToolUtil.isBlank(map.get("quId").toString())){
+			quId = ToolUtil.getSurFaceId();
+			map.put("id", quId);
+			map.put("quTag", 1);
+			map.put("visibility", 1);
+			map.put("createTime", ToolUtil.getTimeAndToString());
+			dwSurveyDirectoryDao.addQuestionMation(map);
+		}else{
+			
+		}
+		
+		JSONArray checkbox = JSONArray.fromObject(map.get("checkboxTd").toString());//获取模板绑定信息
+		if(checkbox.size() > 0){
+			List<Map<String, Object>> quCheckbox = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < checkbox.size(); i++){
+				JSONObject object = (JSONObject) checkbox.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("optionId", object.getString("optionId"));
+				bean.put("orderById", object.getString("key"));
+				bean.put("optionName", object.getString("optionValue"));
+				bean.put("isNote", object.getString("isNote"));
+				bean.put("checkType", CheckType.valueOf(object.get("checkType").toString()).getIndex());
+				bean.put("isRequiredFill", object.getString("isRequiredFill"));
+				bean.put("quId", quId);
+				bean.put("visibility", 1);
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quCheckbox.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionCheckBoxMationList(quCheckbox);
+			map.put("quItems", quCheckbox);
+		}
+		
+		JSONArray array = JSONArray.fromObject(map.get("logic").toString());//获取模板绑定信息
+		if(array.size() > 0){
+			List<Map<String, Object>> quLogics = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < array.size(); i++){
+				JSONObject object = (JSONObject) array.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("quLogicId", object.getString("quLogicId"));
+				bean.put("cgQuItemId", object.getString("cgQuItemId"));
+				bean.put("skQuId", object.getString("skQuId"));
+				bean.put("visibility", object.getString("visibility"));
+				bean.put("logicType", object.getString("logicType"));
+				bean.put("title", object.getString("key"));
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quLogics.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionLogicsMationList(quLogics);
+			map.put("quLogics", quLogics);
+		}
+		outputObject.setBean(map);
+	}
 	
 }
