@@ -14,8 +14,11 @@
 				<input type="hidden" name="hv" value="2">
 				<input type="hidden" name="randOrder" value="0">
 				<input type="hidden" name="cellCount" value="0">
+				<input type="hidden" name="checkType" value="NO">
 				<input type="hidden" name="answerInputWidth" value="300">
 				<input type="hidden" name="answerInputRow" value="1">
+				<input type="hidden" name="contactsAttr" value="1">
+				<input type="hidden" name="contactsField" value="3">
 				<div class="quLogicInputCase">
 					<input type="hidden" name="quLogicItemNum" value="0">
 				</div>
