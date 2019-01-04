@@ -490,7 +490,7 @@ layui.config({
 			$(".dwQuSet").unbind();
 			$(".dwQuSet").click(function(){
 				showDialog($(this));
-				var quItemBody=$(this).parents(".surveyQuItemBody");
+				var quItemBody = $(this).parents(".surveyQuItemBody");
 				resetQuItemHover(quItemBody);
 				validateGen();
 				return false;
@@ -499,6 +499,7 @@ layui.config({
 			//逻辑设置 
 			$(".dwQuLogic").unbind();
 			$(".dwQuLogic").click(function(){
+				showDialog($(this));
 				var quItemBody = $(this).parents(".surveyQuItemBody");
 				var quType = quItemBody.find("input[name='quType']").val();
 				//默认加载图标
@@ -1192,125 +1193,122 @@ layui.config({
 		//添加逻辑选项
 		function addQuDialogLogicTr(autoClass,trueCallback,falseCallback){
 			//当前题的选项
-			var quItemBody=$(dwDialogObj).parents(".surveyQuItemBody");
-			var quItemInputCases=quItemBody.find(".quItemInputCase");
-			var quLogicInputCase=quItemBody.find(".quLogicInputCase");
-			var curQuId=quItemBody.find("input[name='quId']").val();
-			var quType=quItemBody.find("input[name='quType']").val();
-			
-			var logicQuOptionSels=$("#dwQuLogicTable").find(".logicQuOptionSel");
-			var dwLogicQuSels=$("#dwQuLogicTable").find(".logicQuSel");
+			var quItemBody = $(dwDialogObj).parents(".surveyQuItemBody");
+			var quItemInputCases = quItemBody.find(".quItemInputCase");
+			var quLogicInputCase = quItemBody.find(".quLogicInputCase");
+			var curQuId = quItemBody.find("input[name='quId']").val();
+			var quType = quItemBody.find("input[name='quType']").val();
+			var logicQuOptionSels = $("#dwQuLogicTable").find(".logicQuOptionSel");
+			var dwLogicQuSels = $("#dwQuLogicTable").find(".logicQuSel");
 			//判断有无选项任意选项
-			var executeTag=true;
-			$.each(logicQuOptionSels,function(){
-				var selOptionVal=$(this).val();
-				if(selOptionVal=="0"){
-					executeTag=false;
+			var executeTag = true;
+			$.each(logicQuOptionSels, function(){
+				var selOptionVal = $(this).val();
+				if(selOptionVal == "0"){
+					executeTag = false;
 					return false;
 				}
 			});
-			
 			if(executeTag){
-				var appendTrHtml=$("#setQuLogicItemTrModel").html();
-				if(quType==="SCORE"){
-					appendTrHtml=$("#setQuLogicItemTrModel_score").html();
+				var appendTrHtml = $("#setQuLogicItemTrModel").html();
+				if(quType === "SCORE"){
+					appendTrHtml = $("#setQuLogicItemTrModel_score").html();
 				}
-				$("#dwQuLogicTable").append("<tr>"+appendTrHtml+"</tr>");
-				var lastTr=$("#dwQuLogicTable").find("tr").last();
-				if(quType==="FILLBLANK"){
+				$("#dwQuLogicTable").append("<tr>" + appendTrHtml + "</tr>");
+				var lastTr = $("#dwQuLogicTable").find("tr").last();
+				if(quType === "FILLBLANK"){
 					lastTr.find(".ifSpanText1").text("如果回答");
 				}
 				if(autoClass){
-					var quLogicItemNum=quLogicInputCase.find("input[name='quLogicItemNum']");
-					var newQuLogicItemNum=(parseInt(quLogicItemNum.val())+1);
+					var quLogicItemNum = quLogicInputCase.find("input[name='quLogicItemNum']");
+					var newQuLogicItemNum = (parseInt(quLogicItemNum.val()) + 1);
 					quLogicItemNum.val(newQuLogicItemNum);
-					var newQuLogicItemClass="quLogicItem_"+newQuLogicItemNum;
-					lastTr.attr("class",newQuLogicItemClass);
+					var newQuLogicItemClass = "quLogicItem_" + newQuLogicItemNum;
+					lastTr.attr("class", newQuLogicItemClass);
 				}
-				var dwQuOptionSel=lastTr.find(".logicQuOptionSel");
-				var eachTag=true;
-				if(quType==="CHENRADIO" || quType==="CHENCHECKBOX" || quType==="CHENSCORE" || quType==="CHENFBK"){
-					var quChenColumnTds=quItemBody.find(".quChenColumnTd");
-					var quChenRowTds=quItemBody.find(".quChenRowTd");
-					$.each(quChenRowTds,function(){
-						var rowText=$(this).find(".quCoOptionEdit").text();
-						var rowQuItemId=$(this).find("input[name='quItemId']").val();	
-						$.each(quChenColumnTds,function(){
-							var colText=$(this).find(".quCoOptionEdit").text();
-							var colQuItemId=$(this).find("input[name='quItemId']").val();
-							var optionId=rowQuItemId+":"+colQuItemId;
-							eachTag=true;
-							$.each(logicQuOptionSels,function(){
-								var selOptionVal=$(this).val();
-								if(selOptionVal==optionId){
-									eachTag=false;
+				var dwQuOptionSel = lastTr.find(".logicQuOptionSel");
+				var eachTag = true;
+				if(quType === "CHENRADIO" || quType === "CHENCHECKBOX" || quType === "CHENSCORE" || quType === "CHENFBK"){
+					var quChenColumnTds = quItemBody.find(".quChenColumnTd");
+					var quChenRowTds = quItemBody.find(".quChenRowTd");
+					$.each(quChenRowTds, function(){
+						var rowText = $(this).find(".quCoOptionEdit").text();
+						var rowQuItemId = $(this).find("input[name='quItemId']").val();	
+						$.each(quChenColumnTds, function(){
+							var colText = $(this).find(".quCoOptionEdit").text();
+							var colQuItemId = $(this).find("input[name='quItemId']").val();
+							var optionId = rowQuItemId + ":" + colQuItemId;
+							eachTag = true;
+							$.each(logicQuOptionSels, function(){
+								var selOptionVal = $(this).val();
+								if(selOptionVal == optionId){
+									eachTag = false;
 									return false;
 								}
 							});
 							if(eachTag){
-								dwQuOptionSel.append("<option value='"+optionId+"'>"+rowText+":"+colText+"</option>");	
+								dwQuOptionSel.append("<option value='" + optionId + "'>" + rowText + ":" + colText + "</option>");	
 							}
 						});
 					});
 				}else{
-					$.each(quItemInputCases,function(){
-						var optionText=$(this).parent().find("label.quCoOptionEdit").text();
-						var optionId=$(this).find("input[name='quItemId']").val();
-						eachTag=true;
-						$.each(logicQuOptionSels,function(){
-							var selOptionVal=$(this).val();
-							if(selOptionVal==optionId){
-								eachTag=false;
+					$.each(quItemInputCases, function(){
+						var optionText = $(this).parent().find("label.quCoOptionEdit").text();
+						var optionId = $(this).find("input[name='quItemId']").val();
+						eachTag = true;
+						$.each(logicQuOptionSels, function(){
+							var selOptionVal = $(this).val();
+							if(selOptionVal == optionId){
+								eachTag = false;
 								return false;
 							}
 						});
 						if(eachTag){
-							dwQuOptionSel.append("<option value='"+optionId+"'>"+optionText+"</option>");	
+							dwQuOptionSel.append("<option value='" + optionId + "'>" + optionText + "</option>");	
 						}
 					});
 				}
-				if(logicQuOptionSels.size()==0){
+				if(logicQuOptionSels.size() == 0){
 					dwQuOptionSel.append("<option value='0'>任意选项</option>");	
 				}else{
 					$("#dwQuLogicTable").find(".logicQuOptionSel option[value='0']").remove();
 				}
-				if(quType==="FILLBLANK"){
+				if(quType === "FILLBLANK"){
 					dwQuOptionSel.val("0");
 				}
-				var logicQuSel=lastTr.find(".logicQuSel");
-				var quItemBodys=$("#dwSurveyQuContent .surveyQuItemBody");
-				$.each(quItemBodys,function(){
-					//logicQuSels
+				var logicQuSel = lastTr.find(".logicQuSel");
+				var quItemBodys = $("#dwSurveyQuContent .surveyQuItemBody");
+				$.each(quItemBodys, function(){
 					if($(this).find(".quCoTitleEdit")[0]){
-						var quCoNumText=$(this).find(".quCoNum").text();
-						var quTitleText=$(this).find(".quCoTitleEdit").text();
-						var quId=$(this).find("input[name='quId']").val();
-						eachTag=true;
-						if(curQuId==quId){
-							eachTag=false;
+						var quCoNumText = $(this).find(".quCoNum").text();
+						var quTitleText = $(this).find(".quCoTitleEdit").text();
+						var quId = $(this).find("input[name='quId']").val();
+						eachTag = true;
+						if(curQuId == quId){
+							eachTag = false;
 						}
 						if(eachTag){
-							$.each(dwLogicQuSels,function(){
-								var dwLogicQuSelVal=$(this).val();
-								if(dwLogicQuSelVal==quId){
-									eachTag=false;
+							$.each(dwLogicQuSels, function(){
+								var dwLogicQuSelVal = $(this).val();
+								if(dwLogicQuSelVal == quId){
+									eachTag = false;
 									return false;
 								}
 							});
 						}
 						if(eachTag){
-							logicQuSel.append("<option value='"+quId+"'>"+quCoNumText+quTitleText+"</option>");	
+							logicQuSel.append("<option value='" + quId + "'>" + quCoNumText + quTitleText + "</option>");	
 						}
 					}
 				});
 				logicQuSel.append("<option value='1'>正常结束（计入结果）</option><option value='2'>提前结束（不计入结果）</option>");
-				if(quType==="SCORE"){
-					var logicScoreNum=lastTr.find(".logicScoreNum");
+				if(quType === "SCORE"){
+					var logicScoreNum = lastTr.find(".logicScoreNum");
 					logicScoreNum.empty();
-					for(var i=1;i<=10;i++){
-						logicScoreNum.append("<option value=\""+i+"\">"+i+"</option>");
+					for(var i = 1;i <= 10; i++){
+						logicScoreNum.append("<option value=\"" + i + "\">" + i + "</option>");
 					}
-				}else if(quType==="ORDERQU"){
+				}else if(quType === "ORDERQU"){
 					dwQuOptionSel.empty();
 					dwQuOptionSel.append("<option value='0'>回答完成</option>");
 					lastTr.find(".ifSpanText1").text("如果本题");
@@ -1383,36 +1381,36 @@ layui.config({
 			var thObjClass = thDialogObj.attr("class");
 			curEditCallback();
 			setShowDialogOffset(thDialogObj);
-			var quItemBody=$(thDialogObj).parents(".surveyQuItemBody");
+			var quItemBody = $(thDialogObj).parents(".surveyQuItemBody");
 			$("#dwCommonDialog .dwQuDialogCon").hide();
 			if(thObjClass.indexOf("addMoreOption") >= 0){
 				$("#dwCommonDialog .dwQuAddMore").show();
 			}else if(thObjClass.indexOf("dwQuSet") >= 0){
 				$("#dwCommonDialog .dwQuSetCon").show();
-				var quType=quItemBody.find("input[name='quType']").val();
-				var isRequired=quItemBody.find("input[name='isRequired']").val();
-				var hv=quItemBody.find("input[name='hv']").val();
-				var randOrder=quItemBody.find("input[name='randOrder']").val();
-				var cellCount=quItemBody.find("input[name='cellCount']").val();
-				var paramInt01=quItemBody.find("input[name='paramInt01']");
-				var paramInt02=quItemBody.find("input[name='paramInt02']");
-				var contactsAttr=quItemBody.find("input[name='contactsAttr']").val();
-				var contactsField=quItemBody.find("input[name='contactsField']").val();
-				$("#dwCommonDialog input[name='setIsRequired']").prop("checked",false);
-				$("#dwCommonDialog input[name='setRandOrder']").prop("checked",false);
+				var quType = quItemBody.find("input[name='quType']").val();
+				var isRequired = quItemBody.find("input[name='isRequired']").val();
+				var hv = quItemBody.find("input[name='hv']").val();
+				var randOrder = quItemBody.find("input[name='randOrder']").val();
+				var cellCount = quItemBody.find("input[name='cellCount']").val();
+				var paramInt01 = quItemBody.find("input[name='paramInt01']");
+				var paramInt02 = quItemBody.find("input[name='paramInt02']");
+				var contactsAttr = quItemBody.find("input[name='contactsAttr']").val();
+				var contactsField = quItemBody.find("input[name='contactsField']").val();
+				$("#dwCommonDialog input[name='setIsRequired']").prop("checked", false);
+				$("#dwCommonDialog input[name='setRandOrder']").prop("checked", false);
 				$("#dwCommonDialog select[name='setHv']").val(2);
-				$("#dwCommonDialog input[name='setAutoContacts']").prop("checked",false);
+				$("#dwCommonDialog input[name='setAutoContacts']").prop("checked", false);
 				$("#dwCommonDialog .contactsFieldLi").hide();
 				$("#dwCommonDialog .contactsAttrLi").hide();
 				$("#dwCommonDialog .optionAutoOrder").hide();
 				$("#dwCommonDialog .optionRangeHv").hide();
 				$("#dwCommonDialog .scoreMinMax").hide();
 				$("#dwCommonDialog .minMaxLi").hide();
-				if(isRequired==1){
-					$("#dwCommonDialog input[name='setIsRequired']").prop("checked",true);
+				if(isRequired == 1){
+					$("#dwCommonDialog input[name='setIsRequired']").prop("checked", true);
 				}
-				if(randOrder==1){
-					$("#dwCommonDialog input[name='setRandOrder']").prop("checked",true);
+				if(randOrder == 1){
+					$("#dwCommonDialog input[name='setRandOrder']").prop("checked", true);
 				}
 				if(hv == 3){
 					$("#dwCommonDialog .option_range_3").show();
@@ -1454,40 +1452,40 @@ layui.config({
 						$("#dwCommonDialog select[name='setContactsField']").val(contactsField);
 					}
 				}
-			}else if(thObjClass.indexOf("dwQuLogic")>=0){
+			}else if(thObjClass.indexOf("dwQuLogic") >= 0){
 				$("#dwCommonDialog .dwQuDialogLoad").show();
-			}else if(thObjClass.indexOf("dwFbMenuBtn")>=0){
+			}else if(thObjClass.indexOf("dwFbMenuBtn") >= 0){
 				$("#dwCommonDialog .dwQuFillDataTypeOption").show();
-				var checkType_val=quItemBody.find("input[name='checkType']").val();
-				if(checkType_val==""){
-					checkType_val="NO";
+				var checkType_val = quItemBody.find("input[name='checkType']").val();
+				if(checkType_val == ""){
+					checkType_val = "NO";
 				}
-				var checkType=$("#dwCommonDialog select[name='quFill_checkType']");
+				var checkType = $("#dwCommonDialog select[name='quFill_checkType']");
 				checkType.val(checkType_val);
-			}else if(thObjClass.indexOf("quCoOptionEdit")>=0){
+			}else if(thObjClass.indexOf("quCoOptionEdit") >= 0){
 				$("#dwCommonDialog .dwQuRadioCheckboxOption").show();
 				//设置回显值 isNote checkType
-				var quOption_isNote=$("#dwCommonDialog input[name='quOption_isNote']");
-				var quOption_checkType=$("#dwCommonDialog select[name='quOption_checkType']");
-				var quOption_isRequiredFill=$("#dwCommonDialog input[name='quOption_isRequiredFill']");
+				var quOption_isNote = $("#dwCommonDialog input[name='quOption_isNote']");
+				var quOption_checkType = $("#dwCommonDialog select[name='quOption_checkType']");
+				var quOption_isRequiredFill = $("#dwCommonDialog input[name='quOption_isRequiredFill']");
 				
-				var quOptionParent=$(thDialogObj).parent();
-				var isNote_val=quOptionParent.find("input[name='isNote']").val();
-				var checkType_val=quOptionParent.find("input[name='checkType']").val();
-				var isRequiredFill_val=quOptionParent.find("input[name='isRequiredFill']").val();
+				var quOptionParent = $(thDialogObj).parent();
+				var isNote_val = quOptionParent.find("input[name='isNote']").val();
+				var checkType_val = quOptionParent.find("input[name='checkType']").val();
+				var isRequiredFill_val = quOptionParent.find("input[name='isRequiredFill']").val();
 				
-				if(isNote_val=="1"){
-					quOption_isNote.prop("checked",true);
+				if(isNote_val == "1"){
+					quOption_isNote.prop("checked", true);
 					$(".quOptionFillContentLi,.quOptionFillRequiredLi").show();
 				}else{
-					quOption_isNote.prop("checked",false);
+					quOption_isNote.prop("checked", false);
 					$(".quOptionFillContentLi,.quOptionFillRequiredLi").hide();
 				}
-				if(checkType_val==""){
-					checkType_val="NO";
+				if(checkType_val == ""){
+					checkType_val = "NO";
 				}
 				quOption_checkType.val(checkType_val);
-				if(isRequiredFill_val=="1"){
+				if(isRequiredFill_val == "1"){
 					quOption_isRequiredFill.prop("checked",true);
 				}else{
 					quOption_isRequiredFill.prop("checked",false);
@@ -2379,7 +2377,7 @@ layui.config({
 	     **/
 	    function savePagetag(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0) {
+	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -2441,7 +2439,7 @@ layui.config({
 	     **/
 	    function saveParagraph(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0) {
+	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -2644,7 +2642,7 @@ layui.config({
 	     **/
 	    function saveChen(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0) {
+	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -3172,6 +3170,179 @@ layui.config({
 	    	}
 	    	return false;
 	    });
+	    
+	    /**
+	     * 关闭设置弹出框
+	     */
+	    $("body").on("click", "#dwCommonDialogClose", function(){
+			dwCommonDialogHide();
+			resetQuItemHover(null);
+	    });
+	    
+	    /**
+	     * 保存逻辑设置 
+	     */
+	    $("body").on("click", "#dwDialogSaveLogic", function(){
+	    	var quItemBody = $(dwDialogObj).parents(".surveyQuItemBody");
+			var quLogicInputCase = quItemBody.find(".quLogicInputCase");
+			var quType = quItemBody.find("input[name='quType']").val();
+			var dwQuLogicTrs = $("#dwQuLogicTable tr");
+			var quLogicItemHtml = $("#quLogicItemModel").html();
+			$.each(dwQuLogicTrs, function(){
+				var cgQuItemId = $(this).find(".logicQuOptionSel").val();
+				var skQuId = $(this).find(".logicQuSel").val();
+				var logicType = $(this).find(".logicType").val();
+				var quLogicItemClass = $(this).attr("class");
+				//判断已经保存过的，保存过的只做修改
+				if(skQuId != "" && cgQuItemId != ""){
+					var quLogicItem = quLogicInputCase.find("." + quLogicItemClass);
+					if(quLogicItem[0]){
+						//已经有值--检查值是否有发生变化 
+						var oldSkQuId = quLogicItem.find("input[name='skQuId']").val();
+						var oldCgQuItemId = quLogicItem.find("input[name='cgQuItemId']").val();
+						var oldLogicType = quLogicItem.find("input[name='logicType']").val();
+						if(oldSkQuId != skQuId || cgQuItemId != oldCgQuItemId || oldLogicType != logicType){
+							quLogicItem.find("input[name='logicSaveTag']").val("0");
+							quItemBody.find("input[name='saveTag']").val("0");
+							//后来修复的
+							quLogicItem.find("input[name='skQuId']").val(skQuId);
+							quLogicItem.find("input[name='cgQuItemId']").val(cgQuItemId);
+							quLogicItem.find("input[name='logicType']").val(logicType);
+						}
+						//如果是评分题
+						if(quType === "SCORE"){
+							var logicScoreGtLt = $(this).find(".logicScoreGtLt").val();
+							var logicScoreNum = $(this).find(".logicScoreNum").val();
+							quLogicItem.find("input[name='geLe']").val(logicScoreGtLt);
+							quLogicItem.find("input[name='scoreNum']").val(logicScoreNum);
+							quLogicItem.find("input[name='logicType']").val(logicType);
+							//状态
+							quLogicItem.find("input[name='logicSaveTag']").val("0");
+							quItemBody.find("input[name='saveTag']").val("0");
+						}
+					}else{
+						quLogicInputCase.append(quLogicItemHtml);
+						quLogicItem = quLogicInputCase.find(".quLogicItem").last();
+						quLogicItem.addClass(quLogicItemClass);
+						//修改值
+						quLogicItem.find("input[name='quLogicId']").val("");
+						quLogicItem.find("input[name='skQuId']").val(skQuId);
+						quLogicItem.find("input[name='cgQuItemId']").val(cgQuItemId);
+						quLogicItem.find("input[name='visibility']").val("1");
+						quLogicItem.find("input[name='logicType']").val(logicType);
+						quItemBody.find("input[name='saveTag']").val("0");
+						//如果是评分题
+						if(quType === "SCORE"){
+							var logicScoreGtLt = $(this).find(".logicScoreGtLt").val();
+							var logicScoreNum = $(this).find(".logicScoreNum").val();
+							quLogicItem.find("input[name='geLe']").val(logicScoreGtLt);
+							quLogicItem.find("input[name='scoreNum']").val(logicScoreNum);
+							quLogicItem.find("input[name='logicType']").val(logicType);
+						}
+					}
+				}
+			});
+			refreshQuLogicInfo(quItemBody);
+			dwCommonDialogHide();
+			return false;
+	    });
+	    
+	    /**
+	     * 设置窗口保存事件
+	     */
+	    $("body").on("click", "#dwDialogQuSetSave", function(){
+	    	if (dwDialogObj != null) {
+	    		var quItemBody = $(dwDialogObj).parents(".surveyQuItemBody");
+	    		var setIsRequired = $("#dwCommonDialog input[name='setIsRequired']:checked");
+	    		var setRandOrder = $("#dwCommonDialog input[name='setRandOrder']:checked");
+	    		var setHv = $("#dwCommonDialog select[name='setHv']").val();
+	    		var setCellCount = $("#dwCommonDialog input[name='setCellCount']").val();
+	    		var setAutoContacts = $("#dwCommonDialog input[name='setAutoContacts']:checked");
+	    		var setContactsField = $("#dwCommonDialog select[name='setContactsField']").val();
+	    		var oldHv = quItemBody.find("input[name='hv']").val();
+	    		var oldCellCount = quItemBody.find("input[name='cellCount']").val();
+	    		quItemBody.find("input[name='isRequired']").val(setIsRequired[0] ? 1 : 0);
+	    		quItemBody.find("input[name='hv']").val(setHv);
+	    		quItemBody.find("input[name='randOrder']").val(setRandOrder[0] ? 1 : 0);
+	    		quItemBody.find("input[name='cellCount']").val(setCellCount);
+	    		quItemBody.find("input[name='saveTag']").val(0);
+	    		var quType = quItemBody.find("input[name='quType']").val();
+	    		if (quType == "RADIO" || quType == "CHECKBOX" || quType == "FILLBLANK") {
+	    			quItemBody.find("input[name='contactsAttr']").val(setAutoContacts[0] ? 1 : 0);
+	    			quItemBody.find("input[name='contactsField']").val(setContactsField);
+	    		} else if (quType == "SCORE") {
+	    			quItemBody.find("input[name='paramInt01']").val(1);
+	    			var paramInt02 = $("#dwCommonDialog .scoreMinMax .maxScore");
+	    			if (paramInt02[0]) {
+	    				quItemBody.find("input[name='paramInt02']").val(paramInt02.val());
+	    			}
+	    			//根据分数设置评分选项
+	    			var paramInt01Val = 1;
+	    			var paramInt02Val = paramInt02.val();
+	    			var scoreNumTableTr = quItemBody.find(".scoreNumTable tr");
+	    			$.each(scoreNumTableTr,
+	    			function() {
+	    				$(this).empty();
+	    				for (var i = paramInt01Val; i <= paramInt02Val; i++) {
+	    					$(this).append("<td>" + i + "</td>");
+	    				}
+	    			});
+	    		} else if (quType === "MULTIFILLBLANK") {
+	    			var paramInt01 = $("#dwCommonDialog .minMaxLi .minNum");
+	    			if (paramInt01[0]) {
+	    				quItemBody.find("input[name='paramInt01']").val(paramInt01.val());
+	    			}
+	    			quItemBody.find("input[name='paramInt02']").val(10);
+	    		}
+	    		var selVal = $(".option_range").val();
+	    		if (selVal == 1) {
+	    			//横排 transverse
+	    			if (oldHv == 3) {
+	    				quTableOptoin2Li(quItemBody);
+	    			}
+	    			quItemBody.find(".quCoItem ul").addClass("transverse");
+	    		} else if (selVal == 2) {
+	    			if (oldHv == 3) {
+	    				quTableOptoin2Li(quItemBody);
+	    			} else {
+	    				//竖排
+	    				quItemBody.find(".quCoItem ul").removeClass("transverse");
+	    				quItemBody.find(".quCoItem ul li").width("");
+	    			}
+	    		} else if (selVal == 3) {
+	    			if (!$("#dwCommonDialogForm").valid()) {
+	    				notify("参数不对，请检查！", 800);
+	    				return false;
+	    			}
+	    			if (oldHv == 3) {
+	    				if (oldCellCount != setCellCount) {
+	    					quTableOption2Table(quItemBody);
+	    				}
+	    			} else {
+	    				quLiOption2Table(quItemBody);
+	    			}
+	    		}
+	    	}
+	    	dwCommonDialogHide();
+	    	return false;
+	    });
+	    
+	    //逻辑设置时添加逻辑项
+		$(".dwQuDialogAddLogic").click(function(){
+			addQuDialogLogicTr(true, function(){}, function(){
+				alert("此题已经设置了任意选项!");
+			});
+			return false;
+		});
+		
+		$("input[name='setAutoContacts']").change(function(){
+			var check = $(this).prop("checked");
+			if(check){
+				$(".contactsFieldLi").show();
+			}else{
+				$(".contactsFieldLi").hide();
+			}
+		});
 	    
 	    //选项卡切换
 	    $("body").on("click", "#tabType li", function(){
