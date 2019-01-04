@@ -7,9 +7,6 @@ public enum QuType {
 	CHECKBOX("多选题", "checkbox", 2), 
 	FILLBLANK("填空题", "fillblank", 3),
 
-	COMPRADIO("复合单选", "comp-radio", 17), 
-	COMPCHECKBOX("复合多选", "comp-checkbox", 18),
-
 	MULTIFILLBLANK("多项填空题", "multi-fillblank", 4), // 组合填空题
 	ANSWER("多行填空题", "answer", 5), // 原问答题
 	BIGQU("大题", "bigqu", 6),
@@ -26,7 +23,10 @@ public enum QuType {
 	UPLOADFILE("文件上传题", "sendfile", 15), 
 	PAGETAG("分页标记", "pagetag", 16), 
 	PARAGRAPH("段落说明", "paragraph", 17), 
-	CHENSCORE("矩阵评分题", "chen-score", 18);
+	CHENSCORE("矩阵评分题", "chen-score", 18),
+	
+	COMPRADIO("复合单选", "comp-radio", 19), 
+	COMPCHECKBOX("复合多选", "comp-checkbox", 20);
 
 	private String cnName;
 	private String actionName;
@@ -69,6 +69,15 @@ public enum QuType {
 			}
 		}
 		return null;
+	}
+	
+	public static int getIndex(String actionName){
+		for (QuType q : QuType.values()){
+			if(q.getActionName().replaceAll("-", "").equals(actionName.toLowerCase())){
+				return q.index;
+			}
+		}
+		return -1;
 	}
 
 }

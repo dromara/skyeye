@@ -2634,7 +2634,7 @@ layui.config({
 
 	    /** 矩阵单选题 **/
 	    /**
-	     * 新保存矩阵单选题
+	     * 保存矩阵单选题
 	     **/
 	    function saveChen(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
@@ -2643,6 +2643,7 @@ layui.config({
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
     				tag: svTag,
+    				quType: quItemBody.find("input[name='quType']").val(),
     				quId: quItemBody.find("input[name='quId']").val(),
     				isRequired: quItemBody.find("input[name='isRequired']").val(),
     				hv: quItemBody.find("input[name='hv']").val(),
@@ -2650,6 +2651,7 @@ layui.config({
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
     				quTitle: '',
 	    		};
+	    		console.log(data);
 	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
 	    		if(quTitleSaveTag == 0) {
 	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
@@ -2833,10 +2835,8 @@ layui.config({
 	    	var curEditTd = $(curEditObj).parents("td");
 	    	var curEditTdClass = curEditTd.attr("class");
 	    	if(curEditTdClass.indexOf("Column") >= 0) {
-	    		// deleteChenRadioColumnOption();
 	    		deleteChenColumnOption();
 	    	} else {
-	    		// deleteChenRadioRowOption();
 	    		deleteChenRowOption();
 	    	}
 	    }
@@ -2951,7 +2951,6 @@ layui.config({
 	    			});
 	    		} else {
 	    			$.each(quItemInputCases, function() {
-	    				//				var optionText=$(this).prev().text();
 	    				var optionText = $(this).parent().find("label.quCoOptionEdit").text();
 	    				var optionId = $(this).find("input[name='quItemId']").val();
 	    				eachTag = true;
@@ -2978,7 +2977,6 @@ layui.config({
 	    		var logicQuSel = lastTr.find(".logicQuSel");
 	    		var quItemBodys = $("#dwSurveyQuContent .surveyQuItemBody");
 	    		$.each(quItemBodys, function() {
-	    			//logicQuSels
 	    			if($(this).find(".quCoTitleEdit")[0]) {
 	    				var quCoNumText = $(this).find(".quCoNum").text();
 	    				var quTitleText = $(this).find(".quCoTitleEdit").text();

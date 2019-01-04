@@ -227,7 +227,7 @@ public class DwSurveyDirectoryController {
 	/**
 	 * 
 	     * @Title: addQuChenMation
-	     * @Description: 添加矩阵单选题
+	     * @Description: 添加矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数

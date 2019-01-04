@@ -875,20 +875,20 @@
 																												<table class="quCoChenTable">
 																													<tr>
 																														<td></td>
-																														{{#each columns}}
+																														{{#each questionChenColumn}}
 																															<td class="quChenColumnTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
 																															</td>
 																														{{/each}}
 																													</tr>
-																													{{#each rows1}}
+																													{{#each questionChenRow}}
 																														<tr class="quChenRowTr">
 																															<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
 																															</td>
-																															<c:forEach items="{{columns}}" var="columnItem">
+																															{{#each questionChenColumn}}
 																																<td><input type="checkbox"> </td>
-																															</c:forEach>
+																															{{/each}}
 																														</tr>
 																													{{/each}}
 																												</table>
@@ -989,20 +989,20 @@
 																														<table class="quCoChenTable">
 																															<tr>
 																																<td></td>
-																																{{#each columns}}
+																																{{#each questionChenColumn}}
 																																	<td class="quChenColumnTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																		<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
 																																	</td>
 																																{{/each}}
 																															</tr>
-																															{{#each rows1}}
+																															{{#each questionChenRow}}
 																																<tr class="quChenRowTr">
 																																	<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																		<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
 																																	</td>
-																																	<c:forEach items="{{columns}}" var="columnItem">
+																																	{{#each questionChenColumn}}
 																																		<td><input type="text"> </td>
-																																	</c:forEach>
+																																	{{/each}}
 																																</tr>
 																															{{/each}}
 																														</table>
@@ -1098,22 +1098,20 @@
 																																<table class="quCoChenTable">
 																																	<tr>
 																																		<td></td>
-																																		{{#each columns}}
+																																		{{#each questionChenColumn}}
 																																			<td class="quChenColumnTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																				<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
 																																			</td>
 																																		{{/each}}
 																																	</tr>
-																																	{{#each rows1}}
+																																	{{#each questionChenRow}}
 																																		<tr class="quChenRowTr">
 																																			<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																																				<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>
 																																			</td>
-																																			<c:forEach items="{{columns}}" var="columnItem">
-																																				<td>
-																											
-																																				</td>
-																																			</c:forEach>
+																																			{{#each questionChenColumn}}
+																																				<td>评分</td>
+																																			{{/each}}
 																																		</tr>
 																																	{{/each}}
 																																</table>

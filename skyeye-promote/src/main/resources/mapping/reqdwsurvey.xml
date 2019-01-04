@@ -145,10 +145,11 @@
 	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
 	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
 	</url>
-	<url id="dwsurveydirectory014" path="/post/DwSurveyDirectoryController/addQuChenMation" val="添加矩阵单选题" allUse="1">
+	<url id="dwsurveydirectory014" path="/post/DwSurveyDirectoryController/addQuChenMation" val="添加矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题" allUse="1">
 	    <property id="quId" name="quId" ref="" var="问题id"/>
 	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
 	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="quType" name="quType" ref="required" var="问题类型"/>
 	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
 	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
 	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>

@@ -696,7 +696,7 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	/**
 	 * 
 	     * @Title: addQuChenMation
-	     * @Description: 添加矩阵单选题
+	     * @Description: 添加矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题
 	     * @param @param inputObject
 	     * @param @param outputObject
 	     * @param @throws Exception    参数
@@ -706,7 +706,13 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	@Override
 	public void addQuChenMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		map.put("quType", QuType.CHENRADIO.getIndex());
+		int quType = QuType.getIndex(map.get("quType").toString());
+		if(-1 == quType){
+			outputObject.setreturnMessage("参数值错误！");
+			return;
+		}else{
+			map.put("quType", quType);
+		}
 		String quId = "";
 		if(ToolUtil.isBlank(map.get("quId").toString())){
 			quId = ToolUtil.getSurFaceId();
