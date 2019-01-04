@@ -27,4 +27,6 @@ public interface DwSurveyDirectoryService {
 
 	public void addQuCheckBoxMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void addQuMultiFillblankMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

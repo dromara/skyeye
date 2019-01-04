@@ -376,4 +376,13 @@
 		</foreach>  
 	</insert>
 	
+	<insert id="addQuestionMultiFillblankMationList" parameterType="java.util.Map">
+	     insert into dw_qu_multi_fillblank
+	     (id, qu_id, option_id, option_name, option_title, check_type, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
 </mapper>

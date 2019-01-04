@@ -54,4 +54,6 @@ public interface DwSurveyDirectoryDao {
 
 	public int addQuestionCheckBoxMationList(List<Map<String, Object>> quCheckBox) throws Exception;
 
+	public int addQuestionMultiFillblankMationList(List<Map<String, Object>> quMultiFillblank) throws Exception;
+
 }

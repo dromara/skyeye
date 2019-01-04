@@ -664,7 +664,7 @@
 																						</div>
 																						<div class="quCoItem">
 																							<table class="mFillblankTable" cellpadding="0" cellspacing="0">
-																								{{#each quMultiFillblanks}}
+																								{{#each questionMultiFillBlank}}
 																									<tr class="mFillblankTableTr">
 																										<td align="right" class="mFillblankTableEditTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
 																											<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1"></div>

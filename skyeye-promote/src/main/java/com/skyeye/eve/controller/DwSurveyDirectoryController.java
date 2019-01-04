@@ -192,4 +192,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.addQuCheckBoxMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuMultiFillblankMation
+	     * @Description: 添加多选填空题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuMultiFillblankMation")
+	@ResponseBody
+	public void addQuMultiFillblankMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuMultiFillblankMation(inputObject, outputObject);
+	}
+	
 }
