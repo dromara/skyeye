@@ -5424,4 +5424,25 @@
   [skyeye-promote][INFO] [2019-01-04 19:24:39] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory006
   [skyeye-promote][INFO] [2019-01-04 19:24:43] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/login002
   [skyeye-promote][INFO] [2019-01-04 19:24:45] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory003
+  [skyeye-promote][INFO] [2019-01-04 19:25:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:26:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:28:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:29:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:30:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:31:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:32:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:33:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:34:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:35:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:37:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:39:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:41:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:42:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-04 19:42:42] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/login002
+  [skyeye-promote][INFO] [2019-01-04 19:42:43] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/login004
+  [skyeye-promote][INFO] [2019-01-04 19:42:44] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/login005
+  [skyeye-promote][INFO] [2019-01-04 19:42:48] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/login002
+  [skyeye-promote][INFO] [2019-01-04 19:42:50] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory001
+  [skyeye-promote][INFO] [2019-01-04 19:42:53] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/login002
+  [skyeye-promote][INFO] [2019-01-04 19:42:56] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory003
   

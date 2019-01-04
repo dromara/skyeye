@@ -37,6 +37,7 @@
 		<div id="dwSurveyQuContent" style="min-height: 500px;">
 			<ul id="dwSurveyQuContentAppUl">
 				{{#each rows}}
+					<li class="li_surveyQuItemBody">
 					{{#if quType}}
 					{{#compare1 quType '1'}}<!-- radio -->
     						<div class="surveyQuItemBody">
@@ -1268,6 +1269,7 @@
 							{{/if}}
 					{{/compare1}}
 					{{/if}}
+					</li>
 				{{/each}}
 			</ul>
 		</div>

@@ -445,39 +445,45 @@ layui.config({
 			
 			$(".questionUp").unbind();
 			$(".questionUp").click(function(){
-				var nextQuBody=$(this).parents(".li_surveyQuItemBody");
-				var prevQuBody=$(nextQuBody).prev();
+				var nextQuBody = $(this).parents(".li_surveyQuItemBody");
+				var prevQuBody = $(nextQuBody).prev();
 				if(prevQuBody[0]){
-					var prevQuBodyHtml=prevQuBody.html();
+					var prevQuBodyHtml = prevQuBody.html();
 					$(nextQuBody).after("<li class='li_surveyQuItemBody'>"+prevQuBodyHtml+"</li>");
-					var newNextObj=$(nextQuBody).next();
+					var newNextObj = $(nextQuBody).next();
 					newNextObj.hide();
 					newNextObj.slideDown("slow");
-					prevQuBody.slideUp("slow",function(){prevQuBody.remove();resetQuItem();bindQuHoverItem();});
-					
+					prevQuBody.slideUp("slow",function(){
+						prevQuBody.remove();
+						resetQuItem();
+						bindQuHoverItem();
+					});
 					nextQuBody.find("input[name='saveTag']").val(0);
 					newNextObj.find("input[name='saveTag']").val(0);
 				}else{
-					notify("已经是第一个了！",1000);
+					top.winui.window.msg("已经是第一个了！", {icon: 2,time: 1000});
 				}
 			});
 			
 			$(".questionDown").unbind();
 			$(".questionDown").click(function(){
-				var prevQuBody=$(this).parents(".li_surveyQuItemBody");
-				var nextQuBody=$(prevQuBody).next();
+				var prevQuBody = $(this).parents(".li_surveyQuItemBody");
+				var nextQuBody = $(prevQuBody).next();
 				if(nextQuBody[0]){
-					var nextQuBodyHtml=nextQuBody.html();
+					var nextQuBodyHtml = nextQuBody.html();
 					$(prevQuBody).before("<li class='li_surveyQuItemBody' >"+nextQuBodyHtml+"</li>");
-					var newPrevObj=$(prevQuBody).prev();
+					var newPrevObj = $(prevQuBody).prev();
 					newPrevObj.hide();
 					newPrevObj.slideDown("slow");
-					nextQuBody.slideUp("slow",function(){nextQuBody.remove();resetQuItem();bindQuHoverItem();});
-					
+					nextQuBody.slideUp("slow",function(){
+						nextQuBody.remove();
+						resetQuItem();
+						bindQuHoverItem();
+					});
 					prevQuBody.find("input[name='saveTag']").val(0);
 					newPrevObj.find("input[name='saveTag']").val(0);
 				}else{
-					alert("已经是最后一个了！");
+					top.winui.window.msg("已经是最后一个了！", {icon: 2,time: 1000});
 				}
 			});
 			
