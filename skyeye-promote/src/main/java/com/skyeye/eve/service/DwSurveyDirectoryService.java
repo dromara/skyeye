@@ -29,4 +29,6 @@ public interface DwSurveyDirectoryService {
 
 	public void addQuMultiFillblankMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void addQuParagraphMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

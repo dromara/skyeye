@@ -639,5 +639,55 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		}
 		outputObject.setBean(map);
 	}
+
+	/**
+	 * 
+	     * @Title: addQuParagraphMation
+	     * @Description: 添加段落题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void addQuParagraphMation(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		map.put("quType", QuType.PARAGRAPH.getIndex());
+		String quId = "";
+		if(ToolUtil.isBlank(map.get("quId").toString())){
+			quId = ToolUtil.getSurFaceId();
+			map.put("id", quId);
+			map.put("quTag", 1);
+			map.put("visibility", 1);
+			map.put("createTime", ToolUtil.getTimeAndToString());
+			dwSurveyDirectoryDao.addQuestionMation(map);
+		}else{
+			
+		}
+		
+		JSONArray array = JSONArray.fromObject(map.get("logic").toString());//获取模板绑定信息
+		if(array.size() > 0){
+			List<Map<String, Object>> quLogics = new ArrayList<>();
+			Map<String, Object> user = inputObject.getLogParams();
+			for(int i = 0; i < array.size(); i++){
+				JSONObject object = (JSONObject) array.get(i);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("quLogicId", object.getString("quLogicId"));
+				bean.put("cgQuItemId", object.getString("cgQuItemId"));
+				bean.put("skQuId", object.getString("skQuId"));
+				bean.put("visibility", object.getString("visibility"));
+				bean.put("logicType", object.getString("logicType"));
+				bean.put("title", object.getString("key"));
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("createId", user.get("id"));
+				bean.put("createTime", ToolUtil.getTimeAndToString());
+				quLogics.add(bean);
+			}
+			dwSurveyDirectoryDao.addQuestionLogicsMationList(quLogics);
+			map.put("quLogics", quLogics);
+		}
+		outputObject.setBean(map);
+	}
 	
 }

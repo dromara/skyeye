@@ -570,6 +570,9 @@
 																		<div class="surveyQuItem">
 																			<div class="surveyQuItemLeftTools">
 																				<ul class="surveyQuItemLeftToolsUl">
+																					<li title="移动排序" class="dwQuMove">
+																						<div class="dwQuIcon"></div>
+																					</li>
 																					<li title="删除" class="dwQuDelete">
 																						<div class="dwQuIcon"></div>
 																					</li>
@@ -588,7 +591,7 @@
 																			<div class="surveyQuItemContent" style="min-height: 45px;">
 																				<div class="quCoTitle">
 																					<div class="quCoNum" style="display: none;">{{showIndex @index}}、</div>
-																					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+																					<div class="editAble quCoTitleEdit">{{{quTitle}}}</div>
 																					<input type="hidden" name="quTitleSaveTag" value="1">
 																				</div>
 																			</div>

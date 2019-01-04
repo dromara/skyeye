@@ -208,4 +208,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.addQuMultiFillblankMation(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: addQuParagraphMation
+	     * @Description: 添加段落题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/addQuParagraphMation")
+	@ResponseBody
+	public void addQuParagraphMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.addQuParagraphMation(inputObject, outputObject);
+	}
+	
 }
