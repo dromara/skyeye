@@ -336,4 +336,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.deleteQuestionScoreOptionMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: deleteQuestionOrderOptionMationById
+	     * @Description: 删除排序选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/deleteQuestionOrderOptionMationById")
+	@ResponseBody
+	public void deleteQuestionOrderOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.deleteQuestionOrderOptionMationById(inputObject, outputObject);
+	}
+	
 }

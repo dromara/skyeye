@@ -2060,28 +2060,24 @@ layui.config({
 	    		$(this).text(i + 1);
 	    	});
 	    }
-	    /** 删除排序选项 **/
+	    /**
+	     * 删除排序选项
+	     */
 	    function deleteOrderquOption() {
 	    	var optionParent = null;
 	    	optionParent = $(curEditObj).parents("li.quCoItemUlLi");
 	    	var quItemBody = $(curEditObj).parents(".surveyQuItemBody");
 	    	var rmQuOrderTableTr = quItemBody.find(".quOrderByRight table.quOrderByTable tr:last");
-
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = reqBasePath + "/design/qu-orderqu!ajaxDelete.action";
-	    		var data = "quItemId=" + quOptionId;
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: "post",
-	    			success: function(msg) {
-	    				if(msg == "true") {
-	    					delQuOptionCallBack(optionParent);
-	    					rmQuOrderTableTr.remove();
-	    				}
-	    			}
-	    		});
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory021", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+	 	   				delQuOptionCallBack(optionParent);
+	 	   				rmQuOrderTableTr.remove();
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
 	    		rmQuOrderTableTr.remove();

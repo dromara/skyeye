@@ -100,4 +100,10 @@ public interface DwSurveyDirectoryDao {
 
 	public int deleteLogicQuestionScoreOptionMationById(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryQuestionOrderOptionById(Map<String, Object> map) throws Exception;
+
+	public int deleteQuestionOrderOptionMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteLogicQuestionOrderOptionMationById(Map<String, Object> map) throws Exception;
+
 }
