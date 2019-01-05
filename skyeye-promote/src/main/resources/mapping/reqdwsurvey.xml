@@ -163,6 +163,12 @@
 	<url id="dwsurveydirectory015" path="/post/DwSurveyDirectoryController/deleteQuestionMationById" val="删除问题" allUse="1">
 		<property id="quId" name="quId" ref="required" var="问题id"/>
 	</url>
+	<url id="dwsurveydirectory016" path="/post/DwSurveyDirectoryController/deleteQuestionChenColumnMationById" val="删除矩阵单选题列选项" allUse="1">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="dwsurveydirectory017" path="/post/DwSurveyDirectoryController/deleteQuestionChenRowMationById" val="删除矩阵单选题行选项" allUse="1">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
 	<!-- 问卷调查结束 -->
 	
 </controller>

@@ -1054,86 +1054,6 @@ layui.config({
 				}});
 		}
 	    
-		/** 添加列选项 **/
-		function addChenItem(eventObj, quItemBody, itemText){
-			var eventObjClass = eventObj.attr("class");
-			if(eventObjClass.indexOf("Column") >= 0){
-				return addChenColumnItem(quItemBody, itemText);
-			}else{
-				return addChenRowItem(quItemBody, itemText);
-			}
-		}
-		/** 添加矩阵单选题列选项   **/
-		function addChenColumnItem(quItemBody,itemText){
-			//得判断是否是table类型
-			var newEditObj=null;
-			//ul li处理
-			var quRadioColumnHtml=$("#quChenColumnModel").html();
-			var quCoChenTable=quItemBody.find("table.quCoChenTable");
-			var quCoChenTableTrs=quCoChenTable.find("tr");
-			var quType=quItemBody.find("input[name='quType']").val();
-			$.each(quCoChenTableTrs,function(i){
-				if(i==0){
-					$(this).append(quRadioColumnHtml);
-				}else{
-					if(quType=="CHENRADIO"){
-						$(this).append("<td><input type='radio'> </td>");	
-					}else if(quType=="CHENCHECKBOX"){
-						$(this).append("<td><input type='checkbox'> </td>");
-					}else if(quType=="CHENFBK"){
-						$(this).append("<td><input type='text'> </td>");
-					}else if(quType=="CHENSCORE"){
-						 $(this).append("<td>评分</td>");
-					}
-				}
-			});
-			quItemBody.find("input[name='saveTag']").val(0);
-			newEditObj=quCoChenTable.find("tr:first .editAble:last");
-			
-			newEditObj.text(itemText);
-			if(itemText==""){
-				newEditObj.css("display","inline");
-			}
-			return newEditObj;
-		}
-
-		//添加矩阵单选题行选项
-		function addChenRowItem(quItemBody,itemText){
-			//得判断是否是table类型
-			var newEditObj=null;
-			//ul li处理
-			var quChenRowHtml=$("#quChenRowModel").html();
-			var quCoChenTable=quItemBody.find("table.quCoChenTable");
-			var quCoChenTableTds=quCoChenTable.find("tr:first td");
-			var quType=quItemBody.find("input[name='quType']").val();
-			var appendTrHtml="<tr>";
-			$.each(quCoChenTableTds,function(i){
-				if(i==0){
-					appendTrHtml+=quChenRowHtml;
-				}else{
-					if(quType=="CHENRADIO"){
-						appendTrHtml+="<td><input type='radio'> </td>";
-					}else if(quType=="CHENCHECKBOX"){
-						appendTrHtml+="<td><input type='checkbox'> </td>";
-					}else if(quType=="CHENFBK"){
-						appendTrHtml+="<td><input type='text'> </td>";
-					}else if(quType=="CHENSCORE"){
-						appendTrHtml+="<td>评分</td>";
-					}
-				}
-			});
-			appendTrHtml+="</tr>";
-			quCoChenTable.append(appendTrHtml);
-			
-			quItemBody.find("input[name='saveTag']").val(0);
-			newEditObj=quCoChenTable.find("tr:last .editAble");
-			
-			newEditObj.text(itemText);
-			if(itemText==""){
-				newEditObj.css("display","inline");
-			}
-			return newEditObj;
-		}
 		//删除矩陈单选题选项
 		function deleteChenOption(){
 			var curEditTd=$(curEditObj).parents("td");
@@ -1144,236 +1064,43 @@ layui.config({
 				deleteChenRowOption();
 			}
 		}
-		/** 删除矩阵单选题列选项 **/
+		/**
+		 * 删除矩阵单选题列选项
+		 */
 		function deleteChenColumnOption(){
-			var optionParent=null;
-			optionParent=$(curEditObj).parents("td.quChenColumnTd");
-			var quOptionId=$(optionParent).find("input[name='quItemId']").val();
-			if(quOptionId!="" && quOptionId!="0" ){
-				var url=reqBasePath+"/design/qu-chen!ajaxDeleteColumn.action";
-				var data="quItemId="+quOptionId;
-				$.ajax({
-					url:url,
-					data:data,
-					type:"post",
-					success:function(msg){
-						if(msg=="true"){
-							delQuOptionCallBack(optionParent);
-						}
-					}
-				});
+			var optionParent = null;
+			optionParent = $(curEditObj).parents("td.quChenColumnTd");
+			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
+			if(!isNull(quOptionId) && quOptionId != "0" ){
+				AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory016", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+	 	   				delQuOptionCallBack(optionParent);
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 			}else{
 				delQuOptionCallBack(optionParent);
 			}
 		}
-		/** 删除矩阵单选题行选项 **/
+		/**
+		 * 删除矩阵单选题行选项
+		 */
 		function deleteChenRowOption(){
-			var optionParent=null;
-			optionParent=$(curEditObj).parents("td.quChenRowTd");
-			var quOptionId=$(optionParent).find("input[name='quItemId']").val();
-			if(quOptionId!="" && quOptionId!="0" ){
-				var url=reqBasePath+"/design/qu-chen!ajaxDeleteRow.action";
-				var data="quItemId="+quOptionId;
-				$.ajax({
-					url:url,
-					data:data,
-					type:"post",
-					success:function(msg){
-						if(msg=="true"){
-							delQuOptionCallBack(optionParent);
-						}
-					}
-				});
+			var optionParent = null;
+			optionParent = $(curEditObj).parents("td.quChenRowTd");
+			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
+			if(!isNull(quOptionId) && quOptionId != "0" ){
+				AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory017", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+	 	   				delQuOptionCallBack(optionParent);
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 			}else{
 				delQuOptionCallBack(optionParent);
 			}
-		}
-		
-		/**逻辑设置**/
-		//添加逻辑选项
-		function addQuDialogLogicTr(autoClass,trueCallback,falseCallback){
-			//当前题的选项
-			var quItemBody = $(dwDialogObj).parents(".surveyQuItemBody");
-			var quItemInputCases = quItemBody.find(".quItemInputCase");
-			var quLogicInputCase = quItemBody.find(".quLogicInputCase");
-			var curQuId = quItemBody.find("input[name='quId']").val();
-			var quType = quItemBody.find("input[name='quType']").val();
-			var logicQuOptionSels = $("#dwQuLogicTable").find(".logicQuOptionSel");
-			var dwLogicQuSels = $("#dwQuLogicTable").find(".logicQuSel");
-			//判断有无选项任意选项
-			var executeTag = true;
-			$.each(logicQuOptionSels, function(){
-				var selOptionVal = $(this).val();
-				if(selOptionVal == "0"){
-					executeTag = false;
-					return false;
-				}
-			});
-			if(executeTag){
-				var appendTrHtml = $("#setQuLogicItemTrModel").html();
-				if(quType === "SCORE"){
-					appendTrHtml = $("#setQuLogicItemTrModel_score").html();
-				}
-				$("#dwQuLogicTable").append("<tr>" + appendTrHtml + "</tr>");
-				var lastTr = $("#dwQuLogicTable").find("tr").last();
-				if(quType === "FILLBLANK"){
-					lastTr.find(".ifSpanText1").text("如果回答");
-				}
-				if(autoClass){
-					var quLogicItemNum = quLogicInputCase.find("input[name='quLogicItemNum']");
-					var newQuLogicItemNum = (parseInt(quLogicItemNum.val()) + 1);
-					quLogicItemNum.val(newQuLogicItemNum);
-					var newQuLogicItemClass = "quLogicItem_" + newQuLogicItemNum;
-					lastTr.attr("class", newQuLogicItemClass);
-				}
-				var dwQuOptionSel = lastTr.find(".logicQuOptionSel");
-				var eachTag = true;
-				if(quType === "CHENRADIO" || quType === "CHENCHECKBOX" || quType === "CHENSCORE" || quType === "CHENFBK"){
-					var quChenColumnTds = quItemBody.find(".quChenColumnTd");
-					var quChenRowTds = quItemBody.find(".quChenRowTd");
-					$.each(quChenRowTds, function(){
-						var rowText = $(this).find(".quCoOptionEdit").text();
-						var rowQuItemId = $(this).find("input[name='quItemId']").val();	
-						$.each(quChenColumnTds, function(){
-							var colText = $(this).find(".quCoOptionEdit").text();
-							var colQuItemId = $(this).find("input[name='quItemId']").val();
-							var optionId = rowQuItemId + ":" + colQuItemId;
-							eachTag = true;
-							$.each(logicQuOptionSels, function(){
-								var selOptionVal = $(this).val();
-								if(selOptionVal == optionId){
-									eachTag = false;
-									return false;
-								}
-							});
-							if(eachTag){
-								dwQuOptionSel.append("<option value='" + optionId + "'>" + rowText + ":" + colText + "</option>");	
-							}
-						});
-					});
-				}else{
-					$.each(quItemInputCases, function(){
-						var optionText = $(this).parent().find("label.quCoOptionEdit").text();
-						var optionId = $(this).find("input[name='quItemId']").val();
-						eachTag = true;
-						$.each(logicQuOptionSels, function(){
-							var selOptionVal = $(this).val();
-							if(selOptionVal == optionId){
-								eachTag = false;
-								return false;
-							}
-						});
-						if(eachTag){
-							dwQuOptionSel.append("<option value='" + optionId + "'>" + optionText + "</option>");	
-						}
-					});
-				}
-				if(logicQuOptionSels.size() == 0){
-					dwQuOptionSel.append("<option value='0'>任意选项</option>");	
-				}else{
-					$("#dwQuLogicTable").find(".logicQuOptionSel option[value='0']").remove();
-				}
-				if(quType === "FILLBLANK"){
-					dwQuOptionSel.val("0");
-				}
-				var logicQuSel = lastTr.find(".logicQuSel");
-				var quItemBodys = $("#dwSurveyQuContent .surveyQuItemBody");
-				$.each(quItemBodys, function(){
-					if($(this).find(".quCoTitleEdit")[0]){
-						var quCoNumText = $(this).find(".quCoNum").text();
-						var quTitleText = $(this).find(".quCoTitleEdit").text();
-						var quId = $(this).find("input[name='quId']").val();
-						eachTag = true;
-						if(curQuId == quId){
-							eachTag = false;
-						}
-						if(eachTag){
-							$.each(dwLogicQuSels, function(){
-								var dwLogicQuSelVal = $(this).val();
-								if(dwLogicQuSelVal == quId){
-									eachTag = false;
-									return false;
-								}
-							});
-						}
-						if(eachTag){
-							logicQuSel.append("<option value='" + quId + "'>" + quCoNumText + quTitleText + "</option>");	
-						}
-					}
-				});
-				logicQuSel.append("<option value='1'>正常结束（计入结果）</option><option value='2'>提前结束（不计入结果）</option>");
-				if(quType === "SCORE"){
-					var logicScoreNum = lastTr.find(".logicScoreNum");
-					logicScoreNum.empty();
-					for(var i = 1;i <= 10; i++){
-						logicScoreNum.append("<option value=\"" + i + "\">" + i + "</option>");
-					}
-				}else if(quType === "ORDERQU"){
-					dwQuOptionSel.empty();
-					dwQuOptionSel.append("<option value='0'>回答完成</option>");
-					lastTr.find(".ifSpanText1").text("如果本题");
-				}
-				if(autoClass){
-					logicQuSel.prepend("<option value=''>-请选择题目-</option>");
-					dwQuOptionSel.prepend("<option value=''>-请选择选项-</option>");
-				}
-				bindDialogRemoveLogic();
-				trueCallback();
-			}else{
-				falseCallback();
-			}
-			
-		}
-
-		//绑定逻辑设置中选项删除事件
-		function bindDialogRemoveLogic(){
-			$(".dialogRemoveLogic").unbind();
-			$(".dialogRemoveLogic").click(function(){
-				var logicItemTr=$(this).parents("tr");
-				var logicItemTrClass=logicItemTr.attr("class");
-				//同时移除页面只保存的信息--注意如果已经保存到库中，修改
-				var quItemBody=$(dwDialogObj).parents(".surveyQuItemBody");
-				var quLogicItem=quItemBody.find("."+logicItemTrClass);
-				if(quLogicItem[0]){
-					//有则判断，是否已经加入到数据库
-					var quLogicIdVal=quLogicItem.find("input[name='quLogicId']").val();
-					if(quLogicIdVal!=""){
-						quLogicItem.find("input[name='visibility']").val(0);
-						quLogicItem.find("input[name='logicSaveTag']").val(0);
-						quItemBody.find("input[name='saveTag']").val(0);
-					}else{
-						quLogicItem.remove();
-					}
-					//更新select option信息
-					var logicQuOptionSel=logicItemTr.find(".logicQuOptionSel option:selected");
-					var logicQuSel=logicItemTr.find(".logicQuSel option:selected");
-					if(logicQuOptionSel.val()!=""){
-						$("#dwQuLogicTable").find(".logicQuOptionSel").append("<option value='"+logicQuOptionSel.val()+"'>"+logicQuOptionSel.text()+"</option>");
-					}
-					if(logicQuSel.val()!=""){
-						$("#dwQuLogicTable").find(".logicQuSel").append("<option value='"+logicQuSel.val()+"'>"+logicQuSel.text()+"</option>");
-					}
-				}
-				logicItemTr.remove();
-				refreshQuLogicInfo(quItemBody);
-				return false;
-			});
-			$(".logicQuSel").unbind();
-			$(".logicQuSel").change(function(){
-				var thVal=$(this).val();
-				//当题目选项中选项 提前结束，或正常结束，则不作处理
-				if(thVal!=="1" && thVal!=="2"){
-					//移除前面选项中存在的当前被选择的选项
-					$("#dwQuLogicTable").find(".logicQuSel").not(this).find("option[value='"+thVal+"']").remove();			
-				}
-			});
-		}
-		
-		//刷新每题的逻辑显示数目
-		function refreshQuLogicInfo(quItemBody){
-			var quLogicItems = quItemBody.find(".quLogicItem input[name='visibility'][value='1']");
-			var quLogicItemSize = quLogicItems.size();
-			quItemBody.find(".quLogicInfo").text(quLogicItemSize);
 		}
 		
 		//显示弹出层
@@ -2833,61 +2560,7 @@ layui.config({
 	    	}
 	    	return newEditObj;
 	    }
-	    //删除矩陈单选题选项
-	    function deleteChenOption() {
-	    	var curEditTd = $(curEditObj).parents("td");
-	    	var curEditTdClass = curEditTd.attr("class");
-	    	if(curEditTdClass.indexOf("Column") >= 0) {
-	    		deleteChenColumnOption();
-	    	} else {
-	    		deleteChenRowOption();
-	    	}
-	    }
-	    /** 删除矩阵单选题列选项 **/
-	    function deleteChenColumnOption() {
-	    	var optionParent = null;
-	    	optionParent = $(curEditObj).parents("td.quChenColumnTd");
-	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
-	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = reqBasePath + "/design/qu-chen!ajaxDeleteColumn.action";
-	    		var data = "quItemId=" + quOptionId;
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: "post",
-	    			success: function(msg) {
-	    				if(msg == "true") {
-	    					delQuOptionCallBack(optionParent);
-	    				}
-	    			}
-	    		});
-	    	} else {
-	    		delQuOptionCallBack(optionParent);
-	    	}
-	    }
-	    /** 删除矩阵单选题行选项 **/
-	    function deleteChenRowOption() {
-	    	var optionParent = null;
-	    	optionParent = $(curEditObj).parents("td.quChenRowTd");
-	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
-	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = reqBasePath + "/design/qu-chen!ajaxDeleteRow.action";
-	    		var data = "quItemId=" + quOptionId;
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: "post",
-	    			success: function(msg) {
-	    				if(msg == "true") {
-	    					delQuOptionCallBack(optionParent);
-	    				}
-	    			}
-	    		});
-	    	} else {
-	    		delQuOptionCallBack(optionParent);
-	    	}
-	    }
-
+	    
 	    /**逻辑设置**/
 	    //添加逻辑选项
 	    function addQuDialogLogicTr(autoClass, trueCallback, falseCallback) {
@@ -3085,15 +2758,6 @@ layui.config({
 	    		//全部题排序号同步一次
 	    		//对如新增插入题-需要同步调整其它题的排序
 	    		//对如删除题-需要同步调整其它题的排序
-	    	}
-	    }
-
-	    function setSelectText(el) {
-	    	try {
-	    		window.getSelection().selectAllChildren(el[0]); //全选
-	    		window.getSelection().collapseToEnd(el[0]); //光标置后
-	    	} catch(err) {
-	    		//在此处理错误
 	    	}
 	    }
 

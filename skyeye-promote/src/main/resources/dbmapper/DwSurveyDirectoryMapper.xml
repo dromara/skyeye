@@ -437,6 +437,7 @@
 			dw_survey_directory b
 		WHERE a.id = #{quId}
 			AND a.visibility = '1'
+			AND b.visibility = '1'
 			AND a.belong_id = b.id
 	</select>
 	
@@ -472,5 +473,69 @@
 		WHERE order_by_id > #{orderById}
 			AND belong_id = #{belongId}
 	</update>
+	
+	<select id="queryQuestionChenColumnById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_chen_column a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionChenColumnMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_chen_column
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionChenColumnMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_chen_column
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
+	<select id="queryQuestionChenRowById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_chen_row a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionChenRowMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_chen_row
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionChenRowMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_chen_row
+		WHERE
+			id = #{quItemId}
+	</delete>
 	
 </mapper>

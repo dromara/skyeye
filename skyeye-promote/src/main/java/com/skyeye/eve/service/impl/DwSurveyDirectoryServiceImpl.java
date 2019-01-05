@@ -824,5 +824,53 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			dwSurveyDirectoryDao.updateQuestionOrderByIdByQuId(question);//修改该问题排序后面的序号减1
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: deleteQuestionChenColumnMationById
+	     * @Description: 删除矩阵单选题列选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteQuestionChenColumnMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> option = dwSurveyDirectoryDao.queryQuestionChenColumnById(map);
+		if(option != null){
+			if(option.get("surveyState").toString().equals("0")){//设计状态
+				dwSurveyDirectoryDao.deleteQuestionChenColumnMationById(map);//执行物理删除
+			}else{//执行中或者结束
+				dwSurveyDirectoryDao.deleteLogicQuestionChenColumnMationById(map);//执行逻辑删除问题
+			}
+		}
+	}
+
+	/**
+	 * 
+	     * @Title: deleteQuestionChenRowMationById
+	     * @Description: 删除矩阵单选题行选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteQuestionChenRowMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> option = dwSurveyDirectoryDao.queryQuestionChenRowById(map);
+		if(option != null){
+			if(option.get("surveyState").toString().equals("0")){//设计状态
+				dwSurveyDirectoryDao.deleteQuestionChenRowMationById(map);//执行物理删除
+			}else{//执行中或者结束
+				dwSurveyDirectoryDao.deleteLogicQuestionChenRowMationById(map);//执行逻辑删除问题
+			}
+		}
+	}
+	
+	
 	
 }

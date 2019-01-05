@@ -256,4 +256,36 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.deleteQuestionMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: deleteQuestionChenColumnMationById
+	     * @Description: 删除矩阵单选题列选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/deleteQuestionChenColumnMationById")
+	@ResponseBody
+	public void deleteQuestionChenColumnMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.deleteQuestionChenColumnMationById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: deleteQuestionChenRowMationById
+	     * @Description: 删除矩阵单选题行选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/deleteQuestionChenRowMationById")
+	@ResponseBody
+	public void deleteQuestionChenRowMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.deleteQuestionChenRowMationById(inputObject, outputObject);
+	}
+	
 }

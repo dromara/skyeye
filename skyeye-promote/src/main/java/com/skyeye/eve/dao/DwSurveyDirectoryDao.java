@@ -70,4 +70,16 @@ public interface DwSurveyDirectoryDao {
 
 	public int updateQuestionOrderByIdByQuId(Map<String, Object> question) throws Exception;
 
+	public Map<String, Object> queryQuestionChenColumnById(Map<String, Object> map) throws Exception;
+
+	public int deleteLogicQuestionChenColumnMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteQuestionChenColumnMationById(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> queryQuestionChenRowById(Map<String, Object> map) throws Exception;
+
+	public int deleteQuestionChenRowMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteLogicQuestionChenRowMationById(Map<String, Object> map) throws Exception;
+
 }
