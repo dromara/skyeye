@@ -106,4 +106,10 @@ public interface DwSurveyDirectoryDao {
 
 	public int deleteLogicQuestionOrderOptionMationById(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryQuestionMultiFillblankOptionById(Map<String, Object> map) throws Exception;
+
+	public int deleteQuestionMultiFillblankOptionMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteLogicQuestionMultiFillblankOptionMationById(Map<String, Object> map) throws Exception;
+
 }

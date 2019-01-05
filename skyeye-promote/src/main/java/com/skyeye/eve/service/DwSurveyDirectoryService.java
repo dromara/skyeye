@@ -47,4 +47,6 @@ public interface DwSurveyDirectoryService {
 
 	public void deleteQuestionOrderOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void deleteQuestionMultiFillblankOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

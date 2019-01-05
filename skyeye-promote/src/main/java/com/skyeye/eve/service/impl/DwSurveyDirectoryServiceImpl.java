@@ -962,7 +962,28 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			}
 		}
 	}
-	
-	
+
+	/**
+	 * 
+	     * @Title: deleteQuestionMultiFillblankOptionMationById
+	     * @Description: 删除多项填空题选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteQuestionMultiFillblankOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> option = dwSurveyDirectoryDao.queryQuestionMultiFillblankOptionById(map);
+		if(option != null){
+			if(option.get("surveyState").toString().equals("0")){//设计状态
+				dwSurveyDirectoryDao.deleteQuestionMultiFillblankOptionMationById(map);//执行物理删除
+			}else{//执行中或者结束
+				dwSurveyDirectoryDao.deleteLogicQuestionMultiFillblankOptionMationById(map);//执行逻辑删除问题
+			}
+		}
+	}
 	
 }

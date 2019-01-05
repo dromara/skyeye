@@ -181,6 +181,9 @@
 	<url id="dwsurveydirectory021" path="/post/DwSurveyDirectoryController/deleteQuestionOrderOptionMationById" val="删除排序选项" allUse="1">
 		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
 	</url>
+	<url id="dwsurveydirectory022" path="/post/DwSurveyDirectoryController/deleteQuestionMultiFillblankOptionMationById" val="删除多项填空题选项" allUse="1">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
 	<!-- 问卷调查结束 -->
 	
 </controller>

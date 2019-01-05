@@ -352,4 +352,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.deleteQuestionOrderOptionMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: deleteQuestionMultiFillblankOptionMationById
+	     * @Description: 删除多项填空题选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/deleteQuestionMultiFillblankOptionMationById")
+	@ResponseBody
+	public void deleteQuestionMultiFillblankOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.deleteQuestionMultiFillblankOptionMationById(inputObject, outputObject);
+	}
+	
 }

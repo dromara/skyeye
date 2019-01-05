@@ -2325,25 +2325,21 @@ layui.config({
 	    	}
 	    	return newEditObj;
 	    }
-	    /** 删除多项填空题选项 **/
+	    /**
+	     * 删除多项填空题选项
+	     */
 	    function deleteMultiFillblankOption() {
 	    	var optionParent = null;
 	    	optionParent = $(curEditObj).parents("tr.mFillblankTableTr");
-
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = reqBasePath + "/design/qu-multi-fillblank!ajaxDelete.action";
-	    		var data = "quItemId=" + quOptionId;
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: "post",
-	    			success: function(msg) {
-	    				if(msg == "true") {
-	    					delQuOptionCallBack(optionParent);
-	    				}
-	    			}
-	    		});
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory022", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+	 	   				delQuOptionCallBack(optionParent);
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
 	    	}
