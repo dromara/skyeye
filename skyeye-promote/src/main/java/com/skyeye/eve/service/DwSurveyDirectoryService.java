@@ -33,4 +33,6 @@ public interface DwSurveyDirectoryService {
 
 	public void addQuChenMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void deleteQuestionMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

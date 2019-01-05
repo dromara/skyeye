@@ -419,27 +419,27 @@ layui.config({
 			$(".dwQuDelete").unbind();
 			$(".dwQuDelete").click(function(){
 				var quBody = $(this).parents(".surveyQuItemBody");
-				if(confirm("确认要删除此题吗？")){
+				layer.confirm("确认要删除此题吗？", { icon: 3, title: '删除系统菜单' }, function (index) {
+					layer.close(index);
 					var quId = quBody.find("input[name='quId']").val();
-					if(quId != ""){
-						var url = reqBasePath+"/design/question!ajaxDelete.action";
-						var data="quId="+quId;
-						$.ajax({
-							url:url,
-							data:data,
-							type:"post",
-							success:function(msg){
-								if(msg=="true"){
-									quBody.hide("slow",function(){$(this).parent().remove();resetQuItem();});
-								}else{
-									alert("删除失败，请重试！");
-								}
-							}
-						});
+					if(!isNull(quId)){
+						AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory015", params:{quId: quId}, type:'json', callback:function(json){
+			 	   			if(json.returnCode == 0){
+			 	   				quBody.hide("slow", function(){
+			 	   					$(this).parent().remove();
+			 	   					resetQuItem();
+			 	   				});
+			 	   			}else{
+			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   			}
+			 	   		}});
 					}else{
-						quBody.hide("slow",function(){$(this).parent().remove();resetQuItem();});
+						quBody.hide("slow", function(){
+							$(this).parent().remove();
+							resetQuItem();
+						});
 					}
-				}
+				});
 				return false;
 			});
 			

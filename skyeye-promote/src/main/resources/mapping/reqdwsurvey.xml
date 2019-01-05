@@ -160,6 +160,9 @@
 	    <property id="row" name="row" ref="" var="矩阵行选项td json串"/>
 	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
 	</url>
+	<url id="dwsurveydirectory015" path="/post/DwSurveyDirectoryController/deleteQuestionMationById" val="删除问题" allUse="1">
+		<property id="quId" name="quId" ref="required" var="问题id"/>
+	</url>
 	<!-- 问卷调查结束 -->
 	
 </controller>

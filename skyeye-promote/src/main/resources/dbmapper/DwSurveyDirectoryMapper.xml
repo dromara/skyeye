@@ -403,4 +403,74 @@
 		</foreach>  
 	</insert>
 	
+	<select id="queryQuestionMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.answer_input_row answerInputRow,
+			a.answer_input_width answerInputWidth,
+			a.belong_id belongId,
+			a.cell_count cellCount,
+			a.check_type checkType,
+			a.contacts_attr contactsAttr,
+			a.contacts_field contactsField,
+			a.copy_from_id copyFromId,
+			a.create_time createTime,
+			a.hv,
+			a.is_required isRequired,
+			a.keywords,
+			a.order_by_id orderById,
+			a.param_int01 paramInt01,
+			a.param_int02 paramInt02,
+			a.parent_qu_id parentQuId,
+			a.qu_name quName,
+			a.qu_note quNote,
+			a.qu_tag quTag,
+			a.qu_title quTitle,
+			a.qu_type quType,
+			a.rand_order randOrder,
+			a.tag,
+			a.visibility,
+			a.yesno_option yesnoOption,
+			b.survey_state surveyState 
+		FROM
+			dw_question a,
+			dw_survey_directory b
+		WHERE a.id = #{quId}
+			AND a.visibility = '1'
+			AND a.belong_id = b.id
+	</select>
+	
+	<update id="deleteLogicQuestionMationById" parameterType="java.util.Map">
+		UPDATE dw_question
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quId}
+	</update>
+	
+	<delete id="deleteQuestionMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_question
+		WHERE
+			id = #{quId}
+	</delete>
+	
+	<delete id="deleteQuestionOptionMationByQuId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			${tableName}
+		WHERE
+			${key} = #{quId}
+	</delete>
+	
+	<update id="updateQuestionOrderByIdByQuId" parameterType="java.util.Map">
+		UPDATE dw_question
+		<set>
+			order_by_id = (order_by_id - 1),
+		</set>
+		WHERE order_by_id > #{orderById}
+			AND belong_id = #{belongId}
+	</update>
+	
 </mapper>

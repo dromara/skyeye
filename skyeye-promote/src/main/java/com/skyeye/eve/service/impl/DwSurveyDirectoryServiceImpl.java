@@ -790,5 +790,39 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		}
 		outputObject.setBean(map);
 	}
+
+	/**
+	 * 
+	     * @Title: deleteQuestionMationById
+	     * @Description: 删除问题
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteQuestionMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> question = dwSurveyDirectoryDao.queryQuestionMationById(map);
+		if(question != null){
+			if(question.get("surveyState").toString().equals("0")){//设计状态
+				String tableName = QuType.getTableName(Integer.parseInt(question.get("quType").toString()));
+				if(!ToolUtil.isBlank(tableName)){
+					String[] questionId = QuType.getQuestionId(Integer.parseInt(question.get("quType").toString())).split(",");
+					String[] str = tableName.split(",");
+					for(int i = 0; i < str.length; i++){
+						map.put("tableName", str[i]);
+						map.put("key", questionId[i]);
+						dwSurveyDirectoryDao.deleteQuestionOptionMationByQuId(map);
+					}
+				}
+				dwSurveyDirectoryDao.deleteQuestionMationById(map);//执行物理删除问题
+			}else{//执行中或者结束
+				dwSurveyDirectoryDao.deleteLogicQuestionMationById(map);//执行逻辑删除问题
+			}
+			dwSurveyDirectoryDao.updateQuestionOrderByIdByQuId(question);//修改该问题排序后面的序号减1
+		}
+	}
 	
 }

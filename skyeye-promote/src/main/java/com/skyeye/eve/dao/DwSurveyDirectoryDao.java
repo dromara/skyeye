@@ -60,4 +60,14 @@ public interface DwSurveyDirectoryDao {
 
 	public int addQuestionRowMationList(List<Map<String, Object>> quRow) throws Exception;
 
+	public Map<String, Object> queryQuestionMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteLogicQuestionMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteQuestionMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteQuestionOptionMationByQuId(Map<String, Object> map) throws Exception;
+
+	public int updateQuestionOrderByIdByQuId(Map<String, Object> question) throws Exception;
+
 }
