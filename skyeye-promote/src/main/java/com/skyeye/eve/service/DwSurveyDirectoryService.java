@@ -43,4 +43,6 @@ public interface DwSurveyDirectoryService {
 
 	public void deleteQuestionChedkBoxOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void deleteQuestionScoreOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

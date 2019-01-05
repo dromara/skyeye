@@ -1914,25 +1914,21 @@ layui.config({
 	    	}
 	    	return newEditObj;
 	    }
-	    /** 删除评分Score选项 **/
+	    /**
+	     * 删除评分Score选项
+	     */
 	    function deleteScoreOption() {
 	    	var optionParent = null;
 	    	optionParent = $(curEditObj).parents("tr.quScoreOptionTr");
-
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = reqBasePath + "/design/qu-score!ajaxDelete.action";
-	    		var data = "quItemId=" + quOptionId;
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: "post",
-	    			success: function(msg) {
-	    				if(msg == "true") {
-	    					delQuOptionCallBack(optionParent);
-	    				}
-	    			}
-	    		});
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory020", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+	 	   				delQuOptionCallBack(optionParent);
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
 	    	}
