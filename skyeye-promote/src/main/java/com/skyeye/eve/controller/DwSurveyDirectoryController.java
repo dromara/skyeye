@@ -304,4 +304,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.deleteQuestionRadioOptionMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: deleteQuestionChedkBoxOptionMationById
+	     * @Description: 删除多选题选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/deleteQuestionChedkBoxOptionMationById")
+	@ResponseBody
+	public void deleteQuestionChedkBoxOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.deleteQuestionChedkBoxOptionMationById(inputObject, outputObject);
+	}
+	
 }

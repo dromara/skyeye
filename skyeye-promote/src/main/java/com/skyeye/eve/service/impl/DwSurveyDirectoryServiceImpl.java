@@ -893,6 +893,29 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			}
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: deleteQuestionChedkBoxOptionMationById
+	     * @Description: 删除多选题选项
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteQuestionChedkBoxOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> option = dwSurveyDirectoryDao.queryQuestionChedkBoxOptionById(map);
+		if(option != null){
+			if(option.get("surveyState").toString().equals("0")){//设计状态
+				dwSurveyDirectoryDao.deleteQuestionChedkBoxOptionMationById(map);//执行物理删除
+			}else{//执行中或者结束
+				dwSurveyDirectoryDao.deleteLogicQuestionChedkBoxOptionMationById(map);//执行逻辑删除问题
+			}
+		}
+	}
 	
 	
 	

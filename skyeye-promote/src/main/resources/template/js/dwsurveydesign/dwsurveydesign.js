@@ -1444,7 +1444,9 @@ layui.config({
 	    	}
 	    	return newEditObj;
 	    }
-	    /** 删除单选题选项 **/
+	    /**
+	     * 删除单选题选项
+	     */
 	    function deleteRadioOption() {
 	    	//判断是否是table类型
 	    	var quItemBody = $(curEditObj).parents(".surveyQuItemBody");
@@ -1622,7 +1624,9 @@ layui.config({
 	    	}
 	    	return newEditObj;
 	    }
-	    /** 删除多选题选项 **/
+	    /**
+	     * 删除多选题选项
+	     */
 	    function deleteCheckboxOption() {
 	    	//判断是否是table类型
 	    	var quItemBody = $(curEditObj).parents(".surveyQuItemBody");
@@ -1635,18 +1639,13 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		var url = reqBasePath + "/design/qu-checkbox!ajaxDelete.action";
-	    		var data = "quItemId=" + quOptionId;
-	    		$.ajax({
-	    			url: url,
-	    			data: data,
-	    			type: "post",
-	    			success: function(msg) {
-	    				if(msg == "true") {
-	    					delQuOptionCallBack(optionParent);
-	    				}
-	    			}
-	    		});
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory019", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	 	   			if(json.returnCode == 0){
+	 	   				delQuOptionCallBack(optionParent);
+	 	   			}else{
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   			}
+	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
 	    	}
