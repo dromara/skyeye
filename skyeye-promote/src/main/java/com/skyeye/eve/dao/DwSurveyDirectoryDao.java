@@ -82,4 +82,10 @@ public interface DwSurveyDirectoryDao {
 
 	public int deleteLogicQuestionChenRowMationById(Map<String, Object> map) throws Exception;
 
+	public Map<String, Object> queryQuestionRadioOptionById(Map<String, Object> map) throws Exception;
+
+	public int deleteQuestionRadioOptionMationById(Map<String, Object> map) throws Exception;
+
+	public int deleteLogicQuestionRadioOptionMationById(Map<String, Object> map) throws Exception;
+
 }

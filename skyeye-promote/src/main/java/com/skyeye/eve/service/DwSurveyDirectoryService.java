@@ -39,4 +39,6 @@ public interface DwSurveyDirectoryService {
 
 	public void deleteQuestionChenRowMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void deleteQuestionRadioOptionMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

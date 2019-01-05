@@ -538,4 +538,36 @@
 			id = #{quItemId}
 	</delete>
 	
+	<select id="queryQuestionRadioOptionById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_radio a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionRadioOptionMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_radio
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionRadioOptionMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_radio
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
 </mapper>
