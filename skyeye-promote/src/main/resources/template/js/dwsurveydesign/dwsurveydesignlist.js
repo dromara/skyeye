@@ -46,6 +46,10 @@ layui.config({
         	resolveWj(data);
         }else if (layEvent === 'fxWj') { //分析报告
         	fxWj(data);
+        }else if (layEvent === 'showFb') { //发布
+        	showFb(data, obj);
+        }else if (layEvent === 'endSurvey') { //结束调查
+        	endSurvey(data, obj);
         }
     });
 	
@@ -108,6 +112,40 @@ layui.config({
 	//分析报告
 	function fxWj(data){
 		
+	}
+	
+	//发布
+	function showFb(data, obj){
+		var msg = obj ? '确认发布问卷【' + obj.data.surveyName + '】吗？' : '确认发布选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '问卷发布' }, function (index) {
+			layer.close(index);
+            //向服务端发送删除指令
+            AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory023", params:{rowId: data.id}, type:'json', callback:function(json){
+    			if(json.returnCode == 0){
+    				top.winui.window.msg("发布成功", {icon: 1,time: 2000});
+    				loadTable();
+    			}else{
+    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			}
+    		}});
+		});
+	}
+	
+	//结束调查
+	function endSurvey(data, obj){
+		var msg = obj ? '确认结束问卷【' + obj.data.surveyName + '】的调查吗？' : '确认结束选中数据吗？';
+		layer.confirm(msg, { icon: 3, title: '结束调查' }, function (index) {
+			layer.close(index);
+            //向服务端发送删除指令
+//            AjaxPostUtil.request({url:reqBasePath + "planproject003", params:{rowId: data.id}, type:'json', callback:function(json){
+//    			if(json.returnCode == 0){
+//    				top.winui.window.msg("发布成功", {icon: 1,time: 2000});
+//    				loadTable();
+//    			}else{
+//    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+//    			}
+//    		}});
+		});
 	}
 	
 	//刷新数据

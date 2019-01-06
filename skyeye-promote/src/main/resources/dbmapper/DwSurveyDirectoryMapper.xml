@@ -10,7 +10,8 @@
 			b.user_name userName,
 			CONVERT(a.create_time, char) createTime,
 			a.answer_num answerNum,
-			CASE a.survey_state WHEN '0' THEN '设计' WHEN '1' THEN '执行中' WHEN '2' THEN '结束' ELSE '' END surveyState
+			CASE a.survey_state WHEN '0' THEN '设计' WHEN '1' THEN '执行中' WHEN '2' THEN '结束' ELSE '' END surveyState,
+			a.survey_state state
 		FROM
 			dw_survey_directory a
 			LEFT JOIN sys_eve_user b ON a.create_id = b.id
@@ -150,7 +151,8 @@
 			a.order_by_id orderById,
 			a.qu_id quId,
 			a.visibility,
-			#{cellCount} cellCount
+			#{cellCount} cellCount,
+			#{quType} quType
 		FROM
 			dw_qu_radio a
 		WHERE
@@ -285,6 +287,7 @@
 			a.mail_only mailOnly,
 			a.rule,
 			a.rule_code ruleCode,
+			a.sid,
 			a.refresh,
 			a.survey_tag surveyTag,
 			a.view_answer viewAnswer,

@@ -149,8 +149,6 @@ layui.config({
 		 		
 			    loadAddr();//初始化地址区域
 			    
-		 		console.log(json);
-		 		
 		 		//拖入题目到问卷中
 				$(".dragQuUl li").draggable({
 				  	connectToSortable: "#dwSurveyQuContentAppUl",
@@ -2972,7 +2970,7 @@ layui.config({
 			bindQuHoverItem();
 			dwCommonDialogHide();
 		});
-	    
+		
 	    //选项卡切换
 	    $("body").on("click", "#tabType li", function(){
 	    	$("#tabType li").removeClass("current");

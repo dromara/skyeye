@@ -45,7 +45,7 @@
 								<div class="quInputCase" style="display: none;">
 									<input type="hidden" name="quType" value="RADIO">
 									<input type="hidden" name="quId" value="{{id}}">
-									<input type="hidden" name="orderById" value="{{en.orderById}}" />
+									<input type="hidden" name="orderById" value="{{orderById}}" />
 									<input type="hidden" name="saveTag" value="1">
 									<input type="hidden" name="hoverTag" value="0">
 									<input type="hidden" name="isRequired" value="{{isRequired}}">
@@ -707,7 +707,7 @@
 																							<input type="hidden" name="randOrder" value="{{randOrder}}">
 																							<input type="hidden" name="cellCount" value="{{cellCount}}">
 																							<div class="quLogicInputCase">
-																								<input type="hidden" name="quLogicItemNum" value="${fn:length(en.questionLogic)}}">
+																								<input type="hidden" name="quLogicItemNum" value="{{questionLogic.length}}">
 																								{{#each questionLogic}}
 																									<div class="quLogicItem quLogicItem_{{showIndex @index}}">
 																										<input type="hidden" name="quLogicId" value="{{id}}" />

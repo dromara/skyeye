@@ -1155,5 +1155,45 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			}
 		}
 	}
+
+	/**
+	 * 
+	     * @Title: editSurveyStateToReleaseById
+	     * @Description: 发布问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editSurveyStateToReleaseById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		
+	}
+
+	/**
+	 * 
+	     * @Title: queryDwSurveyDirectoryMationByIdToHTML
+	     * @Description: 获取调查问卷题目信息用来生成html页面
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryDwSurveyDirectoryMationByIdToHTML(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> questions = dwSurveyDirectoryDao.queryQuestionListByBelongId(map);//获取问卷中的题
+		for(Map<String, Object> question : questions){
+			getQuestionOptionListMation(question);
+		}
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		outputObject.setBean(surveyMation);
+		outputObject.setBeans(questions);
+		outputObject.settotal(1);
+	}
 	
 }

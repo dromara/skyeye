@@ -45,11 +45,16 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-			<a class="layui-btn layui-btn-xs" lay-event="edit">设计</a>
             <a class="layui-btn layui-btn-xs" lay-event="fzWj">复制</a>
-			{{# if(d.answerNum == 0 && d.surveyState == 0){ }}
+			{{# if(d.state == 0){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="edit">设计</a>
+				<a class="layui-btn layui-btn-xs" lay-event="showFb">发布</a>
           		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-			{{# } else{ }}
+			{{# } else if(d.state == 1){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="endSurvey">结束调查</a>
+				<a class="layui-btn layui-btn-xs" lay-event="resolveWj">收集问卷</a>
+				<a class="layui-btn layui-btn-xs" lay-event="fxWj">分析报告</a>
+			{{# } else if(d.state == 2){ }}
 				<a class="layui-btn layui-btn-xs" lay-event="resolveWj">收集问卷</a>
 				<a class="layui-btn layui-btn-xs" lay-event="fxWj">分析报告</a>
 			{{# } }}

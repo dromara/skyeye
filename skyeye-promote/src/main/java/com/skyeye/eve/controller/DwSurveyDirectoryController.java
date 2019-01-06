@@ -368,4 +368,36 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.deleteQuestionMultiFillblankOptionMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editSurveyStateToReleaseById
+	     * @Description: 问卷发布
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/editSurveyStateToReleaseById")
+	@ResponseBody
+	public void editSurveyStateToReleaseById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.editSurveyStateToReleaseById(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: queryDwSurveyDirectoryMationByIdToHTML
+	     * @Description: 获取调查问卷题目信息用来生成html页面
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/queryDwSurveyDirectoryMationByIdToHTML")
+	@ResponseBody
+	public void queryDwSurveyDirectoryMationByIdToHTML(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.queryDwSurveyDirectoryMationByIdToHTML(inputObject, outputObject);
+	}
+	
 }

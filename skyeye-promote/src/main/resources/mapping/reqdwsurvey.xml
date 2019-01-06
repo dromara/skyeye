@@ -184,6 +184,12 @@
 	<url id="dwsurveydirectory022" path="/post/DwSurveyDirectoryController/deleteQuestionMultiFillblankOptionMationById" val="删除多项填空题选项" allUse="1">
 		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
 	</url>
+	<url id="dwsurveydirectory023" path="/post/DwSurveyDirectoryController/editSurveyStateToReleaseById" val="问卷发布" allUse="1">
+		<property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<url id="dwsurveydirectory024" path="/post/DwSurveyDirectoryController/queryDwSurveyDirectoryMationByIdToHTML" val="获取调查问卷题目信息用来生成html页面" allUse="1">
+		<property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
 	<!-- 问卷调查结束 -->
 	
 </controller>

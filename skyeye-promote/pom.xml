@@ -177,6 +177,13 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		
+		<!-- jsoup解析 -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.7.3</version>
+		</dependency>
+		
 		<!--poi-->
 		<dependency>
 			<groupId>org.apache.poi</groupId>

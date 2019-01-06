@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div id="wrap">
+	
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+	   	layui.config({
+	   		base: basePath, 
+	   		version: skyeyeVersion
+	   	}).define(['jquery', 'winui', 'validate'], function (exports) {
+	   		winui.renderColor();
+	   		layui.use(['form', 'jqueryUI'], function (form) {
+	   			var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+	   		    var $ = layui.$,
+	   		    form = layui.form;
+	   			
+		   		showGrid({
+		 		 	id: "wrap",
+		 		 	url: reqBasePath + "dwsurveydirectory024",
+		 		 	params: {rowId: getUrlParam("rowId")},
+		 		 	pagination: false,
+		 		 	template: getFileContent('tpl/dwsurveydesign/surveyTemplate.tpl'),
+		 		 	ajaxSendLoadBefore: function(hdb){
+		 		 		hdb.registerHelper("showIndex",function(index, options){
+		 		 			return parseInt(index) + 1;
+		 		 		});
+		 		 		
+		 		 		hdb.registerHelper("showParamInt02",function(v1, options){
+		 		 			var str = "";
+		 		 			for(var i = 1; i <= v1; i++){
+		 		 				str += "<td>" + i + "</td>";
+		 		 			}
+		 		 			return str;
+		 		 		});
+		 		 		
+		 		 		hdb.registerHelper('compare1', function(v1, v2, options) {
+		 		 			if(v1 == v2){
+		 		 				return options.fn(this);
+		 		 			}else{
+		 		 				return options.inverse(this);
+		 		 			}
+		 		 		});
+		 		 		
+		 		 		hdb.registerHelper('compare2', function(v1, v2, options) {
+		 		 			if(v1 == v2){
+		 		 				return 'display: none;';
+		 		 			}else{
+		 		 				return '';
+		 		 			}
+		 		 		});
+		 		 		
+		 		 		hdb.registerHelper("cellCount001",function(v1, options){
+		 		 			var str = "";
+		 		 			var width = 600 / v1;
+		 		 			for(var i = 1; i <= v1; i++){
+		 		 				str += '<td width="' + width + 'px">' + 
+		 									'<div class="dwQuOptionItemContent">' + 
+		 										'<label class="dwRedioStyle dwQuInputLabel" ></label>' + 
+		 										'<input type="radio" name="qu_{{quType}}_{{quId}}" value="{{id}}" >' + 
+		 										'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' + 
+		 										'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_qu_{{quType}}_{{quId}}_{{id}}" />' + 
+		 									'</div>' + 
+		 								'</td>';
+		 		 			}
+		 		 			str += '<div class="emptyTd"></div>';
+		 		 			return str;
+		 		 		});
+		 		 		
+		 		 		hdb.registerHelper("cellCount002",function(v1, options){
+		 		 			var str = "";
+		 		 			var width = 600 / v1;
+		 		 			for(var i = 1; i <= v1; i++){
+		 		 				str += '<td width="' + width + 'px">' + 
+		 									'<input type="checkbox"><label style="width:' + width + 'px;" class="editAble quCoOptionEdit">{{optionName}}</label>' + 
+		 									'<input type="text" class="optionInpText" style="{{#compare2 isNote 0}}{{/compare2}}" />' + 
+		 									'<div class="quItemInputCase">' + 
+		 										'<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="1">' + 
+		 										'<input type="hidden" name="isNote" value="{{isNote}}">' + 
+		 										'<input type="hidden" name="checkType" value="{{checkType}}">' + 
+		 										'<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">' + 
+		 									'</div>' + 
+		 								'</td>';
+		 		 			}
+		 		 			str += '<div class="emptyTd"></div>';
+		 		 			return str;
+		 		 		});
+		 		 	},
+		 		 	ajaxSendAfter:function(json){
+		 		 		
+		 		 	}
+		 	    });
+		   		
+		   		//获取url中的参数
+		        function getUrlParam(name) {
+		            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+		            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+		            if (r != null) return unescape(r[2]); return null; //返回参数值
+		        }
+	   			
+	   		});
+	   	});
+    </script>
+</body>
+</html>
