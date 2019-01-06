@@ -1292,7 +1292,7 @@ layui.config({
 	     **/
 	    function saveRadio(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -1304,15 +1304,8 @@ layui.config({
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
     				contactsAttr: quItemBody.find("input[name='contactsAttr']").val(),
     				contactsField: quItemBody.find("input[name='contactsField']").val(),
-    				quTitle: '',
+    				quTitle: encodeURI(quItemBody.find(".quCoTitleEdit").html()),
 	    		};
-
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			data.quTitle = encodeURI(quTitle);
-	    		}
-
 	    		var quItemOptions = null;
 	    		if(quItemBody.find("input[name='hv']").val() == 3) {
 	    			//还有是table的情况需要处理
@@ -1477,7 +1470,7 @@ layui.config({
 	     **/
 	    function saveCheckbox(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -1489,14 +1482,8 @@ layui.config({
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
     				contactsAttr: quItemBody.find("input[name='contactsAttr']").val(),
     				contactsField: quItemBody.find("input[name='contactsField']").val(),
-    				quTitle: '',
+    				quTitle: encodeURI(quItemBody.find(".quCoTitleEdit").html()),
 	    		};
-
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			data.quTitle = encodeURI(quTitle);
-	    		}
 	    		var quItemOptions = null;
 	    		if(quItemBody.find("input[name='hv']").val() == 3) {
 	    			//还有是table的情况需要处理
@@ -1791,7 +1778,7 @@ layui.config({
 	     **/
 	    function saveScore(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -1803,14 +1790,8 @@ layui.config({
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
     				paramInt01: quItemBody.find("input[name='paramInt01']").val(),
     				paramInt02: quItemBody.find("input[name='paramInt02']").val(),
-    				quTitle: '',
+    				quTitle: encodeURI(quItemBody.find(".quCoTitleEdit").html()),
 	    		};
-
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			data.quTitle = encodeURI(quTitle);
-	    		}
 	    		//评分题选项td
 	    		var quItemOptions = quItemBody.find(".quCoItem table.quCoItemTable tr td.quOptionEditTd");
 	    		var scoreTd = [];
@@ -1933,7 +1914,7 @@ layui.config({
 	     **/
 	    function saveOrderqu(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -1943,14 +1924,8 @@ layui.config({
     				hv: quItemBody.find("input[name='hv']").val(),
     				randOrder: quItemBody.find("input[name='randOrder']").val(),
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
-    				quTitle: '',
+    				quTitle: encodeURI(quItemBody.find(".quCoTitleEdit").html()),
 	    		};
-
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			data.quTitle = encodeURI(quTitle);
-	    		}
 	    		//评分题选项td
 	    		var quItemOptions = quItemBody.find(".quCoItem .quOrderByLeft  li.quCoItemUlLi");
 	    		var orderquTd = [];
@@ -2083,7 +2058,7 @@ layui.config({
 	     **/
 	    function savePagetag(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -2145,7 +2120,7 @@ layui.config({
 	     **/
 	    function saveParagraph(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -2155,13 +2130,8 @@ layui.config({
     				hv: quItemBody.find("input[name='hv']").val(),
     				randOrder: quItemBody.find("input[name='randOrder']").val(),
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
-    				quTitle: '',
+    				quTitle: encodeURI(quItemBody.find(".quCoTitleEdit").html()),
 	    		};
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			data.quTitle = encodeURI(quTitle);
-	    		}
 	    		//逻辑选项
 	    		var quLogicItems = quItemBody.find(".quLogicItem");
 	    		var list = [];
@@ -2213,7 +2183,7 @@ layui.config({
 	     **/
 	    function saveMultiFillblank(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -2225,13 +2195,8 @@ layui.config({
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
     				paramInt01: quItemBody.find("input[name='paramInt01']").val(),
     				paramInt02: quItemBody.find("input[name='paramInt02']").val(),
-    				quTitle: '',
+    				quTitle: encodeURI(quItemBody.find(".quCoTitleEdit").html()),
 	    		};
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			data.quTitle = encodeURI(quTitle);
-	    		}
 	    		//评分题选项td
 	    		var quItemOptions = quItemBody.find(".quCoItem table.mFillblankTable tr td.mFillblankTableEditTd");
 	    		var multiFillblankTd = [];
@@ -2344,7 +2309,7 @@ layui.config({
 	     **/
 	    function saveChen(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -2355,13 +2320,8 @@ layui.config({
     				hv: quItemBody.find("input[name='hv']").val(),
     				randOrder: quItemBody.find("input[name='randOrder']").val(),
     				cellCount: quItemBody.find("input[name='cellCount']").val(),
-    				quTitle: '',
+    				quTitle: encodeURI(quItemBody.find(".quCoTitleEdit").html()),
 	    		};
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			data.quTitle = encodeURI(quTitle);
-	    		}
 	    		//矩阵列选项td
 	    		var quColumnOptions = quItemBody.find(".quCoItem table.quCoChenTable tr td.quChenColumnTd");
 	    		var column = [];
@@ -2981,6 +2941,36 @@ layui.config({
 			}else{
 				$(".contactsFieldLi").hide();
 			}
+		});
+		
+		$("#dwDialogSaveMoreItem").click(function(){
+			var quItemBody = $(dwDialogObj).parents(".surveyQuItemBody");
+			var quType = quItemBody.find("input[name='quType']").val();
+			var areaVal = $("#dwQuMoreTextarea").val();
+			var areaValSplits = areaVal.split("\n");
+			$.each(areaValSplits, function(i,item){
+				item = $.trim(item);
+				if(item != ""){
+					if(quType == "RADIO"){
+						//添加单选选项
+						addRadioItem(quItemBody, item);
+					}else if(quType == "CHECKBOX"){
+						//添加多选选项
+						addCheckboxItem(quItemBody, item);	
+					}else if(quType == "SCORE"){
+						addScoreItem(quItemBody, item);
+					}else if(quType == "ORDERQU"){
+						addOrderquItem(quItemBody, item);
+					}else if(quType == "MULTIFILLBLANK"){
+						addMultiFillblankItem(quItemBody, item);
+					}else if(quType == "CHENRADIO" || quType == "CHENCHECKBOX" || quType == "CHENFBK" || quType == "CHENSCORE"){
+						addChenItem(dwDialogObj, quItemBody, item);
+					}
+				}
+			});
+			$("#dwQuMoreTextarea").val("");
+			bindQuHoverItem();
+			dwCommonDialogHide();
 		});
 	    
 	    //选项卡切换

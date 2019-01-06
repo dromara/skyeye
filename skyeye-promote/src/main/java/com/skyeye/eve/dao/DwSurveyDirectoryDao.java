@@ -116,4 +116,18 @@ public interface DwSurveyDirectoryDao {
 
 	public int editQuestionLogicsMationList(List<Map<String, Object>> editquLogics) throws Exception;
 
+	public int editQuestionScoreMationList(List<Map<String, Object>> editquScore) throws Exception;
+
+	public int editQuestionOrderquMationList(List<Map<String, Object>> editquOrderqu) throws Exception;
+
+	public int editQuestionRadioMationList(List<Map<String, Object>> editquRadio) throws Exception;
+
+	public int editQuestionCheckBoxMationList(List<Map<String, Object>> editquCheckbox) throws Exception;
+
+	public int editQuestionMultiFillblankMationList(List<Map<String, Object>> editquMultiFillblank) throws Exception;
+
+	public int editQuestionColumnMationList(List<Map<String, Object>> editquColumn) throws Exception;
+
+	public int editQuestionRowMationList(List<Map<String, Object>> editquRow) throws Exception;
+
 }

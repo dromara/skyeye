@@ -344,7 +344,6 @@
 				<set>
 					title = #{item.title},
 					cg_qu_item_id = #{item.cgQuItemId},
-					ck_qu_id = #{item.ckQuId},
 					ge_le = #{item.geLe},
 					logic_type = #{item.logicType},
 					score_num = #{item.scoreNum},
@@ -356,68 +355,151 @@
 	
 	<insert id="addQuestionScoreMationList" parameterType="java.util.Map">
 	     insert into dw_qu_score
-	     (id, qu_id, option_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
+	     (id, qu_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
+	
+	<update id="editQuestionScoreMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+			UPDATE dw_qu_score
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
 	
 	<insert id="addQuestionOrderquMationList" parameterType="java.util.Map">
 	     insert into dw_qu_orderby
-	     (id, qu_id, option_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
+	     (id, qu_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
+	
+	<update id="editQuestionOrderquMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+			UPDATE dw_qu_orderby
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
 	
 	<insert id="addQuestionRadioMationList" parameterType="java.util.Map">
 	     insert into dw_qu_radio
-	     (id, qu_id, option_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
+	     (id, qu_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
 				#{item.isRequiredFill}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
+	
+	<update id="editQuestionRadioMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+			UPDATE dw_qu_radio
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+					check_type = #{item.checkType},
+					is_note = #{item.isNote},
+					is_required_fill = #{item.isRequiredFill},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
 	
 	<insert id="addQuestionCheckBoxMationList" parameterType="java.util.Map">
 	     insert into dw_qu_checkbox
-	     (id, qu_id, option_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
+	     (id, qu_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
 				#{item.isRequiredFill}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
 	
+	<update id="editQuestionCheckBoxMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+			UPDATE dw_qu_checkbox
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+					check_type = #{item.checkType},
+					is_note = #{item.isNote},
+					is_required_fill = #{item.isRequiredFill},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
 	<insert id="addQuestionMultiFillblankMationList" parameterType="java.util.Map">
 	     insert into dw_qu_multi_fillblank
-	     (id, qu_id, option_id, option_name, option_title, check_type, order_by_id, visibility, create_id, create_time)
+	     (id, qu_id, option_name, option_title, check_type, order_by_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
+	
+	<update id="editQuestionMultiFillblankMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+			UPDATE dw_qu_multi_fillblank
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
 	
 	<insert id="addQuestionColumnMationList" parameterType="java.util.Map">
 	     insert into dw_qu_chen_column
-	     (id, qu_id, option_id, option_name, order_by_id, visibility, create_id, create_time)
+	     (id, qu_id, option_name, order_by_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
 	
+	<update id="editQuestionColumnMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+			UPDATE dw_qu_chen_column
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
 	<insert id="addQuestionRowMationList" parameterType="java.util.Map">
 	     insert into dw_qu_chen_row
-	     (id, qu_id, option_id, option_name, order_by_id, visibility, create_id, create_time)
+	     (id, qu_id, option_name, order_by_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.quId}, #{item.optionId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
+	
+	<update id="editQuestionRowMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+			UPDATE dw_qu_chen_row
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
 	
 	<select id="queryQuestionMationById" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
