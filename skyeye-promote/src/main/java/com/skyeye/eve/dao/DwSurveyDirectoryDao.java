@@ -112,4 +112,8 @@ public interface DwSurveyDirectoryDao {
 
 	public int deleteLogicQuestionMultiFillblankOptionMationById(Map<String, Object> map) throws Exception;
 
+	public int editQuestionMationById(Map<String, Object> map) throws Exception;
+
+	public int editQuestionLogicsMationList(List<Map<String, Object>> editquLogics) throws Exception;
+
 }

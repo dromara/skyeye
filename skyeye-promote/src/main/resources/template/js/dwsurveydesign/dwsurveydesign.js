@@ -1723,7 +1723,7 @@ layui.config({
 	     **/
 	    function saveFillblank(quItemBody, callback) {
 	    	var saveTag = quItemBody.find("input[name='saveTag']").val();
-	    	if(saveTag == 0 && isNull(quItemBody.find("input[name='quId']").val())) {
+	    	if(saveTag == 0) {
 	    		var data = {
     				belongId: parent.rowId,
     				orderById: quItemBody.find("input[name='orderById']").val(),
@@ -1738,14 +1738,8 @@ layui.config({
     				contactsAttr: quItemBody.find("input[name='contactsAttr']").val(),
     				contactsField: quItemBody.find("input[name='contactsField']").val(),
     				checkType: quItemBody.find("input[name='checkType']").val(),
-    				quTitle: '',
+    				quTitle: encodeURI(quItemBody.find(".quCoTitleEdit").html()),
 	    		};
-
-	    		var quTitleSaveTag = quItemBody.find("input[name='quTitleSaveTag']").val();
-	    		if(quTitleSaveTag == 0) {
-	    			var quTitle = quItemBody.find(".quCoTitleEdit").html();
-	    			data.quTitle = encodeURI(quTitle);
-	    		}
 	    		//逻辑选项
 	    		var quLogicItems = quItemBody.find(".quLogicItem");
 	    		var list = [];
@@ -1777,7 +1771,6 @@ layui.config({
 							logicItem.find("input[name='quLogicId']").val(item.id);
 							logicItem.find("input[name='logicSaveTag']").val(1);
 						});
-	
 						//执行保存下一题
 						saveQus(quItemBody.next(), callback);
 						//同步-更新题目排序号

@@ -330,13 +330,29 @@
 	
 	<insert id="addQuestionLogicsMationList" parameterType="java.util.Map">
 	     insert into dw_question_logic
-	     (id, title, cg_qu_item_id, ck_qu_id, qu_logic_id, ge_le, logic_type, score_num, sk_qu_id, visibility, create_id, create_time)
+	     (id, title, cg_qu_item_id, ck_qu_id, ge_le, logic_type, score_num, sk_qu_id, visibility, create_id, create_time)
 	     values
 		<foreach collection="list" item="item" index="index" separator="," >  
-			(#{item.id}, #{item.title}, #{item.cgQuItemId}, #{item.ckQuId}, #{item.quLogicId}, #{item.geLe}, #{item.logicType}, 
+			(#{item.id}, #{item.title}, #{item.cgQuItemId}, #{item.ckQuId}, #{item.geLe}, #{item.logicType}, 
 					#{item.scoreNum}, #{item.skQuId}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
+	
+	<update id="editQuestionLogicsMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+			UPDATE dw_question_logic
+				<set>
+					title = #{item.title},
+					cg_qu_item_id = #{item.cgQuItemId},
+					ck_qu_id = #{item.ckQuId},
+					ge_le = #{item.geLe},
+					logic_type = #{item.logicType},
+					score_num = #{item.scoreNum},
+					sk_qu_id = #{item.skQuId},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
 	
 	<insert id="addQuestionScoreMationList" parameterType="java.util.Map">
 	     insert into dw_qu_score
@@ -697,5 +713,60 @@
 		WHERE
 			id = #{quItemId}
 	</delete>
+	
+	<update id="editQuestionMationById" parameterType="java.util.Map">
+		UPDATE dw_question
+		<set>
+			<if test="answerInputRow != '' and answerInputRow != null">
+				answer_input_row = #{answerInputRow},
+			</if>
+			<if test="answerInputWidth != '' and answerInputWidth != null">
+				answer_input_width = #{answerInputWidth},
+			</if>
+			<if test="cellCount != '' and cellCount != null">
+				cell_count = #{cellCount},
+			</if>
+			<if test="checkType != '' and checkType != null">
+				check_type = #{checkType},
+			</if>
+			<if test="contactsAttr != '' and contactsAttr != null">
+				contacts_attr = #{contactsAttr},
+			</if>
+			<if test="contactsField != '' and contactsField != null">
+				contacts_field = #{contactsField},
+			</if>
+			<if test="hv != '' and hv != null">
+				hv = #{hv},
+			</if>
+			<if test="isRequired != '' and isRequired != null">
+				is_required = #{isRequired},
+			</if>
+			<if test="orderById != '' and orderById != null">
+				order_by_id = #{orderById},
+			</if>
+			<if test="paramInt01 != '' and paramInt01 != null">
+				param_int01 = #{paramInt01},
+			</if>
+			<if test="paramInt02 != '' and paramInt02 != null">
+				param_int02 = #{paramInt02},
+			</if>
+			<if test="quName != '' and quName != null">
+				qu_name = #{quName},
+			</if>
+			<if test="quNote != '' and quNote != null">
+				qu_note = #{quNote},
+			</if>
+			<if test="quTag != '' and quTag != null">
+				qu_tag = #{quTag},
+			</if>
+			<if test="quTitle != '' and quTitle != null">
+				qu_title = #{quTitle},
+			</if>
+			<if test="randOrder != '' and randOrder != null">
+				rand_order = #{randOrder},
+			</if>
+		</set>
+		WHERE id = #{quId}
+	</update>
 	
 </mapper>
