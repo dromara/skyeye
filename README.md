@@ -58,6 +58,33 @@ G6|流程图开发|https://antv.alipay.com/zh-cn/index.html
 	<property id="前端请求key" name="后台接收key" ref="限制条件（参考项目内文档）" var="key含义"/>
 </url>
 ```
+##### 后台代码编写规范
+
+###### 控制层
+```
+@RequestMapping("后台接口")
+@ResponseBody
+public void 方法名(InputObject inputObject, OutputObject outputObject) throws Exception{
+	服务层接口对象.方法名(inputObject, outputObject);
+}
+```
+
+###### 服务层
+```
+@Override
+public void 方法名(InputObject inputObject, OutputObject outputObject) throws Exception {
+	Map<String, Object> map = inputObject.getParams();//接收参数
+	Map<String, Object> user = inputObject.getLogParams();//获取当前登录用户信息
+	/**
+	 * 业务逻辑
+	 */
+	outputObject.setBean(bean);//返回单个实体Bean
+	outputObject.setBeans(beans);//返回集合
+	outputObject.settotal(total);//返回数量
+	outputObject.setreturnMessage("信息");//返回前端的错误信息
+	outputObject.setreturnMessage("信息", 错误码);//返回前端的错误信息，同时抛出异常（不常用）
+}
+```
 
 
 
