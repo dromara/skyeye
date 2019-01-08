@@ -128,6 +128,9 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			List<Map<String, Object>> questionChenRow = dwSurveyDirectoryDao.queryQuestionChenRowListByQuestionId(question);//获取行选项
 			List<Map<String, Object>> questionChenColumn = dwSurveyDirectoryDao.queryQuestionChenColumnListByQuestionId(question);//获取列选项
 			for(Map<String, Object> bean : questionChenRow){
+				for(Map<String, Object> item : questionChenColumn){
+					item.put("rowId", bean.get("id"));
+				}
 				bean.put("questionChenColumn", questionChenColumn);
 			}
 			question.put("questionChenRow", questionChenRow);
@@ -1187,10 +1190,19 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	public void queryDwSurveyDirectoryMationByIdToHTML(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		List<Map<String, Object>> questions = dwSurveyDirectoryDao.queryQuestionListByBelongId(map);//获取问卷中的题
+		int pageNo = 1;
 		for(Map<String, Object> question : questions){
+			String quType = QuType.getActionName(Integer.parseInt(question.get("quType").toString()));
+			if(quType.equals(QuType.PAGETAG.getActionName())){
+				pageNo++;
+			}
+		}
+		for(Map<String, Object> question : questions){
+			question.put("pageNo", pageNo);
 			getQuestionOptionListMation(question);
 		}
 		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		surveyMation.put("pageNo", pageNo);
 		outputObject.setBean(surveyMation);
 		outputObject.setBeans(questions);
 		outputObject.settotal(1);

@@ -96,7 +96,8 @@
 			a.option_name optionName,
 			a.order_by_id orderById,
 			a.qu_id quId,
-			a.visibility
+			a.visibility,
+			#{quType} quType
 		FROM
 			dw_qu_chen_row a
 		WHERE
@@ -112,7 +113,8 @@
 			a.option_name optionName,
 			a.order_by_id orderById,
 			a.qu_id quId,
-			a.visibility
+			a.visibility,
+			#{quType} quType
 		FROM
 			dw_qu_chen_column a
 		WHERE
@@ -129,8 +131,9 @@
 			a.option_name optionName,
 			a.option_title optionTitle,
 			a.order_by_id orderById,
-			a.qu_id qu_id,
-			a.visibility
+			a.qu_id quId,
+			a.visibility,
+			#{quType} quType
 		FROM
 			dw_qu_multi_fillblank a
 		WHERE
@@ -221,7 +224,8 @@
 			a.option_name optionName,
 			a.option_title optionTitle,
 			a.order_by_id orderById,
-			a.visibility
+			a.visibility,
+			#{quType} quType
 		FROM
 			dw_qu_orderby a
 		WHERE
