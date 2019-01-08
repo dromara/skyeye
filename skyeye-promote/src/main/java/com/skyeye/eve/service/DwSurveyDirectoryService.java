@@ -53,4 +53,6 @@ public interface DwSurveyDirectoryService {
 
 	public void queryDwSurveyDirectoryMationByIdToHTML(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void deleteSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

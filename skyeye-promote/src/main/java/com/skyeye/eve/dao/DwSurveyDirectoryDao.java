@@ -130,4 +130,6 @@ public interface DwSurveyDirectoryDao {
 
 	public int editQuestionRowMationList(List<Map<String, Object>> editquRow) throws Exception;
 
+	public int deleteSurveyMationById(Map<String, Object> map) throws Exception;
+
 }

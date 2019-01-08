@@ -1207,5 +1207,21 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		outputObject.setBeans(questions);
 		outputObject.settotal(1);
 	}
+
+	/**
+	 * 
+	     * @Title: deleteSurveyMationById
+	     * @Description: 删除问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void deleteSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		dwSurveyDirectoryDao.deleteSurveyMationById(map);//删除问卷
+	}
 	
 }

@@ -858,4 +858,12 @@
 		WHERE id = #{quId}
 	</update>
 	
+	<update id="deleteSurveyMationById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
 </mapper>

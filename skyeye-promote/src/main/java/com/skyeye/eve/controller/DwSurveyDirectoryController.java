@@ -400,4 +400,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.queryDwSurveyDirectoryMationByIdToHTML(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: deleteSurveyMationById
+	     * @Description: 删除问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/deleteSurveyMationById")
+	@ResponseBody
+	public void deleteSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.deleteSurveyMationById(inputObject, outputObject);
+	}
+	
 }
