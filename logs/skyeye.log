@@ -1662,4 +1662,10 @@
   [skyeye-promote][INFO] [2019-01-08 14:21:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
   [skyeye-promote][INFO] [2019-01-08 14:22:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
   [skyeye-promote][INFO] [2019-01-08 14:22:07] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory024
+  [skyeye-promote][INFO] [2019-01-08 14:23:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-08 14:24:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-08 14:24:24] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory023
+  [skyeye-promote][INFO] [2019-01-08 14:24:25] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory001
+  [skyeye-promote][INFO] [2019-01-08 14:25:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
+  [skyeye-promote][INFO] [2019-01-08 14:26:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
   
