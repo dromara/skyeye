@@ -29,7 +29,7 @@ layui.config({
 	        { field:'surveyState', width:120, title: '状态'},
 	        { field:'userName', width:120, title: '创建人'},
 	        { field: 'createTime', title: '创建时间', width: 180 },
-	        { title: '操作', fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+	        { title: '操作', fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 	    ]]
 	});
 	
@@ -111,7 +111,18 @@ layui.config({
 	
 	//分析报告
 	function fxWj(data){
-		
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/dwsurveydesign/surveyReport.html", 
+			title: "分析报告",
+			pageId: "surveyReport",
+			maxmin: true,
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
 	}
 	
 	//发布

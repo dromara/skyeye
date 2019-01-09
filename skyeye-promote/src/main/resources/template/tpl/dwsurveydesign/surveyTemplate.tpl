@@ -31,7 +31,7 @@
 												<input type="hidden" class="answerTag" value="0" >
 												<div class="quLogicInputCase">
 													{{#each questionLogic}}
-														<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+														<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 															<input type="hidden" class="logicId" value="{{id}}" />
 															<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 															<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -43,7 +43,7 @@
 											<div class="surveyQuItem">
 												<div class="surveyQuItemContent">
 													<div class="quCoTitle">
-														<div class="quCoNum">{{showIndex quType}}、</div>
+														<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 														<div class="quCoTitleEdit" >{{quTitle}}</div>
 													</div>
 													<div class="quCoItem">
@@ -106,7 +106,7 @@
 														<input type="hidden" class="answerTag" value="0" >
 														<div class="quLogicInputCase">
 															{{#each questionLogic}}
-																<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																	<input type="hidden" class="logicId" value="{{id}}" />
 																	<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																	<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -119,7 +119,7 @@
 													<div class="surveyQuItem">
 														<div class="surveyQuItemContent">
 															<div class="quCoTitle">
-																<div class="quCoNum">{{showIndex quType}}、</div>
+																<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																<div class="quCoTitleEdit" >{{quTitle}}</div>
 															</div>
 															<div class="quCoItem">
@@ -182,7 +182,7 @@
 																<input type="hidden" class="answerTag" value="0" >
 																<div class="quLogicInputCase">
 																	{{#each questionLogic}}
-																		<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																		<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																			<input type="hidden" class="logicId" value="{{id}}" />
 																			<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																			<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -194,7 +194,7 @@
 															<div class="surveyQuItem">
 																<div class="surveyQuItemContent">
 																	<div class="quCoTitle">
-																		<div class="quCoNum">{{showIndex quType}}、</div>
+																		<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																		<div class="quCoTitleEdit" >{{quTitle}}</div>
 																	</div>
 																	<div class="quCoItem"><ul>
@@ -232,7 +232,7 @@
 																		<input type="hidden" class="answerTag" value="0" >
 																		<div class="quLogicInputCase">
 																			{{#each questionLogic}}
-																				<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																				<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																					<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																					<input type="hidden" class="skQuId" value="{{skQuId}}" />
 																				</div>
@@ -243,7 +243,7 @@
 																	<div class="surveyQuItem">
 																		<div class="surveyQuItemContent">
 																			<div class="quCoTitle">
-																				<div class="quCoNum">{{showIndex quType}}、</div>
+																				<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																				<div class="quCoTitleEdit">{{quTitle}}</div>
 																			</div>
 																			<div class="quCoItem quOrderByCoItem">
@@ -251,7 +251,7 @@
 																					<table class="quOrderByTable" style="padding:5px;">
 																						{{#each questionOrderBy}}
 																							<tr class="quOrderByTableTr">
-																								<td class="quOrderyTableTd">{{showIndex @index}}</td>
+																								<td class="quOrderyTableTd">{{showXhIndex @index}}</td>
 																								<td class="quOrderTabConnect"></td>
 																							</tr>
 																						{{/each}}
@@ -285,7 +285,7 @@
 																				<input type="hidden" name="isRequired" value="{{isRequired}}">
 																				<div class="quLogicInputCase">
 																					{{#each questionLogic}}
-																						<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																						<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																							<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																							<input type="hidden" class="skQuId" value="{{skQuId}}" />
 																						</div>
@@ -318,7 +318,7 @@
 																						<input type="hidden" name="isRequired" value="{{isRequired}}">
 																						<div class="quLogicInputCase">
 																							{{#each questionLogic}}
-																								<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																								<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																									<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																									<input type="hidden" class="skQuId" value="{{skQuId}}" />
 																								</div>
@@ -345,7 +345,7 @@
 																								<input type="hidden" name="isRequired" value="{{isRequired}}">
 																								<div class="quLogicInputCase">
 																									{{#each questionLogic}}
-																										<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																										<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																											<input type="hidden" class="logicId" value="{{id}}" />
 																											<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																											<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -358,7 +358,7 @@
 																							<div class="surveyQuItem">
 																								<div class="surveyQuItemContent">
 																									<div class="quCoTitle">
-																										<div class="quCoNum">{{showIndex quType}}、</div>
+																										<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																										<div class="quCoTitleEdit" >{{quTitle}}</div>
 																									</div>
 																									<div class="quCoItem">
@@ -389,7 +389,7 @@
 																										<input type="hidden" name="isRequired" value="{{isRequired}}">
 																										<div class="quLogicInputCase">
 																											{{#each questionLogic}}
-																												<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																												<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																													<input type="hidden" class="logicId" value="{{id}}" />
 																													<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																													<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -402,7 +402,7 @@
 																									<div class="surveyQuItem">
 																										<div class="surveyQuItemContent">
 																											<div class="quCoTitle">
-																												<div class="quCoNum">{{showIndex quType}}、</div>
+																												<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																												<div class="quCoTitleEdit">{{quTitle}}</div>
 																											</div>
 																											<div class="quCoItem">
@@ -450,7 +450,7 @@
 																												<input type="hidden" name="isRequired" value="{{isRequired}}">
 																												<div class="quLogicInputCase">
 																													{{#each questionLogic}}
-																														<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																														<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																															<input type="hidden" class="logicId" value="{{id}}" />
 																															<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																															<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -463,7 +463,7 @@
 																											<div class="surveyQuItem">
 																												<div class="surveyQuItemContent">
 																													<div class="quCoTitle">
-																														<div class="quCoNum">{{showIndex quType}}、</div>
+																														<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																														<div class="quCoTitleEdit" >{{quTitle}}</div>
 																													</div>
 																													<div class="quCoItem">
@@ -512,7 +512,7 @@
 																														<input type="hidden" name="isRequired" value="{{isRequired}}">
 																														<div class="quLogicInputCase">
 																															{{#each questionLogic}}
-																																<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																																<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																																	<input type="hidden" class="logicId" value="{{id}}" />
 																																	<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																																	<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -525,7 +525,7 @@
 																													<div class="surveyQuItem">
 																														<div class="surveyQuItemContent">
 																															<div class="quCoTitle">
-																																<div class="quCoNum">{{showIndex quType}}、</div>
+																																<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																																<div class="quCoTitleEdit" >{{quTitle}}</div>
 																															</div>
 																															<div class="quCoItem">
@@ -572,7 +572,7 @@
 																																<input type="hidden" name="isRequired" value="{{isRequired}}">
 																																<div class="quLogicInputCase">
 																																	{{#each questionLogic}}
-																																		<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																																		<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																																			<input type="hidden" class="logicId" value="{{id}}" />
 																																			<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																																			<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -585,7 +585,7 @@
 																															<div class="surveyQuItem">
 																																<div class="surveyQuItemContent">
 																																	<div class="quCoTitle">
-																																		<div class="quCoNum">{{showIndex quType}}、</div>
+																																		<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																																		<div class="quCoTitleEdit" >{{quTitle}}</div>
 																																	</div>
 																																	<div class="quCoItem">
@@ -635,7 +635,7 @@
 																																		<input type="hidden" name="isRequired" value="{{isRequired}}">
 																																		<div class="quLogicInputCase">
 																																			{{#each questionLogic}}
-																																				<div class="quLogicItem quLogicItem_{{showIndex @index}}">
+																																				<div class="quLogicItem quLogicItem_{{showXhIndex @index}}">
 																																					<input type="hidden" class="logicId" value="{{id}}" />
 																																					<input type="hidden" class="cgQuItemId" value="{{cgQuItemId}}" />
 																																					<input type="hidden" class="skQuId" value="{{skQuId}}" />
@@ -650,7 +650,7 @@
 																																	<div class="surveyQuItem">
 																																		<div class="surveyQuItemContent">
 																																			<div class="quCoTitle">
-																																				<div class="quCoNum">{{showIndex quType}}、</div>
+																																				<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																																				<div class="quCoTitleEdit" >{{quTitle}}</div>
 																																			</div>
 																																			<div class="quCoItem">

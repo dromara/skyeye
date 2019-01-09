@@ -1,4 +1,6 @@
 
+var quIndex = 0;//问题序号
+
 var ueEditObj = null;//即将编辑的内容
 
 var quOptionDesign = null;//问题选项设置
@@ -79,9 +81,17 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/dwsurveydesign/dwsurveydesignbean.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
-		 		hdb.registerHelper("showIndex",function(index, options){
-		 			return parseInt(index) + 1;
+		 		hdb.registerHelper("showIndex",function(v1, options){
+		 			return parseInt(v1) + 1;
 		 		});
+		 		
+		 		hdb.registerHelper("showQuestionIndex", function(v1, options) {
+					if(v1 == '16' || v1 == '17'){
+					}else{
+						quIndex++;
+						return quIndex;
+					}
+				});
 		 		
 		 		hdb.registerHelper("showParamInt02",function(v1, options){
 		 			var str = "";

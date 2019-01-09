@@ -77,7 +77,7 @@
 		<script src="../../assets/lib/layui/layui.js"></script>
 		<script src="../../assets/lib/layui/custom.js"></script>
 		<script type="text/javascript">
-			var index = 0;//问题序号
+			var quIndex = 0;//问题序号
 			var pageNum = 1;//模拟页码
 			var nowPageNum = 1;//当前页码
 			layui.config({
@@ -99,12 +99,16 @@
 						pagination: false,
 						template: getFileContent('tpl/dwsurveydesign/surveyTemplate.tpl'),
 						ajaxSendLoadBefore: function(hdb) {
-							hdb.registerHelper("showIndex", function(v1, options) {
+							hdb.registerHelper("showQuestionIndex", function(v1, options) {
 								if(v1 == '16' || v1 == '17'){
 								}else{
-									index++;
-									return index;
+									quIndex++;
+									return quIndex;
 								}
+							});
+							
+							hdb.registerHelper("showXhIndex", function(v1, options) {
+								return parseInt(v1) + 1;
 							});
 
 							hdb.registerHelper("showParamInt02", function(v1, options) {
@@ -1102,7 +1106,7 @@
 							answerQuSize = answerTag1.size();
 						}
 						var newValue = parseInt(answerQuSize / totalQuSize * 100);
-						console.log(answerQuSize + "/" + totalQuSize + "=" + newValue);
+						//console.log(answerQuSize + "/" + totalQuSize + "=" + newValue);
 						$("#resultProgressRoot .progress-label").text("完成度：" + newValue + "%");
 						$("#resultProgress").progressbar("option", "value", newValue);
 					}

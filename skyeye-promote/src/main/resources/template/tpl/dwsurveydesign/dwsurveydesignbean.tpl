@@ -102,7 +102,7 @@
 									</div>
 									<div class="surveyQuItemContent">
 										<div class="quCoTitle">
-											<div class="quCoNum">{{showIndex @index}}、</div>
+											<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 											<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 											<input type="hidden" name="quTitleSaveTag" value="1">
 										</div>
@@ -230,7 +230,7 @@
 											</div>
 											<div class="surveyQuItemContent">
 												<div class="quCoTitle">
-													<div class="quCoNum">{{showIndex @index}}、</div>
+													<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 													<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 													<input type="hidden" name="quTitleSaveTag" value="1">
 												</div>
@@ -361,7 +361,7 @@
 													</div>
 													<div class="surveyQuItemContent">
 														<div class="quCoTitle">
-															<div class="quCoNum">{{showIndex @index}}、</div>
+															<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 															<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 															<input type="hidden" name="quTitleSaveTag" value="1">
 														</div>
@@ -443,7 +443,7 @@
 															</div>
 															<div class="surveyQuItemContent">
 																<div class="quCoTitle">
-																	<div class="quCoNum">{{showIndex @index}}、</div>
+																	<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																	<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																	<input type="hidden" name="quTitleSaveTag" value="1">
 																</div>
@@ -591,7 +591,7 @@
 																			</div>
 																			<div class="surveyQuItemContent" style="min-height: 45px;">
 																				<div class="quCoTitle">
-																					<div class="quCoNum" style="display: none;">{{showIndex @index}}、</div>
+																					<div class="quCoNum" style="display: none;">{{showQuestionIndex quType}}、</div>
 																					<div class="editAble quCoTitleEdit">{{{quTitle}}}</div>
 																					<input type="hidden" name="quTitleSaveTag" value="1">
 																				</div>
@@ -662,7 +662,7 @@
 																					</div>
 																					<div class="surveyQuItemContent">
 																						<div class="quCoTitle">
-																							<div class="quCoNum">{{showIndex @index}}、</div>
+																							<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																							<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																							<input type="hidden" name="quTitleSaveTag" value="1">
 																						</div>
@@ -753,7 +753,7 @@
 																							</div>
 																							<div class="surveyQuItemContent">
 																								<div class="quCoTitle">
-																									<div class="quCoNum">{{showIndex @index}}、</div>
+																									<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																									<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																									<input type="hidden" name="quTitleSaveTag" value="1">
 																								</div>
@@ -867,7 +867,7 @@
 																									</div>
 																									<div class="surveyQuItemContent">
 																										<div class="quCoTitle">
-																											<div class="quCoNum">{{showIndex @index}}、</div>
+																											<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																											<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																											<input type="hidden" name="quTitleSaveTag" value="1">
 																										</div>
@@ -981,7 +981,7 @@
 																											</div>
 																											<div class="surveyQuItemContent">
 																												<div class="quCoTitle">
-																													<div class="quCoNum">{{showIndex @index}}、</div>
+																													<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																													<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																													<input type="hidden" name="quTitleSaveTag" value="1">
 																												</div>
@@ -1090,7 +1090,7 @@
 																													</div>
 																													<div class="surveyQuItemContent">
 																														<div class="quCoTitle">
-																															<div class="quCoNum">{{showIndex @index}}、</div>
+																															<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																															<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																															<input type="hidden" name="quTitleSaveTag" value="1">
 																														</div>
@@ -1206,7 +1206,7 @@
 																															</div>
 																															<div class="surveyQuItemContent">
 																																<div class="quCoTitle">
-																																	<div class="quCoNum">{{showIndex @index}}、</div>
+																																	<div class="quCoNum">{{showQuestionIndex quType}}、</div>
 																																	<div class="editAble quCoTitleEdit">{{quTitle}}</div>
 																																	<input type="hidden" name="quTitleSaveTag" value="1">
 																																</div>

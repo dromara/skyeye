@@ -92,6 +92,15 @@ public enum QuType {
 		return null;
 	}
 	
+	public static String getCName(int index){
+		for (QuType q : QuType.values()){
+			if(q.getIndex() == index){
+				return q.cnName;
+			}
+		}
+		return null;
+	}
+	
 	public static String getTableName(int index){
 		for (QuType q : QuType.values()){
 			if(q.getIndex() == index){

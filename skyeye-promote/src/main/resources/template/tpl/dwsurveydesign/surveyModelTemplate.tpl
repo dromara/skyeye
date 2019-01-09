@@ -43,7 +43,7 @@
 											<div class="surveyQuItem">
 												<div class="surveyQuItemContent">
 													<div class="quCoTitle">
-														<div class="quCoNum">{{showIndex quType}}、</div>
+														<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 														<div class="quCoTitleEdit" >{{quTitle}}</div>
 													</div>
 													<div class="quCoItem">
@@ -119,7 +119,7 @@
 													<div class="surveyQuItem">
 														<div class="surveyQuItemContent">
 															<div class="quCoTitle">
-																<div class="quCoNum">{{showIndex quType}}、</div>
+																<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																<div class="quCoTitleEdit" >{{quTitle}}</div>
 															</div>
 															<div class="quCoItem">
@@ -194,7 +194,7 @@
 															<div class="surveyQuItem">
 																<div class="surveyQuItemContent">
 																	<div class="quCoTitle">
-																		<div class="quCoNum">{{showIndex quType}}、</div>
+																		<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																		<div class="quCoTitleEdit" >{{quTitle}}</div>
 																	</div>
 																	<div class="quCoItem"><ul>
@@ -243,7 +243,7 @@
 																	<div class="surveyQuItem">
 																		<div class="surveyQuItemContent">
 																			<div class="quCoTitle">
-																				<div class="quCoNum">{{showIndex quType}}、</div>
+																				<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																				<div class="quCoTitleEdit">{{quTitle}}</div>
 																			</div>
 																			<div class="quCoItem quOrderByCoItem">
@@ -358,7 +358,7 @@
 																							<div class="surveyQuItem">
 																								<div class="surveyQuItemContent">
 																									<div class="quCoTitle">
-																										<div class="quCoNum">{{showIndex quType}}、</div>
+																										<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																										<div class="quCoTitleEdit" >{{quTitle}}</div>
 																									</div>
 																									<div class="quCoItem">
@@ -402,7 +402,7 @@
 																									<div class="surveyQuItem">
 																										<div class="surveyQuItemContent">
 																											<div class="quCoTitle">
-																												<div class="quCoNum">{{showIndex quType}}、</div>
+																												<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																												<div class="quCoTitleEdit">{{quTitle}}</div>
 																											</div>
 																											<div class="quCoItem">
@@ -463,7 +463,7 @@
 																											<div class="surveyQuItem">
 																												<div class="surveyQuItemContent">
 																													<div class="quCoTitle">
-																														<div class="quCoNum">{{showIndex quType}}、</div>
+																														<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																														<div class="quCoTitleEdit" >{{quTitle}}</div>
 																													</div>
 																													<div class="quCoItem">
@@ -525,7 +525,7 @@
 																													<div class="surveyQuItem">
 																														<div class="surveyQuItemContent">
 																															<div class="quCoTitle">
-																																<div class="quCoNum">{{showIndex quType}}、</div>
+																																<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																																<div class="quCoTitleEdit" >{{quTitle}}</div>
 																															</div>
 																															<div class="quCoItem">
@@ -585,7 +585,7 @@
 																															<div class="surveyQuItem">
 																																<div class="surveyQuItemContent">
 																																	<div class="quCoTitle">
-																																		<div class="quCoNum">{{showIndex quType}}、</div>
+																																		<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																																		<div class="quCoTitleEdit" >{{quTitle}}</div>
 																																	</div>
 																																	<div class="quCoItem">
@@ -650,7 +650,7 @@
 																																	<div class="surveyQuItem">
 																																		<div class="surveyQuItemContent">
 																																			<div class="quCoTitle">
-																																				<div class="quCoNum">{{showIndex quType}}、</div>
+																																				<div class="quCoNum">{{showQuestionIndex @index}}、</div>
 																																				<div class="quCoTitleEdit" >{{quTitle}}</div>
 																																			</div>
 																																			<div class="quCoItem">
