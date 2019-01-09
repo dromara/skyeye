@@ -300,7 +300,9 @@
 			a.end_num endNum,
 			a.yn_end_time ynEndTime,
 			CONVERT(a.end_time, char) endTime,
-			a.view_answer viewAnswer
+			CONVERT(a.real_start_time, char) startTime,
+			a.view_answer viewAnswer,
+			a.survey_state surveyState
 		FROM
 			dw_survey_directory a
 		WHERE a.id = #{id}
@@ -865,5 +867,198 @@
 		</set>
 		WHERE id = #{id}
 	</update>
+	
+	<update id="editSurveyStateToReleaseById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			survey_state = '1',
+			real_start_time = #{startTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryRadioGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_item_id quItemId,
+			count(qu_item_id) count
+		FROM
+			dw_an_radio
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_item_id
+	</select>
+	
+	<select id="queryCheckBoxGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_item_id quItemId,
+			count(qu_item_id) count
+		FROM
+			dw_an_checkbox
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_item_id
+	</select>
+	
+	<select id="queryFillBlankGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			count(
+				CASE
+				WHEN answer = '' THEN
+					answer
+				END
+			) emptyCount,
+			count(
+				CASE
+				WHEN answer != '' THEN
+					answer
+				END
+			) blankCount
+		FROM
+			dw_an_fillblank
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+	</select>
+	
+	<select id="queryAnswerGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			count(
+				CASE
+				WHEN answer = '' THEN
+					answer
+				END
+			) emptyCount,
+			count(
+				CASE
+				WHEN answer != '' THEN
+					answer
+				END
+			) blankCount
+		FROM
+			dw_an_answer
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+	</select>
+	
+	<select id="queryMultiFillBlankGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_item_id quItemId,
+			count(*) count
+		FROM
+			dw_an_dfillblank
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_item_id
+	</select>
+	
+	<select id="queryEnumQuGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			answer,
+			count(answer) count
+		FROM
+			dw_an_enumqu
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			answer
+	</select>
+	
+	<select id="queryChenRadioGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			qu_col_id quColId,
+			count(qu_col_id) count
+		FROM
+			dw_an_chen_radio
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id,
+			qu_col_id
+	</select>
+	
+	<select id="queryChenFbkGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			qu_col_id quColId,
+			count(qu_col_id) count
+		FROM
+			dw_an_chen_fbk
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id,
+			qu_col_id
+	</select>
+	
+	<select id="queryChenCheckBoxGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			qu_col_id quColId,
+			count(qu_col_id) count
+		FROM
+			dw_an_chen_checkbox
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id,
+			qu_col_id
+	</select>
+	
+	<select id="queryChenScoreGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			qu_col_id quColId,
+			AVG(answser_score) avgScore
+		FROM
+			dw_an_chen_score
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id,
+			qu_col_id
+	</select>
+	
+	<select id="queryScoreGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			count(qu_row_id) count,
+			AVG(answser_score) avgScore
+		FROM
+			dw_an_score
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id
+	</select>
+	
+	<select id="queryOrderQuGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			sum(ordery_num) sumOrderNum
+		FROM
+			dw_an_order
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id
+		ORDER BY
+			sumOrderNum
+	</select>
+	
 	
 </mapper>

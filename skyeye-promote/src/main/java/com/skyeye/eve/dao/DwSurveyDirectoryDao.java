@@ -132,4 +132,30 @@ public interface DwSurveyDirectoryDao {
 
 	public int deleteSurveyMationById(Map<String, Object> map) throws Exception;
 
+	public int editSurveyStateToReleaseById(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> queryRadioGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryCheckBoxGroupStat(Map<String, Object> question) throws Exception;
+
+	public Map<String, Object> queryFillBlankGroupStat(Map<String, Object> question) throws Exception;
+
+	public Map<String, Object> queryAnswerGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryMultiFillBlankGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryEnumQuGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryChenRadioGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryChenFbkGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryChenCheckBoxGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryChenScoreGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryScoreGroupStat(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryOrderQuGroupStat(Map<String, Object> question) throws Exception;
+	
 }

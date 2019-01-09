@@ -1173,7 +1173,12 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	public void editSurveyStateToReleaseById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
-		
+		if("0".equals(surveyMation.get("surveyState").toString())){//设计状态可以发布问卷
+			map.put("startTime", ToolUtil.getTimeAndToString());
+			dwSurveyDirectoryDao.editSurveyStateToReleaseById(map);
+		}else{
+			outputObject.setreturnMessage("该问卷已发布，请刷新数据。");
+		}
 	}
 
 	/**
@@ -1222,6 +1227,194 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	public void deleteSurveyMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		dwSurveyDirectoryDao.deleteSurveyMationById(map);//删除问卷
+	}
+
+	/**
+	 * 
+	     * @Title: querySurveyFxMationById
+	     * @Description: 分析报告问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySurveyFxMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		List<Map<String, Object>> questions = dwSurveyDirectoryDao.queryQuestionListByBelongId(map);//获取问卷中的题
+		for(Map<String, Object> question : questions){
+			question.put("quTypeName", QuType.getCName(Integer.parseInt(question.get("quType").toString())));
+			getQuestionOptionListMation(question);
+			getQuestionOptionReportListMation(question);
+		}
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		outputObject.setBean(surveyMation);
+		outputObject.setBeans(questions);
+		outputObject.settotal(1);
+	}
+	
+	/**
+	 * 
+	     * @Title: getQuestionOptionReportListMation
+	     * @Description: 统计获取数量
+	     * @param @param question
+	     * @param @return
+	     * @param @throws Exception    参数
+	     * @return Map<String,Object>    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String, Object> getQuestionOptionReportListMation(Map<String, Object> question) throws Exception {
+		String quType = QuType.getActionName(Integer.parseInt(question.get("quType").toString()));//获取题目类型
+		if (quType.equals(QuType.RADIO.getActionName()) || quType.equals(QuType.COMPRADIO.getActionName())) {//单选  复合单选
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryRadioGroupStat(question);
+			List<Map<String, Object>> radios = (List<Map<String, Object>>) question.get("questionRadio");
+			int count = 0;
+			for(Map<String, Object> radio : radios){
+				radio.put("anCount", 0);
+				for(Map<String, Object> bean : beans){
+					if(bean.get("quItemId").toString().equals(radio.get("id").toString())){
+						radio.put("anCount", bean.get("count"));
+					}
+				}
+				count += Integer.parseInt(radio.get("anCount").toString());
+			}
+			for(Map<String, Object> radio : radios){
+				radio.put("anAllCount", count);
+			}
+		} else if (quType.equals(QuType.CHECKBOX.getActionName()) || quType.equals(QuType.COMPCHECKBOX.getActionName())) {//多选 复合多选
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryCheckBoxGroupStat(question);
+			List<Map<String, Object>> checkBoxs = (List<Map<String, Object>>) question.get("questionCheckBox");
+			int count = 0;
+			for(Map<String, Object> checkBox : checkBoxs){
+				checkBox.put("anCount", 0);
+				for(Map<String, Object> bean : beans){
+					if(bean.get("quItemId").toString().equals(checkBox.get("id").toString())){
+						checkBox.put("anCount", bean.get("count"));
+					}
+				}
+				count += Integer.parseInt(checkBox.get("anCount").toString());
+			}
+			for(Map<String, Object> checkBox : checkBoxs){
+				checkBox.put("anAllCount", count);
+			}
+		} else if (quType.equals(QuType.FILLBLANK.getActionName())) {//填空题
+			Map<String, Object> bean = dwSurveyDirectoryDao.queryFillBlankGroupStat(question);
+			question.put("rowContent", bean.get("emptyCount"));
+			question.put("optionContent", bean.get("blankCount"));
+			question.put("anCount", bean.get("blankCount"));
+		} else if (quType.equals(QuType.ANSWER.getActionName())) {//多行填空题
+			Map<String, Object> bean = dwSurveyDirectoryDao.queryAnswerGroupStat(question);
+			question.put("rowContent", bean.get("emptyCount"));
+			question.put("optionContent", bean.get("blankCount"));
+			question.put("anCount", bean.get("blankCount"));
+		} else if (quType.equals(QuType.MULTIFILLBLANK.getActionName())) {//组合填空
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryMultiFillBlankGroupStat(question);
+			List<Map<String, Object>> multiFillBlanks = (List<Map<String, Object>>) question.get("questionMultiFillBlank");
+			int count = 0;
+			for(Map<String, Object> multiFillBlank : multiFillBlanks){
+				multiFillBlank.put("anCount", 0);
+				for(Map<String, Object> bean : beans){
+					if(bean.get("quItemId").toString().equals(multiFillBlank.get("id").toString())){
+						multiFillBlank.put("anCount", bean.get("count"));
+					}
+				}
+				count += Integer.parseInt(multiFillBlank.get("anCount").toString());
+			}
+			for(Map<String, Object> multiFillBlank : multiFillBlanks){
+				multiFillBlank.put("anAllCount", count);
+			}
+		} else if (quType.equals(QuType.ENUMQU.getActionName())) {//枚举题
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryEnumQuGroupStat(question);
+			if(beans.isEmpty())
+				question.put("anCount", 0);
+			else
+				question.put("anCount", beans.size());
+		} else if (quType.equals(QuType.CHENRADIO.getActionName())){//矩阵单选题
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenRadioGroupStat(question);
+			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
+			int count = 0;
+			for(Map<String, Object> row : rows){
+				row.put("anCount", 0);
+				for(Map<String, Object> bean : beans){
+					if(bean.get("quRowId").toString().equals(row.get("id").toString())){
+						row.put("anCount", Integer.parseInt(row.get("anCount").toString()) + Integer.parseInt(bean.get("count").toString()));
+					}
+				}
+				count += Integer.parseInt(row.get("anCount").toString());
+			}
+			for(Map<String, Object> row : rows){
+				row.put("anAllCount", count);
+			}
+			question.put("anChenRadios", beans);
+		} else if (quType.equals(QuType.CHENFBK.getActionName())){//矩阵填空题
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenFbkGroupStat(question);
+			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
+			int count = 0;
+			for(Map<String, Object> row : rows){
+				row.put("anCount", 0);
+				for(Map<String, Object> bean : beans){
+					if(bean.get("quRowId").toString().equals(row.get("id").toString())){
+						row.put("anCount", Integer.parseInt(row.get("anCount").toString()) + Integer.parseInt(bean.get("count").toString()));
+					}
+				}
+				count += Integer.parseInt(row.get("anCount").toString());
+			}
+			for(Map<String, Object> row : rows){
+				row.put("anAllCount", count);
+			}
+			question.put("anChenFbks", beans);
+		} else if(quType.equals(QuType.CHENCHECKBOX.getActionName())){//矩阵多选题
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenCheckBoxGroupStat(question);
+			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
+			int count = 0;
+			for(Map<String, Object> row : rows){
+				row.put("anCount", 0);
+				for(Map<String, Object> bean : beans){
+					if(bean.get("quRowId").toString().equals(row.get("id").toString())){
+						row.put("anCount", Integer.parseInt(row.get("anCount").toString()) + Integer.parseInt(bean.get("count").toString()));
+					}
+				}
+				count += Integer.parseInt(row.get("anCount").toString());
+			}
+			for(Map<String, Object> row : rows){
+				row.put("anAllCount", count);
+			}
+			question.put("anChenCheckboxs", beans);
+		} else if(quType.equals(QuType.CHENSCORE.getActionName())){//矩阵评分题
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenScoreGroupStat(question);
+			question.put("anChenScores", beans);
+		}else if (quType.equals(QuType.SCORE.getActionName())) {//评分题
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryScoreGroupStat(question);
+			List<Map<String, Object>> scores = (List<Map<String, Object>>) question.get("quScores");
+			int count = 0;
+			for(Map<String, Object> score : scores){
+				score.put("anCount", 0);
+				score.put("avgScore", "0.00");
+				for(Map<String, Object> bean : beans){
+					if(bean.get("quRowId").toString().equals(score.get("id").toString())){
+						score.put("anCount", bean.get("count"));
+						score.put("avgScore", Float.parseFloat(bean.get("avgScore").toString()));
+					}
+				}
+				count += Integer.parseInt(score.get("anCount").toString());
+			}
+			for(Map<String, Object> score : scores){
+				score.put("anAllCount", count);
+			}
+		} else if (quType.equals(QuType.ORDERQU.getActionName())) {//排序题
+			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryOrderQuGroupStat(question);
+			List<Map<String, Object>> orderQus = (List<Map<String, Object>>) question.get("questionOrderBy");
+			for(Map<String, Object> bean : beans){
+				for(Map<String, Object> orderQu : orderQus){
+					if(bean.get("quRowId").toString().equals(orderQu.get("id").toString())){
+						orderQu.put("anOrderSum", bean.get("sumOrderNum"));
+					}
+				}
+			}
+		}
+		return question;
 	}
 	
 }

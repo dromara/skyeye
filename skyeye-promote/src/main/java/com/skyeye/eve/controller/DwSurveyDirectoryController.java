@@ -416,4 +416,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.deleteSurveyMationById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySurveyFxMationById
+	     * @Description: 分析报告问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/querySurveyFxMationById")
+	@ResponseBody
+	public void querySurveyFxMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.querySurveyFxMationById(inputObject, outputObject);
+	}
+	
 }
