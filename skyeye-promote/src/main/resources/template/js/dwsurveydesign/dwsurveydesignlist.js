@@ -1,6 +1,8 @@
 
 var rowId = "";
 
+var surveyName = "";
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -106,7 +108,19 @@ layui.config({
 	
 	//收集问卷
 	function resolveWj(data){
-		
+		rowId = data.id;
+		surveyName = data.surveyName;
+		_openNewWindows({
+			url: "../../tpl/dwsurveydesign/surveyRelove.html", 
+			title: "收集问卷",
+			pageId: "surveyRelove",
+			area: ['500px', '500px'],
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
 	}
 	
 	//分析报告
