@@ -47,6 +47,14 @@ layui.config({
 		 			}
 		 		});
 		 		
+		 		hdb.registerHelper('compare8', function(v1, v2, v31, v4, options) {
+		 			if(v1 == v3 && v2 == v4){
+		 				return options.fn(this);
+		 			}else{
+		 				return options.inverse(this);
+		 			}
+		 		});
+		 		
 		 	},
 		 	ajaxSendAfter:function(json){
 		 		
@@ -72,25 +80,17 @@ layui.config({
 					if(amchartdivId != null) {
 						var amchartdivObj = $("#" + amchartdivId);
 						if(!amchartdivObj[0]) {
-							var url = "${ctx}/da/survey-report!chartData.action";
-							var data = "quId=" + quId;
-							$.ajax({
-								url: url,
-								data: data,
-								type: "post",
-								success: function(msg) {
-									$("#amchart_" + quId).find(".higChartSvg").hide();
-									if(thClass.indexOf("linechart_pic") > 0) {
-										higLineChart(msg, quId);
-									} else if(thClass.indexOf("piechart_pic") > 0) {
-										higPieChart(msg, quId);
-									} else if(thClass.indexOf("barchart_pic") > 0) {
-										higBarChart(msg, quId);
-									} else if(thClass.indexOf("columnchart_pic") > 0) {
-										higColumnChart(msg, quId);
-									}
-								}
-							});
+		 	   				var msg = {};
+			 	   			$("#amchart_" + quId).find(".higChartSvg").hide();
+							if(thClass.indexOf("linechart_pic") > 0) {
+								higLineChart(msg, quId);
+							} else if(thClass.indexOf("piechart_pic") > 0) {
+								higPieChart(msg, quId);
+							} else if(thClass.indexOf("barchart_pic") > 0) {
+								higBarChart(msg, quId);
+							} else if(thClass.indexOf("columnchart_pic") > 0) {
+								higColumnChart(msg, quId);
+							}
 						} else {
 							$("#amchart_" + quId).find(".higChartSvg").hide();
 							amchartdivObj.show();
@@ -121,7 +121,7 @@ layui.config({
 			if(charType === "Line") {
 				seriesType = 'line';
 			}
-			if(quType === "CHENRADIO" || quType === "CHENCHECKBOX" || quType === "CHENSCORE") {
+			if(quType === "11" || quType === "13" || quType === "18") {
 				if(charType === "PIE") {
 					seriesData = new Array();
 					var rowItemTrs = quItemBody.find(".rowItemTr");

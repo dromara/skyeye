@@ -157,5 +157,5 @@ public interface DwSurveyDirectoryDao {
 	public List<Map<String, Object>> queryScoreGroupStat(Map<String, Object> question) throws Exception;
 
 	public List<Map<String, Object>> queryOrderQuGroupStat(Map<String, Object> question) throws Exception;
-	
+
 }

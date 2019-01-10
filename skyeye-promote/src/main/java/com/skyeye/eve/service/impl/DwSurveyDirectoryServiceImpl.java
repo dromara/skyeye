@@ -1346,8 +1346,11 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			}
 			for(Map<String, Object> row : rows){
 				row.put("anAllCount", count);
+				List<Map<String, Object>> columns = (List<Map<String, Object>>) row.get("questionChenColumn");
+				for(Map<String, Object> column : columns){
+					column.put("anChenRadios", beans);
+				}
 			}
-			question.put("anChenRadios", beans);
 		} else if (quType.equals(QuType.CHENFBK.getActionName())){//矩阵填空题
 			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenFbkGroupStat(question);
 			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
@@ -1363,8 +1366,11 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			}
 			for(Map<String, Object> row : rows){
 				row.put("anAllCount", count);
+				List<Map<String, Object>> columns = (List<Map<String, Object>>) row.get("questionChenColumn");
+				for(Map<String, Object> column : columns){
+					column.put("anChenFbks", beans);
+				}
 			}
-			question.put("anChenFbks", beans);
 		} else if(quType.equals(QuType.CHENCHECKBOX.getActionName())){//矩阵多选题
 			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenCheckBoxGroupStat(question);
 			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
@@ -1380,11 +1386,20 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			}
 			for(Map<String, Object> row : rows){
 				row.put("anAllCount", count);
+				List<Map<String, Object>> columns = (List<Map<String, Object>>) row.get("questionChenColumn");
+				for(Map<String, Object> column : columns){
+					column.put("anChenCheckboxs", beans);
+				}
 			}
-			question.put("anChenCheckboxs", beans);
 		} else if(quType.equals(QuType.CHENSCORE.getActionName())){//矩阵评分题
 			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenScoreGroupStat(question);
-			question.put("anChenScores", beans);
+			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
+			for(Map<String, Object> row : rows){
+				List<Map<String, Object>> columns = (List<Map<String, Object>>) row.get("questionChenColumn");
+				for(Map<String, Object> column : columns){
+					column.put("anChenScores", beans);
+				}
+			}
 		}else if (quType.equals(QuType.SCORE.getActionName())) {//评分题
 			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryScoreGroupStat(question);
 			List<Map<String, Object>> scores = (List<Map<String, Object>>) question.get("quScores");
@@ -1416,5 +1431,5 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		}
 		return question;
 	}
-	
+
 }
