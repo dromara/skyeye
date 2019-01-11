@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.imgscalr:imgscalr-lib:4.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.m2/repository/org/imgscalr/imgscalr-lib/4.2/imgscalr-lib-4.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.m2/repository/org/imgscalr/imgscalr-lib/4.2/imgscalr-lib-4.2-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.m2/repository/org/imgscalr/imgscalr-lib/4.2/imgscalr-lib-4.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

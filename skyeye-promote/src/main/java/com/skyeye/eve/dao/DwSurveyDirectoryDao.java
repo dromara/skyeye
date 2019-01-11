@@ -158,4 +158,40 @@ public interface DwSurveyDirectoryDao {
 
 	public List<Map<String, Object>> queryOrderQuGroupStat(Map<String, Object> question) throws Exception;
 
+	public int insertSurveyMationCopyById(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionMationCopyById(Map<String, Object> map) throws Exception;
+
+	public int addQuestionMationCopyBySurveyId(List<Map<String, Object>> questions) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionRadioListByCopyId(Map<String, Object> question) throws Exception;
+
+	public int addQuestionRadioMationCopyList(List<Map<String, Object>> questionRadio) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionCheckBoxListByCopyId(Map<String, Object> question) throws Exception;
+
+	public int addQuestionCheckBoxMationCopyList(List<Map<String, Object>> questionCheckBoxs) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionMultiFillBlankListByCopyId(Map<String, Object> question) throws Exception;
+
+	public int addQuestionMultiFillBlankMationCopyList(List<Map<String, Object>> questionMultiFillBlanks) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionChenRowListByCopyId(Map<String, Object> question) throws Exception;
+
+	public int addQuestionChenRowMationCopyList(List<Map<String, Object>> questionChenRows) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionChenColumnListByCopyId(Map<String, Object> question) throws Exception;
+
+	public int addQuestionChenColumnMationCopyList(List<Map<String, Object>> questionChenColumns) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionChenOptionListByCopyId(Map<String, Object> question) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionScoreListByCopyId(Map<String, Object> question) throws Exception;
+
+	public int addQuestionScoreMationCopyList(List<Map<String, Object>> questionScores) throws Exception;
+
+	public List<Map<String, Object>> queryQuestionOrderByListByCopyId(Map<String, Object> question) throws Exception;
+
+	public int addQuestionOrderByMationCopyList(List<Map<String, Object>> questionOrderBys) throws Exception;
+
 }

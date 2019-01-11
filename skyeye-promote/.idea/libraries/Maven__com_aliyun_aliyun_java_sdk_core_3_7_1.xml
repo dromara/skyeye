@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.aliyun:aliyun-java-sdk-core:3.7.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/aliyun/aliyun-java-sdk-core/3.7.1/aliyun-java-sdk-core-3.7.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.m2/repository/com/aliyun/aliyun-java-sdk-core/3.7.1/aliyun-java-sdk-core-3.7.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/aliyun/aliyun-java-sdk-core/3.7.1/aliyun-java-sdk-core-3.7.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

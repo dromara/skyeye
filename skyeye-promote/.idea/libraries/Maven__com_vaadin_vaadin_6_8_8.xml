@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.vaadin:vaadin:6.8.8">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/vaadin/vaadin/6.8.8/vaadin-6.8.8.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.m2/repository/com/vaadin/vaadin/6.8.8/vaadin-6.8.8-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/vaadin/vaadin/6.8.8/vaadin-6.8.8-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

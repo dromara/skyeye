@@ -1432,4 +1432,124 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		return question;
 	}
 
+	/**
+	 * 
+	     * @Title: insertSurveyMationCopyById
+	     * @Description: 复制问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void insertSurveyMationCopyById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		String surveyId = ToolUtil.getSurFaceId();
+		map.put("id", surveyId);
+		map.put("sId", ToolUtil.randomStr(6, 12));//用于短链接的ID
+		map.put("dirType", 2);//2问卷
+		map.put("surveyModel", 1);//问卷所属的问卷模块   1问卷模块
+		map.put("createId", user.get("id"));
+		map.put("createTime", ToolUtil.getTimeAndToString());
+		//复制问卷
+		dwSurveyDirectoryDao.insertSurveyMationCopyById(map);
+		List<Map<String, Object>> questions = dwSurveyDirectoryDao.queryQuestionMationCopyById(map);
+		for(Map<String, Object> question : questions){
+			question.put("copyFormId", question.get("id"));
+			question.put("id", ToolUtil.getSurFaceId());
+			question.put("createTime", ToolUtil.getTimeAndToString());
+			question.put("belongId", surveyId);
+			copyQuestionOptionListMation(question);
+		}
+		dwSurveyDirectoryDao.addQuestionMationCopyBySurveyId(questions);
+	}
+	
+	/**
+	 * 
+	     * @Title: copyQuestionOptionListMation
+	     * @Description: 复制题目选项
+	     * @param @param question
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	public void copyQuestionOptionListMation(Map<String, Object> question) throws Exception {
+		String quType = QuType.getActionName(Integer.parseInt(question.get("quType").toString()));//获取题目类型
+		if (quType.equals(QuType.RADIO.getActionName()) || quType.equals(QuType.COMPRADIO.getActionName())) {
+			List<Map<String, Object>> questionRadios = dwSurveyDirectoryDao.queryQuestionRadioListByCopyId(question);//获取多行填空题
+			for(Map<String, Object> questionRadio : questionRadios){
+				questionRadio.put("id", ToolUtil.getSurFaceId());
+				questionRadio.put("createTime", ToolUtil.getTimeAndToString());
+				questionRadio.put("quId", question.get("id"));
+			}
+			if(!questionRadios.isEmpty())
+				dwSurveyDirectoryDao.addQuestionRadioMationCopyList(questionRadios);
+		} else if (quType.equals(QuType.CHECKBOX.getActionName()) || quType.equals(QuType.COMPCHECKBOX.getActionName())) {
+			List<Map<String, Object>> questionCheckBoxs = dwSurveyDirectoryDao.queryQuestionCheckBoxListByCopyId(question);//获取多选题
+			for(Map<String, Object> questionCheckBox : questionCheckBoxs){
+				questionCheckBox.put("id", ToolUtil.getSurFaceId());
+				questionCheckBox.put("createTime", ToolUtil.getTimeAndToString());
+				questionCheckBox.put("quId", question.get("id"));
+			}
+			if(!questionCheckBoxs.isEmpty())
+				dwSurveyDirectoryDao.addQuestionCheckBoxMationCopyList(questionCheckBoxs);
+		} else if (quType.equals(QuType.MULTIFILLBLANK.getActionName())) {
+			List<Map<String, Object>> questionMultiFillBlanks = dwSurveyDirectoryDao.queryQuestionMultiFillBlankListByCopyId(question);//获取多行填空题
+			for(Map<String, Object> questionMultiFillBlank : questionMultiFillBlanks){
+				questionMultiFillBlank.put("id", ToolUtil.getSurFaceId());
+				questionMultiFillBlank.put("createTime", ToolUtil.getTimeAndToString());
+				questionMultiFillBlank.put("quId", question.get("id"));
+			}
+			if(!questionMultiFillBlanks.isEmpty())
+				dwSurveyDirectoryDao.addQuestionMultiFillBlankMationCopyList(questionMultiFillBlanks);
+		} else if (quType.equals(QuType.BIGQU.getActionName())) {
+		} else if (quType.equals(QuType.CHENRADIO.getActionName()) || quType.equals(QuType.CHENCHECKBOX.getActionName()) || quType.equals(QuType.CHENSCORE.getActionName())
+				|| quType.equals(QuType.CHENFBK.getActionName()) || quType.equals(QuType.COMPCHENRADIO.getActionName())) {// 矩阵单选，矩阵多选，矩阵填空题，复合矩阵单选
+			List<Map<String, Object>> questionChenRows = dwSurveyDirectoryDao.queryQuestionChenRowListByCopyId(question);//获取行选项
+			List<Map<String, Object>> questionChenColumns = dwSurveyDirectoryDao.queryQuestionChenColumnListByCopyId(question);//获取列选项
+			for(Map<String, Object> questionChenRow : questionChenRows){
+				questionChenRow.put("id", ToolUtil.getSurFaceId());
+				questionChenRow.put("createTime", ToolUtil.getTimeAndToString());
+				questionChenRow.put("quId", question.get("id"));
+			}
+			if(!questionChenRows.isEmpty())
+				dwSurveyDirectoryDao.addQuestionChenRowMationCopyList(questionChenRows);
+			for(Map<String, Object> questionChenColumn : questionChenColumns){
+				questionChenColumn.put("id", ToolUtil.getSurFaceId());
+				questionChenColumn.put("createTime", ToolUtil.getTimeAndToString());
+				questionChenColumn.put("quId", question.get("id"));
+			}
+			if(!questionChenColumns.isEmpty())
+				dwSurveyDirectoryDao.addQuestionChenColumnMationCopyList(questionChenColumns);
+			if(quType.equals(QuType.COMPCHENRADIO.getActionName())){//如果是复合矩阵单选题， 则还有题选项
+				List<Map<String, Object>> questionChenOptions = dwSurveyDirectoryDao.queryQuestionChenOptionListByCopyId(question);//获取选项
+				for(Map<String, Object> questionChenOption : questionChenOptions){
+					questionChenOption.put("id", ToolUtil.getSurFaceId());
+					questionChenOption.put("createTime", ToolUtil.getTimeAndToString());
+					questionChenOption.put("quId", question.get("id"));
+				}
+			}
+		} else if (quType.equals(QuType.SCORE.getActionName())) {
+			List<Map<String, Object>> questionScores = dwSurveyDirectoryDao.queryQuestionScoreListByCopyId(question);//获取评分题
+			for(Map<String, Object> questionScore : questionScores){
+				questionScore.put("id", ToolUtil.getSurFaceId());
+				questionScore.put("createTime", ToolUtil.getTimeAndToString());
+				questionScore.put("quId", question.get("id"));
+			}
+			if(!questionScores.isEmpty())
+				dwSurveyDirectoryDao.addQuestionScoreMationCopyList(questionScores);
+		} else if (quType.equals(QuType.ORDERQU.getActionName())) {
+			List<Map<String, Object>> questionOrderBys = dwSurveyDirectoryDao.queryQuestionOrderByListByCopyId(question);//获取排序题
+			for(Map<String, Object> questionOrderBy : questionOrderBys){
+				questionOrderBy.put("id", ToolUtil.getSurFaceId());
+				questionOrderBy.put("createTime", ToolUtil.getTimeAndToString());
+				questionOrderBy.put("quId", question.get("id"));
+			}
+			if(!questionOrderBys.isEmpty())
+				dwSurveyDirectoryDao.addQuestionOrderByMationCopyList(questionOrderBys);
+		}
+	}
+
 }

@@ -103,7 +103,20 @@ layui.config({
 	//复制问卷
 	function fzWj(data){
 		rowId = data.id;
-		
+		surveyName = data.surveyName;
+		_openNewWindows({
+			url: "../../tpl/dwsurveydesign/dwsurveydesigncopy.html", 
+			title: "复制问卷",
+			pageId: "dwsurveydesigncopy",
+			area: ['500px', '300px'],
+			callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                	top.winui.window.msg("操作成功", {icon: 1,time: 2000});
+                	loadTable();
+                } else if (refreshCode == '-9999') {
+                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
+                }
+			}});
 	}
 	
 	//收集问卷
@@ -184,6 +197,7 @@ layui.config({
 			url: "../../tpl/dwsurveydesign/dwsurveydesignadd.html", 
 			title: "新增问卷",
 			pageId: "dwsurveydesignadd",
+			area: ['500px', '300px'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	top.winui.window.msg("操作成功", {icon: 1,time: 2000});

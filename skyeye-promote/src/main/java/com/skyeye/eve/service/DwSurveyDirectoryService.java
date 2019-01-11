@@ -57,4 +57,6 @@ public interface DwSurveyDirectoryService {
 
 	public void querySurveyFxMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void insertSurveyMationCopyById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }
