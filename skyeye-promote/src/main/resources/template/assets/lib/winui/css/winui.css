@@ -6109,6 +6109,15 @@ select option{
     box-shadow: none! important;
 }
 
+.messageSpan{
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+    display: block;
+    margin-top: 200px;
+    font-size: 25px;
+    font-family: serif;
+}
 
 /*******************************************自定义样式end********************************************/
 

@@ -983,6 +983,62 @@ public class ToolUtil {
 		return textStr;// 返回文本字符串
 	}
 	
+	/**
+	 * 两个时间之间相差距离多少分
+	 * 
+	 * @param one
+	 *            时间参数 1：
+	 * @param two
+	 *            时间参数 2：
+	 * @return 相差天数
+	 */
+	public static long getDistanceDays(String str1, String str2) throws Exception {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date one;
+		Date two;
+		long min = 0;
+		try {
+			one = df.parse(str1);
+			two = df.parse(str2);
+			long time1 = one.getTime();
+			long time2 = two.getTime();
+			long diff;
+			if (time1 < time2) {
+				diff = time2 - time1;
+			} else {
+				diff = time1 - time2;
+			}
+			min = diff / (1000 * 60);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return min;
+	}
+	
+	/**
+	 * 
+	     * @Title: compare
+	     * @Description: 时间字符串比较大小
+	     * @param @param time1
+	     * @param @param time2
+	     * @param @return
+	     * @param @throws ParseException    参数
+	     * @return boolean    返回类型
+	     * @throws
+	 */
+	public static boolean compare(String time1, String time2) throws ParseException {
+		// 如果想比较日期则写成"yyyy-MM-dd"就可以了
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		// 将字符串形式的时间转化为Date类型的时间
+		Date a = sdf.parse(time1);
+		Date b = sdf.parse(time2);
+		// Date类的一个方法，如果a早于b返回true，否则返回false
+		if (a.before(b))
+			return true;
+		else
+			return false;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		List<Map<String, Object>> data = new ArrayList<>();
 		Map<String, Object> map = new HashMap<>();

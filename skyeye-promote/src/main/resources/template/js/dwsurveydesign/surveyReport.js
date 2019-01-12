@@ -47,14 +47,6 @@ layui.config({
 		 			}
 		 		});
 		 		
-		 		hdb.registerHelper('compare8', function(v1, v2, v31, v4, options) {
-		 			if(v1 == v3 && v2 == v4){
-		 				return options.fn(this);
-		 			}else{
-		 				return options.inverse(this);
-		 			}
-		 		});
-		 		
 		 	},
 		 	ajaxSendAfter:function(json){
 		 		
@@ -98,8 +90,10 @@ layui.config({
 					}
 					return false;
 				});
-		 		$(".columnchart_pic").click();
-		 		resetQuNum();
+				setTimeout(function(){
+					$(".columnchart_pic").click();
+				}, 2000);
+				resetQuNum();
 		 	}
 	    });
 		
@@ -171,7 +165,7 @@ layui.config({
 						anCount = 0;
 					}
 					categories.push(quOptionName);
-					if(quType === "SCORE") {
+					if(quType === "8") {
 						var avgScore = $(this).find("input[name='quItemAvgScore']").val();
 						//平均分 setAvgScore  
 						avgScore = parseFloat(avgScore).toFixed(2);
@@ -187,7 +181,7 @@ layui.config({
 							seriesData.push(parseFloat(avgScore));
 						}
 						tagText = "分数";
-					} else if(quType === "ORDERQU") {
+					} else if(quType === "9") {
 						if(charType === "PIE") {
 							var data = {};
 							data["value"] = parseInt(anCount);

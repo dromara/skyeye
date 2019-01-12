@@ -424,8 +424,8 @@
 																																	<td>
 																																		<div class="dwQuOptionItemContent">
 																																			<label class="dwRedioStyle dwQuInputLabel" ></label>
-																																			<input type="hidden" class="dwChenInputTemp" disabled="disabled" value="{{rowId}}:{{id}}">
-																																			<input name="item_qu_{{quType}}_{{quId}}_{{rowId}}" value="{{id}}" type="radio"> 
+																																			<input type="hidden" class="dwChenInputTemp" disabled="disabled" value="{{../id}}:{{id}}">
+																																			<input name="item_qu_{{quType}}_{{quId}}_{{../id}}" value="{{id}}" type="radio"> 
 																																		</div>
 																																	</td>
 																																{{/each}}
@@ -479,15 +479,15 @@
 																																{{#each questionChenRow}}
 																																	<tr class="dwQuCoChenRowTr">
 																																		<td class="quChenRowTd"><label class="quCoOptionEdit">{{optionName}}</label>
-																																			<input type="hidden" name="item_qu_{{quType}}_{{quId}}_{{rowId}}" value="ck_item_qu_{{quType}}_{{quId}}_{{rowId}}_" />
+																																			<input type="hidden" name="item_qu_{{quType}}_{{quId}}_{{id}}" value="ck_item_qu_{{quType}}_{{quId}}_{{id}}_" />
 																																			<input type="hidden" class="answerTag" value="0" >
 																																		</td>
 																																		{{#each questionChenColumn}}
 																																			<td>
 																																				<div class="dwQuOptionItemContent">
 																																					<label class="dwCheckboxStyle dwQuInputLabel" ></label>
-																																					<input type="hidden" class="dwChenInputTemp" disabled="disabled" value="{{rowId}}:{{id}}">
-																																					<input name="ck_item_qu_{{quType}}_{{quId}}_{{rowId}}_{{id}}" value="{{id}}" type="checkbox"> 
+																																					<input type="hidden" class="dwChenInputTemp" disabled="disabled" value="{{../id}}:{{id}}">
+																																					<input name="ck_item_qu_{{quType}}_{{quId}}_{{../id}}_{{id}}" value="{{id}}" type="checkbox"> 
 																																				</div>
 																																			</td>
 																																		{{/each}}
@@ -545,8 +545,8 @@
 																																				{{#each questionChenColumn}}
 																																					<td>
 																																						<div class="dwQuChenFbkOptionItemContent">
-																																							<input type="hidden" class="dwChenInputTemp" disabled="disabled" value="{{rowId}}:{{id}}">
-																																							<input name="fbk_item_qu_{{quType}}_{{quId}}_{{rowId}}_{{id}}" class="inputSytle_1 dwChenMFillblankInput" type="text"> 
+																																							<input type="hidden" class="dwChenInputTemp" disabled="disabled" value="{{../id}}:{{id}}">
+																																							<input name="fbk_item_qu_{{quType}}_{{quId}}_{{../id}}_{{id}}" class="inputSytle_1 dwChenMFillblankInput" type="text"> 
 																																							<input type="hidden" class="answerTag" value="0" >
 																																						</div>
 																																					</td>
@@ -605,8 +605,8 @@
 																																						{{#each questionChenColumn}}
 																																							<td>
 																																								<div class="dwQuScoreOptionItemContent">
-																																									<input type="hidden" class="dwChenInputTemp" disabled="disabled" value="{{rowId}}:{{id}}">
-																																									<select name="cs_item_qu_{{quType}}_{{quId}}_{{rowId}}_{{id}}" class="quChenScoreSelect" > 
+																																									<input type="hidden" class="dwChenInputTemp" disabled="disabled" value="{{../id}}:{{id}}">
+																																									<select name="cs_item_qu_{{quType}}_{{quId}}_{{../id}}_{{id}}" class="quChenScoreSelect" > 
 																																										<option value="0">-评分-</option>
 																																										{{#scoreNum001 5}}{{/scoreNum001}}
 																																									</select> 
@@ -709,8 +709,9 @@
 								<li class="li_surveyQuItemBody surveyQu_{{#compare6 quType}}{{/compare6}}" style="{{#compare4 pageNo}}{{/compare4}}">
 									<div class="surveyQuItemBody">
 										<div class="surveyQuItem">
+											<input type="hidden" class="quType" value="submitSurveyBtn">
 											<div class="surveyQuItemContent" style="padding-top: 12px;height: 30px;min-height: 30px;">
-												<a href="#" id="submitSurvey" class="sbtn24 sbtn24_0 submitSurvey" >提&nbsp;交</a>&nbsp;&nbsp;&nbsp;&nbsp;
+												<a href="javascript:;" id="submitSurvey" class="sbtn24 sbtn24_0 submitSurvey" >提&nbsp;交</a>&nbsp;&nbsp;&nbsp;&nbsp;
 												{{#if pageNo}}
 												{{#compare3 pageNo 1}}
 													<a href="#" class="sbtn24 sbtn24_1 prevPage_a">上一页</a>

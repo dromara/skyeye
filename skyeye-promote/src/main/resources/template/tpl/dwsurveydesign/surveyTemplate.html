@@ -80,6 +80,10 @@
 			var quIndex = 0;//问题序号
 			var pageNum = 1;//模拟页码
 			var nowPageNum = 1;//当前页码
+			
+			var ruleCode = "";//密码
+			
+			var bgAnDate = "";//答卷开始时间
 			layui.config({
 				base: basePath,
 				version: skyeyeVersion
@@ -89,142 +93,163 @@
 					var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 					var $ = layui.$,
 						form = layui.form;
-
-					showGrid({
-						id: "wrap",
-						url: reqBasePath + "dwsurveydirectory024",
-						params: {
-							rowId: getUrlParam("rowId")
-						},
-						pagination: false,
-						template: getFileContent('tpl/dwsurveydesign/surveyTemplate.tpl'),
-						ajaxSendLoadBefore: function(hdb) {
-							hdb.registerHelper("showQuestionIndex", function(v1, options) {
-								if(v1 == '16' || v1 == '17'){
-								}else{
-									quIndex++;
-									return quIndex;
+					bgAnDate = getFormatDate();
+					AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory028", params: {surveyId: getUrlParam("rowId"), ip: returnCitySN["cip"]}, type:'json', callback:function(json){
+		 	   			if(json.returnCode == 0){
+			 	   			showGrid({
+								id: "wrap",
+								url: reqBasePath + "dwsurveydirectory024",
+								params: {
+									rowId: getUrlParam("rowId")
+								},
+								pagination: false,
+								template: getFileContent('tpl/dwsurveydesign/surveyTemplate.tpl'),
+								ajaxSendLoadBefore: function(hdb) {
+									hdb.registerHelper("showQuestionIndex", function(v1, options) {
+										if(v1 == '16' || v1 == '17'){
+										}else{
+											quIndex++;
+											return quIndex;
+										}
+									});
+									
+									hdb.registerHelper("showXhIndex", function(v1, options) {
+										return parseInt(v1) + 1;
+									});
+	
+									hdb.registerHelper("showParamInt02", function(v1, options) {
+										var str = "";
+										for(var i = 1; i <= v1; i++) {
+											str += "<td style='background-color: white;'>" + i + "</td>";
+										}
+										return str;
+									});
+	
+									hdb.registerHelper('compare1', function(v1, v2, options) {
+										if(v1 == v2) {
+											return options.fn(this);
+										} else {
+											return options.inverse(this);
+										}
+									});
+	
+									hdb.registerHelper('compare2', function(v1, v2, options) {
+										if(v1 == v2) {
+											return 'display: none;';
+										} else {
+											return '';
+										}
+									});
+	
+									hdb.registerHelper('compare3', function(v1, v2, options) {
+										if(v1 > v2) {
+											return options.fn(this);
+										} else {
+											return options.inverse(this);
+										}
+									});
+									
+									hdb.registerHelper('compare4', function(v1, options) {
+										if(v1 == nowPageNum) {
+											return '';
+										} else {
+											return 'display: none;';
+										}
+									});
+									
+									hdb.registerHelper('compare5', function(v1, options) {
+										if(v1 == '16'){
+											if(pageNum == '1'){
+												pageNum++;
+												return '';
+											}else{
+												pageNum++;
+											}
+										}
+										if(pageNum == '1'){
+											return '';
+										}else{
+											return 'display: none;';
+										}
+									});
+									
+									hdb.registerHelper('compare6', function(v1, options) {
+										return pageNum;
+									});
+									
+									hdb.registerHelper('compare7', function(v1, options) {
+										if(nowPageNum == '1'){
+											return options.inverse(this);
+										}else{
+											return options.fn(this);
+										}
+									});
+	
+									hdb.registerHelper("cellCount001", function(v1, options) {
+										var str = "";
+										var width = 600 / v1;
+										for(var i = 1; i <= v1; i++) {
+											str += '<td width="' + width + 'px">' +
+												'<div class="dwQuOptionItemContent">' +
+												'<label class="dwRedioStyle dwQuInputLabel" ></label>' +
+												'<input type="radio" name="qu_{{quType}}_{{quId}}" value="{{id}}" >' +
+												'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' +
+												'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_qu_{{quType}}_{{quId}}_{{id}}" />' +
+												'</div>' +
+												'</td>';
+										}
+										str += '<div class="emptyTd"></div>';
+										return str;
+									});
+	
+									hdb.registerHelper("cellCount002", function(v1, options) {
+										var str = "";
+										var width = 600 / v1;
+										for(var i = 1; i <= v1; i++) {
+											str += '<td width="' + width + 'px">' +
+												'<div class="dwQuOptionItemContent">' +
+												'<label class="dwCheckboxStyle dwQuInputLabel" ></label>' +
+												'<input type="checkbox" name="tag_qu_{{quType}}_{{quId}}" value="{{id}}" >' +
+												'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' +
+												'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_tag_qu_{{quType}}_{{quId}}_{{id}}" />' +
+												'</div>' +
+												'</td>';
+										}
+										str += '<div class="emptyTd"></div>';
+										return str;
+									});
+	
+									hdb.registerHelper("scoreNum001", function(v1, options) {
+										var str = "";
+										for(var i = 1; i <= v1; i++) {
+											str += '<option value="' + i + '">' + i + '分</option>';
+										}
+										return str;
+									});
+								},
+								ajaxSendAfter: function(json) {
+									loadModel();
 								}
 							});
-							
-							hdb.registerHelper("showXhIndex", function(v1, options) {
-								return parseInt(v1) + 1;
-							});
-
-							hdb.registerHelper("showParamInt02", function(v1, options) {
-								var str = "";
-								for(var i = 1; i <= v1; i++) {
-									str += "<td style='background-color: white;'>" + i + "</td>";
-								}
-								return str;
-							});
-
-							hdb.registerHelper('compare1', function(v1, v2, options) {
-								if(v1 == v2) {
-									return options.fn(this);
-								} else {
-									return options.inverse(this);
-								}
-							});
-
-							hdb.registerHelper('compare2', function(v1, v2, options) {
-								if(v1 == v2) {
-									return 'display: none;';
-								} else {
-									return '';
-								}
-							});
-
-							hdb.registerHelper('compare3', function(v1, v2, options) {
-								if(v1 > v2) {
-									return options.fn(this);
-								} else {
-									return options.inverse(this);
-								}
-							});
-							
-							hdb.registerHelper('compare4', function(v1, options) {
-								if(v1 == nowPageNum) {
-									return '';
-								} else {
-									return 'display: none;';
-								}
-							});
-							
-							hdb.registerHelper('compare5', function(v1, options) {
-								if(v1 == '16'){
-									if(pageNum == '1'){
-										pageNum++;
-										return '';
-									}else{
-										pageNum++;
-									}
-								}
-								if(pageNum == '1'){
-									return '';
-								}else{
-									return 'display: none;';
-								}
-							});
-							
-							hdb.registerHelper('compare6', function(v1, options) {
-								return pageNum;
-							});
-							
-							hdb.registerHelper('compare7', function(v1, options) {
-								if(nowPageNum == '1'){
-									return options.inverse(this);
-								}else{
-									return options.fn(this);
-								}
-							});
-
-							hdb.registerHelper("cellCount001", function(v1, options) {
-								var str = "";
-								var width = 600 / v1;
-								for(var i = 1; i <= v1; i++) {
-									str += '<td width="' + width + 'px">' +
-										'<div class="dwQuOptionItemContent">' +
-										'<label class="dwRedioStyle dwQuInputLabel" ></label>' +
-										'<input type="radio" name="qu_{{quType}}_{{quId}}" value="{{id}}" >' +
-										'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' +
-										'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_qu_{{quType}}_{{quId}}_{{id}}" />' +
-										'</div>' +
-										'</td>';
-								}
-								str += '<div class="emptyTd"></div>';
-								return str;
-							});
-
-							hdb.registerHelper("cellCount002", function(v1, options) {
-								var str = "";
-								var width = 600 / v1;
-								for(var i = 1; i <= v1; i++) {
-									str += '<td width="' + width + 'px">' +
-										'<div class="dwQuOptionItemContent">' +
-										'<label class="dwCheckboxStyle dwQuInputLabel" ></label>' +
-										'<input type="checkbox" name="tag_qu_{{quType}}_{{quId}}" value="{{id}}" >' +
-										'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' +
-										'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_tag_qu_{{quType}}_{{quId}}_{{id}}" />' +
-										'</div>' +
-										'</td>';
-								}
-								str += '<div class="emptyTd"></div>';
-								return str;
-							});
-
-							hdb.registerHelper("scoreNum001", function(v1, options) {
-								var str = "";
-								for(var i = 1; i <= v1; i++) {
-									str += '<option value="' + i + '">' + i + '分</option>';
-								}
-								return str;
-							});
-						},
-						ajaxSendAfter: function(json) {
-
-						}
-					});
+		 	   				ruleCode = json.bean.ruleCode;
+		 	   				if(json.bean.rule == '3'){
+		 	   					_openNewWindowsNoRel({
+				 	   				url: "../../tpl/dwsurveydesign/dwsurveydesignrulecode.html", 
+				 	   				title: "问卷密钥",
+				 	   				area: ['300px', '200px'],
+				 	   				closeBtn: 0,
+				 	   				pageId: "dwsurveydesignrulecode",
+				 	   				callBack: function(refreshCode){
+				 	   	                if (refreshCode == '0') {
+				 	   	                } else if (refreshCode == '-9999') {
+				 	   	                layer.msg("操作失败", {icon: 2,time: 2000});
+				 	   	                }
+				 	   				}});
+		 	   				}
+		 	   			}else{
+		 	   				$("#wrap").html('<span class="messageSpan">' + json.returnMessage + '</span>');
+		 	   			}
+		 	   		}});
 
 					//获取url中的参数
 					function getUrlParam(name) {
@@ -235,7 +260,7 @@
 					}
 
 					//分页设置 nextPage_a prevPage_a
-					$(".nextPage_a").click(function() {
+					$("body").on("click", ".nextPage_a", function(e) {
 						if(validateForms()){
 							var thParent = $(this).parent();
 							nowPageNum = nowPageNum + 1;
@@ -247,7 +272,7 @@
 							return false;
 						}
 					});
-					$(".prevPage_a").click(function() {
+					$("body").on("click", ".prevPage_a", function(e) {
 						var thParent = $(this).parent();
 						nowPageNum = nowPageNum - 1;
 						$(".li_surveyQuItemBody").hide();
@@ -255,189 +280,270 @@
 						$(window).scrollTop(10);
 						return false;
 					});
-
-					var prevHost = $("#prevHost").val();
-					//初始化弹出窗口参数
-					var surveyStyleId = $("#surveyStyleId").val();
-					if(surveyStyleId != "") {
-						/** 背景样式 **/
-						var showBodyBi = "${surveyStyle.showBodyBi}";
-						var bodyBgColor = "${surveyStyle.bodyBgColor}";
-						var bodyBgColorObj = $("input[name='bodyBgColor']");
-						bodyBgColorObj.val(bodyBgColor);
-						var bodyBCThemeParamObj = bodyBgColorObj.parents(".theme_param");
-						bodyBCThemeParamObj.find(".color_box").css({
-							"background-color": bodyBgColor
-						});
-						$("body").css({
-							"background-color": bodyBgColor
-						});
-
-						var bodyBgImage = "${surveyStyle.bodyBgImage}";
-						var bodyBgImageObj = $("input[name='bodyBgImage']");
-						var bodyBIThemeParamObj = bodyBgImageObj.parents(".theme_param");
-						bodyBgImageObj.val(bodyBgImage);
-						bodyBIThemeParamObj.find(".previewImage").attr("src", prevHost + bodyBgImage);
-						if(showBodyBi == 1) {
+					
+					$.fn.serializeJson = function() {
+				        var serializeObj = {};
+				        var array = this.serializeArray();
+				        var str = this.serialize();
+				        $(array).each(function() {
+		                    if (serializeObj[this.name]) {
+		                        if ($.isArray(serializeObj[this.name])) {
+		                            serializeObj[this.name].push(this.value);
+		                        } else {
+		                            serializeObj[this.name] = [
+		                                    serializeObj[this.name], this.value ];
+		                        }
+		                    } else {
+		                        serializeObj[this.name] = this.value;
+		                    }
+		                });
+				        return serializeObj;
+				    };
+						
+				    function loadModel(){
+						var prevHost = $("#prevHost").val();
+						//初始化弹出窗口参数
+						var surveyStyleId = $("#surveyStyleId").val();
+						if(surveyStyleId != "") {
+							/** 背景样式 **/
+							var showBodyBi = "${surveyStyle.showBodyBi}";
+							var bodyBgColor = "${surveyStyle.bodyBgColor}";
+							var bodyBgColorObj = $("input[name='bodyBgColor']");
+							bodyBgColorObj.val(bodyBgColor);
+							var bodyBCThemeParamObj = bodyBgColorObj.parents(".theme_param");
+							bodyBCThemeParamObj.find(".color_box").css({
+								"background-color": bodyBgColor
+							});
 							$("body").css({
-								"background-image": "url(" + prevHost + bodyBgImage + ")"
+								"background-color": bodyBgColor
 							});
-							$("input[name='showBodyBi']").prop("checked", true);
-						}
-
-						/** 表头样式 **/
-						var showSurveyHbgi = "${surveyStyle.showSurveyHbgi}";
-						var surveyHeadBgColor = "${surveyStyle.surveyHeadBgColor}";
-						var surveyHeadBgColorObj = $("input[name='surveyHeadBgColor']");
-						var surveyHBCThemeParamObj = surveyHeadBgColorObj.parents(".theme_param");
-						surveyHeadBgColorObj.val(surveyHeadBgColor);
-						surveyHBCThemeParamObj.find(".color_box").css({
-							"background-color": surveyHeadBgColor
-						});
-						$("#dwSurveyHeader").css({
-							"background-color": surveyHeadBgColor
-						});
-
-						var surveyHeadBgImage = "${surveyStyle.surveyHeadBgImage}";
-						var surveyHeadBgImageObj = $("input[name='surveyHeadBgImage']");
-						var surveyHBIThemeParamObj = surveyHeadBgImageObj.parents(".theme_param");
-						surveyHeadBgImageObj.val(surveyHeadBgImage);
-						surveyHBIThemeParamObj.find(".previewImage").attr("src", prevHost + surveyHeadBgImage);
-						if(showSurveyHbgi == 1) {
+	
+							var bodyBgImage = "${surveyStyle.bodyBgImage}";
+							var bodyBgImageObj = $("input[name='bodyBgImage']");
+							var bodyBIThemeParamObj = bodyBgImageObj.parents(".theme_param");
+							bodyBgImageObj.val(bodyBgImage);
+							bodyBIThemeParamObj.find(".previewImage").attr("src", prevHost + bodyBgImage);
+							if(showBodyBi == 1) {
+								$("body").css({
+									"background-image": "url(" + prevHost + bodyBgImage + ")"
+								});
+								$("input[name='showBodyBi']").prop("checked", true);
+							}
+	
+							/** 表头样式 **/
+							var showSurveyHbgi = "${surveyStyle.showSurveyHbgi}";
+							var surveyHeadBgColor = "${surveyStyle.surveyHeadBgColor}";
+							var surveyHeadBgColorObj = $("input[name='surveyHeadBgColor']");
+							var surveyHBCThemeParamObj = surveyHeadBgColorObj.parents(".theme_param");
+							surveyHeadBgColorObj.val(surveyHeadBgColor);
+							surveyHBCThemeParamObj.find(".color_box").css({
+								"background-color": surveyHeadBgColor
+							});
 							$("#dwSurveyHeader").css({
-								"background-image": "url(" + prevHost + surveyHeadBgImage + ")"
+								"background-color": surveyHeadBgColor
 							});
-							$("input[name='showSurveyHbgi']").prop("checked", true);
-						}
-
-						var surveyHeadPaddingTop = "${surveyStyle.surveyHeadPaddingTop}";
-						var surveyHeadPaddingBottom = "${surveyStyle.surveyHeadPaddingBottom}";
-						$("#dwSurveyHeader").css({
-							"padding-top": surveyHeadPaddingTop + "px"
-						});
-						$("#dwSurveyHeader").css({
-							"padding-bottom": surveyHeadPaddingBottom + "px"
-						});
-
-						/** 内容中间样式 **/
-						var showSurveyCbim = "${surveyStyle.showSurveyCbim}";
-						var surveyContentBgColorMiddle = "${surveyStyle.surveyContentBgColorMiddle}";
-						var surveyContentBgColorMiddleObj = $("input[name='surveyContentBgColorMiddle']");
-						var surveyCBCMThemeParamObj = surveyContentBgColorMiddleObj.parents(".theme_param");
-						surveyContentBgColorMiddleObj.val(surveyContentBgColorMiddle);
-						surveyCBCMThemeParamObj.find(".color_box").css({
-							"background-color": surveyContentBgColorMiddle
-						});;
-						$("#dwSurveyQuContentBg").css({
-							"background-color": surveyContentBgColorMiddle
-						});
-
-						var surveyContentBgImageMiddle = "${surveyStyle.surveyContentBgImageMiddle}";
-						var surveyContentBgImageMiddleObj = $("input[name='surveyContentBgImageMiddle']");
-						var surveyCBIMThemeParamObj = surveyContentBgImageMiddleObj.parents(".theme_param");
-						surveyContentBgImageMiddleObj.val(surveyContentBgImageMiddle);
-						surveyCBIMThemeParamObj.find(".previewImage").attr("src", prevHost + surveyContentBgImageMiddle);
-						if(showSurveyCbim == 1) {
+	
+							var surveyHeadBgImage = "${surveyStyle.surveyHeadBgImage}";
+							var surveyHeadBgImageObj = $("input[name='surveyHeadBgImage']");
+							var surveyHBIThemeParamObj = surveyHeadBgImageObj.parents(".theme_param");
+							surveyHeadBgImageObj.val(surveyHeadBgImage);
+							surveyHBIThemeParamObj.find(".previewImage").attr("src", prevHost + surveyHeadBgImage);
+							if(showSurveyHbgi == 1) {
+								$("#dwSurveyHeader").css({
+									"background-image": "url(" + prevHost + surveyHeadBgImage + ")"
+								});
+								$("input[name='showSurveyHbgi']").prop("checked", true);
+							}
+	
+							var surveyHeadPaddingTop = "${surveyStyle.surveyHeadPaddingTop}";
+							var surveyHeadPaddingBottom = "${surveyStyle.surveyHeadPaddingBottom}";
+							$("#dwSurveyHeader").css({
+								"padding-top": surveyHeadPaddingTop + "px"
+							});
+							$("#dwSurveyHeader").css({
+								"padding-bottom": surveyHeadPaddingBottom + "px"
+							});
+	
+							/** 内容中间样式 **/
+							var showSurveyCbim = "${surveyStyle.showSurveyCbim}";
+							var surveyContentBgColorMiddle = "${surveyStyle.surveyContentBgColorMiddle}";
+							var surveyContentBgColorMiddleObj = $("input[name='surveyContentBgColorMiddle']");
+							var surveyCBCMThemeParamObj = surveyContentBgColorMiddleObj.parents(".theme_param");
+							surveyContentBgColorMiddleObj.val(surveyContentBgColorMiddle);
+							surveyCBCMThemeParamObj.find(".color_box").css({
+								"background-color": surveyContentBgColorMiddle
+							});;
 							$("#dwSurveyQuContentBg").css({
-								"background-image": "url(" + prevHost + surveyContentBgImageMiddle + ")"
+								"background-color": surveyContentBgColorMiddle
 							});
-							$("input[name='showSurveyCbim']").prop("checked", true);
-						}
-
-						/** 文本样式 **/
-						var questionTitleTextColor = "${surveyStyle.questionTitleTextColor}";
-						var questionTitleTextColorObj = $("input[name='questionTitleTextColor']");
-						var questionTTCThemeParamObj = questionTitleTextColorObj.parents(".theme_param");
-						questionTitleTextColorObj.val(questionTitleTextColor);
-						questionTTCThemeParamObj.find(".color_box").css({
-							"background-color": questionTitleTextColor
-						});
-						$(".quCoTitle").css({
-							"color": questionTitleTextColor
-						});
-
-						var questionOptionTextColor = "${surveyStyle.questionOptionTextColor}";
-						var questionOptionTextColorObj = $("input[name='questionOptionTextColor']");
-						var questionOTCThemeParamObj = questionOptionTextColorObj.parents(".theme_param");
-						questionOptionTextColorObj.val(questionOptionTextColor);
-						questionOTCThemeParamObj.find(".color_box").css({
-							"background-color": questionOptionTextColor
-						});
-						$(".quCoOptionEdit").css({
-							"color": questionOptionTextColor
-						});
-
-						var surveyTitleTextColor = "${surveyStyle.surveyTitleTextColor}";
-						var surveyTitleTextColorObj = $("input[name='surveyTitleTextColor']");
-						var surveyTTCThemeParamObj = surveyTitleTextColorObj.parents(".theme_param");
-						surveyTitleTextColorObj.val(surveyTitleTextColor);
-						surveyTTCThemeParamObj.find(".color_box").css({
-							"background-color": surveyTitleTextColor
-						});
-						$("#dwSurveyTitle").css({
-							"color": surveyTitleTextColor
-						});
-
-						var surveyNoteTextColor = "${surveyStyle.surveyNoteTextColor}";
-						var surveyNoteTextColorObj = $("input[name='surveyNoteTextColor']");
-						var surveyNTCThemeParamObj = surveyNoteTextColorObj.parents(".theme_param");
-						surveyNoteTextColorObj.val(surveyNoteTextColor);
-						surveyNTCThemeParamObj.find(".color_box").css({
-							"background-color": surveyNoteTextColor
-						});
-						$("#dwSurveyNoteEdit").css({
-							"color": surveyNoteTextColor
-						});
-
-						var surveyBtnBgColor = "${surveyStyle.surveyBtnBgColor}";
-						if(surveyBtnBgColor !== "") {
-							$("#dw_body_content .sbtn24,.progressbarDiv .ui-progressbar-value").css({
-								"background-color": surveyBtnBgColor
+	
+							var surveyContentBgImageMiddle = "${surveyStyle.surveyContentBgImageMiddle}";
+							var surveyContentBgImageMiddleObj = $("input[name='surveyContentBgImageMiddle']");
+							var surveyCBIMThemeParamObj = surveyContentBgImageMiddleObj.parents(".theme_param");
+							surveyContentBgImageMiddleObj.val(surveyContentBgImageMiddle);
+							surveyCBIMThemeParamObj.find(".previewImage").attr("src", prevHost + surveyContentBgImageMiddle);
+							if(showSurveyCbim == 1) {
+								$("#dwSurveyQuContentBg").css({
+									"background-image": "url(" + prevHost + surveyContentBgImageMiddle + ")"
+								});
+								$("input[name='showSurveyCbim']").prop("checked", true);
+							}
+	
+							/** 文本样式 **/
+							var questionTitleTextColor = "${surveyStyle.questionTitleTextColor}";
+							var questionTitleTextColorObj = $("input[name='questionTitleTextColor']");
+							var questionTTCThemeParamObj = questionTitleTextColorObj.parents(".theme_param");
+							questionTitleTextColorObj.val(questionTitleTextColor);
+							questionTTCThemeParamObj.find(".color_box").css({
+								"background-color": questionTitleTextColor
 							});
-							$(".progressbarDiv").css({
-								"border-color": surveyBtnBgColor
+							$(".quCoTitle").css({
+								"color": questionTitleTextColor
 							});
-							$(".progress-label ").css({
-								"color": surveyBtnBgColor
+	
+							var questionOptionTextColor = "${surveyStyle.questionOptionTextColor}";
+							var questionOptionTextColorObj = $("input[name='questionOptionTextColor']");
+							var questionOTCThemeParamObj = questionOptionTextColorObj.parents(".theme_param");
+							questionOptionTextColorObj.val(questionOptionTextColor);
+							questionOTCThemeParamObj.find(".color_box").css({
+								"background-color": questionOptionTextColor
 							});
-							var surveyBtnBgColorObj = $("input[name='surveyBtnBgColor']");
-							surveyBtnBgColorObj.val(surveyBtnBgColor);
-							var btnBcThemeParamObj = surveyBtnBgColorObj.parents(".theme_param");
-							btnBcThemeParamObj.find(".color_box").css({
-								"background-color": surveyBtnBgColor
+							$(".quCoOptionEdit").css({
+								"color": questionOptionTextColor
 							});
+	
+							var surveyTitleTextColor = "${surveyStyle.surveyTitleTextColor}";
+							var surveyTitleTextColorObj = $("input[name='surveyTitleTextColor']");
+							var surveyTTCThemeParamObj = surveyTitleTextColorObj.parents(".theme_param");
+							surveyTitleTextColorObj.val(surveyTitleTextColor);
+							surveyTTCThemeParamObj.find(".color_box").css({
+								"background-color": surveyTitleTextColor
+							});
+							$("#dwSurveyTitle").css({
+								"color": surveyTitleTextColor
+							});
+	
+							var surveyNoteTextColor = "${surveyStyle.surveyNoteTextColor}";
+							var surveyNoteTextColorObj = $("input[name='surveyNoteTextColor']");
+							var surveyNTCThemeParamObj = surveyNoteTextColorObj.parents(".theme_param");
+							surveyNoteTextColorObj.val(surveyNoteTextColor);
+							surveyNTCThemeParamObj.find(".color_box").css({
+								"background-color": surveyNoteTextColor
+							});
+							$("#dwSurveyNoteEdit").css({
+								"color": surveyNoteTextColor
+							});
+	
+							var surveyBtnBgColor = "${surveyStyle.surveyBtnBgColor}";
+							if(surveyBtnBgColor !== "") {
+								$("#dw_body_content .sbtn24,.progressbarDiv .ui-progressbar-value").css({
+									"background-color": surveyBtnBgColor
+								});
+								$(".progressbarDiv").css({
+									"border-color": surveyBtnBgColor
+								});
+								$(".progress-label ").css({
+									"color": surveyBtnBgColor
+								});
+								var surveyBtnBgColorObj = $("input[name='surveyBtnBgColor']");
+								surveyBtnBgColorObj.val(surveyBtnBgColor);
+								var btnBcThemeParamObj = surveyBtnBgColorObj.parents(".theme_param");
+								btnBcThemeParamObj.find(".color_box").css({
+									"background-color": surveyBtnBgColor
+								});
+							}
+	
+							//显示序号及进度条
+							var showTiNum = "${surveyStyle.showTiNum}";
+							var showProgressbar = "${surveyStyle.showProgressbar}";
+							if(showTiNum == 0) {
+								$(".quCoNum").hide();
+							}
+							if(showProgressbar == 0) {
+								$("#resultProgressRoot").hide();
+							}
+	
+							//表头文本显示
+							var showSurTitle = "${surveyStyle.showSurTitle}";
+							var showSurNote = "${surveyStyle.showSurNote}";
+							if(showSurTitle == 0) {
+								$("#dwSurveyTitle").hide();
+							}
+							if(showSurNote == 0) {
+								$("#dwSurveyNote").hide();
+							}
 						}
+						
+						bindScoreNumTdHover();
+						//排序题
+						bindQuOrderBySorts();
+						
+						/******************************处理题目逻辑设置 **************************************/
+						//初始化 处理默认逻辑跳转为显示，则先隐藏元素
+						var quLogics = $("#dwSurveyQuContent .quLogicItem");
+						$.each(quLogics, function() {
+							var loginItem = $(this);
+							var cgQuItemId = loginItem.find(".cgQuItemId").val();
+							var skQuId = loginItem.find(".skQuId").val();
+							var logicId = loginItem.find(".logicId").val();
+							var logicType = loginItem.find(".logicType").val();
+							if(logicType === "2") {
+								//逻辑类型为“显示”2  则初始化为隐藏
+								var hidQuItemBody = $(".quId[value='" + skQuId + "']").parents(".li_surveyQuItemBody");
+								hidQuItemBody.hide();
+								hidQuItemBody.addClass("hidFor" + logicId);
+								hidQuItemBody.find(".answerTag").attr("disabled", true);
+							}
+						});
+						
+						//填空题
+						$(".fillblankInput,.dwMFillblankInput,.dwChenMFillblankInput").blur(function() {
+							var thVal = $(this).val();
+							runlogic($(this));
+							answerProgressbar($(this));
+							validateCheck($(this).parents(".li_surveyQuItemBody"), false);
+						});
 
-						//显示序号及进度条
-						var showTiNum = "${surveyStyle.showTiNum}";
-						var showProgressbar = "${surveyStyle.showProgressbar}";
-						if(showTiNum == 0) {
-							$(".quCoNum").hide();
-						}
-						if(showProgressbar == 0) {
-							$("#resultProgressRoot").hide();
-						}
+						$(".quChenScoreSelect").change(function() {
+							answerProgressbar($(this));
+							validateCheck($(this).parents(".li_surveyQuItemBody"), false);
+						});
+						
+						resetQuNum();
+						
+						$("#mobileTdId").click(function() {
+							$(this).next().slideToggle();
+							return false;
+						});
 
-						//表头文本显示
-						var showSurTitle = "${surveyStyle.showSurTitle}";
-						var showSurNote = "${surveyStyle.showSurNote}";
-						if(showSurTitle == 0) {
-							$("#dwSurveyTitle").hide();
-						}
-						if(showSurNote == 0) {
-							$("#dwSurveyNote").hide();
-						}
-					}
+						var bfbFloat = 0;
+						$("#resultProgress").progressbar({
+							value: bfbFloat,
+							orientation: "vertical"
+						});
+				    }
 
-					$(".submitSurvey").click(function() {
+					$("body").on("click", ".submitSurvey", function(e) {
 						if(validateForms()) {
-							$("#surveyForm").submit();
+							var params = {
+								jsonData: JSON.stringify($("#surveyForm").serializeJson()), 
+								ip: returnCitySN["cip"],
+								bgAnDate: bgAnDate
+							};
+							params = $.extend({}, params, $("#surveyForm").serializeJson());
+							AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory029", params: params, type:'json', callback:function(json){
+				 	   			if(json.returnCode == 0){
+					 	   			$("#wrap").html('<span class="messageSpan">' + '答题完成，感谢您的参与。' + '</span>');
+				 	   			}else{
+				 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				 	   			}
+				 	   		}});
 						}
 						return false;
 					});
 
 					//评分题
-					$(".scoreNumTable tr td").click(function() {
+					$("body").on("click", ".scoreNumTable tr td", function(e) {
 						var quScoreOptionTr = $(this).parents(".quScoreOptionTr");
 						var tdText = $(this).text();
 						quScoreOptionTr.find(".scoreNumTable tr td").css({
@@ -451,16 +557,12 @@
 						$(this).css({
 							"background": ""
 						});
-
 						quScoreOptionTr.find(".scoreNumInput").val(tdText);
 						quScoreOptionTr.find(".scoreNumText").html(tdText + "&nbsp;分");
-
 						runlogic($(this));
 						answerProgressbar($(this));
 						validateCheck($(this).parents(".li_surveyQuItemBody"), false);
 					});
-
-					bindScoreNumTdHover();
 
 					function bindScoreNumTdHover() {
 						$(".scoreNumTable tr td").hover(function() {
@@ -489,9 +591,6 @@
 							}
 						});
 					}
-
-					//排序题
-					bindQuOrderBySorts();
 
 					function bindQuOrderBySorts() {
 						var quOrderByCoItems = $(".quOrderByCoItem");
@@ -726,26 +825,8 @@
 						return validateStatus;
 					}
 
-					/******************************处理题目逻辑设置 **************************************/
-					//初始化 处理默认逻辑跳转为显示，则先隐藏元素
-					var quLogics = $("#dwSurveyQuContent .quLogicItem");
-					$.each(quLogics, function() {
-						var loginItem = $(this);
-						var cgQuItemId = loginItem.find(".cgQuItemId").val();
-						var skQuId = loginItem.find(".skQuId").val();
-						var logicId = loginItem.find(".logicId").val();
-						var logicType = loginItem.find(".logicType").val();
-						if(logicType === "2") {
-							//逻辑类型为“显示”2  则初始化为隐藏
-							var hidQuItemBody = $(".quId[value='" + skQuId + "']").parents(".li_surveyQuItemBody");
-							hidQuItemBody.hide();
-							hidQuItemBody.addClass("hidFor" + logicId);
-							hidQuItemBody.find(".answerTag").attr("disabled", true);
-						}
-					});
-
 					/** 单选与多选条件触发 自定义单选多选效果 操作结束后得调用逻辑判断 **/
-					$(".dwQuOptionItemContent").click(function() {
+					$("body").on("click", ".dwQuOptionItemContent", function(e) {
 						var thObj = $(this);
 						var quItemBody = thObj.parents(".li_surveyQuItemBody");
 						var quType = quItemBody.find(".quType").val();
@@ -790,19 +871,6 @@
 						}
 						answerProgressbar(thObj);
 						validateCheck(quItemBody, false);
-					});
-
-					//填空题
-					$(".fillblankInput,.dwMFillblankInput,.dwChenMFillblankInput").blur(function() {
-						var thVal = $(this).val();
-						runlogic($(this));
-						answerProgressbar($(this));
-						validateCheck($(this).parents(".li_surveyQuItemBody"), false);
-					});
-
-					$(".quChenScoreSelect").change(function() {
-						answerProgressbar($(this));
-						validateCheck($(this).parents(".li_surveyQuItemBody"), false);
 					});
 
 					//只要触发事件
@@ -1016,8 +1084,6 @@
 						}
 					}
 
-					resetQuNum();
-
 					function resetQuNum() {
 						var quCoNums = $(".quCoNum");
 						$.each(quCoNums, function(i, item) {
@@ -1106,48 +1172,10 @@
 							answerQuSize = answerTag1.size();
 						}
 						var newValue = parseInt(answerQuSize / totalQuSize * 100);
-						//console.log(answerQuSize + "/" + totalQuSize + "=" + newValue);
 						$("#resultProgressRoot .progress-label").text("完成度：" + newValue + "%");
 						$("#resultProgress").progressbar("option", "value", newValue);
 					}
-					$("#mobileTdId").click(function() {
-						$(this).next().slideToggle();
-						return false;
-					});
-
-					var bfbFloat = 0;
-					$("#resultProgress").progressbar({
-						value: bfbFloat,
-						orientation: "vertical"
-					});
-
-					function refreshAutoCode(codeImgId) {
-						var ctx = $("#ctx").val();
-						$("#" + codeImgId).attr("src", ctx + "/jcaptcha.action");
-					}
-
-					//判则判断 
-//					var url = "${ctx}/response!ajaxCheckSurvey.action";
-//					var data = "surveyId=${survey.id}";
-//					$.ajax({
-//						url: url,
-//						data: data,
-//						type: "post",
-//						success: function(msg) {
-//							var json = eval("(" + msg + ")");
-//							if(json.isCheckCode === "3") {
-//								$("#jcaptchaImgBody").show();
-//							}
-//
-//							if(json.surveyStatus != "0") {
-//								$("#fixedMsg").show();
-//								$("#fixedMsg").html("您已经回答过此问卷！");
-//								$("#submitSurvey").remove();
-//								$("form").attr("action", "#");
-//							}
-//						}
-//					});
-
+					
 				});
 			});
 		</script>

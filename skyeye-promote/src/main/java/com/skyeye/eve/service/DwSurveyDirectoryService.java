@@ -59,4 +59,8 @@ public interface DwSurveyDirectoryService {
 
 	public void insertSurveyMationCopyById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void queryAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+	public void insertAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

@@ -194,4 +194,48 @@ public interface DwSurveyDirectoryDao {
 
 	public int addQuestionOrderByMationCopyList(List<Map<String, Object>> questionOrderBys) throws Exception;
 
+	public int editSurveyAnswerNumById(Map<String, Object> surveyMation) throws Exception;
+
+	public int saveAnYesnoMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveAnRadioMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveAnMultiFillMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveScoreMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveChenCheckboxMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveCompAnRadioMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveCompChehRadioMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveChenScoreMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveAnCheckboxMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveAnFillMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveAnAnswerMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveCompAnCheckboxMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveEnumMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveQuOrderMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveChenRadioMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int saveChenFbkMaps(List<Map<String, Object>> beans) throws Exception;
+
+	public int insertSurveyAnswer(Map<String, Object> surveyAnswer) throws Exception;
+
+	public Map<String, Object> querySurveyAnswerMationByIp(Map<String, Object> map) throws Exception;
+
+	public List<Map<String, Object>> querySurveyAnswerMationOverFiveMinByIp(Map<String, Object> map) throws Exception;
+
+	public int editSurveyStateToEndNumById(Map<String, Object> surveyMation) throws Exception;
+
+	public int editSurveyStateToEndNumZdById(Map<String, Object> map) throws Exception;
+
 }

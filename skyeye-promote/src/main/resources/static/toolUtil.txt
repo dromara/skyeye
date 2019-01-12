@@ -34,5 +34,5 @@ listToTree();																																将JSONArray数组转为树状结�
 javaBean2Map();																																实体类转map
 randomStr();																																获取指定的随机值
 removeTagFromText();																														过滤html内容
-
+getDistanceDays();																															两个时间之间相差距离多少分
 

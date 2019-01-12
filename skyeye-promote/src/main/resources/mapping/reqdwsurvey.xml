@@ -187,7 +187,7 @@
 	<url id="dwsurveydirectory023" path="/post/DwSurveyDirectoryController/editSurveyStateToReleaseById" val="问卷发布" allUse="1">
 		<property id="rowId" name="id" ref="required" var="问卷id"/>
 	</url>
-	<url id="dwsurveydirectory024" path="/post/DwSurveyDirectoryController/queryDwSurveyDirectoryMationByIdToHTML" val="获取调查问卷题目信息用来生成html页面" allUse="1">
+	<url id="dwsurveydirectory024" path="/post/DwSurveyDirectoryController/queryDwSurveyDirectoryMationByIdToHTML" val="获取调查问卷题目信息用来生成html页面" allUse="0">
 		<property id="rowId" name="id" ref="required" var="问卷id"/>
 	</url>
 	<url id="dwsurveydirectory025" path="/post/DwSurveyDirectoryController/deleteSurveyMationById" val="删除问卷" allUse="1">
@@ -199,6 +199,15 @@
 	<url id="dwsurveydirectory027" path="/post/DwSurveyDirectoryController/insertSurveyMationCopyById" val="复制问卷" allUse="1">
 		<property id="rowId" name="surveyCopyId" ref="required" var="问卷id"/>
 		<property id="surveyName" name="surveyName" ref="required" var="问卷名称"/>
+	</url>
+	<url id="dwsurveydirectory028" path="/post/DwSurveyDirectoryController/queryAnswerSurveyMationByIp" val="判断该ip的用户是否回答过此问卷" allUse="0">
+		<property id="surveyId" name="id" ref="required" var="问卷id"/>
+		<property id="ip" name="ip" ref="required,ip" var="ip"/>
+	</url>
+	<url id="dwsurveydirectory029" path="/post/DwSurveyDirectoryController/insertAnswerSurveyMationByIp" val="用户回答问卷" allUse="0">
+		<property id="jsonData" name="jsonData" ref="required" var="问卷回答json串"/>
+		<property id="ip" name="ip" ref="required,ip" var="ip"/>
+		<property id="bgAnDate" name="bgAnDate" ref="required" var="答卷开始时间"/>
 	</url>
 	<!-- 问卷调查结束 -->
 	

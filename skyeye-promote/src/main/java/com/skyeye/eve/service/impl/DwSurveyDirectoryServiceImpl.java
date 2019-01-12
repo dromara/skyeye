@@ -5,11 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
@@ -17,9 +20,12 @@ import com.skyeye.common.constans.CheckType;
 import com.skyeye.common.constans.QuType;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import com.skyeye.common.util.IPSeeker;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.DwSurveyDirectoryDao;
 import com.skyeye.eve.service.DwSurveyDirectoryService;
+import com.skyeye.quartz.config.QuartzService;
+import com.skyeye.quartz.entity.SysQuartz;
 
 
 @Service
@@ -27,6 +33,9 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	
 	@Autowired
 	private DwSurveyDirectoryDao dwSurveyDirectoryDao;
+	
+	@Autowired
+	private QuartzService quartzService;
 
 	/**
 	 * 
@@ -1174,8 +1183,23 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
 		if("0".equals(surveyMation.get("surveyState").toString())){//设计状态可以发布问卷
-			map.put("startTime", ToolUtil.getTimeAndToString());
-			dwSurveyDirectoryDao.editSurveyStateToReleaseById(map);
+			List<Map<String, Object>> questions = dwSurveyDirectoryDao.queryQuestionListByBelongId(map);//获取问卷中的题
+			if(!questions.isEmpty()){
+				map.put("startTime", ToolUtil.getTimeAndToString());
+				map.put("questionNum", questions.size());
+				dwSurveyDirectoryDao.editSurveyStateToReleaseById(map);
+				if("1".equals(surveyMation.get("ynEndTime").toString())){//是否依据时间结束
+					SysQuartz sysQuartz = new SysQuartz();
+					sysQuartz.setId(ToolUtil.getSurFaceId());
+			        sysQuartz.setName(surveyMation.get("id").toString());
+			        sysQuartz.setRemark("问卷调查-【" + surveyMation.get("surveyName").toString() + "】");
+			        sysQuartz.setGroups("endSurveyMation");
+			        sysQuartz.setCron(ToolUtil.getCrons1(surveyMation.get("endTime").toString()));
+			        quartzService.addJob(sysQuartz);
+				}
+			}else{
+				outputObject.setreturnMessage("该问卷没有调查项，无法发布问卷。");
+			}
 		}else{
 			outputObject.setreturnMessage("该问卷已发布，请刷新数据。");
 		}
@@ -1344,13 +1368,14 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 				}
 				count += Integer.parseInt(row.get("anCount").toString());
 			}
-			for(Map<String, Object> row : rows){
-				row.put("anAllCount", count);
-				List<Map<String, Object>> columns = (List<Map<String, Object>>) row.get("questionChenColumn");
-				for(Map<String, Object> column : columns){
-					column.put("anChenRadios", beans);
+			for(Map<String, Object> bean : beans){
+				bean.put("anAllCount", count);
+				for(Map<String, Object> row : rows){
+					if(row.get("id").toString().equals(bean.get("quRowId").toString()))
+						bean.put("anCount", row.get("anCount").toString());
 				}
 			}
+			question.put("anChenRadios", beans);
 		} else if (quType.equals(QuType.CHENFBK.getActionName())){//矩阵填空题
 			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenFbkGroupStat(question);
 			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
@@ -1364,13 +1389,14 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 				}
 				count += Integer.parseInt(row.get("anCount").toString());
 			}
-			for(Map<String, Object> row : rows){
-				row.put("anAllCount", count);
-				List<Map<String, Object>> columns = (List<Map<String, Object>>) row.get("questionChenColumn");
-				for(Map<String, Object> column : columns){
-					column.put("anChenFbks", beans);
+			for(Map<String, Object> bean : beans){
+				bean.put("anAllCount", count);
+				for(Map<String, Object> row : rows){
+					if(row.get("id").toString().equals(bean.get("quRowId").toString()))
+						bean.put("anCount", row.get("anCount").toString());
 				}
 			}
+			question.put("anChenFbks", beans);
 		} else if(quType.equals(QuType.CHENCHECKBOX.getActionName())){//矩阵多选题
 			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenCheckBoxGroupStat(question);
 			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
@@ -1384,22 +1410,17 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 				}
 				count += Integer.parseInt(row.get("anCount").toString());
 			}
-			for(Map<String, Object> row : rows){
-				row.put("anAllCount", count);
-				List<Map<String, Object>> columns = (List<Map<String, Object>>) row.get("questionChenColumn");
-				for(Map<String, Object> column : columns){
-					column.put("anChenCheckboxs", beans);
+			for(Map<String, Object> bean : beans){
+				bean.put("anAllCount", count);
+				for(Map<String, Object> row : rows){
+					if(row.get("id").toString().equals(bean.get("quRowId").toString()))
+						bean.put("anCount", row.get("anCount").toString());
 				}
 			}
+			question.put("anChenCheckboxs", beans);
 		} else if(quType.equals(QuType.CHENSCORE.getActionName())){//矩阵评分题
 			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryChenScoreGroupStat(question);
-			List<Map<String, Object>> rows = (List<Map<String, Object>>) question.get("questionChenRow");
-			for(Map<String, Object> row : rows){
-				List<Map<String, Object>> columns = (List<Map<String, Object>>) row.get("questionChenColumn");
-				for(Map<String, Object> column : columns){
-					column.put("anChenScores", beans);
-				}
-			}
+			question.put("anChenScores", beans);
 		}else if (quType.equals(QuType.SCORE.getActionName())) {//评分题
 			List<Map<String, Object>> beans = dwSurveyDirectoryDao.queryScoreGroupStat(question);
 			List<Map<String, Object>> scores = (List<Map<String, Object>>) question.get("quScores");
@@ -1550,6 +1571,893 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 			if(!questionOrderBys.isEmpty())
 				dwSurveyDirectoryDao.addQuestionOrderByMationCopyList(questionOrderBys);
 		}
+	}
+
+	/**
+	 * 
+	     * @Title: queryAnswerSurveyMationByIp
+	     * @Description: 判断该ip的用户是否回答过此问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void queryAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		if("4".equals(surveyMation.get("effective").toString()) || "1".equals(surveyMation.get("effectiveIp").toString())){//每台电脑或手机只能答一次
+			Map<String, Object> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationByIp(map);
+			if(answerMation != null && !answerMation.isEmpty()){
+				outputObject.setreturnMessage("您已参与过该问卷，请休息一会儿。");
+				return;
+			}
+		}else{//不做ip限制，则默认每五分钟才能答一次
+			List<Map<String, Object>> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationOverFiveMinByIp(map);
+			if(answerMation != null && !answerMation.isEmpty()){
+				outputObject.setreturnMessage("您已参与过该问卷，请休息一会儿。");
+				return;
+			}
+		}
+		
+		if("1".equals(surveyMation.get("ynEndNum").toString())){//是否依据收到的份数结束
+			if(Integer.parseInt(surveyMation.get("answerNum").toString()) + 1 > Integer.parseInt(surveyMation.get("endNum").toString())){
+				outputObject.setreturnMessage("问卷已结束。");
+				return;
+			}
+		}
+		
+		if("1".equals(surveyMation.get("ynEndTime").toString())){//是否依据时间结束
+			if(ToolUtil.compare(surveyMation.get("endTime").toString(), ToolUtil.getTimeAndToString())){//当前时间和设置的结束时间作比较
+				outputObject.setreturnMessage("问卷已结束。");
+				return;
+			}
+		}
+		outputObject.setBean(surveyMation);
+	}
+
+	/**
+	 * 
+	     * @Title: insertAnswerSurveyMationByIp
+	     * @Description: 用户回答问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@SuppressWarnings({ "static-access", "unchecked" })
+	@Override
+	public void insertAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> data = JSONObject.fromObject(map.get("jsonData").toString());
+		map.put("id", data.get("surveyId"));
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		if("4".equals(surveyMation.get("effective").toString()) || "1".equals(surveyMation.get("effectiveIp").toString())){//每台电脑或手机只能答一次
+			Map<String, Object> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationByIp(map);
+			if(answerMation != null && !answerMation.isEmpty()){
+				outputObject.setreturnMessage("您已参与过该问卷，请休息一会儿。");
+				return;
+			}
+		}else{//不做ip限制，则默认每五分钟才能答一次
+			List<Map<String, Object>> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationOverFiveMinByIp(map);
+			if(answerMation != null && !answerMation.isEmpty()){
+				outputObject.setreturnMessage("您已参与过该问卷，请休息一会儿。");
+				return;
+			}
+		}
+		
+		if("1".equals(surveyMation.get("ynEndNum").toString())){//是否依据收到的份数结束
+			if(Integer.parseInt(surveyMation.get("answerNum").toString()) + 1 > Integer.parseInt(surveyMation.get("endNum").toString())){
+				outputObject.setreturnMessage("问卷已结束。");
+				return;
+			}
+		}
+		
+		if("1".equals(surveyMation.get("ynEndTime").toString())){//是否依据时间结束
+			if(ToolUtil.compare(surveyMation.get("endTime").toString(), ToolUtil.getTimeAndToString())){//当前时间和设置的结束时间作比较
+				outputObject.setreturnMessage("问卷已结束。");
+				return;
+			}
+		}
+		String ipAddr = map.get("ip").toString();//问卷调查ip
+		HttpServletRequest request = inputObject.getRequest();
+		Map<String, Map<String, Object>> quMaps = buildSaveSurveyMap(request, data);
+		//问卷答卷信息
+		Map<String, Object> surveyAnswer = new HashMap<>();
+		String addr = IPSeeker.getCountry(ipAddr);
+		String city = getCurCityByCountry(addr);
+		surveyAnswer.put("ipAddr", ipAddr);
+		surveyAnswer.put("addr", addr);
+		surveyAnswer.put("city", city);
+		surveyAnswer.put("id", data.get("surveyId"));
+		surveyAnswer.put("dataSource", 0);
+		surveyAnswer.put("bgAnDate", map.get("bgAnDate"));
+		saveAnswer(surveyAnswer, quMaps);
+	}
+	
+	/**
+	 * 
+	     * @Title: getCurCityByCountry
+	     * @Description: 获取城市
+	     * @param @param country
+	     * @param @return    参数
+	     * @return String    返回类型
+	     * @throws
+	 */
+	public String getCurCityByCountry(String country) {
+		String city = country;
+		city = city.replaceAll("\\S+省|市.*|[内蒙古|广西]", "");
+		city = city.replaceAll("清华大学.*", "北京");
+		return city;
+	}
+	
+	/**
+	 * 
+	     * @Title: buildSaveSurveyMap
+	     * @Description: 用户回答问卷时获取key-value值
+	     * @param @param request
+	     * @param @return
+	     * @param @throws Exception    参数
+	     * @return Map<String,Map<String,Object>>    返回类型
+	     * @throws
+	 */
+	public Map<String, Map<String, Object>> buildSaveSurveyMap(HttpServletRequest request, Map<String, Object> params) throws Exception {
+		Map<String, Map<String, Object>> quMaps = new HashMap<String, Map<String, Object>>();
+		Map<String, Object> yesnoMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.YESNO.getIndex() + "_");// 是非
+		quMaps.put("yesnoMaps", yesnoMaps);
+		Map<String, Object> radioMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.RADIO.getIndex() + "_");// 单选
+		Map<String, Object> checkboxMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.CHECKBOX.getIndex() + "_");// 多选
+		Map<String, Object> fillblankMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.FILLBLANK.getIndex() + "_");// 填空
+		quMaps.put("fillblankMaps", fillblankMaps);
+		Map<String, Object> dfillblankMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.MULTIFILLBLANK.getIndex() + "_");// 多项填空
+		for (String key : dfillblankMaps.keySet()) {
+			String dfillValue = dfillblankMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, dfillValue);
+			dfillblankMaps.put(key, map);
+		}
+		quMaps.put("multifillblankMaps", dfillblankMaps);
+		Map<String, Object> answerMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.ANSWER.getIndex() + "_");// 多行填空
+		quMaps.put("answerMaps", answerMaps);
+		Map<String, Object> compRadioMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.COMPRADIO.getIndex() + "_");// 复合单选
+		for (String key : compRadioMaps.keySet()) {
+			String enId = key;
+			String quItemId = compRadioMaps.get(key).toString();
+			String otherText = params.get("text_qu_" + QuType.COMPRADIO.getIndex() + "_" + enId + "_" + quItemId).toString();
+			Map<String, Object> anRadio = new HashMap<>();
+			anRadio.put("quId", enId);
+			anRadio.put("quItemId", quItemId);
+			anRadio.put("otherText", otherText);
+			compRadioMaps.put(key, anRadio);
+		}
+		quMaps.put("compRadioMaps", compRadioMaps);
+		Map<String, Object> compCheckboxMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.COMPCHECKBOX.getIndex() + "_");// 复合多选
+		for (String key : compCheckboxMaps.keySet()) {
+			String dfillValue = compCheckboxMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, "tag_" + dfillValue);
+			for (String key2 : map.keySet()) {
+				String quItemId = map.get(key2).toString();
+				String otherText = params.get("text_" + dfillValue + quItemId).toString();
+				Map<String, Object> anCheckbox = new HashMap<>();
+				anCheckbox.put("quItemId", quItemId);
+				anCheckbox.put("otherText", otherText);
+				map.put(key2, anCheckbox);
+			}
+			compCheckboxMaps.put(key, map);
+		}
+		quMaps.put("compCheckboxMaps", compCheckboxMaps);
+		Map<String, Object> enumMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.ENUMQU.getIndex() + "_");// 枚举
+		quMaps.put("enumMaps", enumMaps);
+		Map<String, Object> scoreMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.SCORE.getIndex() + "_");// 分数
+		for (String key : scoreMaps.keySet()) {
+			String tag = scoreMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, tag);
+			scoreMaps.put(key, map);
+		}
+		quMaps.put("scoreMaps", scoreMaps);
+		Map<String, Object> quOrderMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.ORDERQU.getIndex() + "_");// 排序
+		for (String key : quOrderMaps.keySet()) {
+			String tag = quOrderMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, tag);
+			quOrderMaps.put(key, map);
+		}
+		quMaps.put("quOrderMaps", quOrderMaps);
+		Map<String, Object> chenRadioMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.CHENRADIO.getIndex() + "_");
+		for (String key : chenRadioMaps.keySet()) {
+			String tag = chenRadioMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, tag);
+			chenRadioMaps.put(key, map);
+		}
+		quMaps.put("chenRadioMaps", chenRadioMaps);
+		Map<String, Object> chenCheckboxMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.CHENCHECKBOX.getIndex() + "_");
+		for (String key : chenCheckboxMaps.keySet()) {
+			String tag = chenCheckboxMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, tag);
+			for (String keyRow : map.keySet()) {
+				String tagRow = map.get(keyRow).toString();
+				Map<String, Object> mapRow = WebUtils.getParametersStartingWith(request, tagRow);
+				map.put(keyRow, mapRow);
+			}
+			chenCheckboxMaps.put(key, map);
+		}
+		quMaps.put("chenCheckboxMaps", chenCheckboxMaps);
+		Map<String, Object> chenScoreMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.CHENSCORE.getIndex() + "_");
+		for (String key : chenScoreMaps.keySet()) {
+			String tag = chenScoreMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, tag);
+			for (String keyRow : map.keySet()) {
+				String tagRow = map.get(keyRow).toString();
+				Map<String, Object> mapRow = WebUtils.getParametersStartingWith(request, tagRow);
+				map.put(keyRow, mapRow);
+			}
+			chenScoreMaps.put(key, map);
+		}
+		quMaps.put("chenScoreMaps", chenScoreMaps);
+		Map<String, Object> chenFbkMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.CHENFBK.getIndex() + "_");
+		for (String key : chenFbkMaps.keySet()) {
+			String tag = chenFbkMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, tag);
+			for (String keyRow : map.keySet()) {
+				String tagRow = map.get(keyRow).toString();
+				Map<String, Object> mapRow = WebUtils.getParametersStartingWith(request, tagRow);
+				map.put(keyRow, mapRow);
+			}
+			chenFbkMaps.put(key, map);
+		}
+		quMaps.put("chenFbkMaps", chenFbkMaps);
+		for (String key : radioMaps.keySet()) {
+			String enId = key;
+			String quItemId = radioMaps.get(key).toString();
+			String otherText = params.get("text_qu_" + QuType.RADIO.getIndex() + "_" + enId + "_" + quItemId).toString();
+			Map<String, Object> anRadio = new HashMap<>();
+			anRadio.put("quId", enId);
+			anRadio.put("quItemId", quItemId);
+			anRadio.put("otherText", otherText);
+			radioMaps.put(key, anRadio);
+		}
+		quMaps.put("compRadioMaps", radioMaps);
+		for (String key : checkboxMaps.keySet()) {
+			String dfillValue = checkboxMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, dfillValue);
+			for (String key2 : map.keySet()) {
+				String quItemId = map.get(key2).toString();
+				String otherText = params.get("text_" + dfillValue + quItemId).toString();
+				Map<String, Object> anCheckbox = new HashMap<>();
+				anCheckbox.put("quItemId", quItemId);
+				anCheckbox.put("otherText", otherText);
+				map.put(key2, anCheckbox);
+			}
+			checkboxMaps.put(key, map);
+		}
+		quMaps.put("compCheckboxMaps", checkboxMaps);
+		Map<String, Object> chenCompChenRadioMaps = WebUtils.getParametersStartingWith(request, "qu_" + QuType.COMPCHENRADIO.getIndex() + "_");
+		for (String key : chenCompChenRadioMaps.keySet()) {
+			String tag = chenCompChenRadioMaps.get(key).toString();
+			Map<String, Object> map = WebUtils.getParametersStartingWith(request, tag);
+			for (String keyRow : map.keySet()) {
+				String tagRow = map.get(keyRow).toString();
+				Map<String, Object> mapRow = WebUtils.getParametersStartingWith(request, tagRow);
+				map.put(keyRow, mapRow);
+			}
+			chenCompChenRadioMaps.put(key, map);
+		}
+		quMaps.put("compChenRadioMaps", chenCompChenRadioMaps);
+		return quMaps;
+	}
+	
+	/**
+	 * @throws Exception 
+	 * 
+	     * @Title: saveAnswer
+	     * @Description: 保存答案
+	     * @param @param surveyAnswer
+	     * @param @param quMaps    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	public void saveAnswer(Map<String, Object> surveyAnswer, Map<String, Map<String, Object>> quMaps) throws Exception{
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(surveyAnswer);//获取问卷信息
+		surveyMation.put("answerNum", Integer.parseInt(surveyMation.get("answerNum").toString()) + 1);
+		dwSurveyDirectoryDao.editSurveyAnswerNumById(surveyMation);//修改回答数量
+		if("1".equals(surveyMation.get("ynEndNum").toString())){//是否依据收到的份数结束
+			if(Integer.parseInt(surveyMation.get("answerNum").toString()) + 1 >= Integer.parseInt(surveyMation.get("endNum").toString())){
+				surveyMation.put("realEndTime", ToolUtil.getTimeAndToString());
+				dwSurveyDirectoryDao.editSurveyStateToEndNumById(surveyMation);//结束调查
+			}
+		}
+		//问卷答案
+		surveyAnswer.put("bgAnDate", surveyAnswer.get("bgAnDate"));
+		surveyAnswer.put("endAnDate", ToolUtil.getTimeAndToString());
+		surveyAnswer.put("totalTime", ToolUtil.getDistanceDays(surveyAnswer.get("bgAnDate").toString(), surveyAnswer.get("endAnDate").toString()));//分钟
+		surveyAnswer.put("answerId", ToolUtil.getSurFaceId());
+		
+		int anCount = 0;//回答的题目数，包含多个答案的数量
+		// 保存答案
+		// 是非题
+		Map<String, Object> yesnoMaps = quMaps.get("yesnoMaps");
+		anCount += saveAnYesnoMaps(surveyAnswer, yesnoMaps);
+		// 单选题
+		Map<String, Object> radioMaps = quMaps.get("radioMaps");
+		anCount += saveAnRadioMaps(surveyAnswer, radioMaps);
+		// 多选题
+		Map<String, Object> checkboxMaps = quMaps.get("checkboxMaps");
+		anCount += saveAnCheckboxMaps(surveyAnswer, checkboxMaps);
+		// 填空题
+		Map<String, Object> fillblankMaps = quMaps.get("fillblankMaps");
+		anCount += saveAnFillMaps(surveyAnswer, fillblankMaps);
+		// 多项填空题
+		Map<String, Object> multifillblankMaps = quMaps.get("multifillblankMaps");
+		anCount += saveAnMultiFillMaps(surveyAnswer, multifillblankMaps);
+		// 问答题
+		Map<String, Object> answerMaps = quMaps.get("answerMaps");
+		anCount += saveAnAnswerMaps(surveyAnswer, answerMaps);
+		// 复合单选题
+		Map<String, Object> compRadioMaps = quMaps.get("compRadioMaps");
+		anCount += saveCompAnRadioMaps(surveyAnswer, compRadioMaps);
+		// 复合多选题
+		Map<String, Object> compCheckboxMaps = quMaps.get("compCheckboxMaps");
+		anCount += saveCompAnCheckboxMaps(surveyAnswer, compCheckboxMaps);
+		// 枚举题
+		Map<String, Object> enumMaps = quMaps.get("enumMaps");
+		anCount += saveEnumMaps(surveyAnswer, enumMaps);
+		// 评分题
+		Map<String, Object> scoreMaps = quMaps.get("scoreMaps");
+		anCount += saveScoreMaps(surveyAnswer, scoreMaps);
+		// 排序题 quOrderMaps
+		Map<String, Object> quOrderMaps = quMaps.get("quOrderMaps");
+		anCount += saveQuOrderMaps(surveyAnswer, quOrderMaps);
+		// 矩阵单选题
+		Map<String, Object> chehRadioMaps = quMaps.get("chenRadioMaps");
+		anCount += saveChenRadioMaps(surveyAnswer, chehRadioMaps);
+		// 矩阵多选题
+		Map<String, Object> chehCheckboxMaps = quMaps.get("chenCheckboxMaps");
+		anCount += saveChenCheckboxMaps(surveyAnswer, chehCheckboxMaps);
+		// 矩阵填空题
+		Map<String, Object> chenFbkMaps = quMaps.get("chenFbkMaps");
+		anCount += saveChenFbkMaps(surveyAnswer, chenFbkMaps);
+		// 复合矩阵单选题
+		Map<String, Object> compChehRadioMaps = quMaps.get("compChenRadioMaps");
+		anCount += saveCompChehRadioMaps(surveyAnswer, compChehRadioMaps);
+		// 矩阵填空题
+		Map<String, Object> chenScoreMaps = quMaps.get("chenScoreMaps");
+		anCount += saveChenScoreMaps(surveyAnswer, chenScoreMaps);
+		
+		surveyAnswer.put("completeItemNum", anCount);
+		int isComplete = 0;
+		if(anCount >= Integer.parseInt(surveyMation.get("anItemLeastNum").toString())){
+			isComplete = 1;
+		}
+		surveyAnswer.put("isComplete", isComplete);
+		
+		int isEffective = 0;
+		if(anCount >= 0){//只要回答一题即为有效
+			isEffective = 1;
+		}
+		surveyAnswer.put("isEffective", isEffective);
+		surveyAnswer.put("completeNum", surveyMation.get("surveyQuNum"));
+		surveyAnswer.put("quNum", surveyMation.get("surveyQuNum"));
+		dwSurveyDirectoryDao.insertSurveyAnswer(surveyAnswer);
+	}
+	
+	/**
+	 * 保存是非题答案
+	 * @param exambatchUser
+	 * @param yesnoMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	public int saveAnYesnoMaps(Map<String, Object> surveyAnswer,Map<String,Object> yesnoMaps) throws Exception{
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if (yesnoMaps != null)
+			for (String key : yesnoMaps.keySet()) {
+				answerQuCount++;
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("surveyId", surveyId);
+				bean.put("surveyAnswerId", surveyAnswerId);
+				bean.put("quId", key);
+				bean.put("yesnoAnswer", yesnoMaps.get(key).toString());
+				beans.add(bean);
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveAnYesnoMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存单选题答案
+	 * @param exambatchUser
+	 * @param radioMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	private int saveAnRadioMaps(Map<String, Object> surveyAnswer,Map<String,Object> radioMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if (radioMaps != null)
+			for (String key : radioMaps.keySet()) {
+				answerQuCount++;
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("surveyId", surveyId);
+				bean.put("surveyAnswerId", surveyAnswerId);
+				bean.put("quId", key);
+				bean.put("quItemId", radioMaps.get(key).toString());
+				beans.add(bean);
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveAnRadioMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存多项填空题答案
+	 * @param exambatchUser
+	 * @param dfillMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveAnMultiFillMaps(Map<String, Object> surveyAnswer,Map<String,Object> dfillMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if (dfillMaps != null)
+			for (String key : dfillMaps.keySet()) {
+				Map<String, Object> map= (Map<String, Object>) dfillMaps.get(key);
+				if(map != null && map.size() > 0){
+					for (String keyMap : map.keySet()) {
+						answerQuCount++;
+						Map<String, Object> bean = new HashMap<>();
+						bean.put("id", ToolUtil.getSurFaceId());
+						bean.put("surveyId", surveyId);
+						bean.put("surveyAnswerId", surveyAnswerId);
+						bean.put("quId", key);
+						bean.put("quItemId", keyMap);
+						bean.put("answerValue", map.get(key).toString());
+						beans.add(bean);
+					}
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveAnMultiFillMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存评分题
+	 * @param surveyAnswer
+	 * @param scoreMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveScoreMaps(Map<String, Object> surveyAnswer,Map<String,Object> scoreMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if (scoreMaps != null)
+			for (String key : scoreMaps.keySet()) {
+				Map<String,Object> mapRows = (Map<String, Object>) scoreMaps.get(key);
+				for (String keyRow : mapRows.keySet()) {
+					answerQuCount++;
+					Map<String, Object> bean = new HashMap<>();
+					bean.put("id", ToolUtil.getSurFaceId());
+					bean.put("surveyId", surveyId);
+					bean.put("surveyAnswerId", surveyAnswerId);
+					bean.put("quId", key);
+					bean.put("rowId", keyRow);
+					bean.put("scoreValue", mapRows.get(keyRow).toString());
+					beans.add(bean);
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveScoreMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存矩阵多选题
+	 * @param surveyAnswer
+	 * @param scoreMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveChenCheckboxMaps(Map<String, Object> surveyAnswer,Map<String,Object> chenCheckboxMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(chenCheckboxMaps != null)
+			for (String key : chenCheckboxMaps.keySet()) {
+				Map<String,Object> mapRows = (Map<String, Object>) chenCheckboxMaps.get(key);
+				for (String keyRow : mapRows.keySet()) {
+					Map<String, Object> mapRow=(Map<String, Object>) mapRows.get(keyRow);
+					for (String  keyCol : mapRow.keySet()) {
+						answerQuCount++;
+						Map<String, Object> bean = new HashMap<>();
+						bean.put("id", ToolUtil.getSurFaceId());
+						bean.put("surveyId", surveyId);
+						bean.put("surveyAnswerId", surveyAnswerId);
+						bean.put("quId", key);
+						bean.put("rowId", keyRow);
+						bean.put("colId", keyCol);
+						beans.add(bean);
+					}
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveChenCheckboxMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 复合单选题
+	 * @param surveyAnswer
+	 * @param compRadioMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveCompAnRadioMaps(Map<String, Object> surveyAnswer,Map<String,Object> compRadioMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(compRadioMaps != null)
+			for (String key : compRadioMaps.keySet()) {
+				answerQuCount++;
+				Map<String, Object> tempAnRadio = (Map<String, Object>) compRadioMaps.get(key);
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("surveyId", surveyId);
+				bean.put("surveyAnswerId", surveyAnswerId);
+				bean.put("quId", key);
+				bean.put("quItemId", tempAnRadio.get("quItemId"));
+				bean.put("otherText", tempAnRadio.get("otherText"));
+				beans.add(bean);
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveCompAnRadioMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 复合矩阵单选题
+	 * @param surveyAnswer
+	 * @param compRadioMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveCompChehRadioMaps(Map<String, Object> surveyAnswer,Map<String,Object> compChenRadioMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(compChenRadioMaps != null)
+			for (String key : compChenRadioMaps.keySet()) {
+				Map<String,Object> mapRows = (Map<String, Object>) compChenRadioMaps.get(key);
+				for (String keyRow : mapRows.keySet()) {
+					Map<String, Object> mapRow = (Map<String, Object>) mapRows.get(keyRow);
+					for (String  keyCol : mapRow.keySet()) {
+						answerQuCount++;
+						Map<String, Object> bean = new HashMap<>();
+						bean.put("id", ToolUtil.getSurFaceId());
+						bean.put("surveyId", surveyId);
+						bean.put("surveyAnswerId", surveyAnswerId);
+						bean.put("quId", key);
+						bean.put("rowId", keyRow);
+						bean.put("colId", keyCol);
+						bean.put("optionId", mapRow.get(keyCol).toString());
+						beans.add(bean);
+					}
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveCompChehRadioMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 矩陈评分题
+	 * @param surveyAnswer
+	 * @param chenScoreMaps
+	 * @param session
+	 * @throws Exception 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveChenScoreMaps(Map<String, Object> surveyAnswer,Map<String,Object> chenScoreMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(chenScoreMaps != null)
+			for (String key : chenScoreMaps.keySet()) {
+				Map<String,Object> mapRows = (Map<String, Object>) chenScoreMaps.get(key);
+				for (String keyRow : mapRows.keySet()) {
+					Map<String, Object> mapRow = (Map<String, Object>) mapRows.get(keyRow);
+					for (String  keyCol : mapRow.keySet()) {
+						answerQuCount++;
+						Map<String, Object> bean = new HashMap<>();
+						bean.put("id", ToolUtil.getSurFaceId());
+						bean.put("surveyId", surveyId);
+						bean.put("surveyAnswerId", surveyAnswerId);
+						bean.put("quId", key);
+						bean.put("rowId", keyRow);
+						bean.put("colId", keyCol);
+						bean.put("answerValue", mapRow.get(keyCol).toString());
+						beans.add(bean);
+					}
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveChenScoreMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存多选题答案
+	 * @param exambatchUser
+	 * @param checkboxMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveAnCheckboxMaps(Map<String, Object> surveyAnswer,Map<String,Object> checkboxMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(checkboxMaps != null)
+			for (String key : checkboxMaps.keySet()) {
+				Map<String, Object> map = (Map<String, Object>) checkboxMaps.get(key);
+				for (String keyMap : map.keySet()) {
+					answerQuCount++;
+					Map<String, Object> bean = new HashMap<>();
+					bean.put("id", ToolUtil.getSurFaceId());
+					bean.put("surveyId", surveyId);
+					bean.put("surveyAnswerId", surveyAnswerId);
+					bean.put("quId", key);
+					bean.put("quItemId", map.get(keyMap).toString());
+					beans.add(bean);
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveAnCheckboxMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存单项填空题答案
+	 * @param exambatchUser
+	 * @param fillMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	private int saveAnFillMaps(Map<String, Object> surveyAnswer,Map<String,Object> fillMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(fillMaps != null)
+			for (String key : fillMaps.keySet()) {
+				answerQuCount++;
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("surveyId", surveyId);
+				bean.put("surveyAnswerId", surveyAnswerId);
+				bean.put("quId", key);
+				bean.put("answerValue", fillMaps.get(key).toString());
+				beans.add(bean);
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveAnFillMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存判断题答案
+	 * @param exambatchUser
+	 * @param anAnswerMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	private int saveAnAnswerMaps(Map<String, Object> surveyAnswer,Map<String,Object> anAnswerMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(anAnswerMaps != null)
+			for (String key : anAnswerMaps.keySet()) {
+				answerQuCount++;
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("surveyId", surveyId);
+				bean.put("surveyAnswerId", surveyAnswerId);
+				bean.put("quId", key);
+				bean.put("answerValue", anAnswerMaps.get(key).toString());
+				beans.add(bean);
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveAnAnswerMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存复合多选题答案
+	 * @param exambatchUser
+	 * @param checkboxMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveCompAnCheckboxMaps(Map<String, Object> surveyAnswer,Map<String,Object> compCheckboxMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(compCheckboxMaps != null)
+			for (String key : compCheckboxMaps.keySet()) {
+				Map<String, Object> map = (Map<String, Object>) compCheckboxMaps.get(key);
+				for (String keyMap : map.keySet()) {
+					answerQuCount++;
+					Map<String, Object> tempAnCheckbox = (Map<String, Object>) map.get(keyMap);
+					Map<String, Object> bean = new HashMap<>();
+					bean.put("id", ToolUtil.getSurFaceId());
+					bean.put("surveyId", surveyId);
+					bean.put("surveyAnswerId", surveyAnswerId);
+					bean.put("quId", key);
+					bean.put("quItemId", tempAnCheckbox.get("quItemId"));
+					bean.put("otherText", tempAnCheckbox.get("otherText"));
+					beans.add(bean);
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveCompAnCheckboxMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存枚举题
+	 * @param surveyAnswer
+	 * @param enumMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	private int saveEnumMaps(Map<String, Object> surveyAnswer,Map<String,Object> enumMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(enumMaps != null)
+			for (String key : enumMaps.keySet()) {
+				answerQuCount++;
+				Map<String, Object> bean = new HashMap<>();
+				bean.put("id", ToolUtil.getSurFaceId());
+				bean.put("surveyId", surveyId);
+				bean.put("surveyAnswerId", surveyAnswerId);
+				bean.put("quId", key);
+				bean.put("quItemNum", Integer.parseInt(key.split("_")[1]));
+				bean.put("answerValue", enumMaps.get(key).toString());
+				beans.add(bean);
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveEnumMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存排序题 
+	 * @param surveyAnswer
+	 * @param enumMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveQuOrderMaps(Map<String, Object> surveyAnswer,Map<String,Object> quOrderMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(quOrderMaps != null)
+			for (String key : quOrderMaps.keySet()) {
+				Map<String,Object> mapRows = (Map<String, Object>) quOrderMaps.get(key);
+				for (String keyRow : mapRows.keySet()) {
+					answerQuCount++;
+					Map<String, Object> bean = new HashMap<>();
+					bean.put("id", ToolUtil.getSurFaceId());
+					bean.put("surveyId", surveyId);
+					bean.put("surveyAnswerId", surveyAnswerId);
+					bean.put("quId", key);
+					bean.put("rowId", keyRow);
+					bean.put("orderNumValue", mapRows.get(keyRow).toString());
+					beans.add(bean);
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveQuOrderMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存矩阵单选题
+	 * @param surveyAnswer
+	 * @param chehRadioMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveChenRadioMaps(Map<String, Object> surveyAnswer,Map<String,Object> chenRadioMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(chenRadioMaps != null)
+			for (String key : chenRadioMaps.keySet()) {
+				Map<String,Object> mapRows = (Map<String, Object>) chenRadioMaps.get(key);
+				for (String keyRow : mapRows.keySet()) {
+					answerQuCount++;
+					Map<String, Object> bean = new HashMap<>();
+					bean.put("id", ToolUtil.getSurFaceId());
+					bean.put("surveyId", surveyId);
+					bean.put("surveyAnswerId", surveyAnswerId);
+					bean.put("quId", key);
+					bean.put("rowId", keyRow);
+					bean.put("colId", mapRows.get(keyRow).toString());
+					beans.add(bean);
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveChenRadioMaps(beans);
+		return answerQuCount;
+	}
+	
+	/**
+	 * 保存矩阵填空题
+	 * @param surveyAnswer
+	 * @param chehRadioMaps
+	 * @param session
+	 * @throws Exception 
+	 */
+	@SuppressWarnings("unchecked")
+	private int saveChenFbkMaps(Map<String, Object> surveyAnswer,Map<String,Object> chenFbkMaps) throws Exception {
+		String surveyId = surveyAnswer.get("id").toString();
+		String surveyAnswerId = surveyAnswer.get("answerId").toString();
+		int answerQuCount = 0;
+		List<Map<String, Object>> beans = new ArrayList<>();
+		if(chenFbkMaps != null)
+			for (String key : chenFbkMaps.keySet()) {
+				Map<String,Object> mapRows = (Map<String, Object>) chenFbkMaps.get(key);
+				for (String keyRow : mapRows.keySet()) {
+					Map<String, Object> mapRow=(Map<String, Object>) mapRows.get(keyRow);
+					for (String  keyCol : mapRow.keySet()) {
+						answerQuCount++;
+						Map<String, Object> bean = new HashMap<>();
+						bean.put("id", ToolUtil.getSurFaceId());
+						bean.put("surveyId", surveyId);
+						bean.put("surveyAnswerId", surveyAnswerId);
+						bean.put("quId", key);
+						bean.put("rowId", keyRow);
+						bean.put("colId", keyCol);
+						bean.put("answerValue", mapRow.get(keyCol).toString());
+						beans.add(bean);
+					}
+				}
+			}
+		if(!beans.isEmpty())
+			dwSurveyDirectoryDao.saveChenFbkMaps(beans);
+		return answerQuCount;
 	}
 
 }

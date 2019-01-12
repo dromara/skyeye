@@ -448,4 +448,36 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.insertSurveyMationCopyById(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: queryAnswerSurveyMationByIp
+	     * @Description: 判断该ip的用户是否回答过此问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/queryAnswerSurveyMationByIp")
+	@ResponseBody
+	public void queryAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.queryAnswerSurveyMationByIp(inputObject, outputObject);
+	}
+	
+	/**
+	 * 
+	     * @Title: insertAnswerSurveyMationByIp
+	     * @Description: 用户回答问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/insertAnswerSurveyMationByIp")
+	@ResponseBody
+	public void insertAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.insertAnswerSurveyMationByIp(inputObject, outputObject);
+	}
+	
 }

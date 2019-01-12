@@ -176,7 +176,8 @@
 			a.option_title optionTitle,
 			a.order_by_id orderById,
 			a.qu_id quId,
-			a.visibility
+			a.visibility,
+			#{quType} quType
 		FROM
 			dw_qu_checkbox a
 		WHERE
@@ -208,7 +209,8 @@
 			a.option_title optionTitle,
 			a.order_by_id orderById,
 			a.visibility,
-			#{paramInt02} paramInt02
+			#{paramInt02} paramInt02,
+			#{quType} quType
 		FROM
 			dw_qu_score a
 		WHERE
@@ -281,6 +283,7 @@
 			a.survey_name surveyName,
 			a.survey_note surveyNote,
 			a.survey_qu_num surveyQuNum,
+			a.survey_state surveyState,
 			a.an_item_least_num anItemLeastNum,
 			a.an_item_most_num anItemMostNum,
 			a.effective,
@@ -874,6 +877,8 @@
 		<set>
 			survey_state = '1',
 			real_start_time = #{startTime},
+			survey_qu_num = #{questionNum},
+			an_item_least_num = #{questionNum},
 		</set>
 		WHERE id = #{id}
 	</update>
@@ -976,7 +981,8 @@
 		SELECT
 			qu_row_id quRowId,
 			qu_col_id quColId,
-			count(qu_col_id) count
+			count(qu_col_id) count,
+			#{quType} quType
 		FROM
 			dw_an_chen_radio
 		WHERE
@@ -991,7 +997,8 @@
 		SELECT
 			qu_row_id quRowId,
 			qu_col_id quColId,
-			count(qu_col_id) count
+			count(qu_col_id) count,
+			#{quType} quType
 		FROM
 			dw_an_chen_fbk
 		WHERE
@@ -1006,7 +1013,8 @@
 		SELECT
 			qu_row_id quRowId,
 			qu_col_id quColId,
-			count(qu_col_id) count
+			count(qu_col_id) count,
+			#{quType} quType
 		FROM
 			dw_an_chen_checkbox
 		WHERE
@@ -1021,7 +1029,8 @@
 		SELECT
 			qu_row_id quRowId,
 			qu_col_id quColId,
-			AVG(answser_score) avgScore
+			AVG(answser_score) avgScore,
+			#{quType} quType
 		FROM
 			dw_an_chen_score
 		WHERE
@@ -1331,5 +1340,205 @@
 			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
 		</foreach>  
 	</insert>
+	
+	<update id="editSurveyAnswerNumById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			answer_num = #{answerNum},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="saveAnYesnoMaps" parameterType="java.util.Map">
+	     insert into dw_an_yesno
+	     (id, belong_answer_id, belong_id, qu_id, visibility, yesno_answer)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.quId}, '1', #{item.yesnoAnswer})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveAnRadioMaps" parameterType="java.util.Map">
+	     insert into dw_an_radio
+	     (id, belong_answer_id, belong_id, other_text, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.otherText}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveAnMultiFillMaps" parameterType="java.util.Map">
+	     insert into dw_an_dfillblank
+	     (id, answer, belong_answer_id, belong_id, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.answerValue}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveScoreMaps" parameterType="java.util.Map">
+	     insert into dw_an_score
+	     (id, answser_score, belong_answer_id, belong_id, qu_id, visibility, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.scoreValue}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.quId}, '1', #{item.rowId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveChenCheckboxMaps" parameterType="java.util.Map">
+	     insert into dw_an_chen_checkbox
+	     (id, belong_answer_id, belong_id, qu_id, visibility, qu_row_id, qu_col_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.quId}, '1', #{item.rowId}, #{item.colId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveCompAnRadioMaps" parameterType="java.util.Map">
+	     insert into dw_an_radio
+	     (id, belong_answer_id, belong_id, other_text, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.otherText}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveCompChehRadioMaps" parameterType="java.util.Map">
+	     insert into dw_an_comp_chen_radio
+	     (id, belong_answer_id, belong_id, qu_col_id, qu_id, visibility, qu_option_id, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.colId}, #{item.quId}, '1', #{item.optionId}, #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveChenScoreMaps" parameterType="java.util.Map">
+	     insert into dw_an_chen_score
+	     (id, belong_answer_id, belong_id, qu_col_id, qu_id, visibility, answser_score, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.colId}, #{item.quId}, '1', #{item.answerValue}, #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveAnCheckboxMaps" parameterType="java.util.Map">
+	     insert into dw_an_checkbox
+	     (id, belong_answer_id, belong_id, other_text, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.otherText}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveAnFillMaps" parameterType="java.util.Map">
+	     insert into dw_an_fillblank
+	     (id, belong_answer_id, belong_id, answer, qu_id, visibility)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.answerValue}, #{item.quId}, '1')  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveAnAnswerMaps" parameterType="java.util.Map">
+	     insert into dw_an_answer
+	     (id, belong_answer_id, belong_id, answer, qu_id, visibility)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.answerValue}, #{item.quId}, '1')  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveCompAnCheckboxMaps" parameterType="java.util.Map">
+	     insert into dw_an_checkbox
+	     (id, belong_answer_id, belong_id, other_text, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.otherText}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveEnumMaps" parameterType="java.util.Map">
+	     insert into dw_an_enumqu
+	     (id, belong_answer_id, belong_id, answer, qu_id, visibility, enum_item)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.answerValue}, #{item.quId}, '1', #{item.quItemNum})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveQuOrderMaps" parameterType="java.util.Map">
+	     insert into dw_an_order
+	     (id, belong_answer_id, belong_id, ordery_num, qu_id, visibility, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.orderNumValue}, #{item.quId}, '1', #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveChenRadioMaps" parameterType="java.util.Map">
+	     insert into dw_an_chen_radio
+	     (id, belong_answer_id, belong_id, qu_col_id, qu_id, visibility, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.colId}, #{item.quId}, '1', #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveChenFbkMaps" parameterType="java.util.Map">
+	     insert into dw_an_chen_fbk
+	     (id, answer_value, belong_answer_id, belong_id, qu_col_id, qu_id, visibility, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.answerValue}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.colId}, #{item.quId}, '1', #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="insertSurveyAnswer" parameterType="java.util.Map">
+	     INSERT into dw_survey_answer 
+	     (id, survey_id, bg_an_date, end_an_date, complete_num, complete_item_num, data_source, handle_state, ip_addr, addr, city, is_complete, is_effective,
+	     	qu_num, total_time, create_id)
+	     VALUES
+	     (#{answerId}, #{id}, #{bgAnDate}, #{endAnDate}, #{completeNum}, #{completeItemNum}, '0', '1', #{ipAddr}, #{addr}, #{city}, #{isComplete}, #{isEffective},
+	     	#{quNum}, #{totalTime}, #{createId})
+	</insert>
+	
+	<select id="querySurveyAnswerMationByIp" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			dw_survey_answer a
+		WHERE a.ip_addr = #{ip}
+		AND a.survey_id = #{id}
+	</select>
+	
+	<select id="querySurveyAnswerMationOverFiveMinByIp" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			dw_survey_answer a
+		WHERE a.ip_addr = #{ip}
+		AND a.survey_id = #{id}
+		AND a.end_an_date >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)
+	</select>
+	
+	<update id="editSurveyStateToEndNumById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			real_end_time = #{realEndTime},
+			survey_state = '2',
+			end_type = '3',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSurveyStateToEndNumZdById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			real_end_time = #{realEndTime},
+			survey_state = '2',
+			end_type = '2',
+		</set>
+		WHERE id = #{id}
+	</update>
 	
 </mapper>

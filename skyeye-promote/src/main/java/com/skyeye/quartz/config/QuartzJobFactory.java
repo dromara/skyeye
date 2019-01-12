@@ -1,5 +1,8 @@
 package com.skyeye.quartz.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
@@ -8,6 +11,8 @@ import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.skyeye.common.util.ToolUtil;
+import com.skyeye.eve.dao.DwSurveyDirectoryDao;
 import com.skyeye.eve.dao.SysQuartzDao;
 import com.skyeye.quartz.entity.SysQuartz;
 
@@ -21,6 +26,9 @@ public class QuartzJobFactory implements Job{
 
 	@Autowired
 	private SysQuartzDao sysQuartzDao;
+	
+	@Autowired
+	private DwSurveyDirectoryDao dwSurveyDirectoryDao;
 	
 	/**
 	 * 任务监听
@@ -49,9 +57,9 @@ public class QuartzJobFactory implements Job{
 	     * @throws
 	 */
 	private void handleJob(SysQuartz sysQuartz) throws SchedulerException {
-		if("test".equals(sysQuartz.getGroups())){//根据分组进行任务调度
+		if("endSurveyMation".equals(sysQuartz.getGroups())){//文件调查
 			try {
-				test(sysQuartz);
+				endSurveyMation(sysQuartz);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -59,13 +67,18 @@ public class QuartzJobFactory implements Job{
 	}
 	
 	/**
-	 * 测试
+	 * 问卷调查
 	 * @param sysQuartz
 	 * @throws Exception 
 	 */
-	private void test(SysQuartz sysQuartz) throws Exception{
-		System.out.println(sysQuartz.getName());
-		System.out.println("我是任务，执行完成拉");
+	private void endSurveyMation(SysQuartz sysQuartz) throws Exception{
+		Map<String, Object> map = new HashMap<>();
+		map.put("id", sysQuartz.getName());
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		if("1".equals(surveyMation.get("surveyState").toString())){//执行中
+			map.put("realEndTime", ToolUtil.getTimeAndToString());
+			dwSurveyDirectoryDao.editSurveyStateToEndNumZdById(map);
+		}
 		quartzService.delete(sysQuartz);
 		sysQuartzDao.deleteByPrimaryKey(sysQuartz.getId());
 	}
