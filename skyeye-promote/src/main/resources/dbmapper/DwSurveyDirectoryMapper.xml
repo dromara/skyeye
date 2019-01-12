@@ -1541,4 +1541,14 @@
 		WHERE id = #{id}
 	</update>
 	
+	<update id="updateSurveyMationEndById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			real_end_time = #{realEndTime},
+			survey_state = '2',
+			end_type = '1',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
 </mapper>

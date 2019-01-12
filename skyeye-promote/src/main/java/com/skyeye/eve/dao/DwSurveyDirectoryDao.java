@@ -238,4 +238,6 @@ public interface DwSurveyDirectoryDao {
 
 	public int editSurveyStateToEndNumZdById(Map<String, Object> map) throws Exception;
 
+	public int updateSurveyMationEndById(Map<String, Object> map) throws Exception;
+
 }

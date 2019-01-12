@@ -175,14 +175,14 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '结束调查' }, function (index) {
 			layer.close(index);
             //向服务端发送删除指令
-//            AjaxPostUtil.request({url:reqBasePath + "planproject003", params:{rowId: data.id}, type:'json', callback:function(json){
-//    			if(json.returnCode == 0){
-//    				top.winui.window.msg("发布成功", {icon: 1,time: 2000});
-//    				loadTable();
-//    			}else{
-//    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-//    			}
-//    		}});
+            AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory030", params:{surveyId: data.id}, type:'json', callback:function(json){
+    			if(json.returnCode == 0){
+    				top.winui.window.msg("结束成功", {icon: 1,time: 2000});
+    				loadTable();
+    			}else{
+    				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			}
+    		}});
 		});
 	}
 	

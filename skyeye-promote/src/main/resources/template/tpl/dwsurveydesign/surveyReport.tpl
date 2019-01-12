@@ -6,7 +6,7 @@
 		</div>
 		<div class="surveyCollectInfoDiv">
 			<span class="surveyCollectInfoLeft">
-				状态：<span class="collectInfoSpan">收集中</span>&nbsp;&nbsp;&nbsp;&nbsp; 参与人数：
+				状态：<span class="collectInfoSpan" id="surveyState">收集中</span>&nbsp;&nbsp;&nbsp;&nbsp; 参与人数：
 				<span class="collectInfoSpan">{{answerNum}}</span>
 			</span>
 			<span class="surveyCollectInfoRight">

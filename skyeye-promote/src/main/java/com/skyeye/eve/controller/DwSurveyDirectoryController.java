@@ -480,4 +480,20 @@ public class DwSurveyDirectoryController {
 		dwSurveyDirectoryService.insertAnswerSurveyMationByIp(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: updateSurveyMationEndById
+	     * @Description: 手动结束问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/DwSurveyDirectoryController/updateSurveyMationEndById")
+	@ResponseBody
+	public void updateSurveyMationEndById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dwSurveyDirectoryService.updateSurveyMationEndById(inputObject, outputObject);
+	}
+	
 }

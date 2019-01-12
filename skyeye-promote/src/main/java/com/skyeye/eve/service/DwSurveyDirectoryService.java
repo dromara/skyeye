@@ -63,4 +63,6 @@ public interface DwSurveyDirectoryService {
 
 	public void insertAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void updateSurveyMationEndById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

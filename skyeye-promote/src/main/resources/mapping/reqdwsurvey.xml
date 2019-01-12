@@ -209,6 +209,9 @@
 		<property id="ip" name="ip" ref="required,ip" var="ip"/>
 		<property id="bgAnDate" name="bgAnDate" ref="required" var="答卷开始时间"/>
 	</url>
+	<url id="dwsurveydirectory030" path="/post/DwSurveyDirectoryController/updateSurveyMationEndById" val="手动结束问卷" allUse="0">
+		<property id="surveyId" name="id" ref="required" var="问卷id"/>
+	</url>
 	<!-- 问卷调查结束 -->
 	
 </controller>

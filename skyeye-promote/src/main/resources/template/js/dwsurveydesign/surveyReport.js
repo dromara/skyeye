@@ -50,6 +50,10 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function(json){
 		 		
+		 		if(json.bean.surveyState == '2'){
+		 			$("#surveyState").html("结束");
+		 		}
+		 		
 		 		/**
 				 * 统计图切换
 				 */

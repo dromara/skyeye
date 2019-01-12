@@ -1587,32 +1587,37 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	public void queryAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
-		if("4".equals(surveyMation.get("effective").toString()) || "1".equals(surveyMation.get("effectiveIp").toString())){//每台电脑或手机只能答一次
-			Map<String, Object> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationByIp(map);
-			if(answerMation != null && !answerMation.isEmpty()){
-				outputObject.setreturnMessage("您已参与过该问卷，请休息一会儿。");
-				return;
+		if("2".equals(surveyMation.get("surveyState").toString())){
+			if("4".equals(surveyMation.get("effective").toString()) || "1".equals(surveyMation.get("effectiveIp").toString())){//每台电脑或手机只能答一次
+				Map<String, Object> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationByIp(map);
+				if(answerMation != null && !answerMation.isEmpty()){
+					outputObject.setreturnMessage("您已参与过该问卷，请休息一会儿。");
+					return;
+				}
+			}else{//不做ip限制，则默认每五分钟才能答一次
+				List<Map<String, Object>> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationOverFiveMinByIp(map);
+				if(answerMation != null && !answerMation.isEmpty()){
+					outputObject.setreturnMessage("您已参与过该问卷，请休息一会儿。");
+					return;
+				}
 			}
-		}else{//不做ip限制，则默认每五分钟才能答一次
-			List<Map<String, Object>> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationOverFiveMinByIp(map);
-			if(answerMation != null && !answerMation.isEmpty()){
-				outputObject.setreturnMessage("您已参与过该问卷，请休息一会儿。");
-				return;
+			
+			if("1".equals(surveyMation.get("ynEndNum").toString())){//是否依据收到的份数结束
+				if(Integer.parseInt(surveyMation.get("answerNum").toString()) + 1 > Integer.parseInt(surveyMation.get("endNum").toString())){
+					outputObject.setreturnMessage("问卷已结束。");
+					return;
+				}
 			}
-		}
-		
-		if("1".equals(surveyMation.get("ynEndNum").toString())){//是否依据收到的份数结束
-			if(Integer.parseInt(surveyMation.get("answerNum").toString()) + 1 > Integer.parseInt(surveyMation.get("endNum").toString())){
-				outputObject.setreturnMessage("问卷已结束。");
-				return;
+			
+			if("1".equals(surveyMation.get("ynEndTime").toString())){//是否依据时间结束
+				if(ToolUtil.compare(surveyMation.get("endTime").toString(), ToolUtil.getTimeAndToString())){//当前时间和设置的结束时间作比较
+					outputObject.setreturnMessage("问卷已结束。");
+					return;
+				}
 			}
-		}
-		
-		if("1".equals(surveyMation.get("ynEndTime").toString())){//是否依据时间结束
-			if(ToolUtil.compare(surveyMation.get("endTime").toString(), ToolUtil.getTimeAndToString())){//当前时间和设置的结束时间作比较
-				outputObject.setreturnMessage("问卷已结束。");
-				return;
-			}
+		}else{
+			outputObject.setreturnMessage("问卷已结束。");
+			return;
 		}
 		outputObject.setBean(surveyMation);
 	}
@@ -2458,6 +2463,26 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 		if(!beans.isEmpty())
 			dwSurveyDirectoryDao.saveChenFbkMaps(beans);
 		return answerQuCount;
+	}
+
+	/**
+	 * 
+	     * @Title: updateSurveyMationEndById
+	     * @Description: 手动结束问卷
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void updateSurveyMationEndById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
+		if("1".equals(surveyMation.get("surveyState").toString())){//执行中
+			map.put("realEndTime", ToolUtil.getTimeAndToString());
+			dwSurveyDirectoryDao.updateSurveyMationEndById(map);
+		}
 	}
 
 }
