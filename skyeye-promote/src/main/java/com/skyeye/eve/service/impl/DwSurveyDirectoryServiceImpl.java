@@ -1587,7 +1587,7 @@ public class DwSurveyDirectoryServiceImpl implements DwSurveyDirectoryService{
 	public void queryAnswerSurveyMationByIp(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> surveyMation = dwSurveyDirectoryDao.querySurveyMationById(map);//获取问卷信息
-		if("2".equals(surveyMation.get("surveyState").toString())){
+		if("1".equals(surveyMation.get("surveyState").toString())){
 			if("4".equals(surveyMation.get("effective").toString()) || "1".equals(surveyMation.get("effectiveIp").toString())){//每台电脑或手机只能答一次
 				Map<String, Object> answerMation = dwSurveyDirectoryDao.querySurveyAnswerMationByIp(map);
 				if(answerMation != null && !answerMation.isEmpty()){

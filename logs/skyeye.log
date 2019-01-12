@@ -5251,4 +5251,5 @@
   [skyeye-promote][INFO] [2019-01-12 18:17:31] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory026
   [skyeye-promote][INFO] [2019-01-12 18:17:53] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/login002
   [skyeye-promote][INFO] [2019-01-12 18:17:57] com.skyeye.common.filter.SessionFilter.doFilter(123) | 请求链接/dwsurveydirectory003
+  [skyeye-promote][INFO] [2019-01-12 18:19:00] com.skyeye.start.thread.MonitorThread.queryComMation(49) | 读取
   
