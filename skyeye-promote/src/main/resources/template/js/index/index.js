@@ -47,6 +47,29 @@
    		        //加载聊天
    		        initTalk();
    		        
+	   		    //扩展桌面助手工具
+	   		    winui.helper.addTool([{
+	   		         tips: '锁屏',
+	   		         icon: 'fa-power-off',
+	   		         click: function (e) {
+	   		             winui.lockScreen(function (password) {
+	   		                 //模拟解锁验证
+	   		                 if (password === 'winadmin') {
+	   		                     return true;
+	   		                 } else {
+	   		                     winui.window.msg('密码错误', { shift: 6 });
+	   		                     return false;
+	   		                 }
+	   		             });
+	   		         }
+	   		     }, {
+	   		         tips: '切换壁纸',
+	   		         icon: 'fa-television',
+	   		         click: function (e) {
+	   		             layer.msg('这个是自定义的工具栏', { zIndex: layer.zIndex });
+	   		         }
+	   		     }]);
+   		        
    			}else{
    				location.href = "login.html";
    			}
@@ -450,29 +473,6 @@
             }
         });
     }
-
-    //扩展桌面助手工具
-    winui.helper.addTool([{
-        tips: '锁屏',
-        icon: 'fa-power-off',
-        click: function (e) {
-            winui.lockScreen(function (password) {
-                //模拟解锁验证
-                if (password === 'winadmin') {
-                    return true;
-                } else {
-                    winui.window.msg('密码错误', { shift: 6 });
-                    return false;
-                }
-            });
-        }
-    }, {
-        tips: '切换壁纸',
-        icon: 'fa-television',
-        click: function (e) {
-            layer.msg('这个是自定义的工具栏', { zIndex: layer.zIndex });
-        }
-    }]);
 
     exports('index', {});
 });

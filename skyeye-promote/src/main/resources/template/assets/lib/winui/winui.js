@@ -191,7 +191,7 @@
                 //绑定桌面点击事件
                 $(document).mousedown(function () {
                     $('.task-contextmenu,.menu-contextmenu,.app-contextmenu').remove();    //移除显示的任务项右键菜单和菜单项右键菜单
-                    $('.winui-start').addClass('layui-hide');   //隐藏开始菜单、控制中心
+                    $('.winui-start').fadeOut(200);//隐藏开始菜单、控制中心
                     $('.winui-console').removeClass('slideInRight').addClass('slideOutRight');
                     $('.winui-taskbar-start,.winui-taskbar-console').removeClass(THIS);    //移除开始菜单按钮、控制中心按钮的选中样式
                     $('.winui-desktop>.winui-desktop-item').removeClass('winui-this');     //移除桌面app选中状态
@@ -375,7 +375,7 @@
 
             //隐藏开始菜单
             hideStartMenu: function () {
-                $('.winui-start').addClass('layui-hide');
+                $('.winui-start').fadeOut(200);
             }, 
 
             //返回GUID
@@ -771,7 +771,7 @@
             startClick: function () {
                 $('.task-contextmenu,.menu-contextmenu,.app-contextmenu').remove();    //移除显示的任务项右键菜单和菜单项右键菜单
                 $(this).toggleClass(THIS);
-                $('.winui-start').toggleClass('layui-hide');
+            	$('.winui-start').fadeToggle(200);
             },
             //显示桌面点击事件
             desktopClick: function () {
