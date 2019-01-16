@@ -308,7 +308,7 @@ button{
     height: 40px;
     position: fixed;
     bottom: 0;
-    z-index: 9998;
+    z-index: 99980;
 }
 
 .winui-taskbar > * {

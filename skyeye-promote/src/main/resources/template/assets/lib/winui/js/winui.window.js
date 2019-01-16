@@ -36,7 +36,7 @@ layui.define(['layer', 'winui'], function (exports) {
             //置顶window
             windowfunc.setTop(options.id);
             //隐藏开始菜单
-            $('.winui-start').addClass('layui-hide');
+            $('.winui-start').fadeOut(200);
             //移除开始按钮的选中样式
             $('.winui-taskbar-start').removeClass(THIS);
             //返回windowId
@@ -239,7 +239,7 @@ layui.define(['layer', 'winui'], function (exports) {
         }
         
         //隐藏开始菜单
-        $('.winui-start').addClass('layui-hide');
+        $('.winui-start').fadeOut(200);
         //移除开始按钮的选中样式
         $('.winui-taskbar-start').removeClass(THIS);
 
