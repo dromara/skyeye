@@ -23,9 +23,6 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 - 项目流程图规划
 - 问卷调查模块（创建问卷、发布问卷、问卷统计等）
 
-#### 软件架构
-软件架构说明
-
 #### 技术选型
 ##### 后端技术:
 技术|名称|官网
@@ -173,5 +170,5 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 #### QQ群：
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1205/145236_4fce6966_1541735.jpeg "微信图片_20181205145217.jpg")
 
-#### 作者微信：
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/105033_fa16d4a1_1541735.jpeg "微信图片_20181121104949.jpg")
+#### 微信群：
+
