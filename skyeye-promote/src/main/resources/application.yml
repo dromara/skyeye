@@ -35,6 +35,7 @@ spring:
         connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
         
         activiti:
+            # 自动部署验证设置:true-开启（默认）、false-关闭
             check-process-definitions: false
             url: jdbc:mysql://localhost:3306/${activiti.database.name}?useUnicode=true&characterEncoding=utf8&useSSL=false
             username: ${activiti.database.username}
