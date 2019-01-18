@@ -132,6 +132,7 @@ function isNull(str){
 	    jqueryUI: 'modules/jquery-ui-1.10.3.custom',//jQuery拖拽
 	    validate: 'modules/validate/jquery.validate',//验证
 	    ClipboardJS: 'modules/clipboard.min',//复制
+	    radialin: 'modules/radialindicator/radialindicator',//加载进度条
 	};
 
 	// 记录基础数据

@@ -6171,6 +6171,51 @@ select option{
     font-family: serif;
 }
 
+.winui-load-mation{
+	width: 100%;
+	height: 100%;
+    background-color: RGB(0, 0, 0);
+    z-index: 1000000000;
+    position: relative;
+}
+
+.winui-load-mation-box{
+	margin: auto !important;
+	position: absolute;
+    top: 25%;
+    left: 0;
+    right: 0;
+}
+
+.winui-load{
+    text-align: center;
+    width: 100%;
+}
+
+.load-title{
+	width: 100%;
+    height: 60px;
+    text-align: center;
+}
+
+.load-title font{
+	color: white;
+    font-size: 34px;
+    font-family: cursive;
+}
+
+.load-wait{
+	width: 100%;
+    height: 40px;
+    text-align: center;
+}
+
+.load-wait font{
+	color: white;
+    font-size: 18px;
+    font-family: cursive;
+}
+
 /*******************************************自定义样式end********************************************/
 
 

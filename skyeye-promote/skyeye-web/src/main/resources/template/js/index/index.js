@@ -6,12 +6,37 @@
     desktop: 'js/winui.desktop',//桌面加载模块
     start: 'js/winui.start',//左下角开始菜单
     helper: 'js/winui.helper'
-}).define(['window', 'desktop', 'start', 'helper', 'layim'], function (exports) {
+}).define(['window', 'desktop', 'start', 'helper', 'layim', 'radialin'], function (exports) {
     var $ = layui.jquery,
     layim = layui.layim;
+    var winuiLoad;
+    
+    winuiLoad = radialIndicator($('#winui-load'), {
+    	barBgColor: '#E3E3E3',
+        barColor: '#FFFFFF',
+        radius: 100,
+        barWidth: 5,
+        initValue: 0,
+        fontSize: 15,
+        percentage: true,
+        end: function(val){
+        	if(val == '100'){
+        		$(".winui-load-mation").hide(1000);
+        	}
+        }
+    });
     
     $(function () {
-    	
+    	var loadIndex = 20;
+    	winuiLoad.animate(loadIndex);
+    	var loadInterval = setInterval(function(){ 
+    		if(loadIndex < 90){
+    			loadIndex = loadIndex + 3;
+    			winuiLoad.animate(loadIndex);
+    		}else{
+    			clearInterval(loadInterval);
+    		}
+    	}, 10);
     	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
    			if(json.returnCode == 0){
 //   				winui.window.msg('Welcome To WinAdmin', {
@@ -69,7 +94,10 @@
 	   		             layer.msg('这个是自定义的工具栏', { zIndex: layer.zIndex });
 	   		         }
 	   		     }]);
-   		        
+   		         if(loadIndex != 100){
+   		        	clearInterval(loadInterval);
+   		        	winuiLoad.animate(100);
+   		         }
    			}else{
    				location.href = "login.html";
    			}
@@ -238,13 +266,12 @@
     
     //初始化配置信息
     function initWinConfig(json){
-    	
     	//设置窗口点击事件
     	$("body").on("click", ".sec-clsss-btn", function(e){
     		winui.window.close($('#childWindow').parent());
     		OpenWindow($(this).prop("outerHTML"));
     	});
-    	
+
     	winui.config({
             settings: {
                 color: json.bean.winThemeColor,
