@@ -620,14 +620,13 @@ button{
 
 
 /*开始菜单左边部分*/
-
 .winui-start-left {
     width: 48px;
     height: 100%;
     position: absolute;
     zoom: 1;
     z-index: 50;
-    background-color:rgba(0, 0, 0, 0.9);
+    background-color:rgba(0, 0, 0, 0.3);
     white-space: nowrap;
     overflow: hidden;
 }
@@ -2480,7 +2479,6 @@ body .layer-ext-winconfirm {
     width: 35px;
     height: 35px;
     margin: 0px auto;
-    border: 1px solid rgba(255, 255, 255, 0.5);
     overflow: hidden;
     padding: 0px 4px 6px 4px;
     position: relative;

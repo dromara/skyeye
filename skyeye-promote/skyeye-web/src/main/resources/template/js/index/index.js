@@ -348,17 +348,20 @@
     		$(".winui-start-left").animate({
     			width: '48px', 
     		});
+    		$(".winui-start-left").css({'background-color': 'rgba(0, 0, 0, 0.3)'});
     	}else{//当前状态：关闭
     		$(".winui-start-left").animate({
     			width: '210px', 
     		});
+    		$(".winui-start-left").css({'background-color': 'rgba(0, 0, 0, 0.9)'});
     	}
     });
     
-    $(".winui-start-left").mouseleave(function (){console.log(1);
+    $(".winui-start-left").mouseleave(function (){
     	$(".winui-start-left").animate({
 			width: '48px', 
 		});
+    	$(".winui-start-left").css({'background-color': 'rgba(0, 0, 0, 0.3)'});
     });
 
     //打开窗口的方法（可自己根据需求来写）
