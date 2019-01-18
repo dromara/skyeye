@@ -180,7 +180,9 @@
 			'false' extend,
 			null childs,
 			c.menu_parent_id parentId,
-			c.menu_level menuLevel
+			c.menu_level menuLevel,
+			c.menu_icon_color menuIconColor,
+			c.menu_icon_bg menuIconBg
 		FROM
 			sys_eve_user a,
 			sys_eve_role_menu b,
@@ -205,7 +207,9 @@
 			'false' extend,
 			null childs,
 			c.menu_parent_id parentId,
-			c.menu_level menuLevel
+			c.menu_level menuLevel,
+			c.menu_icon_color menuIconColor,
+			c.menu_icon_bg menuIconBg
 		FROM
 			sys_eve_user a,
 			sys_eve_role_menu b,

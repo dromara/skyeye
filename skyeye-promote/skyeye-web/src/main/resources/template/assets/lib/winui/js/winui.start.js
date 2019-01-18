@@ -28,15 +28,26 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                 maxopen = (item.maxOpen == '' || item.maxOpen == undefined) ? '' : 'win-maxopen="' + item.maxOpen + '"',
                 winIcon = (item.icon == '' || item.icon == undefined) ? '' : 'win-icon="' + item.icon + '"',
                 isParent = item.childs ? ' parent' : '',
-                //icon的算法存在纰漏，但出现错误几率较小
-                icon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1) ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
+        		menuIconBg = (item.menuIconBg == '' || item.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + item.menuIconBg + '"',
+				menuIconColor = (item.menuIconColor == '' || item.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + item.menuIconColor + '"';
+            //icon的算法存在纰漏，但出现错误几率较小
+            var icon;
+            if(!isNull(item.menuIconColor)){
+            	icon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1) ? '<i class="fa ' + item.icon + ' fa-fw" style="color: ' + item.menuIconColor + '"></i>' : '<img src="' + item.icon + '" />';
+            }else{
+            	icon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1) ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
+            }
             if(index == 0){
             	var extend = item.extend ? ' layui-nav-itemed' : '';
             }else{
             	var extend = '';
             }
             html += '<li class="layui-nav-item ' + isParent + ' ' + extend + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxopen + ' ' + winIcon + '>';
-            html += '<a><div class="winui-menu-icon">'
+            if(!isNull(item.menuIconBg)){
+            	html += '<a><div class="winui-menu-icon" style="background-color: ' + item.menuIconBg + '!important;">';
+            }else{
+            	html += '<a><div class="winui-menu-icon">';
+            }
             html += icon;
             html += '</div>';
             html += '<span class="winui-menu-name">' + item.name + '</span></a>';
@@ -49,9 +60,20 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                         cOpentype = (cItem.openType == '' || cItem.openType == undefined) ? '' : 'win-opentype="' + cItem.openType + '"',
                         cMaxopen = (cItem.maxOpen == '' || cItem.maxOpen == undefined) ? '' : 'win-maxopen="' + cItem.maxOpen + '"',
                         cWinIcon = (cItem.icon == '' || cItem.icon == undefined) ? '' : 'win-icon="' + cItem.icon + '"',
-                        cicon = (cItem.icon.indexOf('fa-') != -1 && cItem.icon.indexOf('.') == -1) ? '<i class="fa ' + cItem.icon + ' fa-fw"></i>' : '<img src="' + cItem.icon + '" />';;
+                		cmenuIconBg = (cItem.menuIconBg == '' || cItem.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + cItem.menuIconBg + '"',
+        				cmenuIconColor = (cItem.menuIconColor == '' || cItem.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + cItem.menuIconColor + '"';
+                    var cicon;
+                    if(!isNull(cItem.menuIconColor)){
+                    	cicon = (cItem.icon.indexOf('fa-') != -1 && cItem.icon.indexOf('.') == -1) ? '<i class="fa ' + cItem.icon + ' fa-fw" style="color: ' + cItem.menuIconColor + '"></i>' : '<img src="' + cItem.icon + '" />';;
+                    }else{
+                    	cicon = (cItem.icon.indexOf('fa-') != -1 && cItem.icon.indexOf('.') == -1) ? '<i class="fa ' + cItem.icon + ' fa-fw"></i>' : '<img src="' + cItem.icon + '" />';;
+                    }
                     html += '<dd ' + cId + ' ' + cUrl + ' ' + cTitle + ' ' + cOpentype + ' ' + cMaxopen + ' ' + cWinIcon + '>';
-                    html += '<a><div class="winui-menu-icon">'
+                    if(!isNull(cItem.menuIconBg)){
+                    	html += '<a><div class="winui-menu-icon" style="background-color: ' + cItem.menuIconBg + '!important;">';
+                    }else{
+                    	html += '<a><div class="winui-menu-icon">';
+                    }
                     html += cicon;
                     html += '</div>';
                     html += '<span class="winui-menu-name">' + cItem.name + '</span></a>';

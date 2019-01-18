@@ -25,12 +25,23 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         		title = (item.title == '' || item.title == undefined) ? '' : 'win-title="' + item.title + '"',
         		opentype = (item.openType == '' || item.openType == undefined) ? '' : 'win-opentype="' + item.openType + '"',
         		maxOpen = (item.maxOpen == '' || item.maxOpen == undefined) ? '' : 'win-maxOpen="' + item.maxOpen + '"',
+				menuIconBg = (item.menuIconBg == '' || item.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + item.menuIconBg + '"',
+				menuIconColor = (item.menuIconColor == '' || item.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + item.menuIconColor + '"',
         		//icon的算法存在纰漏，但出现错误几率较小
-        		isFaIcon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1),
+        		isFaIcon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1);
+        	var icon;
+        	if(!isNull(item.menuIconColor)){
+        		icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw" style="color: ' + item.menuIconColor + '"></i>' : '<img src="' + item.icon + '" />';
+        	}else{
         		icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
+        	}
         	if(isNull(item.childs)){
         		html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + '>';
-        		html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
+        		if(!isNull(item.menuIconBg)){
+        			html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '" style="background-color: ' + item.menuIconBg + '">';
+        		}else{
+        			html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
+        		}
         		html += icon;
         		html += '</div>';
         		html += '<p>' + item.name + '</p>';
@@ -47,14 +58,37 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
 						childstitle = (bean.title == '' || bean.title == undefined) ? '' : 'win-title="' + bean.title + '"',
 						childsopentype = (bean.openType == '' || bean.openType == undefined) ? '' : 'win-opentype="' + bean.openType + '"',
 						childsmaxOpen = (bean.maxOpen == '' || bean.maxOpen == undefined) ? '' : 'win-maxOpen="' + bean.maxOpen + '"',
+						childsmenuIconBg = (bean.menuIconBg == '' || bean.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + bean.menuIconBg + '"',
+						childsmenuIconColor = (bean.menuIconColor == '' || bean.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + bean.menuIconColor + '"',
 		        		//icon的算法存在纰漏，但出现错误几率较小
-						childsisFaIcon = (bean.icon.indexOf('fa-') != -1 && bean.icon.indexOf('.') == -1),
-						childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw"></i>' : '<img src="' + bean.icon + '" />',
-						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon"></i>' : '<img src="' + bean.icon + '" />';
+						childsisFaIcon = (bean.icon.indexOf('fa-') != -1 && bean.icon.indexOf('.') == -1);
+    				var childsicon;
+    				var childsiconsmall;
+    				if(!isNull(bean.menuIconColor)){
+    					if(!isNull(bean.menuIconBg)){
+    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '"></i>' : '<img src="' + bean.icon + '" />';
+        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '"></i>' : '<img src="' + bean.icon + '" />';
+    					}else{
+    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="color: ' + bean.menuIconColor + '"></i>' : '<img src="' + bean.icon + '" />';
+        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + '"></i>' : '<img src="' + bean.icon + '" />';
+    					}
+    				}else{
+    					if(!isNull(bean.menuIconBg)){
+    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="background-color: ' + bean.menuIconBg + '"></i>' : '<img src="' + bean.icon + '" />';
+        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="background-color: ' + bean.menuIconBg + '"></i>' : '<img src="' + bean.icon + '" />';
+    					}else{
+	    					childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon"></i>' : '<img src="' + bean.icon + '" />';
+	    					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw"></i>' : '<img src="' + bean.icon + '" />';
+    					}
+    				}
     				
     				childsIconContent += childsiconsmall;
     				childsHtml += '<div class="winui-desktop-item sec-clsss-btn" ' + childsid + ' ' + childsurl + ' ' + childstitle + ' ' + childsopentype + ' ' + childsmaxOpen + '>';
-    				childsHtml += '<div class="winui-icon ' + (childsisFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
+    				if(!isNull(bean.menuIconBg)){
+    					childsHtml += '<div class="winui-icon ' + (childsisFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '" style="background-color: ' + bean.menuIconBg + '">';
+    				}else{
+    					childsHtml += '<div class="winui-icon ' + (childsisFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
+    				}
     				childsHtml += childsicon;
     				childsHtml += '</div>';
     				childsHtml += '<p>' + bean.name + '</p>';

@@ -1,9 +1,5 @@
 ﻿/**
-
  @Name：winui.helper 桌面助手模块
- @Author：Leo
- @License：MIT
-    
  */
 
 layui.define(['jquery', 'layer', 'winui'], function (exports) {
