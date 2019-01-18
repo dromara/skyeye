@@ -4,13 +4,40 @@ var childIcon = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'colorpicker'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	    var $ = layui.$;
+	    var colorpicker = layui.colorpicker;
+	    
 	    var parentId = "0";
+	    
  		form.render();
+ 		
+ 		colorpicker.render({
+ 		    elem: '#menuIconBg',
+ 		    color: '#1c97f5',
+ 		    done: function(color){
+ 		        $('#menuIconBginput').val(color);
+ 		        $("#iconShow").parent().css({'background-color': color});
+ 		    },
+ 		    change: function(color){
+ 		    	$("#iconShow").parent().css({'background-color': color});
+ 		    }
+ 		});
+ 		
+ 		colorpicker.render({
+ 		    elem: '#menuIconColor',
+ 		    color: '#1c97f5',
+ 		    done: function(color){
+ 		        $('#menuIconColorinput').val(color);
+ 		        $("#iconShow").css({'color': color});
+ 		    },
+ 		    change: function(color){
+ 		    	$("#iconShow").css({'color': color});
+ 		    }
+ 		});
  		
  		//菜单级别变化事件
  		form.on('radio(menuLevel)', function (data) {
@@ -59,7 +86,9 @@ layui.config({
         			titleName: $("#menuTitle").val(),
         			menuIcon: $("#menuIcon").val(),
         			menuUrl: $("#menuUrl").val(),
-        			menuType: data.field.menuType
+        			menuType: data.field.menuType,
+        			menuIconBg: $('#menuIconBginput').val(),
+        			menuIconColor: $('#menuIconColorinput').val(),
  	        	};
  	        	
  	        	if(data.field.menuLevel == '1'){//创世菜单
@@ -134,6 +163,8 @@ layui.config({
  				callBack: function(refreshCode){
  	                if (refreshCode == '0') {
  	                	$("#menuIcon").val(childIcon);
+ 	                	$("#iconShow").css({'color': 'white'});
+ 	                	$("#iconShow").attr("class", "fa fa-fw " + $("#menuIcon").val());
  	                } else if (refreshCode == '-9999') {
  	                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
  	                }

@@ -7,6 +7,8 @@
 			a.id,
 			a.menu_name menuName,
 			a.menu_icon menuIcon,
+			a.menu_icon_color menuIconColor,
+			a.menu_icon_bg menuIconBg,
 			a.title_name titleName,
 			a.menu_level menuLevel,
 			a.menu_type menuType,
@@ -52,9 +54,9 @@
 	
 	<insert id="insertSysMenuMation" parameterType="java.util.Map">
 	     INSERT into sys_eve_menu 
-	     (id, menu_name, title_name, menu_icon, menu_url, menu_type, menu_sys_type, menu_parent_id, menu_level, open_type, order_num, creater, create_time)
+	     (id, menu_name, title_name, menu_icon, menu_url, menu_type, menu_sys_type, menu_parent_id, menu_level, open_type, order_num, menu_icon_bg, menu_icon_color, creater, create_time)
 	     VALUES
-	     (#{id}, #{menuName}, #{titleName}, #{menuIcon}, #{menuUrl}, #{menuType}, #{menuSysType}, #{parentId}, #{menuLevel}, #{openType}, #{orderNum}, #{createId}, #{createTime})
+	     (#{id}, #{menuName}, #{titleName}, #{menuIcon}, #{menuUrl}, #{menuType}, #{menuSysType}, #{parentId}, #{menuLevel}, #{openType}, #{orderNum}, #{menuIconBg}, #{menuIconColor}, #{createId}, #{createTime})
 	</insert>
 	
 	<select id="querySysMenuMationBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
@@ -80,6 +82,8 @@
 			a.id,
 			a.menu_name menuName,
 			a.menu_icon menuIcon,
+			a.menu_icon_color menuIconColor,
+			a.menu_icon_bg menuIconBg,
 			a.title_name titleName,
 			a.menu_level menuLevel,
 			a.menu_type menuType,
@@ -124,6 +128,8 @@
 			<if test="orderNum != '' and orderNum != null">
 				order_num = #{orderNum},
 			</if>
+			menu_icon_bg = #{menuIconBg},
+			menu_icon_color = #{menuIconColor},
 		</set>
 		WHERE id = #{id}
 	</update>

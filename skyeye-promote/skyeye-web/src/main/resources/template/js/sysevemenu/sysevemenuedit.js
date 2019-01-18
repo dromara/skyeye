@@ -4,11 +4,13 @@ var childIcon = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
-}).define(['table', 'jquery', 'winui'], function (exports) {
+}).define(['table', 'jquery', 'winui', 'colorpicker'], function (exports) {
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 	    var $ = layui.$;
+	    var colorpicker = layui.colorpicker;
+	    
 	    var parentId = "0";
 	    
 	    //初始化数据
@@ -49,6 +51,46 @@ layui.config({
 		 			//初始化父菜单
 		 			loadChildMenuAll(json.bean.parentId.split(','));
 		 		}
+		 		
+		 		colorpicker.render({
+		 		    elem: '#menuIconBg',
+		 		    color: json.bean.menuIconBg,
+		 		    done: function(color){
+		 		        $('#menuIconBginput').val(color);
+		 		        $("#iconShow").parent().css({'background-color': color});
+		 		    },
+		 		    change: function(color){
+		 		    	$("#iconShow").parent().css({'background-color': color});
+		 		    }
+		 		});
+		 		
+		 		colorpicker.render({
+		 		    elem: '#menuIconColor',
+		 		    color: json.bean.menuIconColor,
+		 		    done: function(color){
+		 		        $('#menuIconColorinput').val(color);
+		 		        $("#iconShow").css({'color': color});
+		 		    },
+		 		    change: function(color){
+		 		    	$("#iconShow").css({'color': color});
+		 		    }
+		 		});
+		 		
+		 		$("#iconShow").attr("class", "fa fa-fw " + $("#menuIcon").val());
+		 		if(isNull(json.bean.menuIconColor)){
+		 			$("#iconShow").css({'color': 'white'});
+		 		}else{
+		 			$('#menuIconColorinput').val(json.bean.menuIconColor);
+		 			$("#iconShow").css({'color': json.bean.menuIconColor});
+		 		}
+		 		
+		 		if(isNull(json.bean.menuIconBg)){
+		 			$("#iconShow").css({'color': 'white'});
+		 		}else{
+		 			$('#menuIconBginput').val(json.bean.menuIconBg);
+		 			$("#iconShow").parent().css({'background-color': json.bean.menuIconBg});
+		 		}
+		 		
 		 		//菜单类型
 		 		$("input:radio[name=menuType][value=" + json.bean.menuType + "]").attr("checked", true);
 		 		
@@ -103,7 +145,9 @@ layui.config({
 		        			menuIcon: $("#menuIcon").val(),
 		        			menuUrl: $("#menuUrl").val(),
 		        			menuType: data.field.menuType,
-		        			rowId: parent.rowId
+		        			rowId: parent.rowId,
+		        			menuIconBg: $('#menuIconBginput').val(),
+		        			menuIconColor: $('#menuIconColorinput').val(),
 		 	        	};
 		 	        	
 		 	        	if(data.field.menuLevel == '1'){//创世菜单
@@ -208,6 +252,8 @@ layui.config({
  				callBack: function(refreshCode){
  	                if (refreshCode == '0') {
  	                	$("#menuIcon").val(childIcon);
+ 	                	$("#iconShow").css({'color': 'white'});
+ 	                	$("#iconShow").attr("class", "fa fa-fw " + $("#menuIcon").val());
  	                } else if (refreshCode == '-9999') {
  	                	top.winui.window.msg("操作失败", {icon: 2,time: 2000});
  	                }

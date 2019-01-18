@@ -89,6 +89,8 @@
 		<property id="menuName" name="menuName" ref="required" var="菜单名称"/>
 		<property id="titleName" name="titleName" ref="required" var="标题名称" />
 		<property id="menuIcon" name="menuIcon" ref="required" var="菜单logo"/>
+		<property id="menuIconColor" name="menuIconColor" ref="" var="菜单logo颜色"/>
+		<property id="menuIconBg" name="menuIconBg" ref="" var="菜单logo背景"/>
 		<property id="menuUrl" name="menuUrl" ref="required" var="菜单链接"/>
 		<property id="menuType" name="menuType" ref="required" var="菜单类型"/>
 		<property id="menuSysType" name="menuSysType" ref="required,num" var="是否为系统菜单"/>
@@ -104,6 +106,8 @@
 		<property id="menuName" name="menuName" ref="required" var="菜单名称"/>
 		<property id="titleName" name="titleName" ref="required" var="标题名称" />
 		<property id="menuIcon" name="menuIcon" ref="required" var="菜单logo"/>
+		<property id="menuIconColor" name="menuIconColor" ref="" var="菜单logo颜色"/>
+		<property id="menuIconBg" name="menuIconBg" ref="" var="菜单logo背景"/>
 		<property id="menuUrl" name="menuUrl" ref="required" var="菜单链接"/>
 		<property id="menuType" name="menuType" ref="required" var="菜单类型"/>
 		<property id="menuSysType" name="menuSysType" ref="required,num" var="是否为系统菜单"/>

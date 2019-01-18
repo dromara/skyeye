@@ -624,7 +624,7 @@ button{
     position: absolute;
     zoom: 1;
     z-index: 50;
-    background-color:rgba(0, 0, 0, 0.6);
+    background-color:rgba(0, 0, 0, 0.9);
     white-space: nowrap;
     overflow: hidden;
 }

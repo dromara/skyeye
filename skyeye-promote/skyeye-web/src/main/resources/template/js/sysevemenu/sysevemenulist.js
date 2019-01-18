@@ -54,7 +54,19 @@ layui.config({
 		        { field: 'menuName', title: '菜单名称', width: 120 },
 		        { field: 'menuIcon', title: '图标码', width: 180 },
 		        { field: 'id', title: '图标', width: 60, templet: function(d){
-		        	return '<i class="fa fa-fw ' + d.menuIcon + '"></i>';
+		        	var str = '';
+		        	if(isNull(d.menuIconBg)){
+		        		str += '<div class="winui-icon winui-icon-font" style="text-align: center;">';
+		        	}else{
+		        		str += '<div class="winui-icon winui-icon-font" style="text-align: center; background-color:' + d.menuIconBg + '">';
+		        	}
+		        	if(isNull(d.menuIconColor)){
+		        		str += '<i class="fa fa-fw ' + d.menuIcon + '" style="color: white"></i>';
+		        	}else{
+		        		str += '<i class="fa fa-fw ' + d.menuIcon + '" style="color: ' + d.menuIconColor + '"></i>';
+		        	}
+		        	str += '</div>';
+		        	return str;
 		        }},
 		        { field: 'titleName', title: '标题名称', width: 120 },
 		        { field: 'menuLevel', title: '菜单级别', width: 180, templet: function(d){
