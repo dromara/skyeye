@@ -278,10 +278,10 @@ button{
     line-height: 56px;
 }
 
-    .winui-desktop-item > .winui-icon-img > img {
-        max-width: 45px;
-        max-height: 45px;
-    }
+.winui-desktop-item > .winui-icon-img > img {
+    max-width: 45px;
+    max-height: 45px;
+}
 
 .winui-desktop-item > .winui-icon-font > i {
     font-size: 38px;
@@ -355,50 +355,49 @@ button{
     overflow: hidden;
 }
 
-    .winui-taskbar-task .winui-task-item {
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        line-height: 40px;
-        width: 160px;
-        padding: 0 10px;
-        text-align: center;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        cursor: default;
-        margin-right: 5px;
-    }
+.winui-taskbar-task .winui-task-item {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 40px;
+    width: 160px;
+    padding: 0 10px;
+    text-align: center;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    cursor: default;
+    margin-right: 5px;
+}
 
-        .winui-taskbar-task .winui-task-item:last-child {
-            margin-right: 0;
-        }
+.winui-taskbar-task .winui-task-item:last-child {
+    margin-right: 0;
+}
 
-        .winui-taskbar-task .winui-task-item:after {
-            position: absolute;
-            left: 0;
-            top: 0;
-            content: '';
-            width: 100%;
-            height: 41px;
-            -webkit-box-sizing: border-box !important;
-            -moz-box-sizing: border-box !important;
-            box-sizing: border-box !important;
-            pointer-events: none;
-            border: none;
-            border-radius: 0;
-            border-bottom: 3px solid rgba(255, 255, 255, 0.5);
-        }
+.winui-taskbar-task .winui-task-item:after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: '';
+    width: 100%;
+    height: 41px;
+    -webkit-box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    box-sizing: border-box !important;
+    pointer-events: none;
+    border: none;
+    border-radius: 0;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.5);
+}
 
-        .winui-taskbar-task .winui-task-item.winui-this {
-            /*任务Item选中样式*/
-            /*background-color: #004275;*/
-        }
+.winui-taskbar-task .winui-task-item.winui-this {
+    /*任务Item选中样式*/
+}
 
-            .winui-taskbar-task .winui-task-item.winui-this:hover {
-                /*任务Item选中悬浮样式*/
-                /*background-color: #195583;*/
-            }
+.winui-taskbar-task .winui-task-item.winui-this:hover {
+    /*任务Item选中悬浮样式*/
+    /*background-color: #195583;*/
+}
 
 
 /*任务栏时间*/
@@ -462,15 +461,15 @@ button{
 }
 
 
-    /*任务栏统一悬浮样式*/
+/*任务栏统一悬浮样式*/
 
-    .winui-taskbar-start:hover,
-    .winui-taskbar-task .winui-task-item:hover,
-    .winui-taskbar-time:hover,
-    .winui-taskbar-console:hover,
-    .winui-taskbar-desktop:hover {
-        /*background: #194260;*/
-    }
+.winui-taskbar-start:hover,
+.winui-taskbar-task .winui-task-item:hover,
+.winui-taskbar-time:hover,
+.winui-taskbar-console:hover,
+.winui-taskbar-desktop:hover {
+    /*background: #194260;*/
+}
 
 
 /*任务项和菜单项右键菜单*/
@@ -548,72 +547,71 @@ button{
 .winui-start {
     position: fixed;
     /*background: #004275;*/
-    width: 960px;
+    width: 975px;
     height: 60vh;
     z-index: 201704011157;
 }
 
-    .winui-start > * {
-        float: left;
-    }
+.winui-start > * {
+    float: left;
+}
 
-    .winui-start.winui-start-size-sm {
-        width: 640px;
-    }
+.winui-start.winui-start-size-sm {
+    width: 640px;
+}
 
-        .winui-start.winui-start-size-sm .winui-start-right {
-            width: 332px;
-        }
+.winui-start.winui-start-size-sm .winui-start-right {
+    width: 332px;
+}
 
-            .winui-start.winui-start-size-sm .winui-start-right .winui-nav-tile {
-                width: 320px;
-            }
+.winui-start.winui-start-size-sm .winui-start-right .winui-nav-tile {
+    width: 320px;
+}
 
-    .winui-start.winui-start-size-xs {
-        width: 308px;
-    }
+.winui-start.winui-start-size-xs {
+    width: 308px;
+}
 
-        .winui-start.winui-start-size-xs .winui-start-right {
-            width: 0;
-        }
-    /*开始菜单滚动条样式*/
+.winui-start.winui-start-size-xs .winui-start-right {
+    width: 0;
+}
+/*开始菜单滚动条样式*/
 
-    .winui-start .layui-side-scroll {
-        width: 100%;
-    }
+.winui-start .layui-side-scroll {
+    width: 100%;
+}
 
-        .winui-start .layui-side-scroll::-webkit-scrollbar {
-            /*滚动条整体*/
-            width: 12px;
-        }
+.winui-start .layui-side-scroll::-webkit-scrollbar {
+    /*滚动条整体*/
+    width: 12px;
+}
 
-        .winui-start .layui-side-scroll::-webkit-scrollbar-thumb,
-        .winui-message .layui-side-scroll::-webkit-scrollbar-thumb {
-            /*滚动条滑块背景色*/
-            /*background-color: #47779C;*/
-            background-color: rgba(255, 255, 255, 0.2);
-        }
+.winui-start .layui-side-scroll::-webkit-scrollbar-thumb,
+.winui-message .layui-side-scroll::-webkit-scrollbar-thumb {
+    /*滚动条滑块背景色*/
+  /*background-color: #47779C;*/
+    background-color: rgba(255, 255, 255, 0.2);
+}
 
-            .winui-start .layui-side-scroll::-webkit-scrollbar-thumb:vertical:hover,
-            .winui-message .layui-side-scroll::-webkit-scrollbar-thumb:vertical:hover {
-                /*滚动条滑块悬浮背景色*/
-                /*background-color: #7599B5;*/
-                background-color: rgba(255, 255, 255, 0.4);
-            }
+.winui-start .layui-side-scroll::-webkit-scrollbar-thumb:vertical:hover,
+.winui-message .layui-side-scroll::-webkit-scrollbar-thumb:vertical:hover {
+    /*滚动条滑块悬浮背景色*/
+/*background-color: #7599B5;*/
+    background-color: rgba(255, 255, 255, 0.4);
+}
 
-            .winui-start .layui-side-scroll::-webkit-scrollbar-thumb:vertical:active,
-            .winui-message .layui-side-scroll::-webkit-scrollbar-thumb:vertical:active {
-                /*滚动条滑块按住背景色*/
-                /*background-color: #A3BBCD;*/
-                background-color: rgba(255, 255, 255, 0.6);
-            }
+.winui-start .layui-side-scroll::-webkit-scrollbar-thumb:vertical:active,
+.winui-message .layui-side-scroll::-webkit-scrollbar-thumb:vertical:active {
+    /*滚动条滑块按住背景色*/
+/*background-color: #A3BBCD;*/
+    background-color: rgba(255, 255, 255, 0.6);
+}
 
-        .winui-start .layui-side-scroll::-webkit-scrollbar-track,
-        .winui-start .layui-side-scroll::-webkit-scrollbar-corner {
-            /*滚动条轨道和边角*/
-            /*background-color: #195583;*/
-        }
-
+.winui-start .layui-side-scroll::-webkit-scrollbar-track,
+.winui-start .layui-side-scroll::-webkit-scrollbar-corner {
+    /*滚动条轨道和边角*/
+ /*background-color: #195583;*/
+}
 
 /*开始菜单——END——*/
 
@@ -623,49 +621,67 @@ button{
 .winui-start-left {
     width: 48px;
     height: 100%;
-    position: relative;
+    position: absolute;
+    zoom: 1;
+    z-index: 50;
+    background-color:rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
 }
 
-    .winui-start-left .winui-start-item {
-        width: 48px;
-        height: 48px;
-        position: absolute;
-        text-align: center;
-    }
+.winui-start-left .winui-start-item {
+    width: 210px;
+    height: 48px;
+    position: absolute;
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.3s, top 0.3s, left 0.3s, border 0.3s, background-color 0.3s;
+    white-space: nowrap;
+    overflow: hidden;
+}
 
-        .winui-start-left .winui-start-item:hover {
-            /*background: #195583;*/
-        }
+.winui-start-left .winui-start-item:hover {
+    /*background: #195583;*/
+}
 
-        .winui-start-left .winui-start-item i {
-            line-height: 48px;
-            color: #fff;
-            font-size: 18px;
-            display: block;
-        }
+.winui-start-left .winui-start-item i {
+    line-height: 48px;
+    width: 48px;
+    height: 48px;
+    color: #fff;
+    font-size: 18px;
+    display: block;
+    float: left;
+}
 
-        .winui-start-left .winui-start-item.bottom:nth-last-child(1) {
-            bottom: 0;
-        }
+.winui-start-left .winui-start-item span {
+    float: left;
+    line-height: 48px;
+    color: white;
+}
 
-        .winui-start-left .winui-start-item.bottom:nth-last-child(2) {
-            bottom: 48px;
-        }
+.winui-start-left .winui-start-item.bottom:nth-last-child(1) {
+    bottom: 0;
+}
 
-        .winui-start-left .winui-start-item.bottom:nth-last-child(3) {
-            bottom: 96px;
-        }
+.winui-start-left .winui-start-item.bottom:nth-last-child(2) {
+    bottom: 48px;
+}
 
-        .winui-start-left .winui-start-item.bottom:nth-last-child(4) {
-            bottom: 144px;
-        }
+.winui-start-left .winui-start-item.bottom:nth-last-child(3) {
+    bottom: 96px;
+}
 
-        .winui-start-left .winui-start-item.bottom:nth-last-child(5),
-        .winui-start-left .winui-start-item.bottom:nth-last-child(6),
-        .winui-start-left .winui-start-item.bottom:nth-last-child(7),
-        .winui-start-left .winui-start-item.bottom:nth-last-child(8) {
-            display: none;
-        }
+.winui-start-left .winui-start-item.bottom:nth-last-child(4) {
+    bottom: 144px;
+}
+
+.winui-start-left .winui-start-item.bottom:nth-last-child(5),
+.winui-start-left .winui-start-item.bottom:nth-last-child(6),
+.winui-start-left .winui-start-item.bottom:nth-last-child(7),
+.winui-start-left .winui-start-item.bottom:nth-last-child(8) {
+    display: none;
+}
 
 .leftbtnhovertext {
     background: #2b2b2b;
@@ -690,102 +706,101 @@ button{
     width: 260px;
     height: 100%;
     position: relative;
+    margin-left: 55px;
+}
+
+/*开始菜单中间导航样式*/
+.winui-start-center .layui-nav-tree {
+    /*导航DIV样式*/
+    width: 248px;
+    background-color: initial;
+}
+
+.winui-start-center .layui-nav-tree * {
+    /*导航字体大小*/
+    font-size: 12px;
+}
+
+.winui-start-center .layui-nav-tree a {
+    /*导航下所有a表情鼠标样式改为默认*/
+    cursor: default;
+    line-height: 36px;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-itemed .layui-nav-child {
+    /*展开的子项div背景*/
+    background-color: initial !important;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-child dd.layui-this,
+.winui-start-center .layui-nav-tree .layui-this,
+.winui-start-center .layui-nav-tree .layui-this > a,
+.winui-start-center .layui-nav-tree .layui-this > a:hover {
+    /*导航选中背景*/
+    background-color: initial;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-item {
+    /*导航项li样式*/
+    line-height: 35px;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-item a {
+    /*导航项a样式*/
+    height: 35px;
+    color: #fff;
+    padding: 0 17px;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-item a:hover,
+.winui-start-center .layui-nav-tree .layui-nav-child dd.layui-this a:hover {
+    /*导航项悬浮背景*/
+    /*background-color: #195583;*/
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-itemed > a {
+    /*一级菜单展开背景*/
+    background-color: initial !important;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-itemed > a:hover {
+    /*一级菜单展开悬浮背景*/
+  /*background-color: #195583 !important;*/
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-child a {
+    /*二级导航*/
+    padding-left: 27px;
+    line-height: 35px;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-child dd.layui-this a {
+    /*二级导航选中样式*/
+    background-color: inherit;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-more {
+    border-color: #fff transparent transparent;
+    top: 15px;
+}
+
+.winui-start-center .layui-nav-tree .layui-nav-itemed .layui-nav-more {
+    border-color: transparent transparent #fff;
+    top: 9px;
 }
 
 
-    /*开始菜单中间导航样式*/
+/*菜单图标*/
 
-    .winui-start-center .layui-nav-tree {
-        /*导航DIV样式*/
-        width: 248px;
-        background-color: initial;
-    }
-
-        .winui-start-center .layui-nav-tree * {
-            /*导航字体大小*/
-            font-size: 12px;
-        }
-
-        .winui-start-center .layui-nav-tree a {
-            /*导航下所有a表情鼠标样式改为默认*/
-            cursor: default;
-            line-height: 36px;
-        }
-
-        .winui-start-center .layui-nav-tree .layui-nav-itemed .layui-nav-child {
-            /*展开的子项div背景*/
-            background-color: initial !important;
-        }
-
-        .winui-start-center .layui-nav-tree .layui-nav-child dd.layui-this,
-        .winui-start-center .layui-nav-tree .layui-this,
-        .winui-start-center .layui-nav-tree .layui-this > a,
-        .winui-start-center .layui-nav-tree .layui-this > a:hover {
-            /*导航选中背景*/
-            background-color: initial;
-        }
-
-        .winui-start-center .layui-nav-tree .layui-nav-item {
-            /*导航项li样式*/
-            line-height: 35px;
-        }
-
-            .winui-start-center .layui-nav-tree .layui-nav-item a {
-                /*导航项a样式*/
-                height: 35px;
-                color: #fff;
-                padding: 0 17px;
-            }
-
-                .winui-start-center .layui-nav-tree .layui-nav-item a:hover,
-                .winui-start-center .layui-nav-tree .layui-nav-child dd.layui-this a:hover {
-                    /*导航项悬浮背景*/
-                    /*background-color: #195583;*/
-                }
-
-        .winui-start-center .layui-nav-tree .layui-nav-itemed > a {
-            /*一级菜单展开背景*/
-            background-color: initial !important;
-        }
-
-            .winui-start-center .layui-nav-tree .layui-nav-itemed > a:hover {
-                /*一级菜单展开悬浮背景*/
-                /*background-color: #195583 !important;*/
-            }
-
-        .winui-start-center .layui-nav-tree .layui-nav-child a {
-            /*二级导航*/
-            padding-left: 27px;
-            line-height: 35px;
-        }
-
-        .winui-start-center .layui-nav-tree .layui-nav-child dd.layui-this a {
-            /*二级导航选中样式*/
-            background-color: inherit;
-        }
-
-        .winui-start-center .layui-nav-tree .layui-nav-more {
-            border-color: #fff transparent transparent;
-            top: 15px;
-        }
-
-        .winui-start-center .layui-nav-tree .layui-nav-itemed .layui-nav-more {
-            border-color: transparent transparent #fff;
-            top: 9px;
-        }
-
-
-        /*菜单图标*/
-
-        .winui-start-center .layui-nav-tree .winui-menu-icon {
-            position: relative;
-            top: 2px;
-            float: left;
-            height: 31px;
-            width: 31px;
-            /*background-color: #0063B1;*/
-            text-align: center;
-        }
+.winui-start-center .layui-nav-tree .winui-menu-icon {
+    position: relative;
+    top: 2px;
+    float: left;
+    height: 31px;
+    width: 31px;
+    /*background-color: #0063B1;*/
+    text-align: center;
+}
 
             .winui-start-center .layui-nav-tree .winui-menu-icon i {
                 font-size: 18px;
@@ -1648,6 +1663,15 @@ body .layer-ext-winconfirm {
     --tile-color: #107C10;
     --taskbar-btnhover-color: #215521;
     --start-btn-color: #3D9C3D;
+}
+
+.winui-color59 {
+    --taskbar-color: RGB(7, 16, 24);
+    --start-color: RGB(16, 35, 33);
+    --navhover-color: RGB(39, 54, 31);
+    --tile-color: RGB(191, 211, 180);
+    --taskbar-btnhover-color: RGB(56, 77, 45);
+    --start-btn-color: RGB(63, 86, 50);
 }
 
 

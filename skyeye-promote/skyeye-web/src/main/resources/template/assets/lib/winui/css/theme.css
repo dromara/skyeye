@@ -1,9 +1,5 @@
 ﻿/**
- 
  @Name: winui
- @Author: Leo
- @Site: www.leo96.com
- 
  */
 
 /*全局*/
@@ -222,177 +218,181 @@
     overflow: auto;
 }
 
-    .color-choose > div {
-        float: left;
-        margin-right: 2px;
-        margin-bottom: 3px;
-        width: 46px;
-        height: 46px;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
+.color-choose > div {
+    float: left;
+    margin-right: 2px;
+    margin-bottom: 3px;
+    width: 46px;
+    height: 46px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+    .color-choose > div:hover {
+        border: 2px solid #000;
     }
 
-        .color-choose > div:hover {
-            border: 2px solid #000;
-        }
+.color-choose .theme-color-11 {
+    background-color: #FFB900;
+}
 
-    .color-choose .theme-color-11 {
-        background-color: #FFB900;
-    }
+.color-choose .theme-color-12 {
+    background-color: #FF8C00;
+}
 
-    .color-choose .theme-color-12 {
-        background-color: #FF8C00;
-    }
+.color-choose .theme-color-13 {
+    background-color: #F7630C;
+}
 
-    .color-choose .theme-color-13 {
-        background-color: #F7630C;
-    }
+.color-choose .theme-color-14 {
+    background-color: #CA5010;
+}
 
-    .color-choose .theme-color-14 {
-        background-color: #CA5010;
-    }
+.color-choose .theme-color-15 {
+    background-color: #DA3B01;
+}
 
-    .color-choose .theme-color-15 {
-        background-color: #DA3B01;
-    }
+.color-choose .theme-color-16 {
+    background-color: #EF6950;
+}
 
-    .color-choose .theme-color-16 {
-        background-color: #EF6950;
-    }
+.color-choose .theme-color-17 {
+    background-color: #D13438;
+}
 
-    .color-choose .theme-color-17 {
-        background-color: #D13438;
-    }
+.color-choose .theme-color-18 {
+    background-color: #D13438;
+}
+/*第二排*/
+.color-choose .theme-color-21 {
+    background-color: #E74856;
+}
 
-    .color-choose .theme-color-18 {
-        background-color: #D13438;
-    }
-    /*第二排*/
-    .color-choose .theme-color-21 {
-        background-color: #E74856;
-    }
+.color-choose .theme-color-22 {
+    background-color: #E81123;
+}
 
-    .color-choose .theme-color-22 {
-        background-color: #E81123;
-    }
+.color-choose .theme-color-23 {
+    background-color: #EA005E;
+}
 
-    .color-choose .theme-color-23 {
-        background-color: #EA005E;
-    }
+.color-choose .theme-color-24 {
+    background-color: #C30052;
+}
 
-    .color-choose .theme-color-24 {
-        background-color: #C30052;
-    }
+.color-choose .theme-color-25 {
+    background-color: #E3008C;
+}
 
-    .color-choose .theme-color-25 {
-        background-color: #E3008C;
-    }
+.color-choose .theme-color-26 {
+    background-color: #BF0077;
+}
 
-    .color-choose .theme-color-26 {
-        background-color: #BF0077;
-    }
+.color-choose .theme-color-27 {
+    background-color: #C239B3;
+}
 
-    .color-choose .theme-color-27 {
-        background-color: #C239B3;
-    }
+.color-choose .theme-color-28 {
+    background-color: #9A0089;
+}
+/*第三排*/
+.color-choose .theme-color-31 {
+    background-color: #0078D7;
+}
 
-    .color-choose .theme-color-28 {
-        background-color: #9A0089;
-    }
-    /*第三排*/
-    .color-choose .theme-color-31 {
-        background-color: #0078D7;
-    }
+.color-choose .theme-color-32 {
+    background-color: #0063B1;
+}
 
-    .color-choose .theme-color-32 {
-        background-color: #0063B1;
-    }
+.color-choose .theme-color-33 {
+    background-color: #8E8CD8;
+}
 
-    .color-choose .theme-color-33 {
-        background-color: #8E8CD8;
-    }
+.color-choose .theme-color-34 {
+    background-color: #6B69D6;
+}
 
-    .color-choose .theme-color-34 {
-        background-color: #6B69D6;
-    }
+.color-choose .theme-color-35 {
+    background-color: #8764B8;
+}
 
-    .color-choose .theme-color-35 {
-        background-color: #8764B8;
-    }
+.color-choose .theme-color-36 {
+    background-color: #744DA9;
+}
 
-    .color-choose .theme-color-36 {
-        background-color: #744DA9;
-    }
+.color-choose .theme-color-37 {
+    background-color: #B146C2;
+}
 
-    .color-choose .theme-color-37 {
-        background-color: #B146C2;
-    }
+.color-choose .theme-color-38 {
+    background-color: #881798;
+}
+/*第四排*/
+.color-choose .theme-color-41 {
+    background-color: #0099BC;
+}
 
-    .color-choose .theme-color-38 {
-        background-color: #881798;
-    }
-    /*第四排*/
-    .color-choose .theme-color-41 {
-        background-color: #0099BC;
-    }
+.color-choose .theme-color-42 {
+    background-color: #2D7D9A;
+}
 
-    .color-choose .theme-color-42 {
-        background-color: #2D7D9A;
-    }
+.color-choose .theme-color-43 {
+    background-color: #00B7C3;
+}
 
-    .color-choose .theme-color-43 {
-        background-color: #00B7C3;
-    }
+.color-choose .theme-color-44 {
+    background-color: #038387;
+}
 
-    .color-choose .theme-color-44 {
-        background-color: #038387;
-    }
+.color-choose .theme-color-45 {
+    background-color: #00B294;
+}
 
-    .color-choose .theme-color-45 {
-        background-color: #00B294;
-    }
+.color-choose .theme-color-46 {
+    background-color: #018574;
+}
 
-    .color-choose .theme-color-46 {
-        background-color: #018574;
-    }
+.color-choose .theme-color-47 {
+    background-color: #00CC6A;
+}
 
-    .color-choose .theme-color-47 {
-        background-color: #00CC6A;
-    }
+.color-choose .theme-color-48 {
+    background-color: #00CC6A;
+}
+/*第五排*/
+.color-choose .theme-color-51 {
+    background-color: #7A7574;
+}
 
-    .color-choose .theme-color-48 {
-        background-color: #00CC6A;
-    }
-    /*第五排*/
-    .color-choose .theme-color-51 {
-        background-color: #7A7574;
-    }
+.color-choose .theme-color-52 {
+    background-color: #5D5A58;
+}
 
-    .color-choose .theme-color-52 {
-        background-color: #5D5A58;
-    }
+.color-choose .theme-color-53 {
+    background-color: #68768A;
+}
 
-    .color-choose .theme-color-53 {
-        background-color: #68768A;
-    }
+.color-choose .theme-color-54 {
+    background-color: #515C6B;
+}
 
-    .color-choose .theme-color-54 {
-        background-color: #515C6B;
-    }
+.color-choose .theme-color-55 {
+    background-color: #567C73;
+}
 
-    .color-choose .theme-color-55 {
-        background-color: #567C73;
-    }
+.color-choose .theme-color-56 {
+    background-color: #486860;
+}
 
-    .color-choose .theme-color-56 {
-        background-color: #486860;
-    }
+.color-choose .theme-color-57 {
+    background-color: #498205;
+}
 
-    .color-choose .theme-color-57 {
-        background-color: #498205;
-    }
+.color-choose .theme-color-58 {
+    background-color: #107C10;
+}
 
-    .color-choose .theme-color-58 {
-        background-color: #107C10;
-    }
+.color-choose .theme-color-59 {
+    background-color: RGB(6, 13, 22);
+}

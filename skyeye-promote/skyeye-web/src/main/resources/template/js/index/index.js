@@ -341,6 +341,25 @@
     $('.winui-start-item.winui-start-syspersonal').on('click', function () {
         winui.window.openSysPersonal();
     });
+    
+    //展开
+    $('.winui-start-item.winui-start-show').on('click', function () {
+    	if($(".winui-start-left").css("width") === '210px'){//当前状态：展开
+    		$(".winui-start-left").animate({
+    			width: '48px', 
+    		});
+    	}else{//当前状态：关闭
+    		$(".winui-start-left").animate({
+    			width: '210px', 
+    		});
+    	}
+    });
+    
+    $(".winui-start-left").mouseleave(function (){console.log(1);
+    	$(".winui-start-left").animate({
+			width: '48px', 
+		});
+    });
 
     //打开窗口的方法（可自己根据需求来写）
     function OpenWindow(menuItem) {
