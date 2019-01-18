@@ -31,6 +31,7 @@ layui.define(['layer', 'winui'], function (exports) {
     //打开窗口
     WinLayer.prototype.open = function (options) {
         var windowfunc = this;
+        MOVE = '.layui-layer-title';
         //获取window，判断window是否存在
         if (common.getWindow(options.id)) {
             //置顶window
@@ -63,6 +64,12 @@ layui.define(['layer', 'winui'], function (exports) {
         if(isNull(options.addToButtomMenu) && options.addToButtomMenu != false){
         	options.addToButtomMenu = true;
         }
+        if(!isNull(options.move) || options.move == false){
+        	MOVE = options.move;
+        }
+        if(isNull(options.fixed) && options.fixed != false){
+        	options.fixed = true;
+        }
 
         //打开窗口
         var windowIndex = layer.open({
@@ -74,6 +81,7 @@ layui.define(['layer', 'winui'], function (exports) {
             offset: options.offset || this.settings.offset,
             anim: options.anim || this.settings.anim,
             move: MOVE,
+            fixed: options.fixed,
             shade: options.shade || 0,
             maxmin: options.maxmin,   //允许最大最小化
             moveOut: true,  //允许拖出窗外

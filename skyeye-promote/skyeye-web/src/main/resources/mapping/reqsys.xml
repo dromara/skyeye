@@ -6,8 +6,8 @@
 	
 	<!-- 登录开始 -->
 	<url id="login001" path="/post/SysEveUserController/queryUserToLogin" val="登录" allUse="0">
-		<property id="userCode" name="userCode" ref="" var="账号"/>
-		<property id="password" name="password" ref="" var="密码"/>
+		<property id="userCode" name="userCode" ref="required" var="账号"/>
+		<property id="password" name="password" ref="required" var="密码"/>
 	</url>
 	<url id="login002" path="/post/SysEveUserController/queryUserMationBySession" val="从session中获取用户信息" allUse="1">
 	</url>

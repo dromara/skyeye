@@ -205,21 +205,18 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         //定位桌面应用
         locaApp: function () {
             //计算一竖排能容纳几个应用
-            var appHeight = 96;
+            var appHeight = 103;
             var appWidth = 90;
-            var maxCount = parseInt($('.winui-desktop').height() / 93);
+            var maxCount = parseInt($('.winui-desktop').height() / 100);
             var oldTemp = 0;
             var rowspan = 0;
             var colspan = 0;
             //定位桌面应用
             $('.winui-desktop>.winui-desktop-item').each(function (index, elem) {
                 var newTemp = parseInt(index / maxCount);
-
                 colspan = parseInt(index / maxCount);
                 rowspan = oldTemp == newTemp ? rowspan : 0;
-
                 if (rowspan == 0 && oldTemp != newTemp) oldTemp++;
-
                 $(this).css('top', appHeight * rowspan + 'px').css('left', appWidth * colspan + 'px');
                 rowspan++;
             });

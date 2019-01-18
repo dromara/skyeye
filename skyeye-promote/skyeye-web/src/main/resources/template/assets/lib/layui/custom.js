@@ -9,76 +9,70 @@ var refreshCode = "";
  * @param title
  */
 function _openNewWindows(mation){
-	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
-		if(json.returnCode == 0){
-			var index = layer.load(1);
-			if(isNull(mation.url)){
-				top.winui.window.msg("页面路径不能为空", {icon: 2,time: 2000});
-				return;
-			}
-			if(isNull(mation.pageId)){
-				top.winui.window.msg("缺少页面ID", {icon: 2,time: 2000});
-				return;
-			}
-			if(isNull(mation.title)){
-				mation.title = "窗口";
-			}
-			if(!isNull(mation.params)){
-				var s = "";
-				for(var param in mation.params)
-					s += "&" + param + "=" + mation.params[param];
-				mation.url = mation.url + "?" + s.slice(1);
-			}
-			if(isNull(mation.area)){
-				mation.area = [window.screen.width / 3 * 2 + 'px', (layui.$(window.parent.window).height() - 200) + 'px'];
-			}
-			if(isNull(mation.offset)){
-				mation.offset = 'auto';
-			}
-			if(isNull(mation.maxmin)){//是否最大化
-				mation.maxmin = false;
-			}
-			if(isNull(mation.shade)){//遮罩层
-				mation.shade = 0.5;
-			}
-		    var index = layer.load(1);
-		    refreshCode = "";
-		    layui.$.ajax({
-		        type: 'get',
-		        url: mation.url,
-		        async: true,
-		        success: function (data) {
-		            layer.close(index);
-		            var pageIndex = layer.open({
-		            	id: mation.pageId,
-		                type: 2,
-		                title: mation.title,
-		                content: mation.url,
-		                area: mation.area,
-		                offset: mation.offset,
-		                maxmin: mation.maxmin,
-		                shade: mation.shade,
-		                zIndex: 20000000000,
-		                scrollbar: false,
-		                end: function(){
-		                	if(typeof(mation.callBack) == "function") {
-		                		mation.callBack(refreshCode);
-		        			}
-		                }
-		            });
-		            if(mation.maxmin){
-	            		layer.full(pageIndex);
-		            }
-		        },
-		        error: function (xml) {
-		            layer.close(index);
-		            top.winui.window.msg("获取页面失败", {icon: 2,time: 2000});
-		        }
-		    });
-		}else{
-			location.href = "login.html";
-		}
-	}});
+	var index = layer.load(1);
+	if(isNull(mation.url)){
+		top.winui.window.msg("页面路径不能为空", {icon: 2,time: 2000});
+		return;
+	}
+	if(isNull(mation.pageId)){
+		top.winui.window.msg("缺少页面ID", {icon: 2,time: 2000});
+		return;
+	}
+	if(isNull(mation.title)){
+		mation.title = "窗口";
+	}
+	if(!isNull(mation.params)){
+		var s = "";
+		for(var param in mation.params)
+			s += "&" + param + "=" + mation.params[param];
+		mation.url = mation.url + "?" + s.slice(1);
+	}
+	if(isNull(mation.area)){
+		mation.area = [window.screen.width / 3 * 2 + 'px', (layui.$(window.parent.window).height() - 200) + 'px'];
+	}
+	if(isNull(mation.offset)){
+		mation.offset = 'auto';
+	}
+	if(isNull(mation.maxmin)){//是否最大化
+		mation.maxmin = false;
+	}
+	if(isNull(mation.shade)){//遮罩层
+		mation.shade = 0.5;
+	}
+    var index = layer.load(1);
+    refreshCode = "";
+    layui.$.ajax({
+        type: 'get',
+        url: mation.url,
+        async: true,
+        success: function (data) {
+            layer.close(index);
+            var pageIndex = layer.open({
+            	id: mation.pageId,
+                type: 2,
+                title: mation.title,
+                content: mation.url,
+                area: mation.area,
+                offset: mation.offset,
+                maxmin: mation.maxmin,
+                shade: mation.shade,
+                zIndex: 20000000000,
+                scrollbar: false,
+                end: function(){
+                	if(typeof(mation.callBack) == "function") {
+                		mation.callBack(refreshCode);
+        			}
+                }
+            });
+            if(mation.maxmin){
+        		layer.full(pageIndex);
+            }
+        },
+        error: function (xml) {
+            layer.close(index);
+            top.winui.window.msg("获取页面失败", {icon: 2,time: 2000});
+        }
+    });
 }
 
 function _openNewWindowsNoRel(mation){

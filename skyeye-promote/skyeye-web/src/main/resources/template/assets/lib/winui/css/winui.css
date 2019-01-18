@@ -239,64 +239,62 @@ button{
 }
 
 .winui-desktop-item {
-    width: 76px;
-    height: 76px;
+    width: 70px;
+    height: 95px;
+    padding-top: 5px;
     position: absolute;
     color: #fff;
-    cursor: default;
+    cursor: pointer;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     border: 1px solid rgba(255, 255, 255, 0.00);
     overflow: hidden;
     padding-bottom: 4px;
+    transition: opacity 0.3s, top 0.3s, left 0.3s, border 0.3s, background-color 0.3s;
 }
 
-    .winui-desktop-item:hover {
-        border: 1px solid rgba(221, 221, 221, .8);
-        background-color: rgba(255, 255, 255, .1);
-        overflow: visible;
-        height: auto;
+.winui-desktop-item:hover {
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background-color: rgba(239, 255, 236, 0.25);
+}
+
+.winui-desktop-item.winui-this {
+    border: 1px solid rgba(221, 221, 221, .8);
+    background-color: rgba(255, 255, 255, .3);
+    overflow: visible;
+}
+
+.winui-desktop-item > .winui-icon {
+    height: 56px;
+    text-align: center;
+}
+
+.winui-desktop-item > .winui-icon-font {
+    line-height: 76px;
+}
+
+.winui-desktop-item > .winui-icon-img {
+    line-height: 56px;
+}
+
+    .winui-desktop-item > .winui-icon-img > img {
+        max-width: 45px;
+        max-height: 45px;
     }
 
-    .winui-desktop-item.winui-this {
-        border: 1px solid rgba(221, 221, 221, .8);
-        background-color: rgba(255, 255, 255, .3);
-        overflow: visible;
-        height: auto;
-    }
+.winui-desktop-item > .winui-icon-font > i {
+    font-size: 38px;
+}
 
-    .winui-desktop-item > .winui-icon {
-        height: 56px;
-        text-align: center;
-    }
-
-    .winui-desktop-item > .winui-icon-font {
-        line-height: 76px;
-    }
-
-    .winui-desktop-item > .winui-icon-img {
-        line-height: 56px;
-    }
-
-        .winui-desktop-item > .winui-icon-img > img {
-            max-width: 45px;
-            max-height: 45px;
-        }
-
-    .winui-desktop-item > .winui-icon-font > i {
-        font-size: 38px;
-    }
-
-    .winui-desktop-item > p {
-        line-height: 16px;
-        text-align: center;
-        width: 90%;
-        margin: 0 auto;
-        /*字母数字换行*/
-        word-wrap: break-word;
-    }
-
+.winui-desktop-item > p {
+    line-height: 16px;
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+    /*字母数字换行*/
+    word-wrap: break-word;
+}
 
 /*********************************************************************/
 
@@ -324,6 +322,8 @@ button{
     color: #fff;
     text-align: center;
     position: absolute;
+    transition: opacity 0.3s, top 0.3s, left 0.3s, border 0.3s, background-color 0.3s;
+    cursor: pointer;
 }
 
 .winui-taskbar-start:hover {
@@ -413,14 +413,15 @@ button{
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    transition: opacity 0.3s, top 0.3s, left 0.3s, border 0.3s, background-color 0.3s;
 }
 
-    .winui-taskbar-time p {
-        line-height: 18px;
-        text-align: center;
-        color: white;
-        font-size: 12px;
-    }
+.winui-taskbar-time p {
+    line-height: 18px;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+}
 
 
 /*任务栏控制中心*/
@@ -430,23 +431,24 @@ button{
     height: 40px;
     position: absolute;
     right: 50px;
+    cursor: pointer;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     text-align: center;
     vertical-align: middle;
     line-height: 40px;
+    transition: opacity 0.3s, top 0.3s, left 0.3s, border 0.3s, background-color 0.3s;
 }
 
-    .winui-taskbar-console.winui-this {
-        /*background-color: #0D3858;*/
-        background-color: rgba(255, 255, 255, 0.05);
-    }
+.winui-taskbar-console.winui-this {
+    background-color: rgba(255, 255, 255, 0.05);
+}
 
-    .winui-taskbar-console i {
-        font-size: 18px;
-        color: #fff;
-    }
+.winui-taskbar-console i {
+    font-size: 18px;
+    color: #fff;
+}
 
 
 /*任务栏显示桌面按钮*/
@@ -975,66 +977,69 @@ button{
     overflow: hidden;
 }
 
-    .winui-window .layui-layer-title {
-        /*background-color: #0063B1;*/
-        border-radius: 0;
-        height: 34px;
-        line-height: 34px;
-        font-size: 12px;
-        color: #fff;
-        cursor: default !important;
-        border-bottom: none;
-    }
+.winui-window .layui-layer-title {
+    /*background-color: #0063B1;*/
+    border-radius: 0;
+    height: 34px;
+    line-height: 34px;
+    font-size: 12px;
+    color: #fff;
+    cursor: move;
+    border-bottom: none;
+}
 
-    .winui-window .layui-layer-setwin {
-        /*最大最小关闭按钮DIV*/
-        top: 0;
-        right: 0;
-        line-height: 34px;
-    }
+.winui-window .layui-layer-setwin {
+    /*最大最小关闭按钮DIV*/
+    top: 0;
+    right: 0;
+    line-height: 34px;
+}
 
-        .winui-window .layui-layer-setwin a {
-            height: 34px;
-            width: 48px;
-            margin: 0;
-            cursor: default;
-        }
+.winui-window .layui-layer-setwin a {
+    height: 34px;
+    width: 48px;
+    margin: 0;
+}
 
-            .winui-window .layui-layer-setwin a:hover {
-                /*background-color: #0078D7;*/
-                background-color: rgba(255, 255, 255, 0.15);
-            }
+.winui-window .layui-layer-setwin a:hover {
+    /*background-color: #0078D7;*/
+    background-color: rgba(255, 255, 255, 0.15);
+}
 
-        .winui-window .layui-layer-setwin .layui-layer-close:hover {
-            background-color: #E81123;
-            opacity: 1;
-        }
+.winui-window .layui-layer-setwin .layui-layer-close:hover {
+    background-color: #E81123;
+    opacity: 1;
+}
 
-        .winui-window .layui-layer-setwin .layui-layer-min cite {
-            /*最小化按钮*/
-            background-color: #fff;
-            left: 17px;
-            cursor: default;
-        }
+.winui-window .layui-layer-setwin .layui-layer-min{
+	cursor: pointer;
+}
 
-        .winui-window .layui-layer-setwin .layui-layer-min:hover cite {
-            background-color: #fff;
-        }
+.winui-window .layui-layer-setwin .layui-layer-min cite {
+    /*最小化按钮*/
+    background-color: #fff;
+    left: 17px;
+    cursor: default;
+}
 
-    .winui-window .layui-layer-ico {
-        background: none;
-        position: relative;
-    }
+.winui-window .layui-layer-setwin .layui-layer-min:hover cite {
+    background-color: #fff;
+}
 
-        .winui-window .layui-layer-ico i {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            top: 2px;
-            left: 16px;
-            color: #fff;
-        }
+.winui-window .layui-layer-ico {
+    background: none;
+    position: relative;
+    cursor: pointer;
+}
 
+.winui-window .layui-layer-ico i {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 2px;
+    left: 16px;
+    color: #fff;
+}
 
 /*************************************************************************************/
 
@@ -1048,51 +1053,51 @@ button{
     position: relative;
     overflow: auto;
 }
-    .winui-tab .winui-tab-left {
-        position: absolute;
-        width: 320px;
-        height: 100%;
-        font-size: 15px;
-    }
+.winui-tab .winui-tab-left {
+    position: absolute;
+    width: 320px;
+    height: 100%;
+    font-size: 15px;
+}
 
-        .winui-tab .winui-tab-left .winui-tab-title {
-            line-height: 50px;
-            padding: 0 10px;
-            color: #666666;
-        }
+.winui-tab .winui-tab-left .winui-tab-title {
+    line-height: 50px;
+    padding: 0 10px;
+    color: #666666;
+}
 
-        .winui-tab .winui-tab-left .winui-tab-nav li {
-            line-height: 50px;
-            padding: 0 15px;
-            cursor: default;
-        }
+.winui-tab .winui-tab-left .winui-tab-nav li {
+    line-height: 50px;
+    padding: 0 15px;
+    cursor: pointer;
+}
 
-            .winui-tab .winui-tab-left .winui-tab-nav li:hover {
-                background-color: #E6E6E6;
-            }
+.winui-tab .winui-tab-left .winui-tab-nav li:hover {
+    background-color: #E6E6E6;
+}
 
-            .winui-tab .winui-tab-left .winui-tab-nav li.winui-this {
-                padding-left: 10px;
-                border-left: 5px solid;
-                /*border-color:#0063B1;*/
-                /*color: #0063B1;*/
-            }
+.winui-tab .winui-tab-left .winui-tab-nav li.winui-this {
+    padding-left: 10px;
+    border-left: 5px solid;
+    /*border-color:#0063B1;*/
+  /*color: #0063B1;*/
+}
 
-            .winui-tab .winui-tab-left .winui-tab-nav li > i {
-                margin-right: 10px;
-            }
+.winui-tab .winui-tab-left .winui-tab-nav li > i {
+    margin-right: 10px;
+}
 
-    .winui-tab .winui-tab-right {
-        position: absolute;
-        left: 330px;
-        right: 0;
-        height: 100%;
-        font-size: 15px;
-    }
+.winui-tab .winui-tab-right {
+    position: absolute;
+    left: 330px;
+    right: 0;
+    height: 100%;
+    font-size: 15px;
+}
 
-        .winui-tab .winui-tab-right .winui-tab-content {
-            padding: 10px;
-        }
+.winui-tab .winui-tab-right .winui-tab-content {
+    padding: 10px;
+}
 
 .winui-tab-item.winui-this {
     display: block;
@@ -3020,6 +3025,26 @@ body .layer-ext-winconfirm {
 
 .sec-clsss{
     background-color: rgba(0,0,0,0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.54);
+}
+
+.sec-clsss .layui-layer-title{
+	background-color: rgba(0, 0, 0, 0);
+	margin-left: 10px;
+    margin-right: 10px;
+    color: #fff;
+    padding-left: 0px;
+}
+
+.sec-clsss .layui-layer-setwin{
+	display: none;
+}
+
+.sec-clsss .layui-layer-content{
+	padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .sec-clsss-btn{

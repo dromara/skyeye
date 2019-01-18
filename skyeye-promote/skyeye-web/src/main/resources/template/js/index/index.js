@@ -240,7 +240,7 @@
     function initWinConfig(json){
     	
     	//设置窗口点击事件
-    	$("body").on("dblclick", ".sec-clsss-btn", function(e){
+    	$("body").on("click", ".sec-clsss-btn", function(e){
     		winui.window.close($('#childWindow').parent());
     		OpenWindow($(this).prop("outerHTML"));
     	});
@@ -260,17 +260,12 @@
                     data: {loginPCIp: returnCitySN["cip"]}
                 },    //可以为{}  默认 请求 json/desktopmenu.json
                 done: function (desktopApp) {
-                    desktopApp.ondblclick(function (id, elem) {
-                    	var item = $(elem);
-                    	if(item.find(".icon-drawer").length > 0){
-                    	}else{
-                    		OpenWindow(elem);
-                    	}
-                    });
                     desktopApp.onclick(function (id, elem) {
                     	var item = $(elem);
                     	if(item.find(".icon-drawer").length > 0){
                     		showBigWin(elem);
+                    	}else{
+                    		OpenWindow(elem);
                     	}
                     }),
                     desktopApp.contextmenu({
@@ -349,80 +344,72 @@
 
     //打开窗口的方法（可自己根据需求来写）
     function OpenWindow(menuItem) {
-    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
-   			if(json.returnCode == 0){
-   				var $this = $(menuItem);
-   		        var url = $this.attr('win-url');
-   		        var title = $this.attr('win-title');
-   		        var id = $this.attr('win-id');
-   		        var type = parseInt($this.attr('win-opentype'));
-   		        var maxOpen = parseInt($this.attr('win-maxopen')) || -1;
-   		        if (url == 'theme') {
-   		            winui.window.openTheme();
-   		            return;
-   		        }
-   		        if (!url || !title || !id) {
-   		            winui.window.msg('菜单配置错误（菜单链接、标题、id缺一不可）');
-   		            return;
-   		        }
-   		        var content;
-   		        if (type === 1) {
-   		            $.ajax({
-   		                type: 'get',
-   		                url: url,
-   		                async: false,
-   		                success: function (data) {
-   		                    content = data;
-   		                },
-   		                error: function (e) {
-   		                    var page = '';
-   		                    switch (e.status) {
-   		                        case 404:
-   		                            page = '404.html';
-   		                            break;
-   		                        case 500:
-   		                            page = '500.html';
-   		                            break;
-   		                        default:
-   		                            content = "打开窗口失败";
-   		                    }
-   		                    $.ajax({
-   		                        type: 'get',
-   		                        url: reqBasePath + 'tpl/sysmessage/' + page,
-   		                        async: false,
-   		                        success: function (data) {
-   		                            content = data;
-   		                        },
-   		                        error: function () {
-   		                            layer.close(load);
-   		                        }
-   		                    });
-   		                }
-   		            });
-   		        } else {
-   		            content = url;
-   		        }
-   		        //核心方法（参数请看文档，config是全局配置 open是本次窗口配置 open优先级大于config）
-   		        winui.window.config({
-   		            anim: 0,
-   		            miniAnim: 0,
-   		            maxOpen: -1
-   		        }).open({
-   		            id: id,
-   		            type: type,
-   		            title: title,
-   		            content: content,
-   		            area: ['90vw','90vh'],
-   		            //,offset: ['10vh', '15vw']
-   		            maxOpen: maxOpen,
-   		            //, max: false
-   		            //, min: false
-   		            refresh:true
-   		        });
-   			}else{
-   				location.href = "login.html";
-   			}
-   		}});
+		var $this = $(menuItem);
+        var url = $this.attr('win-url');
+        console.log($this);
+        var title = $this.attr('win-title');
+        var id = $this.attr('win-id');
+        var type = parseInt($this.attr('win-opentype'));
+        var maxOpen = parseInt($this.attr('win-maxopen')) || -1;
+        if (url == 'theme') {
+            winui.window.openTheme();
+            return;
+        }
+        if (!url || !title || !id) {
+            winui.window.msg('菜单配置错误（菜单链接、标题、id缺一不可）');
+            return;
+        }
+        var content;
+        if (type === 1) {
+            $.ajax({
+                type: 'get',
+                url: url,
+                async: false,
+                success: function (data) {
+                    content = data;
+                },
+                error: function (e) {
+                    var page = '';
+                    switch (e.status) {
+                        case 404:
+                            page = '404.html';
+                            break;
+                        case 500:
+                            page = '500.html';
+                            break;
+                        default:
+                            content = "打开窗口失败";
+                    }
+                    $.ajax({
+                        type: 'get',
+                        url: reqBasePath + 'tpl/sysmessage/' + page,
+                        async: false,
+                        success: function (data) {
+                            content = data;
+                        },
+                        error: function () {
+                            layer.close(load);
+                        }
+                    });
+                }
+            });
+        } else {
+            content = url;
+        }
+        //核心方法（参数请看文档，config是全局配置 open是本次窗口配置 open优先级大于config）
+        winui.window.config({
+            anim: 0,
+            miniAnim: 0,
+            maxOpen: -1
+        }).open({
+            id: id,
+            type: type,
+            title: title,
+            content: content,
+            area: ['90vw','90vh'],
+            maxOpen: maxOpen,
+            refresh:true
+        });
     }
     
     function showBigWin(menuItem){
@@ -434,10 +421,12 @@
         }).open({
         	id: 'childWindow',
             type: 1,
-    		title: false,
+    		title: menu[0].outerText,
     		closeBtn: 1,
+    		fixed: false,
+    		move: false,
             content: menu.find(".icon-child").html(),
-            area: ['30vw', '40vh'],
+            area: ['600px', '250px'],
             shadeClose: true,
             skin: 'sec-clsss',
             scrollbar: false,
