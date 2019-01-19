@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body style="overflow: hidden;">
+	<div class="txtcenter" style="width:100%;margin:0 auto;">
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	    	<div class="layui-row" style="background-color: gainsboro;position: relative; width: 100%;">
+	    		<div class="layui-col-xs1 browser-optrare">
+	    			<i class="fa fa-fw fa-home browser-icon" id="homePage"></i>
+	    			<i class="fa fa-fw fa-refresh browser-icon" id="refresh"></i>
+	    		</div>
+	    		<div class="layui-col-xs11" style="min-height: 36px;padding-top: 3px">
+	    			<input type="text" id="browserAddress" name="browserAddress" class="layui-input browser-input" value="https://www.baidu.com/"/>
+	    		</div>
+	    	</div>
+	    </form>
+	</div>
+    <div class="browser-content">
+        <iframe id="contentUrl" src="https://www.baidu.com/"></iframe>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/browser/'}).use('browser');
+    </script>
+</body>
+</html>
