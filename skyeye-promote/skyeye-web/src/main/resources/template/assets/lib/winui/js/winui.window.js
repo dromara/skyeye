@@ -96,7 +96,6 @@ layui.define(['layer', 'winui'], function (exports) {
             },
             //打开回调
             success: function (layero, index) {
-            	console.log(1);
         		common.setWindowBody(layero);
             },
             //关闭回调

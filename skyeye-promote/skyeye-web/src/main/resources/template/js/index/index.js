@@ -469,6 +469,7 @@
             type: type,
             title: title,
             content: content,
+            loadBgColor: menuIconBg,
             area: ['90vw','90vh'],
             maxOpen: maxOpen,
             refresh:true
