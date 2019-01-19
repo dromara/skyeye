@@ -13,7 +13,7 @@
     
     winuiLoad = radialIndicator($('#winui-load'), {
     	barBgColor: '#E3E3E3',
-        barColor: '#FFFFFF',
+        barColor: '#8A2BE2',
         radius: 100,
         barWidth: 5,
         initValue: 0,
@@ -395,8 +395,22 @@
     function OpenWindow(menuItem) {
 		var $this = $(menuItem);
         var url = $this.attr('win-url');
-        console.log($this);
-        var title = $this.attr('win-title');
+        var menuIconBg = $this.attr("win-menuiconbg");
+        var menuIconColor = $this.attr("win-menuiconcolor");
+        var menuIcon = $this.attr("win-icon");
+        var str = '<i class="fa title-icon fa-fw ';
+        if(!isNull(menuIcon)){
+        	str += menuIcon;
+        }
+        str += '" style="';
+        if(!isNull(menuIconBg)){
+        	str += 'background-color: ' + menuIconBg + ';';
+        }
+        if(!isNull(menuIconColor)){
+        	str += 'color: ' + menuIconColor + ';';
+        }
+        str += '"></i>';
+        var title = str + '<font class="win-title-class">' + $this.attr('win-title') + '</font>';
         var id = $this.attr('win-id');
         var type = parseInt($this.attr('win-opentype'));
         var maxOpen = parseInt($this.attr('win-maxopen')) || -1;

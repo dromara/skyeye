@@ -42,7 +42,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
             }else{
             	var extend = '';
             }
-            html += '<li class="layui-nav-item ' + isParent + ' ' + extend + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxopen + ' ' + winIcon + '>';
+            html += '<li class="layui-nav-item ' + isParent + ' ' + extend + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxopen + ' ' + winIcon + ' ' + menuIconBg + ' ' + menuIconColor + '>';
             if(!isNull(item.menuIconBg)){
             	html += '<a><div class="winui-menu-icon" style="background-color: ' + item.menuIconBg + '!important;">';
             }else{
@@ -68,7 +68,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                     }else{
                     	cicon = (cItem.icon.indexOf('fa-') != -1 && cItem.icon.indexOf('.') == -1) ? '<i class="fa ' + cItem.icon + ' fa-fw"></i>' : '<img src="' + cItem.icon + '" />';;
                     }
-                    html += '<dd ' + cId + ' ' + cUrl + ' ' + cTitle + ' ' + cOpentype + ' ' + cMaxopen + ' ' + cWinIcon + '>';
+                    html += '<dd ' + cId + ' ' + cUrl + ' ' + cTitle + ' ' + cOpentype + ' ' + cMaxopen + ' ' + cWinIcon + ' ' + cmenuIconBg + ' ' + cmenuIconColor + '>';
                     if(!isNull(cItem.menuIconBg)){
                     	html += '<a><div class="winui-menu-icon" style="background-color: ' + cItem.menuIconBg + '!important;">';
                     }else{

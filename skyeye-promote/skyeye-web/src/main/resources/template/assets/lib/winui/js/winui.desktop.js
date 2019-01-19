@@ -27,6 +27,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         		maxOpen = (item.maxOpen == '' || item.maxOpen == undefined) ? '' : 'win-maxOpen="' + item.maxOpen + '"',
 				menuIconBg = (item.menuIconBg == '' || item.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + item.menuIconBg + '"',
 				menuIconColor = (item.menuIconColor == '' || item.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + item.menuIconColor + '"',
+				menuIcon = (item.icon == '' || item.icon == undefined) ? '' : 'win-icon="' + item.icon + '"',
         		//icon的算法存在纰漏，但出现错误几率较小
         		isFaIcon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1);
         	var icon;
@@ -36,7 +37,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         		icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
         	}
         	if(isNull(item.childs)){
-        		html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + '>';
+        		html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + ' ' + menuIconBg + ' ' + menuIconColor + ' ' + menuIcon + '>';
         		if(!isNull(item.menuIconBg)){
         			html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '" style="background-color: ' + item.menuIconBg + '">';
         		}else{
@@ -47,7 +48,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         		html += '<p>' + item.name + '</p>';
         		html += '</div>';
         	}else{
-        		html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + '>';
+        		html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + ' ' + menuIconBg + ' ' + menuIconColor + '>';
         		html += '<div class="winui-icon ' + (isFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '">';
         		html += '<div class="icon-drawer">';
         		var childsIconContent = '';
@@ -60,6 +61,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
 						childsmaxOpen = (bean.maxOpen == '' || bean.maxOpen == undefined) ? '' : 'win-maxOpen="' + bean.maxOpen + '"',
 						childsmenuIconBg = (bean.menuIconBg == '' || bean.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + bean.menuIconBg + '"',
 						childsmenuIconColor = (bean.menuIconColor == '' || bean.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + bean.menuIconColor + '"',
+						childsmenuIcon = (bean.icon == '' || bean.icon == undefined) ? '' : 'win-icon="' + bean.icon + '"',
 		        		//icon的算法存在纰漏，但出现错误几率较小
 						childsisFaIcon = (bean.icon.indexOf('fa-') != -1 && bean.icon.indexOf('.') == -1);
     				var childsicon;
@@ -83,7 +85,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
     				}
     				
     				childsIconContent += childsiconsmall;
-    				childsHtml += '<div class="winui-desktop-item sec-clsss-btn" ' + childsid + ' ' + childsurl + ' ' + childstitle + ' ' + childsopentype + ' ' + childsmaxOpen + '>';
+    				childsHtml += '<div class="winui-desktop-item sec-clsss-btn" ' + childsid + ' ' + childsurl + ' ' + childstitle + ' ' + childsopentype + ' ' + childsmaxOpen + ' ' + childsmenuIconBg + ' ' + childsmenuIconColor + ' ' + childsmenuIcon + '>';
     				if(!isNull(bean.menuIconBg)){
     					childsHtml += '<div class="winui-icon ' + (childsisFaIcon ? 'winui-icon-font' : 'winui-icon-img') + '" style="background-color: ' + bean.menuIconBg + '">';
     				}else{

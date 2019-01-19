@@ -309,7 +309,7 @@ button{
     height: 40px;
     position: fixed;
     bottom: 0;
-    z-index: 99980;
+    z-index: 99980000;
 }
 
 .winui-taskbar > * {
@@ -365,7 +365,6 @@ button{
     line-height: 40px;
     width: 160px;
     padding: 0 10px;
-    text-align: center;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -2494,6 +2493,18 @@ body .layer-ext-winconfirm {
     line-height: 17px;
 }
 
+.title-icon{
+	width: 16px;
+    height: 16px;
+    float: left;
+    margin-top: 10px;
+    line-height: 16px;
+}
+
+.win-title-class{
+	margin-left: 5px;
+}
+
 .icon-child{
 	display: none;
 }
@@ -3063,8 +3074,12 @@ body .layer-ext-winconfirm {
     padding-left: 0px;
 }
 
-.sec-clsss .layui-layer-setwin{
-	display: none;
+.sec-clsss .layui-layer-setwin a{
+	background-color: white;
+    border-radius: 10px;
+    padding-right: -8px;
+    background-position-x: 2px;
+    background-position-y: -39px;
 }
 
 .sec-clsss .layui-layer-content{
@@ -4226,6 +4241,12 @@ body .layer-ext-winconfirm {
 	background-color: rgba(0,0,0,0) !important;
     border: 0px !important;
     box-shadow: 1px 1px 50px rgba(0,0,0,0) !important;
+    z-index: 99980001 !important;
+}
+
+.talk-mabal{
+	margin-bottom: 40px!important;
+	z-index: 99980001 !important;
 }
 
 .qq_32{

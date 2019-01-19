@@ -158,7 +158,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 			return t.open({
 				type: 1,
 				area: ["260px", "520px"],
-				skin: "layui-box layui-layim",
+				skin: "layui-box layui-layim talk-mabal",
 				title: "&#8203;",
 				offset: "rb",
 				id: "layui-layim",
