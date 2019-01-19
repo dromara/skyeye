@@ -470,6 +470,8 @@
             title: title,
             content: content,
             loadBgColor: menuIconBg,
+            loadIcon: menuIcon,
+            loadIconColor: menuIconColor,
             area: ['90vw','90vh'],
             maxOpen: maxOpen,
             refresh:true

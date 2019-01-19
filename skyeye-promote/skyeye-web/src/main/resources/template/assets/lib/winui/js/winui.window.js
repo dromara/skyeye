@@ -97,6 +97,7 @@ layui.define(['layer', 'winui'], function (exports) {
             //打开回调
             success: function (layero, index) {
         		common.setWindowBody(layero);
+        		common.showLoading(layero, options);
             },
             //关闭回调
             cancel: function (index, windowDom) {
@@ -385,6 +386,40 @@ layui.define(['layer', 'winui'], function (exports) {
         hideWindow: function (param) {
             $(common.getWindow(param)).addClass('layui-hide');
         },
+        //显示加载进度
+        showLoading: function(window, options){
+        	var body = $(window).find('iframe').contents().find('body');
+            if (body) {
+            	var str = '<div class="page-load" ';
+            	if(!isNull(options.loadBgColor)){
+            		str += 'style="background-color:' + options.loadBgColor + ';';
+            		if(!isNull(options.zIndex)){
+            			var zIndex = options.zIndex + 1;
+            			str += 'z-index:' + zIndex;
+            		}
+            		str += '"';
+            	}
+            	str += '>';
+            	if(!isNull(options.loadIcon)){
+            		str += '<div class="page-icon">';
+            		str += '<i class="fa page-icon-title fa-fw ' + options.loadIcon + '" ';
+            		if(!isNull(options.loadIconColor)){
+                    	str += 'style="color: ' + options.loadIconColor + '" ';
+                    }else{
+                    	str += 'style="color: white" ';
+                    }
+            		str += '></i></div>';
+            	}
+            	str += '<div class="page-icon-load"><i class="fa page-icon-title-load fa-fw fa-spin fa-spinner"></i>';
+            	str += '<font>加载中</font></div></div>';
+                body.append(str);
+                $(window).ready(function(e){
+                	setTimeout(function(e){
+                		body.find(".page-load").remove();
+                	}, 1500);
+                });
+            }
+        }
     };
 
     //基础事件

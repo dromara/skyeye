@@ -6240,6 +6240,35 @@ select option{
 .page-load{
 	width: 100%;
 	height: 100%;
+	top: 0;
+    left: 0;
+    position: fixed;
+    background-color: aqua;
+}
+
+.page-icon{
+    width: 100%;
+    text-align: center;
+    margin-top: 9%;
+}
+
+.page-icon-title{
+	font-size: 66px;
+}
+
+.page-icon-load{
+	width: 100%;
+    text-align: center;
+    margin-top: 25px;
+    color: white;
+}
+
+.page-icon-title-load{
+	
+}
+
+.page-load font{
+	
 }
 
 /*******************************************自定义样式end********************************************/
