@@ -6302,6 +6302,35 @@ select option{
 	height: 100%;
 }
 
+.win-bg-vague{
+	-webkit-filter: blur(10px); /* Chrome, Opera */
+    -moz-filter: blur(10px);
+    -ms-filter: blur(10px);    
+    filter: blur(10px);
+    background-position: center 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    -webkit-background-size: cover;
+    background-color: gainsboro;
+    opacity: 0.5;
+}
+
+.win-bg-img{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.slider-custom{
+	width: 200px;
+    padding-top: 15px;
+}
+
+.slider-custom .layui-slider-input{
+	margin-top: 15px;
+}
+
 /*******************************************自定义样式end********************************************/
 
 

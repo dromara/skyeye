@@ -29,6 +29,9 @@
 	<url id="commontarea004" path="/post/SysTAreaController/querySysTAreaTownShipList" val="获取四级镇行政区划信息" allUse="1">
 		<property id="rowId" name="id" ref="required" var="县级行政区划id"/>
 	</url>
+	
+	<url id="sysevewinmation001" path="/post/CommonController/querySysWinMationById" val="获取win系统桌列表信息供展示" allUse="1">
+	</url>
 	<!-- 公共请求结束 -->
 	
 </controller>

@@ -59,6 +59,8 @@ public interface SysEveUserDao {
 	public int editSysUserJobMationById(Map<String, Object> map) throws Exception;
 
 	public Map<String, Object> querySysUserJobMationById(Map<String, Object> map) throws Exception;
+
+	public int editUserInstallVagueBgSrc(Map<String, Object> map) throws Exception;
 	
 	
 	

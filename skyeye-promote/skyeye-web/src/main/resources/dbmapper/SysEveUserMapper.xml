@@ -134,7 +134,9 @@
 			b.win_lock_bg_pic_url winLockBgPicUrl,
 			b.win_theme_color winThemeColor,
 			b.win_start_menu_size winStartMenuSize,
-			b.win_task_position winTaskPosition
+			b.win_task_position winTaskPosition,
+			b.win_bg_pic_vague winBgPicVague,
+			b.win_bg_pic_vague_value winBgPicVagueValue
 		FROM
 			sys_eve_user a
 			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id
@@ -299,6 +301,15 @@
 			password = #{password}
 		</set>
 		WHERE id = #{id}
+	</update>
+	
+	<update id="editUserInstallVagueBgSrc" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_bg_pic_vague = #{winBgPicVague},
+			win_bg_pic_vague_value = #{winBgPicVagueValue}
+		</set>
+		WHERE user_id = #{userId}
 	</update>
 	
 </mapper>

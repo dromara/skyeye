@@ -11,4 +11,6 @@ public interface CommonService {
 
 	public void downloadFileByJsonData(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	public void querySysWinMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+
 }

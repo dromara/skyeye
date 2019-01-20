@@ -15,6 +15,4 @@ public interface SysEveWinThemeColorService {
 
 	public void editSysEveWinThemeColorMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void querySysEveWinThemeColorListToShow(InputObject inputObject, OutputObject outputObject) throws Exception;
-
 }

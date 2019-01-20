@@ -6,45 +6,33 @@ layui.config({
 	winui.renderColor();
 	layui.use(['layer', 'form'], function (exports) {
 	    var $ = layui.jquery, 
-	    form = layui.form, 
-	    unfinished = '暂未实现',
-	    upload = layui.upload;
+		    form = layui.form, 
+		    unfinished = '暂未实现',
+		    upload = layui.upload;
 	
 	    $(function () {
 	        winui.renderColor();
 	        winui.tab.init();
-	        //设置预览背景为当前背景
-	        $('.background-preview').css('background-image', layui.jquery('body').css('background-image'));
-	        //设置锁屏预览背景为当前锁屏预览背景
-	        $('.lockscreen-preview').css('background-image', 'url(' + winui.getSetting('lockBgSrc') + ')');
-	
-	        //设置主题预览中任务栏位置
-	        var taskbarMode = winui.getSetting('taskbarMode');
-	        $('.taskbar-position input[value=' + taskbarMode + ']').prop('checked', true);
-	        //设置主题预览中开始菜单尺寸
-	        var startSize = winui.getSetting('startSize');
-	        $('.start-size input[value=' + startSize + ']').prop('checked', true);
-	        $('.preview-start').removeClass('xs sm lg');
-	        $('.preview-start').addClass(startSize);
-	        
-	        $(".preview-start").html(getFileContent('tpl/systheme/menu-model.tpl'));
-	        
-	        form.render();
 	        
 	        //初始化桌面背景图片
 		    showGrid({
-			 	id: "background-choose",
-			 	url: reqBasePath + "sysevewinbgpic004",
+			 	id: "choose-content",
+			 	url: reqBasePath + "sysevewinmation001",
 			 	params: {},
 			 	pagination: false,
-			 	template: getFileContent('tpl/systheme/bg-pic.tpl'),
+			 	template: getFileContent('tpl/systheme/systheme.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){
 			 		hdb.registerHelper("compare1", function(v1, options){
 						return fileBasePath + v1;
 					});
 			 	},
-			 	options: {'click .bgPicItem':function(index, row){
-				        var bgSrc = row.picUrl;
+			 	options: {},
+			 	ajaxSendAfter:function(json){
+			 		initCustomBackGroundPic();
+			 		initCustomLockBackGroundPic();
+			 		//桌面背景选择
+				    $('.bgPicItem').on('click', function () {
+				    	var bgSrc = $(this).attr('picUrl');
 				        AjaxPostUtil.request({url:reqBasePath + "sys025", params:{winBgPicUrl: bgSrc}, type:'json', callback:function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
@@ -53,62 +41,54 @@ layui.config({
 			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 			 	   			}
 			 	   		}});
-			 		}
-			 	},
-			 	ajaxSendAfter:function(json){
-			 		initCustomBackGroundPic();
-			 		//初始化桌面锁屏背景图片
-				    showGrid({
-					 	id: "lockscreen-choose",
-					 	url: reqBasePath + "sysevewinlockbgpic004",
-					 	params: {},
-					 	pagination: false,
-					 	template: getFileContent('tpl/systheme/lock-bg-pic.tpl'),
-					 	ajaxSendLoadBefore: function(hdb){
-					 		hdb.registerHelper("compare1", function(v1, options){
-								return fileBasePath + v1;
-							});
-					 	},
-					 	options: {'click .lockBgPicItem':function(index, row){
-						        var bgSrc = row.picUrl;
-						        AjaxPostUtil.request({url:reqBasePath + "sys026", params:{winLockBgPicUrl: bgSrc}, type:'json', callback:function(json){
-					 	   			if(json.returnCode == 0){
-						 	   			$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
-								        winui.resetLockBg(bgSrc);
-					 	   			}else{
-					 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-					 	   			}
-					 	   		}});
-					 		}
-					 	},
-					 	ajaxSendAfter:function(json){
-					 		initCustomLockBackGroundPic();
-					 		//初始化主题色
-					 		showGrid({
-							 	id: "color-choose",
-							 	url: reqBasePath + "sysevewinthemecolor006",
-							 	params: {},
-							 	pagination: false,
-							 	template: getFileContent('tpl/systheme/color-choose.tpl'),
-							 	ajaxSendLoadBefore: function(hdb){
-							 	},
-							 	ajaxSendAfter:function(json){
-							 		//颜色选择
-								    $('.color-choose>div').on('click', function () {
-								        var color = Number($(this)[0].classList[0].replace('theme-color-', ''));
-								        AjaxPostUtil.request({url:reqBasePath + "sys024", params:{themeColor: color}, type:'json', callback:function(json){
-							 	   			if(json.returnCode == 0){
-							 	   				winui.resetColor(color);
-							 	   			}else{
-							 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-							 	   			}
-							 	   		}});
-								        
-								    });
-							 	}
-						    });
-					 	}
 				    });
+				    //桌面锁屏背景选择
+				    $('.lockBgPicItem').on('click', function () {
+				    	var bgSrc = $(this).attr('picUrl');
+				        AjaxPostUtil.request({url:reqBasePath + "sys026", params:{winLockBgPicUrl: bgSrc}, type:'json', callback:function(json){
+			 	   			if(json.returnCode == 0){
+				 	   			$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
+						        winui.resetLockBg(bgSrc);
+			 	   			}else{
+			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   			}
+			 	   		}});
+				    });
+			 		//颜色选择
+				    $('.color-choose>div').on('click', function () {
+				        var color = Number($(this)[0].classList[0].replace('theme-color-', ''));
+				        AjaxPostUtil.request({url:reqBasePath + "sys024", params:{themeColor: color}, type:'json', callback:function(json){
+			 	   			if(json.returnCode == 0){
+			 	   				winui.resetColor(color);
+			 	   			}else{
+			 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   			}
+			 	   		}});
+				    });
+				    
+				    //设置预览背景为当前背景
+				    $('.background-preview').css('background-image', layui.jquery('body').css('background-image'));
+				    //设置锁屏预览背景为当前锁屏预览背景
+				    $('.lockscreen-preview').css('background-image', 'url(' + winui.getSetting('lockBgSrc') + ')');
+				    
+				    //设置主题预览中任务栏位置
+				    var taskbarMode = winui.getSetting('taskbarMode');
+				    $('.taskbar-position input[value=' + taskbarMode + ']').prop('checked', true);
+				    //设置主题预览中开始菜单尺寸
+				    var startSize = winui.getSetting('startSize');
+				    $('.start-size input[value=' + startSize + ']').prop('checked', true);
+				    $('.preview-start').removeClass('xs sm lg');
+				    $('.preview-start').addClass(startSize);
+				    $(".preview-start").html(getFileContent('tpl/systheme/menu-model.tpl'));
+				    var vagueBgSrc = winui.getSetting('vagueBgSrc');
+				    if(vagueBgSrc == '1'){
+				    	$("#winBgPicVague").val(false);
+				    	$("#winBgPicVague").attr("checked", false);
+				    }else{
+				    	$("#winBgPicVague").val(true);
+				    	$("#winBgPicVague").attr("checked", true);
+				    }
+				    form.render();
 			 	}
 		    });
 	
@@ -274,5 +254,24 @@ layui.config({
  	   			}
  	   		}});
 	    });
+	    //雾化开关
+	    form.on('switch(winBgPicVague)', function (data) {
+	    	var winBgPicVague = "";
+	    	var winBgPicVagueValue = "5";
+ 			//同步开关值
+ 			$(data.elem).val(data.elem.checked);
+ 			if(data.elem.checked){
+ 				winBgPicVague = '0';
+ 			}else{
+ 				winBgPicVague = '1';
+ 			}
+ 			AjaxPostUtil.request({url:reqBasePath + "sys029", params:{winBgPicVague: winBgPicVague, winBgPicVagueValue: winBgPicVagueValue}, type:'json', callback:function(json){
+ 	   			if(json.returnCode == 0){
+ 	   				winui.resetVagueBgSrc(winBgPicVague, winBgPicVagueValue);
+ 	   			}else{
+ 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   			}
+ 	   		}});
+ 		});
 	});
 });

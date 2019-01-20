@@ -79,7 +79,9 @@
                 bgSrc: '../assets/winbgpic/default.jpg',
                 lockBgSrc: '../assets/winlockbgpic/default.jpg/',
                 audioSrc: this.path + 'audio/236',
-                startSize: 'sm'
+                startSize: 'sm',
+                vagueBgSrc: '1',//背景图片是否雾化  1正常0模糊
+                vagueBgSrcValue: '0.5', //雾化值
             }; //设置
             this.configs = {}; //配置
             this.event = {};    //自定义事件
@@ -298,6 +300,18 @@
                 }
                 this.renderStartSize();
             }, 
+            
+            //重置雾化设置
+            resetVagueBgSrc: function (vagueBgSrc, vagueBgSrcValue) {
+            	if(vagueBgSrc == '1'){
+            		$('.win-bg-img').removeClass('.win-bg-vague');
+            		$('.win-bg-img').css({'opacity': 0});
+            	}else{
+            		this.settings.vagueBgSrcValue = vagueBgSrcValue;
+            		$('.win-bg-img').addClass('win-bg-vague');//模糊化
+            		$('.win-bg-img').css({'opacity': this.settings.vagueBgSrcValue / 10});
+            	}
+            }, 
 
             //渲染开始菜单尺寸
             renderStartSize: function () {
@@ -326,8 +340,13 @@
             //渲染背景图
             renderBg: function () {
                 var bgSrc = this.settings.bgSrc;
-                if (bgSrc)
-                    $('body').css('background-image', 'url(' + bgSrc + ')');
+                if (bgSrc){
+                	$('body').css('background-image', 'url(' + bgSrc + ')');
+                	if(this.settings.vagueBgSrc == '0'){
+                		$('.win-bg-img').addClass('win-bg-vague');//模糊化
+                		$('.win-bg-img').css({'opacity': this.settings.vagueBgSrcValue / 10});
+                	}
+                }
             }, 
 
             //重置锁屏图

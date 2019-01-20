@@ -65,22 +65,6 @@ public class SysEveWinBgPicController {
 	
 	/**
 	 * 
-	     * @Title: querySysEveWinBgPicList
-	     * @Description: 获取win系统桌面图片列表供展示
-	     * @param @param inputObject
-	     * @param @param outputObject
-	     * @param @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/SysEveWinBgPicController/querySysEveWinBgPicListToShow")
-	@ResponseBody
-	public void querySysEveWinBgPicListToShow(InputObject inputObject, OutputObject outputObject) throws Exception{
-		sysEveWinBgPicService.querySysEveWinBgPicListToShow(inputObject, outputObject);
-	}
-	
-	/**
-	 * 
 	     * @Title: insertSysEveWinBgPicMationByCustom
 	     * @Description: 用户自定义上传添加win系统桌面图片信息
 	     * @param @param inputObject

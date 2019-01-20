@@ -10,17 +10,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.CommonDao;
+import com.skyeye.eve.dao.SysEveWinBgPicDao;
+import com.skyeye.eve.dao.SysEveWinLockBgPicDao;
+import com.skyeye.eve.dao.SysEveWinThemeColorDao;
 import com.skyeye.eve.service.CommonService;
 
 import net.sf.json.JSONArray;
@@ -32,6 +37,15 @@ public class CommonServiceImpl implements CommonService{
 	
 	@Autowired
 	private CommonDao commonDao;
+	
+	@Autowired
+	private SysEveWinBgPicDao sysEveWinBgPicDao;
+	
+	@Autowired
+	private SysEveWinLockBgPicDao sysEveWinLockBgPicDao;
+	
+	@Autowired
+	private SysEveWinThemeColorDao sysEveWinThemeColorDao;
 
 	/**
 	 * 
@@ -280,6 +294,32 @@ public class CommonServiceImpl implements CommonService{
 		}
 		out.close();
 		commonDao.insertCodeModelHistory(inBeans);
+	}
+
+	/**
+	 * 
+	     * @Title: querySysWinMationById
+	     * @Description: 获取win系统桌列表信息供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void querySysWinMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		//获取win系统桌面图片列表供展示
+		List<Map<String, Object>> winBgPic = sysEveWinBgPicDao.querySysEveWinBgPicListToShow(map);
+		//获取win系统锁屏桌面图片列表供展示
+		List<Map<String, Object>> winLockBgPic = sysEveWinLockBgPicDao.querySysEveWinBgPicListToShow(map);
+		//获取win系统主题颜色列表供展示
+		List<Map<String, Object>> winThemeColor = sysEveWinThemeColorDao.querySysEveWinThemeColorListToShow(map);
+		map.put("winBgPic", winBgPic);
+		map.put("winLockBgPic", winLockBgPic);
+		map.put("winThemeColor", winThemeColor);
+		outputObject.setBean(map);
+		outputObject.settotal(1);
 	}
 	
 }

@@ -83,26 +83,6 @@ public class SysEveWinLockBgPicServiceImpl implements SysEveWinLockBgPicService{
 
 	/**
 	 * 
-	     * @Title: querySysEveWinBgPicListToShow
-	     * @Description: 获取win系统锁屏桌面图片列表供展示
-	     * @param @param inputObject
-	     * @param @param outputObject
-	     * @param @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@Override
-	public void querySysEveWinBgPicListToShow(InputObject inputObject, OutputObject outputObject) throws Exception {
-		Map<String, Object> map = inputObject.getParams();
-		List<Map<String, Object>> beans = sysEveWinLockBgPicDao.querySysEveWinBgPicListToShow(map);
-		if(beans != null && !beans.isEmpty()){
-			outputObject.setBeans(beans);
-			outputObject.settotal(beans.size());
-		}
-	}
-
-	/**
-	 * 
 	     * @Title: insertSysEveWinBgPicMationByCustom
 	     * @Description: 用户自定义上传win系统锁屏桌面图片信息
 	     * @param @param inputObject

@@ -175,6 +175,10 @@
 	<url id="sys028" path="/post/SysEveUserController/editUserInstallWinTaskPosition" val="自定义设置win任务栏在屏幕的位置" allUse="1">
 		<property id="winTaskPosition" name="winTaskPosition" ref="required" var="位置属性" />
 	</url>
+	<url id="sys029" path="/post/SysEveUserController/editUserInstallVagueBgSrc" val="自定义设置win雾化" allUse="1">
+		<property id="winBgPicVague" name="winBgPicVague" ref="required,num" var="背景图片是否雾化  1正常0模糊" />
+		<property id="winBgPicVagueValue" name="winBgPicVagueValue" ref="required,num" var="雾化值  0~1" />
+	</url>
 	
 	<url id="icon001" path="/post/SysEveIconController/querySysIconList" val="获取ICON列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
@@ -216,8 +220,6 @@
 	<url id="sysevewinbgpic003" path="/post/SysEveWinBgPicController/deleteSysEveWinBgPicMationById" val="删除win系统桌面图片信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="win系统桌面图片id"/>
 	</url>
-	<url id="sysevewinbgpic004" path="/post/SysEveWinBgPicController/querySysEveWinBgPicListToShow" val="获取win系统桌面图片列表供展示" allUse="1">
-	</url>
 	<url id="sysevewinbgpic005" path="/post/SysEveWinBgPicController/insertSysEveWinBgPicMationByCustom" val="用户自定义上传win系统桌面图片信息" allUse="1">
 		<property id="picUrl" name="picUrl" ref="required" var="图片路径"/>
 	</url>
@@ -236,8 +238,6 @@
 	</url>
 	<url id="sysevewinlockbgpic003" path="/post/SysEveWinLockBgPicController/deleteSysEveWinLockBgPicMationById" val="删除win系统锁屏桌面图片信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="win系统锁屏桌面图片id"/>
-	</url>
-	<url id="sysevewinlockbgpic004" path="/post/SysEveWinLockBgPicController/querySysEveWinBgPicListToShow" val="获取win系统锁屏桌面图片列表供展示" allUse="1">
 	</url>
 	<url id="sysevewinlockbgpic005" path="/post/SysEveWinLockBgPicController/insertSysEveWinBgPicMationByCustom" val="用户自定义上传win系统锁屏桌面图片信息" allUse="1">
 		<property id="picUrl" name="picUrl" ref="required" var="图片路径"/>
@@ -265,8 +265,6 @@
 	<url id="sysevewinthemecolor005" path="/post/SysEveWinThemeColorController/editSysEveWinThemeColorMationById" val="编辑win系统主题颜色信息" allUse="1">
 	    <property id="rowId" name="id" ref="required" var="win系统主题颜色id"/>
 	    <property id="colorClass" name="colorClass" ref="required" var="win系统主题颜色属性"/>
-	</url>
-	<url id="sysevewinthemecolor006" path="/post/SysEveWinThemeColorController/querySysEveWinThemeColorListToShow" val="获取win系统主题颜色列表供展示" allUse="1">
 	</url>
 	<!-- 系统管理结束 -->
 	

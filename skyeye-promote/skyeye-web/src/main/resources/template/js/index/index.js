@@ -278,7 +278,9 @@
                 taskbarMode: json.bean.winTaskPosition,
                 startSize: json.bean.winStartMenuSize,
                 bgSrc: json.bean.winBgPicUrl,
-                lockBgSrc: json.bean.winLockBgPicUrl
+                lockBgSrc: json.bean.winLockBgPicUrl,
+                vagueBgSrc: json.bean.winBgPicVague,
+                vagueBgSrcValue: json.bean.winBgPicVagueValue
             },
             desktop: {//桌面菜单栏
                 options: {

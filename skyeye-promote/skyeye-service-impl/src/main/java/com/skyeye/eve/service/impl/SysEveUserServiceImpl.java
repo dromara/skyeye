@@ -501,4 +501,27 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 		}
 	}
 
+	/**
+	 * 
+	     * @Title: editUserInstallVagueBgSrc
+	     * @Description: 自定义设置win雾化
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@Override
+	public void editUserInstallVagueBgSrc(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		map.put("userId", user.get("id"));
+		//修改reids中的用户信息
+		user.put("winBgPicVague", map.get("winBgPicVague"));
+		user.put("winBgPicVagueValue", map.get("winBgPicVagueValue"));
+		jedisClient.set("userMation:" + user.get("id").toString(), JSON.toJSONString(user));
+		jedisClient.expire("userMation:" + user.get("id").toString(), 1800);//时间为30分钟
+		sysEveUserDao.editUserInstallVagueBgSrc(map);
+	}
+
 }

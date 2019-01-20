@@ -11,8 +11,6 @@ public interface SysEveWinBgPicService {
 
 	public void deleteSysEveWinBgPicMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void querySysEveWinBgPicListToShow(InputObject inputObject, OutputObject outputObject) throws Exception;
-
 	public void insertSysEveWinBgPicMationByCustom(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void querySysEveWinBgPicCustomList(InputObject inputObject, OutputObject outputObject) throws Exception;

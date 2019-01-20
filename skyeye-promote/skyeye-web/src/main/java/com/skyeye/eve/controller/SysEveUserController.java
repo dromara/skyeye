@@ -319,4 +319,20 @@ public class SysEveUserController {
 		sysEveUserService.editUserPassword(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: editUserInstallVagueBgSrc
+	     * @Description: 自定义设置win雾化
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/SysEveUserController/editUserInstallVagueBgSrc")
+	@ResponseBody
+	public void editUserInstallVagueBgSrc(InputObject inputObject, OutputObject outputObject) throws Exception{
+		sysEveUserService.editUserInstallVagueBgSrc(inputObject, outputObject);
+	}
+	
 }

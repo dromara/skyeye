@@ -62,4 +62,20 @@ public class CommonController {
 		commonService.downloadFileByJsonData(inputObject, outputObject);
 	}
 	
+	/**
+	 * 
+	     * @Title: querySysWinMationById
+	     * @Description: 获取win系统桌列表信息供展示
+	     * @param @param inputObject
+	     * @param @param outputObject
+	     * @param @throws Exception    参数
+	     * @return void    返回类型
+	     * @throws
+	 */
+	@RequestMapping("/post/CommonController/querySysWinMationById")
+	@ResponseBody
+	public void querySysWinMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+		commonService.querySysWinMationById(inputObject, outputObject);
+	}
+	
 }

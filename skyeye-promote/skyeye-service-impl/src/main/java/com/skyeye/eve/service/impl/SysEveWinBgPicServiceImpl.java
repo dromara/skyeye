@@ -83,26 +83,6 @@ public class SysEveWinBgPicServiceImpl implements SysEveWinBgPicService{
 
 	/**
 	 * 
-	     * @Title: querySysEveWinBgPicList
-	     * @Description: 获取win系统桌面图片列表供展示
-	     * @param @param inputObject
-	     * @param @param outputObject
-	     * @param @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@Override
-	public void querySysEveWinBgPicListToShow(InputObject inputObject, OutputObject outputObject) throws Exception {
-		Map<String, Object> map = inputObject.getParams();
-		List<Map<String, Object>> beans = sysEveWinBgPicDao.querySysEveWinBgPicListToShow(map);
-		if(beans != null && !beans.isEmpty()){
-			outputObject.setBeans(beans);
-			outputObject.settotal(beans.size());
-		}
-	}
-
-	/**
-	 * 
 	     * @Title: insertSysEveWinBgPicMationByCustom
 	     * @Description: 用户自定义上传添加win系统桌面图片信息
 	     * @param @param inputObject
