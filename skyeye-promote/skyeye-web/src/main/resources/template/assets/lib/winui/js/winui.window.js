@@ -585,7 +585,7 @@ layui.define(['layer', 'winui'], function (exports) {
             that.open({
                 id: 'winui-theme',
                 type: 1,
-                title: '主题',
+                title: '<i class="fa title-icon fa-fw fa-cog" style="background-color: #0491fe;color: #ecf3f8;"></i>' + '<font class="win-title-class">主题设置</font>',
                 content: content,
             });
         });
@@ -598,7 +598,7 @@ layui.define(['layer', 'winui'], function (exports) {
             that.open({
                 id: 'winui-syspersonal',
                 type: 1,
-                title: '个人中心',
+                title: '<i class="fa title-icon fa-fw fa-user" style="background-color: #0491fe;color: #ecf3f8;"></i>' + '<font class="win-title-class">个人中心</font>',
                 content: content,
             });
         });
