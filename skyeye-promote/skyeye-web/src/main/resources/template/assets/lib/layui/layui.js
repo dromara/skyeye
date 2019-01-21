@@ -133,6 +133,7 @@ function isNull(str){
 	    validate: 'modules/validate/jquery.validate',//验证
 	    ClipboardJS: 'modules/clipboard.min',//复制
 	    radialin: 'modules/radialindicator/radialindicator',//加载进度条
+	    contextMenu: 'modules/contextMenu',//右键
 	};
 
 	// 记录基础数据
@@ -1094,6 +1095,22 @@ function getFormatDate(){
     var minute = nowDate.getMinutes()< 10 ? "0" + nowDate.getMinutes() : nowDate.getMinutes();
     var second = nowDate.getSeconds()< 10 ? "0" + nowDate.getSeconds() : nowDate.getSeconds();
     return year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second;
+}
+
+/**
+ * 获取长度为len的随机字符串
+ * @param len
+ * @returns {String}
+ */
+function _getRandomString(len) {
+    len = len || 32;
+    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; // 默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
+    var maxPos = $chars.length;
+    var pwd = '';
+    for (i = 0; i < len; i++) {
+        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
 }
 
 

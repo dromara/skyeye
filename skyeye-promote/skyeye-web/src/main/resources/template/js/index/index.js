@@ -6,11 +6,25 @@
     desktop: 'js/winui.desktop',//桌面加载模块
     start: 'js/winui.start',//左下角开始菜单
     helper: 'js/winui.helper'
-}).define(['window', 'desktop', 'start', 'helper', 'layim', 'radialin'], function (exports) {
+}).define(['window', 'desktop', 'start', 'helper', 'layim', 'radialin', 'contextMenu'], function (exports) {
     var $ = layui.jquery,
     layim = layui.layim;
     var winuiLoad;
     
+    //自动回复
+    var autoReplay = [
+		'您好，我现在有事不在，一会再和您联系。',
+		'你没发错吧？face[微笑] ',
+		'洗澡中，请勿打扰，偷窥请购票，个体四十，团体八折，订票电话：一般人我不告诉他！face[哈哈] ',
+		'你好，我是主人的美女秘书，有什么事就跟我说吧，等他回来我会转告他的。face[心] face[心] face[心] ',
+		'face[威武] face[威武] face[威武] face[威武] ',
+		'<（@￣︶￣@）>',
+		'你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。',
+		'face[黑线]  你慢慢说，别急……',
+		'(*^__^*) face[嘻嘻] ，是天眼吗？'
+	];
+    
+    //页面加载进度条
     winuiLoad = radialIndicator($('#winui-load'), {
     	barBgColor: '#E3E3E3',
         barColor: '#8A2BE2',
@@ -67,10 +81,14 @@
    				}else{
    					json.bean.winLockBgPicUrl = fileBasePath + json.bean.winLockBgPicUrl;
    				}
+   				//加载win系统内容
    		        initWinConfig(json);
    		        
    		        //加载聊天
    		        initTalk();
+   		        
+   		        //加载右键
+   		        initRightMenu();
    		        
 	   		    //扩展桌面助手工具
 	   		    winui.helper.addTool([{
@@ -105,18 +123,65 @@
     	
     });
     
-    //自动回复
-    var autoReplay = [
-		'您好，我现在有事不在，一会再和您联系。',
-		'你没发错吧？face[微笑] ',
-		'洗澡中，请勿打扰，偷窥请购票，个体四十，团体八折，订票电话：一般人我不告诉他！face[哈哈] ',
-		'你好，我是主人的美女秘书，有什么事就跟我说吧，等他回来我会转告他的。face[心] face[心] face[心] ',
-		'face[威武] face[威武] face[威武] face[威武] ',
-		'<（@￣︶￣@）>',
-		'你要和我说话？你真的要和我说话？你确定自己想说吗？你一定非说不可吗？那你说吧，这是自动回复。',
-		'face[黑线]  你慢慢说，别急……',
-		'(*^__^*) face[嘻嘻] ，是天眼吗？'
-	];
+    function initRightMenu(){
+    	$("body").contextMenu({
+			width: 110, // width
+			itemHeight: 30, // 菜单项height
+			bgColor: "#FFFFFF", // 背景颜色
+			color: "#0A0A0A", // 字体颜色
+			fontSize: 12, // 字体大小
+			hoverBgColor: "#99CC66", // hover背景颜色
+			target: function(ele) { // 当前元素
+			},
+			menu: [{ // 菜单项
+					text: "新建",
+					icon: "fa fa-plus-square",
+					children: [{
+						text: "新建Fill",
+						icon: "fa fa-copy",
+						callback: function() {
+							alert("新建Fill");
+						}
+					}, {
+						text: "新建Logo",
+						icon: "fa fa-copy",
+						callback: function() {
+							alert("新建Logo");
+						}
+					}]
+				}, {
+					text: "复制",
+					icon: "fa fa-copy",
+					callback: function() {
+						alert("复制");
+					}
+				}, {
+					text: "粘贴",
+					icon: "fa fa-paste",
+					children: [{
+						text: "粘贴Fill",
+						icon: "fa fa-copy",
+						callback: function() {
+							alert("粘贴Fill");
+						}
+					}, {
+						text: "粘贴Logo",
+						icon: "fa fa-copy",
+						callback: function() {
+							alert("粘贴Logo");
+						}
+					}]
+				}, {
+					text: "删除",
+					icon: "fa fa-trash-o",
+					callback: function() {
+						alert("删除");
+					}
+				}
+			]
+
+		});
+    }
     
     function initTalk(){
     	layim.config({
