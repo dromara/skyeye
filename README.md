@@ -170,5 +170,5 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 #### QQ群：
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1205/145236_4fce6966_1541735.jpeg "微信图片_20181205145217.jpg")
 
-#### 微信群：
-
+#### 微信：
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0121/175606_b635774d_1541735.jpeg "微信图片_20190121175533.jpg")
