@@ -478,70 +478,72 @@ button{
 
 .task-contextmenu,
 .menu-contextmenu {
-    width: 200px;
+    width: 110px;
     padding: 8px 0;
-    background: #2B2B2B;
-    color: #fff;
+    background: white;
+    color: black;
     position: fixed;
     z-index: 201704011157;
     box-sizing: border-box;
-    border: 1px solid #494949;
+    border-radius: 5px;
 }
 
-    .task-contextmenu li,
-    .menu-contextmenu li {
-        line-height: 34px;
-        padding: 0 10px;
-        font-size: 13px;
-        cursor: default;
-        padding-left: 38px;
-    }
+.task-contextmenu li,
+.menu-contextmenu li {
+    line-height: 34px;
+    padding: 0 10px;
+    font-size: 13px;
+    cursor: default;
+    padding-left: 38px;
+}
 
-        .task-contextmenu li:hover,
-        .menu-contextmenu li:hover {
-            background: #404040;
-        }
+.task-contextmenu li:hover,
+.menu-contextmenu li:hover {
+    background: #91C9F7;
+}
 
-        .task-contextmenu li i,
-        .menu-contextmenu li i {
-            font-size: 14px;
-            margin-right: 10px;
-            margin-left: -28px;
-        }
+.task-contextmenu li i,
+.menu-contextmenu li i {
+    font-size: 14px;
+    margin-right: 10px;
+    margin-left: -28px;
+}
 
 /*左面应用右键菜单*/
 .app-contextmenu {
-    width: 180px;
+    width: 110px;
+    border-radius: 5px;
     padding: 2px;
     border: 1px solid #dcf0ff;
     z-index: 201704011157;
     box-sizing: border-box;
-    background-color: #F0F0F0;
+    background-color: white;
     position: fixed;
     -moz-box-shadow: 2px 2px 1px #353535;
     -webkit-box-shadow: 2px 2px 1px #353535;
     box-shadow: 2px 2px 1px #353535;
 }
 
-    .app-contextmenu li {
-        line-height: 22px;
-        font-size: 12px;
-        cursor: default;
-        padding-left: 28px;
-        padding-right: 10px;
-        position: relative;
-    }
+.app-contextmenu li {
+    line-height: 30px;
+    font-size: 12px;
+    cursor: pointer;
+    padding-left: 28px;
+    padding-right: 10px;
+    position: relative;
+}
 
-        .app-contextmenu li:hover {
-            background-color: #91C9F7;
-        }
+.app-contextmenu li:hover {
+    background-color: #91C9F7;
+}
 
-        .app-contextmenu li i {
-            position: absolute;
-            left: 10px;
-            top: 3px;
-            font-size: 14px;
-        }
+.app-contextmenu li i {
+    position: absolute;
+    left: 5px;
+    top: 3px;
+    font-size: 14px;
+    line-height: 24px;
+}
 
 
 /*开始菜单*/

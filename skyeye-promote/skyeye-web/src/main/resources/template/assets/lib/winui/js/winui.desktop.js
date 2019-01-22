@@ -176,7 +176,11 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
 
                 var div = '<ul class="app-contextmenu" style="top:' + top + 'px;left:' + left + 'px;">';
                 $(options.item).each(function (index, item) {
-                    div += '<li>' + item + '</li>';
+                	if(!isNull(item.icon)){
+                		div += '<li><i class="right-menu-icon ' + item.icon + '"></i>' + item.text + '</li>';
+                	}else{
+                		div += '<li>' + item.text + '</li>';
+                	}
                 });
                 div += '</ul>';
 
@@ -292,6 +296,54 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
             this.render(callback);
         });
     };
+    
+    //重置二级菜单右键
+    desktop.initRightMenu = function(options){
+    	if (!options.item)
+            return;
+
+        //重置右键事件
+        common.resetEvent('.winui-desktop-item', 'mouseup', function (e) {
+            if (!e) e = window.event;
+            var currentItem = this;
+            if (e.button == 2) {
+                var left = e.clientX;
+                var top = e.clientY;
+
+                var div = '<ul class="app-contextmenu" style="top:' + top + 'px;left:' + left + 'px;">';
+                $(options.item).each(function (index, item) {
+                	if(!isNull(item.icon)){
+                		div += '<li><i class="right-menu-icon ' + item.icon + '"></i>' + item.text + '</li>';
+                	}else{
+                		div += '<li>' + item.text + '</li>';
+                	}
+                });
+                div += '</ul>';
+
+                //移除之前右键菜单
+                $('.app-contextmenu').remove();
+                //渲染当前右键菜单
+                $('body').append(div);
+                //绑定单击回调函数
+                $('ul.app-contextmenu li').on('click', function () {
+                    var index = $(this).index();
+                    if (typeof options['item' + (index + 1)] !== 'function')
+                        return;
+                    //调用回调函数
+                    options['item' + (index + 1)].call(this, $(currentItem).attr('win-id'), $(currentItem), { reLocaApp: common.locaApp });
+
+                    $('.app-contextmenu').remove();
+                    //移除选中状态
+                    $('.winui-desktop>.winui-desktop-item').removeClass('winui-this');
+                });
+                //阻止右键菜单冒泡
+                $('.app-contextmenu li').on('click mousedown', call.sp);
+            }
+            $(currentItem).addClass('winui-this').siblings().removeClass('winui-this');
+        });
+
+        this.contextmenuOptions = options;
+    }
 
     winui.desktop = desktop;
 

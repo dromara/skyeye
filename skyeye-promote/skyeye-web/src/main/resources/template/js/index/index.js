@@ -352,7 +352,7 @@
                 	url: reqBasePath + 'login004',
                     method: 'get',
                     data: {loginPCIp: returnCitySN["cip"]}
-                },    //可以为{}  默认 请求 json/desktopmenu.json
+                },    //可以为{}
                 done: function (desktopApp) {
                     desktopApp.onclick(function (id, elem) {
                     	var item = $(elem);
@@ -363,7 +363,16 @@
                     	}
                     }),
                     desktopApp.contextmenu({
-                        item: ["打开", "删除", '右键菜单可自定义'],
+                        item: [{
+                        	icon: 'fa fa-folder-open-o',
+                    		text: "打开",
+                        }, {
+                        	icon: 'fa fa-trash-o fa-lg',
+                    		text: "删除",
+                        }, {
+                        	icon: 'fa fa-calculator',
+                    		text: "自定义",
+                        }],
                         item1: function (id, elem) {
                         	var item = $(elem);
                         	if(item.find(".icon-drawer").length > 0){
@@ -398,7 +407,7 @@
                     menuItem.contextmenu({
                         item: [{icon: 'fa-cog', text: '设置'}, 
                                {icon: 'fa-close', text: '关闭'}, 
-                               {icon: 'fa-qq', text: '右键菜单可自定义'}],
+                               {icon: 'fa-qq', text: '自定义'}],
                         item1: function (id, elem) {
                             //设置回调
                             console.log(id);
@@ -545,6 +554,7 @@
         });
     }
     
+    //打开二级窗口
     function showBigWin(menuItem){
     	var menu = $(menuItem);
     	winui.window.config({
@@ -565,6 +575,36 @@
             scrollbar: false,
             shade: 0.5,
             maxmin: false
+        });
+    	winui.desktop.initRightMenu({
+            item: [{
+            	icon: 'fa fa-folder-open-o',
+        		text: "打开",
+            }, {
+            	icon: 'fa fa-trash-o fa-lg',
+        		text: "删除",
+            }, {
+            	icon: 'fa fa-calculator',
+        		text: "自定义",
+            }],
+            item1: function (id, elem) {
+            	var item = $(elem);
+            	if(item.find(".icon-drawer").length > 0){
+            		showBigWin(elem);
+            	}else{
+            		OpenWindow(elem);
+            		winui.window.close($('#childWindow').parent());
+            	}
+            },
+            item2: function (id, elem, events) {
+                winui.window.msg('删除回调');
+                $(elem).remove();
+                //从新排列桌面app
+                events.reLocaApp();
+            },
+            item3: function (id, elem, events) {
+                winui.window.msg('自定义回调');
+            }
         });
     }
 
