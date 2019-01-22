@@ -598,7 +598,10 @@
             },
             item2: function (id, elem, events) {
                 winui.window.msg('删除回调');
+                console.log();
                 $(elem).remove();
+                $("i[win-i-id=" + $(elem).attr('win-id') + "]").remove();
+                $("div[win-id=" + $(elem).attr('win-id') + "]").remove();
                 //从新排列桌面app
                 events.reLocaApp();
             },

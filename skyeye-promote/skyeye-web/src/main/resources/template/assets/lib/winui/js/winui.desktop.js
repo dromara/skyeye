@@ -32,9 +32,9 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         		isFaIcon = (item.icon.indexOf('fa-') != -1 && item.icon.indexOf('.') == -1);
         	var icon;
         	if(!isNull(item.menuIconColor)){
-        		icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw" style="color: ' + item.menuIconColor + '"></i>' : '<img src="' + item.icon + '" />';
+        		icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw" style="color: ' + item.menuIconColor + '" win-i-id="' + item.id + '"></i>' : '<img src="' + item.icon + '" />';
         	}else{
-        		icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '<img src="' + item.icon + '" />';
+        		icon = isFaIcon ? '<i class="fa ' + item.icon + ' fa-fw" win-i-id="' + item.id + '"></i>' : '<img src="' + item.icon + '" />';
         	}
         	if(isNull(item.childs)){
         		html += '<div class="winui-desktop-item" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + ' ' + menuIconBg + ' ' + menuIconColor + ' ' + menuIcon + '>';
@@ -68,19 +68,19 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
     				var childsiconsmall;
     				if(!isNull(bean.menuIconColor)){
     					if(!isNull(bean.menuIconBg)){
-    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '"></i>' : '<img src="' + bean.icon + '" />';
-        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '"></i>' : '<img src="' + bean.icon + '" />';
+    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>' : '<img src="' + bean.icon + '" />';
+        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>' : '<img src="' + bean.icon + '" />';
     					}else{
-    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="color: ' + bean.menuIconColor + '"></i>' : '<img src="' + bean.icon + '" />';
-        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + '"></i>' : '<img src="' + bean.icon + '" />';
+    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="color: ' + bean.menuIconColor + '" win-i-id="' + bean.id + '"></i>' : '<img src="' + bean.icon + '" />';
+        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + '" win-i-id="' + bean.id + '"></i>' : '<img src="' + bean.icon + '" />';
     					}
     				}else{
     					if(!isNull(bean.menuIconBg)){
-    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="background-color: ' + bean.menuIconBg + '"></i>' : '<img src="' + bean.icon + '" />';
-        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="background-color: ' + bean.menuIconBg + '"></i>' : '<img src="' + bean.icon + '" />';
+    						childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>' : '<img src="' + bean.icon + '" />';
+        					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" style="background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>' : '<img src="' + bean.icon + '" />';
     					}else{
-	    					childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon"></i>' : '<img src="' + bean.icon + '" />';
-	    					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw"></i>' : '<img src="' + bean.icon + '" />';
+	    					childsiconsmall = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" win-i-id="' + bean.id + '"></i>' : '<img src="' + bean.icon + '" />';
+	    					childsicon = childsisFaIcon ? '<i class="fa ' + bean.icon + ' fa-fw" win-i-id="' + bean.id + '"></i>' : '<img src="' + bean.icon + '" />';
     					}
     				}
     				
