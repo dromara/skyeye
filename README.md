@@ -24,6 +24,10 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 - 问卷调查模块（创建问卷、发布问卷、问卷统计等）
 - 聊天功能，个人对个人的聊天，群组聊天，适合公司内部职员。用户可根据不同项目的人员进行群聊创建并聊天。
 
+#### 技术扩展
+- webSocket技术扩展
+	
+
 #### 版本介绍
 ##### 免费版说明:免费版并不意味着可以私自使用，一经发现私自使用仍要承担法律责任。
 功能|商用版|免费版
@@ -32,6 +36,7 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 桌面动画样式效果|有|否
 问卷调查样式设计|有|否
 聊天功能（下图展示部分功能）|有|否
+多任务栏桌面|有|否
 
 #### 技术选型
 ##### 后端技术:
@@ -97,49 +102,36 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 
 #### 效果图
-- 1.界面效果图（支持右键操作）</br>
+- 1.界面效果图（支持右键操作，多任务栏桌面）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/112942_44fec9a9_1541735.png "1.png")
-- 2.系统icon</br>
-![系统icon](https://images.gitee.com/uploads/images/2018/1018/085200_c2e72494_1541735.png "微信截图_20181018085136.png")
-- 3.角色管理</br>
+- 2.角色管理（权限分配，多角色用户）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113041_5cd4dd4a_1541735.png "1.png")
-- 4.小程序组件配置</br>
-![小程序组件配置](https://images.gitee.com/uploads/images/2018/1107/104615_286c0cf4_1541735.png "1.png")
-- 5.小程序拖拽</br>
+- 3.小程序拖拽</br>
 ![小程序拖拽](https://images.gitee.com/uploads/images/2018/1107/104734_d9304e60_1541735.png "2.png")
-- 5-1.小程序拖拽第一版</br>
-![小程序拖拽](https://images.gitee.com/uploads/images/2018/1112/125615_8f51a2a6_1541735.gif "soogif1.gif")
-- 6.代码生成器、自定义代码模板</br>
+- 4.代码生成器（自定义模板）</br>
 ![代码生成器](https://images.gitee.com/uploads/images/2018/1107/104903_f244dfde_1541735.png "3.png")
-- 7.浏览器</br>
+- 5.系统内置浏览器</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113224_443dcac5_1541735.png "1.png")
-- 8.Redis数据实时监控</br>
+- 6.Redis数据实时监控</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191634_497ea929_1541735.png "微信图片_20181118191516.png")
-- 9.动态表单</br>
-- 9-1.动态表单限制条件
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193153_77249ba4_1541735.png "1.png")
-- 9-2.动态表单Form表单内容项
+- 7.动态表单（动态表单限制条件配置，动态表单Form表单内容项配置，动态表单数据展示模板配置）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193301_72d0bb49_1541735.png "微信截图_20181118193254.png")
-- 9-3.动态表单数据展示模板配置
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193420_9d666e05_1541735.png "1.png")
-- 10.用户自定义win界面样式
+- 8.用户基础设置（主题设置，背景图片设置，任务栏设置）
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1120/154901_4fdce714_1541735.png "微信截图_20181120154643.png")
-- 11.系统日志管理
+- 9.系统日志管理
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/105120_65de9434_1541735.png "1.png")
-- 12.Java应用的在线服务器性能监控
+- 10.Java应用的在线服务器性能监控
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/173442_c1c842b4_1541735.png "1.png")
-- 13.行政区划
+- 11.行政区划
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1122/210207_93200209_1541735.png "微信截图_20181122210047.png")
-- 14.公司管理、部门管理、职位管理等
+- 12.公司上下级管理（公司管理、部门管理、职位管理）
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113516_b0600e8f_1541735.png "1.png")
-- 15.思维导图-项目流程图
+- 13.思维导图（项目流程图制作）
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1207/123501_3248346e_1541735.png "微信截图_20181207123447.png")
-- 16.问卷调查、设计问卷、问卷收集、问卷发布、答卷等
+- 13.问卷调查（设计问卷、问卷收集、问卷发布、答卷等）
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0113/114947_1c7fa387_1541735.png "微信截图_20190113114922.png")
-- 17.聊天功能</br>
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0202/130605_a8ed5ac6_1541735.png "1.png")
+- 14.聊天功能（在线客户端列表，上线/下线通知，消息通知，群聊管理）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0202/130711_7ed57951_1541735.png "3.png")
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0202/130731_685227a4_1541735.png "2.png")
 
 #### 环境搭建
 ##### 开发工具:
@@ -173,5 +165,3 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 #### QQ群：
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1205/145236_4fce6966_1541735.jpeg "微信图片_20181205145217.jpg")
 
-#### 微信：
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0121/175606_b635774d_1541735.jpeg "微信图片_20190121175533.jpg")
