@@ -128,9 +128,9 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113516_b0600e8f_1541735.png "1.png")
 - 13.思维导图（项目流程图制作）
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1207/123501_3248346e_1541735.png "微信截图_20181207123447.png")
-- 13.问卷调查（设计问卷、问卷收集、问卷发布、答卷等）
+- 14.问卷调查（设计问卷、问卷收集、问卷发布、答卷等）
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0113/114947_1c7fa387_1541735.png "微信截图_20190113114922.png")
-- 14.聊天功能（在线客户端列表，上线/下线通知，消息通知，群聊管理）</br>
+- 15.聊天功能（在线客户端列表，上线/下线通知，消息通知，群聊管理）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0202/130711_7ed57951_1541735.png "3.png")
 
 #### 环境搭建
