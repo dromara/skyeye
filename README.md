@@ -5,6 +5,13 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 ##### 启动方式
 直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081即可。
 
+#### 服务器部署注意事项
+1.ActiveMQ链接地址、账号、密码的修改</br>
+2.Redis集群的修改</br>
+3.MySQL数据库链接地址、账号、密码的修改</br>
+4.webSocket的IP地址修改</br>
+5.图片资源路径存储的修改</br>
+
 ##### 注意事项
 如果是eclipse导入发现pom文件报错。</br>
 错误：org.apache.maven.archiver.MavenArchiver.getManifest</br>
@@ -12,18 +19,18 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 
 #### 目前功能
 
-- 菜单管理、用户管理、角色管理、角色绑定菜单管理、用户多角色管理
-- 系统ICON管理（目前只支持系统内部样式icon）
+- 菜单管理、用户管理、角色管理、角色绑定菜单管理、用户多角色管理、系统ICON管理（目前只支持系统内部样式icon）、日志管理
 - 代码生成器完成（只能适用于该框架的代码生成器，配置模板即可生成，然后下载压缩包解压复制到项目中即可）
-- 微信小程序拖拽生成，可自定义配置小程序组件
+- 微信小程序、H5手机自适应页面拖拽生成，可自定义配置小程序组件
 - 用户可根据自己的爱好自定义设置界面样式
-- 日志管理
 - Java应用的在线性能监控
 - 行政区划（四级行政区划，数据量四万多条，界面只展示三级行政区划。获取行政区划的工具在 **com.skyeye.common.util.AreaUtil** ）
 - 项目流程图规划
 - 问卷调查模块（创建问卷、发布问卷、问卷统计等）
 - 多桌面任务栏（[演示](https://www.bilibili.com/video/av43650484)）
 - 聊天功能([演示](https://www.bilibili.com/video/av43650782))，个人对个人的聊天，群组聊天，适合公司内部职员。用户可根据不同项目的人员进行群聊创建并聊天。
+- 我的日程([演示]())，个人日程的创建，消息提醒，公司节假日的规划，避免上班日被认作为节假日的尴尬。
+- 自定义快捷方式，自由组合菜单分组
 
 #### 技术扩展
 - webSocket技术扩展
@@ -55,6 +62,7 @@ webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.co
 Activiti|工作流引擎|https://www.activiti.org/
 spring mvc|视图框架|http://spring.io/
 quartz 2.2.2|定时任务|http://www.quartz-scheduler.org/
+ActiveMQ|消息队列|http://activemq.apache.org/replicated-leveldb-store.html
 
 ##### 前端技术：
 技术|名称|官网
@@ -67,6 +75,7 @@ codemirror|codemirror代码编辑器|https://codemirror.net/
 handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-js-templating-engine/
 webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.com/html/html5-websocket.html
 G6|流程图开发|https://antv.alipay.com/zh-cn/index.html
+FullCalendar|日历插件|https://blog.csdn.net/qw_xingzhe/article/details/44920943
 
 #### 代码描述
 ##### 前后台接口映射
@@ -107,7 +116,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 #### 效果图
 - 1.界面效果图（支持右键操作，多任务栏桌面）</br>
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/112942_44fec9a9_1541735.png "1.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/095507_c98767f2_1541735.png "微信截图_20190310095448.png")
 - 2.角色管理（权限分配，多角色用户）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113041_5cd4dd4a_1541735.png "1.png")
 - 3.小程序拖拽</br>
@@ -136,6 +145,8 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0113/114947_1c7fa387_1541735.png "微信截图_20190113114922.png")
 - 15.聊天功能（在线客户端列表，上线/下线通知，消息通知，群聊管理）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0202/130711_7ed57951_1541735.png "3.png")
+- 16.我的日程
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/095241_72a7847b_1541735.png "微信截图_20190310094407.png")
 
 #### 环境搭建
 ##### 开发工具:
@@ -151,14 +162,14 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 #### 资源下载
 
-- JDK7 http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html</br>
+- JDK8 https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</br>
 - Maven http://maven.apache.org/download.cgi</br>
 - Redis https://redis.io/download</br>
 - Nginx http://nginx.org/en/download.html</br>
 
 #### 在线文档
 
-- [JDK7英文文档](http://tool.oschina.net/apidocs/apidoc?api=jdk_7u4)</br>
+- [JDK8中文文档](https://blog.fondme.cn/apidoc/jdk-1.8-youdao/)</br>
 - [Spring4.x文档](http://spring.oschina.mopaas.com/)</br>
 - [Mybatis3官网](http://www.mybatis.org/mybatis-3/zh/index.html)</br>
 - [Nginx中文文档](http://tool.oschina.net/apidocs/apidoc?api=nginx-zh)</br>
