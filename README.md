@@ -12,6 +12,11 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 4.webSocket的IP地址修改</br>
 5.图片资源路径存储的修改</br>
 
+#### 本地开发环境搭建
+- windows搭建nginx负载均衡（[下载](https://download.csdn.net/download/doc_wei/11010749)）
+- windows搭建activemq单机版（[下载](https://download.csdn.net/download/doc_wei/11010746)）
+- windows搭建redis集群（[下载](https://download.csdn.net/download/doc_wei/11010741)）
+
 ##### 注意事项
 如果是eclipse导入发现pom文件报错。</br>
 错误：org.apache.maven.archiver.MavenArchiver.getManifest</br>
