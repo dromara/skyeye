@@ -36,6 +36,16 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 - 聊天功能([演示](https://www.bilibili.com/video/av43650782))，个人对个人的聊天，群组聊天，适合公司内部职员。用户可根据不同项目的人员进行群聊创建并聊天。
 - 我的日程([演示](https://www.bilibili.com/video/av45854959))，个人日程的创建，消息提醒，公司节假日的规划，避免上班日被认作为节假日的尴尬。
 - 自定义快捷方式，自由组合菜单分组
+- 多系统集成：可以将多个系统进行应用集成，无需多次登陆，无需记录多个网址
+- 应用商店：集成外部系统，进行同步更新
+- 开发文档：方便开发者进行开发的学习文档
+
+#### 目前系统
+
+- 文件系统：便捷的文件选择：单选，鼠标框选，shift连选，ctrl随意选择，键盘上下左右、home、end选择；同时支持类似windows的键盘字母快捷定位文件功能
+- 笔记系统：类似有道云的笔记记录系统，可同步更新、分享。
+- 门户系统：包含门户展示系统和门户后台维护系统（可进行定制开发）
+- 消息系统：负责整个系统的消息、通知等内容
 
 #### 技术扩展
 - webSocket技术扩展
@@ -45,14 +55,22 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 ##### 免费版说明:免费版并不意味着可以私自使用，一经发现私自使用仍要承担法律责任。
 功能|商用版|免费版
 ---|---|---
-桌面动画样式效果|有|否
 问卷调查样式设计|有|否
 聊天功能（下图展示部分功能）|有|否
-多任务栏桌面|有|否
 我的日程|有|否
 我的笔记|有|否
-自由组合桌面快捷方式|有|否
 自定义快捷方式|有|否
+多系统集成|有|否
+应用商店|有|否
+开发文档|有|否
+
+#### 系统
+功能|商用版|免费版
+---|---|---
+门户系统(包含门户展示系统和门户后台维护系统)|有|否
+消息系统|有|否
+文件系统|有|否
+笔记系统|有|否
 
 #### 技术选型
 ##### 后端技术:
@@ -75,7 +93,7 @@ ActiveMQ|消息队列|http://activemq.apache.org/replicated-leveldb-store.html
 jQuery|函式库|http://jquery.com/
 zTree|树插件|http://www.treejs.cn/v3/
 layui|模块化前端UI|https://www.layui.com/
-winui|win10风格UI|http://win10ui.yuri2.cn/
+winui|win10风格UI|https://gitee.com/doc_wei01_admin/skyeye
 codemirror|codemirror代码编辑器|https://codemirror.net/
 handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-js-templating-engine/
 webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.com/html/html5-websocket.html
@@ -121,7 +139,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 #### 效果图
 - 1.界面效果图（支持右键操作，多任务栏桌面）</br>
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0310/095507_c98767f2_1541735.png "微信截图_20190310095448.png")
+
 - 2.角色管理（权限分配，多角色用户）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113041_5cd4dd4a_1541735.png "1.png")
 - 3.小程序拖拽</br>
