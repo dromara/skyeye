@@ -139,7 +139,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 #### 效果图
 - 1.界面效果图（支持右键操作，多任务栏桌面）</br>
-![输入图片说明](http://pic31.nipic.com/20130804/7487939_090818211000_2.jpg "1.png")
+![输入图片说明](http://m.qpic.cn/psb?/V11H0k2c3qeE92/N9yPnjWTxJEDT4qP8CVRU2ON8advFVGNUKpqpOcYPxE!/b/dMAAAAAAAAAA&bo=7Ag4BAAAAAADB*o!&rf=viewer_4 "1.png")
 - 2.角色管理（权限分配，多角色用户）</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113041_5cd4dd4a_1541735.png "1.png")
 - 3.小程序拖拽</br>
