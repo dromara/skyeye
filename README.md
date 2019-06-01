@@ -42,7 +42,7 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 
 #### 目前系统
 
-- 文件系统：便捷的文件选择：单选，鼠标框选，shift连选，ctrl随意选择，键盘上下左右、home、end选择；同时支持类似windows的键盘字母快捷定位文件功能
+- 文件系统：支持大文件分块上传，支持office、txt、tpl、html、js、css、png、jpg、gif、mp4、zip、rar等多种文件格式的在线预览，在线编辑，在线解压，压缩包内容在线查看，在线压缩等功能。
 - 笔记系统：类似有道云的笔记记录系统，可同步更新、分享。
 - 门户系统：包含门户展示系统和门户后台维护系统（可进行定制开发）
 - 消息系统：负责整个系统的消息、通知等内容
@@ -146,7 +146,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 - 4.代码生成器（自定义模板）</br>
 ![代码生成器](https://images.gitee.com/uploads/images/2018/1107/104903_f244dfde_1541735.png "3.png")
 - 5.文件管理</br>
-![输入图片说明](https://s2.ax1x.com/2019/04/16/AvTkCt.png "1.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2019/0601/165637_3862802b_1541735.png "1.png")
 - 6.Redis数据实时监控</br>
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191634_497ea929_1541735.png "微信图片_20181118191516.png")
 - 7.动态表单（动态表单限制条件配置，动态表单Form表单内容项配置，动态表单数据展示模板配置）</br>
