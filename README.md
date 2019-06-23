@@ -6,11 +6,11 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081即可。
 
 #### 服务器部署注意事项
-1.ActiveMQ链接地址、账号、密码的修改</br>
-2.Redis集群的修改</br>
-3.MySQL数据库链接地址、账号、密码的修改</br>
-4.webSocket的IP地址修改</br>
-5.图片资源路径存储的修改</br>
+1.ActiveMQ链接地址、账号、密码的修改<br />
+2.Redis集群的修改<br />
+3.MySQL数据库链接地址、账号、密码的修改<br />
+4.webSocket的IP地址修改<br />
+5.图片资源路径存储的修改<br />
 
 #### 本地开发环境搭建
 - windows搭建nginx负载均衡（[下载](https://download.csdn.net/download/doc_wei/11010749)）
@@ -24,7 +24,15 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 
 #### 目前功能
 
-- 菜单管理、用户管理、角色管理、角色绑定菜单管理、用户多角色管理、系统ICON管理（目前只支持系统内部样式icon）、日志管理
+- 菜单管理、<br />
+    用户管理、<br />
+    角色管理、<br />
+    角色绑定菜单管理、<br />
+    用户多角色管理、<br />
+    系统ICON管理（目前只支持系统内部样式icon）、<br />
+    日志管理、<br />
+    员工管理、<br />
+    系统基础设置、<br />
 - 代码生成器完成（只能适用于该框架的代码生成器，配置模板即可生成，然后下载压缩包解压复制到项目中即可）
 - 微信小程序、H5手机自适应页面拖拽生成，可自定义配置小程序组件
 - 用户可根据自己的爱好自定义设置界面样式
@@ -42,6 +50,7 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 - 工作日志：记录每个员工的日报、周报、月报
 - 考勤管理：员工的上下班打卡记录
 - 开发文档：关于该系统详细的开发文档介绍
+- 轻应用：系统之外的一些方便的小应用，可以往系统中进行集成
 
 #### 目前系统
 
@@ -159,7 +168,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 - 9.系统日志管理
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/105120_65de9434_1541735.png "1.png")
 - 10.Java应用的在线服务器性能监控<br />
-![ZPpTIS.png](https://s2.ax1x.com/2019/06/23/ZPpTIS.png)
+![ZPpTIS.png](https://images.gitee.com/uploads/images/2019/0623/145248_4a51c610_1541735.png)
 - 11.职位管理（公司管理、部门管理、职位管理）
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113516_b0600e8f_1541735.png "1.png")
 - 12.思维导图（项目流程图制作）
@@ -171,7 +180,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 - 15.日程管理
 ![ZPC6cd.png](https://s2.ax1x.com/2019/06/23/ZPC6cd.png)
 - 16.考勤管理
-[![ZP9WYF.png](https://images.gitee.com/uploads/images/2019/0623/143712_7763186c_1541735.png)](https://imgchr.com/i/ZP9WYF)
+![ZPFktK.png](https://images.gitee.com/uploads/images/2019/0623/145351_dd55da65_1541735.png)
 - 17.工作日志
 ![ZP9bTK.png](https://images.gitee.com/uploads/images/2019/0623/143810_e76aec71_1541735.png)
 - 18.开发文档
@@ -205,11 +214,11 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 - [Mybatis3官网](http://www.mybatis.org/mybatis-3/zh/index.html)</br>
 - [Nginx中文文档](http://tool.oschina.net/apidocs/apidoc?api=nginx-zh)</br>
 - [Git官网中文文档](https://git-scm.com/book/zh/v2)</br>
-#### 作者微信公众号：
+#### 作者微信公众号：<br />
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1207/083137_48330589_1541735.jpeg "qrcode_for_gh_e7f97ff1beda_258.jpg")
 
-#### QQ群：
-为防止恶意进群，特开启收费模式，请见谅。
+#### QQ群：<br />
+为防止恶意进群，特开启收费模式，请见谅。<br />
 ![输入图片说明](https://images.gitee.com/uploads/images/2018/1205/145236_4fce6966_1541735.jpeg "微信图片_20181205145217.jpg")
 
 #### 合作公司(保留客户信息)：
