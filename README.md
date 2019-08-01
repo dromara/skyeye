@@ -1,11 +1,20 @@
 # skyeye
 
-#### 项目介绍 
+#### 项目介绍
+
 win10风格的一套系统，前端采用layui作为前端框架，后端采用SpringBoot作为服务框架，采用自封装的xml对所有请求进行参数校验，以保证接口安全性。</br>
+
+> APP端开始开发，前端采用VUE，后端采用SpringCloud，APP访问地址：[https://gitee.com/doc_wei01_admin/oa-app](https://gitee.com/doc_wei01_admin/oa-app "https://gitee.com/doc_wei01_admin/oa-app")
+
+`项目持续更新，欢迎进群讨论`
+
 ##### 启动方式
-直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081即可。
+
+直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081 即可。
+初始化账号密码：`root/123456`
 
 #### 服务器部署注意事项
+
 1.ActiveMQ链接地址、账号、密码的修改<br />
 2.Redis集群的修改<br />
 3.MySQL数据库链接地址、账号、密码的修改<br />
@@ -13,78 +22,74 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 5.图片资源路径存储的修改<br />
 
 #### 本地开发环境搭建
+
 - windows搭建nginx负载均衡（[下载](https://download.csdn.net/download/doc_wei/11010749)）
 - windows搭建activemq单机版（[下载](https://download.csdn.net/download/doc_wei/11010746)）
 - windows搭建redis集群（[下载](https://download.csdn.net/download/doc_wei/11010741)）
 
 ##### 注意事项
-如果是eclipse导入发现pom文件报错。</br>
-错误：org.apache.maven.archiver.MavenArchiver.getManifest</br>
-解决办法：https://blog.csdn.net/doc_wei/article/details/84936514</br>
+
+如果是eclipse导入发现pom文件报错。<br />
+错误：org.apache.maven.archiver.MavenArchiver.getManifest<br />
+解决办法：https://blog.csdn.net/doc_wei/article/details/84936514<br />
 
 #### 目前功能
 
-- 菜单管理、<br />
-    用户管理、<br />
-    角色管理、<br />
-    角色绑定菜单管理、<br />
-    用户多角色管理、<br />
-    系统ICON管理（目前只支持系统内部样式icon）、<br />
-    日志管理、<br />
-    员工管理、<br />
-    系统基础设置、<br />
-- 代码生成器完成（只能适用于该框架的代码生成器，配置模板即可生成，然后下载压缩包解压复制到项目中即可）
+- 基础功能
+- - 菜单管理
+- - 员工管理
+- - 用户管理
+- - 角色管理
+- - 权限管理
+- - 资源图标
+- - 日志管理
+- - APP菜单管理
+- - 多桌面管理
+- - 系统基础设置
+- 代码生成器（只能适用于该框架的代码生成器，配置模板即可生成，然后下载压缩包解压复制到项目中即可）
 - 微信小程序、H5手机自适应页面拖拽生成，可自定义配置小程序组件
-- 用户可根据自己的爱好自定义设置界面样式
-- Java应用的在线性能监控
-- 行政区划（四级行政区划，数据量四万多条，界面只展示三级行政区划。获取行政区划的工具在 **com.skyeye.common.util.AreaUtil** ）
+- 在线性能监控
 - 项目流程图规划
-- 问卷调查模块（创建问卷、发布问卷、问卷统计等）
+- 问卷调查
 - 多桌面任务栏（[演示](https://www.bilibili.com/video/av43650484)）
-- 聊天功能([演示](https://www.bilibili.com/video/av43650782))，个人对个人的聊天，群组聊天，适合公司内部职员。用户可根据不同项目的人员进行群聊创建并聊天。
-- 我的日程([演示](https://www.bilibili.com/video/av45854959))，个人日程的创建，消息提醒，公司节假日的规划，避免上班日被认作为节假日的尴尬。
-- 自定义快捷方式，自由组合菜单分组
-- 多系统集成：可以将多个系统进行应用集成，无需多次登陆，无需记录多个网址
-- 应用商店：集成外部系统，进行同步更新
-- 开发文档：方便开发者进行开发的学习文档
-- 工作日志：记录每个员工的日报、周报、月报
-- 考勤管理：员工的上下班打卡记录
-- 开发文档：关于该系统详细的开发文档介绍
-- 轻应用：系统之外的一些方便的小应用，可以往系统中进行集成
-
-#### 目前系统
-
-- 文件系统：支持大文件分块上传，支持office、txt、tpl、html、js、css、png、jpg、gif、mp4、zip、rar等多种文件格式的在线预览，在线编辑，在线解压，压缩包内容在线查看，在线压缩，支持多人在线协作，桌面右键功能等。
-- 笔记系统：类似有道云的笔记记录系统，可同步更新、分享。
-- 门户系统：包含门户展示系统和门户后台维护系统（可进行定制开发）
-- 消息系统：负责整个系统的消息、通知等内容
+- 聊天功能([演示](https://www.bilibili.com/video/av43650782))
+- 我的日程([演示](https://www.bilibili.com/video/av45854959))
+- 自定义桌面菜单
+- 多系统集成（可以将多个系统进行应用集成，无需多次登陆，无需记录多个网址）
+- 应用商店
+- 开发文档
+- 工作日志
+- 考勤管理
+- 轻应用
+- 我的笔记
+- 报表管理
+- 文件管理
+- 附件管理
+- 邮件管理
+- 工作流管理
+- APP端(接口：SpringCloud微服务框架；前端：vue)
 
 #### 技术扩展
+
 - webSocket技术扩展
     ![输入图片说明](https://images.gitee.com/uploads/images/2019/0205/224843_d8055e22_1541735.png "1.png")
 
 #### 版本介绍
-功能|商用版|免费版
----|---|---
-问卷调查样式设计|有|否
-聊天功能（下图展示部分功能）|有|否
-我的日程|有|否
-我的笔记|有|否
-自定义快捷方式|有|否
-多系统集成|有|否
-应用商店|有|否
-开发文档|有|否
 
-#### 系统
-功能|商用版|免费版
----|---|---
-门户系统(包含门户展示系统和门户后台维护系统)|有|否
-消息系统|有|否
-文件系统|有|否
-笔记系统|有|否
+功能|商用版|开源版|功能|商用版|开源版
+---|-------|---|---|-------|---
+问卷调查|<abbr>有</abbr>|否|我的日程|<abbr>有</abbr>|否
+我的笔记|<abbr>有</abbr>|否|自定义快捷方式|<abbr>有</abbr>|否
+多系统集成|<abbr>有</abbr>|否|应用商店|<abbr>有</abbr>|否
+开发文档|<abbr>有</abbr>|否|文件管理|<abbr>有</abbr>|否
+附件管理|<abbr>有</abbr>|否|邮件管理|<abbr>有</abbr>|否
+考勤管理|<abbr>有</abbr>|否|报表管理|<abbr>有</abbr>|否
+工作日志|<abbr>有</abbr>|否|工作流管理|<abbr>有</abbr>|否
 
 #### 技术选型
+
 ##### 后端技术:
+
 技术|名称|官网
 ---|---|---
 SpringBoot|核心框架|http://spring.io/projects/spring-boot
@@ -97,8 +102,11 @@ Activiti|工作流引擎|https://www.activiti.org/
 spring mvc|视图框架|http://spring.io/
 quartz 2.2.2|定时任务|http://www.quartz-scheduler.org/
 ActiveMQ|消息队列|http://activemq.apache.org/replicated-leveldb-store.html
+solr|企业级搜索应用服务器|https://lucene.apache.org/solr/
+Spring Cloud|微服务框架(目前用户APP端接口)|https://springcloud.cc/
 
 ##### 前端技术：
+
 技术|名称|官网
 ---|---|---
 jQuery|函式库|http://jquery.com/
@@ -113,14 +121,17 @@ FullCalendar|日历插件|https://blog.csdn.net/qw_xingzhe/article/details/44920
 
 #### 代码描述
 ##### 前后台接口映射
+
 ```
 <url id="前端请求id" path="后台接口" val="备注" allUse="是否需要登录">
 	<property id="前端请求key" name="后台接收key" ref="限制条件（参考项目内文档）" var="key含义"/>
 </url>
 ```
+
 ##### 后台代码编写规范
 
 ###### 控制层
+
 ```
 @RequestMapping("后台接口")
 @ResponseBody
@@ -130,6 +141,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 ```
 
 ###### 服务层
+
 ```
 @Override
 public void 方法名(InputObject inputObject, OutputObject outputObject) throws Exception {
@@ -149,44 +161,20 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 
 #### 效果图
-- 1.界面效果图（支持右键操作，多任务栏桌面）<br />
-![输入图片说明](https://s2.ax1x.com/2019/04/16/Avo0c8.png "1.png")
-- 2.角色管理（权限分配，多角色用户）</br>
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0623/142954_6c8612f2_1541735.png "1.png")
-- 3.小程序拖拽</br>
-![小程序拖拽](https://images.gitee.com/uploads/images/2018/1107/104734_d9304e60_1541735.png "2.png")
-- 4.代码生成器（自定义模板）</br>
-![代码生成器](https://images.gitee.com/uploads/images/2018/1107/104903_f244dfde_1541735.png "3.png")
-- 5.文件管理</br>
-![ZPS5h4.png](https://s2.ax1x.com/2019/06/23/ZPS5h4.png)
-- 6.Redis数据实时监控</br>
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/191634_497ea929_1541735.png "微信图片_20181118191516.png")
-- 7.动态表单（动态表单限制条件配置，动态表单Form表单内容项配置，动态表单数据展示模板配置）</br>
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1118/193301_72d0bb49_1541735.png "微信截图_20181118193254.png")
-- 8.用户基础设置（主题设置，背景图片设置，任务栏设置）
-![输入图片说明](https://s2.ax1x.com/2019/04/16/Av7lee.png "微信截图_20181120154643.png")
-- 9.系统日志管理
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1121/105120_65de9434_1541735.png "1.png")
-- 10.Java应用的在线服务器性能监控<br />
-![ZPpTIS.png](https://images.gitee.com/uploads/images/2019/0623/145248_4a51c610_1541735.png)
-- 11.职位管理（公司管理、部门管理、职位管理）
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/113516_b0600e8f_1541735.png "1.png")
-- 12.思维导图（项目流程图制作）
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1207/123501_3248346e_1541735.png "微信截图_20181207123447.png")
-- 13.问卷调查（设计问卷、问卷收集、问卷发布、答卷等）
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0113/114947_1c7fa387_1541735.png "微信截图_20190113114922.png")
-- 14.聊天功能（在线客户端列表，上线/下线通知，消息通知，群聊管理）<br />
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0202/130711_7ed57951_1541735.png "3.png")
-- 15.日程管理
-![ZPC6cd.png](https://s2.ax1x.com/2019/06/23/ZPC6cd.png)
-- 16.考勤管理
-![ZPFktK.png](https://images.gitee.com/uploads/images/2019/0623/145351_dd55da65_1541735.png)
-- 17.工作日志
-![ZP9bTK.png](https://images.gitee.com/uploads/images/2019/0623/143810_e76aec71_1541735.png)
-- 18.开发文档
-![ZPCYc9.png](https://images.gitee.com/uploads/images/2019/0623/144143_1063782a_1541735.png)
-- 19.笔记
-![ZPCqun.png](https://images.gitee.com/uploads/images/2019/0623/144444_73cfd8a1_1541735.png)
+
+|效果图|效果图|
+| ------------- | ------------- |
+|![](https://s2.ax1x.com/2019/04/16/Avo0c8.png "1.png")|![](https://images.gitee.com/uploads/images/2019/0623/142954_6c8612f2_1541735.png "1.png")|
+|![](https://images.gitee.com/uploads/images/2018/1107/104734_d9304e60_1541735.png "2.png")|![](https://images.gitee.com/uploads/images/2018/1107/104903_f244dfde_1541735.png "3.png")|
+|![](https://s2.ax1x.com/2019/06/23/ZPS5h4.png)|![](https://images.gitee.com/uploads/images/2018/1118/191634_497ea929_1541735.png "微信图片_20181118191516.png")|
+|![](https://images.gitee.com/uploads/images/2018/1118/193301_72d0bb49_1541735.png "微信截图_20181118193254.png")|![](https://s2.ax1x.com/2019/04/16/Av7lee.png "微信截图_20181120154643.png")|
+|![](https://images.gitee.com/uploads/images/2018/1121/105120_65de9434_1541735.png "1.png")|![](https://images.gitee.com/uploads/images/2019/0623/145248_4a51c610_1541735.png)|
+|![](https://images.gitee.com/uploads/images/2019/0122/113516_b0600e8f_1541735.png "1.png")|![](https://images.gitee.com/uploads/images/2018/1207/123501_3248346e_1541735.png "微信截图_20181207123447.png")|
+|![](https://images.gitee.com/uploads/images/2019/0113/114947_1c7fa387_1541735.png "微信截图_20190113114922.png")|![](https://images.gitee.com/uploads/images/2019/0202/130711_7ed57951_1541735.png "3.png")|
+|![](https://s2.ax1x.com/2019/06/23/ZPC6cd.png)|![](https://images.gitee.com/uploads/images/2019/0623/145351_dd55da65_1541735.png)|
+|![](https://images.gitee.com/uploads/images/2019/0623/143810_e76aec71_1541735.png)|![](https://images.gitee.com/uploads/images/2019/0623/144143_1063782a_1541735.png)|
+|![](https://images.gitee.com/uploads/images/2019/0623/144444_73cfd8a1_1541735.png)||
+
 
 #### 环境搭建
 ##### 开发工具:
@@ -214,12 +202,15 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 - [Mybatis3官网](http://www.mybatis.org/mybatis-3/zh/index.html)</br>
 - [Nginx中文文档](http://tool.oschina.net/apidocs/apidoc?api=nginx-zh)</br>
 - [Git官网中文文档](https://git-scm.com/book/zh/v2)</br>
-#### 作者微信公众号：<br />
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1207/083137_48330589_1541735.jpeg "qrcode_for_gh_e7f97ff1beda_258.jpg")
 
-#### QQ群：<br />
-为防止恶意进群，特开启收费模式，请见谅。<br />
-![输入图片说明](https://images.gitee.com/uploads/images/2018/1205/145236_4fce6966_1541735.jpeg "微信图片_20181205145217.jpg")
+#### 项目交流：
+
+**为防止恶意进群，特开启收费模式，请见谅。**
+
+|QQ群|公众号|
+|-------|-------|
+|![](https://images.gitee.com/uploads/images/2018/1205/145236_4fce6966_1541735.jpeg "微信图片_20181205145217.jpg")|![](https://images.gitee.com/uploads/images/2018/1207/083137_48330589_1541735.jpeg "qrcode_for_gh_e7f97ff1beda_258.jpg")|
+
 
 #### 合作公司(保留客户信息)：
 - 合肥**科技有限责任公司
