@@ -4,7 +4,7 @@
 
 win10风格的一套系统，前端采用layui作为前端框架，后端采用SpringBoot作为服务框架，采用自封装的xml对所有请求进行参数校验，以保证接口安全性。</br>
 
-> 该项目遵守MIT许可证
+> 该项目遵守MIT许可证，证书见`附件`
 
 > APP端开始开发，前端采用VUE，后端采用SpringCloud，APP访问地址：[https://gitee.com/doc_wei01_admin/oa-app](https://gitee.com/doc_wei01_admin/oa-app "https://gitee.com/doc_wei01_admin/oa-app")
 
