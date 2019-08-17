@@ -4,6 +4,13 @@
 
 win10风格的一套系统，前端采用layui作为前端框架，后端采用SpringBoot作为服务框架，采用自封装的xml对所有请求进行参数校验，以保证接口安全性。</br>
 
+|项目|地址|
+|-------|-------|
+|主项目地址|https://gitee.com/doc_wei01_admin/skyeye|
+|APP端接口微服务地址|https://gitee.com/doc_wei01_admin/app-oaserver|
+|APP端地址|https://gitee.com/doc_wei01_admin/oa-app|
+|小程序端地址|https://gitee.com/doc_wei01_admin/small-pro|
+
 > 该项目遵守MIT许可证，证书见`附件`
 
 > APP端开始开发，前端采用VUE，后端采用SpringCloud，APP访问地址：[https://gitee.com/doc_wei01_admin/oa-app](https://gitee.com/doc_wei01_admin/oa-app "https://gitee.com/doc_wei01_admin/oa-app")
@@ -14,6 +21,61 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 
 直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081 即可。
 初始化账号密码：`root/123456`
+
+### OA主项目结构
+
+- |----skyeye-promote---------------------OA主项目[端口：**8081**]
+- - |----skyeye-web---------------------web层项目
+- - |----skyeye-service-impl--------------Service服务层
+- - |----skyeye-service-------------------ServiceImpl服务层接口
+- - |----skyeye-dao----------------------Mapper层接口
+- - |----skyeye-common------------------工具层
+- - |----skyeye-activiti--------------------工作流
+- - |----skyeye-entity---------------------部分操作实体类
+- - |----skyeye-guacamole----------------远程控制桌面（开发中）
+- - |----skyeye-mq-----------------------ActiveMq消息中间件
+- - |----skyeye-quartz--------------------定时任务
+- - |----skyeye-redis----------------------redis缓存
+- - |----skyeye-websocket-----------------webSocket双工通讯
+- - |----skyeye-wx------------------------微信接口层
+
+## 子系统
+
+### OA消息系统项目结构
+
+- |----message-----------------------------消息系统[端口：**8084**]
+- - |----message-web---------------------web层项目
+- - |----message-service-impl--------------Service服务层
+- - |----message-service-------------------ServiceImpl服务层接口
+- - |----message-dao----------------------Mapper层接口
+- - |----message-common------------------工具层
+- - |----message-mq-----------------------ActiveMq消息中间件
+- - |----message-quartz--------------------定时任务
+- - |----message-redis----------------------redis缓存
+- - |----message-websocket-----------------webSocket双工通讯
+
+### OA门户后台管理系统项目结构
+
+- |----gateway-promote---------------------消息系统[端口：**8083**]
+- - |----gateway-web---------------------web层项目
+- - |----gateway-service-impl--------------Service服务层
+- - |----gateway-service-------------------ServiceImpl服务层接口
+- - |----gateway-dao----------------------Mapper层接口
+- - |----gateway-common------------------工具层
+- - |----gateway-entity---------------------部分操作实体类
+- - |----gateway-mq-----------------------ActiveMq消息中间件
+- - |----gateway-quartz--------------------定时任务
+- - |----gateway-redis----------------------redis缓存
+- - |----gateway-websocket-----------------webSocket双工通讯
+
+### OA门户展示系统项目结构
+
+- |----gateway-------------------------门户展示系统[端口：**8082**]
+- - |----gtw-web---------------------web层项目
+- - |----gtw-service-impl--------------Service服务层
+- - |----gtw-service-------------------ServiceImpl服务层接口
+- - |----gtw-common-----------------工具层
+- - |----gtw-redis---------------------redis缓存
 
 #### 服务器部署注意事项
 
