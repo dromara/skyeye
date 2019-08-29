@@ -269,7 +269,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 #### 项目交流：
 
-**为防止恶意进群，特开启收费模式，请见谅。**
+QQ群号：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229)
 
 |QQ群|公众号|
 |-------|-------|
