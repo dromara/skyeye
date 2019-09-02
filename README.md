@@ -229,6 +229,11 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 |![](https://images.gitee.com/uploads/images/2019/0623/143810_e76aec71_1541735.png)|![](https://images.gitee.com/uploads/images/2019/0623/144143_1063782a_1541735.png)|
 |![](https://images.gitee.com/uploads/images/2019/0623/144444_73cfd8a1_1541735.png)||
 
+#### 传统风格界面效果图
+
+|效果图|效果图|
+| ------------- | ------------- |
+|![](https://s2.ax1x.com/2019/09/02/nCS3VS.png)||
 
 #### 环境搭建
 ##### 开发工具:
