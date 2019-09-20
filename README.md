@@ -4,6 +4,8 @@
 
 win10风格的一套系统，前端采用layui作为前端框架，后端采用SpringBoot作为服务框架，采用自封装的xml对所有请求进行参数校验，以保证接口安全性。</br>
 
+> 求职简历：[点我](https://gitee.com/doc_wei01_admin/skyeye/blob/master/%E7%AE%80%E5%8E%86.md)
+
 > 系统新增传统风格界面，layui左菜单右内容风格。
 
 |项目|地址|
