@@ -268,6 +268,10 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 QQ群号：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229)
 
+> 如果没有QQ或者QQ等级低于三个太阳的，需要了解商业版的请加微信：wzq_598748873，备注：码云-公司（姓名），作者不打造死尸群，小号勿进QQ群，望理解。
+
+> 另：商业版不是几千就能买到的，嫌价格高者勿加
+
 |QQ群|公众号|
 |-------|-------|
 |![](https://images.gitee.com/uploads/images/2018/1205/145236_4fce6966_1541735.jpeg "微信图片_20181205145217.jpg")|![](https://images.gitee.com/uploads/images/2018/1207/083137_48330589_1541735.jpeg "qrcode_for_gh_e7f97ff1beda_258.jpg")|
