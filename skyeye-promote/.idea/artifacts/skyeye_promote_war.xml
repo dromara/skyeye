@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="skyeye-promote:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="skyeye-promote.war">
-      <element id="artifact" artifact-name="skyeye-promote:war exploded" />
-    </root>
-  </artifact>
-</component>
