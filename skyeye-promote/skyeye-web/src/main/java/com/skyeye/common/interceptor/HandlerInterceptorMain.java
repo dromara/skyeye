@@ -35,20 +35,20 @@ public class HandlerInterceptorMain implements HandlerInterceptor{
     	new PutObject(request, response);
     	
     	/**IP黑名单过滤开始**/
-    	String ip = ToolUtil.getIpByRequest(request);
-		
-		Properties prop = new Properties();
-		String path = ToolUtil.getIPPropertiesPath();
-		InputStream in = new BufferedInputStream(new FileInputStream(path));
-		prop.load(in); /// 加载属性列表
-		Iterator<String> it = prop.stringPropertyNames().iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			if (prop.getProperty(key).equals(ip)) {
-				return false;
-			}
-		}
-		in.close();
+//    	String ip = ToolUtil.getIpByRequest(request);
+//		
+//		Properties prop = new Properties();
+//		String path = ToolUtil.getIPPropertiesPath();
+//		InputStream in = new BufferedInputStream(new FileInputStream(path));
+//		prop.load(in); /// 加载属性列表
+//		Iterator<String> it = prop.stringPropertyNames().iterator();
+//		while (it.hasNext()) {
+//			String key = it.next();
+//			if (prop.getProperty(key).equals(ip)) {
+//				return false;
+//			}
+//		}
+//		in.close();
 		/**IP黑名单过滤结束**/
 		
 		request.setCharacterEncoding("UTF-8");
