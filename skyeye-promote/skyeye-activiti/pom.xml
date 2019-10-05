@@ -15,13 +15,13 @@
 
 	<dependencies>
 	
-		<!-- 引入公共模块的依赖 -->
+		<!-- 引入dao的依赖 -->
 		<dependency>
 			<groupId>com.skyeye</groupId>
-			<artifactId>skyeye-common</artifactId>
+			<artifactId>skyeye-dao</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		
+	
 		<!-- activiti工作 -->
 		<dependency>
 			<groupId>org.activiti</groupId>

@@ -15,13 +15,6 @@
 
 	<dependencies>
 	
-		<!-- 引入公共的依赖 -->
-		<dependency>
-			<groupId>com.skyeye</groupId>
-			<artifactId>skyeye-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	
 		<!-- 引入实体类的依赖 -->
 		<dependency>
 			<groupId>com.skyeye</groupId>

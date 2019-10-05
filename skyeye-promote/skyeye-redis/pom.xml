@@ -15,17 +15,17 @@
 
 	<dependencies>
 	
-		<!-- 引入工作流模块的依赖 -->
-		<dependency>
-			<groupId>com.skyeye</groupId>
-			<artifactId>skyeye-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		
 		<!-- 引入实体类的依赖 -->
 		<dependency>
 			<groupId>com.skyeye</groupId>
 			<artifactId>skyeye-entity</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- 引入dao的依赖 -->
+		<dependency>
+			<groupId>com.skyeye</groupId>
+			<artifactId>skyeye-dao</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		

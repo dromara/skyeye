@@ -22,6 +22,14 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>ky.com.skyeye</groupId>
+			<artifactId>skyeye-common</artifactId>
+			<version>0.0.2-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/skyeye-common-0.0.2-SNAPSHOT.jar</systemPath>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
