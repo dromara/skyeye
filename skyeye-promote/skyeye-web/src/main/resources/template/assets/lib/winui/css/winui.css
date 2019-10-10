@@ -275,6 +275,7 @@ button{
     line-height: 70px;
     width: 50px;
     margin-left: 9px;
+    border-radius: 5px;
 }
 
 .winui-desktop-item > .winui-icon-img {
@@ -2484,6 +2485,7 @@ body .layer-ext-winconfirm {
     padding: 0px 4px 6px 4px;
     position: relative;
     background-color: rgba(255, 255, 255, 0.19);
+    border-radius: 5px;
 }
 
 .icon-drawer-icon{
@@ -2493,6 +2495,7 @@ body .layer-ext-winconfirm {
     margin-top: 3px;
     margin-left: 1px;
     line-height: 17px;
+    border-radius: 3px;
 }
 
 .title-icon{

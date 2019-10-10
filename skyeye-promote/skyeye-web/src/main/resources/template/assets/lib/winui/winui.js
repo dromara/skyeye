@@ -87,40 +87,48 @@
             this.event = {};    //自定义事件
             this.verify = {
                 required: [
-                    /[\S]+/
-                    , '必填项不能为空'
+                    /[\S]+/,
+                    '必填项不能为空'
                 ], 
                 phone: [
-                    /^1\d{10}$/
-                    , '请输入正确的手机号'
+                    /(^$)|^1\d{10}$/,
+                    '请输入正确的手机号'
+                ], 
+                tel: [
+                    /(^$)|^0\d{2,3}-?\d{7,8}$/,
+                    '请输入正确的电话号'
                 ], 
                 email: [
-                    /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/
-                    , '邮箱格式不正确'
+                    /(^$)|^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+                    '邮箱格式不正确'
                 ], 
                 url: [
-                    /(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)/
-                    , '链接格式不正确'
+                    /(^$)|(^#)|(^http(s*):\/\/[^\s]+\.[^\s]+)/,
+                    '链接格式不正确'
                 ], 
                 number: [
-                    /^\d+$/
-                    , '只能填写数字'
+                    /(^$)|^\d+$/, 
+                    '只能填写数字'
                 ], 
                 date: [
-                    /^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/
-                    , '日期格式不正确'
+                    /(^$)|^(\d{4})[-\/](\d{1}|0\d{1}|1[0-2])([-\/](\d{1}|0\d{1}|[1-2][0-9]|3[0-1]))*$/,
+                    '日期格式不正确'
                 ], 
                 identity: [
-                    /(^\d{15}$)|(^\d{17}(x|X|\d)$)/
-                    , '请输入正确的身份证号'
+                    /(^$)|(^\d{15}$)|(^\d{17}(x|X|\d)$)/, 
+                    '请输入正确的身份证号'
                 ], 
             	double: [//验证小数点后两位,一般用于金钱验证
-                     /^[0-9]+(.[0-9]{1,2})?$/
-                     , '请输入正确正数,小数点后最多两位'
+                     /(^$)|^[0-9]+(.[0-9]{1,2})?$/,
+                     '请输入正确正数,小数点后最多两位'
                 ], 
             	postcode: [
-                     /^\d{6}$/
-                     , '请输入正确邮编'
+                     /(^$)|^\d{6}$/, 
+                     '请输入正确邮编'
+                ],
+                money: [
+                	/(^$)|^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/,
+                	'请输入正确的金额, 可保留小数点后两位'
                 ]
             };  //表单验证
 
@@ -414,6 +422,10 @@
                     elem = button.parents('.layui-form'),
                     verifyElem = elem.find('*[win-verify]'),//获取需要校验的元素
                     that = this;
+                //请求遮罩层
+        		$("body").find(".mask-req-str").remove();
+        		var maskReqStr = '<div class="mask-req-str"><div class="cent"><i class="fa fa-spin fa-spinner fa-fw"></i><br><br><font>数据请求中</font></div></div>';
+        		$("body").append(maskReqStr);
                 layui.each(verifyElem, function (index, item) {
                     var othis = $(this), ver = othis.attr('win-verify').split('|');
                     var tips = '', value = othis.val();
@@ -422,14 +434,16 @@
                         var isFn = typeof that.verify[thisVer] === 'function';
                         if (that.verify[thisVer] && (isFn ? tips = that.verify[thisVer](value, item) : !that.verify[thisVer][0].test(value))) {
                         	layer.msg(tips || that.verify[thisVer][1], {
-                                icon: 5
-                                , shift: 6
+                                icon: 5,
+                                shift: 6
                             });
                             //非移动设备自动定位焦点
                             if (!device.android && !device.ios) {
                                 item.focus();
                             }
                             othis.addClass(DANGER);
+                            //移除请求遮罩层
+                            $("body").find(".mask-req-str").remove();
                             return stop = true;
                         }
                     });
@@ -493,14 +507,16 @@
             taskAuto: function () {
                 var res = true;
                 $('.winui-taskbar-task').each(function () {
-                    var thisWidth = parseInt($(this).prop('scrollWidth'));
-                    var childWidth = parseInt($(this).children().length * 165);
-                    //响应式
-                    if (thisWidth - 165 < childWidth) {
-                        layer.msg('任务栏装不下啦', { zIndex: layer.zIndex });
-                        res = false;
-                        return false;
-                    }
+                	if($(this).css("display") === 'block'){//判断当前操作的是哪个任务窗口
+                		var thisWidth = parseInt($(this).prop('scrollWidth'));
+                		var childWidth = parseInt($(this).children().length * 165);
+                		//响应式
+                		if (thisWidth - 165 < childWidth) {
+                			layer.msg('任务栏装不下啦', { zIndex: layer.zIndex });
+                			res = false;
+                			return false;
+                		}
+                	}
                 });
                 return res;
             }, 
@@ -535,7 +551,6 @@
             //锁屏
             lockScreen: function (callback) {
                 var self = this;
-                $('.winui-taskbar').css('zIndex', '0');
                 $.get(winui.path + '../../../tpl/index/lockscreen.html', {}, function (content) {
                     layer.open({
                         id: 'winui-lockscreen',
@@ -591,12 +606,18 @@
                             }
                             $(document).on('mouseup', docMouseup);
                             $(document).on('keydown', docKeydown);
+                            
+                            $('.winui-taskbar').css('z-index', '0');
+                            $('.talk-mabal .layui-layer-close').click();
+                            $('.talk-btn').hide();
                             //解锁点击
                             form.on('submit(unlock)', function (data) {
                                 try {
                                     if (typeof callback === 'function' && callback.call(this, data.field.password)) {
                                         layer.close(layerindex);
                                         window.localStorage.setItem("lockscreen", false);
+                                        $('.winui-taskbar').css('z-index', '99980000');
+                                        $('.talk-btn').show();
                                     }
                                 } catch (e) {
                                     console.error(e);
@@ -647,7 +668,7 @@
             //添加任务项（返回添加的任务项dom）
             , addTaskItem: function (id, title) {
                 var taskItem = $('<li win-id="' + id + '" class="winui-task-item">' + title + '</li>');
-                $('.winui-taskbar-task').append(taskItem);
+                $('.winui-taskbar-task:visible').append(taskItem);
                 return taskItem;
             }
 
@@ -716,9 +737,9 @@
             //定位桌面应用
             , locaApp: function () {
                 //计算一竖排能容纳几个应用
-                var appHeight = 96;
+            	var appHeight = 103;
                 var appWidth = 90;
-                var maxCount = parseInt($('.winui-desktop').height() / 93);
+    	        var maxCount = parseInt($('.winui-desktop').height() / 100);
                 var oldTemp = 0;
                 var rowspan = 0;
                 var colspan = 0;
@@ -772,7 +793,52 @@
                         }
                     }
                 });
-            }
+            },
+            //图片url获取主题色
+            imgUrlToThemeColor: function(url, cb, light) {
+            	if(!light) {
+            		light = 1.0
+            	}
+            	var img = new Image;
+            	img.src = url;
+            	img.crossOrigin = 'anonymous'; //跨域声明（只在chrome和firefox有效——吗？）
+            	img.onload = function() {
+            		try {
+            			var canvas = document.createElement("canvas");
+            			canvas.width = img.width;
+            			canvas.height = img.height;
+            			var ctxt = canvas.getContext('2d');
+            			ctxt.drawImage(img, 0, 0);
+            			var data = ctxt.getImageData(0, 0, img.width, img.height).data; //读取整张图片的像素。
+            			var r = 0,
+            				g = 0,
+            				b = 0,
+            				a = 0;
+            			var red, green, blue, alpha;
+            			var pixel = img.width * img.height;
+            			for(var i = 0, len = data.length; i < len; i += 4) {
+            				red = data[i];
+            				r += red; //红色色深
+            				green = data[i + 1];
+            				g += green; //绿色色深
+            				blue = data[i + 2];
+            				b += blue; //蓝色色深
+            				alpha = data[i + 3];
+            				a += alpha; //透明度
+            			}
+            			r = parseInt(r / pixel * light);
+            			g = parseInt(g / pixel * light);
+            			b = parseInt(b / pixel * light);
+            			a = 1; //a/pixel/255;
+            			var color = "rgba(" + r + "," + g + "," + b + "," + a + ")";
+            			if(cb) {
+            				cb(color);
+            			}
+            		} catch(e) {
+            			console.warn(e)
+            		}
+            	};
+            },
         };
 
         //基础事件
