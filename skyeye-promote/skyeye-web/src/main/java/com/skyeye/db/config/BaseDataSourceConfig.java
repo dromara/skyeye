@@ -16,7 +16,7 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 @Configuration
-@MapperScan(basePackages = {"com.skyeye.eve.dao"}, sqlSessionTemplateRef = "baseSqlSessionTemplate")
+@MapperScan(basePackages = {"com.skyeye.eve.dao", "com.skyeye.dao"}, sqlSessionTemplateRef = "baseSqlSessionTemplate")
 public class BaseDataSourceConfig {
 	
 	@Bean(name="baseDataSource")
