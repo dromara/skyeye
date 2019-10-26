@@ -10,7 +10,7 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 
 > 系统新增传统风格界面，layui左菜单右内容风格。
 
-> 体验地址： http://skyeye.vipgz1.idcfengye.com；账号/密码：root/123456
+> 体验地址： [http://skyeye.vipgz1.idcfengye.com](http://skyeye.vipgz1.idcfengye.com)；账号/密码：root/123456
 
 |项目|地址|
 |-------|-------|
