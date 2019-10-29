@@ -14,10 +14,10 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 
 |项目|地址|
 |-------|-------|
-|主项目地址|https://gitee.com/doc_wei01_admin/skyeye|
-|APP端接口微服务地址|https://gitee.com/doc_wei01_admin/app-oaserver|
-|APP端地址|https://gitee.com/doc_wei01_admin/oa-app|
-|小程序端地址|https://gitee.com/doc_wei01_admin/small-pro|
+|主项目地址|https://gitee.com/doc_wei01/skyeye|
+|APP端接口微服务地址|https://gitee.com/doc_wei01/app-oaserver|
+|APP端地址|https://gitee.com/doc_wei01/oa-app|
+|小程序端地址|https://gitee.com/doc_wei01/small-pro|
 
 > 该项目遵守MIT许可证，证书见`附件`
 
