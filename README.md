@@ -1,4 +1,4 @@
-# skyeye
+# OA
 
 #### 项目介绍
 
@@ -24,6 +24,8 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 > APP端开始开发，前端采用VUE，后端采用SpringCloud，APP访问地址：[https://gitee.com/doc_wei01_admin/oa-app](https://gitee.com/doc_wei01_admin/oa-app "https://gitee.com/doc_wei01_admin/oa-app")
 
 `项目持续更新，欢迎进群讨论`
+
+> 3D模型编辑器（图片效果在下面）。很多人会问：有什么用？答案是：用途很多，比如机场建设，工厂监控，小区建设，统计分析等。当前已出第一版，后续会不断更新代码和3D模型。
 
 ##### 启动方式
 
@@ -73,6 +75,7 @@ win10风格的一套系统，前端采用layui作为前端框架，后端采用S
 动态表单|通过自定义的方式生成提交表单页，可与动态数据进行结合，目前已和工作流结合|行政管理|包含车辆管理、会议室管理、用品管理、印章管理、财产管理、证照管理。所有功能审核已和工作流结合
 内部公告|系统内部公告通知，可设置邮件通知，定时通知，人员选择等|通讯录|记录个人、公司内部、公共通讯录信息
  **APP端** |接口：SpringCloud微服务框架；前端：vue| **小程序端** |微信用户与系统用户绑定进行系统操作
+ **3D模型编辑器**|||
 
 #### 技术选型
 
@@ -168,6 +171,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 |效果图|效果图|
 | ------------- | ------------- |
 |![](https://images.gitee.com/uploads/images/2019/0904/143634_0c9da9ad_1541735.png)|![](https://images.gitee.com/uploads/images/2019/0904/143639_2e442328_1541735.png)|
+|![输入图片说明](https://images.gitee.com/uploads/images/2019/1101/170700_738ed970_1541735.png "在这里输入图片标题")||
 
 #### 环境搭建
 ##### 开发工具:
