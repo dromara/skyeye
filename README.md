@@ -19,8 +19,6 @@
 |APP端地址|https://gitee.com/doc_wei01/oa-app|
 |小程序端地址|https://gitee.com/doc_wei01/small-pro|
 
-> 该项目遵守MIT许可证，证书见`附件`
-
 > APP端开始开发，前端采用VUE，后端采用SpringCloud，APP访问地址：[https://gitee.com/doc_wei01_admin/oa-app](https://gitee.com/doc_wei01_admin/oa-app "https://gitee.com/doc_wei01_admin/oa-app")
 
 `项目持续更新，欢迎进群讨论`
