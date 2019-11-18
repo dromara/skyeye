@@ -4,13 +4,11 @@
 
 智能办公OA系统[SpringBoot2-快速开发平台]，适用于医院，学校，中小型企业等机构的管理。Activiti5.22+动态表单实现零java代码即可做到复杂业务的流程实施，同时包含文件在线操作、日志、考勤、CRM、项目、拖拽式生成问卷、日程、笔记、计划、行政等多种复杂业务功能。同时，可进行授权二开。</br>
 
-> QQ群号：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))
-
-> 注：开源社区版只限学习，切勿使用此版本商用，内设授权码，默认十天删除所有非基础数据
-
-> 求职简历：[点我](https://gitee.com/doc_wei01/skyeye/blob/master/%E7%AE%80%E5%8E%86.md)
-
-> 系统新增传统风格界面，layui左菜单右内容风格。
+- QQ群号：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))
+- 注：开源社区版只限学习，切勿使用此版本商用，内设授权码，默认十天删除所有非基础数据
+- 求职简历：[点我](https://gitee.com/doc_wei01/skyeye/blob/master/%E7%AE%80%E5%8E%86.md)
+- 体验地址1： [http://skyeye.vipgz1.idcfengye.com](http://skyeye.vipgz1.idcfengye.com?2)；账号/密码：root/123456 
+- 体验地址2： [http://skyeyeoa.fzlin.net](http://skyeyeoa.fzlin.net)；账号/密码：root/123456 感谢`疯子林`提供的服务器
 
 |项目|地址|
 |-------|-------|
