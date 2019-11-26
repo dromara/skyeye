@@ -9,7 +9,7 @@
 - 开发环境对应的文档以及安装包地址：链接：https://pan.baidu.com/s/1msVBhDcf_I_VN63YCcS-kA 提取码：w8sr；不要告诉我你没有云盘
 - 注：开源社区版只限学习，切勿使用此版本商用，内设授权码，默认十天删除所有非基础数据
 - 求职简历：[点我](https://gitee.com/doc_wei01/skyeye/blob/master/%E7%AE%80%E5%8E%86.md)
-- 体验地址1： [http://skyeye.vipgz1.idcfengye.com](http://skyeye.vipgz1.idcfengye.com?2)；账号/密码：root/123456 
+- 体验地址1： [http://skyeye.vipgz1.idcfengye.com](http://skyeye.vipgz1.idcfengye.com?2)；账号/密码：root/123456 (开源主已不足以养活自己，关闭一个，请使用第二个)
 - 体验地址2： [http://skyeyeoa.fzlin.net](http://skyeyeoa.fzlin.net)；账号/密码：root/123456 感谢`疯子林`提供的服务器
 - [掘金文档地址](https://juejin.im/post/5d89df81e51d4561fb04c029)
 
