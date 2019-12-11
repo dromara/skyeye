@@ -8,8 +8,9 @@
 - QQ群号：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))
 - 开发环境对应的文档以及安装包地址：链接：https://pan.baidu.com/s/1msVBhDcf_I_VN63YCcS-kA 提取码：w8sr；不要告诉我你没有云盘
 - 注：开源社区版只限学习，切勿使用此版本商用，内设授权码，默认十天删除所有非基础数据
-- 求职简历：[点我](https://gitee.com/doc_wei01/skyeye/blob/master/%E7%AE%80%E5%8E%86.md)
 - [掘金文档地址](https://juejin.im/post/5d89df81e51d4561fb04c029)
+
+> 开源版只包含基础功能，全套商业版售价是四万(价格会随着功能的增加而增加)，负责bug维护，现在本人正在找工作，体验地址关了，需要体验的，请联系作者远程查看
 
 |项目|地址|
 |-------|-------|
