@@ -8,6 +8,7 @@
 - 小白勿入，不会度娘的勿入
 - 项目交流群：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))
 - 请不要重复加群，一个群就可以了，把机会留给更多人
+- 百度云盘群（3676101838）提供环境安装文档和软件。请用手机版云盘自行搜索进群。
 -  **进群先看公告！！！进群先看公告！！！进群先看公告！！！**  重要的事情说三遍
 - 开发环境对应的文档以及安装包地址：链接：https://pan.baidu.com/s/1msVBhDcf_I_VN63YCcS-kA 提取码：w8sr；不要告诉我你没有云盘
 - [掘金文档地址](https://juejin.im/post/5d89df81e51d4561fb04c029)
