@@ -5,7 +5,6 @@
 智能办公OA系统[SpringBoot2-快速开发平台]，适用于医院，学校，中小型企业等机构的管理。Activiti5.22+动态表单实现零java代码即可做到复杂业务的流程实施，同时包含文件在线操作、日志、考勤、CRM、项目、拖拽式生成问卷、日程、笔记、计划、行政等多种复杂业务功能。</br>
 
 - 开源不易，给个`star`吧
-- 代码是没问题的，请下载`发行版`，环境版本请参照下面云盘提供的版本进行对应的修改
 - 小白勿入，不会度娘的勿入
 - 项目交流群：(群一(满)：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))(群三：[887391486](https://shang.qq.com/wpa/qunwpa?idkey=a65f2e0292eb1048bb13abb7adca302bd83e3465974861ec1f04c2f7fffc4d99))
 - 请不要重复加群，一个群就可以了，把机会留给更多人
@@ -16,17 +15,13 @@
 |项目|地址|
 |-------|-------|
 |主项目地址|https://gitee.com/doc_wei01/skyeye|
-|APP端接口微服务地址|https://gitee.com/doc_wei01/app-oaserver|
-|APP端地址|https://gitee.com/doc_wei01/oa-app|
-|小程序端地址|https://gitee.com/doc_wei01/small-pro|
+|APP端(uni-app)|https://gitee.com/doc_wei01/cloud-after-sale|
 
 `项目持续更新，欢迎进群讨论`
 
-> 3D模型编辑器（图片效果在下面）。很多人会问：有什么用？答案是：用途很多，比如机场建设，工厂监控，小区建设，统计分析等。当前已出第一版，后续会不断更新代码和3D模型。
-
 ##### 启动方式
 
-直接运行com.skyeye.SkyEyeApplication即可，启动完成后，访问http://localhost:8081 即可。
+直接运行SkyEyeApplication即可，启动完成后，访问http://localhost:8081 即可。
 初始化账号密码：`root/123456`
 
 #### 服务器部署注意事项
@@ -36,12 +31,6 @@
 3.MySQL数据库链接地址、账号、密码的修改<br />
 4.webSocket的IP地址修改<br />
 5.图片资源路径存储的修改<br />
-
-#### 本地开发环境搭建
-
-- windows搭建nginx负载均衡（[下载](https://download.csdn.net/download/doc_wei/11010749)）
-- windows搭建activemq单机版（[下载](https://download.csdn.net/download/doc_wei/11010746)）
-- windows搭建redis集群（[下载](https://download.csdn.net/download/doc_wei/11010741)）
 
 ##### 注意事项
 
