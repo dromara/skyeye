@@ -6,41 +6,22 @@
 
 > 价格介绍：开源版只包含基础功能，架构不支持高并发，容易出现问题，如想使用，签订使用协议即可。商业版包含所有功能，一直在更新，价格也在随时变化，目前价格是六万五千元【2020/02/27更新】(需要发票另外算)，负责半年的现有功能维护，提供开发文档、技术支持、疑难问题的解决方案，可根据需要进行功能整合（整合后费用跟着变化），一次性付费，全部源码。商业版包含的功能往下翻
 
+> 新增学校模块功能，往下翻看功能
+
 - 开源不易，给个`star`吧
 - [面试专题](https://gitee.com/doc_wei01/skyeye/blob/master/Java%E5%AD%A6%E4%B9%A0%E7%9B%AE%E5%BD%95.md)
 - 小白勿入，不会度娘的勿入
 - 项目交流群：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))(群三：[887391486](https://shang.qq.com/wpa/qunwpa?idkey=a65f2e0292eb1048bb13abb7adca302bd83e3465974861ec1f04c2f7fffc4d99))
 - 需要进微信群的，进微信群需要支付五元费用，为了防止发广告的等，望谅解。请加我微信：wzq_598748873
 - 请不要重复加群，一个群就可以了，把机会留给更多人
-- 开发环境对应的文档以及安装包-百度云盘群（3676101838）提供环境安装文档和软件。请用手机版云盘自行搜索进群。
 -  **进群先看公告！！！进群先看公告！！！进群先看公告！！！**  重要的事情说三遍
 - [掘金文档地址](https://juejin.im/post/5d89df81e51d4561fb04c029)
+- `项目持续更新，欢迎进群讨论`
 
 |项目|地址|
 |-------|-------|
 |主项目地址|https://gitee.com/doc_wei01/skyeye|
 |APP端(uni-app)|https://gitee.com/doc_wei01/cloud-after-sale|
-
-`项目持续更新，欢迎进群讨论`
-
-##### 启动方式
-
-直接运行SkyEyeApplication即可，启动完成后，访问http://localhost:8081 即可。
-初始化账号密码：`root/123456`
-
-#### 服务器部署注意事项
-
-1.ActiveMQ链接地址、账号、密码的修改<br />
-2.Redis集群的修改<br />
-3.MySQL数据库链接地址、账号、密码的修改<br />
-4.webSocket的IP地址修改<br />
-5.图片资源路径存储的修改<br />
-
-##### 注意事项
-
-如果是eclipse导入发现pom文件报错。<br />
-错误：org.apache.maven.archiver.MavenArchiver.getManifest<br />
-解决办法：https://blog.csdn.net/doc_wei/article/details/84936514<br />
 
 #### 功能介绍
 
@@ -67,6 +48,16 @@
 知识库|企业文化支柱；[效果地址](https://gitee.com/doc_wei01/knowlg-pro)|[CRM客户管理](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/CRM%E5%AE%A2%E6%88%B7%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9D%97.md)|包含客户、商机、跟单、合同等多个模块化功能
 [ERP进销存管理](https://gitee.com/doc_wei01/erp-pro)|包含采购、销售、零售、客户、供应商等多个模块化功能；[效果地址](https://gitee.com/doc_wei01/erp-pro)|[项目管理](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86.md)|包含项目、工作量、讨论帖、项目文档、成本费用等功能
 [云售后管理系统](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E5%94%AE%E5%90%8E%E5%B7%A5%E5%8D%95%E6%A8%A1%E5%9D%97.md)|包含工单的派工，接单，签到，配件申领审批，完工，评价，审核等操作||
+
+#### 学校模块
+
+功能|简介|功能|简介
+-------|-------|-------|-------
+学校管理|管理学校以及子学校，可以控制数据权限|科目管理|管理本学校所拥有的科目
+教学楼管理|管理本校教学楼，以方便班级定位|基础数据管理|包括身心障碍类型，交通方式等
+年级管理|管理学校年级，同时可管理兴趣班等|班级管理|管理每一个的班级信息
+教师管理|管理学校教职工|学生管理|管理学校学生信息
+试卷管理|可以自定义试卷，可进行拖拽，包括填空题，单选题，多选题，评分题，排序题，矩阵题等||
 
 #### 技术选型
 
