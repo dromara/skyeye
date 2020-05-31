@@ -9,6 +9,8 @@
 > 新增学校模块功能，往下翻看功能
 
 - 开源不易，给个`star`吧
+- 如果需要学习资料的（不免费，不贵，一杯咖啡的钱），可以加我微信。
+- 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
 - Skyeye的近期工作清单，有别的需求可以联系我添加。https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - [面试专题](https://gitee.com/doc_wei01/skyeye/blob/master/Java%E5%AD%A6%E4%B9%A0%E7%9B%AE%E5%BD%95.md)
 - 小白勿入，不会度娘的勿入
@@ -47,7 +49,7 @@
 内部公告|系统内部公告通知，可设置邮件通知，定时通知，人员选择等|通讯录|记录个人、公司内部、公共通讯录信息
 知识库|企业文化支柱；[效果地址](https://gitee.com/doc_wei01/knowlg-pro)|[CRM客户管理](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/CRM%E5%AE%A2%E6%88%B7%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9D%97.md)|包含客户、商机、跟单、合同等多个模块化功能
 [ERP进销存管理](https://gitee.com/doc_wei01/erp-pro)|包含采购、销售、零售、客户、供应商等多个模块化功能；[效果地址](https://gitee.com/doc_wei01/erp-pro)|[项目管理](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86.md)|包含项目、工作量、讨论帖、项目文档、成本费用等功能
-[云售后管理系统](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E5%94%AE%E5%90%8E%E5%B7%A5%E5%8D%95%E6%A8%A1%E5%9D%97.md)|包含工单的派工，接单，签到，配件申领审批，完工，评价，审核等操作||
+[云售后管理系统](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E5%94%AE%E5%90%8E%E5%B7%A5%E5%8D%95%E6%A8%A1%E5%9D%97.md)|包含工单的派工，接单，签到，配件申领审批，完工，评价，审核等操作|生产模块|狂吃狂吃开发中
 
 #### 学校模块
 
