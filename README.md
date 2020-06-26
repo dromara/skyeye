@@ -188,3 +188,8 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 - [Nginx中文文档](http://tool.oschina.net/apidocs/apidoc?api=nginx-zh)</br>
 - [Git官网中文文档](https://git-scm.com/book/zh/v2)</br>
 
+### 捐助
+如果您觉得我们的开源软件对你有所帮助，请扫下方二维码打赏我们一杯咖啡。
+| 支付宝 | 微信 |
+| ------ | ---- |
+| ![      ](https://images.gitee.com/uploads/images/2019/1016/094014_96f92c56_1541735.png "微信截图_20191016093832.png") | ![     ](https://images.gitee.com/uploads/images/2019/1016/094025_65ba24f0_1541735.png "微信截图_20191016093850.png")|
