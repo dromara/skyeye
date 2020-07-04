@@ -1,4 +1,12 @@
-
+apollo:
+    bootstrap:
+        eagerLoad:
+            enabled: true
+        enabled: true
+    meta: http://127.0.0.1:8080
+# apollo应用id
+app:
+    id: skyeye-kaiyuan
 server:
     port: ${server.port}
     tomcat:

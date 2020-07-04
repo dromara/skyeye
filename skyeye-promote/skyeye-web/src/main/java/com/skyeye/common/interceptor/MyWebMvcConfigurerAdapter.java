@@ -1,3 +1,6 @@
+/**
+ * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved.
+ */
 package com.skyeye.common.interceptor;
 
 import org.springframework.beans.factory.annotation.Value;
