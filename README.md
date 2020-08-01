@@ -12,9 +12,8 @@
 - Skyeye的近期工作清单，有别的需求可以联系我添加。https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - [面试专题](https://gitee.com/doc_wei01/skyeye/blob/master/Java%E5%AD%A6%E4%B9%A0%E7%9B%AE%E5%BD%95.md)
 - 项目交流群：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))(群三：[887391486](https://shang.qq.com/wpa/qunwpa?idkey=a65f2e0292eb1048bb13abb7adca302bd83e3465974861ec1f04c2f7fffc4d99))
-- 需要进微信群的，进微信群需要支付五元费用，为了防止发广告的等，望谅解。请加我微信：wzq_598748873
-- 请不要重复加群，一个群就可以了，把机会留给更多人
--  **进群先看公告！！！进群先看公告！！！进群先看公告！！！**  重要的事情说三遍
+- 需要进微信群的，进微信群需要支付五元费用(加我拉你进群，wzq_598748873)，为了防止发广告的等，望谅解。
+- `不想支付的进QQ群，别尼玛加了我微信说这说那的`
 - [掘金文档地址](https://juejin.im/post/5d89df81e51d4561fb04c029)
 - 如果需要学习资料的（不免费，不贵，一杯咖啡的钱），可以加我微信。
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
