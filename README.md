@@ -10,7 +10,7 @@
 - erp+生产演示视频：https://www.bilibili.com/video/BV1yA411e7mm/
 - 集成apollo配置中心，不会的菜比就别用这项目了，不想理你们这些菜比
 - 安装文档，技术文档，业务文档：https://www.kancloud.cn/doc_wei/skyeye0_1/1222150
-- Skyeye的近期工作清单，有别的需求可以联系我添加。https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
+- Skyeye的近期工作清单(价格表)。https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - 项目交流群：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))(群三：[887391486](https://shang.qq.com/wpa/qunwpa?idkey=a65f2e0292eb1048bb13abb7adca302bd83e3465974861ec1f04c2f7fffc4d99))
 - 需要进微信群的，进微信群需要支付五元费用(加我拉你进群，wzq_598748873)，为了防止发广告的等，望谅解。
 - `不想支付的进QQ群，别尼玛加了我微信说这说那的`
