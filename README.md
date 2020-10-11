@@ -4,22 +4,14 @@
 
 智能办公OA系统[SpringBoot2-快速开发平台]，适用于医院，学校，中小型企业等机构的管理。Activiti5.22+动态表单实现零java代码即可做到复杂业务的流程实施，同时包含文件在线操作、日志、考勤、CRM、项目、拖拽式生成问卷、日程、笔记、计划、行政等多种复杂业务功能。</br>
 
-> 开源版只包含基础功能，架构不支持高并发，容易出现问题，私用出现问题概不负责。商业版包含所有功能，个人软件，无发票。
-
 - 开源不易，给个`star`吧
 - erp+生产演示视频：https://www.bilibili.com/video/BV1yA411e7mm/
-- 集成apollo配置中心，不会的菜比就别用这项目了，不想理你们这些菜比
-- 需要合作的，请加了作者后主动说明合作方式
 - 项目交流群：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))(群三：[887391486](https://shang.qq.com/wpa/qunwpa?idkey=a65f2e0292eb1048bb13abb7adca302bd83e3465974861ec1f04c2f7fffc4d99))`商业需求直接进微信群，申请QQ群的直接拒绝`
 - 需要进微信群的，进微信群需要支付五元费用(加我拉你进群，wzq_598748873)，为了防止发广告的等，喜欢爱答不理的就别进，进了也会被踢。望谅解。
 - `不想支付的进QQ群，别尼玛加了我微信说这说那的`
 - 工作清单以及价格表：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
 - 环境搭建资料以及项目介绍操作文档（50一份）获取：进群后找群主
-
-|项目|地址|
-|-------|-------|
-|主项目地址|https://gitee.com/doc_wei01/skyeye|
 
 #### 功能介绍
 
@@ -46,7 +38,7 @@
 知识库|企业文化支柱；[效果地址](https://gitee.com/doc_wei01/knowlg-pro)|[CRM客户管理](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/CRM%E5%AE%A2%E6%88%B7%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9D%97.md)|包含客户、商机、跟单、合同等多个模块化功能
 [ERP进销存管理](https://gitee.com/doc_wei01/erp-pro)|包含采购、销售、零售、客户、供应商等多个模块化功能；[效果地址](https://gitee.com/doc_wei01/erp-pro)|[项目管理](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86.md)|包含项目、工作量、讨论帖、项目文档、成本费用等功能
 [云售后管理系统](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E5%94%AE%E5%90%8E%E5%B7%A5%E5%8D%95%E6%A8%A1%E5%9D%97.md)|包含工单的派工，接单，签到，配件申领审批，完工，评价，审核等操作|生产模块|已完成，[演示视频](https://www.bilibili.com/video/BV1yA411e7mm/)
-|学校模块以及考试模块|[地址](https://gitee.com/doc_wei01/schoolExam)|||
+|学校模块以及考试模块|[地址](https://gitee.com/doc_wei01/schoolExam)|EHR模块|管理企业员工的基础信息|
 
 #### 技术选型
 
