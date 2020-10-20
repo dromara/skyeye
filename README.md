@@ -6,12 +6,12 @@
 
 - 开源不易，给个`star`吧
 - erp+生产演示视频：https://www.bilibili.com/video/BV1yA411e7mm/
-- 项目交流群：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))(群三：[887391486](https://shang.qq.com/wpa/qunwpa?idkey=a65f2e0292eb1048bb13abb7adca302bd83e3465974861ec1f04c2f7fffc4d99))`商业需求直接进微信群，申请QQ群的直接拒绝`
+- 项目交流群：(群一：[696070023](http://shang.qq.com/wpa/qunwpa?idkey=e9aace2bf3e05f37ed5f0377c3827c6683d970ac0bcc61b601f70dc861053229))(群二：[836039567](https://shang.qq.com/wpa/qunwpa?idkey=7bb6f29b27f772aadca9c7c4e384f7833c64e9c3c947b5e946c7b303d1fe174a))(群三：[887391486](https://shang.qq.com/wpa/qunwpa?idkey=a65f2e0292eb1048bb13abb7adca302bd83e3465974861ec1f04c2f7fffc4d99))
 - 需要进微信群的，进微信群需要支付五元费用(加我拉你进群，wzq_598748873)，为了防止发广告的等，喜欢爱答不理的就别进，进了也会被踢。望谅解。
 - `不想支付的进QQ群，别尼玛加了我微信说这说那的`
-- 工作清单以及价格表：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
+- 工作清单：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
-- 环境搭建资料以及项目介绍操作文档（50一份）获取：进群后找群主
+- 环境搭建资料以及项目介绍操作文档（30一份）获取：进群后找群主
 
 #### 功能介绍
 
