@@ -12,6 +12,7 @@
 - 工作清单：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
 - 环境搭建资料以及项目介绍操作文档（30一份）获取：进群后找群主
+- 新增国际化(中英文切换)支持
 
 #### 功能介绍
 
