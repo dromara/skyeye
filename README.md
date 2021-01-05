@@ -39,6 +39,7 @@
 [ERP进销存管理](https://gitee.com/doc_wei01/erp-pro)|包含采购、销售、零售、客户、供应商等多个模块化功能；[效果地址](https://gitee.com/doc_wei01/erp-pro)|[项目管理](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86.md)|包含项目、工作量、讨论帖、项目文档、成本费用等功能
 [云售后管理系统](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E5%94%AE%E5%90%8E%E5%B7%A5%E5%8D%95%E6%A8%A1%E5%9D%97.md)|包含工单的派工，接单，签到，配件申领审批，完工，评价，审核等操作|生产模块|已完成，[演示视频](https://www.bilibili.com/video/BV1yA411e7mm/)
 |学校模块以及考试模块|[地址](https://gitee.com/doc_wei01/schoolExam)|EHR模块|管理企业员工的基础信息|
+|薪资模块|员工薪资管理，支持多种类型设定|||
 
 #### 技术选型
 
