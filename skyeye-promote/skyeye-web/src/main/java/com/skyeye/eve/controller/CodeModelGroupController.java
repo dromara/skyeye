@@ -12,6 +12,10 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.eve.service.CodeModelGroupService;
 
+/**
+ * @auther 卫志强 QQ：598748873@qq.com，微信：wzq_598748873
+ * @desc 禁止商用
+ */
 @Controller
 public class CodeModelGroupController {
 	
