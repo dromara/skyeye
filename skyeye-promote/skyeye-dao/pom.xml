@@ -30,7 +30,7 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>ky.com.skyeye</groupId>
+			<groupId>com.skyeye</groupId>
 			<artifactId>skyeye-common</artifactId>
 			<version>1.0.2-SNAPSHOT</version>
 			<scope>system</scope>
