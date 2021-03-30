@@ -5,7 +5,7 @@
 智能办公OA系统[SpringBoot2-快速开发平台]，适用于医院，学校，中小型企业等机构的管理。包含文件在线操作、工作日志、多班次考勤、CRM、ERP进销存、项目管理、EHR、拖拽式生成问卷、日程、笔记、工作计划、行政办公、薪资模块、动态表单、知识库、公告模块、企业论坛、云售后模块、生产模块、系统模块化同步模块等多种复杂业务功能。
 
 - 开源不易，给个`star`吧
-- erp+生产演示视频：https://www.bilibili.com/video/BV1yA411e7mm/
+- erp+生产演示视频：https://mp.weixin.qq.com/s/CrFM_VZShi-FIJ8zD0_Nqg
 - 需要进微信群的，进微信群需要支付五元费用(加我拉你进群，wzq_598748873)，为了防止发广告的等，望谅解。
 - `本项目分为开源版和商业版，不喜勿喷，谢谢。`
 - 工作清单以及商业版价格表：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
