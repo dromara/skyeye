@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.skyeye.activity.main;
 
 import java.io.InputStream;
@@ -25,8 +26,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author Tijs Rademakers
- * 获取编辑器组件及配置项信息
+ * @ClassName: StencilsetRestResource
+ * @Description: 获取编辑器组件及配置项信息
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/4/10 22:03
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目
  */
 @RestController
 @RequestMapping(value = "/service")

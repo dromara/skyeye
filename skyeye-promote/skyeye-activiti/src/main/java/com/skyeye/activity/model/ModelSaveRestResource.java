@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.skyeye.activity.model;
 
 import java.io.ByteArrayInputStream;
@@ -40,8 +41,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * @author Tijs Rademakers
- * 编辑器制图之后，将节点信息以json的形式提交给这个Controller，然后由其进行持久化操作
+ * @ClassName: ModelSaveRestResource
+ * @Description: 编辑器制图之后，将节点信息以json的形式提交给这个Controller，然后由其进行持久化操作
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/4/10 22:03
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目
  */
 @RestController
 @RequestMapping(value = "/service")
