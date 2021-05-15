@@ -137,32 +137,10 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 |![](https://images.gitee.com/uploads/images/2019/0904/143634_0c9da9ad_1541735.png)|![](https://images.gitee.com/uploads/images/2019/0904/143639_2e442328_1541735.png)|
 |![输入图片说明](https://images.gitee.com/uploads/images/2019/1101/170700_738ed970_1541735.png "在这里输入图片标题")||
 
-#### 环境搭建
-##### 开发工具:
 
-- MySql: 数据库</br>
-- Tomcat: 应用服务器</br>
-- SVN|Git: 版本管理</br>
-- Nginx: 反向代理服务器</br>
-- Varnish: HTTP加速器</br>
-- IntelliJ IDEA|Eclipse: 开发IDE</br>
-- Navicat for MySQL: 数据库客户端</br>
-- Redis Manager：redis视图工具</br>
+#### 更新日志:
 
-#### 资源下载
-
-- JDK8 https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</br>
-- Maven http://maven.apache.org/download.cgi</br>
-- Redis https://redis.io/download</br>
-- Nginx http://nginx.org/en/download.html</br>
-
-#### 在线文档
-
-- [JDK8中文文档](https://blog.fondme.cn/apidoc/jdk-1.8-youdao/)</br>
-- [Spring4.x文档](http://spring.oschina.mopaas.com/)</br>
-- [Mybatis3官网](http://www.mybatis.org/mybatis-3/zh/index.html)</br>
-- [Nginx中文文档](http://tool.oschina.net/apidocs/apidoc?api=nginx-zh)</br>
-- [Git官网中文文档](https://git-scm.com/book/zh/v2)</br>
+- [skyeye v3.5.3 发布，考勤模块、薪资模块以及ERP生产模块更新](https://mp.weixin.qq.com/s/qYzGDi6fP1Gqp9QQnYahyQ)--[视频介绍](https://mp.weixin.qq.com/s/DUd9RCsF3Ubyng6AEZXxKg)
 
 ### 捐助
 如果您觉得我们的开源软件对你有所帮助，请扫下方二维码打赏我们一杯咖啡。
