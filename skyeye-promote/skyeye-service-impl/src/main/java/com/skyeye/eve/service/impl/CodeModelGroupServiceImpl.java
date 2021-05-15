@@ -1,6 +1,7 @@
 /**
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved.
  */
+
 package com.skyeye.eve.service.impl;
 
 import java.util.HashMap;
@@ -19,6 +20,12 @@ import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.CodeModelGroupDao;
 import com.skyeye.eve.service.CodeModelGroupService;
 
+/**
+ * 代码生成器模板分组服务类
+ *
+ * @auther 卫志强 QQ：598748873@qq.com，微信：wzq_598748873
+ * @desc 禁止商用
+ */
 @Service
 public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 	
