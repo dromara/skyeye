@@ -138,7 +138,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 |![输入图片说明](https://images.gitee.com/uploads/images/2019/1101/170700_738ed970_1541735.png "在这里输入图片标题")||
 
 
-#### 更新日志:
+#### 更新日志(关注下方公众号，第一时间把握最新动态):
 
 - [skyeye v3.5.3 发布，考勤模块、薪资模块以及ERP生产模块更新](https://mp.weixin.qq.com/s/qYzGDi6fP1Gqp9QQnYahyQ)--[视频介绍](https://mp.weixin.qq.com/s/DUd9RCsF3Ubyng6AEZXxKg)
 
