@@ -1,6 +1,7 @@
 /**
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved.
  */
+
 package com.skyeye.quartz.config;
 
 import org.quartz.DisallowConcurrentExecution;
@@ -14,7 +15,16 @@ import org.springframework.stereotype.Component;
 import com.skyeye.eve.dao.SysQuartzDao;
 import com.skyeye.quartz.entity.SysQuartz;
 
-
+/**
+ *
+ * @ClassName: QuartzJobFactory
+ * @Description: 定时任务分发任务类
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/6/10 20:36
+ *
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
+ */
 @Component
 @DisallowConcurrentExecution
 public class QuartzJobFactory implements Job{
