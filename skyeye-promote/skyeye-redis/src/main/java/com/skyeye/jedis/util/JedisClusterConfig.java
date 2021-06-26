@@ -1,6 +1,7 @@
 /**
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved.
  */
+
 package com.skyeye.jedis.util;
 
 import java.util.HashSet;
@@ -13,6 +14,16 @@ import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 
+/**
+ *
+ * @ClassName: JedisClusterConfig
+ * @Description: jedis服务启动配置类
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/6/26 9:53
+ *
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
+ */
 @Configuration
 public class JedisClusterConfig {
 
