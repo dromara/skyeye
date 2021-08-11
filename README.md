@@ -11,7 +11,7 @@
 - `本项目分为开源版和企业版，不喜勿喷，谢谢。`
 - 工作清单以及企业版价格表：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
-- 环境搭建资料以及项目介绍操作文档（30一份）获取：进群后找群主
+- [项目文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 - 采用Redis缓存做单点登录功能，全新风格的后台管理系统
 - [MIT协议的高性能报表软件](https://gitee.com/doc_wei01/skyeye-report)
 
