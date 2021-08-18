@@ -6,7 +6,7 @@
 
 - 开源不易，给个`star`吧
 - erp+生产演示视频：https://mp.weixin.qq.com/s/CrFM_VZShi-FIJ8zD0_Nqg
-- 需要进微信群的，进微信群需要支付五元费用(加我拉你进群，wzq_598748873)，为了防止发广告的等，望谅解。
+- 需要进微信群(加我拉你进群，wzq_598748873)，请提供自己的真实姓名以及手机号，为了防止发广告的等，望谅解。
 - 不需要进群的，请直接加微信：ZhiJinShuLi
 - `本项目分为开源版和企业版，不喜勿喷，谢谢。`
 - 工作清单以及企业版价格表：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
