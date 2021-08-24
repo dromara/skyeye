@@ -144,7 +144,7 @@ public void 方法名(InputObject inputObject, OutputObject outputObject) throws
 
 - 购买企业版源码
 - 购买企业版Jar包
-- 客户可提供文字版合作方式(语音或者电话一律不接)
+- 客户可提供文字版合作方式
 
 ### 捐助
 如果您觉得我们的开源软件对你有所帮助，请扫下方二维码打赏我们一杯咖啡。
