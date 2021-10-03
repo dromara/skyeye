@@ -1,6 +1,7 @@
 /**
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved.
  */
+
 package com.skyeye.common.filter;
 
 import java.io.IOException;
@@ -45,7 +46,6 @@ public class SessionFilter implements Filter {
 	/**
 	 * 过滤器
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// 获得在下面代码中要用的request,response,session对象

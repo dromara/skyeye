@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>skyeye-promote</artifactId>
-		<groupId>com.skyeye</groupId>
+		<groupId>com.skyeye.ky</groupId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
