@@ -9,9 +9,10 @@
 - 需要进微信群(加我拉你进群，wzq_598748873)，请提供自己的邮箱，默认订阅每周更新内容推送。
 - 不需要进群的，请直接加微信：ZhiJinShuLi
 - `本项目分为开源版和企业版，不喜勿喷，谢谢。`
-- 企业版信息`现接受已有模块的需求定制,仅限五名客户`：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
+- 企业版信息：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
-- [项目文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
+- 现接受财务模块+ERP模块的功能扩展需求，有意向的可将需求文档发送给作者。
+- [说明文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 - 采用Redis缓存做单点登录功能，全新风格的后台管理系统
 - [MIT协议的高性能报表软件](https://gitee.com/doc_wei01/skyeye-report)
 
