@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="薪资模块">
+    <!--
+        - allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+     -->
+
+    <!-- 薪资字段开始 -->
+    <url id="wages001" path="/post/WagesFieldTypeController/queryWagesFieldTypeList" val="获取薪资字段列表" allUse="1" groupName="薪资字段">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="name" name="name" ref="" var="字段名称" />
+        <property id="key" name="key" ref="" var="字段key"/>
+        <property id="state" name="state" ref="num" var="状态"/>
+    </url>
+    <url id="wages002" path="/post/WagesFieldTypeController/insertWagesFieldTypeMation" val="新增薪资字段信息" allUse="1" groupName="薪资字段">
+        <property id="nameCn" name="nameCn" ref="required" var="名称-中文" />
+        <property id="nameEn" name="nameEn" ref="required" var="名称-英文"/>
+        <property id="key" name="key" ref="required" var="key，可以用于区分字段内容，用于后面公式计算"/>
+        <property id="monthlyClearing" name="monthlyClearing" ref="required,num" var="是否每月统计上月薪资时，该字段自动清零  1.是  2.否"/>
+        <property id="wagesType" name="wagesType" ref="required,num" var="薪资类型  1.薪资增加  2.薪资减少"/>
+    </url>
+    <url id="wages003" path="/post/WagesFieldTypeController/queryWagesFieldTypeMationToEditById" val="编辑薪资字段信息时进行回显" allUse="2" method="GET" groupName="薪资字段">
+        <property id="rowId" name="id" ref="required" var="薪资字段id" />
+    </url>
+    <url id="wages004" path="/post/WagesFieldTypeController/editWagesFieldTypeMationById" val="编辑薪资字段信息" allUse="1" method="PUT" groupName="薪资字段">
+        <property id="nameCn" name="nameCn" ref="required" var="名称-中文" />
+        <property id="nameEn" name="nameEn" ref="required" var="名称-英文"/>
+        <property id="monthlyClearing" name="monthlyClearing" ref="required,num" var="是否每月统计上月薪资时，该字段自动清零  1.是  2.否"/>
+        <property id="wagesType" name="wagesType" ref="required,num" var="薪资类型  1.薪资增加  2.薪资减少"/>
+        <property id="rowId" name="id" ref="required" var="薪资字段id" />
+    </url>
+    <url id="wages005" path="/post/WagesFieldTypeController/deleteWagesFieldTypeMationById" val="删除薪资字段信息" allUse="1" method="DELETE" groupName="薪资字段">
+        <property id="rowId" name="id" ref="required" var="薪资字段id" />
+    </url>
+    <url id="wages006" path="/post/WagesFieldTypeController/enableWagesFieldTypeMationById" val="启用薪资字段信息" allUse="1" method="GET" groupName="薪资字段">
+        <property id="rowId" name="id" ref="required" var="薪资字段id" />
+    </url>
+    <url id="wages007" path="/post/WagesFieldTypeController/disableWagesFieldTypeMationById" val="禁用薪资字段信息" allUse="1" method="GET" groupName="薪资字段">
+        <property id="rowId" name="id" ref="required" var="薪资字段id" />
+    </url>
+    <url id="wages008" path="/post/WagesFieldTypeController/queryEnableWagesFieldTypeList" val="获取已经启用的薪资字段列表" allUse="2" groupName="薪资字段">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="name" name="name" ref="" var="字段名称" />
+        <property id="key" name="key" ref="" var="字段key"/>
+    </url>
+    <url id="wages009" path="/post/WagesFieldTypeController/querySysWagesFieldTypeList" val="获取系统薪资字段列表" allUse="2" groupName="薪资字段">
+    </url>
+    <!-- 薪资字段结束 -->
+
+    <!-- 社保公积金模板开始 -->
+    <url id="wagessocialsecurityfund001" path="/post/WagesSocialSecurityFundController/queryWagesSocialSecurityFundList" val="获取社保公积金模板列表" allUse="1" groupName="社保公积金模板">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="title" name="title" ref="" var="名称" />
+        <property id="state" name="state" ref="num" var="状态"/>
+    </url>
+    <url id="wagessocialsecurityfund002" path="/post/WagesSocialSecurityFundController/insertWagesSocialSecurityFundMation" val="新增社保公积金模板信息" allUse="1" groupName="社保公积金模板">
+        <property id="title" name="title" ref="required" var="名称" />
+        <property id="startMonth" name="startMonth" ref="required" var="开始年月份"/>
+        <property id="endMonth" name="endMonth" ref="required" var="结束年月份"/>
+        <property id="desc" name="desc" ref="" var="说明"/>
+        <property id="enclosure" name="enclosure" ref="" var="附件"/>
+        <property id="insuranceEndowmentBase" name="insuranceEndowmentBase" ref="double" var="养老保险基数" default="0"/>
+        <property id="insuranceEndowmentPerson" name="insuranceEndowmentPerson" ref="double" var="养老个人比例(%)" default="0"/>
+        <property id="insuranceEndowmentCompany" name="insuranceEndowmentCompany" ref="double" var="养老单位比例(%)" default="0"/>
+        <property id="insuranceUnemploymentBase" name="insuranceUnemploymentBase" ref="double" var="失业保险基数" default="0"/>
+        <property id="insuranceUnemploymentPerson" name="insuranceUnemploymentPerson" ref="double" var="失业个人比例(%)" default="0"/>
+        <property id="insuranceUnemploymentCompany" name="insuranceUnemploymentCompany" ref="double" var="失业单位比例(%)" default="0"/>
+        <property id="insuranceEmploymentBase" name="insuranceEmploymentBase" ref="double" var="工伤保险基数" default="0"/>
+        <property id="insuranceEmploymentPerson" name="insuranceEmploymentPerson" ref="double" var="工伤个人比例(%)" default="0"/>
+        <property id="insuranceEmploymentCompany" name="insuranceEmploymentCompany" ref="double" var="工伤单位比例(%)" default="0"/>
+        <property id="insuranceMaternityBase" name="insuranceMaternityBase" ref="double" var="生育保险基数" default="0"/>
+        <property id="insuranceMaternityPerson" name="insuranceMaternityPerson" ref="double" var="生育个人比例(%)" default="0"/>
+        <property id="insuranceMaternityCompany" name="insuranceMaternityCompany" ref="double" var="生育单位比例(%)" default="0"/>
+        <property id="insuranceMedicalBase" name="insuranceMedicalBase" ref="double" var="医疗保险基数" default="0"/>
+        <property id="insuranceMedicalPerson" name="insuranceMedicalPerson" ref="double" var="医疗个人比例(%)" default="0"/>
+        <property id="insuranceMedicalCompany" name="insuranceMedicalCompany" ref="double" var="医疗单位比例(%)" default="0"/>
+        <property id="insTotalSeriouslyIllIndividual" name="insTotalSeriouslyIllIndividual" ref="double" var="保险合计：大病个人" default="0"/>
+        <property id="insTotalPerson" name="insTotalPerson" ref="double" var="保险合计：个人社保缴费" default="0"/>
+        <property id="insTotalCompany" name="insTotalCompany" ref="double" var="保险合计：单位社保缴费" default="0"/>
+        <property id="accumulationBase" name="accumulationBase" ref="double" var="公积金基数" default="0"/>
+        <property id="accumulationPersonScale" name="accumulationPersonScale" ref="double" var="公积金个人比例(%)" default="0"/>
+        <property id="accumulationCompanyScale" name="accumulationCompanyScale" ref="double" var="公积金单位比例(%)" default="0"/>
+        <property id="accumulationPersonAmount" name="accumulationPersonAmount" ref="double" var="公积金个人(元)" default="0"/>
+        <property id="accumulationCompanyAmount" name="accumulationCompanyAmount" ref="double" var="公积金单位(元)" default="0"/>
+        <property id="str" name="str" ref="" var="社保公积金适用对象信息,包含objectId,objectType"/>
+        <property id="sortNo" name="sortNo" ref="required,num" var="序号"/>
+    </url>
+    <url id="wagessocialsecurityfund003" path="/post/WagesSocialSecurityFundController/queryWagesSocialSecurityFundMationToEditById" val="编辑社保公积金模板信息时进行回显" allUse="2" method="GET" groupName="社保公积金模板">
+        <property id="rowId" name="id" ref="required" var="社保公积金模板id" />
+    </url>
+    <url id="wagessocialsecurityfund004" path="/post/WagesSocialSecurityFundController/editWagesSocialSecurityFundMationById" val="编辑社保公积金模板信息" allUse="1" method="PUT" groupName="社保公积金模板">
+        <property id="title" name="title" ref="required" var="名称" />
+        <property id="startMonth" name="startMonth" ref="required" var="开始年月份"/>
+        <property id="endMonth" name="endMonth" ref="required" var="结束年月份"/>
+        <property id="desc" name="desc" ref="" var="说明"/>
+        <property id="enclosure" name="enclosure" ref="" var="附件"/>
+        <property id="insuranceEndowmentBase" name="insuranceEndowmentBase" ref="double" var="养老保险基数" default="0"/>
+        <property id="insuranceEndowmentPerson" name="insuranceEndowmentPerson" ref="double" var="养老个人比例(%)" default="0"/>
+        <property id="insuranceEndowmentCompany" name="insuranceEndowmentCompany" ref="double" var="养老单位比例(%)" default="0"/>
+        <property id="insuranceUnemploymentBase" name="insuranceUnemploymentBase" ref="double" var="失业保险基数" default="0"/>
+        <property id="insuranceUnemploymentPerson" name="insuranceUnemploymentPerson" ref="double" var="失业个人比例(%)" default="0"/>
+        <property id="insuranceUnemploymentCompany" name="insuranceUnemploymentCompany" ref="double" var="失业单位比例(%)" default="0"/>
+        <property id="insuranceEmploymentBase" name="insuranceEmploymentBase" ref="double" var="工伤保险基数" default="0"/>
+        <property id="insuranceEmploymentPerson" name="insuranceEmploymentPerson" ref="double" var="工伤个人比例(%)" default="0"/>
+        <property id="insuranceEmploymentCompany" name="insuranceEmploymentCompany" ref="double" var="工伤单位比例(%)" default="0"/>
+        <property id="insuranceMaternityBase" name="insuranceMaternityBase" ref="double" var="生育保险基数" default="0"/>
+        <property id="insuranceMaternityPerson" name="insuranceMaternityPerson" ref="double" var="生育个人比例(%)" default="0"/>
+        <property id="insuranceMaternityCompany" name="insuranceMaternityCompany" ref="double" var="生育单位比例(%)" default="0"/>
+        <property id="insuranceMedicalBase" name="insuranceMedicalBase" ref="double" var="医疗保险基数" default="0"/>
+        <property id="insuranceMedicalPerson" name="insuranceMedicalPerson" ref="double" var="医疗个人比例(%)" default="0"/>
+        <property id="insuranceMedicalCompany" name="insuranceMedicalCompany" ref="double" var="医疗单位比例(%)" default="0"/>
+        <property id="insTotalSeriouslyIllIndividual" name="insTotalSeriouslyIllIndividual" ref="double" var="保险合计：大病个人" default="0"/>
+        <property id="insTotalPerson" name="insTotalPerson" ref="double" var="保险合计：个人社保缴费" default="0"/>
+        <property id="insTotalCompany" name="insTotalCompany" ref="double" var="保险合计：单位社保缴费" default="0"/>
+        <property id="accumulationBase" name="accumulationBase" ref="double" var="公积金基数" default="0"/>
+        <property id="accumulationPersonScale" name="accumulationPersonScale" ref="double" var="公积金个人比例(%)" default="0"/>
+        <property id="accumulationCompanyScale" name="accumulationCompanyScale" ref="double" var="公积金单位比例(%)" default="0"/>
+        <property id="accumulationPersonAmount" name="accumulationPersonAmount" ref="double" var="公积金个人(元)" default="0"/>
+        <property id="accumulationCompanyAmount" name="accumulationCompanyAmount" ref="double" var="公积金单位(元)" default="0"/>
+        <property id="str" name="str" ref="" var="社保公积金适用对象信息,包含objectId,objectType"/>
+        <property id="sortNo" name="sortNo" ref="required,num" var="序号"/>
+        <property id="rowId" name="id" ref="required" var="社保公积金模板id" />
+    </url>
+    <url id="wagessocialsecurityfund005" path="/post/WagesSocialSecurityFundController/deleteWagesSocialSecurityFundMationById" val="删除社保公积金模板信息" allUse="1" method="DELETE" groupName="社保公积金模板">
+        <property id="rowId" name="id" ref="required" var="社保公积金模板id" />
+    </url>
+    <url id="wagessocialsecurityfund006" path="/post/WagesSocialSecurityFundController/enableWagesSocialSecurityFundMationById" val="启用社保公积金模板信息" allUse="1" method="GET" groupName="社保公积金模板">
+        <property id="rowId" name="id" ref="required" var="社保公积金模板id" />
+    </url>
+    <url id="wagessocialsecurityfund007" path="/post/WagesSocialSecurityFundController/disableWagesSocialSecurityFundMationById" val="禁用社保公积金模板信息" allUse="1" method="GET" groupName="社保公积金模板">
+        <property id="rowId" name="id" ref="required" var="社保公积金模板id" />
+    </url>
+    <url id="wagessocialsecurityfund008" path="/post/WagesSocialSecurityFundController/queryWagesSocialSecurityFundMationById" val="社保公积金模板详情信息" allUse="2" method="GET" groupName="社保公积金模板">
+        <property id="rowId" name="id" ref="required" var="社保公积金模板id" />
+    </url>
+    <!-- 社保公积金模板结束 -->
+
+    <!-- 薪资模板类型开始 -->
+    <url id="wagesmodeltype001" path="/post/WagesModelTypeController/queryWagesModelTypeList" val="获取薪资模板类型列表" allUse="1" method="POST" groupName="薪资模板类型">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="name" name="name" ref="" var="名称" />
+        <property id="state" name="state" ref="num" var="状态"/>
+    </url>
+    <url id="wagesmodeltype002" path="/post/WagesModelTypeController/insertWagesModelTypeMation" val="新增薪资模板类型信息" allUse="1" method="POST" groupName="薪资模板类型">
+        <property id="nameCn" name="nameCn" ref="required" var="中文名称" />
+        <property id="nameEn" name="nameEn" ref="required" var="英文"/>
+    </url>
+    <url id="wagesmodeltype003" path="/post/WagesModelTypeController/queryWagesModelTypeMationToEditById" val="编辑薪资模板类型信息时进行回显" allUse="2" method="GET" groupName="薪资模板类型">
+        <property id="rowId" name="id" ref="required" var="薪资模板类型id" />
+    </url>
+    <url id="wagesmodeltype004" path="/post/WagesModelTypeController/editWagesModelTypeMationById" val="编辑薪资模板类型信息" allUse="1" method="PUT" groupName="薪资模板类型">
+        <property id="nameCn" name="nameCn" ref="required" var="中文名称" />
+        <property id="nameEn" name="nameEn" ref="required" var="英文"/>
+        <property id="rowId" name="id" ref="required" var="薪资模板类型id" />
+    </url>
+    <url id="wagesmodeltype005" path="/post/WagesModelTypeController/deleteWagesModelTypeMationById" val="删除薪资模板类型信息" allUse="1" method="DELETE" groupName="薪资模板类型">
+        <property id="rowId" name="id" ref="required" var="薪资模板类型id" />
+    </url>
+    <url id="wagesmodeltype006" path="/post/WagesModelTypeController/enableWagesModelTypeMationById" val="启用薪资模板类型信息" allUse="1" method="GET" groupName="薪资模板类型">
+        <property id="rowId" name="id" ref="required" var="薪资模板类型id" />
+    </url>
+    <url id="wagesmodeltype007" path="/post/WagesModelTypeController/disableWagesModelTypeMationById" val="禁用薪资模板类型信息" allUse="1" method="GET" groupName="薪资模板类型">
+        <property id="rowId" name="id" ref="required" var="薪资模板类型id" />
+    </url>
+    <url id="wagesmodeltype008" path="/post/WagesModelTypeController/queryEnableWagesModelTypeList" val="获取已经启用的薪资模板类型列表" allUse="2" method="GET" groupName="薪资模板类型">
+    </url>
+    <!-- 薪资模板类型开始 -->
+
+    <!-- 薪资模板开始 -->
+    <url id="wagesmodel001" path="/post/WagesModelController/queryWagesModelList" val="获取薪资模板列表" allUse="1" groupName="薪资模板">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="title" name="title" ref="" var="名称" />
+        <property id="typeId" name="typeId" ref="" var="模板类型" />
+        <property id="state" name="state" ref="num" var="状态"/>
+    </url>
+    <url id="wagesmodel002" path="/post/WagesModelController/insertWagesModelMation" val="新增薪资模板信息" allUse="1" method="POST" groupName="薪资模板">
+        <property id="title" name="title" ref="required" var="模板标题" />
+        <property id="typeId" name="typeId" ref="required" var="模板类型id"/>
+        <property id="startMonth" name="startMonth" ref="required" var="开始年月份"/>
+        <property id="endMonth" name="endMonth" ref="required" var="结束年月份"/>
+        <property id="desc" name="desc" ref="" var="说明"/>
+        <property id="sortNo" name="sortNo" ref="required,num" var="排序"/>
+        <property id="str" name="str" ref="" var="薪资模板适用对象信息,包含objectId,objectType"/>
+        <property id="fieldStr" name="fieldStr" ref="" var="薪资模板包含的字段列表"/>
+    </url>
+    <url id="wagesmodel003" path="/post/WagesModelController/queryWagesModelMationToEditById" val="编辑薪资模板信息时进行回显" allUse="2" method="GET" groupName="薪资模板">
+        <property id="rowId" name="id" ref="required" var="模板id" />
+    </url>
+    <url id="wagesmodel004" path="/post/WagesModelController/editWagesModelMationById" val="编辑薪资模板信息" allUse="1" method="PUT" groupName="薪资模板">
+        <property id="rowId" name="id" ref="required" var="模板id" />
+        <property id="title" name="title" ref="required" var="模板标题" />
+        <property id="typeId" name="typeId" ref="required" var="模板类型id"/>
+        <property id="startMonth" name="startMonth" ref="required" var="开始年月份"/>
+        <property id="endMonth" name="endMonth" ref="required" var="结束年月份"/>
+        <property id="desc" name="desc" ref="" var="说明"/>
+        <property id="sortNo" name="sortNo" ref="required,num" var="排序"/>
+        <property id="str" name="str" ref="" var="薪资模板适用对象信息,包含objectId,objectType"/>
+        <property id="fieldStr" name="fieldStr" ref="" var="薪资模板包含的字段列表"/>
+    </url>
+    <url id="wagesmodel005" path="/post/WagesModelController/deleteWagesModelMationById" val="删除薪资模板信息" allUse="1" method="DELETE" groupName="薪资模板">
+        <property id="rowId" name="id" ref="required" var="模板id" />
+    </url>
+    <url id="wagesmodel006" path="/post/WagesModelController/enableWagesModelMationById" val="启用薪资模板信息" allUse="1" method="GET" groupName="薪资模板">
+        <property id="rowId" name="id" ref="required" var="模板id" />
+    </url>
+    <url id="wagesmodel007" path="/post/WagesModelController/disableWagesModelMationById" val="禁用薪资模板信息" allUse="1" method="GET" groupName="薪资模板">
+        <property id="rowId" name="id" ref="required" var="模板id" />
+    </url>
+    <url id="wagesmodel008" path="/post/WagesModelController/queryWagesModelDetailMationById" val="薪资模板详细信息" allUse="2" method="GET" groupName="薪资模板">
+        <property id="rowId" name="id" ref="required" var="模板id" />
+    </url>
+    <!-- 薪资模板结束 -->
+
+    <!-- 薪资发放历史开始 -->
+    <url id="wagespaymenthistory001" path="/post/WagesPaymentHistoryController/queryAllGrantWagesPaymentHistoryList" val="获取所有已发放薪资发放历史列表" allUse="1" groupName="薪资发放历史">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="jobNumber" name="jobNumber" ref="" var="工号" />
+        <property id="userName" name="userName" ref="" var="员工姓名" />
+        <property id="companyId" name="companyId" ref="" var="企业id"/>
+        <property id="departmentId" name="departmentId" ref="" var="部门id"/>
+        <property id="jobId" name="jobId" ref="" var="职位id"/>
+        <property id="payMonth" name="payMonth" ref="" var="月份"/>
+    </url>
+    <url id="wagespaymenthistory002" path="/post/WagesPaymentHistoryController/queryMyWagesPaymentHistoryList" val="获取我的薪资发放历史列表" allUse="1" groupName="薪资发放历史">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="payMonth" name="payMonth" ref="" var="月份"/>
+    </url>
+    <url id="wagespaymenthistory003" path="/post/WagesPaymentHistoryController/queryAllNotGrantWagesPaymentHistoryList" val="获取所有待发放薪资列表" allUse="1" groupName="薪资发放历史">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="jobNumber" name="jobNumber" ref="" var="工号" />
+        <property id="userName" name="userName" ref="" var="员工姓名" />
+        <property id="companyId" name="companyId" ref="" var="企业id"/>
+        <property id="departmentId" name="departmentId" ref="" var="部门id"/>
+        <property id="jobId" name="jobId" ref="" var="职位id"/>
+        <property id="payMonth" name="payMonth" ref="" var="月份"/>
+    </url>
+    <!-- 薪资发放历史结束 -->
+
+    <!-- 员工薪资设定开始 -->
+    <url id="wagesstaff001" path="/post/WagesStaffMationController/queryWagesStaffWaitAllocatedMationList" val="获取待设定薪资员工列表" allUse="1" groupName="员工薪资管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="companyId" name="companyId" ref="" var="企业id"/>
+        <property id="departmentId" name="departmentId" ref="" var="部门id"/>
+        <property id="jobId" name="jobId" ref="" var="职位id"/>
+        <property id="jobNumber" name="jobNumber" ref="" var="工号" />
+        <property id="userName" name="userName" ref="" var="员工姓名" />
+        <property id="userSex" name="userSex" ref="num" var="性别"/>
+    </url>
+    <url id="wagesstaff002" path="/post/WagesStaffMationController/queryStaffWagesModelFieldMationListByStaffId" val="根据员工id获取该员工拥有的薪资字段" allUse="2" method="GET" groupName="员工薪资管理">
+        <property id="staffId" name="staffId" ref="required" var="员工id" />
+    </url>
+    <url id="wagesstaff003" path="/post/WagesStaffMationController/saveStaffWagesModelFieldMation" val="保存员工薪资设定" allUse="1" method="POST" groupName="员工薪资管理">
+        <property id="staffId" name="staffId" ref="required" var="员工id" />
+        <property id="fieldStr" name="fieldStr" ref="required" var="薪资信息"/>
+        <property id="actMoney" name="actMoney" ref="required,double" var="员工月标准工资"/>
+    </url>
+    <url id="wagesstaff004" path="/post/WagesStaffMationController/queryWagesStaffDesignMationList" val="获取已设定薪资员工列表" allUse="1" groupName="员工薪资管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="companyId" name="companyId" ref="" var="企业id"/>
+        <property id="departmentId" name="departmentId" ref="" var="部门id"/>
+        <property id="jobId" name="jobId" ref="" var="职位id"/>
+        <property id="jobNumber" name="jobNumber" ref="" var="工号" />
+        <property id="userName" name="userName" ref="" var="员工姓名" />
+        <property id="userSex" name="userSex" ref="num" var="性别"/>
+    </url>
+    <url id="wagesstaff005" path="/post/WagesStaffMationController/queryWagesStaffPaymentDetail" val="获取员工薪资条薪资" allUse="2" method="GET" groupName="员工薪资管理">
+        <property id="staffId" name="staffId" ref="required" var="员工id" />
+        <property id="payMonth" name="payMonth" ref="required" var="薪资月份" />
+    </url>
+    <!-- 员工薪资设定结束 -->
+
+</controller>

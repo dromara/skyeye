@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 问卷调查开始 -->
+	<url id="dwsurveydirectory001" path="/post/DwSurveyDirectoryController/queryDwSurveyDirectoryList" val="获取调查问卷列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="surveyState" name="surveyState" ref="" var="问卷状态"/>
+	    <property id="surveyName" name="surveyName" ref="" var="问卷名称"/>
+	</url>
+	<url id="dwsurveydirectory002" path="/post/DwSurveyDirectoryController/insertDwSurveyDirectoryMation" val="新增调查问卷" allUse="1">
+	    <property id="surveyName" name="surveyName" ref="required" var="问卷名称"/>
+	</url>
+	<url id="dwsurveydirectory003" path="/post/DwSurveyDirectoryController/queryDwSurveyDirectoryMationById" val="获取调查问卷题目信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<url id="dwsurveydirectory004" path="/post/DwSurveyDirectoryController/queryDwSurveyMationById" val="获取调查问卷信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<url id="dwsurveydirectory005" path="/post/DwSurveyDirectoryController/editDwSurveyMationById" val="编辑调查问卷信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="问卷id"/>
+	    <property id="effective" name="effective" ref="required,num" var="每台电脑或手机只能答一次"/>
+	    <property id="effectiveIp" name="effectiveIp" ref="required,num" var="每个IP只能答一次"/>
+	    <property id="rule" name="rule" ref="required,num" var="启用访问密码"/>
+	    <property id="ruleCode" name="ruleCode" ref="" var="密码"/>
+	    <property id="refresh" name="refresh" ref="required,num" var="有重复回答启用验证码"/>
+	    <property id="ynEndNum" name="ynEndNum" ref="required,num" var="是否依据收到的份数结束   1是   0否"/>
+	    <property id="endNum" name="endNum" ref="" var="依据收到的份数"/>
+	    <property id="ynEndTime" name="ynEndTime" ref="required,num" var="是否依据收到的份数结束"/>
+	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
+	</url>
+	<url id="dwsurveydirectory006" path="/post/DwSurveyDirectoryController/addQuFillblankMation" val="添加填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="answerInputWidth" name="answerInputWidth" ref="required,num" var="填空的input宽度"/>
+	    <property id="answerInputRow" name="answerInputRow" ref="required,num" var="填空的input行"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="checkType" name="checkType" ref="required" var="说明的验证方式"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory007" path="/post/DwSurveyDirectoryController/addQuScoreMation" val="添加评分题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt01" name="paramInt01" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt02" name="paramInt02" ref="required,num" var="按列显示时，列数"/>
+	    <property id="scoreTd" name="scoreTd" ref="" var="评分题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory008" path="/post/DwSurveyDirectoryController/addQuOrderquMation" val="添加排序题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="orderquTd" name="orderquTd" ref="" var="排序题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory009" path="/post/DwSurveyDirectoryController/addQuPagetagMation" val="添加分页标记" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory010" path="/post/DwSurveyDirectoryController/addQuRadioMation" val="添加单选题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="radioTd" name="radioTd" ref="" var="单选题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory011" path="/post/DwSurveyDirectoryController/addQuCheckBoxMation" val="添加多选题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="checkboxTd" name="checkboxTd" ref="" var="多选题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory012" path="/post/DwSurveyDirectoryController/addQuMultiFillblankMation" val="添加多选填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt01" name="paramInt01" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt02" name="paramInt02" ref="required,num" var="按列显示时，列数"/>
+	    <property id="multiFillblankTd" name="multiFillblankTd" ref="" var="多选填空题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory013" path="/post/DwSurveyDirectoryController/addQuParagraphMation" val="添加段落题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory014" path="/post/DwSurveyDirectoryController/addQuChenMation" val="添加矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="问卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="quType" name="quType" ref="required" var="问题类型"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是问卷题还是题库中题"/>
+	    <property id="isRequired" name="isRequired" ref="required,num" var="是否必选"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="column" name="column" ref="" var="矩阵列选项td json串"/>
+	    <property id="row" name="row" ref="" var="矩阵行选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="dwsurveydirectory015" path="/post/DwSurveyDirectoryController/deleteQuestionMationById" val="删除问题" allUse="2">
+		<property id="quId" name="quId" ref="required" var="问题id"/>
+	</url>
+	<url id="dwsurveydirectory016" path="/post/DwSurveyDirectoryController/deleteQuestionChenColumnMationById" val="删除矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题列选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="dwsurveydirectory017" path="/post/DwSurveyDirectoryController/deleteQuestionChenRowMationById" val="删除矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题行选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="dwsurveydirectory018" path="/post/DwSurveyDirectoryController/deleteQuestionRadioOptionMationById" val="删除单选题选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="dwsurveydirectory019" path="/post/DwSurveyDirectoryController/deleteQuestionChedkBoxOptionMationById" val="删除多选题选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="dwsurveydirectory020" path="/post/DwSurveyDirectoryController/deleteQuestionScoreOptionMationById" val="删除评分Score选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="dwsurveydirectory021" path="/post/DwSurveyDirectoryController/deleteQuestionOrderOptionMationById" val="删除排序选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="dwsurveydirectory022" path="/post/DwSurveyDirectoryController/deleteQuestionMultiFillblankOptionMationById" val="删除多项填空题选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="dwsurveydirectory023" path="/post/DwSurveyDirectoryController/editSurveyStateToReleaseById" val="问卷发布" allUse="1">
+		<property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<url id="dwsurveydirectory024" path="/post/DwSurveyDirectoryController/queryDwSurveyDirectoryMationByIdToHTML" val="获取调查问卷题目信息用来生成html页面" allUse="0">
+		<property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<url id="dwsurveydirectory025" path="/post/DwSurveyDirectoryController/deleteSurveyMationById" val="删除问卷" allUse="1">
+		<property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<url id="dwsurveydirectory026" path="/post/DwSurveyDirectoryController/querySurveyFxMationById" val="分析报告问卷" allUse="1">
+		<property id="rowId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<url id="dwsurveydirectory027" path="/post/DwSurveyDirectoryController/insertSurveyMationCopyById" val="复制问卷" allUse="1">
+		<property id="rowId" name="surveyCopyId" ref="required" var="问卷id"/>
+		<property id="surveyName" name="surveyName" ref="required" var="问卷名称"/>
+	</url>
+	<url id="dwsurveydirectory028" path="/post/DwSurveyDirectoryController/queryAnswerSurveyMationByIp" val="判断该ip的用户是否回答过此问卷" allUse="0">
+		<property id="surveyId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<url id="dwsurveydirectory029" path="/post/DwSurveyDirectoryController/insertAnswerSurveyMationByIp" val="用户回答问卷" allUse="0">
+		<property id="jsonData" name="jsonData" ref="required" var="问卷回答json串"/>
+		<property id="bgAnDate" name="bgAnDate" ref="required" var="答卷开始时间"/>
+	</url>
+	<url id="dwsurveydirectory030" path="/post/DwSurveyDirectoryController/updateSurveyMationEndById" val="手动结束问卷" allUse="1">
+		<property id="surveyId" name="id" ref="required" var="问卷id"/>
+	</url>
+	<!-- 问卷调查结束 -->
+	
+</controller>

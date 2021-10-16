@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ErpMachinDao">
+	
+	<select id="queryMachinOrderToList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.order_num orderNum,
+			a.need_num needNum,
+			b.default_number productionNumber,
+			c.department_name departmentName,
+			d.`name` materialName,
+			CASE d.unit WHEN '1' THEN d.unit_name WHEN '2' THEN f.`name` ELSE '' END unitName,
+			CONVERT (a.start_time, char) startTime,
+			CONVERT (a.end_time, char) endTime,
+			a.state,
+			g.user_name createName,
+			CONVERT (a.create_time, char) createTime
+		FROM
+			erp_machin_header a
+			LEFT JOIN erp_production_head b ON a.production_id = b.id
+			LEFT JOIN company_department c ON a.department_id = c.id
+			LEFT JOIN erp_material d ON a.material_id = d.id
+			LEFT JOIN erp_material_norms e ON a.norms_id = e.id
+			LEFT JOIN erp_unit f ON e.unit_id = f.id,
+			sys_eve_user_staff g
+		WHERE a.create_id = g.user_id
+        <if test="materialName != '' and materialName != null">
+            AND d.`name` LIKE '%${materialName}%'
+        </if>
+        <if test="defaultNumber != '' and defaultNumber != null">
+            AND a.order_num LIKE '%${defaultNumber}%'
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <insert id="insertMachinOrderMation" parameterType="java.util.Map">
+        INSERT into erp_machin_header
+        (id, order_num, production_id, department_id, bar_code, material_id, norms_id, need_num, start_time, 
+        	end_time, state, remark, create_id, create_time)
+        VALUES(#{id}, #{orderNum}, #{productionId}, #{departmentId}, #{barCode}, #{materialId}, #{normsId}, #{needNum}, #{startTime},
+        	#{endTime}, #{state}, #{remark}, #{createId}, #{createTime})
+    </insert>
+    
+    <insert id="insertMachinOrderProcedureMation" parameterType="java.util.Map">
+	     INSERT INTO erp_machin_child
+	     (id, header_id, order_number, bar_code, procedure_id, procedure_num, procedure_name, unit_price, need_num,
+	     	state, create_time)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.headerId}, #{item.orderNumber}, #{item.barCode}, #{item.procedureId}, #{item.procedureNum}, #{item.procedureName}, #{item.unitPrice}, #{item.needNum},
+				#{item.state}, #{item.createTime})  
+		</foreach>
+	</insert>
+	
+	<insert id="insertMachinOrderMaterialMation" parameterType="java.util.Map">
+	     INSERT INTO erp_machin_material
+	     (id, header_id, material_id, norms_id, need_number, unit_price)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.headerId}, #{item.materialId}, #{item.normsId}, #{item.needNumber}, #{item.unitPrice})  
+		</foreach>
+	</insert>
+	
+	<select id="queryMachinOrderMationById" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.order_num orderNum,
+			a.need_num needNum,
+			a.material_id materialId,
+			a.norms_id normsId,
+			a.department_id departmentId,
+			a.bar_code barCode,
+			a.production_id productionId,
+			a.remark,
+			a.examine_content examineContent,
+			b.default_number productionNumber,
+			c.department_name departmentName,
+			d.`name` materialName,
+			d.model productModel,
+			d.unit,
+			CASE d.unit WHEN '1' THEN d.unit_name WHEN '2' THEN f.`name` ELSE '' END unitName,
+			CONVERT (a.start_time, char) startTime,
+			CONVERT (a.end_time, char) endTime,
+			a.state,
+			g.user_name createName,
+			CONVERT (a.create_time, char) createTime
+		FROM
+			erp_machin_header a
+			LEFT JOIN erp_production_head b ON a.production_id = b.id
+			LEFT JOIN company_department c ON a.department_id = c.id
+			LEFT JOIN erp_material d ON a.material_id = d.id
+			LEFT JOIN erp_material_norms e ON a.norms_id = e.id
+			LEFT JOIN erp_unit f ON e.unit_id = f.id,
+			sys_eve_user_staff g
+		WHERE a.create_id = g.user_id
+        AND a.id = #{orderId}
+    </select>
+    
+    <select id="queryMachinOrderProcedureMationByOrdeId" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.order_number orderNumber,
+			a.bar_code barCode,
+			a.procedure_id procedureId,
+			a.procedure_name procedureName,
+			a.procedure_num number,
+			a.unit_price unitPrice,
+			a.state,
+			a.need_num needNum,
+			a.accept_num acceptNum,
+			a.below_num belowNum,
+			CONVERT (a.accept_time, char) acceptTime,
+			c.department_name departmentName
+		FROM
+			erp_machin_child a,
+			erp_work_procedure b
+			LEFT JOIN company_department c ON b.department_id = c.id
+		WHERE
+			a.header_id = #{orderId}
+		AND a.procedure_id = b.id
+		ORDER BY a.procedure_num ASC
+    </select>
+    
+    <select id="queryMachinOrderMaterialMationByOrdeId" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.material_id productId,
+			a.norms_id normsId,
+			a.need_number needNumber,
+			a.unit_price unitPrice,
+			d.`name` productName,
+			d.model productModel,
+			d.unit,
+			CASE d.unit WHEN '1' THEN d.unit_name WHEN '2' THEN f.`name` ELSE '' END unitName,
+			IFNULL((SELECT SUM(it.initial_tock) FROM erp_material_norms_tock it WHERE a.norms_id = it.norms_id), 0) + 
+				IFNULL((SELECT SUM(sn.stock_num) FROM erp_material_depot_stock sn WHERE a.norms_id = sn.norms_id), 0) currentTock #当前库存
+		FROM
+			erp_machin_material a
+			LEFT JOIN erp_material d ON a.material_id = d.id
+			LEFT JOIN erp_material_norms e ON a.norms_id = e.id
+			LEFT JOIN erp_unit f ON e.unit_id = f.id
+		WHERE
+			a.header_id = #{orderId}
+		GROUP BY a.id
+    </select>
+    
+    <update id="editMachinOrderMationById">
+        UPDATE erp_machin_header
+        <set>
+            production_id = #{productionId},
+            department_id = #{departmentId},
+            bar_code = #{barCode},
+            material_id = #{materialId},
+            norms_id = #{normsId},
+            need_num = #{needNum},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            remark = #{remark},
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+    
+    <delete id="deleteMachinOrderProcedureMationByOrderId">
+        DELETE
+		FROM
+			erp_machin_child
+		WHERE
+			header_id = #{orderId}
+    </delete>
+    
+    <delete id="deleteMachinOrderMaterialMationByOrderId">
+        DELETE
+		FROM
+			erp_machin_material
+		WHERE
+			header_id = #{orderId}
+    </delete>
+    
+    <delete id="deleteMachinOrderMationById">
+        DELETE
+		FROM
+			erp_machin_header
+		WHERE
+			id = #{orderId}
+    </delete>
+    
+    <update id="editMachinOrderStateMationById">
+        UPDATE erp_machin_header
+        <set>
+            state = #{state},
+        </set>
+        WHERE
+            id = #{orderId}
+    </update>
+    
+    <update id="editMachinOrderStateMationToExamineById">
+        UPDATE erp_machin_header
+        <set>
+            state = #{state},
+            examine_id = #{userId},
+            examine_content = #{content},
+            examine_time = #{time},
+        </set>
+        WHERE
+            id = #{orderId}
+    </update>
+    
+    <update id="editProductionProcedureBindMationByOrdeIdAndProceId">
+        UPDATE erp_production_procedure
+        <set>
+            state = '2',
+        </set>
+        WHERE
+            order_id = #{orderId}
+        AND procedure_id = #{procedureId}
+        AND state = '1'
+    </update>
+    
+    <select id="queryMachinStateIsPassOrderListByDepartmentId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.order_num orderNum,
+			a.need_num needNum,
+			b.default_number productionNumber,
+			c.department_name departmentName,
+			d.`name` materialName,
+			CASE d.unit WHEN '1' THEN d.unit_name WHEN '2' THEN f.`name` ELSE '' END unitName,
+			CONVERT (a.start_time, char) startTime,
+			CONVERT (a.end_time, char) endTime,
+			a.state,
+			a.pick_state pickState,
+			g.user_name createName,
+			CONVERT (a.create_time, char) createTime
+		FROM
+			erp_machin_header a
+			LEFT JOIN erp_production_head b ON a.production_id = b.id
+			LEFT JOIN company_department c ON a.department_id = c.id
+			LEFT JOIN erp_material d ON a.material_id = d.id
+			LEFT JOIN erp_material_norms e ON a.norms_id = e.id
+			LEFT JOIN erp_unit f ON e.unit_id = f.id,
+			sys_eve_user_staff g
+		WHERE a.create_id = g.user_id
+		AND a.department_id = #{departMentId}
+		AND a.state IN (3, 5)
+        <if test="materialName != '' and materialName != null">
+            AND d.`name` LIKE '%${materialName}%'
+        </if>
+        <if test="defaultNumber != '' and defaultNumber != null">
+            AND a.order_num LIKE '%${defaultNumber}%'
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="queryMachinStateIsPassNoComplateOrderListByDepartmentId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.order_num orderNum,
+			a.need_num needNum,
+			a.production_id productionId,
+			b.default_number productionNumber,
+			c.department_name departmentName,
+			d.`name` materialName,
+			CASE d.unit WHEN '1' THEN d.unit_name WHEN '2' THEN f.`name` ELSE '' END unitName,
+			CONVERT (a.start_time, char) startTime,
+			CONVERT (a.end_time, char) endTime,
+			a.state,
+			a.pick_state pickState,
+			g.user_name createName,
+			CONVERT (a.create_time, char) createTime
+		FROM
+			erp_machin_header a
+			LEFT JOIN erp_production_head b ON a.production_id = b.id
+			LEFT JOIN company_department c ON a.department_id = c.id
+			LEFT JOIN erp_material d ON a.material_id = d.id
+			LEFT JOIN erp_material_norms e ON a.norms_id = e.id
+			LEFT JOIN erp_unit f ON e.unit_id = f.id,
+			sys_eve_user_staff g
+		WHERE a.create_id = g.user_id
+		AND a.department_id = #{departMentId}
+		AND a.state = '3' # 审核通过
+		<if test="materialName != '' and materialName != null">
+            AND d.`name` LIKE '%${materialName}%'
+        </if>
+        <if test="defaultNumber != '' and defaultNumber != null">
+            AND a.order_num LIKE '%${defaultNumber}%'
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="queryMachinStateIsPassOrderMationById" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.material_id productId,
+			a.norms_id normsId,
+			a.need_number needNumber,
+			a.unit_price unitPrice,
+			d.`name` productName,
+			d.model productModel,
+			d.unit,
+			CASE d.unit WHEN '1' THEN d.unit_name WHEN '2' THEN f.`name` ELSE '' END unitName,
+			IFNULL((SELECT SUM(it.initial_tock) FROM erp_material_norms_tock it WHERE a.norms_id = it.norms_id), 0) + 
+				IFNULL((SELECT SUM(sn.stock_num) FROM erp_material_depot_stock sn WHERE a.norms_id = sn.norms_id), 0) currentTock, #当前库存
+			IFNULL(IFNULL(a.need_number, 0) - SUM(IFNULL(i.need_num, 0)), 0) machinNum #加工单剩余待领料数量
+		FROM
+			erp_machin_material a
+			LEFT JOIN erp_material d ON a.material_id = d.id
+			LEFT JOIN erp_material_norms e ON a.norms_id = e.id
+			LEFT JOIN erp_unit f ON e.unit_id = f.id
+			# 以下是计算加工单剩余所需领料数量的表
+			LEFT JOIN erp_pick_header j ON a.header_id = j.machin_id AND j.`status` = '2' #审核通过
+			LEFT JOIN erp_pick_child i ON i.header_id = j.id AND a.norms_id = i.norms_id
+		WHERE
+			a.header_id = #{orderId}
+		GROUP BY a.id
+    </select>
+    
+    <select id="queryMachinChildMationByChildId" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.state,
+			a.need_num needNum,
+			a.header_id headerId,
+			b.production_id productionId
+		FROM
+			erp_machin_child a,
+			erp_machin_header b
+		WHERE
+			a.id = #{childId}
+		AND a.header_id = b.id
+    </select>
+    
+    <update id="editMachinStateMationByChildId">
+        UPDATE erp_machin_child
+        <set>
+            accept_num = #{acceptNum},
+            below_num = #{belowNum},
+            state = #{state},
+            accept_time = #{acceptTime},
+        </set>
+        WHERE
+            id = #{childId}
+    </update>
+    
+    <select id="queryMachinOrderFinishedMaterialMationByOrdeId" resultType="java.util.Map">
+    	SELECT
+			a.material_id materialId,
+			a.norms_id mUnitId,
+			b.estimate_purchase_price unitPrice,
+			'' remark
+		FROM
+			erp_machin_header a
+			LEFT JOIN erp_material_norms b ON a.norms_id = b.id
+		WHERE
+			a.id = #{orderId}
+    </select>
+    
+    <update id="queryMachinOrderToComplateByOrdeId">
+        UPDATE erp_machin_header
+        <set>
+            state = '5',
+        </set>
+        WHERE
+            id = #{orderId}
+    </update>
+    
+    <select id="queryMachinOrderMaterialListByOrdeId" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.material_id materialId,
+			a.norms_id normsId,
+			a.need_number operNumber,
+			b.department_id departmentId,
+			IFNULL((SELECT SUM(it.stock_num) FROM erp_department_stock it WHERE a.norms_id = it.norms_id AND it.department_id = b.department_id), 0) currentTock #当前部门库存存量
+		FROM
+			erp_machin_material a,
+			erp_machin_header b
+		WHERE
+			a.header_id = #{orderId}
+		AND a.header_id = b.id
+		GROUP BY a.id
+    </select>
+    
+    <select id="queryNoComProcedureByProductionId" resultType="java.util.Map">
+    	SELECT
+			a.procedure_id procedureId
+		FROM
+			erp_production_procedure a
+		WHERE
+			a.order_id = #{productionId}
+		AND a.state = '1'
+		UNION ALL
+		SELECT
+			a.procedure_id procedureId
+		FROM
+			erp_production_procedure a,
+			erp_machin_header b,
+			erp_machin_child c
+		WHERE
+			a.order_id = #{productionId}
+		AND a.state = '2'
+		AND b.state != '5' # 加工单未完成
+		AND a.order_id = b.production_id
+		AND c.header_id = b.id
+		AND c.procedure_id = a.procedure_id
+    </select>
+    
+    <update id="editProductionStateIsComByProductionId">
+        UPDATE erp_production_head
+        <set>
+            state = '5',
+        </set>
+        WHERE
+            id = #{productionId}
+    </update>
+    
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ActUserProcessInstanceIdDao">
+	
+	<select id="queryStartProcessNotSubByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.process_instance_id processInstanceId,
+			IFNULL(b.id, "") sequenceId,
+			a.create_time createTime,
+			a.data_id dataId,
+			IF(IFNULL(c.edit_page_url, '') = '', '../../tpl/myactiviti/myactivitiedit.html', c.edit_page_url) pageUrl,
+			c.title taskType,
+			IF(IFNULL(c.revoke_mapping, '') = '', 'dsformrevoke001', c.revoke_mapping) revokeMapping
+		FROM
+			act_user_processinstanceid a
+			LEFT JOIN ds_form_page_sequence b ON a.process_instance_id = b.process_instance_id 
+			LEFT JOIN act_model c ON c.act_id = a.act_id
+		WHERE
+			a.create_id = #{createId}
+			<if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+				AND a.create_time >= #{startTime} AND #{endTime} >= a.create_time
+			</if>
+			<if test="processInstanceId != '' and processInstanceId != null">
+				AND a.process_instance_id = #{processInstanceId}
+			</if>
+		GROUP BY a.process_instance_id
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<insert id="insertActUserProInsIdMation" parameterType="java.util.Map">
+	     INSERT act_user_processinstanceid
+	     (id, process_instance_id, act_id, data_id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{processInstanceId}, #{keyName}, #{dataId}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryProcessInstanceMationByProcessInstanceId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.process_instance_id processInstanceId,
+			a.create_time createTime,
+			b.page_types pageTypes
+		FROM
+			act_user_processinstanceid a
+			LEFT JOIN act_model b ON a.act_id = b.act_id AND b.state != '4'
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+		GROUP BY a.process_instance_id
+	</select>
+	
+	<select id="queryProcessMationByProcessInstanceId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.process_instance_id processInstanceId,
+			a.create_time createTime
+		FROM
+			act_user_processinstanceid a
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+		AND a.create_id = #{userId}
+		GROUP BY a.process_instance_id
+	</select>
+	
+	<update id="editDsFormStateIsDraftByProcessInstanceId" parameterType="java.util.Map">
+		UPDATE ds_form_page_sequence
+		<set>
+			process_instance_id = '',
+			state = '1'
+		</set>
+		WHERE process_instance_id = #{processInstanceId}
+	</update>
+	
+	<delete id="deleteProcessMationByProcessInstanceId" parameterType="java.lang.String">
+		DELETE 
+		FROM 
+			act_user_processinstanceid
+		where 
+			process_instance_id = #{processInstanceId}
+	</delete>
+
+	<select id="queryActUserProcessInstanceId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.create_id createId,
+			b.company_id companyId
+		FROM
+			act_user_processinstanceid a,
+			sys_eve_user_staff b
+		WHERE a.process_instance_id = #{processInstanceId}
+		  AND a.create_id = b.user_id
+	</select>
+	
+</mapper>

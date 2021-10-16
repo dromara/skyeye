@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ProTaskTypeDao">
+
+    <insert id="insertProTaskType" parameterType="java.util.Map">
+        insert into pro_task_type
+        (id, `name`, state, create_id, create_time)
+        values(#{id}, #{typeName},  #{state},  #{createId},  #{createTime})
+    </insert>
+
+    <delete id="deleteProTaskTypeById" parameterType="java.util.Map">
+        UPDATE pro_task_type
+        <set>
+            state = 4
+        </set>
+        WHERE id = #{id}
+    </delete>
+
+    <update id="editStateUpById" parameterType="java.util.Map">
+        UPDATE pro_task_type
+        <set>
+            state = 2
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editStateDownById" parameterType="java.util.Map">
+        UPDATE pro_task_type
+        <set>
+            state = 3
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editProTaskTypeById" parameterType="java.util.Map">
+        UPDATE pro_task_type
+        <set>
+            <if test="typeName != '' and typeName != null">
+                `name` = #{typeName}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryProTaskTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            c.id,
+            c.`name` typeName,
+            c.state,
+            CONVERT(c.create_time, char) createTime,
+            (select count(*) from pro_task a where a.task_type = c.id) useNum
+        FROM
+            pro_task_type c
+        WHERE c.state != 4
+            <if test="typeName != '' and typeName != null">
+                AND c.`name` LIKE '%${typeName}%'
+            </if>
+            <if test="state != '' and state != null">
+                AND c.state = #{state}
+            </if>
+    </select>
+
+    <select id="queryProTaskTypeMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id,
+            `name` typeName
+        FROM
+            pro_task_type
+        WHERE
+            id = #{id}
+    </select>
+
+    <select id="queryStateById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            state
+        FROM
+            pro_task_type
+        WHERE
+            id = #{id}
+    </select>
+
+    <select id="queryStateUpList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id,
+            `name`
+        FROM
+            pro_task_type
+        WHERE
+            state = 2
+    </select>
+
+    <select id="queryProTaskTypeByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id
+        FROM
+            pro_task_type
+        WHERE state != 4
+            AND `name` = #{typeName}
+    </select>
+
+    <select id="queryProTaskTypeByIdAndName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id
+        FROM
+            pro_task_type
+        WHERE state != 4
+            AND `name` = #{typeName} AND id != #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AssetArticlesDao">
+
+	<insert id="insertAssetArticles" parameterType="java.util.Map">
+        INSERT into asset_articles
+        (id, articles_name, type_id, articles_num, specifications, unit_of_measurement, initial_num, residual_num, storage_area, asset_admin, room_add_desc, enclosure_info, company_id, create_id, create_time)
+        VALUES(#{id}, #{articlesName}, #{typeId}, #{articlesNum}, #{specifications}, #{unitOfMeasurement}, #{initialNum}, #{residualNum}, #{storageArea}, #{assetAdmin}, #{roomAddDesc}, #{enclosureInfo}, #{companyId}, #{createId}, #{createTime})
+    </insert>
+	
+    <select id="queryAssetArticlesList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.articles_name articlesName,
+            a.articles_num articlesNum,
+            b.type_name typeName,
+            a.specifications,
+            a.residual_num residualNum,
+            c.company_name company
+        FROM
+            asset_articles a,
+            asset_articles_type b,
+            company_mation c
+        WHERE
+            a.type_id = b.id
+        AND a.company_id = c.id
+        AND a.company_id = #{companyId}
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="articlesName != '' and articlesName != null">
+            AND a.articles_name LIKE '%${articlesName}%'
+        </if>
+    </select>
+    
+    <select id="queryUserCompanyById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.company_id companyId
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            a.user_id = #{id}
+    </select>
+	
+    <select id="queryAssetArticlesMationToDetails" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.articles_name articlesName,
+            a.articles_num articlesNum,
+            b.type_name typeName,
+            a.specifications,
+            a.unit_of_measurement unitOfMeasurement,
+            a.initial_num initialNum,
+            a.residual_num residualNum,
+            a.storage_area storageArea,
+            d.user_name assetAdmin,
+            a.room_add_desc roomAddDesc,
+            a.enclosure_info enclosureInfo,
+            c.company_name company,
+            e.user_name createName,
+            CONVERT(a.create_time, char) createTime
+        FROM
+            asset_articles_type b,
+            company_mation c,
+            sys_eve_user_staff e,
+            asset_articles a
+        LEFT JOIN sys_eve_user_staff d ON a.asset_admin = d.user_id
+        WHERE a.id = #{id}
+        AND a.type_id = b.id
+        AND a.company_id = c.id
+        AND a.create_id = e.user_id
+    </select>
+	
+    <delete id="deleteAssetArticles" parameterType="java.util.Map">
+        DELETE
+        FROM
+            asset_articles
+        WHERE
+            id = #{id}
+    </delete>
+	
+    <select id="queryAssetArticlesMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.articles_name articlesName,
+            a.type_id typeId,
+            a.specifications,
+            a.unit_of_measurement unitOfMeasurement,
+            a.initial_num initialNum,
+            a.storage_area storageArea,
+            a.asset_admin assetAdmin,
+            a.room_add_desc roomAddDesc,
+            IFNULL(a.enclosure_info, '') enclosureInfo
+        FROM
+            asset_articles a
+        WHERE
+            id = #{id}
+    </select>
+	
+    <update id="editAssetArticlesMationById" parameterType="java.util.Map">
+        update asset_articles
+        <set>
+            articles_name = #{articlesName},
+            type_id = #{typeId},
+            specifications = #{specifications},
+            unit_of_measurement = #{unitOfMeasurement},
+            storage_area = #{storageArea},
+            asset_admin = #{assetAdmin},
+            room_add_desc = #{roomAddDesc},
+            enclosure_info = #{enclosureInfo}
+        </set>
+        WHERE 
+            id = #{id}
+    </update>
+	
+    <select id="queryAssetArticlesListByTypeId" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.articles_name `name`,
+			CONCAT(a.specifications, '(', a.unit_of_measurement, ')') specificationsName,
+			a.residual_num residualNum
+		FROM
+			asset_articles a
+		WHERE
+			a.type_id = #{typeId}
+		AND a.company_id = #{companyId}
+    </select>
+    
+    <select id="queryAssetArticleById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id articleId,
+			a.articles_name articlesName,
+			a.type_id typeId,
+			a.residual_num residualNum
+		FROM
+			asset_articles a
+		WHERE a.id = #{assetarId}
+    </select>
+    
+	<update id="editAssetsArticlesById" parameterType="java.util.Map">
+        update asset_articles
+        <set>
+            residual_num = #{residualNum}
+        </set>
+        WHERE 
+            id = #{articleId}
+    </update>
+    
+	<select id="queryMyAssetArticlesList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.articles_name articlesName,
+			a.articles_num articlesNum,
+			b.type_name typeName,
+			a.specifications,
+			c.company_name companyName,
+		    d.id oddId,
+		    d.title oddTitle,
+		    d.odd_number oddNumber,
+			CONVERT(d.create_time, char) oddCreateTime,
+		    e.apply_use_num applyUseNum
+		FROM
+			asset_articles a,
+			asset_articles_type b,
+			company_mation c,
+			asset_articles_use d,
+			asset_articles_use_goods e
+		WHERE a.type_id = b.id
+			AND a.company_id = c.id
+			AND d.create_id = #{userId}
+		  	AND d.id = e.use_id
+		  	AND e.article_id = a.id
+			<if test="articlesName != '' and articlesName != null">
+				AND a.articles_name LIKE '%${articlesName}%'
+			</if>
+			<if test="articlesNum != '' and articlesNum != null">
+				AND a.articles_num LIKE '%${articlesNum}%'
+			</if>
+        ORDER BY d.create_time DESC
+	</select>
+
+</mapper>

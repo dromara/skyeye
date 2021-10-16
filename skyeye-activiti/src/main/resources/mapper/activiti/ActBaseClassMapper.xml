@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ActBaseClassDao">
+
+	<select id="queryActBaseClassList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.class_url classUrl,
+			a.`desc`
+		FROM
+			act_base_class a
+		WHERE 1 = 1
+		<if test="title != '' and title != null">
+			AND a.title LIKE '%${title}%'
+		</if>
+		<if test="className != '' and className != null">
+			AND a.class_url LIKE '%${className}%'
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<insert id="insertActBaseClassMation" parameterType="java.util.Map">
+	    INSERT into act_base_class 
+	    (id, title, class_url, `desc`, create_id, create_time, last_update_id, last_update_time)
+	    VALUES(#{id}, #{title}, #{classUrl}, #{desc}, #{createId}, #{createTime}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteActBaseClassById" parameterType="java.lang.String">
+		DELETE 
+		FROM 
+			act_base_class
+		where 
+			id = #{id}
+	</delete>
+	
+	<select id="selectActBaseClassById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.class_url classUrl,
+			a.`desc`
+		FROM
+			act_base_class a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editActBaseClassMationById" parameterType="java.util.Map">
+		UPDATE act_base_class
+		<set>
+			title = #{title},
+			class_url = #{classUrl},
+			`desc` = #{desc},
+			last_update_id = #{lastUpdateId},
+			last_update_time = #{lastUpdateTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="selectActBaseClassByIdToDedails" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.class_url classUrl,
+			a.`desc`
+		FROM
+			act_base_class a
+		WHERE a.id = #{id}
+	</select>
+	
+</mapper>

@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.CustomerDao">
+
+    <select id="queryCustomerList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.name,
+			b.name typeName,
+			c.name fromName,
+			d.name industryName,
+			bu.user_name createName,
+			DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+			cu.user_name lastUpdateName,
+			DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+		FROM
+			crm_customer a
+			LEFT JOIN crm_customer_type b ON a.type_id = b.id
+			LEFT JOIN crm_customer_from c ON a.from_id = c.id
+			LEFT JOIN crm_customer_industry d ON a.industry_id = d.id
+			LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+			LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+		WHERE 1 = 1
+			<if test="name != '' and name != null">
+                AND a.name like '%${name}%'
+            </if>
+            <if test="typeId != '' and typeId != null">
+                AND a.type_id = #{typeId}
+            </if>
+            <if test="fromId != '' and fromId != null">
+                AND a.from_id = #{fromId}
+            </if>
+            <if test="industryId != '' and industryId != null">
+                AND a.industry_id = #{industryId}
+            </if>
+        ORDER BY a.create_time desc
+    </select>
+    
+    <insert id="insertCustomerMation" parameterType="java.util.Map">
+        insert into crm_customer
+        (id, `name`, combine, type_id, from_id, industry_id, cus_url, country, city, detail_address, postal_code, fax, 
+        	cor_representative, reg_capital, add_desc, enclosure_info, bank_account, bank_name, bank_address, account_name,
+	        duty_paragraph, finance_phone, create_id, create_time, mechanic_name, mechanic_phone, charge_user, group_id,
+	        last_update_id, last_update_time)
+        values(#{id}, #{name}, #{combine}, #{typeId}, #{fromId}, #{industryId}, #{cusUrl}, #{country}, #{city}, #{detailAddress}, #{postalCode}, #{fax},
+        	#{corRepresentative}, #{regCapital}, #{addDesc}, #{enclosureInfo}, #{bankAccount}, #{bankName}, #{bankAddress}, #{accountName},
+	        #{dutyParagraph}, #{financePhone}, #{createId}, #{createTime}, #{mechanicName}, #{mechanicPhone}, #{chargeUser}, #{groupId},
+	        #{createId}, NOW())
+    </insert>
+    
+    <select id="queryCustomerMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			id,
+			`name`,
+			combine,
+			type_id typeId,
+			from_id fromId,
+			industry_id industryId,
+			cus_url cusUrl,
+			country,
+			city,
+			detail_address detailAddress,
+			postal_code postalCode,
+			fax,
+			cor_representative corRepresentative,
+			reg_capital regCapital,
+			add_desc addDesc,
+			enclosure_info enclosureInfo,
+			bank_account bankAccount,
+			bank_name bankName,
+			bank_address bankAddress,
+			account_name accountName,
+			duty_paragraph dutyParagraph,
+			finance_phone financePhone,
+			mechanic_name mechanicName,
+			mechanic_phone mechanicPhone,
+			charge_user chargeUser,
+			group_id groupId
+		FROM
+			crm_customer
+		WHERE id = #{id}
+    </select>
+    
+    <update id="editCustomerMationById" parameterType="java.util.Map">
+        UPDATE crm_customer
+        <set>
+            <if test="name != '' and name != null">
+                name = #{name},
+            </if>
+            <if test="typeId != '' and typeId != null">
+                type_id = #{typeId},
+            </if>
+            <if test="fromId != '' and fromId != null">
+                from_id = #{fromId},
+            </if>
+            <if test="industryId != '' and industryId != null">
+                industry_id = #{industryId},
+            </if>
+            combine = #{combine},
+            cus_url = #{cusUrl},
+            country = #{country},
+            city = #{city},
+            detail_address = #{detailAddress},
+            postal_code = #{postalCode},
+            fax = #{fax},
+            add_desc = #{addDesc},
+            cor_representative = #{corRepresentative},
+            reg_capital = #{regCapital},
+            enclosure_info = #{enclosureInfo},
+            bank_account = #{bankAccount},
+            bank_name = #{bankName},
+            bank_address = #{bankAddress},
+            account_name = #{accountName},
+            duty_paragraph = #{dutyParagraph},
+            finance_phone = #{financePhone},
+            mechanic_name = #{mechanicName},
+            mechanic_phone = #{mechanicPhone},
+            charge_user = #{chargeUser},
+            group_id = #{groupId},
+            last_update_id = #{lastUpdateId},
+            last_update_time = NOW(),
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteCustomerMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			crm_customer
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<delete id="deleteContractMationByCustomerId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			crm_contract
+		WHERE
+			customer_id = #{id}
+	</delete>
+	
+	<delete id="deleteOpportunityMationByCustomerId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			crm_opportunity
+		WHERE
+			customer_id = #{id}
+	</delete>
+	
+	<delete id="deleteServiceMationByCustomerId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			crm_service
+		WHERE
+			customer_id = #{id}
+	</delete>
+	
+	<select id="queryCustomerMationToDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name`,
+			a.combine,
+			b.name typeId,
+			c.name fromId,
+			d.name industryId,
+			a.cus_url cusUrl,
+			a.country,
+			a.city,
+			a.detail_address detailAddress,
+			a.postal_code postalCode,
+			a.fax,
+			a.cor_representative corRepresentative,
+			a.reg_capital regCapital,
+			a.add_desc addDesc,
+			a.enclosure_info enclosureInfo,
+			a.bank_account bankAccount,
+			a.bank_name bankName,
+			a.bank_address bankAddress,
+			a.account_name accountName,
+			a.duty_paragraph dutyParagraph,
+			a.finance_phone financePhone,
+			a.mechanic_name mechanicName,
+			a.mechanic_phone mechanicPhone,
+			e.user_name chargeUserName,
+			f.group_name groupName
+		FROM
+			crm_customer a
+			LEFT JOIN crm_customer_type b ON a.type_id = b.id
+			LEFT JOIN crm_customer_from c ON a.from_id = c.id
+			LEFT JOIN crm_customer_industry d ON a.industry_id = d.id
+			LEFT JOIN sys_eve_user_staff e ON a.charge_user = e.user_id
+			LEFT JOIN crm_customer_group f ON a.group_id = f.id AND f.state = '2'
+		WHERE a.id = #{id}
+    </select>
+    
+	<select id="queryCustomerMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			crm_customer a	
+		WHERE 
+			a.name = #{name}
+	</select>
+	
+	<select id="queryCustomerMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			crm_customer a	
+		WHERE a.name = #{name}
+		AND a.id != #{id}
+	</select>
+	
+	<select id="queryCustomerListToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name`,
+			a.industry_id industryId,
+			b.name industryName,
+			a.city,
+			a.detail_address detailAddress,
+			e.contacts,
+			e.department,
+			e.job,
+			e.work_phone workPhone,
+			e.mobile_phone mobilePhone,
+			e.email,
+			e.qq
+		FROM
+			 crm_customer a
+			 LEFT JOIN crm_customer_industry b ON a.industry_id = b.id
+			 LEFT JOIN crm_customer_contacts e ON a.id = e.customer_id AND e.is_default = '1' AND e.state = '1'
+        ORDER BY a.create_time desc
+    </select>
+    
+    <select id="queryContractNumsDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.title,
+			a.num,
+			a.price,
+			CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '11' THEN '审核通过' WHEN '12' THEN '审核不通过' WHEN '2' THEN '执行中' WHEN '3' THEN '已关闭' WHEN '4' THEN '已撤销' WHEN '5' THEN '已搁置' END state, 
+			DATE_FORMAT(CONVERT (a.signing_time, CHAR),'%Y-%m-%d') signingTime,
+			DATE_FORMAT(CONVERT (a.create_time, CHAR),'%Y-%m-%d') createTime
+		FROM
+			crm_contract a
+		WHERE a.customer_id = #{id}
+			<if test="searchName != '' and searchName != null">
+                AND a.title like '%${searchName}%'
+            </if>
+            <if test="searchState != '' and searchState != null">
+                AND a.state = #{searchState}
+            </if>
+            <if test="searchTime != '' and searchTime != null and searchTime == '0'.toString()">
+				AND YEARWEEK(date_format(a.create_time,'%Y/%m/%d')) = YEARWEEK(now())
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '1'.toString()">
+				AND YEARWEEK(date_format(a.create_time,'%Y/%m/%d')) = YEARWEEK(now()) - 1
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '2'.toString()">
+				AND date_format(a.create_time,'%Y-%m')=date_format(now(),'%Y-%m')
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '3'.toString()">
+				AND date_format(a.create_time,'%Y-%m')=date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m')
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '4'.toString()">
+				AND QUARTER(a.create_time)=QUARTER(now())
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '5'.toString()">
+				AND QUARTER(a.create_time)=QUARTER(DATE_SUB(now(),interval 1 QUARTER))
+			</if>
+        ORDER BY a.create_time desc
+    </select>
+
+	<select id="queryOpportunityNumsDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.title,
+			b.user_name responsId,
+			a.estimate_price estimatePrice,
+			CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '11' THEN '审核通过' WHEN '12' THEN '审核不通过' WHEN '2' THEN '初期沟通' WHEN '3' THEN '方案与报价' WHEN '4' THEN '竞争与投标' WHEN '5' THEN '商务谈判' WHEN '6' THEN '成交' WHEN '7' THEN '丢单' WHEN '8' THEN '搁置' END state, 
+			DATE_FORMAT(CONVERT (a.estimate_end_time, CHAR),'%Y-%m-%d') estimateEndTime,
+			DATE_FORMAT(CONVERT (a.create_time, CHAR),'%Y-%m-%d') createTime
+		FROM
+			crm_opportunity a,
+            sys_eve_user_staff b
+		WHERE a.customer_id = #{id} AND b.user_id = a.respons_id
+			<if test="searchName != '' and searchName != null">
+                AND a.title like '%${searchName}%'
+            </if>
+            <if test="searchState != '' and searchState != null">
+                AND a.state = #{searchState}
+            </if>
+            <if test="searchTime != '' and searchTime != null and searchTime == '0'.toString()">
+				AND YEARWEEK(date_format(a.create_time,'%Y/%m/%d')) = YEARWEEK(now())
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '1'.toString()">
+				AND YEARWEEK(date_format(a.create_time,'%Y/%m/%d')) = YEARWEEK(now()) - 1
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '2'.toString()">
+				AND date_format(a.create_time,'%Y-%m')=date_format(now(),'%Y-%m')
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '3'.toString()">
+				AND date_format(a.create_time,'%Y-%m')=date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m')
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '4'.toString()">
+				AND QUARTER(a.create_time)=QUARTER(now())
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '5'.toString()">
+				AND QUARTER(a.create_time)=QUARTER(DATE_SUB(now(),interval 1 QUARTER))
+			</if>
+        ORDER BY a.create_time desc
+    </select>    
+    
+    <select id="queryServiceNumsDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.order_num orderNum,
+			b.name typeName,
+			c.name modeName,
+			CASE a.state WHEN '1' THEN '待派工' WHEN '2' THEN '待接单' WHEN '3' THEN '待签到' 
+				WHEN '4' THEN '待完工' WHEN '5' THEN '待评价' WHEN '6' THEN '待审核' WHEN '7' THEN '已完工' END state, 
+			DATE_FORMAT(CONVERT (a.declaration_time, CHAR),'%Y-%m-%d') declarationTime
+		FROM
+			crm_service a
+			LEFT JOIN crm_service_type b ON a.type_id = b.id
+			LEFT JOIN crm_service_mode c ON a.mode_id = c.id
+		WHERE a.customer_id = #{id}
+			<if test="orderNum != '' and orderNum != null">
+                AND a.order_num like '%${orderNum}%'
+            </if>
+            <if test="searchState != '' and searchState != null">
+                AND a.state = #{searchState}
+            </if>
+            <if test="searchTime != '' and searchTime != null and searchTime == '0'.toString()">
+				AND YEARWEEK(date_format(a.create_time, '%Y/%m/%d')) = YEARWEEK(now())
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '1'.toString()">
+				AND YEARWEEK(date_format(a.create_time, '%Y/%m/%d')) = YEARWEEK(now()) - 1
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '2'.toString()">
+				AND date_format(a.create_time, '%Y-%m') = date_format(now(), '%Y-%m')
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '3'.toString()">
+				AND date_format(a.create_time, '%Y-%m') = date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH), '%Y-%m')
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '4'.toString()">
+				AND QUARTER(a.create_time) = QUARTER(now())
+			</if>
+			<if test="searchTime != '' and searchTime != null and searchTime == '5'.toString()">
+				AND QUARTER(a.create_time) = QUARTER(DATE_SUB(now(), interval 1 QUARTER))
+			</if> 
+        ORDER BY a.create_time desc
+    </select>    
+    
+    <select id="queryContractListByCustomerId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.state,
+			c.process_instance_id processInstanceId,
+            c.sub_id createId
+		FROM
+			crm_contract a
+			LEFT JOIN crm_contract_process c ON c.contract_id = a.id
+		WHERE customer_id = #{id}
+    </select>
+    
+    <select id="queryOpportunityListByCustomerId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.state,
+			c.process_instance_id processInstanceId,
+            c.sub_id createId
+		FROM
+			crm_opportunity a
+			LEFT JOIN crm_opportunity_process c ON c.opportunity_id = a.id
+		WHERE customer_id = #{id}
+    </select>
+    
+    <select id="queryCustomerListTableToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.name,
+			b.name typeName,
+			c.name fromName,
+			d.name industryName,
+			format(ROUND(IFNULL((SELECT sum(estimate_price) from crm_opportunity where customer_id = a.id),0),2), 2) estimatePrice,
+			format(ROUND(IFNULL((SELECT sum(price) from crm_contract where customer_id = a.id),0),2), 2) contractPrice,
+			a.city,
+			a.detail_address detailAddress,
+			e.contacts,
+			e.mobile_phone mobilePhone,
+			e.email,
+			e.qq,
+			e.work_phone workPhone
+		FROM
+			crm_customer a
+			LEFT JOIN crm_customer_type b ON a.type_id = b.id
+			LEFT JOIN crm_customer_from c ON a.from_id = c.id
+			LEFT JOIN crm_customer_industry d ON a.industry_id = d.id
+			LEFT JOIN crm_customer_contacts e ON a.id = e.customer_id AND e.is_default = '1' AND e.state = '1'
+		WHERE 1 = 1
+			<if test="name != '' and name != null">
+                AND a.name like '%${name}%'
+            </if>
+            <if test="typeId != '' and typeId != null">
+                AND a.type_id = #{typeId}
+            </if>
+            <if test="fromId != '' and fromId != null">
+                AND a.from_id = #{fromId}
+            </if>
+            <if test="industryId != '' and industryId != null">
+                AND a.industry_id = #{industryId}
+            </if>
+        ORDER BY a.create_time desc
+    </select>
+    
+    <select id="queryMyConscientiousList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.name,
+			b.name typeName,
+			c.name fromName,
+			d.name industryName,
+			bu.user_name createName,
+			DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+			cu.user_name lastUpdateName,
+			DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+		FROM
+			crm_customer a
+			LEFT JOIN crm_customer_type b ON a.type_id = b.id
+			LEFT JOIN crm_customer_from c ON a.from_id = c.id
+			LEFT JOIN crm_customer_industry d ON a.industry_id = d.id
+			LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+			LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+		WHERE a.charge_user = #{userId}
+			<if test="name != '' and name != null">
+                AND a.name like '%${name}%'
+            </if>
+            <if test="typeId != '' and typeId != null">
+                AND a.type_id = #{typeId}
+            </if>
+            <if test="fromId != '' and fromId != null">
+                AND a.from_id = #{fromId}
+            </if>
+            <if test="industryId != '' and industryId != null">
+                AND a.industry_id = #{industryId}
+            </if>
+        ORDER BY a.create_time desc
+    </select>
+    
+    <select id="queryMyCreateList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.name,
+			b.name typeName,
+			c.name fromName,
+			d.name industryName,
+			bu.user_name createName,
+			DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+			cu.user_name lastUpdateName,
+			DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+		FROM
+			crm_customer a
+			LEFT JOIN crm_customer_type b ON a.type_id = b.id
+			LEFT JOIN crm_customer_from c ON a.from_id = c.id
+			LEFT JOIN crm_customer_industry d ON a.industry_id = d.id
+			LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+			LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+		WHERE a.create_id = #{userId}
+			<if test="name != '' and name != null">
+                AND a.name like '%${name}%'
+            </if>
+            <if test="typeId != '' and typeId != null">
+                AND a.type_id = #{typeId}
+            </if>
+            <if test="fromId != '' and fromId != null">
+                AND a.from_id = #{fromId}
+            </if>
+            <if test="industryId != '' and industryId != null">
+                AND a.industry_id = #{industryId}
+            </if>
+        ORDER BY a.create_time desc
+    </select>
+    
+    <select id="queryDocumentaryNumsDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			c.id,
+			CONCAT(a.`name`, '-', b.title) opportunityName,
+			d.`name` typeName,
+			CONVERT(c.documentary_time, char) documentaryTime,
+			c.create_name createName,
+			c.detail
+		FROM
+			crm_customer a,
+			crm_opportunity b,
+			crm_documentary c
+			LEFT JOIN crm_documentary_type d ON c.type_id = d.id
+		WHERE a.id = #{id}
+		AND a.id = b.customer_id
+		AND c.opportunity_id = b.id
+        ORDER BY a.create_time desc
+    </select>
+    
+    <select id="queryContactsNumsDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.contacts,
+			a.department,
+			a.job,
+			a.work_phone workPhone,
+			a.mobile_phone mobilePhone,
+			a.email,
+			a.qq,
+			a.wechat,
+			a.is_default isDefault,
+			b.user_name createName,
+			DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+			c.user_name lastUpdateName,
+			DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+		FROM
+			crm_customer_contacts a
+			LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.last_update_id = c.user_id
+		WHERE a.state = '1'
+		AND a.customer_id = #{id}
+            <if test="searchName != '' and searchName != null">
+                AND a.contacts like '%${searchName}%'
+            </if>
+        ORDER BY a.create_time desc
+    </select>
+    
+    <select id="queryDiscussNumsDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			c.id,
+			b.title opportunityName,
+			c.opportunity_id opportunityId,
+			c.title,
+			(SELECT COUNT(id) from crm_opportunity_discuss_reply where discuss_id = c.id) replyNum,
+			(SELECT DATE_FORMAT(create_time,'%Y-%m-%d %H:%i') from crm_opportunity_discuss_reply where discuss_id = c.id ORDER BY create_time DESC LIMIT 1) recoveryTime,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i') createTime,
+			c.create_name createName,
+			c.content
+		FROM
+			crm_customer a,
+			crm_opportunity b,
+			crm_opportunity_discuss c
+		WHERE a.id = #{id}
+		AND a.id = b.customer_id
+		AND c.opportunity_id = b.id
+            <if test="searchName != '' and searchName != null">
+                AND c.title like '%${searchName}%'
+            </if>
+        ORDER BY a.create_time desc
+    </select>
+    
+    <select id="queryInternationalCustomerList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.name,
+			b.name typeName,
+			c.name fromName,
+			d.name industryName,
+			bu.user_name createName,
+			DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+			cu.user_name lastUpdateName,
+			DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime,
+			IFNULL(datediff(NOW(), cdo.create_time), datediff(NOW(), a.create_time)) noDocumentaryDayNum
+		FROM
+			crm_customer a
+			LEFT JOIN crm_customer_type b ON a.type_id = b.id
+			LEFT JOIN crm_customer_from c ON a.from_id = c.id
+			LEFT JOIN crm_customer_industry d ON a.industry_id = d.id
+			LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+			LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+        	LEFT JOIN 
+        		(SELECT max(cd.create_time) create_time, co.customer_id FROM crm_documentary cd,crm_opportunity co WHERE cd.opportunity_id = co.id GROUP BY co.customer_id ORDER BY cd.create_time DESC) cdo
+    		ON cdo.customer_id = a.id
+		WHERE 1 = 1
+			<if test="name != '' and name != null">
+                AND a.name like '%${name}%'
+            </if>
+            <if test="noChargeId != '' and noChargeId != null">
+            	<if test="noChargeId == '1'.toString()">
+                	AND (isNull(charge_user) || LENGTH(charge_user) = 0)
+            	</if>
+            </if>
+            <if test="noDocumentaryDayNum != '' and noDocumentaryDayNum != null">
+            	AND IFNULL(datediff(NOW(), cdo.create_time), datediff(NOW(), a.create_time)) >= #{noDocumentaryDayNum}
+            </if>
+            <if test="typeId != '' and typeId != null">
+                AND a.type_id = #{typeId}
+            </if>
+            <if test="fromId != '' and fromId != null">
+                AND a.from_id = #{fromId}
+            </if>
+            <if test="industryId != '' and industryId != null">
+                AND a.industry_id = #{industryId}
+            </if>
+        ORDER BY a.create_time desc
+    </select>
+
+</mapper>

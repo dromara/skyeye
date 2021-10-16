@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.MaterialUnitDao">
+
+    <select id="queryMaterialUnitList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name` groupName,
+			CONCAT(GROUP_CONCAT(b.`name` ORDER BY b.number ASC), '(', GROUP_CONCAT(b.number ORDER BY b.number ASC separator ':') ,')') unitName
+		FROM
+			erp_unit_group a
+			LEFT JOIN erp_unit b ON b.group_id = a.id AND b.delete_flag = '0'
+		WHERE a.delete_flag = '0'
+		<if test="groupName != '' and groupName != null">
+        	AND a.`name` LIKE '%${groupName}%'
+        </if>
+		GROUP BY a.id
+    </select>
+    
+    <select id="queryUnitGroupMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			erp_unit_group a
+		WHERE
+			a.`name` = #{groupName}
+    </select>
+    
+    <insert id="insertMaterialUnitGroupMation" parameterType="java.util.Map">
+        INSERT into erp_unit_group
+        (id, `name`, delete_flag)
+        VALUES(#{id}, #{name}, #{deleteFlag})
+    </insert>
+    
+    <insert id="insertMaterialUnitMation" parameterType="java.util.Map">
+	     INSERT INTO erp_unit
+	     (id, `name`, number, group_id, base_unit, delete_flag)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.unitName}, #{item.unitNum}, #{item.groupId}, #{item.baseUnit}, #{item.deleteFlag})  
+		</foreach>  
+	</insert>
+	
+	<update id="deleteMaterialUnitGroupMationById" parameterType="java.util.Map">
+        UPDATE erp_unit_group
+        <set>
+            delete_flag = '1'
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="deleteMaterialUnitMationByGroupId" parameterType="java.util.Map">
+        UPDATE erp_unit
+        <set>
+            delete_flag = '1'
+        </set>
+        WHERE group_id = #{id}
+    </update>
+    
+    <select id="queryMaterialUnitGroupMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name` groupName
+		FROM
+			erp_unit_group a
+		WHERE a.id = #{id}
+		AND a.delete_flag = '0'
+    </select>
+    
+    <select id="queryMaterialUnitMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id unitIdValue,
+			a.`name` unitNameValue,
+			a.number unitNumValue,
+			a.base_unit baseUnit
+		FROM
+			erp_unit a
+		WHERE a.group_id = #{id}
+		AND a.delete_flag = '0'
+		ORDER BY a.number ASC
+    </select>
+    
+    <select id="queryUnitGroupMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			erp_unit_group a
+		WHERE
+			a.`name` = #{groupName}
+		AND a.id != #{id}
+    </select>
+    
+    <update id="editMaterialUnitGroupMationById" parameterType="java.util.Map">
+        UPDATE erp_unit_group
+        <set>
+        	<if test="name != '' and name != null">
+	        	`name` = #{name}
+	        </if>
+        </set>
+        WHERE id = #{id}
+        AND delete_flag = '0'
+    </update>
+    
+    <update id="editUnitMationById" parameterType="java.util.Map">
+        UPDATE erp_unit
+        <set>
+        	<if test="unitNameValue != '' and unitNameValue != null">
+	        	`name` = #{unitNameValue},
+	        </if>
+	        <if test="unitNumValue != '' and unitNumValue != null">
+	        	number = #{unitNumValue},
+	        </if>
+        </set>
+        WHERE id = #{unitIdValue}
+    </update>
+    
+    <insert id="insertUnitMation" parameterType="java.util.Map">
+	     INSERT INTO erp_unit
+	     (id, `name`, number, group_id, base_unit, delete_flag)
+	     VALUES(#{id}, #{unitName}, #{unitNum}, #{groupId}, #{baseUnit}, #{deleteFlag})  
+	</insert>
+	
+	<update id="deleteUnitMationById" parameterType="java.util.Map">
+        UPDATE erp_unit
+        <set>
+            delete_flag = '1'
+        </set>
+        WHERE id = #{unitIdValue}
+    </update>
+    
+    <select id="queryMaterialUnitListToSelect" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			CONCAT(a.`name`, '-----', CONCAT(GROUP_CONCAT(b.`name` ORDER BY b.number ASC), '(', GROUP_CONCAT(b.number ORDER BY b.number ASC separator ':') ,')')) `name`
+		FROM
+			erp_unit_group a
+			LEFT JOIN erp_unit b ON b.group_id = a.id AND b.delete_flag = '0'
+		WHERE a.delete_flag = '0'
+		GROUP BY a.id
+    </select>
+    
+    <select id="queryMaterialUnitById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.`name`,
+			a.base_unit baseUnit
+		FROM
+			erp_unit a
+		WHERE
+			a.group_id = #{id}
+		AND a.delete_flag = '0'
+		ORDER BY a.number
+    </select>
+
+</mapper>

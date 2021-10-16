@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ForumContentDao">
+
+	<select id="queryMyForumContentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.forum_desc `desc`,
+			(select GROUP_CONCAT(DISTINCT tag_name,'-',id) from forum_tag  where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+			a.forum_title title,
+			(SELECT COUNT(*) FROM forum_comment b WHERE a.id = b.forum_id) commentNum,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			forum_content a
+		WHERE a.create_id = #{userId}
+			AND a.state = '1'
+		ORDER BY a.create_time desc
+	</select>
+	
+	<insert id="insertForumContentMation" parameterType="java.util.Map">
+	    INSERT into forum_content 
+	    (id, forum_content, type, state, report_state, tag_id, forum_title, forum_desc, anonymous, create_id, create_time)
+	    VALUES(#{id}, #{content}, #{forumType}, #{state}, #{reportState}, #{tagId}, #{title}, #{desc}, #{anonymous}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="deleteForumContentById" parameterType="java.util.Map">
+        UPDATE forum_content
+        <set>
+            state = 2
+        </set>
+        WHERE id = #{id}
+    </update>
+	
+	<select id="queryForumContentMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.forum_desc `desc`,
+			a.tag_id tagId,
+			a.forum_title title,
+			a.forum_content content,
+			a.anonymous anonymous,
+			a.type forumType,
+			a.create_id createId
+		FROM
+			forum_content a
+		WHERE id = #{id}
+	</select>
+	
+	<update id="editForumContentMationById" parameterType="java.util.Map">
+		UPDATE forum_content
+		<set>
+			<if test="title != '' and title != null">
+				forum_title = #{title},
+			</if>
+			<if test="tagId != '' and tagId != null">
+				tag_id = #{tagId},
+			</if>
+			<if test="content != '' and content != null">
+				forum_content = #{content},
+			</if>
+			<if test="anonymous != '' and anonymous != null">
+				anonymous = #{anonymous},
+			</if>
+			<if test="forumType != '' and forumType != null">
+				type = #{forumType},
+			</if>
+			<if test="desc != '' and desc != null">
+				forum_desc = #{desc},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryForumContentMationToDetails" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.forum_title title,
+			a.forum_content content,
+			(select GROUP_CONCAT(DISTINCT tag_name,'-',id) from forum_tag  where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+			a.forum_desc `desc`,
+			(CASE WHEN a.anonymous = '2' THEN '../../assets/images/anonymousphoto.jpg' else b.user_photo end) as userPhoto,
+			a.create_id createId,
+            (CASE WHEN anonymous = '1' THEN b.id WHEN anonymous = '1' THEN '' END) userId,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			forum_content a
+			LEFT JOIN sys_eve_user_staff b ON b.user_id = a.create_id
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryNewForumContentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.id,
+			c.forum_title title,
+			c.user_photo userPhoto,
+			c.userId userId
+		FROM
+			(SELECT
+				a.id,
+				a.forum_title,
+				b.user_photo,
+				a.create_time,
+				b.id userId
+			FROM
+				forum_content a
+				LEFT JOIN sys_eve_user_staff b ON b.user_id = a.create_id
+			WHERE (a.type = '1' OR (a.type = '2' AND a.create_id = #{userId})) AND a.anonymous = '1' AND a.state = '1'
+			UNION ALL
+			SELECT
+				a.id,
+				a.forum_title,
+				'../../assets/images/anonymousphoto.jpg' user_photo,
+				a.create_time,
+				'' userId
+			FROM
+				forum_content a
+			WHERE (a.type = '1' OR (a.type = '2' AND a.create_id = #{userId})) AND a.anonymous = '2' AND a.state = '1') c
+		ORDER BY c.create_time desc
+		LIMIT 20
+	</select>
+	
+	<insert id="insertForumCommentMation" parameterType="java.util.Map">
+	    INSERT into forum_comment 
+	    (id, forum_id, content, comment_id, belong_comment_id, reply_id, comment_time)
+	    VALUES(#{id}, #{forumId}, #{content}, #{commentId}, #{belongCommentId}, #{replyId}, #{commentTime})
+	</insert>
+	
+	<insert id="insertForumReplyMation" parameterType="java.util.Map">
+	    INSERT into forum_comment 
+	    (id, forum_id, content, comment_id, belong_comment_id, reply_id, comment_time)
+	    VALUES(#{id}, #{forumId}, #{content}, #{commentId}, #{belongCommentId}, #{replyId}, #{commentTime})
+	</insert>
+	
+	<select id="queryForumCommentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.content content,
+			a.comment_id commentUserId,
+			b.user_photo userPhoto,
+			b.user_name commentName,
+			b.id userId,
+			CONVERT(a.comment_time, char) commentTime
+		FROM
+			forum_comment a
+			LEFT JOIN sys_eve_user_staff b ON b.user_id = a.comment_id
+		WHERE a.forum_id = #{forumId}
+			AND a.belong_comment_id = '0'
+			ORDER BY a.comment_time desc
+	</select>
+	
+	<select id="queryForumReplyList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id id,
+			a.content content,
+			a.comment_id commentUserId,
+			a.belong_comment_id belongCommentId,
+			(CASE WHEN d.anonymous = '2' and a.reply_id = d.create_id  THEN '匿名贴主' else c.user_name end) as commentName,
+			(CASE WHEN d.anonymous = '2' and a.comment_id = d.create_id  THEN '匿名贴主' else b.user_name end) as replyName,
+			CONVERT(a.comment_time, char) commentTime
+		FROM
+			forum_comment a
+			LEFT JOIN sys_eve_user_staff b ON b.user_id = a.comment_id
+			LEFT JOIN sys_eve_user_staff c ON c.user_id = a.reply_id
+			LEFT JOIN forum_content d ON d.id = a.forum_id
+		WHERE a.forum_id = #{forumId}
+			AND a.belong_comment_id != '0'
+			ORDER BY a.comment_time 
+	</select>
+	
+	<select id="selectForumCommentNumById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			count(*) commentNum
+		FROM forum_comment
+		WHERE forum_id = #{forumId}
+	</select>
+	
+	<select id="queryNewCommentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.id,
+			c.forum_title title,
+			c.user_photo userPhoto,
+			c.userId userId
+		FROM
+			(SELECT
+				a.id,
+				a.forum_title,
+				b.user_photo,
+				a.create_time,
+				b.id userId,
+				(select comment_time from forum_comment where forum_id = a.id order by comment_time desc limit 1) commentTime
+			FROM
+				forum_content a
+				LEFT JOIN sys_eve_user_staff b ON b.user_id = a.create_id
+			WHERE a.type = '1' AND a.anonymous = '1' AND a.state = '1'
+			UNION ALL
+			SELECT
+				a.id,
+				a.forum_title,
+				'../../assets/images/anonymousphoto.jpg' user_photo,
+				a.create_time,
+				'' userId,
+				(select comment_time from forum_comment where forum_id = a.id order by comment_time desc limit 1) commentTime
+			FROM
+				forum_content a
+			WHERE a.type = '1' AND a.anonymous = '2' AND a.state = '1') c
+		WHERE c.commentTime IS NOT NULL
+		ORDER BY c.commentTime desc
+		LIMIT 20
+	</select>
+	
+	<select id="queryForumListByTagId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			c.id,
+			c.forum_desc `desc`,
+			c.tagName tagName,
+			c.forum_title title,
+			c.user_photo userPhoto,
+			c.commentNum commentNum,
+			c.userId userId,
+			c.createTime createTime
+		FROM
+			(SELECT
+				a.id,
+				a.forum_desc,
+				(select GROUP_CONCAT(DISTINCT tag_name) from forum_tag  where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+				a.forum_title,
+				b.user_photo,
+				a.create_time,
+				b.id userId,
+				(SELECT COUNT(*) FROM forum_comment b WHERE a.id = b.forum_id) commentNum,
+				CONVERT(a.create_time, char) createTime
+			FROM
+				forum_content a
+				LEFT JOIN sys_eve_user_staff b ON b.user_id = a.create_id
+			WHERE a.state = '1' AND (a.type = '1' OR (a.type = '2' AND a.create_id = #{userId})) AND a.anonymous = '1'
+					<if test="tagId != '' and tagId != null">
+						AND INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', #{tagId}, ','))
+					</if>
+			UNION ALL 
+			SELECT
+				a.id,
+				a.forum_desc,
+				(select GROUP_CONCAT(DISTINCT tag_name) from forum_tag  where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+				a.forum_title,
+				'../../assets/images/anonymousphoto.jpg' user_photo,
+				a.create_time,
+				'' userId,
+				(SELECT COUNT(*) FROM forum_comment b WHERE a.id = b.forum_id) commentNum,
+				CONVERT(a.create_time, char) createTime
+			FROM
+				forum_content a
+			WHERE a.state = '1' AND (a.type = '1' OR (a.type = '2' AND a.create_id = #{userId})) AND a.anonymous = '2'
+					<if test="tagId != '' and tagId != null">
+						AND INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', #{tagId}, ','))
+					</if> ) c
+		ORDER BY c.create_time desc
+	</select>
+	
+	<select id="queryHotTagList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            b.id,
+            b.tag_name name,
+            COUNT(*) n
+        FROM
+            (SELECT a.tag_id FROM forum_content a WHERE a.state = '1') m
+            LEFT JOIN forum_tag b ON INSTR( CONCAT(',', m.tag_id, ','), CONCAT(',', b.id, ','))
+        GROUP BY b.id
+        ORDER BY COUNT(*) DESC
+        LIMIT 10
+    </select>
+    
+    <select id="queryActiveUsersList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            e.id,
+            e.user_name userName,
+            e.user_photo userPhoto,
+            d.nums
+        FROM
+            (SELECT
+                c.id,
+                sum(c.n) nums
+            FROM
+                (SELECT
+                    a.create_id id,
+                    count(*) n
+                 FROM
+                    forum_content a
+                 GROUP BY a.create_id
+                 UNION ALL
+                 SELECT
+                    b.comment_id id,
+                    count(*) n
+                 FROM
+                    forum_comment b
+                 GROUP BY b.comment_id) c
+            GROUP BY c.id) d
+        LEFT JOIN sys_eve_user_staff e ON e.user_id = d.id
+        ORDER BY d.nums DESC
+        LIMIT 15
+    </select>
+	
+    <select id="queryHotForumList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.forum_desc `desc`,
+            (select GROUP_CONCAT(DISTINCT tag_name,'-',id) from forum_tag  where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+            a.forum_title title,
+            (SELECT COUNT(*) FROM forum_comment b WHERE a.id = b.forum_id) commentNum,
+            CONVERT(a.create_time, char) createTime,
+            b.user_photo userPhoto,
+            b.id userId
+        FROM
+            forum_content a
+            LEFT JOIN sys_eve_user_staff b ON b.user_id = a.create_id
+        WHERE a.state = '1' AND (a.type = '1' OR (a.type = '2' AND a.create_id = #{userId})) AND a.anonymous = '1' AND a.id in (SELECT t.id FROM(select DISTINCT(forum_id) id from forum_hot ORDER BY update_time desc LIMIT 6)t)
+        UNION ALL 
+        SELECT
+            a.id,
+            a.forum_desc `desc`,
+            (select GROUP_CONCAT(DISTINCT tag_name,'-',id) from forum_tag  where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+            a.forum_title title,
+            (SELECT COUNT(*) FROM forum_comment b WHERE a.id = b.forum_id) commentNum,
+            CONVERT(a.create_time, char) createTime,
+            '../../assets/images/anonymousphoto.jpg' userPhoto,
+            '' userId
+        FROM
+            forum_content a
+        WHERE a.state = '1' AND (a.type = '1' OR (a.type = '2' AND a.create_id = #{userId})) AND a.anonymous = '2' AND a.id in (SELECT t.id FROM(select DISTINCT(forum_id) id from forum_hot ORDER BY update_time desc LIMIT 6)t)
+    </select>
+    
+    <select id="queryAllHotForumList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.forum_desc `desc`,
+            (select GROUP_CONCAT(DISTINCT tag_name,'-',id) from forum_tag  where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+            a.forum_title title,
+            (SELECT COUNT(*) FROM forum_comment b WHERE a.id = b.forum_id) commentNum,
+            CONVERT(a.create_time, char) createTime,
+            b.user_photo userPhoto,
+            b.id userId
+        FROM
+            forum_content a
+            LEFT JOIN sys_eve_user_staff b ON b.user_id = a.create_id
+        WHERE a.state = '1' AND (a.type = '1' OR (a.type = '2' AND a.create_id = #{userId})) AND a.anonymous = '1' AND a.id in (select DISTINCT(forum_id) id from forum_hot ORDER BY update_time desc)
+        UNION ALL 
+        SELECT
+            a.id,
+            a.forum_desc `desc`,
+            (select GROUP_CONCAT(DISTINCT tag_name,'-',id) from forum_tag  where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+            a.forum_title title,
+            (SELECT COUNT(*) FROM forum_comment b WHERE a.id = b.forum_id) commentNum,
+            CONVERT(a.create_time, char) createTime,
+            '../../assets/images/anonymousphoto.jpg' userPhoto,
+            '' userId
+        FROM
+            forum_content a
+        WHERE a.state = '1' AND (a.type = '1' OR (a.type = '2' AND a.create_id = #{userId})) AND a.anonymous = '2' AND a.id in (select DISTINCT(forum_id) id from forum_hot ORDER BY update_time desc)
+    </select>
+    
+    <select id="queryAllForumList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.forum_desc `desc`,
+            a.forum_content content,
+            a.forum_title title,
+            a.type forumType,
+            a.create_id createId
+        FROM
+            forum_content a
+        WHERE a.state = '1'
+    </select>
+    
+    <select id="selectForumTagById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id,
+            tag_name `name`
+        FROM
+            forum_tag
+        WHERE
+            instr(concat(',', #{tagId},','),concat(',', id, ','));
+	</select>
+	
+	<select id="queryMyCommentList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id forumId,
+            b.id commentId,
+            (select GROUP_CONCAT(DISTINCT tag_name,'-',id) from forum_tag where INSTR(CONCAT(',', a.tag_id, ','), CONCAT(',', id, ','))) tagName,
+            a.forum_title title,
+            c.user_name commentName,
+            b.content content,
+            d.user_name replyName,
+            CONVERT(b.comment_time, char) commentTime
+        FROM
+            forum_content a 
+            LEFT JOIN forum_comment b ON a.id = b.forum_id
+            LEFT JOIN sys_eve_user_staff c ON c.user_id = b.comment_id
+            LEFT JOIN sys_eve_user_staff d ON d.user_id = b.reply_id
+        WHERE b.comment_id = #{userId}
+            AND a.state = '1'
+        ORDER BY b.comment_time desc
+    </select>
+	
+    <delete id="deleteCommentById" parameterType="java.lang.String">
+        DELETE 
+        FROM 
+            forum_comment
+        where id = #{id} OR belong_comment_id = #{id}
+    </delete>
+	
+    <select id="queryMyNoticeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.notice_title noticeTitle,
+            a.notice_content `content`,
+            b.id forumId,
+            b.forum_title forumTitle,
+            b.forum_desc `desc`,
+            CONVERT(a.create_time, char) sendTime
+        FROM
+            forum_notice a 
+            LEFT JOIN forum_content b ON b.id = a.forum_id
+        WHERE a.receive_id = #{userId}
+            AND a.state = '1'
+        ORDER BY a.create_time desc
+    </select>
+	
+    <delete id="deleteNoticeById" parameterType="java.lang.String">
+        DELETE 
+        FROM 
+            forum_notice
+        where id = #{id}
+    </delete>
+    
+    <insert id="insertForumHotByList" parameterType="java.util.Map">
+         insert into forum_hot
+         (id, forum_id, update_time)
+         values
+        <foreach collection="list" item="item" index="index" separator="," >  
+            (#{item.id}, #{item.forumId}, #{item.time})  
+        </foreach>  
+    </insert>
+    
+    <insert id="insertForumStatisticsDayByList" parameterType="java.util.Map">
+         insert into forum_statistics_day
+         (id, forum_id, browse_num, comment_num, create_time)
+         values
+        <foreach collection="list" item="item" index="index" separator="," >  
+            (#{item.id}, #{item.forumId}, #{item.bnum}, #{item.cnum}, #{item.time})  
+        </foreach>  
+    </insert>
+
+</mapper>

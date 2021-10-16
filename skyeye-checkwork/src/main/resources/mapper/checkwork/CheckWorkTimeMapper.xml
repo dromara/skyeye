@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.CheckWorkTimeDao">
+
+    <select id="queryAllCheckWorkTimeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.title,
+			a.start_time startTime,
+			a.end_time endTime,
+            a.rest_start_time restStartTime,
+            a.rest_end_time restEndTime,
+			a.type,
+			a.state,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			b.user_name createName,
+			DATE_FORMAT(a.last_update_time, '%Y-%m-%d') lastUpdateTime,
+			c.user_name lastUpdateName,
+			COUNT(d.staff_id) userNum
+		FROM
+			check_work_time a
+			LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.last_update_id = c.user_id
+			LEFT JOIN sys_eve_user_staff_time d ON a.id = d.check_work_time_id
+		WHERE a.state != '3'
+        <if test="title != '' and title != null">
+            AND a.title LIKE '%${title}%'
+        </if>
+        GROUP BY a.id
+        ORDER BY a.create_time DESC
+    </select>
+
+    <insert id="insertCheckWorkTimeMation" parameterType="java.util.Map">
+        INSERT INTO check_work_time
+        (id, title, start_time, end_time, rest_start_time, rest_end_time, type, state, create_id, create_time,
+        	last_update_id, last_update_time)
+        VALUES
+        (#{id}, #{title}, #{startTime}, #{endTime}, #{restStartTime}, #{restEndTime}, #{type}, #{state}, #{createId}, #{createTime},
+        	#{createId}, #{createTime})
+    </insert>
+    
+    <select id="queryCheckWorkTimeMationToEdit" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.title,
+			a.start_time startTime,
+			a.end_time endTime,
+			a.rest_start_time restStartTime,
+			a.rest_end_time restEndTime,
+			a.type,
+			CASE a.type WHEN 1 THEN '单休' WHEN 2 THEN '双休' WHEN 3 THEN '单双休' WHEN 4 THEN '自定义' ELSE '' END typeName,
+			a.state
+		FROM
+			check_work_time a
+		WHERE a.id = #{id}
+    </select>
+    
+    <update id="editCheckWorkTimeMationById">
+        UPDATE check_work_time
+        <set>
+            title = #{title},
+            start_time = #{startTime},
+            end_time = #{endTime},
+			rest_start_time = #{restStartTime},
+			rest_end_time = #{restEndTime},
+            type = #{type},
+            last_update_id = #{lastUpdateId},
+            last_update_time = #{lastUpdateTime},
+            state = #{state},
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="editCheckWorkTimeStateMationById">
+        UPDATE check_work_time
+        <set>
+            state = #{state},
+        </set>
+        WHERE id = #{id}
+    </update>
+	
+	<select id="queryEnableCheckWorkTimeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.title,
+			a.start_time startTime,
+			a.end_time endTime,
+			a.rest_start_time restStartTime,
+			a.rest_end_time restEndTime,
+			CASE a.type WHEN 1 THEN '单休' WHEN 2 THEN '双休' WHEN 3 THEN '单双休' WHEN 4 THEN '自定义' ELSE '' END typeName
+		FROM
+			check_work_time a
+		WHERE a.state = '1'
+		<if test="title != '' and title != null">
+            AND a.title LIKE '%${title}%'
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <insert id="creatWeekDay" parameterType="java.util.Map">
+	     INSERT INTO check_work_time_week
+	     (time_id, week_number, `type`)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+		(#{item.timeId}, #{item.day}, #{item.type})  
+		</foreach>  
+	</insert>
+	
+	<delete id="deleteWeekDayByTimeId">
+		DELETE
+		FROM
+			check_work_time_week
+		WHERE
+			time_id = #{timeId}
+	</delete>
+	
+	<select id="queryWeekDayByTimeId" resultType="java.util.Map">
+        SELECT
+			a.week_number day,
+			a.`type`
+		FROM
+			check_work_time_week a
+		WHERE time_id = #{timeId}
+    </select>
+    
+    <select id="queryAllStaffCheckWorkTime" resultType="java.util.Map">
+		SELECT
+			b.id timeId,
+			b.title,
+			b.start_time startTime,
+			b.end_time endTime,
+			b.rest_start_time restStartTime,
+			b.rest_end_time restEndTime,
+			b.`type`
+		FROM
+			check_work_time b
+		WHERE 
+			b.state IN (1, 2)
+	</select>
+
+</mapper>

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ProWorkloadDao">
+
+    <select id="queryProWorkloadList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.title,
+			b.project_name proName,
+			a.project_number projectNumber,
+			a.all_work_load allWorkLoad,
+			a.state,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			c.user_name createName,
+			IFNULL(d.process_instance_id, '') processInstanceId,
+			IF((a.state = 0 OR a.state = 1 OR a.state = 12 OR a.state = 3), 1, -1) editRow
+		FROM
+			pro_workload a
+			LEFT JOIN pro_workload_process d ON a.id = d.workload_id,
+			pro_project b,
+			sys_eve_user_staff c
+		WHERE
+			a.create_id = #{userId}
+		AND	a.pro_id = b.id
+		AND c.user_id = #{userId}
+		<if test="proName != '' and proName != null">
+			AND b.project_name like '%${proName}%'
+		</if>
+		<if test="workloadName != '' and workloadName != null">
+			AND a.title like '%${workloadName}%'
+		</if>
+		<if test="state != '' and state != null">
+			AND a.state = #{state}
+		</if>
+		ORDER BY a.create_time DESC
+    </select>
+
+    <insert id="insertProWorkloadMation" parameterType="java.util.Map">
+		insert into pro_workload
+        (id, title, pro_id, project_number, `desc`, type, all_work_load, enclosure_info, state, create_id, create_time)
+		values(#{id}, #{title}, #{proId}, #{projectNumber}, #{desc}, #{type}, #{allWorkLoad}, #{enclosureInfo}, #{state}, #{createId}, #{createTime})
+    </insert>
+    
+    <insert id="insertProWorkloadRelatedTasksMation" parameterType="java.util.Map">
+        INSERT into pro_workload_related_tasks 
+		(id, workload_id, task_content, execute_people, mon_amount, mon_time, tues_amount, tues_time, wed_amount, wed_time, thur_amount, thur_time, fri_amount, fri_time, satu_amount, satu_time, sun_amount, sun_time, all_work_load)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id}, #{item.workloadId}, #{item.taskContent}, #{item.executePeople}, #{item.monAmount}, #{item.monTime}, #{item.tuesAmount}, #{item.tuesTime}, #{item.wedAmount}, #{item.wedTime}, #{item.thurAmount}, #{item.thurTime}, #{item.friAmount}, #{item.friTime}, #{item.satuAmount}, #{item.satuTime}, #{item.sunAmount}, #{item.sunTime}, #{item.allWorkLoad})
+		</foreach>
+    </insert>
+    
+    <select id="queryAllProWorkloadList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.title,
+			b.project_name projectName,
+			a.project_number projectNumber,
+			a.all_work_load allWorkLoad,
+			a.state,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			c.user_name createName,
+			IFNULL(d.process_instance_id, '') processInstanceId,
+			g.title taskType
+		FROM
+			pro_workload a
+			LEFT JOIN pro_workload_process d ON a.id = d.workload_id,
+			pro_project b,
+			sys_eve_user_staff c,
+			act_model g
+		WHERE
+			a.pro_id = b.id
+		AND c.user_id = a.create_id
+		AND g.page_url = '../../tpl/proworkload/proworkloadadd.html'
+		<if test="proName != '' and proName != null">
+			AND b.project_name like '%${proName}%'
+		</if>
+		<if test="workloadName != '' and workloadName != null">
+			AND a.title like '%${workloadName}%'
+		</if>
+		<if test="state != '' and state != null">
+			AND a.state = #{state}
+		</if>
+		ORDER BY a.create_time DESC
+    </select>
+
+	<select id="queryProWorkloadMationById" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			c.user_name userName,
+			CASE a.type WHEN '1' THEN '上一周' WHEN '2' THEN '本周' WHEN '3' THEN '下一周' END workLoadType,
+			b.project_name projectName,
+			a.project_number projectNumber,
+			a.all_work_load allworkload,
+			a.`desc` remark,
+		    a.state,
+		    d.process_instance_id processInstanceId,
+		    a.create_id createId,
+			a.enclosure_info enclosureInfo
+		FROM
+			pro_workload a
+			left join pro_workload_process d on a.id = d.workload_id,
+			pro_project b,
+			sys_eve_user_staff c
+		WHERE a.id = #{id}
+		AND a.pro_id = b.id
+		AND c.user_id = a.create_id
+	</select>
+	
+	<select id="queryProWorkloadRelatedTasksById" resultType="java.util.Map">
+		SELECT
+			b.task_name taskContent,
+			a.execute_people executePeople,
+			a.mon_amount monAmount,
+			a.tues_amount tuesAmount,
+			a.wed_amount wedAmount,
+			a.thur_amount thurAmount,
+			a.fri_amount friAmount,
+			a.satu_amount satuAmount,
+			a.sun_amount sunAmount,
+			a.all_work_load allWorkLoad,
+			a.mon_time monTime,
+			a.tues_time tuesTime,
+			a.wed_time wedTime,
+			a.thur_time thurTime,
+			a.fri_time friTime,
+			a.satu_time satuTime,
+			a.sun_time sunTime
+		FROM
+			pro_workload_related_tasks a,
+			pro_task b
+		WHERE
+			a.workload_id = #{workloadId}
+		AND a.task_content = b.id
+	</select>
+	
+	<update id="updateProWorkloadStateISInAudit">
+		UPDATE pro_workload
+		<set>
+			state = '1'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteProWorkloadProcessById">
+		DELETE
+		FROM
+			pro_workload_process
+		WHERE workload_id = #{workloadId}
+	</delete>
+	
+	<insert id="insertProWorkloadProcess" parameterType="java.util.Map">
+		insert into pro_workload_process
+        (id, process_instance_id, workload_id, state, type, sub_id, sub_time)
+		values(#{id}, #{processInId}, #{workloadId}, #{state}, #{type}, #{subId},  #{subTime})
+    </insert>
+    
+	<select id="queryWorkloadIdByProcessInstanceId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.workload_id workloadId
+		FROM
+			pro_workload_process a
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+		AND a.state = '0'
+	</select>
+	
+	<update id="editProWorkloadStateAndWorkloadById" parameterType="java.util.Map">
+		UPDATE pro_workload
+		<set>
+			state = #{state}
+		</set>
+		WHERE id = #{workloadId}
+	</update>
+	
+	<update id="editProWorkloadProcessStateById" parameterType="java.util.Map">
+		UPDATE pro_workload_process
+		<set>
+			state = #{processState}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryWorkloadTaskMationByWorkloadId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.task_content taskId,
+			a.all_work_load allWorkload
+		FROM
+			pro_workload_related_tasks a
+		WHERE
+			a.workload_id = #{workloadId}
+	</select>
+	
+	<update id="editProTaskByWorkloadId" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" open="" close="" separator=";">
+			UPDATE pro_task
+			<set>
+				actual_workload = actual_workload + #{item.allWorkload}
+			</set>
+			WHERE id = #{item.taskId}
+		</foreach> 
+	</update>
+	
+	<select id="queryProWorkloadId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.workload_id id
+		FROM
+			pro_workload_process a
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+	</select>
+	
+	<update id="editProWorkloadProcessToRevoke" parameterType="java.util.Map">
+		UPDATE pro_workload
+		<set>
+			state = '3'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteProWorkloadProcessToRevoke" parameterType="java.util.Map">
+		DELETE
+		FROM
+			pro_workload_process
+		WHERE
+			workload_id = #{id}
+		AND state = '0'
+	</delete>
+	
+	<select id="queryProWorkloadMationToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			c.user_name writePeople,
+			a.type,
+			a.pro_id proId,
+			a.project_number projectNumber,
+			a.all_work_load allworkload,
+			a.`desc`,
+			a.enclosure_info enclosureInfo,
+			a.state
+		FROM
+			pro_workload a,
+			sys_eve_user_staff c
+		WHERE
+			a.id = #{id}
+		AND c.user_id = a.create_id
+	</select>
+	
+	<select id="queryRelatedTasksById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.task_content taskContent,
+			a.execute_people executePeople,
+			a.mon_amount monAmount,
+			a.tues_amount tuesAmount,
+			a.wed_amount wedAmount,
+			a.thur_amount thurAmount,
+			a.fri_amount friAmount,
+			a.satu_amount satuAmount,
+			a.sun_amount sunAmount,
+			a.all_work_load allWorkLoad,
+			a.mon_time monTime,
+			a.tues_time tuesTime,
+			a.wed_time wedTime,
+			a.thur_time thurTime,
+			a.fri_time friTime,
+			a.satu_time satuTime,
+			a.sun_time sunTime
+		FROM
+			pro_workload_related_tasks a
+		WHERE
+			a.workload_id = #{id}
+	</select>
+	
+	<update id="editProWorkloadMation" parameterType="java.util.Map">
+		UPDATE pro_workload
+		<set>
+			title = #{title},
+			pro_id = #{proId},
+			project_number = #{projectNumber},
+			`desc` = #{desc},
+			type = #{type},
+			all_work_load = #{allWorkLoad},
+			enclosure_info = #{enclosureInfo}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteProWorkloadRelatedTasksById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			pro_workload_related_tasks
+		WHERE
+			workload_id = #{id}
+	</delete>
+	
+	<select id="queryProWorkloadMationForApprovalByIdInProcess" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			d.process_instance_id processInstanceId,
+			a.title,
+			c.user_name writePeople,
+			CASE a.type WHEN '1' THEN '上一周' WHEN '2' THEN '本周' WHEN '3' THEN '下一周' END workLoadType,
+			b.project_name payType,
+			a.project_number projectNumber,
+			a.all_work_load allworkload,
+			a.`desc` remark,
+			a.enclosure_info enclosureInfo
+		FROM
+			pro_workload a,
+			pro_project b,
+			sys_eve_user_staff c,
+			pro_workload_process d
+		WHERE
+			a.id = #{id}
+		AND a.pro_id = b.id
+		AND c.user_id = a.create_id
+		AND a.id = d.workload_id
+	</select>
+	
+	<delete id="deleteAllProWorkloadById" parameterType="java.util.Map">
+		DELETE a.*, b.*, c.*
+		FROM
+			pro_workload a 
+			LEFT JOIN pro_workload_process b ON a.id = b.workload_id
+		LEFT JOIN pro_workload_related_tasks c ON a.id = c.workload_id
+		WHERE
+			a.id = #{id}
+	</delete>
+	
+	<update id="updateProWorkloadToCancellation" parameterType="java.util.Map">
+		UPDATE pro_workload
+		<set>
+			state = '2'
+		</set>
+		WHERE id = #{id}
+	</update>
+ 
+</mapper>

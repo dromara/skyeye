@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.school.dao.MySchoolTaskDao">
+	
+	<select id="queryMyNowLeadClassList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`year` sessionYear,
+			a.class_name className,
+			a.limit_number limitNumber,
+			b.grade_name gradeName,
+			c.school_name schoolName,
+			d.`name` floorName,
+			COUNT(f.id) actualNumber
+		FROM
+			school_class_mation a
+			LEFT JOIN school_grade_mation b ON a.grade_id = b.id
+			LEFT JOIN school_mation c ON a.school_id = c.id
+			LEFT JOIN school_floor_mation d ON a.floor_id = d.id
+			LEFT JOIN school_student_mation f ON a.id = f.now_class_id AND f.state = '1'
+		WHERE
+			a.master_staff_id = #{staffId}
+			AND a.state = '1'
+			<if test="gradeId != '' and gradeId != null">
+				AND a.grade_id = #{gradeId}
+			</if>
+			<choose>
+				<!-- 查询的不是所有的数据 -->
+	    		<when test="schoolPowerId != 'all'.toString()">
+	    			AND a.school_id = #{schoolPowerId}
+	    		</when>
+	    		<!-- 查询的是所有的数据 -->
+	    		<when test="schoolPowerId == 'all'.toString()">
+	    			<if test="schoolId != '' and schoolId != null">
+						AND a.school_id = #{schoolId}
+					</if>
+	    		</when>
+			</choose>
+			GROUP BY a.id
+			ORDER BY a.`year` DESC
+	</select>
+	
+	<select id="queryMyWaitMarkingList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			ml.*
+		FROM 
+			(
+			<!-- 查询我创建的试卷 -->
+			SELECT
+				b.id answerId,
+				a.id surveyId,
+				a.survey_name surveyName,
+				a.session_year sessionYear,
+				c.student_name studentName,
+				c.student_no studentNo,
+				f.school_name schoolName,
+				d.grade_name gradeName,
+				DATE_FORMAT(b.bg_an_date,'%Y-%m-%d %H:%i') bgAnDate,
+				DATE_FORMAT(b.end_an_date,'%Y-%m-%d %H:%i') endAnDate,
+				b.total_time totalTime
+			FROM
+				exam_survey_directory a
+				LEFT JOIN school_grade_mation d ON a.grade_id = d.id,
+				exam_survey_answer b,
+				school_student_mation c,
+				school_mation f
+			WHERE
+				a.create_id = #{userId}
+			AND a.id = b.survey_id
+			AND b.state = '1'
+			AND b.create_id = c.id
+			AND c.school_id = f.id
+				<if test="surveyName != '' and surveyName != null">
+					AND a.survey_name LIKE '%${surveyName}%'
+				</if>
+				<if test="studentName != '' and studentName != null">
+					AND c.student_name LIKE '%${studentName}%'
+				</if>
+				<if test="studentNo != '' and studentNo != null">
+					AND c.student_no LIKE '%${studentNo}%'
+				</if>
+				<if test="gradeId != '' and gradeId != null">
+					AND a.grade_id = #{gradeId}
+				</if>
+				<if test="year != '' and year != null">
+					AND a.session_year = #{year}
+				</if>
+				<choose>
+					<!-- 查询的不是所有的数据 -->
+		    		<when test="schoolPowerId != 'all'.toString()">
+		    			AND a.school_id = #{schoolPowerId}
+		    		</when>
+		    		<!-- 查询的是所有的数据 -->
+		    		<when test="schoolPowerId == 'all'.toString()">
+		    			<if test="schoolId != '' and schoolId != null">
+							AND a.school_id = #{schoolId}
+						</if>
+		    		</when>
+				</choose>
+			UNION ALL
+			<!-- 查询我被授权批阅的试卷 -->
+			SELECT
+				b.id answerId,
+				a.id surveyId,
+				a.survey_name surveyName,
+				a.session_year sessionYear,
+				c.student_name studentName,
+				c.student_no studentNo,
+				f.school_name schoolName,
+				d.grade_name gradeName,
+				DATE_FORMAT(b.bg_an_date,'%Y-%m-%d %H:%i') bgAnDate,
+				DATE_FORMAT(b.end_an_date,'%Y-%m-%d %H:%i') endAnDate,
+				b.total_time totalTime
+			FROM
+				exam_survey_directory a
+				LEFT JOIN school_grade_mation d ON a.grade_id = d.id,
+				exam_survey_answer b,
+				school_student_mation c,
+				school_mation f,
+				exam_survey_mark_exam g
+			WHERE
+				g.user_id = #{userId}
+			AND a.id = g.survey_id
+			AND a.id = b.survey_id
+			AND b.state = '1'
+			AND b.create_id = c.id
+			AND c.school_id = f.id
+				<if test="surveyName != '' and surveyName != null">
+					AND a.survey_name LIKE '%${surveyName}%'
+				</if>
+				<if test="studentName != '' and studentName != null">
+					AND c.student_name LIKE '%${studentName}%'
+				</if>
+				<if test="studentNo != '' and studentNo != null">
+					AND c.student_no LIKE '%${studentNo}%'
+				</if>
+				<if test="gradeId != '' and gradeId != null">
+					AND a.grade_id = #{gradeId}
+				</if>
+				<if test="year != '' and year != null">
+					AND a.session_year = #{year}
+				</if>
+				<choose>
+					<!-- 查询的不是所有的数据 -->
+		    		<when test="schoolPowerId != 'all'.toString()">
+		    			AND a.school_id = #{schoolPowerId}
+		    		</when>
+		    		<!-- 查询的是所有的数据 -->
+		    		<when test="schoolPowerId == 'all'.toString()">
+		    			<if test="schoolId != '' and schoolId != null">
+							AND a.school_id = #{schoolId}
+						</if>
+		    		</when>
+				</choose>
+			) ml
+		ORDER BY ml.endAnDate ASC
+	</select>
+	
+	<select id="queryMyEndMarkingList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id answerId,
+			a.mark_fraction markFraction,
+			DATE_FORMAT(a.bg_an_date,'%Y-%m-%d %H:%i') bgAnDate,
+			DATE_FORMAT(a.end_an_date,'%Y-%m-%d %H:%i') endAnDate,
+			a.total_time totalTime,
+			DATE_FORMAT(a.mark_start_time,'%Y-%m-%d %H:%i') markStartTime,
+			DATE_FORMAT(a.mark_end_time,'%Y-%m-%d %H:%i') markEndTime,
+			d.student_name studentName,
+			d.student_no studentNo,
+			e.school_name schoolName,
+			c.grade_name gradeName,
+			b.id surveyId,
+			b.session_year sessionYear,
+			b.survey_name surveyName
+		FROM
+			exam_survey_answer a,
+			exam_survey_directory b,
+			school_grade_mation c,
+			school_student_mation d,
+			school_mation e
+		WHERE
+			a.mark_people = #{userId}
+		AND a.state = '2'
+		AND a.survey_id = b.id
+		AND b.grade_id = c.id
+		AND a.create_id = d.id
+		AND b.school_id = e.id
+			<if test="surveyName != '' and surveyName != null">
+				AND b.survey_name LIKE '%${surveyName}%'
+			</if>
+			<if test="studentName != '' and studentName != null">
+				AND d.student_name LIKE '%${studentName}%'
+			</if>
+			<if test="studentNo != '' and studentNo != null">
+				AND d.student_no LIKE '%${studentNo}%'
+			</if>
+			<if test="gradeId != '' and gradeId != null">
+				AND b.grade_id = #{gradeId}
+			</if>
+			<if test="year != '' and year != null">
+				AND b.session_year = #{year}
+			</if>
+			<choose>
+				<!-- 查询的不是所有的数据 -->
+	    		<when test="schoolPowerId != 'all'.toString()">
+	    			AND b.school_id = #{schoolPowerId}
+	    		</when>
+	    		<!-- 查询的是所有的数据 -->
+	    		<when test="schoolPowerId == 'all'.toString()">
+	    			<if test="schoolId != '' and schoolId != null">
+						AND b.school_id = #{schoolId}
+					</if>
+	    		</when>
+			</choose>
+		ORDER BY a.mark_end_time DESC
+	</select>
+	
+</mapper>

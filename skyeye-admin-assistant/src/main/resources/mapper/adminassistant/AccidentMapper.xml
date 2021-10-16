@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AccidentDao">
+
+	<select id="selectAllAccidentMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.accident_title accidentTitle,
+			b.license_plate licensePlate,
+			a.driver driver,
+			DATE_FORMAT(CONVERT (a.accident_time, CHAR),'%Y-%m-%d') accidentTime,
+			a.accident_area accidentArea
+		FROM
+			vehicle_accident a
+			LEFT JOIN vehicle_mation b ON a.vehicle_id = b.id
+			LEFT JOIN sys_eve_user_staff c ON c.user_id = #{userId}
+		WHERE
+		    b.state != 4
+		    AND b.vehicle_company = c.company_id
+			<if test="accidentTitle != '' and accidentTitle != null">
+				AND a.accident_title LIKE '%${accidentTitle}%'
+			</if>
+			<if test="accidentPlate != '' and accidentPlate != null">
+				AND a.vehicle_id = #{accidentPlate}
+			</if>
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<insert id="insertAccidentMation" parameterType="java.util.Map">
+	    INSERT into vehicle_accident 
+	    (id, accident_title, vehicle_id, driver, accident_time, accident_area, accident_detail, confirmation_responsibility, manufacturer, repair_start_time, repair_end_time, repair_price, repair_content, loss_fee_price, claims_fee_price, driver_bear_price, enclosure_info, create_id, create_time)
+	    VALUES(#{id}, #{accidentTitle}, #{vehicleId}, #{driver}, #{accidentTime}, #{accidentArea}, #{accidentDetail}, #{confirmationResponsibility}, #{manufacturer}, #{repairStartTime}, #{repairEndTime}, #{repairPrice}, #{repairContent}, #{lossFeePrice}, #{claimsFeePrice}, #{driverBearPrice}, #{enclosureInfo}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteAccidentById" parameterType="java.lang.String">
+		DELETE 
+		FROM 
+			vehicle_accident
+		where 
+			id = #{id}
+	</delete>
+	
+	<select id="queryAccidentMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.accident_title accidentTitle,
+			a.driver driver,
+			a.accident_area accidentArea,
+			a.accident_detail accidentDetail,
+			a.confirmation_responsibility confirmationResponsibility,
+			a.manufacturer manufacturer,
+			a.repair_price repairPrice,
+			a.repair_content repairContent,
+			a.loss_fee_price lossFeePrice,
+			a.claims_fee_price claimsFeePrice,
+			a.driver_bear_price driverBearPrice,
+			DATE_FORMAT(CONVERT (a.accident_time, CHAR),'%Y-%m-%d') accidentTime,
+            CONCAT(DATE_FORMAT(CONVERT (a.repair_start_time, CHAR),'%Y-%m-%d'),' - ',DATE_FORMAT(CONVERT (a.repair_end_time, CHAR),'%Y-%m-%d')) repairTime,
+			IFNULL(a.enclosure_info, '') enclosureInfo,
+			b.license_plate licensePlate
+		FROM
+			vehicle_accident a
+			LEFT JOIN vehicle_mation b ON a.vehicle_id = b.id
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editAccidentMationById" parameterType="java.util.Map">
+		UPDATE vehicle_accident
+		<set>
+			<if test="driver != '' and driver != null">
+				driver = #{driver},
+			</if>
+			<if test="accidentArea != '' and accidentArea != null">
+				accident_area = #{accidentArea},
+			</if>
+			<if test="accidentTime != '' and accidentTime != null">
+				accident_time = #{accidentTime},
+			</if>
+			accident_detail = #{accidentDetail},
+			confirmation_responsibility = #{confirmationResponsibility},
+			manufacturer = #{manufacturer},
+			repair_price = #{repairPrice},
+			repair_content = #{repairContent},
+			loss_fee_price = #{lossFeePrice},
+			claims_fee_price = #{claimsFeePrice},
+			driver_bear_price = #{driverBearPrice},
+			repair_start_time = #{repairStartTime},
+			repair_end_time = #{repairEndTime},
+			enclosure_info = #{enclosureInfo}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="selectAccidentDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.accident_title accidentTitle,
+			a.driver driver,
+			a.accident_area accidentArea,
+			a.accident_detail accidentDetail,
+			a.confirmation_responsibility confirmationResponsibility,
+			a.manufacturer manufacturer,
+			a.repair_price repairPrice,
+			a.repair_content repairContent,
+			a.loss_fee_price lossFeePrice,
+			a.claims_fee_price claimsFeePrice,
+			a.driver_bear_price driverBearPrice,
+			DATE_FORMAT(CONVERT (a.accident_time, CHAR),'%Y-%m-%d') accidentTime,
+            CONCAT(DATE_FORMAT(CONVERT (a.repair_start_time, CHAR),'%Y-%m-%d'),' - ',DATE_FORMAT(CONVERT (a.repair_end_time, CHAR),'%Y-%m-%d')) repairTime,
+			IFNULL(a.enclosure_info, '') enclosureInfo,
+			c.license_plate licensePlate,
+			b.user_name userName,
+			CONVERT (a.create_time, CHAR) createTime
+		FROM
+			vehicle_accident a
+		LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+		LEFT JOIN vehicle_mation c ON a.vehicle_id = c.id
+		WHERE a.id = #{id}
+	</select>
+
+</mapper>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ProCostExpenseDao">
+
+    <select id="queryProCostExpenseList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			c.project_name projectName,
+			d.user_name userName,
+			IFNULL(b.process_instance_id, '') processInstanceId,
+			a.state,
+			IF((a.state = 0 OR a.state = 1 OR a.state = 12 OR a.state = 3), 1, -1) editRow,
+			DATE_FORMAT(a.reimbursement_time, '%Y-%m-%d') reimbursementTime,
+			FORMAT(a.all_price, 2) allPrice,
+			g.title taskTpye
+		FROM
+			pro_cost_expense a
+			LEFT JOIN pro_cost_expense_process b ON a.id = b.expense_id
+			LEFT JOIN act_model g ON g.page_url = '../../tpl/procostexpense/procostexpenseadd.html',
+			pro_project c,
+			sys_eve_user_staff d
+		WHERE a.pro_id = c.id
+		AND a.create_id = d.user_id
+		<if test="state != '' and state != null">
+			AND a.state = #{state}
+		</if>
+		<if test="title != '' and title != null">
+			AND a.title like '%${title}%'
+		</if>
+		<if test="projectName != '' and projectName != null">
+			AND c.project_name like '%${projectName}%'
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<insert id="insertProCostExpenseMation" parameterType="java.util.Map">
+		insert into pro_cost_expense
+        (id, pro_id, department_id, reimbursement_time, all_price, title, enclosure_info, state, create_id, create_time)
+		values(#{id}, #{proId}, #{departmentId}, #{reimbursementTime}, #{allPrice}, #{title}, #{enclosureInfo}, #{state}, #{createId},  #{createTime})
+    </insert>
+    
+    <insert id="insertProCostExpensePurposeMation" parameterType="java.util.Map">
+        INSERT into pro_cost_expense_purpose
+		(id, expense_id, expenditure_type_id, purpose_content, price, oppos_unit, experienced_person)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id}, #{item.expenseId}, #{item.expenditureTypeId}, #{item.purposeContent}, #{item.price}, #{item.opposUnit}, #{item.experiencedPerson})
+		</foreach>
+    </insert>
+    
+    <select id="queryProCostExpenseMationById" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			b.project_name projectName,
+			c.department_name departmentName,
+		    a.state,
+			DATE_FORMAT(a.reimbursement_time, '%Y-%m-%d') reimbursementTime,
+			FORMAT(a.all_price, 2) allPrice,
+			IFNULL(a.enclosure_info, '') enclosureInfo,
+			d.user_name userName,
+		    a.create_id createId,
+			IFNULL(e.process_instance_id, '') processInstanceId
+		FROM
+			pro_cost_expense a
+		    LEFT JOIN pro_cost_expense_process e ON a.id = e.expense_id,
+			pro_project b,
+			sys_eve_user_staff d,
+			company_department c
+		WHERE
+			a.id = #{id}
+		AND a.pro_id = b.id
+		AND a.create_id = d.user_id
+		AND a.department_id = c.id
+	</select>
+	
+	<select id="queryProCostExpensePurpose" resultType="java.util.Map">
+		SELECT
+			a.id,
+			b.`name` expenseTypeId,
+			a.purpose_content purposeContent,
+			FORMAT(a.price, 2) price,
+			a.oppos_unit opposUnit,
+			a.experienced_person experiencedPerson			
+		FROM
+			pro_cost_expense_purpose a,
+			pro_cost_expense_type b
+		WHERE
+			a.expense_id = #{expenseId}
+		AND a.expenditure_type_id = b.id
+	</select>
+	
+	<select id="queryProCostExpenseMationToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			DATE_FORMAT(a.reimbursement_time, '%Y-%m-%d') reimbursementTime,
+			a.pro_id proId,
+			a.department_id departmentId,
+			a.enclosure_info enclosureInfo,
+			a.state,
+			a.all_price allPrice,
+			b.user_name userName
+		FROM
+			pro_cost_expense a,
+			sys_eve_user_staff b
+		WHERE
+			a.id = #{id}
+		AND a.create_id = b.user_id
+	</select>
+	
+	<select id="queryProCostExpensePurposeToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.expenditure_type_id expenditureTypeId,
+			a.purpose_content purposeContent,
+			a.price,
+			a.oppos_unit opposUnit,
+			a.experienced_person experiencedPerson			
+		FROM
+			pro_cost_expense_purpose a
+		WHERE
+			a.expense_id = #{id}
+	</select>
+	
+	<update id="editProCostExpenseMation" parameterType="java.util.Map">
+		UPDATE pro_cost_expense
+		<set>
+			pro_id = #{proId},
+			department_id = #{departmentId},
+			title = #{title},
+			reimbursement_time = #{reimbursementTime},
+			all_price = #{allPrice},
+			enclosure_info = #{enclosureInfo}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteProCostExpensePurposeById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			pro_cost_expense_purpose
+		WHERE
+			expense_id = #{id}
+	</delete>
+	
+	<update id="updateProCostExpenseStateISInAudit">
+		UPDATE pro_cost_expense
+		<set>
+			state = '1'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteProCostExpenseProcessById">
+		DELETE
+		FROM
+			pro_cost_expense_process
+		WHERE
+			expense_id = #{id}
+	</delete>
+	
+	<insert id="insertProCostExpenseProcess" parameterType="java.util.Map">
+		insert into pro_cost_expense_process
+        (id, process_instance_id, expense_id, state, type, sub_id, sub_time)
+		values(#{id}, #{processInId}, #{expenseId}, #{state}, #{type}, #{subId},  #{subTime})
+    </insert>
+    
+    <select id="queryExpenseIdByProcessInstanceId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.expense_id expenseId
+		FROM
+			pro_cost_expense_process a
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+		AND a.state = '0'
+	</select>
+	
+	<update id="editProCostExpenseStateById" parameterType="java.util.Map">
+		UPDATE pro_cost_expense
+		<set>
+			state = #{state}
+		</set>
+		WHERE id = #{expenseId}
+	</update>
+	
+	<update id="editProCostExpenseProcessStateById" parameterType="java.util.Map">
+		UPDATE pro_cost_expense_process
+		<set>
+			state = #{processState}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryProCostExpenseId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.expense_id id
+		FROM
+			pro_cost_expense_process a
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+	</select>
+	
+	<update id="editProCostExpenseProcessToRevoke" parameterType="java.util.Map">
+		UPDATE pro_cost_expense
+		<set>
+			state = '3'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteProCostExpenseProcessToRevoke" parameterType="java.util.Map">
+		DELETE
+		FROM
+			pro_cost_expense_process
+		WHERE
+			expense_id = #{id}
+		AND state = '0'
+	</delete>
+	
+	<delete id="deleteProCostExpenseMationById" parameterType="java.util.Map">
+		DELETE a.*, b.*, c.*
+		FROM
+			pro_cost_expense a
+			LEFT JOIN pro_cost_expense_process b ON a.id = b.expense_id
+			LEFT JOIN pro_cost_expense_purpose c ON a.id = c.expense_id
+		WHERE
+			a.id = #{id}
+	</delete>
+	
+	<update id="updateProCostExpenseToCancellation" parameterType="java.util.Map">
+		UPDATE pro_cost_expense
+		<set>
+			state = '2'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

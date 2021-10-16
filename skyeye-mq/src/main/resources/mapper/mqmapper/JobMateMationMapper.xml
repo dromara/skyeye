@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.JobMateMationDao">
+	
+	<select id="queryJobMateMationByBigTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.job_id jobId,
+			a.title,
+			a.job_type jobType,
+			a.request_body requestBody,
+			a.response_body responseBody,
+			a.`status`,
+			b.user_name userName,
+			CONVERT (a.create_time, CHAR) createTime,
+			CONVERT (a.complate_time, CHAR) complateTime
+		FROM
+			job_mate_mation a
+			LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+		WHERE a.big_type = #{bigType}
+		AND a.type = '1'
+		AND a.create_id = #{userId}
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<insert id="insertJobMation" useGeneratedKeys="true" keyProperty="jobId" parameterType="java.util.Map">
+        INSERT INTO job_mate_mation
+        (title, job_type, big_type, type, request_body, `status`, parent_id, create_id, create_ip, create_time)
+        VALUES 
+        (#{title}, #{jobType}, #{bigType}, #{type}, #{requestBody}, #{status}, #{parentId}, #{createId}, #{createIp}, #{createTime})
+    </insert>
+    
+    <select id="queryJobMationByJobId" resultType="java.util.Map">
+		SELECT
+			a.job_id jobId,
+			a.title,
+			a.job_type jobType,
+			a.type,
+			a.request_body requestBody,
+			a.response_body responseBody,
+			a.parent_id parentId,
+			a.`status`,
+			a.create_id createId
+		FROM
+			job_mate_mation a
+		WHERE a.job_id = #{jobId}
+	</select>
+	
+	<update id="editJobMationByJobId">
+        UPDATE job_mate_mation
+        <set>
+            `status` = #{status},
+            response_body = #{responseBody},
+            complate_time = #{complateTime},
+        </set>
+        WHERE job_id = #{jobId}
+    </update>
+    
+    <select id="queryNoComChildJobMationByJobId" resultType="java.util.Map">
+		SELECT
+			a.job_id jobId,
+			a.title,
+			a.job_type jobType,
+			a.type,
+			a.request_body requestBody,
+			a.response_body responseBody,
+			a.parent_id parentId
+			a.`status`
+		FROM
+			job_mate_mation a
+		WHERE a.parent_id = #{jobId}
+		AND a.type = '2'
+		AND a.status IN(1, 2)
+	</select>
+	
+	<select id="queryFailChildJobMationByJobId" resultType="java.util.Map">
+		SELECT
+			a.job_id jobId,
+			a.title,
+			a.job_type jobType,
+			a.type,
+			a.request_body requestBody,
+			a.response_body responseBody,
+			a.parent_id parentId
+			a.`status`
+		FROM
+			job_mate_mation a
+		WHERE a.parent_id = #{jobId}
+		AND a.type = '2'
+		AND a.status = '3'
+	</select>
+	
+	<update id="editJobRequestBodyMation" parameterType="java.util.Map">
+        UPDATE job_mate_mation
+        <set>
+            request_body = #{requestBody},
+        </set>
+        WHERE job_id = #{jobId}
+    </update>
+	
+</mapper>

@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="EHR模块">
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 员工基础信息相关的数据字典管理开始 -->
+	<url id="sysstaffdatadictionary001" path="/post/SysStaffDataDictionaryController/querySysStaffDataDictionaryList" val="查询员工基础信息相关的数据字典列表" allUse="1" groupName="员工基础信息相关的数据字典">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="员工基础信息相关的数据字典名称"></property>
+		<property id="state" name="state" ref="num" var="员工基础信息相关的数据字典状态"></property>
+		<property id="typeId" name="typeId" ref="" var="数据字典类型"></property>
+	</url>
+	<url id="sysstaffdatadictionary002" path="/post/SysStaffDataDictionaryController/insertSysStaffDataDictionaryMation" val="新增员工基础信息相关的数据字典" allUse="1" groupName="员工基础信息相关的数据字典">
+		<property id="typeName" name="typeName" ref="required" var="员工基础信息相关的数据字典名称"></property>
+		<property id="typeId" name="typeId" ref="required" var="数据字典类型"></property>
+	</url>
+	<url id="sysstaffdatadictionary003" path="/post/SysStaffDataDictionaryController/querySysStaffDataDictionaryMationToEditById" val="修改员工基础信息相关的数据字典时数据回显" allUse="2" groupName="员工基础信息相关的数据字典">
+		<property id="rowId" name="id" ref="required" var="员工基础信息相关的数据字典id"></property>
+	</url>
+	<url id="sysstaffdatadictionary004" path="/post/SysStaffDataDictionaryController/editSysStaffDataDictionaryMationById" val="修改员工基础信息相关的数据字典" allUse="1" groupName="员工基础信息相关的数据字典">
+		<property id="typeName" name="typeName" ref="required" var="员工基础信息相关的数据字典名称"></property>
+		<property id="rowId" name="id" ref="required" var="员工基础信息相关的数据字典id"></property>
+	</url>
+	<url id="sysstaffdatadictionary005" path="/post/SysStaffDataDictionaryController/downSysStaffDataDictionaryMationById" val="禁用员工基础信息相关的数据字典" allUse="1" groupName="员工基础信息相关的数据字典">
+		<property id="rowId" name="id" ref="required" var="员工基础信息相关的数据字典id"></property>
+	</url>
+	<url id="sysstaffdatadictionary006" path="/post/SysStaffDataDictionaryController/upSysStaffDataDictionaryMationById" val="启用员工基础信息相关的数据字典" allUse="1" groupName="员工基础信息相关的数据字典">
+		<property id="rowId" name="id" ref="required" var="员工基础信息相关的数据字典id"></property>
+	</url>
+	<url id="sysstaffdatadictionary007" path="/post/SysStaffDataDictionaryController/deleteSysStaffDataDictionaryMationById" val="删除员工基础信息相关的数据字典" allUse="1" groupName="员工基础信息相关的数据字典">
+		<property id="rowId" name="id" ref="required" var="员工基础信息相关的数据字典id"></property>
+	</url>
+	<url id="sysstaffdatadictionary008" path="/post/SysStaffDataDictionaryController/querySysStaffDataDictionaryUpMation" val="获取所有启用员工基础信息相关的数据字典" allUse="2" groupName="员工基础信息相关的数据字典">
+		<property id="typeId" name="typeId" ref="required" var="数据字典类型"></property>
+	</url>
+	<!-- 员工基础信息相关的数据字典管理结束 -->
+	
+	<!-- 语种等级管理开始 -->
+	<url id="sysstafflanguagelevel001" path="/post/SysStaffLanguageLevelController/querySysStaffLanguageLevelList" val="查询语种等级列表" allUse="1" groupName="语种等级">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="语种等级名称"></property>
+		<property id="state" name="state" ref="num" var="语种等级状态"></property>
+		<property id="typeId" name="typeId" ref="" var="数据字典类型"></property>
+	</url>
+	<url id="sysstafflanguagelevel002" path="/post/SysStaffLanguageLevelController/insertSysStaffLanguageLevelMation" val="新增语种等级" allUse="1" groupName="语种等级">
+		<property id="typeName" name="typeName" ref="required" var="语种等级名称"></property>
+		<property id="typeId" name="typeId" ref="required" var="语种类型"></property>
+	</url>
+	<url id="sysstafflanguagelevel003" path="/post/SysStaffLanguageLevelController/querySysStaffLanguageLevelMationToEditById" val="修改语种等级时数据回显" allUse="2" groupName="语种等级">
+		<property id="rowId" name="id" ref="required" var="语种等级id"></property>
+	</url>
+	<url id="sysstafflanguagelevel004" path="/post/SysStaffLanguageLevelController/editSysStaffLanguageLevelMationById" val="修改语种等级" allUse="1" groupName="语种等级">
+		<property id="typeName" name="typeName" ref="required" var="语种等级名称"></property>
+		<property id="rowId" name="id" ref="required" var="语种等级id"></property>
+	</url>
+	<url id="sysstafflanguagelevel005" path="/post/SysStaffLanguageLevelController/downSysStaffLanguageLevelMationById" val="禁用语种等级" allUse="1" groupName="语种等级">
+		<property id="rowId" name="id" ref="required" var="语种等级id"></property>
+	</url>
+	<url id="sysstafflanguagelevel006" path="/post/SysStaffLanguageLevelController/upSysStaffLanguageLevelMationById" val="启用语种等级" allUse="1" groupName="语种等级">
+		<property id="rowId" name="id" ref="required" var="语种等级id"></property>
+	</url>
+	<url id="sysstafflanguagelevel007" path="/post/SysStaffLanguageLevelController/deleteSysStaffLanguageLevelMationById" val="删除语种等级" allUse="1" groupName="语种等级">
+		<property id="rowId" name="id" ref="required" var="语种等级id"></property>
+	</url>
+	<url id="sysstafflanguagelevel008" path="/post/SysStaffLanguageLevelController/querySysStaffLanguageLevelUpMation" val="获取所有启用语种等级" allUse="2" groupName="语种等级">
+		<property id="typeId" name="typeId" ref="required" var="语种类型"></property>
+	</url>
+	<!-- 语种等级管理结束 -->
+	
+	<!-- 员工档案管理开始 -->
+	<url id="sysstaffarchives001" path="/post/SysStaffArchivesController/queryAllSysStaffArchivesList" val="查询所有档案列表" allUse="1" groupName="员工档案">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="archivesNumber" name="archivesNumber" ref="" var="档案编号"></property>
+		<property id="archivesState" name="archivesState" ref="" var="档案状态"></property>
+		<property id="state" name="state" ref="" var="员工状态"></property>
+	</url>
+	<url id="sysstaffarchives002" path="/post/SysStaffArchivesController/querySysLeaveStaffArchivesList" val="离职员工在档列表" allUse="1" groupName="员工档案">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="archivesNumber" name="archivesNumber" ref="" var="档案编号"></property>
+		<property id="archivesState" name="archivesState" ref="" var="档案状态"></property>
+	</url>
+	<url id="sysstaffarchives003" path="/post/SysStaffArchivesController/querySysStaffNotInArchivesList" val="员工不在档列表" allUse="1" groupName="员工档案">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="archivesNumber" name="archivesNumber" ref="" var="档案编号"></property>
+		<property id="archivesState" name="archivesState" ref="" var="档案状态"></property>
+	</url>
+	<url id="sysstaffarchives004" path="/post/SysStaffArchivesController/querySysStaffNoArchivesList" val="员工无在档列表" allUse="1" groupName="员工档案">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+	</url>
+	<url id="sysstaffarchives005" path="/post/SysStaffArchivesController/insertSysStaffArchivesMation" val="员工档案信息录入" allUse="1" groupName="员工档案">
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="archivesNumber" name="archivesNumber" ref="required" var="档案编号"></property>
+		<property id="managementUnit" name="managementUnit" ref="" var="管理单位"></property>
+		<property id="custodyPlace" name="custodyPlace" ref="" var="保管地"></property>
+		<property id="archivesCenter" name="archivesCenter" ref="" var="档案室"></property>
+		<property id="archivesTime" name="archivesTime" ref="required" var="入档时间"></property>
+		<property id="educationId" name="educationId" ref="" var="档案上的学历"></property>
+		<property id="whetherArchives" name="whetherArchives" ref="required,num" var="是否在档1.在档  2.不在档"></property>
+		<property id="archivesState" name="archivesState" ref="required,num" var="档案状态1.有效  2.失效"></property>
+		<property id="remark" name="remark" ref="" var="备注"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffarchives006" path="/post/SysStaffArchivesController/querySysStaffArchivesMationToEdit" val="编辑员工档案信息时回显" allUse="2" method="GET" groupName="员工档案">
+		<property id="rowId" name="id" ref="required" var="档案id"></property>
+	</url>
+	<url id="sysstaffarchives007" path="/post/SysStaffArchivesController/editSysStaffArchivesMationById" val="编辑员工档案信息" allUse="1" groupName="员工档案">
+		<property id="rowId" name="id" ref="required" var="档案id"></property>
+		<property id="archivesNumber" name="archivesNumber" ref="required" var="档案编号"></property>
+		<property id="managementUnit" name="managementUnit" ref="" var="管理单位"></property>
+		<property id="custodyPlace" name="custodyPlace" ref="" var="保管地"></property>
+		<property id="archivesCenter" name="archivesCenter" ref="" var="档案室"></property>
+		<property id="archivesTime" name="archivesTime" ref="required" var="入档时间"></property>
+		<property id="educationId" name="educationId" ref="" var="档案上的学历"></property>
+		<property id="whetherArchives" name="whetherArchives" ref="required,num" var="是否在档1.在档  2.不在档"></property>
+		<property id="archivesState" name="archivesState" ref="required,num" var="档案状态1.有效  2.失效"></property>
+		<property id="remark" name="remark" ref="" var="备注"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<!-- 员工档案管理开始 -->
+	
+	<!-- 员工证书管理开始 -->
+	<url id="sysstaffcertificate001" path="/post/SysStaffCertificateController/queryAllSysStaffCertificateList" val="查询所有证书列表" allUse="1" groupName="员工证书">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="certificateNumber" name="certificateNumber" ref="" var="证书编号"></property>
+		<property id="certificateName" name="certificateName" ref="" var="证书名称"></property>
+		<property id="state" name="state" ref="" var="员工状态"></property>
+	</url>
+	<url id="sysstaffcertificate002" path="/post/SysStaffCertificateController/insertSysStaffCertificateMation" val="员工证书信息录入" allUse="1" groupName="员工证书">
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="certificateNumber" name="certificateNumber" ref="required" var="证书编号"></property>
+		<property id="certificateName" name="certificateName" ref="required" var="证书名称"></property>
+		<property id="issueOrgan" name="issueOrgan" ref="required" var="签发机构"></property>
+		<property id="validityType" name="validityType" ref="required,num" var="有效期类型  1.永久有效  2.时间段有效"></property>
+		<property id="issueTime" name="issueTime" ref="required" var="签发时间"></property>
+		<property id="validityTime" name="validityTime" ref="" var="证书有效期到..."></property>
+		<property id="typeId" name="typeId" ref="required" var="证书类型id"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffcertificate003" path="/post/SysStaffCertificateController/querySysStaffCertificateMationToEdit" val="编辑员工证书信息时回显" allUse="2" method="GET" groupName="员工证书">
+		<property id="rowId" name="id" ref="required" var="证书id"></property>
+	</url>
+	<url id="sysstaffcertificate004" path="/post/SysStaffCertificateController/editSysStaffCertificateMationById" val="编辑员工证书信息" allUse="1" groupName="员工证书">
+		<property id="rowId" name="id" ref="required" var="证书id"></property>
+		<property id="certificateNumber" name="certificateNumber" ref="required" var="证书编号"></property>
+		<property id="certificateName" name="certificateName" ref="required" var="证书名称"></property>
+		<property id="issueOrgan" name="issueOrgan" ref="required" var="签发机构"></property>
+		<property id="validityType" name="validityType" ref="required,num" var="有效期类型  1.永久有效  2.时间段有效"></property>
+		<property id="issueTime" name="issueTime" ref="required" var="签发时间"></property>
+		<property id="validityTime" name="validityTime" ref="" var="证书有效期到..."></property>
+		<property id="typeId" name="typeId" ref="required" var="证书类型id"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffcertificate005" path="/post/SysStaffCertificateController/deleteSysStaffCertificateMationById" val="删除员工证书信息" allUse="1" method="DELETE" groupName="员工证书">
+		<property id="rowId" name="id" ref="required" var="证书id"></property>
+	</url>
+	<url id="sysstaffcertificate006" path="/post/SysStaffCertificateController/queryPointStaffSysStaffCertificateList" val="查询指定员工的证书列表" allUse="1" groupName="员工证书">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+	</url>
+	<!-- 员工证书管理开始 -->
+	
+	<!-- 员工教育背景管理开始 -->
+	<url id="sysstaffeducation001" path="/post/SysStaffEducationController/queryAllSysStaffEducationList" val="查询所有教育背景列表" allUse="1" groupName="员工教育背景">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="graductionSchool" name="graductionSchool" ref="" var="毕业学校"></property>
+		<property id="state" name="state" ref="" var="员工状态"></property>
+	</url>
+	<url id="sysstaffeducation002" path="/post/SysStaffEducationController/insertSysStaffEducationMation" val="员工教育背景信息录入" allUse="1" groupName="员工教育背景">
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="educationId" name="educationId" ref="required" var="学历类型"></property>
+		<property id="admissionTime" name="admissionTime" ref="required" var="入学时间"></property>
+		<property id="graduationTime" name="graduationTime" ref="required" var="毕业时间"></property>
+		<property id="graductionSchool" name="graductionSchool" ref="required" var="毕业学校"></property>
+		<property id="major" name="major" ref="" var="专业"></property>
+		<property id="learningModalityId" name="learningModalityId" ref="required" var="学习形式"></property>
+		<property id="schoolNature" name="schoolNature" ref="" var="学校性质"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffeducation003" path="/post/SysStaffEducationController/querySysStaffEducationMationToEdit" val="编辑员工教育背景信息时回显" allUse="2" method="GET" groupName="员工教育背景">
+		<property id="rowId" name="id" ref="required" var="教育背景id"></property>
+	</url>
+	<url id="sysstaffeducation004" path="/post/SysStaffEducationController/editSysStaffEducationMationById" val="编辑员工教育背景信息" allUse="1" groupName="员工教育背景">
+		<property id="rowId" name="id" ref="required" var="教育背景id"></property>
+		<property id="educationId" name="educationId" ref="required" var="学历类型"></property>
+		<property id="admissionTime" name="admissionTime" ref="required" var="入学时间"></property>
+		<property id="graduationTime" name="graduationTime" ref="required" var="毕业时间"></property>
+		<property id="graductionSchool" name="graductionSchool" ref="required" var="毕业学校"></property>
+		<property id="major" name="major" ref="" var="专业"></property>
+		<property id="learningModalityId" name="learningModalityId" ref="required" var="学习形式"></property>
+		<property id="schoolNature" name="schoolNature" ref="" var="学校性质"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffeducation005" path="/post/SysStaffEducationController/deleteSysStaffEducationMationById" val="删除员工教育背景信息" allUse="1" method="DELETE" groupName="员工教育背景">
+		<property id="rowId" name="id" ref="required" var="教育背景id"></property>
+	</url>
+	<url id="sysstaffeducation006" path="/post/SysStaffEducationController/queryPointStaffSysStaffEducationList" val="查询指定员工的教育背景列表" allUse="1" groupName="员工教育背景">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+	</url>
+	<!-- 员工教育背景管理开始 -->
+	
+	<!-- 员工奖惩信息管理开始 -->
+	<url id="sysstaffrewardpunish001" path="/post/SysStaffRewardPunishController/queryAllSysStaffRewardPunishList" val="查询所有奖惩信息列表" allUse="1" groupName="员工奖惩信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="name" name="name" ref="" var="名称"></property>
+		<property id="state" name="state" ref="" var="员工状态"></property>
+	</url>
+	<url id="sysstaffrewardpunish002" path="/post/SysStaffRewardPunishController/insertSysStaffRewardPunishMation" val="员工奖惩信息录入" allUse="1" groupName="员工奖惩信息">
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="rewardPunishTime" name="rewardPunishTime" ref="required" var="奖惩时间"></property>
+		<property id="name" name="name" ref="required" var="名称"></property>
+		<property id="price" name="price" ref="double" var="奖惩金额"></property>
+		<property id="content" name="content" ref="required" var="奖惩事件描述"></property>
+		<property id="desc" name="desc" ref="" var="备注"></property>
+		<property id="typeId" name="typeId" ref="required" var="奖惩分类"></property>
+		<property id="awardUnit" name="awardUnit" ref="required" var="授予单位"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffrewardpunish003" path="/post/SysStaffRewardPunishController/querySysStaffRewardPunishMationToEdit" val="编辑员工奖惩信息信息时回显" allUse="2" method="GET" groupName="员工奖惩信息">
+		<property id="rowId" name="id" ref="required" var="奖惩信息id"></property>
+	</url>
+	<url id="sysstaffrewardpunish004" path="/post/SysStaffRewardPunishController/editSysStaffRewardPunishMationById" val="编辑员工奖惩信息信息" allUse="1" groupName="员工奖惩信息">
+		<property id="rowId" name="id" ref="required" var="奖惩信息id"></property>
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="rewardPunishTime" name="rewardPunishTime" ref="required" var="奖惩时间"></property>
+		<property id="name" name="name" ref="required" var="名称"></property>
+		<property id="price" name="price" ref="double" var="奖惩金额"></property>
+		<property id="content" name="content" ref="required" var="奖惩事件描述"></property>
+		<property id="desc" name="desc" ref="" var="备注"></property>
+		<property id="typeId" name="typeId" ref="required" var="奖惩分类"></property>
+		<property id="awardUnit" name="awardUnit" ref="required" var="授予单位"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffrewardpunish005" path="/post/SysStaffRewardPunishController/deleteSysStaffRewardPunishMationById" val="删除员工奖惩信息信息" allUse="1" method="DELETE" groupName="员工奖惩信息">
+		<property id="rowId" name="id" ref="required" var="奖惩信息id"></property>
+	</url>
+	<url id="sysstaffrewardpunish006" path="/post/SysStaffRewardPunishController/queryPointStaffSysStaffRewardPunishList" val="查询指定员工的奖惩列表" allUse="1" groupName="员工奖惩信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+	</url>
+	<!-- 员工奖惩信息管理开始 -->
+	
+	<!-- 员工家庭成员信息管理开始 -->
+	<url id="sysstafffamily001" path="/post/SysStaffFamilyController/queryAllSysStaffFamilyList" val="查询所有家庭成员信息列表" allUse="1" groupName="员工家庭成员信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="state" name="state" ref="" var="员工状态"></property>
+		<property id="name" name="name" ref="" var="名称"></property>
+		<property id="workUnit" name="workUnit" ref="" var="工作单位"></property>
+	</url>
+	<url id="sysstafffamily002" path="/post/SysStaffFamilyController/insertSysStaffFamilyMation" val="员工家庭成员信息录入" allUse="1" groupName="员工家庭成员信息">
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="relationshipId" name="relationshipId" ref="required" var="与本人关系id"></property>
+		<property id="name" name="name" ref="required" var="名称"></property>
+		<property id="cardType" name="cardType" ref="required" var="证件类型id"></property>
+		<property id="cardNumber" name="cardNumber" ref="required" var="证件号码"></property>
+		<property id="sex" name="sex" ref="required,num" var="性别  0保密   1男  2女"></property>
+		<property id="workUnit" name="workUnit" ref="required" var="工作单位"></property>
+		<property id="job" name="job" ref="required" var="职务"></property>
+		<property id="politicId" name="politicId" ref="required" var="政治面貌id"></property>
+		<property id="emergencyContact" name="emergencyContact" ref="required,num" var="是否紧急联系人  1.是  2.否"></property>
+	</url>
+	<url id="sysstafffamily003" path="/post/SysStaffFamilyController/querySysStaffFamilyMationToEdit" val="编辑员工家庭成员信息信息时回显" allUse="2" method="GET" groupName="员工家庭成员信息">
+		<property id="rowId" name="id" ref="required" var="家庭成员信息id"></property>
+	</url>
+	<url id="sysstafffamily004" path="/post/SysStaffFamilyController/editSysStaffFamilyMationById" val="编辑员工家庭成员信息信息" allUse="1" groupName="员工家庭成员信息">
+		<property id="rowId" name="id" ref="required" var="家庭成员信息id"></property>
+		<property id="relationshipId" name="relationshipId" ref="required" var="与本人关系id"></property>
+		<property id="name" name="name" ref="required" var="名称"></property>
+		<property id="cardType" name="cardType" ref="required" var="证件类型id"></property>
+		<property id="cardNumber" name="cardNumber" ref="required" var="证件号码"></property>
+		<property id="sex" name="sex" ref="required,num" var="性别  0保密   1男  2女"></property>
+		<property id="workUnit" name="workUnit" ref="required" var="工作单位"></property>
+		<property id="job" name="job" ref="required" var="职务"></property>
+		<property id="politicId" name="politicId" ref="required" var="政治面貌id"></property>
+		<property id="emergencyContact" name="emergencyContact" ref="required,num" var="是否紧急联系人  1.是  2.否"></property>
+	</url>
+	<url id="sysstafffamily005" path="/post/SysStaffFamilyController/deleteSysStaffFamilyMationById" val="删除员工家庭成员信息信息" allUse="1" method="DELETE" groupName="员工家庭成员信息">
+		<property id="rowId" name="id" ref="required" var="家庭成员信息id"></property>
+	</url>
+	<url id="sysstafffamily006" path="/post/SysStaffFamilyController/queryPointStaffSysStaffFamilyList" val="查询指定员工的家庭成员列表" allUse="1" groupName="员工家庭成员信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+	</url>
+	<!-- 员工家庭成员信息管理开始 -->
+	
+	<!-- 员工工作履历信息管理开始 -->
+	<url id="sysstaffjobresume001" path="/post/SysStaffJobResumeController/queryAllSysStaffJobResumeList" val="查询所有工作履历信息列表" allUse="1" groupName="员工工作履历信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="state" name="state" ref="" var="员工状态"></property>
+		<property id="workUnit" name="workUnit" ref="" var="任职单位"></property>
+		<property id="department" name="department" ref="" var="部门"></property>
+	</url>
+	<url id="sysstaffjobresume002" path="/post/SysStaffJobResumeController/insertSysStaffJobResumeMation" val="员工工作履历信息录入" allUse="1" groupName="员工工作履历信息">
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="startTime" name="startTime" ref="required" var="任职开始时间"></property>
+		<property id="endTime" name="endTime" ref="required" var="任职结束时间"></property>
+		<property id="workUnit" name="workUnit" ref="required" var="任职单位"></property>
+		<property id="department" name="department" ref="required" var="部门"></property>
+		<property id="job" name="job" ref="required" var="职务"></property>
+		<property id="station" name="station" ref="" var="岗位"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffjobresume003" path="/post/SysStaffJobResumeController/querySysStaffJobResumeMationToEdit" val="编辑员工工作履历信息信息时回显" allUse="2" method="GET" groupName="员工工作履历信息">
+		<property id="rowId" name="id" ref="required" var="工作履历信息id"></property>
+	</url>
+	<url id="sysstaffjobresume004" path="/post/SysStaffJobResumeController/editSysStaffJobResumeMationById" val="编辑员工工作履历信息信息" allUse="1" groupName="员工工作履历信息">
+		<property id="rowId" name="id" ref="required" var="工作履历信息id"></property>
+		<property id="startTime" name="startTime" ref="required" var="任职开始时间"></property>
+		<property id="endTime" name="endTime" ref="required" var="任职结束时间"></property>
+		<property id="workUnit" name="workUnit" ref="required" var="任职单位"></property>
+		<property id="department" name="department" ref="required" var="部门"></property>
+		<property id="job" name="job" ref="required" var="职务"></property>
+		<property id="station" name="station" ref="" var="岗位"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffjobresume005" path="/post/SysStaffJobResumeController/deleteSysStaffJobResumeMationById" val="删除员工工作履历信息信息" allUse="1" method="DELETE" groupName="员工工作履历信息">
+		<property id="rowId" name="id" ref="required" var="工作履历信息id"></property>
+	</url>
+	<url id="sysstaffjobresume006" path="/post/SysStaffJobResumeController/queryPointStaffSysStaffJobResumeList" val="查询指定员工的工作履历列表" allUse="1" groupName="员工工作履历信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+	</url>
+	<!-- 员工工作履历信息管理开始 -->
+	
+	<!-- 员工语言能力信息管理开始 -->
+	<url id="sysstafflanguage001" path="/post/SysStaffLanguageController/queryAllSysStaffLanguageList" val="查询所有语言能力信息列表" allUse="1" groupName="员工语言能力信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="state" name="state" ref="" var="员工状态"></property>
+	</url>
+	<url id="sysstafflanguage002" path="/post/SysStaffLanguageController/insertSysStaffLanguageMation" val="员工语言能力信息录入" allUse="1" groupName="员工语言能力信息">
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="languageId" name="languageId" ref="required" var="语种类型"></property>
+		<property id="levelId" name="levelId" ref="required" var="语种等级"></property>
+		<property id="getTime" name="getTime" ref="required" var="获取时间"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstafflanguage003" path="/post/SysStaffLanguageController/querySysStaffLanguageMationToEdit" val="编辑员工语言能力信息信息时回显" allUse="2" method="GET" groupName="员工语言能力信息">
+		<property id="rowId" name="id" ref="required" var="语言能力信息id"></property>
+	</url>
+	<url id="sysstafflanguage004" path="/post/SysStaffLanguageController/editSysStaffLanguageMationById" val="编辑员工语言能力信息信息" allUse="1" groupName="员工语言能力信息">
+		<property id="rowId" name="id" ref="required" var="语言能力信息id"></property>
+		<property id="languageId" name="languageId" ref="required" var="语种类型"></property>
+		<property id="levelId" name="levelId" ref="required" var="语种等级"></property>
+		<property id="getTime" name="getTime" ref="required" var="获取时间"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstafflanguage005" path="/post/SysStaffLanguageController/deleteSysStaffLanguageMationById" val="删除员工语言能力信息信息" allUse="1" method="DELETE" groupName="员工语言能力信息">
+		<property id="rowId" name="id" ref="required" var="语言能力信息id"></property>
+	</url>
+	<url id="sysstafflanguage006" path="/post/SysStaffLanguageController/queryPointStaffSysStaffLanguageList" val="查询指定员工的语言能力列表" allUse="1" groupName="员工语言能力信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+	</url>
+	<!-- 员工语言能力信息管理开始 -->
+	
+	<!-- 员工合同信息管理开始 -->
+	<url id="sysstaffcontract001" path="/post/SysStaffContractController/queryAllSysStaffContractList" val="查询所有合同信息列表" allUse="1" groupName="员工合同信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"></property>
+		<property id="jobNumber" name="jobNumber" ref="" var="员工工号"></property>
+		<property id="state" name="state" ref="" var="员工状态"></property>
+		<property id="contractNumber" name="contractNumber" ref="" var="合同编号"></property>
+	</url>
+	<url id="sysstaffcontract002" path="/post/SysStaffContractController/insertSysStaffContractMation" val="员工合同信息录入" allUse="1" groupName="员工合同信息">
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+		<property id="contractNumber" name="contractNumber" ref="required" var="合同编号"></property>
+		<property id="typeId" name="typeId" ref="required" var="合同类别"></property>
+		<property id="moldId" name="moldId" ref="required" var="合同类型"></property>
+		<property id="startTime" name="startTime" ref="required" var="开始日期"></property>
+		<property id="endTime" name="endTime" ref="" var="结束日期"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffcontract003" path="/post/SysStaffContractController/querySysStaffContractMationToEdit" val="编辑员工合同信息信息时回显" allUse="2" method="GET" groupName="员工合同信息">
+		<property id="rowId" name="id" ref="required" var="合同信息id"></property>
+	</url>
+	<url id="sysstaffcontract004" path="/post/SysStaffContractController/editSysStaffContractMationById" val="编辑员工合同信息信息" allUse="1" groupName="员工合同信息">
+		<property id="rowId" name="id" ref="required" var="合同信息id"></property>
+		<property id="contractNumber" name="contractNumber" ref="required" var="合同编号"></property>
+		<property id="typeId" name="typeId" ref="required" var="合同类别"></property>
+		<property id="moldId" name="moldId" ref="required" var="合同类型"></property>
+		<property id="startTime" name="startTime" ref="required" var="开始日期"></property>
+		<property id="endTime" name="endTime" ref="" var="结束日期"></property>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+	</url>
+	<url id="sysstaffcontract005" path="/post/SysStaffContractController/deleteSysStaffContractMationById" val="删除员工合同信息信息" allUse="1" method="DELETE" groupName="员工合同信息">
+		<property id="rowId" name="id" ref="required" var="合同信息id"></property>
+	</url>
+	<url id="sysstaffcontract006" path="/post/SysStaffContractController/queryPointStaffSysStaffContractList" val="查询指定员工的合同列表" allUse="1" groupName="员工合同信息">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
+	</url>
+	<url id="sysstaffcontract007" path="/post/SysStaffContractController/signSysStaffContractById" val="员工合同签约" allUse="1" method="GET" groupName="员工合同信息">
+		<property id="rowId" name="id" ref="required" var="合同信息id"></property>
+	</url>
+	<!-- 员工合同信息管理开始 -->
+	
+</controller>

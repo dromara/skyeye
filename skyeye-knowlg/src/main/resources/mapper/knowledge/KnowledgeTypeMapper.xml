@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.KnowledgeTypeDao">
+	
+	<select id="queryKnowledgeTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+		    b.user_name createName,
+			CONVERT (a.create_time, CHAR) createTime,
+			c.user_name lastUpdateName,
+			CONVERT (a.last_update_time, CHAR) lastUpdateTime,
+			a.state,
+			a.parent_id pId,
+			false lay_is_open
+		FROM
+			knowlg_type a
+			LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.last_update_id = c.user_id
+		WHERE  a.state != 4
+			<if test="name != '' and name != null">
+				AND a.name LIKE '%${name}%'
+			</if>
+			<if test="state != '' and state != null">
+				AND a.state = #{state}
+			</if>
+			<if test="notId != '' and notId != null">
+				AND a.id != #{notId}
+			</if>
+	</select>
+	
+	<select id="queryKnowledgeTypeMationByName" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			knowlg_type a
+		WHERE a.name = #{name}
+		<if test="parentId != '' and parentId != null">
+			AND a.parent_id = #{parentId}
+		</if>
+		<if test="thisId != '' and thisId != null">
+			AND a.id != #{thisId}
+		</if>
+		AND a.state != 4
+	</select>
+
+	<insert id="insertKnowledgeTypeMation" parameterType="java.util.Map">
+	    INSERT into knowlg_type 
+	    (id, name, state, parent_id, create_id, create_time, last_update_id, last_update_time)
+	    VALUES(#{id}, #{name}, #{state}, #{parentId}, #{createId}, #{createTime}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="editKnowledgeTypeStateById">
+		UPDATE knowlg_type
+		<set>
+			last_update_id = #{lastUpdateId},
+		    last_update_time = #{lastUpdateTime},
+			state = #{state}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryKnowledgeTypeStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.state
+		FROM
+			knowlg_type a	
+		WHERE 
+			a.id = #{id}
+	</select>
+
+	<select id="selectKnowledgeTypeById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			b.`name` parentName
+		FROM
+			knowlg_type a
+			LEFT JOIN knowlg_type b ON b.id = a.parent_id
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="editKnowledgeTypeMationById" parameterType="java.util.Map">
+		UPDATE knowlg_type
+		<set>
+			name = #{name},
+			last_update_id = #{lastUpdateId},
+			last_update_time = #{lastUpdateTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="queryUpKnowledgeTypeTreeMation" resultType="java.util.Map">
+		SELECT
+			t3.id,
+			t3.`name`,
+			t3.parent_id pId
+		FROM
+			(
+				SELECT
+					t1.*,
+					IF (find_in_set(parent_id, @pids) > 0, @pids := concat(@pids, ',', id ), 0) AS ischild
+				FROM
+					(
+						SELECT
+							*
+						FROM
+							knowlg_type t
+						WHERE t.state = 2
+						ORDER BY t.create_time ASC
+					) t1,
+					(SELECT @pids := '0') t2
+			) t3
+		WHERE
+			ischild != '0'
+	</select>
+
+</mapper>

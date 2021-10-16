@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 试卷调查开始 -->
+	<url id="exam001" path="/post/ExamController/queryExamList" val="获取所有试卷列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="surveyState" name="surveyState" ref="" var="试卷状态"/>
+	    <property id="surveyName" name="surveyName" ref="" var="试卷名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+	    <property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="year" name="year" ref="" var="年份"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+	</url>
+	<url id="exam001-my" path="/post/ExamController/queryMyExamList" val="获取我的试卷列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="surveyState" name="surveyState" ref="" var="试卷状态"/>
+	    <property id="surveyName" name="surveyName" ref="" var="试卷名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+	    <property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="year" name="year" ref="" var="年份"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+	</url>
+	<url id="exam002" path="/post/ExamController/insertExamMation" val="新增试卷" allUse="1">
+	    <property id="surveyName" name="surveyName" ref="required" var="试卷名称"/>
+	    <property id="schoolId" name="schoolId" ref="required" var="所属学校id"/>
+	    <property id="gradeId" name="gradeId" ref="required" var="年级id"/>
+	    <property id="subjectId" name="subjectId" ref="required" var="科目id"/>
+	    <property id="semesterId" name="semesterId" ref="required" var="学期id"/>
+	    <property id="propertyIds" name="propertyIds" ref="required" var="班级id串"/>
+	    <property id="viewAnswer" name="viewAnswer" ref="required,num" var="是否公开结果  0不  1公开"/>
+	</url>
+	<url id="exam003" path="/post/ExamController/queryExamMationById" val="获取试卷题目信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="试卷id"/>
+	</url>
+	<url id="exam006" path="/post/ExamController/addQuFillblankMation" val="添加填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="answerInputWidth" name="answerInputWidth" ref="required,num" var="填空的input宽度"/>
+	    <property id="answerInputRow" name="answerInputRow" ref="required,num" var="填空的input行"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="checkType" name="checkType" ref="required" var="说明的验证方式"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="knowledgeIds" name="knowledgeIds" ref="" var="知识点id字符串，逗号隔开"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+		<property id="isDefaultAnswer" name="isDefaultAnswer" ref="" var="填空题标准答案"/>
+	</url>
+	<url id="exam007" path="/post/ExamController/addQuScoreMation" val="添加评分题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt01" name="paramInt01" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt02" name="paramInt02" ref="required,num" var="按列显示时，列数"/>
+	    <property id="scoreTd" name="scoreTd" ref="" var="评分题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="knowledgeIds" name="knowledgeIds" ref="" var="知识点id字符串，逗号隔开"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="exam008" path="/post/ExamController/addQuOrderquMation" val="添加排序题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="orderquTd" name="orderquTd" ref="" var="排序题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="knowledgeIds" name="knowledgeIds" ref="" var="知识点id字符串，逗号隔开"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="exam009" path="/post/ExamController/addQuPagetagMation" val="添加分页标记" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	</url>
+	<url id="exam010" path="/post/ExamController/addQuRadioMation" val="添加单选题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="radioTd" name="radioTd" ref="" var="单选题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="knowledgeIds" name="knowledgeIds" ref="" var="知识点id字符串，逗号隔开"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="exam011" path="/post/ExamController/addQuCheckBoxMation" val="添加多选题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="checkboxTd" name="checkboxTd" ref="" var="多选题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="knowledgeIds" name="knowledgeIds" ref="" var="知识点id字符串，逗号隔开"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="exam012" path="/post/ExamController/addQuMultiFillblankMation" val="添加多项填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt01" name="paramInt01" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt02" name="paramInt02" ref="required,num" var="按列显示时，列数"/>
+	    <property id="multiFillblankTd" name="multiFillblankTd" ref="" var="多选填空题选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="knowledgeIds" name="knowledgeIds" ref="" var="知识点id字符串，逗号隔开"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="exam013" path="/post/ExamController/addQuParagraphMation" val="添加段落" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="knowledgeIds" name="knowledgeIds" ref="" var="知识点id字符串，逗号隔开"/>
+	</url>
+	<url id="exam014" path="/post/ExamController/addQuChenMation" val="添加矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="belongId" name="belongId" ref="required" var="试卷id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="quType" name="quType" ref="required" var="问题类型"/>
+	    <property id="orderById" name="orderById" ref="required,num" var="序号"/>
+	    <property id="tag" name="tag" ref="" var="表示题目是试卷题还是题库中题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="column" name="column" ref="" var="矩阵列选项td json串"/>
+	    <property id="row" name="row" ref="" var="矩阵行选项td json串"/>
+	    <property id="logic" name="logic" ref="" var="逻辑设置json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="knowledgeIds" name="knowledgeIds" ref="" var="知识点id字符串，逗号隔开"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+		<property id="isDefaultAnswer" name="isDefaultAnswer" ref="" var="标准答案"/>
+	</url>
+	<url id="exam015" path="/post/ExamController/deleteQuestionMationById" val="删除问题" allUse="2">
+		<property id="quId" name="quId" ref="required" var="问题id"/>
+	</url>
+	<url id="exam016" path="/post/ExamController/deleteQuestionChenColumnMationById" val="删除矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题列选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="exam017" path="/post/ExamController/deleteQuestionChenRowMationById" val="删除矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题行选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="exam018" path="/post/ExamController/deleteQuestionRadioOptionMationById" val="删除单选题选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="exam019" path="/post/ExamController/deleteQuestionChedkBoxOptionMationById" val="删除多选题选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="exam020" path="/post/ExamController/deleteQuestionScoreOptionMationById" val="删除评分Score选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="exam021" path="/post/ExamController/deleteQuestionOrderOptionMationById" val="删除排序选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="exam022" path="/post/ExamController/deleteQuestionMultiFillblankOptionMationById" val="删除多项填空题选项" allUse="2">
+		<property id="quItemId" name="quItemId" ref="required" var="选项id"/>
+	</url>
+	<url id="exam023" path="/post/ExamController/editExamStateToReleaseById" val="试卷发布" allUse="1">
+		<property id="rowId" name="id" ref="required" var="试卷id"/>
+	</url>
+	<url id="exam024" path="/post/ExamController/queryExamMationByIdToHTML" val="获取试卷题目信息用来生成html页面" allUse="2">
+		<property id="rowId" name="id" ref="required" var="试卷id"/>
+	</url>
+	<url id="exam025" path="/post/ExamController/deleteExamMationById" val="删除试卷" allUse="1">
+		<property id="rowId" name="id" ref="required" var="试卷id"/>
+	</url>
+	<url id="exam026" path="/post/ExamController/queryExamFxMationById" val="分析报告试卷" allUse="1">
+		<property id="rowId" name="id" ref="required" var="试卷id"/>
+	</url>
+	<url id="exam027" path="/post/ExamController/insertExamMationCopyById" val="复制试卷" allUse="1">
+		<property id="rowId" name="surveyCopyId" ref="required" var="试卷id"/>
+		<property id="surveyName" name="surveyName" ref="required" var="试卷名称"/>
+	</url>
+	<url id="exam028" path="/post/ExamController/queryAnswerExamMationByIp" val="判断此试卷当前的状态" allUse="2">
+		<property id="surveyId" name="id" ref="required" var="试卷id"/>
+	</url>
+	<url id="exam029" path="/post/ExamController/insertAnswerExamMationByIp" val="用户回答试卷" allUse="2">
+		<property id="jsonData" name="jsonData" ref="required" var="试卷回答json串"/>
+		<property id="bgAnDate" name="bgAnDate" ref="required" var="答卷开始时间"/>
+		<property id="quAnswerFile" name="quAnswerFile" ref="" var="学生答题上传的附件"/>
+	</url>
+	<url id="exam030" path="/post/ExamController/updateExamMationEndById" val="手动结束考试" allUse="1">
+		<property id="surveyId" name="id" ref="required" var="试卷id"/>
+	</url>
+	<url id="exam031" path="/post/ExamController/queryExamAnswerMationByAnswerId" val="获取答卷详情信息" allUse="2">
+		<property id="answerId" name="answerId" ref="required" var="答卷信息id"/>
+	</url>
+	<url id="exam032" path="/post/ExamController/queryExamAnswerMationToMarkingByAnswerId" val="批阅试卷时获取答卷信息" allUse="2">
+		<property id="answerId" name="answerId" ref="required" var="答卷信息id"/>
+	</url>
+	<url id="exam033" path="/post/ExamController/insertExamAnswerResultMation" val="批阅试卷提交答卷结果" allUse="1">
+		<property id="answerId" name="answerId" ref="required" var="答卷信息id"/>
+		<property id="arrayStr" name="arrayStr" ref="required" var="题目分数，json字符串"/>
+		<property id="markStartTime" name="markStartTime" ref="required" var="阅卷开始时间"/>
+	</url>
+	<url id="exam034" path="/post/ExamController/queryExamMationDetailById" val="获取试卷详情信息" allUse="2">
+		<property id="surveyId" name="surveyId" ref="required" var="试卷信息id"/>
+	</url>
+	<url id="exam035" path="/post/ExamController/queryExamAnswerMationDetailById" val="获取试卷答题情况信息" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="surveyId" name="surveyId" ref="required" var="试卷信息id"/>
+		<property id="field" name="field" ref="" var="排序字段"/>
+		<property id="order" name="order" ref="" var="排序方式"/>
+	</url>
+	<url id="exam036" path="/post/ExamController/queryExamAndMarkPeopleMationDetailById" val="获取试卷详情信息以及阅卷人信息" allUse="2">
+		<property id="surveyId" name="surveyId" ref="required" var="试卷信息id"/>
+	</url>
+	<url id="exam037" path="/post/ExamController/editMarkPeopleMationDetailById" val="修改阅卷人信息" allUse="1">
+		<property id="surveyId" name="surveyId" ref="required" var="试卷信息id"/>
+		<property id="arrayStr" name="arrayStr" ref="required" var="阅卷人信息，json字符串"/>
+	</url>
+	<!-- 试卷调查结束 -->
+	
+	<!-- 题库管理开始 -->
+	<url id="schoolquestionbank001" path="/post/SchoolQuestionBankController/querySchoolQuestionBankMationList" val="获取我的题库列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="quTitle" name="quTitle" ref="" var="问题名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="quType" name="quType" ref="" var="题目类型  比如单选题，多选题等"/>
+	</url>
+	<url id="schoolquestionbank002" path="/post/SchoolQuestionBankController/addQuRadioMation" val="添加单选题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="radioTd" name="radioTd" ref="" var="单选题选项td json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="schoolKnowledgeMationList" name="schoolKnowledgeMationList" ref="" var="知识点信息 json串"/>
+		<property id="deleteRowList" name="deleteRowList" ref="" var="要删除的问题项id串"/>
+		<property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="schoolquestionbank003" path="/post/SchoolQuestionBankController/deleteSchoolQuestionBankMationById" val="删除我的题目信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="问题id"/>
+	</url>
+	<url id="schoolquestionbank004" path="/post/SchoolQuestionBankController/queryQuRadioMationToEditById" val="编辑单选题时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="问题id"/>
+	</url>
+	<url id="schoolquestionbank005" path="/post/SchoolQuestionBankController/addQuCheckBoxMation" val="添加多选题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="checkboxTd" name="checkboxTd" ref="" var="多选题选项td json串"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="schoolKnowledgeMationList" name="schoolKnowledgeMationList" ref="" var="知识点信息 json串"/>
+		<property id="deleteRowList" name="deleteRowList" ref="" var="要删除的问题项id串"/>
+		<property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="schoolquestionbank006" path="/post/SchoolQuestionBankController/queryQuCheckBoxMationToEditById" val="编辑多选题时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="问题id"/>
+	</url>
+	<url id="schoolquestionbank007" path="/post/SchoolQuestionBankController/addQuFillblankMation" val="添加填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="contactsAttr" name="contactsAttr" ref="required,num" var="1关联到联系人属性  0不关联到联系人属性"/>
+	    <property id="contactsField" name="contactsField" ref="required,num" var="关联的联系人字段"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="schoolKnowledgeMationList" name="schoolKnowledgeMationList" ref="" var="知识点信息 json串"/>
+	    <property id="answerInputWidth" name="answerInputWidth" ref="required,num" var="填空的input宽度"/>
+	    <property id="answerInputRow" name="answerInputRow" ref="required,num" var="填空的input行"/>
+	    <property id="checkType" name="checkType" ref="required" var="说明的验证方式"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+		<property id="isDefaultAnswer" name="isDefaultAnswer" ref="" var="填空题标准答案"/>
+	</url>
+	<url id="schoolquestionbank008" path="/post/SchoolQuestionBankController/queryQuFillblankMationToEditById" val="编辑填空题时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="问题id"/>
+	</url>
+	<url id="schoolquestionbank009" path="/post/SchoolQuestionBankController/addQuScoreMation" val="添加评分题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="schoolKnowledgeMationList" name="schoolKnowledgeMationList" ref="" var="知识点信息 json串"/>
+	    <property id="deleteRowList" name="deleteRowList" ref="" var="要删除的问题项id串"/>
+	    <property id="paramInt01" name="paramInt01" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt02" name="paramInt02" ref="required,num" var="按列显示时，列数"/>
+	    <property id="scoreTd" name="scoreTd" ref="" var="评分题选项td json串"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="schoolquestionbank010" path="/post/SchoolQuestionBankController/queryQuScoreMationToEditById" val="编辑评分题时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="问题id"/>
+	</url>
+	<url id="schoolquestionbank011" path="/post/SchoolQuestionBankController/addQuOrderbyMation" val="添加排序题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="schoolKnowledgeMationList" name="schoolKnowledgeMationList" ref="" var="知识点信息 json串"/>
+	    <property id="deleteRowList" name="deleteRowList" ref="" var="要删除的问题项id串"/>
+	    <property id="orderquTd" name="orderquTd" ref="" var="排序题选项td json串"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="schoolquestionbank012" path="/post/SchoolQuestionBankController/queryQuOrderbyMationToEditById" val="编辑排序题时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="问题id"/>
+	</url>
+	<url id="schoolquestionbank013" path="/post/SchoolQuestionBankController/addQuMultiFillblankAddMation" val="新增多项填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="schoolKnowledgeMationList" name="schoolKnowledgeMationList" ref="" var="知识点信息 json串"/>
+	    <property id="deleteRowList" name="deleteRowList" ref="" var="要删除的问题项id串"/>
+	    <property id="paramInt01" name="paramInt01" ref="required,num" var="按列显示时，列数"/>
+	    <property id="paramInt02" name="paramInt02" ref="required,num" var="按列显示时，列数"/>
+	    <property id="multiFillblankTd" name="multiFillblankTd" ref="" var="多选填空题选项td json串"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+	</url>
+	<url id="schoolquestionbank014" path="/post/SchoolQuestionBankController/queryQuMultiFillblankMationToEditById" val="编辑多项填空题时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="问题id"/>
+	</url>
+	<url id="schoolquestionbank015" path="/post/SchoolQuestionBankController/addQuChenMation" val="新增矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题" allUse="2">
+	    <property id="quId" name="quId" ref="" var="问题id"/>
+	    <property id="quTitle" name="quTitle" ref="required" var="问题标题"/>
+	    <property id="quType" name="quType" ref="required" var="问题类型"/>
+	    <property id="hv" name="hv" ref="required,num" var="1水平显示 2垂直显示"/>
+	    <property id="randOrder" name="randOrder" ref="required,num" var="选项随机排列  1随机排列 0不随机排列"/>
+	    <property id="cellCount" name="cellCount" ref="required,num" var="按列显示时，列数"/>
+	    <property id="fraction" name="fraction" ref="required,num" var="分数"/>
+	    <property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="schoolKnowledgeMationList" name="schoolKnowledgeMationList" ref="" var="知识点信息 json串"/>
+	    <property id="deleteRowList" name="deleteRowList" ref="" var="要删除的问题项id串"/>
+	    <property id="deleteColumnList" name="deleteColumnList" ref="" var="要删除的问题项id串"/>
+	    <property id="column" name="column" ref="" var="矩阵列选项td json串"/>
+	    <property id="row" name="row" ref="" var="矩阵行选项td json串"/>
+	    <property id="fileUrl" name="fileUrl" ref="" var="文件url"/>
+		<property id="fileType" name="fileType" ref="required,num" var="试题类型，0.默认没有，1.视频，2.音频，3.图片"/>
+		<property id="whetherUpload" name="whetherUpload" ref="required,num" var="是否允许拍照/上传图片选中，1.是，2.否"/>
+		<property id="isDefaultAnswer" name="isDefaultAnswer" ref="" var="标准答案"/>
+	</url>
+	<url id="schoolquestionbank016" path="/post/SchoolQuestionBankController/queryQuChenMationToEditById" val="编辑矩阵单选题,矩阵多选题,矩阵评分题,矩阵填空题时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="问题id"/>
+	</url>
+	<url id="schoolquestionbank017" path="/post/SchoolQuestionBankController/querySchoolQuestionBankMationListToChoose" val="获取题库列表(包含我的私有题库以及所有公开题库)供试卷选择" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="quTitle" name="quTitle" ref="" var="问题名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="type" name="type" ref="" var="类型  1.公开  2.私有"/>
+		<property id="quType" name="quType" ref="" var="题目类型  比如单选题，多选题等"/>
+	</url>
+	<url id="schoolquestionbank018" path="/post/SchoolQuestionBankController/querySchoolQuestionBankMationListByIds" val="根据试题id串获取试题详细信息" allUse="2">
+		<property id="ids" name="ids" ref="required" var="试题id"/>
+	</url>
+	<url id="schoolquestionbank019" path="/post/SchoolQuestionBankController/querySchoolQuestionBankMationAllList" val="获取所有公共题库以及个人私有题库列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+	</url>
+	<!-- 题库管理结束 -->
+	
+</controller>

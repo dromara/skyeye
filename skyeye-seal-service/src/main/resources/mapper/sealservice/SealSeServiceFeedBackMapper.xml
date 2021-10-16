@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.SealSeServiceFeedBackDao">
+
+    <select id="queryFeedBackList" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			b.`name` typeName,
+			c.user_name createName,
+			a.content,
+			CONVERT(a.create_time, CHAR) createTime
+		FROM
+			crm_service_feedback a
+			LEFT JOIN crm_service_feedback_type b ON a.type_id = b.id
+			LEFT JOIN sys_eve_user_staff c ON a.create_id = c.user_id
+		WHERE a.service_id = #{serviceId}
+    </select>
+    
+    <select id="querySealServiceMationToFeedBack" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.order_num orderNum,
+			a.customer_id customerId,
+			a.customer_name customerName,
+			a.product_id productId,
+			a.product_name productName
+		FROM
+			crm_service a
+		WHERE
+			a.id = #{id}
+    </select>
+    
+    <insert id="insertFeedBackMation" parameterType="java.util.Map">
+        insert into crm_service_feedback
+        (id, service_id, type_id, custom_id, pro_id, content, enclosure_info, create_id, create_time)
+        values(#{id}, #{serviceId},  #{typeId},  #{customId}, #{proId}, #{content}, #{enclosureInfo}, #{createId}, #{createTime})
+    </insert>
+    
+    <select id="queryFeedBackMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.type_id typeId,
+			a.content,
+			a.enclosure_info enclosureInfo
+		FROM
+			crm_service_feedback a
+		WHERE
+			a.id = #{id}
+    </select>
+    
+	<update id="editFeedBackMationById" parameterType="java.util.Map">
+        UPDATE crm_service_feedback
+        <set>
+            type_id = #{typeId},
+            content = #{content},
+            enclosure_info = #{enclosureInfo},
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteFeedBackMationById" parameterType="java.util.Map">
+        DELETE 
+		FROM 
+			crm_service_feedback
+		where id = #{id}
+    </delete>
+    
+    <select id="queryFeedBackDetailsMationById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			b.`name` typeName,
+			c.user_name createName,
+			a.content,
+			a.enclosure_info enclosureInfo
+		FROM
+			crm_service_feedback a
+			LEFT JOIN crm_service_feedback_type b ON a.type_id = b.id
+			LEFT JOIN sys_eve_user_staff c ON a.create_id = c.user_id
+		WHERE
+			a.id = #{id}
+    </select>
+
+</mapper>

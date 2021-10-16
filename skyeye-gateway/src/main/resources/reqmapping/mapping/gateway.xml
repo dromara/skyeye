@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 首页接口开始 -->
+	<url id="mainpage001" path="/post/MainPageController/queryFourNumListByUserId" val="获取本月考勤天数，我的文件数，我的论坛帖数，我的知识库文档数" allUse="2">
+    </url>
+    <url id="mainpage002" path="/post/MainPageController/queryNoticeContentListByUserId" val="获取公告类型以及前八条内容" allUse="2">
+    </url>
+    <url id="mainpage003" path="/post/MainPageController/queryHotForumList" val="获取前八条热门论坛帖" allUse="2">
+    </url>
+    <url id="mainpage004" path="/post/MainPageController/queryKnowledgeEightList" val="获取近期八条已审核的知识库" allUse="2">
+    </url>
+    <!-- 首页接口结束 -->
+    
+    <!-- erp首页接口开始 -->
+    <url id="erppage001" path="/post/ErpPageController/queryFourTypeMoneyList" val="获取本月累计销售，本月累计零售，本月累计采购，本月利润（已审核通过）" allUse="2">
+    </url>
+    <url id="erppage002" path="/post/ErpPageController/querySixMonthPurchaseMoneyList" val="获取近半年的采购统计" allUse="2">
+    </url>
+    <url id="erppage003" path="/post/ErpPageController/querySixMonthSealsMoneyList" val="获取近半年的销售统计" allUse="2">
+    </url>
+    <url id="erppage004" path="/post/ErpPageController/queryTwelveMonthProfitMoneyList" val="获取近十二个月的利润统计" allUse="2">
+    </url>
+    <!-- erp首页接口结束 -->
+    
+    <!-- crm统计接口开始 -->
+    <url id="crmpage001" path="/post/CrmPageController/queryInsertNumByYear" val="获取指定年度的客户新增量，联系人新增量" allUse="2">
+    	<property id="year" name="year" ref="required" var="指定年度"></property>
+    </url>
+    <url id="crmpage002" path="/post/CrmPageController/queryCustomNumByOtherType" val="根据客户分类，客户来源，所属行业，客户分组统计客户数量" allUse="2">
+    </url>
+    <url id="crmpage003" path="/post/CrmPageController/queryCustomDocumentaryType" val="客户跟单方式分析" allUse="2">
+    	<property id="year" name="year" ref="required" var="指定年度"></property>
+    </url>
+    <url id="crmpage004" path="/post/CrmPageController/queryNewContractNum" val="获取合同在指定年度的月新增量" allUse="2">
+    	<property id="year" name="year" ref="required" var="指定年度"></property>
+    </url>
+    <url id="crmpage005" path="/post/CrmPageController/queryNewDocumentaryNum" val="获取员工跟单在指定年度的月新增量" allUse="2">
+    	<property id="year" name="year" ref="required" var="指定年度"></property>
+    </url>
+    <!-- crm统计接口结束 -->
+    
+    <!-- 生产模块统计接口开始 -->
+    <url id="erpproduce001" path="/post/ErpProducePageController/queryDepartmentPickMaterial" val="统计当前部门月度领料图" allUse="2">
+    	<property id="year" name="year" ref="required" var="指定年度"></property>
+    </url>
+    <url id="erpproduce002" path="/post/ErpProducePageController/queryDepartmentPatchMaterial" val="统计当前部门月度补料图" allUse="2">
+    	<property id="year" name="year" ref="required" var="指定年度"></property>
+    </url>
+    <url id="erpproduce003" path="/post/ErpProducePageController/queryDepartmentReturnMaterial" val="统计当前部门月度退料图" allUse="2">
+    	<property id="year" name="year" ref="required" var="指定年度"></property>
+    </url>
+    <url id="erpproduce004" path="/post/ErpProducePageController/queryDepartmentMachin" val="统计当前部门月度新建加工单图" allUse="2">
+    	<property id="year" name="year" ref="required" var="指定年度"></property>
+    </url>
+    <!-- 生产模块统计接口结束 -->
+	
+</controller>

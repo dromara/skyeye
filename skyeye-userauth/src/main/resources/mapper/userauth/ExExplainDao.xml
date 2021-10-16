@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ExExplainDao">
+	
+	<select id="queryExExplainMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.content,
+		    a.type
+		FROM
+			ex_explain a
+		WHERE a.type = #{type}
+		LIMIT 1
+	</select>
+	
+	<insert id="insertExExplainMation" parameterType="java.util.Map">
+	     INSERT into ex_explain
+	     (id, title, content, type, create_id, create_time)
+	     VALUES
+	     (#{id}, #{title}, #{content}, #{type}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="editExExplainMationById" parameterType="java.util.Map">
+		UPDATE ex_explain
+		<set>
+			<if test="title != '' and title != null">
+				title = #{title},
+			</if>
+			<if test="content != '' and content != null">
+				content = #{content},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

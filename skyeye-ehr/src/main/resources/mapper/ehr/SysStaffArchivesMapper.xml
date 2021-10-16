@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysStaffArchivesDao">
+
+    <select id="queryAllSysStaffArchivesList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.archives_number archivesNumber,
+			a.custody_place custodyPlace,
+			a.archives_center archivesCenter,
+			a.state archivesState,
+			DATE_FORMAT(a.archives_time,'%Y-%m-%d') archivesTime,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.remark,
+			a.enclosure,
+			a.whether_archives whetherArchives,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			c.company_name companyName,
+			d.`name` educationName
+		FROM
+			sys_staff_archives a
+			LEFT JOIN company_mation c ON a.management_unit = c.id
+			LEFT JOIN sys_staff_data_dictionary d ON a.education_id = d.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        <if test="userName != '' and userName != null">
+            AND b.user_name LIKE '%${userName}%'
+        </if>
+        <if test="jobNumber != '' and jobNumber != null">
+            AND b.job_number LIKE '%${jobNumber}%'
+        </if>
+        <if test="archivesNumber != '' and archivesNumber != null">
+            AND a.archives_number = #{archivesNumber}
+        </if>
+        <if test="archivesState != '' and archivesState != null">
+            AND a.state = #{archivesState}
+        </if>
+        <if test="state != '' and state != null">
+            AND b.state = #{state}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="querySysLeaveStaffArchivesList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.archives_number archivesNumber,
+			a.custody_place custodyPlace,
+			a.archives_center archivesCenter,
+			a.state archivesState,
+			DATE_FORMAT(a.archives_time,'%Y-%m-%d') archivesTime,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.remark,
+			a.enclosure,
+			a.whether_archives whetherArchives,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			c.company_name companyName,
+			d.`name` educationName
+		FROM
+			sys_staff_archives a
+			LEFT JOIN company_mation c ON a.management_unit = c.id
+			LEFT JOIN sys_staff_data_dictionary d ON a.education_id = d.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+		AND b.state IN(2, 5)
+		AND a.whether_archives = 1
+        <if test="userName != '' and userName != null">
+            AND b.user_name LIKE '%${userName}%'
+        </if>
+        <if test="jobNumber != '' and jobNumber != null">
+            AND b.job_number LIKE '%${jobNumber}%'
+        </if>
+        <if test="archivesNumber != '' and archivesNumber != null">
+            AND a.archives_number = #{archivesNumber}
+        </if>
+        <if test="archivesState != '' and archivesState != null">
+            AND a.state = #{archivesState}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="querySysStaffNotInArchivesList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.archives_number archivesNumber,
+			a.custody_place custodyPlace,
+			a.archives_center archivesCenter,
+			a.state archivesState,
+			DATE_FORMAT(a.archives_time,'%Y-%m-%d') archivesTime,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.remark,
+			a.enclosure,
+			a.whether_archives whetherArchives,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			c.company_name companyName,
+			d.`name` educationName
+		FROM
+			sys_staff_archives a
+			LEFT JOIN company_mation c ON a.management_unit = c.id
+			LEFT JOIN sys_staff_data_dictionary d ON a.education_id = d.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+		AND a.whether_archives = 2
+        <if test="userName != '' and userName != null">
+            AND b.user_name LIKE '%${userName}%'
+        </if>
+        <if test="jobNumber != '' and jobNumber != null">
+            AND b.job_number LIKE '%${jobNumber}%'
+        </if>
+        <if test="archivesNumber != '' and archivesNumber != null">
+            AND a.archives_number = #{archivesNumber}
+        </if>
+        <if test="archivesState != '' and archivesState != null">
+            AND a.state = #{archivesState}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="querySysStaffNoArchivesList" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.job_number jobNumber,
+			a.user_name userName,
+			u.company_name companyName,
+			q.department_name departmentName,
+			p.job_name jobName,
+			a.state,
+			a.entry_time entryTime,
+			a.work_time workTime
+		FROM
+			sys_eve_user_staff a,
+			company_job p,
+			company_department q,
+			company_mation u
+		WHERE
+			a.id NOT IN (
+				SELECT
+					b.staff_id
+				FROM
+					sys_staff_archives b
+			)
+		AND a.company_id = u.id 
+		AND a.department_id = q.id 
+		AND a.job_id = p.id
+		<if test="userName != '' and userName != null">
+            AND a.user_name LIKE '%${userName}%'
+        </if>
+        <if test="jobNumber != '' and jobNumber != null">
+            AND a.job_number LIKE '%${jobNumber}%'
+        </if>
+	</select>
+	
+	<select id="querySysStaffArchivesMationByStaffId" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.archives_number archivesNumber,
+			a.custody_place custodyPlace,
+			a.archives_center archivesCenter,
+			a.state archivesState,
+			DATE_FORMAT(a.archives_time,'%Y-%m-%d') archivesTime,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.remark,
+			a.enclosure,
+			a.whether_archives whetherArchives,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			c.company_name companyName,
+			a.management_unit managementUnit,
+			d.`name` educationName
+		FROM
+			sys_staff_archives a
+			LEFT JOIN company_mation c ON a.management_unit = c.id
+			LEFT JOIN sys_staff_data_dictionary d ON a.education_id = d.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        AND a.staff_id = #{staffId}
+    </select>
+    
+    <insert id="insertSysStaffArchivesMation" parameterType="java.util.Map">
+        INSERT INTO sys_staff_archives
+        (id, archives_number, management_unit, custody_place, archives_center, archives_time, education_id, whether_archives, state, remark,
+        	enclosure, staff_id, create_time)
+        VALUES
+        (#{id}, #{archivesNumber}, #{managementUnit}, #{custodyPlace}, #{archivesCenter}, #{archivesTime}, #{educationId}, #{whetherArchives}, #{archivesState}, #{remark},
+        	#{enclosureInfo}, #{staffId}, #{createTime})
+    </insert>
+    
+    <select id="querySysStaffArchivesMationToEdit" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.archives_number archivesNumber,
+			a.custody_place custodyPlace,
+			a.archives_center archivesCenter,
+			a.state archivesState,
+			DATE_FORMAT(a.archives_time,'%Y-%m-%d') archivesTime,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.remark,
+			a.enclosure,
+			a.whether_archives whetherArchives,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			a.management_unit managementUnit,
+			c.company_name companyName,
+			a.education_id educationId,
+			d.`name` educationName
+		FROM
+			sys_staff_archives a
+			LEFT JOIN company_mation c ON a.management_unit = c.id
+			LEFT JOIN sys_staff_data_dictionary d ON a.education_id = d.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        AND a.id = #{id}
+    </select>
+    
+    <update id="editSysStaffArchivesMationById">
+        UPDATE sys_staff_archives
+        <set>
+            archives_number = #{archivesNumber},
+            management_unit = #{managementUnit},
+            custody_place = #{custodyPlace},
+            archives_center = #{archivesCenter},
+            archives_time = #{archivesTime},
+            education_id = #{educationId},
+            whether_archives = #{whetherArchives},
+            state = #{archivesState},
+            remark = #{remark},
+            enclosure = #{enclosureInfo},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+</mapper>

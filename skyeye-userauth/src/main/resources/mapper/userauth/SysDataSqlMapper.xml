@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysDataSqlDao">
+
+	<select id="querySysDataSqlBackupsList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sql_title sqlTitle,
+			a.mysql_version mysqlVersion,
+			a.file_size fileSize,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_data_sql_backups a
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<select id="queryAllTableMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			table_name tableName,
+			table_comment tableComment,
+			TABLE_ROWS tablesRows,
+			DATA_LENGTH tableSize,
+			INDEX_LENGTH indexSize
+		FROM
+			information_schema.TABLES
+		WHERE
+			table_schema = #{dbName}
+	</select>
+	
+	<select id="queryDataSqlVersion" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			version() `version`
+		LIMIT 1
+	</select>
+	
+	<insert id="insertTableBackUps" parameterType="java.util.Map">
+	     INSERT into sys_data_sql_backups 
+	     (id, sql_title, sql_version, sql_path, file_size, mysql_version, create_id, create_time)
+	     VALUES
+	     (#{id}, #{sqlTitle}, #{sqlVersion}, #{filePath}, #{fileSize}, #{mysqlVersion}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryDataSqlVersionById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sql_path filePath
+		FROM
+			sys_data_sql_backups a
+		WHERE
+			a.id = #{rowId}
+	</select>
+	
+</mapper>

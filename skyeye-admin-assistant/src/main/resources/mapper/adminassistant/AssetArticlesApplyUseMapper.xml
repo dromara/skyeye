@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AssetArticlesApplyUseDao">
+
+    <select id="queryMyUseAssetArticlesMation" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNum,
+            IFNULL(a.process_instance_id,'') processInstanceId,
+            a.state,
+            CONVERT(a.create_time, char) createTime
+        FROM
+            asset_articles_use a
+        WHERE a.create_id = #{userId}
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+            AND a.create_time >= #{startTime} AND #{endTime} >= a.create_time
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <insert id="insertAssetArticleUseMation" parameterType="java.util.Map">
+        INSERT into asset_articles_use
+        (id, title, odd_number, state, process_instance_id, remark, enclosure_info, create_id, create_time)
+        VALUES(#{id}, #{title}, #{oddNumber}, #{state}, #{processInstanceId}, #{remark}, #{enclosureInfo}, #{createId}, #{createTime})
+    </insert>
+
+    <insert id="insertAssetArticleUseGoodsMation" parameterType="java.util.Map">
+        insert into asset_articles_use_goods
+        (id, use_id, type_id, article_id, article_name, apply_use_num, remark, state)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id}, #{item.useId}, #{item.typeId}, #{item.articleId}, #{item.articlesName}, #{item.applyUseNum}, #{item.remark}, #{item.state})
+        </foreach>
+    </insert>
+
+    <select id="queryAssetArticleUseGoodsMationById" resultType="java.util.Map">
+        SELECT
+            a.article_name articleName,
+            CONCAT(c.specifications, '(', c.unit_of_measurement, ')') specificationsName,
+            b.type_name typeName,
+            a.apply_use_num applyUseNum,
+            a.actual_use_num actualUseNum,
+            a.remark,
+            a.state,
+            CASE a.state WHEN '0' THEN '未提交审批' WHEN '1' THEN '等待发放' WHEN '2' THEN '库存不足' WHEN '3' THEN '库存充足' WHEN '4' THEN '拒绝发放' END stateName
+        FROM
+            asset_articles_use_goods a
+            LEFT JOIN asset_articles_type b ON a.type_id = b.id
+            LEFT JOIN asset_articles c ON a.article_id = c.id
+        WHERE a.use_id = #{useId}
+    </select>
+
+    <select id="queryAssetArticleUseMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumver,
+            a.remark,
+            a.state,
+            b.user_name userName,
+            IFNULL(a.enclosure_info, '') enclosureInfo
+        FROM
+            asset_articles_use a
+            LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="queryAssetArticleUseGoodsMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.article_id articleId,
+            CONCAT(c.specifications, '(', c.unit_of_measurement, ')') specificationsName,
+            a.type_id typeId,
+            a.apply_use_num applyUseNum,
+            c.residual_num residualNum,
+            a.remark
+        FROM
+            asset_articles_use_goods a
+                LEFT JOIN asset_articles c ON a.article_id = c.id
+        WHERE a.use_id = #{id}
+    </select>
+
+    <update id="updateAssetArticleUseMation" parameterType="java.util.Map">
+        UPDATE asset_articles_use
+        <set>
+            remark = #{remark},
+            enclosure_info = #{enclosureInfo}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAssetArticleUseGoodsMationById" parameterType="java.util.Map">
+        DELETE
+        FROM
+            asset_articles_use_goods
+        WHERE
+            use_id = #{id}
+    </delete>
+
+    <select id="queryAssetArticleUseStateById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.state
+        FROM
+            asset_articles_use a
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <update id="updateAssetArticleUseStateISInAudit">
+        UPDATE asset_articles_use
+        <set>
+            state = '1',
+            process_instance_id = #{processInId}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAssetArticlesUseMationById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumber,
+            a.remark,
+            a.state,
+            IFNULL(a.enclosure_info, '') enclosureInfo,
+            IFNULL(a.process_instance_id,'') processInstanceId,
+            b.user_name userName
+        FROM
+            asset_articles_use a
+            LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="queryAssetsArticlesUseByProcessInstanceId" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_articles_use a
+        WHERE
+            a.process_instance_id = #{processInstanceId}
+          AND a.state = '1'
+    </select>
+
+    <select id="queryAssetsArticlesUseGoodsById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.article_id articleId,
+            a.apply_use_num applyUseNum,
+            b.residual_num residualNum
+        FROM
+            asset_articles_use_goods a
+            LEFT JOIN asset_articles b ON a.article_id = b.id
+        WHERE
+            a.use_id = #{id}
+    </select>
+
+    <update id="editAssetsArticlesUseGoodsById" parameterType="java.util.Map">
+        update asset_articles_use_goods
+        <set>
+            state = #{applyState},
+            actual_use_num = #{actualUseNum}
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="editAssetsArticlesUseById" parameterType="java.util.Map">
+        update asset_articles_use
+        <set>
+            state = #{state},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateAssetArticleUseGoodStateISInAudit">
+        UPDATE asset_articles_use_goods
+        <set>
+            state = '1'
+        </set>
+        WHERE use_id = #{useId}
+    </update>
+
+    <update id="editAssetsArticlesUseGoodsByUseId" parameterType="java.util.Map">
+        update asset_articles_use_goods
+        <set>
+            state = '4',
+            actual_use_num = '0'
+        </set>
+        WHERE
+        use_id = #{id}
+    </update>
+
+    <update id="editAssetArticlesUseToRevoke" parameterType="java.util.Map">
+        UPDATE asset_articles_use
+        <set>
+            state = '5',
+            process_instance_id = ''
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editAssetArticlesUseGoodsToRevoke" parameterType="java.util.Map">
+        UPDATE asset_articles_use_goods
+        <set>
+            state = '0'
+        </set>
+        WHERE use_id = #{id}
+    </update>
+
+    <select id="queryAssetArticlesUseId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_articles_use a
+        WHERE
+            a.process_instance_id = #{processInstanceId}
+    </select>
+
+    <update id="updateAssetArticlesToCancellation" parameterType="java.util.Map">
+        UPDATE asset_articles_use
+        <set>
+            state = 4
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

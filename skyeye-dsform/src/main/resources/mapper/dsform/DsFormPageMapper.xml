@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.DsFormPageDao">
+	
+	<select id="queryDsFormPageList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.page_name pageName,
+			a.page_desc pageDesc,
+			a.page_num pageNum
+		FROM
+			ds_form_page a
+		WHERE 1 = 1
+			<if test="pageName != '' and pageName != null">
+				AND a.page_name LIKE '%${pageName}%'
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryDsFormPageMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			ds_form_page a
+		WHERE
+			a.page_name = #{pageName}
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+	
+	<insert id="insertDsFormPageMation" parameterType="java.util.Map">
+		INSERT INTO ds_form_page 
+	    (id, page_name, page_desc, page_num, create_id, create_time)
+	    VALUES(#{id}, #{pageName}, #{pageDesc}, #{pageNum}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryDsFormPageOrderby" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			MAX(a.order_by) orderBy
+		FROM
+			ds_form_page_content a
+		WHERE a.page_id = #{pageId}
+		AND a.state = 1
+	</select>
+
+	<insert id="insertDsFormPageContent" parameterType="java.util.Map">
+		INSERT INTO ds_form_page_content 
+	    (id, title, placeholder, `require`, default_value, default_width, form_content_id, html_content, js_content, page_id, associated_data_types,
+	    	a_data, key_id, editable_node_id, editable_node_name, order_by, state, create_id, create_time)
+	    VALUES(#{id}, #{labelContent}, #{placeholder}, #{require}, #{value}, #{defaultWidth}, #{formContentId}, #{htmlContent}, #{jsContent}, #{pageId}, #{associatedDataTypes},
+	    	#{aData}, #{keyId}, #{editableNodeId}, #{editableNodeName}, #{orderBy}, #{state}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="selectFormPageContentByPageId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.id name,
+			a.title labelContent,
+			b.`name` controlTypeName,
+			b.linked_data linkedData,
+			b.id formContentId,
+			a.placeholder,
+			a.`require`,
+			a.default_value value,
+			a.default_width defaultWidth,
+			a.page_id pageId,
+			a.html_content htmlContent,
+			a.js_content jsContent,
+			a.order_by orderBy,
+			a.state,
+			IFNULL(a.key_id, '') keyId,
+			IFNULL(a.associated_data_types,'') associatedDataTypes,
+			IFNULL(a.a_data,'') aData,
+			IFNULL(d.template_content,'') templateContent,
+			IFNULL(a.editable_node_id, '') editableNodeId,
+			IFNULL(a.editable_node_name, '') editableNodeName
+		FROM
+			ds_form_content b
+			LEFT JOIN ds_form_display_template d ON b.data_show_tpl = d.id,
+			ds_form_page_content a
+		WHERE a.page_id = #{pageId}
+		AND a.state = 1
+		AND	b.id = a.form_content_id
+		GROUP BY a.id
+		ORDER BY
+			a.order_by ASC
+	</select>
+	
+	<delete id="deleteDsFormContentByPageId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			ds_form_page_content
+		WHERE
+			page_id = #{pageId}
+	</delete>
+	
+	<delete id="deleteDsFormPageById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			ds_form_page
+		WHERE
+			id = #{pageId}
+	</delete>
+	
+	<select id="selectDsFormPageById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.page_name pageName,
+			a.page_desc pageDesc
+		FROM
+			ds_form_page a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editDsFormPageMationById" parameterType="java.util.Map">
+		UPDATE ds_form_page
+		<set>
+			page_name = #{pageName},
+			page_desc = #{pageDesc}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryAllDsFormPageContent" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title labelContent,
+			b.`name` controlTypeName,
+			a.order_by orderBy,
+			a.default_width defaultWidth,
+			c.former_requirement requireName
+		FROM
+			ds_form_content b,
+			ds_form_page_content a
+		LEFT JOIN ds_form_limit_requirement c ON c.id = a.`require`
+		WHERE a.page_id = #{id}
+		AND	b.id = a.form_content_id
+		ORDER BY
+			a.order_by ASC
+	</select>
+	
+	<update id="editDsFormPageContentByPageId" parameterType="java.util.Map">
+		UPDATE ds_form_page_content
+		<set>
+			title = #{labelContent},
+			`require` = #{require},
+			default_width = #{defaultWidth},
+			order_by = #{orderBy},
+			state = #{state},
+			editable_node_id = #{editableNodeId},
+			editable_node_name = #{editableNodeName},
+			placeholder = #{placeholder},
+			default_value = #{value},
+			a_data = '${aData}',
+			associated_data_types = #{associatedDataTypes},
+			key_id = #{keyId}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editDsFormPageContentToDelete" parameterType="java.util.Map">
+		UPDATE ds_form_page_content
+		<set>
+			state = #{state}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryDsFormContentListByPageId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.id name,
+			a.title labelContent,
+			b.`name` controlTypeName,
+			a.placeholder,
+			a.default_value value,
+			a.default_width defaultWidth,
+			a.page_id pageId,
+			a.html_content htmlContent,
+			a.js_content jsContent,
+			a.order_by orderBy,
+			a.state,
+			IFNULL(a.key_id, '') keyId,
+			IFNULL(a.editable_node_id, '') editableNodeId,
+			IFNULL(a.editable_node_name, '') editableNodeName,
+			IFNULL(a.associated_data_types,'') associatedDataTypes,
+			IFNULL(a.a_data,'') aData,
+			IFNULL(d.template_content,'') templateContent,
+			GROUP_CONCAT(c.former_requirement separator '|') `require`,
+			a.editable_node_id editableNodeId,
+			a.editable_node_name editableNodeName
+		FROM
+			ds_form_content b
+			LEFT JOIN ds_form_display_template d ON b.data_show_tpl = d.id,
+			ds_form_page_content a
+			LEFT JOIN ds_form_limit_requirement c ON INSTR(CONCAT(',', a.`require`, ','), CONCAT(',', c.id, ','))
+		WHERE a.page_id = #{pageId}
+		AND a.state = 1
+		AND	b.id = a.form_content_id
+		GROUP BY a.id
+		ORDER BY
+			a.order_by ASC
+	</select>
+	
+	<select id="queryFromDsFormPageContent" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id contentId,
+			a.page_id pageId,
+			a.title,
+			a.placeholder,
+			IFNULL(GROUP_CONCAT(c.former_requirement separator '|'), '') `require`,
+			a.html_content htmlContent,
+			a.js_content jsContent,
+			a.associated_data_types associatedDataTypes,
+			a.a_data aData,
+			a.key_id keyId,
+			a.editable_node_id editableNodeId,
+			a.editable_node_name editableNodeName,
+			a.order_by orderBy,
+			a.form_content_id formContentId,
+			b.linked_data linkedData,
+			IFNULL(d.template_content, '') displayTemplate
+		FROM
+			ds_form_content b
+		LEFT JOIN ds_form_display_template d ON b.data_show_tpl = d.id,
+			ds_form_page_content a
+		LEFT JOIN ds_form_limit_requirement c ON INSTR(CONCAT(',', a.`require`, ','), CONCAT(',', c.id, ','))
+		WHERE
+			a.id = #{rowId}
+		AND	b.id = a.form_content_id
+	</select>
+
+	<insert id="insertDsFormPageSequence" parameterType="java.util.Map">
+		INSERT INTO ds_form_page_sequence
+	    (id, page_id, process_instance_id, create_id, create_time)
+	    VALUES(#{sequenceId}, #{pageId}, #{processInstanceId}, #{createId}, #{createTime})
+	</insert>
+	
+	<insert id="insertDsFormPageData" parameterType="java.util.Map">
+		INSERT INTO ds_form_page_data
+	    (id, content_id, sequence_id, page_id, title, placeholder, `require`, html_content, js_content, associated_data_types, a_data, linked_data, display_template, key_id, editable_node_id, editable_node_name, order_by, default_width, `value`, text, show_type, create_id, create_time)
+	    VALUES
+	    <foreach collection="list" item="item" index="index" separator=",">
+	    	(#{item.id}, #{item.contentId}, #{item.sequenceId}, #{item.pageId}, #{item.title}, #{item.placeholder}, #{item.require}, #{item.htmlContent}, #{item.jsContent}, #{item.associatedDataTypes}, #{item.aData}, #{item.linkedData}, #{item.displayTemplate}, #{item.keyId}, #{item.editableNodeId}, #{item.editableNodeName}, #{item.orderBy}, #{item.defaultWidth}, #{item.value}, #{item.text}, #{item.showType}, #{item.createId}, #{item.createTime})
+		</foreach>
+	</insert>
+
+</mapper>

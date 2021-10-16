@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="知识库模块">
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	<url id="knowledgetype001" path="/post/KnowledgeTypeController/queryKnowledgeTypeList" val="获取知识库类型列表" allUse="1" groupName="知识库类型">
+		<property id="name" name="name" ref="" var="知识库类型名称"/>
+		<property id="state" name="state" ref="num" var="上线状态" />
+		<property id="notId" name="notId" ref="" var="不包含在查询列表中的数据" />
+	</url>
+	<url id="knowledgetype002" path="/post/KnowledgeTypeController/insertKnowledgeTypeMation" val="新增知识库类型" allUse="1" groupName="知识库类型">
+	    <property id="name" name="name" ref="required" var="知识库类型名称"/>
+	    <property id="parentId" name="parentId" ref="" var="一级类型id"/>
+	</url>
+	<url id="knowledgetype003" path="/post/KnowledgeTypeController/deleteKnowledgeTypeById" val="删除知识库类型" allUse="1" method="DELETE" groupName="知识库类型">
+	    <property id="rowId" name="id" ref="required" var="知识库类型名称id"/>
+	</url>
+	<url id="knowledgetype004" path="/post/KnowledgeTypeController/updateUpKnowledgeTypeById" val="上线知识库类型" allUse="1" groupName="知识库类型">
+	    <property id="rowId" name="id" ref="required" var="知识库类型名称id"/>
+	</url>
+	<url id="knowledgetype005" path="/post/KnowledgeTypeController/updateDownKnowledgeTypeById" val="下线知识库类型" allUse="1" groupName="知识库类型">
+	    <property id="rowId" name="id" ref="required" var="知识库类型名称id"/>
+	</url>
+	<url id="knowledgetype006" path="/post/KnowledgeTypeController/selectKnowledgeTypeById" val="获取选中的知识库类型信息用以编辑" allUse="2" method="GET" groupName="知识库类型">
+	    <property id="rowId" name="id" ref="required" var="知识库类型名称id"/>
+	</url>
+	<url id="knowledgetype007" path="/post/KnowledgeTypeController/editKnowledgeTypeMationById" val="编辑知识库类型" allUse="1" groupName="知识库类型">
+	    <property id="rowId" name="id" ref="required" var="知识库类型名称id"/>
+	    <property id="name" name="name" ref="required" var="知识库类型名称"/>
+	</url>
+	<url id="knowledgetype008" path="/post/KnowledgeTypeController/queryUpKnowledgeTypeTreeMation" val="获取已经上线的知识库类型，数据为tree格式" allUse="2" method="GET" groupName="知识库类型">
+	</url>
+
+	<url id="knowledgecontent001" path="/post/KnowledgeContentController/queryKnowledgeContentList" val="获取知识库列表" allUse="1" groupName="知识库">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="标题"/>
+		<property id="state" name="state" ref="" var="上线状态" />
+		<property id="typeId" name="typeId" ref="" var="所属类型"/>
+	</url>
+	<url id="knowledgecontent002" path="/post/KnowledgeContentController/insertKnowledgeContentMation" val="新增知识库" allUse="1" groupName="知识库">
+		<property id="title" name="title" ref="required" var="知识库标题"/>
+		<property id="desc" name="desc" ref="required" var="知识库简介"/>
+		<property id="content" name="content" ref="required" var="知识库内容"/>
+		<property id="typeId" name="typeId" ref="required" var="所属类型"/>
+		<property id="label" name="label" ref="" var="知识库标签"/>
+	</url>
+	<url id="knowledgecontent003" path="/post/KnowledgeContentController/selectKnowledgeContentById" val="通过id查找对应的知识库信息用以编辑" allUse="2" groupName="知识库">
+	    <property id="rowId" name="id" ref="required" var="知识库id"/>
+	</url>
+	<url id="knowledgecontent004" path="/post/KnowledgeContentController/editKnowledgeContentById" val="编辑知识库" allUse="1" groupName="知识库">
+	    <property id="rowId" name="id" ref="required" var="知识库id"/>
+	    <property id="title" name="title" ref="required" var="标题"/>
+	    <property id="typeId" name="typeId" ref="required" var="所属类型"/>
+	    <property id="desc" name="desc" ref="required" var="知识库简介"/>
+	    <property id="content" name="content" ref="required" var="知识库内容"/>
+		<property id="label" name="label" ref="" var="知识库标签"/>
+	</url>
+	<url id="knowledgecontent005" path="/post/KnowledgeContentController/deleteKnowledgeContentById" val="删除知识库" allUse="1" groupName="知识库">
+	    <property id="rowId" name="id" ref="required" var="知识库id"/>
+	</url>
+	<url id="knowledgecontent006" path="/post/KnowledgeContentController/queryKnowledgeContentMationById" val="知识库详情" allUse="2" groupName="知识库">
+	    <property id="rowId" name="id" ref="required" var="知识库id"/>
+	</url>
+	<url id="knowledgecontent007" path="/post/KnowledgeContentController/insertUploadFileByUserId" val="上传文件" allUse="2">
+		<property id="name" name="name" ref="required" var="文件名" />
+		<property id="size" name="size" ref="required,num" var="文件大小" />
+		<property id="md5" name="md5" ref="required" var="文件唯一标示" />
+		<property id="chunk" name="chunk" ref="required" var="分块上传，块下标" />
+		<property id="chunkSize" name="chunkSize" ref="required" var="分块上传时，块的大小，用于最后合并" />
+	</url>
+	<url id="knowledgecontent008" path="/post/KnowledgeContentController/insertUploadFileChunksByUserId" val="上传文件合并块" allUse="2">
+		<property id="md5" name="md5" ref="required" var="文件唯一标示" />
+		<property id="name" name="name" ref="required" var="文件名" />
+		<property id="size" name="size" ref="required,num" var="文件大小" />
+	</url>
+	<url id="knowledgecontent009" path="/post/KnowledgeContentController/queryUploadFileChunksByChunkMd5" val="文件分块上传检测是否上传" allUse="2">
+		<property id="md5" name="md5" ref="required" var="文件唯一标示" />
+		<property id="chunk" name="chunk" ref="required" var="分块上传，块下标" />
+		<property id="chunkSize" name="chunkSize" ref="required" var="分块上传时，块的大小，用于最后合并" />
+	</url>
+	<url id="knowledgecontent010" path="/post/KnowledgeContentController/queryUnCheckedKnowledgeContentList" val="获取待审核的知识库列表" allUse="1" groupName="知识库">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="标题" />
+		<property id="typeId" name="typeId" ref="" var="所属类型" />
+		<property id="createUser" name="createUser" ref="" var="提交人" />
+		<property id="startTime" name="startTime" ref="" var="提交时间开始" />
+		<property id="endTime" name="endTime" ref="" var="提交时间结束" />
+	</url>
+	<url id="knowledgecontent011" path="/post/KnowledgeContentController/queryKnowledgeContentByIdToCheck" val="获取知识库信息用于回显审核" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="知识库id"/>
+	</url>
+	<url id="knowledgecontent012" path="/post/KnowledgeContentController/editKnowledgeContentToCheck" val="审核知识库" allUse="1">
+		<property id="rowId" name="id" ref="required" var="知识库Id" />
+		<property id="examineState" name="examineState" ref="required" var="审核状态"/>
+		<property id="examineNopassReason" name="examineNopassReason" ref="" var="审核不通过原因" />
+	</url>
+	<url id="knowledgecontent013" path="/post/KnowledgeContentController/queryCheckedKnowledgeContentList" val="获取已经审核的知识库列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="标题" />
+		<property id="state" name="state" ref="" var="上线状态" />
+		<property id="typeId" name="typeId" ref="" var="所属类型" />
+		<property id="createName" name="createUser" ref="" var="提交人" />
+		<property id="startTime" name="startTime" ref="" var="提交时间开始" />
+		<property id="endTime" name="endTime" ref="" var="提交时间结束" />
+		<property id="examineStartTime" name="examineStartTime" ref="" var="审核时间开始" />
+		<property id="examineEndTime" name="examineEndTime" ref="" var="审核时间结束" />
+	</url>
+	<url id="knowledgecontent014" path="/post/KnowledgeContentController/queryUncheckedKnowledgeContent" val="未审核知识库详情" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="知识库id"/>
+	</url>
+	<url id="knowledgecontent015" path="/post/KnowledgeContentController/queryCheckedKnowledgeContent" val="已审核知识库详情" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="知识库id"/>
+	</url>
+	<url id="knowledgecontent016" path="/post/KnowledgeContentController/queryAllPassKnowledgeContentList" val="获取企业知识库列表(已审核通过)" allUse="1" groupName="知识库">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="标题"/>
+		<property id="label" name="label" ref="" var="标签" />
+		<property id="typeId" name="typeId" ref="" var="所属类型"/>
+	</url>
+
+</controller>

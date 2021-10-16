@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	 <!-- 动态表单系列开始 -->
+	<url id="dsform001" path="/post/DsFormContentController/queryDsFormContentList" val="获取动态表单内容列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="contentName" name="contentName" ref="" var="模板内容标题"/>
+	</url>
+	<url id="dsform002" path="/post/DsFormContentController/insertDsFormContentMation" val="添加动态表单内容信息" allUse="1">
+		<property id="contentName" name="contentName" ref="required" var="模板内容标题"/>
+		<property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
+		<property id="htmlType" name="htmlType" ref="required" var="html内容类型"/>
+		<property id="jsContent" name="jsContent" ref="" var="js内容"/>
+		<property id="jsType" name="jsType" ref="" var="js内容类型"/>
+		<property id="linkedData" name="linkedData" ref="required" var="关联数据"/>
+		<property id="dataShowTpl" name="dataShowTpl" ref="" var="数据展示模板"/>
+		<property id="defaultData" name="defaultData" ref="" var="默认数据"/>
+	</url>
+	<url id="dsform003" path="/post/DsFormContentController/deleteDsFormContentMationById" val="删除动态表单内容信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单内容id"/>
+	</url>
+	<url id="dsform004" path="/post/DsFormContentController/queryDsFormContentMationToEditById" val="编辑动态表单内容信息时进行回显" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="动态表单内容id"/>
+	</url>
+	<url id="dsform005" path="/post/DsFormContentController/editDsFormContentMationById" val="编辑动态表单内容信息" allUse="1">
+	    <property id="contentName" name="contentName" ref="required" var="模板内容标题"/>
+		<property id="htmlContent" name="htmlContent" ref="required" var="html内容"/>
+		<property id="jsContent" name="jsContent" ref="" var="js内容"/>
+	    <property id="rowId" name="id" ref="required" var="动态表单内容id"/>
+	    <property id="linkedData" name="linkedData" ref="required" var="关联数据"/>
+	    <property id="dataShowTpl" name="dataShowTpl" ref="" var="数据展示模板"/>
+	    <property id="defaultData" name="defaultData" ref="" var="默认数据"/>
+	</url>
+	<url id="dsform006" path="/post/DsFormContentController/queryDsFormContentMationToShow" val="获取动态表单内容供展示" allUse="2">
+	</url>
+	<url id="dsform007" path="/post/DsFormContentController/queryDsFormContentDetailedMationToShow" val="获取动态表单内容详细信息供展示" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="动态表单内容id"/>
+	</url>
+	<url id="dsformlimitrequirement001" path="/post/DsFormLimitRequirementController/queryDsFormLimitRequirementList" val="获取动态表单条件限制类型列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="requireName" name="requireName" ref="" var="类型名称"/>
+	    <property id="formerRequirement" name="formerRequirement" ref="" var="前端限制条件标签"/>
+	    <property id="afterRequirement" name="afterRequirement" ref="" var="后端限制条件标签"/>
+	</url>
+	<url id="dsformlimitrequirement002" path="/post/DsFormLimitRequirementController/insertDsFormLimitRequirementMation" val="添加动态表单条件限制类型信息" allUse="1">
+		<property id="requireName" name="requireName" ref="required" var="类型名称"/>
+	    <property id="formerRequirement" name="formerRequirement" ref="required" var="前端限制条件标签"/>
+	    <property id="afterRequirement" name="afterRequirement" ref="required" var="后端限制条件标签"/>
+	</url>
+	<url id="dsformlimitrequirement003" path="/post/DsFormLimitRequirementController/deleteDsFormLimitRequirementMationById" val="删除动态表单条件限制类型信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单条件限制类型id"/>
+	</url>
+	<url id="dsformlimitrequirement004" path="/post/DsFormLimitRequirementController/queryDsFormLimitRequirementMationToEditById" val="编辑动态表单条件限制类型信息时进行回显" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="动态表单条件限制类型id"/>
+	</url>
+	<url id="dsformlimitrequirement005" path="/post/DsFormLimitRequirementController/editDsFormLimitRequirementMationById" val="编辑动态表单条件限制类型信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单条件限制类型id"/>
+	    <property id="requireName" name="requireName" ref="required" var="类型名称"/>
+	    <property id="formerRequirement" name="formerRequirement" ref="required" var="前端限制条件标签"/>
+	    <property id="afterRequirement" name="afterRequirement" ref="required" var="后端限制条件标签"/>
+	</url>
+	<url id="dsformlimitrequirement006" path="/post/DsFormLimitRequirementController/queryDsFormLimitRequirementMationToShow" val="获取动态表单内容供展示" allUse="2">
+	</url>
+	<url id="dsformdisplaytemplate001" path="/post/DsFormDisplayTemplateController/queryDsFormDisplayTemplateList" val="获取动态表单数据展示模板列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="templateName" name="templateName" ref="" var="模板名称"/>
+	</url>
+	<url id="dsformdisplaytemplate002" path="/post/DsFormDisplayTemplateController/insertDsFormDisplayTemplateMation" val="添加动态表单数据展示模板信息" allUse="1">
+		<property id="templateName" name="templateName" ref="required" var="模板名称"/>
+	    <property id="templateContent" name="templateContent" ref="required" var="模板内容"/>
+	</url>
+	<url id="dsformdisplaytemplate003" path="/post/DsFormDisplayTemplateController/deleteDsFormDisplayTemplateMationById" val="删除动态表单数据展示模板信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单数据展示模板id"/>
+	</url>
+	<url id="dsformdisplaytemplate004" path="/post/DsFormDisplayTemplateController/queryDsFormDisplayTemplateMationToEditById" val="编辑动态表单数据展示模板信息时进行回显" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="动态表单数据展示模板id"/>
+	</url>
+	<url id="dsformdisplaytemplate005" path="/post/DsFormDisplayTemplateController/editDsFormDisplayTemplateMationById" val="编辑动态表单数据展示模板信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="动态表单数据展示模板id"/>
+	    <property id="templateName" name="templateName" ref="required" var="模板名称"/>
+	    <property id="templateContent" name="templateContent" ref="required" var="模板内容"/>
+	</url>
+	<url id="dsformdisplaytemplate006" path="/post/DsFormDisplayTemplateController/queryDisplayTemplateListToShow" val="获取动态表单数据展示模板" allUse="2">
+	</url>
+	
+	<url id="dsformpage001" path="/post/DsFormPageController/queryDsFormPageList" val="获取动态表单页面表" allUse="1">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="pageName" name="pageName" ref="" var="页面名称"/>
+    </url>
+    <url id="dsformpage002" path="/post/DsFormPageController/insertDsFormPageMation" val="新增动态表单页面" allUse="1">
+        <property id="pageName" name="pageName" ref="required" var="页面名称" />
+        <property id="pageDesc" name="pageDesc" ref="" var="页面简介"/>
+    </url>
+    <url id="dsformpage003" path="/post/DsFormPageController/insertDsFormPageContent" val="新增控件" allUse="2">
+        <property id="pageId" name="pageId" ref="required" var="页面id" />
+        <property id="defaultWidth" name="defaultWidth" ref="required" var="默认宽度"/>
+        <property id="title" name="labelContent" ref="required" var="左侧提醒" />
+        <property id="require" name="require" ref="" var="表单项限制条件"/>
+        <property id="placeholder" name="placeholder" ref="" var="文本提示语" />
+        <property id="defaultValue" name="value" ref="" var="默认值"/>
+        <property id="formContentId" name="formContentId" ref="required" var="展现形式id" />
+        <property id="htmlContent" name="htmlContent" ref="required" var="HTML文本"/>
+        <property id="jsContent" name="jsContent" ref="" var="JS文本"/>
+        <property id="associatedDataTypes" name="associatedDataTypes" ref="" var="关联数据类型"/>
+        <property id="aData" name="aData" ref="" var="数据"/>
+        <property id="keyId" name="keyId" ref="" var="控件Id"/>
+        <property id="editableNodeId" name="editableNodeId" ref="" var="可编辑节点Id"/>
+        <property id="editableNodeName" name="editableNodeName" ref="" var="可编辑节点名称"/>
+    </url>
+    <url id="dsformpage004" path="/post/DsFormPageController/selectFormPageContentByPageId" val="查看某个动态表单中的表单控件" allUse="1">
+        <property id="rowId" name="pageId" ref="required" var="页面id" />
+    </url>
+    <url id="dsformpage005" path="/post/DsFormPageController/deleteDsFormPageById" val="删除动态表单页面" allUse="1">
+        <property id="rowId" name="pageId" ref="required" var="页面id" />
+    </url>
+    <url id="dsformpage006" path="/post/DsFormPageController/selectDsFormPageById" val="通过id查找对应的动态表单" allUse="2">
+        <property id="rowId" name="id" ref="required" var="页面id" />
+    </url>
+    <url id="dsformpage007" path="/post/DsFormPageController/editDsFormPageMationById" val="通过id编辑对应的动态表单" allUse="1">
+        <property id="rowId" name="id" ref="required" var="页面id" />
+        <property id="pageName" name="pageName" ref="" var="页面名称" />
+        <property id="pageDesc" name="pageDesc" ref="" var="页面简介" />
+    </url>
+    <url id="dsformpage008" path="/post/DsFormPageController/queryAllDsFormPageContent" val="获取表单内所有控件用于编辑调整" allUse="1">
+    	<property id="rowId" name="id" ref="required" var="页面id" />
+    </url>
+    <url id="dsformpage009" path="/post/DsFormPageController/editDsFormPageContentByPageId" val="编辑表单内容中的控件" allUse="1">
+    	<property id="formedit" name="formedit" ref="" var="数据" />
+    </url>
+    <url id="dsformpage010" path="/post/DsFormPageController/queryInterfaceIsTrueOrNot" val="验证接口是否正确" allUse="2">
+    	<property id="interfa" name="interfa" ref="" var="数据" />
+    </url>
+    <url id="dsformpage011" path="/post/DsFormPageController/queryInterfaceValue" val="获取接口中的值" allUse="2">
+    	<property id="interfa" name="interfa" ref="" var="数据" />
+    </url>
+    <url id="dsformpage012" path="/post/DsFormPageController/queryDsFormContentListByPageId" val="获取redis中的动态表单页" allUse="2">
+        <property id="rowId" name="pageId" ref="required" var="页面id" />
+    </url>
+	<!-- 动态表单系列结束 -->
+	
+</controller>

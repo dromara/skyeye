@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.OilingDao">
+
+	<select id="selectAllOilingMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.oil_title oilTitle,
+			c.license_plate licensePlate,
+			DATE_FORMAT(CONVERT (a.oil_time, CHAR),'%Y-%m-%d') oilTime,
+			a.oil_capacity oilCapacity,
+			a.oil_price oilPrice,
+			b.user_name userName
+		FROM
+			vehicle_oiling a
+			LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+			LEFT JOIN vehicle_mation c ON a.vehicle_id = c.id
+			LEFT JOIN sys_eve_user_staff d ON d.user_id = #{userId}
+		WHERE
+		    c.state != 4
+		    AND c.vehicle_company = d.company_id
+			<if test="oilTitle != '' and oilTitle != null">
+				AND a.oil_title LIKE '%${oilTitle}%'
+			</if>
+			<if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+				AND #{endTime} >= a.oil_time AND a.oil_time >= #{startTime}
+			</if>
+			<if test="oilPlate != '' and oilPlate != null">
+				AND a.vehicle_id = #{oilPlate}
+			</if>
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<insert id="insertOilingMation" parameterType="java.util.Map">
+	    INSERT into vehicle_oiling 
+	    (id, oil_title, vehicle_id, oil_capacity, oil_time, oil_price, room_add_desc, enclosure_info, create_id, create_time)
+	    VALUES(#{id}, #{oilTitle}, #{vehicleId}, #{oilCapacity}, #{oilTime}, #{oilPrice}, #{roomAddDesc}, #{enclosureInfo}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteOilingById" parameterType="java.lang.String">
+		DELETE 
+		FROM 
+			vehicle_oiling
+		where 
+			id = #{id}
+	</delete>
+	
+	<select id="queryOilingMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.oil_title oilTitle,
+			a.oil_capacity oilCapacity,
+			DATE_FORMAT(CONVERT (a.oil_time, CHAR),'%Y-%m-%d') oilTime,
+			a.oil_price oilPrice,
+			a.room_add_desc roomAddDesc,
+			IFNULL(a.enclosure_info, '') enclosureInfo,
+			b.license_plate licensePlate
+		FROM
+			vehicle_oiling a
+			LEFT JOIN vehicle_mation b ON a.vehicle_id = b.id
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editOilingMationById" parameterType="java.util.Map">
+		UPDATE vehicle_oiling
+		<set>
+			<if test="oilCapacity != '' and oilCapacity != null">
+				oil_capacity = #{oilCapacity},
+			</if>
+			<if test="oilTime != '' and oilTime != null">
+				oil_time = #{oilTime},
+			</if>
+			<if test="oilPrice != '' and oilPrice != null">
+				oil_price = #{oilPrice},
+			</if>
+			room_add_desc = #{roomAddDesc},
+			enclosure_info = #{enclosureInfo}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="selectOilingDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.oil_title oilTitle,
+			a.oil_capacity oilCapacity,
+			DATE_FORMAT(CONVERT (a.oil_time, CHAR),'%Y-%m-%d') oilTime,
+			a.oil_price oilPrice,
+			a.room_add_desc roomAddDesc,
+			IFNULL(a.enclosure_info, '') enclosureInfo,
+			c.license_plate licensePlate,
+			b.user_name userName,
+			CONVERT (a.create_time, CHAR) createTime
+		FROM
+			vehicle_oiling a
+		LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+		LEFT JOIN vehicle_mation c ON a.vehicle_id = c.id
+		WHERE a.id = #{id}
+	</select>
+
+</mapper>

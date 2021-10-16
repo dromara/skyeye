@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AssetFromDao">
+
+    <select id="selectAllAssetFromMation" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        a.id,
+        a.from_name fromName,
+        a.state,
+        a.order_by orderBy
+        FROM
+        asset_management_from a
+        WHERE
+        a.state != 3
+        <if test="fromName != '' and fromName != null">
+            AND a.from_name LIKE '%${fromName}%'
+        </if>
+        <if test="fromState != '' and fromState != null">
+            AND a.state = #{fromState}
+        </if>
+        ORDER BY a.order_by ASC
+    </select>
+
+    <insert id="insertAssetFromMation" parameterType="java.util.Map">
+        INSERT into asset_management_from
+            (id, from_name, state, order_by, create_id, create_time)
+        VALUES(#{id}, #{fromName}, #{state}, #{orderBy}, #{createId}, #{createTime})
+    </insert>
+
+    <update id="deleteAssetFromById" parameterType="java.util.Map">
+        UPDATE asset_management_from
+        <set>
+            state = 3
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAssetFromMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.from_name fromName
+        FROM
+            asset_management_from a
+        WHERE a.id = #{id}
+    </select>
+
+    <update id="editAssetFromMationById" parameterType="java.util.Map">
+        UPDATE asset_management_from
+        <set>
+            <if test="fromName != '' and fromName != null">
+                from_name = #{fromName},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectAllAssetFromToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.from_name name
+        FROM
+            asset_management_from a
+        WHERE
+            a.state = 1
+        ORDER BY
+            a.order_by
+    </select>
+
+    <select id="queryAssetFromAfterOrderBum" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.order_by orderBy
+        FROM
+            asset_management_from a
+        WHERE a.state != 3
+        ORDER BY a.order_by DESC
+            LIMIT 1
+    </select>
+
+    <select id="queryAssetFromISTopByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            b.id,
+            b.order_by orderBy,
+            a.order_by thisOrderBy
+        FROM
+            asset_management_from a,
+            asset_management_from b
+        WHERE
+            a.id = #{id}
+          AND a.order_by > b.order_by
+          AND b.state != 3
+        ORDER BY b.order_by DESC LIMIT 1
+    </select>
+
+    <select id="queryAssetFromISLowerByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            b.id,
+            b.order_by orderBy,
+            a.order_by thisOrderBy
+        FROM
+            asset_management_from a,
+            asset_management_from b
+        WHERE
+            a.id = #{id}
+          AND b.order_by > a.order_by
+          AND b.state != 3
+        ORDER BY b.order_by ASC LIMIT 1
+    </select>
+
+    <update id="editAssetFromSortTopById" parameterType="java.util.Map">
+        UPDATE asset_management_from
+        <set>
+            order_by = #{orderBy},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editAssetFromSortLowerById" parameterType="java.util.Map">
+        UPDATE asset_management_from
+        <set>
+            order_by = #{orderBy}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editAssetFromUpTypeById" parameterType="java.util.Map">
+        UPDATE asset_management_from
+        <set>
+            state = 1
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editAssetFromDownTypeById" parameterType="java.util.Map">
+        UPDATE asset_management_from
+        <set>
+            state = 2
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAssetFromMationStateById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.state
+        FROM
+            asset_management_from a
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="queryAssetFromMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_management_from a
+        WHERE
+            a.from_name = #{fromName}
+          AND a.state != 3
+    </select>
+
+    <select id="queryAssetFromMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_management_from a
+        WHERE
+            a.from_name = #{fromName}
+          AND a.id != #{id}
+          AND a.state != 3
+    </select>
+    
+</mapper>

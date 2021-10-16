@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.WagesModelDao">
+
+    <select id="queryWagesModelList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            b.name_cn nameCn,
+            b.name_en nameEn,
+            a.start_month startMonth,
+            a.end_month endMonth,
+            a.sort_no sortNo,
+            a.state,
+            bu.user_name createName,
+            DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+            cu.user_name lastUpdateName,
+            DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+        FROM
+            wages_model a
+            LEFT JOIN wages_model_type b ON a.type_id = b.id
+            LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+            LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+        WHERE a.state != '3'
+        <if test="title != '' and title != null">
+            AND a.title LIKE '%${title}%'
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+    </select>
+
+    <update id="editWagesModelMationStateMationById">
+        UPDATE wages_model
+        <set>
+            state = #{state},
+        </set>
+        WHERE id = #{id}
+        AND state != '3'
+    </update>
+
+    <select id="queryWagesModelMationByTitleAndNotId" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.start_month startMonth,
+            a.end_month endMonth,
+            a.sort_no sortNo,
+            a.state
+        FROM
+            wages_model a
+        WHERE a.title = #{title}
+        AND a.state != '3'
+        <if test="notId != '' and notId != null">
+            AND a.id != #{notId}
+        </if>
+    </select>
+
+    <insert id="insertWagesModelMation">
+        INSERT into wages_model
+        (id, title, type_id, start_month, end_month, `desc`, sort_no, state,
+         create_id, create_time, last_update_id, last_update_time)
+        VALUES
+        (#{id}, #{title}, #{typeId}, #{startMonth}, #{endMonth}, #{desc}, #{sortNo}, #{state},
+         #{createId}, #{createTime}, #{createId}, #{createTime})
+    </insert>
+
+    <select id="queryWagesModelMationById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.type_id typeId,
+            b.name_cn nameCn,
+            b.name_en nameEn,
+            a.start_month startMonth,
+            a.end_month endMonth,
+            a.sort_no sortNo,
+            a.state,
+            bu.user_name createName,
+            DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+            cu.user_name lastUpdateName,
+            DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+        FROM
+            wages_model a
+            LEFT JOIN wages_model_type b ON a.type_id = b.id
+            LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+            LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+        WHERE a.id = #{id}
+        AND a.state != '3'
+    </select>
+
+    <select id="queryStaffNameListByStaffIdList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            CONCAT_WS('_', a.job_number, a.user_name) `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE a.id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryDepartMentNameListByDepartMentIdList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            CONCAT_WS('_', b.company_name, a.department_name) `name`
+        FROM
+            company_department a,
+            company_mation b
+        WHERE a.company_id = b.id
+        AND a.id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryCompanyNameListByCompanyIdList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.company_name `name`
+        FROM
+            company_mation a
+        WHERE a.id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="editWagesModelMationById">
+        UPDATE wages_model
+        <set>
+            title = #{title},
+            type_id = #{typeId},
+            start_month = #{startMonth},
+            end_month = #{endMonth},
+            `desc` = #{desc},
+            sort_no = #{sortNo},
+            last_update_id = #{lastUpdateId},
+            last_update_time = #{lastUpdateTime},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryWagesModelListByApplicableObjectIds" resultType="java.util.Map">
+        SELECT
+            b.id,
+            b.title
+        FROM
+            wages_model_applicable_objects a,
+            wages_model b
+        WHERE a.object_id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND a.model_id = b.id
+        AND b.state = 1
+        GROUP BY b.id ORDER BY b.sort_no DESC
+    </select>
+
+</mapper>

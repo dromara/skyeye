@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AssetDao">
+
+	<select id="selectAllAssetMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			e.company_name companyName,
+			a.asset_name assetName,
+			c.type_name typeId,
+			a.asset_num assetNum,
+			a.unit_price unitPrice,
+			b.user_name employeeId,
+			a.state state
+		FROM
+			asset_management a
+			LEFT JOIN sys_eve_user_staff b ON a.employee_id = b.user_id
+			LEFT JOIN asset_management_type c ON a.type_id = c.id
+			LEFT JOIN sys_eve_user_staff d ON d.user_id = #{userId}
+            LEFT JOIN company_mation e ON e.id = a.company_id
+		WHERE
+		    a.state != 4
+		    AND d.company_id = a.company_id
+			<if test="assetName != '' and assetName != null">
+				AND a.asset_name LIKE '%${assetName}%'
+			</if>
+			<if test="state != '' and state != null">
+				AND a.state = #{state}
+			</if>
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<insert id="insertAssetMation" parameterType="java.util.Map">
+		INSERT into asset_management 
+	    (id, company_id, asset_name, asset_img, type_id, asset_num, from_id, specifications, unit_price, manufacturer, manufacturer_time, supplier, purchase_time, storage_area, employee_id, asset_admin, room_add_desc, enclosure_info, create_id, create_time)
+        VALUES(#{id}, #{companyId}, #{assetName}, #{assetImg}, #{typeId}, #{assetNum}, #{fromId}, #{specifications}, #{unitPrice}, #{manufacturer}, #{manufacturerTime}, #{supplier}, #{purchaseTime}, #{storageArea}, #{employeeId}, #{assetAdmin}, #{roomAddDesc}, #{enclosureInfo}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="deleteAssetById" parameterType="java.util.Map">
+		UPDATE asset_management
+		<set>
+			state = 4
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryAssetMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.asset_name assetName,
+			a.asset_img assetImg,
+			a.type_id typeId,
+			a.asset_num assetNum,
+			a.from_id fromId,
+			a.specifications specifications,
+			a.unit_price unitPrice,
+			a.manufacturer manufacturer,
+			DATE_FORMAT(CONVERT (a.manufacturer_time, CHAR),'%Y-%m-%d') manufacturerTime,
+			a.supplier supplier,
+			DATE_FORMAT(CONVERT (a.purchase_time, CHAR),'%Y-%m-%d') purchaseTime,
+			a.storage_area storageArea,
+			IFNULL(a.employee_id, '') employeeId,
+			IFNULL(a.asset_admin, '') assetAdmin,
+			a.room_add_desc roomAddDesc,
+			IFNULL(a.enclosure_info, '') enclosureInfo
+		FROM
+			asset_management a
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="queryAssetById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id assetId,
+			a.asset_name assetName,
+			a.type_id typeId,
+			a.specifications specificationsName,
+			a.asset_num assetNum
+		FROM
+			asset_management a
+		WHERE a.id = #{assetId}
+	</select>
+	
+	<update id="editAssetMationById" parameterType="java.util.Map">
+		UPDATE asset_management
+		<set>
+			<if test="assetName != '' and assetName != null">
+				asset_name = #{assetName},
+			</if>
+			<if test="assetImg != '' and assetImg != null">
+				asset_img = #{assetImg},
+			</if>
+			<if test="typeId != '' and typeId != null">
+				type_id = #{typeId},
+			</if>
+			<if test="assetNum != '' and assetNum != null">
+				asset_num = #{assetNum},
+			</if>
+			<if test="fromId != '' and fromId != null">
+				from_id = #{fromId},
+			</if>
+			<if test="unitPrice != '' and unitPrice != null">
+				unit_price = #{unitPrice},
+			</if>
+			<if test="purchaseTime != '' and purchaseTime != null">
+				purchase_time = #{purchaseTime},
+			</if>
+			specifications = #{specifications},
+			manufacturer = #{manufacturer},
+			manufacturer_time = #{manufacturerTime},
+			supplier = #{supplier},
+			storage_area = #{storageArea},
+			employee_id = #{employeeId},
+			asset_admin = #{assetAdmin},
+			room_add_desc = #{roomAddDesc},
+			enclosure_info = #{enclosureInfo}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="selectAssetDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			f.company_name companyName,
+			a.asset_name assetName,
+			a.asset_img assetImg,
+			c.type_name typeId,
+			a.asset_num assetNum,
+			e.from_name fromId,
+			a.specifications specifications,
+			a.unit_price unitPrice,
+			a.manufacturer manufacturer,
+			DATE_FORMAT(CONVERT (a.manufacturer_time, CHAR),'%Y-%m-%d') manufacturerTime,
+			a.supplier supplier,
+			DATE_FORMAT(CONVERT (a.purchase_time, CHAR),'%Y-%m-%d') purchaseTime,
+			a.storage_area storageArea,
+			b.user_name employeeId,
+			d.user_name assetAdmin,
+			a.room_add_desc roomAddDesc,
+			IFNULL(a.enclosure_info, '') enclosureInfo
+		FROM
+			asset_management a
+			LEFT JOIN sys_eve_user_staff b ON a.employee_id = b.user_id
+			LEFT JOIN asset_management_type c ON a.type_id = c.id
+			LEFT JOIN sys_eve_user_staff d ON a.asset_admin = d.user_id
+			LEFT JOIN asset_management_from e ON a.from_id = e.id
+			LEFT JOIN company_mation f ON f.id = a.company_id
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="queryAssetState" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.state
+		FROM
+			asset_management a	
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="updateAssetNormalById" parameterType="java.util.Map">
+		UPDATE asset_management
+		<set>
+			state = 1
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateAssetRepairById" parameterType="java.util.Map">
+		UPDATE asset_management
+		<set>
+			state = 2
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateAssetScrapById" parameterType="java.util.Map">
+		UPDATE asset_management
+		<set>
+			state = 3
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+    <select id="queryUnUseAssetListByTypeId" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			CONCAT(a.asset_name, '(', a.asset_num, ')') `name`,
+			a.specifications specificationsName,
+			a.asset_num assetNum
+		FROM
+			asset_management a
+		WHERE
+			a.type_id = #{typeId}
+		AND (a.employee_id = '' OR a.employee_id IS NULL)
+		AND a.company_id = #{companyId}
+    </select>
+    
+    <update id="updateAssetToCancellation" parameterType="java.util.Map">
+		UPDATE asset_management_use
+		<set>
+			state = 4
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryEmployeeNameFromAssetUse" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.create_id createName
+		FROM
+			asset_management_use a
+		WHERE a.id = #{useId}
+	</select>
+	
+	<update id="editAssetManagementById" parameterType="java.util.Map">
+        update asset_management
+        <set>
+            employee_id = #{employeeId}
+        </set>
+        WHERE 
+            id = #{managementId}
+    </update>
+    
+    <select id="queryAssetMationByAssetNum" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_management a	
+        WHERE 
+            a.asset_num = #{assetNum}
+            AND a.state != 4
+    </select>
+	
+    <select id="queryAssetMationByIdAndAssetNum" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_management a	
+        WHERE  a.asset_num = #{assetNum}
+		AND a.id != #{id}
+		AND a.state != 4
+    </select>
+    
+	<select id="queryUserCompanyById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.company_id companyId
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            a.user_id = #{id}
+    </select>
+    
+	<insert id="insertAssetMationList" parameterType="java.util.Map">
+		INSERT into asset_management 
+	    (id, company_id, asset_name, asset_img, type_id, asset_num, from_id, specifications, unit_price, manufacturer, manufacturer_time,
+	     supplier, purchase_time, storage_area, employee_id, asset_admin, room_add_desc, enclosure_info, create_id, create_time)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+        	(#{item.id}, #{item.companyId}, #{item.assetName}, #{item.assetImg}, #{item.typeId}, #{item.assetNum}, #{item.fromId}, #{item.specifications}, #{item.unitPrice}, #{item.manufacturer}, #{item.manufacturerTime},
+        	 #{item.supplier}, #{item.purchaseTime}, #{item.storageArea}, #{item.employeeId}, #{item.assetAdmin}, #{item.roomAddDesc}, #{item.enclosureInfo}, #{item.createId}, #{item.createTime})
+        </foreach>
+	</insert>
+
+	<select id="queryAnythingFromAsset" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			asset_management a
+		WHERE a.asset_name = #{managementName}
+		  AND a.asset_num = #{assetNum}
+	</select>
+	
+	<update id="editAssetManagementMation" parameterType="java.util.Map">
+		UPDATE asset_management 
+		<set>
+			employee_id = '' 
+		</set>
+		WHERE INSTR(CONCAT(',', #{managementId}, ','), CONCAT(',', id, ',')) 
+		AND employee_id = #{employeeId}
+	</update>
+	
+	<select id="queryMyAssetManagementList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			f.company_name companyName,
+			a.asset_name assetName,
+			a.asset_img assetImg,
+			c.type_name typeName,
+			a.asset_num assetNum,
+			a.specifications specifications,
+			b.user_name employeeName,
+			d.user_name assetAdmin
+		FROM
+			asset_management a
+			LEFT JOIN sys_eve_user_staff b ON a.employee_id = b.user_id
+			LEFT JOIN asset_management_type c ON a.type_id = c.id
+			LEFT JOIN sys_eve_user_staff d ON a.asset_admin = d.user_id
+			LEFT JOIN company_mation f ON f.id = a.company_id
+		WHERE
+			a.state != 4
+			AND a.employee_id = #{userId}
+			<if test="assetName != '' and assetName != null">
+				AND a.asset_name LIKE '%${assetName}%'
+			</if>
+			<if test="assetNum != '' and assetNum != null">
+				AND a.asset_num = #{assetNum}
+			</if>
+			<if test="specifications != '' and specifications != null">
+				AND a.specifications = #{specifications}
+			</if>
+		ORDER BY a.asset_name DESC
+	</select>
+
+</mapper>

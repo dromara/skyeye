@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="工作流模块">
+	
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 工作流开始 -->
+	<url id="activitimode001" path="/post/ActivitiModelController/insertNewActivitiModel" val="新建一个空模型" allUse="1" groupName="工作流操作">
+	</url>
+	<url id="activitimode002" path="/post/ActivitiModelController/queryActivitiModelList" val="获取所有模型" allUse="1" groupName="工作流操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="modelName" name="modelName" ref="" var="模型名称"/>
+	</url>
+	<url id="activitimode003" path="/post/ActivitiModelController/editActivitiModelToDeploy" val="发布模型为流程定义" allUse="1" groupName="工作流操作">
+		<property id="modelId" name="modelId" ref="required" var="模型id"/>
+	</url>
+	<url id="activitimode004" path="/post/ActivitiModelController/editActivitiModelToStartProcess" val="启动流程" allUse="2" groupName="工作流操作">
+		<property id="keyName" name="keyName" ref="required" var="模型key"/>
+		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
+	</url>
+	<url id="activitimode005" path="/post/ActivitiModelController/editActivitiModelToRun" val="提交任务" allUse="2" groupName="工作流操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+		<property id="taskId" name="taskId" ref="required" var="任务id"/>
+		<property id="opinion" name="opinion" ref="" var="审核意见"/>
+		<property id="editStr" name="editStr" ref="" var="审批人修改的内容"/>
+		<property id="pageTypes" name="pageTypes" ref="required,num" var="页面类型 1.指定页面，2.动态表单"/>
+		<property id="flag" name="flag" ref="required,num" var="是否通过：1.通过2.不通过"/>
+	</url>
+	<url id="activitimode006" path="/post/ActivitiModelController/deleteActivitiModelById" val="删除模型" allUse="1" groupName="工作流操作">
+		<property id="rowId" name="id" ref="required" var="模型id"/>
+	</url>
+	<url id="activitimode007" path="/post/ActivitiModelController/deleteReleasedActivitiModelById" val="取消发布" allUse="1" groupName="工作流操作">
+		<property id="deploymentId" name="deploymentId" ref="required" var="部署流程id"/>
+	</url>
+	<url id="activitimode008" path="/post/ActivitiModelController/queryUserAgencyTasksListByUserId" val="获取用户待办任务" allUse="2" groupName="工作流操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="taskName" name="taskName" ref="" var="任务名称"/>
+	    <property id="processInstanceId" name="processInstanceId" ref="" var="流程id"/>
+	</url>
+	<url id="activitimode009" path="/post/ActivitiModelController/queryReleaseActivitiModelList" val="获取已发布模型" allUse="2" groupName="工作流操作">
+	</url>
+	<url id="activitimode010" path="/post/ActivitiModelController/editApprovalActivitiTaskListByUserId" val="导出model的xml文件" allUse="0" method="GET" groupName="工作流操作">
+		<property id="modelId" name="modelId" ref="required" var="模型id" />
+	</url>
+	<url id="activitimode011" path="/post/ActivitiModelController/queryUserListToActiviti" val="获取人员选择" allUse="2" groupName="工作流操作">
+		<property id="reqObj" name="reqObj" ref="required" var="参数" />
+	</url>
+	<url id="activitimode012" path="/post/ActivitiModelController/queryUserGroupListToActiviti" val="获取人员选择" allUse="2" groupName="工作流操作">
+		<property id="reqObj" name="reqObj" ref="required" var="参数" />
+	</url>
+	<url id="activitimode013" path="/post/ActivitiModelController/queryStartProcessNotSubByUserId" val="获取我启动的流程" allUse="2" groupName="工作流操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="startTime" name="startTime" ref="" var="开始时间"/>
+	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
+	    <property id="processInstanceId" name="processInstanceId" ref="" var="流程id"/>
+	</url>
+	<url id="activitimode014" path="/post/ActivitiModelController/queryMyHistoryTaskByUserId" val="获取我的历史任务" allUse="2" groupName="工作流操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="activitimode015" path="/post/ActivitiModelController/insertSyncUserListMationToAct" val="用户以及用户组信息同步到act表中" allUse="1" groupName="工作流操作">
+	</url>
+	<url id="activitimode016" path="/post/ActivitiModelController/querySubFormMationByTaskId" val="获取用户提交的表单信息根据taskid" allUse="2" groupName="工作流操作">
+		<property id="taskId" name="taskId" ref="required" var="任务id"/>
+	</url>
+	<url id="activitimode017" path="/post/ActivitiModelController/queryApprovalTasksHistoryByProcessInstanceId" val="获取历史审批列表" allUse="2" groupName="工作流操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode018" path="/post/ActivitiModelController/queryAllComplateProcessList" val="获取所有已完成的流程信息" allUse="2" groupName="工作流操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="activitimode019" path="/post/ActivitiModelController/queryAllConductProcessList" val="获取所有待办的流程信息" allUse="2" groupName="工作流操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="activitimode020" path="/post/ActivitiModelController/updateProcessToHangUp" val="流程挂起" allUse="2" groupName="工作流操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode021" path="/post/ActivitiModelController/updateProcessToActivation" val="流程激活" allUse="2" groupName="工作流操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode022" path="/post/ActivitiModelController/insertDSFormProcess" val="提交审批" allUse="2" groupName="工作流操作">
+		<property id="keyName" name="keyName" ref="required" var="模型key"/>
+		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
+	</url>
+	<url id="activitimode023" path="/post/ActModleTypeController/queryDsFormMationToEdit" val="获取动态表单内容用于编辑申请类型实体" allUse="2" groupName="工作流操作">
+		<property id="rowId" name="id" ref="required" var="用户提交的表单数据的id"/>
+	</url>
+	<url id="activitimode024" path="/post/ActModleTypeController/editDsFormMationBySequenceId" val="编辑申请类型实体" allUse="2" groupName="工作流操作">
+		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
+		<property id="taskId" name="taskId" ref="required" var="任务id"/>
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode025" path="/post/ActivitiModelController/querySubFormMationByProcessInstanceId" val="获取用户提交的表单信息根据流程id" allUse="2" groupName="工作流操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode026" path="/post/ActivitiModelController/editProcessInstanceWithDraw" val="流程撤回" allUse="2" groupName="工作流操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+		<property id="hisTaskId" name="hisTaskId" ref="required" var="历史审批任务id"/>
+		<property id="opinion" name="opinion" ref="required" var="撤回原因"/>
+	</url>
+	<url id="activitimode027" path="/post/ActivitiModelController/editProcessInstancePicToRefresh" val="刷新流程图" allUse="2" groupName="工作流操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode028" path="/post/ActivitiModelController/copyModelByModelId" val="流程模型拷贝" allUse="1" groupName="工作流操作">
+		<property id="modelId" name="modelId" ref="required" var="模型id"/>
+	</url>
+	<!-- 工作流结束 -->
+	
+	<!-- 动态表单审核中撤销开始 -->
+	<url id="dsformrevoke001" path="/post/ActivitiModelController/editDsFormContentToRevokeByProcessInstanceId" val="动态表单提交项进行撤销操作" allUse="2">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
+    </url>
+	<!-- 动态表单审核中撤销结束 -->
+	
+	<!-- 动态表单草稿操作开始 -->
+	<url id="pagesequence001" path="/post/PageSequenceController/queryDsFormISDraftListByUser" val="获取所有草稿状态的动态表单提交项" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="startTime" name="startTime" ref="" var="开始时间"/>
+	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
+	</url>
+	<url id="pagesequence002" path="/post/PageSequenceController/deleteDsFormISDraftByUser" val="删除草稿状态的动态表单提交项" allUse="2">
+		<property id="rowId" name="id" ref="required" var="表单提交序列id" />
+	</url>
+	<url id="pagesequence003" path="/post/PageSequenceController/queryDsFormISDraftToEditById" val="编辑动态表单时进行回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="表单提交序列id" />
+	</url>
+	<url id="pagesequence004" path="/post/PageSequenceController/editDsFormISDraftById" val="编辑动态表单(无工作流)" allUse="2">
+		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
+	</url>
+	<url id="pagesequence005" path="/post/PageSequenceController/editDsFormISDraftToSubApprovalById" val="提交审批" allUse="2">
+		<property id="rowId" name="id" ref="required" var="表单提交序列id" />
+		<property id="pageId" name="pageId" ref="required" var="页面id" />
+	</url>
+	<url id="pagesequence006" path="/post/PageSequenceController/queryDsFormISDraftDetailsById" val="表单详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="表单提交序列id" />
+	</url>
+	<!-- 动态表单草稿操作结束 -->
+	
+	<!-- 配置类管理开始 -->
+    <url id="actbaseclass001" path="/post/ActBaseClassController/queryActBaseClassList" val="获取配置类列表" allUse="1" groupName="配置类操作">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="title" name="title" ref="" var="标题" />
+		<property id="className" name="className" ref="" var="类名称" />
+    </url>
+    <url id="actbaseclass002" path="/post/ActBaseClassController/insertActBaseClassMation" val="添加配置类" allUse="1" groupName="配置类操作">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="classUrl" name="classUrl" ref="required" var="类名" />
+        <property id="desc" name="desc" ref="" var="配置类描述" />
+    </url>
+    <url id="actbaseclass003" path="/post/ActBaseClassController/deleteActBaseClassById" val="删除配置类" allUse="1" groupName="配置类操作">
+        <property id="rowId" name="id" ref="required" var="配置类id" />
+    </url>
+    <url id="actbaseclass004" path="/post/ActBaseClassController/selectActBaseClassById" val="通过id查找对应的配置类信息用以编辑" allUse="2" groupName="配置类操作">
+         <property id="rowId" name="id" ref="required" var="配置类id" />
+    </url>
+    <url id="actbaseclass005" path="/post/ActBaseClassController/editActBaseClassMationById" val="编辑配置类" allUse="1" groupName="配置类操作">
+        <property id="rowId" name="id" ref="required" var="举报id" />
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="classUrl" name="classUrl" ref="required" var="类名" />
+        <property id="desc" name="desc" ref="" var="配置类描述" />
+    </url>
+    <url id="actbaseclass006" path="/post/ActBaseClassController/selectActBaseClassByIdToDedails" val="配置类详情" allUse="2" groupName="配置类操作">
+         <property id="rowId" name="id" ref="required" var="配置类id" />
+    </url>
+    <!-- 配置类管理结束 -->
+    
+    <!-- 工作流用户组开始 -->
+	<url id="actgroup001" path="/post/ActGroupController/insertActGroupMation" val="新增用户组" allUse="1" groupName="工作流用户组">
+		<property id="groupName" name="groupName" ref="required" var="组名" />
+	</url>
+	<url id="actgroup002" path="/post/ActGroupController/selectAllActGroupMation" val="遍历所有的用户组" allUse="2" groupName="工作流用户组">
+	</url>
+	<url id="actgroup003" path="/post/ActGroupController/insertActGroupUserByGroupId" val="给用户组新增用户" allUse="1" groupName="工作流用户组">
+		<property id="rowId" name="groupId" ref="required" var="组id" />
+		<property id="userId" name="userId" ref="required" var="用户id" />
+	</url>
+	<url id="actgroup004" path="/post/ActGroupController/editActGroupNameByGroupId" val="编辑用户组名" allUse="1" groupName="工作流用户组">
+		<property id="rowId" name="groupId" ref="required" var="组id" />
+		<property id="groupName" name="groupName" ref="required" var="组名" />
+	</url>
+	<url id="actgroup005" path="/post/ActGroupController/deleteActGroupByGroupId" val="删除用户组" allUse="1" groupName="工作流用户组">
+		<property id="rowId" name="groupId" ref="required" var="组id" />
+	</url>
+	<url id="actgroup006" path="/post/ActGroupController/deleteActGroupUserByGroupIdAndUserId" val="移除用户组中的某个用户" allUse="1" groupName="工作流用户组">
+		<property id="rowId" name="id" ref="required" var="组id" />
+	</url>
+	<url id="actgroup007" path="/post/ActGroupController/selectUserInfoOnActGroup" val="展示用户组的用户信息" allUse="1" groupName="工作流用户组">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="groupId" name="groupId" ref="" var="组id" />
+		<property id="userName" name="userName" ref="" var="用户姓名" />
+	</url>
+	<url id="actgroup008" path="/post/ActGroupController/deleteAllActGroupUserByGroupId" val="一键移除指定用户组下的所有用户" allUse="1" groupName="工作流用户组">
+		<property id="rowId" name="groupId" ref="required" var="组id" />
+	</url>
+    <!-- 工作流用户组结束 -->
+    
+    <!-- 工作流任务配置开始 -->
+    <url id="actmodletype001" path="/post/ActModleTypeController/insertActModleTypeMation" val="新增申请类型" allUse="1" groupName="工作流任务配置">
+        <property id="title" name="title" ref="required" var="类型名称" />
+    </url>
+    <url id="actmodletype002" path="/post/ActModleTypeController/selectAllActModleTypeMation" val="遍历所有的申请类型" allUse="2" groupName="工作流任务配置">
+    </url>
+    <url id="actmodletype003" path="/post/ActModleTypeController/insertActModleByTypeId" val="新增申请类型实体" allUse="1" groupName="工作流任务配置">
+        <property id="typeId" name="typeId" ref="required" var="类型id" />
+        <property id="title" name="title" ref="required" var="类型实体名称" />
+        <property id="pageUrl" name="pageUrl" ref="" var="新增页面URL" />
+        <property id="editPageUrl" name="editPageUrl" ref="" var="编辑页面URL" />
+        <property id="actId" name="actId" ref="required" var="工作流模型" />
+        <property id="backgroundColor" name="backgroundColor" ref="required" var="背景颜色" />
+        <property id="pageTypes" name="pageTypes" ref="required" var="页面类型" />
+        <property id="dsFormId" name="dsFormId" ref="" var="动态表单" />
+        <property id="tokenUrl" name="tokenUrl" ref="" var="回调地址" />
+        <property id="revokeMapping" name="revokeMapping" ref="" var="撤销接口" />
+        <property id="remark" name="remark" ref="" var="备注说明" />
+		<property id="menuIconType" name="menuIconType" ref="num" var="图标类型  1icon图片   2 图片" />
+		<property id="menuIconPic" name="menuIconPic" ref="" var="图片  menu_icon_type为2时有值" />
+		<property id="menuIcon" name="menuIcon" ref="" var="图标   menu_icon_type为1时有值" />
+		<property id="menuIconColor" name="menuIconColor" ref="" var="图标颜色" />
+		<property id="commonUsed" name="commonUsed" ref="required,num" var="是否常用(热门)  1.是  2.否" />
+	</url>
+    <url id="actmodletype004" path="/post/ActModleTypeController/editActModleTypeNameById" val="编辑申请类型名" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型id" />
+        <property id="title" name="title" ref="required" var="类型名称" />
+    </url>
+    <url id="actmodletype005" path="/post/ActModleTypeController/deleteActModleTypeById" val="删除申请类型" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型id" />
+    </url>
+    <url id="actmodletype006" path="/post/ActModleTypeController/deleteActModleById" val="移除申请类型实体" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型实体id" />
+    </url>
+    <url id="actmodletype007" path="/post/ActModleTypeController/selectActModleTypeMation" val="申请类型实体列表" allUse="2" groupName="工作流任务配置">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="typeId" name="typeId" ref="" var="类型id" />
+        <property id="title" name="title" ref="" var="申请类型实体名称" />
+    </url>
+    <url id="actmodletype009" path="/post/ActModleTypeController/updateUpActModleById" val="上线申请类型实体" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型实体id" />
+    </url>
+    <url id="actmodletype010" path="/post/ActModleTypeController/updateDownActModleById" val="下线申请类型实体" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型实体id" />
+    </url>
+    <url id="actmodletype011" path="/post/ActModleTypeController/selectActModleMationById" val="通过id查找对应的发起申请类型实体用以编辑" allUse="2" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型实体id" />
+    </url>
+    <url id="actmodletype012" path="/post/ActModleTypeController/editActModleMationById" val="编辑申请类型实体" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="实体id" />
+        <property id="title" name="title" ref="required" var="类型实体名称" />
+        <property id="pageUrl" name="pageUrl" ref="" var="新增页面URL" />
+        <property id="editPageUrl" name="editPageUrl" ref="" var="编辑页面URL" />
+        <property id="backgroundColor" name="backgroundColor" ref="required" var="背景颜色" />
+        <property id="pageTypes" name="pageTypes" ref="required" var="页面类型" />
+        <property id="dsFormId" name="dsFormId" ref="" var="动态表单" />
+        <property id="tokenUrl" name="tokenUrl" ref="" var="回调地址" />
+        <property id="revokeMapping" name="revokeMapping" ref="" var="撤销接口" />
+        <property id="remark" name="remark" ref="" var="备注说明" />
+		<property id="menuIconType" name="menuIconType" ref="num" var="图标类型  1icon图片   2 图片" />
+		<property id="menuIconPic" name="menuIconPic" ref="" var="图片  menu_icon_type为2时有值" />
+		<property id="menuIcon" name="menuIcon" ref="" var="图标   menu_icon_type为1时有值" />
+		<property id="menuIconColor" name="menuIconColor" ref="" var="图标颜色" />
+		<property id="commonUsed" name="commonUsed" ref="required,num" var="是否常用(热门)  1.是  2.否" />
+    </url>
+    <url id="actmodletype013" path="/post/ActModleTypeController/editActModleMationOrderNumUpById" val="上移申请类型实体" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型实体id" />
+        <property id="typeId" name="typeId" ref="required" var="类型id" />
+    </url>
+    <url id="actmodletype014" path="/post/ActModleTypeController/editActModleMationOrderNumDownById" val="下移申请类型实体" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型实体id" />
+        <property id="typeId" name="typeId" ref="required" var="类型id" />
+    </url>
+    <url id="actmodletype015" path="/post/ActModleTypeController/updateUpActModleTypeById" val="上线申请类型" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型id" />
+    </url>
+    <url id="actmodletype016" path="/post/ActModleTypeController/updateDownActModleTypeById" val="下线申请类型" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型id" />
+    </url>
+    <url id="actmodletype017" path="/post/ActModleTypeController/editActModleTypeOrderNumUpById" val="上移申请类型" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型实体id" />
+    </url>
+    <url id="actmodletype018" path="/post/ActModleTypeController/editActModleTypeOrderNumDownById" val="下移申请类型" allUse="1" groupName="工作流任务配置">
+        <property id="rowId" name="id" ref="required" var="类型实体id" />
+    </url>
+    <url id="actmodletype019" path="/post/ActModleTypeController/queryActModleUpStateByUpStateType" val="获取上线的申请类型下的上线的类型实体" allUse="2" groupName="工作流任务配置">
+    </url>
+    <url id="actmodletype020" path="/post/ActModleTypeController/queryAllDsForm" val="获取动态表单用于新增申请类型实体" allUse="2" groupName="工作流任务配置">
+    </url>
+	<url id="actmodletype021" path="/post/ActModleTypeController/queryActModleDetailsById" val="通过id获取流程任务配置详情" allUse="2" groupName="工作流任务配置">
+		<property id="rowId" name="id" ref="required" var="类型实体id" />
+	</url>
+	<url id="actmodletype022" path="/post/ActModleTypeController/queryHotActModleDetailsById" val="获取热门的流程任务配置列表" allUse="2" groupName="工作流任务配置">
+	</url>
+    <!-- 工作流任务配置结束 -->
+	
+</controller>

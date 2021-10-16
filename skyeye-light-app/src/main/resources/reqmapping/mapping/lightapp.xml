@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+
+	<!-- 轻应用管理开始 -->
+	<url id="lightapptype001" path="/post/LightAppTypeController/queryLightAppTypeList" val="获取轻应用类型列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="类型名称" />
+		<property id="state" name="state" ref="" var="状态" />
+	</url>
+	<url id="lightapptype002" path="/post/LightAppTypeController/insertLightAppTypeMation" val="新增一条轻应用类型" allUse="1">
+		<property id="typeName" name="typeName" ref="required" var="类型名称" />
+		<property id="iconPath" name="iconPath" ref="" var="图标" />
+		<property id="iconType" name="iconType" ref="required,num" var="图标类型" />
+	</url>
+	<url id="lightapptype003" path="/post/LightAppTypeController/queryLightAppTypeMationToEditById" val="编辑轻应用类型时进行信息回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="类型ID" />
+	</url>
+	<url id="lightapptype004" path="/post/LightAppTypeController/editLightAppTypeMationById" val="编辑轻应用类型" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="类型ID" />
+		<property id="typeName" name="typeName" ref="required" var="类型名称" />
+		<property id="iconPath" name="iconPath" ref="" var="图标" />
+		<property id="iconType" name="iconType" ref="required,num" var="图标类型" />
+	</url>
+	<url id="lightapptype005" path="/post/LightAppTypeController/editLightAppTypeSortTopById" val="轻应用类型展示顺序上移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="类型ID" />
+	</url>
+	<url id="lightapptype006" path="/post/LightAppTypeController/editLightAppTypeSortLowerById" val="轻应用类型展示顺序下移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="类型ID" />
+	</url>
+	<url id="lightapptype007" path="/post/LightAppTypeController/deleteLightAppTypeById" val="轻应用类型删除" allUse="1">
+		<property id="rowId" name="id" ref="required" var="类型ID" />
+	</url>
+	<url id="lightapptype008" path="/post/LightAppTypeController/editLightAppTypeUpTypeById" val="轻应用类型上线" allUse="1">
+		<property id="rowId" name="id" ref="required" var="类型ID" />
+	</url>
+	<url id="lightapptype009" path="/post/LightAppTypeController/editLightAppTypeDownTypeById" val="轻应用类型下线" allUse="1">
+		<property id="rowId" name="id" ref="required" var="类型ID" />
+	</url>
+	<url id="lightapptype010" path="/post/LightAppTypeController/queryLightAppTypeUpList" val="获取轻应用类型上线列表" allUse="2">
+	</url>
+	<url id="lightapp001" path="/post/LightAppController/queryLightAppList" val="获取轻应用列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="appName" name="appName" ref="" var="应用名称" />
+		<property id="state" name="state" ref="" var="状态" />
+	</url>
+	<url id="lightapp002" path="/post/LightAppController/insertLightAppMation" val="新增一条轻应用" allUse="1">
+		<property id="appName" name="appName" ref="required" var="应用名称" />
+		<property id="appLogo" name="appLogo" ref="required" var="图标" />
+		<property id="typeId" name="typeId" ref="required" var="轻应用类型" />
+		<property id="appUrl" name="appUrl" ref="required" var="应用地址" />
+		<property id="desc" name="desc" ref="" var="描述" />
+	</url>
+	<url id="lightapp003" path="/post/LightAppController/queryLightAppMationToEditById" val="编辑轻应用时进行信息回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="应用ID" />
+	</url>
+	<url id="lightapp004" path="/post/LightAppController/editLightAppMationById" val="编辑轻应用" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="应用ID" />
+		<property id="appName" name="appName" ref="required" var="应用名称" />
+		<property id="appLogo" name="appLogo" ref="required" var="图标" />
+		<property id="typeId" name="typeId" ref="required" var="轻应用类型" />
+		<property id="appUrl" name="appUrl" ref="required" var="应用地址" />
+		<property id="desc" name="desc" ref="" var="描述" />
+	</url>
+	<url id="lightapp005" path="/post/LightAppController/deleteLightAppById" val="轻应用删除" allUse="1">
+		<property id="rowId" name="id" ref="required" var="应用ID" />
+	</url>
+	<url id="lightapp006" path="/post/LightAppController/editLightAppUpById" val="轻应用上线" allUse="1">
+		<property id="rowId" name="id" ref="required" var="应用ID" />
+	</url>
+	<url id="lightapp007" path="/post/LightAppController/editLightAppDownById" val="轻应用下线" allUse="1">
+		<property id="rowId" name="id" ref="required" var="应用ID" />
+	</url>
+	<url id="lightapp008" path="/post/LightAppController/queryLightAppUpList" val="获取轻应用上线列表" allUse="2">
+	    <property id="typeId" name="typeId" ref=" " var="类型ID" />
+	</url>
+	<url id="lightapp009" path="/post/LightAppController/insertLightAppToWin" val="添加轻应用到桌面" allUse="2">
+	    <property id="id" name="id" ref="required" var="应用ID" />
+	</url>
+	<!-- 轻应用管理结束 -->
+	
+</controller>

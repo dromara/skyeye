@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysDeveLopDocDao">
+	
+	<select id="querySysDeveLopTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			IFNULL(a.parent_id, '0') pId,
+			a.`title`,
+			TRUE lay_is_open,
+			COUNT(b.id) contentNum,
+			a.state,
+			CASE a.state WHEN 0 THEN '新建' WHEN 1 THEN '上线' WHEN 2 THEN '下线' ELSE '错误码' END stateName,
+			(SELECT COUNT(*) FROM sys_develop_doc_type c WHERE c.parent_id = a.id) childNum,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_develop_doc_type a
+			LEFT JOIN sys_develop_doc b ON a.id = b.type_id
+		WHERE 1=1
+			<if test="typeName != '' and typeName != null">
+				AND a.`title` LIKE '%${typeName}%'
+			</if>
+		GROUP BY a.id
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysDeveLopByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_develop_doc_type a
+		WHERE a.title = #{typeName}
+	</select>
+	
+	<select id="queryMaxSysDeveLopBySimpleParentId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by orderBy
+		FROM
+			sys_develop_doc_type a
+		WHERE
+			a.parent_id = #{parentId}
+		ORDER BY
+			a.order_by DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="insertSysDeveLopType" parameterType="java.util.Map">
+	     INSERT into sys_develop_doc_type 
+	     (id, title, parent_id, order_by, state, create_id, create_time)
+	     VALUES
+	     (#{id}, #{typeName}, #{parentId}, #{orderBy}, '0', #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySysDeveLopTypeByIdToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.parent_id parentId
+		FROM
+			sys_develop_doc_type a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editSysDeveLopTypeById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc_type
+		<set>
+			<if test="typeName != '' and typeName != null">
+				title = #{typeName},
+			</if>
+			<if test="parentId != '' and parentId != null">
+				parent_id = #{parentId},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteSysDeveLopTypeById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_develop_doc_type
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="querySysDeveLopTypeContentNumById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			COUNT(b.id) contentNum,
+			(SELECT COUNT(*) FROM sys_develop_doc_type c WHERE c.parent_id = a.id) childNum
+		FROM
+			sys_develop_doc_type a
+			LEFT JOIN sys_develop_doc b ON a.id = b.type_id
+		WHERE
+			a.id = #{id}
+		GROUP BY
+			a.id
+	</select>
+	
+	<select id="querySysDeveLopTypeByFirstType" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title `name`
+		FROM
+			sys_develop_doc_type a
+		WHERE
+			a.parent_id = '0'
+		AND a.id != #{id}
+		ORDER BY
+			a.order_by ASC
+	</select>
+	
+	<select id="querySysDeveLopByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_develop_doc_type a
+		WHERE a.title = #{typeName}
+		AND a.id != #{id}
+	</select>
+	
+	<select id="querySysDeveLopTypeStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.state,
+			a.parent_id parentId
+		FROM
+			sys_develop_doc_type a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editSysDeveLopTypeStateISupById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc_type
+		<set>
+			state = '1',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSysDeveLopTypeStateISdownById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc_type
+		<set>
+			state = '2',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysDeveLopTypeOrderByISupById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.order_by newOrderBy,
+			a.order_by oldOrderBy,
+			a.parent_id parentId
+		FROM
+			sys_develop_doc_type a,
+			sys_develop_doc_type b
+		WHERE a.id = #{id}
+		AND a.parent_id = b.parent_id
+		AND a.order_by > b.order_by
+		ORDER BY b.order_by DESC
+		LIMIT 1
+	</select>
+	
+	<update id="editSysDeveLopTypeOrderByISupById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc_type
+		<set>
+			order_by = #{orderBy}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysDeveLopTypeOrderByISdownById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.order_by newOrderBy,
+			a.order_by oldOrderBy,
+			a.parent_id parentId
+		FROM
+			sys_develop_doc_type a,
+			sys_develop_doc_type b
+		WHERE a.id = #{id}
+		AND a.parent_id = b.parent_id
+		AND b.order_by > a.order_by
+		ORDER BY b.order_by ASC
+		LIMIT 1
+	</select>
+	
+	<update id="editSysDeveLopTypeOrderByISdownById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc_type
+		<set>
+			order_by = #{orderBy}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysDeveLopDocList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.content,
+			a.state,
+			CASE a.state WHEN 0 THEN '新建' WHEN 1 THEN '上线' WHEN 2 THEN '下线' ELSE '错误码' END stateName,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_develop_doc a
+		WHERE a.type_id = #{parentId}
+			<if test="title != '' and title != null">
+				AND a.`title` LIKE '%${title}%'
+			</if>
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysDeveLopDocByNameAndParentId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_develop_doc a
+		WHERE a.type_id = #{parentId}
+		AND a.title = #{title}
+	</select>
+	
+	<select id="queryMaxSysDeveLopDocBySimpleParentId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by orderBy
+		FROM
+			sys_develop_doc a
+		WHERE
+			a.type_id = #{parentId}
+		ORDER BY
+			a.order_by DESC
+		LIMIT 1
+	</select>
+	
+	<insert id="insertSysDeveLopDoc" parameterType="java.util.Map">
+	     INSERT into sys_develop_doc 
+	     (id, title, type_id, content, order_by, state, create_id, create_time)
+	     VALUES
+	     (#{id}, #{title}, #{parentId}, #{content}, #{orderBy}, '0', #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySysDeveLopDocByIdToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.content
+		FROM
+			sys_develop_doc a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<select id="querySysDeveLopDocByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_develop_doc a
+		WHERE a.type_id = #{parentId}
+		AND a.title = #{title}
+		AND a.id != #{id}
+	</select>
+	
+	<update id="editSysDeveLopDocById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc
+		<set>
+			<if test="title != '' and title != null">
+				title = #{title},
+			</if>
+			<if test="content != '' and content != null">
+				content = #{content},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteSysDeveLopDocById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_develop_doc
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="querySysDeveLopDocStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.state,
+			a.type_id typeId
+		FROM
+			sys_develop_doc a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editSysDeveLopDocStateISupById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc
+		<set>
+			state = '1',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSysDeveLopDocStateISdownById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc
+		<set>
+			state = '2',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysDeveLopDocOrderByISupById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.order_by newOrderBy,
+			a.order_by oldOrderBy,
+			a.type_id typeId
+		FROM
+			sys_develop_doc a,
+			sys_develop_doc b
+		WHERE a.id = #{id}
+		AND a.type_id = b.type_id
+		AND a.order_by > b.order_by
+		ORDER BY b.order_by DESC
+		LIMIT 1
+	</select>
+	
+	<update id="editSysDeveLopDocOrderByISupById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc
+		<set>
+			order_by = #{orderBy}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysDeveLopDocOrderByISdownById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.order_by newOrderBy,
+			a.order_by oldOrderBy,
+			a.type_id typeId
+		FROM
+			sys_develop_doc a,
+			sys_develop_doc b
+		WHERE a.id = #{id}
+		AND a.type_id = b.type_id
+		AND b.order_by > a.order_by
+		ORDER BY b.order_by ASC
+		LIMIT 1
+	</select>
+	
+	<update id="editSysDeveLopDocOrderByISdownById" parameterType="java.util.Map">
+		UPDATE sys_develop_doc
+		<set>
+			order_by = #{orderBy}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysDeveLopFirstTypeToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title `name`
+		FROM
+			sys_develop_doc_type a
+		WHERE
+			a.parent_id = '0'
+		AND a.state = '1'
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysDeveLopSecondTypeToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title `name`
+		FROM
+			sys_develop_doc_type a
+		WHERE
+			a.parent_id = #{parentId}
+		AND a.state = '1'
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysDeveLopDocToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title `name`
+		FROM
+			sys_develop_doc a
+		WHERE
+			a.type_id = #{parentId}
+		AND a.state = '1'
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysDeveLopDocContentToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.content
+		FROM
+			sys_develop_doc a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+</mapper>

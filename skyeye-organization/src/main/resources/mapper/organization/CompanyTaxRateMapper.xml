@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.CompanyTaxRateDao">
+
+    <insert id="insertCompanyTaxRate">
+        INSERT INTO company_tax_rate
+        (id, company_id, min_money, max_money, jan_rate, feb_rate, mar_rate, apr_rate, may_rate,
+        jun_rate, jul_rate, aug_rate, sept_rate, oct_rate, nov_rate, dec_rate, sort_no)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id}, #{item.companyId}, #{item.minMoney}, #{item.maxMoney}, #{item.janRate}, #{item.febRate}, #{item.marRate}, #{item.aprRate}, #{item.mayRate},
+            #{item.junRate}, #{item.julRate}, #{item.augRate}, #{item.septRate}, #{item.octRate}, #{item.novRate}, #{item.decRate}, #{item.sortNo})
+        </foreach>
+    </insert>
+
+    <delete id="deleteCompanyTaxRateByCompanyId">
+        DELETE
+        FROM
+            company_tax_rate
+        WHERE
+            company_id = #{companyId}
+    </delete>
+
+    <select id="queryCompanyTaxRateByCompanyId" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.company_id companyId,
+            CONVERT(a.min_money, decimal(24, 2)) minMoney,
+            CONVERT(a.max_money, decimal(24, 2)) maxMoney,
+            CONVERT(a.jan_rate, decimal(24, 2)) janRate,
+            CONVERT(a.feb_rate, decimal(24, 2)) febRate,
+            CONVERT(a.mar_rate, decimal(24, 2)) marRate,
+            CONVERT(a.apr_rate, decimal(24, 2)) aprRate,
+            CONVERT(a.may_rate, decimal(24, 2)) mayRate,
+            CONVERT(a.jun_rate, decimal(24, 2)) junRate,
+            CONVERT(a.jul_rate, decimal(24, 2)) julRate,
+            CONVERT(a.aug_rate, decimal(24, 2)) augRate,
+            CONVERT(a.sept_rate, decimal(24, 2)) septRate,
+            CONVERT(a.oct_rate, decimal(24, 2)) octRate,
+            CONVERT(a.nov_rate, decimal(24, 2)) novRate,
+            CONVERT(a.dec_rate, decimal(24, 2)) decRate,
+            a.sort_no sortNo
+        FROM
+            company_tax_rate a
+        WHERE a.company_id = #{companyId}
+        ORDER BY a.sort_no ASC
+    </select>
+
+    <select id="queryAllCompanyTaxRate" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.company_id companyId,
+            CONVERT(a.min_money, decimal(24, 2)) minMoney,
+            CONVERT(a.max_money, decimal(24, 2)) maxMoney,
+            CONVERT(a.jan_rate, decimal(24, 2)) janRate,
+            CONVERT(a.feb_rate, decimal(24, 2)) febRate,
+            CONVERT(a.mar_rate, decimal(24, 2)) marRate,
+            CONVERT(a.apr_rate, decimal(24, 2)) aprRate,
+            CONVERT(a.may_rate, decimal(24, 2)) mayRate,
+            CONVERT(a.jun_rate, decimal(24, 2)) junRate,
+            CONVERT(a.jul_rate, decimal(24, 2)) julRate,
+            CONVERT(a.aug_rate, decimal(24, 2)) augRate,
+            CONVERT(a.sept_rate, decimal(24, 2)) septRate,
+            CONVERT(a.oct_rate, decimal(24, 2)) octRate,
+            CONVERT(a.nov_rate, decimal(24, 2)) novRate,
+            CONVERT(a.dec_rate, decimal(24, 2)) decRate,
+            a.sort_no sortNo
+        FROM
+            company_tax_rate a
+        ORDER BY a.sort_no ASC
+    </select>
+
+</mapper>

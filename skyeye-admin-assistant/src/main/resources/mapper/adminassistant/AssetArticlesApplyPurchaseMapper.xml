@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AssetArticlesApplyPurchaseDao">
+
+    <select id="queryMyPurchaseAssetArticlesMation" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNum,
+            IFNULL(a.process_instance_id,'') processInstanceId,
+            a.state,
+            CONVERT(a.create_time, char) createTime
+        FROM
+            asset_articles_purchase a
+        WHERE a.create_id = #{userId}
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+            AND a.create_time >= #{startTime} AND #{endTime} >= a.create_time
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <insert id="insertAssetArticlePurchaseMation" parameterType="java.util.Map">
+        INSERT into asset_articles_purchase
+        (id, title, odd_number, state, process_instance_id, remark, enclosure_info, create_id, create_time)
+        VALUES(#{id}, #{title}, #{oddNumber}, #{state}, #{processInstanceId}, #{remark}, #{enclosureInfo}, #{createId}, #{createTime})
+    </insert>
+
+    <insert id="insertAssetArticlePurchaseGoodsMation" parameterType="java.util.Map">
+        insert into asset_articles_purchase_goods
+        (id, purchase_id, type_id, article_id, article_name, apply_purchase_num, remark, state)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id}, #{item.purchaseId}, #{item.typeId}, #{item.articleId}, #{item.articlesName}, #{item.applyPurchaseNum}, #{item.remark}, #{item.state})
+        </foreach>
+    </insert>
+
+    <select id="queryAssetsArticlesPurchaseByProcessInstanceId" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_articles_purchase a
+        WHERE
+            a.process_instance_id = #{processInstanceId}
+          AND a.state = '1'
+    </select>
+
+    <select id="queryAssetsArticlesPurchaseGoodsById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.article_id articleId,
+            a.apply_purchase_num applyPurchaseNum,
+            b.residual_num residualNum
+        FROM
+            asset_articles_purchase_goods a
+                LEFT JOIN asset_articles b ON a.article_id = b.id
+        WHERE
+            a.purchase_id = #{id}
+    </select>
+
+    <update id="editAssetsArticlesPurchaseGoodsById" parameterType="java.util.Map">
+        update asset_articles_purchase_goods
+        <set>
+            state = #{applyState},
+            actual_purchase_num = #{actualPurchaseNum}
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="editAssetsArticlesPurchaseById" parameterType="java.util.Map">
+        update asset_articles_purchase
+        <set>
+            state = #{state},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="queryAssetArticlePurchaseStateById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.state
+        FROM
+            asset_articles_purchase a
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="queryAssetArticlePurchaseGoodsMationById" resultType="java.util.Map">
+        SELECT
+            a.article_name articleName,
+            CONCAT(c.specifications, '(', c.unit_of_measurement, ')') specificationsName,
+            b.type_name typeName,
+            a.apply_purchase_num applyPurchaseNum,
+            a.actual_purchase_num actualPurchaseNum,
+            a.remark,
+            a.state,
+            CASE a.state WHEN '0' THEN '未提交审批' WHEN '1' THEN '等待审批' WHEN '2' THEN '审批通过' WHEN '3' THEN '审批不通过' END stateName
+        FROM
+            asset_articles_purchase_goods a
+            LEFT JOIN asset_articles_type b ON a.type_id = b.id
+            LEFT JOIN asset_articles c ON a.article_id = c.id
+        WHERE a.purchase_id = #{purchaseId}
+    </select>
+
+    <select id="queryAssetArticlesPurchaseMationById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumber,
+            a.remark,
+            a.state,
+            IFNULL(a.enclosure_info, '') enclosureInfo,
+            IFNULL(a.process_instance_id,'') processInstanceId,
+            b.user_name userName
+        FROM
+            asset_articles_purchase a
+            LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <update id="updateAssetArticlePurchaseStateISInAudit">
+        UPDATE asset_articles_purchase
+        <set>
+            state = '1',
+            process_instance_id = #{processInId}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAssetArticlePurchaseMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumver,
+            a.remark,
+            a.state,
+            b.user_name userName,
+            IFNULL(a.enclosure_info, '') enclosureInfo
+        FROM
+            asset_articles_purchase a
+                LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="queryAssetArticlePurchaseGoodsMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.article_id articleId,
+            CONCAT(c.specifications, '(', c.unit_of_measurement, ')') specificationsName,
+            a.type_id typeId,
+            a.apply_purchase_num applyPurchaseNum,
+            c.residual_num residualNum,
+            a.remark
+        FROM
+            asset_articles_purchase_goods a
+                LEFT JOIN asset_articles c ON a.article_id = c.id
+        WHERE a.purchase_id = #{id}
+    </select>
+
+    <update id="updateAssetArticlePurchaseMation" parameterType="java.util.Map">
+        UPDATE asset_articles_purchase
+        <set>
+            remark = #{remark},
+            enclosure_info = #{enclosureInfo}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAssetArticlePurchaseGoodsMationById" parameterType="java.util.Map">
+        DELETE
+        FROM
+            asset_articles_purchase_goods
+        WHERE
+            purchase_id = #{id}
+    </delete>
+
+    <update id="updateAssetArticlesPurchaseToCancellation" parameterType="java.util.Map">
+        UPDATE asset_articles_purchase
+        <set>
+            state = 4
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateAssetArticlePurchaseGoodStateISInAudit">
+        UPDATE asset_articles_purchase_goods
+        <set>
+            state = '1'
+        </set>
+        WHERE purchase_id = #{purchaseId}
+    </update>
+
+    <update id="editAssetsArticlesPurchaseGoodsByPurchaseId" parameterType="java.util.Map">
+        update asset_articles_purchase_goods
+        <set>
+            state = '3',
+            actual_purchase_num = '0'
+        </set>
+        WHERE
+        purchase_id = #{id}
+    </update>
+
+    <update id="editAssetArticlesPurchaseToRevoke" parameterType="java.util.Map">
+        UPDATE asset_articles_purchase
+        <set>
+            state = '5',
+            process_instance_id = ''
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editAssetArticlesPurchaseGoodsToRevoke" parameterType="java.util.Map">
+        UPDATE asset_articles_purchase_goods
+        <set>
+            state = '0'
+        </set>
+        WHERE purchase_id = #{id}
+    </update>
+
+    <select id="queryAssetArticlesPurchaseId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_articles_purchase a
+        WHERE
+            a.process_instance_id = #{processInstanceId}
+    </select>
+
+</mapper>

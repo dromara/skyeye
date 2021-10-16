@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ErpOrderSaleOverPlanDao">
+    <!-- 销售订单统筹管理 -->
+
+    <insert id="insertOrderSaleOverPlanMation">
+        INSERT INTO erp_depothead_sale
+            (sale_id, state)
+        VALUES
+            (#{orderId}, #{state})
+    </insert>
+
+    <delete id="deleteOrderSaleOverPlanMation">
+        DELETE
+        FROM
+            erp_depothead_sale
+        WHERE sale_id = #{orderId}
+    </delete>
+
+    <select id="queryOrderSaleOverPlanList" resultType="java.util.Map">
+        SELECT
+            a.sale_id orderId,
+            a.state,
+            CONCAT_WS('_', c.job_number, c.user_name) overPlanName,
+            CONVERT (a.over_plan_time, CHAR) overPlanTime,
+            b.default_number defaultNumber,
+            FORMAT(b.total_price, 2) totalPrice,
+            CONVERT (b.oper_time, CHAR) operTime,
+            CONVERT (b.create_time, CHAR) createTime
+        FROM
+            erp_depothead_sale a
+            LEFT JOIN sys_eve_user_staff c ON a.over_plan_id = c.user_id,
+            erp_depothead b
+        WHERE a.sale_id = b.id
+        AND b.`status` IN(2, 4)
+        <if test="defaultNumber != '' and defaultNumber != null">
+            AND b.default_number LIKE '%${defaultNumber}%'
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+            AND b.oper_time >= #{startTime} AND #{endTime} >= b.oper_time
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        ORDER BY b.create_time DESC
+    </select>
+
+    <select id="queryOrderSaleOverPlanMation" resultType="java.util.Map">
+        SELECT
+            a.sale_id orderId,
+            a.state,
+            CASE a.state WHEN '1' THEN '未统筹' WHEN '2' THEN '已统筹' ELSE '' END stateName,
+            CONVERT (a.late_design_time, CHAR) lateDesignTime,
+            CONVERT (a.real_design_time, CHAR) realDesignTime,
+            CONVERT (a.late_purchase_time, CHAR) latePurchaseTime,
+            CONVERT (a.real_purchase_time, CHAR) realPurchaseTime,
+            CONVERT (a.late_produce_time, CHAR) lateProduceTime,
+            CONVERT (a.real_produce_time, CHAR) realProduceTime,
+            CONVERT (a.late_quality_time, CHAR) lateQualityTime,
+            CONVERT (a.real_quality_time, CHAR) realQualityTime,
+            CONCAT_WS('_', c.job_number, c.user_name) overPlanName,
+            CONVERT (a.over_plan_time, CHAR) overPlanTime
+        FROM
+            erp_depothead_sale a
+            LEFT JOIN sys_eve_user_staff c ON a.over_plan_id = c.user_id
+        WHERE a.sale_id = #{orderId}
+    </select>
+
+    <update id="editOrderSaleOverPlanMation">
+        UPDATE erp_depothead_sale
+        <set>
+            <if test="lateDesignTime != '' and lateDesignTime != null">
+                late_design_time = #{lateDesignTime},
+            </if>
+            <if test="latePurchaseTime != '' and latePurchaseTime != null">
+                late_purchase_time = #{latePurchaseTime},
+            </if>
+            <if test="lateProduceTime != '' and lateProduceTime != null">
+                late_produce_time = #{lateProduceTime},
+            </if>
+            <if test="lateQualityTime != '' and lateQualityTime != null">
+                late_quality_time = #{lateQualityTime},
+            </if>
+            state = #{state},
+            over_plan_id = #{overPlanId},
+            over_plan_time = #{overPlanTime},
+        </set>
+        WHERE sale_id = #{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveWinDao">
+	
+	<select id="queryWinMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sys_name sysName,
+			a.sys_url sysUrl,
+			a.sys_desc sysDesc,
+			a.sys_pic sysPic,
+			CONVERT(a.create_time, char) createTime,
+			COUNT(c.id) menuNum,
+			(SELECT COUNT(1) FROM sys_eve_win_super_power d WHERE d.win_id = a.id) useNum,
+			(SELECT e.type_name FROM sys_eve_win_type e WHERE a.first_type = e.id) firstTypeName,
+			(SELECT f.type_name FROM sys_eve_win_type f WHERE a.second_type = f.id) secondTypeName
+		FROM
+			sys_eve_win a
+			LEFT JOIN sys_eve_menu c ON a.id = c.sys_win_id
+		WHERE 1 = 1
+			<if test="sysName != '' and sysName != null">
+				AND a.sys_name LIKE '%${sysName}%'
+			</if>
+		GROUP BY a.id
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryWinMationByNameOrUrl" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sys_name sysName,
+			a.sys_url sysUrl,
+			a.sys_desc sysDesc,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_win a
+		WHERE a.sys_name = #{sysName}
+		OR a.sys_url = #{sysUrl}
+	</select>
+	
+	<insert id="insertWinMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_win 
+	     (id, sys_name, sys_desc, sys_url, sys_pic, first_type, second_type, create_id, create_time)
+	     VALUES
+	     (#{id}, #{sysName}, #{sysDesc}, #{sysUrl}, #{sysPic}, #{sysFirstType}, #{sysSecondType}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryWinMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sys_name sysName,
+			a.sys_url sysUrl,
+			a.sys_desc sysDesc,
+			a.sys_pic sysPic,
+			a.first_type sysFirstType,
+			a.second_type sysSecondType
+		FROM
+			sys_eve_win a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryWinMationByNameOrUrlAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sys_name sysName,
+			a.sys_url sysUrl,
+			a.sys_desc sysDesc,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_win a
+		WHERE (a.sys_name = #{sysName}
+		OR a.sys_url = #{sysUrl}) 
+		AND a.id != #{id}
+	</select>
+	
+	<update id="editWinMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_win
+		<set>
+			<if test="sysName != '' and sysName != null">
+				sys_name = #{sysName},
+			</if>
+			<if test="sysUrl != '' and sysUrl != null">
+				sys_url = #{sysUrl},
+			</if>
+			<if test="sysPic != '' and sysPic != null">
+				sys_pic = #{sysPic},
+			</if>
+			<if test="sysFirstType != '' and sysFirstType != null">
+				first_type = #{sysFirstType},
+			</if>
+			<if test="sysSecondType != '' and sysSecondType != null">
+				second_type = #{sysSecondType},
+			</if>
+			sys_desc = #{sysDesc},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryChildMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			COUNT(b.id) menuNum,
+			(SELECT COUNT(1) FROM sys_eve_win_super_power d WHERE d.win_id = a.id) useNum
+		FROM
+			sys_eve_win a
+			LEFT JOIN sys_eve_menu b ON a.id = b.sys_win_id
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<delete id="deleteWinMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_win
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="querySysEveWinNum" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_eve_win_num a
+		LIMIT 1
+	</select>
+	
+	<insert id="insertAuthorizationById" parameterType="java.util.Map">
+	     INSERT into sys_eve_win_super_power 
+	     (id, win_id, win_num_id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{winId}, #{winNumId}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="editCancleAuthorizationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_win_super_power
+		WHERE
+			win_id = #{winId}
+	</delete>
+	
+	<select id="queryWinMationListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.sys_name sysName,
+			a.sys_url sysUrl,
+			a.sys_pic sysPic,
+			b.id powerId
+		FROM
+			sys_eve_win a
+			LEFT JOIN sys_eve_win_super_power b ON a.id = b.win_id
+		WHERE 1 = 1
+			<if test="firstType != '' and firstType != null and firstType != '111'">
+				AND a.first_type = #{firstType}
+			</if>
+			<if test="secondType != '' and secondType != null and secondType != '111'">
+				AND INSTR(CONCAT(',', #{secondType}, ','), CONCAT(',', a.second_type, ','))
+			</if>
+	</select>
+	
+	<select id="queryWinMationSynchronizationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_eve_win_super_power a
+		WHERE
+			a.win_id = #{id}
+	</select>
+	
+	<select id="queryWinMationImportantSynchronizationData" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.menu_name menuName,
+			a.menu_icon menuIcon,
+			a.menu_icon_color menuIconColor,
+			a.menu_icon_bg menuIconBg,
+			a.menu_name_en menuNameEn,
+			a.menu_level menuLevel,
+			a.menu_type menuType,
+			a.menu_sys_type menuSysType,
+			a.menu_parent_id parentId,
+			a.menu_url menuUrl,
+			a.menu_icon_type menuIconType,
+			a.menu_icon_pic menuIconPic,
+			a.open_type openType,
+			a.order_num orderNum,
+			a.sys_win_id sysWinId,
+			a.is_share isShare,
+			a.creater createId,
+			CONVERT (a.create_time, CHAR) createTime
+		FROM
+			sys_eve_menu a
+		WHERE
+			a.is_share = '1'
+	</select>
+	
+	<select id="queryWinMationSynchronizationByWinId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_eve_menu a
+		WHERE
+			a.sys_win_id = #{id} 
+	</select>
+	
+	<insert id="insertWinMationImportantSynchronization" parameterType="java.util.Map">
+	     INSERT into sys_eve_menu 
+	     (id, menu_name, menu_name_en, menu_icon_type, menu_icon_pic, menu_icon, menu_url, menu_type, menu_sys_type, menu_parent_id, menu_level, open_type, order_num, menu_icon_bg, menu_icon_color, sys_win_id, is_share, creater, create_time)
+	     VALUES
+	     <foreach collection="list" item="item" index="index" separator="," >  
+	     	(#{item.id}, #{item.menuName}, #{item.menuNameEn}, #{item.menuIconType}, #{item.menuIconPic}, #{item.menuIcon}, #{item.menuUrl}, #{item.menuType}, #{item.menuSysType}, #{item.parentId}, #{item.menuLevel}, #{item.openType}, #{item.orderNum}, #{item.menuIconBg}, #{item.menuIconColor}, #{item.sysWinId}, #{item.isShare}, #{item.createId}, #{item.createTime})
+		 </foreach>
+	</insert>
+	
+	<select id="queryWinMationImportantSynchronizationPointData" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.menu_id menuId,
+			b.auth_menu authMenu,
+			b.auth_menu_name authMenuName,
+			b.menu_num menuNum
+		FROM
+			sys_eve_menu a,
+			sys_eve_menu_auth_point b
+		WHERE
+			a.is_share = '1'
+		AND a.id = b.menu_id
+	</select>
+	
+	<insert id="insertWinMationImportantSynchronizationPoint" parameterType="java.util.Map">
+	     INSERT into sys_eve_menu_auth_point 
+	     (id, menu_id, auth_menu, auth_menu_name, menu_num, create_id, create_time)
+	     VALUES
+	     <foreach collection="list" item="item" index="index" separator="," >  
+	     	(#{item.id}, #{item.menuId}, #{item.authMenu}, #{item.authMenuName}, #{item.menuNum}, #{item.createId}, #{item.createTime})
+		 </foreach>  
+	</insert>
+	
+</mapper>

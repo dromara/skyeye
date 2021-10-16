@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 日志操作开始 -->
+	<url id="diary001" path="/post/JobDiaryController/queryJobDiaryDayReceived" val="查看所有收到的日志" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="firstTime" name="firstTime" ref="" var="起始时间" />
+		<property id="lastTime" name="lastTime" ref="" var="最后时间" />
+		<property id="userName" name="userName" ref="" var="发件人" />
+		<property id="diaryType" name="diaryType" ref="" var="报表类型" />
+	</url>
+	<url id="diary002" path="/post/JobDiaryController/insertDayJobDiary" val="发表日志" allUse="1">
+		<property id="completedJob" name="completedJob" ref="required" var="今日完成工作" />
+		<property id="incompleteJob" name="incompleteJob" ref="" var="今日未完成工作" />
+		<property id="coordinaJob" name="coordinaJob" ref="" var="需协调工作" />
+		<property id="jobRemark" name="jobRemark" ref="" var="备注" />
+		<property id="jobTitle" name="jobTitle" ref="required" var="日报主题" />
+		<property id="userInfo" name="userId" ref="required" var="员工姓名"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件信息"/>
+	</url>	
+	<url id="diary003" path="/post/JobDiaryController/querySysEveUserStaff" val="查看所有有账户的员工列表" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="员工姓名"/>
+	</url>
+	<url id="diary004" path="/post/JobDiaryController/queryJobDiaryDetails" val="通过日报关联表id阅读他人日报并改变阅读状态" allUse="2">
+		<property id="rowId" name="id" ref="required" var="日报关联表id" />
+	</url>
+	<url id="diary005" path="/post/JobDiaryController/queryJobDiaryDayMysend" val="查看我发出的所有日报" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="firstTime" name="firstTime" ref="" var="起始时间" />
+		<property id="lastTime" name="lastTime" ref="" var="最后时间" />
+		<property id="jobTitle" name="jobTitle" ref="" var="日报主题" />
+		<property id="diaryType" name="diaryType" ref="" var="报表类型" />
+	</url>
+	<url id="diary006" path="/post/JobDiaryController/deleteJobDiaryDayMysend" val="撤销我发出的日志" allUse="1">
+		<property id="rowId" name="id" ref="required" var="日志id" />
+	</url>
+	<url id="diary007" path="/post/JobDiaryController/selectMysendDetails" val="阅读我发出的日报详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="日报表id" />
+	</url>
+	<url id="diary008" path="/post/JobDiaryController/editMyReceivedJobDiary" val="删除我收到的日志" allUse="1">
+		<property id="rowId" name="id" ref="required" var="日报关联表id" />
+	</url>
+	<url id="diary009" path="/post/JobDiaryController/insertWeekJobDiary" val="发表周报" allUse="2">
+		<property id="jobTitle" name="jobTitle" ref="required" var="周报标题" />
+		<property id="completedJob" name="completedJob" ref="required" var="已完成工作" />
+		<property id="thisWorkSummary" name="thisWorkSummary" ref="" var="本周工作总结" />
+		<property id="nextWorkPlan" name="nextWorkPlan" ref="" var="下周工作计划" />
+		<property id="coordinaJob" name="coordinaJob" ref="" var="需协调工作" />
+		<property id="jobRemark" name="jobRemark" ref="" var="备注" />
+		<property id="userInfo" name="userId" ref="required" var="员工姓名"/>
+		<property id="weekenclosureInfo" name="enclosureInfo" ref="" var="附件信息"/>
+	</url>
+	<url id="diary010" path="/post/JobDiaryController/selectMysendWeekDetails" val="阅读我发出的周报详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="周报表id" />
+	</url>
+	
+	<url id="diary011" path="/post/JobDiaryController/queryWeekJobDiaryDetails" val="通过周报关联表id阅读他人周报并改变阅读状态" allUse="2">
+		<property id="rowId" name="id" ref="required" var="周报关联表id" />
+	</url>
+	<url id="diary012" path="/post/JobDiaryController/insertMonthJobDiary" val="发表月报" allUse="2">
+		<property id="jobTitle" name="jobTitle" ref="required" var="月报标题" />
+		<property id="completedJob" name="completedJob" ref="required" var="已完成工作" />
+		<property id="thisWorkSummary" name="thisWorkSummary" ref="" var="本月工作总结" />
+		<property id="nextWorkPlan" name="nextWorkPlan" ref="" var="下月工作计划" />
+		<property id="coordinaJob" name="coordinaJob" ref="" var="需协调工作" />
+		<property id="jobRemark" name="jobRemark" ref="" var="备注" />
+		<property id="userInfo" name="userId" ref="required" var="员工姓名"/>
+		<property id="monthenclosureInfo" name="enclosureInfo" ref="" var="附件信息"/>
+	</url>
+	<url id="diary013" path="/post/JobDiaryController/selectMysendMonthDetails" val="阅读我发出的月报详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="月报表id" />
+	</url>
+	<url id="diary014" path="/post/JobDiaryController/queryMonthJobDiaryDetails" val="通过月报关联表id阅读他人月报并改变阅读状态" allUse="2">
+		<property id="rowId" name="id" ref="required" var="月报关联表id" />
+	</url>
+	<url id="diary015" path="/post/JobDiaryController/editJobDiaryDayMysend" val="删除我发出的日志" allUse="1">
+		<property id="rowId" name="id" ref="required" var="日志id" />
+	</url>
+	<url id="diary016" path="/post/JobDiaryController/queryJobDiaryDayMysendToEdit" val="回显我撤回的日报" allUse="2">
+		<property id="rowId" name="id" ref="required" var="日志id" />
+	</url>
+	<url id="diary017" path="/post/JobDiaryController/editDayJobDiary" val="提交撤回的日志" allUse="1">
+		<property id="completedJob" name="completedJob" ref="required" var="今日完成工作" />
+		<property id="incompleteJob" name="incompleteJob" ref="" var="今日未完成工作" />
+		<property id="coordinaJob" name="coordinaJob" ref="" var="需协调工作" />
+		<property id="jobRemark" name="jobRemark" ref="" var="备注" />
+		<property id="jobTitle" name="jobTitle" ref="required" var="日报主题" />
+		<property id="userId" name="userId" ref="required" var="员工id"/>
+		<property id="id" name="id" ref="required" var="日报id"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件信息"/>
+	</url>
+	<url id="diary018" path="/post/JobDiaryController/queryWeekJobDiaryDayMysendToEdit" val="回显我撤回的周报" allUse="2">
+		<property id="rowId" name="id" ref="required" var="周报id" />
+	</url>
+	<url id="diary019" path="/post/JobDiaryController/editWeekDayJobDiary" val="提交撤回的周报" allUse="2">
+		<property id="completedJob" name="completedJob" ref="required" var="本周完成工作" />
+		<property id="thisWorkSummary" name="thisWorkSummary" ref="" var="本周工作总结" />
+		<property id="nextWorkPlan" name="nextWorkPlan" ref="" var="下周工作计划" />
+		<property id="coordinaJob" name="coordinaJob" ref="" var="许协调工作" />
+		<property id="jobRemark" name="jobRemark" ref="" var="备注" />
+		<property id="jobTitle" name="jobTitle" ref="required" var="周报主题" />
+		<property id="userId" name="userId" ref="required" var="员工id"/>
+		<property id="id" name="id" ref="required" var="周报id"/>
+		<property id="weekenclosureInfo" name="enclosureInfo" ref="" var="附件信息"/>
+	</url>
+	<url id="diary020" path="/post/JobDiaryController/queryMonthJobDiaryDayMysendToEdit" val="回显我撤回的月报" allUse="2">
+		<property id="rowId" name="id" ref="required" var="月报id" />
+	</url>
+	<url id="diary021" path="/post/JobDiaryController/editMonthDayJobDiary" val="提交撤回的月报" allUse="2">
+		<property id="completedJob" name="completedJob" ref="required" var="本月完成工作" />
+		<property id="thisWorkSummary" name="thisWorkSummary" ref="" var="本月工作总结" />
+		<property id="nextWorkPlan" name="nextWorkPlan" ref="" var="下月工作计划" />
+		<property id="coordinaJob" name="coordinaJob" ref="" var="许协调工作" />
+		<property id="jobRemark" name="jobRemark" ref="" var="备注" />
+		<property id="jobTitle" name="jobTitle" ref="required" var="月报主题" />
+		<property id="userId" name="userId" ref="required" var="员工id"/>
+		<property id="id" name="id" ref="required" var="月报id"/>
+		<property id="monthenclosureInfo" name="enclosureInfo" ref="" var="附件信息"/>
+	</url>
+	<url id="diary022" path="/post/JobDiaryController/queryJobDiaryDayNumber" val="查询日志类型各个类型的条数" allUse="2">
+		<property id="firstTime" name="firstTime" ref="" var="起始时间" />
+		<property id="lastTime" name="lastTime" ref="" var="最后时间" />
+	</url>
+	<url id="diary023" path="/post/JobDiaryController/queryJobDiaryListToTimeTree" val="获取日志列表展示位时间树" allUse="2">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="firstTime" name="firstTime" ref="" var="起始时间" />
+        <property id="lastTime" name="lastTime" ref="" var="最后时间" />
+        <property id="createName" name="createName" ref="" var="发件人" />
+    </url>
+    <url id="diary024" path="/post/JobDiaryController/editReceivedJobDiaryToAlreadyRead" val="我收到的日志全部设置为已读" allUse="2">
+    </url>
+	<!-- 日志操作结束 -->
+	
+</controller>

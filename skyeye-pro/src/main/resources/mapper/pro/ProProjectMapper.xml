@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ProProjectDao">
+
+    <select id="queryAllProProjectList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.project_name projectName,
+			a.state,
+			c.process_instance_id processInstanceId,
+			CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '2' THEN '执行中' WHEN '3' THEN '已完结' WHEN '4' THEN '作废' WHEN '5' THEN '撤销' WHEN '11' THEN '审核通过' WHEN '12' THEN '审核不通过' END stateName, 
+			DATE_FORMAT(CONVERT (a.end_time, CHAR),'%Y-%m-%d') endTime,
+			DATE_FORMAT(CONVERT (a.actual_end_time, CHAR),'%Y-%m-%d') actualEndTime,
+			(select count(id) from pro_task where pro_id = a.id) taskNum,
+			a.estimated_workload estimatedWorkload,
+			FORMAT(a.estimated_cost, 2) estimatedCost,
+			(select count(id) from pro_file where pro_id = a.id AND state = '11') fileNum,
+			(select count(id) from pro_project_discuss where pro_id = a.id) discussNum,
+			GROUP_CONCAT(distinct f.user_name) projectManagerName,
+			GROUP_CONCAT(distinct g.user_name) projectSponsorName,
+			GROUP_CONCAT(distinct h.user_name) projectMembersName,
+			e.user_name createName,
+			d.`name` typeName
+		FROM
+			pro_project a
+			LEFT JOIN pro_project_process c ON c.pro_id = a.id
+			LEFT JOIN pro_project_type d ON a.type_id = d.id
+			LEFT JOIN sys_eve_user_staff e ON e.user_id = a.create_id
+			LEFT JOIN sys_eve_user_staff f ON INSTR(CONCAT(',', a.project_manager, ','),CONCAT(',', f.user_id, ','))
+			LEFT JOIN sys_eve_user_staff g ON INSTR(CONCAT(',', a.project_sponsor, ','),CONCAT(',', g.user_id, ','))
+			LEFT JOIN sys_eve_user_staff h ON INSTR(CONCAT(',', a.project_members, ','),CONCAT(',', h.user_id, ','))
+		WHERE 1 = 1
+			<if test="typeId != '' and typeId != null">
+                AND a.type_id = #{typeId}
+            </if>
+            <if test="state != '' and state != null">
+                AND a.state = #{state}
+            </if>
+            <if test="proName != '' and proName != null">
+				AND a.project_name like '%${proName}%'
+			</if>
+		GROUP BY a.id
+		ORDER BY a.create_time desc
+	</select>
+    
+    <select id="queryMyProProjectList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.project_name projectName,
+			a.state,
+			IFNULL(c.process_instance_id, '') processInstanceId,
+			CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '2' THEN '执行中' WHEN '3' THEN '已完结' WHEN '4' THEN '作废' WHEN '5' THEN '撤销' WHEN '11' THEN '审核通过' WHEN '12' THEN '审核不通过' END stateName, 
+			DATE_FORMAT(CONVERT (a.end_time, CHAR),'%Y-%m-%d') endTime,
+			DATE_FORMAT(CONVERT (a.actual_end_time, CHAR),'%Y-%m-%d') actualEndTime,
+			(select count(id) from pro_task where pro_id = a.id) taskNum,
+			a.estimated_workload estimatedWorkload,
+			FORMAT(a.estimated_cost, 2) estimatedCost,
+			(select count(id) from pro_file where pro_id = a.id AND state = '11') fileNum,
+			(select count(id) from pro_project_discuss where pro_id = a.id) discussNum,
+			a.project_manager projectManager,
+			a.project_sponsor projectSponsor,
+			a.project_members projectMembers,
+			GROUP_CONCAT(distinct f.user_name) projectManagerName,
+			GROUP_CONCAT(distinct g.user_name) projectSponsorName,
+			GROUP_CONCAT(distinct h.user_name) projectMembersName,
+			e.user_name createName,
+			a.project_enclosure_info projectEnclosureInfo,
+			a.project_content projectContent,
+			d.`name` typeName,
+			<!-- 默认可编辑 -->
+			IF((a.state = 0 OR a.state = 1 OR a.state = 5), 1, -1) editRow
+		FROM
+			pro_project a
+			LEFT JOIN pro_project_process c ON c.pro_id = a.id
+			LEFT JOIN pro_project_type d ON a.type_id = d.id
+			LEFT JOIN sys_eve_user_staff e ON e.user_id = a.create_id
+			LEFT JOIN sys_eve_user_staff f ON INSTR(CONCAT(',', a.project_manager, ','),CONCAT(',', f.user_id, ','))
+			LEFT JOIN sys_eve_user_staff g ON INSTR(CONCAT(',', a.project_sponsor, ','),CONCAT(',', g.user_id, ','))
+			LEFT JOIN sys_eve_user_staff h ON INSTR(CONCAT(',', a.project_members, ','),CONCAT(',', h.user_id, ','))
+		WHERE CASE WHEN a.create_id = #{userId} THEN 1 = 1 ELSE a.state IN(2, 3, 4) END
+			<if test="typeId != '' and typeId != null">
+                AND a.type_id = #{typeId}
+            </if>
+            <if test="state != '' and state != null">
+                AND a.state = #{state}
+            </if>
+            <if test="proName != '' and proName != null">
+				AND a.project_name like '%${proName}%'
+			</if>
+			<choose>
+		        <when test="proBelongId == '1'.toString()">
+		            AND a.create_id = #{userId}
+		        </when>
+		        <when test="proBelongId == '2'.toString()">
+		            AND INSTR(CONCAT(',', a.project_manager, ','), CONCAT(',', #{userId}, ','))
+		        </when>
+		        <when test="proBelongId == '3'.toString()">
+		            AND INSTR(CONCAT(',', a.project_members, ','), CONCAT(',', #{userId}, ','))
+		        </when>
+		        <when test="proBelongId == '4'.toString()">
+		            AND INSTR(CONCAT(',', a.project_sponsor, ','), CONCAT(',', #{userId}, ','))
+		        </when>
+		        <otherwise>
+				    AND (a.create_id = #{userId}
+					OR INSTR(CONCAT(',', a.project_manager, ','), CONCAT(',', #{userId}, ','))
+					OR INSTR(CONCAT(',', a.project_members, ','), CONCAT(',', #{userId}, ','))
+					OR INSTR(CONCAT(',', a.project_sponsor, ','), CONCAT(',', #{userId}, ',')))
+		        </otherwise>
+	    	</choose>
+		GROUP BY a.id
+		ORDER BY a.create_time desc
+	</select>
+    
+    <insert id="insertProProjectMation" parameterType="java.util.Map">
+        insert into pro_project
+        (id, `project_name`, project_number, type_id, department_id, start_time, end_time, customer_id, contract_id, contact_name, telphone, mobile, mail, qq, estimated_workload, estimated_cost, business_enclosure_info, business_content, project_manager, project_sponsor, project_members, project_enclosure_info, project_content, plan_enclosure_info, plan_content, actual_start_time, actual_end_time, results_enclosure_info, results_content, speed_of_progress, state, create_id, create_time)
+        values(#{id}, #{projectName}, #{projectNumber}, #{typeId}, #{departmentId}, #{startTime}, #{endTime}, #{customerId}, #{contractId}, #{contactName}, #{telphone}, #{mobile}, #{mail}, #{qq}, #{estimatedWorkload}, #{estimatedCost}, #{businessEnclosureInfo}, #{businessContent}, #{projectManager}, #{projectSponsor}, #{projectMembers}, #{projectEnclosureInfo}, #{projectContent}, #{planEnclosureInfo}, #{planContent}, #{actualStartTime}, #{actualEndTime}, #{resultsEnclosureInfo}, #{resultsContent}, #{speedOfProgress}, #{state},  #{createId},  #{createTime})
+    </insert>
+    
+    <select id="queryAllProProjectToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.project_name `name`,
+			a.project_number projectNumber,
+			b.`name` customerName
+		FROM
+			pro_project a
+			LEFT JOIN crm_customer b ON a.customer_id = b.id
+		WHERE a.state = '2'
+		AND (a.create_id = #{userId}
+			OR INSTR(CONCAT(',', a.project_manager, ','), CONCAT(',', #{userId}, ','))
+			OR INSTR(CONCAT(',', a.project_members, ','), CONCAT(',', #{userId}, ','))
+			OR INSTR(CONCAT(',', a.project_sponsor, ','), CONCAT(',', #{userId}, ',')))
+        ORDER BY a.create_time desc
+    </select>
+    
+    <select id="queryProProjectMationByNameAndNum" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id
+		FROM
+			pro_project a
+		WHERE a.customer_id = #{customerId}
+		AND (a.project_name = #{projectName}
+			<if test="projectNumber != '' and projectNumber != null">
+				OR a.project_number = #{projectNumber}
+			</if>)
+    </select>
+    
+    <select id="queryProProjectMationToDetail" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.project_name projectName,
+			a.project_number projectNumber,
+			b.name typeName,
+			c.department_name departmentName,
+			DATE_FORMAT(CONVERT (a.start_time, CHAR),'%Y-%m-%d') startTime,
+			DATE_FORMAT(CONVERT (a.end_time, CHAR),'%Y-%m-%d') endTime,
+			d.name customerName,
+			e.title contractName,
+			a.contact_name contactName,
+			a.telphone telphone,
+			a.mobile mobile,
+			a.mail mail,
+			a.qq qq,
+			a.estimated_workload estimatedWorkload,
+			a.estimated_cost estimatedCost,
+			a.business_content businessContent,
+			IFNULL(a.business_enclosure_info, '') businessEnclosureInfo,
+            a.state,
+			CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '11' THEN '审核通过' WHEN '12' THEN '审核不通过' WHEN '2' THEN '执行中' WHEN '3' THEN '已完结' WHEN '4' THEN '作废' WHEN '5' THEN '撤销' END stateName,
+			GROUP_CONCAT(distinct CONCAT(f.job_number, '_', f.user_name)) projectManager,
+			GROUP_CONCAT(distinct CONCAT(g.job_number, '_', g.user_name)) projectSponsor,
+			GROUP_CONCAT(distinct CONCAT(h.job_number, '_', h.user_name)) projectMembers,
+			IFNULL(a.project_enclosure_info, '') projectEnclosureInfo,
+			IFNULL(a.project_content, '') projectContent,
+			a.plan_content planContent,
+			IFNULL(a.plan_enclosure_info, '') planEnclosureInfo,
+			a.results_content resultsContent,
+			IFNULL(a.results_enclosure_info, '') resultsEnclosureInfo,
+			DATE_FORMAT(CONVERT (a.actual_start_time, CHAR),'%Y-%m-%d') actualStartTime,
+			DATE_FORMAT(CONVERT (a.actual_end_time, CHAR),'%Y-%m-%d') actualEndTime,
+            i.process_instance_id processInstanceId,
+			a.create_id createId,
+            j.user_name userName
+		FROM
+			pro_project a
+			LEFT JOIN pro_project_type b ON a.type_id = b.id
+			LEFT JOIN company_department c ON a.department_id = c.id
+			LEFT JOIN crm_customer d ON a.customer_id = d.id
+			LEFT JOIN crm_contract e ON a.contract_id = e.id
+			LEFT JOIN sys_eve_user_staff f ON INSTR(CONCAT(',', a.project_manager, ','),CONCAT(',', f.user_id, ','))
+			LEFT JOIN sys_eve_user_staff g ON INSTR(CONCAT(',', a.project_sponsor, ','),CONCAT(',', g.user_id, ','))
+			LEFT JOIN sys_eve_user_staff h ON INSTR(CONCAT(',', a.project_members, ','),CONCAT(',', h.user_id, ','))
+			LEFT JOIN pro_project_process i ON i.pro_id = a.id
+			LEFT JOIN sys_eve_user_staff j ON a.create_id = j.user_id
+		WHERE a.id = #{id}
+    </select>
+    
+    <select id="queryProProjectMationToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.project_name projectName,
+			a.project_number projectNumber,
+			a.type_id typeId,
+			a.department_id departmentId,
+			DATE_FORMAT(CONVERT (a.start_time, CHAR),'%Y-%m-%d') startTime,
+			DATE_FORMAT(CONVERT (a.end_time, CHAR),'%Y-%m-%d') endTime,
+			a.customer_id customerId,
+			a.contract_id contractId,
+			a.contact_name contactName,
+			a.telphone telphone,
+			a.mobile mobile,
+			a.mail mail,
+			a.qq qq,
+			a.estimated_workload estimatedWorkload,
+			a.estimated_cost estimatedCost,
+			a.business_content businessContent,
+			IFNULL(a.business_enclosure_info, '') businessEnclosureInfo,
+			c.process_instance_id processInstanceId,
+			a.state,
+			<!-- 默认可编辑 -->
+			IF((a.state = 0 OR a.state = 1 OR a.state = 5), 1, -1) editRow
+		FROM
+			pro_project a
+			LEFT JOIN pro_project_process c ON c.pro_id = a.id
+		WHERE a.id = #{id}
+    </select>
+    
+	<select id="queryProProjectMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id
+		FROM
+			pro_project a
+		WHERE a.customer_id = #{customerId} AND a.id != #{id} AND (a.project_name = #{projectName}
+		<if test="projectNumber != '' and projectNumber != null">
+			OR a.project_number = #{projectNumber}
+		</if>)
+    </select>
+    
+    <update id="editProProjectMationById" parameterType="java.util.Map">
+        UPDATE pro_project
+        <set>
+            <if test="projectName != '' and projectName != null">
+                project_name = #{projectName},
+            </if>
+            <if test="typeId != '' and typeId != null">
+                type_id = #{typeId},
+            </if>
+            <if test="endTime != '' and endTime != null">
+                end_time = #{endTime},
+            </if>
+            department_id = #{departmentId},
+            project_number = #{projectNumber},
+            start_time = #{startTime},
+            customer_id = #{customerId},
+            contract_id = #{contractId},
+            contact_name = #{contactName},
+            telphone = #{telphone},
+            mobile = #{mobile},
+            mail = #{mail},
+            qq = #{qq},
+            estimated_workload = #{estimatedWorkload},
+            estimated_cost = #{estimatedCost},
+            business_enclosure_info = #{businessEnclosureInfo},
+            business_content = #{businessContent}
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <select id="queryProProjectStateById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.state,
+			IFNULL(a.project_manager, '') projectManager,
+			IFNULL(a.project_members, '') projectMembers,
+			IFNULL(a.project_content, '') projectContent
+		FROM
+			pro_project a
+		WHERE a.id = #{id}
+    </select>
+
+	<update id="updateProProjectStateISInAudit">
+        UPDATE pro_project
+        <set>
+            state = '1'
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteProProjectRelationByProId">
+        DELETE 
+		FROM 
+			pro_project_process
+		where pro_id = #{proId}
+    </delete>
+    
+    <insert id="insertProProjectRelationMation" parameterType="java.util.Map">
+        insert into pro_project_process
+        (id, process_instance_id, pro_id, state, type, sub_id, sub_time)
+        values(#{id}, #{processInId}, #{proId}, #{state}, #{type}, #{subId}, #{subTime})
+    </insert>
+    
+    <delete id="deleteProProjectMationById" parameterType="java.util.Map">
+        DELETE 
+		FROM 
+			pro_project
+		where id = #{id}
+    </delete>
+    
+    <select id="queryProjectId" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.pro_id id
+		FROM
+			pro_project_process a
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+    </select>
+    
+    <update id="editProjectProcessToRevoke" parameterType="java.util.Map">
+		UPDATE pro_project
+		<set>
+			state = '5'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteProjectProcessToRevoke" parameterType="java.util.Map">
+		DELETE
+		FROM
+			pro_project_process
+		WHERE
+			pro_id = #{id}
+		AND state = '0'
+	</delete>
+	
+	<update id="editProjectProcessToNullify" parameterType="java.util.Map">
+		UPDATE pro_project
+		<set>
+			state = '4'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryProProjectByProcessInstanceId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.pro_id id,
+			a.process_instance_id processInstanceId
+		FROM
+			pro_project_process a
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+	</select>
+	
+	<update id="editProProjectToPassByUseId" parameterType="java.util.Map">
+		UPDATE pro_project_process
+		<set>
+			state = '1'
+		</set>
+		WHERE process_instance_id = #{processInstanceId}
+	</update>
+	
+	<update id="editProProjectToNoPassByUseId" parameterType="java.util.Map">
+		UPDATE pro_project_process
+		<set>
+			state = '2'
+		</set>
+		WHERE process_instance_id = #{processInstanceId}
+	</update>
+	
+	<update id="editProProjectStateResultById" parameterType="java.util.Map">
+		UPDATE pro_project
+		<set>
+			state = #{state}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editProjectProcessToExecute" parameterType="java.util.Map">
+		UPDATE pro_project
+		<set>
+			state = '2'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryProjectProcessToProAppointShowById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.project_name projectName,
+			a.project_number projectNumber,
+			b.name typeName,
+			c.department_name departmentName,
+			DATE_FORMAT(CONVERT (a.start_time, CHAR),'%Y-%m-%d') startTime,
+			DATE_FORMAT(CONVERT (a.end_time, CHAR),'%Y-%m-%d') endTime,
+			d.name customerName,
+			e.title contractName,
+			a.contact_name contactName,
+			a.telphone telphone,
+			a.mobile mobile,
+			a.mail mail,
+			a.qq qq,
+			a.estimated_workload estimatedWorkload,
+			a.estimated_cost estimatedCost,
+			a.business_content businessContent,
+			IFNULL(a.business_enclosure_info, '') businessEnclosureInfo,
+			CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '11' THEN '审核通过' WHEN '12' THEN '审核不通过' WHEN '2' THEN '执行中' WHEN '3' THEN '已完结' WHEN '4' THEN '作废' WHEN '5' THEN '撤销' END stateName,
+			a.project_manager projectManager,
+			a.project_sponsor projectSponsor,
+			a.project_members projectMembers,
+			IFNULL(a.project_enclosure_info, '') projectEnclosureInfo,
+			a.project_content projectContent,
+			a.plan_content planContent,
+		    IFNULL(a.plan_enclosure_info, '') planEnclosureInfo
+		FROM
+			pro_project a
+			LEFT JOIN pro_project_type b ON a.type_id = b.id
+			LEFT JOIN company_department c ON a.department_id = c.id
+			LEFT JOIN crm_customer d ON a.customer_id = d.id
+			LEFT JOIN crm_contract e ON a.contract_id = e.id
+		WHERE a.id = #{id}
+    </select>
+    
+    <select id="queryProjectManagerInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{projectManager}, ','), CONCAT(',', a.user_id, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+    </select>
+    
+    <select id="queryProjectSponsorInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{projectSponsor}, ','), CONCAT(',', a.user_id, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+    </select>
+    
+    <select id="queryProjectMembersInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{projectMembers}, ','), CONCAT(',', a.user_id, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+    </select>
+    
+    <update id="editProjectProcessToProAppointById" parameterType="java.util.Map">
+		UPDATE pro_project
+		<set>
+			project_manager = #{projectManager},
+			project_sponsor = #{projectSponsor},
+			project_members = #{projectMembers},
+			project_content = #{projectContent},
+			project_enclosure_info = #{projectEnclosureInfoStr},
+			plan_content = #{planContent},
+			plan_enclosure_info = #{planEnclosureInfo},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryProjectProcessToPerFectShowById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.project_name projectName,
+			a.project_number projectNumber,
+			b.name typeName,
+			c.department_name departmentName,
+			DATE_FORMAT(CONVERT (a.start_time, CHAR),'%Y-%m-%d') startTime,
+			DATE_FORMAT(CONVERT (a.end_time, CHAR),'%Y-%m-%d') endTime,
+			d.name customerName,
+			e.title contractName,
+			a.contact_name contactName,
+			a.telphone telphone,
+			a.mobile mobile,
+			a.mail mail,
+			a.qq qq,
+			a.estimated_workload estimatedWorkload,
+			a.estimated_cost estimatedCost,
+			a.business_content businessContent,
+			IFNULL(a.business_enclosure_info, '') businessEnclosureInfo,
+			CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '11' THEN '审核通过' WHEN '12' THEN '审核不通过' WHEN '2' THEN '执行中' WHEN '3' THEN '已完结' WHEN '4' THEN '作废' WHEN '5' THEN '撤销' END stateName,
+			GROUP_CONCAT(distinct CONCAT(f.job_number, '_', f.user_name)) projectManager,
+			GROUP_CONCAT(distinct CONCAT(g.job_number, '_', g.user_name)) projectSponsor,
+			GROUP_CONCAT(distinct CONCAT(h.job_number, '_', h.user_name)) projectMembers,
+			IFNULL(a.project_enclosure_info, '') projectEnclosureInfo,
+			IFNULL(a.project_content, '') projectContent,
+			a.plan_content planContent,
+			IFNULL(a.plan_enclosure_info, '') planEnclosureInfo,
+			a.results_content resultsContent,
+			IFNULL(a.results_enclosure_info, '') resultsEnclosureInfo,
+			DATE_FORMAT(CONVERT (a.actual_start_time, CHAR),'%Y-%m-%d') actualStartTime,
+			DATE_FORMAT(CONVERT (a.actual_end_time, CHAR),'%Y-%m-%d') actualEndTime
+		FROM
+			pro_project a
+			LEFT JOIN pro_project_type b ON a.type_id = b.id
+			LEFT JOIN company_department c ON a.department_id = c.id
+			LEFT JOIN crm_customer d ON a.customer_id = d.id
+			LEFT JOIN crm_contract e ON a.contract_id = e.id
+			LEFT JOIN sys_eve_user_staff f ON INSTR(CONCAT(',', a.project_manager, ','),CONCAT(',', f.user_id, ','))
+			LEFT JOIN sys_eve_user_staff g ON INSTR(CONCAT(',', a.project_sponsor, ','),CONCAT(',', g.user_id, ','))
+			LEFT JOIN sys_eve_user_staff h ON INSTR(CONCAT(',', a.project_members, ','),CONCAT(',', h.user_id, ','))
+		WHERE a.id = #{id}
+    </select>
+
+	<update id="editProjectProcessToPerFectById" parameterType="java.util.Map">
+		UPDATE pro_project
+		<set>
+			actual_start_time = #{actualStartTime},
+			actual_end_time = #{actualEndTime},
+			results_enclosure_info = #{resultsEnclosureInfo},
+			results_content = #{resultsContent},
+			<if test="state != '' and state != null">
+                state = #{state},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+    
+</mapper>

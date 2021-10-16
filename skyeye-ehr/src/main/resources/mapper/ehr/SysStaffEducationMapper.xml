@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysStaffEducationDao">
+
+    <select id="queryAllSysStaffEducationList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.admission_time admissionTime,
+			a.graduation_time graduationTime,
+			a.graduction_school graductionSchool,
+			a.major major,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.enclosure,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			d.`name` educationName,
+			c.`name` learningModalityName,
+			e.`name` schoolNatureName
+		FROM
+			sys_staff_education a
+			LEFT JOIN sys_staff_data_dictionary d ON a.education_id = d.id
+			LEFT JOIN sys_staff_data_dictionary c ON a.learning_modality_id = c.id
+			LEFT JOIN sys_staff_data_dictionary e ON a.school_nature = e.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        <if test="graductionSchool != '' and graductionSchool != null">
+            AND a.graduction_school LIKE '%${graductionSchool}%'
+        </if>
+        <if test="userName != '' and userName != null">
+            AND b.user_name LIKE '%${userName}%'
+        </if>
+        <if test="jobNumber != '' and jobNumber != null">
+            AND b.job_number LIKE '%${jobNumber}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND b.state = #{state}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <insert id="insertSysStaffEducationMation" parameterType="java.util.Map">
+        INSERT INTO sys_staff_education
+        (id, education_id, admission_time, graduation_time, graduction_school, major, learning_modality_id, school_nature,
+        	enclosure, staff_id, create_time)
+        VALUES
+        (#{id}, #{educationId}, #{admissionTime}, #{graduationTime}, #{graductionSchool}, #{major}, #{learningModalityId}, #{schoolNature},
+        	#{enclosureInfo}, #{staffId}, #{createTime})
+    </insert>
+    
+    <select id="querySysStaffEducationMationToEdit" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.admission_time admissionTime,
+			a.graduation_time graduationTime,
+			a.graduction_school graductionSchool,
+			a.major major,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.enclosure,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			a.education_id educationId,
+			d.`name` educationName,
+			a.learning_modality_id learningModalityId,
+			c.`name` learningModalityName,
+			a.school_nature schoolNature,
+			e.`name` schoolNatureName
+		FROM
+			sys_staff_education a
+			LEFT JOIN sys_staff_data_dictionary d ON a.education_id = d.id
+			LEFT JOIN sys_staff_data_dictionary c ON a.learning_modality_id = c.id
+			LEFT JOIN sys_staff_data_dictionary e ON a.school_nature = e.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        AND a.id = #{id}
+    </select>
+    
+    <update id="editSysStaffEducationMationById">
+        UPDATE sys_staff_education
+        <set>
+            education_id = #{educationId},
+            admission_time = #{admissionTime},
+            graduation_time = #{graduationTime},
+            graduction_school = #{graductionSchool},
+            major = #{major},
+            learning_modality_id = #{learningModalityId},
+            school_nature = #{schoolNature},
+            enclosure = #{enclosureInfo},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+    
+    <delete id="deleteSysStaffEducationMationById">
+		DELETE
+		FROM
+			sys_staff_education
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryPointStaffSysStaffEducationList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.admission_time admissionTime,
+			a.graduation_time graduationTime,
+			a.graduction_school graductionSchool,
+			a.major major,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.enclosure,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			d.`name` educationName,
+			c.`name` learningModalityName,
+			e.`name` schoolNatureName
+		FROM
+			sys_staff_education a
+			LEFT JOIN sys_staff_data_dictionary d ON a.education_id = d.id
+			LEFT JOIN sys_staff_data_dictionary c ON a.learning_modality_id = c.id
+			LEFT JOIN sys_staff_data_dictionary e ON a.school_nature = e.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        AND b.id = #{staffId}
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

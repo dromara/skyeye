@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysStaffJobResumeDao">
+
+    <select id="queryAllSysStaffJobResumeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.work_unit workUnit,
+			a.department,
+			a.job,
+			a.station,
+			DATE_FORMAT(a.start_time,'%Y-%m-%d') startTime,
+			DATE_FORMAT(a.end_time, '%Y-%m-%d') endTime,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.enclosure,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state
+		FROM
+			sys_staff_job_resume a,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        <if test="userName != '' and userName != null">
+            AND b.user_name LIKE '%${userName}%'
+        </if>
+        <if test="jobNumber != '' and jobNumber != null">
+            AND b.job_number LIKE '%${jobNumber}%'
+        </if>
+        <if test="workUnit != '' and workUnit != null">
+            AND a.work_unit LIKE '%${workUnit}%'
+        </if>
+        <if test="department != '' and department != null">
+            AND a.department LIKE '%${department}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND b.state = #{state}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <insert id="insertSysStaffJobResumeMation" parameterType="java.util.Map">
+        INSERT INTO sys_staff_job_resume
+        (id, start_time, end_time, work_unit, department, job, station,
+        	enclosure, staff_id, create_time)
+        VALUES
+        (#{id}, #{startTime}, #{endTime}, #{workUnit}, #{department}, #{job}, #{station},
+        	#{enclosureInfo}, #{staffId}, #{createTime})
+    </insert>
+    
+    <select id="querySysStaffJobResumeMationToEdit" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.work_unit workUnit,
+			a.department,
+			a.job,
+			a.station,
+			DATE_FORMAT(a.start_time,'%Y-%m-%d') startTime,
+			DATE_FORMAT(a.end_time, '%Y-%m-%d') endTime,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.enclosure,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state
+		FROM
+			sys_staff_job_resume a,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        AND a.id = #{id}
+    </select>
+    
+    <update id="editSysStaffJobResumeMationById">
+        UPDATE sys_staff_job_resume
+        <set>
+            work_unit = #{workUnit},
+            department = #{department},
+            job = #{job},
+            station = #{station},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            enclosure = #{enclosureInfo},
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteSysStaffJobResumeMationById">
+		DELETE
+		FROM
+			sys_staff_job_resume
+		WHERE id = #{id}
+	</delete>
+	
+	<select id="queryPointStaffSysStaffJobResumeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.work_unit workUnit,
+			a.department,
+			a.job,
+			a.station,
+			DATE_FORMAT(a.start_time,'%Y-%m-%d') startTime,
+			DATE_FORMAT(a.end_time, '%Y-%m-%d') endTime,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.enclosure,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state
+		FROM
+			sys_staff_job_resume a,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        AND b.id = #{staffId}
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

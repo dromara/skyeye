@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 项目管理开始 -->
+	<url id="proproject001" path="/post/ProProjectController/queryAllProProjectList" val="获取所有项目列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeId" name="typeId" ref="" var="类型"/>
+		<property id="proName" name="proName" ref="" var="项目名称"/>
+		<property id="state" name="state" ref="num" var="状态"/>
+	</url>
+	<url id="proproject002" path="/post/ProProjectController/queryMyProProjectList" val="获取我的项目列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeId" name="typeId" ref="" var="类型"/>
+		<property id="proName" name="proName" ref="" var="项目名称"/>
+		<property id="state" name="state" ref="num" var="状态"/>
+		<property id="proBelongId" name="proBelongId" ref="num" var="项目所属"/>
+	</url>
+	<url id="proproject003" path="/post/ProProjectController/insertProProjectMation" val="新增项目信息" allUse="1">
+		<property id="projectName" name="projectName" ref="required" var="项目名称"/>
+		<property id="projectNumber" name="projectNumber" ref="" var="项目编号"/>
+		<property id="typeId" name="typeId" ref="required" var="项目分类"/>
+		<property id="startTime" name="startTime" ref="required" var="计划开始时间"/>
+		<property id="endTime" name="endTime" ref="required" var="计划完成时间"/>
+		<property id="customerId" name="customerId" ref="" var="客户名称"/>
+		<property id="contractId" name="contractId" ref="" var="关联合同"/>
+		<property id="contactName" name="contactName" ref="" var="对方联系人"/>
+		<property id="telphone" name="telphone" ref="" var="固定电话"/>
+		<property id="mobile" name="mobile" ref="" var="移动电话"/>
+		<property id="mail" name="mail" ref="" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="qq"/>
+		<property id="departmentId" name="departmentId" ref="" var="所属部门"/>
+		<property id="estimatedWorkload" name="estimatedWorkload" ref="" var="预估工作量"/>
+		<property id="estimatedCost" name="estimatedCost" ref="" var="预估成本费用"/>
+		<property id="businessContent" name="businessContent" ref="required" var="业务需求和目标"/>
+		<property id="businessEnclosureInfo" name="businessEnclosureInfo" ref="" var="附件"/>
+		<property id="subType" name="subType" ref="required" var="提交类型"/>
+	</url>
+	<url id="proproject004" path="/post/ProProjectController/queryAllProProjectToChoose" val="获取所有指定项目用于下拉框选择" allUse="2">
+	</url>
+	<url id="proproject005" path="/post/ProProjectController/queryProProjectMationToDetail" val="获取项目详细信息展示详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="项目id"/>
+	</url>
+	<url id="proproject006" path="/post/ProProjectController/queryProProjectMationToEdit" val="获取项目详细信息用于编辑回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="项目id"/>
+	</url>
+	<url id="proproject007" path="/post/ProProjectController/editProProjectMationById" val="编辑项目信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="项目id"/>
+		<property id="projectName" name="projectName" ref="required" var="项目名称"/>
+		<property id="projectNumber" name="projectNumber" ref="" var="项目编号"/>
+		<property id="typeId" name="typeId" ref="required" var="项目分类"/>
+		<property id="startTime" name="startTime" ref="required" var="计划开始时间"/>
+		<property id="endTime" name="endTime" ref="required" var="计划完成时间"/>
+		<property id="customerId" name="customerId" ref="" var="客户名称"/>
+		<property id="contractId" name="contractId" ref="" var="关联合同"/>
+		<property id="contactName" name="contactName" ref="" var="对方联系人"/>
+		<property id="telphone" name="telphone" ref="" var="固定电话"/>
+		<property id="mobile" name="mobile" ref="" var="移动电话"/>
+		<property id="mail" name="mail" ref="" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="qq"/>
+		<property id="departmentId" name="departmentId" ref="" var="所属部门"/>
+		<property id="estimatedWorkload" name="estimatedWorkload" ref="" var="预估工作量"/>
+		<property id="estimatedCost" name="estimatedCost" ref="" var="预估成本费用"/>
+		<property id="businessContent" name="businessContent" ref="required" var="业务需求和目标"/>
+		<property id="businessEnclosureInfo" name="businessEnclosureInfo" ref="" var="附件"/>
+		<property id="subType" name="subType" ref="required" var="提交类型"/>
+	</url>
+	<url id="proproject008" path="/post/ProProjectController/editProProjectMationToSubApproval" val="项目提交审批" allUse="2">
+		<property id="rowId" name="id" ref="required" var="项目id"/>
+	</url>
+	<url id="proproject009" path="/post/ProProjectController/deleteProProjectMationById" val="删除项目" allUse="1">
+		<property id="rowId" name="id" ref="required" var="项目id"/>
+	</url>
+	<url id="proproject010" path="/post/ProProjectController/editProjectProcessToRevoke" val="撤销项目审批申请" allUse="1">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+    </url>
+    <url id="proproject011" path="/post/ProProjectController/editProjectProcessToNullify" val="作废项目" allUse="1">
+        <property id="rowId" name="id" ref="required" var="项目id"/>
+    </url>
+    <url id="proproject012" path="/post/ProProjectController/editProjectProcessToExecute" val="开始执行项目" allUse="1">
+        <property id="rowId" name="id" ref="required" var="项目id"/>
+    </url>
+	<url id="proproject013" path="/post/ProProjectController/queryProjectProcessToProAppointShowById" val="项目任命数据回显" allUse="2">
+        <property id="rowId" name="id" ref="required" var="项目id"/>
+    </url>
+    <url id="proproject014" path="/post/ProProjectController/editProjectProcessToProAppointById" val="项目任命" allUse="1">
+        <property id="rowId" name="id" ref="required" var="项目id"/>
+        <property id="toProjectManager" name="projectManager" ref="required" var="项目经理"/>
+        <property id="toProjectSponsor" name="projectSponsor" ref="" var="项目赞助人"/>
+        <property id="toProjectMembers" name="projectMembers" ref="required" var="项目组成员"/>
+        <property id="projectContent" name="projectContent" ref="required" var="项目分工明细"/>
+        <property id="projectEnclosureInfoStr" name="projectEnclosureInfoStr" ref="" var="项目附件"/>
+     	<property id="planContent" name="planContent" ref="" var="实施计划与方案"/>
+        <property id="planEnclosureInfoStr" name="planEnclosureInfo" ref="" var="实施计划附件"/>
+    </url>
+    <url id="proproject015" path="/post/ProProjectController/queryProjectProcessToPerFectShowById" val="信息完善数据回显" allUse="2">
+        <property id="rowId" name="id" ref="required" var="项目id"/>
+    </url>
+    <url id="proproject016" path="/post/ProProjectController/editProjectProcessToPerFectById" val="信息完善" allUse="1">
+        <property id="rowId" name="id" ref="required" var="项目id"/>
+        <property id="actualStartTime" name="actualStartTime" ref="required" var="实际开始时间"/>
+        <property id="actualEndTime" name="actualEndTime" ref="required" var="实际完成时间"/>
+        <property id="resultsEnclosureInfoStr" name="resultsEnclosureInfo" ref="" var="项目成果附件"/>
+     	<property id="resultsContent" name="resultsContent" ref="required" var="成果与总结"/>
+        <property id="subType" name="subType" ref="required,num" var="操作保存类型：1.保存，2.完结"/>
+    </url>
+	<url id="proproject017" path="/post/ProProjectController/editProjectMationInProcess" val="在工作流中编辑项目信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="项目id"/>
+		<property id="projectName" name="projectName" ref="required" var="项目名称"/>
+		<property id="projectNumber" name="projectNumber" ref="" var="项目编号"/>
+		<property id="typeId" name="typeId" ref="required" var="项目分类"/>
+		<property id="startTime" name="startTime" ref="required" var="计划开始时间"/>
+		<property id="endTime" name="endTime" ref="required" var="计划完成时间"/>
+		<property id="customerId" name="customerId" ref="" var="客户名称"/>
+		<property id="contractId" name="contractId" ref="" var="关联合同"/>
+		<property id="contactName" name="contactName" ref="" var="对方联系人"/>
+		<property id="telphone" name="telphone" ref="" var="固定电话"/>
+		<property id="mobile" name="mobile" ref="" var="移动电话"/>
+		<property id="mail" name="mail" ref="" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="qq"/>
+		<property id="departmentId" name="departmentId" ref="" var="所属部门"/>
+		<property id="estimatedWorkload" name="estimatedWorkload" ref="" var="预估工作量"/>
+		<property id="estimatedCost" name="estimatedCost" ref="" var="预估成本费用"/>
+		<property id="businessContent" name="businessContent" ref="required" var="业务需求和目标"/>
+		<property id="businessEnclosureInfo" name="businessEnclosureInfo" ref="" var="附件"/>
+	</url>
+	<!-- 项目管理结束 -->
+	
+	<!-- 项目工作量开始 -->
+	<url id="proworkload001" path="/post/ProWorkloadController/queryProWorkloadList" val="获取我的工作量列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="proName" name="proName" ref="" var="项目名称"/>
+		<property id="workloadName" name="workloadName" ref="" var="工作量名称"/>
+		<property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="proworkload002" path="/post/ProWorkloadController/insertProWorkloadMation" val="新增工作量" allUse="1">
+        <property id="title" name="title" ref="required" var="工作量名称" />
+        <property id="proId" name="proId" ref="required" var="项目Id" />
+        <property id="projectNumber" name="projectNumber" ref="" var="项目编号" />
+        <property id="desc" name="desc" ref="" var="附加描述" />
+        <property id="type" name="type" ref="required" var="填报工作量节点" />
+        <property id="allWorkLoad" name="allWorkLoad" ref="required" var="本周合计工作量" />
+        <property id="workloadTaskStr" name="workloadTaskStr" ref="required,json" var="工作量相关任务json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="proworkload003" path="/post/ProWorkloadController/queryAllProWorkloadList" val="获取所有的工作量列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="proName" name="proName" ref="" var="项目名称"/>
+		<property id="workloadName" name="workloadName" ref="" var="工作量名称"/>
+		<property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="proworkload004" path="/post/ProWorkloadController/editProWorkloadToApprovalById" val="提交审批" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工作量id"/>
+	</url>
+	<url id="proworkload005" path="/post/ProWorkloadController/editProWorkloadProcessToRevoke" val="撤销工作量审批申请" allUse="1">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="工作流程Id" />
+	</url>
+	<url id="proworkload006" path="/post/ProWorkloadController/queryProWorkloadMationToDetails" val="工作量详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工作量Id" />
+	</url>
+	<url id="proworkload007" path="/post/ProWorkloadController/queryProWorkloadMationToEdit" val="获取工作量信息用以编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工作量Id" />
+	</url>
+	<url id="proworkload008" path="/post/ProWorkloadController/editProWorkloadMation" val="编辑工作量信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工作量Id" />
+		<property id="title" name="title" ref="required" var="工作量名称" />
+        <property id="proId" name="proId" ref="required" var="项目Id" />
+        <property id="projectNumber" name="projectNumber" ref="" var="项目编号" />
+        <property id="desc" name="desc" ref="" var="附加描述" />
+        <property id="type" name="type" ref="required" var="填报工作量节点" />
+        <property id="allWorkLoad" name="allWorkLoad" ref="required" var="本周合计工作量" />
+        <property id="workloadTaskStr" name="workloadTaskStr" ref="required,json" var="工作量相关任务json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="proworkload009" path="/post/ProWorkloadController/editProWorkloadMationInProcess" val="在工作流中编辑工作量信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工作量Id" />
+		<property id="title" name="title" ref="required" var="工作量名称" />
+        <property id="proId" name="proId" ref="required" var="项目Id" />
+        <property id="projectNumber" name="projectNumber" ref="" var="项目编号" />
+        <property id="desc" name="desc" ref="" var="附加描述" />
+        <property id="type" name="type" ref="required" var="填报工作量节点" />
+        <property id="allWorkLoad" name="allWorkLoad" ref="required" var="本周合计工作量" />
+        <property id="workloadTaskStr" name="workloadTaskStr" ref="required,json" var="工作量相关任务json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+	</url>
+	<url id="proworkload010" path="/post/ProWorkloadController/deleteProWorkloadMationById" val="删除工作量" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工作量Id" />
+	</url>
+	<url id="proworkload011" path="/post/ProWorkloadController/updateProWorkloadToCancellation" val="作废工作量" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工作量Id"/>
+	</url>
+    <!-- 项目工作量结束 -->
+    
+    <!-- 项目讨论帖子开始  -->
+    <url id="prodiscuss001" path="/post/ProProjectDiscussController/queryProProjectDiscussList" val="获取项目的讨论版的列表" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="rowId" name="id" ref="required" var="项目id"/>
+	</url>
+	<url id="prodiscuss002" path="/post/ProProjectDiscussController/insertProProjectDiscuss" val="社区发帖" allUse="2">
+		<property id="proId" name="proId" ref="required" var="项目id"/>
+		<property id="typeId" name="typeId" ref="required" var="所属分类id"/>
+		<property id="title" name="title" ref="required" var="讨论板标题"/>
+		<property id="content" name="content" ref="required" var="讨论内容"/>
+	</url>
+	<url id="prodiscuss003" path="/post/ProProjectDiscussController/insertProProjectDiscussReply" val="新增帖子的回复贴" allUse="2">
+		<property id="proId" name="proId" ref="required" var="项目id"/>
+		<property id="discussId" name="discussId" ref="required" var="讨论板id"/>
+		<property id="content" name="content" ref="required" var="讨论内容"/>
+	</url>
+	<url id="prodiscuss004" path="/post/ProProjectDiscussController/deleteProProjectDiscussById" val="删除讨论版" allUse="2">
+		<property id="rowId" name="discussId" ref="required" var="讨论板id"/>
+	</url>
+	<url id="prodiscuss005" path="/post/ProProjectDiscussController/queryProProjectDiscussMationById" val="根据讨论版Id获取讨论版详情" allUse="2">
+		<property id="rowId" name="discussId" ref="required" var="讨论板id"/>
+	</url>
+	<url id="prodiscuss006" path="/post/ProProjectDiscussController/queryAllDiscussList" val="获取所有讨论板" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="主题名称"/>
+		<property id="projectName" name="projectName" ref="" var="项目名称"/>
+	</url>
+    <!-- 项目讨论帖子结束  -->
+	
+	<!-- 项目文档开始  -->
+    <url id="profile001" path="/post/ProFileController/queryProFileList" val="获取项目的文档的列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="state" name="state" ref="" var="状态"/>
+		<property id="title" name="title" ref="" var="文档名称"/>
+		<property id="projectName" name="projectName" ref="" var="项目名称"/>
+	</url>
+	<url id="profile002" path="/post/ProFileController/insertProFileMation" val="新增文档" allUse="1">
+		<property id="proId" name="proId" ref="required" var="项目id"/>
+		<property id="typeId" name="typeId" ref="required" var="所属分类id"/>
+		<property id="title" name="title" ref="required" var="文档名称"/>
+		<property id="content" name="content" ref="required" var="文档内容"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="profile003" path="/post/ProFileController/queryProFileMationToDetails" val="文档详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="文档Id" />
+	</url>
+	<url id="profile004" path="/post/ProFileController/queryProFileMationToEdit" val="获取文档信息用以编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="文档Id" />
+	</url>
+	<url id="profile005" path="/post/ProFileController/editProFileMation" val="编辑文档信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="文档Id" />
+		<property id="proId" name="proId" ref="required" var="项目id"/>
+		<property id="typeId" name="typeId" ref="required" var="所属分类id"/>
+		<property id="title" name="title" ref="required" var="文档名称"/>
+		<property id="content" name="content" ref="required" var="文档内容"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="profile006" path="/post/ProFileController/editProFileToApprovalById" val="提交审批" allUse="1">
+		<property id="rowId" name="id" ref="required" var="文档id"/>
+	</url>
+	<url id="profile007" path="/post/ProFileController/editProFileProcessToRevoke" val="撤销文档审批申请" allUse="1">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="工作流程Id" />
+	</url>
+	<url id="profile008" path="/post/ProFileController/editProFileMationInProcess" val="在工作流中编辑文档信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="文档Id" />
+		<property id="proId" name="proId" ref="required" var="项目id"/>
+		<property id="typeId" name="typeId" ref="required" var="所属分类id"/>
+		<property id="title" name="title" ref="required" var="文档名称"/>
+		<property id="content" name="content" ref="required" var="文档内容"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+	</url>
+	<url id="profile009" path="/post/ProFileController/deleteProFileMationById" val="删除文档" allUse="1">
+		<property id="rowId" name="id" ref="required" var="文档Id" />
+	</url>
+	<url id="profile010" path="/post/ProFileController/updateProFileToCancellation" val="作废文档" allUse="1">
+		<property id="rowId" name="id" ref="required" var="文档Id"/>
+	</url>
+	<url id="profile011" path="/post/ProFileController/queryAllProFileList" val="获取全部的项目文档的列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="state" name="state" ref="" var="状态"/>
+		<property id="title" name="title" ref="" var="文档名称"/>
+		<property id="projectName" name="projectName" ref="" var="项目名称"/>
+	</url>
+	<url id="profile012" path="/post/ProFileController/queryAllStateupProFileByProId" val="获取某个项目下的所有已经审核通过的文档" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="rowId" name="id" ref="required" var="项目Id"/>
+	</url>
+    <!-- 项目文档结束  -->
+    
+    <!-- 项目费用报销开始  -->
+    <url id="procostexpense001" path="/post/ProCostExpenseController/queryProCostExpenseList" val="获取项目的费用报销的列表" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="state" name="state" ref="" var="状态"/>
+		<property id="title" name="title" ref="" var="费用报销名称"/>
+		<property id="projectName" name="projectName" ref="" var="项目名称"/>
+	</url>
+	<url id="procostexpense002" path="/post/ProCostExpenseController/insertProCostExpenseMation" val="新增费用报销" allUse="2">
+		<property id="proId" name="proId" ref="required" var="项目id"/>
+		<property id="departmentId" name="departmentId" ref="required" var="所属部门id"/>
+		<property id="title" name="title" ref="required" var="费用报销名称"/>
+		<property id="reimbursementTime" name="reimbursementTime" ref="required" var="报销时间"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+        <property id="expensePurposeStr" name="expensePurposeStr" ref="required" var="成本费用用途详细json串" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="procostexpense003" path="/post/ProCostExpenseController/queryProCostExpenseMationToDetails" val="费用报销详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="费用报销Id" />
+	</url>
+	<url id="procostexpense004" path="/post/ProCostExpenseController/queryProCostExpenseMationToEdit" val="获取费用报销信息用以编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="费用报销Id" />
+	</url>
+	<url id="procostexpense005" path="/post/ProCostExpenseController/editProCostExpenseMation" val="编辑费用报销信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="费用报销Id" />
+		<property id="proId" name="proId" ref="required" var="项目id"/>
+		<property id="departmentId" name="departmentId" ref="required" var="所属部门id"/>
+		<property id="title" name="title" ref="required" var="费用报销名称"/>
+		<property id="reimbursementTime" name="reimbursementTime" ref="required" var="报销时间"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+        <property id="expensePurposeStr" name="expensePurposeStr" ref="required" var="成本费用用途详细json串" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="procostexpense006" path="/post/ProCostExpenseController/editProCostExpenseToApprovalById" val="提交审批" allUse="2">
+		<property id="rowId" name="id" ref="required" var="费用报销id"/>
+	</url>
+	<url id="procostexpense007" path="/post/ProCostExpenseController/editProCostExpenseProcessToRevoke" val="撤销费用报销审批申请" allUse="2">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="工作流程Id" />
+	</url>
+	<url id="procostexpense008" path="/post/ProCostExpenseController/editProCostExpenseMationInProcess" val="在工作流中编辑费用报销信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="费用报销Id" />
+		<property id="proId" name="proId" ref="required" var="项目id"/>
+		<property id="departmentId" name="departmentId" ref="required" var="所属部门id"/>
+		<property id="title" name="title" ref="required" var="费用报销名称"/>
+		<property id="reimbursementTime" name="reimbursementTime" ref="required" var="报销时间"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+        <property id="expensePurposeStr" name="expensePurposeStr" ref="required" var="成本费用用途详细json串" />
+	</url>
+	<url id="procostexpense009" path="/post/ProCostExpenseController/deleteProCostExpenseMationById" val="删除费用报销" allUse="2">
+		<property id="rowId" name="id" ref="required" var="费用报销Id" />
+	</url>
+	<url id="procostexpense010" path="/post/ProCostExpenseController/updateProCostExpenseToCancellation" val="作废费用报销" allUse="2">
+		<property id="rowId" name="id" ref="required" var="费用报销Id"/>
+	</url>
+    <!-- 项目费用报销结束  -->
+	
+	<!-- 任务管理开始 -->
+	<url id="protask001" path="/post/ProTaskController/queryProTaskList" val="获取任务管理表列表" allUse="1">
+		<property id="taskName" name="taskName" ref="" var="任务名称"/>
+		<property id="createId" name="createId" ref="" var="创建人"/>
+		<property id="performId" name="performId" ref="" var="执行人"/>
+		<property id="firstTime" name="firstTime" ref="" var="起始时间" />
+		<property id="lastTime" name="lastTime" ref="" var="最后时间" />
+	</url>
+	<url id="protask002" path="/post/ProTaskController/insertProTaskMation" val="新增任务管理" allUse="1">
+		<property id="taskName" name="taskName" ref="required" var="任务名称"/>
+		<property id="taskType" name="taskType" ref="required" var="任务分类"/>
+		<property id="proId" name="proId" ref="required" var="所属项目"/>
+		<property id="departments" name="departments" ref="required" var="所属部门"/>
+		<property id="startTime" name="startTime" ref="required" var="开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="结束时间"/>
+		<property id="performId" name="performId" ref="required" var="执行人"/>
+		<property id="estimatedWorkload" name="estimatedWorkload" ref="required,num" var="预估工作量"/>
+		<property id="taskInstructions" name="taskInstructions" ref="required" var="任务说明"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="任务说明附件"/>
+		<property id="parentId" name="parentId" ref="required" var="所属主任务"/>
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="protask003" path="/post/ProTaskController/queryProTaskMationToDetails" val="任务详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="任务Id" />
+	</url>
+	<url id="protask004" path="/post/ProTaskController/queryProTaskMationToEdit" val="获取任务信息用以编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="任务Id" />
+	</url>
+	<url id="protask005" path="/post/ProTaskController/editProTaskMation" val="编辑任务信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="任务Id" />
+		<property id="taskName" name="taskName" ref="required" var="任务名称"/>
+		<property id="taskType" name="taskType" ref="required" var="任务分类"/>
+		<property id="proId" name="proId" ref="required" var="所属项目"/>
+		<property id="departments" name="departments" ref="required" var="所属部门"/>
+		<property id="startTime" name="startTime" ref="required" var="开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="结束时间"/>
+		<property id="performId" name="performId" ref="required" var="执行人"/>
+		<property id="estimatedWorkload" name="estimatedWorkload" ref="required,num" var="预估工作量"/>
+		<property id="taskInstructions" name="taskInstructions" ref="required" var="任务说明"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="任务说明附件"/>
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="protask006" path="/post/ProTaskController/deleteProTaskMationById" val="删除任务" allUse="1">
+		<property id="rowId" name="id" ref="required" var="任务Id" />
+	</url>
+	<url id="protask007" path="/post/ProTaskController/editProTaskProcessToRevoke" val="撤销任务审批申请" allUse="1">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="工作流程Id" />
+	</url>
+	<url id="protask008" path="/post/ProTaskController/editProTaskToApprovalById" val="根据任务Id提交审批" allUse="1">
+		<property id="rowId" name="id" ref="required" var="任务id"/>
+	</url>
+	<url id="protask009" path="/post/ProTaskController/updateProTaskToCancellation" val="作废任务" allUse="1">
+		<property id="rowId" name="id" ref="required" var="任务id"/>
+	</url>
+	<url id="protask010" path="/post/ProTaskController/editProTaskMationInProcess" val="在工作流中编辑任务信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="任务Id" />
+		<property id="taskName" name="taskName" ref="required" var="任务名称"/>
+		<property id="taskType" name="taskType" ref="required" var="任务分类"/>
+		<property id="proId" name="proId" ref="required" var="所属项目"/>
+		<property id="departments" name="departments" ref="required" var="所属部门"/>
+		<property id="startTime" name="startTime" ref="required" var="开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="结束时间"/>
+		<property id="performId" name="performId" ref="required" var="执行人"/>
+		<property id="estimatedWorkload" name="estimatedWorkload" ref="required,num" var="预估工作量"/>
+		<property id="taskInstructions" name="taskInstructions" ref="required" var="任务说明"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="任务说明附件"/>
+	</url>
+	<url id="protask011" path="/post/ProTaskController/queryMyProTaskList" val="获取我的任务列表" allUse="1">
+		<property id="taskName" name="taskName" ref="" var="任务名称"/>
+		<property id="myRole" name="myRole" ref="" var="我的任务"/>
+		<property id="state" name="state" ref="" var="状态"/>
+		<property id="firstTime" name="firstTime" ref="" var="起始时间" />
+		<property id="lastTime" name="lastTime" ref="" var="最后时间" />
+	</url>
+	<url id="protask012" path="/post/ProTaskController/updateProTaskToExecutionBegin" val="任务开始执行" allUse="1">
+		<property id="rowId" name="id" ref="required" var="任务id"/>
+	</url>
+	<url id="protask013" path="/post/ProTaskController/updateProTaskToExecutionOver" val="完成执行" allUse="1">
+		<property id="rowId" name="id" ref="required" var="任务id"/>
+		<property id="executionResult" name="executionResult" ref="required" var="执行结果"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="执行结果附件"/>
+	</url>
+	<url id="protask014" path="/post/ProTaskController/updateProTaskToExecutionClose" val="任务关闭" allUse="1">
+		<property id="rowId" name="id" ref="required" var="任务id"/>
+	</url>
+	<url id="protask015" path="/post/ProTaskController/queryProTaskInExecution" val="登录人的执行中的任务" allUse="2">
+		<property id="proId" name="proId" ref="required" var="任务id"/>
+	</url>
+	<!-- 任务管理结束 -->
+	
+	<!-- 文档分类开始 -->
+	<url id="profiletype001" path="/post/ProFileTypeController/queryProFileTypeList" val="获取文档分类列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="文档分类名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="profiletype002" path="/post/ProFileTypeController/insertProFileType" val="新增文档分类" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="文档分类名称"/>
+	</url>
+	<url id="profiletype003" path="/post/ProFileTypeController/queryProFileTypeMationById" val="根据id获取文档分类信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="文档分类id"/>
+	</url>
+	<url id="profiletype004" path="/post/ProFileTypeController/editProFileTypeById" val="编辑文档分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="文档分类id"/>
+	    <property id="typeName" name="typeName" ref="required" var="文档分类名称"/>
+	</url>
+	<url id="profiletype005" path="/post/ProFileTypeController/deleteProFileTypeById" val="根据id删除文档分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="文档分类id"/>
+	</url>
+	<url id="profiletype006" path="/post/ProFileTypeController/editStateUpById" val="根据id更改文档分类状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="文档分类id"/>
+	</url>
+	<url id="profiletype007" path="/post/ProFileTypeController/editStateDownById" val="根据id更改文档分类状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="文档分类id"/>
+	</url>
+	<url id="profiletype008" path="/post/ProFileTypeController/queryStateUpList" val="获取已上线的文档分类类型" allUse="2">
+	</url>
+	<!-- 文档分类结束 -->
+	
+	<!-- 项目分类开始 -->
+	<url id="proprojecttype001" path="/post/ProProjectTypeController/queryProProjectTypeList" val="获取项目分类列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="项目分类名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="proprojecttype002" path="/post/ProProjectTypeController/insertProProjectType" val="新增项目分类" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="项目分类名称"/>
+	</url>
+	<url id="proprojecttype003" path="/post/ProProjectTypeController/queryProProjectTypeMationById" val="根据id获取项目分类信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="项目分类id"/>
+	</url>
+	<url id="proprojecttype004" path="/post/ProProjectTypeController/editProProjectTypeById" val="编辑项目分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目分类id"/>
+	    <property id="typeName" name="typeName" ref="required" var="项目分类名称"/>
+	</url>
+	<url id="proprojecttype005" path="/post/ProProjectTypeController/deleteProProjectTypeById" val="根据id删除项目分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目分类id"/>
+	</url>
+	<url id="proprojecttype006" path="/post/ProProjectTypeController/editStateUpById" val="根据id更改项目分类状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目分类id"/>
+	</url>
+	<url id="proprojecttype007" path="/post/ProProjectTypeController/editStateDownById" val="根据id更改项目分类状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目分类id"/>
+	</url>
+	<url id="proprojecttype008" path="/post/ProProjectTypeController/queryStateUpList" val="获取已上线的项目分类类型" allUse="2">
+	</url>
+	<!-- 项目分类结束 -->
+	
+	<!-- 成本费用支出分类开始 -->
+	<url id="procostexpensetype001" path="/post/ProCostExpenseTypeController/queryProCostExpenseTypeList" val="获取成本费用支出分类列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="成本费用支出分类名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="procostexpensetype002" path="/post/ProCostExpenseTypeController/insertProCostExpenseType" val="新增成本费用支出分类" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="成本费用支出分类名称"/>
+	</url>
+	<url id="procostexpensetype003" path="/post/ProCostExpenseTypeController/queryProCostExpenseTypeMationById" val="根据id获取成本费用支出分类信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="成本费用支出分类id"/>
+	</url>
+	<url id="procostexpensetype004" path="/post/ProCostExpenseTypeController/editProCostExpenseTypeById" val="编辑成本费用支出分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="成本费用支出分类id"/>
+	    <property id="typeName" name="typeName" ref="required" var="成本费用支出分类名称"/>
+	</url>
+	<url id="procostexpensetype005" path="/post/ProCostExpenseTypeController/deleteProCostExpenseTypeById" val="根据id删除成本费用支出分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="成本费用支出分类id"/>
+	</url>
+	<url id="procostexpensetype006" path="/post/ProCostExpenseTypeController/editStateUpById" val="根据id更改成本费用支出分类状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="成本费用支出分类id"/>
+	</url>
+	<url id="procostexpensetype007" path="/post/ProCostExpenseTypeController/editStateDownById" val="根据id更改成本费用支出分类状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="成本费用支出分类id"/>
+	</url>
+	<url id="procostexpensetype008" path="/post/ProCostExpenseTypeController/queryStateUpList" val="获取已上线的成本费用支出分类类型" allUse="2">
+	</url>
+	<!-- 成本费用支出分类结束 -->
+	
+	<!-- 项目管理讨论板分类开始 -->
+	<url id="proprojectdiscusstype001" path="/post/ProProjectDiscussTypeController/queryProProjectDiscussTypeList" val="获取项目管理讨论板分类列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="项目管理讨论板分类名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="proprojectdiscusstype002" path="/post/ProProjectDiscussTypeController/insertProProjectDiscussType" val="新增项目管理讨论板分类" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="项目管理讨论板分类名称"/>
+	</url>
+	<url id="proprojectdiscusstype003" path="/post/ProProjectDiscussTypeController/queryProProjectDiscussTypeMationById" val="根据id获取项目管理讨论板分类信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="项目管理讨论板分类id"/>
+	</url>
+	<url id="proprojectdiscusstype004" path="/post/ProProjectDiscussTypeController/editProProjectDiscussTypeById" val="编辑项目管理讨论板分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目管理讨论板分类id"/>
+	    <property id="typeName" name="typeName" ref="required" var="项目管理讨论板分类名称"/>
+	</url>
+	<url id="proprojectdiscusstype005" path="/post/ProProjectDiscussTypeController/deleteProProjectDiscussTypeById" val="根据id删除项目管理讨论板分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目管理讨论板分类id"/>
+	</url>
+	<url id="proprojectdiscusstype006" path="/post/ProProjectDiscussTypeController/editStateUpById" val="根据id更改项目管理讨论板分类状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目管理讨论板分类id"/>
+	</url>
+	<url id="proprojectdiscusstype007" path="/post/ProProjectDiscussTypeController/editStateDownById" val="根据id更改项目管理讨论板分类状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="项目管理讨论板分类id"/>
+	</url>
+	<url id="proprojectdiscusstype008" path="/post/ProProjectDiscussTypeController/queryStateUpList" val="获取已上线的项目管理讨论板分类类型" allUse="2">
+	</url>
+	<!-- 项目管理讨论板分类结束 -->
+	
+	<!-- 任务分类开始 -->
+	<url id="protasktype001" path="/post/ProTaskTypeController/queryProTaskTypeList" val="获取任务分类列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="任务分类名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="protasktype002" path="/post/ProTaskTypeController/insertProTaskType" val="新增任务分类" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="任务分类名称"/>
+	</url>
+	<url id="protasktype003" path="/post/ProTaskTypeController/queryProTaskTypeMationById" val="根据id获取任务分类信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="任务分类id"/>
+	</url>
+	<url id="protasktype004" path="/post/ProTaskTypeController/editProTaskTypeById" val="编辑任务分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="任务分类id"/>
+	    <property id="typeName" name="typeName" ref="required" var="任务分类名称"/>
+	</url>
+	<url id="protasktype005" path="/post/ProTaskTypeController/deleteProTaskTypeById" val="根据id删除任务分类信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="任务分类id"/>
+	</url>
+	<url id="protasktype006" path="/post/ProTaskTypeController/editStateUpById" val="根据id更改任务分类状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="任务分类id"/>
+	</url>
+	<url id="protasktype007" path="/post/ProTaskTypeController/editStateDownById" val="根据id更改任务分类状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="任务分类id"/>
+	</url>
+	<url id="protasktype008" path="/post/ProTaskTypeController/queryStateUpList" val="获取已上线的任务分类类型" allUse="2">
+	</url>
+	<!-- 任务分类结束 -->
+	
+</controller>

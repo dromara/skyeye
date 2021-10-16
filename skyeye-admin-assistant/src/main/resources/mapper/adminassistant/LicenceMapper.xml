@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.LicenceDao">
+
+	<select id="selectAllLicenceMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			e.company_name companyName,
+			a.licence_name licenceName,
+			DATE_FORMAT(CONVERT (a.issue_time, CHAR),'%Y-%m-%d') issueTime,
+            DATE_FORMAT(CONVERT (a.next_annual_review, CHAR),'%Y-%m-%d') nextAnnualReview,
+            DATE_FORMAT(CONVERT (a.term_of_validity_time, CHAR),'%Y-%m-%d') termOfValidityTime,
+			b.user_name licenceAdmin,
+			f.user_name borrowName
+		FROM
+			licence_manage a
+			LEFT JOIN sys_eve_user_staff b ON a.licence_admin = b.user_id
+			LEFT JOIN sys_eve_user_staff d ON d.user_id = #{userId}
+            LEFT JOIN company_mation e ON e.id = a.company_id
+            LEFT JOIN sys_eve_user_staff f ON a.borrow_id = f.user_id
+		WHERE
+			d.company_id = a.company_id
+			<if test="licenceName != '' and licenceName != null">
+				AND a.licence_name LIKE '%${licenceName}%'
+			</if>
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<insert id="insertLicenceMation" parameterType="java.util.Map">
+	    INSERT into licence_manage 
+	    (id, company_id, licence_name, licence_num, issuing_organization, issue_time, annual_review, next_annual_review, term_of_validity, term_of_validity_time, licence_admin, borrow_id, room_add_desc, enclosure_info, create_id, create_time)
+        VALUES(#{id}, #{companyId}, #{licenceName}, #{licenceNum}, #{issuingOrganization}, #{issueTime}, #{annualReview}, #{nextAnnualReview}, #{termOfValidity}, #{termOfValidityTime}, #{licenceAdmin}, #{borrowId}, #{roomAddDesc}, #{enclosureInfo}, #{createId}, #{createTime})
+	</insert>
+	
+	<delete id="deleteLicenceById" parameterType="java.lang.String">
+		DELETE 
+		FROM 
+			licence_manage
+		where id = #{id}
+	</delete>
+	
+	<select id="queryLicenceMationById" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.licence_name licenceName,
+			a.licence_num licenceNum,
+			a.issuing_organization issuingOrganization,
+			DATE_FORMAT(CONVERT (a.issue_time, CHAR),'%Y-%m-%d') issueTime,
+			a.annual_review annualReview,
+			DATE_FORMAT(CONVERT (a.next_annual_review, CHAR),'%Y-%m-%d') nextAnnualReview,
+			a.term_of_validity termOfValidity,
+			DATE_FORMAT(CONVERT (a.term_of_validity_time, CHAR),'%Y-%m-%d') termOfValidityTime,
+			IFNULL(a.licence_admin, '') licenceAdmin,
+			IFNULL(a.borrow_id, '') borrowId,
+			a.room_add_desc roomAddDesc,
+			IFNULL(a.enclosure_info, '') enclosureInfo
+		FROM
+			licence_manage a
+		WHERE a.id = #{licenceId}
+	</select>
+	
+	<update id="editLicenceMationById" parameterType="java.util.Map">
+		UPDATE licence_manage
+		<set>
+			<if test="licenceName != '' and licenceName != null">
+				licence_name = #{licenceName},
+			</if>
+			<if test="licenceNum != '' and licenceNum != null">
+				licence_num = #{licenceNum},
+			</if>
+			<if test="issuingOrganization != '' and issuingOrganization != null">
+				issuing_organization = #{issuingOrganization},
+			</if>
+			<if test="issueTime != '' and issueTime != null">
+				issue_time = #{issueTime},
+			</if>
+			<if test="annualReview != '' and annualReview != null">
+				annual_review = #{annualReview},
+			</if>
+			<if test="termOfValidity != '' and termOfValidity != null">
+				term_of_validity = #{termOfValidity},
+			</if>
+			next_annual_review = #{nextAnnualReview},
+			term_of_validity_time = #{termOfValidityTime},
+			licence_admin = #{licenceAdmin},
+			borrow_id = #{borrowId},
+			room_add_desc = #{roomAddDesc},
+			enclosure_info = #{enclosureInfo}
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<!-- 根据证照id更改证照表中的借用人 -->
+	<update id="editLicenceBorrowIdById" parameterType="java.util.Map">
+		UPDATE
+			licence_manage
+		<set>
+			borrow_id = #{borrowId}
+		</set>
+		WHERE id = #{licenceId}
+	</update>
+	
+	<select id="selectLicenceDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.company_name companyName,
+			a.licence_name licenceName,
+			a.licence_num licenceNum,
+			a.issuing_organization issuingOrganization,
+			DATE_FORMAT(CONVERT (a.issue_time, CHAR),'%Y-%m-%d') issueTime,
+			CASE a.annual_review WHEN '1' THEN '是'WHEN '2' THEN '否' ELSE '无' END annualReview,
+			DATE_FORMAT(CONVERT (a.next_annual_review, CHAR),'%Y-%m-%d') nextAnnualReview,
+			CASE a.term_of_validity WHEN '1' THEN '永久'WHEN '2' THEN '非永久' ELSE '无' END termOfValidity,
+			DATE_FORMAT(CONVERT (a.term_of_validity_time, CHAR),'%Y-%m-%d') termOfValidityTime,
+			b.user_name licenceAdmin,
+			d.user_name borrowName,
+			a.room_add_desc roomAddDesc,
+			IFNULL(a.enclosure_info, '') enclosureInfo
+		FROM
+			licence_manage a
+			LEFT JOIN sys_eve_user_staff b ON a.licence_admin = b.user_id
+			LEFT JOIN company_mation c ON c.id = a.company_id
+			LEFT JOIN sys_eve_user_staff d ON a.borrow_id = d.user_id
+		WHERE a.id = #{id}
+	</select>
+
+	<!-- 用于证照借用申请时的证照下拉框的选择，筛选没有借用人的数据 -->
+	<select id="selectLicenceListToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.licence_name name
+		FROM
+			licence_manage a
+			LEFT JOIN sys_eve_user_staff b ON b.user_id = #{userId}
+		WHERE
+			b.company_id = a.company_id
+			AND (a.borrow_id = '' OR a.borrow_id IS NULL)
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<!-- 根据证照id获取证照数据-->
+    <select id="queryLicenceEntityById" resultType="java.util.Map">
+		SELECT
+			a.id licenceId,
+			a.licence_name licenceName
+		FROM
+			licence_manage a
+		WHERE a.id = #{licenceId}
+	</select>
+
+    <!-- 用于证照归还申请时的证照下拉框的选择，筛选当前用户未归还的数据 -->
+	<select id="selectRevertListToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.licence_name name
+		FROM
+			licence_manage a
+		WHERE
+			a.borrow_id = #{userId}
+	</select>
+	
+	<select id="queryMyLicenceManageList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			e.company_name companyName,
+			a.licence_name licenceName,
+			b.user_name licenceAdmin,
+			f.user_name borrowName
+		FROM
+			licence_manage a
+			LEFT JOIN sys_eve_user_staff b ON a.licence_admin = b.user_id
+			LEFT JOIN company_mation e ON e.id = a.company_id
+			LEFT JOIN sys_eve_user_staff f ON a.borrow_id = f.user_id
+		WHERE a.borrow_id = #{userId}
+			<if test="licenceName != '' and licenceName != null">
+				AND a.licence_name LIKE '%${licenceName}%'
+			</if>
+		ORDER BY a.licence_name DESC
+	</select>
+
+</mapper>

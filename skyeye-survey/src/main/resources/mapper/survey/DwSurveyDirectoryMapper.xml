@@ -1,0 +1,1544 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.DwSurveyDirectoryDao">
+	
+	<select id="queryDwSurveyDirectoryList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.survey_name surveyName,
+			a.sid,
+			b.user_name userName,
+			CONVERT(a.create_time, char) createTime,
+			a.answer_num answerNum,
+			CASE a.survey_state WHEN '0' THEN '设计' WHEN '1' THEN '执行中' WHEN '2' THEN '结束' ELSE '' END surveyState,
+			a.survey_state state
+		FROM
+			dw_survey_directory a
+			LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+		WHERE a.visibility = '1'<!-- 显示 -->
+			AND a.dir_type = '2'<!-- 问卷 -->
+			AND a.survey_model = '1'<!-- 问卷模块 -->
+			<if test="surveyName != '' and surveyName != null">
+				AND a.survey_name LIKE '%${surveyName}%'
+			</if>
+			<if test="surveyState != '' and surveyState != null">
+				AND a.survey_state = #{surveyState}
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<insert id="insertDwSurveyDirectoryMation" parameterType="java.util.Map">
+	     INSERT into dw_survey_directory 
+	     (id, survey_name, sid, dir_type, survey_model, survey_note, create_id, create_time)
+	     VALUES
+	     (#{id}, #{surveyName}, #{sId}, #{dirType}, #{surveyModel}, #{surveyNote}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryQuestionListByBelongId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.answer_input_row answerInputRow,
+			a.answer_input_width answerInputWidth,
+			a.belong_id belongId,
+			a.cell_count cellCount,
+			a.check_type checkType,
+			a.contacts_attr contactsAttr,
+			a.contacts_field contactsField,
+			a.copy_from_id copyFromId,
+			a.create_time createTime,
+			a.hv,
+			a.is_required isRequired,
+			a.keywords,
+			a.order_by_id orderById,
+			a.param_int01 paramInt01,
+			a.param_int02 paramInt02,
+			a.parent_qu_id parentQuId,
+			a.qu_name quName,
+			a.qu_note quNote,
+			a.qu_tag quTag,
+			a.qu_title quTitle,
+			a.qu_type quType,
+			a.rand_order randOrder,
+			a.tag,
+			a.visibility,
+			a.yesno_option yesnoOption 
+		FROM
+			dw_question a
+		WHERE
+			a.belong_id = #{id}<!-- 所属问卷 -->
+		AND a.tag = '2'<!-- 问卷的题 -->
+		AND a.qu_tag != '2'<!-- 不是大题 -->
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionLogicListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.cg_qu_item_id cgQuItemId,
+			a.ck_qu_id ckQuId,
+			a.create_time createTime,
+			a.ge_le geLe,
+			a.logic_type logicType,
+			a.score_num scoreNum,
+			a.sk_qu_id skQuId,
+			a.visibility 
+		FROM
+			dw_question_logic a
+		WHERE
+			a.ck_qu_id = #{id}
+		AND a.visibility = '1'
+	</select>
+	
+	<select id="queryQuestionChenRowListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.option_name optionName,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			#{quType} quType
+		FROM
+			dw_qu_chen_row a
+		WHERE
+			a.qu_id = #{id}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionChenColumnListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.option_name optionName,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			#{quType} quType
+		FROM
+			dw_qu_chen_column a
+		WHERE
+			a.qu_id = #{id}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionMultiFillBlankListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.check_type checkType,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			#{quType} quType
+		FROM
+			dw_qu_multi_fillblank a
+		WHERE
+			a.qu_id = #{id}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionRadioListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.check_type checkType,
+			a.is_note isNote,
+			a.is_required_fill isRequiredFill,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			#{cellCount} cellCount,
+			#{quType} quType
+		FROM
+			dw_qu_radio a
+		WHERE
+			a.qu_id = #{id}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionCheckBoxListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.check_type checkType,
+			a.is_note isNote,
+			a.is_required_fill isRequiredFill,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			#{quType} quType
+		FROM
+			dw_qu_checkbox a
+		WHERE
+			a.qu_id = #{id}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionChenOptionListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.qu_id quId,
+			a.option_name optionName,
+			a.order_by_id orderById
+		FROM
+			dw_qu_chen_option a
+		WHERE
+			a.qu_id = #{id}
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionScoreListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.qu_id quId,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.visibility,
+			#{paramInt02} paramInt02,
+			#{quType} quType
+		FROM
+			dw_qu_score a
+		WHERE
+			a.qu_id = #{id}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionOrderByListByQuestionId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.qu_id quId,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.visibility,
+			#{quType} quType
+		FROM
+			dw_qu_orderby a
+		WHERE
+			a.qu_id = #{id}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryChildQuestionListByBelongId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.answer_input_row answerInputRow,
+			a.answer_input_width answerInputWidth,
+			a.belong_id belongId,
+			a.cell_count cellCount,
+			a.check_type checkType,
+			a.contacts_attr contactsAttr,
+			a.contacts_field contactsField,
+			a.copy_from_id copyFromId,
+			a.create_time createTime,
+			a.hv,
+			a.is_required isRequired,
+			a.keywords,
+			a.order_by_id orderById,
+			a.param_int01 paramInt01,
+			a.param_int02 paramInt02,
+			a.parent_qu_id parentQuId,
+			a.qu_name quName,
+			a.qu_note quNote,
+			a.qu_tag quTag,
+			a.qu_title quTitle,
+			a.qu_type quType,
+			a.rand_order randOrder,
+			a.tag,
+			a.visibility,
+			a.yesno_option yesnoOption 
+		FROM
+			dw_question a
+		WHERE
+			a.belong_id = #{belongId}<!-- 所属问卷 -->
+		AND a.tag = '2'<!-- 问卷的题 -->
+		AND a.qu_tag != '2'<!-- 不是大题 -->
+		AND a.parent_qu_id = #{id}
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="querySurveyMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.survey_name surveyName,
+			a.survey_note surveyNote,
+			a.survey_qu_num surveyQuNum,
+			a.survey_state surveyState,
+			a.an_item_least_num anItemLeastNum,
+			a.an_item_most_num anItemMostNum,
+			a.effective,
+			a.effective_ip effectiveIp,
+			a.effective_time effectiveTime,
+			a.answer_num answerNum,
+			a.html_path htmlPath,
+			a.is_share isShare,
+			a.mail_only mailOnly,
+			a.rule,
+			a.rule_code ruleCode,
+			a.sid,
+			a.refresh,
+			a.survey_tag surveyTag,
+			a.view_answer viewAnswer,
+			a.visibility,
+			a.yn_end_num ynEndNum,
+			a.end_num endNum,
+			a.yn_end_time ynEndTime,
+			CONVERT(a.end_time, char) endTime,
+			CONVERT(a.real_start_time, char) startTime,
+			a.view_answer viewAnswer,
+			a.survey_state surveyState
+		FROM
+			dw_survey_directory a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editDwSurveyMationById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			effective = #{effective},
+			effective_ip = #{effectiveIp},
+			rule = #{rule},
+			rule_code = #{ruleCode},
+			refresh = #{refresh},
+			yn_end_num = #{ynEndNum},
+			end_num = #{endNum},
+			yn_end_time = #{ynEndTime},
+			<if test="endTime != '' and endTime != null">
+				end_time = #{endTime},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="addQuestionMation" parameterType="java.util.Map">
+	     INSERT into dw_question 
+	     (id, answer_input_row, answer_input_width, belong_id, cell_count, check_type, contacts_attr, contacts_field, copy_from_id, hv, is_required,
+	     	keywords, order_by_id, param_int01, param_int02, parent_qu_id, qu_name, qu_note, qu_tag, qu_title, qu_type, rand_order, tag, visibility,
+	     	yesno_option, create_time)
+	     VALUES
+	     (#{id}, #{answerInputRow}, #{answerInputWidth}, #{belongId}, #{cellCount}, #{checkType}, #{contactsAttr}, #{contactsField}, #{copyFormId}, #{hv}, #{isRequired},
+	     	#{keywords}, #{orderById}, #{paramInt01}, #{paramInt02}, #{parentQuId}, #{quName}, #{quNote}, #{quTag}, #{quTitle}, #{quType}, #{randOrder}, #{tag}, #{visibility},
+	     	#{yesnoOption}, #{createTime})
+	</insert>
+	
+	<insert id="addQuestionLogicsMationList" parameterType="java.util.Map">
+	     insert into dw_question_logic
+	     (id, title, cg_qu_item_id, ck_qu_id, ge_le, logic_type, score_num, sk_qu_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.title}, #{item.cgQuItemId}, #{item.ckQuId}, #{item.geLe}, #{item.logicType}, 
+					#{item.scoreNum}, #{item.skQuId}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editQuestionLogicsMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=";" >  
+			UPDATE dw_question_logic
+				<set>
+					title = #{item.title},
+					cg_qu_item_id = #{item.cgQuItemId},
+					ge_le = #{item.geLe},
+					logic_type = #{item.logicType},
+					score_num = #{item.scoreNum},
+					sk_qu_id = #{item.skQuId},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
+	<insert id="addQuestionScoreMationList" parameterType="java.util.Map">
+	     insert into dw_qu_score
+	     (id, qu_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editQuestionScoreMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=";" >  
+			UPDATE dw_qu_score
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
+	<insert id="addQuestionOrderquMationList" parameterType="java.util.Map">
+	     insert into dw_qu_orderby
+	     (id, qu_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editQuestionOrderquMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=";" >  
+			UPDATE dw_qu_orderby
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
+	<insert id="addQuestionRadioMationList" parameterType="java.util.Map">
+	     insert into dw_qu_radio
+	     (id, qu_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
+				#{item.isRequiredFill}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editQuestionRadioMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=";" >  
+			UPDATE dw_qu_radio
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+					check_type = #{item.checkType},
+					is_note = #{item.isNote},
+					is_required_fill = #{item.isRequiredFill},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
+	<insert id="addQuestionCheckBoxMationList" parameterType="java.util.Map">
+	     insert into dw_qu_checkbox
+	     (id, qu_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
+				#{item.isRequiredFill}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editQuestionCheckBoxMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=";" >  
+			UPDATE dw_qu_checkbox
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+					check_type = #{item.checkType},
+					is_note = #{item.isNote},
+					is_required_fill = #{item.isRequiredFill},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
+	<insert id="addQuestionMultiFillblankMationList" parameterType="java.util.Map">
+	     insert into dw_qu_multi_fillblank
+	     (id, qu_id, option_name, option_title, check_type, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editQuestionMultiFillblankMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=";" >  
+			UPDATE dw_qu_multi_fillblank
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
+	<insert id="addQuestionColumnMationList" parameterType="java.util.Map">
+	     insert into dw_qu_chen_column
+	     (id, qu_id, option_name, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editQuestionColumnMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=";" >  
+			UPDATE dw_qu_chen_column
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
+	<insert id="addQuestionRowMationList" parameterType="java.util.Map">
+	     insert into dw_qu_chen_row
+	     (id, qu_id, option_name, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editQuestionRowMationList" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator=";" >  
+			UPDATE dw_qu_chen_row
+				<set>
+					order_by_id = #{item.orderById},
+					option_name = #{item.optionName},
+				</set>
+			WHERE id = #{item.id}
+		</foreach>  
+	</update>
+	
+	<select id="queryQuestionMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.answer_input_row answerInputRow,
+			a.answer_input_width answerInputWidth,
+			a.belong_id belongId,
+			a.cell_count cellCount,
+			a.check_type checkType,
+			a.contacts_attr contactsAttr,
+			a.contacts_field contactsField,
+			a.copy_from_id copyFromId,
+			a.create_time createTime,
+			a.hv,
+			a.is_required isRequired,
+			a.keywords,
+			a.order_by_id orderById,
+			a.param_int01 paramInt01,
+			a.param_int02 paramInt02,
+			a.parent_qu_id parentQuId,
+			a.qu_name quName,
+			a.qu_note quNote,
+			a.qu_tag quTag,
+			a.qu_title quTitle,
+			a.qu_type quType,
+			a.rand_order randOrder,
+			a.tag,
+			a.visibility,
+			a.yesno_option yesnoOption,
+			b.survey_state surveyState 
+		FROM
+			dw_question a,
+			dw_survey_directory b
+		WHERE a.id = #{quId}
+			AND a.visibility = '1'
+			AND b.visibility = '1'
+			AND a.belong_id = b.id
+	</select>
+	
+	<update id="deleteLogicQuestionMationById" parameterType="java.util.Map">
+		UPDATE dw_question
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quId}
+	</update>
+	
+	<delete id="deleteQuestionMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_question
+		WHERE
+			id = #{quId}
+	</delete>
+	
+	<delete id="deleteQuestionOptionMationByQuId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			${tableName}
+		WHERE
+			${key} = #{quId}
+	</delete>
+	
+	<update id="updateQuestionOrderByIdByQuId" parameterType="java.util.Map">
+		UPDATE dw_question
+		<set>
+			order_by_id = (order_by_id - 1),
+		</set>
+		WHERE order_by_id > #{orderById}
+			AND belong_id = #{belongId}
+	</update>
+	
+	<select id="queryQuestionChenColumnById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_chen_column a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionChenColumnMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_chen_column
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionChenColumnMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_chen_column
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
+	<select id="queryQuestionChenRowById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_chen_row a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionChenRowMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_chen_row
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionChenRowMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_chen_row
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
+	<select id="queryQuestionRadioOptionById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_radio a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionRadioOptionMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_radio
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionRadioOptionMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_radio
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
+	<select id="queryQuestionChedkBoxOptionById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_checkbox a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionChedkBoxOptionMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_checkbox
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionChedkBoxOptionMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_checkbox
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
+	<select id="queryQuestionScoreOptionById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_score a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionScoreOptionMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_score
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionScoreOptionMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_score
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
+	<select id="queryQuestionOrderOptionById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_orderby a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionOrderOptionMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_orderby
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionOrderOptionMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_orderby
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
+	<select id="queryQuestionMultiFillblankOptionById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.survey_state surveyState
+		FROM
+			dw_qu_multi_fillblank a,
+			dw_question b,
+			dw_survey_directory c
+		WHERE a.id = #{quItemId}
+		AND a.visibility = '1'
+		AND a.qu_id = b.id
+		AND b.visibility = '1'
+		AND c.visibility = '1'
+		AND b.belong_id = c.id
+	</select>
+	
+	<update id="deleteLogicQuestionMultiFillblankOptionMationById" parameterType="java.util.Map">
+		UPDATE dw_qu_multi_fillblank
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{quItemId}
+	</update>
+	
+	<delete id="deleteQuestionMultiFillblankOptionMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			dw_qu_multi_fillblank
+		WHERE
+			id = #{quItemId}
+	</delete>
+	
+	<update id="editQuestionMationById" parameterType="java.util.Map">
+		UPDATE dw_question
+		<set>
+			<if test="answerInputRow != '' and answerInputRow != null">
+				answer_input_row = #{answerInputRow},
+			</if>
+			<if test="answerInputWidth != '' and answerInputWidth != null">
+				answer_input_width = #{answerInputWidth},
+			</if>
+			<if test="cellCount != '' and cellCount != null">
+				cell_count = #{cellCount},
+			</if>
+			<if test="checkType != '' and checkType != null">
+				check_type = #{checkType},
+			</if>
+			<if test="contactsAttr != '' and contactsAttr != null">
+				contacts_attr = #{contactsAttr},
+			</if>
+			<if test="contactsField != '' and contactsField != null">
+				contacts_field = #{contactsField},
+			</if>
+			<if test="hv != '' and hv != null">
+				hv = #{hv},
+			</if>
+			<if test="isRequired != '' and isRequired != null">
+				is_required = #{isRequired},
+			</if>
+			<if test="orderById != '' and orderById != null">
+				order_by_id = #{orderById},
+			</if>
+			<if test="paramInt01 != '' and paramInt01 != null">
+				param_int01 = #{paramInt01},
+			</if>
+			<if test="paramInt02 != '' and paramInt02 != null">
+				param_int02 = #{paramInt02},
+			</if>
+			<if test="quName != '' and quName != null">
+				qu_name = #{quName},
+			</if>
+			<if test="quNote != '' and quNote != null">
+				qu_note = #{quNote},
+			</if>
+			<if test="quTag != '' and quTag != null">
+				qu_tag = #{quTag},
+			</if>
+			<if test="quTitle != '' and quTitle != null">
+				qu_title = #{quTitle},
+			</if>
+			<if test="randOrder != '' and randOrder != null">
+				rand_order = #{randOrder},
+			</if>
+		</set>
+		WHERE id = #{quId}
+	</update>
+	
+	<update id="deleteSurveyMationById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			visibility = '0',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSurveyStateToReleaseById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			survey_state = '1',
+			real_start_time = #{startTime},
+			survey_qu_num = #{questionNum},
+			an_item_least_num = #{questionNum},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryRadioGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_item_id quItemId,
+			count(qu_item_id) count
+		FROM
+			dw_an_radio
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_item_id
+	</select>
+	
+	<select id="queryCheckBoxGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_item_id quItemId,
+			count(qu_item_id) count
+		FROM
+			dw_an_checkbox
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_item_id
+	</select>
+	
+	<select id="queryFillBlankGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			count(
+				CASE
+				WHEN answer = '' THEN
+					answer
+				END
+			) emptyCount,
+			count(
+				CASE
+				WHEN answer != '' THEN
+					answer
+				END
+			) blankCount
+		FROM
+			dw_an_fillblank
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+	</select>
+	
+	<select id="queryAnswerGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			count(
+				CASE
+				WHEN answer = '' THEN
+					answer
+				END
+			) emptyCount,
+			count(
+				CASE
+				WHEN answer != '' THEN
+					answer
+				END
+			) blankCount
+		FROM
+			dw_an_answer
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+	</select>
+	
+	<select id="queryMultiFillBlankGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_item_id quItemId,
+			count(*) count
+		FROM
+			dw_an_dfillblank
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_item_id
+	</select>
+	
+	<select id="queryEnumQuGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			answer,
+			count(answer) count
+		FROM
+			dw_an_enumqu
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			answer
+	</select>
+	
+	<select id="queryChenRadioGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			qu_col_id quColId,
+			count(qu_col_id) count,
+			#{quType} quType
+		FROM
+			dw_an_chen_radio
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id,
+			qu_col_id
+	</select>
+	
+	<select id="queryChenFbkGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			qu_col_id quColId,
+			count(qu_col_id) count,
+			#{quType} quType
+		FROM
+			dw_an_chen_fbk
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id,
+			qu_col_id
+	</select>
+	
+	<select id="queryChenCheckBoxGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			qu_col_id quColId,
+			count(qu_col_id) count,
+			#{quType} quType
+		FROM
+			dw_an_chen_checkbox
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id,
+			qu_col_id
+	</select>
+	
+	<select id="queryChenScoreGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			qu_col_id quColId,
+			AVG(answser_score) avgScore,
+			#{quType} quType
+		FROM
+			dw_an_chen_score
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id,
+			qu_col_id
+	</select>
+	
+	<select id="queryScoreGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			count(qu_row_id) count,
+			AVG(answser_score) avgScore
+		FROM
+			dw_an_score
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id
+	</select>
+	
+	<select id="queryOrderQuGroupStat" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			qu_row_id quRowId,
+			sum(ordery_num) sumOrderNum
+		FROM
+			dw_an_order
+		WHERE
+			visibility = 1
+		AND qu_id = #{id}
+		GROUP BY
+			qu_row_id
+		ORDER BY
+			sumOrderNum
+	</select>
+	
+	<insert id="insertSurveyMationCopyById" parameterType="java.util.Map">
+	     INSERT into dw_survey_directory (id, survey_name, sid, dir_type, survey_model, survey_note, create_id, create_time,
+	     		survey_qu_num, an_item_least_num, an_item_most_num, effective, effective_ip, effective_time, yn_end_num, end_num,
+	     		yn_end_time, end_time, rule, rule_code, answer_num, refresh, excerpt_num, is_share, mail_only, view_answer)
+	     SELECT #{id}, #{surveyName}, #{sId}, #{dirType}, #{surveyModel}, survey_note, #{createId}, #{createTime},
+	     		survey_qu_num, an_item_least_num, an_item_most_num, effective, effective_ip, effective_time, yn_end_num, end_num,
+	     		yn_end_time, end_time, rule, rule_code, answer_num, refresh, excerpt_num, is_share, mail_only, view_answer FROM dw_survey_directory WHERE id = #{surveyCopyId} AND visibility = '1' 
+	</insert>
+	
+	<select id="queryQuestionMationCopyById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.answer_input_row answerInputRow,
+			a.answer_input_width answerInputWidth,
+			a.belong_id belongId,
+			a.cell_count cellCount,
+			a.check_type checkType,
+			a.contacts_attr contactsAttr,
+			a.contacts_field contactsField,
+			a.copy_from_id copyFromId,
+			a.hv,
+			a.is_required isRequired,
+			a.keywords,
+			a.order_by_id orderById,
+			a.param_int01 paramInt01,
+			a.param_int02 paramInt02,
+			a.parent_qu_id parentQuId,
+			a.qu_name quName,
+			a.qu_note quNote,
+			a.qu_tag quTag,
+			a.qu_title quTitle,
+			a.qu_type quType,
+			a.rand_order randOrder,
+			a.tag,
+			a.visibility,
+			a.yesno_option yesnoOption 
+		FROM
+			dw_question a
+		WHERE
+			a.belong_id = #{surveyCopyId}<!-- 所属问卷 -->
+		AND a.tag = '2'<!-- 问卷的题 -->
+		AND a.qu_tag != '2'<!-- 不是大题 -->
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<insert id="addQuestionMationCopyBySurveyId" parameterType="java.util.Map">
+	     INSERT into dw_question 
+	     (id, answer_input_row, answer_input_width, belong_id, cell_count, check_type, contacts_attr, contacts_field, copy_from_id, hv, is_required,
+	     	keywords, order_by_id, param_int01, param_int02, parent_qu_id, qu_name, qu_note, qu_tag, qu_title, qu_type, rand_order, tag, visibility,
+	     	yesno_option, create_time)
+	     VALUES
+	     <foreach collection="list" item="item" index="index" separator="," >  
+	     (#{item.id}, #{item.answerInputRow}, #{item.answerInputWidth}, #{item.belongId}, #{item.cellCount}, #{item.checkType}, #{item.contactsAttr}, #{item.contactsField},
+	     	#{item.copyFormId}, #{item.hv}, #{item.isRequired}, #{item.keywords}, #{item.orderById}, #{item.paramInt01}, #{item.paramInt02}, #{item.parentQuId}, #{item.quName},
+	     	#{item.quNote}, #{item.quTag}, #{item.quTitle}, #{item.quType}, #{item.randOrder}, #{item.tag}, #{item.visibility}, #{item.yesnoOption}, #{item.createTime})
+	     </foreach>
+	</insert>
+	
+	<select id="queryQuestionRadioListByCopyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.check_type checkType,
+			a.is_note isNote,
+			a.is_required_fill isRequiredFill,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			a.create_id createId
+		FROM
+			dw_qu_radio a
+		WHERE
+			a.qu_id = #{copyFormId}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<insert id="addQuestionRadioMationCopyList" parameterType="java.util.Map">
+	     insert into dw_qu_radio
+	     (id, qu_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
+				#{item.isRequiredFill}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryQuestionCheckBoxListByCopyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.check_type checkType,
+			a.is_note isNote,
+			a.is_required_fill isRequiredFill,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			a.create_id createId
+		FROM
+			dw_qu_checkbox a
+		WHERE
+			a.qu_id = #{copyFormId}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<insert id="addQuestionCheckBoxMationCopyList" parameterType="java.util.Map">
+	     insert into dw_qu_checkbox
+	     (id, qu_id, option_name, option_title, check_type, is_note, is_required_fill, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.isNote},
+				#{item.isRequiredFill}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryQuestionMultiFillBlankListByCopyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.check_type checkType,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			a.create_id createId
+		FROM
+			dw_qu_multi_fillblank a
+		WHERE
+			a.qu_id = #{copyFormId}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<insert id="addQuestionMultiFillBlankMationCopyList" parameterType="java.util.Map">
+	     insert into dw_qu_multi_fillblank
+	     (id, qu_id, option_name, option_title, check_type, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.checkType}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryQuestionChenRowListByCopyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.option_name optionName,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			a.create_id createId
+		FROM
+			dw_qu_chen_row a
+		WHERE
+			a.qu_id = #{copyFormId}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<insert id="addQuestionChenRowMationCopyList" parameterType="java.util.Map">
+	     insert into dw_qu_chen_row
+	     (id, qu_id, option_name, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryQuestionChenColumnListByCopyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.option_name optionName,
+			a.order_by_id orderById,
+			a.qu_id quId,
+			a.visibility,
+			a.create_id createId
+		FROM
+			dw_qu_chen_column a
+		WHERE
+			a.qu_id = #{copyFormId}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<insert id="addQuestionChenColumnMationCopyList" parameterType="java.util.Map">
+	     insert into dw_qu_chen_column
+	     (id, qu_id, option_name, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryQuestionChenOptionListByCopyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.qu_id quId,
+			a.option_name optionName,
+			a.order_by_id orderById,
+			a.create_id createId
+		FROM
+			dw_qu_chen_option a
+		WHERE
+			a.qu_id = #{copyFormId}
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<select id="queryQuestionScoreListByCopyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.qu_id quId,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.visibility,
+			a.create_id createId
+		FROM
+			dw_qu_score a
+		WHERE
+			a.qu_id = #{copyFormId}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<insert id="addQuestionScoreMationCopyList" parameterType="java.util.Map">
+	     insert into dw_qu_score
+	     (id, qu_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryQuestionOrderByListByCopyId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.qu_id quId,
+			a.option_name optionName,
+			a.option_title optionTitle,
+			a.order_by_id orderById,
+			a.visibility,
+			a.create_id createId
+		FROM
+			dw_qu_orderby a
+		WHERE
+			a.qu_id = #{copyFormId}
+		AND a.visibility = '1'
+		ORDER BY
+			a.order_by_id ASC
+	</select>
+	
+	<insert id="addQuestionOrderByMationCopyList" parameterType="java.util.Map">
+	     insert into dw_qu_orderby
+	     (id, qu_id, option_name, option_title, order_by_id, visibility, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.quId}, #{item.optionName}, #{item.optionTitle}, #{item.orderById}, #{item.visibility}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editSurveyAnswerNumById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			answer_num = #{answerNum},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="saveAnYesnoMaps" parameterType="java.util.Map">
+	     insert into dw_an_yesno
+	     (id, belong_answer_id, belong_id, qu_id, visibility, yesno_answer)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.quId}, '1', #{item.yesnoAnswer})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveAnRadioMaps" parameterType="java.util.Map">
+	     insert into dw_an_radio
+	     (id, belong_answer_id, belong_id, other_text, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.otherText}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveAnMultiFillMaps" parameterType="java.util.Map">
+	     insert into dw_an_dfillblank
+	     (id, answer, belong_answer_id, belong_id, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.answerValue}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveScoreMaps" parameterType="java.util.Map">
+	     insert into dw_an_score
+	     (id, answser_score, belong_answer_id, belong_id, qu_id, visibility, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.scoreValue}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.quId}, '1', #{item.rowId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveChenCheckboxMaps" parameterType="java.util.Map">
+	     insert into dw_an_chen_checkbox
+	     (id, belong_answer_id, belong_id, qu_id, visibility, qu_row_id, qu_col_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.quId}, '1', #{item.rowId}, #{item.colId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="saveCompAnRadioMaps" parameterType="java.util.Map">
+	     insert into dw_an_radio
+	     (id, belong_answer_id, belong_id, other_text, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.otherText}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveCompChehRadioMaps" parameterType="java.util.Map">
+	     insert into dw_an_comp_chen_radio
+	     (id, belong_answer_id, belong_id, qu_col_id, qu_id, visibility, qu_option_id, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.colId}, #{item.quId}, '1', #{item.optionId}, #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveChenScoreMaps" parameterType="java.util.Map">
+	     insert into dw_an_chen_score
+	     (id, belong_answer_id, belong_id, qu_col_id, qu_id, visibility, answser_score, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.colId}, #{item.quId}, '1', #{item.answerValue}, #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveAnCheckboxMaps" parameterType="java.util.Map">
+	     insert into dw_an_checkbox
+	     (id, belong_answer_id, belong_id, other_text, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.otherText}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveAnFillMaps" parameterType="java.util.Map">
+	     insert into dw_an_fillblank
+	     (id, belong_answer_id, belong_id, answer, qu_id, visibility)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.answerValue}, #{item.quId}, '1')  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveAnAnswerMaps" parameterType="java.util.Map">
+	     insert into dw_an_answer
+	     (id, belong_answer_id, belong_id, answer, qu_id, visibility)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.answerValue}, #{item.quId}, '1')  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveCompAnCheckboxMaps" parameterType="java.util.Map">
+	     insert into dw_an_checkbox
+	     (id, belong_answer_id, belong_id, other_text, qu_id, visibility, qu_item_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.otherText}, #{item.quId}, '1', #{item.quItemId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveEnumMaps" parameterType="java.util.Map">
+	     insert into dw_an_enumqu
+	     (id, belong_answer_id, belong_id, answer, qu_id, visibility, enum_item)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.answerValue}, #{item.quId}, '1', #{item.quItemNum})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveQuOrderMaps" parameterType="java.util.Map">
+	     insert into dw_an_order
+	     (id, belong_answer_id, belong_id, ordery_num, qu_id, visibility, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.orderNumValue}, #{item.quId}, '1', #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveChenRadioMaps" parameterType="java.util.Map">
+	     insert into dw_an_chen_radio
+	     (id, belong_answer_id, belong_id, qu_col_id, qu_id, visibility, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.colId}, #{item.quId}, '1', #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="saveChenFbkMaps" parameterType="java.util.Map">
+	     insert into dw_an_chen_fbk
+	     (id, answer_value, belong_answer_id, belong_id, qu_col_id, qu_id, visibility, qu_row_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.answerValue}, #{item.surveyAnswerId}, #{item.surveyId}, #{item.colId}, #{item.quId}, '1', #{item.rowId})  
+		</foreach> 
+	</insert>
+	
+	<insert id="insertSurveyAnswer" parameterType="java.util.Map">
+	     INSERT into dw_survey_answer 
+	     (id, survey_id, bg_an_date, end_an_date, complete_num, complete_item_num, data_source, handle_state, ip_addr, addr, city, is_complete, is_effective,
+	     	qu_num, total_time, create_id)
+	     VALUES
+	     (#{answerId}, #{id}, #{bgAnDate}, #{endAnDate}, #{completeNum}, #{completeItemNum}, '0', '1', #{ipAddr}, #{addr}, #{city}, #{isComplete}, #{isEffective},
+	     	#{quNum}, #{totalTime}, #{createId})
+	</insert>
+	
+	<select id="querySurveyAnswerMationByIp" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			dw_survey_answer a
+		WHERE a.ip_addr = #{ip}
+		AND a.survey_id = #{id}
+	</select>
+	
+	<select id="querySurveyAnswerMationOverFiveMinByIp" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			dw_survey_answer a
+		WHERE a.ip_addr = #{ip}
+		AND a.survey_id = #{id}
+		AND a.end_an_date >= DATE_SUB(NOW(), INTERVAL 5 MINUTE)
+	</select>
+	
+	<update id="editSurveyStateToEndNumById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			real_end_time = #{realEndTime},
+			survey_state = '2',
+			end_type = '3',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSurveyMationEndById" parameterType="java.util.Map">
+		UPDATE dw_survey_directory
+		<set>
+			real_end_time = #{realEndTime},
+			survey_state = '2',
+			end_type = '1',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveUserStaffDao">
+
+	<select id="querySysUserStaffList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.job_number jobNumber,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.user_sex userSex,
+			a.email,
+			a.phone,
+		    a.user_id userId,
+			a.home_phone homePhone,
+			a.qq,
+			a.state,
+			u.company_name companyName,
+			q.department_name departmentName,
+			p.job_name jobName,
+			a.`type` staffType,
+		    COUNT(b.check_work_time_id) workTimeNum
+		FROM
+			sys_eve_user_staff a
+		    LEFT JOIN sys_eve_user_staff_time b ON a.id = b.staff_id,
+			company_job p, 
+			company_department q, 
+			company_mation u
+		WHERE 
+			a.company_id = u.id 
+			AND a.department_id = q.id 
+			AND a.job_id = p.id
+			<if test="userName != '' and userName != null">
+				AND a.user_name LIKE '%${userName}%'
+			</if>
+			<if test="userIdCard != '' and userIdCard != null">
+				AND a.user_idcard LIKE '%${userIdCard}%'
+			</if>
+			<if test="userSex != '' and userSex != null">
+				AND a.user_sex = #{userSex}
+			</if>
+			<if test="companyName != '' and companyName != null">
+				AND a.company_id = #{companyName}
+			</if>
+			<if test="departmentName != '' and departmentName != null">
+				AND a.department_id = #{departmentName}
+			</if>
+			<if test="jobName != '' and jobName != null">
+				AND a.job_id = #{jobName}
+			</if>
+		GROUP BY a.id
+		ORDER BY a.state ASC, a.entry_time DESC
+	</select>
+	
+	<select id="querySysUserStaffMationByIdCard" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_eve_user_staff a
+		WHERE 
+			a.user_idcard = #{userIdCard}
+	</select>
+	
+	<insert id="insertSysUserStaffMation" parameterType="java.util.Map">
+	    INSERT into sys_eve_user_staff 
+	    (id, 
+	    	job_number,
+	    	user_name, user_photo, user_idcard, user_sex, email, phone, home_phone, qq, job_score_id,
+	    	company_id, department_id, job_id, user_sign, state, entry_time, `type`, user_id, work_time)
+	    VALUES(#{id},
+	    	(SELECT a.job_number FROM (SELECT MAX(job_number) + 1 AS job_number FROM sys_eve_user_staff) a),
+	    	#{userName}, #{userPhoto}, #{userIdCard}, #{userSex}, #{email}, #{phone}, #{homePhone}, #{qq}, #{jobScoreId},
+	    	#{companyId}, #{departmentId}, #{jobId}, #{userSign}, #{state}, #{entryTime}, #{type}, #{userId}, #{workTime})
+	</insert>
+	
+	<select id="querySysUserStaffById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_sex userSex,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.email,
+			a.phone,
+			a.home_phone homePhone,
+			a.qq,
+			a.company_id companyId,
+			a.department_id departmentId,
+			a.job_id jobId,
+			a.job_score_id jobScoreId,
+			a.user_sign userSign,
+			a.work_time workTime,
+			a.entry_time entryTime
+		FROM
+			sys_eve_user_staff a	
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="querySysUserStaffMationByIdCardAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_eve_user_staff a
+		WHERE a.user_idcard = #{userIdCard}
+		AND a.id != #{id}
+	</select>
+	
+	<update id="editSysUserStaffById" parameterType="java.util.Map">
+		UPDATE sys_eve_user_staff
+		<set>
+			user_photo = #{userPhoto},
+			user_idcard = #{userIdCard},
+			email = #{email},
+			user_sex = #{userSex},
+			phone = #{phone},
+			home_phone = #{homePhone},
+			qq = #{qq},
+			user_sign = #{userSign},
+			company_id = #{companyId},
+			department_id = #{departmentId},
+			job_id = #{jobId},
+			job_score_id = #{jobScoreId},
+		    work_time = #{workTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysUserStaffByIdToDetails" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.job_number jobNumber,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.email,
+			a.phone,
+			a.home_phone homePhone,
+			a.qq,
+			a.work_time workTime,
+			a.entry_time entryTime,
+			IFNULL(a.quit_time, '') quitTime,
+			IFNULL(a.quit_reason, '') quitReason,
+			a.annual_leave annualLeave,
+		    a.annual_leave_statis_time annualLeaveStatisTime,
+			a.holiday_number holidayNumber,
+		    a.holiday_statis_time holidayStatisTime,
+			a.retired_holiday_number retiredHolidayNumber,
+		    a.retired_holiday_statis_time retiredHolidayStatisTime,
+			IFNULL(a.user_sign, '暂无签名') userSign,
+			CASE a.state WHEN '1' THEN 'state-up' WHEN '2' THEN 'state-down' END colorClass,
+			CASE a.state WHEN '1' THEN '在职' WHEN '2' THEN '离职' END state,
+			CASE a.user_sex WHEN '2' THEN '女' WHEN '1' THEN '男' ELSE '保密' END userSex,
+			u.company_name companyName,
+			q.department_name departmentName,
+			p.job_name jobName,
+		    o.name_cn jobScoreName
+		FROM
+			sys_eve_user_staff a
+		    LEFT JOIN company_job_score o ON a.job_score_id = o.id,
+			company_job p, 
+			company_department q, 
+			company_mation u
+		WHERE a.id = #{staffId}
+		AND a.company_id = u.id
+		AND a.department_id = q.id
+		AND a.job_id = p.id
+	</select>
+	
+	<update id="editSysUserStaffState" parameterType="java.util.Map">
+		UPDATE sys_eve_user_staff a
+		<set>
+			a.state = '2',
+			a.quit_time = #{quitTime},
+			a.quit_reason = #{quitReason}
+		</set>
+		WHERE a.id = #{id}
+	</update>
+	
+	<select id="querySysUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			b.department_id departmentId
+		FROM
+			sys_eve_user a,
+			sys_eve_user_staff b
+		WHERE b.id = #{id}
+		AND b.user_id = a.id
+	</select>
+	
+	<update id="editSysUserLock" parameterType="java.util.Map">
+		UPDATE sys_eve_user a
+		<set>
+			a.user_lock = 1
+		</set>
+		WHERE a.id = #{id}
+	</update>
+	
+	<select id="queryAllSysUserIsIncumbency" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            LENGTH(a.user_id) > 0
+        AND a.user_id != ""
+        AND a.state = '1'
+    </select>
+    
+    <select id="queryCompanyIdByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.company_id companyId
+        FROM
+            sys_eve_user_staff a
+        WHERE a.user_id = #{id}
+    </select>
+    
+    <select id="queryStaffTypeById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.type staffType
+		FROM
+			sys_eve_user_staff a
+		WHERE
+			a.id = #{staffId}
+    </select>
+    
+    <update id="editStaffTypeById" parameterType="java.util.Map">
+		UPDATE sys_eve_user_staff
+		<set>
+			`type` = '2'
+		</set>
+		WHERE id = #{staffId}
+	</update>
+
+	<insert id="insertSchoolStaffMation" parameterType="java.util.Map">
+	    INSERT into school_staff_mation 
+	    (id, staff_id, school_id)
+	    VALUES(#{id}, #{staffId}, #{schoolId})
+	</insert>
+	
+	<select id="queryUserNameList" resultType="java.util.Map">
+		SELECT
+			a.user_id id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			a.email
+		FROM
+			sys_eve_user_staff a
+		WHERE INSTR(CONCAT(',', #{userIds}, ','), CONCAT(',', a.user_id, ','))
+	</select>
+	
+	<select id="querySysUserStaffListToTable" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.job_number jobNumber,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.user_sex userSex,
+			a.email,
+			a.phone,
+			a.home_phone homePhone,
+			a.qq,
+			a.state,
+			u.company_name companyName,
+			q.department_name departmentName,
+			p.job_name jobName,
+			a.`type` staffType
+		FROM
+			sys_eve_user_staff a,
+			company_job p, 
+			company_department q, 
+			company_mation u	
+		WHERE 
+			a.company_id = u.id 
+			AND a.department_id = q.id 
+			AND a.job_id = p.id
+			<if test="userName != '' and userName != null">
+				AND a.user_name LIKE '%${userName}%'
+			</if>
+			<if test="userIdCard != '' and userIdCard != null">
+				AND a.user_idcard LIKE '%${userIdCard}%'
+			</if>
+			<if test="userSex != '' and userSex != null">
+				AND a.user_sex = #{userSex}
+			</if>
+			<if test="companyName != '' and companyName != null">
+				AND a.company_id = #{companyName}
+			</if>
+			<if test="departmentName != '' and departmentName != null">
+				AND a.department_id = #{departmentName}
+			</if>
+			<if test="jobName != '' and jobName != null">
+				AND a.job_id = #{jobName}
+			</if>
+			ORDER BY a.state ASC, a.entry_time DESC
+	</select>
+	
+	<insert id="insertStaffCheckWorkTimeRelation" parameterType="java.util.Map">
+	     INSERT INTO sys_eve_user_staff_time
+	     (staff_id, check_work_time_id)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.staffId}, #{item.timeId})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryStaffCheckWorkTimeRelationByStaffId" resultType="java.util.Map">
+		SELECT
+			a.staff_id staffId,
+			a.check_work_time_id timeId
+		FROM
+			sys_eve_user_staff_time a	
+		WHERE 
+			a.staff_id = #{staffId}
+	</select>
+	
+	<delete id="deleteStaffCheckWorkTimeRelationByStaffId">
+		DELETE
+		FROM
+			sys_eve_user_staff_time
+		WHERE staff_id = #{staffId}
+	</delete>
+	
+	<select id="queryStaffCheckWorkTimeRelationNameByStaffId" resultType="java.util.Map">
+		SELECT
+			a.staff_id staffId,
+			a.check_work_time_id timeId,
+			b.title,
+			b.start_time startTime,
+			b.end_time endTime,
+			b.rest_start_time restStartTime,
+			b.rest_end_time restEndTime,
+			b.`type`,
+			b.state,
+			CASE b.type WHEN 1 THEN '单休' WHEN 2 THEN '双休' WHEN 3 THEN '单双休' WHEN 4 THEN '自定义' ELSE '' END typeName
+		FROM
+			sys_eve_user_staff_time a,
+			check_work_time b
+		WHERE 
+			a.staff_id = #{staffId}
+		AND a.check_work_time_id = b.id
+	</select>
+	
+	<select id="queryCheckTimeMationByTimeIds" resultType="java.util.Map">
+		SELECT
+			a.id timeId,
+			a.start_time startTime,
+			a.end_time endTime
+		FROM
+			check_work_time a
+		WHERE a.id IN
+			<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+	            #{item}
+	        </foreach>
+	</select>
+	
+	<select id="queryCheckTimeDaysMationByTimeIds" resultType="java.util.Map">
+		SELECT
+			a.time_id timeId,
+			a.week_number `day`,
+			a.`type`
+		FROM
+			check_work_time_week a
+		WHERE a.time_id IN
+			<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+	            #{item}
+	        </foreach>
+	</select>
+
+	<select id="queryStaffNameListByIdList" resultType="java.util.Map">
+		SELECT
+			a.id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			a.email
+		FROM
+			sys_eve_user_staff a
+		WHERE a.id IN
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="queryAllSysUserStaffListByState" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.work_time workTime,
+			a.entry_time entryTime,
+			a.annual_leave annualLeave
+		FROM
+			sys_eve_user_staff a
+		WHERE a.state IN
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="querySysUserStaffDetailsByUserId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.job_number jobNumber,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.email,
+			a.phone,
+			a.home_phone homePhone,
+			a.qq,
+			a.work_time workTime,
+			a.entry_time entryTime,
+			IFNULL(a.quit_time, '') quitTime,
+			IFNULL(a.quit_reason, '') quitReason,
+			a.annual_leave annualLeave,
+		    a.holiday_number holidayNumber,
+		    a.retired_holiday_number retiredHolidayNumber,
+			IFNULL(a.user_sign, '暂无签名') userSign,
+			CASE a.state WHEN '1' THEN 'state-up' WHEN '2' THEN 'state-down' END colorClass,
+			CASE a.state WHEN '1' THEN '在职' WHEN '2' THEN '离职' END state,
+			CASE a.user_sex WHEN '2' THEN '女' WHEN '1' THEN '男' ELSE '保密' END userSex,
+			u.company_name companyName,
+		    a.department_id departmentId,
+			q.department_name departmentName,
+			p.job_name jobName,
+			o.name_cn jobScoreName
+		FROM
+			sys_eve_user_staff a
+			LEFT JOIN company_job_score o ON a.job_score_id = o.id,
+			company_job p,
+			company_department q,
+			company_mation u
+		WHERE a.user_id = #{userId}
+		  AND a.company_id = u.id
+		  AND a.department_id = q.id
+		  AND a.job_id = p.id
+	</select>
+
+	<update id="editSysUserStaffAnnualLeaveById">
+		UPDATE sys_eve_user_staff
+		<set>
+			annual_leave = #{quarterYearHour},
+			annual_leave_statis_time = #{annualLeaveStatisTime}
+		</set>
+		WHERE id = #{staffId}
+	</update>
+
+	<update id="updateSysUserStaffHolidayNumberById">
+		UPDATE sys_eve_user_staff
+		<set>
+			holiday_number = #{holidayNumber},
+			holiday_statis_time = #{holidayStatisTime}
+		</set>
+		WHERE id = #{staffId}
+	</update>
+
+	<update id="updateSysUserStaffRetiredHolidayNumberById">
+		UPDATE sys_eve_user_staff
+		<set>
+			retired_holiday_number = #{retiredHolidayNumber},
+			retired_holiday_statis_time = #{retiredHolidayStatisTime}
+		</set>
+		WHERE id = #{staffId}
+	</update>
+
+</mapper>

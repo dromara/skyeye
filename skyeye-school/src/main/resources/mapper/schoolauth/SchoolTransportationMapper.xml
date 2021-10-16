@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.school.dao.SchoolTransportationDao">
+
+	<select id="querySchoolTransportationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			b.school_name schoolName,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			school_transportation a,
+			school_mation b
+		WHERE a.school_id = b.id
+		<if test="name != '' and name != null">
+			AND a.`name` LIKE '%${name}%'
+		</if>
+		<choose>
+			<!-- 查询的不是所有的数据 -->
+    		<when test="schoolPowerId != 'all'.toString()">
+    			AND a.school_id = #{schoolPowerId}
+    		</when>
+    		<!-- 查询的是所有的数据 -->
+    		<when test="schoolPowerId == 'all'.toString()">
+    			<if test="schoolId != '' and schoolId != null">
+					AND a.school_id = #{schoolId}
+				</if>
+    		</when>
+		</choose>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySchoolTransportationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			school_transportation a
+		WHERE a.`name` = #{name}
+		AND a.school_id = #{schoolId}
+	</select>
+	
+	<insert id="insertSchoolTransportationMation" parameterType="java.util.Map">
+	    INSERT into school_transportation 
+	    (id, `name`, school_id, create_id, create_time)
+	    VALUES(#{id}, #{name}, #{schoolId}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySchoolTransportationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			a.school_id schoolId
+		FROM
+			school_transportation a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="querySchoolTransportationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			school_transportation a
+		WHERE a.`name` = #{name}
+		AND a.id != #{id}
+		AND a.school_id = #{schoolId}
+	</select>
+	
+	<update id="editSchoolTransportationById" parameterType="java.util.Map">
+		UPDATE school_transportation
+		<set>
+			<if test="name != '' and name != null">
+				`name` = #{name},
+			</if>
+			<if test="schoolId != '' and schoolId != null">
+				school_id = #{schoolId},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteSchoolTransportationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			school_transportation
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="querySchoolTransportationListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			school_transportation a
+		WHERE 1=1
+		<choose>
+			<!-- 查询的不是所有的数据 -->
+    		<when test="schoolPowerId != 'all'.toString()">
+    			AND a.school_id = #{schoolPowerId}
+    		</when>
+    		<!-- 查询的是所有的数据 -->
+    		<when test="schoolPowerId == 'all'.toString()">
+    			<if test="schoolId != '' and schoolId != null">
+					AND a.school_id = #{schoolId}
+				</if>
+    		</when>
+		</choose>
+		ORDER BY a.create_time DESC
+	</select>
+	
+</mapper>

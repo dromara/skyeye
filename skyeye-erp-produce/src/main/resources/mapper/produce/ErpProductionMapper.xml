@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ErpProductionDao">
+	
+	<select id="queryErpProductionList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.default_number defaultNumber,
+			CONVERT (a.plan_start_date, CHAR) planStartDate,
+			CONVERT (a.plan_complate_date, CHAR) planComplateDate,
+			a.number,
+			a.parent_id parentId,
+			a.state,
+			CASE a.state WHEN '1' THEN '新建' WHEN '2' THEN '审核中' WHEN '3' THEN '审核通过' WHEN '4' THEN '审核拒绝' 
+						 WHEN '5' THEN '加工完成' ELSE '错误参数' END stateName,
+			b.default_number salesOrderNum,
+			c.`name` materialName,
+			c.model materialModel
+		FROM
+			erp_production_head a
+			LEFT JOIN erp_depothead b ON a.order_id = b.id
+			LEFT JOIN erp_material c ON a.material_id = c.id
+		WHERE a.state != '0'
+        <if test="materialName != '' and materialName != null">
+            AND c.`name` LIKE '%${materialName}%'
+        </if>
+        <if test="materialModel != '' and materialModel != null">
+            AND c.model LIKE '%${materialModel}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="defaultNumber != '' and defaultNumber != null">
+            AND a.default_number LIKE '%${defaultNumber}%'
+        </if>
+        <if test="salesOrderNum != '' and salesOrderNum != null">
+            AND b.default_number LIKE '%${salesOrderNum}%'
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <insert id="insertErpProductionMation" parameterType="java.util.Map">
+        INSERT into erp_production_head
+        (id, default_number, order_id, oper_time, remark, plan_start_date, plan_complate_date, material_id, norms_id, 
+        	bom_id, number, parent_id, state, way_procedure_id, create_id, create_time)
+        VALUES(#{id}, #{defaultNumber}, #{orderId}, #{operTime}, #{remark}, #{planStartDate}, #{planComplateDate}, #{materialId}, #{normsId},
+        	#{bomId}, #{number}, #{parentId}, #{state}, #{wayProcedureId}, #{createId}, #{createTime})
+    </insert>
+    
+    <insert id="insertErpProductionChildMation" parameterType="java.util.Map">
+	     INSERT INTO erp_production_child
+	     (id, order_id, material_id, norms_id, number, unit_price, unit_number)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.orderId}, #{item.materialId}, #{item.normsId}, #{item.number}, #{item.unitPrice}, #{item.unitNumber})  
+		</foreach>
+	</insert>
+	
+	<insert id="insertErpProductionProcedureMation" parameterType="java.util.Map">
+	     INSERT INTO erp_production_procedure
+	     (order_id, procedure_id)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.orderId}, #{item.procedureId})
+		</foreach>  
+	</insert>
+	
+	<select id="queryErpProductionMationToEditById" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.order_id orderId,
+			b.default_number defaultNumber,
+			CONVERT (a.oper_time, CHAR) operTime,
+			CONVERT (a.plan_start_date, CHAR) planStartDate,
+			CONVERT (a.plan_complate_date, CHAR) planComplateDate,
+			a.number,
+			a.remark,
+			a.material_id productId,
+			a.norms_id normsId,
+			a.bom_id bomId,
+			c.`name` materialName,
+			c.model materialModel,
+			c.unit,
+			c.unit_name unitName,
+		    a.way_procedure_id wayProcedureId
+		FROM
+			erp_production_head a
+			LEFT JOIN erp_depothead b ON a.order_id = b.id
+			LEFT JOIN erp_material c ON a.material_id = c.id
+		WHERE (a.state = '1' OR a.state = '4')
+		AND a.id = #{orderId}
+	</select>
+	
+	<select id="queryErpProductionChildMationToEditByOrderId" resultType="java.util.Map">
+    	SELECT
+			b.id productId,
+			b.`name` productName,
+			b.model productModel,
+			a.number,
+			a.unit_number needNum,
+			c.estimate_purchase_price unitPrice,
+			b.type,
+			CASE b.`type` WHEN '1' THEN '自产' WHEN '2' THEN '外购' ELSE '参数错误' END typeName,
+			a.norms_id normsId,
+			CASE b.unit WHEN '1' THEN b.unit_name WHEN '2' THEN d.`name` ELSE '' END unitName,
+			bc.`name` categoryName,
+			IFNULL((SELECT SUM(it.initial_tock) FROM erp_material_norms_tock it WHERE c.id = it.norms_id), 0) + 
+				IFNULL((SELECT SUM(sn.stock_num) FROM erp_material_depot_stock sn WHERE c.id = sn.norms_id), 0) deportAllTock
+		FROM
+			erp_production_child a,
+			erp_material b
+			LEFT JOIN erp_material_category bc ON b.category_id = bc.id,
+			erp_material_norms c
+			LEFT JOIN erp_unit d ON c.unit_id = d.id
+		WHERE a.order_id = #{orderId}
+		AND a.material_id = b.id
+		AND a.norms_id = c.id
+		GROUP BY c.id
+    </select>
+    
+    <select id="queryErpProductionProcedureMationDetailsById" resultType="java.util.Map">
+		SELECT
+			b.id procedureId,
+			b.`name` procedureName,
+			b.number,
+			FORMAT(b.unit_price, 2) unitPrice,
+			b.department_id departmentId,
+			c.department_name departmentName,
+			a.state,
+			m.machinId,
+			m.machinOrderNum
+		FROM
+			erp_production_procedure a
+			LEFT JOIN
+				(SELECT
+					d.id machinId,
+					d.order_num machinOrderNum,
+					d.production_id,
+					e.procedure_id
+				FROM
+					erp_machin_header d,
+					erp_machin_child e
+				WHERE d.id = e.header_id) m ON a.order_id = m.production_id AND a.procedure_id = m.procedure_id,
+			erp_work_procedure b
+			LEFT JOIN company_department c ON b.department_id = c.id
+		WHERE
+			a.order_id = #{orderId}
+		AND a.procedure_id = b.id
+		AND b.whether_delete = '1'
+		GROUP BY b.id
+		ORDER BY b.number ASC
+	</select>
+	
+	<update id="editErpProductionMationById">
+        UPDATE erp_production_head
+        <set>
+            order_id = #{orderId},
+            oper_time = #{operTime},
+            remark = #{remark},
+            plan_start_date = #{planStartDate},
+            plan_complate_date = #{planComplateDate},
+            material_id = #{materialId},
+            norms_id = #{normsId},
+            bom_id = #{bomId},
+            number = #{number},
+			way_procedure_id = #{wayProcedureId},
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+    
+    <delete id="deleteErpProductionChildMation">
+        DELETE
+		FROM
+			erp_production_child
+		WHERE
+			order_id = #{orderId}
+    </delete>
+    
+    <delete id="deleteErpProductionProcedureMation">
+        DELETE
+		FROM
+			erp_production_procedure
+		WHERE
+			order_id = #{orderId}
+    </delete>
+    
+    <select id="queryErpPruductionStateById" resultType="java.util.Map">
+		SELECT
+			a.state
+		FROM
+			erp_production_head a
+		WHERE
+			a.id = #{orderId}
+	</select>
+	
+	<update id="deleteErpProductionMationById">
+        UPDATE erp_production_head
+        <set>
+            state = '0',
+        </set>
+        WHERE
+            id = #{orderId}
+    </update>
+    
+    <select id="queryErpProductionMationToDetailById" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.order_id orderId,
+			a.default_number defaultNumber,
+			b.default_number salesNumber,
+			CONVERT (a.oper_time, CHAR) operTime,
+			CONVERT (a.plan_start_date, CHAR) planStartDate,
+			CONVERT (a.plan_complate_date, CHAR) planComplateDate,
+			a.number,
+			a.remark,
+			a.state,
+			CASE a.state WHEN '1' THEN '新建' WHEN '2' THEN '审核中' WHEN '3' THEN '审核通过' WHEN '4' THEN '审核拒绝' 
+						 WHEN '5' THEN '加工完成' ELSE '错误参数' END stateName,
+			a.material_id productId,
+			a.norms_id normsId,
+			a.bom_id bomId,
+			a.approval_content approvalContent,
+			c.`name` materialName,
+			c.model materialModel,
+			CASE c.unit WHEN '1' THEN c.unit_name WHEN '2' THEN f.`name` ELSE '' END unitName,
+			d.title
+		FROM
+			erp_production_head a
+			LEFT JOIN erp_depothead b ON a.order_id = b.id
+			LEFT JOIN erp_material c ON a.material_id = c.id
+			LEFT JOIN erp_bom_parent d ON a.bom_id = d.id,
+			erp_material_norms e
+			LEFT JOIN erp_unit f ON e.unit_id = f.id
+		WHERE a.state != '0'
+		AND a.id = #{orderId}
+		AND a.norms_id = e.id
+	</select>
+	
+	<select id="queryErpProductionChildMationToDetailByOrderId" resultType="java.util.Map">
+    	SELECT
+			b.id productId,
+			b.`name` productName,
+			b.model productModel,
+			a.number,
+			a.unit_number needNum,
+			c.estimate_purchase_price unitPrice,
+			b.type,
+			CASE b.`type` WHEN '1' THEN '自产' WHEN '2' THEN '外购' ELSE '参数错误' END typeName,
+			a.norms_id normsId,
+			CASE b.unit WHEN '1' THEN b.unit_name WHEN '2' THEN d.`name` ELSE '' END unitName,
+			(SELECT  
+				IFNULL(SUM(l.oper_number), 0)
+			FROM 
+				erp_production_purchase k,
+				erp_depothead m,
+				erp_depotitem l
+			WHERE k.produciton_id = a.order_id
+			AND k.purchase_order_id = m.id
+			AND m.`status` IN (2, 4)
+			AND l.norms_id = a.norms_id
+			AND m.id = l.header_id) purchaseNum,
+			bc.`name` categoryName
+		FROM
+			erp_production_child a,
+			erp_material b
+			LEFT JOIN erp_material_category bc ON b.category_id = bc.id,
+			erp_material_norms c
+			LEFT JOIN erp_unit d ON c.unit_id = d.id
+		WHERE a.order_id = #{orderId}
+		AND a.material_id = b.id
+		AND a.norms_id = c.id
+		GROUP BY c.id
+    </select>
+    
+    <update id="editErpPruductionStateById">
+        UPDATE erp_production_head
+        <set>
+            state = #{state},
+        </set>
+        WHERE
+            id = #{orderId}
+    </update>
+    
+    <update id="editErpProductionStateToExamineById">
+        UPDATE erp_production_head
+        <set>
+            state = #{state},
+            approval_id = #{approvalId},
+            approval_content = #{approvalContent},
+            approval_time = #{approvalTime},
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+    
+    <select id="queryErpProductionListToTable" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.default_number defaultNumber,
+			CONVERT (a.plan_start_date, CHAR) planStartDate,
+			CONVERT (a.plan_complate_date, CHAR) planComplateDate,
+			a.number,
+			a.parent_id parentId,
+			b.default_number salesOrderNum,
+			a.material_id materialId,
+			a.norms_id normsId,
+			c.`name` materialName,
+			c.model materialModel,
+			c.unit,
+			c.unit_name unitName
+		FROM
+			erp_production_head a
+			LEFT JOIN erp_depothead b ON a.order_id = b.id
+			LEFT JOIN erp_material c ON a.material_id = c.id
+		WHERE a.state = '3'
+        <if test="materialName != '' and materialName != null">
+            AND c.`name` LIKE '%${materialName}%'
+        </if>
+        <if test="materialModel != '' and materialModel != null">
+            AND c.model LIKE '%${materialModel}%'
+        </if>
+        <if test="defaultNumber != '' and defaultNumber != null">
+            AND a.default_number LIKE '%${defaultNumber}%'
+        </if>
+        <if test="salesOrderNum != '' and salesOrderNum != null">
+            AND b.default_number LIKE '%${salesOrderNum}%'
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="queryErpProductionOutsideProListByOrderId" resultType="java.util.Map">
+    	SELECT
+			a.material_id materialId, #商品id
+			b.`name` materialName, #商品名称
+			b.model materialModel, #商品型号
+			b.unit materialUnit, #商品单位，是多个还是单个,  1.单个  2.多个
+			b.unit_name materialUnitName, #计量单位  当unit=1时，必填
+			a.norms_id normsId, #规格id
+			IFNULL((SELECT SUM(it.initial_tock) FROM erp_material_norms_tock it WHERE a.norms_id = it.norms_id), 0) + 
+				IFNULL((SELECT SUM(sn.stock_num) FROM erp_material_depot_stock sn WHERE a.norms_id = sn.norms_id), 0) currentTock, #当前库存
+			IFNULL(a.number, 0) productionNum, #计划单所需数量
+			IFNULL(IFNULL(a.number, 0) - SUM(IFNULL(h.oper_number, 0)), 0) needNum, #采购单剩余所有采购数量
+			IFNULL(IFNULL(a.number, 0) - SUM(IFNULL(i.need_number, 0)), 0) machinNum, #加工单剩余所有加工分配数量
+			CONVERT(a.unit_price, decimal(24, 2)) unitPrice, #单价
+			CONVERT(a.unit_price * a.number, decimal(24, 2)) allPrice, #总金额
+			CONVERT('0', decimal(24, 2)) taxUnitPrice, #含税单价
+			CONVERT('0', decimal(24, 2)) taxRate, #税率
+			CONVERT('0', decimal(24, 2)) taxMoney, #税额
+			CONVERT('0', decimal(24, 2)) taxLastMoney #价税合计
+		FROM
+			erp_production_child a
+			LEFT JOIN erp_material b ON a.material_id = b.id
+			#以下是计算剩余所需采购数量的表
+			LEFT JOIN erp_production_purchase f ON a.order_id = f.produciton_id
+			LEFT JOIN erp_depothead g ON f.purchase_order_id = g.id AND g.`status` IN (2, 4) #审核通过或者已完成
+			LEFT JOIN erp_depotitem h ON g.id = h.header_id AND a.norms_id = h.norms_id
+			#以下是计算剩余所需加工分配数量的表
+			LEFT JOIN erp_machin_header j ON a.order_id = j.production_id AND j.state IN (3, 5) #审核通过或者已完成
+			LEFT JOIN erp_machin_material i ON i.header_id = j.id AND a.norms_id = i.norms_id
+		WHERE a.order_id = #{orderId}
+		AND b.type IN (${type})
+		GROUP BY a.norms_id
+    </select>
+    
+</mapper>

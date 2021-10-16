@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveUserNoticeDao">
+	
+	<select id="getNoticeListByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.`desc`,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_user_notice a
+		WHERE
+			a.receive_id = #{userId}
+		AND a.state = '1'
+		ORDER BY
+			a.create_time DESC
+		LIMIT 8
+	</select>
+	
+	<select id="getAllNoticeListByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.`desc`,
+			CONVERT(a.create_time, char) createTime,
+			CASE a.state WHEN '1' THEN '未读' WHEN '2' THEN '已读' ELSE '未读' END state
+		FROM
+			sys_eve_user_notice a
+		WHERE
+			a.receive_id = #{userId}
+		AND a.state != '0'
+		ORDER BY
+			a.state ASC, a.create_time DESC
+	</select>
+	
+	<select id="queryNoticeMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.`desc`,
+			a.state,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_user_notice a
+		WHERE
+			a.id = #{id}
+		AND a.receive_id = #{userId}
+	</select>
+	
+	<update id="editNoticeMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_user_notice
+		<set>
+			state = '2',
+			read_time = #{readTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteNoticeMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_user_notice
+		<set>
+			state = '0',
+			del_time = #{delTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryNoticeNoReadMationByIds" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.`desc`,
+			a.state,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_user_notice a
+		WHERE
+			INSTR(CONCAT(',', #{ids}, ','), CONCAT(',', a.id, ','))
+		AND a.receive_id = #{userId}
+		AND a.state = '1'
+	</select>
+	
+	<update id="editNoticeMationByIds" parameterType="java.util.Map">
+		UPDATE sys_eve_user_notice
+		<set>
+			state = '2',
+			read_time = #{readTime},
+		</set>
+		WHERE INSTR(CONCAT(',', #{editIds}, ','), CONCAT(',', id, ','))
+	</update>
+	
+	<select id="queryNoticeNoDelMationByIds" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.`desc`,
+			a.state,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_user_notice a
+		WHERE
+			INSTR(CONCAT(',', #{ids}, ','), CONCAT(',', a.id, ','))
+		AND a.receive_id = #{userId}
+		AND a.state != '0'
+	</select>
+	
+	<update id="deleteNoticeMationByIds" parameterType="java.util.Map">
+		UPDATE sys_eve_user_notice
+		<set>
+			state = '0',
+			del_time = #{delTime},
+		</set>
+		WHERE INSTR(CONCAT(',', #{editIds}, ','), CONCAT(',', id, ','))
+	</update>
+	
+	<select id="queryNoticeDetailsMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.`desc`,
+			a.content,
+			a.state,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_user_notice a
+		WHERE
+			a.id = #{id}
+		AND a.receive_id = #{userId}
+	</select>
+	
+</mapper>

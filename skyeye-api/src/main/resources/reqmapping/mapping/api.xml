@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="API模块">
+    <!--
+        - allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+     -->
+
+    <url id="api004" path="/post/ApiController/queryLimitRestrictions" val="获取限制条件" allUse="2" method="GET" groupName="公共接口">
+    </url>
+    <url id="api005" path="/post/ApiController/queryAllSysEveReqMapping" val="获取接口列表" allUse="2" groupName="公共接口">
+    </url>
+    <url id="api006" path="/post/ApiController/querySysEveReqMappingMation" val="获取接口详情" allUse="2" method="GET" groupName="公共接口">
+        <property id="rowId" name="id" ref="required" var="接口id"/>
+    </url>
+
+</controller>

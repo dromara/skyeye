@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AssetApplyReturnDao">
+
+    <select id="queryMyReturnAssetMation" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNum,
+            IFNULL(a.process_instance_id,'') processInstanceId,
+            a.state,
+            CONVERT(a.create_time, char) createTime
+        FROM
+            asset_management_return a
+        WHERE a.create_id = #{userId}
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+            AND a.create_time >= #{startTime} AND #{endTime} >= a.create_time
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="queryMyUnReturnAssetListByTypeId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            CONCAT(a.asset_name, '(', a.asset_num, ')') `name`,
+            a.specifications specificationsName,
+            a.asset_num assetNum
+        FROM
+            asset_management a
+        WHERE
+            a.type_id = #{typeId}
+          AND a.employee_id = #{employeeId}
+    </select>
+
+    <insert id="insertAssetReturnMation" parameterType="java.util.Map">
+        INSERT into asset_management_return
+        (id, title, odd_number, state, process_instance_id, remark, enclosure_info, create_id, create_time)
+        VALUES(#{id}, #{title}, #{oddNumber}, #{state}, #{processInstanceId}, #{remark}, #{enclosureInfo}, #{createId}, #{createTime})
+    </insert>
+
+    <insert id="insertAssetReturnGoodsMation" parameterType="java.util.Map">
+        insert into asset_management_return_goods
+        (id, return_id, type_id, management_id, management_name, specifications, asset_num, remark, state)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id}, #{item.returnId}, #{item.typeId}, #{item.assetId}, #{item.assetName}, #{item.specificationsName}, #{item.assetNum}, #{item.remark}, #{item.state})
+        </foreach>
+    </insert>
+
+    <select id="queryAssetReturnMationById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumber,
+            a.remark,
+            a.state,
+            IFNULL(a.enclosure_info, '') enclosureInfo,
+            IFNULL(a.process_instance_id,'') processInstanceId,
+            b.user_name userName
+        FROM
+            asset_management_return a
+            LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="queryAssetReturnGoodsMationById" resultType="java.util.Map">
+        SELECT
+            a.management_name assetName,
+            c.specifications specificationsName,
+            b.type_name typeName,
+            a.asset_num assetNum,
+            a.remark,
+            a.state,
+            CASE a.state WHEN '0' THEN '未提交审批' WHEN '1' THEN '等待审批' WHEN '2' THEN '审批通过' WHEN '3' THEN '审批不通过' END stateName
+        FROM
+            asset_management_return_goods a
+            LEFT JOIN asset_management_type b ON a.type_id = b.id
+            LEFT JOIN asset_management c ON a.management_id = c.id
+        WHERE a.return_id = #{returnId}
+    </select>
+
+    <update id="updateAssetReturnStateISInAudit">
+        UPDATE asset_management_return
+        <set>
+            state = '1',
+            process_instance_id = #{processInId}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateAssetReturnGoodStateISInAudit">
+        UPDATE asset_management_return_goods
+        <set>
+            state = '1'
+        </set>
+        WHERE return_id = #{returnId}
+    </update>
+
+    <select id="queryAssetReturnByProcessInstanceId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.create_id createId,
+            GROUP_CONCAT(b.management_id) managementId
+        FROM
+            asset_management_return a,
+            asset_management_return_goods b
+        WHERE a.process_instance_id = #{processInstanceId}
+        AND a.id = b.return_id
+        AND	a.state = '1'
+    </select>
+
+    <update id="editAssetReturnGoodsById" parameterType="java.util.Map">
+        UPDATE asset_management_return_goods
+        <set>
+            state = #{applyState}
+        </set>
+        WHERE return_id = #{id}
+    </update>
+
+    <update id="editAssetReturnById" parameterType="java.util.Map">
+        UPDATE asset_management_return
+        <set>
+            state = #{state}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateAssetReturnToCancellation" parameterType="java.util.Map">
+        UPDATE asset_management_return
+        <set>
+            state = 4
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAssetReturnMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumver,
+            a.remark,
+            a.state,
+            b.user_name userName,
+            IFNULL(a.enclosure_info, '') enclosureInfo
+        FROM
+            asset_management_return a
+            LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <select id="queryAssetReturnGoodsMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.management_id assetId,
+            c.specifications specificationsName,
+            a.type_id typeId,
+            a.asset_num assetNum,
+            a.remark
+        FROM
+            asset_management_return_goods a
+                LEFT JOIN asset_management c ON a.management_id = c.id
+        WHERE a.return_id = #{id}
+    </select>
+
+    <update id="updateAssetReturnMation" parameterType="java.util.Map">
+        UPDATE asset_management_return
+        <set>
+            remark = #{remark},
+            enclosure_info = #{enclosureInfo}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteAssetReturnGoodsMationById" parameterType="java.util.Map">
+        DELETE
+        FROM
+            asset_management_return_goods
+        WHERE
+            return_id = #{id}
+    </delete>
+
+    <update id="editAssetReturnToRevoke" parameterType="java.util.Map">
+        UPDATE asset_management_return
+        <set>
+            state = '5',
+            process_instance_id = ''
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editAssetReturnGoodsToRevoke" parameterType="java.util.Map">
+        UPDATE asset_management_return_goods
+        <set>
+            state = '0'
+        </set>
+        WHERE return_id = #{id}
+    </update>
+
+    <select id="queryAssetReturnId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            asset_management_return a
+        WHERE
+            a.process_instance_id = #{processInstanceId}
+    </select>
+
+</mapper>

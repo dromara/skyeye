@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.school.dao.SchoolTeacherSubjectDao">
+
+	<select id="querySchoolTeacherSubjectList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.user_sex userSex,
+			a.phone,
+			a.home_phone homePhone,
+			a.qq,
+			c.school_name schoolName,
+			COUNT(d.id) subjectNum
+		FROM
+			sys_eve_user_staff a
+			LEFT JOIN school_teacher_subject d ON a.id = d.staff_id,
+			school_staff_mation b,
+			school_mation c
+		WHERE a.id = b.staff_id
+		AND b.school_id = c.id
+		AND a.`type` = '2'
+		AND a.state = '1'
+		<if test="userName != '' and userName != null">
+			AND a.user_name LIKE '%${userName}%'
+		</if>
+		<if test="userIdCard != '' and userIdCard != null">
+			AND a.user_idcard LIKE '%${userIdCard}%'
+		</if>
+		<if test="userSex != '' and userSex != null">
+			AND a.user_sex = #{userSex}
+		</if>
+		<choose>
+			<!-- 查询的不是所有的数据 -->
+    		<when test="schoolPowerId != 'all'.toString()">
+    			AND c.id = #{schoolPowerId}
+    		</when>
+    		<!-- 查询的是所有的数据 -->
+    		<when test="schoolPowerId == 'all'.toString()">
+    			<if test="schoolId != '' and schoolId != null">
+					AND c.id = #{schoolId}
+				</if>
+    		</when>
+		</choose>
+		GROUP BY a.id
+		ORDER BY a.state ASC, a.entry_time DESC
+	</select>
+	
+	<select id="querySchoolTeacherSkillById" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.subject_name subjectName
+		FROM
+			school_teacher_subject a,
+			school_subject_mation b
+		WHERE
+			a.staff_id = #{staffId}
+		AND a.subject_id = b.id
+	</select>
+	
+	<select id="querySchoolTeacherMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.phone,
+			c.id schoolId,
+			c.school_name schoolName
+		FROM
+			sys_eve_user_staff a,
+			school_staff_mation b,
+			school_mation c
+		WHERE a.id = b.staff_id
+		AND b.school_id = c.id
+		AND a.`type` = '2'
+		AND a.state = '1'
+		AND a.id = #{id}
+	</select>
+	
+	<delete id="deleteSchoolTeacherSubjectMation">
+		DELETE
+		FROM
+			school_teacher_subject
+		WHERE
+			staff_id = #{staffId}
+	</delete>
+	
+	<insert id="insertSchoolTeacherSubjectMation" parameterType="java.util.Map">
+	     INSERT INTO school_teacher_subject
+	     (id, staff_id, subject_id)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.staffId}, #{item.subjectId})  
+		</foreach>  
+	</insert>
+	
+</mapper>

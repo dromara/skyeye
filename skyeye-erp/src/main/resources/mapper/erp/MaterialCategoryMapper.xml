@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.MaterialCategoryDao">
+
+    <select id="queryMaterialCategoryList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name`,
+			a.parent_id pId,
+			true lay_is_open,
+			a.sort orderBy,
+			a.`status`,
+			a.remark
+		FROM
+			erp_material_category a
+		WHERE a.`status` = '1'
+	        <if test="name != '' and name != null">
+	            AND a.name LIKE '%${name}%'
+	        </if>
+	        <if test="parentId != '' and parentId != null">
+				AND a.parent_id = #{parentId}
+			</if>
+		ORDER BY a.sort ASC
+    </select>
+    
+    <select id="queryMaterialCategoryMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			erp_material_category a
+		WHERE a.`name` = #{name}
+		AND a.status = '1'
+	</select>
+	
+	<select id="queryMaterialCategoryMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			erp_material_category a
+		WHERE a.`name` = #{name}
+		AND a.id != #{id}
+		AND a.status = '1'
+	</select>
+	
+	<select id="queryMaterialCategoryBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			COUNT(1) simpleNum
+		FROM
+			erp_material_category a
+		WHERE
+			a.parent_id = #{parentId}
+	</select>
+	
+	<insert id="insertMaterialCategoryMation" parameterType="java.util.Map">
+	    INSERT into erp_material_category 
+	    (id, `name`, sort, status, creator, create_time, parent_id, remark)
+	    VALUES(#{id}, #{name}, #{orderBy}, #{status}, #{createId}, #{createTime}, #{parentId}, #{remark})
+	</insert>
+	
+	<select id="queryMaterialCategoryStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.`status`
+		FROM
+			erp_material_category a	
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="deleteMaterialCategoryById" parameterType="java.util.Map">
+		UPDATE erp_material_category
+		<set>
+			`status` = '2'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteMaterialCategoryByParentId" parameterType="java.util.Map">
+		UPDATE erp_material_category
+		<set>
+			`status` = '2'
+		</set>
+		WHERE parent_id = #{id}
+	</update>
+	
+	<select id="selectMaterialCategoryToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			a.remark,
+			IFNULL(b.`name`, '全部') parentName
+		FROM
+			erp_material_category a
+			LEFT JOIN erp_material_category b ON a.parent_id = b.id
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="editMaterialCategoryMationById" parameterType="java.util.Map">
+		UPDATE erp_material_category
+		<set>
+			`name` = #{name},
+			remark = #{remark}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryMaterialCategoryUpMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.sort thisOrderBy,
+			b.id,
+			b.sort prevOrderBy
+		FROM
+			erp_material_category a,
+			erp_material_category b
+		WHERE
+			a.id = #{id}
+		AND a.parent_id = b.parent_id
+		AND a.sort > b.sort
+		AND b.status = '1'
+		ORDER BY
+			b.sort DESC
+		LIMIT 1
+	</select>
+	
+	<update id="editMaterialCategoryMationOrderNumById" parameterType="java.util.Map">
+		UPDATE erp_material_category
+		<set>
+			sort = #{upOrderBy},
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="queryMaterialCategoryDownMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.sort thisOrderBy,
+			b.id,
+			b.sort prevOrderBy
+		FROM
+			erp_material_category a,
+			erp_material_category b
+		WHERE
+			a.id = #{id}
+		AND a.parent_id = b.parent_id
+		AND b.sort > a.sort
+		AND b.status = '1'
+		ORDER BY
+			b.sort ASC
+		LIMIT 1
+	</select>
+	
+	<select id="queryMaterialCategoryListToTree" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name`,
+			a.parent_id pId
+		FROM
+			erp_material_category a
+		WHERE a.`status` = '1'
+		ORDER BY a.sort ASC
+    </select>
+	
+</mapper>

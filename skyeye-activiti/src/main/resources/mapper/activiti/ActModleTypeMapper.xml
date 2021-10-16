@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ActModleTypeDao">
+
+	<select id="queryActModleTypeByTitle" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			act_modle_type a
+		WHERE
+			a.title = #{title}
+		AND a.state != 4
+	</select>
+	
+	<select id="queryCountOrderby" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			COUNT(*) orderBy
+		FROM
+			act_modle_type 
+	</select>
+	
+	<insert id="insertActModleTypeMation" parameterType="java.util.Map">
+		INSERT INTO act_modle_type 
+	    (id, title, state, order_by, create_id, create_time)
+	    VALUES
+	    (#{id}, #{title}, #{state}, #{orderBy}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="selectAllActModleTypeMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title name,
+			CASE a.state WHEN '1' THEN 'new-state-point' WHEN '2' THEN 'up-state-point' WHEN '3' THEN 'down-state-point' END stateColor
+		FROM
+			act_modle_type a
+		WHERE a.state != 4
+		ORDER BY
+			a.order_by DESC
+	</select>
+	
+	<update id="editActModleTypeNameById" parameterType="java.util.Map">
+		UPDATE act_modle_type
+		<set>
+			title = #{title}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editActModleTypeStateById" parameterType="java.util.Map">
+		UPDATE act_modle_type
+		<set>
+			state = #{state}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryActModleTypeMationById" resultType="java.util.Map">
+		SELECT
+			a.state
+		FROM
+			act_modle_type a	
+		WHERE 
+			a.id = #{id}
+		AND a.state != 4
+	</select>
+	
+	<select id="queryActModleTypeUpMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by thisOrderBy,
+			b.id,
+			b.order_by prevOrderBy
+		FROM
+			act_modle_type a,
+			act_modle_type b
+		WHERE
+			a.id = #{id}
+		AND b.order_by > a.order_by
+		AND b.state != 4
+		ORDER BY
+			b.order_by ASC
+		LIMIT 1
+	</select>
+	
+	<update id="editActModleTypeMationOrderNumUpById" parameterType="java.util.Map">
+		UPDATE act_modle_type
+		<set>
+			order_by = #{upOrderBy},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryActModleTypeDownMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by thisOrderBy,
+			b.id,
+			b.order_by prevOrderBy
+		FROM
+			act_modle_type a,
+			act_modle_type b
+		WHERE
+			a.id = #{id}
+		AND a.order_by > b.order_by
+		AND b.state != 4
+		ORDER BY
+			b.order_by DESC
+		LIMIT 1
+	</select>
+
+	<select id="queryActModleUpStateByUpStateType" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.title,
+			a.id
+		FROM
+			act_modle_type a
+		WHERE
+			a.state = 2
+		ORDER BY
+			a.order_by DESC
+	</select>
+
+	<select id="queryAllDsForm" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.page_name `name`
+		FROM
+			ds_form_page a
+	</select>
+	
+	<select id="queryDsFormMationToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.content_id contentId,
+			a.id `name`,
+			a.title labelContent,
+			a.placeholder,
+			a.`value`,
+			a.text,
+			CONCAT('layui-col-xs', a.default_width) defaultWidth,
+			a.page_id pageId,
+			a.html_content htmlContent,
+			a.js_content jsContent,
+			a.order_by orderBy,
+			IFNULL(a.key_id, '') keyId,
+			IFNULL(a.associated_data_types,'') associatedDataTypes,
+			IFNULL(a.a_data,'') aData,
+			IFNULL(a.display_template,'') templateContent,
+			a.`require`
+		FROM
+			ds_form_page_data a
+		WHERE a.sequence_id = #{id}
+		ORDER BY
+			a.order_by ASC
+	</select>
+	
+	<update id="editDsFormMationBySequenceId" parameterType="java.util.Map">
+		UPDATE ds_form_page_data
+		<set>
+			`value` = #{value},
+			text = #{text}
+		</set>
+		WHERE id = #{rowId}
+	</update>
+	
+	<update id="editDsFormMationBySequenceIdAndProcessInstanceId" parameterType="java.util.Map">
+		UPDATE 
+			ds_form_page_data a,
+			ds_form_page_sequence b
+		<set>
+			a.`value` = #{value},
+			a.text = #{text}
+		</set>
+		WHERE b.process_instance_id = #{processInstanceId}
+		AND a.sequence_id = b.id
+		AND a.content_id = #{rowId}
+	</update>
+
+</mapper>

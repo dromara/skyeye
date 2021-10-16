@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="webWocker模块">
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- webWocker开始 -->
+	<url id="websocket001" path="/websocket" val="WebSocketContext获取服务器信息" allUse="2" groupName="webWocker模块">
+	</url>
+	<!-- webWocker结束 -->
+	
+</controller>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEvePicTypeDao">
+
+	<select id="querySysPicTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name typeName,
+			b.user_name createName,
+			CONVERT(a.create_time, char) createTime,
+			a.state,
+			a.order_by orderBy
+		FROM
+			sys_eve_pic_type a,		
+			sys_eve_user_staff b
+		WHERE 
+			a.create_id = b.user_id
+			<if test="typeName != '' and typeName != null">
+				AND a.type_name LIKE '%${typeName}%'
+			</if>
+			AND a.state != 0
+			ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysPicTypeMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_eve_pic_type a
+		WHERE a.type_name = #{typeName}
+		AND a.state != 0
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+	
+	<insert id="insertSysPicTypeMation" parameterType="java.util.Map">
+	    INSERT into sys_eve_pic_type 
+	    (id, type_name, order_by, state, create_id, create_time)
+	    VALUES(#{id}, #{typeName}, #{orderBy}, #{state}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySysPicTypeBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			COUNT(*) simpleNum
+		FROM
+			sys_eve_pic_type 
+	</select>
+	
+	<update id="deleteSysPicTypeById" parameterType="java.util.Map">
+		UPDATE sys_eve_pic_type
+		<set>
+			state = 0
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateUpSysPicTypeById" parameterType="java.util.Map">
+		UPDATE sys_eve_pic_type
+		<set>
+			state = 2
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysPicTypeStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.state
+		FROM
+			sys_eve_pic_type a	
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="updateDownSysPicTypeById" parameterType="java.util.Map">
+		UPDATE sys_eve_pic_type
+		<set>
+			state = 3
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="selectSysPicTypeById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name typeName
+		FROM
+			sys_eve_pic_type a	
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="editSysPicTypeMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_pic_type
+		<set>
+			type_name = #{typeName}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysPicTypeUpMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by thisOrderBy,
+			b.id,
+			b.order_by prevOrderBy
+		FROM
+			sys_eve_pic_type a,
+			sys_eve_pic_type b
+		WHERE
+			a.id = #{id}
+		AND a.order_by > b.order_by
+		AND b.state != 0
+		ORDER BY
+			b.order_by DESC
+		LIMIT 1
+	</select>
+	
+	<update id="editSysPicTypeMationOrderNumUpById" parameterType="java.util.Map">
+		UPDATE sys_eve_pic_type
+		<set>
+			order_by = #{upOrderBy},
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="querySysPicTypeDownMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by thisOrderBy,
+			b.id,
+			b.order_by prevOrderBy
+		FROM
+			sys_eve_pic_type a,
+			sys_eve_pic_type b
+		WHERE
+			a.id = #{id}
+		AND b.order_by > a.order_by
+		AND b.state != 0
+		ORDER BY
+			b.order_by ASC
+		LIMIT 1
+	</select>
+	
+	<select id="querySysPicTypeUpStateList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name typeName
+		FROM
+			sys_eve_pic_type a
+		WHERE 
+			a.state = 2
+			ORDER BY a.order_by ASC
+	</select>
+
+</mapper>

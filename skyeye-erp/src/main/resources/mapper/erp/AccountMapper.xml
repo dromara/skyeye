@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.AccountDao">
+    <select id="queryAccountByList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name accountName,
+            a.serial_no serialNo,
+            FORMAT(a.initial_amount, 2) initialAmount,
+            FORMAT(IFNULL(SUM(IFNULL(b.change_amount, b.total_price) * CASE b.type WHEN 1 THEN 1 WHEN 2 THEN -1 WHEN 3 THEN 0 ELSE '' END), 0) + a.current_amount, 2) currentAmount,
+            a.remark,
+            a.is_default isDefault,
+            CONVERT (a.create_time, CHAR) createTime
+        FROM
+            erp_account a
+            LEFT JOIN erp_depothead b ON a.id = b.account_id AND b.sub_type NOT IN(10, 11) AND b.delete_flag = '0'
+        WHERE
+            a.delete_flag = 0
+        <if test="accountName != '' and accountName != null">
+            AND a.name LIKE '%${accountName}%'
+        </if>
+        <if test="serialNo != '' and serialNo != null">
+            AND a.serial_no LIKE '%${serialNo}%'
+        </if>
+        <if test="remark != '' and remark != null">
+            AND a.remark LIKE '%${remark}%'
+        </if>
+        GROUP BY a.id
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="queryAccountByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            erp_account a
+        WHERE
+            a.delete_flag = 0
+        AND a.name = #{accountName}
+        ORDER BY a.create_time DESC LIMIT 0,1
+    </select>
+
+    <insert id="insertAccount" parameterType="java.util.Map">
+        INSERT INTO erp_account(
+            id, name, serial_no, initial_amount, current_amount, remark, is_default, delete_flag, create_time
+        ) values (#{id}, #{accountName}, #{serialNo}, #{initialAmount}, #{currentAmount}, #{remark}, #{isDefault}, #{deleteFlag}, #{createTime})
+    </insert>
+
+    <select id="queryAccountById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name accountName,
+            a.serial_no serialNo,
+            a.initial_amount initialAmount,
+            a.current_amount currentAmount,
+            a.remark,
+            a.is_default isDefault,
+            CONVERT (a.create_time, CHAR) createTime
+        FROM
+          erp_account a
+        WHERE
+            a.delete_flag = 0
+        AND a.id = #{id}
+        ORDER BY a.create_time DESC LIMIT 0,1
+    </select>
+
+    <update id="editAccountByDeleteFlag" parameterType="java.util.Map">
+        UPDATE erp_account
+        <set>
+            delete_flag = #{deleteFlag}
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="queryAccountByIdAndName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+          erp_account a
+        WHERE
+            a.delete_flag = 0
+        AND a.id != #{id}
+        AND a.name = #{accountName}
+        ORDER BY a.create_time DESC LIMIT 0,1
+    </select>
+
+    <update id="editAccountById" parameterType="java.util.Map">
+        UPDATE erp_account
+        <set>
+            name = #{accountName},
+            serial_no = #{serialNo},
+            initial_amount = #{initialAmount},
+            current_amount = #{initialAmount},
+            remark = #{remark},
+            is_default = #{isDefault}
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="queryAccountByIdAndIsDeafault" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+          erp_account a
+        WHERE
+            a.delete_flag = 0
+        AND a.is_default = 1
+        AND a.id = #{id}
+        ORDER BY a.create_time DESC LIMIT 0,1
+    </select>
+
+    <update id="editAccountByIsNotDefault" parameterType="java.util.Map">
+        UPDATE erp_account
+        <set>
+            is_default = #{isDefault}
+        </set>
+    </update>
+
+    <update id="editAccountByIdAndIsDefault" parameterType="java.util.Map">
+        UPDATE erp_account
+        <set>
+            is_default = #{isDefault}
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="queryAccountByIdAndInfo" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name accountName,
+            a.serial_no serialNo,
+            FORMAT(a.initial_amount, 2) initialAmount,
+            FORMAT(a.current_amount, 2) currentAmount,
+            a.remark,
+            a.is_default isDefault,
+            CONVERT (a.create_time, CHAR) createTime
+        FROM
+          erp_account a
+        WHERE
+            a.delete_flag = 0
+        AND a.id = #{id}
+        ORDER BY a.create_time DESC LIMIT 0,1
+    </select>
+
+    <select id="queryAccountStreamById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            d.id,
+            d.sub_type subType,
+            CASE d.sub_type WHEN 1 THEN '采购入库' WHEN 2 THEN '销售退货' WHEN 3 THEN '零售退货' WHEN 4 THEN '其他入库' WHEN 5 THEN '销售出库' 
+							WHEN 6 THEN '采购退货' WHEN 7 THEN '调拨' WHEN 8 THEN '零售出库' WHEN 9 THEN '其他出库' ELSE '' END subTypeName,
+            d.default_number defaultNumber,
+            CONVERT(d.oper_time, CHAR) operTime,
+            CONVERT(d.create_time, CHAR) createTime,
+            FORMAT(d.total_price * (CASE d.type WHEN 2 THEN -1 ELSE 1 END), 2) totalPrice,
+            d.type,
+            IF(IFNULL(c.supplier, '') = '', e.`name`, c.supplier) supplierName,
+            d.pay_type payType,
+            d.`status`,
+			d.status_content statusContent,
+			d.link_number linkNumber
+        FROM
+            erp_depothead d
+            LEFT JOIN erp_supplier c ON d.organ_id = c.id
+            LEFT JOIN crm_customer e ON d.organ_id = e.id
+        WHERE
+            d.account_id = #{id}
+        AND d.delete_flag = 0
+    	AND d.type = '1'
+        AND d.sub_type NOT IN(10, 11)
+    </select>
+    
+    <select id="queryAccountListToSelect" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.`name`
+		FROM
+			erp_account a
+		WHERE
+			a.delete_flag = '0'
+		ORDER BY a.is_default ASC
+    </select>
+
+</mapper>

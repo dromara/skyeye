@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ForumReportDao">
+
+	<insert id="insertForumReportMation" parameterType="java.util.Map">
+	    INSERT into forum_report 
+	    (id, forum_id, report_type_id, report_other_content, report_desc, examine_state, report_id, report_time)
+	    VALUES(#{id}, #{forumId}, #{reportType}, #{reportContent}, #{reportDesc}, #{examineState}, #{reportId}, #{reportTime})
+	</insert>
+	
+	<select id="queryReportNoCheckList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			d.forum_title title,
+			d.id forumId,
+            CASE WHEN a.report_type_id = 'other' THEN '其他' ELSE c.type_name END as reportType,
+			a.examine_state examineState,
+			a.report_other_content reportContent,
+			a.report_desc reportDesc,
+			b.user_name reportUser,
+			CONVERT(a.report_time, char) reportTime
+		FROM
+			forum_report a
+			LEFT JOIN sys_eve_user_staff b ON a.report_id = b.user_id
+			LEFT JOIN forum_report_type c ON a.report_type_id = c.id
+			LEFT JOIN forum_content d ON a.forum_id = d.id
+		WHERE a.examine_state = '1'
+			<if test="reportTypeId != '' and reportTypeId != null">
+				AND a.report_type_id = #{reportTypeId}
+			</if>
+			<if test="title != '' and title != null">
+                AND d.forum_title like '%${title}%'
+            </if>
+            <if test="reportstartTime != '' and reportstartTime != null and reportendTime != '' and reportendTime != null">
+                AND #{reportendTime} >= a.report_time AND a.report_time >= #{reportstartTime}
+            </if>
+		ORDER BY a.report_time desc
+	</select>
+	
+	<update id="editReportCheckMationById" parameterType="java.util.Map">
+		UPDATE forum_report
+		<set>
+			<if test="examineId != '' and examineId != null">
+				examine_id = #{examineId},
+			</if>
+			<if test="examineTime != '' and examineTime != null">
+				examine_time = #{examineTime},
+			</if>
+			<if test="examineState != '' and examineState != null">
+				examine_state = #{examineState},
+			</if>
+			examine_nopass_reason = #{examineNopassReason},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryReportCheckedList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			e.forum_title title,
+			e.id forumId,
+            CASE WHEN a.report_type_id = 'other' THEN '其他' ELSE c.type_name END as reportType,
+			a.examine_state examineState,
+			a.report_other_content reportContent,
+			a.report_desc reportDesc,
+			a.examine_nopass_reason examineNopassReason,
+			b.user_name reportUser,
+			CONVERT(a.report_time, char) reportTime,
+			d.user_name examineUser,
+			CONVERT(a.examine_time, char) examineTime
+		FROM
+			forum_report a
+			LEFT JOIN sys_eve_user_staff b ON a.report_id = b.user_id
+			LEFT JOIN forum_report_type c ON a.report_type_id = c.id
+			LEFT JOIN sys_eve_user_staff d ON a.examine_id = d.user_id
+			LEFT JOIN forum_content e ON a.forum_id = e.id
+		WHERE (a.examine_state = '2' OR a.examine_state = '3')
+			<if test="reportTypeId != '' and reportTypeId != null">
+				AND a.report_type_id = #{reportTypeId}
+			</if>
+			<if test="title != '' and title != null">
+                AND e.forum_title like '%${title}%'
+            </if>
+            <if test="reportstartTime != '' and reportstartTime != null and reportendTime != '' and reportendTime != null">
+                AND #{reportendTime} >= a.report_time AND a.report_time >= #{reportstartTime}
+            </if>
+            <if test="examinestartTime != '' and examinestartTime != null and examineendTime != '' and examineendTime != null">
+                AND #{examineendTime} >= a.examine_time AND a.examine_time >= #{examinestartTime}
+            </if>
+		ORDER BY a.examine_time desc
+	</select>
+	
+	<select id="queryForumReportMationToDetails" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			e.forum_title title,
+			CASE WHEN a.report_type_id = 'other' THEN '其他' ELSE c.type_name END as reportType,
+			CASE a.examine_state WHEN '1' THEN '未审核' WHEN '2' THEN '审核通过' WHEN '3' THEN '审核不通过' END examineState,
+			a.report_other_content reportContent,
+			a.report_desc reportDesc,
+			a.examine_nopass_reason examineNopassReason,
+			b.user_name reportUser,
+			CONVERT(a.report_time, char) reportTime,
+			d.user_name examineUser,
+			CONVERT(a.examine_time, char) examineTime
+		FROM
+			forum_report a
+			LEFT JOIN sys_eve_user_staff b ON a.report_id = b.user_id
+			LEFT JOIN forum_report_type c ON a.report_type_id = c.id
+			LEFT JOIN sys_eve_user_staff d ON a.examine_id = d.user_id
+			LEFT JOIN forum_content e ON a.forum_id = e.id
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryForumReportMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.forum_id forumId,
+            b.create_id createId,
+            a.report_id reportId
+        FROM
+            forum_report a
+            LEFT JOIN forum_content b ON a.forum_id = b.id
+        WHERE a.id = #{id}
+    </select>
+	
+	<select id="queryForumReportStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.examine_state examineState
+		FROM
+			forum_report a
+		WHERE a.id = #{id}
+	</select>
+	
+	<insert id="insertForumNoticeMation" parameterType="java.util.Map">
+        INSERT into forum_notice 
+        (id, forum_id, notice_title, notice_content, receive_id, type, state, create_time)
+        VALUES(#{id}, #{forumId}, #{noticeTitle}, #{noticeContent}, #{receiveId}, #{type}, #{state}, #{createTime})
+    </insert>
+	
+</mapper>

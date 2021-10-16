@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.CrmCustomerContactDao">
+
+    <select id="queryCustomerContactList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			d.`name` customerName,
+			a.contacts,
+			a.department,
+			a.job,
+			a.work_phone workPhone,
+			a.mobile_phone mobilePhone,
+			a.email,
+			a.qq,
+			a.wechat,
+			a.is_default isDefault,
+			b.user_name createName,
+			DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+			c.user_name lastUpdateName,
+			DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+		FROM
+			crm_customer_contacts a
+			LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.last_update_id = c.user_id
+			LEFT JOIN crm_customer d ON a.customer_id = d.id
+		WHERE a.state = '1'
+			<if test="customerName != '' and customerName != null">
+                AND d.`name` like '%${customerName}%'
+            </if>
+            <if test="contacts != '' and contacts != null">
+                AND a.contacts like '%${contacts}%'
+            </if>
+            <if test="mobilePhone != '' and mobilePhone != null">
+                AND a.mobile_phone = #{mobilePhone}
+            </if>
+            <if test="email != '' and email != null">
+                AND a.email = #{email}
+            </if>
+            <if test="qq != '' and qq != null">
+                AND a.qq = #{qq}
+            </if>
+            <if test="wechat != '' and wechat != null">
+                AND a.wechat = #{wechat}
+            </if>
+        ORDER BY a.create_time desc
+    </select>
+    
+    <insert id="insertCustomerContactMation" parameterType="java.util.Map">
+        insert into crm_customer_contacts
+        (id, customer_id, contacts, department, job, work_phone, mobile_phone, email, qq, wechat, is_default, state,
+        	create_id, create_time, last_update_id, last_update_time)
+        values(#{id}, #{customerId}, #{contacts}, #{department}, #{job}, #{workPhone}, #{mobilePhone}, #{email}, #{qq}, #{wechat}, #{isDefault}, '1',
+        	#{createId}, #{createTime}, #{lastUpdateId}, #{lastUpdateTime})
+    </insert>
+    
+    <select id="queryCustomerContactMationToEditById" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.customer_id customerId,
+			d.`name` customerName,
+			a.contacts,
+			a.department,
+			a.job,
+			a.work_phone workPhone,
+			a.mobile_phone mobilePhone,
+			a.email,
+			a.qq,
+			a.wechat,
+			a.is_default isDefault
+		FROM
+			crm_customer_contacts a
+			LEFT JOIN crm_customer d ON a.customer_id = d.id
+		WHERE a.id = #{contactId}
+		AND a.state = '1'
+    </select>
+
+    <update id="editCustomerContactMation" parameterType="java.util.Map">
+        UPDATE crm_customer_contacts
+        <set>
+            customer_id = #{customerId},
+            contacts = #{contacts},
+            department = #{department},
+            job = #{job},
+            work_phone = #{workPhone},
+            mobile_phone = #{mobilePhone},
+            email = #{email},
+            qq = #{qq},
+            wechat = #{wechat},
+            is_default = #{isDefault},
+            last_update_id = #{lastUpdateId},
+            last_update_time = #{lastUpdateTime},
+        </set>
+        WHERE id = #{contactId}
+        AND state = '1'
+    </update>
+    
+    <delete id="deleteCustomerContactMationById">
+        UPDATE crm_customer_contacts
+        <set>
+            state = 2
+        </set>
+        WHERE id = #{contactId}
+    </delete>
+    
+    <update id="editCustomerContactIsNotDefaultMation">
+        UPDATE crm_customer_contacts
+        <set>
+            is_default = '2',
+        </set>
+        WHERE customer_id = #{customerId}
+        AND state = '1'
+    </update>
+    
+</mapper>

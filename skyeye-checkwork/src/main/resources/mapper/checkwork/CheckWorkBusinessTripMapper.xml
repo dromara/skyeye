@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.CheckWorkBusinessTripDao">
+
+    <select id="queryMyCheckWorkBusinessTripList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNum,
+            a.business_trip_address businessTripAddress,
+            a.business_trip_reason businessTripReason,
+            IFNULL(a.process_instance_id,'') processInstanceId,
+            a.state,
+            IF((a.state = 0 OR a.state = 1 OR a.state = 3 OR a.state = 5), 1, -1) editRow,
+            CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '2' THEN '审核通过' WHEN '3' THEN '审核不通过' WHEN '4' THEN '作废' WHEN '5' THEN '撤销' END stateName,
+            CONVERT(a.create_time, char) createTime
+        FROM
+            check_work_business_travel a
+        WHERE a.create_id = #{userId}
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+            AND a.create_time >= #{startTime} AND #{endTime} >= a.create_time
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="queryCheckWorkBusinessTripDetailById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumber,
+            a.business_trip_address businessTripAddress,
+            a.business_trip_reason businessTripReason,
+            IFNULL(a.process_instance_id,'') processInstanceId,
+            a.state,
+            a.remark,
+            IFNULL(a.enclosure_info, '') enclosureInfo,
+            CASE a.state WHEN '0' THEN '草稿' WHEN '1' THEN '审核中' WHEN '2' THEN '审核通过' WHEN '3' THEN '审核不通过' WHEN '4' THEN '作废' WHEN '5' THEN '撤销' END stateName,
+            b.user_name userName,
+            CONVERT(a.create_time, char) createTime
+        FROM
+            check_work_business_travel a,
+            sys_eve_user_staff b
+        WHERE a.id = #{businessTripId}
+          AND a.create_id = b.user_id
+    </select>
+
+    <select id="queryCheckWorkBusinessTripDaysDetailByBusinessTripId" resultType="java.util.Map">
+        SELECT
+            b.title timeName,
+            a.id,
+            a.time_id timeId,
+            a.time_start_time timeStartTime,
+            a.time_end_time timeEndTime,
+            a.business_travel_day businessTravelDay,
+            a.business_travel_hour businessTravelHour,
+            a.state,
+            CASE a.state WHEN '0' THEN '未提交审批' WHEN '1' THEN '等待审批' WHEN '2' THEN '审批通过' WHEN '3' THEN '审批不通过' END stateName,
+            a.remark
+        FROM
+            check_work_business_travel_time_slot a
+            LEFT JOIN check_work_time b ON a.time_id = b.id
+        WHERE a.business_travel_id = #{businessTripId}
+    </select>
+
+    <update id="updateCheckWorkBusinessTripStateAndProcessInId">
+        UPDATE check_work_business_travel
+        <set>
+            state = #{state},
+            process_instance_id = #{processInId}
+        </set>
+        WHERE id = #{businessTripId}
+    </update>
+
+    <update id="updateCheckWorkBusinessTripDaysStateByBusinessTripId">
+        UPDATE check_work_business_travel_time_slot
+        <set>
+            state = #{state},
+        </set>
+        WHERE business_travel_id = #{businessTripId}
+    </update>
+
+    <update id="updateCheckWorkBusinessTripMation">
+        UPDATE check_work_business_travel
+        <set>
+            business_trip_address = #{businessTripAddress},
+            business_trip_reason = #{businessTripReason},
+            remark = #{remark},
+            enclosure_info = #{enclosureInfo}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateCheckWorkBusinessTripStateById">
+        UPDATE check_work_business_travel
+        <set>
+            state = #{state},
+        </set>
+        WHERE id = #{businessTripId}
+    </update>
+
+    <insert id="insertCheckWorkBusinessTripMation">
+        INSERT into check_work_business_travel
+        (id, title, odd_number, business_trip_address, business_trip_reason, state, process_instance_id, remark, enclosure_info,
+         create_id, create_time)
+        VALUES(#{id}, #{title}, #{oddNumber}, #{businessTripAddress}, #{businessTripReason}, #{state}, #{processInstanceId}, #{remark}, #{enclosureInfo},
+         #{createId}, #{createTime})
+    </insert>
+
+    <insert id="insertCheckWorkBusinessTripDaysMation" parameterType="java.util.Map">
+        insert into check_work_business_travel_time_slot
+        (id, business_travel_id, time_id, time_start_time, time_end_time, business_travel_day, business_travel_hour, state,
+        remark)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id}, #{item.businessTripId}, #{item.timeId}, #{item.timeStartTime}, #{item.timeEndTime}, #{item.businessTravelDay}, #{item.businessTravelHour}, '0',
+            #{item.remark})
+        </foreach>
+    </insert>
+
+    <select id="queryCheckWorkBusinessTripToEditById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumber,
+            a.business_trip_address businessTripAddress,
+            a.business_trip_reason businessTripReason,
+            IFNULL(a.process_instance_id, '') processInstanceId,
+            a.state,
+            a.remark,
+            IFNULL(a.enclosure_info, '') enclosureInfo,
+            b.user_name userName
+        FROM
+            check_work_business_travel a,
+            sys_eve_user_staff b
+        WHERE a.id = #{businessTripId}
+          AND a.create_id = b.user_id
+    </select>
+
+    <select id="queryCheckWorkBusinessTripDaysMationToEditByBusinessTripId" resultType="java.util.Map">
+        SELECT
+            a.time_id timeId,
+            a.time_start_time timeStartTime,
+            a.time_end_time timeEndTime,
+            a.business_travel_day businessTravelDay,
+            a.business_travel_hour businessTravelHour,
+            a.remark
+        FROM
+            check_work_business_travel_time_slot a
+        WHERE a.business_travel_id = #{businessTripId}
+    </select>
+
+    <select id="queryCheckWorkBusinessTripByProcessInstanceId" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.create_id createId
+        FROM
+            check_work_business_travel a
+        WHERE a.process_instance_id = #{processInstanceId}
+    </select>
+
+    <delete id="deleteCheckWorkBusinessTripDaysMationByBusinessTripId">
+        DELETE
+        FROM
+            check_work_business_travel_time_slot
+        WHERE
+            business_travel_id = #{businessTripId}
+    </delete>
+
+    <update id="updateCheckWorkBusinessTripSoltStateByBusinessTripTimeId">
+        UPDATE check_work_business_travel_time_slot
+        <set>
+            state = #{state}
+        </set>
+        WHERE id = #{businessTripTimeId}
+    </update>
+
+    <select id="queryPassThisTimeAndDayAndCreateId" resultType="java.util.Map">
+        SELECT
+            b.id
+        FROM
+            check_work_business_travel a,
+            check_work_business_travel_time_slot b
+        WHERE
+            a.create_id = #{createId}
+          AND a.id = b.business_travel_id
+          AND b.state = '2'
+          AND b.time_id = #{timeId}
+          AND b.business_travel_day = #{businessTravelDay}
+    </select>
+
+    <select id="queryStateIsSuccessBusinessTripDayByUserIdAndMonths" resultType="java.util.Map">
+        SELECT
+            a.id,
+            '出差' title,
+            a.business_travel_day 'start',
+            a.business_travel_day 'end'
+        FROM
+            check_work_business_travel_time_slot a,
+            check_work_business_travel b
+        WHERE b.create_id = #{userId}
+        AND b.id = a.business_travel_id
+        AND a.state = '2'
+        AND a.time_id = #{timeId}
+        <if test="months != null and months.size() &gt; 0">
+            <foreach collection="months" item="month" separator="," open=" AND date_format(a.business_travel_day, '%Y-%m') in(" close=")">
+                #{month}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

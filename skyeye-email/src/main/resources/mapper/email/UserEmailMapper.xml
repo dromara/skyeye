@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.UserEmailDao">
+	
+	<select id="queryEmailListByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.email_address emailAddress,
+			a.email_check emailCheck
+		FROM
+			email_user a
+		WHERE
+			a.create_id = #{userId}
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<select id="queryEmailISInByEmailAddressAndUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			email_user a
+		WHERE
+			a.create_id = #{userId}
+		AND a.email_address = #{emailAddress}
+	</select>
+	
+	<select id="queryEmailCheckByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			email_user a
+		WHERE
+			a.create_id = #{userId}
+		AND a.email_check = '1'
+		LIMIT 1
+	</select>
+	
+	<insert id="insertEmailListByUserId" parameterType="java.util.Map">
+		INSERT into email_user 
+	     (id, email_address, email_password, email_check, create_id, create_time)
+	     VALUES
+	     (#{id}, #{emailAddress}, #{emailPassword}, #{emailCheck}, #{userId}, #{createTime})
+	</insert>
+
+	<select id="queryEmailMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.email_address emailAddress,
+			a.email_password emailPassword,
+			a.create_id createId
+		FROM
+			email_user a
+		WHERE
+			a.id = #{id}
+		AND a.create_id = #{userId}
+	</select>
+	
+	<insert id="insertEmailEnclosureListToServer" parameterType="java.util.Map">
+	     insert into email_enclosure
+	     (id, file_name, file_ext_name, file_path, file_size, parent_id)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.fileName}, #{item.fileExtName}, #{item.filePath}, #{item.fileSize}, #{item.parentId})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryInboxEmailListByEmailId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.from_people fromPeople,
+			DATE_FORMAT(a.send_date, '%Y-%m-%d') sendDay,
+			DATE_FORMAT(a.send_date, '%H:%i') sendTime,
+			CASE a.is_contain_attach WHEN '1' THEN 'block' WHEN '2' THEN 'none' ELSE 'none' END isContainAttach,
+			CASE a.is_new WHEN '1' THEN 'font-weight: 100;' WHEN '2' THEN 'font-weight: 700;' ELSE 'font-weight: 100;' END isNew
+		FROM
+			email_mail a,
+			email_user b
+		WHERE b.create_id = #{userId}
+		AND b.id = #{emailId}
+		AND (a.to_people = b.email_address
+			OR INSTR(CONCAT(',', a.to_cc, ','), CONCAT(',', b.email_address, ','))
+			OR INSTR(CONCAT(',', a.to_bcc, ','), CONCAT(',', b.email_address, ',')))
+		AND a.email_state = '1'
+		ORDER BY a.send_date DESC
+	</select>
+	
+	<select id="queryEmailMationByEmailId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.from_people fromPeople,
+			DATE_FORMAT(a.send_date, '%Y-%m-%d') sendDay,
+			DATE_FORMAT(a.send_date, '%H:%i') sendTime,
+			a.is_contain_attach isContainAttach,
+			a.to_people toPeople,
+			a.to_cc toCc,
+			a.to_bcc toBcc,
+			a.content
+		FROM
+			email_mail a,
+			email_user b
+		WHERE b.create_id = #{userId}
+		AND a.id = #{id}
+		AND (a.to_people = b.email_address
+			OR INSTR(CONCAT(',', a.to_cc, ','), CONCAT(',', b.email_address, ','))
+			OR INSTR(CONCAT(',', a.to_bcc, ','), CONCAT(',', b.email_address, ','))
+			OR a.from_people = b.email_address)
+	</select>
+	
+	<select id="queryEnclosureBeansMationByEmailId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.file_name fileName,
+			a.file_path filePath
+		FROM
+			email_enclosure a
+		WHERE
+			a.parent_id = #{id}
+	</select>
+	
+	<select id="querySendedEmailListByEmailId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.from_people fromPeople,
+			DATE_FORMAT(a.send_date, '%Y-%m-%d') sendDay,
+			DATE_FORMAT(a.send_date, '%H:%i') sendTime,
+			CASE a.is_contain_attach WHEN '1' THEN 'block' WHEN '2' THEN 'none' ELSE 'none' END isContainAttach
+		FROM
+			email_mail a,
+			email_user b
+		WHERE b.create_id = #{userId}
+		AND b.id = #{emailId}
+		AND a.from_people = b.email_address
+		AND a.email_state = '1'
+		ORDER BY a.send_date DESC
+	</select>
+	
+	<select id="queryDeleteEmailListByEmailId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.from_people fromPeople,
+			DATE_FORMAT(a.send_date, '%Y-%m-%d') sendDay,
+			DATE_FORMAT(a.send_date, '%H:%i') sendTime,
+			CASE a.is_contain_attach WHEN '1' THEN 'block' WHEN '2' THEN 'none' ELSE 'none' END isContainAttach
+		FROM
+			email_mail a,
+			email_user b
+		WHERE b.create_id = #{userId}
+		AND b.id = #{emailId}
+		AND (a.to_people = b.email_address
+			OR INSTR(CONCAT(',', a.to_cc, ','), CONCAT(',', b.email_address, ','))
+			OR INSTR(CONCAT(',', a.to_bcc, ','), CONCAT(',', b.email_address, ',')))
+		AND a.email_state = '2'
+		ORDER BY a.send_date DESC
+	</select>
+	
+	<select id="queryDraftsEmailListByEmailId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.from_people fromPeople,
+			DATE_FORMAT(a.send_date, '%Y-%m-%d') sendDay,
+			DATE_FORMAT(a.send_date, '%H:%i') sendTime,
+			CASE a.is_contain_attach WHEN '1' THEN 'block' WHEN '2' THEN 'none' ELSE 'none' END isContainAttach
+		FROM
+			email_mail a,
+			email_user b
+		WHERE b.create_id = #{userId}
+		AND b.id = #{emailId}
+		AND a.from_people = b.email_address
+		AND a.email_state = '0'
+		ORDER BY a.send_date DESC
+	</select>
+	
+	<select id="queryMyEnclusureListByUserIdAndIds" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.file_name fileName,
+            a.file_type fileExtName,
+            a.file_size fileSize,
+            a.file_address filePath
+        FROM
+            sys_enclosure a
+        WHERE
+            a.create_id = #{userId}
+        AND INSTR(CONCAT(',', #{emailEnclosure}, ','), CONCAT(',', a.id, ','))
+    </select>
+	
+	<insert id="insertToSendEmailMationByUserId" parameterType="java.util.Map">
+        INSERT INTO email_mail
+        (id, title, send_date, replay_sign, is_new, is_contain_attach, from_people, to_people, to_cc, to_bcc, message_id, content, create_time, email_state)
+        VALUES
+        (#{id}, #{title}, #{sendDate}, #{replaySign}, #{isNew}, #{isContainAttach}, #{fromPeople}, #{toPeople}, #{toCc}, 
+            #{toBcc}, #{messageId}, #{content}, #{createTime}, #{emailState})  
+    </insert>
+	
+    <select id="queryDraftsEmailMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            IFNULL(a.to_people, '') toPeople,
+            IFNULL(a.to_cc, '') toCc,
+            IFNULL(a.to_bcc, '') toBcc,
+            a.content
+        FROM
+            email_mail a
+        WHERE
+            a.id = #{id}
+        AND a.email_state = '0'
+    </select>
+	
+    <select id="queryDraftsEmailToPeopleMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{toPeople}, ','), CONCAT(',', a.email, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+        AND a.email != ''
+        AND LENGTH(a.email) > 0
+    </select>
+	
+    <select id="queryDraftsEmailToCcMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{toCc}, ','), CONCAT(',', a.email, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+        AND a.email != ''
+        AND LENGTH(a.email) > 0
+    </select>
+	
+    <select id="queryDraftsEmailToBccMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{toBcc}, ','), CONCAT(',', a.email, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+        AND a.email != ''
+        AND LENGTH(a.email) > 0
+    </select>
+	
+    <select id="queryDraftsEmailEnclosureMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.file_name fileName,
+            a.file_path fileAddress,
+            b.id sysEnclosureId
+        FROM
+            email_enclosure a
+            LEFT JOIN sys_enclosure b ON a.file_path = b.file_address
+        WHERE
+            a.parent_id = #{id}
+    </select>
+	
+    <delete id="deleteEmailEnclosureListByEmailId" parameterType="java.util.Map">
+        DELETE
+        FROM
+            email_enclosure
+        WHERE
+            parent_id = #{rowId}
+    </delete>
+	
+    <update id="editToSendEmailMationByUserId" parameterType="java.util.Map">
+        UPDATE email_mail
+        <set>
+            <if test="toPeople != '' and toPeople != null">
+                to_people = #{toPeople},
+            </if>
+            <if test="isContainAttach != '' and isContainAttach != null">
+                is_contain_attach = #{isContainAttach},
+            </if>
+            title = #{title},
+            to_cc = #{toCc},
+            to_bcc = #{toBcc},
+            content = #{content},
+            <if test="emailState != '' and emailState != null">
+                email_state = #{emailState},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+	
+    <select id="queryForwardEmailMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            IFNULL(a.to_people, '') toPeople,
+            IFNULL(a.to_cc, '') toCc,
+            IFNULL(a.to_bcc, '') toBcc,
+            a.content,
+            a.from_people fromPeople,
+            DATE_FORMAT(a.send_date, '%Y年%m月%d日 %h:%i %p') sendDate
+        FROM
+            email_mail a
+        WHERE
+            a.id = #{id}
+        AND a.email_state = '1'
+    </select>
+	
+    <select id="queryForwardEmailFromPeopleMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{fromPeople}, ','), CONCAT(',', a.email, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+        AND a.email != ''
+        AND LENGTH(a.email) > 0
+    </select>
+	
+    <select id="queryForwardEmailToCcMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{toCc}, ','), CONCAT(',', a.email, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+        AND a.email != ''
+        AND LENGTH(a.email) > 0
+    </select>
+	
+    <select id="queryForwardEmailToBccMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.user_id id,
+            a.user_name `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE
+            INSTR(CONCAT(',', #{toBcc}, ','), CONCAT(',', a.email, ','))
+        AND a.state = '1'
+        AND a.user_id != ''
+        AND LENGTH(a.user_id) > 0
+        AND a.email != ''
+        AND LENGTH(a.email) > 0
+    </select>
+	
+    <select id="queryForwardEmailEnclosureMationToEditByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.file_name fileName,
+            a.file_path fileAddress,
+            b.id sysEnclosureId
+        FROM
+            email_enclosure a
+            LEFT JOIN sys_enclosure b ON a.file_path = b.file_address
+        WHERE
+            a.parent_id = #{id}
+    </select>
+	
+</mapper>

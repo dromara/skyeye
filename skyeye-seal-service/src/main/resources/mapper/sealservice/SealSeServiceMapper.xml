@@ -1,0 +1,1339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.SealSeServiceDao">
+
+    <select id="querySealSeServiceList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.state,
+			CASE a.state WHEN '1' THEN '待派工' WHEN '2' THEN '待接单' WHEN '3' THEN '待签到' WHEN '4' THEN '待完工' WHEN '5' THEN '待评价' WHEN '6' THEN '待审核' WHEN '7' THEN '已完工' END stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime,
+			a.contacts,
+			a.phone,
+			a.customer_name customerName,
+			a.product_name productName,
+			c.user_name receiver,
+			a.type,
+			CASE a.type WHEN '1' THEN '微信报单' ELSE '用户报单' END typeName,
+			d.user_name declarationName
+		FROM
+			crm_service a
+			LEFT JOIN sys_eve_user_staff d ON a.declaration_id = d.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.service_user_id = c.user_id,
+			crm_service_type b
+		WHERE
+			a.type_id = b.id 
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="contacts != '' and contacts != null">
+            AND a.contacts LIKE '%${contacts}%'
+        </if>
+        <if test="receiver != '' and receiver != null">
+            AND c.user_name LIKE '%${receiver}%'
+        </if>
+        ORDER BY a.declaration_time desc
+    </select>
+
+	<select id="querySealSeServiceWaitToWorkList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.customer_name customerName,
+			a.product_name productName,
+			a.state,
+			'待派工' stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.state = 1
+		AND	a.type_id = b.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="querySealSeServiceWaitToReceiveList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.customer_name customerName,
+			a.product_name productName,
+			a.state,
+			'待接单' stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.service_user_id = #{receiver}
+		AND	a.state = 2
+		AND	a.type_id = b.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="querySealSeServiceWaitToSignonList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.customer_name customerName,
+			a.product_name productName,
+			a.state,
+			'待签到' stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.service_user_id = #{receiver}
+		AND	a.state = 3
+		AND	a.type_id = b.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="querySealSeServiceWaitToFinishList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.customer_name customerName,
+			a.product_name productName,
+			a.state,
+			'待完工' stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.service_user_id = #{receiver}
+		AND	a.state = 4
+		AND	a.type_id = b.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="querySealSeServiceWaitToAssessmentList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.customer_name customerName,
+			a.product_name productName,
+			a.state,
+			'待评价' stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.service_user_id = #{receiver}
+		AND	a.state = 5
+		AND	a.type_id = b.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="queryAllSealSeServiceWaitToAssessmentList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.customer_name customerName,
+			a.product_name productName,
+			a.state,
+			'待评价' stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.state = 5
+		AND	a.type_id = b.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="queryAllSealSeServiceWaitToCheckList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.customer_name customerName,
+			a.product_name productName,
+			a.state,
+			'待审核' stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.state = 6
+		AND	a.type_id = b.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="queryAllSealSeServiceFinishedList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum, #工单号
+			b.`name` serviceTypeName, #服务类型
+			a.customer_name customerName, #客户名称
+			a.product_name productName, #产品名称
+			a.state,
+			'已完工' stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime #报单时间
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.state = 7
+		AND	a.type_id = b.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="querySealSeServiceToDetails" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.order_num orderNum,#工单号
+			IFNULL(b.`name`, '') serviceTypeName,#服务类型
+			a.state,
+			CASE a.state WHEN '1' THEN '待派工' WHEN '2' THEN '待接单' WHEN '3' THEN '待签到' WHEN '4' THEN '待完工' WHEN '5' THEN '待评价' WHEN '6' THEN '待审核' WHEN '7' THEN '已完工' END stateName,#工单状态
+			CASE a.parent_id WHEN '0' THEN '主工单' ELSE '子工单' END workOrderClassification,#工单类别
+			CONVERT(a.declaration_time, CHAR) declarationTime,#报单时间
+			a.contacts,#联系人
+			a.phone,#联系电话
+			a.email, #邮箱
+			a.qq, #qq
+			a.customer_id customerId, #客户id
+			a.customer_name customerName,#客户名称
+			IFNULL(o.`name`, '') addressProvince,#省
+			IFNULL(p.`name`, '') addressCity,#市
+			IFNULL(q.`name`, '') addressArea, #区、乡、县
+			IFNULL(r.`name`, '') addressTownship, #镇、街道
+			IFNULL(a.address_detailed, '') addressDetailed,#详细地址
+			a.product_id productId,#产品id
+			IFNULL(a.product_name, '') productName,#产品名称
+			IFNULL(a.product_norms, '') productNorms,#规格型号
+			IFNULL(a.product_serial_num, '') productSerialNum,#序列号
+			CASE a.product_warranty WHEN '1' THEN '保内' WHEN '2' THEN '保外' else '' END productWarranty,#质保类型
+			IFNULL(e.`name`, '') faultName,#故障类型
+			c.`name` urgencyName,#紧急程度
+			a.content,#服务内容
+			f.`name` modeName,#处理方式
+			IFNULL(g.user_name, '') receiver,#工单接收人
+			IFNULL(a.cooperation_user_id, '') cooperationUserId,#工单协助人
+			IFNULL(a.sheet_picture, '') sheetPicture,#上传照片
+			IFNULL(a.enclosure_info, '') enclosureInfo,#上传附件
+			IFNULL(d.com_pic, '') comPic,#完工拍照
+			IFNULL(d.com_enclosure_info, '') comEnclosureInfo,#完工附件
+			IFNULL(d.com_remark, '') comRemark,#完工备注
+			CASE a.type WHEN '1' THEN '微信报单' WHEN '2' THEN '用户报单' END comeType, #来源
+			IFNULL(h.reason, '') reason,#改派原因
+			IFNULL(i.address, '') registerAddress, #签到地址
+			IFNULL(i.remark, '') remark, #签到备注
+			CONVERT(i.create_time, CHAR) registerTime, #签到时间
+			IFNULL(j.remark, '') receiptRemark, #接单备注
+			IFNULL(j.subscribe_time, '') subscribeTime,#真实预约时间
+			CONVERT(d.com_star_time, CHAR) comStarTime,#实际开工时间
+			IFNULL(d.com_time, '') comTime,#实际完工时间
+			IFNULL(d.com_work_time, '') comWorkTime,#工时
+			d.fault_key_parts_id faultKeyPartsId,#故障关键组件id
+			IFNULL(dpart.`name`, '') dPartName,#故障关键组件
+			IFNULL(d.actual_failure, '') actualFailure,#真实故障
+			IFNULL(d.solution, '') solution,#解决方案
+			IFNULL(d.com_execution, '') comExecution, #完成情况
+			IFNULL(format(d.material_cost, 2), '') materialCost, #应收客户材料费
+			IFNULL(format(d.cover_cost, 2), '') coverCost, #应收客户服务费
+			IFNULL(format(d.other_cost, 2), '') otherCost,#应收客户其他费
+			IFNULL(format(d.all_price, 2), '') allPrice, #应收客户合计
+			IFNULL(k.`name`, '') evaluateTypeName, #评价类型
+			IFNULL(s.content, '') evaluateContent, #评价内容
+			t.user_name createName, #工单创建人
+			CONVERT(a.point_subscribe_time, CHAR) pointSubscribeTime #指定预约时间
+		FROM
+			crm_service a
+			LEFT JOIN crm_service_fault d ON a.id = d.service_id
+			LEFT JOIN crm_service_fault_type e ON d.type_id = e.id
+			LEFT JOIN erp_material dpart ON d.fault_key_parts_id = dpart.id
+			LEFT JOIN crm_service_transfer h ON a.id = h.service_id
+			LEFT JOIN crm_service_register i ON a.id = i.service_id
+			LEFT JOIN crm_service_receipt j ON a.id = j.service_id
+			LEFT JOIN t_area o ON a.address_province = o.id
+			LEFT JOIN t_area p ON a.address_city = p.id
+			LEFT JOIN t_area q ON a.address_area = q.id
+			LEFT JOIN t_area r ON a.address_township = r.id
+			LEFT JOIN crm_service_evaluate s ON a.id = s.service_id
+			LEFT JOIN crm_service_evaluate_type k ON k.id = s.type_id
+			LEFT JOIN sys_eve_user_staff t ON a.create_id = t.user_id
+			LEFT JOIN sys_eve_user_staff g ON a.service_user_id = g.user_id,
+		 	crm_service_type b,
+			crm_service_urgency c,
+			crm_service_mode f
+		WHERE
+			a.id = #{id}
+			AND a.type_id = b.id
+			AND a.urgency_id = c.id
+			AND a.mode_id = f.id
+    </select>
+    
+    <select id="queryMaterialMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.material_id materialId,
+			a.material_name materialName,#配件名称
+			a.material_model materialModel,#配件规格
+			CASE b.unit WHEN '1' THEN b.unit_name ELSE d.`name` END unitName,#商品计量单位
+			SUM(a.oper_number) operNumber,#使用数量
+			FORMAT(a.unit_price, 2) unitPrice, #单价
+			FORMAT(a.all_price, 2) allPrice, #总金额
+			a.remark #备注
+		FROM
+			crm_service_fault_use_material a,
+			erp_material b,
+			erp_material_norms c
+			LEFT JOIN erp_unit d ON d.id = c.unit_id
+		WHERE a.service_id = #{id}
+		AND a.material_id = b.id
+		AND a.norms_id = c.id
+		GROUP BY a.norms_id
+	</select>
+	
+	<select id="queryFeedbackMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			b.`name` typeName,#反馈类型
+			a.content,#反馈内容
+			a.enclosure_info enclosureInfo,#反馈附件
+			c.user_name feedbackUserName,#反馈人
+			CONVERT(a.create_time, CHAR) feedbackCreateTime #反馈时间
+		FROM
+			crm_service_feedback a
+			LEFT JOIN sys_eve_user_staff c ON a.create_id = c.user_id,
+			crm_service_feedback_type b
+		WHERE a.service_id = #{id}
+		AND a.type_id = b.id
+	</select>
+    
+    <insert id="insertSealSeServiceMation" parameterType="java.util.Map">
+	    INSERT into crm_service 
+		(id, service_time, order_num, declaration_time, declaration_id, customer_id, customer_name, contacts, phone, email, qq, address_province, 
+			address_city, address_area, address_township, address_detailed, type_id, product_id, product_name, product_norms, product_serial_num, product_warranty, 
+			mode_id, content, urgency_id, service_user_id, cooperation_user_id, sheet_picture, enclosure_info, state, type, parent_id, create_id, create_time,
+			point_subscribe_time)
+		VALUES(#{id}, #{serviceTime}, #{orderNum}, #{declarationTime}, #{declarationId}, #{customerId}, #{customerName}, #{contacts}, #{phone}, #{email}, #{qq}, #{provinceId}, 
+			#{cityId}, #{areaId}, #{townshipId}, #{addressDetailed}, #{typeId}, #{productId}, #{productName}, #{productNorms}, #{productSerialNum}, #{productWarranty}, 
+			#{modeId}, #{content}, #{urgencyId}, #{serviceUserId}, #{cooperationUserId}, #{sheetPicture}, #{enclosureInfo}, #{state}, #{type}, #{parentId}, #{createId}, #{createTime},
+			#{pointSubscribeTime})
+	</insert>
+	
+	<select id="querySealSeServiceMationToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.type_id typeId,#服务类型
+			CONVERT(a.declaration_time, CHAR) declarationTime,#报单时间
+			a.customer_id customerId,#客户id
+			a.customer_name customerName,#客户名称
+			a.contacts,#联系人
+			a.phone,
+			a.email,
+			a.qq,
+			a.address_province provinceId,#省
+			a.address_city cityId,#市
+			a.address_area areaId,#区
+			a.address_township townshipId,#乡镇
+			IFNULL(o.`name`, '') addressProvince,#省
+			IFNULL(p.`name`, '') addressCity,#市
+			IFNULL(q.`name`, '') addressArea, #区、乡、县
+			IFNULL(r.`name`, '') addressTownship, #镇、街道
+			a.address_detailed addressDetailed,#详细地址
+			a.product_id productId,#产品id
+			a.product_name productName,#产品名称
+			a.product_norms productNorms,#规格型号
+			a.product_serial_num productSerialNum,#序列号
+			a.product_warranty productWarranty,#质保类型
+			a.urgency_id urgencyId,#紧急程度
+			a.mode_id modeId,#处理方式
+			a.content,#服务内容
+			IFNULL(a.service_user_id, '') serviceUserId,#工单接收人
+			IFNULL(a.cooperation_user_id, '') cooperationUserId,#工单协助人
+			a.sheet_picture sheetPicture,#相关照片
+			a.enclosure_info enclosureInfo, #附件
+			CONVERT(a.point_subscribe_time, CHAR) pointSubscribeTime #指定预约时间
+		FROM
+			crm_service a
+			LEFT JOIN t_area o ON a.address_province = o.id
+			LEFT JOIN t_area p ON a.address_city = p.id
+			LEFT JOIN t_area q ON a.address_area = q.id
+			LEFT JOIN t_area r ON a.address_township = r.id
+		WHERE
+			a.id = #{id}
+    </select>
+    
+	<select id="querySealSeServiceWaitToWorkMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.order_num orderNum,#工单号
+			IFNULL(b.`name`, '') serviceTypeName,#服务类型
+			CONVERT(a.declaration_time, CHAR) declarationTime,#报单时间
+			a.contacts,#联系人
+			a.phone,#联系电话
+			a.email, #邮箱
+			a.qq, #qq
+			a.customer_name customerName,#客户名称
+			IFNULL(o.`name`, '') addressProvince,#省
+			IFNULL(p.`name`, '') addressCity,#市
+			IFNULL(q.`name`, '') addressArea, #区、乡、县
+			IFNULL(r.`name`, '') addressTownship, #镇、街道
+			IFNULL(a.address_detailed, '') addressDetailed #详细地址
+		FROM
+			crm_service a
+			LEFT JOIN t_area o ON a.address_province = o.id
+			LEFT JOIN t_area p ON a.address_city = p.id
+			LEFT JOIN t_area q ON a.address_area = q.id
+			LEFT JOIN t_area r ON a.address_township = r.id,
+		 	crm_service_type b
+		WHERE
+			a.id = #{id}
+			AND a.type_id = b.id
+			AND a.state = 1
+	</select>
+	
+	<update id="editSealSeServiceMationById" parameterType="java.util.Map">
+        UPDATE crm_service
+        <set>
+            type_id = #{typeId},
+            declaration_time = #{declarationTime},
+            customer_id = #{customerId},
+            customer_name = #{customerName},
+            contacts = #{contacts},
+            phone = #{phone},
+            email = #{email},
+            qq = #{qq},
+            address_province = #{provinceId},
+            address_city = #{cityId},
+            address_area = #{areaId},
+            address_township = #{townshipId},
+            address_detailed = #{addressDetailed},
+            product_id = #{productId},
+            product_name = #{productName},
+            product_norms = #{productNorms},
+            product_serial_num = #{productSerialNum},
+            product_warranty = #{productWarranty},
+            urgency_id = #{urgencyId},
+            mode_id = #{modeId},
+            content = #{content},
+            service_user_id = #{serviceUserId},
+            cooperation_user_id = #{cooperationUserId},
+            sheet_picture = #{sheetPicture},
+            enclosure_info = #{enclosureInfo},
+            state = #{state},
+            <if test="serviceTime != '' and serviceTime != null">
+	            service_time = #{serviceTime},
+	        </if>
+            point_subscribe_time = #{pointSubscribeTime},
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <select id="querySealSeServiceState" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.state
+		FROM
+			crm_service a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editSealSeServiceWaitToWorkMation" parameterType="java.util.Map">
+        UPDATE crm_service
+        <set>
+            service_user_id = #{serviceUserId},
+            cooperation_user_id = #{cooperationUserId},
+            state = 2,
+            service_time = #{serviceTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <select id="querySealSeServiceWaitToReceiveMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.order_num orderNum,#工单号
+			IFNULL(b.`name`, '') serviceTypeName,#服务类型
+			CONVERT(a.declaration_time, CHAR) declarationTime,#报单时间
+			a.contacts,#联系人
+			a.phone,#联系电话
+			a.email, #邮箱
+			a.qq, #qq
+			a.service_time serviceTime, #派工时间
+			a.customer_name customerName,#客户名称
+			IFNULL(o.`name`, '') addressProvince,#省
+			IFNULL(p.`name`, '') addressCity,#市
+			IFNULL(q.`name`, '') addressArea, #区、乡、县
+			IFNULL(r.`name`, '') addressTownship, #镇、街道
+			IFNULL(a.address_detailed, '') addressDetailed, #详细地址
+			CONVERT(a.point_subscribe_time, CHAR) pointSubscribeTime #指定预约时间
+		FROM
+			crm_service a
+			LEFT JOIN t_area o ON a.address_province = o.id
+			LEFT JOIN t_area p ON a.address_city = p.id
+			LEFT JOIN t_area q ON a.address_area = q.id
+			LEFT JOIN t_area r ON a.address_township = r.id,
+		 	crm_service_type b
+		WHERE
+			a.id = #{id}
+			AND a.type_id = b.id
+			AND a.state = 2
+	</select>
+	
+	<insert id="insertSealSeServiceWaitToReceiveMation" parameterType="java.util.Map">
+	    INSERT into crm_service_receipt 
+		(id, service_id, receiver_id, subscribe_time, remark, create_time)
+		VALUES(#{id}, #{serviceId}, #{receiverId}, #{subscribeTime}, #{remark}, #{createTime})
+	</insert>
+	
+	<update id="editSealSeServiceWaitToReceiveMation" parameterType="java.util.Map">
+        UPDATE crm_service
+        <set>
+            state = 3
+        </set>
+        WHERE id = #{serviceId}
+    </update>
+	
+	<select id="querySealSeServiceWaitToSignonMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.order_num orderNum,#工单号
+			IFNULL(b.`name`, '') serviceTypeName,#服务类型
+			CONVERT(a.declaration_time, CHAR) declarationTime,#报单时间
+			a.contacts,#联系人
+			a.phone,#联系电话
+			a.email, #邮箱
+			a.qq, #qq
+			a.service_time serviceTime, #派工时间
+			a.customer_name customerName,#客户名称
+			IFNULL(o.`name`, '') addressProvince,#省
+			IFNULL(p.`name`, '') addressCity,#市
+			IFNULL(q.`name`, '') addressArea, #区、乡、县
+			IFNULL(r.`name`, '') addressTownship, #镇、街道
+			IFNULL(a.address_detailed, '') addressDetailed #详细地址
+		FROM
+			crm_service a
+			LEFT JOIN t_area o ON a.address_province = o.id
+			LEFT JOIN t_area p ON a.address_city = p.id
+			LEFT JOIN t_area q ON a.address_area = q.id
+			LEFT JOIN t_area r ON a.address_township = r.id,
+		 	crm_service_type b
+		WHERE
+			a.id = #{id}
+			AND a.type_id = b.id
+			AND a.state = 3
+	</select>
+	
+	<insert id="insertSealSeServiceWaitToSignonMation" parameterType="java.util.Map">
+	    INSERT into crm_service_register 
+		(id, service_id, register_id, remark, create_time)
+		VALUES(#{id}, #{serviceId}, #{registerId}, #{remark}, #{createTime})
+	</insert>
+	
+	<update id="editSealSeServiceWaitToSignonMation" parameterType="java.util.Map">
+        UPDATE crm_service
+        <set>
+            state = 4
+        </set>
+        WHERE id = #{serviceId}
+    </update>
+    
+    <delete id="deleteSealSeServiceMationById" parameterType="java.util.Map">
+        DELETE 
+		FROM 
+			crm_service
+		where id = #{id}
+    </delete>
+    
+    <select id="queryMaterialsById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id materialId,#配件Id
+			a.`name` materialName,#配件名称
+			a.model materialModel,#配件规格
+			b.retail_price unitPrice,#单价
+			b.id mUnitId,
+			IFNULL(c.number, '1') basicNumber #基础数量
+		FROM
+			erp_material a,
+			erp_material_norms b
+			LEFT JOIN erp_unit c ON b.unit_id = c.id
+		WHERE
+			a.id = b.meterial_id
+		AND b.id = #{mUnitId}
+		AND a.id = b.meterial_id
+		AND a.delete_flag = '0'
+		AND b.delete_flag = '0'
+    </select>
+    
+    <insert id="insertSealSeServiceApplyMation" parameterType="java.util.Map">
+	    INSERT into crm_service_apply 
+		(id, service_id, customer_id, apply_num, apply_time, all_price, state, create_id, remark, enclosure_info, create_time)
+		VALUES(#{id}, #{serviceId}, #{customerId}, #{applyNum}, #{applyTime}, #{allPrice}, #{state}, #{createId}, #{remark}, #{enclosureInfo}, #{createTime})
+	</insert>
+	
+	<insert id="insertSealSeServiceApplyMaterial" parameterType="java.util.Map">
+	     insert into crm_service_apply_material
+	     (id, service_id, apply_id, material_id, material_name, material_model, m_unit_id, oper_number, basic_number, unit_price, all_price, depot_id, remark, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.serviceId}, #{item.applyId}, #{item.materialId}, #{item.materialName}, #{item.materialModel}, #{item.mUnitId}, #{item.operNumber}, #{item.basicNumber}, #{item.unitPrice}, #{item.allPrice}, #{item.depotId}, #{item.remark}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<select id="querySealSeServiceSignon" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,#工单号
+			b.`name` serviceTypeName,#服务类型
+			a.contacts,#联系人
+			a.phone,#联系电话
+			IFNULL(a.customer_name, '') customerName,#所属客户
+			IFNULL(a.product_norms, '') productNorms,#设备规格
+			IFNULL(a.product_name, '') productName,#设备名称
+			CONVERT(a.declaration_time, CHAR) declarationTime#报单时间
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.service_user_id = #{receiver}
+		AND	a.state = 4
+		AND	a.type_id = b.id
+        ORDER BY a.declaration_time desc
+    </select>
+    
+    <select id="querySealSeServiceApplyList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+        	a.service_id serviceId, #工单Id
+			b.order_num orderNum, #工单号
+			a.apply_num applyNum, #申领单号
+			a.state,
+			CASE a.state WHEN '0' THEN '待审核' WHEN '1' THEN '审核通过' WHEN '2' THEN '审核不通过' END stateName, #状态名称
+			IFNULL(d.`name`, b.customer_name) customerName, #客户名称
+			CONVERT(a.apply_time, CHAR) applyTime, #申领时间
+			c.user_name applyUserName #申领人
+		FROM
+			crm_service_apply a
+			LEFT JOIN crm_customer d ON d.id = a.customer_id,
+			crm_service b,
+			sys_eve_user_staff c
+		WHERE a.create_id = #{receiver}
+		AND a.service_id = b.id
+		AND a.create_id = c.user_id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="applyNum != '' and applyNum != null">
+            AND a.apply_num = #{applyNum}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND b.customer_name LIKE '%${customerName}%'
+        </if>
+    </select>
+    
+    <select id="queryAllSealSeServiceApplyList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+        	a.service_id serviceId, #工单Id
+			b.order_num orderNum, #工单号
+			a.apply_num applyNum, #申领单号
+			IFNULL(f.`name`, b.customer_name) customerName, #客户名称
+			CONVERT(a.apply_time, CHAR) applyTime, #申领时间
+			c.user_name applyUserName #申领人
+		FROM
+			crm_service_apply a
+			LEFT JOIN crm_customer f ON f.id = a.customer_id,
+			crm_service b,
+			sys_eve_user_staff c,
+			crm_service_apply_material d,
+			erp_material e
+		WHERE a.service_id = b.id
+		AND a.create_id = c.user_id
+		AND a.state = 1
+		AND d.apply_id = a.id
+		AND d.material_id = e.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="applyNum != '' and applyNum != null">
+            AND a.apply_num = #{applyNum}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND b.customer_name LIKE '%${customerName}%'
+        </if>
+        GROUP BY a.id
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="queryMaterialsCurrentTockById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			IFNULL((SELECT SUM(it.initial_tock) FROM erp_material_norms_tock it WHERE a.id = it.norms_id AND it.depot_id = #{depotId}), 0) + 
+				IFNULL((SELECT SUM(sn.stock_num) FROM erp_material_depot_stock sn WHERE a.id = sn.norms_id AND sn.depot_id = #{depotId}), 0) currentTock
+		FROM
+			erp_material_norms a
+		WHERE a.id = #{mUnitId}
+		GROUP BY a.id
+    </select>
+	
+	<select id="querySealSeServiceApplyState" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.state
+		FROM
+			crm_service_apply a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<delete id="deleteSealSeServiceApplyById" parameterType="java.util.Map">
+        DELETE a.*, b.*
+		FROM
+			crm_service_apply a,
+			crm_service_apply_material b 
+		WHERE
+			a.id = #{id}
+			AND a.id = b.apply_id
+    </delete>
+    
+    <select id="querySealSeServiceApplyToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.service_id serviceId, #工单Id
+			a.all_price allPrice, #总金额
+			CONVERT(a.apply_time, CHAR) applyTime,#申领日期
+			a.customer_id customerId,#客户Id
+			a.remark,#备注
+			a.enclosure_info enclosureInfo, #附件
+			b.order_num orderNum, #工单号
+			IFNULL(c.`name`, b.customer_name) customerName #客户名称
+		FROM
+			crm_service_apply a
+			LEFT JOIN crm_customer c ON c.id = a.customer_id,
+			crm_service b
+		WHERE
+			a.id = #{id}
+		AND a.service_id = b.id
+	</select>
+	
+	<select id="queryApplyMaterialMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.material_id productId, #配件Id
+			em.`name` productName,
+			em.model productModel,
+			em.unit,
+			CASE em.unit WHEN '1' THEN em.unit_name WHEN '2' THEN eu.`name` ELSE '' END unitName,
+			a.unit_price unitPrice, #单价
+			a.all_price allPrice, #总金额
+			a.oper_number operNum, #申领数量
+			a.depot_id depotId, #仓库
+			a.m_unit_id normsId,
+			a.remark,
+			a.basic_number basicNumber, #基础数量
+			IFNULL((SELECT SUM(it.initial_tock) FROM erp_material_norms_tock it WHERE a.m_unit_id = it.norms_id), 0) + 
+				IFNULL((SELECT SUM(sn.stock_num) FROM erp_material_depot_stock sn WHERE a.m_unit_id = sn.norms_id), 0) currentTock
+		FROM
+			crm_service_apply_material a
+			LEFT JOIN erp_depotitem b ON (b.depot_id = a.depot_id OR b.another_depot_id = a.depot_id) AND a.m_unit_id = b.norms_id AND b.delete_flag = '0'
+			LEFT JOIN erp_depothead d ON b.header_id = d.id
+			LEFT JOIN erp_material em ON a.material_id = em.id
+			LEFT JOIN erp_material_norms emn ON a.m_unit_id = emn.id
+			LEFT JOIN erp_unit eu ON emn.unit_id = eu.id
+		WHERE
+			a.apply_id = #{id}
+		GROUP BY a.m_unit_id
+	</select>
+	
+	<update id="editSealSeServiceApplyMation" parameterType="java.util.Map">
+        UPDATE crm_service_apply
+        <set>
+            apply_time = #{applyTime},
+            state = #{state},
+            remark = #{remark},
+            customer_id = #{customerId},
+            all_price = #{allPrice},
+            enclosure_info = #{enclosureInfo},
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteSealSeServiceApplyMaterial" parameterType="java.util.Map">
+        DELETE 
+		FROM
+			crm_service_apply_material
+		WHERE
+			apply_id = #{id}
+    </delete>
+    
+    <select id="querySealSeServiceApplyToDetail" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.apply_num applyNum,#申领单号
+			CONVERT(a.apply_time, CHAR) applyTime,#申领日期
+			IFNULL(c.`name`, '') customerName,#客户名称
+			a.remark,#备注
+			FORMAT(a.all_price, 2) allPrice,#总金额
+			case a.state WHEN '0' THEN '待审核' WHEN '1' THEN '审核通过' WHEN '2' THEN '审核不通过' END stateName,
+			a.enclosure_info enclosureInfo, #附件
+			b.order_num orderNum #工单号
+		FROM
+			crm_service_apply a
+			LEFT JOIN crm_customer c ON a.customer_id = c.id,
+			crm_service b
+		WHERE
+			a.id = #{id}
+		AND a.service_id = b.id
+	</select>
+	
+	<select id="queryApplyMaterialMationToDetail" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			CONCAT(a.material_name,"(",a.material_model, ")") materialName,#配件名称
+			FORMAT(a.unit_price, 2) unitPrice,#单价
+			FORMAT(a.all_price, 2) allPrice,#总金额
+			a.oper_number operNum,#申领数量
+			b.`name` depotName,#仓库名称
+			a.material_model materialModel, #规格型号
+			IFNULL(d.`name`, e.unit_name) unitName, #单位
+			a.remark,
+			a.basic_number basicNumber#基础数量
+		FROM
+			crm_service_apply_material a,
+			erp_depot b,
+			erp_material_norms c
+			LEFT JOIN erp_unit d ON c.unit_id = d.id
+			LEFT JOIN erp_material e ON c.meterial_id = e.id
+		WHERE
+			a.apply_id = #{id}
+		AND a.depot_id = b.id 
+		AND a.m_unit_id = c.id
+	</select>
+	
+	<select id="queryAllSealSeServiceApplyWaitToCheckList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+        	a.service_id serviceId, #工单Id
+			b.order_num orderNum, #工单号
+			a.apply_num applyNum, #申领单号
+			IFNULL(f.`name`, b.customer_name) customerName, #客户名称
+			CONVERT(a.apply_time, CHAR) applyTime, #申领时间
+			c.user_name applyUserName, #申领人
+			a.state
+		FROM
+			crm_service_apply a
+			LEFT JOIN crm_customer f ON f.id = a.customer_id,
+			crm_service b,
+			sys_eve_user_staff c,
+			crm_service_apply_material d,
+			erp_material e
+		WHERE a.service_id = b.id
+		AND a.create_id = c.user_id
+		AND a.state = 0
+		AND d.apply_id = a.id
+		AND d.material_id = e.id
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="applyNum != '' and applyNum != null">
+            AND a.apply_num = #{applyNum}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND b.customer_name LIKE '%${customerName}%'
+        </if>
+        GROUP BY a.id
+        ORDER BY a.create_time DESC
+    </select>
+    
+    <select id="queryApplyMaterialOtherMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.unit_price unitPrice, #单价
+			a.all_price allPrice, #总金额
+			a.oper_number operNum, #申领数量
+			IFNULL((SELECT SUM(it.initial_tock) FROM erp_material_norms_tock it WHERE a.m_unit_id = it.norms_id AND a.depot_id = it.depot_id), 0) + 
+				IFNULL((SELECT SUM(sn.stock_num) FROM erp_material_depot_stock sn WHERE a.m_unit_id = sn.norms_id AND a.depot_id = sn.depot_id), 0) currentTock
+		FROM
+			crm_service_apply_material a
+			LEFT JOIN erp_depotitem b ON (b.depot_id = a.depot_id OR b.another_depot_id = a.depot_id) AND a.m_unit_id = b.norms_id AND b.delete_flag = '0'
+			LEFT JOIN erp_depothead d ON b.header_id = d.id
+		WHERE
+			a.apply_id = #{id}
+		GROUP BY a.m_unit_id
+	</select>
+	
+	<update id="editSealSeServiceCheckMation" parameterType="java.util.Map">
+		<foreach collection="list" item="item" index="index" separator="," >  
+	        UPDATE crm_service_apply_material
+	        <set>
+	            oper_number = #{item.operNum},
+	            all_price = #{item.allPrice}
+	        </set>
+	        WHERE id = #{item.id}
+		</foreach>
+    </update>
+    
+    <update id="editSealSeServiceApplyCheckMation" parameterType="java.util.Map">
+        UPDATE crm_service_apply
+        <set>
+            <if test="allPrice != '' and allPrice != null">
+	            all_price = #{allPrice},
+	        </if>
+            state = #{state},
+            approval_opinion = #{opinion},
+            approval_id = #{approvalId}
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <insert id="insertErpDepotHeadByApplyId">
+    	INSERT INTO erp_depothead
+    	(
+    		id,
+    		`type`,
+    		sub_type,
+    		default_number,
+    		number,
+    		oper_person_id,
+    		oper_person_name,
+    		create_time,
+    		oper_time,
+    		organ_id,
+    		total_price,
+    		pay_type,
+    		status,
+    		status_content,
+    		delete_flag,
+    		service_apply_id
+    	)
+    	SELECT
+    		#{headId},
+    		'1', #出库
+    		'9', #其他出库
+    		#{orderNum}, #订单编号
+    		#{orderNum}, #订单编号
+    		a.create_id, #操作员id
+    		b.user_name, #操作员姓名
+    		a.create_time, #操作时间
+    		a.create_time, #单据日期
+    		a.customer_id, #客户id
+    		a.all_price, #总金额
+    		'3', #付款类型，其他
+    		'2', #默认审核通过
+    		a.approval_opinion, #审批意见
+    		'0', #默认未删除
+    		a.id #配件申领单的id
+    	FROM
+    		crm_service_apply a
+    		LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+    	WHERE 
+    		a.id = #{id}
+    </insert>
+    
+    <select id="queryErpDepotItemMaterialMationByApplyId" resultType="java.util.Map">
+    	SELECT
+    		a.material_id materialId,
+    		a.material_name materialName,
+    		a.material_model materialModel,
+    		a.m_unit_id mUnitId,
+    		a.oper_number operNumber,
+    		a.basic_number basicNumber,
+    		a.unit_price unitPrice,
+    		a.all_price allPrice,
+    		a.remark,
+    		a.depot_id depotId
+    	FROM
+    		crm_service_apply_material a
+    	WHERE 
+    		a.apply_id = #{id}
+    </select>
+    
+    <insert id="insertErpDepotItems" parameterType="java.util.Map">
+	     INSERT INTO erp_depotitem
+	     (id, header_id, material_id, material_name, material_model, norms_id, oper_number, basic_number, unit_price, all_price, remark, depot_id, m_type, delete_flag)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.headId}, #{item.materialId}, #{item.materialName}, #{item.materialModel}, #{item.mUnitId}, #{item.operNumber}, #{item.basicNumber}, #{item.unitPrice},
+			 #{item.allPrice}, #{item.remark}, #{item.depotId}, '0', '0')  
+		</foreach>  
+	</insert>
+	
+	<select id="querySealSeServiceWaitToFinishedMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.order_num orderNum, #工单号
+			IFNULL(b.`name`, '') serviceTypeName, #服务类型
+			CONVERT(a.declaration_time, CHAR) declarationTime, #报单时间
+			a.contacts, #联系人
+			a.phone, #联系电话
+			a.email, #邮箱
+			a.qq, #qq
+			a.product_id productId, #产品id
+			a.product_name productName, #产品名称
+			a.product_norms productNorms, #规格型号
+			a.product_serial_num productSerialNum, #产品序列号
+			CASE a.product_warranty WHEN '1' THEN '保内' WHEN '2' THEN '保外' ELSE '' END productWarranty, #质保类型
+			c.id faultId, #故障表id
+			c.type_id faultTypeId, #故障类型id
+			c.com_execution comExecution, #完成情况
+			c.com_pic comPic, #完工拍照
+			IFNULL(c.com_enclosure_info, '') enclosureInfo, #完工附件
+			c.com_remark comEemark, #完工备注
+			CONVERT(c.com_star_time, CHAR) comStarTime, #实际开工时间
+			c.com_time comTime, #实际完工时间
+			c.fault_key_parts_id faultKeyPartsId, #故障关键组件id
+			d.`name` faultKeyPartsName, #故障关键组件名称
+			c.actual_failure actualFailure, #真实故障
+			c.solution solution, #解决方案
+			c.com_work_time comWorkTime, #工时
+			CONVERT(IFNULL(c.material_cost, 0), decimal(24, 2)) materialCost, #材料费
+			CONVERT(IFNULL(c.cover_cost, 0), decimal(24, 2)) coverCost, #服务费
+			CONVERT(IFNULL(c.other_cost, 0), decimal(24, 2)) otherCost, #其他费用
+			CONVERT(IFNULL(c.all_price, 0), decimal(24, 2)) allPrice #总计
+		FROM
+			crm_service a
+			LEFT JOIN crm_service_fault c ON c.service_id = a.id
+			LEFT JOIN erp_material d ON c.fault_key_parts_id = d.id,
+		 	crm_service_type b
+		WHERE
+			a.id = #{id}
+			AND a.type_id = b.id
+			AND a.state = '4'
+	</select>
+	
+	<select id="queryMyPartsNumByMUnitId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			IFNULL(SUM(b.oper_number), 0) - 
+			IFNULL((SELECT SUM(c.oper_number) FROM crm_service_fault_use_material c WHERE 
+					c.norms_id = b.m_unit_id 
+					AND c.create_id = a.create_id
+            		AND c.service_id != #{servierId} #查询的库存不包含当前工单的已用数量
+			), 0) currentTock
+		FROM
+			crm_service_apply a,
+			crm_service_apply_material b
+		WHERE
+			a.create_id = #{userId}
+		AND a.state = '1'
+		AND a.id = b.apply_id
+		AND b.m_unit_id = #{mUnitId}
+        GROUP BY b.m_unit_id
+	</select>
+	
+	<select id="queryFaultMationByOrderId" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			crm_service_fault a
+		WHERE a.service_id = #{serviceId}
+	</select>
+	
+	<insert id="insertSealSeServiceFaultMation" parameterType="java.util.Map">
+	    INSERT into crm_service_fault 
+		(id, service_id, type_id, com_execution, com_pic, com_enclosure_info, com_remark, com_time, com_work_time,
+			 material_cost, cover_cost, other_cost, all_price, create_id, create_time, com_star_time, fault_key_parts_id,
+			 actual_failure, solution)
+		VALUES(#{id}, #{serviceId}, #{typeId}, #{comExecution}, #{comPic}, #{comEnclosureInfo}, #{comRemark}, #{comTime}, #{comWorkTime},
+			 #{materialCost}, #{coverCost}, #{otherCost}, #{allPrice}, #{createId}, #{createTime}, #{comStarTime}, #{faultKeyPartsId},
+			 #{actualFailure}, #{solution})
+	</insert>
+	
+	<update id="editSealSeServiceFaultMationById" parameterType="java.util.Map">
+        UPDATE crm_service_fault
+        <set>
+            type_id = #{typeId},
+            com_execution = #{comExecution},
+            com_pic = #{comPic},
+            com_enclosure_info = #{comEnclosureInfo},
+            com_remark = #{comRemark},
+            com_time = #{comTime},
+            com_work_time = #{comWorkTime},
+            material_cost = #{materialCost},
+            cover_cost = #{coverCost},
+            other_cost = #{otherCost},
+            all_price = #{allPrice},
+            com_star_time = #{comStarTime},
+            fault_key_parts_id = #{faultKeyPartsId},
+            actual_failure = #{actualFailure},
+            solution = #{solution},
+        </set>
+        WHERE id = #{id}
+    </update>
+	
+	<delete id="deleteSealSeServiceUseMaterialByServiceId">
+        DELETE 
+		FROM 
+			crm_service_fault_use_material
+		WHERE 
+			service_id = #{serviceId}
+    </delete>
+	
+	<insert id="insertSealSeServiceUseMaterial" parameterType="java.util.Map">
+	     insert into crm_service_fault_use_material
+	     (id, service_id, material_id, material_name, material_model, norms_id, oper_number, unit_price, all_price, remark, create_id, create_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.serviceId}, #{item.materialId}, #{item.materialName}, #{item.materialModel}, #{item.mUnitId}, #{item.operNumber}, #{item.unitPrice}, #{item.allPrice}, #{item.remark}, #{item.createId}, #{item.createTime})  
+		</foreach>  
+	</insert>
+	
+	<update id="editSealSeServiceToComplateMation" parameterType="java.util.Map">
+        UPDATE crm_service
+        <set>
+            state = 5
+        </set>
+        WHERE id = #{serviceId}
+    </update>
+    
+    <select id="querySealSeServiceUseMaterialByServiceId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			IFNULL(SUM(b.oper_number), 0) - 
+			IFNULL((SELECT SUM(c.oper_number) FROM crm_service_fault_use_material c WHERE 
+					c.norms_id = b.m_unit_id 
+					AND c.create_id = a.create_id
+            		AND c.service_id != d.service_id #查询的库存不包含当前工单的已用数量
+			), 0) currentTock,
+			d.material_id productId,
+			d.norms_id normsId,
+			d.oper_number operNumber,
+			d.unit_price unitPrice,
+			d.all_price allPrice,
+			d.remark,
+			em.`name` productName,
+			em.model productModel,
+			em.unit,
+			CASE em.unit WHEN '1' THEN em.unit_name WHEN '2' THEN eu.`name` ELSE '' END unitName
+		FROM
+			crm_service_apply a,
+			crm_service_apply_material b,
+			crm_service_fault_use_material d
+			LEFT JOIN erp_material em ON d.material_id = em.id
+			LEFT JOIN erp_material_norms emn ON d.norms_id = emn.id
+			LEFT JOIN erp_unit eu ON emn.unit_id = eu.id
+		WHERE
+			a.create_id = #{userId}
+		AND a.state = '1'
+		AND a.id = b.apply_id
+		AND b.m_unit_id = d.norms_id
+		AND d.service_id = #{id}
+        GROUP BY b.m_unit_id
+	</select>
+	
+	<select id="querySealSeServiceWaitToEvaluateMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.order_num orderNum,#工单号
+			IFNULL(b.`name`, '') serviceTypeName,#服务类型
+			CONVERT(a.declaration_time, CHAR) declarationTime,#报单时间
+			a.contacts,#联系人
+			a.phone,#联系电话
+			a.email, #邮箱
+			a.qq, #qq
+			a.service_time serviceTime, #派工时间
+			a.customer_name customerName,#客户名称
+			IFNULL(o.`name`, '') addressProvince,#省
+			IFNULL(p.`name`, '') addressCity,#市
+			IFNULL(q.`name`, '') addressArea, #区、乡、县
+			IFNULL(r.`name`, '') addressTownship, #镇、街道
+			IFNULL(a.address_detailed, '') addressDetailed #详细地址
+		FROM
+			crm_service a
+			LEFT JOIN t_area o ON a.address_province = o.id
+			LEFT JOIN t_area p ON a.address_city = p.id
+			LEFT JOIN t_area q ON a.address_area = q.id
+			LEFT JOIN t_area r ON a.address_township = r.id,
+		 	crm_service_type b
+		WHERE
+			a.id = #{id}
+			AND a.type_id = b.id
+			AND a.state = 5
+	</select>
+	
+	<update id="editSealSeServiceToEvaluateMationByServiceId" parameterType="java.util.Map">
+        UPDATE crm_service
+        <set>
+            state = 6
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <insert id="insertEvaluateMation" parameterType="java.util.Map">
+	    INSERT into crm_service_evaluate 
+		(id, service_id, type_id, content, `type`, create_id, create_time)
+		VALUES(#{id}, #{serviceId}, #{typeId}, #{content}, #{type}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="editSealSeServiceToFinishedMationByServiceId" parameterType="java.util.Map">
+        UPDATE crm_service
+        <set>
+            state = 7
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <select id="querySealSeServiceFeedBackMationByServiceId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.order_num orderNum,#工单号
+			IFNULL(b.`name`, '') serviceTypeName,#服务类型
+			CONVERT(a.declaration_time, CHAR) declarationTime,#报单时间
+			a.contacts,#联系人
+			a.phone,#联系电话
+			a.email, #邮箱
+			a.qq, #qq
+			a.state, #状态
+			a.service_time serviceTime, #派工时间
+			a.customer_name customerName,#客户名称
+			IFNULL(o.`name`, '') addressProvince,#省
+			IFNULL(p.`name`, '') addressCity,#市
+			IFNULL(q.`name`, '') addressArea, #区、乡、县
+			IFNULL(r.`name`, '') addressTownship, #镇、街道
+			IFNULL(a.address_detailed, '') addressDetailed #详细地址
+		FROM
+			crm_service a
+			LEFT JOIN t_area o ON a.address_province = o.id
+			LEFT JOIN t_area p ON a.address_city = p.id
+			LEFT JOIN t_area q ON a.address_area = q.id
+			LEFT JOIN t_area r ON a.address_township = r.id,
+		 	crm_service_type b
+		WHERE
+			a.id = #{id}
+			AND a.type_id = b.id
+	</select>
+	
+	<select id="querySealSeServiceMyWriteList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.order_num orderNum,
+			b.`name` serviceTypeName,
+			a.customer_name customerName,
+			a.product_name productName,
+			a.state,
+			CASE a.state WHEN '1' THEN '待派工' WHEN '2' THEN '待接单' WHEN '3' THEN '待签到' WHEN '4' THEN '待完工' WHEN '5' THEN '待评价' WHEN '6' THEN '待审核' WHEN '7' THEN '已完工' END stateName,
+			CONVERT(a.declaration_time, CHAR) declarationTime
+		FROM
+			crm_service a,
+		 	crm_service_type b
+		WHERE
+			a.type_id = b.id
+		AND a.create_id = #{createId}
+		<if test="orderNum != '' and orderNum != null">
+            AND a.order_num = #{orderNum}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        <if test="customerName != '' and customerName != null">
+            AND a.customer_name LIKE '%${customerName}%'
+        </if>
+        <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND a.declaration_time >= #{firstTime} AND #{lastTime} >= a.declaration_time
+		</if>
+        ORDER BY a.declaration_time desc
+    </select>
+	
+</mapper>

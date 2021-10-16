@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.school.dao.SchoolFamilySituationDao">
+
+	<select id="querySchoolFamilySituationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			b.school_name schoolName,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			school_family_situation a,
+			school_mation b
+		WHERE a.school_id = b.id
+		<if test="name != '' and name != null">
+			AND a.`name` LIKE '%${name}%'
+		</if>
+		<choose>
+			<!-- 查询的不是所有的数据 -->
+    		<when test="schoolPowerId != 'all'.toString()">
+    			AND a.school_id = #{schoolPowerId}
+    		</when>
+    		<!-- 查询的是所有的数据 -->
+    		<when test="schoolPowerId == 'all'.toString()">
+    			<if test="schoolId != '' and schoolId != null">
+					AND a.school_id = #{schoolId}
+				</if>
+    		</when>
+		</choose>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySchoolFamilySituationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			school_family_situation a
+		WHERE a.`name` = #{name}
+		AND a.school_id = #{schoolId}
+	</select>
+	
+	<insert id="insertSchoolFamilySituationMation" parameterType="java.util.Map">
+	    INSERT into school_family_situation 
+	    (id, `name`, school_id, create_id, create_time)
+	    VALUES(#{id}, #{name}, #{schoolId}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySchoolFamilySituationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			a.school_id schoolId
+		FROM
+			school_family_situation a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="querySchoolFamilySituationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			school_family_situation a
+		WHERE a.`name` = #{name}
+		AND a.id != #{id}
+		AND a.school_id = #{schoolId}
+	</select>
+	
+	<update id="editSchoolFamilySituationById" parameterType="java.util.Map">
+		UPDATE school_family_situation
+		<set>
+			<if test="name != '' and name != null">
+				`name` = #{name},
+			</if>
+			<if test="schoolId != '' and schoolId != null">
+				school_id = #{schoolId},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteSchoolFamilySituationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			school_family_situation
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="querySchoolFamilySituationListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			a.id `value`
+		FROM
+			school_family_situation a
+		WHERE 1=1
+		<choose>
+			<!-- 查询的不是所有的数据 -->
+    		<when test="schoolPowerId != 'all'.toString()">
+    			AND a.school_id = #{schoolPowerId}
+    		</when>
+    		<!-- 查询的是所有的数据 -->
+    		<when test="schoolPowerId == 'all'.toString()">
+    			<if test="schoolId != '' and schoolId != null">
+					AND a.school_id = #{schoolId}
+				</if>
+    		</when>
+		</choose>
+		ORDER BY a.create_time DESC
+	</select>
+	
+</mapper>

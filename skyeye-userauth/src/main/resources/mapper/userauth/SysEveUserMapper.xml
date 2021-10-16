@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveUserDao">
+	
+	<select id="querySysUserList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			k.id staffId,
+			k.job_number jobNumber,
+			k.email email,
+			k.user_name userName,
+			k.user_sex sexName,
+			a.user_lock userLock,
+			(SELECT c.user_name FROM sys_eve_user_staff c WHERE a.creater = c.user_id) createName,
+			(SELECT group_concat(distinct b.role_name) FROM sys_eve_role b WHERE INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.id, ','))) roleName,
+			m.company_name companyName,
+			m.department_name departmentName,
+			m.job_name jobName,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			sys_eve_user a
+			LEFT JOIN (SELECT 
+						o.user_id,
+						p.job_name,
+						q.department_name,
+						u.company_name
+					FROM 
+						sys_eve_user_staff o, 
+						company_job p, 
+						company_department q, 
+						company_mation u 
+					WHERE o.company_id = u.id 
+						AND o.department_id = q.id 
+						AND o.job_id = p.id) m ON a.id = m.user_id,
+			sys_eve_user_staff k
+		WHERE a.id = k.user_id
+		<if test="userCode != '' and userCode != null">
+			AND a.user_code like '%${userCode}%'
+		</if>
+		<if test="userName != '' and userName != null">
+			AND k.user_name like '%${userName}%'
+		</if>
+		<if test="sexName != '' and sexName != null">
+			AND k.user_sex = #{sexName}
+		</if>
+		<if test="companyName != '' and companyName != null">
+			AND k.company_id = #{companyName}
+		</if>
+		<if test="departmentName != '' and departmentName != null">
+			AND k.department_id = #{departmentName}
+		</if>
+		<if test="jobName != '' and jobName != null">
+			AND k.job_id = #{jobName}
+		</if>
+		ORDER BY a.user_lock ASC, a.create_time DESC
+	</select>
+	
+	<select id="querySysUserLockStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_lock userLock
+		FROM
+			sys_eve_user a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editSysUserLockStateToLockById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			user_lock = #{userLock}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSysUserLockStateToUnLockById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			user_lock = #{userLock}
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<update id="editSysUserPasswordMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			password = #{password},
+			pwd_num_enc = #{pwdNum},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryMationByUserCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNum,
+			a.`password`,
+			a.user_lock userLock,
+			b.win_bg_pic_url winBgPicUrl,
+			b.win_lock_bg_pic_url winLockBgPicUrl,
+			b.win_theme_color winThemeColor,
+			b.win_start_menu_size winStartMenuSize,
+			b.win_task_position winTaskPosition,
+			b.win_bg_pic_vague winBgPicVague,
+			b.win_bg_pic_vague_value winBgPicVagueValue,
+			b.win_bottom_menu_icon loadBottomMenuIcon,
+			c.id staffId,
+			c.job_number jobNumber,
+			c.user_name userName,
+			c.user_photo userPhoto,
+			c.company_id companyId,
+			u.company_name companyName,
+			c.department_id departmentId,
+			q.department_name departmentName,
+			c.job_id jobId,
+			p.job_name jobName
+		FROM
+			sys_eve_user a
+			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id,
+			sys_eve_user_staff c,
+			company_job p, 
+			company_department q, 
+			company_mation u
+		WHERE
+			a.user_code = #{userCode}
+		AND a.id = c.user_id
+		AND c.company_id = u.id 
+		AND c.department_id = q.id 
+		AND c.job_id = p.id
+	</select>
+	
+	<select id="queryRoleList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.role_name roleName,
+			a.role_desc roleDesc
+		FROM
+			sys_eve_role a
+	</select>
+	
+	<select id="queryBindRoleMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			IFNULL(a.role_id, "") roleIds
+		FROM
+			sys_eve_user a
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editRoleIdsByUserId" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			role_id = #{roleIds}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryDeskTopsMenuByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.*
+		FROM 
+			(SELECT
+				c.id,
+				c.menu_name `name`,
+				c.menu_name_en menuNameEn,
+				c.menu_icon icon,
+				c.menu_url pageURL,
+				c.open_type openType,
+				c.menu_type menuType,
+				'-1' maxOpen,
+				'false' extend,
+				null childs,
+				IFNULL(e.parent_id, c.menu_parent_id) parentId,
+				IFNULL(e.menu_level, c.menu_level) menuLevel,
+				c.menu_icon_color menuIconColor,
+				c.menu_icon_bg menuIconBg,
+				c.menu_icon_pic menuIconPic,
+				c.menu_icon_type menuIconType,
+				IFNULL(c.desktop_id, '') deskTopId
+			FROM
+				sys_eve_user a,
+				sys_eve_role_menu b,
+				sys_eve_menu c
+				LEFT JOIN sys_eve_user_custom_parent e ON e.menu_id = c.id AND e.create_id = #{id},
+				sys_eve_win_num d,
+				sys_eve_win_super_power f,
+				sys_eve_win g
+			WHERE
+				a.id = #{id}
+			AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+			AND b.menu_id = c.id AND c.menu_sys_type = '1'
+			AND c.id NOT IN(SELECT d.menu_id FROM sys_eve_user_custom_menu_del d WHERE d.create_id = #{id})
+			AND d.id = f.win_num_id
+			AND f.win_id = g.id
+			AND g.id = c.sys_win_id
+			GROUP BY c.id
+			ORDER BY c.order_num ASC) a
+		UNION
+			SELECT
+				a.id,
+				a.menu_name `name`,
+				a.menu_name_en menuNameEn,
+				a.menu_icon icon,
+				a.menu_url pageURL,
+				a.open_type openType,
+				a.menu_type menuType,
+				'-1' maxOpen,
+				'false' extend,
+				null childs,
+				IFNULL(e.parent_id, a.menu_parent_id) parentId,
+				IFNULL(e.menu_level, 1) menuLevel,
+				a.menu_icon_color menuIconColor,
+				a.menu_icon_bg menuIconBg,
+				a.menu_icon_pic menuIconPic,
+				a.menu_icon_type menuIconType,
+				IFNULL(a.desktop_id, '') deskTopId
+			FROM
+				sys_eve_user_custom_menu a
+				LEFT JOIN sys_eve_user_custom_parent e ON e.menu_id = a.id AND e.create_id = #{id}
+			WHERE a.create_id = #{id}
+		UNION
+			SELECT
+				a.id,
+				a.menu_box_name `name`,
+				a.menu_box_name menuNameEn,
+				'' icon,
+				'--' pageURL,
+				2 openType,
+				'' menuType,
+				'-1' maxOpen,
+				'false' extend,
+				null childs,
+				'0' parentId,
+				0 menuLevel,
+				'' menuIconColor,
+				'' menuIconBg,
+				'' menuIconPic,
+				'' menuIconType,
+				IFNULL(a.desktop_id, '') deskTopId
+			FROM
+				sys_eve_user_custom_menubox a
+			WHERE a.create_id = #{id}
+	</select>
+	
+	<select id="queryAllMenuByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.id,
+			c.menu_name `name`,
+			c.menu_name_en menuNameEn,
+			c.menu_icon icon,
+			c.menu_url pageURL,
+			c.open_type openType,
+			c.menu_type menuType,
+			'-1' maxOpen,
+			'false' extend,
+			null childs,
+			c.menu_parent_id parentId,
+			c.menu_level menuLevel,
+			c.menu_icon_color menuIconColor,
+			c.menu_icon_bg menuIconBg,
+			c.menu_icon_pic menuIconPic,
+			c.menu_icon_type menuIconType,
+			IFNULL(c.desktop_id, '') deskTopId
+		FROM
+			sys_eve_user a,
+			sys_eve_role_menu b,
+			sys_eve_menu c,
+			sys_eve_win_num d,
+			sys_eve_win_super_power f,
+			sys_eve_win g
+		WHERE
+			a.id = #{id}
+		AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+		AND b.menu_id = c.id
+		AND d.id = f.win_num_id
+		AND f.win_id = g.id
+		AND g.id = c.sys_win_id
+		GROUP BY c.id
+		ORDER BY c.order_num ASC
+	</select>
+	
+	<update id="editUserInstallThemeColor" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_theme_color = #{themeColor}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinBgPic" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_bg_pic_url = #{winBgPicUrl}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinLockBgPic" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_lock_bg_pic_url = #{winLockBgPicUrl}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinStartMenuSize" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_start_menu_size = #{winStartMenuSize}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallWinTaskPosition" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_task_position = #{winTaskPosition}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<select id="querySysUserCodeByMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode
+		FROM
+			sys_eve_user a
+		WHERE
+			a.user_code = #{userCode}
+	</select>
+	
+	<insert id="insertSysUserMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_user 
+	     (id, user_code, pwd_num_enc, password, user_lock, creater, create_time, is_term_of_validity)
+	     VALUES
+	     (#{id}, #{userCode}, #{pwdNum}, #{password}, #{userLock}, #{createId}, #{createTime}, #{isTermOfValidity})
+	</insert>
+	
+	<insert id="insertSysUserInstallMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_user_install 
+	     (id, user_id, win_bg_pic_url, win_lock_bg_pic_url, win_theme_color, win_start_menu_size, win_task_position, create_id, create_time)
+	     VALUES
+	     (#{id}, #{userId}, #{winBgPicUrl}, #{winLockBgPicUrl}, #{winThemeColor}, #{winStartMenuSize}, #{winTaskPosition}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="editUserPassword" parameterType="java.util.Map">
+		UPDATE sys_eve_user
+		<set>
+			password = #{password}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editUserInstallVagueBgSrc" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_bg_pic_vague = #{winBgPicVague},
+			win_bg_pic_vague_value = #{winBgPicVagueValue}
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<update id="editUserInstallLoadMenuIconById" parameterType="java.util.Map">
+		UPDATE sys_eve_user_install
+		<set>
+			win_bottom_menu_icon = #{loadBottomMenuIcon},
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<select id="queryAuthPointsByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.menu_num menuNum,
+			a.auth_menu menuUrl
+		FROM
+			sys_eve_menu_auth_point a,
+			sys_eve_role_menu b,
+			sys_eve_user c
+		WHERE b.menu_id = a.id
+		AND INSTR(CONCAT(',', c.role_id, ','), CONCAT(',', b.role_id, ','))
+		AND c.id = #{id}
+		GROUP BY a.menu_num
+	</select>
+	
+	<select id="queryUserDetailsMationByUserId" resultType="java.util.Map">
+		SELECT
+			a.user_name userName,
+			a.user_photo userPhoto,
+			a.user_idcard userIdCard,
+			a.user_sex userSex,
+			a.email userEmail,
+			a.phone userPhone,
+			a.home_phone userHomePhone,
+			a.qq userQq,
+			a.user_sign userSign,
+			m.company_name companyName,
+			m.department_name departmentName,
+			m.job_name jobName,
+			b.user_code userCode
+		FROM
+			sys_eve_user_staff a
+			LEFT JOIN (SELECT 
+							o.user_id,
+							p.job_name,
+							q.department_name,
+							u.company_name
+						FROM 
+							sys_eve_user_staff o, 
+							company_job p, 
+							company_department q, 
+							company_mation u 
+						WHERE o.company_id = u.id 
+							AND o.department_id = q.id 
+							AND o.job_id = p.id) m ON m.user_id = a.user_id,
+			sys_eve_user b
+		WHERE a.user_id = #{userId}
+		AND b.id = a.user_id
+	</select>
+	
+	<update id="editUserDetailsMationByUserId" parameterType="java.util.Map">
+		UPDATE sys_eve_user_staff
+		<set>
+			user_idcard = #{userIdCard},
+			user_sex = #{userSex},
+			<if test="userPhoto != '' and userPhoto != null">
+				user_photo = #{userPhoto},
+			</if>
+			email = #{userEmail},
+			phone = #{userPhone},
+			home_phone = #{userHomePhone},
+			qq = #{userQq},
+			user_sign = #{userSign},
+		</set>
+		WHERE user_id = #{userId}
+	</update>
+	
+	<select id="querySysUserListByUserName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+		    a.job_number jobNumber,
+			a.user_name userName,
+			a.user_sex userSex
+		FROM
+			sys_eve_user_staff a
+		WHERE 
+			a.user_id IS NULL OR LENGTH(a.user_id) = 0
+		<if test="userMation != '' and userMation != null">
+			AND (a.user_name LIKE '%${userMation}%' OR a.job_number LIKE '%${userMation}%')
+		</if>
+	</select>
+	
+	<update id="editSysUserStaffBindUserId" parameterType="java.util.Map">
+		UPDATE sys_eve_user_staff
+		<set>
+			user_id = #{userId}
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="queryUserListToActiviti" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code firstName,
+			b.user_name lastName,
+			b.email
+		FROM
+			sys_eve_user a,
+			sys_eve_user_staff b,
+			act_group_user c
+		WHERE a.id = b.user_id
+		AND a.user_lock = '0'
+		AND b.state = '1'
+		AND c.user_id = a.id
+		<if test="name != '' and name != null">
+			AND a.user_code LIKE '${name}'
+		</if>
+	</select>
+	
+	<select id="queryGroupListToActiviti" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.group_name `name`
+		FROM
+			act_group a
+		WHERE 1 = 1
+		<if test="name != '' and name != null">
+			AND (a.department_name LIKE '${name}' OR b.company_name LIKE '${name}')
+		</if>
+	</select>
+	
+	<select id="queryUserListToActivitiByGroup" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code firstName,
+			b.user_name lastName,
+			b.email
+		FROM
+			sys_eve_user a,
+			sys_eve_user_staff b,
+			act_group_user c
+		WHERE a.id = b.user_id
+		AND a.user_lock = '0'
+		AND b.state = '1'
+		AND c.user_id = a.id
+		AND c.group_id = #{groupId}
+		<if test="name != '' and name != null">
+			AND a.user_code LIKE '${name}'
+		</if>
+	</select>
+	
+	<select id="querySysDeskTopByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			d.id,
+			CASE #{language} WHEN 'zh' THEN d.desktop_name WHEN 'cn' THEN d.desktop_name_cn ELSE '' END `name`
+		FROM
+			sys_eve_user a,
+			sys_eve_role_menu b,
+			sys_eve_desktop d
+		WHERE
+			a.id = #{id}
+		AND INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+		AND b.menu_id = d.id
+		AND d.state = '2'
+		GROUP BY d.id
+		ORDER BY d.order_by DESC
+    </select>
+    
+    <select id="queryActGroupList" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.group_name `name`
+		FROM
+			act_group a
+    </select>
+    
+    <select id="queryActUserList" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			b.user_id id,
+			b.user_name firstName,
+			c.user_code lastName,
+			b.email
+		FROM
+			act_group_user a,
+			sys_eve_user_staff b,
+			sys_eve_user c
+		WHERE
+			a.user_id = b.user_id
+		AND b.user_id = c.id
+    </select>
+    
+    <select id="queryActUserGroupList" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.group_id groupId,
+			a.user_id userId
+		FROM
+			act_group_user a
+    </select>
+    
+    <select id="queryActGroupListByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.group_id groupId,
+			a.user_id userId
+		FROM
+			act_group_user a
+		WHERE
+			a.user_id = #{id}
+    </select>
+    
+    <select id="queryUserMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.user_name userName
+		FROM
+			sys_eve_user_staff a
+		WHERE
+			a.user_id = #{userId}
+    </select>
+    
+    <select id="queryUserNameByProcessInstanceId" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			b.user_name userName
+		FROM
+			act_user_processinstanceid a,
+			sys_eve_user_staff b
+		WHERE a.create_id = b.user_id
+		AND a.process_instance_id = #{processInstanceId}
+    </select>
+	
+	<select id="queryUserSchoolMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.id schoolId,
+			c.power schoolPower
+		FROM
+			sys_eve_user_staff a,
+			school_staff_mation b,
+			school_mation c
+		WHERE
+			a.user_id = #{userId}
+		AND a.id = b.staff_id
+		AND c.id = b.school_id
+		LIMIT 1
+	</select>
+	
+</mapper>

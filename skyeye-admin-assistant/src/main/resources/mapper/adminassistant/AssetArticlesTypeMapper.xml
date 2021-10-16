@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AssetArticlesTypeDao">
+
+    <select id="queryAssetArticlesTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.type_name typeName,
+            b.user_name createName,
+            CONVERT(a.create_time, char) createTime,
+            a.state,
+            a.order_by orderBy
+        FROM
+            asset_articles_type a,
+            sys_eve_user_staff b
+        WHERE a.create_id = b.user_id
+        <if test="typeName != '' and typeName != null">
+            AND a.type_name LIKE '%${typeName}%'
+        </if>
+        AND a.state != 3
+        ORDER BY a.order_by ASC
+    </select>
+
+    <select id="queryAssetArticlesTypeMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        a.id
+        FROM
+        asset_articles_type a
+        WHERE a.type_name = #{typeName}
+        AND a.state != 3
+        <if test="id != '' and id != null">
+            AND a.id != #{id}
+        </if>
+    </select>
+
+    <insert id="insertAssetArticlesType" parameterType="java.util.Map">
+        INSERT into asset_articles_type
+            (id, type_name, order_by, state, create_id, create_time)
+        VALUES(#{id}, #{typeName}, #{orderBy}, #{state}, #{createId}, #{createTime})
+    </insert>
+
+    <select id="queryAssetArticlesTypeBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            COUNT(*) simpleNum
+        FROM
+            asset_articles_type
+    </select>
+
+    <update id="deleteAssetArticlesTypeById" parameterType="java.util.Map">
+        UPDATE asset_articles_type
+        <set>
+            state = 3
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateUpAssetArticlesTypeById" parameterType="java.util.Map">
+        UPDATE asset_articles_type
+        <set>
+            state = 1
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAssetArticlesTypeStateById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.state
+        FROM
+            asset_articles_type a
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <update id="updateDownAssetArticlesTypeById" parameterType="java.util.Map">
+        UPDATE asset_articles_type
+        <set>
+            state = 2
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectAssetArticlesTypeById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.type_name typeName
+        FROM
+            asset_articles_type a
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <update id="editAssetArticlesTypeById" parameterType="java.util.Map">
+        UPDATE asset_articles_type
+        <set>
+            type_name = #{typeName}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAssetArticlesTypeUpMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.order_by thisOrderBy,
+            b.id,
+            b.order_by prevOrderBy
+        FROM
+            asset_articles_type a,
+            asset_articles_type b
+        WHERE
+            a.id = #{id}
+          AND a.order_by > b.order_by
+          AND b.state != 3
+        ORDER BY
+            b.order_by DESC
+            LIMIT 1
+    </select>
+
+    <update id="editAssetArticlesTypeOrderUpById" parameterType="java.util.Map">
+        UPDATE asset_articles_type
+        <set>
+            order_by = #{upOrderBy},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryAssetArticlesTypeDownMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.order_by thisOrderBy,
+            b.id,
+            b.order_by prevOrderBy
+        FROM
+            asset_articles_type a,
+            asset_articles_type b
+        WHERE
+            a.id = #{id}
+          AND b.order_by > a.order_by
+          AND b.state != 3
+        ORDER BY
+            b.order_by ASC
+            LIMIT 1
+    </select>
+
+    <select id="queryAssetArticlesTypeUpStateList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.type_name `name`
+        FROM
+            asset_articles_type a
+        WHERE
+            a.state = 1
+        ORDER BY a.order_by ASC
+    </select>
+
+</mapper>

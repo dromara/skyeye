@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysStaffDataDictionaryDao">
+
+    <select id="querySysStaffDataDictionaryList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`,
+            a.state,
+            bu.user_name createName,
+            a.type typeId,
+            DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+            cu.user_name lastUpdateName,
+            DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+        FROM
+            sys_staff_data_dictionary a
+            LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+            LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+        WHERE a.state != '3'
+        <if test="typeName != '' and typeName != null">
+            AND a.`name` LIKE '%${typeName}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type = #{typeId}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="querySysStaffDataDictionaryByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            sys_staff_data_dictionary a
+        WHERE a.`name` = #{typeName}
+        AND a.type = #{typeId}
+        AND a.state != '3'
+    </select>
+
+    <insert id="insertSysStaffDataDictionaryMation" parameterType="java.util.Map">
+        INSERT INTO sys_staff_data_dictionary
+        (id, `name`, state, type, create_id, create_time, last_update_id, last_update_time)
+        VALUES
+        (#{id}, #{typeName}, #{state}, #{typeId}, #{createId}, #{createTime}, #{createId}, #{createTime})
+    </insert>
+
+    <select id="querySysStaffDataDictionaryById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            sys_staff_data_dictionary a
+        WHERE a.id = #{id}
+        AND a.state != '3'
+    </select>
+
+    <select id="querySysStaffDataDictionaryByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            sys_staff_data_dictionary a
+        WHERE a.`name` = #{typeName}
+        AND a.type = (SELECT b.type FROM sys_staff_data_dictionary b WHERE b.id = #{id})
+        AND a.state != '3'
+        AND a.id != #{id}
+    </select>
+
+    <update id="editSysStaffDataDictionaryMationById">
+        UPDATE sys_staff_data_dictionary
+        <set>
+            `name` = #{typeName},
+            last_update_id = #{lastUpdateId},
+            last_update_time = #{lastUpdateTime},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="querySysStaffDataDictionaryStateById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.state
+        FROM
+            sys_staff_data_dictionary a
+        WHERE a.id = #{id}
+    </select>
+
+    <update id="editSysStaffDataDictionaryStateById">
+        UPDATE sys_staff_data_dictionary
+        <set>
+            state = #{state},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="querySysStaffDataDictionaryUpMation" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+          sys_staff_data_dictionary a
+        WHERE a.state = '1'
+        AND a.type = #{typeId}
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

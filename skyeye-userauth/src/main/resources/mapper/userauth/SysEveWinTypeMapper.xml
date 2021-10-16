@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveWinTypeDao">
+	
+	<select id="querySysWinTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`,
+			IFNULL(a.parent_id, '0') pId,
+			false lay_is_open,
+			CASE a.state WHEN '1' THEN '新建' WHEN '2' THEN '正常' WHEN '3' THEN '下线' ELSE '新建' END stateName,
+			a.state,
+			(SELECT COUNT(*) FROM sys_eve_win b WHERE (b.first_type = a.id OR b.second_type = a.id)) winNum,
+			a.order_by orderBy
+		FROM
+			sys_eve_win_type a
+		WHERE a.state != '0'
+			<if test="state != '' and state != null">
+				AND a.state = #{state}
+			</if>
+			<if test="typeName != '' and typeName != null">
+				AND a.type_name = #{typeName}
+			</if>
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysWinFirstTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`
+		FROM
+			sys_eve_win_type a
+		WHERE a.state != '0'
+		AND a.parent_id = '0'
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysWinTypeByNameANDLevel" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`
+		FROM
+			sys_eve_win_type a
+		WHERE a.state != '0'
+		AND a.type_name = #{typeName}
+		AND a.parent_id = #{parentId}
+	</select>
+	
+	<select id="querySysWinTypeBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			COUNT(*) simpleNum
+		FROM
+			sys_eve_win_type a
+		WHERE a.parent_id = #{parentId}
+	</select>
+	
+	<insert id="insertSysWinTypeMation" parameterType="java.util.Map">
+	     INSERT into sys_eve_win_type 
+	     (id, type_name, parent_id, order_by, state, create_id, create_time)
+	     VALUES
+	     (#{id}, #{typeName}, #{parentId}, #{orderBy}, #{state}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySysWinTypeMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name typeName,
+			IFNULL(a.parent_id, '0') parentId
+		FROM
+			sys_eve_win_type a
+		WHERE a.id = #{id}
+		AND a.state != '0'
+	</select>
+	
+	<select id="querySysWinTypeByNameANDLevelAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`
+		FROM
+			sys_eve_win_type a
+		WHERE a.state != '0'
+		AND a.type_name = #{typeName}
+		AND a.parent_id = #{parentId}
+		AND a.id != #{id}
+	</select>
+	
+	<update id="editSysWinTypeMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_win_type
+		<set>
+			<if test="typeName != '' and typeName != null">
+				type_name = #{typeName},
+			</if>
+			<if test="parentId != '' and parentId != null">
+				parent_id = #{parentId},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysWinFirstTypeListNotIsThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`
+		FROM
+			sys_eve_win_type a
+		WHERE a.state != '0'
+		AND a.parent_id = '0'
+		AND a.id != #{id}
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysWinTypeParentMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			IFNULL(a.parent_id, '0') pId,
+			(SELECT COUNT(*) FROM sys_eve_win b WHERE (b.first_type = a.id OR b.second_type = a.id)) winNum
+		FROM
+			sys_eve_win_type a
+		WHERE a.state != '0'
+		AND a.id = #{id}
+	</select>
+	
+	<update id="deleteSysWinTypeMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_win_type
+		<set>
+			state = '0',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteSysWinTypeChildMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_win_type
+		<set>
+			state = '0',
+		</set>
+		WHERE parent_id = #{id}
+	</update>
+	
+	<select id="querySysWinTypeUpMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by thisOrderBy,
+			b.id,
+			b.order_by prevOrderBy
+		FROM
+			sys_eve_win_type a,
+			sys_eve_win_type b
+		WHERE
+			a.id = #{id}
+		AND b.parent_id = a.parent_id
+		AND a.order_by > b.order_by
+		ORDER BY
+			b.order_by DESC
+		LIMIT 1
+	</select>
+	
+	<update id="editSysWinTypeMationOrderNumUpById" parameterType="java.util.Map">
+		UPDATE sys_eve_win_type
+		<set>
+			order_by = #{upOrderBy},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysWinTypeDownMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by thisOrderBy,
+			b.id,
+			b.order_by prevOrderBy
+		FROM
+			sys_eve_win_type a,
+			sys_eve_win_type b
+		WHERE
+			a.id = #{id}
+		AND b.parent_id = a.parent_id
+		AND b.order_by > a.order_by
+		ORDER BY
+			b.order_by ASC
+		LIMIT 1
+	</select>
+	
+	<select id="querySysWinTypeStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.state
+		FROM
+			sys_eve_win_type a
+		WHERE a.state != '0'
+		AND a.id = #{id}
+	</select>
+	
+	<update id="editSysWinTypeMationStateUpById" parameterType="java.util.Map">
+		UPDATE sys_eve_win_type
+		<set>
+			state = '2',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSysWinTypeMationStateDownById" parameterType="java.util.Map">
+		UPDATE sys_eve_win_type
+		<set>
+			state = '3',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySysWinTypeFirstMationStateIsUp" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`
+		FROM
+			sys_eve_win_type a
+		WHERE a.state = '2'
+		AND a.parent_id = '0'
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="querySysWinTypeSecondMationStateIsUp" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`
+		FROM
+			sys_eve_win_type a
+		WHERE a.state = '2'
+		AND a.parent_id = #{parentId}
+		ORDER BY a.order_by ASC
+	</select>
+	
+</mapper>

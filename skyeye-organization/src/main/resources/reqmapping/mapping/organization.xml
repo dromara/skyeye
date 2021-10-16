@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="组织模块">
+
+    <!--
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+
+    <!-- 公司管理开始 -->
+    <url id="companymation001" path="/post/CompanyMationController/queryCompanyMationList" val="获取公司信息列表" allUse="1" groupName="企业管理">
+        <property id="companyName" name="companyName" ref="" var="公司名称"/>
+    </url>
+    <url id="companymation002" path="/post/CompanyMationController/insertCompanyMation" val="添加公司信息信息" allUse="1" groupName="企业管理">
+        <property id="companyName" name="companyName" ref="required" var="公司名称"/>
+        <property id="companyDesc" name="companyDesc" ref="" var="公司简介"/>
+        <property id="pId" name="pId" ref="required" var="公司总公司"/>
+        <property id="provinceId" name="provinceId" ref="required" var="行政区划省"/>
+        <property id="cityId" name="cityId" ref="" var="行政区划市"/>
+        <property id="areaId" name="areaId" ref="" var="行政区划县"/>
+        <property id="townshipId" name="townshipId" ref="" var="行政区划镇"/>
+        <property id="addressDetailed" name="addressDetailed" ref="required" var="行政区划具体地址"/>
+        <property id="taxRateStr" name="taxRateStr" ref="required,json" var="公司个人所得税税率信息"/>
+    </url>
+    <url id="companymation003" path="/post/CompanyMationController/deleteCompanyMationById" val="删除公司信息信息" allUse="1" groupName="企业管理">
+        <property id="rowId" name="id" ref="required" var="公司信息id"/>
+    </url>
+    <url id="companymation004" path="/post/CompanyMationController/queryCompanyMationToEditById" val="编辑公司信息信息时进行回显" allUse="2" groupName="企业管理">
+        <property id="rowId" name="id" ref="required" var="公司信息id"/>
+    </url>
+    <url id="companymation005" path="/post/CompanyMationController/editCompanyMationById" val="编辑公司信息信息" allUse="1" groupName="企业管理">
+        <property id="rowId" name="id" ref="required" var="公司信息id"/>
+        <property id="companyName" name="companyName" ref="required" var="公司名称"/>
+        <property id="companyDesc" name="companyDesc" ref="" var="公司简介"/>
+        <property id="pId" name="pId" ref="required" var="公司总公司"/>
+        <property id="provinceId" name="provinceId" ref="required" var="行政区划省"/>
+        <property id="cityId" name="cityId" ref="" var="行政区划市"/>
+        <property id="areaId" name="areaId" ref="" var="行政区划县"/>
+        <property id="townshipId" name="townshipId" ref="" var="行政区划镇"/>
+        <property id="addressDetailed" name="addressDetailed" ref="required" var="行政区划具体地址"/>
+        <property id="taxRateStr" name="taxRateStr" ref="required,json" var="公司个人所得税税率信息"/>
+    </url>
+    <url id="companymation006" path="/post/CompanyMationController/queryOverAllCompanyMationList" val="获取总公司信息列表" allUse="2" groupName="企业管理">
+        <property id="notId" name="notId" ref="" var="不包含的企业id"/>
+    </url>
+    <url id="companymation007" path="/post/CompanyMationController/queryCompanyMationListTree" val="获取公司信息列表展示为树" allUse="2" groupName="企业管理">
+    </url>
+    <url id="companymation008" path="/post/CompanyMationController/queryCompanyListToSelect" val="获取公司列表展示为下拉选择框" allUse="2" groupName="企业管理">
+    </url>
+    <url id="companymation009" path="/post/CompanyMationController/queryCompanyOrganization" val="获取企业组织机构图" allUse="1" method="GET" groupName="企业管理">
+    </url>
+    <url id="companymation010" path="/post/CompanyMationController/queryCompanyMationListToChoose" val="获取公司信息列表展示为表格供其他需要选择" allUse="2" groupName="企业管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="companyName" name="companyName" ref="" var="公司名称"/>
+    </url>
+    <url id="companymation011" path="/post/CompanyMationController/queryCompanyMationListByIds" val="根据公司ids获取公司信息列表" allUse="2" groupName="企业管理">
+        <property id="ids" name="ids" ref="required" var="公司ids，逗号隔开"/>
+    </url>
+    <!-- 公司管理结束 -->
+
+    <!-- 部门管理开始 -->
+    <url id="companydepartment001" path="/post/CompanyDepartmentController/queryCompanyDepartmentList" val="获取公司部门信息列表" allUse="1" groupName="部门管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="departmentName" name="departmentName" ref="" var="部门名称"/>
+        <property id="companyId" name="companyId" ref="" var="公司id"/>
+        <property id="overtimeSettlementType" name="overtimeSettlementType" ref="num" var="部门加班结算方式"/>
+    </url>
+    <url id="companydepartment002" path="/post/CompanyDepartmentController/insertCompanyDepartmentMation" val="添加公司部门信息信息" allUse="1" groupName="部门管理">
+        <property id="departmentName" name="departmentName" ref="required" var="部门名称"/>
+        <property id="departmentDesc" name="departmentDesc" ref="" var="部门简介"/>
+        <property id="companyId" name="companyId" ref="required" var="公司id"/>
+        <property id="overtimeSettlementType" name="overtimeSettlementType" ref="required,num" var="部门加班结算方式"/>
+    </url>
+    <url id="companydepartment003" path="/post/CompanyDepartmentController/deleteCompanyDepartmentMationById" val="删除公司部门信息信息" allUse="1" groupName="部门管理">
+        <property id="rowId" name="id" ref="required" var="公司部门信息id"/>
+    </url>
+    <url id="companydepartment004" path="/post/CompanyDepartmentController/queryCompanyDepartmentMationToEditById" val="编辑公司部门信息信息时进行回显" allUse="2" groupName="部门管理">
+        <property id="rowId" name="id" ref="required" var="公司部门信息id"/>
+    </url>
+    <url id="companydepartment005" path="/post/CompanyDepartmentController/editCompanyDepartmentMationById" val="编辑公司部门信息信息" allUse="1" groupName="部门管理">
+        <property id="rowId" name="id" ref="required" var="公司部门信息id"/>
+        <property id="departmentName" name="departmentName" ref="required" var="部门名称"/>
+        <property id="departmentDesc" name="departmentDesc" ref="" var="部门简介"/>
+        <property id="companyId" name="companyId" ref="required" var="公司id"/>
+        <property id="overtimeSettlementType" name="overtimeSettlementType" ref="required,num" var="部门加班结算方式"/>
+    </url>
+    <url id="companydepartment006" path="/post/CompanyDepartmentController/queryCompanyDepartmentListTreeByCompanyId" val="获取公司部门信息列表展示为树根据公司id" allUse="2" groupName="部门管理">
+        <property id="companyId" name="companyId" ref="required" var="公司id"/>
+    </url>
+    <url id="companydepartment007" path="/post/CompanyDepartmentController/queryCompanyDepartmentListByCompanyIdToSelect" val="根据公司id获取部门列表展示为下拉选择框" allUse="2" groupName="部门管理">
+        <property id="companyId" name="companyId" ref="" var="公司id"/>
+    </url>
+    <url id="companydepartment008" path="/post/CompanyDepartmentController/queryCompanyDepartmentListToChoose" val="获取部门列表展示为表格供其他选择" allUse="2" groupName="部门管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="companyName" name="companyName" ref="" var="公司名称"/>
+        <property id="departmentName" name="departmentName" ref="" var="部门名称"/>
+    </url>
+    <url id="companydepartment009" path="/post/CompanyDepartmentController/queryCompanyDepartmentListByIds" val="根据部门ids获取部门信息列表" allUse="2" groupName="部门管理">
+        <property id="ids" name="ids" ref="required" var="公司ids，逗号隔开"/>
+    </url>
+    <!-- 部门管理结束 -->
+
+    <!-- 职位管理开始 -->
+    <url id="companyjob001" path="/post/CompanyJobController/queryCompanyJobList" val="获取公司部门职位信息列表" allUse="1" groupName="职位管理">
+        <property id="companyId" name="companyId" ref="" var="公司id"/>
+        <property id="departmentId" name="departmentId" ref="" var="部门id"/>
+        <property id="jobName" name="jobName" ref="" var="部门职位名称"/>
+    </url>
+    <url id="companyjob002" path="/post/CompanyJobController/insertCompanyJobMation" val="添加公司部门职位信息信息" allUse="1" groupName="职位管理">
+        <property id="companyId" name="companyId" ref="required" var="公司id"/>
+        <property id="departmentId" name="departmentId" ref="required" var="部门id"/>
+        <property id="jobName" name="jobName" ref="" var="部门职位名称"/>
+        <property id="jobDesc" name="jobDesc" ref="" var="部门职位简介"/>
+        <property id="pId" name="pId" ref="required" var="父职位id"/>
+    </url>
+    <url id="companyjob003" path="/post/CompanyJobController/deleteCompanyJobMationById" val="删除公司部门职位信息信息" allUse="1" groupName="职位管理">
+        <property id="rowId" name="id" ref="required" var="公司部门职位信息id"/>
+    </url>
+    <url id="companyjob004" path="/post/CompanyJobController/queryCompanyJobMationToEditById" val="编辑公司部门职位信息信息时进行回显" allUse="2" groupName="职位管理">
+        <property id="rowId" name="id" ref="required" var="公司部门职位信息id"/>
+    </url>
+    <url id="companyjob005" path="/post/CompanyJobController/editCompanyJobMationById" val="编辑公司部门职位信息信息" allUse="1" groupName="职位管理">
+        <property id="rowId" name="id" ref="required" var="公司部门职位信息id"/>
+        <property id="jobName" name="jobName" ref="" var="部门职位名称"/>
+        <property id="jobDesc" name="jobDesc" ref="" var="部门职位简介"/>
+        <property id="companyId" name="companyId" ref="required" var="公司id"/>
+        <property id="departmentId" name="departmentId" ref="required" var="部门id"/>
+        <property id="pId" name="pId" ref="required" var="父职位id"/>
+    </url>
+    <url id="companyjob006" path="/post/CompanyJobController/queryCompanyJobListTreeByDepartmentId" val="获取公司部门职位信息列表展示为树根据公司id" allUse="2" groupName="职位管理">
+        <property id="departmentId" name="departmentId" ref="required" var="部门id"/>
+    </url>
+    <url id="companyjob007" path="/post/CompanyJobController/queryCompanyJobListByToSelect" val="根据公司id和部门id获取职位列表展示为下拉选择框" allUse="2" groupName="职位管理">
+        <property id="departmentId" name="departmentId" ref="" var="部门id"/>
+    </url>
+    <url id="companyjob008" path="/post/CompanyJobController/queryCompanyJobSimpleListByToSelect" val="根据部门id获取职位同级列表且不包含当前id的值展示为下拉选择框" allUse="2" groupName="职位管理">
+        <property id="departmentId" name="departmentId" ref="required" var="部门id"/>
+        <property id="rowId" name="id" ref="" var="不包含的职位id"/>
+        <property id="pId" name="pId" ref="required" var="父职位id"/>
+    </url>
+    <!-- 职位管理结束 -->
+
+    <!-- 职位定级开始 -->
+    <url id="companyjobscore001" path="/post/CompanyJobScoreController/queryCompanyJobScoreList" val="获取职位定级信息列表" allUse="1" method="POST" groupName="职位定级">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="jobId" name="jobId" ref="required" var="职位id" />
+        <property id="name" name="name" ref="" var="名称" />
+        <property id="state" name="state" ref="num" var="状态"/>
+    </url>
+    <url id="companyjobscore002" path="/post/CompanyJobScoreController/insertCompanyJobScoreMation" val="新增职位定级信息" allUse="1" method="POST" groupName="职位定级">
+        <property id="jobId" name="jobId" ref="required" var="职位id" />
+        <property id="nameCn" name="nameCn" ref="required" var="中文名称" />
+        <property id="nameEn" name="nameEn" ref="required" var="英文"/>
+        <property id="fieldStr" name="fieldStr" ref="" var="职位定级包含的字段列表"/>
+    </url>
+    <url id="companyjobscore003" path="/post/CompanyJobScoreController/queryCompanyJobScoreMationToEditById" val="编辑职位定级信息时进行回显" allUse="2" method="GET" groupName="职位定级">
+        <property id="rowId" name="id" ref="required" var="职位定级信息id" />
+    </url>
+    <url id="companyjobscore004" path="/post/CompanyJobScoreController/editCompanyJobScoreMationById" val="编辑职位定级信息" allUse="1" method="PUT" groupName="职位定级">
+        <property id="nameCn" name="nameCn" ref="required" var="中文名称" />
+        <property id="nameEn" name="nameEn" ref="required" var="英文"/>
+        <property id="jobId" name="jobId" ref="required" var="职位id" />
+        <property id="rowId" name="id" ref="required" var="职位定级信息id" />
+        <property id="fieldStr" name="fieldStr" ref="" var="职位定级包含的字段列表"/>
+    </url>
+    <url id="companyjobscore005" path="/post/CompanyJobScoreController/deleteCompanyJobScoreMationById" val="删除职位定级信息" allUse="1" method="DELETE" groupName="职位定级">
+        <property id="rowId" name="id" ref="required" var="职位定级信息id" />
+    </url>
+    <url id="companyjobscore006" path="/post/CompanyJobScoreController/enableCompanyJobScoreMationById" val="启用职位定级信息" allUse="1" method="GET" groupName="职位定级">
+        <property id="rowId" name="id" ref="required" var="职位定级信息id" />
+    </url>
+    <url id="companyjobscore007" path="/post/CompanyJobScoreController/disableCompanyJobScoreMationById" val="禁用职位定级信息" allUse="1" method="GET" groupName="职位定级">
+        <property id="rowId" name="id" ref="required" var="职位定级信息id" />
+    </url>
+    <url id="companyjobscore008" path="/post/CompanyJobScoreController/queryEnableCompanyJobScoreList" val="获取已经启用的职位定级信息列表" allUse="2" method="GET" groupName="职位定级">
+        <property id="jobId" name="jobId" ref="required" var="职位id" />
+    </url>
+    <url id="companyjobscore009" path="/post/CompanyJobScoreController/queryCompanyJobScoreDetailMationById" val="获取职位定级信息" allUse="2" method="GET" groupName="职位定级">
+        <property id="rowId" name="id" ref="required" var="职位定级信息id" />
+    </url>
+    <!-- 职位定级开始 -->
+
+</controller>

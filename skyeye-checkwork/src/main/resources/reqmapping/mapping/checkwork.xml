@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="考勤模块">
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 考勤申诉原因操作开始 -->
+	<url id="checkworkreason001" path="/post/CheckWorkReasonController/queryCheckWorkReasonList" val="获取申诉原因名称列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="appealName" name="appealName" ref="" var="申诉原因名称"/>
+	</url>
+	<url id="checkworkreason002" path="/post/CheckWorkReasonController/insertCheckWorkReasonMation" val="添加申诉原因名称" allUse="1">
+	    <property id="appealName" name="appealName" ref="required" var="申诉原因名称"/>
+	</url>
+	<url id="checkworkreason003" path="/post/CheckWorkReasonController/deleteCheckWorkReasonById" val="删除申诉原因名称" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
+	</url>
+	<url id="checkworkreason004" path="/post/CheckWorkReasonController/updateUpCheckWorkReasonById" val="上线申诉原因" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
+	</url>
+	<url id="checkworkreason005" path="/post/CheckWorkReasonController/updateDownCheckWorkReasonById" val="下线申诉原因" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
+	</url>
+	<url id="checkworkreason006" path="/post/CheckWorkReasonController/selectCheckWorkReasonById" val="回显申诉原因" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
+	</url>
+	<url id="checkworkreason007" path="/post/CheckWorkReasonController/editCheckWorkReasonMationById" val="编辑申诉原因" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
+	    <property id="appealName" name="appealName" ref="required" var="申诉原因名称"/>
+	</url>
+	<url id="checkworkreason008" path="/post/CheckWorkReasonController/queryCheckWorkReasonUpMationById" val="上移申诉原因" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
+	</url>
+	<url id="checkworkreason009" path="/post/CheckWorkReasonController/queryCheckWorkReasonDownMationById" val="下移申诉原因" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
+	</url>
+	<url id="checkworkreason010" path="/post/CheckWorkReasonController/queryCheckWorkReasonUpStateList" val="获取已经上线的申诉原因" allUse="2">
+	</url>
+	<!-- 考勤申诉原因操作结束 -->
+	
+	<!-- 考勤操作开始 -->
+	<url id="checkwork001" path="/post/CheckWorkController/insertCheckWorkStartWork" val="上班打卡" allUse="1">
+		<property id="timeId" name="timeId" ref="required" var="班次id" />
+	</url>
+	<url id="checkwork002" path="/post/CheckWorkController/editCheckWorkEndWork" val="下班打卡" allUse="1">
+		<property id="timeId" name="timeId" ref="required" var="班次id" />
+	</url>
+	<url id="checkwork003" path="/post/CheckWorkController/queryCheckWork" val="查看我的考勤" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="firstTime" name="firstTime" ref="" var="起始时间" />
+		<property id="lastTime" name="lastTime" ref="" var="最后时间" />
+		<property id="state" name="state" ref="" var="考勤状态" />
+		<property id="clockInState" name="clockInState" ref="" var="上班打卡状态" />
+		<property id="clockOutState" name="clockOutState" ref="" var="下班打卡状态" />
+		<property id="timeId" name="timeId" ref="" var="班次id" />
+	</url>
+	<url id="checkwork004" path="/post/CheckWorkController/queryCheckWorkIdByAppealType" val="遍历申诉内容" allUse="2">
+		<property id="appealType" name="appealType" ref="" var="考勤状态" />
+	</url>
+	<url id="checkwork005" path="/post/CheckWorkController/insertCheckWorkAppeal" val="新增申诉" allUse="1">
+		<property id="approvalId" name="approvalId" ref="" var="审批人" />
+		<property id="appealType" name="appealType" ref="" var="申诉类型" />
+		<property id="workId" name="workId" ref="" var="申诉内容" />
+		<property id="appealReasonId" name="appealReasonId" ref="" var="申诉原因类型" />
+		<property id="appealReason" name="appealReason" ref="" var="申诉原因" />
+	</url>
+	<url id="checkwork006" path="/post/CheckWorkController/queryCheckWorkAppeallist" val="申诉申请列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="firstTime" name="firstTime" ref="" var="起始时间" />
+		<property id="lastTime" name="lastTime" ref="" var="最后时间" />
+		<property id="state" name="state" ref="" var="审批状态" />
+		<property id="approvalId" name="approvalId" ref="" var="审批人" />
+		<property id="appealReasonId" name="appealReasonId" ref="" var="申诉原因类型" />
+	</url>
+	<url id="checkwork007" path="/post/CheckWorkController/queryCheckWorkAppealMyGetlist" val="员工考勤申诉审批列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="firstTime" name="firstTime" ref="" var="起始时间" />
+		<property id="lastTime" name="lastTime" ref="" var="最后时间" />
+		<property id="state" name="state" ref="" var="审批状态" />
+		<property id="createId" name="createId" ref="" var="申诉人" />
+		<property id="appealReasonId" name="appealReasonId" ref="" var="申诉原因类型" />
+	</url>
+	<url id="checkwork008" path="/post/CheckWorkController/querySysEveUserStaff" val="审批人列表" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="checkwork010" path="/post/CheckWorkController/queryStaffCheckWorkDetails" val="回显员工的申诉申请详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="申诉申请表id" />
+	</url>
+	<url id="checkwork011" path="/post/CheckWorkController/editStaffCheckWork" val="审批员工的申诉申请" allUse="1">
+		<property id="rowId" name="id" ref="required" var="申诉申请表id" />
+		<property id="state" name="state" ref="required" var="申诉状态" />
+		<property id="appealRemark" name="appealRemark" ref="" var="审核意见" />
+	</url>
+	<url id="checkwork012" path="/post/CheckWorkController/queryCheckWorkDetails" val="员工的申诉申请详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="申诉申请表id" />
+	</url>
+	<url id="checkwork013" path="/post/CheckWorkController/queryCheckWorkTimeToShowButton" val="判断显示打上班卡或者下班卡" allUse="2">
+		<property id="timeId" name="timeId" ref="required" var="班次id" />
+    </url>
+    <url id="checkwork014" path="/post/CheckWorkController/queryCheckWorkMationByMonth" val="根据月份查询当月的考勤信息" allUse="2">
+        <property id="monthMation" name="monthMation" ref="required" var="当前月上个年月" />
+        <property id="timeId" name="timeId" ref="required" var="班次id" />
+    </url>
+    <url id="checkwork015" path="/post/CheckWorkController/queryCheckWorkReport" val="获取考勤报表数据" allUse="2">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="userName" name="userName" ref="" var="员工姓名"/>
+        <property id="companyName" name="companyName" ref="" var="公司"/>
+        <property id="departmentName" name="departmentName" ref="" var="部门"/>
+        <property id="jobName" name="jobName" ref="" var="职位"/>
+        <property id="startTime" name="startTime" ref="required" var="起始时间" />
+        <property id="endTime" name="endTime" ref="required" var="最后时间" />
+        <property id="timeId" name="timeId" ref="" var="班次id" />
+    </url>
+    <url id="checkwork016" path="/post/CheckWorkController/queryCheckWorkEcharts" val="获取考勤图标数据" allUse="2">
+        <property id="userName" name="userName" ref="" var="员工姓名"/>
+        <property id="companyName" name="companyName" ref="" var="公司"/>
+        <property id="departmentName" name="departmentName" ref="" var="部门"/>
+        <property id="jobName" name="jobName" ref="" var="职位"/>
+        <property id="arr" name="arr" ref="required" var="时间数组" />
+        <property id="timeId" name="timeId" ref="" var="班次id" />
+    </url>
+    <url id="checkwork017" path="/post/CheckWorkController/downloadCheckWorkTemplate" val="个人考勤情况导出" allUse="2">
+        <property id="firstTime" name="firstTime" ref="" var="起始时间" />
+        <property id="lastTime" name="lastTime" ref="" var="最后时间" />
+        <property id="state" name="state" ref="" var="考勤状态" />
+        <property id="clockInState" name="clockInState" ref="" var="上班打卡状态" />
+        <property id="clockOutState" name="clockOutState" ref="" var="下班打卡状态" />
+        <property id="timeId" name="timeId" ref="" var="班次id" />
+    </url>
+    <url id="checkwork018" path="/post/CheckWorkController/queryReportDetail" val="获取表格数据详情信息" allUse="2">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="required" var="起始时间" />
+        <property id="endTime" name="endTime" ref="required" var="最后时间" />
+        <property id="state" name="state" ref="required" var="状态" />
+        <property id="userId" name="userId" ref="required" var="姓名Id" />
+    </url>
+    <url id="checkwork019" path="/post/CheckWorkController/queryEchartsDetail" val="获取图表数据详情信息" allUse="2">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="state" name="state" ref="required" var="状态" />
+        <property id="day" name="day" ref="required" var="日期" />
+        <property id="userName" name="userName" ref="" var="员工姓名"/>
+        <property id="companyName" name="companyName" ref="" var="公司"/>
+        <property id="departmentName" name="departmentName" ref="" var="部门"/>
+        <property id="jobName" name="jobName" ref="" var="职位"/>
+    </url>
+    <url id="checkwork020" path="/post/CheckWorkController/queryReportDownload" val="导出考勤报表" allUse="1">
+        <property id="userName" name="userName" ref="" var="员工姓名"/>
+        <property id="companyName" name="companyName" ref="" var="公司"/>
+        <property id="departmentName" name="departmentName" ref="" var="部门"/>
+        <property id="jobName" name="jobName" ref="" var="职位"/>
+        <property id="startTime" name="startTime" ref="required" var="起始时间" />
+        <property id="endTime" name="endTime" ref="required" var="最后时间" />
+        <property id="timeId" name="timeId" ref="" var="班次id" />
+    </url>
+    <!-- 考勤操作结束 -->
+    
+    <!-- 考勤班次操作开始 -->
+	<url id="checkworktime001" path="/post/CheckWorkTimeController/queryAllCheckWorkTimeList" val="查询所有考勤班次列表" allUse="1" method="POST" groupName="考勤班次操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="班次标题"/>
+	</url>
+	<url id="checkworktime002" path="/post/CheckWorkTimeController/insertCheckWorkTimeMation" val="员工考勤班次信息录入" allUse="1" method="POST" groupName="考勤班次操作">
+	    <property id="title" name="title" ref="required" var="班次标题"/>
+	    <property id="startTime" name="startTime" ref="required" var="开始时间"/>
+	    <property id="endTime" name="endTime" ref="required" var="结束时间"/>
+		<property id="restStartTime" name="restStartTime" ref="" var="作息开始时间"/>
+		<property id="restEndTime" name="restEndTime" ref="" var="作息结束时间"/>
+	    <property id="type" name="type" ref="required,num" var="班次类型  1.单休  2.双休  3.单双周  4.自定义"/>
+	    <property id="state" name="state" ref="required,num" var="状态  1.启用  2.禁用  3.删除"/>
+	    <property id="weekDay" name="weekDay" ref="required" var="工作日json串"/>
+	</url>
+	<url id="checkworktime003" path="/post/CheckWorkTimeController/queryCheckWorkTimeMationToEdit" val="编辑员工考勤班次信息时回显" allUse="2" method="GET" groupName="考勤班次操作">
+	    <property id="rowId" name="id" ref="required" var="考勤班次id"/>
+	</url>
+	<url id="checkworktime004" path="/post/CheckWorkTimeController/editCheckWorkTimeMationById" val="编辑员工考勤班次信息" allUse="1" method="PUT" groupName="考勤班次操作">
+	    <property id="rowId" name="id" ref="required" var="考勤班次id"/>
+	    <property id="title" name="title" ref="required" var="班次标题"/>
+	    <property id="startTime" name="startTime" ref="required" var="开始时间"/>
+	    <property id="endTime" name="endTime" ref="required" var="结束时间"/>
+		<property id="restStartTime" name="restStartTime" ref="" var="作息开始时间"/>
+		<property id="restEndTime" name="restEndTime" ref="" var="作息结束时间"/>
+	    <property id="type" name="type" ref="required,num" var="班次类型  1.单休  2.双休  3.单双周  4.自定义"/>
+	    <property id="state" name="state" ref="required,num" var="状态  1.启用  2.禁用  3.删除"/>
+	    <property id="weekDay" name="weekDay" ref="required" var="工作日json串"/>
+	</url>
+	<url id="checkworktime005" path="/post/CheckWorkTimeController/deleteCheckWorkTimeMationById" val="删除员工考勤班次信息" allUse="1" method="DELETE" groupName="考勤班次操作">
+	    <property id="rowId" name="id" ref="required" var="考勤班次id"/>
+	</url>
+	<url id="checkworktime006" path="/post/CheckWorkTimeController/queryEnableCheckWorkTimeList" val="查询启用的考勤班次列表" allUse="2" method="POST" groupName="考勤班次操作">
+		<property id="title" name="title" ref="" var="班次标题"/>
+	</url>
+	<url id="checkworktime007" path="/post/CheckWorkTimeController/queryCheckWorkTimeListByLoginUser" val="获取当前登陆人的考勤班次" allUse="2" method="POST" groupName="考勤班次操作">
+	</url>
+	<!-- 考勤班次操作结束 -->
+
+	<!-- 请假申请开始 -->
+	<url id="checkworkleave001" path="/post/CheckWorkLeaveController/queryMyCheckWorkLeaveList" val="获取我的请假申请列表" allUse="1" groupName="请假申请">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="startTime" name="startTime" ref="" var="开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="结束时间"/>
+		<property id="state" name="state" ref="num" var="状态" />
+	</url>
+	<url id="checkworkleave002" path="/post/CheckWorkLeaveController/insertCheckWorkLeaveMation" val="新增请假申请" allUse="1" method="POST" groupName="请假申请">
+		<property id="title" name="title" ref="required" var="标题" />
+		<property id="leaveDayStr" name="leaveDayStr" ref="required,json" var="请假天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="checkworkleave003" path="/post/CheckWorkLeaveController/queryCheckWorkLeaveDetailsById" val="请假申请详情" allUse="2" method="GET" groupName="请假申请">
+		<property id="rowId" name="id" ref="required" var="请假申请主表单id" />
+	</url>
+	<url id="checkworkleave004" path="/post/CheckWorkLeaveController/queryCheckWorkLeaveToEditById" val="请假申请编辑时进行回显" allUse="2" method="GET" groupName="请假申请">
+		<property id="rowId" name="id" ref="required" var="请假申请主表单id" />
+	</url>
+	<url id="checkworkleave005" path="/post/CheckWorkLeaveController/updateCheckWorkLeaveById" val="编辑请假申请" allUse="1" method="PUT" groupName="请假申请">
+		<property id="rowId" name="id" ref="required" var="请假申请id" />
+		<property id="leaveDayStr" name="leaveDayStr" ref="required,json" var="请假天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="checkworkleave006" path="/post/CheckWorkLeaveController/editCheckWorkLeaveToSubApproval" val="提交审批请假申请" allUse="1" groupName="请假申请">
+		<property id="rowId" name="id" ref="required" var="请假申请id" />
+	</url>
+	<url id="checkworkleave007" path="/post/CheckWorkLeaveController/updateCheckWorkLeaveToCancellation" val="作废请假申请" allUse="1" groupName="请假申请">
+		<property id="rowId" name="id" ref="required" var="请假申请id" />
+	</url>
+	<url id="checkworkleave008" path="/post/CheckWorkLeaveController/updateCheckWorkLeaveByIdInProcess" val="在工作流中编辑请假申请" allUse="2" method="PUT" groupName="请假申请">
+		<property id="rowId" name="id" ref="required" var="请假申请id" />
+		<property id="leaveDayStr" name="leaveDayStr" ref="required,json" var="请假天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+	</url>
+	<url id="checkworkleave009" path="/post/CheckWorkLeaveController/editCheckWorkLeaveToRevoke" val="撤销请假申请" allUse="1" groupName="请假申请">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<!-- 请假申请结束 -->
+
+	<!-- 出差申请开始 -->
+	<url id="checkworkbusinesstrip001" path="/post/CheckWorkBusinessTripController/queryMyCheckWorkBusinessTripList" val="获取我的出差申请列表" allUse="1" groupName="出差申请">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="startTime" name="startTime" ref="" var="开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="结束时间"/>
+		<property id="state" name="state" ref="num" var="状态" />
+	</url>
+	<url id="checkworkbusinesstrip002" path="/post/CheckWorkBusinessTripController/insertCheckWorkBusinessTripMation" val="新增出差申请" allUse="1" method="POST" groupName="出差申请">
+		<property id="title" name="title" ref="required" var="标题" />
+		<property id="businessTripDayStr" name="businessTripDayStr" ref="required,json" var="出差天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="businessTripAddress" name="businessTripAddress" ref="required" var="出差地点" />
+		<property id="businessTripReason" name="businessTripReason" ref="required" var="出差事由" />
+	</url>
+	<url id="checkworkbusinesstrip003" path="/post/CheckWorkBusinessTripController/queryCheckWorkBusinessTripDetailsById" val="出差申请详情" allUse="2" method="GET" groupName="出差申请">
+		<property id="rowId" name="id" ref="required" var="出差申请主表单id" />
+	</url>
+	<url id="checkworkbusinesstrip004" path="/post/CheckWorkBusinessTripController/queryCheckWorkBusinessTripToEditById" val="出差申请编辑时进行回显" allUse="2" method="GET" groupName="出差申请">
+		<property id="rowId" name="id" ref="required" var="出差申请主表单id" />
+	</url>
+	<url id="checkworkbusinesstrip005" path="/post/CheckWorkBusinessTripController/updateCheckWorkBusinessTripById" val="编辑出差申请" allUse="1" method="PUT" groupName="出差申请">
+		<property id="rowId" name="id" ref="required" var="出差申请id" />
+		<property id="businessTripDayStr" name="businessTripDayStr" ref="required,json" var="出差天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="businessTripAddress" name="businessTripAddress" ref="required" var="出差地点" />
+		<property id="businessTripReason" name="businessTripReason" ref="required" var="出差事由" />
+	</url>
+	<url id="checkworkbusinesstrip006" path="/post/CheckWorkBusinessTripController/editCheckWorkBusinessTripToSubApproval" val="提交审批出差申请" allUse="1" groupName="出差申请">
+		<property id="rowId" name="id" ref="required" var="出差申请id" />
+	</url>
+	<url id="checkworkbusinesstrip007" path="/post/CheckWorkBusinessTripController/updateCheckWorkBusinessTripToCancellation" val="作废出差申请" allUse="1" groupName="出差申请">
+		<property id="rowId" name="id" ref="required" var="出差申请id" />
+	</url>
+	<url id="checkworkbusinesstrip008" path="/post/CheckWorkBusinessTripController/updateCheckWorkBusinessTripByIdInProcess" val="在工作流中编辑出差申请" allUse="2" method="PUT" groupName="出差申请">
+		<property id="rowId" name="id" ref="required" var="出差申请id" />
+		<property id="businessTripDayStr" name="businessTripDayStr" ref="required,json" var="出差天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="businessTripAddress" name="businessTripAddress" ref="required" var="出差地点" />
+		<property id="businessTripReason" name="businessTripReason" ref="required" var="出差事由" />
+	</url>
+	<url id="checkworkbusinesstrip009" path="/post/CheckWorkBusinessTripController/editCheckWorkBusinessTripToRevoke" val="撤销出差申请" allUse="1" groupName="出差申请">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<!-- 出差申请结束 -->
+
+	<!-- 加班申请开始 -->
+	<url id="checkworkovertime001" path="/post/CheckWorkOvertimeController/queryMyCheckWorkOvertimeList" val="获取我的加班申请列表" allUse="1" groupName="加班申请">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="startTime" name="startTime" ref="" var="开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="结束时间"/>
+		<property id="state" name="state" ref="num" var="状态" />
+	</url>
+	<url id="checkworkovertime002" path="/post/CheckWorkOvertimeController/insertCheckWorkOvertimeMation" val="新增加班申请" allUse="1" method="POST" groupName="加班申请">
+		<property id="title" name="title" ref="required" var="标题" />
+		<property id="overtimeDayStr" name="overtimeDayStr" ref="required,json" var="加班天数json串" />
+		<property id="content" name="content" ref="required" var="加班内容" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="checkworkovertime003" path="/post/CheckWorkOvertimeController/queryCheckWorkOvertimeDetailsById" val="加班申请详情" allUse="2" method="GET" groupName="加班申请">
+		<property id="rowId" name="id" ref="required" var="加班申请主表单id" />
+	</url>
+	<url id="checkworkovertime004" path="/post/CheckWorkOvertimeController/queryCheckWorkOvertimeToEditById" val="加班申请编辑时进行回显" allUse="2" method="GET" groupName="加班申请">
+		<property id="rowId" name="id" ref="required" var="加班申请主表单id" />
+	</url>
+	<url id="checkworkovertime005" path="/post/CheckWorkOvertimeController/updateCheckWorkOvertimeById" val="编辑加班申请" allUse="1" method="PUT" groupName="加班申请">
+		<property id="rowId" name="id" ref="required" var="加班申请id" />
+		<property id="overtimeDayStr" name="overtimeDayStr" ref="required,json" var="加班天数json串" />
+		<property id="content" name="content" ref="required" var="加班内容" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="checkworkovertime006" path="/post/CheckWorkOvertimeController/editCheckWorkOvertimeToSubApproval" val="提交审批加班申请" allUse="1" groupName="加班申请">
+		<property id="rowId" name="id" ref="required" var="加班申请id" />
+	</url>
+	<url id="checkworkovertime007" path="/post/CheckWorkOvertimeController/updateCheckWorkOvertimeToCancellation" val="作废加班申请" allUse="1" groupName="加班申请">
+		<property id="rowId" name="id" ref="required" var="加班申请id" />
+	</url>
+	<url id="checkworkovertime008" path="/post/CheckWorkOvertimeController/updateCheckWorkOvertimeByIdInProcess" val="在工作流中编辑加班申请" allUse="2" method="PUT" groupName="加班申请">
+		<property id="rowId" name="id" ref="required" var="加班申请id" />
+		<property id="overtimeDayStr" name="overtimeDayStr" ref="required,json" var="加班天数json串" />
+		<property id="content" name="content" ref="required" var="加班内容" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+	</url>
+	<url id="checkworkovertime009" path="/post/CheckWorkOvertimeController/editCheckWorkOvertimeToRevoke" val="撤销加班申请" allUse="1" groupName="加班申请">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<!-- 加班申请结束 -->
+
+	<!-- 销假申请开始 -->
+	<url id="checkworkcancelleave001" path="/post/CheckWorkCancelLeaveController/queryMyCheckWorkCancelLeaveList" val="获取我的销假申请列表" allUse="1" groupName="销假申请">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="startTime" name="startTime" ref="" var="开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="结束时间"/>
+		<property id="state" name="state" ref="num" var="状态" />
+	</url>
+	<url id="checkworkcancelleave002" path="/post/CheckWorkCancelLeaveController/insertCheckWorkCancelLeaveMation" val="新增销假申请" allUse="1" method="POST" groupName="销假申请">
+		<property id="title" name="title" ref="required" var="标题" />
+		<property id="cancelLeaveDayStr" name="cancelLeaveDayStr" ref="required,json" var="销假天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="checkworkcancelleave003" path="/post/CheckWorkCancelLeaveController/queryCheckWorkCancelLeaveDetailsById" val="销假申请详情" allUse="2" method="GET" groupName="销假申请">
+		<property id="rowId" name="id" ref="required" var="销假申请主表单id" />
+	</url>
+	<url id="checkworkcancelleave004" path="/post/CheckWorkCancelLeaveController/queryCheckWorkCancelLeaveToEditById" val="销假申请编辑时进行回显" allUse="2" method="GET" groupName="销假申请">
+		<property id="rowId" name="id" ref="required" var="销假申请主表单id" />
+	</url>
+	<url id="checkworkcancelleave005" path="/post/CheckWorkCancelLeaveController/updateCheckWorkCancelLeaveById" val="编辑销假申请" allUse="1" method="PUT" groupName="销假申请">
+		<property id="rowId" name="id" ref="required" var="销假申请id" />
+		<property id="cancelLeaveDayStr" name="cancelLeaveDayStr" ref="required,json" var="销假天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+	</url>
+	<url id="checkworkcancelleave006" path="/post/CheckWorkCancelLeaveController/editCheckWorkCancelLeaveToSubApproval" val="提交审批销假申请" allUse="1" groupName="销假申请">
+		<property id="rowId" name="id" ref="required" var="销假申请id" />
+	</url>
+	<url id="checkworkcancelleave007" path="/post/CheckWorkCancelLeaveController/updateCheckWorkCancelLeaveToCancellation" val="作废销假申请" allUse="1" groupName="销假申请">
+		<property id="rowId" name="id" ref="required" var="销假申请id" />
+	</url>
+	<url id="checkworkcancelleave008" path="/post/CheckWorkCancelLeaveController/updateCheckWorkCancelLeaveByIdInProcess" val="在工作流中编辑销假申请" allUse="2" method="PUT" groupName="销假申请">
+		<property id="rowId" name="id" ref="required" var="销假申请id" />
+		<property id="leaveDayStr" name="leaveDayStr" ref="required,json" var="销假天数json串" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+	</url>
+	<url id="checkworkcancelleave009" path="/post/CheckWorkCancelLeaveController/editCheckWorkCancelLeaveToRevoke" val="撤销销假申请" allUse="1" groupName="销假申请">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<!-- 销假申请结束 -->
+	
+</controller>

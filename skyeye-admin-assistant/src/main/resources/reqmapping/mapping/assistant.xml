@@ -1,0 +1,1239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="行政模块">
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	 
+	<!-- 会议室管理开始 -->
+	<url id="conferenceroom001" path="/post/ConferenceRoomController/selectAllConferenceRoomMation" val="遍历所有的会议室" allUse="1" groupName="会议室配置">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="roomName" name="roomName" ref="" var="会议室名称" />
+		<property id="state" name="state" ref="" var="会议室状态" />
+	</url>
+	<url id="conferenceroom002" path="/post/ConferenceRoomController/insertConferenceRoomMation" val="新增会议室" allUse="1" groupName="会议室配置">
+		<property id="roomName" name="roomName" ref="required" var="会议室名称" />
+		<property id="roomImg" name="roomImg" ref="required" var="会议室图片"/>
+		<property id="roomCapacity" name="roomCapacity" ref="required,num" var="会议室容量"/>
+		<property id="roomPosition" name="roomPosition" ref="" var="会议室位置"/>
+		<property id="roomEquipment" name="roomEquipment" ref="" var="内部设备"/>
+		<property id="roomAdmin" name="roomAdmin" ref="" var="会议室管理人"/>
+		<property id="roomAddDesc" name="roomAddDesc" ref="" var="会议室附件描述"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件"/>
+	</url>
+	<url id="conferenceroom003" path="/post/ConferenceRoomController/deleteConferenceRoomById" val="删除会议室" allUse="1" groupName="会议室配置">
+		<property id="rowId" name="id" ref="required" var="会议室id" />
+	</url>
+	<url id="conferenceroom004" path="/post/ConferenceRoomController/updateConferenceRoomNormalById" val="会议室恢复正常" allUse="1" groupName="会议室配置">
+		<property id="rowId" name="id" ref="required" var="会议室id" />
+	</url>
+	<url id="conferenceroom005" path="/post/ConferenceRoomController/updateConferenceRoomRepairById" val="会议室维修" allUse="1" groupName="会议室配置">
+		<property id="rowId" name="id" ref="required" var="会议室id" />
+	</url>
+	<url id="conferenceroom006" path="/post/ConferenceRoomController/updateConferenceRoomScrapById" val="会议室报废" allUse="1" groupName="会议室配置">
+		<property id="rowId" name="id" ref="required" var="会议室id" />
+	</url>
+	<url id="conferenceroom007" path="/post/ConferenceRoomController/selectConferenceRoomDetailsById" val="会议室详情" allUse="2" groupName="会议室配置">
+		<property id="rowId" name="id" ref="required" var="会议室id" />
+	</url>
+	<url id="conferenceroom008" path="/post/ConferenceRoomController/queryConferenceRoomMationById" val="查询会议室信息用以编辑" allUse="2" groupName="会议室配置">
+		<property id="rowId" name="id" ref="required" var="会议室id" />
+	</url>
+	<url id="conferenceroom009" path="/post/ConferenceRoomController/editConferenceRoomMationById" val="编辑会议室" allUse="1" groupName="会议室配置">
+		<property id="rowId" name="id" ref="required" var="会议室id" />
+		<property id="roomName" name="roomName" ref="required" var="会议室名称" />
+		<property id="roomImg" name="roomImg" ref="required" var="会议室图片"/>
+		<property id="roomCapacity" name="roomCapacity" ref="required,num" var="会议室容量"/>
+		<property id="roomPosition" name="roomPosition" ref="" var="会议室位置"/>
+		<property id="roomEquipment" name="roomEquipment" ref="" var="内部设备"/>
+		<property id="roomAdmin" name="roomAdmin" ref="" var="会议室管理人"/>
+		<property id="roomAddDesc" name="roomAddDesc" ref="" var="会议室附件描述"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件"/>
+	</url>
+    <url id="conferenceroomreserve008" path="/post/ConferenceRoomController/selectConferenceRoomListToChoose" val="获取会议室列表用于预定选择" allUse="2" groupName="会议室配置">
+    </url>
+	<!-- 会议室管理结束 -->
+	
+	<!-- 会议室预定开始 -->
+    <url id="conferenceroomreserve001" path="/post/ConferenceRoomReserveController/queryMyReserveConferenceRoomList" val="获取我预定的会议室列表" allUse="1" groupName="会议室预定">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="approvalState" name="approvalState" ref="num" var="状态" />
+    </url>
+    <url id="conferenceroomreserve002" path="/post/ConferenceRoomReserveController/insertReserveConferenceRoomMation" val="会议室预定申请" allUse="1" groupName="会议室预定">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="conferenceRoom" name="conferenceRoom" ref="required" var="会议室" />
+        <property id="startTime" name="startTime" ref="required" var="开始时间" />
+        <property id="endTime" name="endTime" ref="required" var="结束时间" />
+        <property id="reserveReason" name="reserveReason" ref="required" var="使用事由" />
+        <property id="remark" name="remark" ref="" var="备注" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="conferenceroomreserve003" path="/post/ConferenceRoomReserveController/queryReserveConferenceRoomMationToDetails" val="会议室预定申请详情" allUse="2" groupName="会议室预定">
+        <property id="rowId" name="id" ref="required" var="会议室预定主表单id" />
+    </url>
+    <url id="conferenceroomreserve004" path="/post/ConferenceRoomReserveController/queryReserveConferenceRoomMationToEdit" val="会议室预定申请编辑时进行回显" allUse="2" groupName="会议室预定">
+        <property id="rowId" name="id" ref="required" var="会议室预定主表单id" />
+    </url>
+    <url id="conferenceroomreserve005" path="/post/ConferenceRoomReserveController/updateReserveConferenceRoomMationById" val="编辑会议室预定申请" allUse="1" groupName="会议室预定">
+    	<property id="rowId" name="id" ref="required" var="会议室预定id" />
+        <property id="conferenceRoom" name="conferenceRoom" ref="required" var="会议室" />
+        <property id="startTime" name="startTime" ref="required" var="开始时间" />
+        <property id="endTime" name="endTime" ref="required" var="结束时间" />
+        <property id="reserveReason" name="reserveReason" ref="required" var="使用事由" />
+        <property id="remark" name="remark" ref="" var="备注" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="conferenceroomreserve006" path="/post/ConferenceRoomReserveController/editReserveConferenceRoomToSubApproval" val="会议室预定申请提交审批" allUse="1" groupName="会议室预定">
+        <property id="rowId" name="id" ref="required" var="会议室预定id" />
+    </url>
+    <url id="conferenceroomreserve007" path="/post/ConferenceRoomReserveController/updateReserveConferenceRoomToCancellation" val="作废会议室预定申请" allUse="1" groupName="会议室预定">
+        <property id="rowId" name="id" ref="required" var="会议室预定id" />
+    </url>
+    <url id="conferenceroomreserve009" path="/post/ConferenceRoomReserveController/updateReserveConferenceRoomMationToSave" val="编辑会议室预定申请(已提交审批)" allUse="2" groupName="会议室预定">
+    	<property id="rowId" name="id" ref="required" var="会议室预定id" />
+        <property id="conferenceRoom" name="conferenceRoom" ref="required" var="会议室" />
+        <property id="startTime" name="startTime" ref="required" var="开始时间" />
+        <property id="endTime" name="endTime" ref="required" var="结束时间" />
+        <property id="reserveReason" name="reserveReason" ref="required" var="使用事由" />
+        <property id="remark" name="remark" ref="" var="备注" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+    </url>
+    <url id="conferenceroomreserve010" path="/post/ConferenceRoomReserveController/editReserveConferenceRoomToRevoke" val="撤销会议室预定申请" allUse="1" groupName="会议室预定">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+    </url>
+    <!-- 会议室预定结束 -->
+
+    <!-- 用品类别管理开始 -->
+    <url id="assetarticles001" path="/post/AssetArticlesTypeController/queryAssetArticlesTypeList" val="获取用品类别列表" allUse="1" groupName="用品类别配置">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="typeName" name="typeName" ref="" var="用品类别名称"/>
+    </url>
+    <url id="assetarticles002" path="/post/AssetArticlesTypeController/insertAssetArticlesType" val="新增用品类别" allUse="1" groupName="用品类别配置">
+        <property id="typeName" name="typeName" ref="required" var="用品类别名称"/>
+    </url>
+    <url id="assetarticles003" path="/post/AssetArticlesTypeController/deleteAssetArticlesTypeById" val="删除用品类别" allUse="1" groupName="用品类别配置">
+        <property id="rowId" name="id" ref="required" var="用品类别名称id"/>
+    </url>
+    <url id="assetarticles004" path="/post/AssetArticlesTypeController/updateUpAssetArticlesTypeById" val="上线用品类别" allUse="1" groupName="用品类别配置">
+        <property id="rowId" name="id" ref="required" var="用品类别名称id"/>
+    </url>
+    <url id="assetarticles005" path="/post/AssetArticlesTypeController/updateDownAssetArticlesTypeById" val="下线用品类别" allUse="1" groupName="用品类别配置">
+        <property id="rowId" name="id" ref="required" var="用品类别名称id"/>
+    </url>
+    <url id="assetarticles006" path="/post/AssetArticlesTypeController/selectAssetArticlesTypeById" val="获取选中的用品类别信息" allUse="2" groupName="用品类别配置">
+        <property id="rowId" name="id" ref="required" var="用品类别名称id"/>
+    </url>
+    <url id="assetarticles007" path="/post/AssetArticlesTypeController/editAssetArticlesTypeById" val="编辑用品类别信息" allUse="1" groupName="用品类别配置">
+        <property id="rowId" name="id" ref="required" var="用品类别名称id"/>
+        <property id="typeName" name="typeName" ref="required" var="用品类别名称"/>
+    </url>
+    <url id="assetarticles008" path="/post/AssetArticlesTypeController/editAssetArticlesTypeOrderUpById" val="用品类别上移" allUse="1" groupName="用品类别配置">
+        <property id="rowId" name="id" ref="required" var="分类id" />
+    </url>
+    <url id="assetarticles009" path="/post/AssetArticlesTypeController/editAssetArticlesTypeOrderDownById" val="用品类别下移" allUse="1" groupName="用品类别配置">
+        <property id="rowId" name="id" ref="required" var="分类id" />
+    </url>
+    <url id="assetarticles010" path="/post/AssetArticlesTypeController/queryAssetArticlesTypeUpStateList" val="获取已经上线的用品类别列表" allUse="2" groupName="用品类别配置">
+    </url>
+    <!-- 用品类别管理结束 -->
+
+    <!-- 用品管理开始 -->
+	<url id="assetarticles011" path="/post/AssetArticlesController/insertAssetArticles" val="新增用品" allUse="1" groupName="用品配置">
+        <property id="articlesName" name="articlesName" ref="required" var="用品名称" />
+        <property id="typeId" name="typeId" ref="required" var="用品类别" />
+        <property id="specifications" name="specifications" ref="" var="规格" />
+        <property id="unitOfMeasurement" name="unitOfMeasurement" ref="required" var="计量单位" />
+        <property id="initialNum" name="initialNum" ref="required,num" var="初始化数量" />
+        <property id="storageArea" name="storageArea" ref="" var="存放区域" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="相关描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+        <property id="assetAdmin" name="assetAdmin" ref="" var="管理人" />
+    </url>
+    <url id="assetarticles012" path="/post/AssetArticlesController/queryAssetArticlesList" val="获取用品列表" allUse="1" groupName="用品配置">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="articlesName" name="articlesName" ref="" var="用品名称"/>
+        <property id="typeId" name="typeId" ref="" var="用品类别" />
+    </url>
+    <url id="assetarticles013" path="/post/AssetArticlesController/queryAssetArticlesMationToDetails" val="用品详情" allUse="2" groupName="用品配置">
+        <property id="rowId" name="id" ref="required" var="用品id" />
+    </url>
+    <url id="assetarticles014" path="/post/AssetArticlesController/deleteAssetArticles" val="删除用品" allUse="1" groupName="用品配置">
+        <property id="rowId" name="id" ref="required" var="用品id" />
+    </url>
+    <url id="assetarticles015" path="/post/AssetArticlesController/queryAssetArticlesMationById" val="通过id查找对应的用品信息用以编辑" allUse="2" groupName="用品配置">
+        <property id="rowId" name="id" ref="required" var="用品id" />
+    </url>
+    <url id="assetarticles016" path="/post/AssetArticlesController/editAssetArticlesMationById" val="通过id编辑对应的用品信息" allUse="1" groupName="用品配置">
+        <property id="rowId" name="id" ref="required" var="用品id" />
+        <property id="articlesName" name="articlesName" ref="required" var="用品名称" />
+        <property id="typeId" name="typeId" ref="required" var="用品类别" />
+        <property id="specifications" name="specifications" ref="" var="规格" />
+        <property id="unitOfMeasurement" name="unitOfMeasurement" ref="required" var="计量单位" />
+        <property id="storageArea" name="storageArea" ref="" var="存放区域" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="相关描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+        <property id="assetAdmin" name="assetAdmin" ref="" var="管理人" />
+    </url>
+    <url id="assetarticles018" path="/post/AssetArticlesController/queryAssetArticlesListByTypeId" val="根据用品类别获取用品列表信息" allUse="2" groupName="用品领用">
+        <property id="typeId" name="typeId" ref="required" var="类型id" />
+    </url>
+	<!-- 用品管理结束 -->
+
+    <!-- 用品采购申请开始 -->
+    <url id="assetarticles024" path="/post/AssetArticlesApplyPurchaseController/insertAssetArticlesListToPurchase" val="用品采购申请" allUse="1" groupName="用品采购">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetArticlesStr" name="assetArticlesStr" ref="required,json" var="用品json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="assetarticles025" path="/post/AssetArticlesApplyPurchaseController/queryMyPurchaseAssetArticlesMation" val="获取我的用品采购申请单信息" allUse="1" groupName="用品采购">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="assetarticles026" path="/post/AssetArticlesApplyPurchaseController/queryAssetArticlesListPurchaseDetailsById" val="用品采购申请详情" allUse="2" groupName="用品采购">
+        <property id="rowId" name="id" ref="required" var="用品采购主表单id" />
+    </url>
+    <url id="assetarticles027" path="/post/AssetArticlesApplyPurchaseController/editAssetArticlesUseToPurchaseSubApproval" val="用品采购申请提交审批" allUse="1" groupName="用品采购">
+        <property id="rowId" name="id" ref="required" var="用品采购主表单id" />
+    </url>
+    <url id="assetarticles028" path="/post/AssetArticlesApplyPurchaseController/queryAssetArticlesListPurchaseToEditById" val="用品采购申请编辑时进行回显" allUse="2" groupName="用品采购">
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+    </url>
+    <url id="assetarticles029" path="/post/AssetArticlesApplyPurchaseController/updateAssetArticlesListToPurchaseById" val="编辑用品采购申请" allUse="1" groupName="用品采购">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetArticlesStr" name="assetArticlesStr" ref="required,json" var="用品json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="assetarticles031" path="/post/AssetArticlesApplyPurchaseController/updateAssetArticlesPurchaseToCancellation" val="作废用品采购申请" allUse="1" groupName="用品采购">
+        <property id="rowId" name="id" ref="required" var="用品采购主表单id" />
+    </url>
+    <url id="assetarticles033" path="/post/AssetArticlesApplyPurchaseController/updateAssetArticlesListToPurchaseByIdInProcess" val="在工作流中编辑用品采购申请" allUse="2" groupName="用品采购">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetArticlesStr" name="assetArticlesStr" ref="required,json" var="用品json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+    </url>
+    <url id="assetarticles035" path="/post/AssetArticlesApplyPurchaseController/editAssetArticlesPurchaseToRevoke" val="撤销用品采购申请" allUse="1" groupName="用品采购">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+    </url>
+    <!-- 用品采购申请结束 -->
+
+    <!-- 用品领用申请开始 -->
+    <url id="assetarticles017" path="/post/AssetArticlesApplyUseController/queryMyUseAssetArticlesMation" val="获取我领用的用品信息" allUse="1" groupName="用品领用">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="assetarticles019" path="/post/AssetArticlesApplyUseController/insertAssetArticlesListToUse" val="用品领用申请" allUse="1" groupName="用品领用">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetArticlesStr" name="assetArticlesStr" ref="required,json" var="用品json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="assetarticles020" path="/post/AssetArticlesApplyUseController/queryAssetArticlesListUseDetailsById" val="用品领用申请详情" allUse="2" groupName="用品领用">
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+    </url>
+    <url id="assetarticles021" path="/post/AssetArticlesApplyUseController/queryAssetArticlesListUseToEditById" val="用品领用申请编辑时进行回显" allUse="2" groupName="用品领用">
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+    </url>
+    <url id="assetarticles022" path="/post/AssetArticlesApplyUseController/updateAssetArticlesListToUseById" val="编辑用品领用申请" allUse="1" groupName="用品领用">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetArticlesStr" name="assetArticlesStr" ref="required,json" var="用品json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="assetarticles023" path="/post/AssetArticlesApplyUseController/editAssetArticlesUseToSubApproval" val="用品领用申请提交审批" allUse="1" groupName="用品领用">
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+    </url>
+    <url id="assetarticles030" path="/post/AssetArticlesApplyUseController/updateAssetArticlesToCancellation" val="作废用品领用申请" allUse="1" groupName="用品领用">
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+    </url>
+    <url id="assetarticles032" path="/post/AssetArticlesApplyUseController/updateAssetArticlesListToUseByIdInProcess" val="在工作流中编辑用品领用申请" allUse="2" groupName="用品领用">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetArticlesStr" name="assetArticlesStr" ref="required,json" var="用品json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
+    </url>
+    <url id="assetarticles034" path="/post/AssetArticlesApplyUseController/editAssetArticlesUseToRevoke" val="撤销用品领用申请" allUse="1" groupName="用品领用">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+    </url>
+    <!-- 用品领用申请结束 -->
+	
+	<!-- 车辆管理开始 -->
+    <url id="vehicle001" path="/post/VehicleController/selectAllVehicleMation" val="遍历所有的车辆" allUse="1" groupName="车辆管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="vehicleName" name="vehicleName" ref="" var="车辆名称" />
+        <property id="licensePlate" name="licensePlate" ref="" var="车牌号" />
+        <property id="state" name="state" ref="" var="车辆状态" />
+    </url>
+    <url id="vehicle002" path="/post/VehicleController/insertVehicleMation" val="新增车辆" allUse="1" groupName="车辆管理">
+        <property id="vehicleName" name="vehicleName" ref="required" var="车辆名称" />
+        <property id="vehicleImg" name="vehicleImg" ref="required" var="车辆图片"/>
+        <property id="licensePlate" name="licensePlate" ref="required" var="车牌号"/>
+        <property id="specifications" name="specifications" ref="required,num" var="车辆规格(准载人数)"/>
+        <property id="oilConsumption" name="oilConsumption" ref="" var="油耗"/>
+        <property id="unitPrice" name="unitPrice" ref="double" var="单价"/>
+        <property id="vehicleColor" name="vehicleColor" ref="" var="车辆颜色"/>
+        <property id="manufacturer" name="manufacturer" ref="" var="生产商"/>
+        <property id="manufactureTime" name="manufactureTime" ref="" var="生产日期"/>
+        <property id="supplier" name="supplier" ref="" var="供应商"/>
+        <property id="purchaseTime" name="purchaseTime" ref="" var="采购日期"/>
+        <property id="engineNumber" name="engineNumber" ref="" var="发动机号"/>
+        <property id="frameNumber" name="frameNumber" ref="" var="车架号"/>
+        <property id="storageArea" name="storageArea" ref="" var="存放区域"/>
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="附件描述"/>
+        <property id="nextInspectionTime" name="nextInspectionTime" ref="" var="下次年检时间"/>
+        <property id="insuranceDeadline" name="insuranceDeadline" ref="" var="保险截止日期"/>
+        <property id="prevMaintainTime" name="prevMaintainTime" ref="" var="上次保养日期"/>
+        <property id="vehicleAdmin" name="vehicleAdmin" ref="" var="管理人"/>
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件"/>
+    </url>
+    <url id="vehicle003" path="/post/VehicleController/deleteVehicleById" val="删除车辆" allUse="1" groupName="车辆管理">
+        <property id="rowId" name="id" ref="required" var="车辆id" />
+    </url>
+    <url id="vehicle004" path="/post/VehicleController/updateVehicleNormalById" val="车辆恢复正常" allUse="1" groupName="车辆管理">
+        <property id="rowId" name="id" ref="required" var="车辆id" />
+    </url>
+    <url id="vehicle005" path="/post/VehicleController/updateVehicleRepairById" val="车辆维修" allUse="1" groupName="车辆管理">
+        <property id="rowId" name="id" ref="required" var="车辆id" />
+    </url>
+    <url id="vehicle006" path="/post/VehicleController/updateVehicleScrapById" val="车辆报废" allUse="1" groupName="车辆管理">
+        <property id="rowId" name="id" ref="required" var="车辆id" />
+    </url>
+    <url id="vehicle007" path="/post/VehicleController/selectVehicleDetailsById" val="车辆详情" allUse="2" groupName="车辆管理">
+        <property id="rowId" name="id" ref="required" var="车辆id" />
+    </url>
+    <url id="vehicle008" path="/post/VehicleController/queryVehicleMationById" val="查询车辆信息用以编辑" allUse="2" groupName="车辆管理">
+        <property id="rowId" name="id" ref="required" var="车辆id" />
+    </url>
+    <url id="vehicle009" path="/post/VehicleController/editVehicleMationById" val="编辑车辆" allUse="1" groupName="车辆管理">
+        <property id="rowId" name="id" ref="required" var="车辆id" />
+        <property id="vehicleName" name="vehicleName" ref="required" var="车辆名称" />
+        <property id="vehicleImg" name="vehicleImg" ref="required" var="车辆图片"/>
+        <property id="licensePlate" name="licensePlate" ref="required" var="车牌号"/>
+        <property id="specifications" name="specifications" ref="required,num" var="车辆规格(准载人数)"/>
+        <property id="oilConsumption" name="oilConsumption" ref="" var="油耗"/>
+        <property id="unitPrice" name="unitPrice" ref="double" var="单价"/>
+        <property id="vehicleColor" name="vehicleColor" ref="" var="车辆颜色"/>
+        <property id="manufacturer" name="manufacturer" ref="" var="生产商"/>
+        <property id="manufactureTime" name="manufactureTime" ref="" var="生产日期"/>
+        <property id="supplier" name="supplier" ref="" var="供应商"/>
+        <property id="purchaseTime" name="purchaseTime" ref="" var="采购日期"/>
+        <property id="engineNumber" name="engineNumber" ref="" var="发动机号"/>
+        <property id="frameNumber" name="frameNumber" ref="" var="车架号"/>
+        <property id="storageArea" name="storageArea" ref="" var="存放区域"/>
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="附件描述"/>
+        <property id="nextInspectionTime" name="nextInspectionTime" ref="" var="下次年检时间"/>
+        <property id="insuranceDeadline" name="insuranceDeadline" ref="" var="保险截止日期"/>
+        <property id="prevMaintainTime" name="prevMaintainTime" ref="" var="上次保养日期"/>
+        <property id="vehicleAdmin" name="vehicleAdmin" ref="" var="管理人"/>
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件"/>
+    </url>
+    <url id="vehicle010" path="/post/VehicleController/queryAllVehicleToChoose" val="查询所有的车牌号用于下拉选择框" allUse="2" groupName="车辆管理">
+    </url>
+    <url id="vehicle011" path="/post/VehicleController/queryTheSuitableVehicleToChoose" val="查询可用的合适的车辆用于用户用车申请" allUse="2" groupName="车辆管理">
+    	<property id="passengerNum" name="passengerNum" ref="required,num" var="乘车人数" />
+    </url>
+    <url id="vehicle012" path="/post/VehicleController/queryAvailableDrivers" val="查询空闲的司机" allUse="2" groupName="车辆管理">
+    </url>
+    <!-- 车辆管理结束 -->
+
+    <!-- 用车申请管理开始 -->
+    <url id="vehicle013" path="/post/VehicleApplyUseController/insertVehicleMationToUse" val="用车申请" allUse="1" groupName="用车申请">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="passengerNum" name="passengerNum" ref="required" var="乘客数量" />
+        <property id="passengerInfo" name="passengerInfo" ref="" var="乘客信息" />
+        <property id="isSelfDrive" name="isSelfDrive" ref="required,num" var="是否自驾" />
+        <property id="driverId" name="driverId" ref="" var="驾驶员信息" />
+        <property id="departureTime" name="departureTime" ref="required" var="出发时间" />
+        <property id="returnTime" name="returnTime" ref="required" var="返回时间" />
+        <property id="designatedVehicleId" name="designatedVehicleId" ref="" var="指定车辆" />
+        <property id="timeAndPlaceOfTravel" name="timeAndPlaceOfTravel" ref="" var="乘车时间地点" />
+        <property id="reasonsForUsingCar" name="reasonsForUsingCar" ref="required" var="用车事由" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="vehicle014" path="/post/VehicleApplyUseController/queryMyUseVehicleMation" val="获取我的用车申请信息列表" allUse="1" groupName="用车申请">
+    	<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="vehicle016" path="/post/VehicleApplyUseController/queryVehicleUseDetails" val="用车申请详情" allUse="2" groupName="用车申请">
+    	<property id="rowId" name="id" ref="required" var="用车表单id" />
+    </url>
+    <url id="vehicle017" path="/post/VehicleApplyUseController/editVehicleUseToSubApproval" val="用车申请提交审批" allUse="1" groupName="用车申请">
+        <property id="rowId" name="id" ref="required" var="用车申请主表单id" />
+    </url>
+    <url id="vehicle018" path="/post/VehicleApplyUseController/updateVehicleUseToCancellation" val="用车申请作废" allUse="1" groupName="用车申请">
+        <property id="rowId" name="id" ref="required" var="用车申请主表单id" />
+    </url>
+    <url id="vehicle019" path="/post/VehicleApplyUseController/queryVehicleUseMationToEdit" val="获取用车申请信息用于编辑回显" allUse="2" groupName="用车申请">
+        <property id="rowId" name="id" ref="required" var="用车申请主表单id" />
+    </url>
+    <url id="vehicle020" path="/post/VehicleApplyUseController/updateVehicleUseMationToEdit" val="用车申请编辑" allUse="1" groupName="用车申请">
+    	<property id="rowId" name="id" ref="required" var="申请单Id" />
+        <property id="passengerNum" name="passengerNum" ref="required" var="乘客数量" />
+        <property id="passengerInfo" name="passengerInfo" ref="" var="乘客信息" />
+        <property id="isSelfDrive" name="isSelfDrive" ref="required,num" var="是否自驾" />
+        <property id="driverId" name="driverId" ref="" var="驾驶员信息" />
+        <property id="departureTime" name="departureTime" ref="required" var="出发时间" />
+        <property id="returnTime" name="returnTime" ref="required" var="返回时间" />
+        <property id="designatedVehicleId" name="designatedVehicleId" ref="" var="指定车辆" />
+        <property id="timeAndPlaceOfTravel" name="timeAndPlaceOfTravel" ref="" var="乘车时间地点" />
+        <property id="reasonsForUsingCar" name="reasonsForUsingCar" ref="required" var="用车事由" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="vehicle021" path="/post/VehicleApplyUseController/updateVehicleUseMationByIdInProcess" val="在工作流中编辑用车申请" allUse="2" groupName="用车申请">
+    	<property id="rowId" name="id" ref="required" var="申请单Id" />
+        <property id="passengerNum" name="passengerNum" ref="required" var="乘客数量" />
+        <property id="passengerInfo" name="passengerInfo" ref="" var="乘客信息" />
+        <property id="isSelfDrive" name="isSelfDrive" ref="required,num" var="是否自驾" />
+        <property id="driverId" name="driverId" ref="" var="驾驶员信息" />
+        <property id="departureTime" name="departureTime" ref="required" var="出发时间" />
+        <property id="returnTime" name="returnTime" ref="required" var="返回时间" />
+        <property id="designatedVehicleId" name="designatedVehicleId" ref="" var="指定车辆" />
+        <property id="timeAndPlaceOfTravel" name="timeAndPlaceOfTravel" ref="" var="乘车时间地点" />
+        <property id="reasonsForUsingCar" name="reasonsForUsingCar" ref="required" var="用车事由" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+    </url>
+    <url id="vehicle022" path="/post/VehicleApplyUseController/updateVehicleUseToRevoke" val="撤销用车申请" allUse="1" groupName="用车申请">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+    </url>
+    <!-- 用车申请管理结束 -->
+
+    <!-- 车辆保险开始 -->
+    <url id="insurance001" path="/post/InsuranceController/selectAllInsuranceMation" val="遍历所有的保险" allUse="1" groupName="车辆保险管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="insuranceTitle" name="insuranceTitle" ref="" var="保险名称" />
+        <property id="insurancePlate" name="insurancePlate" ref="" var="车牌号" />
+    </url>
+    <url id="insurance002" path="/post/InsuranceController/insertInsuranceMation" val="新增保险" allUse="1" groupName="车辆保险管理">
+        <property id="insuranceTitle" name="insuranceTitle" ref="required" var="保险名称" />
+        <property id="insuranceCompany" name="insuranceCompany" ref="required" var="投保公司" />
+        <property id="insuredTelephone" name="insuredTelephone" ref="" var="投保电话" />
+        <property id="validityStartTime" name="validityStartTime" ref="required" var="投保有效期开始时间" />
+        <property id="validityEndTime" name="validityEndTime" ref="required" var="投保有效期结束时间" />
+        <property id="insuranceAllPrice" name="insuranceAllPrice" ref="required,double" var="投保总费用" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="相关描述" />
+        <property id="vehicleId" name="vehicleId" ref="required" var="车牌号" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+        <property id="coverageIds" name="coverageIds" ref="required" var="险种id" />
+    </url>
+    <url id="insurance003" path="/post/InsuranceController/deleteInsuranceById" val="删除保险" allUse="1" groupName="车辆保险管理">
+        <property id="rowId" name="id" ref="required" var="保险id" />
+    </url>
+    <url id="insurance004" path="/post/InsuranceController/queryInsuranceMationById" val="查询保险信息用以编辑" allUse="2" groupName="车辆保险管理">
+        <property id="rowId" name="id" ref="required" var="保险id" />
+    </url>
+    <url id="insurance005" path="/post/InsuranceController/editInsuranceMationById" val="编辑保险" allUse="1" groupName="车辆保险管理">
+        <property id="rowId" name="id" ref="required" var="保险id" />
+        <property id="insuranceCompany" name="insuranceCompany" ref="required" var="投保公司" />
+        <property id="insuredTelephone" name="insuredTelephone" ref="" var="投保电话" />
+        <property id="validityStartTime" name="validityStartTime" ref="required" var="投保有效期开始时间" />
+        <property id="validityEndTime" name="validityEndTime" ref="required" var="投保有效期结束时间" />
+        <property id="insuranceAllPrice" name="insuranceAllPrice" ref="required,double" var="投保总费用" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="相关描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+        <property id="coverageIds" name="coverageIds" ref="required" var="险种id" />
+    </url>
+    <url id="insurance006" path="/post/InsuranceController/selectInsuranceDetailsById" val="保险详情" allUse="2" groupName="车辆保险管理">
+        <property id="rowId" name="id" ref="required" var="保险id" />
+    </url>
+    <!-- 车辆保险结束 -->
+	
+    <!-- 车辆维修保养开始 -->
+    <url id="maintenance001" path="/post/MaintenanceController/selectAllMaintenanceMation" val="遍历所有的维修保养" allUse="1" groupName="车辆维修保养管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="maintenanceTitle" name="maintenanceTitle" ref="" var="维修保养名称" />
+        <property id="maintenancePlate" name="maintenancePlate" ref="" var="车牌号" />
+    </url>
+    <url id="maintenance002" path="/post/MaintenanceController/insertMaintenanceMation" val="新增维修保养" allUse="1" groupName="车辆维修保养管理">
+        <property id="maintenanceTitle" name="maintenanceTitle" ref="required" var="维修保养名称" />
+        <property id="maintenanceCompany" name="maintenanceCompany" ref="" var="维修保养公司" />
+        <property id="maintenancePrice" name="maintenancePrice" ref="required,double" var="费用" />
+        <property id="startTime" name="startTime" ref="required" var="开始时间" />
+        <property id="endTime" name="endTime" ref="required" var="结束时间" />
+        <property id="concreteContent" name="concreteContent" ref="required" var="具体内容" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="备注" />
+        <property id="maintenanceType" name="maintenanceType" ref="required" var="类型" />
+        <property id="vehicleId" name="vehicleId" ref="required" var="车牌号" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="maintenance003" path="/post/MaintenanceController/deleteMaintenanceById" val="删除维修保养" allUse="1" groupName="车辆维修保养管理">
+        <property id="rowId" name="id" ref="required" var="维修保养id" />
+    </url>
+    <url id="maintenance004" path="/post/MaintenanceController/queryMaintenanceMationById" val="查询维修保养信息用以编辑" allUse="2" groupName="车辆维修保养管理">
+        <property id="rowId" name="id" ref="required" var="维修保养id" />
+    </url>
+    <url id="maintenance005" path="/post/MaintenanceController/editMaintenanceMationById" val="编辑维修保养" allUse="1" groupName="车辆维修保养管理">
+        <property id="rowId" name="id" ref="required" var="维修保养id" />
+        <property id="maintenanceCompany" name="maintenanceCompany" ref="" var="维修保养公司" />
+        <property id="maintenancePrice" name="maintenancePrice" ref="required,double" var="费用" />
+        <property id="startTime" name="startTime" ref="required" var="开始时间" />
+        <property id="endTime" name="endTime" ref="required" var="结束时间" />
+        <property id="concreteContent" name="concreteContent" ref="required" var="具体内容" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="备注" />
+        <property id="maintenanceType" name="maintenanceType" ref="required" var="类型" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="maintenance006" path="/post/MaintenanceController/selectMaintenanceDetailsById" val="维修保养详情" allUse="2" groupName="车辆维修保养管理">
+        <property id="rowId" name="id" ref="required" var="维修保养id" />
+    </url>
+    <!-- 车辆维修保养结束 -->
+	
+    <!-- 车辆年检开始 -->
+    <url id="inspection001" path="/post/InspectionController/selectAllInspectionMation" val="遍历所有的年检" allUse="1" groupName="车辆年检管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="inspectionTitle" name="inspectionTitle" ref="" var="年检名称" />
+        <property id="inspectionPlate" name="inspectionPlate" ref="" var="车牌号" />
+    </url>
+    <url id="inspection002" path="/post/InspectionController/insertInspectionMation" val="新增年检" allUse="1" groupName="车辆年检管理">
+        <property id="inspectionTitle" name="inspectionTitle" ref="required" var="年检名称" />
+        <property id="inspectionArea" name="inspectionArea" ref="" var="年检地点" />
+        <property id="contactInformation" name="contactInformation" ref="" var="联系电话" />
+        <property id="inspectionPrice" name="inspectionPrice" ref="double" var="年检费用" />
+        <property id="thisInspectionTime" name="thisInspectionTime" ref="required" var="本次年检时间" />
+        <property id="nextInspectionTime" name="nextInspectionTime" ref="required" var="下次年检时间" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="相关描述" />
+        <property id="vehicleId" name="vehicleId" ref="required" var="车牌号" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="inspection003" path="/post/InspectionController/deleteInspectionById" val="删除年检" allUse="1" groupName="车辆年检管理">
+        <property id="rowId" name="id" ref="required" var="年检id" />
+    </url>
+    <url id="inspection004" path="/post/InspectionController/queryInspectionMationById" val="查询年检信息用以编辑" allUse="2" groupName="车辆年检管理">
+        <property id="rowId" name="id" ref="required" var="年检id" />
+    </url>
+    <url id="inspection005" path="/post/InspectionController/editInspectionMationById" val="编辑年检" allUse="1" groupName="车辆年检管理">
+        <property id="rowId" name="id" ref="required" var="年检id" />
+        <property id="inspectionArea" name="inspectionArea" ref="" var="年检地点" />
+        <property id="contactInformation" name="contactInformation" ref="" var="联系电话" />
+        <property id="inspectionPrice" name="inspectionPrice" ref="double" var="年检费用" />
+        <property id="thisInspectionTime" name="thisInspectionTime" ref="required" var="本次年检时间" />
+        <property id="nextInspectionTime" name="nextInspectionTime" ref="required" var="下次年检时间" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="相关描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="inspection006" path="/post/InspectionController/selectInspectionDetailsById" val="年检详情" allUse="2" groupName="车辆年检管理">
+        <property id="rowId" name="id" ref="required" var="年检id" />
+    </url>
+    <!-- 车辆年检结束 -->
+	
+    <!-- 车辆加油开始 -->
+    <url id="oiling001" path="/post/OilingController/selectAllOilingMation" val="遍历所有的加油信息" allUse="1" groupName="车辆加油管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="oilTitle" name="oilTitle" ref="" var="加油信息名称" />
+        <property id="startTime" name="startTime" ref="" var="加油日期" />
+        <property id="endTime" name="endTime" ref="" var="加油日期" />
+        <property id="oilPlate" name="oilPlate" ref="" var="车牌号" />
+    </url>
+    <url id="oiling002" path="/post/OilingController/insertOilingMation" val="新增加油信息" allUse="1" groupName="车辆加油管理">
+        <property id="oilTitle" name="oilTitle" ref="required" var="加油信息名称" />
+        <property id="oilTime" name="oilTime" ref="required" var="加油日期" />
+        <property id="oilCapacity" name="oilCapacity" ref="required,double" var="加绒容量" />
+        <property id="oilPrice" name="oilPrice" ref="required,double" var="加油金额" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="备注" />
+        <property id="vehicleId" name="vehicleId" ref="required" var="车牌号" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="oiling003" path="/post/OilingController/deleteOilingById" val="删除加油信息" allUse="1" groupName="车辆加油管理">
+        <property id="rowId" name="id" ref="required" var="加油信息id" />
+    </url>
+    <url id="oiling004" path="/post/OilingController/queryOilingMationById" val="查询加油信息信息用以编辑" allUse="2" groupName="车辆加油管理">
+        <property id="rowId" name="id" ref="required" var="加油信息id" />
+    </url>
+    <url id="oiling005" path="/post/OilingController/editOilingMationById" val="编辑加油信息" allUse="1" groupName="车辆加油管理">
+        <property id="rowId" name="id" ref="required" var="加油信息id" />
+        <property id="oilTime" name="oilTime" ref="required" var="加油日期" />
+        <property id="oilCapacity" name="oilCapacity" ref="required,double" var="加油容量" />
+        <property id="oilPrice" name="oilPrice" ref="required,double" var="加油金额" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="备注" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="oiling006" path="/post/OilingController/selectOilingDetailsById" val="加油信息详情" allUse="2" groupName="车辆加油管理">
+        <property id="rowId" name="id" ref="required" var="加油信息id" />
+    </url>
+    <!-- 车辆加油结束 -->
+	
+    <!-- 车辆事故开始 -->
+    <url id="accident001" path="/post/AccidentController/selectAllAccidentMation" val="遍历所有的事故" allUse="1" groupName="车辆事故管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="accidentTitle" name="accidentTitle" ref="" var="事故名称" />
+        <property id="accidentPlate" name="accidentPlate" ref="" var="车牌号" />
+    </url>
+    <url id="accident002" path="/post/AccidentController/insertAccidentMation" val="新增事故" allUse="1" groupName="车辆事故管理">
+        <property id="accidentTitle" name="accidentTitle" ref="required" var="事故名称" />
+        <property id="driver" name="driver" ref="required" var="驾驶员姓名" />
+        <property id="accidentTime" name="accidentTime" ref="required" var="事故时间" />
+        <property id="accidentArea" name="accidentArea" ref="required" var="事故地点" />
+        <property id="accidentDetail" name="accidentDetail" ref="" var="事故详情" />
+        <property id="confirmationResponsibility" name="confirmationResponsibility" ref="" var="责任认定" />
+        <property id="manufacturer" name="manufacturer" ref="" var="维修厂家" />
+        <property id="repairStartTime" name="repairStartTime" ref="" var="送修开始时间" />
+        <property id="repairEndTime" name="repairEndTime" ref="" var="送修结束时间" />
+        <property id="repairPrice" name="repairPrice" ref="double" var="维修费用" />
+        <property id="repairContent" name="repairContent" ref="" var="维修内容" />
+        <property id="lossFeePrice" name="lossFeePrice" ref="double" var="车损费" />
+        <property id="claimsFeePrice" name="claimsFeePrice" ref="double" var="保险理赔金额" />
+        <property id="driverBearPrice" name="driverBearPrice" ref="double" var="驾驶员承担费用" />
+        <property id="vehicleId" name="vehicleId" ref="required" var="车牌号" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="accident003" path="/post/AccidentController/deleteAccidentById" val="删除事故" allUse="1" groupName="车辆事故管理">
+        <property id="rowId" name="id" ref="required" var="事故id" />
+    </url>
+    <url id="accident004" path="/post/AccidentController/queryAccidentMationById" val="查询事故信息用以编辑" allUse="2" groupName="车辆事故管理">
+        <property id="rowId" name="id" ref="required" var="事故id" />
+    </url>
+    <url id="accident005" path="/post/AccidentController/editAccidentMationById" val="编辑事故" allUse="1" groupName="车辆事故管理">
+        <property id="rowId" name="id" ref="required" var="事故id" />
+        <property id="driver" name="driver" ref="required" var="驾驶员姓名" />
+        <property id="accidentTime" name="accidentTime" ref="required" var="事故时间" />
+        <property id="accidentArea" name="accidentArea" ref="required" var="事故地点" />
+        <property id="accidentDetail" name="accidentDetail" ref="" var="事故详情" />
+        <property id="confirmationResponsibility" name="confirmationResponsibility" ref="" var="责任认定" />
+        <property id="manufacturer" name="manufacturer" ref="" var="维修厂家" />
+        <property id="repairStartTime" name="repairStartTime" ref="" var="送修开始时间" />
+        <property id="repairEndTime" name="repairEndTime" ref="" var="送修结束时间" />
+        <property id="repairPrice" name="repairPrice" ref="double" var="维修费用" />
+        <property id="repairContent" name="repairContent" ref="" var="维修内容" />
+        <property id="lossFeePrice" name="lossFeePrice" ref="double" var="车损费" />
+        <property id="claimsFeePrice" name="claimsFeePrice" ref="double" var="保险理赔金额" />
+        <property id="driverBearPrice" name="driverBearPrice" ref="double" var="驾驶员承担费用" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="accident006" path="/post/AccidentController/selectAccidentDetailsById" val="事故详情" allUse="2" groupName="车辆事故管理">
+        <property id="rowId" name="id" ref="required" var="事故id" />
+    </url>
+    <!-- 车辆事故结束 -->
+	
+    <!-- 险种管理开始 -->
+    <url id="coverage001" path="/post/CoverageController/selectAllCoverageMation" val="遍历所有的险种" allUse="1" groupName="车辆险种管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="coverageName" name="coverageName" ref="" var="险种名称" />
+    </url>
+    <url id="coverage002" path="/post/CoverageController/insertCoverageMation" val="新增险种" allUse="1" groupName="车辆险种管理">
+        <property id="coverageName" name="coverageName" ref="required" var="险种名称" />
+    </url>
+    <url id="coverage003" path="/post/CoverageController/deleteCoverageById" val="删除险种" allUse="1" groupName="车辆险种管理">
+        <property id="rowId" name="id" ref="required" var="险种id" />
+    </url>
+    <url id="coverage004" path="/post/CoverageController/queryCoverageMationById" val="查询险种信息用以编辑" allUse="2" groupName="车辆险种管理">
+        <property id="rowId" name="id" ref="required" var="险种id" />
+    </url>
+    <url id="coverage005" path="/post/CoverageController/editCoverageMationById" val="编辑险种" allUse="1" groupName="车辆险种管理">
+        <property id="rowId" name="id" ref="required" var="险种id" />
+        <property id="coverageName" name="coverageName" ref="required" var="险种名称" />
+    </url>
+    <url id="coverage006" path="/post/CoverageController/queryAllCoverageToChoose" val="查询所有的险种用于复选框" allUse="2" groupName="车辆险种管理">
+    </url>
+    <!-- 险种管理结束 -->
+    
+    <!-- 印章管理开始 -->
+    <url id="seal001" path="/post/SealController/selectAllSealMation" val="遍历所有的印章" allUse="1" groupName="印章管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="sealName" name="sealName" ref="" var="印章名称" />
+    </url>
+    <url id="seal002" path="/post/SealController/insertSealMation" val="新增印章" allUse="1" groupName="印章管理">
+        <property id="sealName" name="sealName" ref="required" var="印章名称" />
+        <property id="enableTime" name="enableTime" ref="required" var="启用日期" />
+        <property id="sealAdmin" name="sealAdmin" ref="required" var="管理人" />
+        <property id="borrowId" name="borrowId" ref="" var="借用人id" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="附加描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="seal003" path="/post/SealController/deleteSealById" val="删除印章" allUse="1" groupName="印章管理">
+        <property id="rowId" name="id" ref="required" var="印章id" />
+    </url>
+    <url id="seal004" path="/post/SealController/querySealMationById" val="查询印章信息用以编辑" allUse="2" groupName="印章管理">
+        <property id="rowId" name="id" ref="required" var="印章id" />
+    </url>
+    <url id="seal005" path="/post/SealController/editSealMationById" val="编辑印章" allUse="1" groupName="印章管理">
+        <property id="rowId" name="id" ref="required" var="印章id" />
+        <property id="sealName" name="sealName" ref="required" var="印章名称" />
+        <property id="enableTime" name="enableTime" ref="required" var="启用日期" />
+        <property id="sealAdmin" name="sealAdmin" ref="required" var="管理人" />
+        <property id="borrowId" name="borrowId" ref="" var="借用人id" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="附加描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="seal006" path="/post/SealController/selectSealDetailsById" val="印章详情" allUse="2" groupName="印章管理">
+        <property id="rowId" name="id" ref="required" var="印章id" />
+    </url>
+    <url id="seal007" path="/post/SealController/selectSealListToChoose" val="获取印章列表用于借用选择" allUse="2" groupName="印章管理">
+    </url>
+    <url id="sealrevert008" path="/post/SealController/selectRevertListToChoose" val="获取印章列表用于归还选择" allUse="2" groupName="印章管理">
+    </url>
+    <!-- 印章管理结束 -->
+    
+    <!-- 印章借用开始 -->
+    <url id="sealborrow001" path="/post/SealApplyBorrowController/queryMyBorrowSealList" val="获取我借用的印章列表" allUse="1" groupName="印章借用">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="sealborrow002" path="/post/SealApplyBorrowController/insertBorrowSealMation" val="印章借用申请" allUse="1" groupName="印章借用">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="sealStr" name="sealStr" ref="required,json" var="印章json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="sealborrow003" path="/post/SealApplyBorrowController/queryBorrowSealMationToDetails" val="印章借用申请详情" allUse="2" groupName="印章借用">
+        <property id="rowId" name="id" ref="required" var="印章借用主表单id" />
+    </url>
+    <url id="sealborrow004" path="/post/SealApplyBorrowController/queryBorrowSealMationToEdit" val="印章借用申请编辑时进行回显" allUse="2" groupName="印章借用">
+        <property id="rowId" name="id" ref="required" var="印章借用主表单id" />
+    </url>
+    <url id="sealborrow005" path="/post/SealApplyBorrowController/updateBorrowSealMationById" val="编辑印章借用申请" allUse="1" groupName="印章借用">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="sealStr" name="sealStr" ref="required,json" var="印章json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="印章借用主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="sealborrow006" path="/post/SealApplyBorrowController/editBorrowSealToSubApproval" val="印章借用申请提交审批" allUse="1" groupName="印章借用">
+        <property id="rowId" name="id" ref="required" var="印章借用主表单id" />
+    </url>
+    <url id="sealborrow007" path="/post/SealApplyBorrowController/updateBorrowSealToCancellation" val="作废印章借用申请" allUse="1" groupName="印章借用">
+        <property id="rowId" name="id" ref="required" var="印章借用主表单id" />
+    </url>
+    <url id="sealborrow009" path="/post/SealApplyBorrowController/updateBorrowSealMationToSave" val="编辑印章借用申请（已提交审核）" allUse="2" groupName="印章借用">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="sealStr" name="sealStr" ref="required,json" var="印章json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="印章借用主表单id" />
+    </url>
+    <url id="sealborrow010" path="/post/SealApplyBorrowController/updateBorrowSealToRevoke" val="撤销印章借用申请" allUse="1" groupName="印章借用">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
+    </url>
+    <!-- 印章借用结束 -->
+    
+    <!-- 印章归还开始 -->
+    <url id="sealrevert001" path="/post/SealApplyRevertController/queryMyRevertSealList" val="获取我归还的印章列表" allUse="1" groupName="印章归还">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="sealrevert002" path="/post/SealApplyRevertController/insertRevertSealMation" val="印章归还申请" allUse="1" groupName="印章归还">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="sealStr" name="sealStr" ref="required,json" var="印章json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="sealrevert003" path="/post/SealApplyRevertController/queryRevertSealMationToDetails" val="印章归还申请详情" allUse="2" groupName="印章归还">
+        <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
+    </url>
+    <url id="sealrevert004" path="/post/SealApplyRevertController/queryRevertSealMationToEdit" val="印章归还申请编辑时进行回显" allUse="2" groupName="印章归还">
+        <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
+    </url>
+    <url id="sealrevert005" path="/post/SealApplyRevertController/updateRevertSealMationById" val="编辑印章归还申请" allUse="1" groupName="印章归还">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="sealStr" name="sealStr" ref="required,json" var="印章json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="sealrevert006" path="/post/SealApplyRevertController/editRevertSealToSubApproval" val="印章归还申请提交审批" allUse="1" groupName="印章归还">
+        <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
+    </url>
+    <url id="sealrevert007" path="/post/SealApplyRevertController/updateRevertSealToCancellation" val="作废印章归还申请" allUse="1" groupName="印章归还">
+        <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
+    </url>
+    <url id="sealrevert009" path="/post/SealApplyRevertController/updateRevertSealMationToSave" val="编辑印章归还申请（已提交审核）" allUse="2" groupName="印章归还">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="sealStr" name="sealStr" ref="required,json" var="印章json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
+    </url>
+    <url id="sealrevert010" path="/post/SealApplyRevertController/updateRevertSealToRevoke" val="撤销印章归还申请" allUse="1" groupName="印章归还">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
+    </url>
+    <!-- 印章归还结束 -->
+	
+    <!-- 证照管理开始 -->
+    <url id="licence001" path="/post/LicenceController/selectAllLicenceMation" val="遍历所有的证照" allUse="1" groupName="证照管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="licenceName" name="licenceName" ref="" var="证照名称" />
+    </url>
+    <url id="licence002" path="/post/LicenceController/insertLicenceMation" val="新增证照" allUse="1" groupName="证照管理">
+        <property id="licenceName" name="licenceName" ref="required" var="证照名称" />
+        <property id="licenceNum" name="licenceNum" ref="required" var="证照编号" />
+        <property id="issuingOrganization" name="issuingOrganization" ref="required" var="签发机关" />
+        <property id="issueTime" name="issueTime" ref="required" var="签发时间" />
+        <property id="annualReview" name="annualReview" ref="required" var="是否年审" />
+        <property id="nextAnnualReview" name="nextAnnualReview" ref="" var="下次年审时间" />
+        <property id="termOfValidity" name="termOfValidity" ref="required" var="有效期是否永久" />
+        <property id="termOfValidityTime" name="termOfValidityTime" ref="" var="有效期" />
+        <property id="licenceAdmin" name="licenceAdmin" ref="" var="管理人" />
+        <property id="borrowId" name="borrowId" ref="" var="借用人" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="附加描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="licence003" path="/post/LicenceController/deleteLicenceById" val="删除证照" allUse="1" groupName="证照管理">
+        <property id="rowId" name="id" ref="required" var="证照id" />
+    </url>
+    <url id="licence004" path="/post/LicenceController/queryLicenceMationById" val="查询证照信息用以编辑" allUse="2" groupName="证照管理">
+        <property id="rowId" name="id" ref="required" var="证照id" />
+    </url>
+    <url id="licence005" path="/post/LicenceController/editLicenceMationById" val="编辑证照" allUse="1" groupName="证照管理">
+        <property id="rowId" name="id" ref="required" var="证照id" />
+        <property id="licenceName" name="licenceName" ref="required" var="证照名称" />
+        <property id="licenceNum" name="licenceNum" ref="required" var="证照编号" />
+        <property id="issuingOrganization" name="issuingOrganization" ref="required" var="签发机关" />
+        <property id="issueTime" name="issueTime" ref="required" var="签发时间" />
+        <property id="annualReview" name="annualReview" ref="required" var="是否年审" />
+        <property id="nextAnnualReview" name="nextAnnualReview" ref="" var="下次年审时间" />
+        <property id="termOfValidity" name="termOfValidity" ref="required" var="有效期是否永久" />
+        <property id="termOfValidityTime" name="termOfValidityTime" ref="" var="有效期" />
+        <property id="licenceAdmin" name="licenceAdmin" ref="" var="管理人" />
+        <property id="borrowId" name="borrowId" ref="" var="借用人" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="附加描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="licence006" path="/post/LicenceController/selectLicenceDetailsById" val="证照详情" allUse="2" groupName="证照管理">
+        <property id="rowId" name="id" ref="required" var="证照id" />
+    </url>
+    <url id="licenceborrow008" path="/post/LicenceController/selectLicenceListToChoose" val="获取证照列表用于借用选择" allUse="2" groupName="证照管理">
+    </url>
+    <url id="licencerevert008" path="/post/LicenceController/selectRevertListToChoose" val="获取证照列表用于归还选择" allUse="2" groupName="证照管理">
+    </url>
+    <!-- 证照管理结束 -->
+    
+    <!-- 证照借用开始 -->
+    <url id="licenceborrow001" path="/post/LicenceApplyBorrowController/queryMyBorrowLicenceList" val="获取我借用的证照列表" allUse="1" groupName="证照借用管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="licenceborrow002" path="/post/LicenceApplyBorrowController/insertBorrowLicenceMation" val="证照借用申请" allUse="1" groupName="证照借用管理">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="licenceStr" name="licenceStr" ref="required,json" var="关联的证照json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="licenceborrow003" path="/post/LicenceApplyBorrowController/queryBorrowLicenceMationToDetails" val="证照借用申请详情" allUse="2" groupName="证照借用管理">
+        <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
+    </url>
+    <url id="licenceborrow004" path="/post/LicenceApplyBorrowController/queryBorrowLicenceMationToEdit" val="证照借用申请编辑时进行回显" allUse="2" groupName="证照借用管理">
+        <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
+    </url>
+    <url id="licenceborrow005" path="/post/LicenceApplyBorrowController/updateBorrowLicenceMationById" val="编辑证照借用申请" allUse="1" groupName="证照借用管理">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="licenceStr" name="licenceStr" ref="required,json" var="关联的证照json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="licenceborrow006" path="/post/LicenceApplyBorrowController/editBorrowLicenceToSubApproval" val="证照借用申请提交审批" allUse="1" groupName="证照借用管理">
+        <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
+    </url>
+    <url id="licenceborrow007" path="/post/LicenceApplyBorrowController/updateBorrowLicenceToCancellation" val="作废证照借用申请" allUse="1" groupName="证照借用管理">
+        <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
+    </url>
+    <url id="licenceborrow009" path="/post/LicenceApplyBorrowController/updateBorrowLicenceMationToSave" val="编辑证照借用申请（已提交审批）" allUse="2" groupName="证照借用管理">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="licenceStr" name="licenceStr" ref="required,json" var="关联的证照json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
+    </url>
+    <url id="licenceborrow010" path="/post/LicenceApplyBorrowController/updateBorrowLicenceMationToRevoke" val="撤销证照借用申请" allUse="1" groupName="证照借用管理">
+    	<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
+    </url>
+    <!-- 证照借用结束 -->
+    
+  	<!-- 证照归还开始 -->
+        <url id="licencerevert001" path="/post/LicenceApplyRevertController/queryMyRevertLicenceList" val="获取我归还的证照列表" allUse="1" groupName="证照归还管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="licencerevert002" path="/post/LicenceApplyRevertController/insertRevertLicenceMation" val="证照归还申请" allUse="1" groupName="证照归还管理">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="licenceStr" name="licenceStr" ref="required,json" var="证照json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="licencerevert003" path="/post/LicenceApplyRevertController/queryRevertLicenceMationToDetails" val="证照归还申请详情" allUse="2" groupName="证照归还管理">
+        <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
+    </url>
+    <url id="licencerevert004" path="/post/LicenceApplyRevertController/queryRevertLicenceMationToEdit" val="证照归还申请编辑时进行回显" allUse="2" groupName="证照归还管理">
+        <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
+    </url>
+    <url id="licencerevert005" path="/post/LicenceApplyRevertController/updateRevertLicenceMationById" val="编辑证照归还申请" allUse="1" groupName="证照归还管理">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="licenceStr" name="licenceStr" ref="required,json" var="证照json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="licencerevert006" path="/post/LicenceApplyRevertController/editRevertLicenceToSubApproval" val="证照归还申请提交审批" allUse="1" groupName="证照归还管理">
+        <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
+    </url>
+    <url id="licencerevert007" path="/post/LicenceApplyRevertController/updateRevertLicenceToCancellation" val="作废证照归还申请" allUse="1" groupName="证照归还管理">
+        <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
+    </url>
+    <url id="licencerevert009" path="/post/LicenceApplyRevertController/updateRevertLicenceMationToSave" val="编辑证照归还申请（已提交审批）" allUse="2" groupName="证照归还管理">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="licenceStr" name="licenceStr" ref="required,json" var="证照json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
+    </url>
+    <url id="licencerevert010" path="/post/LicenceApplyRevertController/updateRevertLicenceMationToRevoke" val="撤销证照归还申请" allUse="1" groupName="证照归还管理">
+    	<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
+    </url>
+    <!-- 证照归还结束 -->
+	
+    <!-- 资产管理开始 -->
+    <url id="asset001" path="/post/AssetController/selectAllAssetMation" val="遍历所有的资产" allUse="1" groupName="资产管理">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="assetName" name="assetName" ref="" var="资产名称" />
+        <property id="state" name="state" ref="" var="状态" />
+    </url>
+    <url id="asset002" path="/post/AssetController/insertAssetMation" val="新增资产" allUse="1" groupName="资产管理">
+        <property id="assetName" name="assetName" ref="required" var="资产名称" />
+        <property id="assetImg" name="assetImg" ref="required" var="资产图片" />
+        <property id="typeId" name="typeId" ref="required" var="资产所属类型" />
+        <property id="assetNum" name="assetNum" ref="required" var="资产编号" />
+        <property id="fromId" name="fromId" ref="required" var="资产来源id" />
+        <property id="specifications" name="specifications" ref="" var="资产规格" />
+        <property id="unitPrice" name="unitPrice" ref="required,double" var="资产单价" />
+        <property id="manufacturer" name="manufacturer" ref="" var="生产商" />
+        <property id="manufacturerTime" name="manufacturerTime" ref="" var="生产日期" />
+        <property id="supplier" name="supplier" ref="" var="供应商" />
+        <property id="purchaseTime" name="purchaseTime" ref="required" var="采购日期" />
+        <property id="storageArea" name="storageArea" ref="" var="存放区域" />
+        <property id="employeeId" name="employeeId" ref="" var="领用人" />
+        <property id="assetAdmin" name="assetAdmin" ref="" var="管理人" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="附加描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="asset003" path="/post/AssetController/deleteAssetById" val="删除资产" allUse="1" groupName="资产管理">
+        <property id="rowId" name="id" ref="required" var="资产id" />
+    </url>
+    <url id="asset004" path="/post/AssetController/queryAssetMationById" val="查询资产信息用以编辑" allUse="2" groupName="资产管理">
+        <property id="rowId" name="id" ref="required" var="资产id" />
+    </url>
+    <url id="asset005" path="/post/AssetController/editAssetMationById" val="编辑资产" allUse="1" groupName="资产管理">
+        <property id="rowId" name="id" ref="required" var="资产id" />
+        <property id="assetName" name="assetName" ref="required" var="资产名称" />
+        <property id="assetImg" name="assetImg" ref="required" var="资产图片" />
+        <property id="typeId" name="typeId" ref="required" var="资产所属类型" />
+        <property id="assetNum" name="assetNum" ref="required" var="资产编号" />
+        <property id="fromId" name="fromId" ref="required" var="资产来源id" />
+        <property id="specifications" name="specifications" ref="" var="资产规格" />
+        <property id="unitPrice" name="unitPrice" ref="required,double" var="资产单价" />
+        <property id="manufacturer" name="manufacturer" ref="" var="生产商" />
+        <property id="manufacturerTime" name="manufacturerTime" ref="" var="生产日期" />
+        <property id="supplier" name="supplier" ref="" var="供应商" />
+        <property id="purchaseTime" name="purchaseTime" ref="required" var="采购日期" />
+        <property id="storageArea" name="storageArea" ref="" var="存放区域" />
+        <property id="employeeId" name="employeeId" ref="" var="领用人" />
+        <property id="assetAdmin" name="assetAdmin" ref="" var="管理人" />
+        <property id="roomAddDesc" name="roomAddDesc" ref="" var="附加描述" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="相关附件" />
+    </url>
+    <url id="asset006" path="/post/AssetController/selectAssetDetailsById" val="资产详情" allUse="2" groupName="资产管理">
+        <property id="rowId" name="id" ref="required" var="资产id" />
+    </url>
+    <url id="asset007" path="/post/AssetController/updateAssetNormalById" val="资产恢复正常" allUse="1" groupName="资产管理">
+        <property id="rowId" name="id" ref="required" var="资产id" />
+    </url>
+    <url id="asset008" path="/post/AssetController/updateAssetRepairById" val="资产维修" allUse="1" groupName="资产管理">
+        <property id="rowId" name="id" ref="required" var="资产id" />
+    </url>
+    <url id="asset009" path="/post/AssetController/updateAssetScrapById" val="资产报废" allUse="1" groupName="资产管理">
+        <property id="rowId" name="id" ref="required" var="资产id" />
+    </url>
+    <url id="asset011" path="/post/AssetController/queryUnUseAssetListByTypeId" val="根据资产类别获取未被使用的资产列表信息" allUse="2" groupName="资产管理">
+        <property id="typeId" name="typeId" ref="required" var="类型id" />
+    </url>
+    <!-- 资产管理结束 -->
+
+    <!-- 资产领用开始 -->
+    <url id="asset010" path="/post/AssetApplyUseController/queryMyUseAssetMation" val="获取我领用的资产信息" allUse="1" groupName="资产领用申请">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="asset012" path="/post/AssetApplyUseController/insertAssetListToUse" val="新增资产领用" allUse="1" groupName="资产领用申请">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="领用资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="asset013" path="/post/AssetApplyUseController/queryAssetListUseDetailsById" val="资产领用申请详情" allUse="2" method="GET" groupName="资产领用申请">
+        <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
+    </url>
+    <url id="asset014" path="/post/AssetApplyUseController/queryAssetListUseToEditById" val="资产领用申请编辑时进行回显" allUse="2" groupName="资产领用申请">
+        <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
+    </url>
+    <url id="asset015" path="/post/AssetApplyUseController/updateAssetListToUseById" val="编辑资产领用申请" allUse="1" groupName="资产领用申请">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="领用资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="asset016" path="/post/AssetApplyUseController/updateAssetToCancellation" val="作废资产领用申请" allUse="1" groupName="资产领用申请">
+        <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
+    </url>
+    <url id="asset017" path="/post/AssetApplyUseController/editAssetUseToSubApproval" val="资产领用申请提交审批" allUse="1" groupName="资产领用申请">
+        <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
+    </url>
+    <url id="asset033" path="/post/AssetApplyUseController/updateAssetListToUseByIdInProcess" val="在工作流中编辑资产领用申请" allUse="2" groupName="资产领用申请">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="领用资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
+    </url>
+    <url id="asset036" path="/post/AssetApplyUseController/editAssetUseToRevoke" val="撤销资产领用申请" allUse="1" groupName="资产领用申请">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+    </url>
+    <!-- 资产领用结束 -->
+
+    <!-- 资产采购开始 -->
+    <url id="asset018" path="/post/AssetApplyPurchaseController/queryMyPurchaseAssetMation" val="获取我采购的资产信息" allUse="1" groupName="资产采购申请">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="asset019" path="/post/AssetApplyPurchaseController/insertAssetListToPurchase" val="资产采购申请" allUse="1" groupName="资产采购申请">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="采购资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="asset020" path="/post/AssetApplyPurchaseController/editAssetPurchaseToSubApproval" val="资产采购申请提交审批" allUse="1" groupName="资产采购申请">
+        <property id="rowId" name="id" ref="required" var="资产采购主表单id" />
+    </url>
+    <url id="asset021" path="/post/AssetApplyPurchaseController/queryAssetListPurchaseDetailsById" val="资产采购申请详情" allUse="2" groupName="资产采购申请">
+        <property id="rowId" name="id" ref="required" var="资产采购主表单id" />
+    </url>
+    <url id="asset022" path="/post/AssetApplyPurchaseController/updateAssetPurchaseToCancellation" val="作废资产采购申请" allUse="1" groupName="资产采购申请">
+        <property id="rowId" name="id" ref="required" var="资产采购主表单id" />
+    </url>
+    <url id="asset023" path="/post/AssetApplyPurchaseController/queryAssetListPurchaseToEditById" val="资产采购申请编辑时进行回显" allUse="2" groupName="资产采购申请">
+        <property id="rowId" name="id" ref="required" var="资产采购主表单id" />
+    </url>
+    <url id="asset024" path="/post/AssetApplyPurchaseController/updateAssetListToPurchaseById" val="编辑资产采购申请" allUse="1" groupName="资产采购申请">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="领用资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="asset034" path="/post/AssetApplyPurchaseController/updateAssetListToPurchaseByIdInProcess" val="在工作流中编辑资产采购申请" allUse="2" groupName="资产采购申请">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="采购资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="资产采购主表单id" />
+    </url>
+    <url id="asset037" path="/post/AssetApplyPurchaseController/editAssetPurchaseToRevoke" val="撤销资产采购申请" allUse="1" groupName="资产采购申请">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+    </url>
+    <!-- 资产采购结束 -->
+
+    <!-- 资产归还开始 -->
+    <url id="asset025" path="/post/AssetApplyReturnController/queryMyReturnAssetMation" val="获取我归还的资产信息" allUse="1" groupName="资产归还申请">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="startTime" name="startTime" ref="" var="开始时间"/>
+        <property id="endTime" name="endTime" ref="" var="结束时间"/>
+        <property id="state" name="state" ref="num" var="状态" />
+    </url>
+    <url id="asset027" path="/post/AssetApplyReturnController/insertAssetListToReturn" val="资产归还申请" allUse="1" groupName="资产归还申请">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="归还资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="asset028" path="/post/AssetApplyReturnController/editAssetReturnToSubApproval" val="资产归还申请提交审批" allUse="1" groupName="资产归还申请">
+        <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
+    </url>
+    <url id="asset029" path="/post/AssetApplyReturnController/queryAssetListReturnDetailsById" val="资产归还申请详情" allUse="2" groupName="资产归还申请">
+        <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
+    </url>
+    <url id="asset030" path="/post/AssetApplyReturnController/updateAssetReturnToCancellation" val="作废资产归还申请" allUse="1" groupName="资产归还申请">
+        <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
+    </url>
+    <url id="asset031" path="/post/AssetApplyReturnController/queryAssetListReturnToEditById" val="资产归还申请编辑时进行回显" allUse="2" groupName="资产归还申请">
+        <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
+    </url>
+    <url id="asset032" path="/post/AssetApplyReturnController/updateAssetListToReturnById" val="编辑资产归还申请" allUse="1" groupName="资产归还申请">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="归还资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
+        <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+    </url>
+    <url id="asset035" path="/post/AssetApplyReturnController/updateAssetListToReturnByIdInProcess" val="在工作流中编辑资产归还申请" allUse="2" groupName="资产归还申请">
+        <property id="remark" name="remark" ref="" var="描述" />
+        <property id="assetListStr" name="assetListStr" ref="required,json" var="归还资产json串" />
+        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
+    </url>
+    <url id="asset038" path="/post/AssetApplyReturnController/editAssetReturnToRevoke" val="撤销资产归还申请" allUse="1" groupName="资产归还申请">
+        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+    </url>
+    <url id="asset026" path="/post/AssetApplyReturnController/queryMyUnReturnAssetListByTypeId" val="根据资产类别获取我领用后未归还的资产列表信息" allUse="2">
+        <property id="typeId" name="typeId" ref="required" var="类型id" />
+    </url>
+    <!-- 资产归还结束 -->
+
+    <!-- 资产来源管理开始 -->
+    <url id="assetfrom001" path="/post/AssetFromController/selectAllAssetFromMation" val="遍历所有的资产来源" allUse="1" groupName="资产来源">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="fromName" name="fromName" ref="" var="资产来源名称" />
+        <property id="fromState" name="fromState" ref="" var="状态" />
+    </url>
+    <url id="assetfrom002" path="/post/AssetFromController/insertAssetFromMation" val="新增资产来源" allUse="1" groupName="资产来源">
+        <property id="fromName" name="fromName" ref="required" var="资产来源名称" />
+    </url>
+    <url id="assetfrom003" path="/post/AssetFromController/deleteAssetFromById" val="删除资产来源" allUse="1" groupName="资产来源">
+        <property id="rowId" name="id" ref="required" var="资产来源id" />
+    </url>
+    <url id="assetfrom004" path="/post/AssetFromController/queryAssetFromMationById" val="查询资产来源信息用以编辑" allUse="2" groupName="资产来源">
+        <property id="rowId" name="id" ref="required" var="资产来源id" />
+    </url>
+    <url id="assetfrom005" path="/post/AssetFromController/editAssetFromMationById" val="编辑资产来源" allUse="1" groupName="资产来源">
+        <property id="rowId" name="id" ref="required" var="资产来源id" />
+        <property id="fromName" name="fromName" ref="required" var="资产来源名称" />
+    </url>
+    <url id="assetfrom006" path="/post/AssetFromController/selectAllAssetFromToChoose" val="遍历所有的资产来源" allUse="2" groupName="资产来源">
+    </url>
+    <url id="assetfrom007" path="/post/AssetFromController/editAssetFromUpTypeById" val="资产来源上线" allUse="1" groupName="资产来源">
+        <property id="rowId" name="id" ref="required" var="资产来源id" />
+    </url>
+    <url id="assetfrom008" path="/post/AssetFromController/editAssetFromDownTypeById" val="资产来源下线" allUse="1" groupName="资产来源">
+        <property id="rowId" name="id" ref="required" var="资产来源id" />
+    </url>
+    <url id="assetfrom009" path="/post/AssetFromController/editAssetFromSortTopById" val="资产来源展示顺序上移" allUse="1" groupName="资产来源">
+        <property id="rowId" name="id" ref="required" var="资产来源id" />
+    </url>
+    <url id="assetfrom010" path="/post/AssetFromController/editAssetFromSortLowerById" val="资产来源展示顺序下移" allUse="1" groupName="资产来源">
+        <property id="rowId" name="id" ref="required" var="资产来源id" />
+    </url>
+    <!-- 资产来源管理结束 -->
+	
+    <!-- 资产类型管理开始 -->
+    <url id="assettype001" path="/post/AssetTypeController/selectAllAssettypeMation" val="遍历所有的资产类型" allUse="1" groupName="资产类型">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="typeName" name="typeName" ref="" var="资产类型名称" />
+        <property id="typeState" name="typeState" ref="" var="状态" />
+    </url>
+    <url id="assettype002" path="/post/AssetTypeController/insertAssettypeMation" val="新增资产类型" allUse="1" groupName="资产类型">
+        <property id="typeName" name="typeName" ref="required" var="资产类型名称" />
+    </url>
+    <url id="assettype003" path="/post/AssetTypeController/deleteAssettypeById" val="删除资产类型" allUse="1" groupName="资产类型">
+        <property id="rowId" name="id" ref="required" var="资产类型id" />
+    </url>
+    <url id="assettype004" path="/post/AssetTypeController/queryAssettypeMationById" val="查询资产类型信息用以编辑" allUse="2" groupName="资产类型">
+        <property id="rowId" name="id" ref="required" var="资产类型id" />
+    </url>
+    <url id="assettype005" path="/post/AssetTypeController/editAssettypeMationById" val="编辑资产类型" allUse="1" groupName="资产类型">
+        <property id="rowId" name="id" ref="required" var="资产类型id" />
+        <property id="typeName" name="typeName" ref="required" var="资产类型名称" />
+    </url>
+    <url id="assettype006" path="/post/AssetTypeController/selectAllAssettypeToChoose" val="遍历所有的资产类型" allUse="2" groupName="资产类型">
+    </url>
+    <url id="assettype007" path="/post/AssetTypeController/editAssettypeUpTypeById" val="资产类型上线" allUse="1" groupName="资产类型">
+        <property id="rowId" name="id" ref="required" var="资产类型id" />
+    </url>
+    <url id="assettype008" path="/post/AssetTypeController/editAssettypeDownTypeById" val="资产类型下线" allUse="1" groupName="资产类型">
+        <property id="rowId" name="id" ref="required" var="资产类型id" />
+    </url>
+    <url id="assettype009" path="/post/AssetTypeController/editAssettypeSortTopById" val="资产类型展示顺序上移" allUse="1" groupName="资产类型">
+        <property id="rowId" name="id" ref="required" var="资产类型id" />
+    </url>
+    <url id="assettype010" path="/post/AssetTypeController/editAssettypeSortLowerById" val="资产类型展示顺序下移" allUse="1" groupName="资产类型">
+        <property id="rowId" name="id" ref="required" var="资产类型id" />
+    </url>
+    <!-- 资产类型结束 -->
+
+    <!-- 我名下的内容管理开始 -->
+    <url id="myhasmation001" path="/post/MyHasMationController/queryMyAssetManagementList" val="获取我名下的资产" allUse="1" groupName="行政-我名下的">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="assetName" name="assetName" ref="" var="资产名称" />
+        <property id="assetNum" name="assetNum" ref="" var="资产编号" />
+        <property id="specifications" name="specifications" ref="" var="资产规格" />
+    </url>
+    <url id="myhasmation002" path="/post/MyHasMationController/queryMySealManageList" val="获取我借用中的印章" allUse="1" groupName="行政-我名下的">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="sealName" name="sealName" ref="" var="印章名称" />
+    </url>
+    <url id="myhasmation003" path="/post/MyHasMationController/queryMyLicenceManageList" val="获取我借用中的证照" allUse="1" groupName="行政-我名下的">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="licenceName" name="licenceName" ref="" var="证照名称" />
+    </url>
+    <url id="myhasmation004" path="/post/MyHasMationController/queryMyAssetArticlesList" val="我的用品领用历史" allUse="1" groupName="行政-我名下的">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="articlesName" name="articlesName" ref="" var="用品名称" />
+        <property id="articlesNum" name="articlesNum" ref="" var="用品编号" />
+    </url>
+    <url id="myhasmation005" path="/post/MyHasMationController/queryMyVehicleHistoryList" val="我的用车历史" allUse="1" groupName="行政-我名下的">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="vehicleName" name="vehicleName" ref="" var="车辆名称" />
+        <property id="licensePlate" name="licensePlate" ref="" var="车牌" />
+    </url>
+    <!-- 我名下的内容管理结束 -->
+    
+</controller>

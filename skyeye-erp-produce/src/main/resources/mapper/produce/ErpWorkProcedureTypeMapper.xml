@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ErpWorkProcedureTypeDao">
+
+    <select id="queryErpWorkProcedureTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`,
+            a.state,
+            bu.user_name createName,
+            DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+            cu.user_name lastUpdateName,
+            DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+        FROM
+            erp_work_procedure_type a
+            LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+            LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+        WHERE a.state != '3'
+        <if test="typeName != '' and typeName != null">
+            AND a.`name` LIKE '%${typeName}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="queryErpWorkProcedureTypeByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            erp_work_procedure_type a
+        WHERE a.`name` = #{typeName}
+        AND a.state != '3'
+    </select>
+
+    <insert id="insertErpWorkProcedureTypeMation" parameterType="java.util.Map">
+        INSERT INTO erp_work_procedure_type
+        (id, `name`, state, create_id, create_time, last_update_id, last_update_time)
+        VALUES
+        (#{id}, #{typeName}, #{state}, #{createId}, #{createTime}, #{createId}, #{createTime})
+    </insert>
+
+    <select id="queryErpWorkProcedureTypeById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            erp_work_procedure_type a
+        WHERE a.id = #{id}
+        AND a.state != '3'
+    </select>
+
+    <select id="queryErpWorkProcedureTypeByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            erp_work_procedure_type a
+        WHERE a.`name` = #{typeName}
+        AND a.state != '3'
+        AND a.id != #{id}
+    </select>
+
+    <update id="editErpWorkProcedureTypeMationById">
+        UPDATE erp_work_procedure_type
+        <set>
+            `name` = #{typeName},
+            last_update_id = #{lastUpdateId},
+            last_update_time = #{lastUpdateTime},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="queryErpWorkProcedureTypeStateById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.state
+        FROM
+            erp_work_procedure_type a
+        WHERE a.id = #{id}
+    </select>
+
+    <update id="editErpWorkProcedureTypeStateById">
+        UPDATE erp_work_procedure_type
+        <set>
+            state = #{state},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="queryErpWorkProcedureTypeUpMation" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+          erp_work_procedure_type a
+        WHERE a.state = '1'
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

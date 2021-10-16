@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.EditUploadDao">
+	
+	<insert id="insertFileImgMation" parameterType="java.util.Map">
+	     insert into ueditor_img 
+	     (ID, imgPath, fileOriginalName, createId, createTime, createType)
+	     values(#{id}, #{imgPath}, #{fileOriginalName}, #{createId}, #{createTime}, #{createType})
+	</insert>
+	
+	<select id="queryFileImgMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.ID id,
+			CONCAT(#{url}, CONVERT(a.imgPath, char), '') url
+		FROM
+			ueditor_img a
+		WHERE
+			a.createId = #{createId}
+	</select>
+	
+</mapper>

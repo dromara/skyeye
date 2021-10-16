@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.WagesSocialSecurityFundDao">
+
+    <select id="queryWagesSocialSecurityFundList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.start_month startMonth,
+            a.end_month endMonth,
+            a.state,
+            a.sort_no sortNo,
+            CONVERT(a.ins_total_seriously_ill_individual, decimal(24, 2)) insTotalSeriouslyIllIndividual,
+            CONVERT(a.ins_total_person, decimal(24, 2)) insTotalPerson,
+            CONVERT(a.ins_total_company, decimal(24, 2)) insTotalCompany,
+            CONVERT(a.accumulation_person_amount, decimal(24, 2)) accumulationPersonAmount,
+            CONVERT(a.accumulation_company_amount, decimal(24, 2)) accumulationCompanyAmount,
+            bu.user_name createName,
+            DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+            cu.user_name lastUpdateName,
+            DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+        FROM
+            wages_social_security_fund a
+            LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+            LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+        WHERE a.state != '3'
+        <if test="title != '' and title != null">
+            AND a.title LIKE '%${title}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+    </select>
+
+    <select id="queryWagesSocialSecurityFundMationByTitleAndNotId" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title
+        FROM
+            wages_social_security_fund a
+        WHERE a.state != '3'
+        AND a.title = #{title}
+        <if test="notId != '' and notId != null">
+            AND a.id != #{notId}
+        </if>
+    </select>
+
+    <insert id="insertWagesSocialSecurityFundMation" parameterType="java.util.Map">
+        INSERT into wages_social_security_fund
+        (id, title, start_month, end_month, state, `desc`, enclosure, insurance_endowment_base, insurance_endowment_person, insurance_endowment_company,
+         insurance_unemployment_base, insurance_unemployment_person, insurance_unemployment_company, insurance_employment_base, insurance_employment_person,
+         insurance_employment_company, insurance_maternity_base, insurance_maternity_person, insurance_maternity_company, insurance_medical_base,
+         insurance_medical_person, insurance_medical_company, ins_total_seriously_ill_individual, ins_total_person, ins_total_company, accumulation_base,
+         accumulation_person_scale, accumulation_company_scale, accumulation_person_amount, accumulation_company_amount, sort_no,
+         create_id, create_time, last_update_id, last_update_time)
+        VALUES
+        (#{id}, #{title}, #{startMonth}, #{endMonth}, #{state}, #{desc}, #{enclosure}, #{insuranceEndowmentBase}, #{insuranceEndowmentPerson}, #{insuranceEndowmentCompany},
+         #{insuranceUnemploymentBase}, #{insuranceUnemploymentPerson}, #{insuranceUnemploymentCompany}, #{insuranceEmploymentBase}, #{insuranceEmploymentPerson},
+         #{insuranceEmploymentCompany}, #{insuranceMaternityBase}, #{insuranceMaternityPerson}, #{insuranceMaternityCompany}, #{insuranceMedicalBase},
+         #{insuranceMedicalPerson}, #{insuranceMedicalCompany}, #{insTotalSeriouslyIllIndividual}, #{insTotalPerson}, #{insTotalCompany}, #{accumulationBase},
+         #{accumulationPersonScale}, #{accumulationCompanyScale}, #{accumulationPersonAmount}, #{accumulationCompanyAmount}, #{sortNo},
+         #{createId}, #{createTime}, #{createId}, #{createTime})
+    </insert>
+
+    <select id="queryWagesSocialSecurityFundMationById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.start_month startMonth,
+            a.end_month endMonth,
+            a.state,
+            a.sort_no sortNo,
+            a.`desc`,
+            IFNULL(a.enclosure, '') enclosure,
+            CONVERT(a.insurance_endowment_base, decimal(24, 2)) insuranceEndowmentBase,
+            CONVERT(a.insurance_endowment_person, decimal(24, 2)) insuranceEndowmentPerson,
+            CONVERT(a.insurance_endowment_company, decimal(24, 2)) insuranceEndowmentCompany,
+            CONVERT(a.insurance_unemployment_base, decimal(24, 2)) insuranceUnemploymentBase,
+            CONVERT(a.insurance_unemployment_person, decimal(24, 2)) insuranceUnemploymentPerson,
+            CONVERT(a.insurance_unemployment_company, decimal(24, 2)) insuranceUnemploymentCompany,
+            CONVERT(a.insurance_employment_base, decimal(24, 2)) insuranceEmploymentBase,
+            CONVERT(a.insurance_employment_person, decimal(24, 2)) insuranceEmploymentPerson,
+            CONVERT(a.insurance_employment_company, decimal(24, 2)) insuranceEmploymentCompany,
+            CONVERT(a.insurance_maternity_base, decimal(24, 2)) insuranceMaternityBase,
+            CONVERT(a.insurance_maternity_person, decimal(24, 2)) insuranceMaternityPerson,
+            CONVERT(a.insurance_maternity_company, decimal(24, 2)) insuranceMaternityCompany,
+            CONVERT(a.insurance_medical_base, decimal(24, 2)) insuranceMedicalBase,
+            CONVERT(a.insurance_medical_person, decimal(24, 2)) insuranceMedicalPerson,
+            CONVERT(a.insurance_medical_company, decimal(24, 2)) insuranceMedicalCompany,
+            CONVERT(a.ins_total_seriously_ill_individual, decimal(24, 2)) insTotalSeriouslyIllIndividual,
+            CONVERT(a.ins_total_person, decimal(24, 2)) insTotalPerson,
+            CONVERT(a.ins_total_company, decimal(24, 2)) insTotalCompany,
+            CONVERT(a.accumulation_base, decimal(24, 2)) accumulationBase,
+            CONVERT(a.accumulation_person_scale, decimal(24, 2)) accumulationPersonScale,
+            CONVERT(a.accumulation_company_scale, decimal(24, 2)) accumulationCompanyScale,
+            CONVERT(a.accumulation_person_amount, decimal(24, 2)) accumulationPersonAmount,
+            CONVERT(a.accumulation_company_amount, decimal(24, 2)) accumulationCompanyAmount
+        FROM
+            wages_social_security_fund a
+        WHERE a.state != '3'
+        AND a.id = #{id}
+    </select>
+
+    <select id="queryStaffNameListByStaffIdList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            CONCAT_WS('_', a.job_number, a.user_name) `name`,
+            a.email
+        FROM
+            sys_eve_user_staff a
+        WHERE a.id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryDepartMentNameListByDepartMentIdList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            CONCAT_WS('_', b.company_name, a.department_name) `name`
+        FROM
+            company_department a,
+            company_mation b
+        WHERE a.company_id = b.id
+        AND a.id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryCompanyNameListByCompanyIdList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.company_name `name`
+        FROM
+            company_mation a
+        WHERE a.id IN
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="editWagesSocialSecurityFundMationById">
+        UPDATE wages_social_security_fund
+        <set>
+            title = #{title},
+            start_month = #{startMonth},
+            end_month = #{endMonth},
+            `desc` = #{desc},
+            enclosure = #{enclosure},
+            insurance_endowment_base = #{insuranceEndowmentBase},
+            insurance_endowment_person = #{insuranceEndowmentPerson},
+            insurance_endowment_company = #{insuranceEndowmentCompany},
+            insurance_unemployment_base = #{insuranceUnemploymentBase},
+            insurance_unemployment_person = #{insuranceUnemploymentPerson},
+            insurance_unemployment_company = #{insuranceUnemploymentCompany},
+            insurance_employment_base = #{insuranceEmploymentBase},
+            insurance_employment_person = #{insuranceEmploymentPerson},
+            insurance_employment_company = #{insuranceEmploymentCompany},
+            insurance_maternity_base = #{insuranceMaternityBase},
+            insurance_maternity_person = #{insuranceMaternityPerson},
+            insurance_maternity_company = #{insuranceMaternityCompany},
+            insurance_medical_base = #{insuranceMedicalBase},
+            insurance_medical_person = #{insuranceMedicalPerson},
+            insurance_medical_company = #{insuranceMedicalCompany},
+            ins_total_seriously_ill_individual = #{insTotalSeriouslyIllIndividual},
+            ins_total_person = #{insTotalPerson},
+            ins_total_company = #{insTotalCompany},
+            accumulation_base = #{accumulationBase},
+            accumulation_person_scale = #{accumulationPersonScale},
+            accumulation_company_scale = #{accumulationCompanyScale},
+            accumulation_person_amount = #{accumulationPersonAmount},
+            accumulation_company_amount = #{accumulationCompanyAmount},
+            sort_no = #{sortNo},
+            last_update_id = #{lastUpdateId},
+            last_update_time = #{lastUpdateTime},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editWagesSocialSecurityFundStateMationById">
+        UPDATE wages_social_security_fund
+        <set>
+            state = #{state},
+        </set>
+        WHERE id = #{id}
+        AND state != '3'
+    </update>
+
+</mapper>

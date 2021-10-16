@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEnclosureDao">
+	
+	<select id="querySysEnclosureFirstTypeListByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`,
+			'1' pId,
+			'../../assets/images/my-folder-icon.png' icon,
+			1 isParent
+		FROM
+			sys_enclosure_type a
+		WHERE
+			a.parent_id = '0'
+		AND a.create_id = #{userId}
+	</select>
+	
+	<select id="querySysEnclosureSecondTypeListByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.type_name `name`,
+			a.parent_id pId,
+			'../../assets/images/my-folder-icon.png' icon,
+			0 isParent
+		FROM
+			sys_enclosure_type a
+		WHERE
+			a.parent_id = #{parentId}
+		AND a.create_id = #{userId}
+	</select>
+	
+	<select id="querySysEnclosureMationByUserIdAndParentId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.parent_id parentId
+		FROM
+			sys_enclosure_type a
+		WHERE
+			a.id = #{parentId}
+		AND a.create_id = #{userId}
+	</select>
+	
+	<insert id="insertSysEnclosureMationByUserId" parameterType="java.util.Map">
+	    INSERT into sys_enclosure_type 
+	    (id, type_name, parent_id, `state`, create_id, create_time)
+	    VALUES(#{id}, #{typeName}, #{parentId}, #{state}, #{userId}, #{createTime})
+	</insert>
+	
+	<select id="queryThisFolderChilsByFolderId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			*
+		FROM
+			(SELECT
+				a.id,
+				a.type_name `name`,
+				'folder' fileType,
+				'' fileSize,
+				DATE_FORMAT(a.create_time, '%Y-%m-%d %H:%i') createTime,
+				'2' orderBy,
+				'' fileAddress
+			FROM
+				sys_enclosure_type a
+			WHERE
+				a.parent_id = #{parentId}
+			AND a.create_id = #{userId}
+			UNION ALL
+			SELECT
+				b.id,
+				b.file_name `name`,
+				b.file_type fileType,
+				b.file_size fileSize,
+				DATE_FORMAT(b.create_time, '%Y-%m-%d %H:%i') createTime,
+				'1' orderBy,
+				b.file_address fileAddress
+			FROM
+				sys_enclosure b
+			WHERE
+				b.parent_id = #{parentId}
+			AND b.create_id = #{userId}) k
+		ORDER BY k.orderBy DESC
+	</select>
+	
+	<select id="querySysEnclosureMationByUserIdToEdit" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT * FROM 
+		(SELECT
+			a.type_name typeName
+		FROM
+			sys_enclosure_type a
+		WHERE
+			a.id = #{id}
+		UNION
+		SELECT
+			b.file_name typeName
+		FROM
+			sys_enclosure b
+		WHERE
+			b.id = #{id}) k
+		LIMIT 1
+	</select>
+	
+	<update id="editSysEnclosureFolderMationByUserId" parameterType="java.util.Map">
+		UPDATE sys_enclosure_type
+		<set>
+			type_name = #{typeName}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editSysEnclosureFileMationByUserId" parameterType="java.util.Map">
+		UPDATE sys_enclosure
+		<set>
+			file_name = #{typeName}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="insertUploadFileByUserId" parameterType="java.util.Map">
+	    INSERT into sys_enclosure 
+	    (id, file_name, file_address, file_type, file_size, file_size_type, parent_id, create_id, create_time)
+	    VALUES(#{id}, #{name}, #{fileAddress}, #{fileType}, #{size}, #{fileSizeType}, #{folderId}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySysEnclosureListToTreeByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			*
+		FROM
+			(SELECT
+				a.id,
+				a.type_name `name`,
+				'folder' fileType,
+				'' fileSize,
+				DATE_FORMAT(a.create_time, '%Y-%m-%d %H:%i') createTime,
+				'2' orderBy,
+				'' fileAddress,
+				a.parent_id pId,
+				1 isParent,
+				'../../assets/images/my-folder-icon.png' `icon`
+			FROM
+				sys_enclosure_type a
+			WHERE
+				a.create_id = #{userId}
+			UNION ALL
+			SELECT
+				b.id,
+				b.file_name `name`,
+				b.file_type fileType,
+				b.file_size fileSize,
+				DATE_FORMAT(b.create_time, '%Y-%m-%d %H:%i') createTime,
+				'1' orderBy,
+				b.file_address fileAddress,
+				b.parent_id pId,
+				0 isParent,
+				'../../assets/images/my-file-icon.png' `icon`
+			FROM
+				sys_enclosure b
+			WHERE
+				b.create_id = #{userId}) k
+		ORDER BY k.orderBy DESC
+	</select>
+	
+	<select id="queryAllPeopleToTree" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name `name`,
+			a.p_id pId,
+			'isCompany' folderType,
+			1 isParent,
+			'../../assets/images/company-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_mation a
+		UNION ALL
+		SELECT
+			a.id,
+			a.department_name `name`,
+			a.company_id pId,
+			'isDepartment' folderType,
+			1 isParent,
+			'../../assets/images/department-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_department a
+		UNION ALL
+		SELECT
+			a.id,
+			a.job_name `name`,
+			a.department_id pId,
+			'isJob' folderType,
+			1 isParent,
+			'../../assets/images/job-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_job a
+		UNION ALL
+		SELECT
+			a.user_id id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			a.job_id pId,
+			'isPeople' folderType,
+			0 isParent,
+			'../../assets/images/people-icon.png' `icon`,
+			a.email `email`
+		FROM
+			sys_eve_user_staff a
+		WHERE a.state = '1'
+		AND LENGTH(a.user_id) > 0 AND a.user_id != ""
+		<if test="userId != null and userId != ''">
+			AND a.user_id != #{userId}
+		</if>
+		<if test="hasEmail != null and hasEmail != ''">
+			AND LENGTH(a.email) > 0 AND a.email != ""
+		</if>
+	</select>
+	
+	<select id="queryCompanyMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.company_id companyId,
+			a.department_id departmentId,
+			a.job_id jobId
+		FROM
+			sys_eve_user_staff a
+		WHERE
+			a.user_id = #{id}
+	</select>
+	
+	<select id="queryCompanyPeopleToTreeByUserBelongCompany" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name `name`,
+			'0' pId,
+			'isCompany' folderType,
+			1 isParent,
+			'../../assets/images/company-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_mation a
+		WHERE a.id = #{companyId}
+		UNION ALL
+		SELECT
+			a.id,
+			a.department_name `name`,
+			a.company_id pId,
+			'isDepartment' folderType,
+			1 isParent,
+			'../../assets/images/department-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_department a
+		WHERE a.company_id = #{companyId}
+		UNION ALL
+		SELECT
+			a.id,
+			a.job_name `name`,
+			a.department_id pId,
+			'isJob' folderType,
+			1 isParent,
+			'../../assets/images/job-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_job a
+		WHERE a.company_id = #{companyId}
+		UNION ALL
+		SELECT
+			a.user_id id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			a.job_id pId,
+			'isPeople' folderType,
+			0 isParent,
+			'../../assets/images/people-icon.png' `icon`,
+			a.email `email`
+		FROM
+			sys_eve_user_staff a
+		WHERE a.state = '1'
+		AND a.company_id = #{companyId}
+		AND LENGTH(a.user_id) > 0 AND a.user_id != ""
+		<if test="userId != null and userId != ''">
+			AND a.user_id != #{userId}
+		</if>
+		<if test="hasEmail != null and hasEmail != ''">
+			AND LENGTH(a.email) > 0 AND a.email != ""
+		</if>
+	</select>
+	
+	<select id="queryDepartmentPeopleToTreeByUserBelongDepartment" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name `name`,
+			'0' pId,
+			'isCompany' folderType,
+			1 isParent,
+			'../../assets/images/company-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_mation a
+		WHERE a.id = #{companyId}
+		UNION ALL
+		SELECT
+			a.id,
+			a.department_name `name`,
+			a.company_id pId,
+			'isDepartment' folderType,
+			1 isParent,
+			'../../assets/images/department-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_department a
+		WHERE a.company_id = #{companyId}
+		UNION ALL
+		SELECT
+			a.user_id id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			a.department_id pId,
+			'isPeople' folderType,
+			0 isParent,
+			'../../assets/images/people-icon.png' `icon`,
+			a.email `email`
+		FROM
+			sys_eve_user_staff a
+		WHERE a.state = '1'
+		AND a.company_id = #{companyId}
+		AND LENGTH(a.user_id) > 0 AND a.user_id != ""
+		<if test="userId != null and userId != ''">
+			AND a.user_id != #{userId}
+		</if>
+		<if test="hasEmail != null and hasEmail != ''">
+			AND LENGTH(a.email) > 0 AND a.email != ""
+		</if>
+	</select>
+	
+	<select id="queryJobPeopleToTreeByUserBelongJob" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name `name`,
+			'0' pId,
+			'isCompany' folderType,
+			1 isParent,
+			'../../assets/images/company-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_mation a
+		WHERE a.id = #{companyId}
+		UNION ALL
+		SELECT
+			a.id,
+			a.job_name `name`,
+			a.company_id pId,
+			'isJob' folderType,
+			1 isParent,
+			'../../assets/images/job-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_job a
+		WHERE a.company_id = #{companyId}
+		UNION ALL
+		SELECT
+			a.user_id id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			a.job_id pId,
+			'isPeople' folderType,
+			0 isParent,
+			'../../assets/images/people-icon.png' `icon`,
+			a.email `email`
+		FROM
+			sys_eve_user_staff a
+		WHERE a.state = '1'
+		AND a.company_id = #{companyId}
+		AND LENGTH(a.user_id) > 0 AND a.user_id != ""
+		<if test="userId != null and userId != ''">
+			AND a.user_id != #{userId}
+		</if>
+		<if test="hasEmail != null and hasEmail != ''">
+			AND LENGTH(a.email) > 0 AND a.email != ""
+		</if>
+	</select>
+	
+	<select id="querySimpleDepPeopleToTreeByUserBelongSimpleDep" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.department_name `name`,
+			'0' pId,
+			'isDepartment' folderType,
+			1 isParent,
+			'../../assets/images/department-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_department a
+		WHERE a.id = #{departmentId}
+		UNION ALL
+		SELECT
+			a.user_id id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			a.department_id pId,
+			'isPeople' folderType,
+			0 isParent,
+			'../../assets/images/people-icon.png' `icon`,
+			a.email `email`
+		FROM
+			sys_eve_user_staff a
+		WHERE a.state = '1'
+		AND a.department_id = #{departmentId}
+		AND LENGTH(a.user_id) > 0 AND a.user_id != ""
+		<if test="userId != null and userId != ''">
+			AND a.user_id != #{userId}
+		</if>
+		<if test="hasEmail != null and hasEmail != ''">
+			AND LENGTH(a.email) > 0 AND a.email != ""
+		</if>
+	</select>
+	
+	<select id="queryTalkGroupUserListByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.group_name `name`,
+			'0' pId,
+			'isGroup' folderType,
+			1 isParent,
+			'../../assets/images/talk-group-icon.png' `icon`,
+			'' `email`
+		FROM
+			sys_talk_group a,
+			sys_talk_group_user b
+		WHERE
+			a.id = b.group_id
+		AND b.user_id = #{createId}
+		UNION ALL
+		SELECT
+			a.user_id id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			c.group_id pId,
+			'isPeople' folderType,
+			0 isParent,
+			'../../assets/images/people-icon.png' `icon`,
+			a.email `email`
+		FROM
+			sys_eve_user_staff a,
+			sys_talk_group_user b,
+			sys_talk_group_user c
+		WHERE a.state = '1'
+		AND a.user_id = c.user_id
+		AND b.user_id = #{createId}
+		AND c.group_id = b.group_id
+		AND LENGTH(a.user_id) > 0 AND a.user_id != ""
+		<if test="userId != null and userId != ''">
+			AND a.user_id != #{userId}
+		</if>
+		<if test="hasEmail != null and hasEmail != ''">
+			AND LENGTH(a.email) > 0 AND a.email != ""
+		</if>
+	</select>
+	
+	<select id="queryEnclosureInfo" resultType="java.util.Map">
+		SELECT
+			id,
+			file_name name,
+			file_address fileAddress
+		FROM
+			sys_enclosure
+		WHERE instr(concat(',', #{enclosure},','),concat(',', id, ','));
+	</select>
+	
+</mapper>

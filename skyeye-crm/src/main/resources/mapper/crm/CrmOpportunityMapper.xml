@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.CrmOpportunityDao">
+
+    <select id="queryCrmOpportunityList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT 
+			m.documentaryTime,
+			n.*
+		FROM
+	        (SELECT
+				a.id,
+				a.title,
+				a.state,
+				IF((a.state = 0 OR a.state = 1 OR a.state = 12), 1, -1) editRow,
+				GROUP_CONCAT(distinct d.user_name) responsId,
+				GROUP_CONCAT(distinct e.user_name) createId,
+				GROUP_CONCAT(distinct f.user_name) partId,
+				GROUP_CONCAT(distinct g.user_name) followId,
+				(SELECT COUNT(id) from crm_opportunity_discuss where opportunity_id = a.id) discussNum,
+				format(a.estimate_price, 2) estimatePrice,
+				IFNULL(b.process_instance_id,'') processInstanceId,
+				DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i') createTime
+			FROM
+				crm_opportunity a
+				LEFT JOIN crm_opportunity_process b ON a.id = b.opportunity_id
+				LEFT JOIN sys_eve_user_staff d ON a.respons_id = d.user_id
+				LEFT JOIN sys_eve_user_staff e ON a.create_id = e.user_id
+				LEFT JOIN sys_eve_user_staff f ON INSTR(CONCAT(',', a.part_id, ','),CONCAT(',', f.user_id, ','))
+				LEFT JOIN sys_eve_user_staff g ON INSTR(CONCAT(',', a.follow_id, ','),CONCAT(',', g.user_id, ','))
+			WHERE 1=1
+	    	<choose>
+	    		<when test="createTime == '0'.toString()">
+		            AND YEARWEEK(date_format(a.create_time,'%Y/%m/%d')) = YEARWEEK(now())
+		        </when>
+		        <when test="createTime == '1'.toString()">
+		            AND YEARWEEK(date_format(a.create_time,'%Y/%m/%d')) = YEARWEEK(now()) - 1
+		        </when>
+		        <when test="createTime == '2'.toString()">
+		            AND date_format(a.create_time,'%Y-%m') = date_format(now(),'%Y-%m')
+		        </when>
+		        <when test="createTime == '3'.toString()">
+		            AND date_format(a.create_time,'%Y-%m') = date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m')
+		        </when>
+		        <when test="createTime == '4'.toString()">
+		            AND QUARTER(a.create_time) = QUARTER(now())
+		        </when>
+		        <when test="createTime == '5'.toString()">
+					AND QUARTER(a.create_time) = QUARTER(DATE_SUB(now(),interval 1 QUARTER))
+				</when>
+	    	</choose>
+	    	<if test="state != '' and state != null">
+				AND a.state = #{state}
+	        </if>
+	        <if test="documentaryState != '' and documentaryState != null and documentaryState == '0'.toString()">
+				AND (a.state = '2' || a.state = '3' || a.state = '4' || a.state = '5')
+	        </if>
+			GROUP BY a.id
+			ORDER BY a.create_time DESC) n
+			LEFT JOIN (SELECT a.id, DATE_FORMAT(b.documentary_time,'%Y-%m-%d %H:%i') documentaryTime from crm_opportunity a LEFT JOIN crm_documentary b ON a.id = b.opportunity_id ORDER BY b.documentary_time DESC LIMIT 1) m ON n.id = m.id
+			WHERE 1 = 1
+			<choose>
+		        <when test="documentaryState == '1'.toString()">
+		            AND (DATEDIFF(NOW(),m.documentaryTime) > '7' AND '30' >= DATEDIFF(NOW(),m.documentaryTime))
+		        </when>
+		        <when test="documentaryState == '2'.toString()">
+		            AND (DATEDIFF(NOW(),m.documentaryTime) > '30' AND '90' >= DATEDIFF(NOW(),m.documentaryTime))
+		        </when>
+		        <when test="documentaryState == '3'.toString()">
+		            AND DATEDIFF(NOW(),m.documentaryTime) > '90'
+		        </when>
+	    	</choose>
+    </select>
+    
+    <insert id="insertCrmOpportunityMation" parameterType="java.util.Map">
+		insert into crm_opportunity
+        (id, customer_id, city, detail_address, title, from_id, estimate_price, estimate_end_time, contacts, department, job,
+         work_phone, mobile_phone, email, qq, business_need, enclosure_info, sub_departments, respons_id, part_id, follow_id, state, create_name,
+         create_id, create_time)
+		values(#{id}, #{customerId}, #{city}, #{detailAddress}, #{title}, #{fromId}, #{estimatePrice}, #{estimateEndTime}, #{contacts}, #{department}, #{job},
+		 #{workPhone}, #{mobilePhone}, #{email}, #{qq}, #{businessNeed}, #{enclosureInfo}, #{subDepartments}, #{responsId}, #{partId}, #{followId}, '0', #{createName},
+		 #{createId},  #{createTime})
+    </insert>
+    
+    <select id="queryOpportunityMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			crm_opportunity a	
+		WHERE 
+			a.title = #{title}
+		AND a.customer_id = #{customerId}
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+	
+	<select id="queryOpportunityMationToDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.title,
+			b.`name` fromId,
+			d.`name` industryId,
+			c.name customerId,
+			format(a.estimate_price, 2) estimatePrice,
+			DATE_FORMAT(a.estimate_end_time,'%Y-%m-%d') estimateEndTime,
+			a.city,
+			a.detail_address detailAddress,
+			a.contacts,
+			a.department,
+			a.job,
+			a.work_phone workPhone,
+			a.mobile_phone mobilePhone,
+			a.email,
+			a.qq,
+			a.business_need businessNeed,
+			a.enclosure_info enclosureInfo,
+			e.department_name subDepartments,
+			(SELECT 
+					GROUP_CONCAT(f.user_name)
+				FROM
+					crm_opportunity a,
+					sys_eve_user_staff f
+				WHERE a.id = #{id}
+				AND a.respons_id = f.user_id
+			) responsId,
+			(SELECT 
+					GROUP_CONCAT(f.user_name)
+				FROM
+					crm_opportunity a,
+					sys_eve_user_staff f
+				WHERE a.id = #{id}
+				AND INSTR(CONCAT(',',a.part_id,','),CONCAT(',',f.user_id,','))
+			) partId,
+			(SELECT 
+					GROUP_CONCAT(f.user_name)
+				FROM
+					crm_opportunity a,
+					sys_eve_user_staff f
+				WHERE a.id = #{id}
+				AND INSTR(CONCAT(',',a.follow_id,','),CONCAT(',',f.user_id,','))
+			) followId,
+			a.state
+		FROM
+			crm_opportunity a,
+			crm_opportunity_from b,
+			crm_customer c, 
+			crm_customer_industry d,
+			company_department e
+		WHERE a.id = #{id}
+		AND a.from_id = b.id
+		AND a.customer_id = c.id
+		AND c.industry_id = d.id
+		AND a.sub_departments = e.id
+    </select>
+    
+	<select id="queryOpportunityMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.state,
+			a.customer_id customerId,
+			c.`name` customerName,
+			a.from_id fromId,
+			b.name industryName,
+			a.estimate_price estimatePrice,
+			DATE_FORMAT(a.estimate_end_time,'%Y-%m-%d') estimateEndTime,
+			a.city,
+			a.detail_address detailAddress,
+			a.contacts,
+			a.department,
+			a.job,
+			a.work_phone workPhone,
+			a.mobile_phone mobilePhone,
+			a.email,
+			a.qq,
+			a.business_need businessNeed,
+			a.enclosure_info enclosureInfo,
+			a.sub_departments subDepartments,
+			a.respons_id responsId,
+			a.part_id partId,
+			a.follow_id followId
+		FROM
+			crm_opportunity a
+			LEFT JOIN crm_customer c ON a.customer_id = c.id
+			LEFT JOIN crm_customer_industry b ON c.industry_id = b.id
+		WHERE a.id = #{id}
+	</select>
+
+	<update id="editOpportunityMationById" parameterType="java.util.Map">
+        UPDATE crm_opportunity
+        <set>
+            <if test="customerId != '' and customerId != null">
+                customer_id = #{customerId},
+            </if>
+            <if test="title != '' and title != null">
+                title = #{title},
+            </if>
+            <if test="fromId != '' and fromId != null">
+                from_id = #{fromId},
+            </if>
+            <if test="subDepartments != '' and subDepartments != null">
+                sub_departments = #{subDepartments},
+            </if>
+            <if test="contacts != '' and contacts != null">
+                contacts = #{contacts},
+            </if>
+            <if test="responsId != '' and responsId != null">
+                respons_id = #{responsId},
+            </if>
+            estimate_price = #{estimatePrice},
+            estimate_end_time = #{estimateEndTime},
+            city = #{city},
+            detail_address = #{detailAddress},
+            business_need = #{businessNeed},
+            enclosure_info = #{enclosureInfo},
+            part_id = #{partId},
+            department = #{department},
+            job = #{job},
+            work_phone = #{workPhone},
+            mobile_phone = #{mobilePhone},
+            email = #{email},
+            qq = #{qq},
+            follow_id = #{followId}
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteOpportunityMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			crm_opportunity
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryDiscussNumsList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.create_name createName,
+			(SELECT COUNT(id) from crm_opportunity_discuss_reply where discuss_id = a.id) replyNum,
+			(SELECT DATE_FORMAT(create_time,'%Y-%m-%d %H:%i') from crm_opportunity_discuss_reply where discuss_id = a.id ORDER BY create_time DESC LIMIT 1) recoveryTime,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i') createTime
+		FROM
+			crm_opportunity_discuss a
+		WHERE a.opportunity_id = #{id}
+	</select>
+	
+	<select id="queryOpportunityListUseToSelect" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			CONCAT_WS('-', b.`name`, a.title) `name`
+		FROM
+			crm_opportunity a,
+			crm_customer b
+		WHERE a.customer_id = b.id
+		AND (a.state = '11' OR a.state = '2' OR a.state = '3' OR a.state = '4' OR a.state = '5')
+		AND (a.respons_id = #{userId}
+		OR a.create_id = #{userId}
+		OR INSTR(CONCAT(',', a.part_id, ','),CONCAT(',', #{userId}, ','))
+		OR INSTR(CONCAT(',', a.follow_id, ','),CONCAT(',', #{userId}, ',')))
+	</select>
+	
+	<insert id="insertOpportunityDiscussMation" parameterType="java.util.Map">
+		insert into crm_opportunity_discuss
+        (id, opportunity_id, content, title, create_name, create_id, create_time)
+		values(#{id}, #{opportunityId}, #{content}, #{title}, #{createName}, #{createId},  #{createTime})
+    </insert>
+    
+    <select id="queryResponsIdInOpportunityById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+            b.user_id id,
+            b.user_name `name`,
+			b.email
+        FROM
+            crm_opportunity a,
+            sys_eve_user_staff b
+        WHERE
+            a.id = #{id}
+        AND b.user_id = a.respons_id
+	</select>
+	
+	<select id="queryPartIdInOpportunityById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.user_id id,
+			b.user_name `name`,
+			b.email
+		FROM
+			crm_opportunity a,
+			sys_eve_user_staff b
+		WHERE
+			a.id = #{id}
+		AND INSTR(CONCAT(',',a.part_id,','),CONCAT(',',b.user_id,','))
+	</select>
+	
+	<select id="queryFollowIdInOpportunityById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.user_id id,
+			b.user_name `name`,
+			b.email
+		FROM
+			crm_opportunity a,
+			sys_eve_user_staff b
+		WHERE
+			a.id = #{id}
+		AND INSTR(CONCAT(',',a.follow_id,','),CONCAT(',',b.user_id,','))
+	</select>
+	
+	<select id="queryMyCrmOpportunityList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			m.documentaryTime,
+			n.*
+		FROM
+	        (SELECT
+				a.id,
+				a.title,
+				a.state,
+				IF((a.state = 0 OR a.state = 1 OR a.state = 12), 1, -1) editRow,
+				GROUP_CONCAT(distinct d.user_name) responsId,
+				GROUP_CONCAT(distinct e.user_name) createId,
+				GROUP_CONCAT(distinct f.user_name) partId,
+				GROUP_CONCAT(distinct g.user_name) followId,
+				(SELECT COUNT(id) from crm_opportunity_discuss where opportunity_id = a.id) discussNum,
+				format(a.estimate_price, 2) estimatePrice,
+				IFNULL(b.process_instance_id,'') processInstanceId,
+				DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i') createTime
+			FROM
+				crm_opportunity a
+				LEFT JOIN crm_opportunity_process b ON a.id = b.opportunity_id
+				LEFT JOIN sys_eve_user_staff d ON a.respons_id = d.user_id
+				LEFT JOIN sys_eve_user_staff e ON a.create_id = e.user_id
+				LEFT JOIN sys_eve_user_staff f ON INSTR(CONCAT(',', a.part_id, ','),CONCAT(',', f.user_id, ','))
+				LEFT JOIN sys_eve_user_staff g ON INSTR(CONCAT(',', a.follow_id, ','),CONCAT(',', g.user_id, ','))
+			WHERE 1=1
+			<choose>
+		        <when test="myRole == '1'.toString()">
+		            AND a.respons_id = #{userId}
+		        </when>
+		        <when test="myRole == '2'.toString()">
+		            AND INSTR(CONCAT(',', a.part_id, ','),CONCAT(',', #{userId}, ','))
+		        </when>
+		        <when test="myRole == '3'.toString()">
+		            AND INSTR(CONCAT(',', a.follow_id, ','),CONCAT(',', #{userId}, ','))
+		        </when>
+		        <when test="myRole == '4'.toString()">
+		            AND a.create_id = #{userId}
+		        </when>
+		        <otherwise>
+				    AND (a.respons_id = #{userId}
+					OR a.create_id = #{userId}
+					OR INSTR(CONCAT(',', a.part_id, ','),CONCAT(',', #{userId}, ','))
+					OR INSTR(CONCAT(',', a.follow_id, ','),CONCAT(',', #{userId}, ',')))
+		        </otherwise>
+	    	</choose>
+	    	<choose>
+	    		<when test="createTime == '0'.toString()">
+		            AND YEARWEEK(date_format(a.create_time,'%Y/%m/%d')) = YEARWEEK(now())
+		        </when>
+		        <when test="createTime == '1'.toString()">
+		            AND YEARWEEK(date_format(a.create_time,'%Y/%m/%d')) = YEARWEEK(now()) - 1
+		        </when>
+		        <when test="createTime == '2'.toString()">
+		            AND date_format(a.create_time,'%Y-%m') = date_format(now(),'%Y-%m')
+		        </when>
+		        <when test="createTime == '3'.toString()">
+		            AND date_format(a.create_time,'%Y-%m') = date_format(DATE_SUB(curdate(), INTERVAL 1 MONTH),'%Y-%m')
+		        </when>
+		        <when test="createTime == '4'.toString()">
+		            AND QUARTER(a.create_time) = QUARTER(now())
+		        </when>
+		        <when test="createTime == '5'.toString()">
+					AND QUARTER(a.create_time) = QUARTER(DATE_SUB(now(),interval 1 QUARTER))
+				</when>
+	    	</choose>
+	    	<if test="state != '' and state != null">
+				AND a.state = #{state}
+	        </if>
+			GROUP BY a.id
+			ORDER BY a.create_time DESC) n
+			LEFT JOIN (SELECT a.id, DATE_FORMAT(b.documentary_time,'%Y-%m-%d %H:%i') documentaryTime from crm_opportunity a LEFT JOIN crm_documentary b ON a.id = b.opportunity_id ORDER BY b.documentary_time DESC LIMIT 1) m ON n.id = m.id
+			WHERE 1 = 1
+			<choose>
+		        <when test="documentaryState == '1'.toString()">
+		            AND (DATEDIFF(NOW(),m.documentaryTime) > '7' AND '30' >= DATEDIFF(NOW(),m.documentaryTime))
+		        </when>
+		        <when test="documentaryState == '2'.toString()">
+		            AND (DATEDIFF(NOW(),m.documentaryTime) > '30' AND '90' >= DATEDIFF(NOW(),m.documentaryTime))
+		        </when>
+		        <when test="documentaryState == '3'.toString()">
+		            AND DATEDIFF(NOW(),m.documentaryTime) > '90'
+		        </when>
+	    	</choose>
+    </select>
+    
+    <insert id="insertDiscussReplyMation" parameterType="java.util.Map">
+		insert into crm_opportunity_discuss_reply
+        (id, opportunity_id, discuss_id, content, create_name, create_id, create_time)
+		values(#{id}, #{opportunityId}, #{discussId}, #{content}, #{createName}, #{createId},  #{createTime})
+    </insert>
+    
+    <delete id="deleteDiscussMationById" parameterType="java.util.Map">
+		DELETE a.*, b.*
+		FROM
+			crm_opportunity_discuss a
+		LEFT JOIN crm_opportunity_discuss_reply b ON a.id = b.discuss_id
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryDiscussMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.id,
+			a.title,
+			a.content,
+			a.create_id createId,
+			a.create_name createName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i') createTime,
+			(SELECT COUNT(id) from crm_opportunity_discuss_reply where discuss_id = a.id) replyNum
+		FROM
+			crm_opportunity_discuss a
+		WHERE a.id = #{discussId}
+    </select>
+    
+    <select id="queryDiscussReplyByDiscussId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.content,
+			a.create_id createId,
+			a.create_name createName,
+			b.user_photo createPhoto,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i') createTime
+		FROM
+			crm_opportunity_discuss_reply a,
+			sys_eve_user_staff b
+		WHERE a.discuss_id = #{discussId}
+		AND b.user_id = a.create_id
+		ORDER BY a.create_time ASC
+    </select>
+    
+    <select id="queryCrmOpportunityStateById" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.state
+		FROM
+			crm_opportunity a
+		WHERE
+			a.id = #{opportunityId}
+    </select>
+
+	<select id="queryOpportunityMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			b.`name` fromId,
+			d.`name` industryId,
+			c.name customerId,
+			format(a.estimate_price, 2) estimatePrice,
+			DATE_FORMAT(a.estimate_end_time,'%Y-%m-%d') estimateEndTime,
+			a.city,
+			a.detail_address detailAddress,
+			a.contacts,
+			a.department,
+			a.job,
+			a.work_phone workPhone,
+			a.mobile_phone mobilePhone,
+			a.email,
+			a.qq,
+			a.business_need businessNeed,
+			a.enclosure_info enclosureInfo,
+			e.department_name subDepartments,
+		    a.create_id createId,
+		    a.create_name userName,
+			f.user_name responsId,
+			(SELECT 
+					GROUP_CONCAT(f.user_name)
+				FROM
+					crm_opportunity a,
+					sys_eve_user_staff f
+				WHERE a.id = #{id}
+				AND INSTR(CONCAT(',',a.part_id,','),CONCAT(',',f.user_id,','))
+			) partId,
+			(SELECT 
+					GROUP_CONCAT(f.user_name)
+				FROM
+					crm_opportunity a,
+					sys_eve_user_staff f
+				WHERE a.id = #{id}
+				AND INSTR(CONCAT(',',a.follow_id,','),CONCAT(',',f.user_id,','))
+			) followId,
+			a.state,
+		    k.process_instance_id processInstanceId
+		FROM
+			crm_opportunity a
+			LEFT JOIN crm_customer c ON a.customer_id = c.id
+			LEFT JOIN crm_customer_industry d ON c.industry_id = d.id
+		    LEFT JOIN crm_opportunity_process k ON k.opportunity_id = a.id,
+			crm_opportunity_from b,
+			company_department e,
+			sys_eve_user_staff f
+		WHERE a.id = #{id}
+		AND a.from_id = b.id
+		AND a.sub_departments = e.id
+		AND a.respons_id = f.user_id
+	</select>
+
+	<update id="updateCrmOpportunityStateISInAudit">
+		UPDATE crm_opportunity
+		<set>
+			state = '1'
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<insert id="insertOpportunityProcess" parameterType="java.util.Map">
+		insert into crm_opportunity_process
+        (id, process_instance_id, opportunity_id, state, type, sub_id, sub_time)
+		values(#{id}, #{processInId}, #{opportunityId}, #{state}, #{type}, #{subId},  #{subTime})
+    </insert>
+    
+    <select id="queryOpportunityIdByProcessInstanceId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.opportunity_id opportunityId
+		FROM
+			crm_opportunity_process a
+		WHERE
+			a.process_instance_id = #{processInstanceId}
+	</select>
+	
+	<update id="editOpportunityStateById" parameterType="java.util.Map">
+		UPDATE crm_opportunity
+		<set>
+			state = #{state}
+		</set>
+		WHERE id = #{opportunityId}
+	</update>
+	
+	<update id="editOpportunityProcessStateById" parameterType="java.util.Map">
+		UPDATE crm_opportunity_process
+		<set>
+			state = #{processState}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editOpportunityState">
+		UPDATE crm_opportunity
+		<set>
+			state = #{state}
+		</set>
+		WHERE id = #{opportunityId}
+	</update>
+	
+	<select id="queryAllDiscussList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.create_name createName,
+			(SELECT COUNT(id) from crm_opportunity_discuss_reply where discuss_id = a.id) replyNum,
+			(SELECT DATE_FORMAT(create_time,'%Y-%m-%d %H:%i') from crm_opportunity_discuss_reply where discuss_id = a.id ORDER BY create_time DESC LIMIT 1) recoveryTime,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i') createTime,
+			a.opportunity_id opportunityId,
+			b.title opportunityTitle
+		FROM
+			crm_opportunity_discuss a
+			LEFT JOIN crm_opportunity b ON a.opportunity_id = b.id
+		WHERE 1=1
+			<if test="title != '' and title != null">
+				AND a.title like '%${title}%'
+			</if>
+			<if test="opportunityTitle != '' and opportunityTitle != null">
+				AND b.title like '%${opportunityTitle}%'
+			</if>
+	</select>
+	
+	<delete id="deleteCrmOpportunityProcessById">
+		DELETE
+		FROM
+			crm_opportunity_process
+		WHERE opportunity_id = #{id}
+	</delete>
+	
+	<delete id="deleteCrmDocumentaryByOpportunityId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			crm_documentary
+		WHERE
+			opportunity_id = #{id}
+	</delete>
+	
+	<delete id="deleteDiscussByOpportunityId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			crm_opportunity_discuss
+		WHERE
+			opportunity_id = #{id}
+	</delete>
+	
+	<delete id="deleteDiscussReplyByOpportunityId" parameterType="java.util.Map">
+		DELETE
+		FROM
+			crm_opportunity_discuss_reply
+		WHERE
+			opportunity_id = #{id}
+	</delete>
+	
+	<update id="editOpportunityProcessToRevoke">
+		UPDATE crm_opportunity
+		<set>
+			state = '0'
+		</set>
+		WHERE id = #{opportunityId}
+	</update>
+	
+</mapper>

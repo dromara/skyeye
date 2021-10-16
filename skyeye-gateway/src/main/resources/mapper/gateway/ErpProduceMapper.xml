@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ErpProducePageDao">
+	
+	<select id="queryPickMaterialYearByDepartmentId" resultType="java.util.Map">
+		SELECT
+			b.material_id materialId,
+			c.`name` materialName
+		FROM
+			erp_pick_header a,
+			erp_pick_child b
+			LEFT JOIN erp_material c ON b.material_id = c.id
+		WHERE a.`status` = '2'
+		AND a.type = '1'
+		AND a.id = b.header_id
+		AND a.department_id = #{departmentId}
+		AND date_format(a.create_time, '%Y') = #{year}
+		GROUP BY b.material_id
+	</select>
+	
+	<select id="queryPickMaterialNumYearByDepartmentId" resultType="java.util.Map">
+		SELECT
+			a.`year_month` yearMonth,
+			(SELECT
+				IFNULL(SUM(b.need_num), 0)
+			FROM
+				erp_pick_header a,
+				erp_pick_child b
+			WHERE a.`status` = '2'
+			AND a.type = '1'
+			AND a.id = b.header_id
+			AND b.material_id = #{id}
+			AND a.department_id = #{departmentId}
+			AND date_format(a.create_time, '%Y-%m') = a.`year_month`) needNum
+		FROM
+			(SELECT CONCAT(#{year}, '-01') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-02') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-03') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-04') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-05') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-06') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-07') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-08') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-09') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-10') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-11') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-12') AS `year_month` ) a
+		GROUP BY a.`year_month`
+	</select>
+	
+	<select id="queryPatchMaterialYearByDepartmentId" resultType="java.util.Map">
+		SELECT
+			b.material_id materialId,
+			c.`name` materialName
+		FROM
+			erp_pick_header a,
+			erp_pick_child b
+			LEFT JOIN erp_material c ON b.material_id = c.id
+		WHERE a.`status` = '2'
+		AND a.type = '3'
+		AND a.id = b.header_id
+		AND a.department_id = #{departmentId}
+		AND date_format(a.create_time, '%Y') = #{year}
+		GROUP BY b.material_id
+	</select>
+	
+	<select id="queryPatchMaterialNumYearByDepartmentId" resultType="java.util.Map">
+		SELECT
+			a.`year_month` yearMonth,
+			(SELECT
+				IFNULL(SUM(b.need_num), 0)
+			FROM
+				erp_pick_header a,
+				erp_pick_child b
+			WHERE a.`status` = '2'
+			AND a.type = '3'
+			AND a.id = b.header_id
+			AND b.material_id = #{id}
+			AND a.department_id = #{departmentId}
+			AND date_format(a.create_time, '%Y-%m') = a.`year_month`) needNum
+		FROM
+			(SELECT CONCAT(#{year}, '-01') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-02') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-03') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-04') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-05') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-06') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-07') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-08') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-09') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-10') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-11') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-12') AS `year_month` ) a
+		GROUP BY a.`year_month`
+	</select>
+	
+	<select id="queryReturnMaterialYearByDepartmentId" resultType="java.util.Map">
+		SELECT
+			b.material_id materialId,
+			c.`name` materialName
+		FROM
+			erp_pick_header a,
+			erp_pick_child b
+			LEFT JOIN erp_material c ON b.material_id = c.id
+		WHERE a.`status` = '2'
+		AND a.type = '2'
+		AND a.id = b.header_id
+		AND a.department_id = #{departmentId}
+		AND date_format(a.create_time, '%Y') = #{year}
+		GROUP BY b.material_id
+	</select>
+	
+	<select id="queryReturnMaterialNumYearByDepartmentId" resultType="java.util.Map">
+		SELECT
+			a.`year_month` yearMonth,
+			(SELECT
+				IFNULL(SUM(b.need_num), 0)
+			FROM
+				erp_pick_header a,
+				erp_pick_child b
+			WHERE a.`status` = '2'
+			AND a.type = '2'
+			AND a.id = b.header_id
+			AND b.material_id = #{id}
+			AND a.department_id = #{departmentId}
+			AND date_format(a.create_time, '%Y-%m') = a.`year_month`) needNum
+		FROM
+			(SELECT CONCAT(#{year}, '-01') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-02') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-03') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-04') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-05') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-06') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-07') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-08') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-09') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-10') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-11') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-12') AS `year_month` ) a
+		GROUP BY a.`year_month`
+	</select>
+	
+	<select id="queryDepartmentMachin" resultType="java.util.Map">
+		SELECT
+			a.`year_month` yearMonth,
+			(SELECT
+				IFNULL(COUNT(a.id), 0)
+			FROM
+				erp_machin_header a
+			WHERE a.state = '5'
+			AND a.department_id = #{departmentId}
+			AND date_format(a.create_time, '%Y-%m') = a.`year_month`) orderNum
+		FROM
+			(SELECT CONCAT(#{year}, '-01') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-02') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-03') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-04') AS `year_month` 
+			UNION SELECT CONCAT(#{year}, '-05') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-06') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-07') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-08') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-09') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-10') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-11') AS `year_month`
+			UNION SELECT CONCAT(#{year}, '-12') AS `year_month` ) a
+		GROUP BY a.`year_month`
+	</select>
+	
+</mapper>

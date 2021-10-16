@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.school.dao.SchoolStudentMationDao">
+	
+	<select id="querySchoolStudentMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.student_name studentName,
+			a.student_no studentNo,
+			a.session_year sessionYear,
+			CASE a.type WHEN '1' THEN '普通学生' WHEN '2' THEN '转校生' ELSE '未知' END stuType,
+			CASE a.sex WHEN '0' THEN '保密' WHEN '1' THEN '男' WHEN '2' THEN '女' ELSE '未知' END stuSex,
+			a.nation,
+			a.guardian,
+			CASE a.residence_type WHEN '1' THEN '农业户口' WHEN '2' THEN '非农业户口' ELSE '未知' END residenceTypeName,
+			b.school_name schoolName,
+			c.grade_name gradeName,
+			IFNULL(d.class_name, '未分班') className
+		FROM
+			school_student_mation a
+			LEFT JOIN school_mation b ON a.school_id = b.id
+			LEFT JOIN school_grade_mation c ON a.grade_id = c.id
+			LEFT JOIN school_class_mation d ON a.now_class_id = d.id
+		WHERE a.state = '1'
+			<if test="gradeId != '' and gradeId != null">
+				AND a.grade_id = #{gradeId}
+			</if>
+			<if test="classId != '' and classId != null">
+				AND a.now_class_id = #{classId}
+			</if>
+			<if test="studentName != '' and studentName != null">
+				AND a.student_name LIKE '%${studentName}%'
+			</if>
+			<choose>
+				<!-- 查询的不是所有的数据 -->
+	    		<when test="schoolPowerId != 'all'.toString()">
+	    			AND a.school_id = #{schoolPowerId}
+	    		</when>
+	    		<!-- 查询的是所有的数据 -->
+	    		<when test="schoolPowerId == 'all'.toString()">
+	    			<if test="schoolId != '' and schoolId != null">
+						AND a.school_id = #{schoolId}
+					</if>
+	    		</when>
+			</choose>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryStudentMationByIdCardAndSruNo" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			a.id
+		FROM 
+			school_student_mation a
+		WHERE 
+			(a.student_no = #{studentNo}
+		OR a.idcard = #{idCard})
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+	
+	<insert id="insertSchoolStudentMation" parameterType="java.util.Map">
+	     INSERT INTO school_student_mation
+	     (id, student_name, student_img, name_use_before, student_no, school_id, grade_id, now_class_id, type, state, sex, birthday, idcard, idcard_type, nation, guardian, 
+	     	guardian_idcard, residence_type, residence_no, residence_police_station, join_time, session_year, speciality, local_contact, contact_relationship, contact_phone,
+	     	home_address, home_postal_code, home_contact, home_phone, outside_school, foreign_students, only_child, behind_children, floating_population, single_parent_family,
+	     	entrance_type, school_choice_students, attend_type, health_condition, overseas_chinese, blood_type, preschool_education, preschool_school, orphan, preferential,
+	     	one_patch, mode_of_transportation, school_bus, vaccination, create_id, create_time, `password`)
+	     VALUES
+	     (#{id}, #{studentName}, #{userPhoto}, #{nameUseBefore}, #{studentNo}, #{schoolId}, #{gradeId}, #{classId}, #{stuType}, #{state}, #{userSex}, #{birthday}, #{idCard}, #{idcardType}, #{nation}, #{guardian},
+	     	 #{guardianIdcard}, #{residenceType}, #{residenceNo}, #{residencePoliceStation}, #{joinTime}, #{sessionYear}, #{speciality}, #{localContact}, #{contactRelationship}, #{contactPhone},
+	     	 #{homeAddress}, #{homePostalCode}, #{homeContact}, #{homePhone}, #{outsideSchool}, #{foreignStudents}, #{onlyChild}, #{behindChildren}, #{floatingPopulation}, #{singleParentFamily},
+	     	 #{entranceType}, #{schoolChoiceStudents}, #{attendType}, #{healthCondition}, #{overseasChinese}, #{bloodType}, #{preschoolEducation}, #{preschoolSchool}, #{orphan}, #{preferential},
+	     	 #{onePatch}, #{modeOfTransportation}, #{schoolBus}, #{vaccination}, #{createId}, #{createTime}, #{password})
+	</insert>
+	
+	<insert id="insertSchoolStudentParentsMation" parameterType="java.util.Map">
+	     INSERT INTO school_student_parents
+	     (id, school_id, student_id, `name`, idcard, unit, phone, nation, residence_no, call_name, speciality)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.id}, #{item.schoolId}, #{item.studentId}, #{item.name}, #{item.idcard}, #{item.unit}, #{item.phone}, #{item.nation}
+				, #{item.residenceNo}, #{item.callName}, #{item.speciality})  
+		</foreach>  
+	</insert>
+	
+	<insert id="insertSchoolStudentHomeSituationMation" parameterType="java.util.Map">
+	     INSERT INTO school_student_home_situation
+	     (school_id, student_id, situation_id)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.schoolId}, #{item.studentId}, #{item.situationId})  
+		</foreach>  
+	</insert>
+	
+	<insert id="insertSchoolStudentBodyMindMation" parameterType="java.util.Map">
+	     INSERT INTO school_student_body_mind
+	     (school_id, body_mind_id, student_id)
+	     VALUES
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.schoolId}, #{item.bodyMindId}, #{item.studentId})  
+		</foreach>  
+	</insert>
+	
+	<select id="queryNotDividedIntoClassesSchoolStudentMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.student_name studentName,
+			a.student_no studentNo,
+			a.session_year sessionYear,
+			CASE a.type WHEN '1' THEN '普通学生' WHEN '2' THEN '转校生' ELSE '未知' END stuType,
+			CASE a.sex WHEN '0' THEN '保密' WHEN '1' THEN '男' WHEN '2' THEN '女' ELSE '未知' END stuSex,
+			a.nation,
+			a.guardian,
+			CASE a.residence_type WHEN '1' THEN '农业户口' WHEN '2' THEN '非农业户口' ELSE '未知' END residenceTypeName,
+			b.school_name schoolName,
+			c.grade_name gradeName
+		FROM
+			school_student_mation a
+			LEFT JOIN school_mation b ON a.school_id = b.id
+			LEFT JOIN school_grade_mation c ON a.grade_id = c.id
+		WHERE a.state = '1'
+			AND (a.now_class_id = null OR LENGTH(a.now_class_id) = 0)
+			<if test="gradeId != '' and gradeId != null">
+				AND a.grade_id = #{gradeId}
+			</if>
+			<if test="studentName != '' and studentName != null">
+				AND a.student_name LIKE '%${studentName}%'
+			</if>
+			<choose>
+				<!-- 查询的不是所有的数据 -->
+	    		<when test="schoolPowerId != 'all'.toString()">
+	    			AND a.school_id = #{schoolPowerId}
+	    		</when>
+	    		<!-- 查询的是所有的数据 -->
+	    		<when test="schoolPowerId == 'all'.toString()">
+	    			<if test="schoolId != '' and schoolId != null">
+						AND a.school_id = #{schoolId}
+					</if>
+	    		</when>
+			</choose>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySchoolStudentMationToOperatorById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.student_name studentName,
+			a.student_no studentNo,
+			a.session_year sessionYear,
+			CASE a.type WHEN '1' THEN '普通学生' WHEN '2' THEN '转校生' ELSE '未知' END stuType,
+			CASE a.sex WHEN '0' THEN '保密' WHEN '1' THEN '男' WHEN '2' THEN '女' ELSE '未知' END stuSex,
+			a.nation,
+			a.guardian,
+			CASE a.residence_type WHEN '1' THEN '农业户口' WHEN '2' THEN '非农业户口' ELSE '未知' END residenceTypeName,
+			a.school_id schoolId,
+			b.school_name schoolName,
+			a.grade_id gradeId,
+			c.grade_name gradeName,
+			a.now_class_id nowClassId,
+			IFNULL(d.class_name, '未分班') className
+		FROM
+			school_student_mation a
+			LEFT JOIN school_mation b ON a.school_id = b.id
+			LEFT JOIN school_grade_mation c ON a.grade_id = c.id
+			LEFT JOIN school_class_mation d ON a.now_class_id = d.id
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="querySchoolStudentAssignmentClassMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM 
+			school_student_mation a
+		WHERE a.id = #{id}
+			AND (a.now_class_id = null OR LENGTH(a.now_class_id) = 0)
+	</select>
+	
+	<update id="editAssignmentClassByStuId" parameterType="java.util.Map">
+		UPDATE school_student_mation
+		<set>
+			now_class_id = #{classId}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="querySchoolStudentMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.student_name studentName,
+			a.student_img userPhoto,
+			a.name_use_before nameUseBefore,
+			a.student_no studentNo,
+			a.school_id schoolId,
+			b.school_name schoolName,
+			a.grade_id gradeId,
+			a.now_class_id classId,
+			a.type stuType,
+			a.state,
+			a.sex userSex,
+			a.idcard idcard,
+			a.idcard_type idcardType,
+			a.nation,
+			a.guardian,
+			a.guardian_idcard guardianIdcard,
+			a.residence_type residenceType,
+			a.residence_no residenceNo,
+			a.residence_police_station residencePoliceStation,
+			a.join_time joinTime,
+			a.session_year sessionYear,
+			a.speciality,
+			a.local_contact localContact,
+			a.contact_relationship contactRelationship,
+			a.contact_phone contactPhone,
+			a.home_address homeAddress,
+			a.home_postal_code homePostalCode,
+			a.home_contact homeContact,
+			a.home_phone homePhone,
+			a.outside_school outsideSchool,
+			a.foreign_students foreignStudents,
+			a.only_child onlyChild,
+			a.behind_children behindChildren,
+			a.floating_population floatingPopulation,
+			a.single_parent_family singleParentFamily,
+			a.entrance_type entranceType,
+			a.school_choice_students schoolChoiceStudents,
+			a.attend_type attendType,
+			a.health_condition healthCondition,
+			a.overseas_chinese overseasChinese,
+			a.blood_type bloodType,
+			a.preschool_education preschoolEducation,
+			a.preschool_school preschoolSchool,
+			a.orphan,
+			a.preferential,
+			a.one_patch onePatch,
+			a.mode_of_transportation modeOfTransportation,
+			a.school_bus schoolBus,
+			a.vaccination
+		FROM
+			school_student_mation a
+			LEFT JOIN school_mation b ON a.school_id = b.id
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<select id="querySchoolStudentParentsMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.`name`,
+			a.idcard,
+			a.unit,
+			a.phone,
+			a.nation,
+			a.residence_no residenceNo,
+			a.call_name callName,
+			a.speciality
+		FROM
+			school_student_parents a
+		WHERE
+			a.student_id = #{id}
+	</select>
+	
+	<select id="querySchoolStudentHomeSituationMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.situation_id situationId
+		FROM
+			school_student_home_situation a
+		WHERE
+			a.student_id = #{id}
+	</select>
+	
+	<select id="querySchoolStudentBodyMindMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.body_mind_id bodyMindId
+		FROM
+			school_student_body_mind a
+		WHERE
+			a.student_id = #{id}
+	</select>
+	
+	<update id="editSchoolStudentMationById" parameterType="java.util.Map">
+		UPDATE school_student_mation
+		<set>
+			student_name = #{studentName},
+			student_img = #{userPhoto},
+			name_use_before = #{nameUseBefore},
+			student_no = #{studentNo},
+			grade_id = #{gradeId},
+			now_class_id = #{classId},
+			type = #{stuType},
+			state = #{state},
+			sex = #{userSex},
+			birthday = #{birthday},
+			idcard = #{idCard},
+			idcard_type = #{idcardType},
+			nation = #{nation},
+			guardian = #{guardian},
+			guardian_idcard = #{guardianIdcard},
+			residence_type = #{residenceType},
+			residence_no = #{residenceNo},
+			residence_police_station = #{residencePoliceStation},
+			join_time = #{joinTime},
+			session_year = #{sessionYear},
+			speciality = #{speciality},
+			local_contact = #{localContact},
+			contact_relationship = #{contactRelationship},
+			contact_phone = #{contactPhone},
+			home_address = #{homeAddress},
+			home_postal_code = #{homePostalCode},
+			home_contact = #{homeContact},
+			home_phone = #{homePhone},
+			outside_school = #{outsideSchool},
+			foreign_students = #{foreignStudents},
+			only_child = #{onlyChild},
+			behind_children = #{behindChildren},
+			floating_population = #{floatingPopulation},
+			single_parent_family = #{singleParentFamily},
+			entrance_type = #{entranceType},
+			school_choice_students = #{schoolChoiceStudents},
+			attend_type = #{attendType},
+			health_condition = #{healthCondition},
+			overseas_chinese = #{overseasChinese},
+			blood_type = #{bloodType},
+			preschool_education = #{preschoolEducation},
+			preschool_school = #{preschoolSchool},
+			orphan = #{orphan},
+			preferential = #{preferential},
+			one_patch = #{onePatch},
+			mode_of_transportation = #{modeOfTransportation},
+			school_bus = #{schoolBus},
+			vaccination = #{vaccination},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteSchoolStudentParentsMationByStuId">
+		DELETE
+		FROM
+			school_student_parents
+		WHERE
+			student_id = #{studentId}
+	</delete>
+	
+	<delete id="deleteSchoolStudentHomeSituationMationByStuId">
+		DELETE
+		FROM
+			school_student_home_situation
+		WHERE
+			student_id = #{studentId}
+	</delete>
+	
+	<delete id="deleteSchoolStudentBodyMindMationByStuId">
+		DELETE
+		FROM
+			school_student_body_mind
+		WHERE
+			student_id = #{studentId}
+	</delete>
+	
+	<select id="querySchoolStudentMationDetailById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.student_name studentName,
+			a.student_img userPhoto,
+			a.name_use_before nameUseBefore,
+			a.student_no studentNo,
+			b.school_name schoolName,
+			c.grade_name gradeName,
+			IFNULL(d.class_name, '未分班') className,
+			CASE a.type WHEN '1' THEN '普通学生' WHEN '2' THEN '转校生' ELSE '未知' END stuType,
+			CASE a.state WHEN '1' THEN '在校' WHEN '2' THEN '毕业' WHEN '3' THEN '休学' ELSE '未知' END stateName,
+			CASE a.sex WHEN '0' THEN '保密' WHEN '1' THEN '男' WHEN '2' THEN '女' ELSE '未知' END userSex,
+			a.idcard idcard,
+			CASE a.idcard_type WHEN '1' THEN '居民身份证' WHEN '2' THEN '其他' ELSE '未知' END idcardType,
+			a.nation,
+			a.guardian,
+			a.guardian_idcard guardianIdcard,
+			CASE a.residence_type WHEN '1' THEN '农业户口' WHEN '2' THEN '非农业户口' ELSE '未知' END residenceType,
+			a.residence_no residenceNo,
+			a.residence_police_station residencePoliceStation,
+			a.join_time joinTime,
+			a.session_year sessionYear,
+			a.speciality,
+			a.local_contact localContact,
+			a.contact_relationship contactRelationship,
+			a.contact_phone contactPhone,
+			a.home_address homeAddress,
+			a.home_postal_code homePostalCode,
+			a.home_contact homeContact,
+			a.home_phone homePhone,
+			CASE a.outside_school WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END outsideSchool,
+			CASE a.foreign_students WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END foreignStudents,
+			CASE a.only_child WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END onlyChild,
+			CASE a.behind_children WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END behindChildren,
+			CASE a.floating_population WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END floatingPopulation,
+			CASE a.single_parent_family WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END singleParentFamily,
+			CASE a.entrance_type WHEN '1' THEN '普通入学' WHEN '2' THEN '其他' ELSE '未知' END entranceType,
+			CASE a.school_choice_students WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END schoolChoiceStudents,
+			CASE a.attend_type WHEN '1' THEN '走读' WHEN '2' THEN '住校' WHEN '3' THEN '其他' ELSE '未知' END attendType,
+			CASE a.health_condition WHEN '1' THEN '健康' WHEN '2' THEN '良好' WHEN '3' THEN '一般' WHEN '4' THEN '较弱' ELSE '未知' END healthCondition,
+			CASE a.overseas_chinese WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END overseasChinese,
+			CASE a.blood_type WHEN '1' THEN 'A型' WHEN '2' THEN 'B型' WHEN '3' THEN 'AB型' WHEN '4' THEN 'O型'
+								 WHEN '5' THEN '其他' WHEN '6' THEN '未定' ELSE '未知' END bloodType,
+			CASE a.preschool_education WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END preschoolEducationName,
+			a.preschool_education preschoolEducation,
+			a.preschool_school preschoolSchool,
+			CASE a.orphan WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END orphan,
+			CASE a.preferential WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END preferential,
+			CASE a.one_patch WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END onePatch,
+			e.`name` modeOfTransportation,
+			CASE a.school_bus WHEN '1' THEN '是' WHEN '2' THEN '否' ELSE '未知' END schoolBus,
+			CASE a.vaccination WHEN '1' THEN '全部打完' WHEN '2' THEN '没有打完' ELSE '未知' END vaccination
+		FROM
+			school_student_mation a
+			LEFT JOIN school_mation b ON a.school_id = b.id
+			LEFT JOIN school_grade_mation c ON a.grade_id = c.id
+			LEFT JOIN school_class_mation d ON a.now_class_id = d.id
+			LEFT JOIN school_transportation e ON a.mode_of_transportation = e.id
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<select id="querySchoolStudentParentsMationDetailById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.`name`,
+			a.idcard,
+			a.unit,
+			a.phone,
+			a.nation,
+			a.residence_no residenceNo,
+			a.call_name callName,
+			a.speciality
+		FROM
+			school_student_parents a
+		WHERE
+			a.student_id = #{id}
+	</select>
+	
+	<select id="querySchoolStudentHomeSituationMationDetailById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.`name` situationName
+		FROM
+			school_student_home_situation a,
+			school_family_situation b
+		WHERE
+			a.student_id = #{id}
+		AND a.situation_id = b.id
+	</select>
+	
+	<select id="querySchoolStudentBodyMindMationDetailById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.`name` bodyMindName
+		FROM
+			school_student_body_mind a,
+			school_body_mind b
+		WHERE
+			a.student_id = #{id}
+		AND a.body_mind_id = b.id
+	</select>
+	
+</mapper>

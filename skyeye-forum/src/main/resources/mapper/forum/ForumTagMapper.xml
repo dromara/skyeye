@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ForumTagDao">
+
+	<select id="queryForumTagList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.tag_name tagName,
+			b.user_name createName,
+			CONVERT(a.create_time, char) createTime,
+			a.state,
+			a.order_by orderBy
+		FROM
+			forum_tag a,		
+			sys_eve_user_staff b
+		WHERE 
+			a.create_id = b.user_id
+			<if test="tagName != '' and tagName != null">
+				AND a.tag_name LIKE '%${tagName}%'
+			</if>
+			AND a.state != 4
+			ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="queryForumTagMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			forum_tag a
+		WHERE a.tag_name = #{tagName}
+		AND a.state != 4
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+	
+	<insert id="insertForumTagMation" parameterType="java.util.Map">
+	    INSERT into forum_tag 
+	    (id, tag_name, order_by, state, create_id, create_time)
+	    VALUES(#{id}, #{tagName}, #{orderBy}, #{state}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryForumTagBySimpleLevel" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			COUNT(*) simpleNum
+		FROM
+			forum_tag 
+	</select>
+	
+	<update id="deleteForumTagById" parameterType="java.util.Map">
+		UPDATE forum_tag
+		<set>
+			state = 4
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateUpForumTagById" parameterType="java.util.Map">
+		UPDATE forum_tag
+		<set>
+			state = 2
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryForumTagStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.state
+		FROM
+			forum_tag a	
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="updateDownForumTagById" parameterType="java.util.Map">
+		UPDATE forum_tag
+		<set>
+			state = 3
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="selectForumTagById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.tag_name tagName
+		FROM
+			forum_tag a	
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="editForumTagMationById" parameterType="java.util.Map">
+		UPDATE forum_tag
+		<set>
+			tag_name = #{tagName}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryForumTagUpMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by thisOrderBy,
+			b.id,
+			b.order_by prevOrderBy
+		FROM
+			forum_tag a,
+			forum_tag b
+		WHERE
+			a.id = #{id}
+		AND a.order_by > b.order_by
+		AND b.state != 4
+		ORDER BY
+			b.order_by DESC
+		LIMIT 1
+	</select>
+	
+	<update id="editForumTagMationOrderNumUpById" parameterType="java.util.Map">
+		UPDATE forum_tag
+		<set>
+			order_by = #{upOrderBy},
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<select id="queryForumTagDownMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by thisOrderBy,
+			b.id,
+			b.order_by prevOrderBy
+		FROM
+			forum_tag a,
+			forum_tag b
+		WHERE
+			a.id = #{id}
+		AND b.order_by > a.order_by
+		AND b.state != 4
+		ORDER BY
+			b.order_by ASC
+		LIMIT 1
+	</select>
+	
+	<select id="queryForumTagUpStateList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.tag_name name
+		FROM
+			forum_tag a
+		WHERE 
+			a.state = 2
+		ORDER BY a.order_by ASC
+	</select>
+
+</mapper>

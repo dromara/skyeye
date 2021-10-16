@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="笔记">
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 笔记开始 -->
+	<url id="mynote001" path="/post/MyNoteController/queryFileMyNoteByUserId" val="根据当前用户获取笔记文件夹" allUse="2" method="GET" groupName="笔记模块">
+		<property id="parentId" name="parentId" ref="required" var="父文件夹id，默认为0" />
+	</url>
+	<url id="mynote002" path="/post/MyNoteController/insertFileMyNoteByUserId" val="添加文件夹" allUse="2">
+		<property id="parentId" name="parentId" ref="required" var="父文件夹id，默认为0" />
+		<property id="catalogName" name="catalogName" ref="required" var="文件夹名称" />
+	</url>
+	<url id="mynote003" path="/post/MyNoteController/deleteFileFolderById" val="删除文件夹以及文件夹下的所有文件" allUse="2">
+		<property id="rowId" name="id" ref="required" var="文件夹id" />
+		<property id="fileType" name="fileType" ref="required" var="文件或者文件夹类型" />
+	</url>
+	<url id="mynote004" path="/post/MyNoteController/editFileFolderById" val="编辑文件夹名称" allUse="2">
+		<property id="rowId" name="id" ref="required" var="文件夹id" />
+		<property id="catalogName" name="catalogName" ref="required" var="文件夹名称" />
+		<property id="fileType" name="fileType" ref="required" var="文件或者文件夹类型" />
+	</url>
+	<url id="mynote005" path="/post/MyNoteController/queryMyNoteListNewByUserId" val="根据当前用户获取最新的笔记列表" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="search" name="search" ref="" var="搜索框的值"/>
+	</url>
+	<url id="mynote006" path="/post/MyNoteController/queryFileAndContentListByFolderId" val="根据文件夹id获取文件夹下的文件夹和笔记列表" allUse="2">
+		<property id="parentId" name="parentId" ref="required" var="文件夹id" />
+		<property id="search" name="search" ref="" var="搜索框的值"/>
+	</url>
+	<url id="mynote007" path="/post/MyNoteController/insertMyNoteContentByUserId" val="添加笔记" allUse="2">
+		<property id="parentId" name="parentId" ref="required" var="父文件夹id，默认为0" />
+		<property id="title" name="title" ref="required" var="笔记标题" />
+		<property id="type" name="type" ref="required" var="笔记类型" />
+	</url>
+	<url id="mynote008" path="/post/MyNoteController/queryMyNoteContentMationById" val="编辑笔记时回显信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="笔记ID" />
+	</url>
+	<url id="mynote009" path="/post/MyNoteController/editMyNoteContentById" val="编辑笔记信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="笔记ID" />
+		<property id="title" name="title" ref="required" var="笔记标题" />
+		<property id="content" name="content" ref="" var="笔记内容" />
+		<property id="desc" name="desc" ref="" var="笔记简介" />
+	</url>
+	<url id="mynote010" path="/post/MyNoteController/editFileToDragById" val="保存文件夹拖拽后的信息" allUse="2">
+		<property id="targetId" name="targetId" ref="required" var="拖拽目标节点id" />
+		<property id="arrId" name="arrId" ref="required" var="拖拽节点id数组" />
+	</url>
+	<url id="mynote011" path="/post/MyNoteController/editNoteToMoveById" val="保存笔记移动后的信息" allUse="2">
+        <property id="toId" name="toId" ref="required" var="移动目标节点id" />
+        <property id="moveId" name="moveId" ref="required" var="移动笔记id" />
+    </url>
+    <url id="mynote012" path="/post/MyNoteController/queryTreeToMoveByUserId" val="获取文件夹或笔记移动时的选择树" allUse="2" method="GET" groupName="文件夹树模块">
+        <property id="parentId" name="parentId" ref="required" var="父文件夹id，默认为0" />
+        <property id="moveId" name="moveId" ref="required" var="移动节点id" />
+    </url>
+    <url id="mynote013" path="/post/MyNoteController/queryShareNoteById" val="根据id获取分享笔记的内容" allUse="2">
+        <property id="rowId" name="id" ref="required" var="笔记ID" />
+    </url>
+    <url id="mynote014" path="/post/MyNoteController/outputNoteIsZipJob" val="根据id(文件夹或者笔记id)将笔记输出为压缩包" allUse="2">
+        <property id="rowId" name="id" ref="required" var="笔记ID" />
+        <property id="type" name="type" ref="required,num" var="类型1.文件夹2.笔记"/>
+    </url>
+	<!-- 笔记结束 -->
+	
+</controller>

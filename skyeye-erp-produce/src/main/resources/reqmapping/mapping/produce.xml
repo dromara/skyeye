@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	
+	<!-- 工序管理开始 -->
+	<url id="erpworkprocedure001" path="/post/ErpWorkProcedureController/queryErpWorkProcedureList" val="查询工序列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="工序名称"></property>
+		<property id="number" name="number" ref="" var="工序编号"></property>
+	</url>
+	<url id="erpworkprocedure002" path="/post/ErpWorkProcedureController/insertErpWorkProcedureMation" val="添加工序信息" allUse="1">
+		<property id="name" name="name" ref="required" var="工序名称"></property>
+		<property id="number" name="number" ref="required" var="工序编号"></property>
+		<property id="unitPrice" name="unitPrice" ref="required,double" var="单价"></property>
+		<property id="departmentId" name="departmentId" ref="" var="部门"></property>
+		<property id="content" name="content" ref="" var="工序内容"></property>
+		<property id="procedureType" name="procedureType" ref="required" var="工序类别"></property>
+		<property id="procedureUserId" name="procedureUserId" ref="" var="工序操作员"></property>
+	</url>
+	<url id="erpworkprocedure003" path="/post/ErpWorkProcedureController/queryErpWorkProcedureToEditById" val="查询单个工序信息，用于信息回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工序ID"></property>
+	</url>
+	<url id="erpworkprocedure004" path="/post/ErpWorkProcedureController/deletErpWorkProcedureById" val="删除工序信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工序ID"></property>
+	</url>
+	<url id="erpworkprocedure005" path="/post/ErpWorkProcedureController/editErpWorkProcedureById" val="编辑工序信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工序ID"></property>
+		<property id="name" name="name" ref="required" var="工序名称"></property>
+		<property id="number" name="number" ref="required" var="工序编号"></property>
+		<property id="unitPrice" name="unitPrice" ref="required,double" var="单价"></property>
+		<property id="departmentId" name="departmentId" ref="" var="部门"></property>
+		<property id="content" name="content" ref="" var="工序内容"></property>
+		<property id="procedureType" name="procedureType" ref="required" var="工序类别"></property>
+		<property id="procedureUserId" name="procedureUserId" ref="" var="工序操作员"></property>
+	</url>
+	<url id="erpworkprocedure006" path="/post/ErpWorkProcedureController/queryErpWorkProcedureListToTable" val="查询工序列表展示为表格供其他选择" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="工序名称"></property>
+		<property id="number" name="number" ref="" var="工序编号"></property>
+	</url>
+	<url id="erpworkprocedure007" path="/post/ErpWorkProcedureController/queryErpWorkProcedureListByIds" val="根据工序id串获取工序列表" allUse="2">
+		<property id="ids" name="ids" ref="" var="工序id串"/>
+	</url>
+	<url id="erpworkprocedure008" path="/post/ErpWorkProcedureController/queryErpWorkProcedureMationById" val="获取工序详情信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工序ID"></property>
+	</url>
+	<url id="erpworkprocedure009" path="/post/ErpWorkProcedureController/queryErpWorkProcedureListToSelect" val="查询工序列表展示为下拉框供其他选择" allUse="2">
+	</url>
+	<!-- 工序管理结束 -->
+	
+	<!-- bom表管理开始 -->
+	<url id="erpbom001" path="/post/ErpBomController/queryErpBomList" val="查询bom表列表" allUse="1" groupName="商品BOM结构清单管理">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="materialName" name="materialName" ref="" var="商品名称"></property>
+		<property id="materialModel" name="materialModel" ref="" var="商品型号"></property>
+	</url>
+	<url id="erpbom002" path="/post/ErpBomController/insertErpBomMation" val="新增bom表" allUse="1" groupName="商品BOM结构清单管理">
+		<property id="bomTitle" name="bomTitle" ref="required" var="bom方案名称" />
+		<property id="materialId" name="materialId" ref="required" var="商品id"/>
+		<property id="normsId" name="normsId" ref="required" var="规格id"></property>
+		<property id="sealPrice" name="sealPrice" ref="required,double" var="销售价"></property>
+		<property id="childStr" name="childStr" ref="required" var="子件清单"></property>
+		<property id="remark" name="remark" ref="" var="备注"></property>
+	</url>
+	<url id="erpbom003" path="/post/ErpBomController/queryErpBomDetailById" val="查询bom表详情" allUse="2" groupName="商品BOM结构清单管理">
+		<property id="rowId" name="id" ref="required" var="bom方案id" />
+	</url>
+	<url id="erpbom004" path="/post/ErpBomController/deleteErpBomMationById" val="删除bom表信息" allUse="1" groupName="商品BOM结构清单管理">
+		<property id="rowId" name="id" ref="required" var="bom方案id" />
+	</url>
+	<url id="erpbom005" path="/post/ErpBomController/queryErpBomMationToEditById" val="查询bom表信息用作编辑" allUse="2" method="GET" groupName="商品BOM结构清单管理">
+		<property id="rowId" name="id" ref="required" var="bom方案id" />
+	</url>
+	<url id="erpbom006" path="/post/ErpBomController/editErpBomMation" val="编辑bom表信息" allUse="1" method="PUT" groupName="商品BOM结构清单管理">
+		<property id="bomTitle" name="bomTitle" ref="required" var="bom方案名称" />
+		<property id="materialId" name="materialId" ref="required" var="商品id"/>
+		<property id="normsId" name="normsId" ref="required" var="规格id"></property>
+		<property id="sealPrice" name="sealPrice" ref="required,double" var="销售价"></property>
+		<property id="childStr" name="childStr" ref="required" var="子件清单"></property>
+		<property id="remark" name="remark" ref="" var="备注"></property>
+		<property id="rowId" name="id" ref="required" var="bom方案id" />
+	</url>
+	<url id="erpbom007" path="/post/ErpBomController/queryErpBomListByNormsId" val="根据规格id获取方案列表" allUse="2" groupName="商品BOM结构清单管理">
+		<property id="normsId" name="normsId" ref="required" var="规格id" />
+	</url>
+	<url id="erpbom008" path="/post/ErpBomController/queryErpBomChildProListByBomId" val="根据方案id获取bom表子件列表" allUse="2" groupName="商品BOM结构清单管理">
+		<property id="bomId" name="bomId" ref="required" var="方案id" />
+	</url>
+	<!-- bom表管理结束 -->
+	
+	<!-- 生产计划单管理开始 -->
+	<url id="erpproduction001" path="/post/ErpProductionController/queryErpProductionList" val="查询生产计划单列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="materialName" name="materialName" ref="" var="商品名称"></property>
+		<property id="materialModel" name="materialModel" ref="" var="商品型号"></property>
+		<property id="state" name="state" ref="num" var="单据状态"></property>
+		<property id="defaultNumber" name="defaultNumber" ref="" var="单据编号"></property>
+		<property id="salesOrderNum" name="salesOrderNum" ref="" var="销售单编号"></property>
+	</url>
+	<url id="erpproduction002" path="/post/ErpProductionController/insertErpProductionMation" val="新增生产计划单" method="POST" allUse="1">
+		<property id="orderId" name="orderId" ref="" var="销售单订单id"/>
+		<property id="materialId" name="materialId" ref="required" var="商品id"/>
+		<property id="normsId" name="normsId" ref="required" var="规格id"/>
+		<property id="number" name="number" ref="required,num" var="计划数量"/>
+		<property id="planStartDate" name="planStartDate" ref="required" var="计划开始时间"/>
+		<property id="planComplateDate" name="planComplateDate" ref="required" var="计划结束时间"/>
+		<property id="operTime" name="operTime" ref="required" var="单据日期"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="bomId" name="bomId" ref="required" var="bom表方案id"/>
+		<property id="procedureJsonStr" name="procedureJsonStr" ref="required,json" var="工序的json字符串"/>
+		<property id="childProStr" name="childProStr" ref="required,json" var="子件清单的json字符串"/>
+		<property id="wayProcedureId" name="wayProcedureId" ref="" var="工艺路线id"/>
+	</url>
+	<url id="erpproduction003" path="/post/ErpProductionController/queryErpProductionMationToEditById" val="查询生产计划单信息用于编辑" method="GET" allUse="2">
+		<property id="orderId" name="id" ref="required" var="计划单id"/>
+	</url>
+	<url id="erpproduction004" path="/post/ErpProductionController/editErpProductionMationById" val="编辑生产计划单信息" method="PUT" allUse="1">
+		<property id="orderId" name="orderId" ref="" var="销售单订单id"/>
+		<property id="materialId" name="materialId" ref="required" var="商品id"/>
+		<property id="normsId" name="normsId" ref="required" var="规格id"/>
+		<property id="number" name="number" ref="required,num" var="计划数量"/>
+		<property id="planStartDate" name="planStartDate" ref="required" var="计划开始时间"/>
+		<property id="planComplateDate" name="planComplateDate" ref="required" var="计划结束时间"/>
+		<property id="operTime" name="operTime" ref="required" var="单据日期"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="bomId" name="bomId" ref="required" var="bom表方案id"/>
+		<property id="procedureJsonStr" name="procedureJsonStr" ref="required,json" var="工序的json字符串"/>
+		<property id="childProStr" name="childProStr" ref="required,json" var="子件清单的json字符串"/>
+		<property id="rowId" name="id" ref="required" var="计划单id"/>
+		<property id="wayProcedureId" name="wayProcedureId" ref="" var="工艺路线id"/>
+	</url>
+	<url id="erpproduction005" path="/post/ErpProductionController/deleteErpProductionMationById" val="删除生产计划单信息" allUse="1">
+		<property id="orderId" name="id" ref="required" var="计划单id"/>
+	</url>
+	<url id="erpproduction006" path="/post/ErpProductionController/queryErpProductionMationToDetailById" val="查询生产计划单信息详情" allUse="2">
+		<property id="orderId" name="id" ref="required" var="计划单id"/>
+	</url>
+	<url id="erpproduction007" path="/post/ErpProductionController/submitApplicationForApproval" val="提交审批申请" allUse="1">
+		<property id="orderId" name="id" ref="required" var="计划单id"/>
+	</url>
+	<url id="erpproduction008" path="/post/ErpProductionController/editErpProductionStateToExamineById" val="生产计划单信息审核" allUse="1">
+		<property id="orderId" name="id" ref="required" var="计划单id"/>
+		<property id="state" name="state" ref="required,num" var="审核结果"/>
+		<property id="approvalContent" name="approvalContent" ref="" var="审批意见"/>
+	</url>
+	<url id="erpproduction009" path="/post/ErpProductionController/queryErpProductionListToTable" val="查询生产计划单列表展示为表格供采购单,加工单选择" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="materialName" name="materialName" ref="" var="商品名称"></property>
+		<property id="materialModel" name="materialModel" ref="" var="商品型号"></property>
+		<property id="defaultNumber" name="defaultNumber" ref="" var="单据编号"></property>
+		<property id="salesOrderNum" name="salesOrderNum" ref="" var="销售单编号"></property>
+	</url>
+	<url id="erpproduction010" path="/post/ErpProductionController/queryErpProductionOutsideProListByOrderId" val="根据生产计划单id获取该单据下的所有外购商品以及剩余数量" allUse="2">
+		<property id="orderId" name="id" ref="required" var="计划单id"/>
+		<property id="chooseType" name="chooseType" ref="required,num" var="回显单据商品的类型：1.外购；2.自产+外购"></property>
+	</url>
+	<!-- 生产计划单管理结束 -->
+	
+	<!-- 部门物料库存开始 -->
+	<url id="erpdepartstock001" path="/post/ErpDepartStockController/queryDepartStockReserveList" val="获取部门物料库存信息" allUse="1">
+		<property id="materialName" name="materialName" ref="" var="物料名称" />
+		<property id="categoryId" name="categoryId" ref="" var="所属分类id" />
+		<property id="typeNum" name="typeNum" ref="" var="商品来源" />
+		<property id="enabled" name="enabled" ref="" var="状态" />
+		<property id="model" name="model" ref="" var="型号" />
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<!-- 部门物料库存结束 -->
+	
+	<!-- 加工单管理开始 -->
+	<url id="erpmachin001" path="/post/ErpMachinController/queryMachinOrderToList" val="获取加工单列表信息" allUse="1">
+		<property id="defaultNumber" name="defaultNumber" ref="" var="单据单号" />
+		<property id="materialName" name="materialName" ref="" var="商品名称" />
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="erpmachin002" path="/post/ErpMachinController/insertMachinOrderMation" val="新增加工单信息" allUse="1">
+		<property id="orderId" name="orderId" ref="" var="计划单id" />
+		<property id="materialId" name="materialId" ref="required" var="商品id" />
+		<property id="normsId" name="normsId" ref="required" var="规格id" />
+		<property id="departmentId" name="departmentId" ref="required" var="部门id"/>
+		<property id="number" name="number" ref="required,num" var="加工数量"/>
+		<property id="starTime" name="starTime" ref="required" var="计划开始时间"/>
+		<property id="endTime" name="endTime" ref="required" var="计划结束时间"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="materielStr" name="materielStr" ref="required" var="物料信息，json串"/>
+		<property id="procedureJsonStr" name="procedureJsonStr" ref="required" var="工序信息，json串"/>
+	</url>
+	<url id="erpmachin003" path="/post/ErpMachinController/queryMachinOrderToEditById" val="编辑加工单信息时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="加工单id" />
+	</url>
+	<url id="erpmachin004" path="/post/ErpMachinController/editMachinOrderMationById" val="编辑加工单信息" allUse="1">
+		<property id="orderId" name="orderId" ref="" var="计划单id" />
+		<property id="materialId" name="materialId" ref="required" var="商品id" />
+		<property id="normsId" name="normsId" ref="required" var="规格id" />
+		<property id="departmentId" name="departmentId" ref="required" var="部门id"/>
+		<property id="number" name="number" ref="required,num" var="加工数量"/>
+		<property id="starTime" name="starTime" ref="required" var="计划开始时间"/>
+		<property id="endTime" name="endTime" ref="required" var="计划结束时间"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="materielStr" name="materielStr" ref="required" var="物料信息，json串"/>
+		<property id="procedureJsonStr" name="procedureJsonStr" ref="required" var="工序信息，json串"/>
+		<property id="rowId" name="id" ref="required" var="加工单id" />
+	</url>
+	<url id="erpmachin005" path="/post/ErpMachinController/deleteMachinOrderMationById" val="删除加工单信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="加工单id" />
+	</url>
+	<url id="erpmachin006" path="/post/ErpMachinController/queryMachinOrderDetailMationById" val="加工单详情信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="加工单id" />
+	</url>
+	<url id="erpmachin007" path="/post/ErpMachinController/editMachinOrderMationToSubmitById" val="加工单提交审核" allUse="1">
+		<property id="rowId" name="id" ref="required" var="加工单id" />
+	</url>
+	<url id="erpmachin008" path="/post/ErpMachinController/editMachinOrderMationToExamineById" val="加工单审核" allUse="1">
+		<property id="rowId" name="id" ref="required" var="加工单id" />
+		<property id="status" name="status" ref="required,num" var="审核结果" />
+		<property id="content" name="content" ref="" var="备注" />
+	</url>
+	<url id="erpmachin009" path="/post/ErpMachinController/queryMachinStateIsPassOrderListByDepartmentId" val="根据部门获取已经审核通过的加工单列表信息" allUse="1">
+		<property id="defaultNumber" name="defaultNumber" ref="" var="单据单号" />
+		<property id="materialName" name="materialName" ref="" var="商品名称" />
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="erpmachin010" path="/post/ErpMachinController/queryMachinStateIsPassNoComplateOrderListByDepartmentId" val="根据部门获取审核通过的加工单列表信息展示为表格供领料/补料单使用（不包含已完成的加工单）" allUse="2">
+		<property id="defaultNumber" name="defaultNumber" ref="" var="单据单号" />
+		<property id="materialName" name="materialName" ref="" var="商品名称" />
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="erpmachin011" path="/post/ErpMachinController/queryMachinStateIsPassOrderMationById" val="根据加工单id获取该单据下的所有单据中商品以及剩余领料数量" allUse="2">
+		<property id="rowId" name="id" ref="required" var="加工单id" />
+	</url>
+	<url id="erpmachin012" path="/post/ErpMachinController/editMachinStateMationByChildId" val="加工单工序验收" allUse="2">
+		<property id="childId" name="childId" ref="required" var="加工单子单据id" />
+		<property id="acceptNum" name="acceptNum" ref="required,num" var="合格数量" />
+		<property id="belowNum" name="belowNum" ref="required,num" var="不合格数量" />
+		<property id="depotId" name="depotId" ref="" var="仓库id" />
+	</url>
+	<!-- 加工单管理结束 -->
+	
+	<!-- 领料/退料/补料单管理开始 -->
+	<url id="erppick001" path="/post/ErpPickController/queryRequisitionMaterialOrderList" val="获取领料单列表信息" allUse="1">
+		<property id="defaultNumber" name="defaultNumber" ref="" var="单据单号" />
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="erppick002" path="/post/ErpPickController/queryReturnMaterialOrderList" val="获取退料单列表信息" allUse="1">
+		<property id="defaultNumber" name="defaultNumber" ref="" var="单据单号" />
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="erppick003" path="/post/ErpPickController/queryPatchMaterialOrderList" val="获取补料单列表信息" allUse="1">
+		<property id="defaultNumber" name="defaultNumber" ref="" var="单据单号" />
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="erppick004" path="/post/ErpPickController/insertRequisitionMaterialOrder" val="新增领料单信息" allUse="1">
+		<property id="machinId" name="machinId" ref="" var="加工单id" />
+		<property id="productionId" name="productionId" ref="" var="计划单id" />
+		<property id="operTime" name="operTime" ref="required" var="单据时间"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="materialStr" name="materialStr" ref="required" var="物料信息，json串"/>
+		<property id="depotId" name="depotId" ref="required" var="仓库id"/>
+	</url>
+	<url id="erppick005" path="/post/ErpPickController/queryRequisitionMaterialOrderToEditById" val="编辑领料单时获取信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="领料单id" />
+	</url>
+	<url id="erppick006" path="/post/ErpPickController/editRequisitionMaterialOrderById" val="编辑领料单信息" allUse="1">
+		<property id="machinId" name="machinId" ref="" var="加工单id" />
+		<property id="productionId" name="productionId" ref="" var="计划单id" />
+		<property id="operTime" name="operTime" ref="required" var="单据时间"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="materialStr" name="materialStr" ref="required" var="物料信息，json串"/>
+		<property id="depotId" name="depotId" ref="required" var="仓库id"/>
+		<property id="rowId" name="id" ref="required" var="领料单id" />
+	</url>
+	<url id="erppick007" path="/post/ErpPickController/queryPickOrderMationById" val="获取领料/补料/退料单信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="单据id" />
+	</url>
+	<url id="erppick008" path="/post/ErpPickController/deletePickOrderMationById" val="删除领料/补料/退料单信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="单据id" />
+	</url>
+	<url id="erppick009" path="/post/ErpPickController/insertPatchMaterialOrder" val="新增补料单信息" allUse="1">
+		<property id="machinId" name="machinId" ref="" var="加工单id" />
+		<property id="productionId" name="productionId" ref="" var="计划单id" />
+		<property id="operTime" name="operTime" ref="required" var="单据时间"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="materialStr" name="materialStr" ref="required" var="物料信息，json串"/>
+		<property id="depotId" name="depotId" ref="required" var="仓库id"/>
+	</url>
+	<url id="erppick010" path="/post/ErpPickController/queryPatchMaterialOrderToEditById" val="编辑补料单时获取信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="补料单id" />
+	</url>
+	<url id="erppick011" path="/post/ErpPickController/editPatchMaterialOrderById" val="编辑补料单信息" allUse="1">
+		<property id="machinId" name="machinId" ref="" var="加工单id" />
+		<property id="productionId" name="productionId" ref="" var="计划单id" />
+		<property id="operTime" name="operTime" ref="required" var="单据时间"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="materialStr" name="materialStr" ref="required" var="物料信息，json串"/>
+		<property id="depotId" name="depotId" ref="required" var="仓库id"/>
+		<property id="rowId" name="id" ref="required" var="补料单id" />
+	</url>
+	<url id="erppick012" path="/post/ErpPickController/insertReturnMaterialOrder" val="新增退料单信息" allUse="1">
+		<property id="operTime" name="operTime" ref="required" var="单据时间"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="materialStr" name="materialStr" ref="required" var="物料信息，json串"/>
+		<property id="depotId" name="depotId" ref="required" var="仓库id"/>
+	</url>
+	<url id="erppick013" path="/post/ErpPickController/queryReturnMaterialOrderToEditById" val="编辑退料单时获取信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="退料单id" />
+	</url>
+	<url id="erppick014" path="/post/ErpPickController/editReturnMaterialOrderById" val="编辑退料单信息" allUse="1">
+		<property id="operTime" name="operTime" ref="required" var="单据时间"/>
+		<property id="remark" name="remark" ref="" var="备注"/>
+		<property id="materialStr" name="materialStr" ref="required" var="物料信息，json串"/>
+		<property id="depotId" name="depotId" ref="required" var="仓库id"/>
+		<property id="rowId" name="id" ref="required" var="退料单id" />
+	</url>
+	<url id="erppick015" path="/post/ErpPickController/editPickOrderMationToSubById" val="领料/补料/退料单信息提交审核" allUse="1">
+		<property id="rowId" name="id" ref="required" var="单据id" />
+	</url>
+	<url id="erppick016" path="/post/ErpPickController/editPickOrderMationToExamineById" val="领料/补料/退料单审核" allUse="1">
+		<property id="rowId" name="id" ref="required" var="单据id" />
+		<property id="status" name="status" ref="required,num" var="审核结果" />
+		<property id="content" name="content" ref="" var="备注" />
+	</url>
+	<!-- 领料/退料/补料单管理结束 -->
+	
+	<!-- 工序类别管理开始 -->
+	<url id="erpworkproceduretype001" path="/post/ErpWorkProcedureTypeController/queryErpWorkProcedureTypeList" val="查询工序类别列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="工序类别名称"></property>
+		<property id="state" name="state" ref="num" var="工序类别状态"></property>
+	</url>
+	<url id="erpworkproceduretype002" path="/post/ErpWorkProcedureTypeController/insertErpWorkProcedureTypeMation" val="新增工序类别" allUse="1">
+		<property id="typeName" name="typeName" ref="required" var="工序类别名称"></property>
+	</url>
+	<url id="erpworkproceduretype003" path="/post/ErpWorkProcedureTypeController/queryErpWorkProcedureTypeMationToEditById" val="修改工序类别时数据回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工序类别id"></property>
+	</url>
+	<url id="erpworkproceduretype004" path="/post/ErpWorkProcedureTypeController/editErpWorkProcedureTypeMationById" val="修改工序类别" allUse="1">
+		<property id="typeName" name="typeName" ref="required" var="工序类别名称"></property>
+		<property id="rowId" name="id" ref="required" var="工序类别id"></property>
+	</url>
+	<url id="erpworkproceduretype005" path="/post/ErpWorkProcedureTypeController/downErpWorkProcedureTypeMationById" val="禁用工序类别" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工序类别id"></property>
+	</url>
+	<url id="erpworkproceduretype006" path="/post/ErpWorkProcedureTypeController/upErpWorkProcedureTypeMationById" val="启用工序类别" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工序类别id"></property>
+	</url>
+	<url id="erpworkproceduretype007" path="/post/ErpWorkProcedureTypeController/deleteErpWorkProcedureTypeMationById" val="删除工序类别" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工序类别id"></property>
+	</url>
+	<url id="erpworkproceduretype008" path="/post/ErpWorkProcedureTypeController/queryErpWorkProcedureTypeUpMation" val="获取所有启用工序类别" allUse="2">
+	</url>
+	<!-- 工序类别管理结束 -->
+
+	<!-- 车间管理结束 -->
+	<url id="erpfarm001" path="/post/ErpFarmController/queryErpFarmList" val="获取车间列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="farmNumber" name="farmNumber" ref="" var="车间编号"></property>
+		<property id="farmName" name="farmName" ref="" var="车间名称"></property>
+		<property id="state" name="state" ref="num" var="车间状态"></property>
+	</url>
+	<url id="erpfarm002" path="/post/ErpFarmController/insertErpFarmMation" val="新增车间" allUse="1">
+		<property id="farmNumber" name="farmNumber" ref="required" var="车间编号"></property>
+		<property id="farmName" name="farmName" ref="required" var="车间名称"></property>
+		<property id="desc" name="desc" ref="" var="车间描述"></property>
+		<property id="departmentId" name="departmentId" ref="required" var="部门id"></property>
+		<property id="chargePerson" name="chargePerson" ref="required" var="车间负责人"></property>
+		<property id="farmProcedure" name="farmProcedure" ref="required" var="工序json串"></property>
+	</url>
+	<url id="erpfarm003" path="/post/ErpFarmController/queryErpFarmToEditById" val="编辑车间信息时回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="车间id"></property>
+	</url>
+	<url id="erpfarm004" path="/post/ErpFarmController/editErpFarmMationById" val="编辑车间" allUse="1">
+		<property id="farmNumber" name="farmNumber" ref="required" var="车间编号"></property>
+		<property id="farmName" name="farmName" ref="required" var="车间名称"></property>
+		<property id="desc" name="desc" ref="" var="车间描述"></property>
+		<property id="departmentId" name="departmentId" ref="required" var="部门id"></property>
+		<property id="chargePerson" name="chargePerson" ref="required" var="车间负责人"></property>
+		<property id="farmProcedure" name="farmProcedure" ref="required" var="工序json串"></property>
+		<property id="rowId" name="id" ref="required" var="车间id"></property>
+	</url>
+	<url id="erpfarm005" path="/post/ErpFarmController/deleteErpFarmMationById" val="删除车间信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="车间id"></property>
+	</url>
+	<url id="erpfarm006" path="/post/ErpFarmController/queryErpFarmMationById" val="获取车间详情信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="车间id"></property>
+	</url>
+	<url id="erpfarm007" path="/post/ErpFarmController/queryErpFarmListByProcedureId" val="根据工序id获取车间列表" allUse="2">
+		<property id="procedureId" name="procedureId" ref="required" var="工序id"></property>
+	</url>
+	<url id="erpfarm008" path="/post/ErpFarmController/normalErpFarmMationById" val="修改车间信息为正常" allUse="1">
+		<property id="rowId" name="id" ref="required" var="车间id"></property>
+	</url>
+	<url id="erpfarm009" path="/post/ErpFarmController/rectificationErpFarmMationById" val="修改车间信息为维修整改" allUse="1">
+		<property id="rowId" name="id" ref="required" var="车间id"></property>
+	</url>
+	<url id="erpfarm010" path="/post/ErpFarmController/queryErpFarmListToTable" val="查询车间列表展示为表格供其他选择" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="farmNumber" name="farmNumber" ref="" var="车间编号"></property>
+		<property id="farmName" name="farmName" ref="" var="车间名称"></property>
+		<property id="procedureId" name="procedureId" ref="" var="工序id"></property>
+	</url>
+	<url id="erpfarm011" path="/post/ErpFarmController/queryErpFarmProcedureListByIds" val="根据车间id串获取车间列表" allUse="2">
+		<property id="ids" name="ids" ref="" var="车间id串"/>
+	</url>
+	<!-- 车间管理结束 -->
+	
+	<!-- 工艺管理结束 -->
+	<url id="erpwayprocedure001" path="/post/ErpWayProcedureController/queryErpWayProcedureList" val="查询工艺列表" allUse="1" groupName="工艺路线管理">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="wayNumber" name="wayNumber" ref="" var="工艺编号"></property>
+		<property id="wayName" name="wayName" ref="" var="工艺名称"></property>
+	</url>
+	<url id="erpwayprocedure002" path="/post/ErpWayProcedureController/insertErpWayProcedureMation" val="新增工艺" allUse="1" groupName="工艺路线管理">
+		<property id="wayNumber" name="wayNumber" ref="required" var="工艺编号"></property>
+		<property id="wayName" name="wayName" ref="required" var="工艺名称"></property>
+		<property id="procedureMation" name="procedureMation" ref="required" var="工序json串"></property>
+	</url>
+	<url id="erpwayprocedure003" path="/post/ErpWayProcedureController/queryErpWayProcedureMationToEditById" val="修改工艺时数据回显" allUse="2" groupName="工艺路线管理">
+		<property id="rowId" name="id" ref="required" var="工艺id"></property>
+	</url>
+	<url id="erpwayprocedure004" path="/post/ErpWayProcedureController/editErpWayProcedureMationById" val="修改工艺" allUse="1" groupName="工艺路线管理">
+		<property id="wayNumber" name="wayNumber" ref="required" var="工艺编号"></property>
+		<property id="wayName" name="wayName" ref="required" var="工艺名称"></property>
+		<property id="procedureMation" name="procedureMation" ref="required" var="工序json串"></property>
+		<property id="rowId" name="id" ref="required" var="工艺id"></property>
+	</url>
+	<url id="erpwayprocedure005" path="/post/ErpWayProcedureController/downErpWayProcedureMationById" val="禁用工艺" allUse="1" groupName="工艺路线管理">
+		<property id="rowId" name="id" ref="required" var="工艺id"></property>
+	</url>
+	<url id="erpwayprocedure006" path="/post/ErpWayProcedureController/upErpWayProcedureMationById" val="启用工艺" allUse="1" groupName="工艺路线管理">
+		<property id="rowId" name="id" ref="required" var="工艺id"></property>
+	</url>
+	<url id="erpwayprocedure007" path="/post/ErpWayProcedureController/deleteErpWayProcedureMationById" val="删除工艺" allUse="1" groupName="工艺路线管理">
+		<property id="rowId" name="id" ref="required" var="工艺id"></property>
+	</url>
+	<url id="erpwayprocedure008" path="/post/ErpWayProcedureController/queryErpWayProcedureDetailsMationById" val="获取工艺详细信息" method="GET" allUse="2" groupName="工艺路线管理">
+		<property id="rowId" name="id" ref="required" var="工艺id"></property>
+	</url>
+	<url id="erpwayprocedure009" path="/post/ErpWayProcedureController/queryErpWayRuningProcedureList" val="查询启用的工艺列表" allUse="2" groupName="工艺路线管理">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="wayNumber" name="wayNumber" ref="" var="工艺编号"></property>
+		<property id="wayName" name="wayName" ref="" var="工艺名称"></property>
+	</url>
+	<!-- 工艺管理结束 -->
+
+</controller>

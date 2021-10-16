@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	 
+	<!-- 售后服务管理开始 -->
+	<url id="sealseservice001" path="/post/SealSeServiceController/querySealSeServiceList" val="获取售后服务管理列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="state" name="state" ref="" var="工单状态"/>
+		<property id="contacts" name="contacts" ref="" var="联系人"/>
+		<property id="receiver" name="receiver" ref="" var="接收人"/>
+	</url>
+	<url id="sealseservice002" path="/post/SealSeServiceController/querySealSeServiceWaitToWorkList" val="获取全部待派工的工单列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<url id="sealseservice003" path="/post/SealSeServiceController/querySealSeServiceWaitToReceiveList" val="获取当前登录人待接单的列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<url id="sealseservice004" path="/post/SealSeServiceController/querySealSeServiceWaitToSignonList" val="获取当前登录人待签到的列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<url id="sealseservice005" path="/post/SealSeServiceController/querySealSeServiceWaitToFinishList" val="获取当前登录人待完工的列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<url id="sealseservice006" path="/post/SealSeServiceController/querySealSeServiceWaitToAssessmentList" val="获取当前登录人待评价的列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<url id="sealseservice007" path="/post/SealSeServiceController/queryAllSealSeServiceWaitToAssessmentList" val="获取全部待评价的工单列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<url id="sealseservice008" path="/post/SealSeServiceController/queryAllSealSeServiceWaitToCheckList" val="获取全部待审核的工单列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<url id="sealseservice009" path="/post/SealSeServiceController/queryAllSealSeServiceFinishedList" val="获取已完成的工单列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<url id="sealseservice010" path="/post/SealSeServiceController/querySealSeServiceTodetails" val="查询工单详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice011" path="/post/SealSeServiceController/insertSealSeServiceMation" val="新增售后服务信息" allUse="1">
+		<property id="typeId" name="typeId" ref="required" var="服务类型"/>
+		<property id="declarationTime" name="declarationTime" ref="required" var="报单时间"/>
+		<property id="customerId" name="customerId" ref="" var="客户"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="phone" name="phone" ref="required,phone" var="联系电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="provinceId" name="provinceId" ref="required" var="省，不可为空"/>
+		<property id="cityId" name="cityId" ref="" var="市，不可为空"/>
+		<property id="areaId" name="areaId" ref="" var="区县，可为空"/>
+		<property id="townshipId" name="townshipId" ref="" var="乡镇，可为空"/>
+		<property id="addressDetailed" name="addressDetailed" ref="required" var="详细地址"/>
+		<property id="productId" name="productId" ref="" var="产品id"/>
+		<property id="productName" name="productName" ref="" var="产品名称"/>
+		<property id="productNorms" name="productNorms" ref="" var="规格型号"/>
+		<property id="productSerialNum" name="productSerialNum" ref="" var="序列号"/>
+		<property id="productWarranty" name="productWarranty" ref="" var="质保类型"/>
+		<property id="urgencyId" name="urgencyId" ref="required" var="紧急程度"/>
+		<property id="modeId" name="modeId" ref="required" var="处理方式"/>
+		<property id="content" name="content" ref="required" var="服务内容"/>
+		<property id="serviceUserId" name="serviceUserId" ref="" var="工单接收人"/>
+		<property id="cooperationUserId" name="cooperationUserId" ref="" var="工单协助人"/>
+		<property id="sheetPicture" name="sheetPicture" ref="" var="相关照片"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="pointSubscribeTime" name="pointSubscribeTime" ref="" var="派单时指定的预约时间"/>
+	</url>
+	<url id="sealseservice012" path="/post/SealSeServiceController/querySealSeServiceMationToEdit" val="根据id获取售后服务信息用于编辑回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice013" path="/post/SealSeServiceController/querySealSeServiceWaitToWorkMation" val="获取派工信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice014" path="/post/SealSeServiceController/editSealSeServiceWaitToWorkMation" val="派工" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+		<property id="serviceUserId" name="serviceUserId" ref="required" var="工单接收人"/>
+		<property id="cooperationUserId" name="cooperationUserId" ref="" var="工单协助人"/>
+	</url>
+	<url id="sealseservice015" path="/post/SealSeServiceController/editSealSeServiceMationById" val="编辑售后服务信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+		<property id="typeId" name="typeId" ref="required" var="服务类型"/>
+		<property id="declarationTime" name="declarationTime" ref="required" var="报单时间"/>
+		<property id="customerId" name="customerId" ref="" var="客户"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="phone" name="phone" ref="required,phone" var="联系电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="provinceId" name="provinceId" ref="required" var="省，不可为空"/>
+		<property id="cityId" name="cityId" ref="" var="市，不可为空"/>
+		<property id="areaId" name="areaId" ref="" var="区县，可为空"/>
+		<property id="townshipId" name="townshipId" ref="" var="乡镇，可为空"/>
+		<property id="addressDetailed" name="addressDetailed" ref="required" var="详细地址"/>
+		<property id="productId" name="productId" ref="" var="产品id"/>
+		<property id="productName" name="productName" ref="" var="产品名称"/>
+		<property id="productNorms" name="productNorms" ref="" var="规格型号"/>
+		<property id="productSerialNum" name="productSerialNum" ref="" var="序列号"/>
+		<property id="productWarranty" name="productWarranty" ref="" var="质保类型"/>
+		<property id="urgencyId" name="urgencyId" ref="required" var="紧急程度"/>
+		<property id="modeId" name="modeId" ref="required" var="处理方式"/>
+		<property id="content" name="content" ref="required" var="服务内容"/>
+		<property id="serviceUserId" name="serviceUserId" ref="" var="工单接收人"/>
+		<property id="cooperationUserId" name="cooperationUserId" ref="" var="工单协助人"/>
+		<property id="sheetPicture" name="sheetPicture" ref="" var="相关照片"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="pointSubscribeTime" name="pointSubscribeTime" ref="" var="派单时指定的预约时间"/>
+	</url>
+	<url id="sealseservice016" path="/post/SealSeServiceController/querySealSeServiceWaitToReceiveMation" val="获取接单信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice017" path="/post/SealSeServiceController/insertSealSeServiceWaitToReceiveMation" val="接单" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+		<property id="subscribeTime" name="subscribeTime" ref="required" var="预约开始时间"/>
+		<property id="remark" name="remark" ref="" var="签收备注"/>
+	</url>
+	<url id="sealseservice018" path="/post/SealSeServiceController/querySealSeServiceWaitToSignonMation" val="获取签到信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice019" path="/post/SealSeServiceController/insertSealSeServiceWaitToSignonMation" val="签到" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+		<property id="remark" name="remark" ref="" var="签到备注"/>
+	</url>
+	<url id="sealseservice020" path="/post/SealSeServiceController/deleteSealSeServiceMationById" val="删除售后服务信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice021" path="/post/SealSeServiceController/insertSealSeServiceApplyMation" val="新增配件申领单" allUse="1">
+		<property id="serviceId" name="serviceId" ref="required" var="工单id" />
+		<property id="applyTime" name="applyTime" ref="required" var="申领日期" />
+		<property id="customerId" name="customerId" ref="" var="客户id" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="applyMaterialStr" name="applyMaterialStr" ref="required" var="配件列表" />
+	</url>
+	<url id="sealseservice022" path="/post/SealSeServiceController/querySealSeServiceSignon" val="查询待完工状态的工单用于新增配件下拉选择" allUse="2">
+	</url>
+	<url id="sealseservice023" path="/post/SealSeServiceController/querySealSeServiceApplyList" val="查询当前登录人的申领单" allUse="1">
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="state" name="state" ref="num" var="工单状态"/>
+		<property id="applyNum" name="applyNum" ref="" var="申领单号"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="sealseservice024" path="/post/SealSeServiceController/queryAllSealSeServiceApplyList" val="查询所有审批通过的申领单" allUse="1">
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="applyNum" name="applyNum" ref="" var="申领单号"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="sealseservice025" path="/post/SealSeServiceController/deleteSealSeServiceApplyById" val="删除配件申领单" allUse="1">
+		<property id="rowId" name="id" ref="required" var="申领单id"/>
+	</url>
+	<url id="sealseservice026" path="/post/SealSeServiceController/querySealSeServiceApplyToEdit" val="获取配件申领单信息用于编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="申领单id"/>
+	</url>
+	<url id="sealseservice027" path="/post/SealSeServiceController/editSealSeServiceApplyMation" val="编辑配件申领单" allUse="1">
+		<property id="rowId" name="id" ref="required" var="申领单id"/>
+		<property id="serviceId" name="serviceId" ref="required" var="工单id" />
+		<property id="applyTime" name="applyTime" ref="required" var="申领日期" />
+		<property id="customerId" name="customerId" ref="" var="客户id" />
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="remark" name="remark" ref="" var="备注" />
+		<property id="applyMaterialStr" name="applyMaterialStr" ref="required" var="配件列表" />
+	</url>
+	<url id="sealseservice028" path="/post/SealSeServiceController/querySealSeServiceApplyToDetail" val="获取配件申领单详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="申领单id"/>
+	</url>
+	<url id="sealseservice029" path="/post/SealSeServiceController/queryAllSealSeServiceApplyWaitToCheckList" val="查询所有等待审核的申领单" allUse="1">
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="applyNum" name="applyNum" ref="" var="申领单号"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="sealseservice030" path="/post/SealSeServiceController/editSealSeServiceApplyToCheckList" val="审核申领单" allUse="1">
+		<property id="rowId" name="id" ref="required" var="申领单id"/>
+		<property id="isAgree" name="isAgree" ref="required" var="审核是否通过"/>
+		<property id="opinion" name="opinion" ref="" var="审核意见"/>
+	</url>
+	<url id="sealseservice031" path="/post/SealSeServiceMyPartsController/queryMyApplyPartsList" val="获取我申领的未使用的配件" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="materialName" name="materialName" ref="" var="配件名称"/>
+		<property id="materialModel" name="materialModel" ref="" var="配件规格"/>
+		<property id="materialGroupName" name="materialGroupName" ref="" var="配件所属ERP组名"/>
+	</url>
+	<url id="sealseservice032" path="/post/SealSeServiceMyPartsController/queryMyApplyUsePartsList" val="获取我使用的配件" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="materialName" name="materialName" ref="" var="配件名称"/>
+		<property id="materialModel" name="materialModel" ref="" var="配件规格"/>
+		<property id="materialGroupName" name="materialGroupName" ref="" var="配件所属ERP组名"/>
+	</url>
+	<url id="sealseservice033" path="/post/SealSeServiceController/querySealSeServiceWaitToFinishedMation" val="工单完成操作时信息回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice034" path="/post/SealSeServiceController/queryMyPartsNumByMUnitId" val="根据配件规格id获取库存" allUse="2">
+		<property id="mUnitId" name="mUnitId" ref="required" var="规格id"/>
+		<property id="servierId" name="servierId" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice035" path="/post/SealSeServiceController/editServiceToComplateByServiceId" val="工单完工操作" allUse="1">
+		<property id="serviceId" name="id" ref="required" var="工单id"/>
+		<property id="faultTypeId" name="faultTypeId" ref="required" var="故障类型"/>
+		<property id="comTime" name="comTime" ref="required" var="实际完工时间"/>
+		<property id="comWorkTime" name="comWorkTime" ref="required" var="工时"/>
+		<property id="comExecution" name="comExecution" ref="required" var="完成情况"/>
+		<property id="comPic" name="comPic" ref="" var="完工拍照"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="完工附件"/>
+		<property id="comRemark" name="comRemark" ref="" var="完工备注"/>
+		<property id="coverCost" name="coverCost" ref="required,double" var="服务费,默认为0.00"/>
+		<property id="otherCost" name="otherCost" ref="required,double" var="其他费用,默认为0.00"/>
+		<property id="useStr" name="useStr" ref="" var="使用配件"/>
+		<property id="subType" name="subType" ref="required,num" var="提交状态。1.暂存，2.完工"/>
+		<property id="comStarTime" name="comStarTime" ref="required" var="实际开工时间"/>
+		<property id="faultKeyPartsId" name="faultKeyPartsId" ref="" var="故障关键组件"/>
+		<property id="actualFailure" name="actualFailure" ref="" var="真实故障"/>
+		<property id="solution" name="solution" ref="" var="解决方案"/>
+	</url>
+	<url id="sealseservice036" path="/post/SealSeServiceController/querySealSeServiceWaitToEvaluateMation" val="评价时获取展示信息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice037" path="/post/SealSeServiceController/editSealSeServiceToEvaluateMationByServiceId" val="人工评价（后台用户评价）" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+		<property id="evaluateType" name="typeId" ref="required" var="评价类型id"/>
+		<property id="content" name="content" ref="required" var="评价内容"/>
+	</url>
+	<url id="sealseservice038" path="/post/SealSeServiceController/editSealSeServiceToFinishedMationByServiceId" val="完工审核操作" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice039" path="/post/SealSeServiceController/querySealSeServiceFeedBackMationByServiceId" val="情况反馈信息展示" allUse="1">
+		<property id="rowId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="sealseservice040" path="/post/SealSeServiceController/querySealSeServiceMyWriteList" val="获取当前登录人填报的工单列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单号"/>
+		<property id="typeId" name="typeId" ref="" var="服务类型"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="报单时间开始"/>
+		<property id="lastTime" name="lastTime" ref="" var="报单时间结束"/>
+	</url>
+	<!-- 售后服务管理结束 -->
+	
+	<!-- 售后服务情况反馈开始 -->
+	<url id="feedback001" path="/post/SealSeServiceFeedBackController/queryFeedBackList" val="根据工单id获取情况反馈列表" allUse="2">
+		<property id="serviceId" name="serviceId" ref="required" var="工单id"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="feedback002" path="/post/SealSeServiceFeedBackController/querySealServiceMationToFeedBack" val="根据工单id获取反馈信息填写时的信息展示" allUse="2">
+		<property id="serviceId" name="id" ref="required" var="工单id"/>
+	</url>
+	<url id="feedback003" path="/post/SealSeServiceFeedBackController/insertFeedBackMation" val="新增情况反馈" allUse="2">
+		<property id="serviceId" name="serviceId" ref="required" var="工单id"/>
+		<property id="typeId" name="typeId" ref="required" var="反馈类型" />
+	    <property id="customId" name="customId" ref="" var="客户id"/>
+	    <property id="proId" name="proId" ref="" var="产品id"/>
+	    <property id="content" name="content" ref="required" var="反馈内容" />
+	    <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+	</url>
+	<url id="feedback004" path="/post/SealSeServiceFeedBackController/queryFeedBackMationToEditById" val="编辑情况反馈时信息回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="反馈信息id"/>
+	</url>
+	<url id="feedback005" path="/post/SealSeServiceFeedBackController/editFeedBackMationById" val="编辑情况反馈" allUse="2">
+		<property id="rowId" name="id" ref="required" var="反馈信息id"/>
+		<property id="typeId" name="typeId" ref="required" var="反馈类型" />
+	    <property id="content" name="content" ref="required" var="反馈内容" />
+	    <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+	</url>
+	<url id="feedback006" path="/post/SealSeServiceFeedBackController/deleteFeedBackMationById" val="删除情况反馈" allUse="2">
+		<property id="rowId" name="id" ref="required" var="反馈信息id"/>
+	</url>
+	<url id="feedback007" path="/post/SealSeServiceFeedBackController/queryFeedBackDetailsMationById" val="情况反馈详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="反馈信息id"/>
+	</url>
+	<!-- 售后服务情况反馈结束 -->
+	 
+	<!-- 售后服务方式开始 -->
+	<url id="sealseservicemode001" path="/post/SealSeServiceModeController/querySealSeServiceModeList" val="获取售后服务方式表列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="售后服务方式表名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="sealseservicemode002" path="/post/SealSeServiceModeController/insertSealSeServiceMode" val="新增售后服务方式表" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="售后服务方式表名称"/>
+	</url>
+	<url id="sealseservicemode003" path="/post/SealSeServiceModeController/querySealSeServiceModeMationById" val="根据id获取售后服务方式表信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="售后服务方式表id"/>
+	</url>
+	<url id="sealseservicemode004" path="/post/SealSeServiceModeController/editSealSeServiceModeById" val="编辑售后服务方式表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务方式表id"/>
+	    <property id="typeName" name="typeName" ref="required" var="售后服务方式表名称"/>
+	</url>
+	<url id="sealseservicemode005" path="/post/SealSeServiceModeController/deleteSealSeServiceModeById" val="根据id删除售后服务方式表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务方式表id"/>
+	</url>
+	<url id="sealseservicemode006" path="/post/SealSeServiceModeController/editStateUpById" val="根据id更改售后服务方式表状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务方式表id"/>
+	</url>
+	<url id="sealseservicemode007" path="/post/SealSeServiceModeController/editStateDownById" val="根据id更改售后服务方式表状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务方式表id"/>
+	</url>
+	<url id="sealseservicemode008" path="/post/SealSeServiceModeController/queryStateUpList" val="获取已上线的售后服务方式表类型" allUse="2">
+	</url>
+	<!-- 售后服务方式结束 -->
+	
+	<!-- 售后服务类型开始 -->
+	<url id="sealseservicetype001" path="/post/SealSeServiceTypeController/querySealSeServiceTypeList" val="获取售后服务类型表列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="售后服务类型表名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="sealseservicetype002" path="/post/SealSeServiceTypeController/insertSealSeServiceType" val="新增售后服务类型表" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="售后服务类型表名称"/>
+	</url>
+	<url id="sealseservicetype003" path="/post/SealSeServiceTypeController/querySealSeServiceTypeMationById" val="根据id获取售后服务类型表信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="售后服务类型表id"/>
+	</url>
+	<url id="sealseservicetype004" path="/post/SealSeServiceTypeController/editSealSeServiceTypeById" val="编辑售后服务类型表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务类型表id"/>
+	    <property id="typeName" name="typeName" ref="required" var="售后服务类型表名称"/>
+	</url>
+	<url id="sealseservicetype005" path="/post/SealSeServiceTypeController/deleteSealSeServiceTypeById" val="根据id删除售后服务类型表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务类型表id"/>
+	</url>
+	<url id="sealseservicetype006" path="/post/SealSeServiceTypeController/editStateUpById" val="根据id更改售后服务类型表状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务类型表id"/>
+	</url>
+	<url id="sealseservicetype007" path="/post/SealSeServiceTypeController/editStateDownById" val="根据id更改售后服务类型表状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务类型表id"/>
+	</url>
+	<url id="sealseservicetype008" path="/post/SealSeServiceTypeController/queryStateUpList" val="获取已上线的售后服务类型表类型" allUse="2">
+	</url>
+	<!-- 售后服务类型结束 -->
+	
+	<!-- 售后服务评价类型开始 -->
+	<url id="sealseserviceevaluatetype001" path="/post/SealSeServiceEvaluateTypeController/querySealSeServiceEvaluateTypeList" val="获取售后服务评价类型表列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="售后服务评价类型表名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="sealseserviceevaluatetype002" path="/post/SealSeServiceEvaluateTypeController/insertSealSeServiceEvaluateType" val="新增售后服务评价类型表" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="售后服务评价类型表名称"/>
+	</url>
+	<url id="sealseserviceevaluatetype003" path="/post/SealSeServiceEvaluateTypeController/querySealSeServiceEvaluateTypeMationById" val="根据id获取售后服务评价类型表信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="售后服务评价类型表id"/>
+	</url>
+	<url id="sealseserviceevaluatetype004" path="/post/SealSeServiceEvaluateTypeController/editSealSeServiceEvaluateTypeById" val="编辑售后服务评价类型表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务评价类型表id"/>
+	    <property id="typeName" name="typeName" ref="required" var="售后服务评价类型表名称"/>
+	</url>
+	<url id="sealseserviceevaluatetype005" path="/post/SealSeServiceEvaluateTypeController/deleteSealSeServiceEvaluateTypeById" val="根据id删除售后服务评价类型表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务评价类型表id"/>
+	</url>
+	<url id="sealseserviceevaluatetype006" path="/post/SealSeServiceEvaluateTypeController/editStateUpById" val="根据id更改售后服务评价类型表状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务评价类型表id"/>
+	</url>
+	<url id="sealseserviceevaluatetype007" path="/post/SealSeServiceEvaluateTypeController/editStateDownById" val="根据id更改售后服务评价类型表状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务评价类型表id"/>
+	</url>
+	<url id="sealseserviceevaluatetype008" path="/post/SealSeServiceEvaluateTypeController/queryStateUpList" val="获取已上线的售后服务评价类型表类型" allUse="2">
+	</url>
+	<!-- 售后服务评价类型结束 -->
+	
+	<!-- 售后服务故障类型开始 -->
+	<url id="sealseservicefaulttype001" path="/post/SealSeServiceFaultTypeController/querySealSeServiceFaultTypeList" val="获取售后服务故障类型表列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="售后服务故障类型表名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="sealseservicefaulttype002" path="/post/SealSeServiceFaultTypeController/insertSealSeServiceFaultType" val="新增售后服务故障类型表" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="售后服务故障类型表名称"/>
+	</url>
+	<url id="sealseservicefaulttype003" path="/post/SealSeServiceFaultTypeController/querySealSeServiceFaultTypeMationById" val="根据id获取售后服务故障类型表信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="售后服务故障类型表id"/>
+	</url>
+	<url id="sealseservicefaulttype004" path="/post/SealSeServiceFaultTypeController/editSealSeServiceFaultTypeById" val="编辑售后服务故障类型表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务故障类型表id"/>
+	    <property id="typeName" name="typeName" ref="required" var="售后服务故障类型表名称"/>
+	</url>
+	<url id="sealseservicefaulttype005" path="/post/SealSeServiceFaultTypeController/deleteSealSeServiceFaultTypeById" val="根据id删除售后服务故障类型表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务故障类型表id"/>
+	</url>
+	<url id="sealseservicefaulttype006" path="/post/SealSeServiceFaultTypeController/editStateUpById" val="根据id更改售后服务故障类型表状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务故障类型表id"/>
+	</url>
+	<url id="sealseservicefaulttype007" path="/post/SealSeServiceFaultTypeController/editStateDownById" val="根据id更改售后服务故障类型表状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务故障类型表id"/>
+	</url>
+	<url id="sealseservicefaulttype008" path="/post/SealSeServiceFaultTypeController/queryStateUpList" val="获取已上线的售后服务故障类型表类型" allUse="2">
+	</url>
+	<!-- 售后服务故障类型结束 -->
+	
+	<!-- 售后服务工单紧急程度类型开始 -->
+	<url id="sealseserviceurgency001" path="/post/SealSeServiceUrgencyController/querySealSeServiceUrgencyList" val="获取售后服务工单紧急程度表列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="售后服务工单紧急程度表名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="sealseserviceurgency002" path="/post/SealSeServiceUrgencyController/insertSealSeServiceUrgency" val="新增售后服务工单紧急程度表" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="售后服务工单紧急程度表名称"/>
+	</url>
+	<url id="sealseserviceurgency003" path="/post/SealSeServiceUrgencyController/querySealSeServiceUrgencyMationById" val="根据id获取售后服务工单紧急程度表信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="售后服务工单紧急程度表id"/>
+	</url>
+	<url id="sealseserviceurgency004" path="/post/SealSeServiceUrgencyController/editSealSeServiceUrgencyById" val="编辑售后服务工单紧急程度表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务工单紧急程度表id"/>
+	    <property id="typeName" name="typeName" ref="required" var="售后服务工单紧急程度表名称"/>
+	</url>
+	<url id="sealseserviceurgency005" path="/post/SealSeServiceUrgencyController/deleteSealSeServiceUrgencyById" val="根据id删除售后服务工单紧急程度表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务工单紧急程度表id"/>
+	</url>
+	<url id="sealseserviceurgency006" path="/post/SealSeServiceUrgencyController/editStateUpById" val="根据id更改售后服务工单紧急程度表状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务工单紧急程度表id"/>
+	</url>
+	<url id="sealseserviceurgency007" path="/post/SealSeServiceUrgencyController/editStateDownById" val="根据id更改售后服务工单紧急程度表状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务工单紧急程度表id"/>
+	</url>
+	<url id="sealseserviceurgency008" path="/post/SealSeServiceUrgencyController/queryStateUpList" val="获取已上线的售后服务工单紧急程度表类型" allUse="2">
+	</url>
+	<!-- 售后服务工单紧急程度类型结束 -->
+	
+	<!-- 售后服务工单反馈类型开始 -->
+	<url id="crmservicefeedbacktype001" path="/post/SealSeServiceFeedbackTypeController/queryCrmServiceFeedbackTypeList" val="获取售后服务反馈类型表列表" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="typeName" name="typeName" ref="" var="售后服务反馈类型表名称"/>
+	    <property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="crmservicefeedbacktype002" path="/post/SealSeServiceFeedbackTypeController/insertCrmServiceFeedbackType" val="新增售后服务反馈类型表" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="售后服务反馈类型表名称"/>
+	</url>
+	<url id="crmservicefeedbacktype003" path="/post/SealSeServiceFeedbackTypeController/queryCrmServiceFeedbackTypeMationById" val="根据id获取售后服务反馈类型表信息" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="售后服务反馈类型表id"/>
+	</url>
+	<url id="crmservicefeedbacktype004" path="/post/SealSeServiceFeedbackTypeController/editCrmServiceFeedbackTypeById" val="编辑售后服务反馈类型表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务反馈类型表id"/>
+	    <property id="typeName" name="typeName" ref="required" var="售后服务反馈类型表名称"/>
+	</url>
+	<url id="crmservicefeedbacktype005" path="/post/SealSeServiceFeedbackTypeController/deleteCrmServiceFeedbackTypeById" val="根据id删除售后服务反馈类型表信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务反馈类型表id"/>
+	</url>
+	<url id="crmservicefeedbacktype006" path="/post/SealSeServiceFeedbackTypeController/editStateUpById" val="根据id更改售后服务反馈类型表状态为上线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务反馈类型表id"/>
+	</url>
+	<url id="crmservicefeedbacktype007" path="/post/SealSeServiceFeedbackTypeController/editStateDownById" val="根据id更改售后服务反馈类型表状态为下线" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="售后服务反馈类型表id"/>
+	</url>
+	<url id="crmservicefeedbacktype008" path="/post/SealSeServiceFeedbackTypeController/queryStateUpList" val="获取已上线的售后服务反馈类型表类型" allUse="2">
+	</url>
+	<!-- 售后服务工单反馈类型结束 -->
+	
+	<!-- 工人管理开始 -->
+	<url id="sealseserviceworker001" path="/post/SealSeServiceWorkerController/queryServiceWorkerList" val="获取所有工人信息" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="userName" name="userName" ref="" var="用户名称"/>
+	</url>
+	<url id="sealseserviceworker002" path="/post/SealSeServiceWorkerController/insertServiceWorkerMation" val="新增工人资料信息" allUse="1">
+	    <property id="userId" name="userId" ref="required" var="用户id"/>
+	    <property id="longitude" name="longitude" ref="required" var="经度" />
+	    <property id="latitude" name="latitude" ref="required" var="纬度"/>
+	    <property id="proName" name="proName" ref="required" var="省"/>
+	    <property id="cityName" name="cityName" ref="required" var="市"/>
+	    <property id="areaName" name="areaName" ref="required" var="地区县"/>
+	    <property id="addressDetail" name="addressDetail" ref="required" var="详细地址"/>
+	</url>
+	<url id="sealseserviceworker003" path="/post/SealSeServiceWorkerController/deleteServiceWorkerMationById" val="删除工人资料信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="工人表id"/>
+	</url>
+	<url id="sealseserviceworker004" path="/post/SealSeServiceWorkerController/queryServiceWorkerMationToEditById" val="编辑工人资料信息时进行回显" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="工人表id"/>
+	</url>
+	<url id="sealseserviceworker005" path="/post/SealSeServiceWorkerController/editServiceWorkerMationById" val="编辑工人资料信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="工人表id"/>
+	    <property id="longitude" name="longitude" ref="required" var="经度" />
+	    <property id="latitude" name="latitude" ref="required" var="纬度"/>
+	    <property id="proName" name="proName" ref="required" var="省"/>
+	    <property id="cityName" name="cityName" ref="required" var="市"/>
+	    <property id="areaName" name="areaName" ref="required" var="地区县"/>
+	    <property id="addressDetail" name="addressDetail" ref="required" var="详细地址"/>
+	</url>
+	<url id="sealseserviceworker006" path="/post/SealSeServiceWorkerController/queryServiceWorkerShowList" val="获取所有工人信息供展示选择" allUse="2">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="userName" name="userName" ref="" var="用户名称"/>
+	</url>
+	<url id="sealseserviceworker007" path="/post/SealSeServiceWorkerController/queryServiceWorkerToMapList" val="获取所有工人信息信息分布图" allUse="1">
+	</url>
+	<!-- 工人管理结束 -->
+	
+	<!-- 签到记录管理开始 -->
+	<url id="sealseservicecheckwork001" path="/post/SealSeServiceCheckWorkController/querySealSeServiceCheckWorkList" val="获取所有的签到记录" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="userName" name="userName" ref="" var="签到人"/>
+	</url>
+	<!-- 签到记录管理结束 -->
+	
+	<!-- 统计模块管理开始 -->
+	<url id="sealseservicestatisforms001" path="/post/SealSeServiceStatisFormsController/queryCustomOrderTable" val="获取客户工单数量统计表格" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="customName" name="customName" ref="" var="客户名称"/>
+	    <property id="serviceType" name="serviceType" ref="" var="服务类型"/>
+	    <property id="startTime" name="startTime" ref="" var="开始时间"/>
+	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
+	</url>
+	<url id="sealseservicestatisforms002" path="/post/SealSeServiceStatisFormsController/queryUserWorkerOrderTable" val="获取员工工单数量统计表格" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="userName" name="userName" ref="" var="工人名称"/>
+	    <property id="startTime" name="startTime" ref="" var="开始时间"/>
+	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
+	</url>
+	<url id="sealseservicestatisforms003" path="/post/SealSeServiceStatisFormsController/queryWarrantyOrderTable" val="获取质保类型工单数量统计表格" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="startTime" name="startTime" ref="" var="开始时间"/>
+	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
+	</url>
+	<url id="sealseservicestatisforms004" path="/post/SealSeServiceStatisFormsController/queryProductTypeOrderTable" val="获取设备产品类型工单数量统计表格" allUse="1">
+	    <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	    <property id="productName" name="productName" ref="" var="产品名称"/>
+	    <property id="startTime" name="startTime" ref="" var="开始时间"/>
+	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
+	</url>
+	<!-- 统计模块管理结束 -->
+	
+</controller>

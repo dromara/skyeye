@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.CheckWorkDao">
+
+	<select id="queryYesterdayIsHoliday" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			title
+		FROM
+			schedule_day a
+		WHERE 
+			type = 3
+			AND #{remindTime} >= a.start_time AND a.end_time >= #{remindTime}
+			LIMIT 1
+	</select>
+	
+	<select id="queryNotCheckMember" resultType="java.util.Map">
+		SELECT
+			b.id createId
+		FROM
+			sys_eve_user b,
+			sys_eve_user_staff c,
+			sys_eve_user_staff_time d
+		WHERE
+			b.id NOT IN (SELECT 
+							b.id 
+						FROM 
+							check_work a, 
+							sys_eve_user b,
+							sys_eve_user_staff c,
+							sys_eve_user_staff_time d
+						WHERE 
+							a.check_date = #{yesterdayTime} 
+						AND b.id = a.create_id 
+						AND b.id = c.user_id
+						AND c.id = d.staff_id
+						AND d.check_work_time_id = #{timeId}
+						AND a.time_id = d.check_work_time_id)
+		AND b.user_lock = '0'
+		AND b.id = c.user_id
+		AND c.state = '1'
+		AND c.id = d.staff_id
+		AND d.check_work_time_id = #{timeId}
+	</select>
+	
+	<insert id="insertCheckWorkBySystem" parameterType="java.util.Map">
+		INSERT into check_work 
+	    (id, check_date, create_id, state, clock_in_state, clock_out_state, work_hours, time_id)
+	    VALUES
+	    <foreach collection="list" item="item" index="index" separator=",">
+	    	(#{item.id}, #{item.checkDate}, #{item.createId}, #{item.state}, #{item.clockInState}, #{item.clockOutState}, #{item.workHours}, #{item.timeId})
+	    </foreach>
+	</insert>
+	
+	<select id="queryNotCheckEndWorkId" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			check_work a,
+			sys_eve_user b,
+			sys_eve_user_staff c,
+			sys_eve_user_staff_time d
+		WHERE
+			a.check_date = #{yesterdayTime}
+		AND b.id = a.create_id
+		AND b.id = c.user_id
+		AND c.id = d.staff_id
+		AND d.check_work_time_id = #{timeId}
+		AND a.time_id = d.check_work_time_id
+		AND b.user_lock = 0
+		AND (a.clock_out IS NULL OR LENGTH(a.clock_out) = 0)
+	</select>
+	
+	<update id="editCheckWorkBySystem" parameterType="java.util.Map">
+		update check_work
+		<set>
+			state = #{state},
+			clock_out_state = #{clockOutState},
+			work_hours = #{workHours}
+		</set>
+		WHERE 
+			id = #{id}
+	</update>
+	
+	<select id="queryisAlreadyCheck" resultType="java.util.Map">
+		SELECT
+			IFNULL(clock_in, '') clockIn,
+			IFNULL(clock_out, '') clockOut
+		FROM
+			check_work
+		WHERE 
+			check_date = #{checkDate}
+		AND create_id = #{createId}
+		AND time_id = #{timeId}
+	</select>
+	
+	<select id="queryStartWorkTime" resultType="java.util.Map">
+		SELECT
+			b.start_time clockIn,
+			b.end_time clockOut
+		FROM
+			sys_eve_user_staff_time a,
+			check_work_time b
+		WHERE
+			a.staff_id = #{staffId}
+		AND a.check_work_time_id = #{timeId}
+		AND a.check_work_time_id = b.id
+	</select>
+	
+	<insert id="insertCheckWorkStartWork" parameterType="java.util.Map">
+		INSERT into check_work 
+	     (id, check_date, clock_in, create_id, state, clock_in_state, clock_in_ip, time_id)
+	     VALUES
+	     (#{id}, #{checkDate}, #{clockIn}, #{createId}, #{state}, #{clockInState}, #{clockInIp}, #{timeId})
+	</insert>
+	
+	<insert id="insertCheckWorkEndWork" parameterType="java.util.Map">
+		INSERT into check_work 
+	     (id, check_date, clock_out, create_id, state, clock_out_state, clock_in_state, work_hours, clock_in_ip, clock_out_ip)
+	     VALUES
+	     (#{id}, #{checkDate}, #{clockOut}, #{createId}, #{state}, #{clockOutState}, #{clockInState}, #{workHours}, #{clockIp}, #{clockIp})
+	</insert>
+
+	<update id="editCheckWorkEndWork" parameterType="java.util.Map">
+		update check_work
+		<set>
+			clock_out = #{clockOut},
+			clock_out_state = #{clockOutState},
+			state = #{state},
+			work_hours = #{workHours},
+			clock_out_ip = #{clockOutIp}
+		</set>
+		WHERE 
+			check_date = #{checkDate}
+		AND create_id = #{createId}
+		AND time_id = #{timeId}
+	</update>
+	
+	<select id="queryCheckWork" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT 
+			m.*,
+			IFNULL(c.appeal_type, '') appealInType,
+            IFNULL(c.state, '') appealInState,
+            IFNULL(d.appeal_type, '') appealOutType,
+            IFNULL(d.state, '') appealOutState,
+            IFNULL(e.appeal_type, '') appealAllType,
+            IFNULL(e.state, '') appealAllState
+		FROM
+			(SELECT
+				a.id, 
+				a.check_date checkDate, 
+				IFNULL(a.clock_in, '') clockIn,
+				IFNULL(a.clock_out, '') clockOut,
+				b.user_name userName,
+				a.state, 
+				a.clock_out_state clockOutState, 
+				a.clock_in_state clockInState,
+				a.work_hours workHours,
+				a.time_id timeId,
+				CASE a.time_id WHEN '-' THEN '加班日' ELSE q.title END title,
+				q.start_time startTime,
+				q.end_time endTime,
+				CASE q.type WHEN 1 THEN '单休' WHEN 2 THEN '双休' WHEN 3 THEN '单双休' WHEN 4 THEN '自定义' ELSE '' END typeName
+			FROM
+				check_work a
+				LEFT JOIN check_work_time q ON q.id = a.time_id,
+				sys_eve_user_staff b
+			WHERE 
+				a.create_id = #{userId}
+			AND a.create_id = b.user_id
+            <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+                AND a.check_date >= #{firstTime} AND #{lastTime} >= a.check_date
+            </if>
+            <if test="state != '' and state != null">
+                AND a.state = #{state}
+            </if>
+            <if test="timeId != '' and timeId != null">
+                AND a.time_id = #{timeId}
+            </if>
+            <if test="clockInState != '' and clockInState != null">
+                AND a.clock_in_state = #{clockInState}
+            </if>
+            <if test="clockOutState != '' and clockOutState != null">
+                AND a.clock_out_state = #{clockOutState}
+            </if>
+            ) m
+        LEFT JOIN check_work_appeal c ON m.id = c.work_id AND c.appeal_type = '2'
+        LEFT JOIN check_work_appeal d ON m.id = d.work_id AND d.appeal_type = '3'
+        LEFT JOIN check_work_appeal e ON m.id = e.work_id AND e.appeal_type = '1'
+		ORDER BY m.checkDate DESC
+	</select>
+	
+	<select id="queryCheckWorkIdByAppealType" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			check_date name
+			<if test="appealType == '1'.toString()">
+				, '缺勤' situation
+			</if>
+			<if test="appealType == '2'.toString()">
+				, CASE WHEN a.clock_in_state = '2' THEN '迟到' WHEN a.state = '4' THEN '缺早卡' ELSE '' END situation
+			</if>
+			<if test="appealType == '3'.toString()">
+				, CASE WHEN a.clock_out_state = '2' THEN '早退' WHEN a.state = '5' THEN '缺晚卡' ELSE '' END situation
+			</if>
+		FROM
+			check_work a
+		WHERE a.create_id = #{userId}
+		AND a.id NOT in (SELECT b.work_id FROM check_work_appeal b WHERE (b.state = 0 OR b.state = 1) AND b.appeal_type = #{appealType} )  
+		<if test="appealType == '1'.toString()">
+			AND a.state = 2
+		</if>
+		<if test="appealType == '2'.toString()">
+			AND (a.state = 4
+			OR a.clock_in_state = 2)
+		</if>
+		<if test="appealType == '3'.toString()">
+			AND (a.state = 5
+			OR a.clock_out_state = 2)
+		</if>
+		ORDER BY a.check_date DESC
+	</select>
+	
+	<select id="querySysEveUserStaff" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.user_id id,
+			a.user_name userName,
+			a.user_sex userSex,
+			d.department_name departmentName
+		FROM
+			sys_eve_user_staff a,
+			company_department d
+		WHERE
+			a.user_id != #{userId}
+		AND a.department_id = d.id
+	</select>
+	
+	<insert id="insertCheckWorkAppeal" parameterType="java.util.Map">
+		INSERT into check_work_appeal 
+	     (id, work_id, appeal_type, appeal_reason_id, appeal_reason, state, approval_id, create_id, create_time)
+	     VALUES
+	     (#{id}, #{workId}, #{appealType}, #{appealReasonId}, #{appealReason}, #{state}, #{approvalId}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryCheckWorkAppeallist" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			a.check_date checkDate,
+			CASE WHEN a.state = '2' THEN '缺勤' WHEN (a.clock_in_state = '2' AND b.appeal_type = '2') THEN '迟到' WHEN a.state = '4' THEN '缺早卡' WHEN (a.clock_out_state = '2' AND b.appeal_type = '3') THEN '早退' WHEN a.state = '5' THEN '缺晚卡' ELSE '' END situation,
+			c.appeal_name appealName,
+			b.appeal_reason appealReason,
+			DATE_FORMAT(b.create_time,'%Y-%m-%d %T') createTime,
+			b.state,
+			IFNULL(DATE_FORMAT(b.approval_time,'%Y-%m-%d %T'),'') approvalTime,
+			d.user_name userName	
+		FROM
+			check_work a,
+			check_work_appeal b,
+			check_work_reason c,
+			sys_eve_user_staff d
+		WHERE b.create_id = #{createId}
+		AND a.id = b.work_id
+		AND b.appeal_reason_id = c.id
+		AND d.user_id = b.approval_id
+		<if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND b.approval_time >= #{firstTime} AND #{lastTime} >= b.approval_time
+		</if>
+		<if test="state != '' and state != null">
+			AND b.state = #{state}
+		</if>
+		<if test="approvalId != '' and approvalId != null">
+			AND b.approval_id = #{approvalId}
+		</if>
+		<if test="appealReasonId != '' and appealReasonId != null">
+			AND b.appeal_reason_id = #{appealReasonId}
+		</if>
+		ORDER BY b.create_time DESC
+	</select>
+	
+	<select id="queryCheckWorkAppealMyGetlist" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			a.check_date checkDate,
+			CASE WHEN a.state = '2' THEN '缺勤' WHEN (a.clock_in_state = '2' AND b.appeal_type = '2') THEN '迟到' WHEN a.state = '4' THEN '缺早卡' WHEN (a.clock_out_state = '2' AND b.appeal_type = '3') THEN '早退' WHEN a.state = '5' THEN '缺晚卡' ELSE '' END situation,
+			c.appeal_name appealName,
+			b.appeal_reason appealReason,
+			DATE_FORMAT(b.create_time,'%Y-%m-%d %T') createTime,
+			b.state,
+			IFNULL(DATE_FORMAT(b.approval_time,'%Y-%m-%d %T'),'') approvalTime,
+			d.user_name userName	
+		FROM
+			check_work a,
+			check_work_appeal b,
+			check_work_reason c,
+			sys_eve_user_staff d
+		WHERE b.approval_id = #{approvalId}
+		AND a.id = b.work_id
+		AND b.appeal_reason_id = c.id
+		AND d.user_id = b.create_id
+		<if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+			AND b.create_time >= #{firstTime} AND #{lastTime} >= b.create_time
+		</if>
+		<if test="state != '' and state != null">
+			AND b.state = #{state}
+		</if>
+		<if test="createId != '' and createId != null">
+			AND b.create_id = #{createId}
+		</if>
+		<if test="appealReasonId != '' and appealReasonId != null">
+			AND b.appeal_reason_id = #{appealReasonId}
+		</if>
+		ORDER BY b.create_time DESC
+	</select>
+	
+	<select id="queryStaffCheckWorkDetails" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			a.check_date checkDate,
+			CASE WHEN a.state = '2' THEN '缺勤' WHEN a.clock_in_state = '2' THEN '迟到' WHEN a.state = '4' THEN '缺早卡' WHEN a.clock_out_state = '2' THEN '早退' WHEN a.state = '5' THEN '缺晚卡' ELSE '' END situation,
+			c.appeal_name appealName,
+			b.appeal_reason appealReason,
+			DATE_FORMAT(b.create_time,'%Y-%m-%d %T') createTime,
+			CASE WHEN b.state = '0' THEN '申诉中' WHEN b.state = '1' THEN '审批通过' WHEN b.state = '2' THEN '审批不通过' ELSE '' END state,
+			CASE WHEN b.state = '0' THEN 'state-new' WHEN b.state = '1' THEN 'state-up' WHEN b.state = '2' THEN 'state-down' ELSE '' END stateColor,
+			d.user_name userName
+		FROM
+			check_work a,
+			check_work_appeal b,
+			check_work_reason c,
+			sys_eve_user_staff d
+		WHERE b.id = #{id}
+		AND a.id = b.work_id
+		AND b.appeal_reason_id = c.id
+		AND d.user_id = b.create_id
+	</select>
+	
+	<update id="editStaffCheckWork" parameterType="java.util.Map">
+		UPDATE check_work_appeal
+		<set>
+			state = #{state},
+			approval_time = #{approvalTime},
+			appeal_remark = #{appealRemark}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryCheckWorkDetails" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			a.check_date checkDate,
+			CASE WHEN a.state = '2' THEN '缺勤' WHEN (a.clock_in_state = '2' AND b.appeal_type = '2') THEN '迟到' WHEN a.state = '4' THEN '缺早卡' WHEN (a.clock_out_state = '2' AND b.appeal_type = '3') THEN '早退' WHEN a.state = '5' THEN '缺晚卡' ELSE '' END situation,
+			c.appeal_name appealName,
+			b.appeal_reason appealReason,
+			DATE_FORMAT(b.create_time,'%Y-%m-%d %T') createTime,
+			CASE WHEN b.state = '0' THEN '申诉中' WHEN b.state = '1' THEN '审批通过' WHEN b.state = '2' THEN '审批不通过' ELSE '' END state,
+			CASE WHEN b.state = '0' THEN 'state-new' WHEN b.state = '1' THEN 'state-up' WHEN b.state = '2' THEN 'state-down' ELSE '' END stateColor,
+			IFNULL(DATE_FORMAT(b.approval_time,'%Y-%m-%d %T'),'') approvalTime,
+			d.user_name userName,
+			IFNULL(b.appeal_remark, '') appealRemark	
+		FROM
+			check_work a,
+			check_work_appeal b,
+			check_work_reason c,
+			sys_eve_user_staff d
+		WHERE b.id = #{id}
+		AND a.id = b.work_id
+		AND b.appeal_reason_id = c.id
+		AND d.user_id = b.create_id
+	</select>
+	
+	<select id="queryCheckWorkMationByMonth" resultType="java.util.Map">
+            SELECT
+                concat(a.id, 'a') id,
+				a.time_id timeId,
+                '上班时间' title,
+                a.check_date 'start',
+                a.check_date 'end',
+                IFNULL(a.clock_in,'未打卡') clockIn,
+                true allday,
+                CASE WHEN a.clock_in_state=3 THEN '#ff3300' WHEN a.clock_in_state=2 THEN '#ff9900' WHEN a.clock_in_state=1 THEN '#32cd99' ELSE '#ffffff' END backgroundColor,
+                CASE WHEN a.clock_in_state=3 THEN '未打卡' WHEN a.clock_in_state=2 THEN '迟到' WHEN a.clock_in_state=1 THEN '正常' ELSE '未打卡' END stateName,
+                '1' showBg,
+                false editable,
+                a.clock_in_state state,
+                '10' type
+            FROM
+                check_work a
+            WHERE
+                a.create_id = #{userId}
+            AND (a.time_id = #{timeId} OR a.time_id = '-')
+			<if test="months != null and months.size() &gt; 0">
+				<foreach collection="months" item="month" separator="," open=" AND date_format(a.check_date, '%Y-%m') in(" close=")">
+					#{month}
+				</foreach>
+			</if>
+        UNION ALL
+            SELECT
+                concat(a.id, 'b') id,
+                a.time_id timeId,
+                '下班时间' title,
+                a.check_date 'start',
+                a.check_date 'end',
+                IFNULL(a.clock_out,'未打卡') clockIn,
+                true allday,
+                CASE WHEN a.clock_out_state=3 THEN '#ff3300' WHEN a.clock_out_state=2 THEN '#ff9900' WHEN a.clock_out_state=1 THEN '#32cd99' ELSE '#ffffff' END backgroundColor,
+                CASE WHEN a.clock_out_state=3 THEN '未打卡' WHEN a.clock_out_state=2 THEN '早退' WHEN a.clock_out_state=1 THEN '正常' ELSE '未打卡' END stateName,
+                '1' showBg,
+                false editable,
+                a.clock_out_state state,
+				'10' type
+            FROM
+                check_work a
+            WHERE
+                a.create_id = #{userId}
+            AND (a.time_id = #{timeId} OR a.time_id = '-')
+			<if test="months != null and months.size() &gt; 0">
+				<foreach collection="months" item="month" separator="," open=" AND date_format(a.check_date, '%Y-%m') in(" close=")">
+					#{month}
+				</foreach>
+			</if>
+    </select>
+    
+    <select id="queryCheckWorkReport" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.user_id userId,
+            a.user_name userName,
+            u.company_name companyName,
+            q.department_name departmentName,
+            p.job_name jobName,
+            GROUP_CONCAT(b.check_work_time_id SEPARATOR ',') timsIds,
+            (SELECT count(*) from check_work where create_id = a.user_id and state = 1 and check_date >= #{startTime} and #{endTime} >= check_date) fullTime,
+            (SELECT count(*) from check_work where create_id = a.user_id and state = 2 and check_date >= #{startTime} and #{endTime} >= check_date) absenteeism,
+            (SELECT count(*) from check_work where create_id = a.user_id and state = 3 and check_date >= #{startTime} and #{endTime} >= check_date) lackTime,
+            (SELECT count(*) from check_work where create_id = a.user_id and clock_in_state = 2 and check_date >= #{startTime} and #{endTime} >= check_date) late,
+            (SELECT count(*) from check_work where create_id = a.user_id and clock_out_state = 2 and check_date >= #{startTime} and #{endTime} >= check_date) leaveEarly,
+            (SELECT count(*) from check_work where create_id = a.user_id and ((clock_out is not null and  clock_in is null) or (clock_out is null and  clock_in is not null)) and check_date >= #{startTime} and #{endTime} >= check_date) missing
+        FROM
+            sys_eve_user_staff a,
+            sys_eve_user_staff_time b,
+            company_job p, 
+            company_department q, 
+            company_mation u	
+        WHERE 
+            a.company_id = u.id 
+            AND a.department_id = q.id 
+            AND a.job_id = p.id
+            AND a.id = b.staff_id
+            AND (a.state = 1 OR (a.state = 2 AND #{endTime} >= a.quit_time AND a.quit_time >= #{startTime}) OR (a.state = 2 AND a.quit_time >= #{endTime}))
+            <if test="userName != '' and userName != null">
+                AND a.user_name LIKE '%${userName}%'
+            </if>
+            <if test="companyName != '' and companyName != null">
+                AND a.company_id = #{companyName}
+            </if>
+            <if test="departmentName != '' and departmentName != null">
+                AND a.department_id = #{departmentName}
+            </if>
+            <if test="jobName != '' and jobName != null">
+                AND a.job_id = #{jobName}
+            </if>
+        GROUP BY a.id
+        ORDER BY a.entry_time DESC, a.user_name
+    </select>
+	
+    <select id="queryCheckWorkEcharts" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            #{day} checkDay,
+            (SELECT count(*) from check_work a, sys_eve_user_staff b where a.create_id = b.user_id and a.state = 1 and a.check_date = #{day} and (b.state = 1 OR (b.state = 2 AND b.quit_time >= #{day}))
+                <if test="userName != '' and userName != null">
+                    AND b.user_name LIKE '%${userName}%'
+                </if>
+                <if test="companyName != '' and companyName != null">
+                    AND b.company_id = #{companyName}
+                </if>
+                <if test="departmentName != '' and departmentName != null">
+                    AND b.department_id = #{departmentName}
+                </if>
+                <if test="jobName != '' and jobName != null">
+                    AND b.job_id = #{jobName}
+                </if>
+            ) fullTime,
+            (SELECT count(*) from check_work a, sys_eve_user_staff b where a.create_id = b.user_id and a.state = 2 and a.check_date = #{day} and (b.state = 1 OR (b.state = 2 AND b.quit_time >= #{day}))
+                <if test="userName != '' and userName != null">
+                    AND b.user_name LIKE '%${userName}%'
+                </if>
+                <if test="companyName != '' and companyName != null">
+                    AND b.company_id = #{companyName}
+                </if>
+                <if test="departmentName != '' and departmentName != null">
+                    AND b.department_id = #{departmentName}
+                </if>
+                <if test="jobName != '' and jobName != null">
+                    AND b.job_id = #{jobName}
+                </if>
+            ) absenteeism,
+            (SELECT count(*) from check_work a, sys_eve_user_staff b where a.create_id = b.user_id and a.state = 3 and a.check_date = #{day} and (b.state = 1 OR (b.state = 2 AND b.quit_time >= #{day}))
+                <if test="userName != '' and userName != null">
+                    AND b.user_name LIKE '%${userName}%'
+                </if>
+                <if test="companyName != '' and companyName != null">
+                    AND b.company_id = #{companyName}
+                </if>
+                <if test="departmentName != '' and departmentName != null">
+                    AND b.department_id = #{departmentName}
+                </if>
+                <if test="jobName != '' and jobName != null">
+                    AND b.job_id = #{jobName}
+                </if>
+            ) lackTime,
+            (SELECT count(*) from check_work a, sys_eve_user_staff b where a.create_id = b.user_id and a.clock_in_state = 2 and a.check_date = #{day} and (b.state = 1 OR (b.state = 2 AND b.quit_time >= #{day}))
+                <if test="userName != '' and userName != null">
+                    AND b.user_name LIKE '%${userName}%'
+                </if>
+                <if test="companyName != '' and companyName != null">
+                    AND b.company_id = #{companyName}
+                </if>
+                <if test="departmentName != '' and departmentName != null">
+                    AND b.department_id = #{departmentName}
+                </if>
+                <if test="jobName != '' and jobName != null">
+                    AND b.job_id = #{jobName}
+                </if>
+            ) late,
+            (SELECT count(*) from check_work a, sys_eve_user_staff b where a.create_id = b.user_id and a.clock_out_state = 2 and a.check_date = #{day} and (b.state = 1 OR (b.state = 2 AND b.quit_time >= #{day}))
+                <if test="userName != '' and userName != null">
+                    AND b.user_name LIKE '%${userName}%'
+                </if>
+                <if test="companyName != '' and companyName != null">
+                    AND b.company_id = #{companyName}
+                </if>
+                <if test="departmentName != '' and departmentName != null">
+                    AND b.department_id = #{departmentName}
+                </if>
+                <if test="jobName != '' and jobName != null">
+                    AND b.job_id = #{jobName}
+                </if>
+            ) leaveEarly,
+            (SELECT count(*) from check_work a, sys_eve_user_staff b where a.create_id = b.user_id and ((a.clock_out is not null and  a.clock_in is null) or (a.clock_out is null and  a.clock_in is not null)) and a.check_date = #{day} and (b.state = 1 OR (b.state = 2 AND b.quit_time >= #{day}))
+                <if test="userName != '' and userName != null">
+                    AND b.user_name LIKE '%${userName}%'
+                </if>
+                <if test="companyName != '' and companyName != null">
+                    AND b.company_id = #{companyName}
+                </if>
+                <if test="departmentName != '' and departmentName != null">
+                    AND b.department_id = #{departmentName}
+                </if>
+                <if test="jobName != '' and jobName != null">
+                    AND b.job_id = #{jobName}
+                </if>
+            ) missing
+    </select>
+
+    <select id="downloadCheckWorkTemplate" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT 
+            m.*,
+            IFNULL(c.appeal_type, '') appealInType,
+            IFNULL(c.state, '') appealInState,
+            IFNULL(d.appeal_type, '') appealOutType,
+            IFNULL(d.state, '') appealOutState,
+            IFNULL(e.appeal_type, '') appealAllType,
+            IFNULL(e.state, '') appealAllState
+        FROM
+            (SELECT
+                a.id, 
+                a.check_date checkDate, 
+                IFNULL(a.clock_in, '') clockIn,
+                IFNULL(a.clock_out, '') clockOut,
+                b.user_name userName,
+                a.state, 
+                IFNULL(a.clock_out_state, '') clockOutState, 
+                a.clock_in_state clockInState,
+                a.work_hours workHours,
+                q.id timeId,
+				q.title,
+				q.start_time startTime,
+				q.end_time endTime,
+				CASE q.type WHEN 1 THEN '单休' WHEN 2 THEN '双休' WHEN 3 THEN '单双休' WHEN 4 THEN '自定义' ELSE '' END typeName
+            FROM
+                check_work a
+                LEFT JOIN check_work_time q ON q.id = a.time_id,
+                sys_eve_user_staff b
+            WHERE 
+                a.create_id = #{userId}
+            AND a.create_id = b.user_id
+            <if test="firstTime != '' and firstTime != null and lastTime != '' and lastTime != null">
+                AND a.check_date >= #{firstTime} AND #{lastTime} >= a.check_date
+            </if>
+            <if test="timeId != '' and timeId != null">
+                AND a.time_id = #{timeId}
+            </if>
+            <if test="state != '' and state != null">
+                AND a.state = #{state}
+            </if>
+            <if test="clockInState != '' and clockInState != null">
+                AND a.clock_in_state = #{clockInState}
+            </if>
+            <if test="clockOutState != '' and clockOutState != null">
+                AND a.clock_out_state = #{clockOutState}
+            </if>
+            ) m
+        LEFT JOIN check_work_appeal c ON m.id = c.work_id AND c.appeal_type = '2'
+        LEFT JOIN check_work_appeal d ON m.id = d.work_id AND d.appeal_type = '3'
+        LEFT JOIN check_work_appeal e ON m.id = e.work_id AND e.appeal_type = '1'
+        ORDER BY m.checkDate DESC
+    </select>
+    
+    <select id="queryReportDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT 
+            m.*,
+            IFNULL(c.appeal_type, '') appealInType,
+            IFNULL(c.state, '') appealInState,
+            IFNULL(d.appeal_type, '') appealOutType,
+            IFNULL(d.state, '') appealOutState,
+            IFNULL(e.appeal_type, '') appealAllType,
+            IFNULL(e.state, '') appealAllState
+        FROM
+            (SELECT
+                a.id, 
+                a.check_date checkDate, 
+                IFNULL(a.clock_in, '') clockIn,
+                IFNULL(a.clock_out, '') clockOut,
+                b.user_name userName,
+                a.state, 
+                a.clock_out_state clockOutState, 
+                a.clock_in_state clockInState,
+                a.work_hours workHours
+            FROM
+                check_work a,
+                sys_eve_user_staff b
+            WHERE 
+                a.create_id = #{userId}
+            AND a.create_id = b.user_id
+            AND a.check_date >= #{startTime} AND #{endTime} >= a.check_date
+            <if test='state != "4" and state != "5" and state != "6"'>
+                AND a.state = #{state}
+            </if>
+            <if test='state == "4"'>
+                AND a.clock_in_state = 2
+            </if>
+            <if test='state == "5"'>
+                AND a.clock_out_state = 2
+            </if>
+            <if test='state == "6"'>
+                AND ((a.clock_out is not null and  a.clock_in is null) or (a.clock_out is null and  a.clock_in is not null))
+            </if>
+            ) m
+        LEFT JOIN check_work_appeal c ON m.id = c.work_id AND c.appeal_type = '2'
+        LEFT JOIN check_work_appeal d ON m.id = d.work_id AND d.appeal_type = '3'
+        LEFT JOIN check_work_appeal e ON m.id = e.work_id AND e.appeal_type = '1'
+        ORDER BY m.checkDate ASC
+    </select>
+	
+    <select id="queryEchartsDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT 
+            m.*,
+            IFNULL(c.appeal_type, '') appealInType,
+            IFNULL(c.state, '') appealInState,
+            IFNULL(d.appeal_type, '') appealOutType,
+            IFNULL(d.state, '') appealOutState,
+            IFNULL(e.appeal_type, '') appealAllType,
+            IFNULL(e.state, '') appealAllState
+        FROM
+            (SELECT
+                a.id, 
+                a.check_date checkDate, 
+                IFNULL(a.clock_in, '') clockIn,
+                IFNULL(a.clock_out, '') clockOut,
+                b.user_name userName,
+                a.state, 
+                a.clock_out_state clockOutState, 
+                a.clock_in_state clockInState,
+                a.work_hours workHours
+            FROM
+                check_work a,
+                sys_eve_user_staff b
+            WHERE 
+                a.create_id = b.user_id
+            AND a.check_date = #{day}
+            <if test='state != "4" and state != "5" and state != "6"'>
+                AND a.state = #{state}
+            </if>
+            <if test='state == "4"'>
+                AND a.clock_in_state = 2
+            </if>
+            <if test='state == "5"'>
+                AND a.clock_out_state = 2
+            </if>
+            <if test='state == "6"'>
+                AND ((a.clock_out is not null and  a.clock_in is null) or (a.clock_out is null and  a.clock_in is not null))
+            </if>
+            <if test="userName != '' and userName != null">
+                AND b.user_name LIKE '%${userName}%'
+            </if>
+            <if test="companyName != '' and companyName != null">
+                AND b.company_id = #{companyName}
+            </if>
+            <if test="departmentName != '' and departmentName != null">
+                AND b.department_id = #{departmentName}
+            </if>
+            <if test="jobName != '' and jobName != null">
+                AND b.job_id = #{jobName}
+            </if>
+            ) m
+        LEFT JOIN check_work_appeal c ON m.id = c.work_id AND c.appeal_type = '2'
+        LEFT JOIN check_work_appeal d ON m.id = d.work_id AND d.appeal_type = '3'
+        LEFT JOIN check_work_appeal e ON m.id = e.work_id AND e.appeal_type = '1'
+        ORDER BY m.checkDate ASC
+    </select>
+    
+    <select id="queryReportDownload" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        	a.user_id userId,
+            a.user_name userName,
+            u.company_name companyName,
+            q.department_name departmentName,
+            p.job_name jobName,
+            GROUP_CONCAT(b.check_work_time_id SEPARATOR ',') timsIds,
+            (SELECT count(*) from check_work where create_id = a.user_id and state = 1 and check_date >= #{startTime} and #{endTime} >= check_date) fullTime,
+            (SELECT count(*) from check_work where create_id = a.user_id and state = 2 and check_date >= #{startTime} and #{endTime} >= check_date) absenteeism,
+            (SELECT count(*) from check_work where create_id = a.user_id and state = 3 and check_date >= #{startTime} and #{endTime} >= check_date) lackTime,
+            (SELECT count(*) from check_work where create_id = a.user_id and clock_in_state = 2 and check_date >= #{startTime} and #{endTime} >= check_date) late,
+            (SELECT count(*) from check_work where create_id = a.user_id and clock_out_state = 2 and check_date >= #{startTime} and #{endTime} >= check_date) leaveEarly,
+            (SELECT count(*) from check_work where create_id = a.user_id and ((clock_out is not null and  clock_in is null) or (clock_out is null and  clock_in is not null)) and check_date >= #{startTime} and #{endTime} >= check_date) missing
+        FROM
+            sys_eve_user_staff a,
+            sys_eve_user_staff_time b,
+            company_job p, 
+            company_department q, 
+            company_mation u	
+        WHERE 
+            a.company_id = u.id 
+            AND a.department_id = q.id 
+            AND a.job_id = p.id
+            AND a.id = b.staff_id
+            AND (a.state = 1 OR (a.state = 2 AND #{endTime} >= a.quit_time AND a.quit_time >= #{startTime}) OR (a.state = 2 AND a.quit_time >= #{endTime}))
+            <if test="userName != '' and userName != null">
+                AND a.user_name LIKE '%${userName}%'
+            </if>
+            <if test="companyName != '' and companyName != null">
+                AND a.company_id = #{companyName}
+            </if>
+            <if test="departmentName != '' and departmentName != null">
+                AND a.department_id = #{departmentName}
+            </if>
+            <if test="jobName != '' and jobName != null">
+                AND a.job_id = #{jobName}
+            </if>
+        GROUP BY a.id
+        ORDER BY a.entry_time DESC, a.user_name
+    </select>
+
+	<select id="queryHolidayScheduleDayMation" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.start_time `start`,
+			a.end_time `end`,
+			CASE a.all_day WHEN '0' THEN false WHEN '1' THEN true ELSE true END allDay,
+			CASE a.type WHEN '1' THEN '#63B8FF' WHEN '2' THEN '#CD69C9' WHEN '3' THEN '#54FF9F'
+			WHEN '4' THEN '#FF0000' WHEN '5' THEN '#ADADAD' ELSE '' END backgroundColor,
+			'2' showBg,
+			false editable, #是否可编辑
+			a.type,
+			'xiu' className
+		FROM
+			schedule_day a
+		WHERE a.type = '3'
+		AND (
+		<foreach collection="list" item="item" index="index" >
+			DATE_FORMAT(a.start_time, '%Y-%m') = #{item} OR DATE_FORMAT(a.end_time, '%Y-%m') = #{item} OR
+		</foreach>
+		1 = 0)
+	</select>
+	
+</mapper>

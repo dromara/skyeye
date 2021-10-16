@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.CrmCustomerGroupDao">
+
+    <insert id="insertCustomerGroup" parameterType="java.util.Map">
+        insert into crm_customer_group
+        (id, group_name, `desc`, state, create_id, create_time, last_update_id, last_update_time)
+        values(#{id}, #{groupName}, #{desc}, #{state}, #{createId}, #{createTime}, #{lastUpdateId}, #{lastUpdateTime})
+    </insert>
+
+    <delete id="deleteCustomerGroupById" parameterType="java.util.Map">
+        UPDATE crm_customer_group
+        <set>
+            state = 4
+        </set>
+        WHERE id = #{id}
+    </delete>
+
+    <update id="editStateUpById" parameterType="java.util.Map">
+        UPDATE crm_customer_group
+        <set>
+            state = 2
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editStateDownById" parameterType="java.util.Map">
+        UPDATE crm_customer_group
+        <set>
+            state = 3
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editCustomerGroupById" parameterType="java.util.Map">
+        UPDATE crm_customer_group
+        <set>
+            <if test="groupName != '' and groupName != null">
+                group_name = #{groupName},
+            </if>
+            `desc` = #{desc},
+            last_update_id = #{lastUpdateId},
+            last_update_time = #{lastUpdateTime},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryCustomerGroupList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.group_name groupName,
+            a.`desc`,
+            a.state,
+            b.user_name createName,
+			DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+			c.user_name lastUpdateName,
+			DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+        FROM
+            crm_customer_group a
+            LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.last_update_id = c.user_id
+        WHERE a.state != 4
+        <if test="groupName != '' and groupName != null">
+            AND a.group_name LIKE '%${groupName}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+    </select>
+
+    <select id="queryCustomerGroupMationById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.group_name groupName,
+            a.`desc`
+        FROM
+            crm_customer_group a
+        WHERE
+            a.id = #{id}
+        AND a.state != 4
+    </select>
+
+    <select id="queryStateById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            state
+        FROM
+            crm_customer_group
+        WHERE
+            id = #{id}
+    </select>
+
+    <select id="queryStateUpList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id,
+            group_name `name`
+        FROM
+            crm_customer_group
+        WHERE
+            state = 2
+    </select>
+
+    <select id="queryCustomerGroupByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id
+        FROM
+            crm_customer_group
+        WHERE state != 4
+        AND group_name = #{groupName}
+    </select>
+
+    <select id="queryCustomerGroupByIdAndName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            id
+        FROM
+            crm_customer_group
+        WHERE state != 4
+        AND group_name = #{groupName} 
+        AND id != #{id}
+    </select>
+
+</mapper>

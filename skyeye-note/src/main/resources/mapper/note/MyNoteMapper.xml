@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.MyNoteDao">
+	
+	<insert id="insertFileFolderByUserId" parameterType="java.util.Map">
+		INSERT INTO note_folder
+			(id, name, state, parent_id, create_id, create_time, last_update_id, last_update_time)
+		VALUES
+			(#{id}, #{catalogName}, #{state}, #{parentId}, #{createId}, #{createTime}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryFileFolderByUserIdAndParentId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name `name`,
+			#{parentId} pId,
+			'../../assets/images/my-folder-icon.png' icon,
+			1 isParent
+		FROM
+			note_folder a
+		WHERE a.parent_id = CONCAT(IFNULL((SELECT t.parent_id FROM note_folder t WHERE t.id = #{parentId}), ''), #{parentId}, ',')
+		AND a.create_id = #{userId}
+		AND a.state = 1
+		ORDER BY a.name ASC
+	</select>
+	
+	<select id="queryTreeToMoveByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name `name`,
+            #{parentId} pId,
+            '../../assets/images/my-folder-icon.png' icon,
+            1 isParent
+        FROM
+            note_folder a
+        WHERE a.parent_id = CONCAT(IFNULL((SELECT t.parent_id FROM note_folder t WHERE t.id = #{parentId}), ''), #{parentId}, ',')
+        AND a.create_id = #{userId}
+        AND a.state = 1
+        AND a.id != #{moveId}
+        ORDER BY a.name ASC
+    </select>
+	
+	<select id="queryFolderParentByFolderId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.parent_id parentId
+		FROM
+			note_folder a
+		WHERE a.id = #{parentId}
+	</select>
+	
+	<select id="quertFolderParentById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.parent_id parentId
+		FROM
+			note_folder a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="queryFolderMationById" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` title
+		FROM
+			note_folder a
+		WHERE a.id = #{folderId}
+		AND a.state = '1'
+	</select>
+	
+	<update id="deleteFileFolderById" parameterType="java.util.Map">
+		UPDATE note_folder
+		<set>
+			state = 2,
+			last_update_id = #{userId},
+			last_update_time = NOW(),
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="deleteFolderChildByFolderId" parameterType="java.util.Map">
+		UPDATE note_folder
+		<set>
+			state = 2,
+			last_update_id = #{userId},
+			last_update_time = NOW(),
+		</set>
+		WHERE 
+			INSTR(CONCAT(',', parent_id, ','), CONCAT(',', #{id}, ','))
+	</update>
+	
+	<update id="deleteFilesByFolderId" parameterType="java.util.Map">
+		UPDATE note_content
+		<set>
+			state = 2,
+			last_update_id = #{userId},
+			last_update_time = NOW(),
+		</set>
+		WHERE 
+			INSTR(CONCAT(',', parent_id, ','), CONCAT(',', #{id}, ','))
+	</update>
+	
+	<update id="deleteNoteContentById" parameterType="java.util.Map">
+		UPDATE note_content
+		<set>
+			state = 2,
+			last_update_id = #{userId},
+			last_update_time = NOW(),
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editFileFolderById" parameterType="java.util.Map">
+		UPDATE note_folder
+		<set>
+			<if test="catalogName != '' and catalogName != null">
+				name = #{catalogName},
+			</if>
+			last_update_id = #{userId},
+			last_update_time = NOW(),
+		</set>
+		WHERE id = #{id}
+		AND create_id = #{userId}
+	</update>
+	
+	<update id="editNoteContentNameById" parameterType="java.util.Map">
+		UPDATE note_content
+		<set>
+			<if test="catalogName != '' and catalogName != null">
+				title = #{catalogName},
+			</if>
+			last_update_id = #{userId},
+			last_update_time = NOW(),
+		</set>
+		WHERE id = #{id}
+		AND create_id = #{userId}
+	</update>
+	
+	<select id="queryMyNoteListNewByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title name,
+			a.icon_logo icon,
+			a.type fileType,
+			a.desc `desc`,
+			a.content,
+			CONVERT(a.last_update_time, char) createTime
+		FROM
+			note_content a
+		WHERE a.state = 1
+			<if test="search != '' and search != null">
+				AND (a.title LIKE '%${search}%' OR a.desc LIKE '%${search}%')
+			</if>
+		AND a.create_id = #{userId}
+		ORDER BY a.last_update_time DESC
+	</select>
+	
+	<insert id="insertMyNoteContentByUserId" parameterType="java.util.Map">
+		INSERT INTO note_content
+			(id, title, state, parent_id, icon_logo, `desc`, content, type, create_id, create_time, last_update_id, last_update_time)
+		VALUES
+			(#{id}, #{title}, #{state}, #{parentId}, #{iconLogo}, #{desc}, #{content}, #{type}, #{createId}, #{createTime}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryFileAndContentListByFolderId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			*
+		FROM (
+			SELECT
+				a.id,
+				a.name `name`,
+				#{parentId} pId,
+				'../../assets/images/my-folder-icon.png' icon,
+				1 isParent,
+				'folder' fileType,
+				'' `desc`,
+				CONVERT(a.create_time, char) createTime
+			FROM
+				note_folder a
+			WHERE
+				a.parent_id = CONCAT(IFNULL((SELECT t.parent_id FROM note_folder t WHERE t.id = #{parentId}), ''), #{parentId}, ',')
+			AND a.state = 1
+				<if test="search != '' and search != null">
+					AND a.name LIKE '%${search}%'
+				</if>
+			AND a.create_id = #{userId}
+			ORDER BY a.`name` DESC
+			) k
+			UNION ALL
+			SELECT
+			       *
+			FROM (
+				SELECT
+					a.id,
+					a.title `name`,
+					#{parentId} pId,
+					a.icon_logo icon,
+					0 isParent,
+					a.type fileType,
+					a.desc `desc`,
+					CONVERT(a.create_time, char) createTime
+				FROM
+					note_content a
+				WHERE
+					a.parent_id = CONCAT(IFNULL((SELECT t.parent_id FROM note_folder t WHERE t.id = #{parentId}), ''), #{parentId}, ',')
+				AND a.state = 1
+					<if test="search != '' and search != null">
+						AND (a.title LIKE '%${search}%' OR a.desc LIKE '%${search}%')
+					</if>
+				AND a.create_id = #{userId}
+				ORDER BY a.title DESC
+			) j
+	</select>
+	
+	<select id="queryMyNoteContentMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			id,
+			title,
+			`type`,
+			icon_logo,
+			`desc`,
+			content
+		FROM
+			note_content 
+		WHERE id = #{id}
+	</select>
+	
+	<update id="editMyNoteContentById" parameterType="java.util.Map">
+		UPDATE note_content
+		<set>
+			<if test="title != '' and title != null">
+				title = #{title},
+			</if>
+			content = #{content},
+			`desc` = #{desc},
+			last_update_id = #{userId},
+			last_update_time = NOW(),
+		</set>
+		WHERE id = #{id}
+		AND create_id = #{userId}
+	</update>
+	
+	<select id="queryFileFolderListByList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name `name`,
+			a.parent_id parentId,
+			'folder' fileType
+		FROM
+			note_folder a
+		WHERE a.state = '1'
+		AND (
+		<foreach collection="list" item="item" index="index" >  
+			INSTR(CONCAT(',', a.parent_id, ','), CONCAT(',', #{item.id}, ',')) OR a.id = #{item.id} OR
+		</foreach>
+		 1=0)
+		ORDER BY LENGTH(a.parent_id) ASC
+	</select>
+	
+	<delete id="deleteFileFolderListByList" parameterType="java.util.Map">
+		DELETE
+		FROM
+			note_folder
+		WHERE
+			(
+			<foreach collection="list" item="item" index="index" >  
+				id = #{item.id} OR
+			</foreach>
+		 1 = 0)
+	</delete>
+	
+	<select id="queryFileListByList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title fileName,
+			a.icon_logo iconLogo,
+			a.desc `desc`,
+			a.content,
+			a.type,
+			a.parent_id parentId
+		FROM
+			note_content a
+		WHERE a.state = '1'
+		AND (
+		<foreach collection="list" item="item" index="index" >  
+			a.parent_id = CONCAT(#{item.parentId}, #{item.id}, ',') OR
+		</foreach>
+		 1=0)
+		ORDER BY LENGTH(a.parent_id) ASC
+	</select>
+	
+	<delete id="deleteFileListByList" parameterType="java.util.Map">
+		DELETE
+		FROM
+			note_content
+		WHERE
+			(
+			<foreach collection="list" item="item" index="index" >  
+				id = #{item.id} OR
+			</foreach>
+		 1 = 0)
+	</delete>
+	
+	<insert id="insertFileFolderListByList" parameterType="java.util.Map">
+	     insert into note_folder
+	     (id, name, parent_id, state, create_id, create_time, last_update_id, last_update_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.newId}, #{item.name}, #{item.newParentId}, #{item.state}, #{item.createId}, #{item.createTime}, #{item.createId}, #{item.createTime})
+		</foreach>  
+	</insert>
+	
+	<insert id="insertFileListByList" parameterType="java.util.Map">
+	     insert into note_content
+	     (id, title, icon_logo, `desc`, content, type, parent_id, state, create_id, create_time, last_update_id, last_update_time)
+	     values
+		<foreach collection="list" item="item" index="index" separator="," >  
+			(#{item.newId}, #{item.fileName}, #{item.iconLogo}, #{item.desc}, #{item.content}, #{item.type},  
+			#{item.newParentId}, #{item.state}, #{item.createId}, #{item.createTime}, #{item.createId}, #{item.createTime})
+		</foreach>  
+	</insert>
+	
+	<select id="queryShareNoteById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.type,
+            a.content,
+            CONVERT(a.create_time, char) createTime,
+            b.user_name createName
+        FROM
+            note_content a
+        	LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        WHERE a.id = #{fileId}
+        AND a.state = '1'
+    </select>
+    
+    <select id="queryAllFolderListByFolderId" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` fileName,
+			'' content,
+			'folder' fileType,
+			a.parent_id parentId
+		FROM
+			note_folder a
+		WHERE a.state = '1'
+		AND (INSTR(CONCAT(',', a.parent_id, ','), CONCAT(',', #{folderId}, ',')) OR a.id = #{folderId})
+		ORDER BY LENGTH(a.parent_id) ASC
+	</select>
+	
+	<select id="queryAllFileListByFolderList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title fileName,
+			a.content,
+			a.type fileType,
+			a.parent_id parentId
+		FROM
+			note_content a
+		WHERE a.state = '1'
+		AND (
+		<foreach collection="list" item="item" index="index" >  
+			a.parent_id = CONCAT(#{item.parentId}, #{item.id}, ',') OR
+		</foreach>
+		 1=0)
+		ORDER BY LENGTH(a.parent_id) ASC
+	</select>
+	
+	<update id="editNoteToMoveById">
+		UPDATE note_content
+		<set>
+			parent_id = #{parentId},
+			last_update_id = #{userId},
+			last_update_time = NOW(),
+		</set>
+		WHERE id = #{fileId}
+	</update>
+	
+</mapper>

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.UserPhoneDao">
+
+	<select id="queryMationByUserCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNum,
+			a.`password`,
+			a.user_lock userLock,
+			c.user_name userName,
+			c.user_photo userPhoto,
+			c.user_sign userSign,
+			d.department_name departmentName,
+			e.job_name jobName
+		FROM
+			sys_eve_user a
+			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.id = c.user_id
+			LEFT JOIN company_department d ON d.id = c.department_id
+			LEFT JOIN company_job e ON e.id = c.job_id
+		WHERE
+			a.user_code = #{userCode}
+	</select>
+	
+	<select id="queryAppMenuByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.logo,
+			a.url,
+			a.parentId,
+			a.menuLevel 
+		FROM (
+			SELECT
+				c.id,
+				c.title,
+				c.logo,
+				c.url,
+				c.parent_id parentId,
+				'1' menuLevel
+			FROM
+				sys_eve_user a,
+				app_workbench_page_role b,
+				app_workbench_page c,
+				app_workbench_page d
+			WHERE
+				INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+				AND c.parent_id = d.id AND d.state = 2 AND b.page_id = c.id 
+				AND c.type = 2 AND c.state = 2 AND a.id = #{id}
+				GROUP BY c.id
+				ORDER BY c.order_by ASC) a
+		UNION ALL
+		SELECT
+			b.id,
+			b.title,
+			b.logo,
+			b.url,
+			b.parentId,
+			b.menuLevel 
+		FROM (
+			SELECT
+				c.id,
+				c.title,
+				c.logo,
+				c.url,
+				c.parent_id parentId,
+				'0' menuLevel
+			FROM
+				sys_eve_user a,
+				app_workbench_page_role b,
+				app_workbench_page c
+			WHERE
+				INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+				AND b.page_id = c.id AND c.type = 1 AND c.state = 2
+				AND a.id = #{id}
+				GROUP BY c.id
+				ORDER BY c.order_by ASC) b
+	</select>
+	
+	<select id="queryAppAuthPointsByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			c.url menuUrl,
+			c.auth_num menuNum
+		FROM
+			sys_eve_user a,
+			app_workbench_page_auth_role b,
+			app_workbench_page_auth c,
+			app_workbench_page d,
+			app_workbench_page e
+		WHERE 
+		    INSTR(CONCAT(',', a.role_id, ','), CONCAT(',', b.role_id, ','))
+			AND b.auth_id = c.id AND d.parent_id = e.id AND e.state = 2
+			AND c.page_id = d.id AND d.type = 2 AND d.state = 2
+			AND a.id = #{id}
+			GROUP BY c.auth_num
+	</select>
+	
+	<select id="queryUserMationByOpenId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.open_id openId,
+			a.user_id userId,
+			a.join_time joinTime
+		FROM
+			wx_user_mation a
+		WHERE
+			a.open_id = #{openId}
+		LIMIT 1
+	</select>
+	
+	<insert id="insertWxUserMation" parameterType="java.util.Map">
+	     INSERT into wx_user_mation 
+	     (id, open_id, join_time)
+	     VALUES
+	     (#{id}, #{openId}, #{joinTime})
+	</insert>
+	
+	<select id="queryUserMationByUserCode" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNum,
+			a.`password`,
+			a.user_lock userLock,
+			b.win_bg_pic_url winBgPicUrl,
+			b.win_lock_bg_pic_url winLockBgPicUrl,
+			b.win_theme_color winThemeColor,
+			b.win_start_menu_size winStartMenuSize,
+			b.win_task_position winTaskPosition,
+			b.win_bg_pic_vague winBgPicVague,
+			b.win_bg_pic_vague_value winBgPicVagueValue,
+			b.win_bottom_menu_icon loadBottomMenuIcon,
+			c.user_name userName,
+			c.user_photo userPhoto,
+			p.company_name companyName,
+			q.department_name departmentName
+		FROM
+			sys_eve_user a
+			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.id = c.user_id
+			LEFT JOIN company_mation p ON c.company_id = p.id
+			LEFT JOIN company_department q ON c.department_id = q.id
+		WHERE
+			a.user_code = #{userCode}
+	</select>
+	
+	<select id="queryUserBindMationByUserId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			wx_user_mation a
+		WHERE
+			a.user_id = #{userId}
+		LIMIT 1
+	</select>
+	
+	<update id="updateBindUserMation" parameterType="java.util.Map">
+		UPDATE wx_user_mation
+		<set>
+			<if test="userId != '' and userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="bindTime != '' and bindTime != null">
+				binding_time = #{bindTime},
+			</if>
+		</set>
+		WHERE open_id = #{openId}
+	</update>
+	
+	<select id="queryUserMationByOPenId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_code userCode,
+			a.pwd_num_enc pwdNum,
+			a.`password`,
+			a.user_lock userLock,
+			b.win_bg_pic_url winBgPicUrl,
+			b.win_lock_bg_pic_url winLockBgPicUrl,
+			b.win_theme_color winThemeColor,
+			b.win_start_menu_size winStartMenuSize,
+			b.win_task_position winTaskPosition,
+			b.win_bg_pic_vague winBgPicVague,
+			b.win_bg_pic_vague_value winBgPicVagueValue,
+			b.win_bottom_menu_icon loadBottomMenuIcon,
+			c.user_name userName,
+			c.user_photo userPhoto,
+			p.company_name companyName,
+			q.department_name departmentName
+		FROM
+			sys_eve_user a
+			LEFT JOIN sys_eve_user_install b ON a.id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON a.id = c.user_id
+			LEFT JOIN company_mation p ON c.company_id = p.id
+			LEFT JOIN company_department q ON c.department_id = q.id,
+			wx_user_mation e
+		WHERE
+			e.open_id = #{openId}
+		AND a.id = e.user_id
+	</select>
+	
+	<select id="queryAllPeopleToTree" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.company_name `name`,
+			a.p_id pId,
+			'isCompany' folderType,
+			1 isParent,
+			'../../assets/images/company-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_mation a
+		UNION ALL
+		SELECT
+			a.id,
+			a.department_name `name`,
+			a.company_id pId,
+			'isDepartment' folderType,
+			1 isParent,
+			'../../assets/images/department-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_department a
+		UNION ALL
+		SELECT
+			a.id,
+			a.job_name `name`,
+			a.department_id pId,
+			'isJob' folderType,
+			1 isParent,
+			'../../assets/images/job-icon.png' `icon`,
+			'' `email`
+		FROM
+			company_job a
+		UNION ALL
+		SELECT
+			a.user_id id,
+			CONCAT_WS('_', a.job_number, a.user_name) `name`,
+			a.job_id pId,
+			'isPeople' folderType,
+			0 isParent,
+			'../../assets/images/people-icon.png' `icon`,
+			a.email `email`
+		FROM
+			sys_eve_user_staff a
+		WHERE a.state = '1'
+		AND LENGTH(a.user_id) > 0 AND a.user_id != ""
+		<if test="userId != null and userId != ''">
+			AND a.user_id != #{userId}
+		</if>
+		<if test="hasEmail != null and hasEmail != ''">
+			AND LENGTH(a.email) > 0 AND a.email != ""
+		</if>
+	</select>
+
+</mapper>

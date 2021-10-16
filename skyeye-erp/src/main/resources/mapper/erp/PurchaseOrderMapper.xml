@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.PurchaseOrderDao">
+	<!-- 采购单管理 -->
+	
+    <select id="queryPurchaseOrderToList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.default_number defaultNumber,
+			CONVERT (a.oper_time, char) operTime,
+			a.oper_person_name operPersonName,
+			b.supplier supplierName,
+			FORMAT(a.total_price, 2) totalPrice,
+			a.status state,
+            a.submit_type submitType,
+            IFNULL(a.process_instance_id, '') processInstanceId
+		FROM
+			erp_depothead a
+			LEFT JOIN erp_supplier b ON a.organ_id = b.id
+		WHERE
+			a.sub_type = #{orderType}
+		AND a.delete_flag = '0'
+        <if test="defaultNumber != '' and defaultNumber != null">
+            AND a.default_number LIKE '%${defaultNumber}%'
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+			AND a.oper_time >= #{startTime} AND #{endTime} >= a.oper_time
+		</if>
+        GROUP BY a.id
+        ORDER BY a.create_time DESC
+    </select>
+    
+	<update id="editPurchaseOrderStateToExamineById" parameterType="java.util.Map">
+		UPDATE erp_depothead
+		<set>
+            `status` = #{status},
+			<if test="realComplateTime != '' and realComplateTime != null">
+				real_complate_time = #{realComplateTime},
+			</if>
+		</set>
+		WHERE id = #{id}
+		AND sub_type = #{orderType}
+	</update>
+	
+	<select id="queryPurchaseOrderToTurnPutById" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.default_number defaultNumber,
+			a.organ_id organId,
+			b.`name` customName,
+			c.supplier supplierName,
+			CONVERT (a.oper_time, char) operTime,
+			a.account_id accountId,
+			CONVERT(a.total_price, decimal(24, 2)) totalPrice,
+			a.pay_type payType,
+			a.remark,
+			CONVERT(a.change_amount, decimal(24, 2)) changeAmount,
+			a.link_number linkNumber,
+			CONVERT(a.discount, decimal(24, 2)) discount,
+			CONVERT(a.discount_money, decimal(24, 2)) discountMoney,
+			CONVERT(a.discount_last_money, decimal(24, 2)) discountLastMoney,
+			CONVERT(a.other_money, decimal(24, 2)) otherMoney,
+			CONVERT((IFNULL(a.discount_money, 0) + IFNULL(a.discount_last_money, 0)), decimal(24, 2)) taxLastMoneyPrice,
+			<!-- 优惠后金额 - 本次付款金额 -->
+			CONVERT((IFNULL(a.discount_last_money, 0) - IFNULL(a.change_amount, 0)), decimal(24, 2)) arrears,
+			a.other_money_list otherMoneyList,
+			a.salesman salesMan
+		FROM
+			erp_depothead a
+			LEFT JOIN crm_customer b ON a.organ_id = b.id
+			LEFT JOIN erp_supplier c ON a.organ_id = c.id
+		WHERE
+			a.id = #{orderId}
+		AND a.`status` = '2'
+		AND a.delete_flag = '0'
+		AND a.sub_type = #{orderType}
+	</select>
+	
+	<select id="queryPurchaseOrderNormsToTurnPutById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.depot_id depotId,
+			a.material_id materialId,
+			pro.`name` materialName, #商品名称
+			pro.model materialModel, #商品型号
+			pro.unit materialUnit, #商品单位，是多个还是单个,  1.单个  2.多个
+			pro.unit_name materialUnitName, #计量单位  当unit=1时，必填
+			a.norms_id mUnitId,
+			IFNULL((SELECT SUM(it.initial_tock) FROM erp_material_norms_tock it WHERE a.norms_id = it.norms_id), 0) + 
+				IFNULL((SELECT SUM(sn.stock_num) FROM erp_material_depot_stock sn WHERE a.norms_id = sn.norms_id), 0) currentTock,
+			a.oper_number - IFNULL((
+				SELECT
+					SUM(m.oper_number)
+				FROM
+					erp_depothead k,
+					erp_depotitem m
+				WHERE
+					k.id = m.header_id
+				AND k.link_number = #{defaultNumber}
+				AND k.id != a.id
+				AND m.norms_id = a.norms_id
+				AND k.delete_flag = '0'
+				AND k.status = '2' #审核通过的
+				GROUP BY
+					k.link_number
+			), 0) nowNumber, #当前剩余入库数量
+			CONVERT(a.unit_price, decimal(24, 2)) unitPrice, #单价
+			CONVERT(a.all_price, decimal(24, 2)) allPrice, #总金额
+			CONVERT(IFNULL(a.tax_unit_price, 0), decimal(24, 2)) taxUnitPrice, #含税单价
+			CONVERT(IFNULL(a.tax_rate, 0), decimal(24, 2)) taxRate, #税率
+			CONVERT(IFNULL(a.tax_money, 0), decimal(24, 2)) taxMoney, #税额
+			CONVERT(IFNULL(a.tax_last_money, a.all_price), decimal(24, 2)) taxLastMoney, #价税合计
+			a.remark
+		FROM
+			erp_depotitem a
+			LEFT JOIN erp_material pro ON a.material_id = pro.id
+			LEFT JOIN erp_depotitem b ON (b.depot_id = a.depot_id OR b.another_depot_id = a.depot_id) AND b.norms_id = a.norms_id AND b.header_id != a.header_id
+			LEFT JOIN erp_depothead c ON c.id = b.header_id
+		WHERE
+			a.header_id = #{id}
+		AND a.delete_flag = '0'
+		GROUP BY a.id
+	</select>
+	
+	<select id="queryMationToExcel" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.default_number defaultNumber,
+			CONVERT (a.oper_time, char) operTime,
+			a.oper_person_name operPersonName,
+			b.supplier supplierName,
+			FORMAT(a.total_price, 2) totalPrice,
+			CASE a.status WHEN 0 THEN '未审核' WHEN 1 THEN '审核中' WHEN 2 THEN '审核通过'
+							WHEN 3 THEN '拒绝通过' WHEN 4 THEN '已转采购' ELSE '参数错误' END status,
+			GROUP_CONCAT(DISTINCT CONCAT(c.material_name, c.material_model) SEPARATOR ',') materialNames
+		FROM
+			erp_depothead a
+			LEFT JOIN erp_supplier b ON a.organ_id = b.id
+			LEFT JOIN erp_depotitem c ON c.header_id = a.id
+		WHERE
+			a.sub_type = '10'
+		AND a.delete_flag = '0'
+        <if test="material != '' and material != null">
+            AND c.material_name LIKE '%${material}%'
+        </if>
+        <if test="defaultNumber != '' and defaultNumber != null">
+            AND a.default_number LIKE '%${defaultNumber}%'
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+			AND a.oper_time >= #{startTime} AND #{endTime} >= a.oper_time
+		</if>
+        GROUP BY a.id
+        ORDER BY a.create_time DESC
+    </select>
+    
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.WagesModelTypeDao">
+
+    <select id="queryWagesModelTypeList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name_cn nameCn,
+            a.name_en nameEn,
+            a.state,
+            bu.user_name createName,
+            DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+            cu.user_name lastUpdateName,
+            DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+        FROM
+            wages_model_type a
+            LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+            LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+        WHERE a.state != '3'
+        <if test="name != '' and name != null">
+            AND (a.name_cn LIKE '%${name}%' OR a.name_en LIKE '%${name}%')
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+    </select>
+
+    <select id="queryWagesModelTypeByNameAndNotId" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name_cn
+        FROM
+            wages_model_type a
+        WHERE a.state != '3'
+        AND a.name_cn = #{nameCn}
+        <if test="notId != '' and notId != null">
+            AND a.id != #{notId}
+        </if>
+    </select>
+
+    <insert id="insertWagesModelTypeMation" parameterType="java.util.Map">
+        INSERT into wages_model_type
+        (id, name_cn, name_en, state, create_id, create_time, last_update_id, last_update_time)
+        VALUES
+        (#{id}, #{nameCn}, #{nameEn}, #{state}, #{createId}, #{createTime}, #{createId}, #{createTime})
+    </insert>
+
+    <select id="queryWagesModelTypeMationToEditById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name_cn nameCn,
+            a.name_en nameEn
+        FROM
+            wages_model_type a
+        WHERE a.state != '3'
+        AND a.id = #{id}
+    </select>
+
+    <update id="editWagesModelTypeMationById">
+        UPDATE wages_model_type
+        <set>
+            name_cn = #{nameCn},
+            name_en = #{nameEn},
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editWagesModelTypeStateMationById">
+        UPDATE wages_model_type
+        <set>
+            state = #{state},
+        </set>
+        WHERE id = #{id}
+        AND state != '3'
+    </update>
+
+    <select id="queryEnableWagesModelTypeList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name_cn name,
+            a.name_en nameEn
+        FROM
+            wages_model_type a
+        WHERE a.state = '1'
+    </select>
+
+</mapper>

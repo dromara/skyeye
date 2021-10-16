@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveUserStaffCapitalDao">
+    <select id="queryStaffCapitalMation" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.money
+        FROM
+            sys_eve_user_staff_capital a
+        WHERE a.staff_id = #{staffId}
+        AND a.month_time = #{monthTime}
+    </select>
+
+    <insert id="insertStaffCapitalMation">
+        INSERT into sys_eve_user_staff_capital
+        (id, staff_id, company_id, department_id, month_time, money, type, state, create_time)
+        VALUES
+        (#{id}, #{staffId}, #{companyId}, #{departmentId}, #{monthTime}, #{money}, #{type}, #{state}, #{createTime})
+    </insert>
+
+    <update id="editStaffCapitalMoneyMation">
+        UPDATE sys_eve_user_staff_capital
+        <set>
+            money = #{money}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryStaffCapitalWaitPayMonthList" resultType="java.util.Map">
+        SELECT
+            b.company_name companyName,
+            c.department_name departmentName,
+            a.month_time monthTime,
+            FORMAT(SUM(a.money), 2) monthAllMony
+        FROM
+            sys_eve_user_staff_capital a,
+            company_mation b,
+            company_department c
+        WHERE a.company_id = b.id
+          AND a.department_id = c.id
+          AND a.type = 1
+        <if test="companyName != '' and companyName != null">
+            AND b.company_name LIKE '%${companyName}%'
+        </if>
+        <if test="departmentName != '' and departmentName != null">
+            AND c.department_name LIKE '%${departmentName}%'
+        </if>
+        <if test="monthTime != '' and monthTime != null">
+            AND a.month_time = #{monthTime}
+        </if>
+        GROUP BY a.month_time, a.department_id
+        ORDER BY a.month_time ASC
+    </select>
+
+</mapper>

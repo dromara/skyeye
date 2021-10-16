@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<controller>
+	<!-- 学校管理开始 -->
+	<url id="schoolmation001" path="/post/SchoolMationController/querySchoolMationList" val="获取学校信息列表" allUse="1">
+		<property id="schoolName" name="schoolName" ref="" var="学校名称"/>
+	</url>
+	<url id="schoolmation002" path="/post/SchoolMationController/insertSchoolMation" val="添加学校信息" allUse="1">
+		<property id="schoolName" name="schoolName" ref="required" var="学校名称"/>
+		<property id="schoolDesc" name="schoolDesc" ref="" var="学校简介"/>
+		<property id="pId" name="pId" ref="required" var="父学校"/>
+		<property id="longitude" name="longitude" ref="" var="经度"/>
+		<property id="latitude" name="latitude" ref="" var="纬度"/>
+		<property id="provinceId" name="provinceId" ref="required" var="行政区划省"/>
+		<property id="cityId" name="cityId" ref="" var="行政区划市"/>
+		<property id="areaId" name="areaId" ref="" var="行政区划县"/>
+		<property id="townshipId" name="townshipId" ref="" var="行政区划镇"/>
+		<property id="addressDetailed" name="addressDetailed" ref="required" var="行政区划具体地址"/>
+		<property id="power" name="power" ref="required,num" var="数据权限  1.查看所有  2.查看本校"/>
+	</url>
+	<url id="schoolmation003" path="/post/SchoolMationController/deleteSchoolMationById" val="删除学校信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="学校id"/>
+	</url>
+	<url id="schoolmation004" path="/post/SchoolMationController/querySchoolMationToEditById" val="编辑学校信息时进行回显" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="学校id"/>
+	</url>
+	<url id="schoolmation005" path="/post/SchoolMationController/editSchoolMationById" val="编辑学校信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="学校id"/>
+	    <property id="schoolName" name="schoolName" ref="required" var="学校名称"/>
+		<property id="schoolDesc" name="schoolDesc" ref="" var="学校简介"/>
+		<property id="pId" name="pId" ref="required" var="父学校"/>
+		<property id="longitude" name="longitude" ref="" var="经度"/>
+		<property id="latitude" name="latitude" ref="" var="纬度"/>
+		<property id="provinceId" name="provinceId" ref="required" var="行政区划省"/>
+		<property id="cityId" name="cityId" ref="" var="行政区划市"/>
+		<property id="areaId" name="areaId" ref="" var="行政区划县"/>
+		<property id="townshipId" name="townshipId" ref="" var="行政区划镇"/>
+		<property id="addressDetailed" name="addressDetailed" ref="required" var="行政区划具体地址"/>
+		<property id="power" name="power" ref="required,num" var="数据权限  1.查看所有  2.查看本校"/>
+	</url>
+	<url id="schoolmation006" path="/post/SchoolMationController/queryOverAllSchoolMationList" val="获取所有的一级学校信息列表" allUse="2">
+	</url>
+	<url id="schoolmation007" path="/post/SchoolMationController/querySchoolListToSelect" val="获取所有学校列表展示为下拉选择框-仅为普通员工转教师使用" allUse="2">
+	</url>
+	<url id="schoolmation008" path="/post/SchoolMationController/querySchoolPowerListToSelect" val="获取拥有的权限学校列表展示为下拉选择框" allUse="2">
+	</url>
+	<!-- 学校管理结束 -->
+	
+	<!-- 年级管理开始 -->
+	<url id="grademation001" path="/post/SchoolGradeMationController/querySchoolGradeMationList" val="获取年级信息列表" allUse="1">
+		<property id="gradeName" name="gradeName" ref="" var="年级名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校名称"/>
+	</url>
+	<url id="grademation002" path="/post/SchoolGradeMationController/insertSchoolGradeMation" val="添加年级信息" allUse="1">
+		<property id="schoolId" name="schoolId" ref="required" var="学校Id"/>
+		<property id="gradeName" name="gradeName" ref="required" var="年级名称"/>
+		<property id="yearN" name="yearN" ref="required" var="n年后达到这个级别"/>
+		<property id="type" name="type" ref="required" var="1是正常年级，2是补习班"/>
+		<property id="pId" name="pId" ref="required" var="正常年级：0，补习班：正常年级的id"/>
+	</url>
+	<url id="grademation003" path="/post/SchoolGradeMationController/deleteSchoolGradeMationById" val="删除年级信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="年级id"/>
+	</url>
+	<url id="grademation004" path="/post/SchoolGradeMationController/querySchoolGradeMationToEditById" val="编辑年级信息时进行回显" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="年级id"/>
+	</url>
+	<url id="grademation005" path="/post/SchoolGradeMationController/editSchoolGradeMationById" val="编辑年级信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="年级id"/>
+		<property id="gradeName" name="gradeName" ref="required" var="年级名称"/>
+		<property id="yearN" name="yearN" ref="required" var="n年后达到这个级别"/>
+	</url>
+	<url id="grademation006" path="/post/SchoolGradeMationController/queryAllGradeMationBySchoolId" val="查询学校中所有的正常年级" allUse="2">
+	    <property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+	</url>
+	<url id="grademation007" path="/post/SchoolGradeMationController/editGradeMationOrderNumToUp" val="年级上移" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="年级id"/>
+	</url>
+	<url id="grademation008" path="/post/SchoolGradeMationController/editGradeMationOrderNumToDown" val="年级下移" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="年级id"/>
+	</url>
+	<url id="grademation009" path="/post/SchoolGradeMationController/querySchoolGradeNowYearMationById" val="获取选中的年级是哪一届的以及这一届的班级信息" allUse="2">
+	    <property id="gradeId" name="gradeId" ref="required" var="年级id"/>
+	</url>
+	<!-- 年级管理结束 -->
+	
+	<!-- 年级科目操作开始 -->
+	<url id="schoolgradesubject001" path="/post/SchoolGradeSubjectController/querySchoolGradeSubjectList" val="获取年级技能列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="gradeName" name="gradeName" ref="" var="年级名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+	</url>
+	<url id="schoolgradesubject002" path="/post/SchoolGradeSubjectController/querySchoolGradeSubjectMationById" val="获取年级部分信息以及当前拥有的技能列表" allUse="2">
+		<property id="rowId" name="id" ref="required" var="年级id" />
+	</url>
+	<url id="schoolgradesubject003" path="/post/SchoolGradeSubjectController/editSchoolGradeSubjectMation" val="年级科目技能信息绑定" allUse="1">
+		<property id="rowId" name="id" ref="required" var="年级id" />
+		<property id="propertyIds" name="propertyIds" ref="" var="科目id，逗号隔开" />
+	</url>
+	<!-- 年级科目操作结束 -->
+	
+	<!-- 班级管理开始 -->
+	<url id="classmation001" path="/post/SchoolClassMationController/querySchoolClassMationList" val="获取班级信息列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="className" name="className" ref="" var="班级名称"/>
+		<property id="year" name="year" ref="" var="年份"/>
+	</url>
+	<url id="classmation002" path="/post/SchoolClassMationController/insertSchoolClassMation" val="添加班级信息" allUse="1">
+		<property id="schoolId" name="schoolId" ref="required" var="学校Id"/>
+		<property id="gradeId" name="gradeId" ref="required" var="年级Id"/>
+		<property id="className" name="className" ref="required" var="班级名称"/>
+		<property id="limitNumber" name="limitNumber" ref="required" var="班级限制人数"/>
+		<property id="masterStaffId" name="masterStaffId" ref="" var="班主任（员工id）"/>
+		<property id="floorId" name="floorId" ref="required" var="教学楼id"/>
+		<property id="year" name="year" ref="required" var="班级所属年份"/>
+	</url>
+	<url id="classmation003" path="/post/SchoolClassMationController/deleteSchoolClassMationById" val="删除班级信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="班级id"/>
+	</url>
+	<url id="classmation004" path="/post/SchoolClassMationController/querySchoolClassMationToEditById" val="编辑班级信息时进行回显" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="班级id"/>
+	</url>
+	<url id="classmation005" path="/post/SchoolClassMationController/editSchoolClassMationById" val="编辑班级信息" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="班级信息id"/>
+		<property id="className" name="className" ref="required" var="班级名称"/>
+		<property id="limitNumber" name="limitNumber" ref="required" var="班级限制人数"/>
+		<property id="masterStaffId" name="masterStaffId" ref="" var="班主任（员工id）"/>
+		<property id="floorId" name="floorId" ref="required" var="教学楼id"/>
+		<property id="year" name="year" ref="required" var="班级所属年份"/>
+	</url>
+	<!-- 班级管理结束 -->
+	
+	<!-- 教师操作开始 -->
+	<url id="schoolteacher001" path="/post/SchoolTeacherController/querySchoolTeacherList" val="查看所有教师列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="教师姓名"/>
+		<property id="userIdCard" name="userIdCard" ref="" var="身份证"/>
+		<property id="userSex" name="userSex" ref="" var="教师性别"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+	</url>
+	<url id="schoolteacher006" path="/post/SchoolTeacherController/querySchoolTeacherToTableList" val="获取教师列表供table表格选择" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="教师姓名"/>
+		<property id="userSex" name="userSex" ref="" var="教师性别"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+		<property id="whetherIncludeMe" name="whetherIncludeMe" ref="required,num" var="是否包含当前登录用户：1.是；2.否"/>
+		<property id="whetherHasCode" name="whetherHasCode" ref="required,num" var="是否必须是已分配帐号的教师：1.是；2.否"/>
+	</url>
+	<url id="schoolteacher007" path="/post/SchoolTeacherController/querySchoolTeacherListByStaffIds" val="根据staffId串获取教师列表详情" allUse="2">
+		<property id="staffIds" name="staffIds" ref="" var="教师id串" />
+	</url>
+	<!-- 教师操作结束 -->
+	
+	<!-- 教师技能操作开始 -->
+	<url id="schoolteachersubject001" path="/post/SchoolTeacherSubjectController/querySchoolTeacherSubjectList" val="获取教师技能列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="userName" name="userName" ref="" var="教师姓名"/>
+		<property id="userIdCard" name="userIdCard" ref="" var="身份证"/>
+		<property id="userSex" name="userSex" ref="" var="教师性别"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+	</url>
+	<url id="schoolteachersubject002" path="/post/SchoolTeacherSubjectController/querySchoolTeacherSubjectMationById" val="获取教师部分信息以及当前拥有的技能列表" allUse="2">
+		<property id="rowId" name="id" ref="required" var="员工id" />
+	</url>
+	<url id="schoolteachersubject003" path="/post/SchoolTeacherSubjectController/editSchoolTeacherSubjectMation" val="教师科目技能信息绑定" allUse="1">
+		<property id="rowId" name="id" ref="required" var="员工id" />
+		<property id="propertyIds" name="propertyIds" ref="" var="科目id，逗号隔开" />
+	</url>
+	<!-- 教师技能操作结束 -->
+	
+	<!-- 身心障碍开始 -->
+	<url id="schoolbodymind001" path="/post/SchoolBodyMindController/querySchoolBodyMindList" val="获取身心障碍列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+	</url>
+	<url id="schoolbodymind002" path="/post/SchoolBodyMindController/insertSchoolBodyMindMation" val="新增身心障碍" allUse="1">
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolbodymind003" path="/post/SchoolBodyMindController/querySchoolBodyMindToEditById" val="通过id获取一条身心障碍信息回显编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="身心障碍id" />
+	</url>
+	<url id="schoolbodymind004" path="/post/SchoolBodyMindController/editSchoolBodyMindById" val="编辑身心障碍信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="身心障碍id" />
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolbodymind005" path="/post/SchoolBodyMindController/deleteSchoolBodyMindById" val="删除身心障碍信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="身心障碍id" />
+	</url>
+	<url id="schoolbodymind006" path="/post/SchoolBodyMindController/querySchoolBodyMindListToShow" val="获取身心障碍信息列表展示为select/chockbox" allUse="2">
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+	</url>
+	<!-- 身心障碍结束 -->
+	
+	<!-- 科目开始 -->
+	<url id="schoolsubjectmation001" path="/post/SchoolSubjectMationController/querySchoolSubjectMationList" val="获取科目列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="subjectName" name="subjectName" ref="" var="名称"/>
+		<property id="subjectNo" name="subjectNo" ref="" var="编号"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+	</url>
+	<url id="schoolsubjectmation002" path="/post/SchoolSubjectMationController/insertSchoolSubjectMationMation" val="新增科目" allUse="1">
+		<property id="subjectName" name="subjectName" ref="required" var="名称"/>
+		<property id="subjectNo" name="subjectNo" ref="" var="编号"/>
+		<property id="desc" name="desc" ref="" var="简介"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolsubjectmation003" path="/post/SchoolSubjectMationController/querySchoolSubjectMationToEditById" val="通过id获取一条科目信息回显编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="科目id" />
+	</url>
+	<url id="schoolsubjectmation004" path="/post/SchoolSubjectMationController/editSchoolSubjectMationById" val="编辑科目信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="科目id" />
+		<property id="subjectName" name="subjectName" ref="required" var="名称"/>
+		<property id="subjectNo" name="subjectNo" ref="" var="编号"/>
+		<property id="desc" name="desc" ref="" var="简介"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolsubjectmation005" path="/post/SchoolSubjectMationController/deleteSchoolSubjectMationById" val="删除科目信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="科目id" />
+	</url>
+	<url id="schoolsubjectmation006" path="/post/SchoolSubjectMationController/querySchoolSubjectMationListToShow" val="获取科目信息列表展示为select/chockbox" allUse="2">
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+	</url>
+	<url id="schoolsubjectmation007" path="/post/SchoolSubjectMationController/querySchoolSubjectMationListToShowByGradeId" val="根据年级获取科目信息列表展示为select/chockbox" allUse="2">
+		<property id="gradeId" name="gradeId" ref="required" var="年级id"/>
+	</url>
+	<!-- 科目结束 -->
+	
+	<!-- 交通方式开始 -->
+	<url id="schooltransportation001" path="/post/SchoolTransportationController/querySchoolTransportationList" val="获取交通方式列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+	</url>
+	<url id="schooltransportation002" path="/post/SchoolTransportationController/insertSchoolTransportationMation" val="新增交通方式" allUse="1">
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schooltransportation003" path="/post/SchoolTransportationController/querySchoolTransportationToEditById" val="通过id获取一条交通方式信息回显编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="交通方式id" />
+	</url>
+	<url id="schooltransportation004" path="/post/SchoolTransportationController/editSchoolTransportationById" val="编辑交通方式信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="交通方式id" />
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schooltransportation005" path="/post/SchoolTransportationController/deleteSchoolTransportationById" val="删除交通方式信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="交通方式id" />
+	</url>
+	<url id="schooltransportation006" path="/post/SchoolTransportationController/querySchoolTransportationListToShow" val="获取交通方式信息列表展示为select/chockbox" allUse="2">
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+	</url>
+	<!-- 交通方式结束 -->
+	
+	<!-- 家庭情况开始 -->
+	<url id="schoolfamilysituation001" path="/post/SchoolFamilySituationController/querySchoolFamilySituationList" val="获取家庭情况列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+	</url>
+	<url id="schoolfamilysituation002" path="/post/SchoolFamilySituationController/insertSchoolFamilySituationMation" val="新增家庭情况" allUse="1">
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolfamilysituation003" path="/post/SchoolFamilySituationController/querySchoolFamilySituationToEditById" val="通过id获取一条家庭情况信息回显编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="家庭情况id" />
+	</url>
+	<url id="schoolfamilysituation004" path="/post/SchoolFamilySituationController/editSchoolFamilySituationById" val="编辑家庭情况信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="家庭情况id" />
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolfamilysituation005" path="/post/SchoolFamilySituationController/deleteSchoolFamilySituationById" val="删除家庭情况信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="家庭情况id" />
+	</url>
+	<url id="schoolfamilysituation006" path="/post/SchoolFamilySituationController/querySchoolFamilySituationListToShow" val="获取家庭情况信息列表展示为select/chockbox" allUse="2">
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+	</url>
+	<!-- 家庭情况结束 -->
+	
+	<!-- 教学楼信息开始 -->
+	<url id="schoolfloormation001" path="/post/SchoolFloorMationController/querySchoolFloorMationList" val="获取教学楼信息列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+	</url>
+	<url id="schoolfloormation002" path="/post/SchoolFloorMationController/insertSchoolFloorMationMation" val="新增教学楼信息" allUse="1">
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolfloormation003" path="/post/SchoolFloorMationController/querySchoolFloorMationToEditById" val="通过id获取一条教学楼信息信息回显编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="教学楼信息id" />
+	</url>
+	<url id="schoolfloormation004" path="/post/SchoolFloorMationController/editSchoolFloorMationById" val="编辑教学楼信息信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="教学楼信息id" />
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolfloormation005" path="/post/SchoolFloorMationController/deleteSchoolFloorMationById" val="删除教学楼信息信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="教学楼信息id" />
+	</url>
+	<url id="schoolfloormation006" path="/post/SchoolFloorMationController/querySchoolFloorMationToSelectList" val="获取教学楼信息列表展示为select" allUse="2">
+		<property id="schoolId" name="schoolId" ref="required" var="学校"/>
+	</url>
+	<!-- 教学楼信息结束 -->
+	
+	<!-- 学期信息开始 -->
+	<url id="schoolsemester001" path="/post/SchoolSemesterController/querySchoolSemesterList" val="获取学期信息列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校"/>
+	</url>
+	<url id="schoolsemester002" path="/post/SchoolSemesterController/insertSchoolSemesterMation" val="新增学期信息" allUse="1">
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolsemester003" path="/post/SchoolSemesterController/querySchoolSemesterToEditById" val="通过id获取一条学期信息信息回显编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="学期信息id" />
+	</url>
+	<url id="schoolsemester004" path="/post/SchoolSemesterController/editSchoolSemesterById" val="编辑学期信息信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="学期信息id" />
+		<property id="name" name="name" ref="required" var="名称"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校" />
+	</url>
+	<url id="schoolsemester005" path="/post/SchoolSemesterController/deleteSchoolSemesterById" val="删除学期信息信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="学期信息id" />
+	</url>
+	<url id="schoolsemester006" path="/post/SchoolSemesterController/querySchoolSemesterListToShow" val="获取学期信息列表展示为select" allUse="2">
+		<property id="schoolId" name="schoolId" ref="required" var="学校"/>
+	</url>
+	<!-- 学期信息结束 -->
+	
+	<!-- 知识点开始 -->
+	<url id="knowledgepoints001" path="/post/KnowledgePointsMationController/queryKnowledgePointsMationList" val="获取知识点列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="标题"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="typeState" name="typeState" ref="" var="类型"/>
+	</url>
+	<url id="knowledgepoints002" path="/post/KnowledgePointsMationController/insertKnowledgePointsMation" val="新增知识点" allUse="1">
+		<property id="title" name="title" ref="required" var="标题"/>
+		<property id="content" name="content" ref="required" var="内容"/>
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="required" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="required" var="科目id"/>
+		<property id="typeState" name="typeState" ref="required,num" var="类型"/>
+	</url>
+	<url id="knowledgepoints003" path="/post/KnowledgePointsMationController/deleteKnowledgePointsMationById" val="删除知识点" allUse="1">
+		<property id="rowId" name="id" ref="required" var="知识点id" />
+	</url>
+	<url id="knowledgepoints004" path="/post/KnowledgePointsMationController/queryKnowledgePointsMationToEditById" val="编辑知识点信息时进行回显" allUse="2">
+		<property id="rowId" name="id" ref="required" var="知识点id" />
+	</url>
+	<url id="knowledgepoints005" path="/post/KnowledgePointsMationController/editKnowledgePointsMationById" val="编辑学期信息信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="知识点id" />
+		<property id="title" name="title" ref="required" var="标题"/>
+		<property id="content" name="content" ref="required" var="内容"/>
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="required" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="required" var="科目id"/>
+		<property id="typeState" name="typeState" ref="required,num" var="类型"/>
+	</url>
+	<url id="knowledgepoints006" path="/post/KnowledgePointsMationController/queryKnowledgePointsMationById" val="知识点详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="知识点id" />
+	</url>
+	<url id="knowledgepoints007" path="/post/KnowledgePointsMationController/queryKnowledgePointsMationListToTable" val="获取知识点列表展示为表格供其他选择" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="标题"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+		<property id="typeState" name="typeState" ref="" var="类型"/>
+	</url>
+	<url id="knowledgepoints008" path="/post/KnowledgePointsMationController/queryKnowledgePointsMationListByIds" val="根据知识点id串获取知识点列表" allUse="2">
+		<property id="ids" name="ids" ref="" var="知识点id串"/>
+	</url>
+	<url id="knowledgepoints009" path="/post/KnowledgePointsMationController/queryKnowledgePointsMationBankList" val="获取知识点库列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="subjectId" name="subjectId" ref="" var="科目id"/>
+	</url>
+	<!-- 知识点结束 -->
+	
+	<!-- 学生管理开始 -->
+	<url id="studentmation001" path="/post/SchoolStudentMationController/querySchoolStudentMationList" val="获取在校学生信息列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="classId" name="classId" ref="" var="班级id"/>
+		<property id="studentName" name="studentName" ref="" var="学生姓名"/>
+	</url>
+	<url id="studentmation002" path="/post/SchoolStudentMationController/insertSchoolStudentMation" val="新增学生信息" allUse="1">
+		<property id="studentName" name="studentName" ref="required" var="学生姓名"/>
+		<property id="userPhoto" name="userPhoto" ref="" var="学生照"/>
+		<property id="nameUseBefore" name="nameUseBefore" ref="" var="曾用名"/>
+		<property id="studentNo" name="studentNo" ref="" var="学号"/>
+		<property id="userSex" name="userSex" ref="required,num" var="性别"/>
+		<property id="nation" name="nation" ref="required" var="民族"/>
+		<property id="idcardType" name="idcardType" ref="required,num" var="证件类型"/>
+		<property id="idCard" name="idCard" ref="required,idcard" var="身份证"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校"/>
+		<property id="gradeId" name="gradeId" ref="required" var="所属年级"/>
+		<property id="classId" name="classId" ref="" var="所属班级"/>
+		<property id="state" name="state" ref="required,num" var="状态"/>
+		<property id="residenceType" name="residenceType" ref="required,num" var="户口类型"/>
+		<property id="residenceNo" name="residenceNo" ref="required" var="户口所在地编码"/>
+		<property id="residencePoliceStation" name="residencePoliceStation" ref="required" var="户口所在地派出所"/>
+		<property id="joinTime" name="joinTime" ref="required" var="入校时间"/>
+		<property id="sessionYear" name="sessionYear" ref="required,num" var="哪一届"/>
+		<property id="homeAddress" name="homeAddress" ref="required" var="家庭住址"/>
+		<property id="homePostalCode" name="homePostalCode" ref="required,postcode" var="家庭邮编"/>
+		<property id="homeContact" name="homeContact" ref="required" var="家庭联系人"/>
+		<property id="homePhone" name="homePhone" ref="required" var="家庭电话"/>
+		<property id="speciality" name="speciality" ref="" var="学生特长"/>
+		<property id="guardian" name="guardian" ref="required" var="监护人姓名"/>
+		<property id="guardianIdcard" name="guardianIdcard" ref="required,idcard" var="监护人身份证号"/>
+		<property id="localContact" name="localContact" ref="required" var="本地联系人姓名"/>
+		<property id="contactRelationship" name="contactRelationship" ref="required" var="本地联系人关系"/>
+		<property id="contactPhone" name="contactPhone" ref="required,phone" var="本地联系人手机号"/>
+		<property id="homeMemberStr" name="homeMemberStr" ref="required" var="家庭成员json串"/>
+		<property id="stuType" name="stuType" ref="required,num" var="学生类别"/>
+		<property id="outsideSchool" name="outsideSchool" ref="required,num" var="学区外"/>
+		<property id="foreignStudents" name="foreignStudents" ref="required,num" var="外地学生"/>
+		<property id="onlyChild" name="onlyChild" ref="required,num" var="独生子女"/>
+		<property id="behindChildren" name="behindChildren" ref="required,num" var="留守儿童"/>
+		<property id="floatingPopulation" name="floatingPopulation" ref="required,num" var="流动人口"/>
+		<property id="singleParentFamily" name="singleParentFamily" ref="required,num" var="单亲家庭"/>
+		<property id="entranceType" name="entranceType" ref="required,num" var="入学方式"/>
+		<property id="schoolChoiceStudents" name="schoolChoiceStudents" ref="required,num" var="择校生"/>
+		<property id="attendType" name="attendType" ref="required,num" var="就读方式"/>
+		<property id="healthCondition" name="healthCondition" ref="required,num" var="健康状态"/>
+		<property id="overseasChinese" name="overseasChinese" ref="required,num" var="港台华侨"/>
+		<property id="homeSituation" name="homeSituation" ref="" var="家庭情况，id串，逗号隔开"/>
+		<property id="bodyMind" name="bodyMind" ref="" var="身心障碍，id串，逗号隔开"/>
+		<property id="bloodType" name="bloodType" ref="required,num" var="血型"/>
+		<property id="preschoolEducation" name="preschoolEducation" ref="required,num" var="学前教育"/>
+		<property id="preschoolSchool" name="preschoolSchool" ref="" var="学前教育学校"/>
+		<property id="orphan" name="orphan" ref="required,num" var="是否孤儿"/>
+		<property id="preferential" name="preferential" ref="required,num" var="烈士/优抚子女"/>
+		<property id="onePatch" name="onePatch" ref="required,num" var="享受一补"/>
+		<property id="modeOfTransportation" name="modeOfTransportation" ref="" var="交通方式"/>
+		<property id="schoolBus" name="schoolBus" ref="required,num" var="乘坐校车"/>
+		<property id="vaccination" name="vaccination" ref="required,num" var="疫苗接种情况"/>
+	</url>
+	<url id="studentmation003" path="/post/SchoolStudentMationController/queryNotDividedIntoClassesSchoolStudentMationList" val="获取未分班的在校学生信息列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="studentName" name="studentName" ref="" var="学生姓名"/>
+	</url>
+	<url id="studentmation004" path="/post/SchoolStudentMationController/querySchoolStudentMationToOperatorById" val="获取学生部分信息展示供其他操作时查看" allUse="2">
+		<property id="rowId" name="id" ref="required" var="学生id" />
+	</url>
+	<url id="studentmation005" path="/post/SchoolStudentMationController/editAssignmentClassByStuId" val="未分班学生分班" allUse="1">
+		<property id="rowId" name="id" ref="required" var="学生id" />
+		<property id="classId" name="classId" ref="required" var="所属班级"/>
+	</url>
+	<url id="studentmation006" path="/post/SchoolStudentMationController/querySchoolStudentMationToEditById" val="获取学生信息用来编辑" allUse="2">
+		<property id="rowId" name="id" ref="required" var="学生id" />
+	</url>
+	<url id="studentmation007" path="/post/SchoolStudentMationController/editSchoolStudentMationById" val="编辑学生信息" allUse="1">
+		<property id="rowId" name="id" ref="required" var="学生id" />
+		<property id="studentName" name="studentName" ref="required" var="学生姓名"/>
+		<property id="userPhoto" name="userPhoto" ref="" var="学生照"/>
+		<property id="nameUseBefore" name="nameUseBefore" ref="" var="曾用名"/>
+		<property id="studentNo" name="studentNo" ref="" var="学号"/>
+		<property id="userSex" name="userSex" ref="required,num" var="性别"/>
+		<property id="nation" name="nation" ref="required" var="民族"/>
+		<property id="idcardType" name="idcardType" ref="required,num" var="证件类型"/>
+		<property id="idCard" name="idCard" ref="required,idcard" var="身份证"/>
+		<property id="schoolId" name="schoolId" ref="required" var="所属学校"/>
+		<property id="gradeId" name="gradeId" ref="required" var="所属年级"/>
+		<property id="classId" name="classId" ref="" var="所属班级"/>
+		<property id="state" name="state" ref="required,num" var="状态"/>
+		<property id="residenceType" name="residenceType" ref="required,num" var="户口类型"/>
+		<property id="residenceNo" name="residenceNo" ref="required" var="户口所在地编码"/>
+		<property id="residencePoliceStation" name="residencePoliceStation" ref="required" var="户口所在地派出所"/>
+		<property id="joinTime" name="joinTime" ref="required" var="入校时间"/>
+		<property id="sessionYear" name="sessionYear" ref="required,num" var="哪一届"/>
+		<property id="homeAddress" name="homeAddress" ref="required" var="家庭住址"/>
+		<property id="homePostalCode" name="homePostalCode" ref="required,postcode" var="家庭邮编"/>
+		<property id="homeContact" name="homeContact" ref="required" var="家庭联系人"/>
+		<property id="homePhone" name="homePhone" ref="required" var="家庭电话"/>
+		<property id="speciality" name="speciality" ref="" var="学生特长"/>
+		<property id="guardian" name="guardian" ref="required" var="监护人姓名"/>
+		<property id="guardianIdcard" name="guardianIdcard" ref="required,idcard" var="监护人身份证号"/>
+		<property id="localContact" name="localContact" ref="required" var="本地联系人姓名"/>
+		<property id="contactRelationship" name="contactRelationship" ref="required" var="本地联系人关系"/>
+		<property id="contactPhone" name="contactPhone" ref="required,phone" var="本地联系人手机号"/>
+		<property id="homeMemberStr" name="homeMemberStr" ref="required" var="家庭成员json串"/>
+		<property id="stuType" name="stuType" ref="required,num" var="学生类别"/>
+		<property id="outsideSchool" name="outsideSchool" ref="required,num" var="学区外"/>
+		<property id="foreignStudents" name="foreignStudents" ref="required,num" var="外地学生"/>
+		<property id="onlyChild" name="onlyChild" ref="required,num" var="独生子女"/>
+		<property id="behindChildren" name="behindChildren" ref="required,num" var="留守儿童"/>
+		<property id="floatingPopulation" name="floatingPopulation" ref="required,num" var="流动人口"/>
+		<property id="singleParentFamily" name="singleParentFamily" ref="required,num" var="单亲家庭"/>
+		<property id="entranceType" name="entranceType" ref="required,num" var="入学方式"/>
+		<property id="schoolChoiceStudents" name="schoolChoiceStudents" ref="required,num" var="择校生"/>
+		<property id="attendType" name="attendType" ref="required,num" var="就读方式"/>
+		<property id="healthCondition" name="healthCondition" ref="required,num" var="健康状态"/>
+		<property id="overseasChinese" name="overseasChinese" ref="required,num" var="港台华侨"/>
+		<property id="homeSituation" name="homeSituation" ref="" var="家庭情况，id串，逗号隔开"/>
+		<property id="bodyMind" name="bodyMind" ref="" var="身心障碍，id串，逗号隔开"/>
+		<property id="bloodType" name="bloodType" ref="required,num" var="血型"/>
+		<property id="preschoolEducation" name="preschoolEducation" ref="required,num" var="学前教育"/>
+		<property id="preschoolSchool" name="preschoolSchool" ref="" var="学前教育学校"/>
+		<property id="orphan" name="orphan" ref="required,num" var="是否孤儿"/>
+		<property id="preferential" name="preferential" ref="required,num" var="烈士/优抚子女"/>
+		<property id="onePatch" name="onePatch" ref="required,num" var="享受一补"/>
+		<property id="modeOfTransportation" name="modeOfTransportation" ref="" var="交通方式"/>
+		<property id="schoolBus" name="schoolBus" ref="required,num" var="乘坐校车"/>
+		<property id="vaccination" name="vaccination" ref="required,num" var="疫苗接种情况"/>
+	</url>
+	<url id="studentmation008" path="/post/SchoolStudentMationController/querySchoolStudentMationDetailById" val="获取学生信息详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="学生id" />
+	</url>
+	<url id="studentmation009" path="/post/SchoolStudentMationController/exportSchoolStudentMationModel" val="导出学生模板" allUse="1">
+	</url>
+	<!-- 学生管理结束 -->
+	
+	<!-- 我的工作管理开始 -->
+	<url id="myschooltask001" path="/post/MySchoolTaskController/queryMyNowLeadClassList" val="获取我当前带领的班级列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+	</url>
+	<url id="myschooltask002" path="/post/MySchoolTaskController/queryMyWaitMarkingList" val="获取我的待阅卷列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="year" name="year" ref="" var="年份"/>
+		<property id="surveyName" name="surveyName" ref="" var="试卷名称"/>
+		<property id="studentName" name="studentName" ref="" var="学生姓名"/>
+		<property id="studentNo" name="studentNo" ref="" var="学号"/>
+	</url>
+	<url id="myschooltask003" path="/post/MySchoolTaskController/queryMyEndMarkingList" val="获取我的已阅卷列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+		<property id="gradeId" name="gradeId" ref="" var="年级id"/>
+		<property id="year" name="year" ref="" var="年份"/>
+		<property id="surveyName" name="surveyName" ref="" var="试卷名称"/>
+		<property id="studentName" name="studentName" ref="" var="学生姓名"/>
+		<property id="studentNo" name="studentNo" ref="" var="学号"/>
+	</url>
+	<!-- 我的工作管理开始 -->
+	
+	<!-- 时间设置管理开始 -->
+	<url id="schooltimesetting001" path="/post/SchoolTimeSettingController/querySchoolTimeSettingMation" val="获取年级时间设置相关参数" allUse="2">
+		<property id="schoolId" name="schoolId" ref="" var="学校id"/>
+	</url>
+	<url id="schooltimesetting002" path="/post/SchoolTimeSettingController/editSchoolTimeSettingMation" val="修改年级时间设置" allUse="2">
+		<property id="schoolId" name="schoolId" ref="required" var="学校id"/>
+		<property id="arrayStr" name="arrayStr" ref="required" var="时间json串"/>
+	</url>
+	<!-- 时间设置管理结束 -->
+	
+</controller>

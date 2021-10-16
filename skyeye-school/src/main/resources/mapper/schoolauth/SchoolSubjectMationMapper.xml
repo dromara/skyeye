@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.school.dao.SchoolSubjectMationDao">
+
+	<select id="querySchoolSubjectMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.subject_name subjectName,
+			a.subject_no subjectNo,
+			a.`desc`,
+			b.school_name schoolName,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			school_subject_mation a,
+			school_mation b
+		WHERE a.school_id = b.id
+		<if test="subjectName != '' and subjectName != null">
+			AND a.subject_name LIKE '%${subjectName}%'
+		</if>
+		<if test="subjectNo != '' and subjectNo != null">
+			AND a.subject_no LIKE '%${subjectNo}%'
+		</if>
+		<choose>
+			<!-- 查询的不是所有的数据 -->
+    		<when test="schoolPowerId != 'all'.toString()">
+    			AND a.school_id = #{schoolPowerId}
+    		</when>
+    		<!-- 查询的是所有的数据 -->
+    		<when test="schoolPowerId == 'all'.toString()">
+    			<if test="schoolId != '' and schoolId != null">
+					AND a.school_id = #{schoolId}
+				</if>
+    		</when>
+		</choose>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySchoolSubjectMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			school_subject_mation a
+		WHERE a.subject_name = #{subjectName}
+		AND a.school_id = #{schoolId}
+	</select>
+	
+	<insert id="insertSchoolSubjectMationMation" parameterType="java.util.Map">
+	    INSERT into school_subject_mation 
+	    (id, subject_name, subject_no, `desc`, school_id, create_id, create_time)
+	    VALUES(#{id}, #{subjectName}, #{subjectNo}, #{desc}, #{schoolId}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="querySchoolSubjectMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.subject_name subjectName,
+			a.subject_no subjectNo,
+			a.`desc`,
+			a.school_id schoolId
+		FROM
+			school_subject_mation a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="querySchoolSubjectMationByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			school_subject_mation a
+		WHERE a.subject_name = #{subjectName}
+		AND a.id != #{id}
+		AND a.school_id = #{schoolId}
+	</select>
+	
+	<update id="editSchoolSubjectMationById" parameterType="java.util.Map">
+		UPDATE school_subject_mation
+		<set>
+			<if test="subjectName != '' and subjectName != null">
+				subject_name = #{subjectName},
+			</if>
+			subject_no = #{subjectNo},
+			`desc` = #{desc},
+			<if test="schoolId != '' and schoolId != null">
+				school_id = #{schoolId},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteSchoolSubjectMationById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			school_subject_mation
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="querySchoolSubjectMationListToShow" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.subject_name `name`,
+			a.subject_no subjectNo
+		FROM
+			school_subject_mation a
+		WHERE 1=1
+		<choose>
+			<!-- 查询的不是所有的数据 -->
+    		<when test="schoolPowerId != 'all'.toString()">
+    			AND a.school_id = #{schoolPowerId}
+    		</when>
+    		<!-- 查询的是所有的数据 -->
+    		<when test="schoolPowerId == 'all'.toString()">
+    			<if test="schoolId != '' and schoolId != null">
+					AND a.school_id = #{schoolId}
+				</if>
+    		</when>
+		</choose>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySchoolSubjectMationListToShowByGradeId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.subject_name `name`
+		FROM
+			school_subject_mation a,
+			school_grade_subject b
+		WHERE b.grade_id = #{gradeId}
+		AND a.id = b.subject_id
+		ORDER BY a.create_time DESC
+	</select>
+	
+</mapper>

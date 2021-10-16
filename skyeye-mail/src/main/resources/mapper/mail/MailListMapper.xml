@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.MailListDao">
+
+	<select id="queryComMailMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_name userName,
+			a.phone,
+			a.home_phone telePhone,
+			a.email,
+			b.department_name unitName,
+			'同事' typeName
+		FROM
+			sys_eve_user_staff a
+			LEFT JOIN company_department b ON a.department_id = b.id,
+			sys_eve_user_staff c
+		WHERE
+			a.state = '1'
+		AND a.company_id = c.company_id
+		AND c.user_id = #{userId}
+		<if test="searchCondition != '' and searchCondition != null">
+			AND (a.user_name LIKE '%${searchCondition}%' OR a.phone LIKE '%${searchCondition}%' OR a.home_phone LIKE '%${searchCondition}%')
+		</if>
+	</select>
+	
+	<select id="queryCommonMailMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` userName,
+			a.personal_phone phone,
+			a.work_phone telePhone,
+			a.email,
+			a.company unitName,
+			'公共通讯录' typeName,
+			a.create_id createId,
+			#{userId} userId,
+			a.readonly
+		FROM
+			sys_mail_list a
+		WHERE a.category = '2'
+		<if test="searchCondition != '' and searchCondition != null">
+			AND (a.`name` LIKE '%${searchCondition}%' OR a.personal_phone LIKE '%${searchCondition}%' OR a.work_phone LIKE '%${searchCondition}%')
+		</if>
+	</select>
+	
+	<select id="queryPersonalMailMationList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name` userName,
+			a.personal_phone phone,
+			a.work_phone telePhone,
+			a.email,
+			a.company unitName,
+			b.`name` typeName
+		FROM
+			sys_mail_list a
+			LEFT JOIN sys_mail_type b ON a.type_id = b.id
+		WHERE a.category = '1'
+		AND a.create_id = #{userId}
+		<if test="searchCondition != '' and searchCondition != null">
+			AND (a.`name` LIKE '%${searchCondition}%' OR a.personal_phone LIKE '%${searchCondition}%' OR a.work_phone LIKE '%${searchCondition}%')
+		</if>
+	</select>
+	
+	<insert id="insertMailMation" parameterType="java.util.Map">
+	     INSERT into sys_mail_list 
+	     (id, category, readonly, type_id, `name`, name_call, company, department, personal_phone, work_phone, fax, email, other_phone, 
+	     	other_email, work_address, work_code, person_address, person_code, company_url, person_url, birthday, remarks, create_id, create_time)
+	     VALUES
+	     (#{id}, #{category}, #{readonly}, #{typeId}, #{name}, #{nameCall}, #{company}, #{department}, #{personalPhone}, #{workPhone}, #{fax}, #{email}, #{otherPhone},
+	     	#{otherEmail}, #{workAddress}, #{workCode}, #{personAddress}, #{personCode}, #{companyUrl}, #{personUrl}, #{birthday}, #{remarks}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryMailMationTypeList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`,
+			a.`desc`,
+			COUNT(b.id) perpleNum
+		FROM
+			sys_mail_type a
+			LEFT JOIN sys_mail_list b ON a.id = b.type_id
+		WHERE
+			a.create_id = #{userId}
+		GROUP BY a.id
+	</select>
+	
+	<select id="queryMailMationTypeByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_mail_type a
+		WHERE
+			a.create_id = #{userId}
+		AND a.`name` = #{name}
+	</select>
+	
+	<insert id="insertMailMationType" parameterType="java.util.Map">
+	     INSERT into sys_mail_type 
+	     (id, `name`, `desc`, create_id, create_time)
+	     VALUES
+	     (#{id}, #{name}, #{desc}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryMailMationTypeByIdAndUserId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			*
+		FROM
+			(SELECT
+				a.id,
+				a.`name`,
+				a.`desc`,
+				COUNT(b.id) perpleNum
+			FROM
+				sys_mail_type a
+			LEFT JOIN sys_mail_list b ON a.id = b.type_id
+			WHERE
+				a.create_id = #{userId}
+			AND a.id = #{id}
+			GROUP BY a.id
+			) a
+		WHERE
+			a.perpleNum = 0
+	</select>
+	
+	<delete id="deleteMailMationTypeById" parameterType="java.util.Map">
+        DELETE
+        FROM
+            sys_mail_type
+        WHERE
+            id = #{id}
+        AND create_id = #{userId}
+    </delete>
+    
+    <select id="queryMailMationTypeToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.`name`,
+			a.`desc`
+		FROM
+			sys_mail_type a
+		WHERE
+			a.id = #{id}
+    </select>
+    
+    <update id="editMailMationTypeById" parameterType="java.util.Map">
+		UPDATE sys_mail_type
+		<set>
+			<if test="name != '' and name != null">
+				`name` = #{name},
+			</if>
+			`desc` = #{desc},
+		</set>
+		WHERE id = #{id}
+		AND create_id = #{userId}
+	</update>
+	
+	<select id="queryMailMationTypeListToSelect" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.`name`
+		FROM
+			sys_mail_type a
+		WHERE
+			a.create_id = #{userId}
+	</select>
+	
+	<delete id="deleteMailMationById" parameterType="java.util.Map">
+        DELETE
+        FROM
+            sys_mail_list
+        WHERE
+            id = #{id}
+        AND create_id = #{userId}
+    </delete>
+    
+    <select id="queryMailMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.category,
+			a.readonly,
+			a.type_id typeId,
+			a.`name`,
+			a.name_call nameCall,
+			a.company,
+			a.department,
+			a.personal_phone personalPhone,
+			a.work_phone workPhone,
+			a.fax,
+			a.email,
+			a.other_phone otherPhone,
+			a.other_email otherEmail,
+			a.work_address workAddress,
+			a.work_code workCode,
+			a.person_address personAddress,
+			a.person_code personCode,
+			a.company_url companyUrl,
+			a.person_url personUrl,
+			a.birthday,
+			a.remarks
+		FROM
+			sys_mail_list a
+		WHERE a.id = #{id}
+    </select>
+    
+    <update id="editMailMationById" parameterType="java.util.Map">
+		UPDATE sys_mail_list
+		<set>
+			<if test="name != '' and name != null">
+				`name` = #{name},
+			</if>
+			category = #{category},
+			readonly = #{readonly},
+			type_id = #{typeId},
+			name_call = #{nameCall},
+			company = #{company},
+			department = #{department},
+			personal_phone = #{personalPhone},
+			work_phone = #{workPhone},
+			fax = #{fax},
+			email = #{email},
+			other_phone = #{otherPhone},
+			other_email = #{otherEmail},
+			work_address = #{workAddress},
+			work_code = #{workCode},
+			person_address = #{personAddress},
+			person_code = #{personCode},
+			company_url = #{companyUrl},
+			person_url = #{personUrl},
+			birthday = #{birthday},
+			remarks = #{remarks}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryMailMationDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			a.category,
+			CASE a.category WHEN 1 THEN '个人通讯录' WHEN 2 THEN '公共通讯录' ELSE '错误参数' END categoryName,
+			CASE a.readonly WHEN 1 THEN '是' WHEN 2 THEN '否' ELSE '错误参数' END readonlyName,
+			b.`name` typeName,
+			a.`name`,
+			a.name_call nameCall,
+			a.company,
+			a.department,
+			a.personal_phone personalPhone,
+			a.work_phone workPhone,
+			a.fax,
+			a.email,
+			a.other_phone otherPhone,
+			a.other_email otherEmail,
+			a.work_address workAddress,
+			a.work_code workCode,
+			a.person_address personAddress,
+			a.person_code personCode,
+			a.company_url companyUrl,
+			a.person_url personUrl,
+			a.birthday,
+			a.remarks
+		FROM
+			sys_mail_list a
+			LEFT JOIN sys_mail_type b ON a.type_id = b.id
+		WHERE a.id = #{id}
+    </select>
+    
+    <select id="querySysMailMationDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.user_name `name`,
+			a.email,
+			a.phone,
+			a.home_phone homePhone,
+			b.company_name companyName,
+			c.department_name departmentName
+		FROM
+			sys_eve_user_staff a
+			LEFT JOIN company_mation b ON a.company_id = b.id
+			LEFT JOIN company_department c ON a.department_id = c.id
+		WHERE
+			a.id = #{id}
+    </select>
+	
+</mapper>

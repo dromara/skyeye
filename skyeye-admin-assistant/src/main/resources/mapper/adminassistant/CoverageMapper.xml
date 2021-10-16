@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.CoverageDao">
+
+	<select id="selectAllCoverageMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.coverage_name coverageName
+		FROM
+			vehicle_coverage a
+		WHERE
+		    a.state = 1
+			<if test="coverageName != '' and coverageName != null">
+				AND a.coverage_name LIKE '%${coverageName}%'
+			</if>
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<insert id="insertCoverageMation" parameterType="java.util.Map">
+	    INSERT into vehicle_coverage 
+	    (id, coverage_name, state, create_id, create_time)
+	    VALUES(#{id}, #{coverageName}, #{state}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="deleteCoverageById" parameterType="java.util.Map">
+		UPDATE vehicle_coverage
+		<set>
+			state = 2
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryCoverageMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.coverage_name coverageName
+		FROM
+			vehicle_coverage a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editCoverageMationById" parameterType="java.util.Map">
+		UPDATE vehicle_coverage
+		<set>
+			<if test="coverageName != '' and coverageName != null">
+				coverage_name = #{coverageName},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryAllCoverageToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.coverage_name `name`
+		FROM
+			vehicle_coverage a
+		WHERE
+		    a.state = 1
+		ORDER BY
+			a.create_time DESC
+	</select>
+
+</mapper>

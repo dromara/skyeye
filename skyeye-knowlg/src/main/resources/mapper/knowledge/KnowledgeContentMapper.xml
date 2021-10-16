@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.KnowledgeContentDao">
+	
+	<insert id="insertKnowledgeContentMation" parameterType="java.util.Map">
+	    INSERT into knowlg_content
+	    (id, title, `desc`, content, type_id, state, read_num, `label`, create_id, create_time)
+	    VALUES(#{id}, #{title}, #{desc}, #{content}, #{typeId}, #{state}, #{readNum}, #{label}, #{createId}, #{createTime})
+	</insert>
+	
+	<select id="queryKnowledgeContentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			c.`name` typeName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d') createTime,
+			a.state
+		FROM
+			knowlg_content a
+			LEFT JOIN knowlg_type c ON a.type_id = c.id
+		WHERE
+			a.create_id = #{userId}
+		<if test="title != '' and title != null">
+			AND a.title LIKE '%${title}%'
+		</if>
+		<if test="state != '' and state != null">
+			AND a.state = #{state}
+		</if>
+		<if test="typeId != '' and typeId != null">
+			AND a.type_id = #{typeId}
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="selectKnowledgeContentById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.type_id typeId,
+		    a.`label`,
+			c.`name` typeName,
+			a.content
+		FROM
+			knowlg_content a
+			LEFT JOIN knowlg_type c ON a.type_id = c.id
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editKnowledgeContentById" parameterType="java.util.Map">
+		UPDATE knowlg_content
+		<set>
+			title = #{title},
+			`desc` = #{desc},
+			content = #{content},
+			type_id = #{typeId},
+		    `label` = #{label},
+			create_time = #{createTime},
+			state = 1
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteKnowledgeContentById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			knowlg_content
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryKnowledgeContentMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.content,
+			CASE a.state WHEN '1' THEN '审核中' WHEN '2' THEN '审核通过' WHEN '3' THEN '审核不通过' END state,
+			CASE a.state WHEN '1' THEN 'state-new' WHEN '2' THEN 'state-up' WHEN '3' THEN 'state-down' END colorClass,
+		    a.`label`,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d') createTime,
+			a.read_num readNum,
+			c.`name` typeName
+		FROM
+			knowlg_content a
+			LEFT JOIN knowlg_type c ON a.type_id = c.id
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<select id="queryUnCheckedKnowledgeContentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.typeName,
+			a.createTime,
+			a.createUser
+		FROM
+			(SELECT
+				a.id,
+				a.title,
+				a.type_id,
+				c.`name` typeName,
+				a.create_time,
+				date_format(a.create_time,'%Y-%m-%d %k:%i') createTime,
+				b.user_name createUser
+			FROM
+				sys_eve_user_staff b,
+				knowlg_content a
+				LEFT JOIN knowlg_type c ON a.type_id = c.id
+			WHERE
+				a.state = '1'
+			AND a.create_id = b.user_id) a
+		WHERE 1 = 1
+		<if test="title != '' and title != null">
+			AND a.title LIKE '%${title}%'
+		</if>
+		<if test="typeId != '' and typeId != null">
+			AND a.type_id = #{typeId}
+		</if>
+		<if test="createUser != '' and createUser != null">
+			AND a.createUser like '%${createUser}%'
+		</if>
+		<if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+			AND a.create_time >= #{startTime} AND #{endTime} >= a.create_time
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryKnowledgeContentByIdToCheck" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+		    a.`label`,
+			c.`name` typeName,
+			a.content
+		FROM
+			knowlg_content a
+			LEFT JOIN knowlg_type c ON a.type_id = c.id
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editKnowledgeContentToCheck" parameterType="java.util.Map">
+		UPDATE knowlg_content
+		<set>
+			examine_id = #{examineId},
+			examine_time = #{examineTime},
+			state = #{examineState},
+			examine_nopass_reason = #{examineNopassReason}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryCheckedKnowledgeContentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.*
+		FROM
+			(SELECT
+				a.id,
+				a.title,
+				c.`name` typeName,
+				a.type_id,
+				e.user_name createUser,
+				date_format(a.create_time,'%Y-%m-%d %k:%i') createTime,
+				b.user_name examineUser,
+				a.create_time,
+				a.examine_time,
+				date_format(a.examine_time,'%Y-%m-%d %k:%i') examineTime,
+				a.state
+			FROM
+				knowlg_content a
+				LEFT JOIN knowlg_type c ON a.type_id = c.id
+				LEFT JOIN sys_eve_user_staff e ON e.user_id = a.create_id
+				LEFT JOIN sys_eve_user_staff b ON b.user_id = a.examine_id
+			WHERE
+				a.state != '1') a
+		WHERE 1 = 1
+		<if test="title != '' and title != null">
+			AND a.title LIKE '%${title}%'
+		</if>
+		<if test="state != '' and state != null">
+			AND a.state = #{state}
+		</if>
+		<if test="typeId != '' and typeId != null">
+			AND a.type_id = #{typeId}
+		</if>
+		<if test="createUser != '' and createUser != null">
+			AND a.createUser like '%${createUser}%'
+		</if>
+		<if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+			AND a.create_time >= #{startTime} AND #{endTime} >= a.create_time
+		</if>     
+		<if test="examineStartTime != '' and examineStartTime != null and examineEndTime != '' and examineEndTime != null">
+			AND a.examine_time >= #{examineStartTime} AND #{examineEndTime} >= a.examine_time
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="queryUncheckedKnowledgeContent" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			CASE a.state WHEN '1' THEN '审核中' WHEN '2' THEN '审核通过' WHEN '3' THEN '审核不通过' END state,
+			CASE a.state WHEN '1' THEN 'state-new' WHEN '2' THEN 'state-up' WHEN '3' THEN 'state-down' END colorClass,
+			c.`name` typeName,
+			a.`label`,
+			a.content,
+			b.user_name createName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %k:%i') createTime
+		FROM
+			sys_eve_user_staff b,
+			knowlg_content a
+			LEFT JOIN knowlg_type c ON a.type_id = c.id
+		WHERE
+			a.id = #{id}
+		AND b.user_id = a.create_id
+	</select>
+	
+	<select id="queryCheckedKnowledgeContent" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			CASE a.state WHEN '1' THEN '审核中' WHEN '2' THEN '审核通过' WHEN '3' THEN '审核不通过' END state,
+			CASE a.state WHEN '1' THEN 'state-new' WHEN '2' THEN 'state-up' WHEN '3' THEN 'state-down' END colorClass,
+			c.`name` typeName,
+			a.content,
+			a.`label`,
+			a.examine_nopass_reason examineNopassReason,
+			e.user_name examineName,
+			DATE_FORMAT(a.examine_time,'%Y-%m-%d %k:%i') examineTime,
+			a.read_num readNum,
+			b.user_name createName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d %k:%i') createTime
+		FROM
+			knowlg_content a
+			LEFT JOIN knowlg_type c ON a.type_id = c.id
+			LEFT JOIN sys_eve_user_staff e ON e.user_id = a.create_id
+			LEFT JOIN sys_eve_user_staff b ON b.user_id = a.examine_id
+		WHERE
+			a.id = #{id}
+	</select>
+
+	<select id="queryAllPassKnowledgeContentList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			c.`name` typeName,
+		    a.`label`,
+			b.user_name createName,
+			DATE_FORMAT(a.create_time,'%Y-%m-%d') createTime
+		FROM
+			knowlg_content a
+			LEFT JOIN sys_eve_user_staff b ON b.user_id = a.create_id
+			LEFT JOIN knowlg_type c ON a.type_id = c.id
+		WHERE a.state = '2'
+		<if test="title != '' and title != null">
+			AND a.title LIKE '%${title}%'
+		</if>
+		<if test="label != '' and label != null">
+			AND a.`label` LIKE '%${label}%'
+		</if>
+		<if test="typeId != '' and typeId != null">
+			AND a.type_id = #{typeId}
+		</if>
+		ORDER BY a.create_time DESC
+	</select>
+	
+</mapper>

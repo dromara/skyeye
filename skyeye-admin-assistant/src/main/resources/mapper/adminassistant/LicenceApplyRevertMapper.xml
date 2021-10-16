@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.LicenceApplyRevertDao">
+
+    <!-- 用于展示当前用户的证照归还申请列表 -->
+    <select id="selectMyLicenceRevertList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNum,
+            a.process_instance_id processInstanceId,
+            a.state,
+            CONVERT(a.create_time, char) createTime
+        FROM
+            licence_manage_revert a
+        WHERE a.create_id = #{userId}
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+            AND a.create_time >= #{startTime} AND #{endTime} >= a.create_time
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <!-- 根据流程id获取归还id及审批状态 -->
+    <select id="queryLicenceRevertByProcessInstanceId" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.state,
+            a.create_id createId
+        FROM
+            licence_manage_revert a
+        WHERE a.process_instance_id = #{processInstanceId}
+    </select>
+
+    <!-- 根据归还id获取归还数据 -->
+    <select id="queryLicenceRevertMationById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.odd_number oddNumber,
+            a.remark,
+            a.state,
+            b.user_name userName,
+            IFNULL(a.enclosure_info, '') enclosureInfo,
+            IFNULL(a.process_instance_id, '') processInstanceId
+        FROM
+            licence_manage_revert a
+            LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <!-- 根据归还id获取关联表数据用于详情 -->
+    <select id="queryLicenceRevertChildListById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.licence_manage_id licenceId,
+            a.licence_manage_name licenceName,
+            a.remark,
+            a.state,
+            CASE a.state WHEN '0' THEN '未提交审批' WHEN '1' THEN '等待审批' WHEN '2' THEN '归还成功' WHEN '3' THEN '归还失败' WHEN '4' THEN '' END stateName
+        FROM
+            licence_manage_revert_goods a
+        WHERE a.revert_id = #{revertId}
+    </select>
+
+    <!--  根据归还id编辑归还表的数据 -->
+    <update id="updateLicenceRevertMation" parameterType="java.util.Map">
+        UPDATE licence_manage_revert
+        <set>
+            remark = #{remark},
+            enclosure_info = #{enclosureInfo}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据归还id删除关联表的数据 -->
+    <delete id="deleteLicenceRevertGoodsMationById" parameterType="java.util.Map">
+        DELETE
+        FROM
+            licence_manage_revert_goods
+        WHERE
+            revert_id = #{id}
+    </delete>
+
+    <!-- 根据归还id将归还审批状态更改为审批中 -->
+    <update id="updateLicenceRevertStateISInAudit">
+        UPDATE licence_manage_revert
+        <set>
+            state = '1',
+            process_instance_id = #{processInId}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editLicenceRevertStateAndProcessInIdIsNullById">
+        update licence_manage_revert
+        <set>
+            state = #{state},
+            process_instance_id = ''
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editLicenceRevertStateById">
+        update licence_manage_revert
+        <set>
+            state = #{state}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据关联表id更改关联表中证照的归还状态 -->
+    <update id="editLicenceRevertGoodsStateById">
+        update licence_manage_revert_goods
+        <set>
+            state = #{state}
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="editLicenceRevertGoodsStateByRevertId">
+        update licence_manage_revert_goods
+        <set>
+            state = #{state}
+        </set>
+        WHERE revert_id = #{revertId}
+    </update>
+
+    <insert id="insertLicenceRevertMation" parameterType="java.util.Map">
+        INSERT into licence_manage_revert
+        (id, title, odd_number, state, process_instance_id, remark, enclosure_info, create_id, create_time)
+        VALUES(#{id}, #{title}, #{oddNumber}, #{state}, #{processInstanceId}, #{remark}, #{enclosureInfo}, #{createId}, #{createTime})
+    </insert>
+
+    <insert id="insertLicenceRevertGoodsMation" parameterType="java.util.Map">
+        insert into licence_manage_revert_goods
+        (id, revert_id, licence_manage_id, licence_manage_name, remark, state)
+        values
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id}, #{item.revertId}, #{item.licenceId}, #{item.licenceName}, #{item.remark}, #{item.state})
+        </foreach>
+    </insert>
+
+</mapper>

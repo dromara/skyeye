@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.MyAgencyDao">
+	
+	<select id="queryMyAgencyList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			* 
+		FROM (
+			SELECT
+				a.id,
+				a.title,
+				CONVERT(a.start_time, char) startTime,
+				CONVERT(a.end_time, char) endTime,
+				a.type_name typeName,
+				b.cron,
+				CONVERT(a.remind_time, char) remindTime,
+				'1' `type`
+			FROM
+				schedule_day a,
+				sys_quartz b
+			WHERE a.create_id = #{userId}
+			AND a.id = b.`name`
+			<if test="myagencyName != '' and myagencyName != null">
+				AND a.title LIKE '%${myagencyName}%'
+			</if>
+			) k
+		WHERE 1=1
+		<if test="myagencyType != '' and myagencyType != null">
+			AND k.`type` = #{myagencyType}
+		</if>
+	</select>
+	
+	<update id="deleteMyAgencyList" parameterType="java.util.Map">
+		UPDATE schedule_day
+		<set>
+			state = '1',
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

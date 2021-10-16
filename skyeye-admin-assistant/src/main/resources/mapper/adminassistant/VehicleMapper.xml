@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.VehicleDao">
+
+	<select id="selectAllVehicleMation" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			c.company_name vehicleCompany,
+			a.vehicle_name vehicleName,
+			a.vehicle_img vehicleImg,
+			a.license_plate licensePlate,
+			a.state,
+			DATE_FORMAT(CONVERT (a.insurance_deadline, CHAR),'%Y-%m-%d') insuranceDeadline,
+            DATE_FORMAT(CONVERT (a.next_inspection_time, CHAR),'%Y-%m-%d') nextInspectionTime,
+            DATE_FORMAT(CONVERT (a.prev_maintain_time, CHAR),'%Y-%m-%d') prevMaintainTime
+		FROM
+			vehicle_mation a
+			LEFT JOIN sys_eve_user_staff b ON b.user_id = #{userId}
+			LEFT JOIN company_mation c ON c.id = a.vehicle_company
+		WHERE
+			a.state != 4
+			AND b.company_id = a.vehicle_company
+			<if test="vehicleName != '' and vehicleName != null">
+				AND a.vehicle_name LIKE '%${vehicleName}%'
+			</if>
+			<if test="licensePlate != '' and licensePlate != null">
+				AND a.license_plate LIKE '%${licensePlate}%'
+			</if>
+			<if test="state != '' and state != null">
+				AND a.state = #{state}
+			</if>
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<insert id="insertVehicleMation" parameterType="java.util.Map">
+	    INSERT into vehicle_mation 
+	    (id, vehicle_name,vehicle_company, vehicle_img, license_plate, specifications, oil_consumption, unit_price, vehicle_color, manufacturer, manufacture_time, supplier, purchase_time, engine_number, frame_number, storage_area, vehicle_admin, state, room_add_desc, enclosure_info, next_inspection_time, insurance_deadline, prev_maintain_time, create_id, create_time)
+	    VALUES(#{id}, #{vehicleName}, #{vehicleCompany}, #{vehicleImg}, #{licensePlate}, #{specifications}, #{oilConsumption}, #{unitPrice}, #{vehicleColor}, #{manufacturer}, #{manufactureTime}, #{supplier}, #{purchaseTime}, #{engineNumber}, #{frameNumber}, #{storageArea}, #{vehicleAdmin}, #{state}, #{roomAddDesc}, #{enclosureInfo}, #{nextInspectionTime}, #{insuranceDeadline}, #{prevMaintainTime}, #{createId}, #{createTime})
+	</insert>
+	
+	<update id="deleteVehicleById" parameterType="java.util.Map">
+		UPDATE vehicle_mation
+		<set>
+			state = 4
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryVehicleState" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.state
+		FROM
+			vehicle_mation a	
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="updateVehicleNormalById" parameterType="java.util.Map">
+		UPDATE vehicle_mation
+		<set>
+			state = 1
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateVehicleRepairById" parameterType="java.util.Map">
+		UPDATE vehicle_mation
+		<set>
+			state = 2
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateVehicleScrapById" parameterType="java.util.Map">
+		UPDATE vehicle_mation
+		<set>
+			state = 3
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateNextInspectionTime" parameterType="java.util.Map">
+		UPDATE vehicle_mation
+		<set>
+			next_inspection_time = #{nextInspectionTime}
+		</set>
+		WHERE id = #{vehicleId}
+	</update>
+	
+	<update id="updateInsuranceDeadlineTime" parameterType="java.util.Map">
+		UPDATE vehicle_mation
+		<set>
+			insurance_deadline = #{validityEndTime}
+		</set>
+		WHERE id = #{vehicleId}
+	</update>
+	
+	<update id="updatePrevMaintainTime" parameterType="java.util.Map">
+		UPDATE vehicle_mation
+		<set>
+			prev_maintain_time = #{endTime}
+		</set>
+		WHERE id = #{vehicleId}
+	</update>
+	
+		<select id="queryVehicleMationBylicensePlate" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			vehicle_mation a	
+		WHERE 
+			a.license_plate = #{licensePlate}
+			AND a.state != 4
+	</select>
+	
+	<select id="queryVehicleMationBylicensePlateAndId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			vehicle_mation a	
+		WHERE 
+			a.license_plate = #{licensePlate}
+			AND a.id != #{id}
+			AND a.state != 4
+	</select>
+	
+	<select id="selectVehicleDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			d.company_name vehicleCompany,
+			a.vehicle_name vehicleName,
+			a.vehicle_img vehicleImg,
+			a.license_plate licensePlate,
+			a.specifications specifications,
+			a.oil_consumption oilConsumption,
+			a.unit_price unitPrice,
+			a.vehicle_color vehicleColor,
+			a.manufacturer manufacturer,
+			DATE_FORMAT(CONVERT (a.manufacture_time, CHAR),'%Y-%m-%d') manufactureTime,
+			a.supplier supplier,
+			DATE_FORMAT(CONVERT (a.purchase_time, CHAR),'%Y-%m-%d') purchaseTime,
+			a.engine_number engineNumber,
+			a.frame_number frameNumber,
+			a.storage_area storageArea,
+			IFNULL(b.user_name, '') vehicleAdmin,
+			a.room_add_desc roomAddDesc,
+			IFNULL(a.enclosure_info, '')  enclosureInfo,
+			DATE_FORMAT(CONVERT (a.insurance_deadline, CHAR),'%Y-%m-%d') insuranceDeadline,
+            DATE_FORMAT(CONVERT (a.next_inspection_time, CHAR),'%Y-%m-%d') nextInspectionTime,
+            DATE_FORMAT(CONVERT (a.prev_maintain_time, CHAR),'%Y-%m-%d') prevMaintainTime,
+			CASE a.state WHEN '1' THEN 'state-up' ELSE 'state-down' END colorClass,
+			CASE a.state WHEN '1' THEN '正常' WHEN '2' THEN '维修' WHEN '3' THEN '报废' END state
+		FROM
+			vehicle_mation a
+		LEFT JOIN sys_eve_user_staff b ON a.vehicle_admin = b.user_id
+		LEFT JOIN sys_eve_user_staff c ON a.create_id = c.user_id
+		LEFT JOIN company_mation d ON d.id = a.vehicle_company
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="queryVehicleMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.vehicle_name vehicleName,
+			a.vehicle_img vehicleImg,
+			a.license_plate licensePlate,
+			a.specifications specifications,
+			a.oil_consumption oilConsumption,
+			a.unit_price unitPrice,
+			a.vehicle_color vehicleColor,
+			a.manufacturer manufacturer,
+			DATE_FORMAT(CONVERT (a.manufacture_time, CHAR),'%Y-%m-%d') manufactureTime,
+			a.supplier supplier,
+			DATE_FORMAT(CONVERT (a.purchase_time, CHAR),'%Y-%m-%d') purchaseTime,
+			a.engine_number engineNumber,
+			a.frame_number frameNumber,
+			a.storage_area storageArea,
+			IFNULL(a.vehicle_admin, '') vehicleAdmin,
+			a.room_add_desc roomAddDesc,
+			a.state state,
+			IFNULL(a.enclosure_info, '')  enclosureInfo,
+			DATE_FORMAT(CONVERT (a.insurance_deadline, CHAR),'%Y-%m-%d') insuranceDeadline,
+            DATE_FORMAT(CONVERT (a.next_inspection_time, CHAR),'%Y-%m-%d') nextInspectionTime,
+            DATE_FORMAT(CONVERT (a.prev_maintain_time, CHAR),'%Y-%m-%d') prevMaintainTime
+		FROM
+			vehicle_mation a
+		WHERE a.id = #{id}
+	</select>
+	
+	<update id="editVehicleMationById" parameterType="java.util.Map">
+		UPDATE vehicle_mation
+		<set>
+			<if test="vehicleName != '' and vehicleName != null">
+				vehicle_name = #{vehicleName},
+			</if>
+			<if test="vehicleImg != '' and vehicleImg != null">
+				vehicle_img = #{vehicleImg},
+			</if>
+			<if test="licensePlate != '' and licensePlate != null">
+				license_plate = #{licensePlate},
+			</if>
+			<if test="state != '' and state != null">
+				state = #{state},
+			</if>
+			specifications = #{specifications},
+			oil_consumption = #{oilConsumption},
+			unit_price = #{unitPrice},
+			vehicle_color = #{vehicleColor},
+			manufacturer = #{manufacturer},
+			manufacture_time = #{manufactureTime},
+			supplier = #{supplier},
+			purchase_time = #{purchaseTime},
+			engine_number = #{engineNumber},
+			frame_number = #{frameNumber},
+			storage_area = #{storageArea},
+			vehicle_admin = #{vehicleAdmin},
+			room_add_desc = #{roomAddDesc},
+			enclosure_info  = #{enclosureInfo},
+			insurance_deadline = #{insuranceDeadline},
+			next_inspection_time = #{nextInspectionTime},
+			prev_maintain_time = #{prevMaintainTime}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryAllVehicleToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.license_plate `name`
+		FROM
+			vehicle_mation a
+			LEFT JOIN sys_eve_user_staff b ON b.user_id = #{userId}
+		WHERE
+			a.state != 4
+			AND b.company_id = a.vehicle_company
+		ORDER BY
+			a.create_time DESC
+	</select>
+	
+	<select id="queryTheSuitableVehicleToChoose" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			CONCAT(a.vehicle_name,'——车牌：',a.license_plate,'——准载人数：',a.specifications) `name`
+		FROM
+			vehicle_mation a
+		WHERE
+			a.state = '1'
+		AND a.vehicle_company = #{vehicleCompany}
+		AND a.specifications >= #{passengerNum}
+		ORDER BY a.specifications ASC
+	</select>
+	
+	<select id="queryAvailableDrivers" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.user_name `name`
+		FROM
+			sys_eve_user_staff a
+		WHERE
+			a.state = '1'
+		AND a.company_id = #{companyId}
+		AND a.job_id = 'c7a29cf189894316a617401e45eecf63'
+	</select>
+	
+	<select id="queryTheSuitableDriver" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id driverId
+		FROM
+			sys_eve_user_staff a
+		WHERE
+			a.company_id = #{userCompany}
+		AND a.job_id = 'c7a29cf189894316a617401e45eecf63'
+		AND a.state = '1'
+		LIMIT 1
+	</select>
+	
+	<select id="queryMyVehicleHistoryList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.title oddTitle,
+			a.odd_number oddNumber,
+			a.passenger_num passengerNum,
+			a.passenger_info passengerInfo,
+			CASE a.is_self_drive WHEN '1' THEN '自驾' WHEN '2' THEN '安排司机' ELSE '参数错误' END isSelfDrive,
+			IF( IFNULL(c.user_name, '') = '', '无', c.user_name) driverName,
+			CONCAT(a.departure_time, ' ~ ', a.return_time) departureTime,
+			IF(a.time_and_place_of_travel = '', '暂未填写', a.time_and_place_of_travel) timeAndPlaceOfTravel,
+			a.reasons_for_using_car reasonsForUsingCar,
+		    b.vehicle_name vehicleName,
+		    b.vehicle_img vehicleImg,
+			CONVERT(a.create_time, char) oddCreateTime,
+		    b.license_plate licensePlate
+		FROM
+			vehicle_use a
+			LEFT JOIN sys_eve_user_staff c ON a.driver_id = c.id,
+			vehicle_mation b
+		WHERE a.create_id = #{userId}
+			AND a.state = '2'
+		  	AND a.vehicle_id = b.id
+			<if test="vehicleName != '' and vehicleName != null">
+				AND b.vehicle_name LIKE '%${vehicleName}%'
+			</if>
+			<if test="licensePlate != '' and licensePlate != null">
+				AND b.license_plate LIKE '%${licensePlate}%'
+			</if>
+		ORDER BY a.create_time DESC
+	</select>
+
+	<select id="queryVehicleMationByVehicleId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id vehicleId,
+			IFNULL(CONCAT(a.vehicle_name,'——车牌：',a.license_plate,'——准载人数：',a.specifications), '') designatedVehicleInfo,
+			IFNULL(a.vehicle_img, '') vehicleImg
+		FROM
+			vehicle_mation a
+		WHERE
+			a.id = #{designatedVehicleId}
+	</select>
+
+</mapper>

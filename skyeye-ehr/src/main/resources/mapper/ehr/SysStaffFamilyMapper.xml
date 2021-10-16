@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysStaffFamilyDao">
+
+    <select id="queryAllSysStaffFamilyList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name`,
+			a.card_number cardNumber,
+			a.sex,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.work_unit workUnit,
+			a.job,
+			a.emergency_contact emergencyContact,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			d.`name` relationshipName,
+			e.`name` cardTypeName,
+			f.`name` politicName
+		FROM
+			sys_staff_family a
+			LEFT JOIN sys_staff_data_dictionary d ON a.relationship_id = d.id
+			LEFT JOIN sys_staff_data_dictionary e ON a.card_type = e.id
+			LEFT JOIN sys_staff_data_dictionary f ON a.politic_id = f.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        <if test="userName != '' and userName != null">
+            AND b.user_name LIKE '%${userName}%'
+        </if>
+        <if test="jobNumber != '' and jobNumber != null">
+            AND b.job_number LIKE '%${jobNumber}%'
+        </if>
+        <if test="name != '' and name != null">
+            AND a.`name` LIKE '%${name}%'
+        </if>
+        <if test="workUnit != '' and workUnit != null">
+            AND a.work_unit LIKE '%${workUnit}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND b.state = #{state}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <insert id="insertSysStaffFamilyMation" parameterType="java.util.Map">
+        INSERT INTO sys_staff_family
+        (id, relationship_id, `name`, card_type, card_number, sex, work_unit, job, politic_id,
+        	emergency_contact, staff_id, create_time)
+        VALUES
+        (#{id}, #{relationshipId}, #{name}, #{cardType}, #{cardNumber}, #{sex}, #{workUnit}, #{job}, #{politicId},
+        	#{emergencyContact}, #{staffId}, #{createTime})
+    </insert>
+    
+    <select id="querySysStaffFamilyMationToEdit" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name`,
+			a.card_number cardNumber,
+			a.sex,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.work_unit workUnit,
+			a.job,
+			a.emergency_contact emergencyContact,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			a.relationship_id relationshipId,
+			d.`name` relationshipName,
+			a.card_type cardType,
+			e.`name` cardTypeName,
+			a.politic_id politicId,
+			f.`name` politicName
+		FROM
+			sys_staff_family a
+			LEFT JOIN sys_staff_data_dictionary d ON a.relationship_id = d.id
+			LEFT JOIN sys_staff_data_dictionary e ON a.card_type = e.id
+			LEFT JOIN sys_staff_data_dictionary f ON a.politic_id = f.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        AND a.id = #{id}
+    </select>
+    
+    <update id="editSysStaffFamilyMationById">
+        UPDATE sys_staff_family
+        <set>
+            relationship_id = #{relationshipId},
+            `name` = #{name},
+            card_type = #{cardType},
+            card_number = #{cardNumber},
+            sex = #{sex},
+            work_unit = #{workUnit},
+            job = #{job},
+            politic_id = #{politicId},
+            emergency_contact = #{emergencyContact},
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteSysStaffFamilyMationById">
+		DELETE
+		FROM
+			sys_staff_family
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="queryPointStaffSysStaffFamilyList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			a.`name`,
+			a.card_number cardNumber,
+			a.sex,
+			DATE_FORMAT(a.create_time, '%Y-%m-%d') createTime,
+			a.work_unit workUnit,
+			a.job,
+			a.emergency_contact emergencyContact,
+			b.user_name userName,
+			b.job_number jobNumber,
+			b.state,
+			d.`name` relationshipName,
+			e.`name` cardTypeName,
+			f.`name` politicName
+		FROM
+			sys_staff_family a
+			LEFT JOIN sys_staff_data_dictionary d ON a.relationship_id = d.id
+			LEFT JOIN sys_staff_data_dictionary e ON a.card_type = e.id
+			LEFT JOIN sys_staff_data_dictionary f ON a.politic_id = f.id,
+			sys_eve_user_staff b
+		WHERE a.staff_id = b.id
+        AND b.id = #{staffId}
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

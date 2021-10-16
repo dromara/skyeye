@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.AppWorkPageDao">
+
+	<select id="queryAppWorkPageList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title name,
+			CASE a.state WHEN '1' THEN 'new-state-point' WHEN '2' THEN 'up-state-point' WHEN '3' THEN 'down-state-point' END stateColor
+		FROM
+			app_workbench_page a
+		WHERE
+			a.type = 1
+			AND a.state != 4
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="queryAppWorkPageAfterOrderBum" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by orderBy
+		FROM
+			app_workbench_page a
+		WHERE 
+			a.type = 1
+		ORDER BY a.order_by DESC 
+		LIMIT 1
+	</select>
+	
+	<select id="queryAppWorkPageTAfterOrderBum" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.order_by orderBy
+		FROM
+			app_workbench_page a
+		WHERE 
+			a.type = 2
+			AND a.parent_id = #{parentId}
+		ORDER BY a.order_by DESC 
+		LIMIT 1
+	</select>
+	
+	<insert id="insertAppWorkPageMation" parameterType="java.util.Map">
+	    INSERT INTO app_workbench_page 
+	    (id, title, logo, url, url_type, state, order_by, type, parent_id, create_id, create_time,
+		 last_update_id, last_update_time)
+	    VALUES(#{id}, #{title}, #{logo}, #{url}, #{urlType}, #{state}, #{orderBy}, #{type}, #{parentId}, #{createId}, #{createTime},
+	     #{lastUpdateId}, #{lastUpdateTime})
+	</insert>
+	
+	<select id="queryAppWorkPageListById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+			a.state,
+			a.logo,
+			a.url,
+			a.parent_id parentId,
+			a.order_by orderBy,
+			b.user_name createId,
+			CONVERT(a.create_time, char) createTime
+		FROM
+			app_workbench_page a
+			LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+		WHERE
+			a.type = 2
+			AND a.parent_id = #{chooseId}
+			AND a.state != 4
+			<if test="title != '' and title != null">
+				AND a.title LIKE '%${title}%'
+			</if>
+		ORDER BY a.order_by ASC
+	</select>
+	
+	<select id="queryAppWorkPageMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title,
+		    a.url_type urlType,
+			a.state,
+			a.logo,
+			a.url,
+			a.parent_id parentId
+		FROM
+			app_workbench_page a
+		WHERE 
+			a.id = #{id}
+	</select>
+	
+	<update id="editAppWorkPageMationById" parameterType="java.util.Map">
+		UPDATE app_workbench_page
+		<set>
+			<if test="title != '' and title != null">
+				title = #{title},
+			</if>
+			<if test="parentId != '' and parentId != null">
+				parent_id = #{parentId},
+			</if>
+			<if test="orderBy != '' and orderBy != null">
+				order_by = #{orderBy},
+			</if>
+			logo = #{logo},
+			url = #{url},
+			url_type = #{urlType},
+			last_update_id = #{lastUpdateId},
+			last_update_time = #{lastUpdateTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryAppWorkPageStateById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.state
+		FROM
+			app_workbench_page a
+		WHERE id = #{id}
+	</select>
+	
+	<select id="queryAppWorkPageISTopByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.order_by orderBy,
+			a.order_by thisOrderBy
+		FROM
+			app_workbench_page a,
+			app_workbench_page b
+		WHERE
+			a.id = #{id}
+		AND a.order_by > b.order_by
+		AND a.state != 4 AND b.state != 4
+		AND a.type = 2 AND b.type = 2
+		AND a.parent_id = #{parentId} AND b.parent_id = #{parentId}
+		ORDER BY b.order_by DESC LIMIT 1
+	</select>
+	
+	<update id="editAppWorkPageSortById" parameterType="java.util.Map">
+		UPDATE app_workbench_page
+		<set>
+			order_by = #{orderBy},
+			last_update_id = #{lastUpdateId},
+			last_update_time = #{lastUpdateTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryAppWorkPageISLowerByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.order_by orderBy,
+			a.order_by thisOrderBy
+		FROM
+			app_workbench_page a,
+			app_workbench_page b
+		WHERE
+			a.id = #{id}
+		AND b.order_by > a.order_by
+		AND a.state != 4 AND b.state != 4
+		AND a.type = 2 AND b.type = 2
+		AND a.parent_id = #{parentId} AND b.parent_id = #{parentId}
+		ORDER BY b.order_by ASC LIMIT 1
+	</select>
+
+	<update id="editAppWorkPageStateById" parameterType="java.util.Map">
+		UPDATE app_workbench_page
+		<set>
+			state = #{state},
+			last_update_id = #{lastUpdateId},
+			last_update_time = #{lastUpdateTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="editAppWorkPageTitleById" parameterType="java.util.Map">
+		UPDATE app_workbench_page
+		<set>
+			title = #{title},
+			last_update_id = #{lastUpdateId},
+			last_update_time = #{lastUpdateTime},
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	<select id="queryAppWorkISTopByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.order_by orderBy,
+			a.order_by thisOrderBy
+		FROM
+			app_workbench_page a,
+			app_workbench_page b
+		WHERE
+			a.id = #{id}
+		AND a.order_by > b.order_by
+		AND a.state != 4 AND b.state != 4
+		AND a.type = 1 AND b.type = 1
+		ORDER BY b.order_by DESC LIMIT 1
+	</select>
+	
+	<select id="queryAppWorkISLowerByThisId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			b.id,
+			b.order_by orderBy,
+			a.order_by thisOrderBy
+		FROM
+			app_workbench_page a,
+			app_workbench_page b
+		WHERE
+			a.id = #{id}
+		AND b.order_by > a.order_by
+		AND a.state != 4 AND b.state != 4
+		AND a.type = 1 AND b.type = 1
+		ORDER BY b.order_by ASC LIMIT 1
+	</select>
+	
+	<select id="queryAppWorkPageExistById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			app_workbench_page a
+		WHERE 
+			a.id = #{str}
+	</select>
+	
+</mapper>

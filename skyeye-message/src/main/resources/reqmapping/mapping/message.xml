@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller>
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	 <url id="noticetype001" path="/post/SysNoticeTypeController/querySysNoticeTypeList" val="获取公告类型列表" allUse="1">
+		<property id="name" name="name" ref="" var="公告类型名称"/>
+		<property id="parentId" name="parentId" ref="" var="一级类型id"/>
+	</url>
+	<url id="noticetype002" path="/post/SysNoticeTypeController/insertSysNoticeTypeMation" val="新增公告类型" allUse="1">
+	    <property id="typeName" name="typeName" ref="required" var="公告类型名称"/>
+	    <property id="parentId" name="parentId" ref="" var="一级类型id"/>
+	</url>
+	<url id="noticetype003" path="/post/SysNoticeTypeController/deleteSysNoticeTypeById" val="删除公告类型" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公告类型名称id"/>
+	</url>
+	<url id="noticetype004" path="/post/SysNoticeTypeController/updateUpSysNoticeTypeById" val="上线公告类型" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公告类型名称id"/>
+	</url>
+	<url id="noticetype005" path="/post/SysNoticeTypeController/updateDownSysNoticeTypeById" val="下线公告类型" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公告类型名称id"/>
+	</url>
+	<url id="noticetype006" path="/post/SysNoticeTypeController/selectSysNoticeTypeById" val="获取选中的公告类型信息用以编辑" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="公告类型名称id"/>
+	</url>
+	<url id="noticetype007" path="/post/SysNoticeTypeController/editSysNoticeTypeMationById" val="编辑公告类型" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公告类型名称id"/>
+	    <property id="typeName" name="typeName" ref="required" var="公告类型名称"/>
+	</url>
+	<url id="noticetype008" path="/post/SysNoticeTypeController/editSysNoticeTypeMationOrderNumUpById" val="公告类型上移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="类型id" />
+	</url>
+	<url id="noticetype009" path="/post/SysNoticeTypeController/editSysNoticeTypeMationOrderNumDownById" val="公告类型下移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="类型id" />
+	</url>
+	<url id="noticetype011" path="/post/SysNoticeTypeController/queryFirstSysNoticeTypeUpStateList" val="获取已经上线的一级类型列表" allUse="2">
+	</url>
+	<url id="noticetype012" path="/post/SysNoticeTypeController/queryAllFirstSysNoticeTypeStateList" val="获取所有的一级类型列表" allUse="2">
+	</url>
+	<url id="noticetype013" path="/post/SysNoticeTypeController/querySecondSysNoticeTypeUpStateList" val="获取上线的一级类型对应的上线的二级类型列表" allUse="2">
+		<property id="parentId" name="parentId" ref="required" var="类型id" />
+	</url>
+	
+	<url id="notice001" path="/post/SysNoticeController/querySysNoticeList" val="获取公告列表" allUse="1">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="公告名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="时间段起始时间"/>
+		<property id="lastTime" name="lastTime" ref="" var="时间段结束时间"/>
+		<property id="state" name="state" ref="" var="上线状态" />
+		<property id="realLinesType" name="realLinesType" ref="" var="上线类型" />
+		<property id="whetherEmail" name="whetherEmail" ref="" var="是否邮件通知" />
+	</url>
+	<url id="notice002" path="/post/SysNoticeController/insertSysNoticeMation" val="新增公告" allUse="1">
+	    <property id="title" name="title" ref="required" var="公告标题"/>
+	    <property id="typeId" name="typeId" ref="required" var="一级公告类型"/>
+	    <property id="secondTypeId" name="secondTypeId" ref="required" var="二级公告类型"/>
+	    <property id="sendType" name="sendType" ref="required" var="群发类型"/>
+	    <property id="timeSend" name="timeSend" ref="required" var="是否定时发送"/>
+	    <property id="whetherEmail" name="whetherEmail" ref="required" var="是否邮件通知"/>
+	    <property id="content" name="content" ref="required" var="公告内容"/>
+	    <property id="userInfo" name="userInfo" ref="" var="选择性群发公告收件人信息"/>
+	    <property id="delayedTime" name="delayedTime" ref="" var="定时通知时间"/>
+	</url>
+	<url id="notice003" path="/post/SysNoticeController/deleteSysNoticeById" val="删除公告" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公告id"/>
+	</url>
+	<url id="notice004" path="/post/SysNoticeController/updateUpSysNoticeById" val="上线公告" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公告id"/>
+	</url>
+	<url id="notice005" path="/post/SysNoticeController/updateDownSysNoticeById" val="下线公告" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公告id"/>
+	</url>
+	<url id="notice006" path="/post/SysNoticeController/selectSysNoticeById" val="获取选中的公告信息用以编辑" allUse="2">
+	    <property id="rowId" name="id" ref="required" var="公告id"/>
+	</url>
+	<url id="notice007" path="/post/SysNoticeController/editSysNoticeMationById" val="编辑公告" allUse="1">
+	    <property id="rowId" name="id" ref="required" var="公告id"/>
+	    <property id="title" name="title" ref="required" var="公告标题"/>
+	    <property id="typeId" name="typeId" ref="required" var="一级公告类型"/>
+	    <property id="secondTypeId" name="secondTypeId" ref="required" var="二级公告类型"/>
+	    <property id="sendType" name="sendType" ref="required" var="群发类型"/>
+	    <property id="timeSend" name="timeSend" ref="required" var="是否定时发送"/>
+	    <property id="whetherEmail" name="whetherEmail" ref="required" var="是否邮件通知"/>
+	    <property id="content" name="content" ref="required" var="公告内容"/>
+	    <property id="userInfo" name="userInfo" ref="" var="选择性群发公告收件人信息"/>
+	    <property id="delayedTime" name="delayedTime" ref="" var="定时通知时间"/>
+	</url>
+	<url id="notice008" path="/post/SysNoticeController/editSysNoticeMationOrderNumUpById" val="公告上移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="公告id" />
+	</url>
+	<url id="notice009" path="/post/SysNoticeController/editSysNoticeMationOrderNumDownById" val="公告下移" allUse="1">
+		<property id="rowId" name="id" ref="required" var="公告id" />
+	</url>
+	<url id="notice011" path="/post/SysNoticeController/editSysNoticeTimeUpById" val="定时上线时间" allUse="1">
+		<property id="rowId" name="id" ref="required" var="公告id" />
+		<property id="title" name="title" ref="required" var="公告" />
+		<property id="delayedTime" name="delayedTime" ref="" var="定时通知时间"/>
+	</url>
+	<url id="notice012" path="/post/SysNoticeController/querySysNoticeDetailsById" val="公告详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="公告id" />
+	</url>
+	<url id="notice013" path="/post/SysNoticeController/queryUserReceivedSysNotice" val="公告列表" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeId" name="typeId" ref="" var="公告类型父级id" />
+		<property id="title" name="title" ref="" var="公告名称"/>
+		<property id="firstTime" name="firstTime" ref="" var="时间段起始时间"/>
+		<property id="lastTime" name="lastTime" ref="" var="时间段结束时间"/>
+	</url>
+	<url id="notice014" path="/post/SysNoticeController/queryReceivedSysNoticeDetailsById" val="接收到的公告详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="公告id" />
+	</url>
+	
+	<!-- 系统消息通知开始 -->
+	<url id="syseveusernotice001" path="/post/SysEveUserNoticeController/getAllNoticeListByUserId" val="根据用户id获取用户的消息" allUse="2">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="syseveusernotice002" path="/post/SysEveUserNoticeController/getNoticeListByUserId" val="根据用户id获取用户的消息只查询8条" allUse="2">
+	</url>
+	<url id="syseveusernotice003" path="/post/SysEveUserNoticeController/editNoticeMationById" val="用户阅读消息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="消息id"/>
+	</url>
+	<url id="syseveusernotice004" path="/post/SysEveUserNoticeController/deleteNoticeMationById" val="用户删除消息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="消息id"/>
+	</url>
+	<url id="syseveusernotice005" path="/post/SysEveUserNoticeController/editNoticeMationByIds" val="用户批量阅读消息" allUse="2">
+		<property id="rowIds" name="ids" ref="required" var="消息id"/>
+	</url>
+	<url id="syseveusernotice006" path="/post/SysEveUserNoticeController/deleteNoticeMationByIds" val="用户批量删除消息" allUse="2">
+		<property id="rowIds" name="ids" ref="required" var="消息id"/>
+	</url>
+	<url id="syseveusernotice007" path="/post/SysEveUserNoticeController/queryNoticeMationById" val="获取消息详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="消息id"/>
+	</url>
+	<url id="syseveusernotice008" path="/post/SysEveUserNoticeController/insertNoticeMationISSchedule" val="新增日程通知" allUse="0">
+		<property id="userId" name="userId" ref="required" var="接收人id"/>
+		<property id="content" name="content" ref="required" var="内容"/>
+	</url>
+	<url id="syseveusernotice009" path="/post/SysEveUserNoticeController/insertNoticeMationISScheduleList" val="新增日程通知集合" allUse="0">
+		<property id="userJson" name="userJson" ref="required" var="消息json串"/>
+	</url>
+	<url id="syseveusernotice010" path="/post/SysEveUserNoticeController/insertNoticeMationISWorkPlan" val="新增工作计划通知" allUse="0">
+		<property id="userId" name="userId" ref="required" var="接收人id"/>
+		<property id="content" name="content" ref="required" var="内容"/>
+	</url>
+	<url id="syseveusernotice011" path="/post/SysEveUserNoticeController/insertNoticeMationISWorkPlanList" val="新增工作计划通知集合" allUse="0">
+		<property id="userJson" name="userJson" ref="required" var="消息json串"/>
+	</url>
+	<!-- 系统消息通知结束 -->
+	
+	<!-- 系统消息通知开始 -->
+	<url id="syseveusernotice002" path="/post/SysEveUserNoticeController/getNoticeListByUserId" val="根据用户id获取用户的消息只查询8条" allUse="2">
+	</url>
+	<url id="syseveusernotice003" path="/post/SysEveUserNoticeController/editNoticeMationById" val="用户阅读消息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="消息id"/>
+	</url>
+	<url id="syseveusernotice004" path="/post/SysEveUserNoticeController/deleteNoticeMationById" val="用户删除消息" allUse="2">
+		<property id="rowId" name="id" ref="required" var="消息id"/>
+	</url>
+	<url id="syseveusernotice006" path="/post/SysEveUserNoticeController/deleteNoticeMationByIds" val="用户批量删除消息" allUse="2">
+		<property id="rowIds" name="ids" ref="required" var="消息id"/>
+	</url>
+	<url id="syseveusernotice007" path="/post/SysEveUserNoticeController/queryNoticeMationById" val="获取消息详情" allUse="2">
+		<property id="rowId" name="id" ref="required" var="消息id"/>
+	</url>
+	<!-- 系统消息通知结束 -->
+	
+</controller>

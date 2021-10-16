@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysStaffLanguageLevelDao">
+
+    <select id="querySysStaffLanguageLevelList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`,
+            a.state,
+            bu.user_name createName,
+            a.type_id typeId,
+            b.`name` typeName,
+            DATE_FORMAT(CONVERT(a.create_time, CHAR),'%Y-%m-%d') createTime,
+            cu.user_name lastUpdateName,
+            DATE_FORMAT(CONVERT(a.last_update_time, CHAR),'%Y-%m-%d') lastUpdateTime
+        FROM
+            sys_staff_language_level a
+            LEFT JOIN sys_staff_data_dictionary b ON a.type_id = b.id
+            LEFT JOIN sys_eve_user_staff bu ON a.create_id = bu.user_id
+            LEFT JOIN sys_eve_user_staff cu ON a.last_update_id = cu.user_id
+        WHERE a.state != '3'
+        <if test="typeName != '' and typeName != null">
+            AND a.`name` LIKE '%${typeName}%'
+        </if>
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="typeId != '' and typeId != null">
+            AND a.type_id = #{typeId}
+        </if>
+        ORDER BY a.create_time DESC
+    </select>
+
+    <select id="querySysStaffLanguageLevelByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            sys_staff_language_level a
+        WHERE a.`name` = #{typeName}
+        AND a.type_id = #{typeId}
+        AND a.state != '3'
+    </select>
+
+    <insert id="insertSysStaffLanguageLevelMation" parameterType="java.util.Map">
+        INSERT INTO sys_staff_language_level
+        (id, `name`, state, type_id, create_id, create_time, last_update_id, last_update_time)
+        VALUES
+        (#{id}, #{typeName}, #{state}, #{typeId}, #{createId}, #{createTime}, #{createId}, #{createTime})
+    </insert>
+
+    <select id="querySysStaffLanguageLevelById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            sys_staff_language_level a
+        WHERE a.id = #{id}
+        AND a.state != '3'
+    </select>
+
+    <select id="querySysStaffLanguageLevelByNameAndId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+            sys_staff_language_level a
+        WHERE a.`name` = #{typeName}
+        AND a.type_id = (SELECT b.type_id FROM sys_staff_language_level b WHERE b.id = #{id})
+        AND a.state != '3'
+        AND a.id != #{id}
+    </select>
+
+    <update id="editSysStaffLanguageLevelMationById">
+        UPDATE sys_staff_language_level
+        <set>
+            `name` = #{typeName},
+            last_update_id = #{lastUpdateId},
+            last_update_time = #{lastUpdateTime},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="querySysStaffLanguageLevelStateById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.state
+        FROM
+            sys_staff_language_level a
+        WHERE a.id = #{id}
+    </select>
+
+    <update id="editSysStaffLanguageLevelStateById">
+        UPDATE sys_staff_language_level
+        <set>
+            state = #{state},
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <select id="querySysStaffLanguageLevelUpMation" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.`name`
+        FROM
+          sys_staff_language_level a
+        WHERE a.state = '1'
+        AND a.type_id = #{typeId}
+        ORDER BY a.create_time DESC
+    </select>
+
+</mapper>

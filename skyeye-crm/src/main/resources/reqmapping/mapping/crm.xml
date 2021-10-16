@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="CRM客户关系">
+	<!-- 
+			- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+		 -->
+	 
+	
+	<!-- 客户类型管理开始 -->
+	<url id="customertype001" path="/post/CrmCustomerTypeController/queryCustomerTypeList" val="获取客户类型列表" allUse="1" groupName="客户类型">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="类型名称"/>
+		<property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="customertype002" path="/post/CrmCustomerTypeController/insertCustomerType" val="新增客户类型" allUse="1" groupName="客户类型">
+		<property id="typeName" name="typeName" ref="required" var="类型名称"/>
+	</url>
+	<url id="customertype003" path="/post/CrmCustomerTypeController/queryCustomerTypeMationById" val="根据id获取客户类型信息" allUse="2" groupName="客户类型">
+		<property id="rowId" name="id" ref="required" var="类型id"/>
+	</url>
+	<url id="customertype004" path="/post/CrmCustomerTypeController/editCustomerTypeById" val="编辑客户类型信息" allUse="1" groupName="客户类型">
+		<property id="rowId" name="id" ref="required" var="类型id"/>
+		<property id="typeName" name="typeName" ref="required" var="类型名称"/>
+	</url>
+	<url id="customertype005" path="/post/CrmCustomerTypeController/deleteCustomerTypeById" val="根据id删除客户类型信息" allUse="1" groupName="客户类型">
+		<property id="rowId" name="id" ref="required" var="类型id"/>
+	</url>
+	<url id="customertype006" path="/post/CrmCustomerTypeController/editStateUpById" val="根据id更改客户状态为上线" allUse="1" groupName="客户类型">
+		<property id="rowId" name="id" ref="required" var="类型id"/>
+	</url>
+	<url id="customertype007" path="/post/CrmCustomerTypeController/editStateDownById" val="根据id更改客户状态为下线" allUse="1" groupName="客户类型">
+		<property id="rowId" name="id" ref="required" var="类型id"/>
+	</url>
+	<url id="customertype008" path="/post/CrmCustomerTypeController/queryStateUpList" val="获取已上线的客户类型" allUse="2" groupName="客户类型">
+	</url>
+	<!-- 客户类型管理结束 -->
+	
+	<!-- 商机管理开始 -->
+	<url id="opportunity001" path="/post/CrmOpportunityController/queryCrmOpportunityList" val="获取全部商机列表" allUse="1" groupName="商机模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="documentaryState" name="documentaryState" ref="" var="跟单状态"/>
+		<property id="state" name="state" ref="" var="状态"/>
+		<property id="createTime" name="createTime" ref="" var="新增时间"/>
+	</url>
+	<url id="opportunity003" path="/post/CrmOpportunityController/queryOpportunityMationToDetail" val="根据id获取商机信息详情" allUse="2" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity004" path="/post/CrmOpportunityController/queryOpportunityMationById" val="获取商机信息进行编辑回显" allUse="2" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity007" path="/post/CrmOpportunityController/queryDiscussNumsList" val="商机获取商机的讨论版的列表" allUse="2" groupName="商机模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity008" path="/post/CrmOpportunityController/queryOpportunityListUseToSelect" val="获取我的运行中的商机用于下拉框" allUse="2" groupName="商机模块">
+	</url>
+	<url id="opportunity009" path="/post/CrmOpportunityController/insertOpportunityDiscussMation" val="商机社区发帖" allUse="2" groupName="商机模块">
+		<property id="rowId" name="opportunityId" ref="required" var="商机id"/>
+		<property id="title" name="title" ref="required" var="讨论板标题"/>
+		<property id="content" name="content" ref="required" var="讨论内容"/>
+	</url>
+	<url id="opportunity010" path="/post/CrmOpportunityController/queryMyCrmOpportunityList" val="获取我的商机列表" allUse="1" groupName="商机模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="myRole" name="myRole" ref="" var="我的商机"/>
+		<property id="documentaryState" name="documentaryState" ref="" var="跟单状态"/>
+		<property id="state" name="state" ref="" var="状态"/>
+		<property id="createTime" name="createTime" ref="" var="新增时间"/>
+	</url>
+	<url id="opportunity011" path="/post/CrmOpportunityController/insertCrmOpportunityMation" val="新增商机信息" allUse="1" groupName="商机模块">
+		<property id="customerId" name="customerId" ref="required" var="客户名称"/>
+		<property id="city" name="city" ref="" var="所在城市"/>
+		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
+		<property id="title" name="title" ref="required" var="商机名称"/>
+		<property id="fromId" name="fromId" ref="required" var="商机来源"/>
+		<property id="estimatePrice" name="estimatePrice" ref="" var="预计成交金额"/>
+		<property id="estimateEndTime" name="estimateEndTime" ref="" var="预计结单日期"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="department" name="department" ref="" var="部门"/>
+		<property id="job" name="job" ref="" var="职位"/>
+		<property id="workPhone" name="workPhone" ref="" var="办公电话"/>
+		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="businessNeed" name="businessNeed" ref="" var="主要业务需求"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="subDepartments" name="subDepartments" ref="required" var="商机所属部门"/>
+		<property id="responsId" name="responsId" ref="required" var="商机负责人"/>
+		<property id="partId" name="partId" ref="" var="商机参与人"/>
+		<property id="followId" name="followId" ref="" var="商机关注人"/>
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型"/>
+	</url>
+	<url id="opportunity012" path="/post/CrmOpportunityController/editOpportunityMationById" val="编辑商机信息" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+		<property id="customerId" name="customerId" ref="required" var="客户名称"/>
+		<property id="city" name="city" ref="" var="所在城市"/>
+		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
+		<property id="title" name="title" ref="required" var="商机名称"/>
+		<property id="fromId" name="fromId" ref="required" var="商机来源"/>
+		<property id="estimatePrice" name="estimatePrice" ref="" var="预计成交金额"/>
+		<property id="estimateEndTime" name="estimateEndTime" ref="" var="预计结单日期"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="department" name="department" ref="" var="部门"/>
+		<property id="job" name="job" ref="" var="职位"/>
+		<property id="workPhone" name="workPhone" ref="" var="办公电话"/>
+		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="businessNeed" name="businessNeed" ref="" var="主要业务需求"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="subDepartments" name="subDepartments" ref="required" var="商机所属部门"/>
+		<property id="responsId" name="responsId" ref="required" var="商机负责人"/>
+		<property id="partId" name="partId" ref="" var="商机参与人"/>
+		<property id="followId" name="followId" ref="" var="商机关注人"/>
+		<property id="subType" name="subType" ref="required,num" var="表单提交类型"/>
+	</url>
+	<url id="opportunity013" path="/post/CrmOpportunityController/deleteOpportunityMationById" val="商机根据id删除商机信息" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity014" path="/post/CrmOpportunityController/insertDiscussReplyMation" val="新增帖子的回复贴" allUse="2" groupName="商机模块">
+		<property id="opportunityId" name="opportunityId" ref="required" var="商机id"/>
+		<property id="discussId" name="discussId" ref="required" var="讨论板id"/>
+		<property id="content" name="content" ref="required" var="讨论内容"/>
+	</url>
+	<url id="opportunity015" path="/post/CrmOpportunityController/deleteDiscussMationById" val="删除讨论版" allUse="2" groupName="商机模块">
+		<property id="rowId" name="discussId" ref="required" var="讨论板id"/>
+	</url>
+	<url id="opportunity016" path="/post/CrmOpportunityController/queryDiscussMationById" val="根据讨论版Id获取讨论版详情" allUse="2" groupName="商机模块">
+		<property id="rowId" name="discussId" ref="required" var="讨论板id"/>
+	</url>
+	<url id="opportunity017" path="/post/CrmOpportunityController/editOpportunityToApprovalById" val="根据商机Id提交审批" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity018" path="/post/CrmOpportunityController/queryAllDiscussList" val="获取所有讨论板" allUse="1" groupName="商机模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="主题名称"/>
+		<property id="opportunityTitle" name="opportunityTitle" ref="" var="商机名称"/>
+	</url>
+	<url id="opportunity019" path="/post/CrmOpportunityController/editOpportunityToConmunicate" val="根据商机Id初期沟通" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity020" path="/post/CrmOpportunityController/editOpportunityToQuotedPrice" val="根据商机Id方案与报价" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity021" path="/post/CrmOpportunityController/editOpportunityToTender" val="根据商机Id竞争与投标" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity022" path="/post/CrmOpportunityController/editOpportunityToNegotiate" val="根据商机Id商务谈判" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity023" path="/post/CrmOpportunityController/editOpportunityToTurnover" val="根据商机Id成交" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity024" path="/post/CrmOpportunityController/editOpportunityToLosingTable" val="根据商机Id丢单" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity025" path="/post/CrmOpportunityController/editOpportunityToLayAside" val="根据商机Id搁置" allUse="1" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+	</url>
+	<url id="opportunity026" path="/post/CrmOpportunityController/editOpportunityMationByIdInProcess" val="在工作流中全部商机编辑商机信息" allUse="2" groupName="商机模块">
+		<property id="rowId" name="id" ref="required" var="商机id"/>
+		<property id="customerId" name="customerId" ref="required" var="客户名称"/>
+		<property id="city" name="city" ref="" var="所在城市"/>
+		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
+		<property id="title" name="title" ref="required" var="商机名称"/>
+		<property id="fromId" name="fromId" ref="required" var="商机来源"/>
+		<property id="estimatePrice" name="estimatePrice" ref="" var="预计成交金额"/>
+		<property id="estimateEndTime" name="estimateEndTime" ref="" var="预计结单日期"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="department" name="department" ref="" var="部门"/>
+		<property id="job" name="job" ref="" var="职位"/>
+		<property id="workPhone" name="workPhone" ref="" var="办公电话"/>
+		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="businessNeed" name="businessNeed" ref="" var="主要业务需求"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="subDepartments" name="subDepartments" ref="required" var="商机所属部门"/>
+		<property id="responsId" name="responsId" ref="required" var="商机负责人"/>
+		<property id="partId" name="partId" ref="" var="商机参与人"/>
+		<property id="followId" name="followId" ref="" var="商机关注人"/>
+	</url>
+	<url id="opportunity027" path="/post/CrmOpportunityController/editOpportunityProcessToRevoke" val="撤销商机审批申请" allUse="1" groupName="商机模块">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<!-- 商机管理结束 -->
+	
+	<!-- 客户管理开始 -->
+	<url id="customer001" path="/post/CustomerController/queryCustomerList" val="获取客户管理列表" allUse="1" groupName="客户模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="客户名称"/>
+		<property id="typeId" name="typeId" ref="" var="分类"/>
+		<property id="fromId" name="fromId" ref="" var="来源"/>
+		<property id="industryId" name="industryId" ref="" var="所属行业"/>
+	</url>
+	<url id="customer002" path="/post/CustomerController/insertCustomerMation" val="新增客户信息" allUse="1" groupName="客户模块">
+		<property id="name" name="name" ref="required" var="客户名称"/>
+		<property id="combine" name="combine" ref="" var="拼音"/>
+		<property id="typeId" name="typeId" ref="required" var="分类"/>
+		<property id="fromId" name="fromId" ref="required" var="来源"/>
+		<property id="industryId" name="industryId" ref="required" var="所属行业"/>
+		<property id="cusUrl" name="cusUrl" ref="" var="客户网址"/>
+		<property id="country" name="country" ref="" var="国家/地区"/>
+		<property id="city" name="city" ref="" var="所在城市"/>
+		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
+		<property id="postalCode" name="postalCode" ref="num" var="邮政编码"/>
+		<property id="fax" name="fax" ref="" var="传真"/>
+		<property id="mechanicName" name="mechanicName" ref="" var="操机工"/>
+		<property id="mechanicPhone" name="mechanicPhone" ref="" var="操机工电话"/>
+		<property id="corRepresentative" name="corRepresentative" ref="" var="法人代表"/>
+		<property id="regCapital" name="regCapital" ref="" var="注册资本"/>
+		<property id="addDesc" name="addDesc" ref="" var="附加说明"/>
+		<property id="bankAccount" name="bankAccount" ref="" var="银行账号"/>
+		<property id="accountName" name="accountName" ref="" var="开户银行"/>
+		<property id="bankName" name="bankName" ref="" var="开户名称"/>
+		<property id="bankAddress" name="bankAddress" ref="" var="开户银行地址"/>
+		<property id="dutyParagraph" name="dutyParagraph" ref="" var="税号"/>
+		<property id="financePhone" name="financePhone" ref="" var="财务电话"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="chargeUser" name="chargeUser" ref="" var="负责人"/>
+		<property id="groupId" name="groupId" ref="required" var="客户分组id"/>
+	</url>
+	<url id="customer003" path="/post/CustomerController/queryCustomerMationById" val="获取客户信息进行回显" allUse="2" groupName="客户模块">
+		<property id="rowId" name="id" ref="required" var="客户id"/>
+	</url>
+	<url id="customer004" path="/post/CustomerController/editCustomerMationById" val="编辑客户信息" allUse="1" groupName="客户模块">
+		<property id="rowId" name="id" ref="required" var="客户id"/>
+		<property id="name" name="name" ref="required" var="客户名称"/>
+		<property id="combine" name="combine" ref="" var="拼音"/>
+		<property id="typeId" name="typeId" ref="required" var="分类"/>
+		<property id="fromId" name="fromId" ref="required" var="来源"/>
+		<property id="industryId" name="industryId" ref="required" var="所属行业"/>
+		<property id="cusUrl" name="cusUrl" ref="" var="客户网址"/>
+		<property id="country" name="country" ref="" var="国家/地区"/>
+		<property id="city" name="city" ref="" var="所在城市"/>
+		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
+		<property id="postalCode" name="postalCode" ref="num" var="邮政编码"/>
+		<property id="fax" name="fax" ref="" var="传真"/>
+		<property id="mechanicName" name="mechanicName" ref="" var="操机工"/>
+		<property id="mechanicPhone" name="mechanicPhone" ref="" var="操机工电话"/>
+		<property id="corRepresentative" name="corRepresentative" ref="" var="法人代表"/>
+		<property id="regCapital" name="regCapital" ref="" var="注册资本"/>
+		<property id="addDesc" name="addDesc" ref="" var="附加说明"/>
+		<property id="bankAccount" name="bankAccount" ref="" var="银行账号"/>
+		<property id="accountName" name="accountName" ref="" var="开户银行"/>
+		<property id="bankName" name="bankName" ref="" var="开户名称"/>
+		<property id="bankAddress" name="bankAddress" ref="" var="开户银行地址"/>
+		<property id="dutyParagraph" name="dutyParagraph" ref="" var="税号"/>
+		<property id="financePhone" name="financePhone" ref="" var="财务电话"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="chargeUser" name="chargeUser" ref="" var="负责人"/>
+		<property id="groupId" name="groupId" ref="required" var="客户分组id"/>
+	</url>
+	<url id="customer005" path="/post/CustomerController/queryCustomerMationToDetail" val="根据id获取客户信息详情" allUse="2" groupName="客户模块">
+		<property id="rowId" name="id" ref="required" var="客户id"/>
+	</url>
+	<url id="customer006" path="/post/CustomerController/deleteCustomerMationById" val="根据id删除客户信息" allUse="1" groupName="客户模块">
+		<property id="rowId" name="id" ref="required" var="客户id"/>
+	</url>
+	<url id="customer007" path="/post/CustomerController/queryCustomerListToChoose" val="获取客户列表用于下拉框选择" allUse="2" groupName="客户模块">
+	</url>
+	<url id="customer008" path="/post/CustomerController/queryCustomerNumsDetail" val="获取客户列表中商机，合同，售后服务，跟单记录，联系人，讨论板列表" allUse="2" groupName="客户模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="rowId" name="id" ref="required" var="客户id"/>
+		<property id="searchType" name="searchType" ref="required" var="类型"/>
+		<property id="orderNum" name="orderNum" ref="" var="工单单号"/>
+		<property id="searchName" name="searchName" ref="" var="名称"/>
+		<property id="searchState" name="searchState" ref="" var="状态"/>
+		<property id="searchTime" name="searchTime" ref="" var="新增时间"/>
+	</url>
+	<url id="customer010" path="/post/CustomerController/queryMyConscientiousList" val="获取我负责的客户管理列表" allUse="1" groupName="客户模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="客户名称"/>
+		<property id="typeId" name="typeId" ref="" var="分类"/>
+		<property id="fromId" name="fromId" ref="" var="来源"/>
+		<property id="industryId" name="industryId" ref="" var="所属行业"/>
+	</url>
+	<url id="customer011" path="/post/CustomerController/queryMyCreateList" val="获取我创建的客户管理列表" allUse="1" groupName="客户模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="客户名称"/>
+		<property id="typeId" name="typeId" ref="" var="分类"/>
+		<property id="fromId" name="fromId" ref="" var="来源"/>
+		<property id="industryId" name="industryId" ref="" var="所属行业"/>
+	</url>
+	<url id="customer012" path="/post/CustomerController/queryInternationalCustomerList" val="获取公海客户群列表" allUse="1" groupName="客户模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="客户名称"/>
+		<property id="typeId" name="typeId" ref="" var="分类"/>
+		<property id="fromId" name="fromId" ref="" var="来源"/>
+		<property id="industryId" name="industryId" ref="" var="所属行业"/>
+	</url>
+	<url id="customercommonchoose001" path="/post/CustomerController/queryCustomerListTableToChoose" val="获取客户列表供其他内容选择" allUse="2" groupName="客户模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="name" name="name" ref="" var="客户名称"/>
+		<property id="typeId" name="typeId" ref="" var="分类"/>
+		<property id="fromId" name="fromId" ref="" var="来源"/>
+		<property id="industryId" name="industryId" ref="" var="所属行业"/>
+	</url>
+	<!-- 客户管理结束 -->
+	 
+	<!-- 合同管理开始 -->
+	<url id="mycrmcontract001" path="/post/CrmContractController/queryMyCrmContractList" val="获取我的合同管理列表" allUse="1" groupName="合同模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="合同名称"/>
+		<property id="customer" name="customer" ref="" var="客户"/>
+		<property id="state" name="state" ref="" var="状态"/>
+		<property id="createTime" name="createTime" ref="" var="新增时间"/>
+	</url>
+	<url id="mycrmcontract002" path="/post/CrmContractController/insertCrmContractMation" val="新增我的合同信息" allUse="1" groupName="合同模块">
+		<property id="city" name="city" ref="" var="所在城市"/>
+		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
+		<property id="title" name="title" ref="required" var="合同名称"/>
+		<property id="num" name="num" ref="required" var="合同编号"/>
+		<property id="price" name="price" ref="double" var="合同金额"/>
+		<property id="signingTime" name="signingTime" ref="required" var="签约日期"/>
+		<property id="effectTime" name="effectTime" ref="" var="生效日期"/>
+		<property id="serviceEndTime" name="serviceEndTime" ref="" var="服务结束日期"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="workPhone" name="workPhone" ref="" var="固定电话"/>
+		<property id="mobilePhone" name="mobilePhone" ref="" var="移动电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="technicalTerms" name="technicalTerms" ref="" var="主要技术条款"/>
+		<property id="businessTerms" name="businessTerms" ref="" var="主要商务条款"/>
+		<property id="customerId" name="customerId" ref="required" var="客户id"/>
+		<property id="departmentId" name="departmentId" ref="required" var="所属部门id"/>
+		<property id="relationUserId" name="relationUserId" ref="required" var="关联人员"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="subType" name="subType" ref="" var="提交类型"/>
+	</url>
+	<url id="mycrmcontract003" path="/post/CrmContractController/editCrmContractMationById" val="编辑我的合同信息" allUse="1" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+		<property id="city" name="city" ref="" var="所在城市"/>
+		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
+		<property id="title" name="title" ref="required" var="合同名称"/>
+		<property id="num" name="num" ref="required" var="合同编号"/>
+		<property id="price" name="price" ref="double" var="合同金额"/>
+		<property id="signingTime" name="signingTime" ref="required" var="签约日期"/>
+		<property id="effectTime" name="effectTime" ref="" var="生效日期"/>
+		<property id="serviceEndTime" name="serviceEndTime" ref="" var="服务结束日期"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="workPhone" name="workPhone" ref="" var="固定电话"/>
+		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="technicalTerms" name="technicalTerms" ref="" var="主要技术条款"/>
+		<property id="businessTerms" name="businessTerms" ref="" var="主要商务条款"/>
+		<property id="customerId" name="customerId" ref="required" var="客户id"/>
+		<property id="departmentId" name="departmentId" ref="required" var="所属部门id"/>
+		<property id="relationUserId" name="relationUserId" ref="required" var="关联人员"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+		<property id="subType" name="subType" ref="" var="提交类型"/>
+	</url>
+	<url id="mycrmcontract004" path="/post/CrmContractController/queryCrmContractMationById" val="获取合同信息进行回显" allUse="2" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+	</url>
+	<url id="mycrmcontract005" path="/post/CrmContractController/queryCrmContractMationToDetail" val="根据id获取合同信息详情" allUse="2" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+	</url>
+	<url id="mycrmcontract006" path="/post/CrmContractController/queryDepartmentListToChoose" val="获取部门列表用于下拉框选择" allUse="2" groupName="合同模块">
+	</url>
+	<url id="mycrmcontract007" path="/post/CrmContractController/queryCrmContractList" val="获取所有合同管理列表" allUse="1" groupName="合同模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="title" name="title" ref="" var="合同名称"/>
+		<property id="customer" name="customer" ref="" var="客户"/>
+		<property id="state" name="state" ref="" var="状态"/>
+		<property id="createTime" name="createTime" ref="" var="新增时间"/>
+	</url>
+	<url id="mycrmcontract008" path="/post/CrmContractController/queryCrmContractListToChoose" val="根据客户id获取合同管理列表用于下拉框选择" allUse="2" groupName="合同模块">
+		<property id="id" name="id" ref="required" var="客户id"/>
+	</url>
+	<url id="mycrmcontract009" path="/post/CrmContractController/editCrmContractToSubApproval" val="合同提交审批" allUse="1" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+	</url>
+	<url id="mycrmcontract010" path="/post/CrmContractController/editCrmContractToPerform" val="合同执行" allUse="1" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+	</url>
+	<url id="mycrmcontract011" path="/post/CrmContractController/editCrmContractToClose" val="合同关闭" allUse="1" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+	</url>
+	<url id="mycrmcontract012" path="/post/CrmContractController/editCrmContractToShelve" val="合同搁置" allUse="1" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+	</url>
+	<url id="mycrmcontract013" path="/post/CrmContractController/editCrmContractToRecovery" val="合同恢复" allUse="1" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+	</url>
+	<url id="mycrmcontract014" path="/post/CrmContractController/editCrmContractMationToSave" val="编辑我的合同信息(已提交审核)" allUse="2" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+		<property id="city" name="city" ref="" var="所在城市"/>
+		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
+		<property id="title" name="title" ref="required" var="合同名称"/>
+		<property id="num" name="num" ref="required" var="合同编号"/>
+		<property id="price" name="price" ref="double" var="合同金额"/>
+		<property id="signingTime" name="signingTime" ref="required" var="签约日期"/>
+		<property id="effectTime" name="effectTime" ref="" var="生效日期"/>
+		<property id="serviceEndTime" name="serviceEndTime" ref="" var="服务结束日期"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="workPhone" name="workPhone" ref="" var="固定电话"/>
+		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="technicalTerms" name="technicalTerms" ref="" var="主要技术条款"/>
+		<property id="businessTerms" name="businessTerms" ref="" var="主要商务条款"/>
+		<property id="customerId" name="customerId" ref="required" var="客户id"/>
+		<property id="departmentId" name="departmentId" ref="required" var="所属部门id"/>
+		<property id="relationUserId" name="relationUserId" ref="required" var="关联人员"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+	</url>
+	<url id="mycrmcontract015" path="/post/CrmContractController/deleteCrmContractById" val="删除合同信息" allUse="1" groupName="合同模块">
+		<property id="rowId" name="id" ref="required" var="合同id"/>
+	</url>
+	<url id="mycrmcontract016" path="/post/CrmContractController/editCrmContractToRevokeByProcessInstanceId" val="合同审批撤销" allUse="1" groupName="合同模块">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<!-- 合同管理结束 -->
+	 
+	<!-- 跟单管理开始 -->
+	<url id="documentary001" path="/post/DocumentaryController/queryMyDocumentaryList" val="获取我的跟单管理列表" allUse="1" groupName="跟单模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="opportunityName" name="opportunityName" ref="" var="商机"/>
+		<property id="typeId" name="typeId" ref="" var="类型"/>
+		<property id="startTime" name="startTime" ref="" var="跟单开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="跟单结束时间"/>
+	</url>
+	<url id="documentary002" path="/post/DocumentaryController/insertDocumentary" val="新增跟单信息" allUse="1" groupName="跟单模块">
+		<property id="typeId" name="typeId" ref="required" var="分类"/>
+		<property id="opportunityId" name="opportunityId" ref="required" var="商机"/>
+		<property id="detail" name="detail" ref="required" var="详细内容"/>
+		<property id="documentaryTime" name="documentaryTime" ref="required" var="跟单时间"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+	</url>
+	<url id="documentary003" path="/post/DocumentaryController/queryDocumentaryMationById" val="获取跟单信息进行回显" allUse="2" groupName="跟单模块">
+		<property id="rowId" name="id" ref="required" var="跟单id"/>
+	</url>
+	<url id="documentary004" path="/post/DocumentaryController/editDocumentaryMationById" val="编辑跟单信息" allUse="1" groupName="跟单模块">
+		<property id="rowId" name="id" ref="required" var="跟单id"/>
+		<property id="typeId" name="typeId" ref="required" var="分类"/>
+		<property id="opportunityId" name="opportunityId" ref="required" var="商机"/>
+		<property id="detail" name="detail" ref="required" var="详细内容"/>
+		<property id="documentaryTime" name="documentaryTime" ref="required" var="跟单时间"/>
+		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
+	</url>
+	<url id="documentary005" path="/post/DocumentaryController/queryDocumentaryMationToDetail" val="根据id获取跟单信息详情" allUse="2" groupName="跟单模块">
+		<property id="rowId" name="id" ref="required" var="跟单id"/>
+	</url>
+	<url id="documentary006" path="/post/DocumentaryController/deleteDocumentaryMationById" val="根据id删除跟单信息" allUse="1" groupName="跟单模块">
+		<property id="rowId" name="id" ref="required" var="跟单id"/>
+	</url>
+	<url id="documentary007" path="/post/DocumentaryController/queryAllDocumentaryList" val="获取所有跟单管理列表" allUse="1" groupName="跟单模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="opportunityName" name="opportunityName" ref="" var="商机"/>
+		<property id="typeId" name="typeId" ref="" var="类型"/>
+		<property id="startTime" name="startTime" ref="" var="跟单开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="跟单结束时间"/>
+	</url>
+	<!-- 跟单管理结束 -->
+	
+	<!-- 跟单分类开始 -->
+	<url id="crmdocumentarytype001" path="/post/CrmDocumentaryTypeController/queryCrmDocumentaryTypeList" val="获取跟单分类表列表" allUse="1" groupName="跟单分类模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="跟单分类表名称"/>
+		<property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="crmdocumentarytype002" path="/post/CrmDocumentaryTypeController/insertCrmDocumentaryType" val="新增跟单分类表" allUse="1" groupName="跟单分类模块">
+		<property id="typeName" name="typeName" ref="required" var="跟单分类表名称"/>
+	</url>
+	<url id="crmdocumentarytype003" path="/post/CrmDocumentaryTypeController/queryCrmDocumentaryTypeMationById" val="根据id获取跟单分类表信息" allUse="2" groupName="跟单分类模块">
+		<property id="rowId" name="id" ref="required" var="跟单分类表id"/>
+	</url>
+	<url id="crmdocumentarytype004" path="/post/CrmDocumentaryTypeController/editCrmDocumentaryTypeById" val="编辑跟单分类表信息" allUse="1" groupName="跟单分类模块">
+		<property id="rowId" name="id" ref="required" var="跟单分类表id"/>
+		<property id="typeName" name="typeName" ref="required" var="跟单分类表名称"/>
+	</url>
+	<url id="crmdocumentarytype005" path="/post/CrmDocumentaryTypeController/deleteCrmDocumentaryTypeById" val="根据id删除跟单分类表信息" allUse="1" groupName="跟单分类模块">
+		<property id="rowId" name="id" ref="required" var="跟单分类表id"/>
+	</url>
+	<url id="crmdocumentarytype006" path="/post/CrmDocumentaryTypeController/editStateUpById" val="根据id更改跟单分类表状态为上线" allUse="1" groupName="跟单分类模块">
+		<property id="rowId" name="id" ref="required" var="跟单分类表id"/>
+	</url>
+	<url id="crmdocumentarytype007" path="/post/CrmDocumentaryTypeController/editStateDownById" val="根据id更改跟单分类表状态为下线" allUse="1" groupName="跟单分类模块">
+		<property id="rowId" name="id" ref="required" var="跟单分类表id"/>
+	</url>
+	<url id="crmdocumentarytype008" path="/post/CrmDocumentaryTypeController/queryStateUpList" val="获取已上线的跟单分类表类型" allUse="2" groupName="跟单分类模块">
+	</url>
+	<!-- 跟单分类结束 -->
+	
+	<!-- 客户来源开始 -->
+	<url id="crmcustomerfrom001" path="/post/CrmCustomerFromController/queryCrmCustomerFromList" val="获取客户来源表列表" allUse="1" groupName="客户来源模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="客户来源表名称"/>
+		<property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="crmcustomerfrom002" path="/post/CrmCustomerFromController/insertCrmCustomerFrom" val="新增客户来源表" allUse="1" groupName="客户来源模块">
+		<property id="typeName" name="typeName" ref="required" var="客户来源表名称"/>
+	</url>
+	<url id="crmcustomerfrom003" path="/post/CrmCustomerFromController/queryCrmCustomerFromMationById" val="根据id获取客户来源表信息" allUse="2" groupName="客户来源模块">
+		<property id="rowId" name="id" ref="required" var="客户来源表id"/>
+	</url>
+	<url id="crmcustomerfrom004" path="/post/CrmCustomerFromController/editCrmCustomerFromById" val="编辑客户来源表信息" allUse="1" groupName="客户来源模块">
+		<property id="rowId" name="id" ref="required" var="客户来源表id"/>
+		<property id="typeName" name="typeName" ref="required" var="客户来源表名称"/>
+	</url>
+	<url id="crmcustomerfrom005" path="/post/CrmCustomerFromController/deleteCrmCustomerFromById" val="根据id删除客户来源表信息" allUse="1" groupName="客户来源模块">
+		<property id="rowId" name="id" ref="required" var="客户来源表id"/>
+	</url>
+	<url id="crmcustomerfrom006" path="/post/CrmCustomerFromController/editStateUpById" val="根据id更改客户来源表状态为上线" allUse="1" groupName="客户来源模块">
+		<property id="rowId" name="id" ref="required" var="客户来源表id"/>
+	</url>
+	<url id="crmcustomerfrom007" path="/post/CrmCustomerFromController/editStateDownById" val="根据id更改客户来源表状态为下线" allUse="1" groupName="客户来源模块">
+		<property id="rowId" name="id" ref="required" var="客户来源表id"/>
+	</url>
+	<url id="crmcustomerfrom008" path="/post/CrmCustomerFromController/queryStateUpList" val="获取已上线的客户来源表类型" allUse="2" groupName="客户来源模块">
+	</url>
+	<!-- 客户来源结束 -->
+	
+	<!-- 客户所属行业开始 -->
+	<url id="crmcustomerindustry001" path="/post/CrmCustomerIndustryController/queryCrmCustomerIndustryList" val="获取客户所属行业列表" allUse="1" groupName="客户所属行业模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="客户所属行业名称"/>
+		<property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="crmcustomerindustry002" path="/post/CrmCustomerIndustryController/insertCrmCustomerIndustry" val="新增客户所属行业" allUse="1" groupName="客户所属行业模块">
+		<property id="typeName" name="typeName" ref="required" var="客户所属行业名称"/>
+	</url>
+	<url id="crmcustomerindustry003" path="/post/CrmCustomerIndustryController/queryCrmCustomerIndustryMationById" val="根据id获取客户所属行业信息" allUse="2" groupName="客户所属行业模块">
+		<property id="rowId" name="id" ref="required" var="客户所属行业id"/>
+	</url>
+	<url id="crmcustomerindustry004" path="/post/CrmCustomerIndustryController/editCrmCustomerIndustryById" val="编辑客户所属行业信息" allUse="1" groupName="客户所属行业模块">
+		<property id="rowId" name="id" ref="required" var="客户所属行业id"/>
+		<property id="typeName" name="typeName" ref="required" var="客户所属行业名称"/>
+	</url>
+	<url id="crmcustomerindustry005" path="/post/CrmCustomerIndustryController/deleteCrmCustomerIndustryById" val="根据id删除客户所属行业信息" allUse="1" groupName="客户所属行业模块">
+		<property id="rowId" name="id" ref="required" var="客户所属行业id"/>
+	</url>
+	<url id="crmcustomerindustry006" path="/post/CrmCustomerIndustryController/editStateUpById" val="根据id更改客户所属行业状态为上线" allUse="1"> groupName="客户所属行业模块"
+		<property id="rowId" name="id" ref="required" var="客户所属行业id"/>
+	</url>
+	<url id="crmcustomerindustry007" path="/post/CrmCustomerIndustryController/editStateDownById" val="根据id更改客户所属行业状态为下线" allUse="1" groupName="客户所属行业模块">
+		<property id="rowId" name="id" ref="required" var="客户所属行业id"/>
+	</url>
+	<url id="crmcustomerindustry008" path="/post/CrmCustomerIndustryController/queryStateUpList" val="获取已上线的客户所属行业类型" allUse="2" groupName="客户所属行业模块">
+	</url>
+	<!-- 客户所属行业结束 -->
+	
+	<!-- 商机来源开始 -->
+	<url id="crmopportunityfrom001" path="/post/CrmOpportunityFromController/queryCrmOpportunityFromList" val="获取商机来源列表" allUse="1" groupName="商机来源模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="typeName" name="typeName" ref="" var="商机来源名称"/>
+		<property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="crmopportunityfrom002" path="/post/CrmOpportunityFromController/insertCrmOpportunityFrom" val="新增商机来源" allUse="1" groupName="商机来源模块">
+		<property id="typeName" name="typeName" ref="required" var="商机来源名称"/>
+	</url>
+	<url id="crmopportunityfrom003" path="/post/CrmOpportunityFromController/queryCrmOpportunityFromMationById" val="根据id获取商机来源信息" allUse="2" groupName="商机来源模块">
+		<property id="rowId" name="id" ref="required" var="商机来源id"/>
+	</url>
+	<url id="crmopportunityfrom004" path="/post/CrmOpportunityFromController/editCrmOpportunityFromById" val="编辑商机来源信息" allUse="1" groupName="商机来源模块">
+		<property id="rowId" name="id" ref="required" var="商机来源id"/>
+		<property id="typeName" name="typeName" ref="required" var="商机来源名称"/>
+	</url>
+	<url id="crmopportunityfrom005" path="/post/CrmOpportunityFromController/deleteCrmOpportunityFromById" val="根据id删除商机来源信息" allUse="1" groupName="商机来源模块">
+		<property id="rowId" name="id" ref="required" var="商机来源id"/>
+	</url>
+	<url id="crmopportunityfrom006" path="/post/CrmOpportunityFromController/editStateUpById" val="根据id更改商机来源状态为上线" allUse="1" groupName="商机来源模块">
+		<property id="rowId" name="id" ref="required" var="商机来源id"/>
+	</url>
+	<url id="crmopportunityfrom007" path="/post/CrmOpportunityFromController/editStateDownById" val="根据id更改商机来源状态为下线" allUse="1" groupName="商机来源模块">
+		<property id="rowId" name="id" ref="required" var="商机来源id"/>
+	</url>
+	<url id="crmopportunityfrom008" path="/post/CrmOpportunityFromController/queryStateUpList" val="获取已上线的商机来源类型" allUse="2" groupName="商机来源模块">
+	</url>
+	<!-- 商机来源结束 -->
+	
+	<!-- 联系人开始 -->
+	<url id="customercontact001" path="/post/CrmCustomerContactController/queryCustomerContactList" val="获取联系人列表" allUse="1" groupName="联系人模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="customerName" name="customerName" ref="" var="客户名称"/>
+		<property id="contacts" name="contacts" ref="" var="联系人名称"/>
+		<property id="mobilePhone" name="mobilePhone" ref="" var="移动电话"/>
+		<property id="email" name="email" ref="" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="qq"/>
+		<property id="wechat" name="wechat" ref="" var="微信"/>
+	</url>
+	<url id="customercontact002" path="/post/CrmCustomerContactController/insertCustomerContactMation" val="新增联系人信息" allUse="1" groupName="联系人模块">
+		<property id="customerId" name="customerId" ref="required" var="所属客户"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="department" name="department" ref="" var="部门"/>
+		<property id="job" name="job" ref="" var="职位"/>
+		<property id="workPhone" name="workPhone" ref="" var="办公电话"/>
+		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="wechat" name="wechat" ref="" var="微信"/>
+		<property id="isDefault" name="isDefault" ref="required,num" var="默认联系人  1.是  2.否"/>
+	</url>
+	<url id="customercontact003" path="/post/CrmCustomerContactController/queryCustomerContactMationToEditById" val="编辑联系人信息时进行回显" allUse="2" groupName="联系人模块">
+		<property id="contactId" name="contactId" ref="required" var="联系人id"/>
+	</url>
+	<url id="customercontact004" path="/post/CrmCustomerContactController/editCustomerContactMation" val="编辑联系人信息" allUse="1" groupName="联系人模块">
+		<property id="customerId" name="customerId" ref="required" var="所属客户"/>
+		<property id="contacts" name="contacts" ref="required" var="联系人"/>
+		<property id="department" name="department" ref="" var="部门"/>
+		<property id="job" name="job" ref="" var="职位"/>
+		<property id="workPhone" name="workPhone" ref="" var="办公电话"/>
+		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
+		<property id="email" name="email" ref="email" var="邮箱"/>
+		<property id="qq" name="qq" ref="" var="QQ号"/>
+		<property id="wechat" name="wechat" ref="" var="微信"/>
+		<property id="isDefault" name="isDefault" ref="required,num" var="默认联系人  1.是  2.否"/>
+		<property id="contactId" name="contactId" ref="required" var="联系人id"/>
+	</url>
+	<url id="customercontact005" path="/post/CrmCustomerContactController/deleteCustomerContactMationById" val="删除联系人信息" allUse="1" groupName="联系人模块">
+		<property id="contactId" name="contactId" ref="required" var="联系人id"/>
+	</url>
+	<!-- 联系人结束 -->
+	
+	<!-- 客户分组管理开始 -->
+	<url id="customergroup001" path="/post/CrmCustomerGroupController/queryCustomerGroupList" val="获取客户分组列表" allUse="1" groupName="客户分组模块">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="groupName" name="groupName" ref="" var="分组名称"/>
+		<property id="state" name="state" ref="" var="状态"/>
+	</url>
+	<url id="customergroup002" path="/post/CrmCustomerGroupController/insertCustomerGroup" val="新增客户分组" allUse="1" groupName="客户分组模块">
+		<property id="groupName" name="groupName" ref="required" var="分组名称"/>
+		<property id="desc" name="desc" ref="" var="说明"/>
+	</url>
+	<url id="customergroup003" path="/post/CrmCustomerGroupController/queryCustomerGroupMationById" val="根据id获取客户分组信息" allUse="2" groupName="客户分组模块">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="customergroup004" path="/post/CrmCustomerGroupController/editCustomerGroupById" val="编辑客户分组信息" allUse="1" groupName="客户分组模块">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+		<property id="groupName" name="groupName" ref="required" var="分组名称"/>
+		<property id="desc" name="desc" ref="" var="说明"/>
+	</url>
+	<url id="customergroup005" path="/post/CrmCustomerGroupController/deleteCustomerGroupById" val="删除" allUse="1" groupName="客户分组模块">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="customergroup006" path="/post/CrmCustomerGroupController/editStateUpById" val="上线" allUse="1" groupName="客户分组模块">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="customergroup007" path="/post/CrmCustomerGroupController/editStateDownById" val="下线" allUse="1" groupName="客户分组模块">
+		<property id="rowId" name="id" ref="required" var="分组id"/>
+	</url>
+	<url id="customergroup008" path="/post/CrmCustomerGroupController/queryStateUpList" val="获取已上线的客户分组" allUse="2" groupName="客户分组模块">
+	</url>
+	<!-- 客户分组管理结束 -->
+	
+</controller>

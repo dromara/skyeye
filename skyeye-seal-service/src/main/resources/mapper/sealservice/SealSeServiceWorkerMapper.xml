@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.SealSeServiceWorkerDao">
+
+    <select id="queryServiceWorkerList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			b.user_name userName,
+			a.pro_name proName,
+			a.city_name cityName,
+			a.area_name areaName,
+			a.add_detail addDetail,
+			CONVERT(a.create_time, CHAR) createTime,
+			IFNULL(COUNT(c.id), 0) orderNumber,
+			CASE IFNULL(COUNT(c.id), 0) WHEN '0' THEN '空闲中' ELSE '派工中' END stateName
+		FROM
+			crm_service_worker a
+			LEFT JOIN sys_eve_user_staff b ON a.user_id = b.user_id
+			LEFT JOIN crm_service c ON a.user_id = c.service_user_id AND c.state IN(3, 4)
+		WHERE 1 = 1
+			<if test="userName != '' and userName != null">
+	            AND b.user_name LIKE '%${userName}%'
+	        </if>
+	    GROUP BY a.id
+    </select>
+    
+    <select id="queryServiceWorkerMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id
+		FROM
+			crm_service_worker a
+		WHERE
+			a.user_id = #{userId}
+    </select>
+    
+    <insert id="insertServiceWorkerMation" parameterType="java.util.Map">
+        insert into crm_service_worker
+        (id, user_id, longitude, latitude, pro_name, city_name, area_name, add_detail, create_id, create_time)
+        values(#{id}, #{userId}, #{longitude}, #{latitude}, #{proName}, #{cityName}, #{areaName}, #{addressDetail}, #{createId}, #{createTime})
+    </insert>
+    
+    <delete id="deleteServiceWorkerMationById" parameterType="java.util.Map">
+        DELETE 
+		FROM 
+			crm_service_worker
+		where id = #{id}
+    </delete>
+    
+    <select id="queryServiceWorkerMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+    	SELECT
+			a.id,
+			b.user_name userName,
+			b.user_id userId,
+			b.email,
+			a.pro_name proName,
+			a.city_name cityName,
+			a.area_name areaName,
+			a.add_detail addDetail,
+			a.longitude,
+			a.latitude
+		FROM
+			crm_service_worker a
+			LEFT JOIN sys_eve_user_staff b ON a.user_id = b.user_id
+		WHERE a.id = #{id}
+    </select>
+    
+    <update id="editServiceWorkerMationById" parameterType="java.util.Map">
+        UPDATE crm_service_worker
+        <set>
+            pro_name = #{proName},
+            city_name = #{cityName},
+            area_name = #{areaName},
+            add_detail = #{addressDetail},
+            longitude = #{longitude},
+            latitude = #{latitude}
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <select id="queryServiceWorkerShowList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			b.user_id userId,
+			b.user_name userName,
+			a.pro_name proName,
+			a.city_name cityName,
+			a.area_name areaName,
+			a.add_detail addDetail,
+			CONVERT(a.create_time, CHAR) createTime,
+			IFNULL(COUNT(c.id), 0) orderNumber,
+			CASE IFNULL(COUNT(c.id), 0) WHEN '0' THEN '空闲中' ELSE '派工中' END stateName
+		FROM
+			crm_service_worker a
+			LEFT JOIN sys_eve_user_staff b ON a.user_id = b.user_id
+			LEFT JOIN crm_service c ON a.user_id = c.service_user_id AND c.state IN(3, 4)
+		WHERE 1 = 1
+			<if test="userName != '' and userName != null">
+	            AND b.user_name LIKE '%${userName}%'
+	        </if>
+	    GROUP BY a.id
+    </select>
+    
+    <select id="queryServiceWorkerToMapList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+			a.id,
+			b.user_name userName,
+			b.user_photo userPhoto,
+			a.longitude,
+			a.latitude,
+			a.add_detail addDetail,
+			IFNULL(COUNT(c.id), 0) orderNumber,
+			CASE IFNULL(COUNT(c.id), 0) WHEN '0' THEN '空闲中' ELSE '派工中' END stateName
+		FROM
+			crm_service_worker a
+			LEFT JOIN sys_eve_user_staff b ON a.user_id = b.user_id
+			LEFT JOIN crm_service c ON a.user_id = c.service_user_id AND c.state IN(3, 4)
+	    GROUP BY a.id
+    </select>
+
+</mapper>
