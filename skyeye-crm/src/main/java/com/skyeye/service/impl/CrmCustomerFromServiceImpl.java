@@ -41,10 +41,30 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     @Autowired
     private JedisClientService jedisClient;
 
+    public static enum STATE{
+        START_NEW(1, "新建"),
+        START_UP(2, "上线"),
+        START_DOWN(3, "下线"),
+        START_DELETE(4, "删除");
+        private int state;
+        private String name;
+        STATE(int state, String name){
+            this.state = state;
+            this.name = name;
+        }
+        public int getState() {
+            return state;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     /**
      *
      * @Title: insertCrmCustomerFrom
-     * @Description: 添加客户来源表信息
+     * @Description: 添加客户来源信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -69,7 +89,7 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     /**
      *
      * @Title: queryCrmCustomerFromList
-     * @Description: 获取表中所有客户来源表状态为未被删除的记录并分页
+     * @Description: 获取表中所有客户来源状态为未被删除的记录并分页
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -86,7 +106,7 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     /**
      *
      * @Title: queryStateUpList
-     * @Description: 获取客户来源表状态为上线的所有记录
+     * @Description: 获取客户来源状态为上线的所有记录
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -95,11 +115,11 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     public void queryStateUpList(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         List<Map<String, Object>> beans = null;
-        if (ToolUtil.isBlank(jedisClient.get(CrmConstants.sysCrmCustomerFromUpStateList()))){
+        if (ToolUtil.isBlank(jedisClient.get(CrmConstants.SYS_CUSTOMER_FROM_UP_STATE_LIST))){
             beans = crmCustomerFromDao.queryStateUpList(map);
-            jedisClient.set(CrmConstants.sysCrmCustomerFromUpStateList(), JSONUtil.toJsonStr(beans));
+            jedisClient.set(CrmConstants.SYS_CUSTOMER_FROM_UP_STATE_LIST, JSONUtil.toJsonStr(beans));
         }else {
-            beans = JSONUtil.toList(jedisClient.get(CrmConstants.sysCrmCustomerFromUpStateList()), null);
+            beans = JSONUtil.toList(jedisClient.get(CrmConstants.SYS_CUSTOMER_FROM_UP_STATE_LIST), null);
         }
         outputObject.setBeans(beans);
         outputObject.settotal(beans.size());
@@ -124,7 +144,7 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     /**
      *
      * @Title: editCrmCustomerFromById
-     * @Description: 编辑客户来源表名称
+     * @Description: 编辑客户来源名称
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -134,8 +154,10 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     public void editCrmCustomerFromById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         Map<String, Object> bean= crmCustomerFromDao.queryStateById(map);
-        if(bean.get("state").toString().equals("1") || bean.get("state").toString().equals("3")){//新建和下线状态可以编辑
-            //获取名称相同但id不同的客户来源表记录
+        Integer state = Integer.parseInt(bean.get("state").toString());
+        if(state == STATE.START_NEW.getState() || state == STATE.START_DOWN.getState()){
+            // 新建和下线状态可以编辑
+            // 获取名称相同但id不同的客户来源记录
             Map<String, Object> item = crmCustomerFromDao.queryCrmCustomerFromByIdAndName(map);
             if (item == null || item.isEmpty()){
                 crmCustomerFromDao.editCrmCustomerFromById(map);
@@ -150,7 +172,7 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     /**
      *
      * @Title: editStateUpById
-     * @Description: 编辑客户来源表状态为上线
+     * @Description: 编辑客户来源状态为上线
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -160,9 +182,11 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     public void editStateUpById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         Map<String, Object> bean= crmCustomerFromDao.queryStateById(map);
-        if(bean.get("state").toString().equals("1") || bean.get("state").toString().equals("3")){//新建和下线状态可以上线
+        Integer state = Integer.parseInt(bean.get("state").toString());
+        if(state == STATE.START_NEW.getState() || state == STATE.START_DOWN.getState()){
+            // 新建和下线状态可以上线
             crmCustomerFromDao.editStateUpById(map);
-            jedisClient.del(CrmConstants.sysCrmCustomerFromUpStateList());
+            jedisClient.del(CrmConstants.SYS_CUSTOMER_FROM_UP_STATE_LIST);
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面。");
         }
@@ -171,7 +195,7 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     /**
      *
      * @Title: editStateDownById
-     * @Description: 编辑客户来源表状态为下线
+     * @Description: 编辑客户来源状态为下线
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -181,9 +205,11 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     public void editStateDownById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         Map<String, Object> bean= crmCustomerFromDao.queryStateById(map);
-        if(bean.get("state").toString().equals("2")){//上线状态可以下线
+        Integer state = Integer.parseInt(bean.get("state").toString());
+        if(state == STATE.START_UP.getState()){
+            // 上线状态可以下线
             crmCustomerFromDao.editStateDownById(map);
-            jedisClient.del(CrmConstants.sysCrmCustomerFromUpStateList());
+            jedisClient.del(CrmConstants.SYS_CUSTOMER_FROM_UP_STATE_LIST);
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面。");
         }
@@ -192,7 +218,7 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     /**
      *
      * @Title: deleteCrmCustomerFromById
-     * @Description: 编辑客户来源表状态为删除
+     * @Description: 编辑客户来源状态为删除
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -202,7 +228,9 @@ public class CrmCustomerFromServiceImpl implements CrmCustomerFromService {
     public void deleteCrmCustomerFromById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         Map<String, Object> bean= crmCustomerFromDao.queryStateById(map);
-        if(bean.get("state").toString().equals("1") || bean.get("state").toString().equals("3")){//新建和下线状态可以删除
+        Integer state = Integer.parseInt(bean.get("state").toString());
+        if(state == STATE.START_NEW.getState() || state == STATE.START_DOWN.getState()){
+            // 新建和下线状态可以删除
             crmCustomerFromDao.deleteCrmCustomerFromById(map);
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面。");
