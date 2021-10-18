@@ -227,7 +227,7 @@
         <property id="handsPersonId" name="handsPersonId" ref="required" var="经手人Id"></property>
         <property id="remark" name="remark" ref="" var="备注"></property>
         <property id="changeAmount" name="changeAmount" ref="required,double" var="优惠金额"></property>
-        <property id="initemStr" name="initemStr" ref="required" var="账户列表" />
+        <property id="initemStr" name="initemStr" ref="required,json" var="账户列表" />
     </url>
     <url id="advancecharge003" path="/post/AdvanceChargeController/queryAdvanceChargeToEditById" val="查询收预付款用于数据回显" allUse="2" method="GET" groupName="收预付款模块">
         <property id="rowId" name="id" ref="required" var="收预付款Id"></property>
@@ -239,7 +239,7 @@
         <property id="handsPersonId" name="handsPersonId" ref="required" var="经手人Id"></property>
         <property id="remark" name="remark" ref="" var="备注"></property>
         <property id="changeAmount" name="changeAmount" ref="required,double" var="优惠金额"></property>
-        <property id="initemStr" name="initemStr" ref="required" var="账户列表" />
+        <property id="initemStr" name="initemStr" ref="required,json" var="账户列表" />
     </url>
     <url id="advancecharge005" path="/post/AdvanceChargeController/deleteAdvanceChargeById" val="删除收预付款信息" allUse="1" method="DELETE" groupName="收预付款模块">
         <property id="rowId" name="id" ref="required" var="收预付款Id"></property>

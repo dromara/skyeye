@@ -36,7 +36,7 @@ public class CrmConstants {
 	
 	// 获取已经上线的客户来源列表的redis的key
 	public static final String SYS_CUSTOMER_FROM_UP_STATE_LIST = "sys_customer_from_up_state_list";
-	
+
 	// 获取已经上线的客户所属行业列表的redis的key
 	public static final String SYS_CUSTOMER_INDUSTRY_UP_STATE_LIST = "sys_customer_industry_up_state_list";
 	public static String sysCrmCustomerIndustryUpStateList() {

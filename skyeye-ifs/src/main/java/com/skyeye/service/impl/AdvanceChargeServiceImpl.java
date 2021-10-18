@@ -71,58 +71,55 @@ public class AdvanceChargeServiceImpl implements AdvanceChargeService {
      * @param outputObject
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
 	@Override
     @Transactional(value="transactionManager")
     public void insertAdvanceCharge(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
-        String initemStr = params.get("initemStr").toString();
-        if(ToolUtil.isJson(initemStr)) {
-            //财务主表ID
-            String useId = ToolUtil.getSurFaceId();
-            //处理数据
-            List<Map<String, Object>> jArray = JSONUtil.toList(initemStr, null);
-            //收预付款中间转换对象，财务子表存储对象
-            Map<String, Object> bean;
-            List<Map<String, Object>> entitys = new ArrayList<>();//财务子表实体集合信息
-            BigDecimal allPrice = new BigDecimal("0");//主单总价
-            BigDecimal itemAllPrice = null;//子单对象
-            for(int i = 0; i < jArray.size(); i++){
-                bean = jArray.get(i);
-                Map<String, Object> entity = new HashMap<>();
-                //获取子项金额
-                itemAllPrice = new BigDecimal(bean.get("initemMoney").toString());
-                entity.put("id", ToolUtil.getSurFaceId());
-                entity.put("headerId", useId);
-                entity.put("accountId", bean.get("accountId"));
-                entity.put("eachAmount", bean.get("initemMoney"));
-                entity.put("remark", bean.get("remark"));
-                entity.put("deleteFlag", 0);
-                entitys.add(entity);
-                //计算总金额
-                allPrice = allPrice.add(itemAllPrice);
-            }
-            if(entitys.size() == 0){
-                outputObject.setreturnMessage("请选择账户");
-                return;
-            }
-            Map<String, Object> accountHead = new HashMap<>();
-            String orderNum = ErpConstants.DepoTheadSubType.getOrderNumBySubType(ORDER_TYPE);
-            accountHead.put("id", useId);
-            accountHead.put("type", ORDER_TYPE);//收预付款
-            accountHead.put("billNo", orderNum);
-            accountHead.put("totalPrice", allPrice);
-            accountHead.put("organId", params.get("organId"));
-            accountHead.put("operTime", params.get("operTime"));
-            accountHead.put("handsPersonId", params.get("handsPersonId"));
-            accountHead.put("remark", params.get("remark"));
-            accountHead.put("changeAmount", params.get("changeAmount"));
-            accountHead.put("deleteFlag", 0);
-            advanceChargeDao.insertAdvanceCharge(accountHead);
-            advanceChargeDao.insertAdvanceChargeItem(entitys);
-        }else{
-            outputObject.setreturnMessage("数据格式错误");
+        // 财务主表ID
+        String useId = ToolUtil.getSurFaceId();
+        // 处理数据
+        List<Map<String, Object>> entitys = new ArrayList<>();
+        BigDecimal allPrice = getAllPriceAndChildList(useId, params.get("initemStr").toString(), entitys);
+        if(entitys.size() == 0){
+            outputObject.setreturnMessage("请选择账户");
+            return;
         }
+        Map<String, Object> accountHead = new HashMap<>();
+        String orderNum = ErpConstants.DepoTheadSubType.getOrderNumBySubType(ORDER_TYPE);
+        accountHead.put("id", useId);
+        accountHead.put("type", ORDER_TYPE);//收预付款
+        accountHead.put("billNo", orderNum);
+        accountHead.put("totalPrice", allPrice);
+        accountHead.put("organId", params.get("organId"));
+        accountHead.put("operTime", params.get("operTime"));
+        accountHead.put("handsPersonId", params.get("handsPersonId"));
+        accountHead.put("remark", params.get("remark"));
+        accountHead.put("changeAmount", params.get("changeAmount"));
+        accountHead.put("deleteFlag", 0);
+        advanceChargeDao.insertAdvanceCharge(accountHead);
+        advanceChargeDao.insertAdvanceChargeItem(entitys);
+    }
+
+    private BigDecimal getAllPriceAndChildList(String useId, String initemStr, List<Map<String, Object>> entitys) {
+        List<Map<String, Object>> jArray = JSONUtil.toList(initemStr, null);
+        // 主单总价
+        BigDecimal allPrice = new BigDecimal("0");
+        for(int i = 0; i < jArray.size(); i++){
+            Map<String, Object> bean = jArray.get(i);
+            Map<String, Object> entity = new HashMap<>();
+            //获取子项金额
+            BigDecimal itemAllPrice = new BigDecimal(bean.get("initemMoney").toString());
+            entity.put("id", ToolUtil.getSurFaceId());
+            entity.put("headerId", useId);
+            entity.put("accountId", bean.get("accountId"));
+            entity.put("eachAmount", bean.get("initemMoney"));
+            entity.put("remark", bean.get("remark"));
+            entity.put("deleteFlag", 0);
+            entitys.add(entity);
+            // 计算总金额
+            allPrice = allPrice.add(itemAllPrice);
+        }
+        return allPrice;
     }
 
     /**
@@ -153,55 +150,30 @@ public class AdvanceChargeServiceImpl implements AdvanceChargeService {
      * @param outputObject
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
 	@Override
     @Transactional(value="transactionManager")
     public void editAdvanceChargeById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
-        String initemStr = params.get("initemStr").toString();
-        if(ToolUtil.isJson(initemStr)) {
-        	String useId = params.get("id").toString();
-            //处理数据
-            List<Map<String, Object>> jArray = JSONUtil.toList(initemStr, null);
-            //收预付款中间转换对象，财务子表存储对象
-            Map<String, Object> bean;
-            List<Map<String, Object>> entitys = new ArrayList<>();//财务子表实体集合信息
-            BigDecimal allPrice = new BigDecimal("0");//主单总价
-            BigDecimal itemAllPrice = null;//子单对象
-            for(int i = 0; i < jArray.size(); i++){
-                bean = jArray.get(i);
-                Map<String, Object> entity = new HashMap<>();
-                //获取子项金额
-                itemAllPrice = new BigDecimal(bean.get("initemMoney").toString());
-                entity.put("id", ToolUtil.getSurFaceId());
-                entity.put("headerId", useId);
-                entity.put("accountId", bean.get("accountId"));
-                entity.put("eachAmount", bean.get("initemMoney"));
-                entity.put("remark", bean.get("remark"));
-                entity.put("deleteFlag", "0");
-                entitys.add(entity);
-                //计算总金额
-                allPrice = allPrice.add(itemAllPrice);
-            }
-            if(entitys.size() == 0){
-                outputObject.setreturnMessage("请选择账户");
-                return;
-            }
-            Map<String, Object> accountHead = new HashMap<>();
-            accountHead.put("id", useId);
-            accountHead.put("totalPrice", allPrice);
-            accountHead.put("organId", params.get("organId"));
-            accountHead.put("operTime", params.get("operTime"));
-            accountHead.put("handsPersonId", params.get("handsPersonId"));
-            accountHead.put("remark", params.get("remark"));
-            accountHead.put("changeAmount", params.get("changeAmount"));
-            advanceChargeDao.editAdvanceChargeById(accountHead);
-            //删除之前的绑定信息
-            advanceChargeDao.deleteAdvanceChargeItemById(params);
-            advanceChargeDao.insertAdvanceChargeItem(entitys);
-        }else{
-            outputObject.setreturnMessage("数据格式错误");
+        String useId = params.get("id").toString();
+        // 处理数据
+        List<Map<String, Object>> entitys = new ArrayList<>();
+        BigDecimal allPrice = getAllPriceAndChildList(useId, params.get("initemStr").toString(), entitys);
+        if(entitys.size() == 0){
+            outputObject.setreturnMessage("请选择账户");
+            return;
         }
+        Map<String, Object> accountHead = new HashMap<>();
+        accountHead.put("id", useId);
+        accountHead.put("totalPrice", allPrice);
+        accountHead.put("organId", params.get("organId"));
+        accountHead.put("operTime", params.get("operTime"));
+        accountHead.put("handsPersonId", params.get("handsPersonId"));
+        accountHead.put("remark", params.get("remark"));
+        accountHead.put("changeAmount", params.get("changeAmount"));
+        advanceChargeDao.editAdvanceChargeById(accountHead);
+        // 删除之前的绑定信息
+        advanceChargeDao.deleteAdvanceChargeItemById(params);
+        advanceChargeDao.insertAdvanceChargeItem(entitys);
     }
 
     /**
@@ -247,7 +219,6 @@ public class AdvanceChargeServiceImpl implements AdvanceChargeService {
      * @param outputObject
      * @throws Exception
      */
-	@SuppressWarnings("static-access")
 	@Override
 	public void queryMationToExcel(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> params = inputObject.getParams();
