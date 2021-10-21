@@ -75,54 +75,52 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     @Transactional(value="transactionManager")
     public void insertExpenditure(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
-        String initemStr = params.get("initemStr").toString();
-        if(ToolUtil.isJson(initemStr)) {
-            //财务主表ID
-            String useId = ToolUtil.getSurFaceId();
-            //处理数据
-            List<Map<String, Object>> jArray = JSONUtil.toList(initemStr, null);
-            //支出单中间转换对象，财务子表存储对象
-            Map<String, Object> bean;
-            List<Map<String, Object>> entitys = new ArrayList<>();//财务子表实体集合信息
-            BigDecimal allPrice = new BigDecimal("0");//主单总价
-            BigDecimal itemAllPrice = null;//子单对象
-            for(int i = 0; i < jArray.size(); i++){
-                bean = jArray.get(i);
-                Map<String, Object> entity = new HashMap<>();
-                //获取子项金额
-                itemAllPrice = new BigDecimal(bean.get("initemMoney").toString());
-                entity.put("id", ToolUtil.getSurFaceId());
-                entity.put("headerId", useId);
-                entity.put("inOutItemId", bean.get("initemId"));
-                entity.put("eachAmount", bean.get("initemMoney"));
-                entity.put("remark", bean.get("remark"));
-                entity.put("deleteFlag", 0);
-                entitys.add(entity);
-                //计算总金额
-                allPrice = allPrice.add(itemAllPrice);
-            }
-            if(entitys.size() == 0){
-                outputObject.setreturnMessage("请选择支出项目");
-                return;
-            }
-            Map<String, Object> accountHead = new HashMap<>();
-            String orderNum = ErpConstants.DepoTheadSubType.getOrderNumBySubType(ORDER_TYPE);
-            accountHead.put("id", useId);
-            accountHead.put("type", ORDER_TYPE);//支出单
-            accountHead.put("billNo", orderNum);
-            accountHead.put("totalPrice", allPrice);
-            accountHead.put("organId", params.get("organId"));
-            accountHead.put("operTime", params.get("operTime"));
-            accountHead.put("accountId", params.get("accountId"));
-            accountHead.put("handsPersonId", params.get("handsPersonId"));
-            accountHead.put("remark", params.get("remark"));
-            accountHead.put("changeAmount", params.get("changeAmount"));
-            accountHead.put("deleteFlag", 0);
-            expenditureDao.insertExpenditure(accountHead);
-            expenditureDao.insertExpenditureItem(entitys);
-        }else{
-            outputObject.setreturnMessage("数据格式错误");
+        // 财务主表ID
+        String useId = ToolUtil.getSurFaceId();
+        // 财务子表实体集合信息
+        List<Map<String, Object>> entitys = new ArrayList<>();
+        BigDecimal allPrice = getAllPriceAndChildList(useId, params.get("initemStr").toString(), entitys);
+        if(entitys.size() == 0){
+            outputObject.setreturnMessage("请选择支出项目");
+            return;
         }
+        Map<String, Object> accountHead = new HashMap<>();
+        String orderNum = ErpConstants.DepoTheadSubType.getOrderNumBySubType(ORDER_TYPE);
+        accountHead.put("id", useId);
+        accountHead.put("type", ORDER_TYPE);//支出单
+        accountHead.put("billNo", orderNum);
+        accountHead.put("totalPrice", allPrice);
+        accountHead.put("organId", params.get("organId"));
+        accountHead.put("operTime", params.get("operTime"));
+        accountHead.put("accountId", params.get("accountId"));
+        accountHead.put("handsPersonId", params.get("handsPersonId"));
+        accountHead.put("remark", params.get("remark"));
+        accountHead.put("changeAmount", params.get("changeAmount"));
+        accountHead.put("deleteFlag", 0);
+        expenditureDao.insertExpenditure(accountHead);
+        expenditureDao.insertExpenditureItem(entitys);
+    }
+
+    private BigDecimal getAllPriceAndChildList(String useId, String initemStr, List<Map<String, Object>> entitys) {
+        List<Map<String, Object>> jArray = JSONUtil.toList(initemStr, null);
+        // 主单总价
+        BigDecimal allPrice = new BigDecimal("0");
+        for(int i = 0; i < jArray.size(); i++){
+            Map<String, Object> bean = jArray.get(i);
+            Map<String, Object> entity = new HashMap<>();
+            // 获取子项金额
+            BigDecimal itemAllPrice = new BigDecimal(bean.get("initemMoney").toString());
+            entity.put("id", ToolUtil.getSurFaceId());
+            entity.put("headerId", useId);
+            entity.put("inOutItemId", bean.get("initemId"));
+            entity.put("eachAmount", bean.get("initemMoney"));
+            entity.put("remark", bean.get("remark"));
+            entity.put("deleteFlag", 0);
+            entitys.add(entity);
+            // 计算总金额
+            allPrice = allPrice.add(itemAllPrice);
+        }
+        return allPrice;
     }
 
     /**
@@ -157,51 +155,27 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     @Transactional(value="transactionManager")
     public void editExpenditureById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
-        String initemStr = params.get("initemStr").toString();
-        if(ToolUtil.isJson(initemStr)) {
-        	String useId = params.get("id").toString();
-            //处理数据
-            List<Map<String, Object>> jArray = JSONUtil.toList(initemStr, null);
-            //支出单中间转换对象，财务子表存储对象
-            Map<String, Object> bean;
-            List<Map<String, Object>> entitys = new ArrayList<>();//财务子表实体集合信息
-            BigDecimal allPrice = new BigDecimal("0");//主单总价
-            BigDecimal itemAllPrice = null;//子单对象
-            for(int i = 0; i < jArray.size(); i++){
-                bean = jArray.get(i);
-                Map<String, Object> entity = new HashMap<>();
-                //获取子项金额
-                itemAllPrice = new BigDecimal(bean.get("initemMoney").toString());
-                entity.put("id", ToolUtil.getSurFaceId());
-                entity.put("headerId", useId);
-                entity.put("inOutItemId", bean.get("initemId"));
-                entity.put("eachAmount", bean.get("initemMoney"));
-                entity.put("remark", bean.get("remark"));
-                entity.put("deleteFlag", "0");
-                entitys.add(entity);
-                //计算总金额
-                allPrice = allPrice.add(itemAllPrice);
-            }
-            if(entitys.size() == 0){
-                outputObject.setreturnMessage("请选择支出项目");
-                return;
-            }
-            Map<String, Object> accountHead = new HashMap<>();
-            accountHead.put("id", useId);
-            accountHead.put("totalPrice", allPrice);
-            accountHead.put("organId", params.get("organId"));
-            accountHead.put("operTime", params.get("operTime"));
-            accountHead.put("accountId", params.get("accountId"));
-            accountHead.put("handsPersonId", params.get("handsPersonId"));
-            accountHead.put("remark", params.get("remark"));
-            accountHead.put("changeAmount", params.get("changeAmount"));
-            expenditureDao.editExpenditureById(accountHead);
-            //删除之前的绑定信息
-            expenditureDao.deleteExpenditureItemById(params);
-            expenditureDao.insertExpenditureItem(entitys);
-        }else{
-            outputObject.setreturnMessage("数据格式错误");
+        String useId = params.get("id").toString();
+        // 财务子表实体集合信息
+        List<Map<String, Object>> entitys = new ArrayList<>();
+        BigDecimal allPrice = getAllPriceAndChildList(useId, params.get("initemStr").toString(), entitys);
+        if(entitys.size() == 0){
+            outputObject.setreturnMessage("请选择支出项目");
+            return;
         }
+        Map<String, Object> accountHead = new HashMap<>();
+        accountHead.put("id", useId);
+        accountHead.put("totalPrice", allPrice);
+        accountHead.put("organId", params.get("organId"));
+        accountHead.put("operTime", params.get("operTime"));
+        accountHead.put("accountId", params.get("accountId"));
+        accountHead.put("handsPersonId", params.get("handsPersonId"));
+        accountHead.put("remark", params.get("remark"));
+        accountHead.put("changeAmount", params.get("changeAmount"));
+        expenditureDao.editExpenditureById(accountHead);
+        // 删除之前的绑定信息
+        expenditureDao.deleteExpenditureItemById(params);
+        expenditureDao.insertExpenditureItem(entitys);
     }
 
     /**
@@ -228,10 +202,10 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     @Override
     public void queryExpenditureByDetail(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
-        //获取财务主表信息
+        // 获取财务主表信息
         Map<String, Object> bean = expenditureDao.queryExpenditureDetailById(params);
         if(bean != null && !bean.isEmpty()){
-            //获取子表信息
+            // 获取子表信息
             List<Map<String, Object>> beans = expenditureDao.queryExpenditureItemsDetailById(bean);
             bean.put("items", beans);
             outputObject.setBean(bean);
