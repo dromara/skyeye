@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<controller>
+<controller modelName="通讯录管理模块">
 	<!-- 
 		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
 	 -->
 	
-	<!-- 通讯录模块开始 -->
-	<url id="maillist001" path="/post/MailListController/queryMailMationList" val="获取通讯录列表" allUse="1">
+	<!-- 通讯录管理开始 -->
+	<url id="maillist001" path="/post/MailListController/queryMailMationList" val="获取通讯录列表" allUse="1" groupName="通讯录管理">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	    <property id="checkMail" name="checkMail" ref="required,num" var="通讯录类型"/>
 	    <property id="searchCondition" name="searchCondition" ref="" var="查询条件"/>
 	</url>
-	<url id="maillist002" path="/post/MailListController/insertMailMation" val="新增通讯录(个人或者公共通讯录)" allUse="1">
+	<url id="maillist002" path="/post/MailListController/insertMailMation" val="新增通讯录(个人或者公共通讯录)" allUse="1" groupName="通讯录管理">
 		<property id="name" name="name" ref="required" var="姓名" />
 	    <property id="nameCall" name="nameCall" ref="" var="称呼"/>
 	    <property id="company" name="company" ref="" var="公司"/>
@@ -34,63 +34,66 @@
 	    <property id="readonly" name="readonly" ref="num" var="别人是否只读  1.是  2.否  当category=2时，必填"/>
 	    <property id="typeId" name="typeId" ref="" var="通讯录所属类别  当category=1时，必填"/>
 	</url>
-	<url id="maillist003" path="/post/MailListController/queryMailMationTypeList" val="获取我的通讯录类别列表" allUse="1">
+	<url id="maillist009" path="/post/MailListController/deleteMailMationById" val="删除通讯录" allUse="1" groupName="通讯录管理">
+		<property id="rowId" name="id" ref="required" var="通讯录id" />
+	</url>
+	<url id="maillist010" path="/post/MailListController/queryMailMationToEditById" val="编辑通讯录进行回显" allUse="2" groupName="通讯录管理">
+		<property id="rowId" name="id" ref="required" var="通讯录id" />
+	</url>
+	<url id="maillist011" path="/post/MailListController/editMailMationById" val="编辑通讯录" allUse="1" groupName="通讯录管理">
+		<property id="rowId" name="id" ref="required" var="通讯录id" />
+		<property id="name" name="name" ref="required" var="姓名" />
+	    <property id="nameCall" name="nameCall" ref="" var="称呼"/>
+	    <property id="company" name="company" ref="" var="公司"/>
+	    <property id="department" name="department" ref="" var="部门"/>
+	    <property id="personalPhone" name="personalPhone" ref="" var="个人电话"/>
+	    <property id="workPhone" name="workPhone" ref="" var="办公电话"/>
+	    <property id="fax" name="fax" ref="" var="传真"/>
+	    <property id="email" name="email" ref="email" var="个人邮箱"/>
+	    <property id="otherPhone" name="otherPhone" ref="" var="其他电话"/>
+	    <property id="otherEmail" name="otherEmail" ref="email" var="其他邮箱"/>
+	    <property id="workAddress" name="workAddress" ref="" var="商务地址"/>
+	    <property id="workCode" name="workCode" ref="postcode" var="商务邮编"/>
+	    <property id="personAddress" name="personAddress" ref="" var="个人地址"/>
+	    <property id="personCode" name="personCode" ref="postcode" var="个人邮编"/>
+	    <property id="companyUrl" name="companyUrl" ref="url" var="公司网站"/>
+	    <property id="personUrl" name="personUrl" ref="url" var="个人网站"/>
+	    <property id="birthday" name="birthday" ref="" var="生日"/>
+	    <property id="remarks" name="remarks" ref="" var="备注"/>
+	    <property id="category" name="category" ref="required,num" var="通讯录类型"/>
+	    <property id="readonly" name="readonly" ref="num" var="别人是否只读  1.是  2.否  当category=2时，必填"/>
+	    <property id="typeId" name="typeId" ref="" var="通讯录所属类别  当category=1时，必填"/>
+	</url>
+	<url id="maillist012" path="/post/MailListController/queryMailMationDetailsById" val="个人/公共通讯录详情" allUse="2" groupName="通讯录管理">
+		<property id="rowId" name="id" ref="required" var="通讯录id" />
+	</url>
+	<url id="maillist013" path="/post/MailListController/querySysMailMationDetailsById" val="单位通讯录详情" allUse="2" groupName="通讯录管理">
+		<property id="rowId" name="id" ref="required" var="通讯录id" />
+	</url>
+	<!-- 通讯录管理结束 -->
+
+	<!-- 通讯录分组管理开始 -->
+	<url id="mailGroup001" path="/post/MailGroupController/queryMailMationTypeList" val="获取我的通讯录类别列表" allUse="1" groupName="通讯录分组管理">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
-	<url id="maillist004" path="/post/MailListController/insertMailMationType" val="新增通讯录类型" allUse="2">
+	<url id="mailGroup002" path="/post/MailGroupController/insertMailMationType" val="新增通讯录类型" allUse="1" groupName="通讯录分组管理">
 		<property id="name" name="name" ref="required" var="类型名称" />
-	    <property id="desc" name="desc" ref="" var="描述"/>
+		<property id="desc" name="desc" ref="" var="描述"/>
 	</url>
-	<url id="maillist005" path="/post/MailListController/deleteMailMationTypeById" val="删除通讯录类型" allUse="2">
+	<url id="mailGroup003" path="/post/MailGroupController/deleteMailMationTypeById" val="删除通讯录类型" allUse="1" groupName="通讯录分组管理">
 		<property id="rowId" name="id" ref="required" var="类型id" />
 	</url>
-	<url id="maillist006" path="/post/MailListController/queryMailMationTypeToEditById" val="编辑通讯录类型进行回显" allUse="2">
+	<url id="mailGroup004" path="/post/MailGroupController/queryMailMationTypeToEditById" val="编辑通讯录类型进行回显" allUse="2" groupName="通讯录分组管理">
 		<property id="rowId" name="id" ref="required" var="类型id" />
 	</url>
-	<url id="maillist007" path="/post/MailListController/editMailMationTypeById" val="编辑通讯录类型" allUse="2">
+	<url id="mailGroup005" path="/post/MailGroupController/editMailMationTypeById" val="编辑通讯录类型" allUse="1" groupName="通讯录分组管理">
 		<property id="name" name="name" ref="required" var="类型名称" />
-	    <property id="desc" name="desc" ref="" var="描述"/>
-	    <property id="rowId" name="id" ref="required" var="类型id" />
+		<property id="desc" name="desc" ref="" var="描述"/>
+		<property id="rowId" name="id" ref="required" var="类型id" />
 	</url>
-	<url id="maillist008" path="/post/MailListController/queryMailMationTypeListToSelect" val="获取我的通讯录类型用作下拉框展示" allUse="2">
+	<url id="mailGroup006" path="/post/MailGroupController/queryMailMationTypeListToSelect" val="获取我的通讯录类型用作下拉框展示" allUse="2" groupName="通讯录分组管理">
 	</url>
-	<url id="maillist009" path="/post/MailListController/deleteMailMationById" val="删除通讯录" allUse="1">
-		<property id="rowId" name="id" ref="required" var="通讯录id" />
-	</url>
-	<url id="maillist010" path="/post/MailListController/queryMailMationToEditById" val="编辑通讯录进行回显" allUse="2">
-		<property id="rowId" name="id" ref="required" var="通讯录id" />
-	</url>
-	<url id="maillist011" path="/post/MailListController/editMailMationById" val="编辑通讯录" allUse="1">
-		<property id="rowId" name="id" ref="required" var="通讯录id" />
-		<property id="name" name="name" ref="required" var="姓名" />
-	    <property id="nameCall" name="nameCall" ref="" var="称呼"/>
-	    <property id="company" name="company" ref="" var="公司"/>
-	    <property id="department" name="department" ref="" var="部门"/>
-	    <property id="personalPhone" name="personalPhone" ref="" var="个人电话"/>
-	    <property id="workPhone" name="workPhone" ref="" var="办公电话"/>
-	    <property id="fax" name="fax" ref="" var="传真"/>
-	    <property id="email" name="email" ref="email" var="个人邮箱"/>
-	    <property id="otherPhone" name="otherPhone" ref="" var="其他电话"/>
-	    <property id="otherEmail" name="otherEmail" ref="email" var="其他邮箱"/>
-	    <property id="workAddress" name="workAddress" ref="" var="商务地址"/>
-	    <property id="workCode" name="workCode" ref="postcode" var="商务邮编"/>
-	    <property id="personAddress" name="personAddress" ref="" var="个人地址"/>
-	    <property id="personCode" name="personCode" ref="postcode" var="个人邮编"/>
-	    <property id="companyUrl" name="companyUrl" ref="url" var="公司网站"/>
-	    <property id="personUrl" name="personUrl" ref="url" var="个人网站"/>
-	    <property id="birthday" name="birthday" ref="" var="生日"/>
-	    <property id="remarks" name="remarks" ref="" var="备注"/>
-	    <property id="category" name="category" ref="required,num" var="通讯录类型"/>
-	    <property id="readonly" name="readonly" ref="num" var="别人是否只读  1.是  2.否  当category=2时，必填"/>
-	    <property id="typeId" name="typeId" ref="" var="通讯录所属类别  当category=1时，必填"/>
-	</url>
-	<url id="maillist012" path="/post/MailListController/queryMailMationDetailsById" val="个人/公共通讯录详情" allUse="2">
-		<property id="rowId" name="id" ref="required" var="通讯录id" />
-	</url>
-	<url id="maillist013" path="/post/MailListController/querySysMailMationDetailsById" val="单位通讯录详情" allUse="2">
-		<property id="rowId" name="id" ref="required" var="通讯录id" />
-	</url>
-	<!-- 通讯录模块结束 -->
+	<!-- 通讯录分组管理结束 -->
 
 </controller>

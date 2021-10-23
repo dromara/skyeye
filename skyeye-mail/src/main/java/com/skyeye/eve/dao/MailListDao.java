@@ -27,22 +27,6 @@ public interface MailListDao {
 
 	public int insertMailMation(Map<String, Object> map) throws Exception;
 
-	public List<Map<String, Object>> queryMailMationTypeList(Map<String, Object> map) throws Exception;
-
-	public Map<String, Object> queryMailMationTypeByName(Map<String, Object> map) throws Exception;
-
-	public int insertMailMationType(Map<String, Object> map) throws Exception;
-
-	public Map<String, Object> queryMailMationTypeByIdAndUserId(Map<String, Object> map) throws Exception;
-
-	public int deleteMailMationTypeById(Map<String, Object> map) throws Exception;
-
-	public Map<String, Object> queryMailMationTypeToEditById(Map<String, Object> map) throws Exception;
-
-	public int editMailMationTypeById(Map<String, Object> map) throws Exception;
-
-	public List<Map<String, Object>> queryMailMationTypeListToSelect(Map<String, Object> map) throws Exception;
-
 	public int deleteMailMationById(Map<String, Object> map) throws Exception;
 
 	public Map<String, Object> queryMailMationToEditById(Map<String, Object> map) throws Exception;

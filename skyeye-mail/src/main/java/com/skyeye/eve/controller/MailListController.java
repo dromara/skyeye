@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved. 开源地址：https://gitee.com/doc_wei01/skyeye
  ******************************************************************************/
+
 package com.skyeye.eve.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,102 +49,6 @@ public class MailListController {
 	@ResponseBody
 	public void insertMailMation(InputObject inputObject, OutputObject outputObject) throws Exception{
 		mailListService.insertMailMation(inputObject, outputObject);
-	}
-	
-	/**
-	 * 
-	     * @Title: queryMailMationTypeList
-	     * @Description: 获取我的通讯录类别列表
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/MailListController/queryMailMationTypeList")
-	@ResponseBody
-	public void queryMailMationTypeList(InputObject inputObject, OutputObject outputObject) throws Exception{
-		mailListService.queryMailMationTypeList(inputObject, outputObject);
-	}
-	
-	/**
-	 * 
-	     * @Title: insertMailMationType
-	     * @Description: 新增通讯录类型
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/MailListController/insertMailMationType")
-	@ResponseBody
-	public void insertMailMationType(InputObject inputObject, OutputObject outputObject) throws Exception{
-		mailListService.insertMailMationType(inputObject, outputObject);
-	}
-	
-	/**
-	 * 
-	     * @Title: deleteMailMationTypeById
-	     * @Description: 删除通讯录类型
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/MailListController/deleteMailMationTypeById")
-	@ResponseBody
-	public void deleteMailMationTypeById(InputObject inputObject, OutputObject outputObject) throws Exception{
-		mailListService.deleteMailMationTypeById(inputObject, outputObject);
-	}
-	
-	/**
-	 * 
-	     * @Title: queryMailMationTypeToEditById
-	     * @Description: 编辑通讯录类型进行回显
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/MailListController/queryMailMationTypeToEditById")
-	@ResponseBody
-	public void queryMailMationTypeToEditById(InputObject inputObject, OutputObject outputObject) throws Exception{
-		mailListService.queryMailMationTypeToEditById(inputObject, outputObject);
-	}
-	
-	/**
-	 * 
-	     * @Title: editMailMationTypeById
-	     * @Description: 编辑通讯录类型
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/MailListController/editMailMationTypeById")
-	@ResponseBody
-	public void editMailMationTypeById(InputObject inputObject, OutputObject outputObject) throws Exception{
-		mailListService.editMailMationTypeById(inputObject, outputObject);
-	}
-	
-	/**
-	 * 
-	     * @Title: queryMailMationTypeListToSelect
-	     * @Description: 获取我的通讯录类型用作下拉框展示
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/MailListController/queryMailMationTypeListToSelect")
-	@ResponseBody
-	public void queryMailMationTypeListToSelect(InputObject inputObject, OutputObject outputObject) throws Exception{
-		mailListService.queryMailMationTypeListToSelect(inputObject, outputObject);
 	}
 	
 	/**
