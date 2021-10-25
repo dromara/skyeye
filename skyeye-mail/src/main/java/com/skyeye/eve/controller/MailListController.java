@@ -115,20 +115,4 @@ public class MailListController {
 		mailListService.queryMailMationDetailsById(inputObject, outputObject);
 	}
 	
-	/**
-	 * 
-	     * @Title: querySysMailMationDetailsById
-	     * @Description: 单位通讯录详情
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/MailListController/querySysMailMationDetailsById")
-	@ResponseBody
-	public void querySysMailMationDetailsById(InputObject inputObject, OutputObject outputObject) throws Exception{
-		mailListService.querySysMailMationDetailsById(inputObject, outputObject);
-	}
-	
 }

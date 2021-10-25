@@ -21,6 +21,4 @@ public interface MailListService {
 
 	public void queryMailMationDetailsById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void querySysMailMationDetailsById(InputObject inputObject, OutputObject outputObject) throws Exception;
-
 }

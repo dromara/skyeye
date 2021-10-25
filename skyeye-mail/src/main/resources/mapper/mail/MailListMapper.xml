@@ -2,29 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.skyeye.eve.dao.MailListDao">
 
-	<select id="queryComMailMationList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.id,
-			a.user_name userName,
-			a.phone,
-			a.home_phone telePhone,
-			a.email,
-			b.department_name unitName,
-			'同事' typeName
-		FROM
-			sys_eve_user_staff a
-			LEFT JOIN company_department b ON a.department_id = b.id,
-			sys_eve_user_staff c
-		WHERE
-			a.state = '1'
-		AND a.company_id = c.company_id
-		AND c.user_id = #{userId}
-		<if test="searchCondition != '' and searchCondition != null">
-			AND (a.user_name LIKE '%${searchCondition}%' OR a.phone LIKE '%${searchCondition}%' OR a.home_phone LIKE '%${searchCondition}%')
-		</if>
-	</select>
-	
-	<select id="queryCommonMailMationList" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="queryMailMationList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
 			a.`name` userName,
@@ -32,35 +10,21 @@
 			a.work_phone telePhone,
 			a.email,
 			a.company unitName,
-			'公共通讯录' typeName,
 			a.create_id createId,
 			#{userId} userId,
-			a.readonly
-		FROM
-			sys_mail_list a
-		WHERE a.category = '2'
-		<if test="searchCondition != '' and searchCondition != null">
-			AND (a.`name` LIKE '%${searchCondition}%' OR a.personal_phone LIKE '%${searchCondition}%' OR a.work_phone LIKE '%${searchCondition}%')
-		</if>
-	</select>
-	
-	<select id="queryPersonalMailMationList" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.id,
-			a.`name` userName,
-			a.personal_phone phone,
-			a.work_phone telePhone,
-			a.email,
-			a.company unitName,
+			a.readonly,
 			b.`name` typeName
 		FROM
 			sys_mail_list a
 			LEFT JOIN sys_mail_type b ON a.type_id = b.id
-		WHERE a.category = '1'
-		AND a.create_id = #{userId}
+		WHERE a.category = #{category}
+		<if test="category == '1'.toString()">
+			AND a.create_id = #{userId}
+		</if>
 		<if test="searchCondition != '' and searchCondition != null">
 			AND (a.`name` LIKE '%${searchCondition}%' OR a.personal_phone LIKE '%${searchCondition}%' OR a.work_phone LIKE '%${searchCondition}%')
 		</if>
+		ORDER BY a.create_time DESC
 	</select>
 	
 	<insert id="insertMailMation" parameterType="java.util.Map">
@@ -171,20 +135,4 @@
 		WHERE a.id = #{id}
     </select>
     
-    <select id="querySysMailMationDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
-    	SELECT
-			a.user_name `name`,
-			a.email,
-			a.phone,
-			a.home_phone homePhone,
-			b.company_name companyName,
-			c.department_name departmentName
-		FROM
-			sys_eve_user_staff a
-			LEFT JOIN company_mation b ON a.company_id = b.id
-			LEFT JOIN company_department c ON a.department_id = c.id
-		WHERE
-			a.id = #{id}
-    </select>
-	
 </mapper>

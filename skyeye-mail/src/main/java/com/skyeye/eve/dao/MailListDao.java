@@ -19,11 +19,7 @@ import java.util.Map;
  */
 public interface MailListDao {
 
-	public List<Map<String, Object>> queryComMailMationList(Map<String, Object> map) throws Exception;
-
-	public List<Map<String, Object>> queryCommonMailMationList(Map<String, Object> map) throws Exception;
-
-	public List<Map<String, Object>> queryPersonalMailMationList(Map<String, Object> map) throws Exception;
+	public List<Map<String, Object>> queryMailMationList(Map<String, Object> map) throws Exception;
 
 	public int insertMailMation(Map<String, Object> map) throws Exception;
 
@@ -34,7 +30,5 @@ public interface MailListDao {
 	public int editMailMationById(Map<String, Object> map) throws Exception;
 
 	public Map<String, Object> queryMailMationDetailsById(Map<String, Object> map) throws Exception;
-
-	public Map<String, Object> querySysMailMationDetailsById(Map<String, Object> map) throws Exception;
 
 }

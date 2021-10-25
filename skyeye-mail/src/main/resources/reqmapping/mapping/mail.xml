@@ -8,10 +8,10 @@
 	<url id="maillist001" path="/post/MailListController/queryMailMationList" val="获取通讯录列表" allUse="1" groupName="通讯录管理">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	    <property id="checkMail" name="checkMail" ref="required,num" var="通讯录类型"/>
+	    <property id="category" name="category" ref="required,num" var="通讯录类型 1.个人通讯录 2.公共通讯录"/>
 	    <property id="searchCondition" name="searchCondition" ref="" var="查询条件"/>
 	</url>
-	<url id="maillist002" path="/post/MailListController/insertMailMation" val="新增通讯录(个人或者公共通讯录)" allUse="1" groupName="通讯录管理">
+	<url id="maillist002" path="/post/MailListController/insertMailMation" val="新增通讯录(个人或者公共通讯录)" allUse="1" method="POST" groupName="通讯录管理">
 		<property id="name" name="name" ref="required" var="姓名" />
 	    <property id="nameCall" name="nameCall" ref="" var="称呼"/>
 	    <property id="company" name="company" ref="" var="公司"/>
@@ -34,13 +34,13 @@
 	    <property id="readonly" name="readonly" ref="num" var="别人是否只读  1.是  2.否  当category=2时，必填"/>
 	    <property id="typeId" name="typeId" ref="" var="通讯录所属类别  当category=1时，必填"/>
 	</url>
-	<url id="maillist009" path="/post/MailListController/deleteMailMationById" val="删除通讯录" allUse="1" groupName="通讯录管理">
+	<url id="maillist009" path="/post/MailListController/deleteMailMationById" val="删除通讯录" allUse="1" method="DELETE" groupName="通讯录管理">
 		<property id="rowId" name="id" ref="required" var="通讯录id" />
 	</url>
-	<url id="maillist010" path="/post/MailListController/queryMailMationToEditById" val="编辑通讯录进行回显" allUse="2" groupName="通讯录管理">
+	<url id="maillist010" path="/post/MailListController/queryMailMationToEditById" val="编辑通讯录进行回显" allUse="2" method="GET" groupName="通讯录管理">
 		<property id="rowId" name="id" ref="required" var="通讯录id" />
 	</url>
-	<url id="maillist011" path="/post/MailListController/editMailMationById" val="编辑通讯录" allUse="1" groupName="通讯录管理">
+	<url id="maillist011" path="/post/MailListController/editMailMationById" val="编辑通讯录" allUse="1" method="PUT" groupName="通讯录管理">
 		<property id="rowId" name="id" ref="required" var="通讯录id" />
 		<property id="name" name="name" ref="required" var="姓名" />
 	    <property id="nameCall" name="nameCall" ref="" var="称呼"/>
@@ -67,9 +67,6 @@
 	<url id="maillist012" path="/post/MailListController/queryMailMationDetailsById" val="个人/公共通讯录详情" allUse="2" groupName="通讯录管理">
 		<property id="rowId" name="id" ref="required" var="通讯录id" />
 	</url>
-	<url id="maillist013" path="/post/MailListController/querySysMailMationDetailsById" val="单位通讯录详情" allUse="2" groupName="通讯录管理">
-		<property id="rowId" name="id" ref="required" var="通讯录id" />
-	</url>
 	<!-- 通讯录管理结束 -->
 
 	<!-- 通讯录分组管理开始 -->
@@ -81,7 +78,7 @@
 		<property id="name" name="name" ref="required" var="类型名称" />
 		<property id="desc" name="desc" ref="" var="描述"/>
 	</url>
-	<url id="mailGroup003" path="/post/MailGroupController/deleteMailMationTypeById" val="删除通讯录类型" allUse="1" groupName="通讯录分组管理">
+	<url id="mailGroup003" path="/post/MailGroupController/deleteMailMationTypeById" val="删除通讯录类型" allUse="1" method="DELETE" groupName="通讯录分组管理">
 		<property id="rowId" name="id" ref="required" var="类型id" />
 	</url>
 	<url id="mailGroup004" path="/post/MailGroupController/queryMailMationTypeToEditById" val="编辑通讯录类型进行回显" allUse="2" groupName="通讯录分组管理">
