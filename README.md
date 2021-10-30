@@ -12,6 +12,7 @@
 - 不需要进群的，请直接加微信：ZhiJinShuLi
 - `本项目分为开源版和企业版，不喜勿喷，谢谢。`
 - 企业版信息：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
+- 参加企业版改进计划，享受最优惠价格，[点我查看](https://mp.weixin.qq.com/s/YIms04X-bbGJwMs1gree1g)
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
 - 现接受财务模块+ERP模块的功能扩展需求，有意向的可将需求文档发送给作者。
 - [说明文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
