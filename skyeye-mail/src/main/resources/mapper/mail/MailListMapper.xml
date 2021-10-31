@@ -30,10 +30,12 @@
 	<insert id="insertMailMation" parameterType="java.util.Map">
 	     INSERT into sys_mail_list 
 	     (id, category, readonly, type_id, `name`, name_call, company, department, personal_phone, work_phone, fax, email, other_phone, 
-	     	other_email, work_address, work_code, person_address, person_code, company_url, person_url, birthday, remarks, create_id, create_time)
+	     	other_email, work_address, work_code, person_address, person_code, company_url, person_url, birthday, remarks, create_id, create_time,
+		  	wechat_num)
 	     VALUES
 	     (#{id}, #{category}, #{readonly}, #{typeId}, #{name}, #{nameCall}, #{company}, #{department}, #{personalPhone}, #{workPhone}, #{fax}, #{email}, #{otherPhone},
-	     	#{otherEmail}, #{workAddress}, #{workCode}, #{personAddress}, #{personCode}, #{companyUrl}, #{personUrl}, #{birthday}, #{remarks}, #{createId}, #{createTime})
+	     	#{otherEmail}, #{workAddress}, #{workCode}, #{personAddress}, #{personCode}, #{companyUrl}, #{personUrl}, #{birthday}, #{remarks}, #{createId}, #{createTime},
+	      	#{wechatNum})
 	</insert>
 	
 	<delete id="deleteMailMationById" parameterType="java.util.Map">
@@ -68,7 +70,8 @@
 			a.company_url companyUrl,
 			a.person_url personUrl,
 			a.birthday,
-			a.remarks
+			a.remarks,
+		    a.wechat_num wechatNum
 		FROM
 			sys_mail_list a
 		WHERE a.id = #{id}
@@ -99,7 +102,8 @@
 			company_url = #{companyUrl},
 			person_url = #{personUrl},
 			birthday = #{birthday},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			wechat_num = #{wechatNum}
 		</set>
 		WHERE id = #{id}
 	</update>
@@ -128,7 +132,8 @@
 			a.company_url companyUrl,
 			a.person_url personUrl,
 			a.birthday,
-			a.remarks
+			a.remarks,
+			a.wechat_num wechatNum
 		FROM
 			sys_mail_list a
 			LEFT JOIN sys_mail_type b ON a.type_id = b.id
