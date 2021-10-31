@@ -401,7 +401,7 @@
 		<property id="state" name="state" ref="" var="员工状态"></property>
 		<property id="contractNumber" name="contractNumber" ref="" var="合同编号"></property>
 	</url>
-	<url id="sysstaffcontract002" path="/post/SysStaffContractController/insertSysStaffContractMation" val="员工合同信息录入" allUse="1" groupName="员工合同信息">
+	<url id="sysstaffcontract002" path="/post/SysStaffContractController/insertSysStaffContractMation" val="员工合同信息录入" allUse="1" method="POST" groupName="员工合同信息">
 		<property id="staffId" name="staffId" ref="required" var="员工id"></property>
 		<property id="contractNumber" name="contractNumber" ref="required" var="合同编号"></property>
 		<property id="typeId" name="typeId" ref="required" var="合同类别"></property>
@@ -409,11 +409,12 @@
 		<property id="startTime" name="startTime" ref="required" var="开始日期"></property>
 		<property id="endTime" name="endTime" ref="" var="结束日期"></property>
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+		<property id="companyId" name="companyId" ref="required" var="签属企业"></property>
 	</url>
 	<url id="sysstaffcontract003" path="/post/SysStaffContractController/querySysStaffContractMationToEdit" val="编辑员工合同信息信息时回显" allUse="2" method="GET" groupName="员工合同信息">
 		<property id="rowId" name="id" ref="required" var="合同信息id"></property>
 	</url>
-	<url id="sysstaffcontract004" path="/post/SysStaffContractController/editSysStaffContractMationById" val="编辑员工合同信息信息" allUse="1" groupName="员工合同信息">
+	<url id="sysstaffcontract004" path="/post/SysStaffContractController/editSysStaffContractMationById" val="编辑员工合同信息信息" allUse="1" method="PUT" groupName="员工合同信息">
 		<property id="rowId" name="id" ref="required" var="合同信息id"></property>
 		<property id="contractNumber" name="contractNumber" ref="required" var="合同编号"></property>
 		<property id="typeId" name="typeId" ref="required" var="合同类别"></property>
@@ -421,6 +422,7 @@
 		<property id="startTime" name="startTime" ref="required" var="开始日期"></property>
 		<property id="endTime" name="endTime" ref="" var="结束日期"></property>
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"></property>
+		<property id="companyId" name="companyId" ref="required" var="签属企业"></property>
 	</url>
 	<url id="sysstaffcontract005" path="/post/SysStaffContractController/deleteSysStaffContractMationById" val="删除员工合同信息信息" allUse="1" method="DELETE" groupName="员工合同信息">
 		<property id="rowId" name="id" ref="required" var="合同信息id"></property>

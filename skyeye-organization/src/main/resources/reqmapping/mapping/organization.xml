@@ -43,7 +43,7 @@
     </url>
     <url id="companymation007" path="/post/CompanyMationController/queryCompanyMationListTree" val="获取公司信息列表展示为树" allUse="2" groupName="企业管理">
     </url>
-    <url id="companymation008" path="/post/CompanyMationController/queryCompanyListToSelect" val="获取公司列表展示为下拉选择框" allUse="2" groupName="企业管理">
+    <url id="companymation008" path="/post/CompanyMationController/queryCompanyListToSelect" val="获取公司列表展示为下拉选择框" allUse="2" method="GET" groupName="企业管理">
     </url>
     <url id="companymation009" path="/post/CompanyMationController/queryCompanyOrganization" val="获取企业组织机构图" allUse="1" method="GET" groupName="企业管理">
     </url>
@@ -134,7 +134,7 @@
     <url id="companyjob007" path="/post/CompanyJobController/queryCompanyJobListByToSelect" val="根据公司id和部门id获取职位列表展示为下拉选择框" allUse="2" groupName="职位管理">
         <property id="departmentId" name="departmentId" ref="" var="部门id"/>
     </url>
-    <url id="companyjob008" path="/post/CompanyJobController/queryCompanyJobSimpleListByToSelect" val="根据部门id获取职位同级列表且不包含当前id的值展示为下拉选择框" allUse="2" groupName="职位管理">
+    <url id="companyjob008" path="/post/CompanyJobController/queryCompanyJobSimpleListByToSelect" val="根据部门id获取职位同级列表且不包含当前id的值展示为下拉选择框" allUse="2" method="POST" groupName="职位管理">
         <property id="departmentId" name="departmentId" ref="required" var="部门id"/>
         <property id="rowId" name="id" ref="" var="不包含的职位id"/>
         <property id="pId" name="pId" ref="required" var="父职位id"/>

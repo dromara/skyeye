@@ -15,11 +15,13 @@
 			b.job_number jobNumber,
 			b.state,
 			d.`name` typeName,
-			e.`name` moldName
+			e.`name` moldName,
+            f.company_name companyName
 		FROM
 			sys_staff_contract a
 			LEFT JOIN sys_staff_data_dictionary d ON a.type_id = d.id
-			LEFT JOIN sys_staff_data_dictionary e ON a.mold_id = e.id,
+			LEFT JOIN sys_staff_data_dictionary e ON a.mold_id = e.id
+			LEFT JOIN company_mation f ON a.company_id = f.id,
 			sys_eve_user_staff b
 		WHERE a.staff_id = b.id
         <if test="userName != '' and userName != null">
@@ -29,7 +31,7 @@
             AND b.job_number LIKE '%${jobNumber}%'
         </if>
         <if test="contractNumber != '' and contractNumber != null">
-            AND a.contractNumber LIKE '%${contractNumber}%'
+            AND a.contract_number LIKE '%${contractNumber}%'
         </if>
         <if test="state != '' and state != null">
             AND b.state = #{state}
@@ -40,10 +42,10 @@
     <insert id="insertSysStaffContractMation" parameterType="java.util.Map">
         INSERT INTO sys_staff_contract
         (id, contract_number, type_id, mold_id, start_time, end_time, use_expire_time, state,
-        	enclosure, staff_id, create_time)
+        	enclosure, staff_id, create_time, company_id)
         VALUES
         (#{id}, #{contractNumber}, #{typeId}, #{moldId}, #{startTime}, #{endTime}, #{useExpireTime}, '1',
-        	#{enclosureInfo}, #{staffId}, #{createTime})
+        	#{enclosureInfo}, #{staffId}, #{createTime}, #{companyId})
     </insert>
     
     <select id="querySysStaffContractMationToEdit" resultType="java.util.Map">
@@ -59,13 +61,10 @@
 			b.job_number jobNumber,
 			b.state,
 			a.type_id typeId,
-			d.`name` typeName,
 			a.mold_id moldId,
-			e.`name` moldName
+            a.company_id companyId
 		FROM
-			sys_staff_contract a
-			LEFT JOIN sys_staff_data_dictionary d ON a.type_id = d.id
-			LEFT JOIN sys_staff_data_dictionary e ON a.mold_id = e.id,
+			sys_staff_contract a,
 			sys_eve_user_staff b
 		WHERE a.staff_id = b.id
         AND a.id = #{id}
@@ -80,6 +79,7 @@
             type_id = #{typeId},
             mold_id = #{moldId},
             enclosure = #{enclosureInfo},
+			company_id = #{companyId}
         </set>
         WHERE id = #{id}
     </update>
@@ -104,11 +104,13 @@
 			b.job_number jobNumber,
 			b.state,
 			d.`name` typeName,
-			e.`name` moldName
+			e.`name` moldName,
+			f.company_name companyName
 		FROM
 			sys_staff_contract a
 			LEFT JOIN sys_staff_data_dictionary d ON a.type_id = d.id
-			LEFT JOIN sys_staff_data_dictionary e ON a.mold_id = e.id,
+			LEFT JOIN sys_staff_data_dictionary e ON a.mold_id = e.id
+			LEFT JOIN company_mation f ON a.company_id = f.id,
 			sys_eve_user_staff b
 		WHERE a.staff_id = b.id
         AND b.id = #{staffId}
