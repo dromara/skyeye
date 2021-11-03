@@ -9,7 +9,9 @@
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	    <property id="category" name="category" ref="required,num" var="通讯录类型 1.个人通讯录 2.公共通讯录"/>
-	    <property id="searchCondition" name="searchCondition" ref="" var="查询条件"/>
+	    <property id="userName" name="userName" ref="" var="姓名"/>
+		<property id="phone" name="phone" ref="" var="电话"/>
+		<property id="email" name="email" ref="" var="个人邮箱"/>
 	</url>
 	<url id="maillist002" path="/post/MailListController/insertMailMation" val="新增通讯录(个人或者公共通讯录)" allUse="1" method="POST" groupName="通讯录管理">
 		<property id="name" name="name" ref="required" var="姓名" />

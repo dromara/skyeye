@@ -21,8 +21,14 @@
 		<if test="category == '1'.toString()">
 			AND a.create_id = #{userId}
 		</if>
-		<if test="searchCondition != '' and searchCondition != null">
-			AND (a.`name` LIKE '%${searchCondition}%' OR a.personal_phone LIKE '%${searchCondition}%' OR a.work_phone LIKE '%${searchCondition}%')
+		<if test="userName != '' and userName != null">
+			AND a.`name` LIKE '%${userName}%'
+		</if>
+		<if test="phone != '' and phone != null">
+			AND a.personal_phone LIKE '%${phone}%'
+		</if>
+		<if test="email != '' and email != null">
+			AND a.email LIKE '%${email}%'
 		</if>
 		ORDER BY a.create_time DESC
 	</select>
