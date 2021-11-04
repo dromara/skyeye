@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<controller>
+<controller modelName="邮件模块">
 	<!-- 
 		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
 	 -->
@@ -116,32 +116,31 @@
 	<!-- 邮件管理结束 -->
 
 	<!-- 邮件发送模板开始 -->
-    <url id="emailsendmodel001" path="/post/EmailSendModel/queryEmailSendModelList" val="分页获取邮箱发送模板列表" method = "POST" allUse="2">
+    <url id="emailsendmodel001" path="/post/EmailSendModel/queryEmailSendModelList" val="分页获取邮箱发送模板列表" method="POST" allUse="2" groupName="邮件发送模板管理">
         <property id="title" name="title" ref="" var="标题"/>
         <property id="toPeople" name="toPeople" ref="" var="收件人"/>
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
         <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
     </url>
-    <url id="emailsendmodel002" path="/post/EmailSendModel/insertEmailSendModel" val="新增邮件发送模板" allUse="2">
+    <url id="emailsendmodel002" path="/post/EmailSendModel/insertEmailSendModel" val="新增邮件发送模板" method="POST" allUse="1" groupName="邮件发送模板管理">
         <property id="title" name="title" ref="required" var="标题" />
         <property id="toPeople" name="toPeople" ref="required,email" var="收件人" />
         <property id="toCc" name="toCc" ref="" var="抄送人" />
         <property id="toBcc" name="toBcc" ref="" var="暗送" />
     </url>
-    <url id="emailsendmodel003" path="/post/EmailSendModel/queryEmailSendModelInfoById" val="根据邮箱模板id获取邮件模板详情" method = "GET" allUse="2">
+    <url id="emailsendmodel003" path="/post/EmailSendModel/queryEmailSendModelInfoById" val="根据邮箱模板id获取邮件模板详情" method="GET" allUse="2" groupName="邮件发送模板管理">
         <property id="id" name="id" ref="required" var="邮件发送模板id" />
     </url>
-    <url id="emailsendmodel004" path="/post/EmailSendModel/delEmailSendModelById" val="根据id删除邮件模板" method = "DELETE" allUse="2">
+    <url id="emailsendmodel004" path="/post/EmailSendModel/delEmailSendModelById" val="根据id删除邮件模板" method="DELETE" allUse="1" groupName="邮件发送模板管理">
         <property id="id" name="id" ref="required" var="邮件id" />
     </url>
-    <url id="emailsendmodel005" path="/post/EmailSendModel/updateEmailSendModelById" val="根据邮件模板id更新模板内容" method = "PUT" allUse="2">
+    <url id="emailsendmodel005" path="/post/EmailSendModel/updateEmailSendModelById" val="根据邮件模板id更新模板内容" method="PUT" allUse="1" groupName="邮件发送模板管理">
         <property id="id" name="id" ref="required" var="邮件id" />
         <property id="title" name="title" ref="required" var="标题" />
         <property id="toPeople" name="toPeople" ref="required,email" var="收件人" />
         <property id="toCc" name="toCc" ref="" var="抄送人" />
         <property id="toBcc" name="toBcc" ref="" var="暗送" />
     </url>
-
 	<!-- 邮件发送模板结束 -->
 
 </controller>

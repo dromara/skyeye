@@ -13,15 +13,16 @@
 			CONVERT(esm.create_time, char) createTime,
 			c.user_name lastUpdateName,
 			CONVERT(esm.last_update_time, char) lastUpdateTime
-		FROM email_send_model esm
+		FROM
+		    email_send_model esm
 		LEFT JOIN sys_eve_user_staff b ON esm.create_id = b.user_id
 		LEFT JOIN sys_eve_user_staff c ON esm.last_update_id = c.user_id
 		WHERE 1 = 1
 		<if test="title != null and title != ''">
-			AND title = '%${title}%'
+			AND esm.title = '%${title}%'
 		</if>
 		<if test="toPeople != null and toPeople != ''">
-			AND toPeople = #{toPeople}
+			AND esm.to_people = #{toPeople}
 		</if>
 		ORDER BY esm.create_time DESC
 	</select>
@@ -44,30 +45,34 @@
 			CONVERT(esm.create_time, char) createTime,
 			c.user_name lastUpdateName,
 			CONVERT(esm.last_update_time, char) lastUpdateTime
-		FROM email_send_model esm
+		FROM
+		    email_send_model esm
 		LEFT JOIN sys_eve_user_staff b ON esm.create_id = b.user_id
 		LEFT JOIN sys_eve_user_staff c ON esm.last_update_id = c.user_id
 		WHERE esm.id = #{id}
 	</select>
 
 	<update id="updateEmailSendModelById" parameterType="java.util.Map">
-		UPDATE email_send_model
+		UPDATE
+		    email_send_model
 		SET
-		title = #{title},
-		to_people = #{toPeople},
-		<if test="toCc != null and toCc != ''">
-			to_cc = #{toCc},
-		</if>
-		<if test="toBcc != null and toBcc != ''">
-			to_bcc = #{toBcc},
-		</if>
-		last_update_id = #{userId},
-		last_update_time = #{lastUpdateTime}
+			title = #{title},
+			to_people = #{toPeople},
+			<if test="toCc != null and toCc != ''">
+				to_cc = #{toCc},
+			</if>
+			<if test="toBcc != null and toBcc != ''">
+				to_bcc = #{toBcc},
+			</if>
+			last_update_id = #{userId},
+			last_update_time = #{lastUpdateTime}
 		WHERE id = #{id}
 	</update>
 
 	<delete id="delEmailSendModelById" parameterType="java.lang.String">
-		DELETE FROM email_send_model WHERE id = #{id}
+		DELETE FROM
+			email_send_model
+		WHERE id = #{id}
 	</delete>
 
 </mapper>
