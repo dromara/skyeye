@@ -6,6 +6,9 @@
 		SELECT
 			esm.id,
 			esm.title,
+			esm.to_people toPeople,
+			IFNULL(esm.to_cc, '') toCc,
+			IFNULL(esm.to_bcc, '') toBcc,
 			b.user_name createName,
 			CONVERT(esm.create_time, char) createTime,
 			c.user_name lastUpdateName,
@@ -14,9 +17,9 @@
 		    email_send_model esm
 			LEFT JOIN sys_eve_user_staff b ON esm.create_id = b.user_id
 			LEFT JOIN sys_eve_user_staff c ON esm.last_update_id = c.user_id
-		WHERE 1 = 1
+		WHERE esm.create_id = #{userId}
 		<if test="title != null and title != ''">
-			AND esm.title = '%${title}%'
+			AND esm.title LIKE '%${title}%'
 		</if>
 		ORDER BY esm.create_time DESC
 	</select>

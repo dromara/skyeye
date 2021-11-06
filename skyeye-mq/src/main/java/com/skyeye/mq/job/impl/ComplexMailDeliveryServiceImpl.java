@@ -50,7 +50,6 @@ public class ComplexMailDeliveryServiceImpl implements JobMateService {
 	@Autowired
 	private SystemFoundationSettingsService systemFoundationSettingsService;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void call(String data) throws Exception {
 		Map<String, Object> map = JSONUtil.toBean(data, null);

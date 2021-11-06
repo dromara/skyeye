@@ -28,6 +28,7 @@ public class EmailSendModelServiceImpl implements EmailSendModelService {
     public void queryEmailSendModelList(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> inputParams = inputObject.getParams();
         Page pages = PageHelper.startPage(Integer.parseInt(inputParams.get("page").toString()), Integer.parseInt(inputParams.get("limit").toString()));
+        inputParams.put("userId", inputObject.getLogParams().get("id"));
         List<Map<String, Object>> emailSendModelList = emailSendModelDao.queryEmailSendModelList(inputParams);
         outputObject.setBeans(emailSendModelList);
         outputObject.settotal(pages.getTotal());

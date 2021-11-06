@@ -175,6 +175,7 @@ public class JobMateMationServiceImpl implements JobMateMationService {
 	private void sendJobResultMseeage(String jobId, String status) throws Exception{
 		Map<String, Object> jobMation = jobMateMationDao.queryJobMationByJobId(jobId);
 		String userId = jobMation.get("createId").toString();
+		LOGGER.info("job is success, jobId is {}", jobId);
 		if(MqConstants.JOB_TYPE_IS_SUCCESS.equals(status) || MqConstants.JOB_TYPE_IS_FAIL.equals(status)
 				|| MqConstants.JOB_TYPE_IS_PARTIAL_SUCCESS.equals(status)) {
 			// 成功/失败/部分成功
