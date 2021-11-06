@@ -6,23 +6,17 @@
 		SELECT
 			esm.id,
 			esm.title,
-			esm.to_people toPeople,
-			esm.to_cc toCc,
-			esm.to_bcc toBcc,
 			b.user_name createName,
 			CONVERT(esm.create_time, char) createTime,
 			c.user_name lastUpdateName,
 			CONVERT(esm.last_update_time, char) lastUpdateTime
 		FROM
 		    email_send_model esm
-		LEFT JOIN sys_eve_user_staff b ON esm.create_id = b.user_id
-		LEFT JOIN sys_eve_user_staff c ON esm.last_update_id = c.user_id
+			LEFT JOIN sys_eve_user_staff b ON esm.create_id = b.user_id
+			LEFT JOIN sys_eve_user_staff c ON esm.last_update_id = c.user_id
 		WHERE 1 = 1
 		<if test="title != null and title != ''">
 			AND esm.title = '%${title}%'
-		</if>
-		<if test="toPeople != null and toPeople != ''">
-			AND esm.to_people = #{toPeople}
 		</if>
 		ORDER BY esm.create_time DESC
 	</select>
@@ -39,8 +33,8 @@
 		    esm.id,
 		    esm.title,
 		    esm.to_people toPeople,
-		    esm.to_cc toCc,
-		    esm.to_bcc toBcc,
+		    IFNULL(esm.to_cc, '') toCc,
+			IFNULL(esm.to_bcc, '') toBcc,
 			b.user_name createName,
 			CONVERT(esm.create_time, char) createTime,
 			c.user_name lastUpdateName,
@@ -58,12 +52,8 @@
 		SET
 			title = #{title},
 			to_people = #{toPeople},
-			<if test="toCc != null and toCc != ''">
-				to_cc = #{toCc},
-			</if>
-			<if test="toBcc != null and toBcc != ''">
-				to_bcc = #{toBcc},
-			</if>
+			to_cc = #{toCc},
+			to_bcc = #{toBcc},
 			last_update_id = #{userId},
 			last_update_time = #{lastUpdateTime}
 		WHERE id = #{id}

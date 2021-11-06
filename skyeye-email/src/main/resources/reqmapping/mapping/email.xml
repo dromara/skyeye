@@ -118,13 +118,12 @@
 	<!-- 邮件发送模板开始 -->
     <url id="emailsendmodel001" path="/post/EmailSendModel/queryEmailSendModelList" val="分页获取邮箱发送模板列表" method="POST" allUse="2" groupName="邮件发送模板管理">
         <property id="title" name="title" ref="" var="标题"/>
-        <property id="toPeople" name="toPeople" ref="" var="收件人"/>
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
         <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
     </url>
     <url id="emailsendmodel002" path="/post/EmailSendModel/insertEmailSendModel" val="新增邮件发送模板" method="POST" allUse="1" groupName="邮件发送模板管理">
         <property id="title" name="title" ref="required" var="标题" />
-        <property id="toPeople" name="toPeople" ref="required,email" var="收件人" />
+        <property id="toPeople" name="toPeople" ref="required" var="收件人" />
         <property id="toCc" name="toCc" ref="" var="抄送人" />
         <property id="toBcc" name="toBcc" ref="" var="暗送" />
     </url>
@@ -137,7 +136,7 @@
     <url id="emailsendmodel005" path="/post/EmailSendModel/updateEmailSendModelById" val="根据邮件模板id更新模板内容" method="PUT" allUse="1" groupName="邮件发送模板管理">
         <property id="id" name="id" ref="required" var="邮件id" />
         <property id="title" name="title" ref="required" var="标题" />
-        <property id="toPeople" name="toPeople" ref="required,email" var="收件人" />
+        <property id="toPeople" name="toPeople" ref="required" var="收件人" />
         <property id="toCc" name="toCc" ref="" var="抄送人" />
         <property id="toBcc" name="toBcc" ref="" var="暗送" />
     </url>
