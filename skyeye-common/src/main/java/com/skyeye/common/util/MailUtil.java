@@ -3,6 +3,8 @@
  ******************************************************************************/
 package com.skyeye.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +21,9 @@ import java.util.Properties;
  */
 @Component
 public class MailUtil {
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(MailUtil.class);
+
 	//配置文件中的发件服务器
 	private static String smtpHost;
 	@Value("${EMAIL_SMTP_HOST}")
@@ -88,12 +92,9 @@ public class MailUtil {
 	/**
 	 * 发送邮件
 	 * 
-	 * @param toEmail
-	 *            收件人邮箱地址
-	 * @param subject
-	 *            邮件标题
-	 * @param content
-	 *            邮件内容 可以是html内容
+	 * @param toEmail 收件人邮箱地址
+	 * @param subject 邮件标题
+	 * @param content 邮件内容 可以是html内容
 	 */
 	public void send(String toEmail, String subject, String content) {
 		Session session = loadMailSession();
@@ -124,22 +125,14 @@ public class MailUtil {
 	/**
 	 * 发送邮件 带附件
 	 * 
-	 * @param toEmail
-	 *            收件人邮箱地址
-	 * @param toCc
-	 *            抄送人邮箱地址
-	 * @param toBcc
-	 *            暗送人邮箱地址
-	 * @param subject
-	 *            邮件标题
-	 * @param content
-	 *            邮件内容 可以是html内容
-	 * @param basePath
-	 *            文件基础路径
-	 * @param files
-	 *            附件
+	 * @param toEmail 收件人邮箱地址
+	 * @param toCc 抄送人邮箱地址
+	 * @param toBcc 暗送人邮箱地址
+	 * @param subject 邮件标题
+	 * @param content 邮件内容 可以是html内容
+	 * @param basePath 文件基础路径
+	 * @param files 附件
 	 */
-	@SuppressWarnings("static-access")
 	public String send(String toEmail, String toCc, String toBcc, String subject, String content, String basePath, List<Map<String, Object>> files) {
 		Session session = loadMailSession();
 
@@ -182,8 +175,11 @@ public class MailUtil {
 					multipart.addBodyPart(attachPart);
 				}
 			}
-
+			// 将multipart对象放到message中
 			mm.setContent(multipart);
+			// 保存邮件
+			mm.saveChanges();
+
 			Transport.send(mm);
 			String messageID = mm.getMessageID();
             if(messageID == null){
@@ -191,9 +187,7 @@ public class MailUtil {
             }
             return messageID.substring(1, messageID.length() - 1);
 		} catch (Exception e) {
-			String err = e.getMessage();
-			// 在这里处理message内容， 格式是固定的
-			System.out.println(err);
+			LOGGER.warn("send email failed, message is ", e);
 		}
 		return "";
 	}
@@ -201,22 +195,14 @@ public class MailUtil {
 	/**
      * 保存邮件为草稿 带附件
      * 
-     * @param toEmail
-     *            收件人邮箱地址
-     * @param toCc
-     *            抄送人邮箱地址
-     * @param toBcc
-     *            暗送人邮箱地址
-     * @param subject
-     *            邮件标题
-     * @param content
-     *            邮件内容 可以是html内容
-     * @param basePath
-     *            文件基础路径
-     * @param files
-     *            附件
+     * @param toEmail 收件人邮箱地址
+     * @param toCc 抄送人邮箱地址
+     * @param toBcc 暗送人邮箱地址
+     * @param subject 邮件标题
+     * @param content 邮件内容 可以是html内容
+     * @param basePath 文件基础路径
+     * @param files 附件
      */
-    @SuppressWarnings("static-access")
     public String saveDraftsEmail(String toEmail, String toCc, String toBcc, String subject, String content, String basePath, List<Map<String, Object>> files) {
         Session session = loadMailSession();
         MimeMessage mm = new MimeMessage(session);
@@ -271,9 +257,7 @@ public class MailUtil {
             }
             return messageID.substring(1, messageID.length() - 1);
         } catch (Exception e) {
-            String err = e.getMessage();
-            // 在这里处理message内容， 格式是固定的
-            System.out.println(err);
+			LOGGER.warn("send email failed, message is ", e);
         }
         return "";
     }

@@ -67,7 +67,7 @@
 	
 	<select id="queryEmailMessageIdByEmailId" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
-            a.message_id messageId
+            IFNULL(a.message_id, '') messageId
         FROM
             email_mail a
         WHERE

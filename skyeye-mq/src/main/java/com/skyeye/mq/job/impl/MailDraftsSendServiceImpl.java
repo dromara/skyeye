@@ -78,9 +78,11 @@ public class MailDraftsSendServiceImpl implements JobMateService{
 	        }
 	        //获取邮件的messageid
 	        Map<String, Object> message = mqUserEmailDao.queryEmailMessageIdByEmailId(map);
-	        //删除之前的草稿件
-	        new MailUtil(username, password, emailServer.get("emailReceiptServer").toString())
-	                .deleteEmail(username, title, message.get("messageId").toString());
+	        // 删除之前的草稿件
+			if(!ToolUtil.isBlank(message.get("messageId").toString())){
+				new MailUtil(username, password, emailServer.get("emailReceiptServer").toString())
+						.deleteEmail(username, title, message.get("messageId").toString());
+			}
 	        //发送邮件
 	        String messageId = new MailUtil(username, password, emailServer.get("emailSendServer").toString())
 	            .send(toPeople, toCc, toBCc, title, content, tPath.replace("images", ""), beans);
