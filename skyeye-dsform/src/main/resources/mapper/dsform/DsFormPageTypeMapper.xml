@@ -83,4 +83,9 @@
 		DELETE FROM ds_form_page_type
 		WHERE id = #{id}
 	</delete>
+
+	<delete id="delDsFormPageTypeByParentId" parameterType="java.lang.String">
+		DELETE FROM ds_form_page_type
+		WHERE parent_id = #{parentId}
+	</delete>
 </mapper>

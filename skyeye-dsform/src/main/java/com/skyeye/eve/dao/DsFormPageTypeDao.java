@@ -67,8 +67,16 @@ public interface DsFormPageTypeDao {
 
 	/**
 	 * 根据id删除动态表单页面分类
+	 *
 	 * @param id 唯一标识
 	 */
 	void delDsFormPageTypeById(@Param("id") String id);
+
+	/**
+	 * 根据parentid删除动态表单页面分类
+	 *
+	 * @param parentId 父节点id
+	 */
+	void delDsFormPageTypeByParentId(@Param("parentId") String parentId);
 
 }

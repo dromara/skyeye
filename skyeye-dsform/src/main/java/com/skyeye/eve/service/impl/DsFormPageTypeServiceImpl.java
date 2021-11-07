@@ -101,25 +101,9 @@ public class DsFormPageTypeServiceImpl implements DsFormPageTypeService {
 	@Transactional(value="transactionManager")
 	public void delDsFormPageTypeById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> inputParams = inputObject.getParams();
-		// 根据Id查询该节点id是否被作为parentId使用
 		String id = inputParams.get("id").toString();
-		delSubDsFormPageType(id);
+		// 根据Id删除该节点id被作为parentId使用的其他页面分类数据
+		dsFormPageTypeDao.delDsFormPageTypeByParentId(id);
 		dsFormPageTypeDao.delDsFormPageTypeById(id);
-	}
-
-	/**
-	 * 根据id删除挂载该节点作为父节点的页面分类节点
-	 *
-	 * @param id 页面分类id
-	 */
-	private void delSubDsFormPageType(String id) {
-		List<Map<String, Object>> dsFormPageTypeList = dsFormPageTypeDao.queryDsFormPageTypeByParentId(id);
-		if (dsFormPageTypeList.size() != 0) {
-			dsFormPageTypeList.forEach(cs -> {
-				String tempId = cs.get("id").toString();
-				delSubDsFormPageType(tempId);
-				dsFormPageTypeDao.delDsFormPageTypeById(tempId);
-			});
-		}
 	}
 }
