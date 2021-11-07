@@ -4,8 +4,6 @@
 
 package com.skyeye.eve.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -36,10 +34,11 @@ public class DsFormPageTypeServiceImpl implements DsFormPageTypeService {
 	@Override
 	public void queryDsFormPageTypeList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> inputParams = inputObject.getParams();
-		Page pages = PageHelper.startPage(Integer.parseInt(inputParams.get("page").toString()), Integer.parseInt(inputParams.get("limit").toString()));
-		List<Map<String, Object>> emailSendModelList = dsFormPageTypeDao.queryDsFormPageTypeList(inputParams);
-		outputObject.setBeans(emailSendModelList);
-		outputObject.settotal(pages.getTotal());
+		List<Map<String, Object>> beans = dsFormPageTypeDao.queryDsFormPageTypeList(inputParams);
+		if(!beans.isEmpty()){
+			outputObject.setBeans(beans);
+			outputObject.settotal(beans.size());
+		}
 	}
 
 	@Override
