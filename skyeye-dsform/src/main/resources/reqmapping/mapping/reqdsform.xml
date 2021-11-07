@@ -152,7 +152,7 @@
 	</url>
 	<url id="dsformpagetype002" path="/post/DsFormPageTypeController/insertDsFormPageType" method="POST" val="新增动态表单页面分类" allUse="2">
 		<property id="typeName" name="typeName" ref="required" var="分类名称"/>
-		<property id="parentId" name="parentId" ref="" var="父id"/>
+		<property id="parentId" name="parentId" ref="required" var="父id"/>
 	</url>
 	<url id="dsformpagetype003" path="/post/DsFormPageTypeController/delDsFormPageTypeById" method="DELETE" val="删除动态表单分类" allUse="2">
 		<property id="id" name="id" ref="required" var="动态表单分类id"/>

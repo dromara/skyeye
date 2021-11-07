@@ -14,6 +14,7 @@ import com.skyeye.eve.dao.DsFormPageTypeDao;
 import com.skyeye.eve.service.DsFormPageTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -84,26 +85,41 @@ public class DsFormPageTypeServiceImpl implements DsFormPageTypeService {
 	 * 校验parentId是否存在
 	 *
 	 * @param inputParams
+	 * @param outputObject
 	 * @return true: parentId+typeName存在, 反之false
 	 */
 	private boolean checkParentIdExists(Map<String, Object> inputParams, OutputObject outputObject) {
-		Object parentId = inputParams.get("parentId");
-		if (parentId != null) {
-			String tempId = dsFormPageTypeDao.queryDsFormPageTypeByParentIdAndTypeName(inputParams);
-			if (tempId == null || tempId.equals(inputParams.get("id"))) {
-				return false;
-			}
-			outputObject.setreturnMessage("父节点下已存在该分类名称.");
-			return true;
+		String tempId = dsFormPageTypeDao.queryDsFormPageTypeByParentIdAndTypeName(inputParams);
+		if (tempId == null || tempId.equals(inputParams.get("id"))) {
+			return false;
 		}
-		// 父节点不存在默认赋值0
-		inputParams.put("parentId", 0);
-		return false;
+		outputObject.setreturnMessage("父节点下已存在该分类名称.");
+		return true;
 	}
 
 	@Override
+	@Transactional(value="transactionManager")
 	public void delDsFormPageTypeById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> inputParams = inputObject.getParams();
-		dsFormPageTypeDao.delDsFormPageTypeById(inputParams.get("id").toString());
+		// 根据Id查询该节点id是否被作为parentId使用
+		String id = inputParams.get("id").toString();
+		delSubDsFormPageType(id);
+		dsFormPageTypeDao.delDsFormPageTypeById(id);
+	}
+
+	/**
+	 * 根据id删除挂载该节点作为父节点的页面分类节点
+	 *
+	 * @param id 页面分类id
+	 */
+	private void delSubDsFormPageType(String id) {
+		List<Map<String, Object>> dsFormPageTypeList = dsFormPageTypeDao.queryDsFormPageTypeByParentId(id);
+		if (dsFormPageTypeList.size() != 0) {
+			dsFormPageTypeList.forEach(cs -> {
+				String tempId = cs.get("id").toString();
+				delSubDsFormPageType(tempId);
+				dsFormPageTypeDao.delDsFormPageTypeById(tempId);
+			});
+		}
 	}
 }
