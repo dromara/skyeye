@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controller modelName="招聘模块">
+	<!-- 
+		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
+	 -->
+	 
+	
+</controller>

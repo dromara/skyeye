@@ -145,27 +145,27 @@
 	<!-- 动态表单系列结束 -->
 
 	<!-- 动态表单页面分类开始 -->
-	<url id="dsformpagetype001" path="/post/DsFormPageTypeController/queryDsFormPageTypeList" method = "POST" val="获取动态表单页面分类列表" allUse="2">
+	<url id="dsformpagetype001" path="/post/DsFormPageTypeController/queryDsFormPageTypeList" method="POST" val="获取动态表单页面分类列表" allUse="2">
 		<property id="typeName" name="typeName" ref="" var="分类名称"/>
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
-	<url id="dsformpagetype002" path="/post/DsFormPageTypeController/insertDsFormPageType" method = "POST" val="新增动态表单页面分类" allUse="2">
+	<url id="dsformpagetype002" path="/post/DsFormPageTypeController/insertDsFormPageType" method="POST" val="新增动态表单页面分类" allUse="2">
 		<property id="typeName" name="typeName" ref="required" var="分类名称"/>
 		<property id="parentId" name="parentId" ref="" var="父id"/>
 	</url>
-	<url id="dsformpagetype003" path="/post/DsFormPageTypeController/delDsFormPageTypeById" method = "DELETE" val="删除动态表单分类" allUse="2">
+	<url id="dsformpagetype003" path="/post/DsFormPageTypeController/delDsFormPageTypeById" method="DELETE" val="删除动态表单分类" allUse="2">
 		<property id="id" name="id" ref="required" var="动态表单分类id"/>
 	</url>
-	<url id="dsformpagetype004" path="/post/DsFormPageTypeController/queryDsFormPageTypeById" method = "GET" val="根据id查询动态表单页面分类详情" allUse="2">
+	<url id="dsformpagetype004" path="/post/DsFormPageTypeController/queryDsFormPageTypeById" method="GET" val="根据id查询动态表单页面分类详情" allUse="2">
 		<property id="id" name="id" ref="required" var="动态表单内容id"/>
 	</url>
-	<url id="dsformpagetype005" path="/post/DsFormPageTypeController/updateDsFormPageTypeById" method = "PUT" val="通过id编辑对应的动态表单分类信息" allUse="2">
+	<url id="dsformpagetype005" path="/post/DsFormPageTypeController/updateDsFormPageTypeById" method="PUT" val="通过id编辑对应的动态表单分类信息" allUse="2">
 		<property id="id" name="id" ref="required" var="动态表单内容id"/>
 		<property id="typeName" name="typeName" ref="required" var="分类名称"/>
 		<property id="parentId" name="parentId" ref="required" var="父id"/>
 	</url>
-	<url id="dsformpagetype006" path="/post/DsFormPageTypeController/queryDsFormPageTypeByParentId" method = "GET" val="通过parentId查找对应的动态表单分类列表" allUse="2">
+	<url id="dsformpagetype006" path="/post/DsFormPageTypeController/queryDsFormPageTypeByParentId" method="GET" val="通过parentId查找对应的动态表单分类列表" allUse="2">
 		<property id="parentId" name="parentId" ref="required" var="父id"/>
 	</url>
 	<!-- 动态表单页面分类结束 -->
