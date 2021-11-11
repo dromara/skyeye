@@ -7,12 +7,22 @@
 			a.id,
 			a.page_name pageName,
 			a.page_desc pageDesc,
-			a.page_num pageNum
+			a.page_num pageNum,
+		    b.type_name firstTypeName,
+		    c.type_name secondTypeName
 		FROM
 			ds_form_page a
+			LEFT JOIN ds_form_page_type b ON a.first_type_id = b.id
+			LEFT JOIN ds_form_page_type c ON a.second_type_id = c.id
 		WHERE 1 = 1
 			<if test="pageName != '' and pageName != null">
 				AND a.page_name LIKE '%${pageName}%'
+			</if>
+			<if test="firstTypeId != '' and firstTypeId != null">
+				AND a.first_type_id = #{firstTypeId}
+			</if>
+			<if test="secondTypeId != '' and secondTypeId != null">
+				AND a.second_type_id = #{secondTypeId}
 			</if>
 			ORDER BY a.create_time DESC
 	</select>
@@ -31,8 +41,8 @@
 	
 	<insert id="insertDsFormPageMation" parameterType="java.util.Map">
 		INSERT INTO ds_form_page 
-	    (id, page_name, page_desc, page_num, create_id, create_time)
-	    VALUES(#{id}, #{pageName}, #{pageDesc}, #{pageNum}, #{createId}, #{createTime})
+	    (id, page_name, page_desc, page_num, create_id, create_time, first_type_id, second_type_id)
+	    VALUES(#{id}, #{pageName}, #{pageDesc}, #{pageNum}, #{createId}, #{createTime}, #{firstTypeId}, #{secondTypeId})
 	</insert>
 	
 	<select id="queryDsFormPageOrderby" parameterType="java.util.Map" resultType="java.util.Map">
@@ -107,7 +117,9 @@
 		SELECT
 			a.id,
 			a.page_name pageName,
-			a.page_desc pageDesc
+			a.page_desc pageDesc,
+			a.first_type_id firstTypeId,
+			a.second_type_id secondTypeId
 		FROM
 			ds_form_page a
 		WHERE
@@ -118,7 +130,9 @@
 		UPDATE ds_form_page
 		<set>
 			page_name = #{pageName},
-			page_desc = #{pageDesc}
+			page_desc = #{pageDesc},
+			first_type_id = #{firstTypeId},
+			second_type_id = #{secondTypeId}
 		</set>
 		WHERE id = #{id}
 	</update>

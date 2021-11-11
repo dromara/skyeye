@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<controller>
+<controller modelName="动态表单模块">
 	<!-- 
 		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
 	 -->
@@ -87,16 +87,36 @@
 	</url>
 	<url id="dsformdisplaytemplate006" path="/post/DsFormDisplayTemplateController/queryDisplayTemplateListToShow" val="获取动态表单数据展示模板" allUse="2">
 	</url>
-	
-	<url id="dsformpage001" path="/post/DsFormPageController/queryDsFormPageList" val="获取动态表单页面表" allUse="1">
+
+	<!-- 动态表单页面设计开始 -->
+	<url id="dsformpage001" path="/post/DsFormPageController/queryDsFormPageList" val="获取动态表单页面表" method="POST" allUse="1" groupName="表单页面设计接口">
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
         <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
         <property id="pageName" name="pageName" ref="" var="页面名称"/>
+		<property id="firstTypeId" name="firstTypeId" ref="" var="所属一级分类" />
+		<property id="secondTypeId" name="secondTypeId" ref="" var="所属二级分类" />
     </url>
-    <url id="dsformpage002" path="/post/DsFormPageController/insertDsFormPageMation" val="新增动态表单页面" allUse="1">
+    <url id="dsformpage002" path="/post/DsFormPageController/insertDsFormPageMation" val="新增动态表单页面" method="POST" allUse="1" groupName="表单页面设计接口">
         <property id="pageName" name="pageName" ref="required" var="页面名称" />
         <property id="pageDesc" name="pageDesc" ref="" var="页面简介"/>
+		<property id="firstTypeId" name="firstTypeId" ref="required" var="所属一级分类" />
+		<property id="secondTypeId" name="secondTypeId" ref="required" var="所属二级分类" />
     </url>
+	<url id="dsformpage005" path="/post/DsFormPageController/deleteDsFormPageById" val="删除动态表单页面" method="DELETE" allUse="1" groupName="表单页面设计接口">
+		<property id="rowId" name="pageId" ref="required" var="页面id" />
+	</url>
+	<url id="dsformpage006" path="/post/DsFormPageController/selectDsFormPageById" val="通过id查找对应的动态表单页面" method="GET" allUse="2" groupName="表单页面设计接口">
+		<property id="rowId" name="id" ref="required" var="页面id" />
+	</url>
+	<url id="dsformpage007" path="/post/DsFormPageController/editDsFormPageMationById" val="通过id编辑对应的动态表单页面" method="PUT" allUse="1" groupName="表单页面设计接口">
+		<property id="rowId" name="id" ref="required" var="页面id" />
+		<property id="pageName" name="pageName" ref="" var="页面名称" />
+		<property id="pageDesc" name="pageDesc" ref="" var="页面简介" />
+		<property id="firstTypeId" name="firstTypeId" ref="required" var="所属一级分类" />
+		<property id="secondTypeId" name="secondTypeId" ref="required" var="所属二级分类" />
+	</url>
+	<!-- 动态表单页面设计结束 -->
+
     <url id="dsformpage003" path="/post/DsFormPageController/insertDsFormPageContent" val="新增控件" allUse="2">
         <property id="pageId" name="pageId" ref="required" var="页面id" />
         <property id="defaultWidth" name="defaultWidth" ref="required" var="默认宽度"/>
@@ -115,17 +135,6 @@
     </url>
     <url id="dsformpage004" path="/post/DsFormPageController/selectFormPageContentByPageId" val="查看某个动态表单中的表单控件" allUse="1">
         <property id="rowId" name="pageId" ref="required" var="页面id" />
-    </url>
-    <url id="dsformpage005" path="/post/DsFormPageController/deleteDsFormPageById" val="删除动态表单页面" allUse="1">
-        <property id="rowId" name="pageId" ref="required" var="页面id" />
-    </url>
-    <url id="dsformpage006" path="/post/DsFormPageController/selectDsFormPageById" val="通过id查找对应的动态表单" allUse="2">
-        <property id="rowId" name="id" ref="required" var="页面id" />
-    </url>
-    <url id="dsformpage007" path="/post/DsFormPageController/editDsFormPageMationById" val="通过id编辑对应的动态表单" allUse="1">
-        <property id="rowId" name="id" ref="required" var="页面id" />
-        <property id="pageName" name="pageName" ref="" var="页面名称" />
-        <property id="pageDesc" name="pageDesc" ref="" var="页面简介" />
     </url>
     <url id="dsformpage008" path="/post/DsFormPageController/queryAllDsFormPageContent" val="获取表单内所有控件用于编辑调整" allUse="1">
     	<property id="rowId" name="id" ref="required" var="页面id" />
