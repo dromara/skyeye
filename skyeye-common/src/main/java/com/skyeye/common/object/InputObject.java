@@ -5,6 +5,8 @@
 package com.skyeye.common.object;
 
 import cn.hutool.json.JSONUtil;
+import com.gexin.fastjson.JSON;
+import com.gexin.fastjson.JSONObject;
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.SpringUtils;
@@ -76,7 +78,7 @@ public class InputObject extends PutObject implements Serializable{
 		if(params == null){
 			String str = GetRequestJsonUtils.getRequestJsonString(getRequest());
 			try{
-				Map<String, Object> map = JSONUtil.toBean(str, null);
+				Map<String, Object> map = JSONObject.parseObject(str);
 				return setParamsObjToMapReStr(sessionKey, map);
 			}catch(Exception e){
 				Map<String, Object> formMap = ToolUtil.getUrlParams(str);
@@ -96,7 +98,6 @@ public class InputObject extends PutObject implements Serializable{
 	 * @return: String
 	 * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	private static String checkParamsWebPost(String sessionKey) throws Exception{
 		// 获取接口API参数信息
 		List<Map<String, Object>> propertys = (List<Map<String, Object>>) Constants.REQUEST_MAPPING.get(sessionKey).get("list");
@@ -130,7 +131,6 @@ public class InputObject extends PutObject implements Serializable{
 	 * @return: String
 	 * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	private static String checkParamsWebGet(String sessionKey) throws Exception{
 		// 获取接口API参数信息
 		List<Map<String, Object>> propertys = (List<Map<String, Object>>) Constants.REQUEST_MAPPING.get(sessionKey).get("list");
@@ -184,7 +184,6 @@ public class InputObject extends PutObject implements Serializable{
 		return stb.toString();
 	}
 	
-	@SuppressWarnings("unchecked")
 	private static String setParamsObjToMapReStr(String sessionKey, Map<String, Object> formMap) throws Exception{
 		List<Map<String, Object>> propertys = (List<Map<String, Object>>) Constants.REQUEST_MAPPING.get(sessionKey).get("list");
 		// 校验通过的入参集合
@@ -228,7 +227,7 @@ public class InputObject extends PutObject implements Serializable{
 		}
 		resultParams.put("urlUseJurisdiction", allUse);//URL访问权限参数
 		JedisClientService jedisClient = SpringUtils.getBean(JedisClientService.class);
-		jedisClient.set(requestId, JSONUtil.toJsonStr(resultParams), 10);
+		jedisClient.set(requestId, JSON.toJSONString(resultParams), 10);
 	}
 	
 	private static Map<String, Object> getRequestParams(){
@@ -237,7 +236,7 @@ public class InputObject extends PutObject implements Serializable{
 			return null;
 		}
 		JedisClientService jedisClient = SpringUtils.getBean(JedisClientService.class);
-		return JSONUtil.toBean(jedisClient.get(requestId), null);
+		return JSONObject.parseObject(jedisClient.get(requestId));
 	}
 	
 	public static Map<String, Object> getMap() throws Exception{
@@ -253,7 +252,6 @@ public class InputObject extends PutObject implements Serializable{
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<String, Object> getLogParams() throws Exception {
 		String userToken = GetUserToken.getUserToken(getRequest());
 		JedisClientService jedisClient = SpringUtils.getBean(JedisClientService.class);
@@ -266,12 +264,11 @@ public class InputObject extends PutObject implements Serializable{
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public static Map<String, Object> getLogParamsStatic() throws Exception {
 		String userToken = GetUserToken.getUserToken(getRequest());
 		JedisClientService jedisClient = SpringUtils.getBean(JedisClientService.class);
 		// 用户信息
-		return JSONUtil.toBean(jedisClient.get("userMation:" + userToken), null);
+		return JSONObject.parseObject(jedisClient.get("userMation:" + userToken));
 	}
 	
 	/**
@@ -279,11 +276,10 @@ public class InputObject extends PutObject implements Serializable{
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getLogDeskTopMenuParams() throws Exception {
 		String userToken = GetUserToken.getUserToken(getRequest());
 		JedisClientService jedisClient = SpringUtils.getBean(JedisClientService.class);
-		//桌面菜单信息
+		// 桌面菜单信息
 		return JSONUtil.toList(jedisClient.get("deskTopsMation:" + userToken), null);
 	}
 	
@@ -292,11 +288,10 @@ public class InputObject extends PutObject implements Serializable{
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public List<Map<String, Object>> getLogAllMenuParams() throws Exception {
 		String userToken = GetUserToken.getUserToken(getRequest());
 		JedisClientService jedisClient = SpringUtils.getBean(JedisClientService.class);
-		//所有菜单信息
+		// 所有菜单信息
 		return JSONUtil.toList(jedisClient.get("allMenuMation:" + userToken), null);
 	}
 	
