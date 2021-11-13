@@ -68,4 +68,28 @@
     </url>
     <!-- 系统基础设置结束 -->
 
+    <!-- 系统模板分类开始 -->
+    <url id="sysevemodeltype001" path="/post/SysEveModelTypeController/querySysEveModelTypeList" method="POST" val="获取系统模板分类列表" allUse="1">
+        <property id="typeName" name="typeName" ref="" var="分类名称"/>
+    </url>
+    <url id="sysevemodeltype002" path="/post/SysEveModelTypeController/insertSysEveModelType" method="POST" val="新增系统模板分类" allUse="1">
+        <property id="typeName" name="typeName" ref="required" var="分类名称"/>
+        <property id="parentId" name="parentId" ref="required" var="父id"/>
+    </url>
+    <url id="sysevemodeltype003" path="/post/SysEveModelTypeController/delSysEveModelTypeById" method="DELETE" val="删除系统模板分类" allUse="1">
+        <property id="id" name="id" ref="required" var="系统模板分类id"/>
+    </url>
+    <url id="sysevemodeltype004" path="/post/SysEveModelTypeController/querySysEveModelTypeById" method="GET" val="根据id查询系统模板分类详情" allUse="2">
+        <property id="id" name="id" ref="required" var="系统模板分类id"/>
+    </url>
+    <url id="sysevemodeltype005" path="/post/SysEveModelTypeController/updateSysEveModelTypeById" method="PUT" val="通过id编辑对应的系统模板分类信息" allUse="1">
+        <property id="id" name="id" ref="required" var="系统模板分类id"/>
+        <property id="typeName" name="typeName" ref="required" var="分类名称"/>
+        <property id="parentId" name="parentId" ref="required" var="父id"/>
+    </url>
+    <url id="sysevemodeltype006" path="/post/SysEveModelTypeController/querySysEveModelTypeByParentId" method="GET" val="通过parentId查找对应的系统模板分类列表" allUse="2">
+        <property id="parentId" name="parentId" ref="required" var="父id"/>
+    </url>
+    <!-- 系统模板分类结束 -->
+
 </controller>
