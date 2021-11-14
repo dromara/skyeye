@@ -69,27 +69,62 @@
     <!-- 系统基础设置结束 -->
 
     <!-- 系统模板分类开始 -->
-    <url id="sysevemodeltype001" path="/post/SysEveModelTypeController/querySysEveModelTypeList" method="POST" val="获取系统模板分类列表" allUse="1">
+    <url id="sysevemodeltype001" path="/post/SysEveModelTypeController/querySysEveModelTypeList" method="POST" val="获取系统模板分类列表" allUse="1" groupName="系统模板分类">
         <property id="typeName" name="typeName" ref="" var="分类名称"/>
     </url>
-    <url id="sysevemodeltype002" path="/post/SysEveModelTypeController/insertSysEveModelType" method="POST" val="新增系统模板分类" allUse="1">
+    <url id="sysevemodeltype002" path="/post/SysEveModelTypeController/insertSysEveModelType" method="POST" val="新增系统模板分类" allUse="1" groupName="系统模板分类">
         <property id="typeName" name="typeName" ref="required" var="分类名称"/>
         <property id="parentId" name="parentId" ref="required" var="父id"/>
     </url>
-    <url id="sysevemodeltype003" path="/post/SysEveModelTypeController/delSysEveModelTypeById" method="DELETE" val="删除系统模板分类" allUse="1">
+    <url id="sysevemodeltype003" path="/post/SysEveModelTypeController/delSysEveModelTypeById" method="DELETE" val="删除系统模板分类" allUse="1" groupName="系统模板分类">
         <property id="id" name="id" ref="required" var="系统模板分类id"/>
     </url>
-    <url id="sysevemodeltype004" path="/post/SysEveModelTypeController/querySysEveModelTypeById" method="GET" val="根据id查询系统模板分类详情" allUse="2">
+    <url id="sysevemodeltype004" path="/post/SysEveModelTypeController/querySysEveModelTypeById" method="GET" val="根据id查询系统模板分类详情" allUse="2" groupName="系统模板分类">
         <property id="id" name="id" ref="required" var="系统模板分类id"/>
     </url>
-    <url id="sysevemodeltype005" path="/post/SysEveModelTypeController/updateSysEveModelTypeById" method="PUT" val="通过id编辑对应的系统模板分类信息" allUse="1">
+    <url id="sysevemodeltype005" path="/post/SysEveModelTypeController/updateSysEveModelTypeById" method="PUT" val="通过id编辑对应的系统模板分类信息" allUse="1" groupName="系统模板分类">
         <property id="id" name="id" ref="required" var="系统模板分类id"/>
         <property id="typeName" name="typeName" ref="required" var="分类名称"/>
         <property id="parentId" name="parentId" ref="required" var="父id"/>
     </url>
-    <url id="sysevemodeltype006" path="/post/SysEveModelTypeController/querySysEveModelTypeByParentId" method="GET" val="通过parentId查找对应的系统模板分类列表" allUse="2">
+    <url id="sysevemodeltype006" path="/post/SysEveModelTypeController/querySysEveModelTypeByParentId" method="GET" val="通过parentId查找对应的系统模板分类列表" allUse="2" groupName="系统模板分类">
         <property id="parentId" name="parentId" ref="required" var="父id"/>
     </url>
     <!-- 系统模板分类结束 -->
+
+    <!-- 系统编辑器模板开始 -->
+    <url id="sysevemodel001" path="/post/SysEveModelController/querySysEveModelList" val="获取系统编辑器模板列表" method="POST" allUse="1" groupName="系统编辑器模板">
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+        <property id="title" name="title" ref="" var="标题"/>
+        <property id="type" name="type" ref="" var="模板类型"/>
+        <property id="firstTypeId" name="firstTypeId" ref="" var="所属一级分类" />
+        <property id="secondTypeId" name="secondTypeId" ref="" var="所属二级分类" />
+    </url>
+    <url id="sysevemodel002" path="/post/SysEveModelController/insertSysEveModelMation" val="新增系统编辑器模板" method="POST" allUse="1" groupName="系统编辑器模板">
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="content" name="content" ref="" var="模板内容"/>
+        <property id="type" name="type" ref="required,num" var="模板类型"/>
+        <property id="firstTypeId" name="firstTypeId" ref="required" var="所属一级分类" />
+        <property id="secondTypeId" name="secondTypeId" ref="required" var="所属二级分类" />
+    </url>
+    <url id="sysevemodel003" path="/post/SysEveModelController/deleteSysEveModelById" val="删除系统编辑器模板" method="DELETE" allUse="1" groupName="系统编辑器模板">
+        <property id="id" name="id" ref="required" var="模板id" />
+    </url>
+    <url id="sysevemodel004" path="/post/SysEveModelController/selectSysEveModelById" val="通过id查找对应的系统编辑器模板" method="GET" allUse="2" groupName="系统编辑器模板">
+        <property id="id" name="id" ref="required" var="模板id" />
+    </url>
+    <url id="sysevemodel005" path="/post/SysEveModelController/editSysEveModelMationById" val="通过id编辑对应的系统编辑器模板" method="PUT" allUse="1" groupName="系统编辑器模板">
+        <property id="id" name="id" ref="required" var="模板id" />
+        <property id="title" name="title" ref="" var="标题" />
+        <property id="content" name="content" ref="" var="模板内容" />
+        <property id="type" name="type" ref="required,num" var="模板类型"/>
+        <property id="firstTypeId" name="firstTypeId" ref="required" var="所属一级分类" />
+        <property id="secondTypeId" name="secondTypeId" ref="required" var="所属二级分类" />
+    </url>
+    <url id="sysevemodel006" path="/post/SysEveModelController/selectSysEveModelMationById" val="通过id查找对应的系统编辑器模板详情" method="GET" allUse="1" groupName="系统编辑器模板">
+        <property id="id" name="id" ref="required" var="模板id" />
+    </url>
+    <!-- 系统编辑器模板结束 -->
 
 </controller>

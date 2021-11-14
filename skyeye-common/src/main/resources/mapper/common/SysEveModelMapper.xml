@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.SysEveModelDao">
+	
+	<select id="querySysEveModelList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title title,
+			CASE a.type WHEN '1' THEN '系统模板' WHEN '2' THEN '个人模板' ELSE a.type END type,
+			a.content content,
+		    b.type_name firstTypeName,
+		    c.type_name secondTypeName
+		FROM
+			sys_eve_model a
+			LEFT JOIN sys_eve_model_type b ON a.first_type_id = b.id
+			LEFT JOIN sys_eve_model_type c ON a.second_type_id = c.id
+		WHERE 1 = 1
+			<if test="title != '' and title != null">
+				AND a.title LIKE '%${title}%'
+			</if>
+			<if test="type != '' and type != null">
+				AND a.type = #{type}
+			</if>
+			<if test="firstTypeId != '' and firstTypeId != null">
+				AND a.first_type_id = #{firstTypeId}
+			</if>
+			<if test="secondTypeId != '' and secondTypeId != null">
+				AND a.second_type_id = #{secondTypeId}
+			</if>
+			ORDER BY a.create_time DESC
+	</select>
+	
+	<select id="querySysEveModelMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_eve_model a
+		WHERE
+			a.title = #{title}
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+	
+	<insert id="insertSysEveModelMation" parameterType="java.util.Map">
+		INSERT INTO sys_eve_model 
+	    (id, title, content, type, create_id, create_time, first_type_id, second_type_id, last_update_id, last_update_time)
+	    VALUES(#{id}, #{title}, #{content}, #{type}, #{createId}, #{createTime}, #{firstTypeId}, #{secondTypeId}, #{createId}, #{createTime})
+	</insert>
+
+		<delete id="deleteSysEveModelById" parameterType="java.util.Map">
+		DELETE
+		FROM
+			sys_eve_model
+		WHERE
+			id = #{id}
+	</delete>
+	
+	<select id="selectSysEveModelById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title title,
+			a.content content,
+			a.type type,
+			a.first_type_id firstTypeId,
+			a.second_type_id secondTypeId
+		FROM
+			sys_eve_model a
+		WHERE
+			a.id = #{id}
+	</select>
+
+	<select id="selectSysEveModelMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.title title,
+			a.content content,
+			CASE a.type WHEN '1' THEN '系统模板' WHEN '2' THEN '个人模板' ELSE a.type END type,
+		    b.type_name firstTypeName,
+		    c.type_name secondTypeName
+		FROM
+			sys_eve_model a
+			LEFT JOIN sys_eve_model_type b ON a.first_type_id = b.id
+			LEFT JOIN sys_eve_model_type c ON a.second_type_id = c.id
+		WHERE
+			a.id = #{id}
+	</select>
+	
+	<update id="editSysEveModelMationById" parameterType="java.util.Map">
+		UPDATE sys_eve_model
+		<set>
+			title = #{title},
+			content = #{content},
+			type = #{type},
+			first_type_id = #{firstTypeId},
+			second_type_id = #{secondTypeId},
+			last_update_id = #{userId},
+			last_update_time = #{lastUpdateTime}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+	</mapper>
