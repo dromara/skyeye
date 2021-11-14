@@ -7,6 +7,7 @@ package com.skyeye.eve.service.impl;
 import cn.hutool.json.JSONUtil;
 import com.gexin.fastjson.JSON;
 import com.skyeye.common.constans.ErpConstants;
+import com.skyeye.common.constans.SystemFoundationSettingsConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
@@ -137,6 +138,10 @@ public class SystemFoundationSettingsServiceImpl implements SystemFoundationSett
 		// ERP单据审核的一些设置
 		if(!map.containsKey("erpExamineBasicDesign") || ToolUtil.isBlank(map.get("erpExamineBasicDesign").toString())){
 			map.put("erpExamineBasicDesign", JSON.toJSONString(ErpConstants.DepoTheadSubType.getNeedExamineOrderISOne()));
+		}
+		// 动态表单关联的一些设置
+		if(!map.containsKey("customWithDsFormList") || ToolUtil.isBlank(map.get("customWithDsFormList").toString())){
+			map.put("customWithDsFormList", JSON.toJSONString(SystemFoundationSettingsConstants.CustomWithDsFormObject.getCustomWithDsFormList()));
 		}
 	}
 	

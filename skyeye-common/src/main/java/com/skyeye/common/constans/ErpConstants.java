@@ -61,17 +61,18 @@ public class ErpConstants {
 				"../../tpl/salesoutlet/salesoutletadd.html", 1, true, 1),
     	OUT_IS_PURCHASE_RETURNS("采购退货单", "CGTH", "6", "com.skyeye.factory.impl.PurchaseReturnsFactory",
 				"../../tpl/purchasereturns/purchasereturnsadd.html", 1, true, 1),
-    	OUT_IS_ALLOCATION("调拨单", "DBCK", "7", "", "", 0, true, null),
     	OUT_IS_RETAIL("零售出库单", "LSCK", "8", "com.skyeye.factory.impl.RetailOutLetFactory",
 				"../../tpl/retailoutlet/retailoutletadd.html", 1, true, 1),
-    	OUT_IS_OTHERS("其他出库单", "QTCK", "9", "com.skyeye.factory.impl.OtherOutLetsFactory",
+		OUT_IS_OTHERS("其他出库单", "QTCK", "9", "com.skyeye.factory.impl.OtherOutLetsFactory",
 				"../../tpl/otheroutlets/otheroutletsadd.html", 1, true, 1),
-		// 采购单
-    	PURCHASE_ORDER("采购订单", "CGDD", "10", "com.skyeye.factory.impl.PurchaseOrderFactory",
+		// 采购单,
+		PURCHASE_ORDER("采购订单", "CGDD", "10", "com.skyeye.factory.impl.PurchaseOrderFactory",
 				"../../tpl/purchaseorder/purchaseorderadd.html", 1, true, 2),
 		// 销售单
 		OUTCHASE_ORDER("销售订单", "XSDD", "11", "com.skyeye.factory.impl.SalesOrderFactory",
 				"../../tpl/salesorder/salesorderadd.html", 1, true, 1),
+		// 调拨单
+		OUT_IS_ALLOCATION("调拨单", "DBCK", "7", "", "", 0, true, null),
 		// 拆分单
 		SPLIT_LIST_ORDER("拆分订单", "CFDD", "12", "", "", 0, true, null),
 		// 组装单

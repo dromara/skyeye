@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<controller modelName="公共模块">
+<controller modelName="系统公共模块">
     <!--
         - allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
      -->
@@ -65,6 +65,7 @@
         <property id="yearHolidaysMation" name="yearHolidaysMation" ref="required,json" var="年假信息"/>
         <property id="abnormalMation" name="abnormalMation" ref="required,json" var="异常考勤制度管理信息"/>
         <property id="erpExamineBasicDesign" name="erpExamineBasicDesign" ref="required,json" var="ERP单据审核的一些设置"/>
+        <property id="customWithDsFormList" name="customWithDsFormList" ref="required,json" var="动态表单关联信息"/>
     </url>
     <!-- 系统基础设置结束 -->
 
