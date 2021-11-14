@@ -89,7 +89,7 @@
 	</url>
 
 	<!-- 动态表单页面设计开始 -->
-	<url id="dsformpage001" path="/post/DsFormPageController/queryDsFormPageList" val="获取动态表单页面表" method="POST" allUse="1" groupName="表单页面设计接口">
+	<url id="dsformpage001" path="/post/DsFormPageController/queryDsFormPageList" val="获取动态表单页面表" method="POST" allUse="2" groupName="表单页面设计接口">
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
         <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
         <property id="pageName" name="pageName" ref="" var="页面名称"/>

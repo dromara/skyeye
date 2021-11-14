@@ -5,10 +5,12 @@
 	<insert id="insertSystemFoundationSettings" parameterType="java.util.Map">
 	     INSERT into system_foundation_settings 
 	     (id, email_type, email_receipt_server, email_receipt_server_port, email_send_server, email_send_server_port,
-	     	no_documentary_day_num, no_charge_id, holidays_type_json, year_holidays_mation, abnormal_mation, erp_examine_basic_design)
+	     	no_documentary_day_num, no_charge_id, holidays_type_json, year_holidays_mation, abnormal_mation, erp_examine_basic_design,
+		    custom_with_dsform_list)
 	     VALUES
 	     (#{id}, #{emailType}, #{emailReceiptServer}, #{emailReceiptServerPort}, #{emailSendServer}, #{emailSendServerPort},
-	     	#{noDocumentaryDayNum}, #{noChargeId}, #{holidaysTypeJson}, #{yearHolidaysMation}, #{abnormalMation}, #{erpExamineBasicDesign})
+	     	#{noDocumentaryDayNum}, #{noChargeId}, #{holidaysTypeJson}, #{yearHolidaysMation}, #{abnormalMation}, #{erpExamineBasicDesign},
+	        #{customWithDsFormList})
 	</insert>
 	
 	<select id="querySystemFoundationSettingsList" resultType="java.util.Map">
@@ -24,7 +26,8 @@
 			holidays_type_json holidaysTypeJson,
 			year_holidays_mation yearHolidaysMation,
 			abnormal_mation abnormalMation,
-			erp_examine_basic_design erpExamineBasicDesign
+			erp_examine_basic_design erpExamineBasicDesign,
+			custom_with_dsform_list customWithDsFormList
 		FROM
 			system_foundation_settings
 	</select>
@@ -42,7 +45,8 @@
 			holidays_type_json = #{holidaysTypeJson},
 			year_holidays_mation = #{yearHolidaysMation},
 			abnormal_mation = #{abnormalMation},
-			erp_examine_basic_design = #{erpExamineBasicDesign}
+			erp_examine_basic_design = #{erpExamineBasicDesign},
+			custom_with_dsform_list = #{customWithDsFormList}
 		</set>
 	</update>
 	
