@@ -29,14 +29,28 @@
 			</if>
 			ORDER BY a.create_time DESC
 	</select>
-	
-	<select id="querySysEveModelMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+
+	<select id="querySysEveModelMationByNameAndType" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id
 		FROM
 			sys_eve_model a
 		WHERE
 			a.title = #{title}
+			AND a.type = #{type}
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+
+	<select id="querySysEveModelMationByNameAndUser" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			sys_eve_model a
+		WHERE
+			a.title = #{title}
+			AND a.create_id = #{userId}
 		<if test="id != '' and id != null">
 			AND a.id != #{id}
 		</if>
@@ -45,7 +59,7 @@
 	<insert id="insertSysEveModelMation" parameterType="java.util.Map">
 		INSERT INTO sys_eve_model 
 	    (id, title, content, type, create_id, create_time, first_type_id, second_type_id, last_update_id, last_update_time)
-	    VALUES(#{id}, #{title}, #{content}, #{type}, #{createId}, #{createTime}, #{firstTypeId}, #{secondTypeId}, #{createId}, #{createTime})
+	    VALUES(#{id}, #{title}, #{content}, #{type}, #{userId}, #{createTime}, #{firstTypeId}, #{secondTypeId}, #{userId}, #{createTime})
 	</insert>
 
 		<delete id="deleteSysEveModelById" parameterType="java.util.Map">

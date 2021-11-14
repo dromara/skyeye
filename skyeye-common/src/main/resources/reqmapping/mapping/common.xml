@@ -104,7 +104,7 @@
     </url>
     <url id="sysevemodel002" path="/post/SysEveModelController/insertSysEveModelMation" val="新增系统编辑器模板" method="POST" allUse="1" groupName="系统编辑器模板">
         <property id="title" name="title" ref="required" var="标题" />
-        <property id="content" name="content" ref="" var="模板内容"/>
+        <property id="content" name="content" ref="required" var="模板内容"/>
         <property id="type" name="type" ref="required,num" var="模板类型"/>
         <property id="firstTypeId" name="firstTypeId" ref="required" var="所属一级分类" />
         <property id="secondTypeId" name="secondTypeId" ref="required" var="所属二级分类" />
@@ -117,8 +117,8 @@
     </url>
     <url id="sysevemodel005" path="/post/SysEveModelController/editSysEveModelMationById" val="通过id编辑对应的系统编辑器模板" method="PUT" allUse="1" groupName="系统编辑器模板">
         <property id="id" name="id" ref="required" var="模板id" />
-        <property id="title" name="title" ref="" var="标题" />
-        <property id="content" name="content" ref="" var="模板内容" />
+        <property id="title" name="title" ref="required" var="标题" />
+        <property id="content" name="content" ref="required" var="模板内容" />
         <property id="type" name="type" ref="required,num" var="模板类型"/>
         <property id="firstTypeId" name="firstTypeId" ref="required" var="所属一级分类" />
         <property id="secondTypeId" name="secondTypeId" ref="required" var="所属二级分类" />
