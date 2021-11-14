@@ -21,7 +21,9 @@ public interface SysEveModelDao {
 
 	public List<Map<String, Object>> querySysEveModelList(Map<String, Object> map) throws Exception;
 
-	public Map<String, Object> querySysEveModelMationByName(Map<String, Object> map) throws Exception;
+	public Map<String, Object> querySysEveModelMationByNameAndType(Map<String, Object> map) throws Exception;
+
+	public Map<String, Object> querySysEveModelMationByNameAndUser(Map<String, Object> map) throws Exception;
 
 	public int insertSysEveModelMation(Map<String, Object> map) throws Exception;
 

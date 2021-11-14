@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,14 +73,20 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	@Transactional(value="transactionManager")
 	public void insertSysEveModelMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = sysEveModelDao.querySysEveModelMationByName(map);
+		map.put("userId", inputObject.getLogParams().get("id"));
+		Map<String, Object> bean = new HashMap<>();
+		String type = map.get("type").toString();
+		if ("1".equals(type)){
+			bean = sysEveModelDao.querySysEveModelMationByNameAndType(map);
+		} else if ("2".equals(type)){
+			bean = sysEveModelDao.querySysEveModelMationByNameAndUser(map);
+		}
 		if(bean != null && !bean.isEmpty()){
 			outputObject.setreturnMessage("该系统编辑器模板已存在，请更换");
 		}else{
 			Map<String, Object> user = inputObject.getLogParams();
 			map.put("id", ToolUtil.getSurFaceId());
 			map.put("pageNum", ToolUtil.getUniqueKey().substring(10, 20));
-			map.put("createId", user.get("id"));
 			map.put("createTime", DateUtil.getTimeAndToString());
 			sysEveModelDao.insertSysEveModelMation(map);
 		}
@@ -134,12 +141,18 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	@Transactional(value="transactionManager")
 	public void editSysEveModelMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> b = sysEveModelDao.querySysEveModelMationByName(map);
-		if(b != null && !b.isEmpty()){
+		map.put("userId", inputObject.getLogParams().get("id"));
+		Map<String, Object> bean = new HashMap<>();
+		String type = map.get("type").toString();
+		if ("1".equals(type)){
+			bean = sysEveModelDao.querySysEveModelMationByNameAndType(map);
+		} else if ("2".equals(type)){
+			bean = sysEveModelDao.querySysEveModelMationByNameAndUser(map);
+		}
+		if(bean != null && !bean.isEmpty()){
 			outputObject.setreturnMessage("该编辑器模板已存在，请更换");
 		}else{
 			map.put("lastUpdateTime", DateUtil.getTimeAndToString());
-			map.put("userId", inputObject.getLogParams().get("id"));
 			sysEveModelDao.editSysEveModelMationById(map);
 		}
 	}
