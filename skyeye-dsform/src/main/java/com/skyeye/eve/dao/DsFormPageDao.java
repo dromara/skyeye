@@ -4,6 +4,8 @@
 
 package com.skyeye.eve.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +47,7 @@ public interface DsFormPageDao {
 
 	public int editDsFormPageContentToDelete(Map<String, Object> m) throws Exception;
 
-	public List<Map<String, Object>> queryDsFormContentListByPageId(Map<String, Object> map) throws Exception;
+	public List<Map<String, Object>> queryDsFormContentListByPageId(@Param("dsFormPageId") String dsFormPageId) throws Exception;
 
 	public Map<String, Object> queryFromDsFormPageContent(Map<String, Object> o) throws Exception;
 

@@ -182,7 +182,7 @@
 		WHERE id = #{id}
 	</update>
 	
-	<select id="queryDsFormContentListByPageId" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="queryDsFormContentListByPageId" resultType="java.util.Map">
 		SELECT
 			a.id,
 			a.id name,
@@ -210,7 +210,7 @@
 			LEFT JOIN ds_form_display_template d ON b.data_show_tpl = d.id,
 			ds_form_page_content a
 			LEFT JOIN ds_form_limit_requirement c ON INSTR(CONCAT(',', a.`require`, ','), CONCAT(',', c.id, ','))
-		WHERE a.page_id = #{pageId}
+		WHERE a.page_id = #{dsFormPageId}
 		AND a.state = 1
 		AND	b.id = a.form_content_id
 		GROUP BY a.id

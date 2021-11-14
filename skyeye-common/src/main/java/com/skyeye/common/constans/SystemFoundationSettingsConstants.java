@@ -39,7 +39,7 @@ public class SystemFoundationSettingsConstants {
         // 采购单
         PURCHASE_ORDER("ERP模块", "采购订单", "CGDD", new ArrayList<>()),
         // 销售单
-        OUTCHASE_ORDER("ERP模块", "销售订单", "XSDD", new ArrayList<>());
+        OUTCHASE_ORDER("ERP模块", "销售订单",     "XSDD", new ArrayList<>());
 
         // 所属模块
         private String modelName;

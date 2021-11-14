@@ -6,30 +6,36 @@ package com.skyeye.eve.service;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 
+import java.util.List;
+import java.util.Map;
+
 public interface DsFormPageService {
 
-	public void queryDsFormPageList(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void queryDsFormPageList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void insertDsFormPageMation(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void insertDsFormPageMation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void insertDsFormPageContent(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void insertDsFormPageContent(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void selectFormPageContentByPageId(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void selectFormPageContentByPageId(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void deleteDsFormPageById(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void deleteDsFormPageById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void selectDsFormPageById(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void selectDsFormPageById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void editDsFormPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void editDsFormPageMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void queryAllDsFormPageContent(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void queryAllDsFormPageContent(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void editDsFormPageContentByPageId(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void editDsFormPageContentByPageId(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void queryInterfaceIsTrueOrNot(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void queryInterfaceIsTrueOrNot(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void queryInterfaceValue(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void queryInterfaceValue(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void queryDsFormContentListByPageId(InputObject inputObject, OutputObject outputObject) throws Exception;
+	void queryDsFormContentListByPageId(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	List<Map<String, Object>> getDsFormPageContentByFormId(String dsFormPageId) throws Exception;
+
+	void queryDsFormContentListByCode(InputObject inputObject, OutputObject outputObject) throws Exception;
 }

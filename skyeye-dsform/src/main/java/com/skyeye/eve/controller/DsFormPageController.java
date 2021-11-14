@@ -54,7 +54,7 @@ public class DsFormPageController {
 	/**
 	 * 
 	     * @Title: insertDsFormPageContent
-	     * @Description: 新增控件
+	     * @Description: 新增控件到表单页面
 	     * @param inputObject
 	     * @param outputObject
 	     * @throws Exception    参数
@@ -209,6 +209,19 @@ public class DsFormPageController {
 	@ResponseBody
 	public void queryDsFormContentListByPageId(InputObject inputObject, OutputObject outputObject) throws Exception{
 		dsFormPageService.queryDsFormContentListByPageId(inputObject, outputObject);
+	}
+
+	/**
+	 * 根据code获取动添表单信息
+	 *
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	@RequestMapping("/post/DsFormPageController/queryDsFormContentListByCode")
+	@ResponseBody
+	public void queryDsFormContentListByCode(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dsFormPageService.queryDsFormContentListByCode(inputObject, outputObject);
 	}
 	
 }

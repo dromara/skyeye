@@ -8,12 +8,11 @@ import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.activiti.service.ActivitiModelService;
-import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
-import com.skyeye.eve.dao.DsFormPageDao;
 import com.skyeye.eve.dao.PageSequenceDao;
+import com.skyeye.eve.service.DsFormPageService;
 import com.skyeye.eve.service.PageSequenceService;
 import com.skyeye.jedis.JedisClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class PageSequenceServiceImpl implements PageSequenceService{
 	private ActivitiModelService activitiModelService;
 	
 	@Autowired
-	private DsFormPageDao dsFormPageDao;
+	private DsFormPageService dsFormPageService;
 	
 	@Autowired
 	public JedisClientService jedisClient;
@@ -158,17 +157,9 @@ public class PageSequenceServiceImpl implements PageSequenceService{
 				outputObject.setreturnMessage("该表单还未绑定工作流，请联系管理员.");
 				return;
 			}
-			//获取表单项
-			List<Map<String, Object>> items;
-			if(ToolUtil.isBlank(jedisClient.get(Constants.dsFormContentListByPageId(map.get("pageId").toString())))){//若缓存中无值
-				items = dsFormPageDao.queryDsFormContentListByPageId(map);	//从数据库中查询
-				if(!items.isEmpty()){
-					jedisClient.set(Constants.dsFormContentListByPageId(map.get("pageId").toString()), JSONUtil.toJsonStr(items));//将从数据库中查来的内容存到缓存中
-				}
-			}else{
-				items = JSONUtil.toList(jedisClient.get(Constants.dsFormContentListByPageId(map.get("pageId").toString())), null);
-			}
-			//获取数据
+			// 获取表单项
+			List<Map<String, Object>> items = dsFormPageService.getDsFormPageContentByFormId(map.get("pageId").toString());
+			// 获取数据
 			Map<String, Object> subFormData = new HashMap<>();
 			List<Map<String, Object>> rows = pageSequenceDao.queryDsFormContentBySequenceId(map);
 			for(Map<String, Object> row : rows){

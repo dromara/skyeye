@@ -8,6 +8,7 @@ import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.common.constans.Constants;
+import com.skyeye.common.constans.SystemFoundationSettingsConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -20,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -92,7 +92,7 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	/**
 	 * 
 	     * @Title: insertDsFormPageContent
-	     * @Description: 新增控件
+	     * @Description: 新增控件到表单页面
 	     * @param inputObject
 	     * @param outputObject
 	     * @throws Exception    参数
@@ -223,7 +223,6 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(value="transactionManager")
 	public void editDsFormPageContentByPageId(InputObject inputObject, OutputObject outputObject) throws Exception {
@@ -256,7 +255,6 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("static-access")
 	@Override
 	public void queryInterfaceIsTrueOrNot(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
@@ -295,7 +293,6 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("static-access")
 	@Override
 	public void queryInterfaceValue(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
@@ -317,21 +314,48 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void queryDsFormContentListByPageId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		List<Map<String, Object>> beans = new ArrayList<>();
-		if(ToolUtil.isBlank(jedisClient.get(Constants.dsFormContentListByPageId(map.get("pageId").toString())))){//若缓存中无值
-			beans = dsFormPageDao.queryDsFormContentListByPageId(map);	//从数据库中查询
-			jedisClient.set(Constants.dsFormContentListByPageId(map.get("pageId").toString()), JSONUtil.toJsonStr(beans));//将从数据库中查来的内容存到缓存中
-		}else{
-			beans = JSONUtil.toList(jedisClient.get(Constants.dsFormContentListByPageId(map.get("pageId").toString())), null);
-		}
+		String pageId = map.get("").toString();
+		List<Map<String, Object>> beans = getDsFormPageContentByFormId(pageId);
 		if(!beans.isEmpty()){
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());
 		}
+	}
+
+	@Override
+	public List<Map<String, Object>> getDsFormPageContentByFormId(String dsFormPageId) throws Exception {
+		List<Map<String, Object>> beans;
+		if(ToolUtil.isBlank(jedisClient.get(Constants.dsFormContentListByPageId(dsFormPageId)))){
+			// 若缓存中无值,从数据库中查询
+			beans = dsFormPageDao.queryDsFormContentListByPageId(dsFormPageId);
+			// 将从数据库中查来的内容存到缓存中
+			jedisClient.set(Constants.dsFormContentListByPageId(dsFormPageId), JSONUtil.toJsonStr(beans));
+		}else{
+			beans = JSONUtil.toList(jedisClient.get(Constants.dsFormContentListByPageId(dsFormPageId)), null);
+		}
+		return beans;
+	}
+
+	/**
+	 * 根据code获取动添表单信息
+	 *
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	@Override
+	public void queryDsFormContentListByCode(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		String code = map.get("dsFormCode").toString();
+		List<Map<String, Object>> dsFormList = SystemFoundationSettingsConstants.CustomWithDsFormObject.getDsFormListByCode(code);
+		for(Map<String, Object> bean: dsFormList) {
+			bean.put("content", this.getDsFormPageContentByFormId(bean.get("id").toString()));
+		}
+		outputObject.setBeans(dsFormList);
+		outputObject.settotal(dsFormList.size());
 	}
 
 }

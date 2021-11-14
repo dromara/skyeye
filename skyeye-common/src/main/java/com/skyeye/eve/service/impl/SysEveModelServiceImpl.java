@@ -74,13 +74,7 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	public void insertSysEveModelMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		map.put("userId", inputObject.getLogParams().get("id"));
-		Map<String, Object> bean = new HashMap<>();
-		String type = map.get("type").toString();
-		if ("1".equals(type)){
-			bean = sysEveModelDao.querySysEveModelMationByNameAndType(map);
-		} else if ("2".equals(type)){
-			bean = sysEveModelDao.querySysEveModelMationByNameAndUser(map);
-		}
+		Map<String, Object> bean = judgeSimpleTitle(map);
 		if(bean != null && !bean.isEmpty()){
 			outputObject.setreturnMessage("该系统编辑器模板已存在，请更换");
 		}else{
@@ -92,7 +86,18 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 		}
 	}
 
-	 /**
+	private Map<String, Object> judgeSimpleTitle(Map<String, Object> map) throws Exception {
+		Map<String, Object> bean = new HashMap<>();
+		String type = map.get("type").toString();
+		if ("1".equals(type)) {
+			bean = sysEveModelDao.querySysEveModelMationByNameAndType(map);
+		} else if ("2".equals(type)) {
+			bean = sysEveModelDao.querySysEveModelMationByNameAndUser(map);
+		}
+		return bean;
+	}
+
+	/**
 	 *
 	     * @Title: deleteSysEveModelById
 	     * @Description: 删除编辑器模板
@@ -142,13 +147,7 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	public void editSysEveModelMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		map.put("userId", inputObject.getLogParams().get("id"));
-		Map<String, Object> bean = new HashMap<>();
-		String type = map.get("type").toString();
-		if ("1".equals(type)){
-			bean = sysEveModelDao.querySysEveModelMationByNameAndType(map);
-		} else if ("2".equals(type)){
-			bean = sysEveModelDao.querySysEveModelMationByNameAndUser(map);
-		}
+		Map<String, Object> bean = judgeSimpleTitle(map);
 		if(bean != null && !bean.isEmpty()){
 			outputObject.setreturnMessage("该编辑器模板已存在，请更换");
 		}else{
