@@ -212,7 +212,7 @@ public class DsFormPageController {
 	}
 
 	/**
-	 * 根据code获取动添表单信息
+	 * 根据code获取动态表单信息
 	 *
 	 * @param inputObject
 	 * @param outputObject
@@ -223,5 +223,19 @@ public class DsFormPageController {
 	public void queryDsFormContentListByCode(InputObject inputObject, OutputObject outputObject) throws Exception{
 		dsFormPageService.queryDsFormContentListByCode(inputObject, outputObject);
 	}
+
+	/**
+	 * 保存动态表单信息
+	 *
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	@RequestMapping("/post/DsFormPageController/saveDsFormDataList")
+	@ResponseBody
+	public void saveDsFormDataList(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dsFormPageService.saveDsFormDataList(inputObject, outputObject);
+	}
+
 	
 }

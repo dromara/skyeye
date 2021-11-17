@@ -21,6 +21,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.*;
+import com.skyeye.eve.service.DsFormPageService;
 import com.skyeye.exception.CustomException;
 import com.skyeye.jedis.JedisClientService;
 import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
@@ -148,6 +149,9 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 
 	@Autowired
 	private ActModelDao actModelDao;
+
+	@Autowired
+	private DsFormPageService dsFormPageService;
 
 	/**
 	 * form表单数据存储在task的varables的key
@@ -1764,7 +1768,6 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 		}else{
 			try{
 				List<Map<String, Object>> beans = new ArrayList<Map<String,Object>>();
-				Map<String, Object> m = null;
 				List<Map<String, Object>> jsonArray = new ArrayList<>();
 				Map<String, Map<String, Object>> jOb = JSONUtil.toBean(str, null);
 				//遍历数据存入JSONArray集合
@@ -1773,31 +1776,21 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 				}
 				String sequenceId = ToolUtil.getSurFaceId();
 				String userId = user.get("id").toString();
-				String createTime = DateUtil.getTimeAndToString();
 				String pageId = "";
-				for (Map<String, Object> o : jsonArray) {
-					m = dsFormPageDao.queryFromDsFormPageContent((Map<String, Object>)o);
+				for (Map<String, Object> item : jsonArray) {
+					String pageContentId = item.get("rowId").toString();
+					String value = item.containsKey("value") == true ? item.get("value").toString() : "";
+					String text = item.containsKey("text") == true ? item.get("text").toString() : "";
+					Map<String, Object> m = dsFormPageService.getDsFormPageData(pageContentId, value, text, item.get("showType").toString(), sequenceId, userId);
 					pageId = m.get("pageId").toString();
-					m.put("sequenceId", sequenceId);
-					m.put("createId", userId);
-					m.put("createTime", createTime);
-					m.put("id", ToolUtil.getSurFaceId());
-					m.put("value", o.containsKey("value") == true ? o.get("value").toString() : "");//是否存在这个值
-					m.put("text", o.containsKey("text") == true ? o.get("text").toString() : "");
-					m.put("showType", o.get("showType"));
-					m.put("defaultWidth", o.get("proportion").toString());
 					beans.add(m);
 				}
 				editActivitiModelToStartProcessByMap(map, user, sequenceId);
 				if("0".equals(map.get("code").toString())){//启动流程成功
 					dsFormPageDao.insertDsFormPageData(beans);//插入DsFormPageData表
-					Map<String, Object> entity = new HashMap<>();
+					Map<String, Object> entity = dsFormPageService.getDsFormPageSequence(userId, pageId, map.get("message").toString(), StringUtils.EMPTY);
 					entity.put("sequenceId", sequenceId);
-					entity.put("createId", userId);
-					entity.put("createTime", createTime);
-					entity.put("pageId", pageId);
-					entity.put("processInstanceId", map.get("message"));//流程id
-					dsFormPageDao.insertDsFormPageSequence(entity);
+					dsFormPageDao.insertDsFormPageSequence(Arrays.asList(entity));
 				}else{
 					outputObject.setreturnMessage(map.get("message").toString());
 				}

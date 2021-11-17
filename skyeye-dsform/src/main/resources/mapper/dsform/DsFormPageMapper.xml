@@ -202,9 +202,7 @@
 			IFNULL(a.associated_data_types,'') associatedDataTypes,
 			IFNULL(a.a_data,'') aData,
 			IFNULL(d.template_content,'') templateContent,
-			GROUP_CONCAT(c.former_requirement separator '|') `require`,
-			a.editable_node_id editableNodeId,
-			a.editable_node_name editableNodeName
+			GROUP_CONCAT(c.former_requirement separator '|') `require`
 		FROM
 			ds_form_content b
 			LEFT JOIN ds_form_display_template d ON b.data_show_tpl = d.id,
@@ -214,11 +212,10 @@
 		AND a.state = 1
 		AND	b.id = a.form_content_id
 		GROUP BY a.id
-		ORDER BY
-			a.order_by ASC
+		ORDER BY a.order_by ASC
 	</select>
 	
-	<select id="queryFromDsFormPageContent" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="queryFromDsFormPageContent" resultType="java.util.Map">
 		SELECT
 			a.id contentId,
 			a.page_id pageId,
@@ -226,6 +223,7 @@
 			a.placeholder,
 			IFNULL(GROUP_CONCAT(c.former_requirement separator '|'), '') `require`,
 			a.html_content htmlContent,
+			a.default_width defaultWidth,
 			a.js_content jsContent,
 			a.associated_data_types associatedDataTypes,
 			a.a_data aData,
@@ -238,26 +236,33 @@
 			IFNULL(d.template_content, '') displayTemplate
 		FROM
 			ds_form_content b
-		LEFT JOIN ds_form_display_template d ON b.data_show_tpl = d.id,
+			LEFT JOIN ds_form_display_template d ON b.data_show_tpl = d.id,
 			ds_form_page_content a
-		LEFT JOIN ds_form_limit_requirement c ON INSTR(CONCAT(',', a.`require`, ','), CONCAT(',', c.id, ','))
+			LEFT JOIN ds_form_limit_requirement c ON INSTR(CONCAT(',', a.`require`, ','), CONCAT(',', c.id, ','))
 		WHERE
-			a.id = #{rowId}
+			a.id = #{pageContentId}
 		AND	b.id = a.form_content_id
 	</select>
 
 	<insert id="insertDsFormPageSequence" parameterType="java.util.Map">
 		INSERT INTO ds_form_page_sequence
-	    (id, page_id, process_instance_id, create_id, create_time)
-	    VALUES(#{sequenceId}, #{pageId}, #{processInstanceId}, #{createId}, #{createTime})
+	    (id, page_id, process_instance_id, create_id, create_time, object_id)
+	    VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+		(#{item.sequenceId}, #{item.pageId}, #{item.processInstanceId}, #{item.createId}, #{item.createTime}, #{item.objectId})
+		</foreach>
 	</insert>
 	
 	<insert id="insertDsFormPageData" parameterType="java.util.Map">
 		INSERT INTO ds_form_page_data
-	    (id, content_id, sequence_id, page_id, title, placeholder, `require`, html_content, js_content, associated_data_types, a_data, linked_data, display_template, key_id, editable_node_id, editable_node_name, order_by, default_width, `value`, text, show_type, create_id, create_time)
+	    (id, content_id, sequence_id, page_id, title, placeholder, `require`, html_content, js_content,
+	     associated_data_types, a_data, linked_data, display_template, key_id, editable_node_id, editable_node_name, order_by,
+	     default_width, `value`, text, show_type, create_id, create_time)
 	    VALUES
 	    <foreach collection="list" item="item" index="index" separator=",">
-	    	(#{item.id}, #{item.contentId}, #{item.sequenceId}, #{item.pageId}, #{item.title}, #{item.placeholder}, #{item.require}, #{item.htmlContent}, #{item.jsContent}, #{item.associatedDataTypes}, #{item.aData}, #{item.linkedData}, #{item.displayTemplate}, #{item.keyId}, #{item.editableNodeId}, #{item.editableNodeName}, #{item.orderBy}, #{item.defaultWidth}, #{item.value}, #{item.text}, #{item.showType}, #{item.createId}, #{item.createTime})
+		(#{item.id}, #{item.contentId}, #{item.sequenceId}, #{item.pageId}, #{item.title}, #{item.placeholder}, #{item.require}, #{item.htmlContent}, #{item.jsContent},
+		 #{item.associatedDataTypes}, #{item.aData}, #{item.linkedData}, #{item.displayTemplate}, #{item.keyId}, #{item.editableNodeId}, #{item.editableNodeName}, #{item.orderBy},
+		 #{item.defaultWidth}, #{item.value}, #{item.text}, #{item.showType}, #{item.createId}, #{item.createTime})
 		</foreach>
 	</insert>
 

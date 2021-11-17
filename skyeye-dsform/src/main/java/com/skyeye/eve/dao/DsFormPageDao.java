@@ -49,9 +49,9 @@ public interface DsFormPageDao {
 
 	public List<Map<String, Object>> queryDsFormContentListByPageId(@Param("dsFormPageId") String dsFormPageId) throws Exception;
 
-	public Map<String, Object> queryFromDsFormPageContent(Map<String, Object> o) throws Exception;
+	public Map<String, Object> queryFromDsFormPageContent(@Param("pageContentId") String pageContentId) throws Exception;
 
-	public int insertDsFormPageSequence(Map<String, Object> m) throws Exception;
+	public int insertDsFormPageSequence(List<Map<String, Object>> pageSequence) throws Exception;
 
 	public int insertDsFormPageData(List<Map<String, Object>> beans) throws Exception;
 

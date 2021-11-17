@@ -160,6 +160,10 @@
 	<url id="dsformpage013" path="/post/DsFormPageController/queryDsFormContentListByCode" val="根据code获取动态表单信息" allUse="2" method="GET" groupName="表单页面设计接口">
 		<property id="dsFormCode" name="dsFormCode" ref="required" var="com.skyeye.common.constans.SystemFoundationSettingsConstants.CustomWithDsFormObject中的code" />
 	</url>
+	<url id="dsformpage014" path="/post/DsFormPageController/saveDsFormDataList" val="保存动态表单信息" allUse="2" method="POST" groupName="表单页面设计接口">
+		<property id="dataJson" name="dataJson" ref="required,json" var="数据" />
+		<property id="objectId" name="objectId" ref="required" var="需要绑定的id" />
+	</url>
 	<!-- 动态表单页面设计结束 -->
 
 	<!-- 动态表单页面分类开始 -->

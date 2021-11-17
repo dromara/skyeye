@@ -180,6 +180,7 @@ public abstract class ErpOrderFactory {
         this.submitData2Activiti(orderId,
                 Integer.parseInt(depothead.get("subType").toString()),
                 Integer.parseInt(depothead.get("submitType").toString()));
+        outputObject.setBean(depothead);
     }
 
     /**

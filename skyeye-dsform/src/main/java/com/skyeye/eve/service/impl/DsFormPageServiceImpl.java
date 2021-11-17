@@ -5,6 +5,7 @@
 package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
+import com.gexin.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.common.constans.Constants;
@@ -17,10 +18,15 @@ import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.DsFormPageDao;
 import com.skyeye.eve.service.DsFormPageService;
 import com.skyeye.jedis.JedisClientService;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +42,8 @@ import java.util.Map;
  */
 @Service
 public class DsFormPageServiceImpl implements DsFormPageService {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(DsFormPageServiceImpl.class);
 
 	@Autowired
 	private DsFormPageDao dsFormPageDao;
@@ -356,6 +364,83 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 		}
 		outputObject.setBeans(dsFormList);
 		outputObject.settotal(dsFormList.size());
+	}
+
+	/**
+	 * 保存动态表单信息
+	 *
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	@Override
+	@Transactional(value="transactionManager")
+	public void saveDsFormDataList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		Map<String, Object> user = inputObject.getLogParams();
+		String userId = user.get("id").toString();
+		String objectId = map.get("objectId").toString();
+		LOGGER.info("saveDsFormDataList objectId is {}", objectId);
+		// 前端传来的数据json串
+		String str = map.get("dataJson").toString();
+		Map<String, List<Map<String, Object>>> data = JSONObject.parseObject(str, Map.class);
+		List<Map<String, Object>> pageSequence = new ArrayList<>();
+		List<Map<String, Object>> pageData = new ArrayList<>();
+		for (Map.Entry<String, List<Map<String, Object>>> entry : data.entrySet()) {
+			// 获取表单提交序列表对象信息
+			Map<String, Object> sequence = this.getDsFormPageSequence(userId, entry.getKey(), StringUtils.EMPTY, objectId);
+			pageSequence.add(sequence);
+			for(Map<String, Object> item: entry.getValue()){
+				String value = item.containsKey("value") == true ? item.get("value").toString() : "";
+				String text = item.containsKey("text") == true ? item.get("text").toString() : "";
+				pageData.add(this.getDsFormPageData(item.get("rowId").toString(), value, text,
+					item.get("showType").toString(), sequence.get("sequenceId").toString(), userId));
+			}
+		}
+		// 插入ds_form_page_data表
+		if(!pageData.isEmpty()){
+			dsFormPageDao.insertDsFormPageData(pageData);
+		}
+		// 插入ds_form_page_sequence表
+		if(!pageSequence.isEmpty()){
+			dsFormPageDao.insertDsFormPageSequence(pageSequence);
+		}
+	}
+
+	/**
+	 * 获取表单提交序列表对象信息
+	 *
+	 * @param userId 用户id
+	 * @param dsFormPageId 动态表单id
+	 * @param processInstanceId 流程id
+	 * @param objectId 关联的其他信息id
+	 * @return
+	 * @throws Exception
+	 */
+	public Map<String, Object> getDsFormPageSequence(String userId, String dsFormPageId, String processInstanceId, String objectId) {
+		Map<String, Object> sequence = new HashMap<>();
+		sequence.put("sequenceId", ToolUtil.getSurFaceId());
+		sequence.put("pageId", dsFormPageId);
+		sequence.put("processInstanceId", processInstanceId);
+		sequence.put("createId", userId);
+		sequence.put("createTime", DateUtil.getTimeAndToString());
+		sequence.put("objectId", objectId);
+		return sequence;
+	}
+
+	@Override
+	public Map<String, Object> getDsFormPageData(String pageContentId, String value, String text, String showType,
+		String sequenceId, String userId) throws Exception {
+		Map<String, Object> data = dsFormPageDao.queryFromDsFormPageContent(pageContentId);
+		data.put("value", value);
+		data.put("text", text);
+		data.put("showType", showType);
+		data.put("sequenceId", sequenceId);
+		data.put("createId", userId);
+		data.put("createTime", DateUtil.getTimeAndToString());
+		data.put("id", ToolUtil.getSurFaceId());
+		data.put("defaultWidth", data.get("defaultWidth").toString().replace("layui-col-xs", ""));
+		return data;
 	}
 
 }
