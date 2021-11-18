@@ -16,6 +16,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.HttpClient;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.DsFormPageDao;
+import com.skyeye.eve.dao.DsFormPageSequenceDao;
 import com.skyeye.eve.service.DsFormPageService;
 import com.skyeye.jedis.JedisClientService;
 import org.apache.commons.lang3.StringUtils;
@@ -25,10 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -50,6 +48,9 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	
 	@Autowired
 	public JedisClientService jedisClient;
+
+	@Autowired
+	private DsFormPageSequenceDao dsFormPageSequenceDao;
 	
 	/**
 	 * 
@@ -348,7 +349,7 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	}
 
 	/**
-	 * 根据code获取动添表单信息
+	 * 根据code获取动态表单信息
 	 *
 	 * @param inputObject
 	 * @param outputObject
@@ -403,7 +404,7 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 		}
 		// 插入ds_form_page_sequence表
 		if(!pageSequence.isEmpty()){
-			dsFormPageDao.insertDsFormPageSequence(pageSequence);
+			dsFormPageSequenceDao.insertDsFormPageSequence(pageSequence);
 		}
 	}
 
@@ -417,6 +418,7 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	 * @return
 	 * @throws Exception
 	 */
+	@Override
 	public Map<String, Object> getDsFormPageSequence(String userId, String dsFormPageId, String processInstanceId, String objectId) {
 		Map<String, Object> sequence = new HashMap<>();
 		sequence.put("sequenceId", ToolUtil.getSurFaceId());
@@ -441,6 +443,25 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 		data.put("id", ToolUtil.getSurFaceId());
 		data.put("defaultWidth", data.get("defaultWidth").toString().replace("layui-col-xs", ""));
 		return data;
+	}
+
+	/**
+	 * 根据objectId获取动态表单信息
+	 *
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	@Override
+	public void queryDsFormDataListByObjectId(InputObject inputObject, OutputObject outputObject) throws Exception {
+		Map<String, Object> map = inputObject.getParams();
+		String objectId = map.get("objectId").toString();
+		List<Map<String, Object>> dsFormList = dsFormPageSequenceDao.queryDsFormPageSequenceListByObjectId(objectId);
+		for(Map<String, Object> bean: dsFormList) {
+			bean.put("content", dsFormPageDao.queryDsFormPageDataListBySequenceId(Arrays.asList(bean.get("sequenceId").toString())));
+		}
+		outputObject.setBeans(dsFormList);
+		outputObject.settotal(dsFormList.size());
 	}
 
 }

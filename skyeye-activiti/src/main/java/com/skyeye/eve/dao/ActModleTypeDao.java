@@ -34,8 +34,6 @@ public interface ActModleTypeDao {
 
 	public List<Map<String, Object>> queryAllDsForm(Map<String, Object> map) throws Exception;
 
-	public List<Map<String, Object>> queryDsFormMationToEdit( Map<String, Object> map) throws Exception;
-
 	public int editDsFormMationBySequenceId(Map<String, Object> m) throws Exception;
 
 	public void editDsFormMationBySequenceIdAndProcessInstanceId(Map<String, Object> job) throws Exception;

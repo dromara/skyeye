@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.skyeye.eve.dao.PageSequenceDao">
+<mapper namespace="com.skyeye.eve.dao.DsFormPageSequenceDao">
 
 	<select id="queryDsFormISDraftListByUser" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
@@ -126,6 +126,28 @@
 		WHERE
 			a.sequence_id = #{id}
 		ORDER BY a.order_by ASC
+	</select>
+
+	<insert id="insertDsFormPageSequence" parameterType="java.util.Map">
+		INSERT INTO ds_form_page_sequence
+		(id, page_id, process_instance_id, create_id, create_time, object_id)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.sequenceId}, #{item.pageId}, #{item.processInstanceId}, #{item.createId}, #{item.createTime}, #{item.objectId})
+		</foreach>
+	</insert>
+
+	<select id="queryDsFormPageSequenceListByObjectId" resultType="java.util.Map">
+		SELECT
+			a.id sequenceId,
+			a.page_id id,
+			b.page_name pageName,
+			b.page_num pageNum
+		FROM
+			ds_form_page_sequence a,
+			ds_form_page b
+		WHERE a.object_id = #{objectId}
+		  AND a.page_id = b.id
 	</select>
 	
 </mapper>

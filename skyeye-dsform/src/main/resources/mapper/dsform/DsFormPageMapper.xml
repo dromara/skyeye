@@ -244,15 +244,6 @@
 		AND	b.id = a.form_content_id
 	</select>
 
-	<insert id="insertDsFormPageSequence" parameterType="java.util.Map">
-		INSERT INTO ds_form_page_sequence
-	    (id, page_id, process_instance_id, create_id, create_time, object_id)
-	    VALUES
-		<foreach collection="list" item="item" index="index" separator=",">
-		(#{item.sequenceId}, #{item.pageId}, #{item.processInstanceId}, #{item.createId}, #{item.createTime}, #{item.objectId})
-		</foreach>
-	</insert>
-	
 	<insert id="insertDsFormPageData" parameterType="java.util.Map">
 		INSERT INTO ds_form_page_data
 	    (id, content_id, sequence_id, page_id, title, placeholder, `require`, html_content, js_content,
@@ -265,5 +256,39 @@
 		 #{item.defaultWidth}, #{item.value}, #{item.text}, #{item.showType}, #{item.createId}, #{item.createTime})
 		</foreach>
 	</insert>
+
+	<select id="queryDsFormPageDataListBySequenceId" resultType="java.util.Map">
+		SELECT
+			a.id,
+		    a.sequence_id sequenceId,
+			a.id `name`,
+			a.title labelContent,
+			a.content_id contentId,
+			a.placeholder,
+			a.`value`,
+			a.text,
+		    a.show_type showType,
+			CONCAT('layui-col-xs', a.default_width) defaultWidth,
+			a.page_id pageId,
+			a.html_content htmlContent,
+			a.js_content jsContent,
+			a.order_by orderBy,
+			IFNULL(a.key_id, '') keyId,
+			IFNULL(a.editable_node_id, '') editableNodeId,
+			IFNULL(a.editable_node_name, '') editableNodeName,
+			IFNULL(a.associated_data_types,'') associatedDataTypes,
+			IFNULL(a.a_data,'') aData,
+			IFNULL(a.display_template,'') templateContent,
+			a.`require`
+		FROM
+			ds_form_page_data a
+		WHERE 1=1
+		<if test="sequenceIds != null and sequenceIds.size() &gt; 0">
+			<foreach collection="sequenceIds" item="id" separator="," open=" AND a.sequence_id in(" close=")">
+				#{id}
+			</foreach>
+		</if>
+		ORDER BY a.order_by ASC
+	</select>
 
 </mapper>

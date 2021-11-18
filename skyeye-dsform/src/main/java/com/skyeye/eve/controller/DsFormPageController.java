@@ -237,5 +237,17 @@ public class DsFormPageController {
 		dsFormPageService.saveDsFormDataList(inputObject, outputObject);
 	}
 
-	
+	/**
+	 * 根据objectId获取动态表单信息
+	 *
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
+	@RequestMapping("/post/DsFormPageController/queryDsFormDataListByObjectId")
+	@ResponseBody
+	public void queryDsFormDataListByObjectId(InputObject inputObject, OutputObject outputObject) throws Exception{
+		dsFormPageService.queryDsFormDataListByObjectId(inputObject, outputObject);
+	}
+
 }

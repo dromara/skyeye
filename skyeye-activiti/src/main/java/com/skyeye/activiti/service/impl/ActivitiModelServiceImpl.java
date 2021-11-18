@@ -134,6 +134,9 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
     
     @Autowired
     private DsFormPageDao dsFormPageDao;
+
+    @Autowired
+	private DsFormPageSequenceDao dsFormPageSequenceDao;
     
     @Autowired
 	public JedisClientService jedisClient;
@@ -1790,7 +1793,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 					dsFormPageDao.insertDsFormPageData(beans);//插入DsFormPageData表
 					Map<String, Object> entity = dsFormPageService.getDsFormPageSequence(userId, pageId, map.get("message").toString(), StringUtils.EMPTY);
 					entity.put("sequenceId", sequenceId);
-					dsFormPageDao.insertDsFormPageSequence(Arrays.asList(entity));
+					dsFormPageSequenceDao.insertDsFormPageSequence(Arrays.asList(entity));
 				}else{
 					outputObject.setreturnMessage(map.get("message").toString());
 				}

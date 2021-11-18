@@ -164,6 +164,9 @@
 		<property id="dataJson" name="dataJson" ref="required,json" var="数据" />
 		<property id="objectId" name="objectId" ref="required" var="需要绑定的id" />
 	</url>
+	<url id="dsformpage015" path="/post/DsFormPageController/queryDsFormDataListByObjectId" val="根据objectId获取动态表单信息" allUse="2" method="GET" groupName="表单页面设计接口">
+		<property id="objectId" name="objectId" ref="required" var="绑定的id" />
+	</url>
 	<!-- 动态表单页面设计结束 -->
 
 	<!-- 动态表单页面分类开始 -->

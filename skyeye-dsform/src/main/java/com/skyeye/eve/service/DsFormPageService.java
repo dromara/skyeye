@@ -69,4 +69,5 @@ public interface DsFormPageService {
 	Map<String, Object> getDsFormPageData(String pageContentId, String value, String text, String showType,
 		String sequenceId, String userId) throws Exception;
 
+	void queryDsFormDataListByObjectId(InputObject inputObject, OutputObject outputObject) throws Exception;
 }

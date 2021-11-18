@@ -125,33 +125,7 @@
 		FROM
 			ds_form_page a
 	</select>
-	
-	<select id="queryDsFormMationToEdit" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.id,
-			a.content_id contentId,
-			a.id `name`,
-			a.title labelContent,
-			a.placeholder,
-			a.`value`,
-			a.text,
-			CONCAT('layui-col-xs', a.default_width) defaultWidth,
-			a.page_id pageId,
-			a.html_content htmlContent,
-			a.js_content jsContent,
-			a.order_by orderBy,
-			IFNULL(a.key_id, '') keyId,
-			IFNULL(a.associated_data_types,'') associatedDataTypes,
-			IFNULL(a.a_data,'') aData,
-			IFNULL(a.display_template,'') templateContent,
-			a.`require`
-		FROM
-			ds_form_page_data a
-		WHERE a.sequence_id = #{id}
-		ORDER BY
-			a.order_by ASC
-	</select>
-	
+
 	<update id="editDsFormMationBySequenceId" parameterType="java.util.Map">
 		UPDATE ds_form_page_data
 		<set>

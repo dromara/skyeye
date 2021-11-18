@@ -4,6 +4,8 @@
 
 package com.skyeye.eve.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +19,7 @@ import java.util.Map;
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
-public interface PageSequenceDao {
+public interface DsFormPageSequenceDao {
 
 	public List<Map<String, Object>> queryDsFormISDraftListByUser(Map<String, Object> map) throws Exception;
 
@@ -36,5 +38,9 @@ public interface PageSequenceDao {
 	public List<Map<String, Object>> queryDsFormContentBySequenceId(Map<String, Object> map) throws Exception;
 
 	public List<Map<String, Object>> queryDsFormISDraftDetailsById(Map<String, Object> map) throws Exception;
+
+	int insertDsFormPageSequence(List<Map<String, Object>> pageSequence) throws Exception;
+
+	List<Map<String, Object>> queryDsFormPageSequenceListByObjectId(@Param("objectId") String objectId) throws Exception;
 
 }

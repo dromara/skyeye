@@ -14,6 +14,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.ActModelDao;
 import com.skyeye.eve.dao.ActModleTypeDao;
+import com.skyeye.eve.dao.DsFormPageDao;
 import com.skyeye.eve.service.ActModleTypeService;
 import com.skyeye.jedis.JedisClientService;
 import org.activiti.engine.RepositoryService;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +61,9 @@ public class ActModleTypeServiceImpl implements ActModleTypeService {
 	
 	@Autowired  
 	private RuntimeService runtimeService;
+
+	@Autowired
+	private DsFormPageDao dsFormPageDao;
 
 	public static enum ActModelTypeState{
 		START_NEW(1, "新建"),
@@ -574,7 +579,6 @@ public class ActModleTypeServiceImpl implements ActModleTypeService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void queryActModleUpStateByUpStateType(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
@@ -626,7 +630,8 @@ public class ActModleTypeServiceImpl implements ActModleTypeService {
 	@Override
 	public void queryDsFormMationToEdit(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		List<Map<String, Object>> beans = actModleTypeDao.queryDsFormMationToEdit(map);
+		String id = map.get("id").toString();
+		List<Map<String, Object>> beans = dsFormPageDao.queryDsFormPageDataListBySequenceId(Arrays.asList(id));
 		outputObject.setBeans(beans);
 		outputObject.settotal(beans.size());
 	}
@@ -641,7 +646,6 @@ public class ActModleTypeServiceImpl implements ActModleTypeService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	@Transactional(value="transactionManager")
 	public void editDsFormMationBySequenceId(InputObject inputObject, OutputObject outputObject) throws Exception {
