@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.ApiMationDao">
+
+	<select id="queryApiMationByRequestUrl" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			api_mation  a
+		WHERE
+			a.request_url = #{requestUrl}
+	</select>
+
+	<insert id="insertApiMation" parameterType="java.util.Map">
+		INSERT INTO api_mation  
+	    (id, request_url, request_body, reponse_body, create_id, create_time, last_update_id, last_update_time)
+	    VALUES(#{id}, #{requestUrl}, #{requestBody}, #{reponseBody}, #{userId}, #{createTime}, #{userId}, #{createTime})
+	</insert>
+	
+	<select id="selectApiMationById" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.request_url requestUrl,
+			a.request_body requestBody,
+		FROM
+			api_mation  a
+		WHERE
+			a.id = #{id}
+	</select>
+
+	<update id="editApiMationById" parameterType="java.util.Map">
+		UPDATE api_mation
+		<set>
+			request_url = #{requestUrl},
+			request_body = #{requestBody},
+			last_update_id = #{userId},
+			last_update_time = #{lastUpdateTime}
+		</set>
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
