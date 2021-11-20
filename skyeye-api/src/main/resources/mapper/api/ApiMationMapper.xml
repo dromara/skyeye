@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.skyeye.eve.dao.ApiMationDao">
+<mapper namespace="com.skyeye.dao.ApiMationDao">
 
 	<select id="queryApiMationByRequestUrl" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
-			a.id
+			a.request_url requestUrl
 		FROM
 			api_mation  a
 		WHERE
@@ -13,19 +13,19 @@
 
 	<insert id="insertApiMation" parameterType="java.util.Map">
 		INSERT INTO api_mation  
-	    (id, request_url, request_body, reponse_body, create_id, create_time, last_update_id, last_update_time)
-	    VALUES(#{id}, #{requestUrl}, #{requestBody}, #{reponseBody}, #{userId}, #{createTime}, #{userId}, #{createTime})
+	    (request_url, request_body, reponse_body, create_id, create_time, last_update_id, last_update_time)
+	    VALUES(#{requestUrl}, #{requestBody}, #{reponseBody}, #{userId}, #{createTime}, #{userId}, #{createTime})
 	</insert>
 	
 	<select id="selectApiMationById" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
-			a.id,
 			a.request_url requestUrl,
 			a.request_body requestBody,
+			a.reponse_body reponseBody
 		FROM
-			api_mation  a
+			api_mation a
 		WHERE
-			a.id = #{id}
+			a.request_url = #{requestUrl}
 	</select>
 
 	<update id="editApiMationById" parameterType="java.util.Map">
@@ -33,10 +33,11 @@
 		<set>
 			request_url = #{requestUrl},
 			request_body = #{requestBody},
+			reponse_body = #{reponseBody},
 			last_update_id = #{userId},
 			last_update_time = #{lastUpdateTime}
 		</set>
-		WHERE id = #{id}
+		WHERE request_url = #{requestUrl}
 	</update>
 	
 </mapper>

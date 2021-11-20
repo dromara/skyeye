@@ -19,7 +19,7 @@ public class ApiMationController {
 	
 	/**
 	 * 
-	     * @Title: insertApiMationMation
+	     * @Title: insertApiMation
 	     * @Description: 新增api接口信息
 	     * @param inputObject
 	     * @param outputObject
@@ -27,9 +27,9 @@ public class ApiMationController {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@RequestMapping("/post/ApiMationController/insertApiMationMation")
+	@RequestMapping("/post/ApiMationController/insertApiMation")
 	@ResponseBody
-	public void insertApiMationMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+	public void insertApiMation(InputObject inputObject, OutputObject outputObject) throws Exception{
 		apiMationService.insertApiMation(inputObject, outputObject);
 	}
 	

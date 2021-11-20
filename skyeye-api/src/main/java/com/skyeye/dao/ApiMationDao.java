@@ -20,7 +20,7 @@ public interface ApiMationDao {
 
 	public Map<String, Object> queryApiMationByRequestUrl(Map<String, Object> map) throws Exception;
 
-	public int insertApiMationMation(Map<String, Object> map) throws Exception;
+	public int insertApiMation(Map<String, Object> map) throws Exception;
 
 	public Map<String, Object> selectApiMationById(Map<String, Object> map) throws Exception;
 

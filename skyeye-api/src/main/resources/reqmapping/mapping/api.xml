@@ -13,13 +13,13 @@
     </url>
 
     <!-- api接口信息开始 -->
-    <url id="apimation001" path="/post/ApiMationController/insertApiMation" val="新增api接口信息" allUse="2" method="POST" groupName="api接口">
+    <url id="apimation001" path="/post/ApiMationController/insertApiMation" method="POST" val="新增api接口信息" allUse="1" groupName="api接口">
         <property id="requestUrl" name="requestUrl" ref="required" var="请求地址"/>
         <property id="requestBody" name="requestBody" ref="" var="请求入参"/>
         <property id="reponseBody" name="reponseBody" ref="" var="请求出参"/>
     </url>
-    <url id="apimation002" path="/post/ApiMationController/selectApiMationById" val="查看api接口信息详情" allUse="2" method="GET" groupName="api接口">
-        <property id="id" name="id" ref="required" var="接口id"/>
+    <url id="apimation002" path="/post/ApiMationController/selectApiMationById" val="查看api接口信息详情" allUse="1" method="GET" groupName="api接口">
+        <property id="requestUrl" name="requestUrl" ref="required" var="接口id"/>
     </url>
     <!-- api接口信息结束 -->
 

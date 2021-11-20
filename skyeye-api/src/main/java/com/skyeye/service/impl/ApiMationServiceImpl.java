@@ -52,9 +52,8 @@ public class ApiMationServiceImpl implements ApiMationService {
 			map.put("lastUpdateTime", DateUtil.getTimeAndToString());
 			apiMationDao.editApiMationById(map);
 		} else {
-			map.put("id", ToolUtil.getSurFaceId());
 			map.put("createTime", DateUtil.getTimeAndToString());
-			apiMationDao.insertApiMationMation(map);
+			apiMationDao.insertApiMation(map);
 		}
 	}
 	
