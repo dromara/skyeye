@@ -14,7 +14,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.ActModelDao;
 import com.skyeye.eve.dao.ActModleTypeDao;
-import com.skyeye.eve.dao.DsFormPageDao;
+import com.skyeye.eve.dao.DsFormPageDataDao;
 import com.skyeye.eve.service.ActModleTypeService;
 import com.skyeye.jedis.JedisClientService;
 import org.activiti.engine.RepositoryService;
@@ -63,7 +63,7 @@ public class ActModleTypeServiceImpl implements ActModleTypeService {
 	private RuntimeService runtimeService;
 
 	@Autowired
-	private DsFormPageDao dsFormPageDao;
+	private DsFormPageDataDao dsFormPageDataDao;
 
 	public static enum ActModelTypeState{
 		START_NEW(1, "新建"),
@@ -631,7 +631,7 @@ public class ActModleTypeServiceImpl implements ActModleTypeService {
 	public void queryDsFormMationToEdit(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();
-		List<Map<String, Object>> beans = dsFormPageDao.queryDsFormPageDataListBySequenceId(Arrays.asList(id));
+		List<Map<String, Object>> beans = dsFormPageDataDao.queryDsFormPageDataListBySequenceId(Arrays.asList(id));
 		outputObject.setBeans(beans);
 		outputObject.settotal(beans.size());
 	}

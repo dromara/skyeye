@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.eve.dao.DsFormPageDataDao">
+
+    <delete id="deleteDsFormPageDataBySequenceId">
+        DELETE
+        FROM
+            ds_form_page_data
+        where
+            sequence_id = #{sequenceId}
+    </delete>
+
+    <delete id="deleteDsFormPageDataByObjectId">
+        DELETE
+            a
+        FROM
+            ds_form_page_data a,
+            ds_form_page_sequence b
+        WHERE a.sequence_id = b.id
+          AND b.object_id = #{objectId}
+    </delete>
+
+    <insert id="insertDsFormPageData" parameterType="java.util.Map">
+        INSERT INTO ds_form_page_data
+        (id, content_id, sequence_id, page_id, title, placeholder, `require`, html_content, js_content,
+        associated_data_types, a_data, linked_data, display_template, key_id, editable_node_id, editable_node_name, order_by,
+        default_width, `value`, text, show_type, create_id, create_time)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.contentId}, #{item.sequenceId}, #{item.pageId}, #{item.title}, #{item.placeholder}, #{item.require}, #{item.htmlContent}, #{item.jsContent},
+            #{item.associatedDataTypes}, #{item.aData}, #{item.linkedData}, #{item.displayTemplate}, #{item.keyId}, #{item.editableNodeId}, #{item.editableNodeName}, #{item.orderBy},
+            #{item.defaultWidth}, #{item.value}, #{item.text}, #{item.showType}, #{item.createId}, #{item.createTime})
+        </foreach>
+    </insert>
+
+    <select id="queryDsFormPageDataListBySequenceId" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.sequence_id sequenceId,
+            a.id `name`,
+            a.title labelContent,
+            a.content_id contentId,
+            a.placeholder,
+            a.`value`,
+            a.text,
+            a.show_type showType,
+            CONCAT('layui-col-xs', a.default_width) defaultWidth,
+            a.page_id pageId,
+            a.html_content htmlContent,
+            a.js_content jsContent,
+            a.order_by orderBy,
+            IFNULL(a.key_id, '') keyId,
+            IFNULL(a.editable_node_id, '') editableNodeId,
+            IFNULL(a.editable_node_name, '') editableNodeName,
+            IFNULL(a.associated_data_types,'') associatedDataTypes,
+            IFNULL(a.a_data,'') aData,
+            IFNULL(a.display_template,'') templateContent,
+            a.`require`
+        FROM
+            ds_form_page_data a
+        WHERE 1=1
+        <if test="sequenceIds != null and sequenceIds.size() &gt; 0">
+            <foreach collection="sequenceIds" item="id" separator="," open=" AND a.sequence_id in(" close=")">
+                #{id}
+            </foreach>
+        </if>
+        ORDER BY a.order_by ASC
+    </select>
+
+</mapper>

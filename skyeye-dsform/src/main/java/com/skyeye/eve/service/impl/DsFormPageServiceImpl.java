@@ -16,6 +16,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.HttpClient;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.DsFormPageDao;
+import com.skyeye.eve.dao.DsFormPageDataDao;
 import com.skyeye.eve.dao.DsFormPageSequenceDao;
 import com.skyeye.eve.service.DsFormPageService;
 import com.skyeye.jedis.JedisClientService;
@@ -45,6 +46,9 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 
 	@Autowired
 	private DsFormPageDao dsFormPageDao;
+
+	@Autowired
+	private DsFormPageDataDao dsFormPageDataDao;
 	
 	@Autowired
 	public JedisClientService jedisClient;
@@ -398,14 +402,28 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 					item.get("showType").toString(), sequence.get("sequenceId").toString(), userId));
 			}
 		}
+		// 根据objectId删除之前保存的数据
+		this.deteleDsFormPageDataMationByObjectId(objectId);
 		// 插入ds_form_page_data表
 		if(!pageData.isEmpty()){
-			dsFormPageDao.insertDsFormPageData(pageData);
+			dsFormPageDataDao.insertDsFormPageData(pageData);
 		}
 		// 插入ds_form_page_sequence表
 		if(!pageSequence.isEmpty()){
 			dsFormPageSequenceDao.insertDsFormPageSequence(pageSequence);
 		}
+	}
+
+	/**
+	 * 根据objectId删除动态表单数据
+	 *
+	 * @param objectId objectId
+	 * @throws Exception
+	 */
+	@Override
+	public void deteleDsFormPageDataMationByObjectId(String objectId) throws Exception {
+		dsFormPageDataDao.deleteDsFormPageDataByObjectId(objectId);
+		dsFormPageSequenceDao.deleteDsFormPageSequenceByObjectId(objectId);
 	}
 
 	/**
@@ -458,7 +476,7 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 		String objectId = map.get("objectId").toString();
 		List<Map<String, Object>> dsFormList = dsFormPageSequenceDao.queryDsFormPageSequenceListByObjectId(objectId);
 		for(Map<String, Object> bean: dsFormList) {
-			bean.put("content", dsFormPageDao.queryDsFormPageDataListBySequenceId(Arrays.asList(bean.get("sequenceId").toString())));
+			bean.put("content", dsFormPageDataDao.queryDsFormPageDataListBySequenceId(Arrays.asList(bean.get("sequenceId").toString())));
 		}
 		outputObject.setBeans(dsFormList);
 		outputObject.settotal(dsFormList.size());

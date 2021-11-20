@@ -43,15 +43,15 @@
 			id = #{id}
 	</delete>
 	
-	<delete id="deleteDsFormContentISDraftByUser" parameterType="java.lang.String">
-		DELETE 
-		FROM 
-			ds_form_page_data
-		where 
-			sequence_id = #{id}
+    <delete id="deleteDsFormPageSequenceByObjectId">
+		DELETE
+		FROM
+			ds_form_page_sequence
+		where
+			object_id = #{objectId}
 	</delete>
-	
-	<select id="queryDsFormISDraftToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+
+    <select id="queryDsFormISDraftToEditById" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
 			a.content_id contentId,

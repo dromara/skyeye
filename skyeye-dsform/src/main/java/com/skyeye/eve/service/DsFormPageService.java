@@ -42,6 +42,8 @@ public interface DsFormPageService {
 
 	void saveDsFormDataList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+	void deteleDsFormPageDataMationByObjectId(String objectId) throws Exception;
+
 	/**
 	 * 获取表单提交序列表对象信息
 	 *

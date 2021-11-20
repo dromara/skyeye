@@ -11,6 +11,7 @@ import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
+import com.skyeye.eve.dao.DsFormPageDataDao;
 import com.skyeye.eve.dao.DsFormPageSequenceDao;
 import com.skyeye.eve.service.DsFormPageService;
 import com.skyeye.eve.service.PageSequenceService;
@@ -38,6 +39,9 @@ public class PageSequenceServiceImpl implements PageSequenceService{
 	
 	@Autowired
 	private DsFormPageSequenceDao dsFormPageSequenceDao;
+
+	@Autowired
+	private DsFormPageDataDao dsFormPageDataDao;
 	
 	@Autowired
 	private ActivitiModelService activitiModelService;
@@ -85,10 +89,11 @@ public class PageSequenceServiceImpl implements PageSequenceService{
 		map.put("userId", inputObject.getLogParams().get("id"));
 		Map<String, Object> bean = dsFormPageSequenceDao.queryDsFormStateById(map);
 		if(bean != null && !bean.isEmpty()){
-			//删除表单提交序列表数据
+			// 删除表单提交序列表数据
 			dsFormPageSequenceDao.deleteDsFormISDraftByUser(map);
-			//删除表单数据提交数据
-			dsFormPageSequenceDao.deleteDsFormContentISDraftByUser(map);
+			// 删除表单数据提交数据
+			String sequenceId = map.get("id").toString();
+			dsFormPageDataDao.deleteDsFormPageDataBySequenceId(sequenceId);
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变或不属于当前登录账号.");
 		}

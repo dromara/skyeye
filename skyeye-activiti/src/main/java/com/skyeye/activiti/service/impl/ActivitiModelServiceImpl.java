@@ -133,7 +133,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	private ActModleTypeDao actModleTypeDao;
     
     @Autowired
-    private DsFormPageDao dsFormPageDao;
+    private DsFormPageDataDao dsFormPageDataDao;
 
     @Autowired
 	private DsFormPageSequenceDao dsFormPageSequenceDao;
@@ -1790,7 +1790,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 				}
 				editActivitiModelToStartProcessByMap(map, user, sequenceId);
 				if("0".equals(map.get("code").toString())){//启动流程成功
-					dsFormPageDao.insertDsFormPageData(beans);//插入DsFormPageData表
+					dsFormPageDataDao.insertDsFormPageData(beans);//插入DsFormPageData表
 					Map<String, Object> entity = dsFormPageService.getDsFormPageSequence(userId, pageId, map.get("message").toString(), StringUtils.EMPTY);
 					entity.put("sequenceId", sequenceId);
 					dsFormPageSequenceDao.insertDsFormPageSequence(Arrays.asList(entity));

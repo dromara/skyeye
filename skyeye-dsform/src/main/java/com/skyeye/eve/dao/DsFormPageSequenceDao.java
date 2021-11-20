@@ -21,26 +21,25 @@ import java.util.Map;
  */
 public interface DsFormPageSequenceDao {
 
-	public List<Map<String, Object>> queryDsFormISDraftListByUser(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> queryDsFormISDraftListByUser(Map<String, Object> map) throws Exception;
 
-	public Map<String, Object> queryDsFormStateById(Map<String, Object> map) throws Exception;
+	Map<String, Object> queryDsFormStateById(Map<String, Object> map) throws Exception;
 
-	public int deleteDsFormISDraftByUser(Map<String, Object> map) throws Exception;
+	int deleteDsFormISDraftByUser(Map<String, Object> map) throws Exception;
 
-	public int deleteDsFormContentISDraftByUser(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> queryDsFormISDraftToEditById(Map<String, Object> map) throws Exception;
 
-	public List<Map<String, Object>> queryDsFormISDraftToEditById(Map<String, Object> map) throws Exception;
+	int editDsFormISDraftById(Map<String, Object> map) throws Exception;
 
-	public int editDsFormISDraftById(Map<String, Object> map) throws Exception;
+	int editDsFormISDraftToSubApprovalById(Map<String, Object> map) throws Exception;
 
-	public int editDsFormISDraftToSubApprovalById(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> queryDsFormContentBySequenceId(Map<String, Object> map) throws Exception;
 
-	public List<Map<String, Object>> queryDsFormContentBySequenceId(Map<String, Object> map) throws Exception;
-
-	public List<Map<String, Object>> queryDsFormISDraftDetailsById(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> queryDsFormISDraftDetailsById(Map<String, Object> map) throws Exception;
 
 	int insertDsFormPageSequence(List<Map<String, Object>> pageSequence) throws Exception;
 
 	List<Map<String, Object>> queryDsFormPageSequenceListByObjectId(@Param("objectId") String objectId) throws Exception;
 
+    void deleteDsFormPageSequenceByObjectId(@Param("objectId") String objectId) throws Exception;
 }
