@@ -18,6 +18,7 @@ import com.skyeye.common.util.ToolUtil;
 import com.skyeye.dao.ErpCommonDao;
 import com.skyeye.dao.MaterialDao;
 import com.skyeye.erp.entity.TransmitObject;
+import com.skyeye.eve.service.DsFormPageService;
 import com.skyeye.service.ErpCommonService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -48,6 +49,8 @@ public abstract class ErpOrderFactory {
 
     protected OutputObject outputObject;
 
+    protected DsFormPageService dsFormPageService;
+
     /**
      * 单据类型
      */
@@ -71,6 +74,7 @@ public abstract class ErpOrderFactory {
         this.erpCommonDao = SpringUtils.getBean(ErpCommonDao.class);
         this.erpCommonService = SpringUtils.getBean(ErpCommonService.class);
         this.materialDao = SpringUtils.getBean(MaterialDao.class);
+        this.dsFormPageService = SpringUtils.getBean(DsFormPageService.class);
     }
 
     /**
@@ -323,6 +327,7 @@ public abstract class ErpOrderFactory {
         this.submitData2Activiti(orderId,
                 Integer.parseInt(depothead.get("subType").toString()),
                 Integer.parseInt(depothead.get("submitType").toString()));
+        outputObject.setBean(depothead);
     }
 
     /**
@@ -355,6 +360,8 @@ public abstract class ErpOrderFactory {
                 // 删除子单据信息
                 erpCommonDao.deleteOrderChildMationById(orderId);
                 this.deleteOrderOtherMationById(orderMation);
+                // 删除关联的动态表单的数据
+                dsFormPageService.deteleDsFormPageDataMationByObjectId(orderId);
             }
         }else{
             String message = String.format(Locale.ROOT, "The order[%s] status has changed or the data does not exist.", orderId);

@@ -35,15 +35,12 @@
 
     <select id="queryDsFormPageDataListBySequenceId" resultType="java.util.Map">
         SELECT
-            a.id,
-            a.sequence_id sequenceId,
-            a.id `name`,
+            a.content_id id,
+            a.content_id `name`,
             a.title labelContent,
-            a.content_id contentId,
+            a.sequence_id sequenceId,
             a.placeholder,
             a.`value`,
-            a.text,
-            a.show_type showType,
             CONCAT('layui-col-xs', a.default_width) defaultWidth,
             a.page_id pageId,
             a.html_content htmlContent,
@@ -55,7 +52,9 @@
             IFNULL(a.associated_data_types,'') associatedDataTypes,
             IFNULL(a.a_data,'') aData,
             IFNULL(a.display_template,'') templateContent,
-            a.`require`
+            a.`require`,
+            a.text,
+            a.show_type showType
         FROM
             ds_form_page_data a
         WHERE 1=1
