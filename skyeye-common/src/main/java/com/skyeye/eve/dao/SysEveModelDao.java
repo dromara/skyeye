@@ -23,8 +23,6 @@ public interface SysEveModelDao {
 
 	public Map<String, Object> querySysEveModelMationByNameAndType(Map<String, Object> map) throws Exception;
 
-	public Map<String, Object> querySysEveModelMationByNameAndUser(Map<String, Object> map) throws Exception;
-
 	public int insertSysEveModelMation(Map<String, Object> map) throws Exception;
 
 	public int deleteSysEveModelById(Map<String, Object> map) throws Exception;

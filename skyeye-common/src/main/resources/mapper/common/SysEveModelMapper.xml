@@ -27,6 +27,9 @@
 			<if test="secondTypeId != '' and secondTypeId != null">
 				AND a.second_type_id = #{secondTypeId}
 			</if>
+			<if test="type == '2'.toString()">
+				AND a.create_id = #{userId}
+			</if>
 			ORDER BY a.create_time DESC
 	</select>
 
@@ -41,21 +44,11 @@
 		<if test="id != '' and id != null">
 			AND a.id != #{id}
 		</if>
-	</select>
-
-	<select id="querySysEveModelMationByNameAndUser" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.id
-		FROM
-			sys_eve_model a
-		WHERE
-			a.title = #{title}
+		<if test="type == '2'.toString()">
 			AND a.create_id = #{userId}
-		<if test="id != '' and id != null">
-			AND a.id != #{id}
 		</if>
 	</select>
-	
+
 	<insert id="insertSysEveModelMation" parameterType="java.util.Map">
 		INSERT INTO sys_eve_model 
 	    (id, title, content, type, create_id, create_time, first_type_id, second_type_id, last_update_id, last_update_time)

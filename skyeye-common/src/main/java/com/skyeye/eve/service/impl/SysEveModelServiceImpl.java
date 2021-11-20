@@ -36,12 +36,12 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 
 	@Autowired
 	private SysEveModelDao sysEveModelDao;
-	
+
 	@Autowired
 	public JedisClientService jedisClient;
-	
+
 	/**
-	 * 
+	 *
 	     * @Title: querySysEveModelList
 	     * @Description: 获取系统编辑器模板表
 	     * @param inputObject
@@ -53,14 +53,15 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	@Override
 	public void querySysEveModelList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
+		map.put("userId", inputObject.getLogParams().get("id"));
 		Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
 		List<Map<String, Object>> beans = sysEveModelDao.querySysEveModelList(map);
 		outputObject.setBeans(beans);
 		outputObject.settotal(pages.getTotal());
 	}
-	
+
 	/**
-	 * 
+	 *
 	     * @Title: insertSysEveModelMation
 	     * @Description: 新增系统编辑器模板
 	     * @param inputObject
@@ -74,30 +75,17 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	public void insertSysEveModelMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		map.put("userId", inputObject.getLogParams().get("id"));
-		Map<String, Object> bean = judgeSimpleTitle(map);
-		if(bean != null && !bean.isEmpty()){
+		Map<String, Object> bean = sysEveModelDao.querySysEveModelMationByNameAndType(map);
+		if (bean != null && !bean.isEmpty()) {
 			outputObject.setreturnMessage("该系统编辑器模板已存在，请更换");
-		}else{
-			Map<String, Object> user = inputObject.getLogParams();
+		} else {
 			map.put("id", ToolUtil.getSurFaceId());
-			map.put("pageNum", ToolUtil.getUniqueKey().substring(10, 20));
 			map.put("createTime", DateUtil.getTimeAndToString());
 			sysEveModelDao.insertSysEveModelMation(map);
 		}
 	}
 
-	private Map<String, Object> judgeSimpleTitle(Map<String, Object> map) throws Exception {
-		Map<String, Object> bean = new HashMap<>();
-		String type = map.get("type").toString();
-		if ("1".equals(type)) {
-			bean = sysEveModelDao.querySysEveModelMationByNameAndType(map);
-		} else if ("2".equals(type)) {
-			bean = sysEveModelDao.querySysEveModelMationByNameAndUser(map);
-		}
-		return bean;
-	}
-
-	/**
+	 /**
 	 *
 	     * @Title: deleteSysEveModelById
 	     * @Description: 删除编辑器模板
@@ -115,7 +103,7 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	}
 
 	/**
-	 * 
+	 *
 	     * @Title: selectSysEveModelById
 	     * @Description: 通过id查找对应的编辑器模板
 	     * @param inputObject
@@ -133,7 +121,7 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	}
 
 	/**
-	 * 
+	 *
 	     * @Title: editSysEveModelMationById
 	     * @Description: 通过id编辑对应的编辑器模板
 	     * @param inputObject
@@ -147,10 +135,10 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	public void editSysEveModelMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		map.put("userId", inputObject.getLogParams().get("id"));
-		Map<String, Object> bean = judgeSimpleTitle(map);
-		if(bean != null && !bean.isEmpty()){
+		Map<String, Object> bean = sysEveModelDao.querySysEveModelMationByNameAndType(map);
+		if (bean != null && !bean.isEmpty()) {
 			outputObject.setreturnMessage("该编辑器模板已存在，请更换");
-		}else{
+		} else {
 			map.put("lastUpdateTime", DateUtil.getTimeAndToString());
 			sysEveModelDao.editSysEveModelMationById(map);
 		}

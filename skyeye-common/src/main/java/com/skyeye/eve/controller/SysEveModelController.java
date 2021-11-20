@@ -32,8 +32,7 @@ public class SysEveModelController {
 	public void querySysEveModelList(InputObject inputObject, OutputObject outputObject) throws Exception{
 		sysEveModelService.querySysEveModelList(inputObject, outputObject);
 	}
-	
-	
+
 	/**
 	 * 
 	     * @Title: insertSysEveModelMation
