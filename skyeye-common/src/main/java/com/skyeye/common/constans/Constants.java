@@ -274,7 +274,8 @@ public class Constants {
 		SCHOOLBANK(new int[]{16}, "/schoolBank", "/schoolBank/", "考试题库文件"),
 		ACT_MODEL(new int[]{17}, "/actmodel", "/actmodel/", "流程配置图片"),
 		REPORT_BG_IMAGE(new int[]{18}, "/reportBgImage", "/reportBgImage/", "报表基础设置背景图"),
-		REPORT_WORD_MODEL_IMAGE(new int[]{19}, "/reportWordModel", "/reportWordModel/", "报表文字模型logo");
+		REPORT_WORD_MODEL_IMAGE(new int[]{19}, "/reportWordModel", "/reportWordModel/", "报表文字模型logo"),
+		SYS_MODEL(new int[]{20}, "/sysmodel", "/sysmodel/", "编辑器素材logo图片"),;
 
 		private int[] type;
 		// 保存地址

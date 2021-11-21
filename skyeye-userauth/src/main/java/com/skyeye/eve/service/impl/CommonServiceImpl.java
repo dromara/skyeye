@@ -271,7 +271,6 @@ public class CommonServiceImpl implements CommonService{
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void querySysWinMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
