@@ -3,6 +3,29 @@
 	<!-- 
 		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
 	 -->
-	 
-	
+
+	<!-- 面试者来源信息表开始 -->
+	<url id="bossIntervieweeFrom001" path="/post/BossIntervieweeFromController/queryBossIntervieweeFromList" method="POST" val="获取面试者来源信息列表" allUse="1">
+		<property id="title" name="title" ref="" var="标题"/>
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="bossIntervieweeFrom002" path="/post/BossIntervieweeFromController/insertBossIntervieweeFrom" method="POST" val="新增面试者来源信息" allUse="1">
+		<property id="title" name="title" ref="required" var="标题"/>
+		<property id="fromUrl" name="fromUrl" ref="" var="来源地址"/>
+		<property id="desc" name="desc" ref="" var="简介"/>
+	</url>
+	<url id="bossIntervieweeFrom003" path="/post/BossIntervieweeFromController/delBossIntervieweeFromById" method="DELETE" val="删除面试者来源信息" allUse="1">
+		<property id="id" name="id" ref="required" var="主键id"/>
+	</url>
+	<url id="bossIntervieweeFrom004" path="/post/BossIntervieweeFromController/queryBossIntervieweeFromById" method="GET" val="根据id查询面试者来源信息详情" allUse="2">
+		<property id="id" name="id" ref="required" var="主键id"/>
+	</url>
+	<url id="bossIntervieweeFrom005" path="/post/BossIntervieweeFromController/updateBossIntervieweeFromById" method="PUT" val="通过id编辑对应的面试者来源信息" allUse="1">
+		<property id="id" name="id" ref="required" var="主键id"/>
+		<property id="title" name="title" ref="required" var="标题"/>
+		<property id="fromUrl" name="fromUrl" ref="" var="来源地址"/>
+		<property id="desc" name="desc" ref="" var="简介"/>
+	</url>
+	<!-- 面试者来源信息表结束 -->
 </controller>
