@@ -43,6 +43,12 @@ public class BossIntervieweeFromServiceImpl implements BossIntervieweeFromServic
     @Override
     public void insertBossIntervieweeFrom(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> inputParams = inputObject.getParams();
+        String title = inputParams.get("title").toString();
+        Integer total = bossIntervieweeFromDao.queryBossIntervieweeFromTotalByTitle(title);
+        if (total != 0) {
+            outputObject.setreturnMessage("存在相同的标题名称, 请更换新的标题!");
+            return;
+        }
         inputParams.put("id", ToolUtil.getSurFaceId());
         inputParams.put("createTime", DateUtil.getTimeAndToString());
         inputParams.put("userId", inputObject.getLogParams().get("id"));

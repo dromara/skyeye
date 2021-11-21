@@ -47,6 +47,11 @@
         WHERE a.id = #{id}
     </select>
 
+    <select id="queryBossIntervieweeFromTotalByTitle" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) FROM boss_interviewee_from
+        WHERE title = #{title}
+    </select>
+
     <update id="updateBossIntervieweeFromById" parameterType="java.util.Map">
         UPDATE boss_interviewee_from
         SET
