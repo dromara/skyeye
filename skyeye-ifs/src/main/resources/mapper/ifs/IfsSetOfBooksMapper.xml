@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.IfsSetOfBooksDao">
+
+    <select id="queryIfsSetOfBooksByList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name `name`,
+            CASE a.state WHEN '1' THEN '启用' WHEN '2' THEN '停用' ELSE a.state END state,
+            CONVERT (a.start_time, CHAR) startTime,
+            CONVERT (a.end_time, CHAR) endTime,
+            a.remark
+        FROM
+            ifs_set_of_books  a
+        WHERE
+            1 = 1
+        <if test="state != '' and state != null">
+            AND a.state = #{state}
+        </if>
+        <if test="name != '' and name != null">
+            AND a.name LIKE '%${name}%'
+        </if>
+        <if test="startTime1 != '' and startTime1 != null and startTime2 != '' and startTime2 != null">
+            AND a.start_time >= #{startTime1} AND #{startTime2} >= a.start_time
+        </if>
+        <if test="endTime1 != '' and endTime1 != null and endTime2 != '' and endTime2 != null">
+            AND a.end_time >= #{endTime1} AND #{endTime2} >= a.end_time
+        </if>
+        ORDER BY a.last_update_time DESC, a.id ASC
+    </select>
+
+    <select id="queryIfsSetOfBooksMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id
+        FROM
+            ifs_set_of_books a
+        WHERE
+            a.name = #{name}
+        <if test="id != '' and id != null">
+            AND a.id != #{id}
+        </if>
+    </select>
+
+    <insert id="insertIfsSetOfBooks" parameterType="java.util.Map">
+        INSERT INTO ifs_set_of_books (id, `name`, state, start_time, end_time, remark, create_id, create_time, last_update_id, last_update_time
+        ) VALUES 
+        (#{id}, #{name}, #{state}, #{startTime}, #{endTime}, #{remark}, #{userId}, #{createTime}, #{userId}, #{createTime})
+    </insert>
+
+    <select id="queryIfsSetOfBooksToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name `name`,
+            a.state state,
+            CONVERT (a.start_time, CHAR) startTime,
+            CONVERT (a.end_time, CHAR) endTime,
+            a.remark
+        FROM
+            ifs_set_of_books  a
+        WHERE
+            a.id = #{id}
+    </select>
+
+    <update id="editIfsSetOfBooksById" parameterType="java.util.Map">
+        UPDATE ifs_set_of_books 
+        <set>
+            `name` = #{name},
+            state = #{state},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            remark = #{remark},
+            last_update_id = #{userId},
+            last_update_time = #{lastUpdateTime}
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteIfsSetOfBooksById" parameterType="java.util.Map">
+        DELETE
+		FROM
+			ifs_set_of_books
+		WHERE
+			id = #{id}
+    </delete>
+
+    <select id="queryIfsSetOfBooksDetailById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.name `name`,
+            CASE a.state WHEN '1' THEN '启用' WHEN '2' THEN '停用' ELSE a.state END state,
+            CONVERT (a.start_time, CHAR) startTime,
+            CONVERT (a.end_time, CHAR) endTime,
+            a.remark
+        FROM
+            ifs_set_of_books  a
+        WHERE
+            a.id = #{id}
+    </select>
+
+</mapper>
