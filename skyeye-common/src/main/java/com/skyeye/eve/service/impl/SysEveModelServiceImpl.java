@@ -9,15 +9,16 @@ import com.github.pagehelper.PageHelper;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.FileUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.SysEveModelDao;
 import com.skyeye.eve.service.SysEveModelService;
 import com.skyeye.jedis.JedisClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,9 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 
 	@Autowired
 	public JedisClientService jedisClient;
+
+	@Value("${IMAGES_PATH}")
+	private String tPath;
 
 	/**
 	 *
@@ -99,7 +103,12 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	@Transactional(value="transactionManager")
 	public void deleteSysEveModelById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		sysEveModelDao.deleteSysEveModelById(map);
+		String id = map.get("id").toString();
+		Map<String, Object>	bean = sysEveModelDao.selectSysEveModelMationById(id);
+		if (bean != null && !bean.isEmpty()) {
+			FileUtil.deleteFile(tPath.replace("images", "") + bean.get("logo").toString());
+			sysEveModelDao.deleteSysEveModelById(id);
+		}
 	}
 
 	/**
@@ -115,7 +124,8 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	@Override
 	public void selectSysEveModelById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object>	bean = sysEveModelDao.selectSysEveModelById(map);
+		String id = map.get("id").toString();
+		Map<String, Object>	bean = sysEveModelDao.selectSysEveModelMationById(id);
 		outputObject.setBean(bean);
 		outputObject.settotal(1);
 	}
@@ -157,7 +167,8 @@ public class SysEveModelServiceImpl implements SysEveModelService {
 	@Override
 	public void selectSysEveModelMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object>	bean = sysEveModelDao.selectSysEveModelMationById(map);
+		String id = map.get("id").toString();
+		Map<String, Object>	bean = sysEveModelDao.selectSysEveModelMationById(id);
 		outputObject.setBean(bean);
 		outputObject.settotal(1);
 	}

@@ -4,6 +4,8 @@
 
 package com.skyeye.eve.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,11 +27,9 @@ public interface SysEveModelDao {
 
 	public int insertSysEveModelMation(Map<String, Object> map) throws Exception;
 
-	public int deleteSysEveModelById(Map<String, Object> map) throws Exception;
+	public int deleteSysEveModelById(@Param("id") String id) throws Exception;
 
-	public Map<String, Object> selectSysEveModelById(Map<String, Object> map) throws Exception;
-
-	public Map<String, Object> selectSysEveModelMationById(Map<String, Object> map) throws Exception;
+	public Map<String, Object> selectSysEveModelMationById(@Param("id") String id) throws Exception;
 
 	public int editSysEveModelMationById(Map<String, Object> map) throws Exception;
 
