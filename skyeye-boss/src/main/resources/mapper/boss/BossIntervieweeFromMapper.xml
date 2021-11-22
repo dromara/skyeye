@@ -47,8 +47,20 @@
         WHERE a.id = #{id}
     </select>
 
-    <select id="queryBossIntervieweeFromTotalByTitle" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT count(1) FROM boss_interviewee_from
+    <select id="queryBossIntervieweeFromByTitle" parameterType="java.lang.String" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.title,
+            a.from_url fromUrl,
+            a.desc,
+            b.user_name createName,
+            CONVERT(a.create_time, char) createTime,
+            c.user_name lastUpdateName,
+            CONVERT(a.last_update_time, char) lastUpdateTime
+        FROM
+            boss_interviewee_from a
+        LEFT JOIN sys_eve_user_staff b ON a.create_id = b.user_id
+        LEFT JOIN sys_eve_user_staff c ON a.last_update_id = c.user_id
         WHERE title = #{title}
     </select>
 

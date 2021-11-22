@@ -43,12 +43,12 @@ public interface BossIntervieweeFromDao {
     Map<String, Object> queryBossIntervieweeFromById(@Param("id") String id);
 
     /**
-     * 根据title查询统计条数
+     * 根据title查询面试者来源信息
      *
-     * @param title
-     * @return
+     * @param title 标题
+     * @return 查询结果
      */
-    Integer queryBossIntervieweeFromTotalByTitle(@Param("title") String title);
+    Map<String, Object> queryBossIntervieweeFromByTitle(@Param("title") String title);
 
     /**
      * 根据id更新面试者来源信息
