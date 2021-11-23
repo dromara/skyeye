@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public interface IfsSetOfBooksDao {
 
-    public List<Map<String, Object>> queryIfsSetOfBooksByList(Map<String, Object> map) throws Exception;
+    public List<Map<String, Object>> queryIfsSetOfBooksList(Map<String, Object> map) throws Exception;
 
     public Map<String, Object> queryIfsSetOfBooksMationByName(Map<String, Object> map) throws Exception;
 

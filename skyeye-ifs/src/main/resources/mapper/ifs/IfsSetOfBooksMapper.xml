@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.skyeye.dao.IfsSetOfBooksDao">
 
-    <select id="queryIfsSetOfBooksByList" parameterType="java.util.Map" resultType="java.util.Map">
+    <select id="queryIfsSetOfBooksList" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
             a.id,
             a.name `name`,
@@ -42,8 +42,9 @@
     </select>
 
     <insert id="insertIfsSetOfBooks" parameterType="java.util.Map">
-        INSERT INTO ifs_set_of_books (id, `name`, state, start_time, end_time, remark, create_id, create_time, last_update_id, last_update_time
-        ) VALUES 
+        INSERT INTO ifs_set_of_books
+        (id, `name`, state, start_time, end_time, remark, create_id, create_time, last_update_id, last_update_time)
+        VALUES
         (#{id}, #{name}, #{state}, #{startTime}, #{endTime}, #{remark}, #{userId}, #{createTime}, #{userId}, #{createTime})
     </insert>
 

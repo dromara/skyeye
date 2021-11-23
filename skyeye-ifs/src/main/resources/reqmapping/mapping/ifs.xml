@@ -261,7 +261,7 @@
         <property id="startTime1" name="startTime1" ref="" var="开始日期范围" />
         <property id="startTime2" name="startTime2" ref="" var="开始日期范围" />
         <property id="endTime1" name="endTime1" ref="" var="结束日期范围" />
-        <property id="startTime2" name="endTime2" ref="" var="结束日期范围" />
+        <property id="endTime2" name="endTime2" ref="" var="结束日期范围" />
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
         <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
     </url>

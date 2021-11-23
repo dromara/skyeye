@@ -11,7 +11,6 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.dao.IfsSetOfBooksDao;
-import com.skyeye.jedis.JedisClientService;
 import com.skyeye.service.IfsSetOfBooksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +47,7 @@ public class IfsSetOfBooksServiceImpl implements IfsSetOfBooksService {
         Map<String, Object> map = inputObject.getParams();
         map.put("userId", inputObject.getLogParams().get("id"));
         Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
-        List<Map<String, Object>> beans = ifsSetOfBooksDao.queryIfsSetOfBooksByList(map);
+        List<Map<String, Object>> beans = ifsSetOfBooksDao.queryIfsSetOfBooksList(map);
         outputObject.setBeans(beans);
         outputObject.settotal(pages.getTotal());
     }
