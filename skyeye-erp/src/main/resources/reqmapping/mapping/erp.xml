@@ -41,36 +41,36 @@
 	<!-- erp公共部分结束 -->
 	
 	<!-- 产品类型开始 -->
-	<url id="materialcategory001" path="/post/MaterialCategoryController/queryMaterialCategoryList" val="获取产品类型信息" allUse="1" groupName="产品类型模块">
+	<url id="materialcategory001" path="/post/MaterialCategoryController/queryMaterialCategoryList" val="获取产品类型信息" allUse="1" method="POST" groupName="产品类型模块">
 		<property id="name" name="name" ref="" var="类型名称"></property>
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	</url>
-	<url id="materialcategory002" path="/post/MaterialCategoryController/insertMaterialCategoryMation" val="新增产品类型" allUse="1" groupName="产品类型模块">
+	<url id="materialcategory002" path="/post/MaterialCategoryController/insertMaterialCategoryMation" val="新增产品类型" allUse="1" method="POST" groupName="产品类型模块">
 	    <property id="name" name="name" ref="required" var="产品类型名称"/>
 	    <property id="remark" name="remark" ref="" var="产品类型备注"/>
 	    <property id="parentId" name="parentId" ref="required" var="所属类型id"/>
 	</url>
-	<url id="materialcategory003" path="/post/MaterialCategoryController/deleteMaterialCategoryById" val="删除产品类型" allUse="1" groupName="产品类型模块">
+	<url id="materialcategory003" path="/post/MaterialCategoryController/deleteMaterialCategoryById" val="删除产品类型" allUse="1" method="DELETE" groupName="产品类型模块">
 	    <property id="rowId" name="id" ref="required" var="产品类型id"/>
 	</url>
-	<url id="materialcategory004" path="/post/MaterialCategoryController/selectMaterialCategoryToEditById" val="获取选中的产品类型信息用以编辑" allUse="2" groupName="产品类型模块">
+	<url id="materialcategory004" path="/post/MaterialCategoryController/selectMaterialCategoryToEditById" val="获取选中的产品类型信息用以编辑" allUse="2" method="GET" groupName="产品类型模块">
 	    <property id="rowId" name="id" ref="required" var="产品类型id"/>
 	</url>
-	<url id="materialcategory005" path="/post/MaterialCategoryController/editMaterialCategoryMationById" val="编辑产品类型" allUse="1" groupName="产品类型模块">
+	<url id="materialcategory005" path="/post/MaterialCategoryController/editMaterialCategoryMationById" val="编辑产品类型" allUse="1" method="PUT" groupName="产品类型模块">
 	    <property id="rowId" name="id" ref="required" var="产品类型id"/>
 	    <property id="name" name="name" ref="required" var="产品类型名称"/>
 	    <property id="remark" name="remark" ref="" var="产品类型备注"/>
 	</url>
-	<url id="materialcategory006" path="/post/MaterialCategoryController/editMaterialCategoryMationOrderNumUpById" val="产品类型上移" allUse="1" groupName="产品类型模块">
+	<url id="materialcategory006" path="/post/MaterialCategoryController/editMaterialCategoryMationOrderNumUpById" val="产品类型上移" allUse="1" method="PUT" groupName="产品类型模块">
 		<property id="rowId" name="id" ref="required" var="类型id" />
 	</url>
-	<url id="materialcategory007" path="/post/MaterialCategoryController/editMaterialCategoryMationOrderNumDownById" val="产品类型下移" allUse="1" groupName="产品类型模块">
+	<url id="materialcategory007" path="/post/MaterialCategoryController/editMaterialCategoryMationOrderNumDownById" val="产品类型下移" allUse="1" method="PUT" groupName="产品类型模块">
 		<property id="rowId" name="id" ref="required" var="类型id" />
 	</url>
-	<url id="materialcategory008" path="/post/MaterialCategoryController/queryMaterialCategoryListToTree" val="获取所有类型展示为树" method="GET" allUse="2" groupName="产品类型模块">
+	<url id="materialcategory008" path="/post/MaterialCategoryController/queryMaterialCategoryListToTree" val="获取所有类型展示为树" allUse="2" method="GET" groupName="产品类型模块">
 	</url>
-	<url id="materialcategory009" path="/post/MaterialCategoryController/queryMaterialCategoryListToTreeZtr" val="获取所有类型展示为树-数据结果呈树状" method="GET" allUse="2" groupName="产品类型模块">
+	<url id="materialcategory009" path="/post/MaterialCategoryController/queryMaterialCategoryListToTreeZtr" val="获取所有类型展示为树-数据结果呈树状" allUse="2" method="GET" groupName="产品类型模块">
 	</url>
 	<!-- 产品类型结束 -->
 	
