@@ -1132,50 +1132,6 @@
 	</url>
 	<!-- 收支项目管理结束 -->
 
-	<!-- 结算账户管理开始 -->
-	<url id="account001" path="/post/AccountController/queryAccountByList" val="查询账户信息" allUse="1" groupName="结算账户模块">
-		<property id="accountName" name="accountName" ref="" var="结算账户名称"/>
-		<property id="serialNo" name="serialNo" ref="" var="结算账户编号"/>
-		<property id="remark" name="remark" ref="" var="结算账户备注"/>
-		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	</url>
-	<url id="account002" path="/post/AccountController/insertAccount" val="添加账户信息" allUse="1" groupName="结算账户模块">
-		<property id="accountName" name="accountName" ref="required" var="结算账户名称"/>
-		<property id="serialNo" name="serialNo" ref="required" var="结算账户编号"/>
-		<property id="initialAmount" name="initialAmount" ref="" var="结算账户期初金额"/>
-		<property id="remark" name="remark" ref="" var="结算账户备注"/>
-		<property id="isDefault" name="isDefault" ref="required,num" var="结算账户默认状态"/>
-	</url>
-	<url id="account003" path="/post/AccountController/queryAccountById" val="查询单个账户信息，用于信息回显" allUse="2" groupName="结算账户模块">
-		<property id="rowId" name="id" ref="required" var="结算账户Id"></property>
-	</url>
-	<url id="account004" path="/post/AccountController/deleteAccountById" val="删除账户信息" allUse="1" groupName="结算账户模块">
-		<property id="rowId" name="id" ref="required" var="结算账户Id"></property>
-	</url>
-	<url id="account005" path="/post/AccountController/editAccountById" val="编辑账户信息" allUse="1" groupName="结算账户模块">
-		<property id="rowId" name="id" ref="required" var="结算账户Id"></property>
-		<property id="accountName" name="accountName" ref="required" var="结算账户名称"/>
-		<property id="serialNo" name="serialNo" ref="required" var="结算账户编号"/>
-		<property id="initialAmount" name="initialAmount" ref="" var="结算账户期初金额"/>
-		<property id="remark" name="remark" ref="" var="结算账户备注"/>
-		<property id="isDefault" name="isDefault" ref="required,num" var="结算账户默认状态"/>
-	</url>
-	<url id="account006" path="/post/AccountController/editAccountByIdAndIsDefault" val="设置默认" allUse="1" groupName="结算账户模块">
-		<property id="rowId" name="id" ref="required" var="结算账户Id"></property>
-	</url>
-	<url id="account007" path="/post/AccountController/queryAccountByIdAndInfo" val="查看账户详情" allUse="2" groupName="结算账户模块">
-		<property id="rowId" name="id" ref="required" var="结算账户Id"></property>
-	</url>
-	<url id="account008" path="/post/AccountController/queryAccountStreamById" val="查看账户流水" allUse="1" groupName="结算账户模块">
-		<property id="rowId" name="id" ref="required" var="结算账户Id"></property>
-		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	</url>
-	<url id="account009" path="/post/AccountController/queryAccountListToSelect" val="获取账户信息展示为下拉框" allUse="2" method="GET" groupName="结算账户模块">
-	</url>
-	<!-- 结算账户管理结束 -->
-
 	<!-- 库存盘点管理开始 -->
 	<url id="erpstockinventory001" path="/post/ErpStockInventoryController/insertDepotNormsInventory" val="新增库存盘点信息" allUse="2" groupName="盘点模块">
 		<property id="materialId" name="materialId" ref="required" var="商品id" />

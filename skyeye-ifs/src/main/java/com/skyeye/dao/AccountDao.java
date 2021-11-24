@@ -8,8 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author: 卫志强
- * @Date: 2019/10/6 15:43
+ *
+ * @ClassName: AccountDao
+ * @Description: 财务账户数据层
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/11/24 21:54
+ *
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 public interface AccountDao {
     public List<Map<String, Object>> queryAccountByList(Map<String, Object> params) throws Exception;
