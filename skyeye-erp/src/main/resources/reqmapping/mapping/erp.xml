@@ -1099,39 +1099,6 @@
 	</url>
 	<!-- 会员信息管理结束 -->
 
-	<!-- 收支项目管理开始 -->
-	<url id="inoutitem001" path="/post/InoutitemController/queryInoutitemByList" val="查询收支项目信息" allUse="1" groupName="收支项目模块">
-		<property id="inoutitemName" name="inoutitemName" ref="" var="收支项目名称"/>
-		<property id="inoutitemType" name="inoutitemType" ref="" var="收支项目类型"/>
-		<property id="remark" name="remark" ref="" var="收支项目备注"/>
-		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	</url>
-	<url id="inoutitem002" path="/post/InoutitemController/insertInoutitem" val="添加收支项目信息" allUse="1" groupName="收支项目模块">
-		<property id="inoutitemName" name="inoutitemName" ref="required" var="收支项目名称"/>
-		<property id="inoutitemType" name="inoutitemType" ref="required,num" var="收支项目类型"/>
-		<property id="remark" name="remark" ref="" var="收支项目备注"/>
-	</url>
-	<url id="inoutitem003" path="/post/InoutitemController/queryInoutitemById" val="查询单个收支项目信息，用于信息回显" allUse="2" groupName="收支项目模块">
-		<property id="rowId" name="id" ref="required" var="收支项目Id"></property>
-	</url>
-	<url id="inoutitem004" path="/post/InoutitemController/deleteInoutitemById" val="删除收支项目信息" allUse="1" groupName="收支项目模块">
-		<property id="rowId" name="id" ref="required" var="收支项目Id"></property>
-	</url>
-	<url id="inoutitem005" path="/post/InoutitemController/editInoutitemById" val="编辑收支项目信息" allUse="1" groupName="收支项目模块">
-		<property id="rowId" name="id" ref="required" var="收支项目Id"></property>
-		<property id="inoutitemName" name="inoutitemName" ref="required" var="收支项目名称"/>
-		<property id="inoutitemType" name="inoutitemType" ref="required,num" var="收支项目类型"/>
-		<property id="remark" name="remark" ref="" var="收支项目备注"/>
-	</url>
-	<url id="inoutitem006" path="/post/InoutitemController/queryInoutitemByIdAndInfo" val="查看收支项目详情" allUse="2" groupName="收支项目模块">
-		<property id="rowId" name="id" ref="required" var="收支项目Id"></property>
-	</url>
-	<url id="inoutitem007" path="/post/InoutitemController/queryInoutitemListToSelect" val="根据条件查询收支项目展示为下拉框" allUse="2" method="GET" groupName="收支项目模块">
-		<property id="type" name="type" ref="required,num" var="收支项目类型  1.收入  2.支出"/>
-	</url>
-	<!-- 收支项目管理结束 -->
-
 	<!-- 库存盘点管理开始 -->
 	<url id="erpstockinventory001" path="/post/ErpStockInventoryController/insertDepotNormsInventory" val="新增库存盘点信息" allUse="2" groupName="盘点模块">
 		<property id="materialId" name="materialId" ref="required" var="商品id" />
