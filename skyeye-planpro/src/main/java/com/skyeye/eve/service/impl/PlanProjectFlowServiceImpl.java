@@ -37,6 +37,13 @@ public class PlanProjectFlowServiceImpl implements PlanProjectFlowService{
 		Map<String, Object> map = inputObject.getParams();
 		List<Map<String, Object>> beans = planProjectFlowDao.queryPlanProjectFlowList(map);
 		if(!beans.isEmpty()){
+			beans.forEach(bean -> {
+				if("1".equals(bean.get("isParent").toString())){
+					bean.put("isParent", true);
+				}else{
+					bean.put("isParent", false);
+				}
+			});
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());
 		}

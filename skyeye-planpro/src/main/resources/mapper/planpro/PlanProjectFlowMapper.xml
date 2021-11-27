@@ -8,9 +8,9 @@
 			a.title title,
 			a.p_id pId,
 			a.`type`,
-			false lay_is_open,
-			a.is_share isShare,
-			(SELECT COUNT(*) FROM plan_project_flow b WHERE b.p_id = a.id) childNum
+			CASE a.type WHEN 1 THEN 1 WHEN 2 THEN 0 ELSE '' END isParent,
+		    CASE a.type WHEN 1 THEN '' WHEN 2 THEN '/assets/images/note-folder.png' ELSE '' END icon,
+			a.is_share isShare
 		FROM
 			plan_project_flow a
 		WHERE a.project_id = #{projectId}

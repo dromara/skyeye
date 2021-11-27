@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<controller>
+<controller modelName="业务流程规划">
 	<!-- 
 		- allUse  是否需要登录才能使用   1是   0否  2需要登陆才能访问，但无需授权    默认为否
 	 -->
 	
 	<!-- 项目规划开始 -->
-	<url id="planproject001" path="/post/PlanProjectController/queryPlanProjectList" val="获取项目规划-项目表列表" allUse="1">
+	<url id="planproject001" path="/post/PlanProjectController/queryPlanProjectList" val="获取项目规划-项目表列表" allUse="1" method="POST" groupName="项目业务流程图树">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 	    <property id="projectName" name="projectName" ref="" var="项目名称"/>
 	</url>
-	<url id="planproject002" path="/post/PlanProjectController/insertPlanProjectMation" val="添加项目规划-项目表信息" allUse="1">
+	<url id="planproject002" path="/post/PlanProjectController/insertPlanProjectMation" val="添加项目规划-项目表信息" allUse="1" method="POST" groupName="项目业务流程图树">
 		<property id="projectName" name="projectName" ref="required" var="项目名称"/>
 		<property id="projectDesc" name="projectDesc" ref="" var="项目简介"/>
 		<property id="isShare" name="isShare" ref="required,num" var="是否分享"/>
 	</url>
-	<url id="planproject003" path="/post/PlanProjectController/deletePlanProjectMationById" val="删除项目规划-项目表信息" allUse="1">
+	<url id="planproject003" path="/post/PlanProjectController/deletePlanProjectMationById" val="删除项目规划-项目表信息" allUse="1" method="DELETE" groupName="项目业务流程图树">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目表id"/>
 	</url>
-	<url id="planproject004" path="/post/PlanProjectController/queryPlanProjectMationToEditById" val="编辑项目规划-项目表信息时进行回显" allUse="2">
+	<url id="planproject004" path="/post/PlanProjectController/queryPlanProjectMationToEditById" val="编辑项目规划-项目表信息时进行回显" allUse="2" method="GET" groupName="项目业务流程图树">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目表id"/>
 	</url>
-	<url id="planproject005" path="/post/PlanProjectController/editPlanProjectMationById" val="编辑项目规划-项目表信息" allUse="1">
+	<url id="planproject005" path="/post/PlanProjectController/editPlanProjectMationById" val="编辑项目规划-项目表信息" allUse="1" method="PUT" groupName="项目业务流程图树">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目表id"/>
 	    <property id="projectName" name="projectName" ref="required" var="项目名称"/>
 		<property id="projectDesc" name="projectDesc" ref="" var="项目简介"/>
 		<property id="isShare" name="isShare" ref="required,num" var="是否分享"/>
 	</url>
+	<!-- 项目规划结束 -->
 	
-	<url id="planprojectflow001" path="/post/PlanProjectFlowController/queryPlanProjectFlowList" val="获取项目规划-项目流程图表列表" allUse="1">
+	<url id="planprojectflow001" path="/post/PlanProjectFlowController/queryPlanProjectFlowList" val="获取项目规划-项目流程图表列表" allUse="2" method="GET" groupName="项目业务流程图树" >
 		<property id="projectId" name="projectId" ref="required" var="项目id" />
 	</url>
-	<url id="planprojectflow002" path="/post/PlanProjectFlowController/insertPlanProjectFlowMation" val="添加项目规划-项目流程图表信息" allUse="1">
+	<url id="planprojectflow002" path="/post/PlanProjectFlowController/insertPlanProjectFlowMation" val="添加项目规划-项目流程图表信息" allUse="2" method="POST" groupName="项目业务流程图树">
 		<property id="projectId" name="projectId" ref="required" var="项目id" />
 		<property id="title" name="title" ref="required" var="流程图标题或者目录标题" />
 		<property id="pId" name="pId" ref="required" var="所属父id" />
@@ -39,24 +40,23 @@
 		<property id="jsonContent" name="jsonContent" ref="" var="流程图内容" />
 		<property id="isShare" name="isShare" ref="required,num" var="是否分享" />
 	</url>
-	<url id="planprojectflow003" path="/post/PlanProjectFlowController/deletePlanProjectFlowMationById" val="删除项目规划-项目流程图表信息" allUse="1">
+	<url id="planprojectflow003" path="/post/PlanProjectFlowController/deletePlanProjectFlowMationById" val="删除项目规划-项目流程图表信息" allUse="2" method="DELETE" groupName="项目业务流程图树">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
 	</url>
-	<url id="planprojectflow004" path="/post/PlanProjectFlowController/queryPlanProjectFlowMationToEditById" val="编辑项目规划-项目流程图表信息时进行回显" allUse="2">
+	<url id="planprojectflow004" path="/post/PlanProjectFlowController/queryPlanProjectFlowMationToEditById" val="编辑项目规划-项目流程图表信息时进行回显" allUse="2" method="GET" groupName="项目业务流程图树">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
 	</url>
-	<url id="planprojectflow005" path="/post/PlanProjectFlowController/editPlanProjectFlowMationById" val="编辑项目规划-项目流程图表信息" allUse="1">
+	<url id="planprojectflow005" path="/post/PlanProjectFlowController/editPlanProjectFlowMationById" val="编辑项目规划-项目流程图表信息" allUse="2" method="PUT" groupName="项目业务流程图树">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
 	    <property id="title" name="title" ref="required" var="流程图标题或者目录标题" />
 		<property id="isShare" name="isShare" ref="required,num" var="是否分享" />
 	</url>
-	<url id="planprojectflow006" path="/post/PlanProjectFlowController/queryPlanProjectFlowJsonContentMationById" val="获取项目流程图内容进行设计" allUse="2">
+	<url id="planprojectflow006" path="/post/PlanProjectFlowController/queryPlanProjectFlowJsonContentMationById" val="获取项目流程图内容进行设计" allUse="2" method="GET" groupName="项目业务流程图树">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
 	</url>
-	<url id="planprojectflow007" path="/post/PlanProjectFlowController/editPlanProjectFlowJsonContentMationById" val="设计项目流程图" allUse="1">
+	<url id="planprojectflow007" path="/post/PlanProjectFlowController/editPlanProjectFlowJsonContentMationById" val="设计项目流程图" allUse="1" method="POST" groupName="项目业务流程图树">
 	    <property id="rowId" name="id" ref="required" var="项目规划-项目流程图表id"/>
 	    <property id="jsonContent" name="jsonContent" ref="required" var="流程图内容" />
 	</url>
-	<!-- 项目规划结束 -->
-	
+
 </controller>
