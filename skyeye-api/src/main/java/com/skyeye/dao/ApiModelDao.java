@@ -21,7 +21,7 @@ public interface ApiModelDao {
 
     public Map<String, Object> queryApiModelMationByName(Map<String, Object> map) throws Exception;
 
-    public int insertApiModel(Map<String, Object> map) throws Exception;
+    public int insertApiModel(List<Map<String, Object>> beans) throws Exception;
 
     public int deleteApiModelById(Map<String, Object> map) throws Exception;
 

@@ -29,9 +29,12 @@
     </select>
 
     <insert id="insertApiModel" parameterType="java.util.Map">
-        INSERT INTO api_model (id, `name`, create_id, create_time, last_update_id, last_update_time)
+        INSERT INTO api_model
+            (id, `name`, create_id, create_time, last_update_id, last_update_time)
         VALUES
-            (#{id}, #{name}, #{userId}, #{createTime}, #{userId}, #{createTime})
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id}, #{item.name}, #{item.userId}, #{item.createTime}, #{item.userId}, #{item.createTime})
+        </foreach>
     </insert>
 
     <select id="queryApiModelToEditById" parameterType="java.util.Map" resultType="java.util.Map">

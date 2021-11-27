@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -70,11 +70,19 @@ public class ApiModelServiceImpl implements ApiModelService {
         if (bean != null && !bean.isEmpty()) {
             outputObject.setreturnMessage("该模块名称已存在，请更换");
         } else {
-            map.put("id", ToolUtil.getSurFaceId());
-            map.put("userId", inputObject.getLogParams().get("id"));
-            map.put("createTime", DateUtil.getTimeAndToString());
-            apiModelDao.insertApiModel(map);
+            this.insertApiModelList(Arrays.asList(map), inputObject.getLogParams().get("id").toString());
         }
+    }
+
+    @Override
+    @Transactional(value = "transactionManager")
+    public void insertApiModelList(List<Map<String, Object>> beans, String userId) throws Exception{
+        beans.forEach(bean -> {
+            bean.put("id", ToolUtil.getSurFaceId());
+            bean.put("userId", userId);
+            bean.put("createTime", DateUtil.getTimeAndToString());
+        });
+        apiModelDao.insertApiModel(beans);
     }
 
     /**
