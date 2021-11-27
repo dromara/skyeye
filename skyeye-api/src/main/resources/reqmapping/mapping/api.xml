@@ -23,4 +23,25 @@
     </url>
     <!-- api接口信息结束 -->
 
+    <!-- api接口模块开始 -->
+    <url id="apimodel001" path="/post/ApiModelController/queryApiModelList" val="查询api接口模块列表信息" allUse="1" groupName="api接口">
+        <property id="name" name="name" ref="" var="模块名称" />
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+    </url>
+    <url id="apimodel002" path="/post/ApiModelController/insertApiModelMation" val="添加api接口模块信息" allUse="1" method="POST" groupName="api接口">
+        <property id="name" name="name" ref="required" var="模块名称" />
+    </url>
+    <url id="apimodel003" path="/post/ApiModelController/selectApiModelById" val="查询api接口模块信息用于数据回显" allUse="2" method="GET" groupName="api接口">
+        <property id="rowId" name="id" ref="required" var="模块Id"></property>
+    </url>
+    <url id="apimodel004" path="/post/ApiModelController/editApiModelMationById" val="编辑api接口模块信息" allUse="1" method="PUT" groupName="api接口">
+        <property id="rowId" name="id" ref="required" var="模块Id"></property>
+        <property id="name" name="name" ref="required" var="模块名称" />
+    </url>
+    <url id="apimodel005" path="/post/ApiModelController/deleteApiModelById" val="删除api接口模块信息" allUse="1" method="DELETE" groupName="api接口">
+        <property id="rowId" name="id" ref="required" var="模块Id"></property>
+    </url>
+    <!-- api接口模块结束 -->
+
 </controller>
