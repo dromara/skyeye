@@ -365,4 +365,35 @@
     </url>
     <!-- 收支项目管理结束 -->
 
+    <!-- 会计科目管理开始 -->
+    <url id="ifsaccountsubject001" path="/post/IfsAccountSubjectController/queryIfsAccountSubjectList" val="查询会计科目列表信息" allUse="1" groupName="财务模块">
+        <property id="name" name="name" ref="" var="会计科目名称" />
+        <property id="state" name="state" ref="" var="状态" />
+        <property id="type" name="type" ref="" var="类型" />
+        <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+        <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+    </url>
+    <url id="ifsaccountsubject002" path="/post/IfsAccountSubjectController/insertIfsAccountSubjectMation" val="添加会计科目信息" allUse="1" method="POST" groupName="财务模块">
+        <property id="name" name="name" ref="required" var="会计科目名称" />
+        <property id="state" name="state" ref="required,num" var="状态" />
+        <property id="type" name="type" ref="required,num" var="类型" />
+        <property id="num" name="num" ref="required" var="编号" />
+        <property id="remark" name="remark" ref="" var="描述" />
+    </url>
+    <url id="ifsaccountsubject003" path="/post/IfsAccountSubjectController/selectIfsAccountSubjectById" val="查询会计科目信息用于数据回显" allUse="2" method="GET" groupName="财务模块">
+        <property id="rowId" name="id" ref="required" var="会计科目Id"></property>
+    </url>
+    <url id="ifsaccountsubject004" path="/post/IfsAccountSubjectController/editIfsAccountSubjectMationById" val="编辑会计科目信息" allUse="1" method="PUT" groupName="财务模块">
+        <property id="rowId" name="id" ref="required" var="会计科目Id"></property>
+        <property id="name" name="name" ref="required" var="会计科目名称" />
+        <property id="state" name="state" ref="required,num" var="状态" />
+        <property id="type" name="type" ref="required,num" var="类型" />
+        <property id="num" name="num" ref="required" var="编号" />
+        <property id="remark" name="remark" ref="" var="描述" />
+    </url>
+    <url id="ifsaccountsubject005" path="/post/IfsAccountSubjectController/deleteIfsAccountSubjectById" val="删除会计科目信息" allUse="1" method="DELETE" groupName="财务模块">
+        <property id="rowId" name="id" ref="required" var="会计科目Id"></property>
+    </url>
+    <!-- 会计科目管理结束 -->
+
 </controller>
