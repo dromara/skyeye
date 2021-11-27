@@ -92,19 +92,4 @@ public class IfsSetOfBooksController {
         ifsSetOfBooksService.editIfsSetOfBooksMationById(inputObject, outputObject);
     }
 
-    /**
-     * @param inputObject
-     * @param outputObject
-     * @return void    返回类型
-     * @throws Exception 参数
-     * @throws
-     * @Title: selectIfsSetOfBooksMationById
-     * @Description: 通过id查找对应的账套管理信息详情
-     */
-    @RequestMapping("/post/IfsSetOfBooksController/selectIfsSetOfBooksMationById")
-    @ResponseBody
-    public void selectIfsSetOfBooksMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
-        ifsSetOfBooksService.selectIfsSetOfBooksMationById(inputObject, outputObject);
-    }
-
 }

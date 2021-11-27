@@ -104,7 +104,8 @@ public class IfsSetOfBooksServiceImpl implements IfsSetOfBooksService {
     @Override
     public void selectIfsSetOfBooksById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
-        Map<String, Object> bean = ifsSetOfBooksDao.queryIfsSetOfBooksToEditById(map);
+        String id = map.get("id").toString();
+        Map<String, Object> bean = ifsSetOfBooksDao.queryIfsSetOfBooksToEditById(id);
         outputObject.setBean(bean);
         outputObject.settotal(1);
     }
@@ -132,21 +133,5 @@ public class IfsSetOfBooksServiceImpl implements IfsSetOfBooksService {
         }
     }
 
-    /**
-     * @param inputObject
-     * @param outputObject
-     * @return void    返回类型
-     * @throws Exception 参数
-     * @throws
-     * @Title: selectIfsSetOfBooksMationById
-     * @Description: 通过id查找对应的账套管理信息详情
-     */
-    @Override
-    public void selectIfsSetOfBooksMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        Map<String, Object> bean = ifsSetOfBooksDao.queryIfsSetOfBooksDetailById(map);
-        outputObject.setBean(bean);
-        outputObject.settotal(1);
-    }
 }
 

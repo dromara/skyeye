@@ -4,6 +4,8 @@
 
 package com.skyeye.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,9 +27,7 @@ public interface IfsSetOfBooksDao {
 
     public int deleteIfsSetOfBooksById(Map<String, Object> map) throws Exception;
 
-    public Map<String, Object> queryIfsSetOfBooksDetailById(Map<String, Object> map) throws Exception;
-
-    public Map<String, Object> queryIfsSetOfBooksToEditById(Map<String, Object> map) throws Exception;
+    public Map<String, Object> queryIfsSetOfBooksToEditById(@Param("id") String id) throws Exception;
 
     public int editIfsSetOfBooksById(Map<String, Object> map) throws Exception;
 
