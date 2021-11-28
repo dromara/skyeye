@@ -7,11 +7,17 @@
             a.id,
             a.name `name`,
             a.num num,
-            CASE a.type WHEN '1' THEN '资产类' WHEN '2' THEN '负债类' WHEN '3' THEN '权益类' WHEN '4' THEN '成本类' WHEN '5' THEN '损益类' ELSE a.type END `type`,
+            a.type,
             CASE a.state WHEN '1' THEN '启用' WHEN '2' THEN '停用' ELSE a.state END state,
-            a.remark
+            a.remark,
+            d.user_name createName,
+            CONVERT(a.create_time, char) createTime,
+            e.user_name lastUpdateName,
+            CONVERT(a.last_update_time, char) lastUpdateTime
         FROM
             ifs_account_subject  a
+            LEFT JOIN sys_eve_user_staff d ON a.create_id = d.user_id
+            LEFT JOIN sys_eve_user_staff e ON a.last_update_id = e.user_id
         WHERE
             1 = 1
         <if test="type != '' and type != null">
@@ -40,11 +46,10 @@
 
     <select id="queryIfsAccountSubjectMationByNum" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
-        a.id
+            a.id
         FROM
-        ifs_account_subject a
-        WHERE
-        a.num = #{num}
+            ifs_account_subject a
+        WHERE a.num = #{num}
         <if test="id != '' and id != null">
             AND a.id != #{id}
         </if>

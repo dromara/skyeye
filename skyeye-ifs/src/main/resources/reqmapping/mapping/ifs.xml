@@ -255,7 +255,7 @@
     <!-- 收预付款管理结束 -->
 
     <!-- 账套管理开始 -->
-    <url id="ifssetofbooks001" path="/post/IfsSetOfBooksController/queryIfsSetOfBooksList" val="查询账套列表信息" allUse="2" method="POST" groupName="财务模块">
+    <url id="ifssetofbooks001" path="/post/IfsSetOfBooksController/queryIfsSetOfBooksList" val="查询账套列表信息" allUse="2" method="POST" groupName="账套管理">
         <property id="name" name="name" ref="" var="账套名称" />
         <property id="state" name="state" ref="num" var="状态" />
         <property id="startTime1" name="startTime1" ref="" var="开始日期范围" />
@@ -265,17 +265,17 @@
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
         <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
     </url>
-    <url id="ifssetofbooks002" path="/post/IfsSetOfBooksController/insertIfsSetOfBooksMation" val="添加账套信息" allUse="1" method="POST" groupName="财务模块">
+    <url id="ifssetofbooks002" path="/post/IfsSetOfBooksController/insertIfsSetOfBooksMation" val="添加账套信息" allUse="1" method="POST" groupName="账套管理">
         <property id="name" name="name" ref="required" var="账套名称" />
         <property id="state" name="state" ref="required,num" var="状态" />
         <property id="startTime" name="startTime" ref="required" var="开始日期" />
         <property id="endTime" name="endTime" ref="required" var="结束日期" />
         <property id="remark" name="remark" ref="" var="描述" />
     </url>
-    <url id="ifssetofbooks003" path="/post/IfsSetOfBooksController/selectIfsSetOfBooksById" val="查询账套信息详情" allUse="2" method="GET" groupName="财务模块">
+    <url id="ifssetofbooks003" path="/post/IfsSetOfBooksController/selectIfsSetOfBooksById" val="查询账套信息详情" allUse="2" method="GET" groupName="账套管理">
         <property id="rowId" name="id" ref="required" var="账套Id"></property>
     </url>
-    <url id="ifssetofbooks004" path="/post/IfsSetOfBooksController/editIfsSetOfBooksMationById" val="编辑账套信息" allUse="1" method="PUT" groupName="财务模块">
+    <url id="ifssetofbooks004" path="/post/IfsSetOfBooksController/editIfsSetOfBooksMationById" val="编辑账套信息" allUse="1" method="PUT" groupName="账套管理">
         <property id="rowId" name="id" ref="required" var="账套Id"></property>
         <property id="name" name="name" ref="required" var="账套名称" />
         <property id="state" name="state" ref="required,num" var="状态" />
@@ -283,7 +283,7 @@
         <property id="endTime" name="endTime" ref="required" var="结束日期" />
         <property id="remark" name="remark" ref="" var="描述" />
     </url>
-    <url id="ifssetofbooks005" path="/post/IfsSetOfBooksController/deleteIfsSetOfBooksById" val="删除账套信息" allUse="1" method="DELETE" groupName="财务模块">
+    <url id="ifssetofbooks005" path="/post/IfsSetOfBooksController/deleteIfsSetOfBooksById" val="删除账套信息" allUse="1" method="DELETE" groupName="账套管理">
         <property id="rowId" name="id" ref="required" var="账套Id"></property>
     </url>
     <!-- 账套管理结束 -->
@@ -366,24 +366,24 @@
     <!-- 收支项目管理结束 -->
 
     <!-- 会计科目管理开始 -->
-    <url id="ifsaccountsubject001" path="/post/IfsAccountSubjectController/queryIfsAccountSubjectList" val="查询会计科目列表信息" allUse="1" groupName="财务模块">
+    <url id="ifsaccountsubject001" path="/post/IfsAccountSubjectController/queryIfsAccountSubjectList" val="查询会计科目列表信息" allUse="1" method="POST" groupName="会计科目管理">
         <property id="name" name="name" ref="" var="会计科目名称" />
         <property id="state" name="state" ref="" var="状态" />
         <property id="type" name="type" ref="" var="类型" />
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
         <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
     </url>
-    <url id="ifsaccountsubject002" path="/post/IfsAccountSubjectController/insertIfsAccountSubjectMation" val="添加会计科目信息" allUse="1" method="POST" groupName="财务模块">
+    <url id="ifsaccountsubject002" path="/post/IfsAccountSubjectController/insertIfsAccountSubjectMation" val="添加会计科目信息" allUse="1" method="POST" groupName="会计科目管理">
         <property id="name" name="name" ref="required" var="会计科目名称" />
         <property id="state" name="state" ref="required,num" var="状态" />
         <property id="type" name="type" ref="required,num" var="类型" />
         <property id="num" name="num" ref="required" var="编号" />
         <property id="remark" name="remark" ref="" var="描述" />
     </url>
-    <url id="ifsaccountsubject003" path="/post/IfsAccountSubjectController/selectIfsAccountSubjectById" val="查询会计科目信息用于数据回显" allUse="2" method="GET" groupName="财务模块">
+    <url id="ifsaccountsubject003" path="/post/IfsAccountSubjectController/selectIfsAccountSubjectById" val="查询会计科目信息用于数据回显" allUse="2" method="GET" groupName="会计科目管理">
         <property id="rowId" name="id" ref="required" var="会计科目Id"></property>
     </url>
-    <url id="ifsaccountsubject004" path="/post/IfsAccountSubjectController/editIfsAccountSubjectMationById" val="编辑会计科目信息" allUse="1" method="PUT" groupName="财务模块">
+    <url id="ifsaccountsubject004" path="/post/IfsAccountSubjectController/editIfsAccountSubjectMationById" val="编辑会计科目信息" allUse="1" method="PUT" groupName="会计科目管理">
         <property id="rowId" name="id" ref="required" var="会计科目Id"></property>
         <property id="name" name="name" ref="required" var="会计科目名称" />
         <property id="state" name="state" ref="required,num" var="状态" />
@@ -391,7 +391,7 @@
         <property id="num" name="num" ref="required" var="编号" />
         <property id="remark" name="remark" ref="" var="描述" />
     </url>
-    <url id="ifsaccountsubject005" path="/post/IfsAccountSubjectController/deleteIfsAccountSubjectById" val="删除会计科目信息" allUse="1" method="DELETE" groupName="财务模块">
+    <url id="ifsaccountsubject005" path="/post/IfsAccountSubjectController/deleteIfsAccountSubjectById" val="删除会计科目信息" allUse="1" method="DELETE" groupName="会计科目管理">
         <property id="rowId" name="id" ref="required" var="会计科目Id"></property>
     </url>
     <!-- 会计科目管理结束 -->

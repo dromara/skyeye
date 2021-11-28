@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -135,8 +134,7 @@ public class IfsAccountSubjectServiceImpl implements IfsAccountSubjectService {
 
     private String judgeSimpleTitle(Map<String, Object> map) throws Exception {
         String str = "";
-        Map<String, Object> bean = new HashMap<>();
-        bean = ifsAccountSubjectDao.queryIfsAccountSubjectMationByName(map);
+        Map<String, Object> bean = ifsAccountSubjectDao.queryIfsAccountSubjectMationByName(map);
         if (bean == null || bean.isEmpty()) {
             bean = ifsAccountSubjectDao.queryIfsAccountSubjectMationByNum(map);
             if (bean != null && !bean.isEmpty()) {
