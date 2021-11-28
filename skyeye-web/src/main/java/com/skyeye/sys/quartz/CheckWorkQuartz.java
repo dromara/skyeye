@@ -13,7 +13,7 @@ import com.skyeye.eve.dao.CheckWorkLeaveDao;
 import com.skyeye.eve.dao.CheckWorkTimeDao;
 import com.skyeye.eve.entity.quartz.SysQuartzRunHistory;
 import com.skyeye.eve.service.SysQuartzRunHistoryService;
-import com.skyeye.eve.service.WagesStaffMationService;
+import com.skyeye.eve.service.SysScheduleCommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +53,7 @@ public class CheckWorkQuartz {
 	private CheckWorkLeaveDao checkWorkLeaveDao;
 
 	@Autowired
-	private WagesStaffMationService wagesStaffMationService;
+	private SysScheduleCommonService sysScheduleCommonService;
 
 	@Autowired
 	private SysQuartzRunHistoryService sysQuartzRunHistoryService;
@@ -72,7 +72,7 @@ public class CheckWorkQuartz {
 			List<Map<String, Object>> workTime = getAllCheckWorkTime();
 			// 得到昨天的时间
 			String yesterdayTime = DateUtil.getSpecifiedDayMation(DateUtil.getTimeAndToString(), "yyyy-MM-dd", 0, 1, 7);
-			if(workTime != null && !workTime.isEmpty() && !wagesStaffMationService.judgeISHoliday(yesterdayTime)){
+			if(workTime != null && !workTime.isEmpty() && !sysScheduleCommonService.judgeISHoliday(yesterdayTime)){
 				// 班次信息不为空，并且昨天不是节假日
 				log.info("Fill in the clocking information for timing task execution time is {}", yesterdayTime);
 				// 判断昨天的日期是周几

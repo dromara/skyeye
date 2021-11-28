@@ -123,7 +123,7 @@ public class ScheduleDayServiceImpl implements ScheduleDayService{
 	/**
 	 * 
 	     * @Title: queryScheduleDayMationByUserId
-	     * @Description: 根据用户日程信息
+	     * @Description: 根据用户id获取日程信息
 	     * @param inputObject
 	     * @param outputObject
 	     * @throws Exception    参数
@@ -162,8 +162,9 @@ public class ScheduleDayServiceImpl implements ScheduleDayService{
 		map.put("userId", user.get("id"));
 		List<Map<String, Object>> beans = scheduleDayDao.queryScheduleDayMationTodayByUserId(map);
 		outputObject.setBeans(beans);
-		if(beans != null && !beans.isEmpty())
+		if(beans != null && !beans.isEmpty()) {
 			outputObject.settotal(beans.size());
+		}
 	}
 
 	/**

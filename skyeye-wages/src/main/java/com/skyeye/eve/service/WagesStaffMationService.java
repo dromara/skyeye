@@ -32,13 +32,4 @@ public interface WagesStaffMationService {
      */
     void setLastMonthBe(List<Map<String, Object>> staffWorkTime, Map<String, String> staffModelFieldMap, String lastMonthDate) throws Exception;
 
-    /**
-     * 判断指定日期是否是节假日
-     *
-     * @param yesterdayTime 昨天的日期，格式为yyyy-mm-dd
-     * @return
-     * @throws Exception
-     */
-    boolean judgeISHoliday(String yesterdayTime) throws Exception;
-
 }

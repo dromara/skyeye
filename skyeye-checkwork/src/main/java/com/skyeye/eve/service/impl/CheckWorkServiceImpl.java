@@ -16,10 +16,7 @@ import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.CheckWorkDao;
 import com.skyeye.eve.dao.CheckWorkOvertimeDao;
 import com.skyeye.eve.dao.CheckWorkTimeDao;
-import com.skyeye.eve.service.CheckWorkBusinessTripService;
-import com.skyeye.eve.service.CheckWorkLeaveService;
-import com.skyeye.eve.service.CheckWorkOvertimeService;
-import com.skyeye.eve.service.CheckWorkService;
+import com.skyeye.eve.service.*;
 import com.skyeye.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +62,9 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 	@Autowired
 	private CheckWorkOvertimeDao checkWorkOvertimeDao;
 
+	@Autowired
+	private SysScheduleCommonService sysScheduleCommonService;
+
 	public static enum CheckTypeFrom{
 		CHECT_BTN_FROM_TIMEID(1, "根据班次id计算考勤按钮的显示状态"),
 		CHECT_BTN_FROM_OVERTIME(2, "根据加班日计算考勤按钮的显示状态");
@@ -93,7 +93,6 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("static-access")
 	@Override
 	@Transactional(value = "transactionManager")
 	public void insertCheckWorkStartWork(InputObject inputObject, OutputObject outputObject) throws Exception {
@@ -167,7 +166,6 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("static-access")
 	@Override
 	@Transactional(value = "transactionManager")
 	public void editCheckWorkEndWork(InputObject inputObject, OutputObject outputObject) throws Exception {
@@ -416,33 +414,30 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 		outputObject.setBean(bean);
 		outputObject.settotal(1);
 	}
-	
+
 	/**
-     * 
-         * @Title: queryCheckWorkTimeToShowButton
-         * @Description: 判断显示打上班卡或者下班卡
-         * @param inputObject
-         * @param outputObject
-         * @throws Exception    参数
-         * @return void    返回类型
-         * @throws
-     */
+	 * 判断显示打上班卡或者下班卡
+	 *
+	 * @param inputObject
+	 * @param outputObject
+	 * @throws Exception
+	 */
 	@Override
 	public void queryCheckWorkTimeToShowButton(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> user = inputObject.getLogParams();
-		String todayYMD = DateUtil.getYmdTimeAndToString();
+		String today = DateUtil.getYmdTimeAndToString();
 		String userId = user.get("id").toString();
 		String timeId = map.get("timeId").toString();
 		String staffId = user.get("staffId").toString();
 		String nowTimeHMS = DateUtil.getHmsTimeAndToString();
 		// 1.获取当前用户的考勤班次信息
-		Map<String, Object> workTime = getWorkTime(userId, todayYMD, timeId, staffId);
+		Map<String, Object> workTime = getWorkTime(userId, today, timeId, staffId);
 		if(Integer.parseInt(workTime.get("type").toString()) == CheckTypeFrom.CHECT_BTN_FROM_OVERTIME.getType()){
 			timeId = "-";
 		}
 		// 2.判断显示打上班卡或者下班卡
-		Map<String, Object> result = getChectBtn(todayYMD, userId, timeId, workTime, nowTimeHMS);
+		Map<String, Object> result = getChectBtn(today, userId, timeId, workTime, nowTimeHMS);
 		outputObject.setBean(result);
 	}
 
@@ -450,16 +445,16 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 	 * 获取当前用户的考勤班次信息
 	 *
 	 * @param userId 用户id
-	 * @param todayYMD 指定日期，格式为yyyy-MM-dd(一般为今天的日期)
+	 * @param today 指定日期，格式为yyyy-MM-dd(一般为今天的日期)
 	 * @param timeId 班次id
 	 * @param staffId 员工id
 	 * @return
 	 * @throws Exception
 	 */
-	private Map<String, Object> getWorkTime(String userId, String todayYMD, String timeId, String staffId) throws Exception {
+	private Map<String, Object> getWorkTime(String userId, String today, String timeId, String staffId) throws Exception {
 		Map<String, Object> workTime;
 		// 判断今天是否是加班日
-		List<Map<String, Object>> overTimeMation = checkWorkOvertimeDao.queryPassThisDayAndCreateId(userId, todayYMD);
+		List<Map<String, Object>> overTimeMation = checkWorkOvertimeDao.queryPassThisDayAndCreateId(userId, today);
 		if(overTimeMation != null && !overTimeMation.isEmpty()){
 			// 根据加班日判断显示打上班卡或者下班卡
 			workTime = overTimeMation.get(0);
@@ -477,17 +472,18 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 	/**
 	 * 判断显示打上班卡或者下班卡
 	 *
-	 * @param todayYMD 指定日期，格式为yyyy-MM-dd(一般为今天的日期)
+	 * @param today 指定日期，格式为yyyy-MM-dd(一般为今天的日期)
 	 * @param userId 用户id
 	 * @param timeId 班次id
+	 * @param workTime 考勤班次信息
 	 * @param nowTimeHMS 指定日期，格式为HH:mm:ss(一般为当前时间)
 	 * @return
 	 * @throws Exception
 	 */
-	private Map<String, Object> getChectBtn(String todayYMD, String userId, String timeId, Map<String, Object> workTime, String nowTimeHMS) throws Exception {
+	private Map<String, Object> getChectBtn(String today, String userId, String timeId, Map<String, Object> workTime, String nowTimeHMS) throws Exception {
 		// 获取今天的打卡记录
-		Map<String, Object> isAlreadyCheck = checkWorkDao.queryisAlreadyCheck(todayYMD, userId, timeId);
-		Integer checkState = getCheckState(isAlreadyCheck, nowTimeHMS, workTime);
+		Map<String, Object> isAlreadyCheck = checkWorkDao.queryisAlreadyCheck(today, userId, timeId);
+		Integer checkState = getCheckState(isAlreadyCheck, nowTimeHMS, workTime, today);
 		Map<String, Object> result = new HashMap<>();
 		result.put("isCheck", checkState);
 		result.putAll(workTime);
@@ -504,11 +500,20 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 	 * @param isAlreadyCheck 今日打卡信息
 	 * @param nowTimeHMS 指定日期，格式为HH:mm:ss
 	 * @param workTime 班次考勤信息
+	 * @param today 指定日期，格式为yyyy-MM-dd(一般为今天的日期)
 	 * @return
-	 * @throws ParseException
+	 * @throws Exception
 	 */
-	private Integer getCheckState(Map<String, Object> isAlreadyCheck, String nowTimeHMS, Map<String, Object> workTime) throws ParseException {
+	private Integer getCheckState(Map<String, Object> isAlreadyCheck, String nowTimeHMS, Map<String, Object> workTime,
+								  String today) throws Exception {
 		Integer checkState = null;
+		if(Integer.parseInt(workTime.get("type").toString()) == CheckTypeFrom.CHECT_BTN_FROM_TIMEID.getType()){
+			if(sysScheduleCommonService.judgeISHoliday(today)){
+				// 今天不是加班日，但是是节假日，则不显示按钮
+				checkState = 4;
+				return checkState;
+			}
+		}
 		if (isAlreadyCheck == null && DateUtil.compareTimeHMS(nowTimeHMS, workTime.get("clockOut").toString())) {
 			// 今日没有打卡，且没有到下班时间，显示早卡按钮
 			checkState = 1;
@@ -691,7 +696,9 @@ public class CheckWorkServiceImpl implements CheckWorkService {
     @Override
     public void queryCheckWorkReport(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
+        // 1.获取所有的考勤班次在指定日期内需要上班多少天
         Map<String, Integer> timeWorkDay = getAllCheckWorkTime(map.get("startTime").toString(), map.get("endTime").toString());
+        // 2.分页获取员工考勤信息
 		Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
         List<Map<String, Object>> beans = checkWorkDao.queryCheckWorkReport(map);
 		setShouldTime(beans, timeWorkDay);
@@ -702,6 +709,7 @@ public class CheckWorkServiceImpl implements CheckWorkService {
     private void setShouldTime(List<Map<String, Object>> beans, Map<String, Integer> timeWorkDay){
     	for(Map<String, Object> bean: beans){
         	String[] timsIds = bean.get("timsIds").toString().split(",");
+        	// 该员工在指定日期范围内应该上班的天数
         	Integer shouldTime = 0;
         	for(String timeId: timsIds){
         		if(!ToolUtil.isBlank(timeId)){
@@ -734,6 +742,10 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 		// 1.获取范围内的所有日期
 		List<String> days = DateUtil.getDays(startTime, endTime);
 		for(String day: days){
+			if(sysScheduleCommonService.judgeISHoliday(day)){
+				// 如果是法定节假日，则不参与计算
+				continue;
+			}
 			// 判断日期是周几
 			int weekDay = DateUtil.getWeek(day);
 			// 判断日期是单周还是双周
@@ -759,7 +771,6 @@ public class CheckWorkServiceImpl implements CheckWorkService {
 	 * @return: boolean
 	 * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	private boolean getTimeWhetherWork(String timeId, int weekDay, int weekType, List<Map<String, Object>> workTime){
 		Map<String, Object> timeMation = workTime.stream().filter(item -> item.get("timeId").toString().equals(timeId)).collect(Collectors.toList()).get(0);
 		if(timeMation != null && !timeMation.isEmpty()){

@@ -106,7 +106,7 @@
         <property id="monthMation" name="monthMation" ref="required" var="当前月上个年月" />
         <property id="timeId" name="timeId" ref="required" var="班次id" />
     </url>
-    <url id="checkwork015" path="/post/CheckWorkController/queryCheckWorkReport" val="获取考勤报表数据" allUse="2">
+    <url id="checkwork015" path="/post/CheckWorkController/queryCheckWorkReport" val="获取考勤报表数据" method="POST" allUse="2">
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
         <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
         <property id="userName" name="userName" ref="" var="员工姓名"/>
@@ -117,7 +117,7 @@
         <property id="endTime" name="endTime" ref="required" var="最后时间" />
         <property id="timeId" name="timeId" ref="" var="班次id" />
     </url>
-    <url id="checkwork016" path="/post/CheckWorkController/queryCheckWorkEcharts" val="获取考勤图标数据" allUse="2">
+    <url id="checkwork016" path="/post/CheckWorkController/queryCheckWorkEcharts" val="获取考勤图标数据" method="POST" allUse="2">
         <property id="userName" name="userName" ref="" var="员工姓名"/>
         <property id="companyName" name="companyName" ref="" var="公司"/>
         <property id="departmentName" name="departmentName" ref="" var="部门"/>

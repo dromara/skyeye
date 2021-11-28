@@ -14,6 +14,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.eve.dao.WagesModelDao;
 import com.skyeye.eve.dao.WagesModelFieldDao;
 import com.skyeye.eve.dao.WagesStaffMationDao;
+import com.skyeye.eve.service.SysScheduleCommonService;
 import com.skyeye.eve.service.WagesStaffMationService;
 import com.skyeye.wages.constant.WagesConstant;
 import org.slf4j.Logger;
@@ -51,6 +52,9 @@ public class WagesStaffMationServiceImpl implements WagesStaffMationService {
 
     @Autowired
     private WagesModelFieldDao wagesModelFieldDao;
+
+    @Autowired
+    private SysScheduleCommonService sysScheduleCommonService;
 
     /**
      * 计薪资字段状态
@@ -198,7 +202,7 @@ public class WagesStaffMationServiceImpl implements WagesStaffMationService {
         for (Map<String, Object> bean : staffWorkTime) {
             List<Map<String, Object>> days = (List<Map<String, Object>>) bean.get("days");
             for (String day : lastMonthDays) {// 周几
-                if(this.judgeISHoliday(day)){
+                if(sysScheduleCommonService.judgeISHoliday(day)){
                     // 如果是节假日，则不计算
                     continue;
                 }
@@ -227,22 +231,6 @@ public class WagesStaffMationServiceImpl implements WagesStaffMationService {
         }
         staffModelFieldMap.put(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.LAST_MONTH_BE_NUM.getKey(), String.valueOf(lastMonthBeNum));
         staffModelFieldMap.put(WagesConstant.DEFAULT_WAGES_FIELD_TYPE.LAST_MONTH_BE_HOUR.getKey(), CalculationUtil.divide(lastMonthBeHour, "60", 2));
-    }
-
-    /**
-     * 判断指定日期是否是节假日
-     *
-     * @param yesterdayTime 昨天的日期，格式为yyyy-mm-dd
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public boolean judgeISHoliday(String yesterdayTime) throws Exception {
-        List<Map<String, Object>> holiday = wagesStaffMationDao.queryWhetherIsHolidayByDate(yesterdayTime);
-        if(holiday == null || holiday.isEmpty()){
-            return false;
-        }
-        return true;
     }
 
 }

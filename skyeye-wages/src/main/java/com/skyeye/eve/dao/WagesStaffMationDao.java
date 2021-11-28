@@ -89,12 +89,4 @@ public interface WagesStaffMationDao {
      */
     public Map<String, Object> queryWagesStaffPaymentDetail(@Param("staffId") String staffId, @Param("payMonth") String payMonth) throws Exception;
 
-    /**
-     * 根据指定天判断是否属于节假日
-     *
-     * @param day 指定天，格式为yyyy-mm-dd
-     * @return
-     * @throws Exception
-     */
-    List<Map<String, Object>> queryWhetherIsHolidayByDate(@Param("day") String day) throws Exception;
 }

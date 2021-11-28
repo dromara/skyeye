@@ -240,14 +240,4 @@
         AND date_format(b.cancel_day, '%Y-%m') = #{lastMonthDate}
     </select>
 
-    <select id="queryWhetherIsHolidayByDate" resultType="java.util.Map">
-        SELECT
-            a.id
-        FROM
-            schedule_day a
-        WHERE #{day} >= DATE_FORMAT(a.start_time, '%Y-%m-%d')
-          AND DATE_FORMAT(a.end_time, '%Y-%m-%d') >= #{day}
-          AND a.type = 3
-    </select>
-
 </mapper>
