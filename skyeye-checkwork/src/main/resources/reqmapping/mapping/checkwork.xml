@@ -5,37 +5,37 @@
 	 -->
 	
 	<!-- 考勤申诉原因操作开始 -->
-	<url id="checkworkreason001" path="/post/CheckWorkReasonController/queryCheckWorkReasonList" val="获取申诉原因名称列表" allUse="1">
+	<url id="checkworkreason001" path="/post/CheckWorkReasonController/queryCheckWorkReasonList" val="获取申诉原因名称列表" allUse="1" method="POST" groupName="考勤申诉原因">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="appealName" name="appealName" ref="" var="申诉原因名称"/>
 	</url>
-	<url id="checkworkreason002" path="/post/CheckWorkReasonController/insertCheckWorkReasonMation" val="添加申诉原因名称" allUse="1">
+	<url id="checkworkreason002" path="/post/CheckWorkReasonController/insertCheckWorkReasonMation" val="添加申诉原因名称" allUse="1" method="POST" groupName="考勤申诉原因">
 	    <property id="appealName" name="appealName" ref="required" var="申诉原因名称"/>
 	</url>
-	<url id="checkworkreason003" path="/post/CheckWorkReasonController/deleteCheckWorkReasonById" val="删除申诉原因名称" allUse="1">
+	<url id="checkworkreason003" path="/post/CheckWorkReasonController/deleteCheckWorkReasonById" val="删除申诉原因名称" allUse="1" method="DELETE" groupName="考勤申诉原因">
 	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
 	</url>
-	<url id="checkworkreason004" path="/post/CheckWorkReasonController/updateUpCheckWorkReasonById" val="上线申诉原因" allUse="1">
+	<url id="checkworkreason004" path="/post/CheckWorkReasonController/updateUpCheckWorkReasonById" val="上线申诉原因" allUse="1" method="PUT" groupName="考勤申诉原因">
 	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
 	</url>
-	<url id="checkworkreason005" path="/post/CheckWorkReasonController/updateDownCheckWorkReasonById" val="下线申诉原因" allUse="1">
+	<url id="checkworkreason005" path="/post/CheckWorkReasonController/updateDownCheckWorkReasonById" val="下线申诉原因" allUse="1" method="PUT" groupName="考勤申诉原因">
 	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
 	</url>
-	<url id="checkworkreason006" path="/post/CheckWorkReasonController/selectCheckWorkReasonById" val="回显申诉原因" allUse="2">
+	<url id="checkworkreason006" path="/post/CheckWorkReasonController/selectCheckWorkReasonById" val="回显申诉原因" allUse="2" method="GET" groupName="考勤申诉原因">
 	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
 	</url>
-	<url id="checkworkreason007" path="/post/CheckWorkReasonController/editCheckWorkReasonMationById" val="编辑申诉原因" allUse="1">
+	<url id="checkworkreason007" path="/post/CheckWorkReasonController/editCheckWorkReasonMationById" val="编辑申诉原因" allUse="1" method="PUT" groupName="考勤申诉原因">
 	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
 	    <property id="appealName" name="appealName" ref="required" var="申诉原因名称"/>
 	</url>
-	<url id="checkworkreason008" path="/post/CheckWorkReasonController/queryCheckWorkReasonUpMationById" val="上移申诉原因" allUse="1">
+	<url id="checkworkreason008" path="/post/CheckWorkReasonController/queryCheckWorkReasonUpMationById" val="上移申诉原因" allUse="1" method="PUT" groupName="考勤申诉原因">
 	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
 	</url>
-	<url id="checkworkreason009" path="/post/CheckWorkReasonController/queryCheckWorkReasonDownMationById" val="下移申诉原因" allUse="1">
+	<url id="checkworkreason009" path="/post/CheckWorkReasonController/queryCheckWorkReasonDownMationById" val="下移申诉原因" allUse="1" method="PUT" groupName="考勤申诉原因">
 	    <property id="rowId" name="id" ref="required" var="申诉原因id"/>
 	</url>
-	<url id="checkworkreason010" path="/post/CheckWorkReasonController/queryCheckWorkReasonUpStateList" val="获取已经上线的申诉原因" allUse="2">
+	<url id="checkworkreason010" path="/post/CheckWorkReasonController/queryCheckWorkReasonUpStateList" val="获取已经上线的申诉原因" allUse="2" groupName="考勤申诉原因">
 	</url>
 	<!-- 考勤申诉原因操作结束 -->
 	
