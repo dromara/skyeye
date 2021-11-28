@@ -5,8 +5,6 @@
 package com.skyeye.service.impl;
 
 import cn.hutool.json.JSONUtil;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.skyeye.common.constans.ErpConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -14,6 +12,7 @@ import com.skyeye.common.util.ExcelUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.dao.ExpenditureDao;
 import com.skyeye.eve.dao.SysEveUserStaffDao;
+import com.skyeye.factory.IfsOrderRunFactory;
 import com.skyeye.service.ExpenditureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,12 +56,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
      */
     @Override
     public void queryExpenditureByList(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> params = inputObject.getParams();
-        params.put("type", ORDER_TYPE);
-        Page pages = PageHelper.startPage(Integer.parseInt(params.get("page").toString()), Integer.parseInt(params.get("limit").toString()));
-        List<Map<String, Object>> beans = expenditureDao.queryExpenditureByList(params);
-        outputObject.setBeans(beans);
-        outputObject.settotal(pages.getTotal());
+        IfsOrderRunFactory.run(inputObject, outputObject, ORDER_TYPE).queryOrderList();
     }
 
     /**

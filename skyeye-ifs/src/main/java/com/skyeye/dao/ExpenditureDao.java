@@ -14,8 +14,6 @@ import java.util.Map;
  */
 public interface ExpenditureDao {
 	
-    public List<Map<String, Object>> queryExpenditureByList(Map<String, Object> params) throws Exception;
-
     public int insertExpenditure(Map<String, Object> params) throws Exception;
 
     public int insertExpenditureItem(List<Map<String, Object>> entitys) throws Exception;

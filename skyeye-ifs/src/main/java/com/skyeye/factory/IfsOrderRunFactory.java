@@ -11,21 +11,21 @@ import com.skyeye.common.object.OutputObject;
 import java.lang.reflect.Constructor;
 
 /**
- * @ClassName: ErpRunFactory
- * @Description: ERP进销存模块启动工厂类
+ * @ClassName: IfsOrderRunFactory
+ * @Description: IFS财务模块启动工厂类
  * @author: skyeye云系列--卫志强
- * @date: 2021/7/9 20:21
+ * @date: 2021/11/28 22:52
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
-public class ErpRunFactory {
+public class IfsOrderRunFactory {
 
-    public static ErpOrderFactoryResult run(InputObject inputObject, OutputObject outputObject, String orderType) {
+    public static IfsOrderFactoryResult run(InputObject inputObject, OutputObject outputObject, String orderType) {
         try {
             String classPath = ErpConstants.DepoTheadSubType.getFactoryClassPath(orderType);
             Class<?> clazz = Class.forName(classPath);
             Constructor<?> constructor = clazz.getConstructor(InputObject.class, OutputObject.class, String.class);
-            return (ErpOrderFactoryResult) constructor.newInstance(inputObject, outputObject, orderType);
+            return (IfsOrderFactoryResult) constructor.newInstance(inputObject, outputObject, orderType);
         } catch (Exception ex) {
             throw new RuntimeException("ErpRunFactory error", ex);
         }

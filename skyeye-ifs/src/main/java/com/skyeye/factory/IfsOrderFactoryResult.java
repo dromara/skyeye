@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName: ErpOrderFactoryResult
- * @Description: ERP进销存模块
+ * @ClassName: IfsOrderFactoryResult
+ * @Description: IFS财务模块
  * @author: skyeye云系列--卫志强
- * @date: 2021/7/9 22:16
+ * @date: 2021/11/28 22:51
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
  * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
-public interface ErpOrderFactoryResult {
+public interface IfsOrderFactoryResult {
 
     /**
      * 获取订单列表
@@ -52,28 +52,5 @@ public interface ErpOrderFactoryResult {
      * @throws Exception
      */
     void deleteOrderMationById() throws Exception;
-
-    /**
-     * 单据提交审核
-     *
-     * @throws Exception
-     */
-    void subOrderToExamineById() throws Exception;
-
-    /**
-     * 单据撤销
-     *
-     * @throws Exception
-     */
-    void revokeOrder() throws Exception;
-
-    /**
-     * 根据单据类型获取单据提交类型
-     *
-     * @return 1需要审核；2不需要审核
-     * @throws Exception
-     */
-    Integer getSubmitTypeByOrderType() throws Exception;
-
 
 }

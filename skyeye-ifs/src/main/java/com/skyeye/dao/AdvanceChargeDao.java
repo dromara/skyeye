@@ -19,8 +19,6 @@ import java.util.Map;
  */
 public interface AdvanceChargeDao {
 	
-    public List<Map<String, Object>> queryAdvanceChargeByList(Map<String, Object> params) throws Exception;
-
     public int insertAdvanceCharge(Map<String, Object> params) throws Exception;
 
     public int insertAdvanceChargeItem(List<Map<String, Object>> entitys) throws Exception;

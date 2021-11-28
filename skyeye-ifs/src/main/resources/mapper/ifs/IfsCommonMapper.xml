@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.IfsCommonDao">
+
+    <select id="queryIfsOrderList" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.change_amount changeAmount,
+            FORMAT(a.total_price, 2) totalPrice,
+            a.bill_no billNo,
+            CONVERT (a.bill_time, CHAR) billTime,
+            (SELECT group_concat(distinct m.user_name) FROM sys_eve_user_staff m WHERE INSTR(CONCAT(',', a.hands_person_id, ','), CONCAT(',', m.user_id, ','))) hansPersonName,
+            a.remark,
+            s.supplier supplierName
+        FROM
+            erp_accounthead a
+            LEFT JOIN erp_supplier s ON a.organ_id = s.id
+        WHERE a.delete_flag = '0'
+        AND a.type = #{orderType}
+        <if test="billNo != '' and billNo != null">
+            AND a.bill_no LIKE '%${billNo}%'
+        </if>
+        <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
+            AND a.bill_time >= #{startTime} AND #{endTime} >= a.bill_time
+        </if>
+        ORDER BY a.bill_time DESC, a.id ASC
+    </select>
+
+</mapper>
