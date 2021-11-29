@@ -53,4 +53,18 @@ public interface IfsOrderFactoryResult {
      */
     void deleteOrderMationById() throws Exception;
 
+    /**
+     * 单据提交审核
+     *
+     * @throws Exception
+     */
+    void subOrderToExamineById() throws Exception;
+
+    /**
+     * 单据撤销
+     *
+     * @throws Exception
+     */
+    void revokeOrder() throws Exception;
+
 }

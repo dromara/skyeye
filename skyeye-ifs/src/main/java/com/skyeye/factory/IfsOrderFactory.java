@@ -163,4 +163,22 @@ public abstract class IfsOrderFactory {
 
     }
 
+    /**
+     * 单据提交审核
+     *
+     * @throws Exception
+     */
+    public void subOrderToExamineById() throws Exception{
+
+    }
+
+    /**
+     * 单据撤销
+     *
+     * @throws Exception
+     */
+    public void revokeOrder() throws Exception{
+
+    }
+
 }

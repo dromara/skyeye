@@ -59,7 +59,6 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @return void    返回类型
      * @throws
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void queryMyReturnAssetMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).queryWithActivitiList();

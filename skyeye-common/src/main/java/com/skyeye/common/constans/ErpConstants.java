@@ -100,11 +100,11 @@ public class ErpConstants {
 		EXPENDITURE_ORDER("支出订单", "CWZCDD", "22", "com.skyeye.factory.impl.ExpenditureFactory",
 				"", 0, true, null),
 		INCOME_ORDER("收入订单", "CWSRDD", "23", "", "", 0, true, null),
-		RECEIVABLES_ORDER("收款订单", "CWSKDD", "24", "", "", 0, true, null),
-		PAYMENT_ORDER("付款订单", "CWFKDD", "25", "", "", 0, true, null),
-		TRANSFER_ORDER("转账订单", "CWZZDD", "26", "", "", 0, true, null),
-		ADVANCE_ORDER("收预付款", "CWYFDD", "27", "com.skyeye.factory.impl.AdvanceChargeFactory",
-				"", 0, true, null);
+		// 待开发
+		TRAVEL_REIMBURSEMENT_ORDER("出差报销", "CCBXDD", "24", "", "", 0, true, null),
+		LOAN_BILL_ORDER("借款单", "CWFKDD", "25", "", "", 0, true, null),
+		REPAYMENT_NOTE_ORDER("还款单", "CWZZDD", "26", "", "", 0, true, null),
+		EXPENSE_REIMBURSEMENT_ORDER("费用报销", "CWYFDD", "27", "", "", 0, true, null);
 
 		// 单据标题
         private String title;
