@@ -4,15 +4,22 @@
 
 package com.skyeye.factory;
 
+import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.skyeye.common.constans.ErpConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.SpringUtils;
+import com.skyeye.common.util.ToolUtil;
 import com.skyeye.dao.IfsCommonDao;
+import com.skyeye.eve.dao.SysEveUserStaffDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +36,8 @@ public abstract class IfsOrderFactory {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected IfsCommonDao ifsCommonDao;
+
+    protected SysEveUserStaffDao sysEveUserStaffDao;
 
     protected InputObject inputObject;
 
@@ -55,6 +64,7 @@ public abstract class IfsOrderFactory {
      */
     protected void initObject(){
         ifsCommonDao = SpringUtils.getBean(IfsCommonDao.class);
+        sysEveUserStaffDao = SpringUtils.getBean(SysEveUserStaffDao.class);
     }
 
     /**
@@ -89,7 +99,32 @@ public abstract class IfsOrderFactory {
      * @throws Exception
      */
     public void insertOrderMation() throws Exception {
-
+        Map<String, Object> params = inputObject.getParams();
+        // 财务主表ID
+        String orderId = ToolUtil.getSurFaceId();
+        // 财务子表实体集合信息
+        List<Map<String, Object>> entitys = new ArrayList<>();
+        BigDecimal allPrice = getAllPriceAndChildList(orderId, params.get("initemStr").toString(), entitys);
+        if(entitys.size() == 0){
+            outputObject.setreturnMessage("请选择支出项目");
+            return;
+        }
+        Map<String, Object> accountHead = new HashMap<>();
+        String orderNum = ErpConstants.DepoTheadSubType.getOrderNumBySubType(orderType);
+        accountHead.put("id", orderId);
+        accountHead.put("type", orderType);
+        accountHead.put("billNo", orderNum);
+        accountHead.put("totalPrice", allPrice);
+        accountHead.put("organId", params.get("organId"));
+        accountHead.put("operTime", params.get("operTime"));
+        accountHead.put("accountId", params.get("accountId"));
+        accountHead.put("handsPersonId", params.get("handsPersonId"));
+        accountHead.put("remark", params.get("remark"));
+        accountHead.put("changeAmount", params.get("changeAmount"));
+        accountHead.put("deleteFlag", 0);
+        ifsCommonDao.insertIfsOrderMation(accountHead);
+        ifsCommonDao.insertIfsOrderItemMation(entitys);
+        this.insertOrderOtherMation(params, orderId);
     }
 
     /**
@@ -102,6 +137,28 @@ public abstract class IfsOrderFactory {
     protected void insertOrderOtherMation(Map<String, Object> inputParams, String orderId) throws Exception{
     }
 
+    private BigDecimal getAllPriceAndChildList(String orderId, String itemStr, List<Map<String, Object>> entitys) {
+        List<Map<String, Object>> jArray = JSONUtil.toList(itemStr, null);
+        // 主单总价
+        BigDecimal allPrice = new BigDecimal("0");
+        for(int i = 0; i < jArray.size(); i++){
+            Map<String, Object> bean = jArray.get(i);
+            Map<String, Object> entity = new HashMap<>();
+            // 获取子项金额
+            BigDecimal itemAllPrice = new BigDecimal(bean.get("initemMoney").toString());
+            entity.put("id", ToolUtil.getSurFaceId());
+            entity.put("headerId", orderId);
+            entity.put("inOutItemId", bean.get("initemId"));
+            entity.put("eachAmount", bean.get("initemMoney"));
+            entity.put("remark", bean.get("remark"));
+            entity.put("deleteFlag", 0);
+            entitys.add(entity);
+            // 计算总金额
+            allPrice = allPrice.add(itemAllPrice);
+        }
+        return allPrice;
+    }
+
     /**
      * 编辑时获取订单数据进行回显
      *
@@ -109,8 +166,21 @@ public abstract class IfsOrderFactory {
      * @throws Exception
      */
     public Map<String, Object> queryOrderMationToEditById() throws Exception{
-
-        return null;
+        Map<String, Object> params = inputObject.getParams();
+        String orderId = params.get("id").toString();
+        Map<String, Object> bean = ifsCommonDao.queryIfsOrderMationToEditById(orderId);
+        if(bean != null && !bean.isEmpty()){
+            List<Map<String, Object>> beans = ifsCommonDao.queryIfsOrderItemMationToEditById(orderId);
+            bean.put("items", beans);
+            // 获取经手人员
+            bean.put("userInfo", sysEveUserStaffDao.queryUserNameList(bean.get("handsPersonId").toString()));
+            this.quertOrderOtherMationToEditById(bean, orderId);
+            outputObject.setBean(bean);
+            outputObject.settotal(1);
+        }else{
+            outputObject.setreturnMessage("未查询到信息！");
+        }
+        return bean;
     }
 
     /**
@@ -121,7 +191,6 @@ public abstract class IfsOrderFactory {
      * @throws Exception
      */
     protected void quertOrderOtherMationToEditById(Map<String, Object> bean, String orderId) throws Exception{
-
     }
 
     /**
@@ -130,7 +199,29 @@ public abstract class IfsOrderFactory {
      * @throws Exception
      */
     public void editOrderMationById() throws Exception{
-
+        Map<String, Object> params = inputObject.getParams();
+        String orderId = params.get("id").toString();
+        // 财务子表实体集合信息
+        List<Map<String, Object>> entitys = new ArrayList<>();
+        BigDecimal allPrice = getAllPriceAndChildList(orderId, params.get("initemStr").toString(), entitys);
+        if(entitys.size() == 0){
+            outputObject.setreturnMessage("请选择支出项目");
+            return;
+        }
+        Map<String, Object> accountHead = new HashMap<>();
+        accountHead.put("id", orderId);
+        accountHead.put("totalPrice", allPrice);
+        accountHead.put("organId", params.get("organId"));
+        accountHead.put("operTime", params.get("operTime"));
+        accountHead.put("accountId", params.get("accountId"));
+        accountHead.put("handsPersonId", params.get("handsPersonId"));
+        accountHead.put("remark", params.get("remark"));
+        accountHead.put("changeAmount", params.get("changeAmount"));
+        ifsCommonDao.editIfsOrderMation(accountHead);
+        // 删除之前的绑定信息
+        ifsCommonDao.deleteIfsOrderItemMationByOrderId(orderId);
+        ifsCommonDao.insertIfsOrderItemMation(entitys);
+        this.editOrderOtherMationById(params, orderId);
     }
 
     /**
@@ -141,7 +232,6 @@ public abstract class IfsOrderFactory {
      * @throws Exception
      */
     protected void editOrderOtherMationById(Map<String, Object> inputParams, String orderId) throws Exception{
-
     }
 
     /**
@@ -150,7 +240,13 @@ public abstract class IfsOrderFactory {
      * @throws Exception
      */
     public void deleteOrderMationById() throws Exception{
-
+        Map<String, Object> params = inputObject.getParams();
+        String orderId = params.get("id").toString();
+        // 删除订单信息
+        ifsCommonDao.deleteIfsOrderMationById(orderId);
+        // 删除绑定信息
+        ifsCommonDao.deleteIfsOrderItemMationByOrderId(orderId);
+        this.deleteOrderOtherMationById(params);
     }
 
     /**
@@ -160,7 +256,38 @@ public abstract class IfsOrderFactory {
      * @throws Exception
      */
     protected void deleteOrderOtherMationById(Map<String, Object> orderMation) throws Exception{
+    }
 
+    /**
+     * 获取订单详情
+     *
+     * @throws Exception
+     */
+    public Map<String, Object> queryOrderMationDetailsById() throws Exception{
+        Map<String, Object> params = inputObject.getParams();
+        String orderId = params.get("id").toString();
+        // 获取财务主表信息
+        Map<String, Object> bean = ifsCommonDao.queryIfsOrderMationDetailsById(orderId);
+        if(bean != null && !bean.isEmpty()){
+            // 获取子表信息
+            List<Map<String, Object>> beans = ifsCommonDao.queryIfsOrderItemMationDetailsById(orderId);
+            bean.put("items", beans);
+            this.queryOrderOtherDetailsMationById(bean);
+            outputObject.setBean(bean);
+            outputObject.settotal(1);
+        }else{
+            outputObject.setreturnMessage("该数据已不存在.");
+        }
+        return bean;
+    }
+
+    /**
+     * 获取订单详情时,操作其他数据
+     *
+     * @param orderMation 订单信息
+     * @throws Exception
+     */
+    protected void queryOrderOtherDetailsMationById(Map<String, Object> orderMation) throws Exception{
     }
 
     /**

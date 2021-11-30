@@ -54,6 +54,13 @@ public interface IfsOrderFactoryResult {
     void deleteOrderMationById() throws Exception;
 
     /**
+     * 获取订单详情
+     *
+     * @throws Exception
+     */
+    Map<String, Object> queryOrderMationDetailsById() throws Exception;
+
+    /**
      * 单据提交审核
      *
      * @throws Exception

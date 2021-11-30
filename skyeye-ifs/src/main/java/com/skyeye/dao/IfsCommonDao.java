@@ -4,6 +4,8 @@
 
 package com.skyeye.dao;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,5 +27,81 @@ public interface IfsCommonDao {
      * @throws Exception
      */
     List<Map<String, Object>> queryIfsOrderList(Map<String, Object> params) throws Exception;
+
+    /**
+     * 插入财务单据信息
+     *
+     * @param orderMation
+     * @throws Exception
+     */
+    void insertIfsOrderMation(Map<String, Object> orderMation) throws Exception;
+
+    /**
+     * 插入财务单据关联信息
+     *
+     * @param entitys
+     * @throws Exception
+     */
+    void insertIfsOrderItemMation(List<Map<String, Object>> entitys) throws Exception;
+
+    /**
+     * 根据订单id获取订单信息用来编辑
+     *
+     * @param orderId 订单id
+     * @return 订单信息
+     * @throws Exception
+     */
+    Map<String, Object> queryIfsOrderMationToEditById(@Param("orderId") String orderId) throws Exception;
+
+    /**
+     * 根据订单id获取订单关联信息用来编辑
+     *
+     * @param orderId 订单id
+     * @return 订单关联信息
+     * @throws Exception
+     */
+    List<Map<String, Object>> queryIfsOrderItemMationToEditById(@Param("orderId") String orderId) throws Exception;
+
+    /**
+     * 修改财务单据信息
+     *
+     * @param orderMation
+     * @throws Exception
+     */
+    void editIfsOrderMation(Map<String, Object> orderMation) throws Exception;
+
+    /**
+     * 插入财务订单相关单据信息
+     *
+     * @param orderId 订单id
+     * @throws Exception
+     */
+    void deleteIfsOrderItemMationByOrderId(@Param("orderId") String orderId) throws Exception;
+
+    /**
+     * 删除单据信息
+     *
+     * @param orderId 订单id
+     * @throws Exception
+     */
+    void deleteIfsOrderMationById(@Param("orderId") String orderId) throws Exception;
+
+    /**
+     * 根据订单id获取订单信息
+     *
+     * @param orderId 订单id
+     * @return 订单信息
+     * @throws Exception
+     */
+    Map<String, Object> queryIfsOrderMationDetailsById(@Param("orderId") String orderId) throws Exception;
+
+    /**
+     * 根据订单id获取订单关联信息
+     *
+     * @param orderId 订单id
+     * @return 订单关联信息
+     * @throws Exception
+     */
+    List<Map<String, Object>> queryIfsOrderItemMationDetailsById(@Param("orderId") String orderId) throws Exception;
 
 }

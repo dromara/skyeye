@@ -23,7 +23,124 @@
         <if test="startTime != '' and startTime != null and endTime != '' and endTime != null">
             AND a.bill_time >= #{startTime} AND #{endTime} >= a.bill_time
         </if>
-        ORDER BY a.bill_time DESC, a.id ASC
+        ORDER BY a.bill_time DESC
+    </select>
+
+    <insert id="insertIfsOrderMation" parameterType="java.util.Map">
+        INSERT INTO erp_accounthead
+        (id, type, organ_id, hands_person_id, change_amount, total_price, account_id, bill_no, bill_time, remark, delete_flag)
+        VALUES
+        (#{id}, #{type}, #{organId}, #{handsPersonId}, #{changeAmount}, #{totalPrice}, #{accountId}, #{billNo}, #{operTime}, #{remark}, #{deleteFlag})
+    </insert>
+
+    <insert id="insertIfsOrderItemMation" parameterType="java.util.Map">
+        INSERT INTO erp_accountitem
+        (id, header_id, in_out_item_id, each_amount, remark, delete_flag)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator="," >
+            (#{item.id}, #{item.headerId}, #{item.inOutItemId}, #{item.eachAmount}, #{item.remark}, #{item.deleteFlag})
+        </foreach>
+    </insert>
+
+    <select id="queryIfsOrderMationToEditById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.type payType,
+            a.organ_id organId,
+            a.hands_person_id handsPersonId,
+            CONVERT(a.change_amount, decimal(24, 2)) changeAmount,
+            CONVERT(a.total_price, decimal(24, 2)) totalPrice,
+            a.account_id accountId,
+            a.bill_no billNo,
+            CONVERT (a.bill_time, char) billTime,
+            a.remark,
+            s.supplier supplierName
+        FROM
+            erp_accounthead a
+            LEFT JOIN erp_supplier s ON a.organ_id = s.id
+        WHERE
+            a.id = #{orderId}
+          AND a.delete_flag = '0'
+        ORDER BY a.bill_time DESC
+    </select>
+
+    <select id="queryIfsOrderItemMationToEditById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            a.in_out_item_id initemId,
+            CONVERT(a.each_amount , decimal(24, 2)) initemMoney,
+            a.remark
+        FROM
+            erp_accountitem a
+        WHERE
+            a.header_id = #{orderId}
+    </select>
+
+    <update id="editIfsOrderMation" parameterType="java.util.Map">
+        UPDATE erp_accounthead
+        <set>
+            organ_id = #{organId},
+            hands_person_id = #{handsPersonId},
+            change_amount = #{changeAmount},
+            total_price = #{totalPrice},
+            account_id = #{accountId},
+            bill_time = #{operTime},
+            remark = #{remark}
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteIfsOrderMationById">
+        DELETE
+        FROM
+            erp_accounthead
+        WHERE
+            id = #{orderId}
+    </delete>
+
+    <delete id="deleteIfsOrderItemMationByOrderId">
+        DELETE
+        FROM
+            erp_accountitem
+        WHERE
+            header_id = #{orderId}
+    </delete>
+
+    <select id="queryIfsOrderMationDetailsById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            FORMAT(a.change_amount, 2) changeAmount,
+            FORMAT(a.total_price, 2) totalPrice,
+            a.bill_no billNo,
+            CONVERT (a.bill_time, CHAR) operTime,
+            a.remark,
+            s.supplier supplierName,
+            group_concat(distinct b.user_name) hansPersonName,
+            t.`name` accountName
+        FROM
+            erp_accounthead a
+            LEFT JOIN erp_supplier s ON a.organ_id = s.id
+            LEFT JOIN erp_account t ON a.account_id = t.id
+            LEFT JOIN sys_eve_user_staff b ON INSTR(CONCAT(',', a.hands_person_id, ','), CONCAT(',', b.user_id, ','))
+        WHERE
+            a.delete_flag = '0'
+          AND a.id = #{orderId}
+        ORDER BY a.bill_time DESC
+    </select>
+
+    <select id="queryIfsOrderItemMationDetailsById" resultType="java.util.Map">
+        SELECT
+            a.id,
+            FORMAT(a.each_amount, 2) eachAmount,
+            a.remark,
+            c.`name` inoutitemName
+        FROM
+            erp_accountitem a
+            LEFT JOIN erp_inoutitem c ON a.in_out_item_id = c.id
+        WHERE
+            a.header_id = #{orderId}
+          AND a.delete_flag = '0'
     </select>
 
 </mapper>

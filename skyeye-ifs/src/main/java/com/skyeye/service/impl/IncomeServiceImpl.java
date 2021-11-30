@@ -71,7 +71,6 @@ public class IncomeServiceImpl implements IncomeService {
      * @param outputObject
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
 	@Override
     @Transactional(value="transactionManager")
     public void insertIncome(InputObject inputObject, OutputObject outputObject) throws Exception {
