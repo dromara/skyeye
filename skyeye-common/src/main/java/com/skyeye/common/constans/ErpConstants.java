@@ -99,7 +99,8 @@ public class ErpConstants {
 		/*****************************财务模块********************************/
 		EXPENDITURE_ORDER("支出订单", "CWZCDD", "22", "com.skyeye.factory.impl.ExpenditureFactory",
 				"", 0, true, null),
-		INCOME_ORDER("收入订单", "CWSRDD", "23", "", "", 0, true, null),
+		INCOME_ORDER("收入订单", "CWSRDD", "23", "com.skyeye.factory.impl.IncomeFactory",
+				"", 0, true, null),
 		// 待开发
 		TRAVEL_REIMBURSEMENT_ORDER("出差报销", "CCBXDD", "24", "", "", 0, true, null),
 		LOAN_BILL_ORDER("借款单", "CWFKDD", "25", "", "", 0, true, null),
