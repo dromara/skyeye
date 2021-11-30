@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  *
  * @ClassName: IncomeDao
- * @Description: 收入单管理数据层
+ * @Description: 记账收入管理数据层
  * @author: skyeye云系列--卫志强
  * @date: 2021/7/8 22:22
  *

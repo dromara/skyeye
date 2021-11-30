@@ -11,7 +11,7 @@ import com.skyeye.factory.IfsOrderFactoryResult;
 
 /**
  * @ClassName: ExpenditureFactory
- * @Description: 支出单服务工厂类
+ * @Description: 记账支出服务工厂类
  * @author: skyeye云系列--卫志强
  * @date: 2021/11/28 23:42
  * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.

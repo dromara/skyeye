@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  *
  * @ClassName: ExpenditureServiceImpl
- * @Description: 支出单服务类
+ * @Description: 记账支出服务类
  * @author: skyeye云系列--卫志强
  * @date: 2021/6/6 23:41
  *
@@ -44,12 +44,12 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     private SysEveUserStaffDao sysEveUserStaffDao;
 
     /**
-     * 支出单类型
+     * 记账支出类型
      */
     private static final String ORDER_TYPE = ErpConstants.DepoTheadSubType.EXPENDITURE_ORDER.getType();
 
     /**
-     * 查询支出单列表信息
+     * 查询记账支出列表信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -60,7 +60,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     }
 
     /**
-     * 添加支出单
+     * 添加记账支出
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -81,7 +81,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         Map<String, Object> accountHead = new HashMap<>();
         String orderNum = ErpConstants.DepoTheadSubType.getOrderNumBySubType(ORDER_TYPE);
         accountHead.put("id", useId);
-        accountHead.put("type", ORDER_TYPE);//支出单
+        accountHead.put("type", ORDER_TYPE);//记账支出
         accountHead.put("billNo", orderNum);
         accountHead.put("totalPrice", allPrice);
         accountHead.put("organId", params.get("organId"));
@@ -118,7 +118,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     }
 
     /**
-     * 查询支出单用于数据回显
+     * 查询记账支出用于数据回显
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -140,7 +140,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     }
 
     /**
-     * 编辑支出单信息
+     * 编辑记账支出信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -173,7 +173,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     }
 
     /**
-     * 删除支出单信息
+     * 删除记账支出信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -188,7 +188,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
     }
 
     /**
-     * 查看支出单详情
+     * 查看记账支出详情
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -223,7 +223,7 @@ public class ExpenditureServiceImpl implements ExpenditureService {
         String[] key = new String[]{"billNo", "supplierName", "totalPrice", "hansPersonName", "billTime"};
         String[] column = new String[]{"单据编号", "往来单位", "合计金额", "经手人", "单据日期"};
         String[] dataType = new String[]{"", "data", "data", "data", "data"};
-        //支出单信息导出
-        ExcelUtil.createWorkBook("支出单", "支出单详细", beans, key, column, dataType, inputObject.getResponse());
+        //记账支出信息导出
+        ExcelUtil.createWorkBook("记账支出", "记账支出详细", beans, key, column, dataType, inputObject.getResponse());
 	}
 }

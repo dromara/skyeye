@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @Author 卫志强
- * @Description 收入单
+ * @Description 记账收入
  * @Date 2019/10/20 10:22
  */
 @Controller
@@ -23,7 +23,7 @@ public class IncomeController {
     private IncomeService incomeService;
 
     /**
-     * 查询收入单列表信息
+     * 查询记账收入列表信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -35,7 +35,7 @@ public class IncomeController {
     }
 
     /**
-     * 添加收入单
+     * 添加记账收入
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -47,7 +47,7 @@ public class IncomeController {
     }
 
     /**
-     * 查询收入单用于数据回显
+     * 查询记账收入用于数据回显
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -59,7 +59,7 @@ public class IncomeController {
     }
 
     /**
-     * 编辑收入单信息
+     * 编辑记账收入信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -71,7 +71,7 @@ public class IncomeController {
     }
 
     /**
-     * 删除收入单信息
+     * 删除记账收入信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -83,7 +83,7 @@ public class IncomeController {
     }
 
     /**
-     * 查看收入单详情
+     * 查看记账收入详情
      * @param inputObject
      * @param outputObject
      * @throws Exception

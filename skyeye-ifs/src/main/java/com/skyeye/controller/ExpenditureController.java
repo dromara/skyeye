@@ -16,7 +16,7 @@ import com.skyeye.service.ExpenditureService;
 /**
  *
  * @ClassName: ExpenditureController
- * @Description: 支出单管理控制类
+ * @Description: 记账支出管理控制类
  * @author: skyeye云系列--卫志强
  * @date: 2021/10/6 9:21
  *
@@ -30,7 +30,7 @@ public class ExpenditureController {
     private ExpenditureService expenditureService;
 
     /**
-     * 查询支出单列表信息
+     * 查询记账支出列表信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -42,7 +42,7 @@ public class ExpenditureController {
     }
 
     /**
-     * 添加支出单
+     * 添加记账支出
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -54,7 +54,7 @@ public class ExpenditureController {
     }
 
     /**
-     * 查询支出单用于数据回显
+     * 查询记账支出用于数据回显
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -66,7 +66,7 @@ public class ExpenditureController {
     }
 
     /**
-     * 编辑支出单信息
+     * 编辑记账支出信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -78,7 +78,7 @@ public class ExpenditureController {
     }
 
     /**
-     * 删除支出单信息
+     * 删除记账支出信息
      * @param inputObject
      * @param outputObject
      * @throws Exception
@@ -90,7 +90,7 @@ public class ExpenditureController {
     }
 
     /**
-     * 查看支出单详情
+     * 查看记账支出详情
      * @param inputObject
      * @param outputObject
      * @throws Exception
