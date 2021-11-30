@@ -5,6 +5,7 @@
 package com.skyeye.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.skyeye.common.constans.IntervieweeStatusEnum;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -31,21 +32,6 @@ public class BossIntervieweeServiceImpl implements BossIntervieweeService {
     @Autowired
     private BossIntervieweeDao bossIntervieweeDao;
 
-    // 待面试状态
-    private static final Integer PENDING_INTERVIEW_STATUS = 0;
-
-    // 面试中状态
-    private static final Integer INTERVIEW_STATUS = 1;
-
-    // 面试通过状态
-    private static final Integer INTERVIEW_PASS_STATUS = 2;
-
-    // 面试不通过状态
-    private static final Integer INTERVIEW_FAILED_STATUS = 3;
-
-    // 拒绝入职状态
-    private static final Integer REJECTED_STATUS = 4;
-
     @Override
     public void queryBossIntervieweeList(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> inputParams = inputObject.getParams();
@@ -63,7 +49,7 @@ public class BossIntervieweeServiceImpl implements BossIntervieweeService {
             return;
         }
         // 状态(0.待面试  1.面试中  2.面试通过  3.全部面试不通过  4.拒绝入职)
-        inputParams.put("state", PENDING_INTERVIEW_STATUS);
+        inputParams.put("state", IntervieweeStatusEnum.PENDING_INTERVIEW_STATUS.getStatus());
         inputParams.put("id", ToolUtil.getSurFaceId());
         inputParams.put("createTime", DateUtil.getTimeAndToString());
         inputParams.put("userId", inputObject.getLogParams().get("id"));
@@ -82,11 +68,12 @@ public class BossIntervieweeServiceImpl implements BossIntervieweeService {
                 return false;
             }
             Integer state = Integer.valueOf(bossIntervieweeBean.get("state").toString());
-            List<Integer> needCheckStates = Arrays.asList(PENDING_INTERVIEW_STATUS, INTERVIEW_STATUS, INTERVIEW_FAILED_STATUS);
+            List<Integer> needCheckStates = Arrays.asList(IntervieweeStatusEnum.PENDING_INTERVIEW_STATUS.getStatus(),
+                    IntervieweeStatusEnum.INTERVIEW_STATUS.getStatus(), IntervieweeStatusEnum.INTERVIEW_FAILED_STATUS.getStatus());
             if (needCheckStates.contains(state)) {
                 outputObject.setreturnMessage("同一个姓名、手机号的面试者已存在, 请重新确认面试者信息!");
                 return true;
-            } else if (INTERVIEW_PASS_STATUS.equals(state)) {
+            } else if (IntervieweeStatusEnum.INTERVIEW_PASS_STATUS.getStatus().equals(state)) {
                 Date lastJoinTimeDate = DateUtil.getPointTime(bossIntervieweeBean.get("lastJoinTime").toString(), DateUtil.YYYY_MM_DD);
                 // 比较当前时间与最后入职的日期相差几个月
                 long differMonth = cn.hutool.core.date.DateUtil.betweenMonth(lastJoinTimeDate, new Date(), true);
@@ -94,10 +81,10 @@ public class BossIntervieweeServiceImpl implements BossIntervieweeService {
                     outputObject.setreturnMessage("该面试者通过面试未没有超过半年，则不允许录入");
                     return true;
                 }
-            } else if (REJECTED_STATUS.equals(state)) {
-                Date lastJoinTimeDate = DateUtil.getPointTime(bossIntervieweeBean.get("refuseTime").toString(), DateUtil.YYYY_MM_DD);
+            } else if (IntervieweeStatusEnum.REJECTED_STATUS.getStatus().equals(state)) {
+                Date refuseTimeDate = DateUtil.getPointTime(bossIntervieweeBean.get("refuseTime").toString(), DateUtil.YYYY_MM_DD);
                 // 比较当前时间与最后入职的日期相差几个月
-                long differMonth = cn.hutool.core.date.DateUtil.betweenMonth(lastJoinTimeDate, new Date(), true);
+                long differMonth = cn.hutool.core.date.DateUtil.betweenMonth(refuseTimeDate, new Date(), true);
                 if (differMonth < 6) {
                     outputObject.setreturnMessage("该面试者不通过面试未没有超过半年，则不允许录入");
                     return true;
@@ -128,15 +115,16 @@ public class BossIntervieweeServiceImpl implements BossIntervieweeService {
         }
         Integer state = Integer.valueOf(bossIntervieweeBean.get("state").toString());
         // state=0/1可以进行编辑
-        if (state.equals(PENDING_INTERVIEW_STATUS) || state.equals(INTERVIEW_STATUS)) {
+        if (IntervieweeStatusEnum.PENDING_INTERVIEW_STATUS.getStatus().equals(state)
+                || IntervieweeStatusEnum.INTERVIEW_STATUS.getStatus().equals(state)) {
             if (repeatVerification(outputObject, inputParams, id)){
                 return;
             }
             // 入参state
             Integer inputState = Integer.valueOf(inputParams.get("state").toString());
-            if (INTERVIEW_PASS_STATUS.equals(inputState)) {
+            if (IntervieweeStatusEnum.INTERVIEW_PASS_STATUS.getStatus().equals(inputState)) {
                 inputParams.put("lastJoinTime", DateUtil.getYmdTimeAndToString());
-            } else if (REJECTED_STATUS.equals(inputState)) {
+            } else if (IntervieweeStatusEnum.REJECTED_STATUS.getStatus().equals(inputState)) {
                 inputParams.put("refuseTime", DateUtil.getYmdTimeAndToString());
             }
             inputParams.put("userId", inputObject.getLogParams().get("id"));
@@ -154,7 +142,7 @@ public class BossIntervieweeServiceImpl implements BossIntervieweeService {
         Map<String, Object> bossIntervieweeBean = bossIntervieweeDao.queryBossIntervieweeById(id);
         if (bossIntervieweeBean != null) {
             Integer state = Integer.valueOf(bossIntervieweeBean.get("state").toString());
-            if (!state.equals(0)) {
+            if (!IntervieweeStatusEnum.PENDING_INTERVIEW_STATUS.getStatus().equals(state)) {
                 outputObject.setreturnMessage("删除失败, 只有待面试状态的数据可删除!");
                 return;
             }
