@@ -44,7 +44,7 @@
 		FROM
 			erp_depothead a
 			LEFT JOIN erp_supplier b ON a.organ_id = b.id
-			LEFT JOIN erp_account c ON a.account_id = c.id
+			LEFT JOIN ifs_account c ON a.account_id = c.id
 			LEFT JOIN crm_customer d ON a.organ_id = d.id
 			<!-- 生产计划单信息 -->
 			LEFT JOIN erp_production_purchase e ON a.id = e.purchase_order_id

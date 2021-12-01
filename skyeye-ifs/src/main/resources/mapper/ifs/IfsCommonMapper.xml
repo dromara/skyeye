@@ -14,7 +14,7 @@
             s.supplier supplierName,
             d.`name` customerName
         FROM
-            erp_accounthead a
+            ifs_order_head a
             LEFT JOIN erp_supplier s ON a.organ_id = s.id
             LEFT JOIN crm_customer d ON a.organ_id = d.id
         WHERE a.delete_flag = '0'
@@ -29,14 +29,14 @@
     </select>
 
     <insert id="insertIfsOrderMation" parameterType="java.util.Map">
-        INSERT INTO erp_accounthead
+        INSERT INTO ifs_order_head
         (id, type, organ_id, hands_person_id, change_amount, total_price, account_id, bill_no, bill_time, remark, delete_flag)
         VALUES
         (#{id}, #{type}, #{organId}, #{handsPersonId}, #{changeAmount}, #{totalPrice}, #{accountId}, #{billNo}, #{operTime}, #{remark}, #{deleteFlag})
     </insert>
 
     <insert id="insertIfsOrderItemMation" parameterType="java.util.Map">
-        INSERT INTO erp_accountitem
+        INSERT INTO ifs_order_item
         (id, header_id, in_out_item_id, each_amount, remark, delete_flag)
         VALUES
         <foreach collection="list" item="item" index="index" separator="," >
@@ -59,7 +59,7 @@
             s.supplier supplierName,
             b.`name` customName
         FROM
-            erp_accounthead a
+            ifs_order_head a
             LEFT JOIN erp_supplier s ON a.organ_id = s.id
             LEFT JOIN crm_customer b ON a.organ_id = b.id
         WHERE
@@ -75,13 +75,13 @@
             CONVERT(a.each_amount , decimal(24, 2)) initemMoney,
             a.remark
         FROM
-            erp_accountitem a
+            ifs_order_item a
         WHERE
             a.header_id = #{orderId}
     </select>
 
     <update id="editIfsOrderMation" parameterType="java.util.Map">
-        UPDATE erp_accounthead
+        UPDATE ifs_order_head
         <set>
             organ_id = #{organId},
             hands_person_id = #{handsPersonId},
@@ -98,7 +98,7 @@
     <delete id="deleteIfsOrderMationById">
         DELETE
         FROM
-            erp_accounthead
+            ifs_order_head
         WHERE
             id = #{orderId}
     </delete>
@@ -106,7 +106,7 @@
     <delete id="deleteIfsOrderItemMationByOrderId">
         DELETE
         FROM
-            erp_accountitem
+            ifs_order_item
         WHERE
             header_id = #{orderId}
     </delete>
@@ -124,10 +124,10 @@
             group_concat(distinct b.user_name) hansPersonName,
             t.`name` accountName
         FROM
-            erp_accounthead a
+            ifs_order_head a
             LEFT JOIN erp_supplier s ON a.organ_id = s.id
             LEFT JOIN crm_customer d ON a.organ_id = d.id
-            LEFT JOIN erp_account t ON a.account_id = t.id
+            LEFT JOIN ifs_account t ON a.account_id = t.id
             LEFT JOIN sys_eve_user_staff b ON INSTR(CONCAT(',', a.hands_person_id, ','), CONCAT(',', b.user_id, ','))
         WHERE
             a.delete_flag = '0'
@@ -142,7 +142,7 @@
             a.remark,
             c.`name` inoutitemName
         FROM
-            erp_accountitem a
+            ifs_order_item a
             LEFT JOIN erp_inoutitem c ON a.in_out_item_id = c.id
         WHERE
             a.header_id = #{orderId}

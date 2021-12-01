@@ -354,7 +354,7 @@ public abstract class ErpOrderFactory {
         if(orderMation != null && !orderMation.isEmpty()){
             String status = orderMation.get("status").toString();
             if(ErpConstants.ERP_HEADER_STATUS_IS_NOT_APPROVED.equals(status)
-                    || ErpConstants.ERP_HEADER_STATUS_IS_APPROVED_NOT_PASS.equals(status)){
+                || ErpConstants.ERP_HEADER_STATUS_IS_APPROVED_NOT_PASS.equals(status)){
                 // 未提交审核或者审核拒绝的可以删除
                 erpCommonDao.deleteOrderParentMationById(orderId, orderType);
                 // 删除子单据信息
