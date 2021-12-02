@@ -272,6 +272,8 @@ public abstract class IfsOrderFactory {
             // 获取子表信息
             List<Map<String, Object>> beans = ifsCommonDao.queryIfsOrderItemMationDetailsById(orderId);
             bean.put("items", beans);
+            // 获取经手人员
+            bean.put("userInfo", sysEveUserStaffDao.queryUserNameList(bean.get("handsPersonId").toString()));
             this.queryOrderOtherDetailsMationById(bean);
             outputObject.setBean(bean);
             outputObject.settotal(1);

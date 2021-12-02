@@ -202,7 +202,7 @@
     <!-- 收支项目管理结束 -->
 
     <!-- 会计科目管理开始 -->
-    <url id="ifsaccountsubject001" path="/post/IfsAccountSubjectController/queryIfsAccountSubjectList" val="查询会计科目列表信息" allUse="1" method="POST" groupName="会计科目管理">
+    <url id="ifsaccountsubject001" path="/post/IfsAccountSubjectController/queryIfsAccountSubjectList" val="查询会计科目列表信息" allUse="2" method="POST" groupName="会计科目管理">
         <property id="name" name="name" ref="" var="会计科目名称" />
         <property id="state" name="state" ref="" var="状态" />
         <property id="type" name="type" ref="" var="类型" />

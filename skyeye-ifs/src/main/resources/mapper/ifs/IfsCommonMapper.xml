@@ -114,6 +114,7 @@
     <select id="queryIfsOrderMationDetailsById" resultType="java.util.Map">
         SELECT
             a.id,
+            a.hands_person_id handsPersonId,
             FORMAT(a.change_amount, 2) changeAmount,
             FORMAT(a.total_price, 2) totalPrice,
             a.bill_no billNo,
@@ -121,14 +122,12 @@
             a.remark,
             s.supplier supplierName,
             d.`name` customerName,
-            group_concat(distinct b.user_name) hansPersonName,
             t.`name` accountName
         FROM
             ifs_order_head a
             LEFT JOIN erp_supplier s ON a.organ_id = s.id
             LEFT JOIN crm_customer d ON a.organ_id = d.id
             LEFT JOIN ifs_account t ON a.account_id = t.id
-            LEFT JOIN sys_eve_user_staff b ON INSTR(CONCAT(',', a.hands_person_id, ','), CONCAT(',', b.user_id, ','))
         WHERE
             a.delete_flag = '0'
           AND a.id = #{orderId}
