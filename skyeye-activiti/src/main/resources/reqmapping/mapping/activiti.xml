@@ -20,73 +20,16 @@
 		<property id="keyName" name="keyName" ref="required" var="模型key"/>
 		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
 	</url>
-	<url id="activitimode005" path="/post/ActivitiModelController/editActivitiModelToRun" val="提交任务" allUse="2" groupName="工作流操作">
-		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
-		<property id="taskId" name="taskId" ref="required" var="任务id"/>
-		<property id="opinion" name="opinion" ref="" var="审核意见"/>
-		<property id="editStr" name="editStr" ref="" var="审批人修改的内容"/>
-		<property id="pageTypes" name="pageTypes" ref="required,num" var="页面类型 1.指定页面，2.动态表单"/>
-		<property id="flag" name="flag" ref="required,num" var="是否通过：1.通过2.不通过"/>
-	</url>
 	<url id="activitimode006" path="/post/ActivitiModelController/deleteActivitiModelById" val="删除模型" allUse="1" groupName="工作流操作">
 		<property id="rowId" name="id" ref="required" var="模型id"/>
 	</url>
 	<url id="activitimode007" path="/post/ActivitiModelController/deleteReleasedActivitiModelById" val="取消发布" allUse="1" groupName="工作流操作">
 		<property id="deploymentId" name="deploymentId" ref="required" var="部署流程id"/>
 	</url>
-	<url id="activitimode008" path="/post/ActivitiModelController/queryUserAgencyTasksListByUserId" val="获取用户待办任务" allUse="2" groupName="工作流操作">
-		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	    <property id="taskName" name="taskName" ref="" var="任务名称"/>
-	    <property id="processInstanceId" name="processInstanceId" ref="" var="流程id"/>
-	</url>
 	<url id="activitimode009" path="/post/ActivitiModelController/queryReleaseActivitiModelList" val="获取已发布模型" allUse="2" groupName="工作流操作">
 	</url>
 	<url id="activitimode010" path="/post/ActivitiModelController/editApprovalActivitiTaskListByUserId" val="导出model的xml文件" allUse="0" method="GET" groupName="工作流操作">
 		<property id="modelId" name="modelId" ref="required" var="模型id" />
-	</url>
-	<url id="activitimode011" path="/post/ActivitiModelController/queryUserListToActiviti" val="获取人员选择" allUse="2" groupName="工作流操作">
-		<property id="reqObj" name="reqObj" ref="required" var="参数" />
-	</url>
-	<url id="activitimode012" path="/post/ActivitiModelController/queryUserGroupListToActiviti" val="获取人员选择" allUse="2" groupName="工作流操作">
-		<property id="reqObj" name="reqObj" ref="required" var="参数" />
-	</url>
-	<url id="activitimode013" path="/post/ActivitiModelController/queryStartProcessNotSubByUserId" val="获取我启动的流程" allUse="2" groupName="工作流操作">
-		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	    <property id="startTime" name="startTime" ref="" var="开始时间"/>
-	    <property id="endTime" name="endTime" ref="" var="结束时间"/>
-	    <property id="processInstanceId" name="processInstanceId" ref="" var="流程id"/>
-	</url>
-	<url id="activitimode014" path="/post/ActivitiModelController/queryMyHistoryTaskByUserId" val="获取我的历史任务" allUse="2" groupName="工作流操作">
-		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	</url>
-	<url id="activitimode015" path="/post/ActivitiModelController/insertSyncUserListMationToAct" val="用户以及用户组信息同步到act表中" allUse="1" groupName="工作流操作">
-	</url>
-	<url id="activitimode016" path="/post/ActivitiModelController/querySubFormMationByTaskId" val="获取用户提交的表单信息根据taskid" allUse="2" groupName="工作流操作">
-		<property id="taskId" name="taskId" ref="required" var="任务id"/>
-	</url>
-	<url id="activitimode017" path="/post/ActivitiModelController/queryApprovalTasksHistoryByProcessInstanceId" val="获取历史审批列表" allUse="2" groupName="工作流操作">
-		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
-	</url>
-	<url id="activitimode018" path="/post/ActivitiModelController/queryAllComplateProcessList" val="获取所有已完成的流程信息" allUse="2" groupName="工作流操作">
-		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	</url>
-	<url id="activitimode019" path="/post/ActivitiModelController/queryAllConductProcessList" val="获取所有待办的流程信息" allUse="2" groupName="工作流操作">
-		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
-	    <property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
-	</url>
-	<url id="activitimode020" path="/post/ActivitiModelController/updateProcessToHangUp" val="流程挂起" allUse="2" groupName="工作流操作">
-		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
-	</url>
-	<url id="activitimode021" path="/post/ActivitiModelController/updateProcessToActivation" val="流程激活" allUse="2" groupName="工作流操作">
-		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
-	</url>
-	<url id="activitimode022" path="/post/ActivitiModelController/insertDSFormProcess" val="提交审批" allUse="2" groupName="工作流操作">
-		<property id="keyName" name="keyName" ref="required" var="模型key"/>
-		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
 	</url>
 	<url id="activitimode023" path="/post/ActModleTypeController/queryDsFormMationToEdit" val="获取动态表单内容用于编辑申请类型实体" allUse="2" groupName="工作流操作">
 		<property id="rowId" name="id" ref="required" var="用户提交的表单数据的id"/>
@@ -96,26 +39,92 @@
 		<property id="taskId" name="taskId" ref="required" var="任务id"/>
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
 	</url>
-	<url id="activitimode025" path="/post/ActivitiModelController/querySubFormMationByProcessInstanceId" val="获取用户提交的表单信息根据流程id" allUse="2" groupName="工作流操作">
-		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
-	</url>
-	<url id="activitimode026" path="/post/ActivitiModelController/editProcessInstanceWithDraw" val="流程撤回" allUse="2" groupName="工作流操作">
-		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
-		<property id="hisTaskId" name="hisTaskId" ref="required" var="历史审批任务id"/>
-		<property id="opinion" name="opinion" ref="required" var="撤回原因"/>
-	</url>
-	<url id="activitimode027" path="/post/ActivitiModelController/editProcessInstancePicToRefresh" val="刷新流程图" allUse="2" groupName="工作流操作">
-		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
-	</url>
 	<url id="activitimode028" path="/post/ActivitiModelController/copyModelByModelId" val="流程模型拷贝" allUse="1" groupName="工作流操作">
 		<property id="modelId" name="modelId" ref="required" var="模型id"/>
 	</url>
 	<!-- 工作流结束 -->
-	
+
+	<!-- 工作流流程相关操作开始 -->
+	<url id="activitimode020" path="/post/ActivitiProcessController/updateProcessToHangUp" val="流程挂起" allUse="2" groupName="工作流流程相关操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode021" path="/post/ActivitiProcessController/updateProcessToActivation" val="流程激活" allUse="2" groupName="工作流流程相关操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode026" path="/post/ActivitiProcessController/editProcessInstanceWithDraw" val="流程撤回" allUse="2" groupName="工作流流程相关操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+		<property id="hisTaskId" name="hisTaskId" ref="required" var="历史审批任务id"/>
+		<property id="opinion" name="opinion" ref="required" var="撤回原因"/>
+	</url>
+	<url id="activitimode027" path="/post/ActivitiProcessController/editProcessInstancePicToRefresh" val="刷新流程图" allUse="2" groupName="工作流流程相关操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<!-- 工作流流程相关操作结束 -->
+
+	<!-- 工作流用户任务相关操作开始 -->
+	<url id="activitimode005" path="/post/ActivitiTaskController/editActivitiModelToRun" val="提交审批结果" allUse="2" groupName="工作流用户任务操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+		<property id="taskId" name="taskId" ref="required" var="任务id"/>
+		<property id="opinion" name="opinion" ref="" var="审核意见"/>
+		<property id="editStr" name="editStr" ref="" var="审批人修改的内容"/>
+		<property id="pageTypes" name="pageTypes" ref="required,num" var="页面类型 1.指定页面，2.动态表单"/>
+		<property id="flag" name="flag" ref="required,num" var="是否通过：1.通过2.不通过"/>
+	</url>
+	<url id="activitimode008" path="/post/ActivitiTaskController/queryUserAgencyTasksListByUserId" val="获取用户待办任务" allUse="2" groupName="工作流用户任务操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="taskName" name="taskName" ref="" var="任务名称"/>
+		<property id="processInstanceId" name="processInstanceId" ref="" var="流程id"/>
+	</url>
+	<url id="activitimode013" path="/post/ActivitiTaskController/queryStartProcessNotSubByUserId" val="获取我的流程" allUse="2" groupName="工作流用户任务操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+		<property id="startTime" name="startTime" ref="" var="开始时间"/>
+		<property id="endTime" name="endTime" ref="" var="结束时间"/>
+		<property id="processInstanceId" name="processInstanceId" ref="" var="流程id"/>
+	</url>
+	<url id="activitimode014" path="/post/ActivitiTaskController/queryMyHistoryTaskByUserId" val="获取我的历史任务" allUse="2" groupName="工作流用户任务操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="activitimode017" path="/post/ActivitiTaskController/queryApprovalTasksHistoryByProcessInstanceId" val="获取历史审批列表" allUse="2" groupName="工作流用户任务操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode018" path="/post/ActivitiTaskController/queryAllComplateProcessList" val="获取所有已完成的流程信息" allUse="2" groupName="工作流用户任务操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="activitimode019" path="/post/ActivitiTaskController/queryAllConductProcessList" val="获取所有待办的流程信息" allUse="2" groupName="工作流用户任务操作">
+		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
+		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
+	</url>
+	<url id="activitimode025" path="/post/ActivitiTaskController/querySubFormMationByProcessInstanceId" val="根据流程id获取流程详情信息" allUse="2" groupName="工作流用户任务操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+	</url>
+	<url id="activitimode016" path="/post/ActivitiTaskController/querySubFormMationByTaskId" val="根据taskId获取表单信息" allUse="2" groupName="工作流用户任务操作">
+		<property id="taskId" name="taskId" ref="required" var="任务id"/>
+	</url>
+	<!-- 工作流用户任务相关操作结束 -->
+
+	<!-- 工作流用户相关操作开始 -->
+	<url id="activitimode011" path="/post/ActivitiUserController/queryUserListToActiviti" val="获取人员选择" allUse="2" groupName="工作流用户相关操作">
+		<property id="reqObj" name="reqObj" ref="required" var="参数" />
+	</url>
+	<url id="activitimode012" path="/post/ActivitiUserController/queryUserGroupListToActiviti" val="获取人员选择" allUse="2" groupName="工作流用户相关操作">
+		<property id="reqObj" name="reqObj" ref="required" var="参数" />
+	</url>
+	<url id="activitimode015" path="/post/ActivitiModelController/insertSyncUserListMationToAct" val="用户以及用户组信息同步到act表中" allUse="1" groupName="工作流用户相关操作">
+	</url>
+	<!-- 工作流用户相关操作结束 -->
+
 	<!-- 动态表单审核中撤销开始 -->
-	<url id="dsformrevoke001" path="/post/ActivitiModelController/editDsFormContentToRevokeByProcessInstanceId" val="动态表单提交项进行撤销操作" allUse="2">
-        <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
-    </url>
+	<url id="activitimode022" path="/post/DsFormActivitiController/insertDSFormProcess" val="动态表单类型的工作流提交审批" allUse="2" groupName="动态表单工作流操作">
+		<property id="keyName" name="keyName" ref="required" var="模型key"/>
+		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
+	</url>
+	<url id="dsformrevoke001" path="/post/DsFormActivitiController/editDsFormContentToRevokeByProcessInstanceId" val="动态表单类型的工作流进行撤销操作" allUse="2" groupName="动态表单工作流操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
+	</url>
 	<!-- 动态表单审核中撤销结束 -->
 	
 	<!-- 动态表单草稿操作开始 -->
@@ -134,7 +143,7 @@
 	<url id="pagesequence004" path="/post/PageSequenceController/editDsFormISDraftById" val="编辑动态表单(无工作流)" allUse="2">
 		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
 	</url>
-	<url id="pagesequence005" path="/post/PageSequenceController/editDsFormISDraftToSubApprovalById" val="提交审批" allUse="2">
+	<url id="pagesequence005" path="/post/PageSequenceController/editDsFormISDraftToSubApprovalById" val="按钮直接提交审批" allUse="2">
 		<property id="rowId" name="id" ref="required" var="表单提交序列id" />
 		<property id="pageId" name="pageId" ref="required" var="页面id" />
 	</url>

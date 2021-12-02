@@ -26,6 +26,11 @@ public class ActivitiConstants {
     public static final String APPROVAL_NO_PASS = "nopass";
 
     /**
+     * form表单数据存储在task的varables的key
+     */
+    public static final String PROCESSINSTANCEID_TASK_VARABLES = "baseTask";
+
+    /**
      * 工作流用户表格对象
      */
     public static enum ActivitiUserElement {
