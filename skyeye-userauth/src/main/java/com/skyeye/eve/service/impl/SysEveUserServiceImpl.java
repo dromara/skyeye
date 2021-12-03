@@ -7,7 +7,9 @@ package com.skyeye.eve.service.impl;
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.skyeye.cache.redis.RedisCache;
 import com.skyeye.common.constans.Constants;
+import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -22,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class SysEveUserServiceImpl implements SysEveUserService{
@@ -40,6 +39,9 @@ public class SysEveUserServiceImpl implements SysEveUserService{
 
 	@Autowired
 	private JedisClientService jedisClient;
+
+	@Autowired
+	private RedisCache redisCache;
 
 	/**
 	 * 账号状态
@@ -724,5 +726,18 @@ public class SysEveUserServiceImpl implements SysEveUserService{
         List<Map<String, Object>> beans = sysEveUserDao.querySysDeskTopByUserId(map);
         outputObject.setBeans(beans);
     }
+
+    @Override
+	public Map<String, Object> getUserMationByUserId(String userId) {
+    	String cacheKey = String.format(Locale.ROOT, "userMation-%s", userId);
+    	return redisCache.getMap(cacheKey, key -> {
+			try {
+				return sysEveUserDao.queryUserDetailsMationByUserId(userId);
+			} catch (Exception ee) {
+				LOGGER.warn("get user details mation by userId error.", ee);
+			}
+			return null;
+		}, RedisConstants.THIRTY_DAY_SECONDS);
+	}
 
 }

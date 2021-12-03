@@ -20,7 +20,7 @@ public interface JedisClientService {
 	     * @return String    返回类型
 	     * @throws
 	 */
-	public String logEmpty(String ip);
+	String logEmpty(String ip);
 
 	/**
 	 *
@@ -32,7 +32,7 @@ public interface JedisClientService {
 	     * @return String    返回类型
 	     * @throws
 	 */
-	public void set(String key, String value);
+	void set(String key, String value);
 
 	/**
 	 *
@@ -44,7 +44,7 @@ public interface JedisClientService {
 	    * @return void    返回类型
 	    * @throws
 	 */
-	public void set(String key, String value, int seconds);
+	void set(String key, String value, int seconds);
 
 	/**
 	 *
@@ -55,7 +55,7 @@ public interface JedisClientService {
 	     * @return String    返回类型
 	     * @throws
 	 */
-	public String get(String key);
+	String get(String key);
 
 	/**
 	 *
@@ -66,7 +66,7 @@ public interface JedisClientService {
 	     * @return Boolean    返回类型
 	     * @throws
 	 */
-	public Boolean exists(String key);
+	Boolean exists(String key);
 
 	/**
 	 *
@@ -78,7 +78,7 @@ public interface JedisClientService {
 	     * @return Long    返回类型
 	     * @throws
 	 */
-	public boolean expire(String key, int seconds);
+	boolean expire(String key, int seconds);
 
 	/**
 	 *
@@ -89,7 +89,7 @@ public interface JedisClientService {
 	     * @return Long    返回类型
 	     * @throws
 	 */
-	public Long incrByData(String key, long idata);
+	Long incrByData(String key, long idata);
 
 	/**
 	 *
@@ -100,7 +100,7 @@ public interface JedisClientService {
 	     * @return Long    返回类型
 	     * @throws
 	 */
-	public boolean del(String key);
+	boolean del(String key);
 
 	/**
 	 *
@@ -112,7 +112,7 @@ public interface JedisClientService {
 	     * @return List<Slowlog>    返回类型
 	     * @throws
 	 */
-	public List<Slowlog> getLogs(long entries);
+	List<Slowlog> getLogs(long entries);
 
 	/**
 	 *
@@ -123,7 +123,7 @@ public interface JedisClientService {
 	     * @return Long    返回类型
 	     * @throws
 	 */
-	public Long getLogsLen();
+	Long getLogsLen();
 
 	/**
 	 *
@@ -134,7 +134,7 @@ public interface JedisClientService {
 	     * @return String    返回类型
 	     * @throws
 	 */
-	public String logEmpty();
+	String logEmpty();
 
 	/**
 	 *
@@ -145,7 +145,7 @@ public interface JedisClientService {
 	     * @return Long    返回类型
 	     * @throws
 	 */
-	public Long dbSize();
+	Long dbSize();
 
 	/**
 	 *
@@ -156,6 +156,6 @@ public interface JedisClientService {
 	     * @return Long    返回类型
 	     * @throws
 	 */
-	public void delKeys(String keysPattern);
+	void delKeys(String keysPattern);
 
 }

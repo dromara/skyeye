@@ -385,6 +385,7 @@
 	
 	<select id="queryUserDetailsMationByUserId" resultType="java.util.Map">
 		SELECT
+		    a.job_number jobNumber,
 			a.user_name userName,
 			a.user_photo userPhoto,
 			a.user_idcard userIdCard,
@@ -458,57 +459,6 @@
 		WHERE id = #{id}
 	</update>
 
-	<select id="queryUserListToActiviti" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.id,
-			a.user_code firstName,
-			b.user_name lastName,
-			b.email
-		FROM
-			sys_eve_user a,
-			sys_eve_user_staff b,
-			act_group_user c
-		WHERE a.id = b.user_id
-		AND a.user_lock = '0'
-		AND b.state = '1'
-		AND c.user_id = a.id
-		<if test="name != '' and name != null">
-			AND a.user_code LIKE '${name}'
-		</if>
-	</select>
-	
-	<select id="queryGroupListToActiviti" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.id,
-			a.group_name `name`
-		FROM
-			act_group a
-		WHERE 1 = 1
-		<if test="name != '' and name != null">
-			AND (a.department_name LIKE '${name}' OR b.company_name LIKE '${name}')
-		</if>
-	</select>
-	
-	<select id="queryUserListToActivitiByGroup" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.id,
-			a.user_code firstName,
-			b.user_name lastName,
-			b.email
-		FROM
-			sys_eve_user a,
-			sys_eve_user_staff b,
-			act_group_user c
-		WHERE a.id = b.user_id
-		AND a.user_lock = '0'
-		AND b.state = '1'
-		AND c.user_id = a.id
-		AND c.group_id = #{groupId}
-		<if test="name != '' and name != null">
-			AND a.user_code LIKE '${name}'
-		</if>
-	</select>
-	
 	<select id="querySysDeskTopByUserId" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
 			d.id,
@@ -524,47 +474,6 @@
 		AND d.state = '2'
 		GROUP BY d.id
 		ORDER BY d.order_by DESC
-    </select>
-    
-    <select id="queryActGroupList" parameterType="java.util.Map" resultType="java.util.Map">
-    	SELECT
-			a.id,
-			a.group_name `name`
-		FROM
-			act_group a
-    </select>
-    
-    <select id="queryActUserList" parameterType="java.util.Map" resultType="java.util.Map">
-    	SELECT
-			b.user_id id,
-			b.user_name firstName,
-			c.user_code lastName,
-			b.email
-		FROM
-			act_group_user a,
-			sys_eve_user_staff b,
-			sys_eve_user c
-		WHERE
-			a.user_id = b.user_id
-		AND b.user_id = c.id
-    </select>
-    
-    <select id="queryActUserGroupList" parameterType="java.util.Map" resultType="java.util.Map">
-    	SELECT
-			a.group_id groupId,
-			a.user_id userId
-		FROM
-			act_group_user a
-    </select>
-    
-    <select id="queryActGroupListByUserId" parameterType="java.util.Map" resultType="java.util.Map">
-    	SELECT
-			a.group_id groupId,
-			a.user_id userId
-		FROM
-			act_group_user a
-		WHERE
-			a.user_id = #{id}
     </select>
     
     <select id="queryUserMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">

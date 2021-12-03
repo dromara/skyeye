@@ -11,7 +11,8 @@ import com.skyeye.activiti.service.ActivitiUserService;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.eve.dao.SysEveUserDao;
+import com.skyeye.eve.dao.ActGroupDao;
+import com.skyeye.eve.dao.ActGroupUserDao;
 import net.sf.json.JSONObject;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.identity.Group;
@@ -37,7 +38,10 @@ import java.util.Map;
 public class ActivitiUserServiceImpl implements ActivitiUserService {
 
     @Autowired
-    private SysEveUserDao sysEveUserDao;
+    private ActGroupDao actGroupDao;
+
+    @Autowired
+    private ActGroupUserDao actGroupUserDao;
 
     @Autowired
     private IdentityService identityService;
@@ -68,7 +72,7 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
         initPagingMation(reqObj, parmter);
 
         Page pages = PageHelper.startPage(Integer.parseInt(parmter.get("page").toString()), Integer.parseInt(parmter.get("limit").toString()));
-        List<Map<String, Object>> beans = sysEveUserDao.queryUserListToActiviti(parmter);
+        List<Map<String, Object>> beans = actGroupUserDao.queryUserListToActiviti(parmter);
         long total = pages.getTotal();
 
         // 表信息
@@ -174,9 +178,9 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
         Page pages = PageHelper.startPage(Integer.parseInt(parmter.get("page").toString()), Integer.parseInt(parmter.get("limit").toString()));
         List<Map<String, Object>> beans = null;
         if("id_group_list".equals(queryId)){//分组
-            beans = sysEveUserDao.queryGroupListToActiviti(parmter);//人员
+            beans = actGroupDao.queryGroupListToActiviti(parmter);//人员
         }else{
-            beans = sysEveUserDao.queryUserListToActivitiByGroup(parmter);//人员
+            beans = actGroupUserDao.queryUserListToActivitiByGroup(parmter);//人员
         }
         long total = pages.getTotal();
 
@@ -213,7 +217,7 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
     public void insertSyncUserListMationToAct(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 同步用户组信息
-        List<Map<String, Object>> groupList = sysEveUserDao.queryActGroupList(map);
+        List<Map<String, Object>> groupList = actGroupDao.queryActGroupList(map);
         for(Map<String, Object> bean : groupList){
             Group group = new GroupEntity();
             group.setId(bean.get("id").toString());
@@ -222,7 +226,7 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
             identityService.saveGroup(group);
         }
         // 同步用户信息
-        List<Map<String, Object>> userList = sysEveUserDao.queryActUserList(map);
+        List<Map<String, Object>> userList = actGroupUserDao.queryActUserList(map);
         for(Map<String, Object> bean : userList){
             User user = new UserEntity();
             user.setId(bean.get("id").toString());
@@ -233,7 +237,7 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
             identityService.saveUser(user);
         }
         // 同步用户和用户组的关系信息
-        List<Map<String, Object>> userGroupList = sysEveUserDao.queryActUserGroupList(map);
+        List<Map<String, Object>> userGroupList = actGroupUserDao.queryActUserGroupList(map);
         for(Map<String, Object> bean : userGroupList){
             identityService.deleteMembership(bean.get("userId").toString(), bean.get("groupId").toString());
             identityService.createMembership(bean.get("userId").toString(), bean.get("groupId").toString());

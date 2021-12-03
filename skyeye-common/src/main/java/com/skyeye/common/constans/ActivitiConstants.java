@@ -31,6 +31,16 @@ public class ActivitiConstants {
     public static final String PROCESSINSTANCEID_TASK_VARABLES = "baseTask";
 
     /**
+     * 用户任务
+     */
+    public static final String USER_TASK = "userTask";
+
+    /**
+     * 排他网关
+     */
+    public static final String EXCLUSIVE_GATEWAY = "exclusiveGateway";
+
+    /**
      * 工作流用户表格对象
      */
     public static enum ActivitiUserElement {

@@ -90,4 +90,20 @@ public class ActivitiProcessController {
         activitiProcessService.editProcessInstancePicToRefresh(inputObject, outputObject);
     }
 
+    /**
+     *
+     * @Title: nextPrcessApprover
+     * @Description: 获取流程下一个节点的审批人
+     * @param inputObject
+     * @param outputObject
+     * @throws Exception    参数
+     * @return void    返回类型
+     * @throws
+     */
+    @RequestMapping("/post/ActivitiProcessController/nextPrcessApprover")
+    @ResponseBody
+    public void nextPrcessApprover(InputObject inputObject, OutputObject outputObject) throws Exception{
+        activitiProcessService.nextPrcessApprover(inputObject, outputObject);
+    }
+
 }

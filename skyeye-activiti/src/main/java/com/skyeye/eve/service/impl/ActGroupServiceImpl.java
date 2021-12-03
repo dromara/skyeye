@@ -11,6 +11,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.ActGroupDao;
+import com.skyeye.eve.dao.ActGroupUserDao;
 import com.skyeye.eve.service.ActGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class ActGroupServiceImpl implements ActGroupService {
 
 	@Autowired
 	private ActGroupDao actGroupDao;
+
+	@Autowired
+	private ActGroupUserDao groupUserDao;
 
 	/**
 	 * 
@@ -84,7 +88,7 @@ public class ActGroupServiceImpl implements ActGroupService {
 		Map<String, Object> map = inputObject.getParams();
 		List<Map<String, Object>> beans = new ArrayList<>();
 		// 查询该用户组中是否已经存在这些用户
-		Map<String, Object> bs = actGroupDao.queryUserIsInActGroup(map);
+		Map<String, Object> bs = groupUserDao.queryUserIsInActGroup(map);
 		// 把字符串以","分截成字符数组
 		String[] userId = map.get("userId").toString().split(",");
 		String user = bs.get("userId").toString();
@@ -104,7 +108,7 @@ public class ActGroupServiceImpl implements ActGroupService {
 				}
 			}
 			if(!beans.isEmpty()){
-				actGroupDao.insertActGroupUserByGroupId(beans); //在数据库中插入集合beans
+				groupUserDao.insertActGroupUserByGroupId(beans); //在数据库中插入集合beans
 			}
 		}else{
 			outputObject.setreturnMessage("请选择要新增进组的用户！");
@@ -143,7 +147,7 @@ public class ActGroupServiceImpl implements ActGroupService {
 	public void deleteActGroupByGroupId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		actGroupDao.deleteActGroupByGroupId(map);
-		actGroupDao.deleteActGroupUserByGroupId(map);
+		groupUserDao.deleteActGroupUserByGroupId(map);
 	}
 
 	/**
@@ -160,7 +164,7 @@ public class ActGroupServiceImpl implements ActGroupService {
 	@Transactional(value="transactionManager")
 	public void deleteActGroupUserByGroupIdAndUserId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		actGroupDao.deleteActGroupUserByGroupIdAndUserId(map);
+		groupUserDao.deleteActGroupUserByGroupIdAndUserId(map);
 	}
 
 	/**
@@ -177,7 +181,7 @@ public class ActGroupServiceImpl implements ActGroupService {
 	public void selectUserInfoOnActGroup(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
-		List<Map<String, Object>> beans = actGroupDao.selectUserInfoOnActGroup(map);
+		List<Map<String, Object>> beans = groupUserDao.selectUserInfoOnActGroup(map);
 		outputObject.setBeans(beans);
 		outputObject.settotal(pages.getTotal());
 	}
@@ -196,6 +200,6 @@ public class ActGroupServiceImpl implements ActGroupService {
 	@Transactional(value="transactionManager")
 	public void deleteAllActGroupUserByGroupId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		actGroupDao.deleteActGroupUserByGroupId(map);
+		groupUserDao.deleteActGroupUserByGroupId(map);
 	}
 }

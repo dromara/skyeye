@@ -9,22 +9,16 @@ import java.util.Map;
 
 public interface ActGroupDao {
 
-	public int insertActGroupMation(Map<String, Object> map) throws Exception;
+	int insertActGroupMation(Map<String, Object> map) throws Exception;
 
-	public List<Map<String, Object>> selectAllActGroupMation(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> selectAllActGroupMation(Map<String, Object> map) throws Exception;
 
-	public int insertActGroupUserByGroupId(List<Map<String, Object>> beans) throws Exception;
+	int editActGroupNameByGroupId(Map<String, Object> map) throws Exception;
 
-	public int editActGroupNameByGroupId(Map<String, Object> map) throws Exception;
+	int deleteActGroupByGroupId(Map<String, Object> map) throws Exception;
 
-	public int deleteActGroupByGroupId(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> queryGroupListToActiviti(Map<String, Object> parmter) throws Exception;
 
-	public int deleteActGroupUserByGroupId(Map<String, Object> map) throws Exception;
-
-	public int deleteActGroupUserByGroupIdAndUserId(Map<String, Object> map) throws Exception;
-
-	public List<Map<String, Object>> selectUserInfoOnActGroup(Map<String, Object> map) throws Exception;
-
-	public Map<String, Object> queryUserIsInActGroup(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> queryActGroupList(Map<String, Object> map) throws Exception;
 
 }

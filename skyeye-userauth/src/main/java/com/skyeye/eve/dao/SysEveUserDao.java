@@ -63,7 +63,7 @@ public interface SysEveUserDao {
 	
 	public List<Map<String, Object>> queryAuthPointsByUserId(Map<String, Object> userMation) throws Exception;
 	
-	public Map<String, Object> queryUserDetailsMationByUserId(@Param("userId") String userId) throws Exception;
+	Map<String, Object> queryUserDetailsMationByUserId(@Param("userId") String userId) throws Exception;
 
 	public int editUserDetailsMationByUserId(Map<String, Object> map) throws Exception;
 
@@ -71,21 +71,7 @@ public interface SysEveUserDao {
 
 	public int editSysUserStaffBindUserId(Map<String, Object> map) throws Exception;
 	
-	public List<Map<String, Object>> queryUserListToActiviti(Map<String, Object> map) throws Exception;
-	
-	public List<Map<String, Object>> queryUserListToActivitiByGroup(Map<String, Object> parmter) throws Exception;
-
-	public List<Map<String, Object>> queryGroupListToActiviti(Map<String, Object> parmter) throws Exception;
-	
 	public List<Map<String, Object>> querySysDeskTopByUserId(Map<String, Object> user) throws Exception;
-
-	public List<Map<String, Object>> queryActGroupList(Map<String, Object> map) throws Exception;
-
-	public List<Map<String, Object>> queryActUserList(Map<String, Object> map) throws Exception;
-
-	public List<Map<String, Object>> queryActUserGroupList(Map<String, Object> map) throws Exception;
-
-	public List<Map<String, Object>> queryActGroupListByUserId(Map<String, Object> user) throws Exception;
 
 	public Map<String, Object> queryUserMationByUserId(Map<String, Object> userMation) throws Exception;
 

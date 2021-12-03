@@ -4,6 +4,7 @@
 
 package com.skyeye.jedis.impl;
 
+import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.jedis.JedisClientService;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -35,11 +36,6 @@ public class JedisClientServiceImpl implements JedisClientService {
 		return this.redisTemplate;
 	}
 
-	/**
-	 * 默认key失效时间为十天
-	 */
-	private int TEN_DAY_SECONDS = 10 * 24 * 60 * 60;
-
 	@Override
 	public void set(String key, String value) {
 		redisTemplate.opsForValue().set(key, value);
@@ -47,7 +43,7 @@ public class JedisClientServiceImpl implements JedisClientService {
 		if(ToolUtil.isBlank(value)){
 			expire(key, 2);
 		}else{
-			expire(key, TEN_DAY_SECONDS);
+			expire(key, RedisConstants.TEN_DAY_SECONDS);
 		}
 	}
 	

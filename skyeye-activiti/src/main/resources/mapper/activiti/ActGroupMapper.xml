@@ -19,25 +19,6 @@
 			a.create_time
 	</select>
 	
-	<select id="queryUserIsInActGroup" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			IFNULL(GROUP_CONCAT(user_id), '') userId
-		FROM
-			act_group_user
-		WHERE
-			group_id = #{groupId}
-		AND FIND_IN_SET(user_id, #{userId})
-	</select>
-	
-	<insert id="insertActGroupUserByGroupId" parameterType="java.util.Map">
-		INSERT INTO act_group_user 
-	    (id, group_id, user_id, create_id, create_time)
-	    VALUES
-	    <foreach collection="list" item="item" index="index" separator=",">
-	    	(#{item.id}, #{item.groupId}, #{item.userId}, #{item.createId}, #{item.createTime})
-	    </foreach>
-	</insert>
-	
 	<update id="editActGroupNameByGroupId" parameterType="java.util.Map">
 		UPDATE act_group
 		<set>
@@ -53,45 +34,25 @@
 		WHERE
 			id = #{groupId}
 	</delete>
-	
-	<delete id="deleteActGroupUserByGroupId" parameterType="java.util.Map">
-		DELETE
-		FROM
-			act_group_user
-		WHERE
-			group_id = #{groupId}
-	</delete>
-	
-	<delete id="deleteActGroupUserByGroupIdAndUserId" parameterType="java.util.Map">
-		DELETE
-		FROM
-			act_group_user
-		WHERE id = #{id}
-	</delete>
-	
-	<select id="selectUserInfoOnActGroup" parameterType="java.util.Map" resultType="java.util.Map">
+
+	<select id="queryGroupListToActiviti" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.id,
-			b.user_name userName,
-			c.company_name companyName,
-			d.department_name departmentName,
-			e.job_name jobName,
-			b.email
+			a.group_name `name`
 		FROM
-			act_group_user a,
-			sys_eve_user_staff b,
-			company_mation c,
-			company_department d,
-			company_job e
-		WHERE
-			a.group_id = #{groupId}
-		AND a.user_id = b.user_id
-		AND b.company_id = c.id
-		AND b.department_id = d.id
-		AND b.job_id = e.id
-		<if test="userName != '' and userName != null">
-			AND b.user_name LIKE '%${userName}%'
+			act_group a
+		WHERE 1 = 1
+		<if test="name != '' and name != null">
+			AND (a.group_name LIKE '${name}')
 		</if>
+	</select>
+
+	<select id="queryActGroupList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.group_name `name`
+		FROM
+			act_group a
 	</select>
 	
 </mapper>
