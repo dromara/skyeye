@@ -164,7 +164,6 @@ public class ErpMachinServiceImpl implements ErpMachinService {
 	    * @return void    返回类型
 	    * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	private List<Map<String, Object>> rsetMachinMaterial(String materielStr, String useId){
 		//处理数据
 		List<Map<String, Object>> jArray = JSONUtil.toList(materielStr, null);
@@ -194,7 +193,6 @@ public class ErpMachinServiceImpl implements ErpMachinService {
 	    * @return List<Map<String,Object>>    返回类型
 	    * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	private List<Map<String, Object>> rsetMachinChild(String procedureStr, String useId, String number) throws Exception{
 		//处理数据
 		List<Map<String, Object>> jArray = JSONUtil.toList(procedureStr, null);

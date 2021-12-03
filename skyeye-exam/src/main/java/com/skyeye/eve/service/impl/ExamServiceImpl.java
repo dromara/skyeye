@@ -1133,7 +1133,6 @@ public class ExamServiceImpl implements ExamService{
 	     * @return Map<String,Object>    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	public Map<String, Object> getQuestionOptionReportListMation(Map<String, Object> question) throws Exception {
 		String quType = QuType.getActionName(Integer.parseInt(question.get("quType").toString()));//获取题目类型
 		if (quType.equals(QuType.RADIO.getActionName()) || quType.equals(QuType.COMPRADIO.getActionName())) {//单选  复合单选

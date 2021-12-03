@@ -4,6 +4,7 @@
 
 package com.skyeye.eve.entity.quartz;
 
+import com.skyeye.annotation.api.ApiEntityColumn;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ public class SysQuartz implements Serializable {
 
 	private Integer status;
 
+	@ApiEntityColumn("时间点")
 	private String cron;
 
 	private String remark;

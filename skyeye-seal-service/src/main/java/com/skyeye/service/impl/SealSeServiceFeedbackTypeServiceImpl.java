@@ -13,7 +13,7 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.dao.SealSeServiceFeedbackTypeDao;
 import com.skyeye.jedis.JedisClientService;
-import com.skyeye.sealservice.util.SealServiceConstants;
+import com.skyeye.common.constans.SealServiceConstants;
 import com.skyeye.service.SealSeServiceFeedbackTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -265,7 +265,6 @@ public class SysNoticeTypeServiceImpl implements SysNoticeTypeService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void queryFirstSysNoticeTypeUpStateList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
@@ -292,7 +291,6 @@ public class SysNoticeTypeServiceImpl implements SysNoticeTypeService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void querySecondSysNoticeTypeUpStateList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();

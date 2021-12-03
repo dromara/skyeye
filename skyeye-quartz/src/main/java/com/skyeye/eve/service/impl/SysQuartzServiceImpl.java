@@ -22,6 +22,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ *
+ * @ClassName: SysQuartzServiceImpl
+ * @Description: 定时任务服务类
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/12/3 23:29
+ *
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
+ */
 @Service
 public class SysQuartzServiceImpl implements SysQuartzService {
 

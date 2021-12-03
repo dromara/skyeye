@@ -57,7 +57,6 @@ public class OutputNotesIsZipServiceImpl implements JobMateService{
 	@Autowired
 	private MyNoteDao myNoteDao;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void call(String data) throws Exception {
 		Map<String, Object> map = JSONUtil.toBean(data, null);
@@ -98,7 +97,6 @@ public class OutputNotesIsZipServiceImpl implements JobMateService{
 	    * @return void    返回类型
 	    * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	private String outputFolder(String parentId, String userId) throws Exception{
 		// 1.获取该目录下的所有目录
 		List<Map<String, Object>> beans = myNoteDao.queryAllFolderListByFolderId(parentId);

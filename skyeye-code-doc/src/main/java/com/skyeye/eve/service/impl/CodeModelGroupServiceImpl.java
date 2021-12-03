@@ -190,15 +190,15 @@ public class CodeModelGroupServiceImpl implements CodeModelGroupService{
 		String tableName = ToolUtil.replaceUnderLineAndUpperCase(map.get("tableName").toString());
 		map.put("dbName", dbName);
 		Map<String, Object> tableBz = codeModelGroupDao.queryTableBzByTableName(map);
-		//表备注
+		// 表备注
 		bean.put("tableBzName", tableBz.get("tableComment"));
-		//将表名转化为Controller名
+		// 将表名转化为Controller名
 		bean.put("tableName", tableName);
-		//表名首字母小写
+		// 表名首字母小写
 		bean.put("tableFirstISlowerName", ToolUtil.toLowerCaseFirstOne(tableName));
-		//表名全部小写
+		// 表名全部小写
 		bean.put("tableISlowerName", tableName.toLowerCase());
-		//包名
+		// 包名
 		bean.put("ControllerPackageName", "com.skyeye." + tableName.toLowerCase() + ".controller" );
 		bean.put("ServicePackageName", "com.skyeye." + tableName.toLowerCase() + ".service" );
 		bean.put("ServiceImplPackageName", "com.skyeye." + tableName.toLowerCase() + ".service.impl" );

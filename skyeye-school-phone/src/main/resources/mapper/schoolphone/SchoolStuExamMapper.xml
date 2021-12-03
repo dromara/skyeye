@@ -17,8 +17,7 @@
 			LEFT JOIN school_subject_mation d ON c.subject_id = d.id
 			LEFT JOIN sys_eve_user_staff e ON c.create_id = e.user_id
 			LEFT JOIN school_grade_mation f ON c.grade_id = f.id
-		WHERE
-			a.id = #{stuId}
+		WHERE a.id = #{stuId}
 		AND a.now_class_id = b.class_id
 		AND c.id = b.exam_survey_id
 		AND c.survey_state = '1'
@@ -56,8 +55,7 @@
 			LEFT JOIN sys_eve_user_staff e ON c.create_id = e.user_id
 			LEFT JOIN school_grade_mation f ON c.grade_id = f.id,
 			exam_survey_answer g
-		WHERE
-			a.id = #{stuId}
+		WHERE a.id = #{stuId}
 		AND a.id = g.create_id
 		AND c.id = g.survey_id
 		ORDER BY c.real_start_time DESC

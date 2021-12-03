@@ -130,6 +130,7 @@ public class JobMateMationServiceImpl implements JobMateMationService {
 	 * 任务状态修改
 	 */
 	@Override
+	@Transactional(value="transactionManager")
 	public void comMQJobMation(String jobId, String status, String responseBody) throws Exception {
 		Map<String, Object> jobMation = jobMateMationDao.queryJobMationByJobId(jobId);
 		// 类型  1.父任务2.子任务

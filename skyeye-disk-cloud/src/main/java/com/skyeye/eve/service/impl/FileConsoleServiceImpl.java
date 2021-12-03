@@ -1911,7 +1911,7 @@ public class FileConsoleServiceImpl implements FileConsoleService{
 					folder.put("directParentId", str[str.length - 1]);
 					folder.put("newId", ToolUtil.getSurFaceId());
 				}
-				//将数据转化为树的形式，方便进行父id重新赋值
+				// 将数据转化为树的形式，方便进行父id重新赋值
 				folderNew = ToolUtil.listToTree(folderNew, "id", "directParentId", "children");
 				ToolUtil.FileListParentISEdit(folderNew, folderId);//替换父id
 				folderNew = ToolUtil.FileTreeTransList(folderNew);//将树转为list
@@ -1920,7 +1920,7 @@ public class FileConsoleServiceImpl implements FileConsoleService{
 					folder.put("createTime", DateUtil.getTimeAndToString());
 					folder.put("state", 1);
 				}
-				//为文件重置新parentId参数
+				// 为文件重置新parentId参数
 				for(Map<String, Object> folder: folderNew){
 					String parentId = folder.get("parentId").toString() + folder.get("id").toString() + ",";
 					String newParentId = folder.get("newParentId").toString() + folder.get("newId").toString() + ",";

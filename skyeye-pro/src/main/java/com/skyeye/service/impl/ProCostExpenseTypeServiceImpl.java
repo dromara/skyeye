@@ -91,7 +91,6 @@ public class ProCostExpenseTypeServiceImpl implements ProCostExpenseTypeService 
      * @param outputObject
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
 	@Override
     public void queryStateUpList(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();

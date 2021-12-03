@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright 卫志强 QQ：598748873@qq.com Inc. All rights reserved. 开源地址：https://gitee.com/doc_wei01/skyeye
  ******************************************************************************/
+
 package com.skyeye.service.impl;
 
 import cn.hutool.json.JSONUtil;
@@ -36,7 +37,6 @@ public class TAreaPhoneServiceImpl implements TAreaPhoneService{
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void queryTAreaPhoneList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();

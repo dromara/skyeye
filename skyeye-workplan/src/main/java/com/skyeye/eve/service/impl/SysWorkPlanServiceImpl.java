@@ -19,7 +19,6 @@ import com.skyeye.eve.dao.ScheduleDayDao;
 import com.skyeye.eve.dao.SysWorkPlanDao;
 import com.skyeye.eve.service.ScheduleDayService;
 import com.skyeye.eve.service.SysWorkPlanService;
-import com.skyeye.jedis.JedisClientService;
 import com.skyeye.quartz.config.QuartzService;
 import com.skyeye.service.JobMateMationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +49,6 @@ public class SysWorkPlanServiceImpl implements SysWorkPlanService{
 	
 	@Autowired
 	private QuartzService quartzService;
-	
-	@Autowired
-	public JedisClientService jedisClient;
 	
 	@Autowired
 	private ScheduleDayDao scheduleDayDao;
