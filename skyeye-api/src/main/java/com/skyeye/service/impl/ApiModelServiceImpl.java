@@ -10,7 +10,10 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
+import com.skyeye.dao.ApiGroupDao;
+import com.skyeye.dao.ApiMationDao;
 import com.skyeye.dao.ApiModelDao;
+import com.skyeye.dao.ApiPropertyDao;
 import com.skyeye.service.ApiModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +36,15 @@ public class ApiModelServiceImpl implements ApiModelService {
 
     @Autowired
     private ApiModelDao apiModelDao;
+
+    @Autowired
+    private ApiGroupDao apiGroupDao;
+
+    @Autowired
+    private ApiMationDao apiMationDao;
+
+    @Autowired
+    private ApiPropertyDao apiPropertyDao;
 
     /**
      * @param inputObject
@@ -98,6 +110,9 @@ public class ApiModelServiceImpl implements ApiModelService {
     @Transactional(value = "transactionManager")
     public void deleteApiModelById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
+        apiPropertyDao.deleteApiPropertyByModelId(map);
+        apiMationDao.deleteApiMationByModelId(map);
+        apiGroupDao.deleteApiGroupByModelId(map);
         apiModelDao.deleteApiModelById(map);
     }
 

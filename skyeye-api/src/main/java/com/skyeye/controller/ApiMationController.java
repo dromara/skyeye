@@ -16,37 +16,80 @@ public class ApiMationController {
 
 	@Autowired
 	private ApiMationService apiMationService;
-	
+
 	/**
-	 * 
-	     * @Title: insertApiMation
-	     * @Description: 新增api接口信息
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
+	 * @param inputObject
+	 * @param outputObject
+	 * @return void    返回类型
+	 * @throws Exception 参数
+	 * @throws
+	 * @Title: queryApiMationList
+	 * @Description: 获取api接口信息列表
 	 */
-	@RequestMapping("/post/ApiMationController/insertApiMation")
+	@RequestMapping("/post/ApiMationController/queryApiMationList")
 	@ResponseBody
-	public void insertApiMation(InputObject inputObject, OutputObject outputObject) throws Exception{
+	public void queryApiMationList(InputObject inputObject, OutputObject outputObject) throws Exception {
+		apiMationService.queryApiMationList(inputObject, outputObject);
+	}
+
+	/**
+	 * @param inputObject
+	 * @param outputObject
+	 * @return void    返回类型
+	 * @throws Exception 参数
+	 * @throws
+	 * @Title: insertApiMationMation
+	 * @Description: 新增api接口信息
+	 */
+	@RequestMapping("/post/ApiMationController/insertApiMationMation")
+	@ResponseBody
+	public void insertApiMationMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		apiMationService.insertApiMation(inputObject, outputObject);
 	}
-	
+
 	/**
-	 * 
-	     * @Title: selectApiMationById
-	     * @Description: 查看api接口信息详情
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
+	 * @param inputObject
+	 * @param outputObject
+	 * @return void    返回类型
+	 * @throws Exception 参数
+	 * @throws
+	 * @Title: deleteApiMationById
+	 * @Description: 删除api接口信息
+	 */
+	@RequestMapping("/post/ApiMationController/deleteApiMationById")
+	@ResponseBody
+	public void deleteApiMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		apiMationService.deleteApiMationById(inputObject, outputObject);
+	}
+
+	/**
+	 * @param inputObject
+	 * @param outputObject
+	 * @return void    返回类型
+	 * @throws Exception 参数
+	 * @throws
+	 * @Title: selectApiMationById
+	 * @Description: 通过id查找对应的api接口信息
 	 */
 	@RequestMapping("/post/ApiMationController/selectApiMationById")
 	@ResponseBody
-	public void selectApiMationById(InputObject inputObject, OutputObject outputObject) throws Exception{
+	public void selectApiMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		apiMationService.selectApiMationById(inputObject, outputObject);
 	}
-	
+
+	/**
+	 * @param inputObject
+	 * @param outputObject
+	 * @return void    返回类型
+	 * @throws Exception 参数
+	 * @throws
+	 * @Title: editApiMationMationById
+	 * @Description: 通过id编辑对应的api接口信息
+	 */
+	@RequestMapping("/post/ApiMationController/editApiMationById")
+	@ResponseBody
+	public void editApiMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
+		apiMationService.editApiMationById(inputObject, outputObject);
+	}
+
 }

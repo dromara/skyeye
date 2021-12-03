@@ -1,43 +1,118 @@
-<?xml version="1.0" encoding="UTF-8" ?>  
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.skyeye.dao.ApiMationDao">
 
-	<select id="queryApiMationByRequestUrl" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="queryApiMationList" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
-			a.request_url requestUrl
-		FROM
-			api_mation  a
-		WHERE
-			a.request_url = #{requestUrl}
-	</select>
-
-	<insert id="insertApiMation" parameterType="java.util.Map">
-		INSERT INTO api_mation  
-	    (request_url, request_body, reponse_body, create_id, create_time, last_update_id, last_update_time)
-	    VALUES(#{requestUrl}, #{requestBody}, #{reponseBody}, #{userId}, #{createTime}, #{userId}, #{createTime})
-	</insert>
-	
-	<select id="selectApiMationById" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
+			a.id,
+			a.name `name`,
 			a.request_url requestUrl,
+			a.real_path realPath,
+			CASE a.all_use WHEN '1' THEN '是' WHEN '0' THEN '否' WHEN '2' THEN '需要登陆才能访问，但无需授权' ELSE a.all_use END allUse,
+			a.method method,
+			a.group_id groupId,
 			a.request_body requestBody,
 			a.reponse_body reponseBody
 		FROM
+			api_mation  a
+		WHERE
+		1 = 1
+		<if test="name != '' and name != null">
+			AND a.name LIKE '%${name}%'
+		</if>
+		<if test="allUse != '' and allUse != null">
+			AND a.all_use = #{allUse}
+		</if>
+		<if test="method != '' and method != null">
+			AND a.method = #{method}
+		</if>
+		<if test="groupId != '' and groupId != null">
+			AND a.group_id = #{groupId}
+		</if>
+		ORDER BY a.last_update_time DESC
+	</select>
+
+	<select id="queryApiMationByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
 			api_mation a
 		WHERE
-			a.request_url = #{requestUrl}
+			a.name = #{name}
+		AND a.group_id = #{groupId}
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
 	</select>
+
+	<insert id="insertApiMation" parameterType="java.util.Map">
+		INSERT INTO api_mation
+			(id, `name`, request_url, real_path, all_use, method, group_id, request_body, reponse_body, create_id, create_time, last_update_id, last_update_time)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id}, #{item.name}, #{item.requestUrl}, #{item.realPath}, #{item.allUse}, #{item.method}, #{item.groupId}, #{item.requestBody}, #{item.reponseBody}, #{item.userId}, #{item.createTime}, #{item.userId}, #{item.createTime})
+		</foreach>
+	</insert>
+
+	<select id="queryApiMationToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+			a.name `name`,
+			a.request_url requestUrl,
+			a.real_path realPath,
+			a.all_use allUse,
+			a.method method,
+			a.group_id groupId,
+			a.request_body requestBody,
+			a.reponse_body reponseBody
+        FROM
+            api_mation  a
+        WHERE
+            a.id = #{id}
+    </select>
 
 	<update id="editApiMationById" parameterType="java.util.Map">
 		UPDATE api_mation
 		<set>
+			`name` = #{name},
 			request_url = #{requestUrl},
+			real_path = #{realPath},
+			all_use = #{allUse},
+			method = #{method},
+			group_id = #{groupId},
 			request_body = #{requestBody},
 			reponse_body = #{reponseBody},
 			last_update_id = #{userId},
 			last_update_time = #{lastUpdateTime}
 		</set>
-		WHERE request_url = #{requestUrl}
+		WHERE
+		id = #{id}
 	</update>
-	
+
+	<delete id="deleteApiMationById" parameterType="java.util.Map">
+        DELETE
+		FROM
+			api_mation
+		WHERE
+			id = #{id}
+    </delete>
+
+	<delete id="deleteApiMationByGroupId" parameterType="java.util.Map">
+        DELETE
+		FROM
+			api_mation
+		WHERE
+			group_id = #{id}
+    </delete>
+
+	<delete id="deleteApiMationByModelId" parameterType="java.util.Map">
+        DELETE a
+		FROM
+			api_mation a
+		LEFT JOIN api_group d ON a.group_id = d.id
+		LEFT JOIN api_model f ON d.model_id = f.id
+		WHERE
+			f.id = #{id}
+    </delete>
+
 </mapper>
