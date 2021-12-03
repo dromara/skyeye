@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ApiPropertyDao">
+
+	<select id="queryApiPropertyList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.api_id apiId,
+			a.property_id propertyId,
+			a.property_name propertyName,
+			a.ref ref,
+			a.example_default exampleDefault,
+			a.default `default`,
+			a.remark remark
+		FROM
+			api_property  a
+		WHERE
+		1 = 1
+		<if test="apiId != '' and apiId != null">
+			AND a.api_id = #{apiId}
+		</if>
+		<if test="propertyId != '' and propertyId != null">
+			AND a.property_id = #{propertyId}
+		</if>
+		<if test="propertyName != '' and propertyName != null">
+			AND a.property_name = #{propertyName}
+		</if>
+		ORDER BY a.last_update_time DESC
+	</select>
+
+	<select id="queryApiPropertyMationByApiId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			api_property a
+		WHERE
+			a.api_id = #{apiId}
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+
+	<insert id="insertApiProperty" parameterType="java.util.Map">
+		INSERT INTO api_property
+			(id, `default`, api_id, property_id, property_name, ref, example_default, remark, create_id, create_time, last_update_id, last_update_time)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id}, #{item.default}, #{item.apiId}, #{item.propertyId}, #{item.propertyName}, #{item.ref}, #{item.exampleDefault}, #{item.remark}, #{item.userId}, #{item.createTime}, #{item.userId}, #{item.createTime})
+		</foreach>
+	</insert>
+
+	<select id="queryApiPropertyToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+			a.api_id apiId,
+			a.property_id propertyId,
+			a.property_name propertyName,
+			a.ref ref,
+			a.example_default exampleDefault,
+			a.default `default`,
+			a.remark remark
+        FROM
+            api_property  a
+        WHERE
+            a.id = #{id}
+    </select>
+
+	<update id="editApiPropertyById" parameterType="java.util.Map">
+		UPDATE api_property
+		<set>
+			`default` = #{defaul},
+			api_id = #{apiId},
+			property_id = #{propertyId},
+			property_name = #{propertyName},
+			ref = #{ref},
+			example_default = #{exampleDefault},
+			remark = #{remark}
+		</set>
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="deleteApiPropertyById" parameterType="java.util.Map">
+        DELETE
+		FROM
+			api_property
+		WHERE
+			id = #{id}
+    </delete>
+
+	<delete id="deleteApiPropertyByApiId" parameterType="java.util.Map">
+        DELETE
+		FROM
+			api_property
+		WHERE
+			api_id = #{id}
+    </delete>
+
+	<delete id="deleteApiPropertyByGroupId" parameterType="java.util.Map">
+        DELETE a
+		FROM
+			api_property a
+		INNER JOIN api_mation b ON a.api_id = b.id
+		INNER JOIN api_group d ON b.group_id = d.id
+		WHERE
+			b.group_id = #{id}
+    </delete>
+
+	<delete id="deleteApiPropertyByModelId" parameterType="java.util.Map">
+        DELETE a
+		FROM
+			api_property a
+		LEFT JOIN api_mation b ON a.api_id = b.id
+		LEFT JOIN api_group d ON b.group_id = d.id
+		LEFT JOIN api_model f ON d.model_id = f.id
+		WHERE
+			f.id = #{id}
+    </delete>
+
+</mapper>
