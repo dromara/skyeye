@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.skyeye.dao.ApiGroupDao">
+
+	<select id="queryApiGroupList" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id,
+			a.name `name`,
+			a.model_id modelId
+		FROM
+			api_group  a
+		WHERE
+		1 = 1
+		<if test="name != '' and name != null">
+			AND a.name LIKE '%${name}%'
+		</if>
+		<if test="modelId != '' and modelId != null">
+			AND a.model_id = #{modelId}
+		</if>
+		ORDER BY a.last_update_time DESC
+	</select>
+
+	<select id="queryApiGroupByName" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.id
+		FROM
+			api_group a
+		WHERE
+			a.name = #{name}
+		AND a.model_id = #{modelId}
+		<if test="id != '' and id != null">
+			AND a.id != #{id}
+		</if>
+	</select>
+
+	<insert id="insertApiGroup" parameterType="java.util.Map">
+		INSERT INTO api_group
+			(id, `name`, model_id, create_id, create_time, last_update_id, last_update_time)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id}, #{item.name}, #{item.modelId}, #{item.userId}, #{item.createTime}, #{item.userId}, #{item.createTime})
+		</foreach>
+	</insert>
+
+	<select id="queryApiGroupToEditById" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            a.id,
+			a.name `name`,
+			a.model_id modelId
+        FROM
+            api_group  a
+        WHERE
+            a.id = #{id}
+    </select>
+
+	<update id="editApiGroupById" parameterType="java.util.Map">
+		UPDATE api_group
+		<set>
+			`name` = #{name},
+			model_id = #{modelId}
+		</set>
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="deleteApiGroupById" parameterType="java.util.Map">
+        DELETE
+		FROM
+			api_group
+		WHERE
+			id = #{id}
+    </delete>
+
+	<delete id="deleteApiGroupByModelId" parameterType="java.util.Map">
+        DELETE
+		FROM
+			api_group
+		WHERE
+			model_id = #{id}
+    </delete>
+
+</mapper>
