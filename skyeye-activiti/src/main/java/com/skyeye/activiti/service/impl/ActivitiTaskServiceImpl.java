@@ -303,6 +303,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
                         hisModel.put("name", hisTask.getName());//我处理的任务
                         hisModel.put("weatherEnd", 1);//标记流程是否结束；1：结束，0.未结束
                     }
+                    return hisModel;
                 } catch (Exception ee) {
                     LOGGER.warn("queryMyHistoryTaskByUserId get processInstanceId {} is error.", hisTask.getProcessInstanceId(), ee);
                 }
@@ -521,7 +522,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
     public void querySubFormMationByTaskId(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String taskId = map.get("taskId").toString();
-
+        activitiModelService.deleteProcessInRedisMation("647645");
         // 获取任务自定义id和名称
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         map.put("taskKey", task.getTaskDefinitionKey());
@@ -618,10 +619,20 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         bean.put("leaveOpinionList", leaveList);
         bean.put("flag", map.get("flag"));//校验参数
         taskService.complete(taskId, bean);
+        LOGGER.info("complete success, processInstanceId is {}.", processInstanceId);
         // 绘制图像
         activitiModelService.queryProHighLighted(processInstanceId);
         // 删除指定流程在redis中的缓存信息
-        activitiModelService.deleteProcessInRedisMation(task.getProcessInstanceId());
+        activitiModelService.deleteProcessInRedisMation(processInstanceId);
+        // 设置下个节点的审批人
+        setNextUserTaskApproval(processInstanceId, map.get("approverId").toString());
+    }
+
+    private void setNextUserTaskApproval(String processInstanceId, String approverId){
+        if(!ToolUtil.isBlank(approverId)){
+            Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).active().singleResult();
+            taskService.setAssignee(task.getId(), approverId);
+        }
     }
 
     private void setApprovalEditMation(Map<String, Object> map, String processInstanceId, String taskId) throws Exception {

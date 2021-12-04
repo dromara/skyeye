@@ -74,6 +74,7 @@
 		<property id="editStr" name="editStr" ref="" var="审批人修改的内容"/>
 		<property id="pageTypes" name="pageTypes" ref="required,num" var="页面类型 1.指定页面，2.动态表单"/>
 		<property id="flag" name="flag" ref="required,num" var="是否通过：1.通过2.不通过"/>
+		<property id="approverId" name="approverId" ref="" var="下个节点的审批人"/>
 	</url>
 	<url id="activitimode008" path="/post/ActivitiTaskController/queryUserAgencyTasksListByUserId" val="获取用户待办任务" allUse="2" groupName="工作流用户任务操作">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />

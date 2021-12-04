@@ -390,6 +390,7 @@
 			a.user_photo userPhoto,
 			a.user_idcard userIdCard,
 			a.user_sex userSex,
+		    a.user_id userId,
 			a.email userEmail,
 			a.phone userPhone,
 			a.home_phone userHomePhone,
