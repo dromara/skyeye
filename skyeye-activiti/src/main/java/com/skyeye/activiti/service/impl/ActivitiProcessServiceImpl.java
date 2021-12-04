@@ -6,12 +6,15 @@ package com.skyeye.activiti.service.impl;
 
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.ActivitiProcessService;
+import com.skyeye.activiti.service.ActivitiTaskService;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.ActGroupUserDao;
 import com.skyeye.eve.service.SysEveUserService;
+import net.sf.json.JSONObject;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -80,6 +83,9 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
 
     @Autowired
     private ActGroupUserDao actGroupUserDao;
+
+    @Autowired
+    private ActivitiTaskService activitiTaskService;
 
     /**
      *
@@ -224,7 +230,9 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
     public void nextPrcessApprover(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
         String processInstanceId = params.get("processInstanceId").toString();
-        Map<String, Object> map = new HashMap<>();
+        String taskId = params.get("taskId").toString();
+        // 获取表单数据用于排他网关的参数校验
+        Map<String, Object> map = getFormVariable(taskId, params);
         TaskDefinition taskDefinition = getNextTaskInfo(processInstanceId, map);
         if(taskDefinition != null){
             // 1.获取下个节点的所有可选审批人
@@ -233,9 +241,37 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             outputObject.setBeans(user);
             // 2.获取节点信息
             Map<String, Object> nodeMation = new HashMap<>();
-            nodeMation.put("nodeName", taskDefinition.getNameExpression());
+            nodeMation.put("nodeName", taskDefinition.getNameExpression().getExpressionText());
+            nodeMation.put("nodeType", ActivitiConstants.USER_TASK);
             outputObject.setBean(nodeMation);
         }
+    }
+
+    /**
+     * 获取表单数据用于排他网关的参数校验
+     *
+     * @param taskId 当前任务节点的任务id
+     * @param inputParams 入参
+     * @return
+     */
+    private Map<String, Object> getFormVariable(String taskId, Map<String, Object> inputParams){
+        Map<String, Object> variable = new HashMap<>();
+        Map<String, Object> params = activitiTaskService.getCurrentTaskParamsByTaskId(taskId);
+        for (String key : params.keySet()) {
+            if(params.get(key) == null){
+                continue;
+            }
+            String str = params.get(key).toString();
+            if(ToolUtil.isJson(str)){
+                Map<String, Object> formItemMation = JSONObject.fromObject(str);
+                variable.put(key, formItemMation.containsKey("value") ? formItemMation.get("value") : StringUtils.EMPTY);
+            }
+        }
+        // 审批结果
+        if(!ToolUtil.isBlank(inputParams.get("flag").toString())){
+            variable.put("flag", inputParams.get("flag"));
+        }
+        return variable;
     }
 
     private void getNextTaskApprove(TaskDefinition taskDefinition, List<Map<String, Object>> user) throws Exception {
@@ -267,6 +303,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
      * 获取下一个用户任务信息
      *
      * @param processInstanceId 流程Id信息
+     * @param map 表单数据
      * @return 下一个用户任务用户组信息
      * @throws Exception
      */

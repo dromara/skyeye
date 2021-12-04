@@ -59,8 +59,10 @@
 	<url id="activitimode027" path="/post/ActivitiProcessController/editProcessInstancePicToRefresh" val="刷新流程图" allUse="2" groupName="工作流流程相关操作">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
 	</url>
-	<url id="activitiProcess001" path="/post/ActivitiProcessController/nextPrcessApprover" val="获取流程下一个节点的审批人" allUse="2" groupName="工作流流程相关操作">
+	<url id="activitiProcess001" path="/post/ActivitiProcessController/nextPrcessApprover" val="获取流程下一个节点的审批人" allUse="2" method="POST" groupName="工作流流程相关操作">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+		<property id="taskId" name="taskId" ref="required" var="当前任务节点的任务id"/>
+		<property id="flag" name="flag" ref="num" var="是否通过：1.通过2.不通过"/>
 	</url>
 	<!-- 工作流流程相关操作结束 -->
 

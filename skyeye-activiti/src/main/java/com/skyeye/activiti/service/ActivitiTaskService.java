@@ -7,6 +7,8 @@ package com.skyeye.activiti.service;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 
+import java.util.Map;
+
 /**
  * @ClassName: ActivitiTaskService
  * @Description: 工作流用户任务相关
@@ -32,6 +34,14 @@ public interface ActivitiTaskService {
     void querySubFormMationByProcessInstanceId(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     void querySubFormMationByTaskId(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+    /**
+     * 获取当前任务节点填写的表单数据
+     *
+     * @param taskId 任务id
+     * @return 当前任务节点填写的表单数据
+     */
+    Map<String, Object> getCurrentTaskParamsByTaskId(String taskId);
 
     void editActivitiModelToRun(InputObject inputObject, OutputObject outputObject) throws Exception;
 

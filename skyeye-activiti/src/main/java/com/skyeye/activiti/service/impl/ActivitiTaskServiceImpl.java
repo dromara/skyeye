@@ -604,11 +604,23 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(process);
         map.put("pageTypes", process.get("pageTypes"));
 
-        //获取提交时候的信息
-        Map<String, Object> params = (Map<String, Object>) taskService.getVariable(taskId, ActivitiConstants.PROCESSINSTANCEID_TASK_VARABLES);
+        // 获取提交时候的信息
+        Map<String, Object> params = this.getCurrentTaskParamsByTaskId(taskId);
         List<Map<String, Object>> beans = getParamsToDSFormShow(params);
         outputObject.setBean(map);
         outputObject.setBeans(beans);
+    }
+
+    /**
+     * 获取当前任务节点填写的表单数据
+     *
+     * @param taskId 任务id
+     * @return 当前任务节点填写的表单数据
+     */
+    @Override
+    public Map<String, Object> getCurrentTaskParamsByTaskId(String taskId){
+        Map<String, Object> params = (Map<String, Object>) taskService.getVariable(taskId, ActivitiConstants.PROCESSINSTANCEID_TASK_VARABLES);
+        return params;
     }
 
     /**
