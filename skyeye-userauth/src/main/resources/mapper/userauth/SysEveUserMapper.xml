@@ -476,7 +476,7 @@
 		ORDER BY d.order_by DESC
     </select>
     
-    <select id="queryUserMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
+    <select id="queryUserMationByUserId" resultType="java.util.Map">
     	SELECT
 			a.user_name userName
 		FROM
@@ -484,17 +484,7 @@
 		WHERE
 			a.user_id = #{userId}
     </select>
-    
-    <select id="queryUserNameByProcessInstanceId" parameterType="java.util.Map" resultType="java.util.Map">
-    	SELECT
-			b.user_name userName
-		FROM
-			act_user_processinstanceid a,
-			sys_eve_user_staff b
-		WHERE a.create_id = b.user_id
-		AND a.process_instance_id = #{processInstanceId}
-    </select>
-	
+
 	<select id="queryUserSchoolMationByUserId" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			c.id schoolId,

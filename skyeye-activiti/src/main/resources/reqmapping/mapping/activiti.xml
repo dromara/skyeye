@@ -81,7 +81,7 @@
 		<property id="taskName" name="taskName" ref="" var="任务名称"/>
 		<property id="processInstanceId" name="processInstanceId" ref="" var="流程id"/>
 	</url>
-	<url id="activitimode013" path="/post/ActivitiTaskController/queryStartProcessNotSubByUserId" val="获取我的流程" allUse="2" groupName="工作流用户任务操作">
+	<url id="activitimode013" path="/post/ActivitiTaskController/queryStartProcessNotSubByUserId" val="获取我启动的流程" allUse="2" groupName="工作流用户任务操作">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
 		<property id="page" name="page" ref="required,num" var="分页参数,第几页"/>
 		<property id="startTime" name="startTime" ref="" var="开始时间"/>

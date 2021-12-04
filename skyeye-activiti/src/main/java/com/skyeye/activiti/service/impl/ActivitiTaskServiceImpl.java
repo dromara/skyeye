@@ -10,8 +10,10 @@ import com.github.pagehelper.PageHelper;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.ActivitiTaskService;
 import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
+import com.skyeye.cache.redis.RedisCache;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.Constants;
+import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -31,6 +33,8 @@ import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +51,8 @@ import java.util.*;
  */
 @Service
 public class ActivitiTaskServiceImpl implements ActivitiTaskService {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(ActivitiTaskServiceImpl.class);
 
     /**
      * 任务服务类。可以从这个类中获取任务的信息
@@ -81,6 +87,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
     @Autowired
     private ActivitiModelService activitiModelService;
 
+    @Autowired
+    private RedisCache redisCache;
+
     /**
      * @Title: queryUserAgencyTasksListByUserId
      * @Description: 获取用户待办任务
@@ -111,62 +120,51 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         int count = taskQuery.list().size();
         List<Task> taskList = taskQuery.orderByProcessInstanceId().desc()
                 .listPage(Integer.parseInt(map.get("limit").toString()) * (Integer.parseInt(map.get("page").toString()) - 1), Integer.parseInt(map.get("limit").toString()));
-        //整理数据
+        // 整理数据
         List<Map<String, Object>> rows = new ArrayList<>();
-        //for循环中使用的变量
-        ProcessInstance instance;
-        Map<String, Object> params, taskModel, actModel, creater;
-        String taskType, key;
         for (Task task : taskList) {
             //流程待办在redis中存储的key
-            key = Constants.getProjectActProcessInstanceUserAgencyTasksItemById(task.getProcessInstanceId(), userId);
-            if(ToolUtil.isBlank(jedisClient.get(key))){
-                instance = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
-                //获取流程自定义所属名称
-                taskType = "未知流程";
-                if(instance != null){
-                    map.put("actKey", instance.getProcessDefinitionKey());
-                    actModel = actModelDao.queryActModelByActKey(map);
-                    if(actModel != null && !actModel.isEmpty()){
-                        taskType = actModel.get("title").toString();
-                    }
+            String cacheKey = Constants.getActProcessInstanceRedisCacheKey(task.getProcessInstanceId());
+            Map<String, Object> bean = redisCache.getMap(cacheKey, key -> {
+                try {
+                    Map<String, Object> taskModel = this.getTaskModelMationByProcessInstanceId(task.getProcessInstanceId());
+                    return taskModel;
+                } catch (Exception ee) {
+                    LOGGER.warn("queryUserAgencyTasksListByUserId get processInstanceId {} is error.", task.getProcessInstanceId(), ee);
                 }
-                //获取流程创建时间
-                Map<String, Object> process = new HashMap<>();
-                process.put("processInstanceId", task.getProcessInstanceId());
-                process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(process);
-
-                //获取提交时候的信息
-                params = (Map<String, Object>) taskService.getVariable(task.getId(), ActivitiConstants.PROCESSINSTANCEID_TASK_VARABLES);
-                taskModel = new HashMap<>();
-                taskModel.put("assignee", task.getAssignee());
-                taskModel.put("createName", params.get("createName"));//申请人姓名
-                taskModel.put("createTime", (process == null || process.isEmpty()) ? "" : process.get("createTime"));//申请时间
-                taskModel.put("taskType", taskType);//任务类型
-                taskModel.put("id", task.getId());
-                taskModel.put("name", ToolUtil.isBlank(task.getName()) ? "" : task.getName());
-                taskModel.put("suspended", instance.isSuspended());//流程状态
-                taskModel.put("processInstanceId", task.getProcessInstanceId());
-                // 获取流程变量
-                creater = (Map<String, Object>) map.get(ActivitiConstants.PROCESSINSTANCEID_TASK_VARABLES);//用户提交的form表单数据
-                if(creater != null && !creater.isEmpty() && creater.containsKey("createName")){//创建人
-                    taskModel.put("userName", creater.get("createName"));
-                }else{
-                    taskModel.put("userName", "");
-                }
-                jedisClient.set(key, JSONUtil.toJsonStr(taskModel));
-            }else{
-                taskModel = JSONUtil.toBean(jedisClient.get(key), null);
-            }
-            rows.add(taskModel);
+                return null;
+            }, RedisConstants.TEN_DAY_SECONDS);
+            rows.add(bean);
         }
         outputObject.setBeans(rows);
         outputObject.settotal(count);
     }
 
+    private Map<String, Object> getTaskModelMationByProcessInstanceId(String processInstanceId) throws Exception {
+        Map<String, Object> taskModel = new HashMap<>();
+        ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+        if (instance != null) {
+            // 保证流程还没结束
+            Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).list().get(0);
+            // 获取流程创建信息
+            Map<String, Object> process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(task.getProcessInstanceId());
+            taskModel.put("assignee", task.getAssignee());
+            taskModel.put("createName", (process == null || process.isEmpty()) ? "" : process.get("createName"));//申请人姓名
+            taskModel.put("createTime", (process == null || process.isEmpty()) ? "" : process.get("createTime"));//申请时间
+            taskModel.put("taskType", (process == null || process.isEmpty()) ? "" : process.get("title"));//任务类型
+            // 任务id
+            taskModel.put("id", task.getId());
+            // 当前任务节点名称
+            taskModel.put("name", ToolUtil.isBlank(task.getName()) ? "" : task.getName());
+            taskModel.put("suspended", instance.isSuspended());//流程状态
+            taskModel.put("processInstanceId", task.getProcessInstanceId());
+        }
+        return taskModel;
+    }
+
     /**
      * @Title: queryStartProcessNotSubByUserId
-     * @Description: 获取我的流程
+     * @Description: 获取我启动的流程
      * @param inputObject
      * @param outputObject
      * @throws Exception    参数
@@ -183,66 +181,58 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         List<Map<String, Object>> beans = actUserProcessInstanceIdDao.queryStartProcessNotSubByUserId(map);
         // 创建返回前台的集合
         List<Map<String, Object>> items = new ArrayList<>();
-        Map<String, Object> taskModel;
         for (Map<String, Object> bean : beans) {
             // 该结束流程在redis中存储的key
             String processInstanceId = bean.get("processInstanceId").toString();
-            String key = Constants.getProjectActProcessInstanceItemById(processInstanceId, userId);
-            if(ToolUtil.isBlank(jedisClient.get(key))){
-                ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-                //保证运行ing
-                if (instance != null) {
-                    Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).list().get(0);
-                    //获取提交时候的信息
-                    Map<String, Object> params = (Map<String, Object>) taskService.getVariable(task.getId(), ActivitiConstants.PROCESSINSTANCEID_TASK_VARABLES);
-                    //获取当前任务节点的审批人
-                    Map<String, Object> userMation = new HashMap<>();
-                    userMation.put("userId", task.getAssignee());
-                    userMation = sysEveUserDao.queryUserMationByUserId(userMation);
-
-                    taskModel = new HashMap<>();
-                    taskModel.put("id", task.getId());//任务id
-                    taskModel.put("name", task.getName());//当前任务节点名称
-                    if(userMation != null && !userMation.isEmpty()){
-                        taskModel.put("agencyName", userMation.get("userName"));//审批人
-                    }else{
-                        taskModel.put("agencyName", "未设置");//审批人
-                    }
-                    taskModel.put("createName", params.get("createName"));//申请人姓名
-                    taskModel.put("processDefId", task.getProcessDefinitionId());
-                    taskModel.putAll(bean);//将从数据库查出来的数据返回给前台
-                    //判断是否可编辑
-                    Map<String, Object> variables = taskService.getVariables(task.getId());
-                    taskModel.put("editRow", "1");//可编辑
-                    taskModel.put("weatherEnd", 0);//标记流程是否结束；1：结束，0.未结束
-                    taskModel.put("suspended", instance.isSuspended());//流程状态
-                    Object o = variables.get("leaveOpinionList");
-                    if (o != null) {
-                        //获取历史审核信息
-                        List<Map<String, Object>> leaveList = (List<Map<String, Object>>) o;
-                        for(Map<String, Object> leave : leaveList){
-                            if(!userId.equals(leave.get("opId").toString())){
-                                taskModel.put("editRow", "-1");//不可编辑
-                                break;
+            String cacheKey = Constants.getActProcessInstanceRedisCacheKey(processInstanceId);
+            Map<String, Object> item = redisCache.getMap(cacheKey, key -> {
+                try {
+                    ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+                    // 保证运行ing
+                    Map<String, Object> taskModel;
+                    if (instance != null) {
+                        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).list().get(0);
+                        taskModel = this.getTaskModelMationByProcessInstanceId(processInstanceId);
+                        // 获取当前任务节点的审批人
+                        Map<String, Object> userMation = sysEveUserDao.queryUserMationByUserId(task.getAssignee());
+                        if(userMation != null && !userMation.isEmpty()){
+                            taskModel.put("agencyName", userMation.get("userName"));//审批人
+                        }else{
+                            taskModel.put("agencyName", "未设置");//审批人
+                        }
+                        taskModel.putAll(bean);//将从数据库查出来的数据返回给前台
+                        //判断是否可编辑
+                        Map<String, Object> variables = taskService.getVariables(task.getId());
+                        taskModel.put("editRow", "1");//可编辑
+                        taskModel.put("weatherEnd", 0);//标记流程是否结束；1：结束，0.未结束
+                        Object o = variables.get("leaveOpinionList");
+                        if (o != null) {
+                            //获取历史审核信息
+                            List<Map<String, Object>> leaveList = (List<Map<String, Object>>) o;
+                            for(Map<String, Object> leave : leaveList){
+                                if(!userId.equals(leave.get("opId").toString())){
+                                    taskModel.put("editRow", "-1");//不可编辑
+                                    break;
+                                }
                             }
                         }
+                    }else{
+                        //已结束流程
+                        taskModel = getHistoricProcessInstance(processInstanceId, null);
+                        taskModel.putAll(bean);//将从数据库查出来的数据返回给前台
+                        taskModel.put("editRow", "-1");//不可编辑
+                        taskModel.put("weatherEnd", 1);//标记流程是否结束；1：结束，0.未结束
+                        taskModel.put("suspended", false);//流程状态-正常
                     }
-                }else{
-                    //已结束流程
-                    taskModel = getHistoricProcessInstance(processInstanceId, null);
-                    taskModel.put("createName", user.get("userName"));//申请人
-                    taskModel.putAll(bean);//将从数据库查出来的数据返回给前台
-                    taskModel.put("editRow", "-1");//不可编辑
-                    taskModel.put("weatherEnd", 1);//标记流程是否结束；1：结束，0.未结束
-                    taskModel.put("suspended", false);//流程状态-正常
+                    return taskModel;
+                } catch (Exception ee) {
+                    LOGGER.warn("queryStartProcessNotSubByUserId get processInstanceId {} is error.", processInstanceId, ee);
                 }
-                jedisClient.set(key, JSONUtil.toJsonStr(taskModel));
-            }else{
-                taskModel = JSONUtil.toBean(jedisClient.get(key), null);
-            }
-            taskModel.put("pageUrl", bean.get("pageUrl"));
-            taskModel.put("revokeMapping", bean.get("revokeMapping"));
-            items.add(taskModel);
+                return null;
+            }, RedisConstants.TEN_DAY_SECONDS);
+            item.put("pageUrl", bean.get("pageUrl"));
+            item.put("revokeMapping", bean.get("revokeMapping"));
+            items.add(item);
         }
         outputObject.setBeans(items);
         outputObject.settotal(pages.getTotal());
@@ -278,71 +268,49 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         hisTaskList = hisTaskList.subList(Integer.parseInt(map.get("limit").toString()) * (Integer.parseInt(map.get("page").toString()) - 1), pageMaxSize);
 
         List<Map<String, Object>> beans = new ArrayList<>();
-        Map<String, Object> hisModel;
-        ProcessInstance instance;
-        String key;
         for (HistoricTaskInstance hisTask : hisTaskList) {
-            //该流程在redis中存储的key
-            key = Constants.getProjectActProcessHisInstanceItemById(hisTask.getProcessInstanceId(), userId);
-            if(ToolUtil.isBlank(jedisClient.get(key))){
-                instance = runtimeService.createProcessInstanceQuery().processInstanceId(hisTask.getProcessInstanceId()).singleResult();
-                if(instance != null){
-                    hisModel = new HashMap<>();
-                    //获取流程自定义所属名称
-                    String taskType = "未知流程";
-                    map.put("actKey", instance.getProcessDefinitionKey());
-                    Map<String, Object> actModel = actModelDao.queryActModelByActKey(map);
-                    if(actModel != null && !actModel.isEmpty()){
-                        taskType = actModel.get("title").toString();
-                    }
-                    //获取当前任务节点的审批人
-                    String operatorName = "";
-                    List<HistoricVariableInstance> list = historyService.createHistoricVariableInstanceQuery().processInstanceId(instance.getProcessInstanceId()).list();
-                    for (HistoricVariableInstance historicDetail : list) {
-                        if ("leaveOpinionList".equals(historicDetail.getVariableName())) {
-                            List<Map<String, Object>> leaveList = (List<Map<String, Object>>) historicDetail.getValue();
-                            //获取task名称
-                            for(Map<String, Object> leave : leaveList){
-                                String taskId = leave.get("taskId").toString();
-                                if(hisTask.getId().equals(taskId)){
-                                    operatorName = leave.get("opName").toString();
-                                    break;
+            // 该流程在redis中存储的key
+            String cacheKey = Constants.getActProcessInstanceRedisCacheKey(hisTask.getProcessInstanceId());
+            Map<String, Object> item = redisCache.getMap(cacheKey, key -> {
+                try {
+                    ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(hisTask.getProcessInstanceId()).singleResult();
+                    Map<String, Object> hisModel;
+                    if(instance != null){
+                        hisModel = this.getTaskModelMationByProcessInstanceId(hisTask.getProcessInstanceId());
+                        // 获取当前任务节点的审批人
+                        String operatorName = "";
+                        List<HistoricVariableInstance> list = historyService.createHistoricVariableInstanceQuery().processInstanceId(instance.getProcessInstanceId()).list();
+                        for (HistoricVariableInstance historicDetail : list) {
+                            if ("leaveOpinionList".equals(historicDetail.getVariableName())) {
+                                List<Map<String, Object>> leaveList = (List<Map<String, Object>>) historicDetail.getValue();
+                                //获取task名称
+                                for(Map<String, Object> leave : leaveList){
+                                    String taskId = leave.get("taskId").toString();
+                                    if(hisTask.getId().equals(taskId)){
+                                        operatorName = leave.get("opName").toString();
+                                        break;
+                                    }
                                 }
                             }
                         }
+                        hisModel.put("agencyName", operatorName);//受理人
+                        hisModel.put("name", hisTask.getName());//审批节点
+                        hisModel.put("startTime", hisTask.getStartTime());//申请时间
+                        hisModel.put("endTime", hisTask.getEndTime());//受理时间
+                        hisModel.put("weatherEnd", 0);//标记流程是否结束；1：结束，0.未结束
+                    }else{
+                        hisModel = getHistoricProcessInstance(hisTask.getProcessInstanceId(), hisTask.getId());
+                        hisModel.put("name", hisTask.getName());//我处理的任务
+                        hisModel.put("weatherEnd", 1);//标记流程是否结束；1：结束，0.未结束
                     }
-                    //获取提交时候的信息
-                    Task task = taskService.createTaskQuery().processInstanceId(hisTask.getProcessInstanceId()).singleResult();
-                    Map<String, Object> params = (Map<String, Object>) taskService.getVariable(task.getId(), ActivitiConstants.PROCESSINSTANCEID_TASK_VARABLES);
-
-                    hisModel.put("createName", params.get("createName"));//申请人姓名
-                    hisModel.put("taskType", taskType);//类型
-                    hisModel.put("createTime", hisTask.getStartTime());//申请时间
-                    hisModel.put("agencyName", operatorName);//受理人
-                    hisModel.put("name", hisTask.getName());//审批节点
-                    hisModel.put("processInstanceId", hisTask.getProcessInstanceId());//流程id
-                    hisModel.put("startTime", hisTask.getStartTime());//申请时间
-                    hisModel.put("endTime", hisTask.getEndTime());//受理时间
-                    hisModel.put("weatherEnd", 0);//标记流程是否结束；1：结束，0.未结束
-                }else{
-                    //流程id
-                    String processInstanceId = hisTask.getProcessInstanceId();
-                    hisModel = getHistoricProcessInstance(processInstanceId, hisTask.getId());
-                    //获取申请人
-                    Map<String, Object> applicant = new HashMap<>();
-                    applicant.put("processInstanceId", hisTask.getProcessInstanceId());
-                    applicant = sysEveUserDao.queryUserNameByProcessInstanceId(applicant);
-                    hisModel.put("name", hisTask.getName());//我处理的任务
-                    hisModel.put("createName", applicant == null ? "" : applicant.get("userName"));//申请人
-                    hisModel.put("weatherEnd", 1);//标记流程是否结束；1：结束，0.未结束
+                } catch (Exception ee) {
+                    LOGGER.warn("queryMyHistoryTaskByUserId get processInstanceId {} is error.", hisTask.getProcessInstanceId(), ee);
                 }
-                jedisClient.set(key, JSONUtil.toJsonStr(hisModel));
-            }else{
-                hisModel = JSONUtil.toBean(jedisClient.get(key), null);
-            }
-            //历史审批任务id
-            hisModel.put("hisTaskId", hisTask.getId());
-            beans.add(hisModel);
+                return null;
+            }, RedisConstants.TEN_DAY_SECONDS);
+            // 历史审批任务id
+            item.put("hisTaskId", hisTask.getId());
+            beans.add(item);
         }
         outputObject.setBeans(beans);
         outputObject.settotal(count);
@@ -427,11 +395,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         for(HistoricProcessInstance bean : beans){
             String processInstanceId = bean.getId();
             instanceModel = getHistoricProcessInstance(processInstanceId, null);
-            //获取申请人
-            Map<String, Object> applicant = new HashMap<>();
-            applicant.put("processInstanceId", processInstanceId);
-            applicant = sysEveUserDao.queryUserNameByProcessInstanceId(applicant);
-            instanceModel.put("createName", applicant == null ? "" : applicant.get("userName"));//申请人
             rows.add(instanceModel);
         }
         outputObject.setBeans(rows);
@@ -447,7 +410,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
      * @throws Exception
      */
     private Map<String, Object> getHistoricProcessInstance(String processInstanceId, String hisTaskId) throws Exception{
-        Map<String, Object> map = new HashMap<>();
         HistoricProcessInstance instance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         //获取当前最后一个节点的受理人
         List<HistoricVariableInstance> hisTaskList = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
@@ -481,17 +443,13 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
                 }
             }
         }
-        //获取流程自定义所属名称
-        String taskType = "未知流程";
-        map.put("actKey", instance != null ? instance.getProcessDefinitionKey() : "");
-        Map<String, Object> actModel = actModelDao.queryActModelByActKey(map);
-        if(actModel != null && !actModel.isEmpty()){
-            taskType = actModel.get("title").toString();
-        }
+        // 获取流程创建信息
+        Map<String, Object> process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(processInstanceId);
         Map<String, Object> taskModel = new HashMap<>();
+        taskModel.put("createName", (process == null || process.isEmpty()) ? "" : process.get("createName"));//申请人
+        taskModel.put("createTime", (process == null || process.isEmpty()) ? "" : process.get("createTime"));//申请时间
+        taskModel.put("taskType", (process == null || process.isEmpty()) ? "" : process.get("title"));//任务类型
         taskModel.put("agencyName", assignee);//受理人
-        taskModel.put("taskType", taskType);//流程所属名称
-        taskModel.put("createTime", instance != null ? instance.getStartTime() : "");//申请时间
         taskModel.put("name", "结束");//当前任务节点名称
         taskModel.put("processInstanceId", processInstanceId);//流程id
         taskModel.put("startTime", instance != null ? instance.getStartTime() : "");//开始时间
@@ -515,37 +473,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         List<ProcessInstance> beans = runtimeService.createProcessInstanceQuery().orderByProcessInstanceId().desc()
                 .listPage(Integer.parseInt(map.get("limit").toString()) * (Integer.parseInt(map.get("page").toString()) - 1), Integer.parseInt(map.get("limit").toString()));
         List<Map<String, Object>> rows = new ArrayList<>();
-        Map<String, Object> taskModel;
         for(ProcessInstance instance : beans){
-            //获取流程自定义所属名称
-            String taskType = "未知流程";
-            if(instance != null){
-                map.put("actKey", instance.getProcessDefinitionKey());
-                Map<String, Object> actModel = actModelDao.queryActModelByActKey(map);
-                if(actModel != null && !actModel.isEmpty()){
-                    taskType = actModel.get("title").toString();
-                }
-            }
-            Task task = taskService.createTaskQuery().processInstanceId(instance.getProcessInstanceId()).singleResult();
-            //获取提交时候的信息
-            Map<String, Object> params = (Map<String, Object>) taskService.getVariable(task.getId(), ActivitiConstants.PROCESSINSTANCEID_TASK_VARABLES);
-            taskModel = new HashMap<>();
-            taskModel.put("assignee", task.getAssignee());
-            taskModel.put("createName", params.get("createName"));//申请人姓名
-            taskModel.put("createTime", task.getCreateTime());//申请时间
-            taskModel.put("taskType", taskType);//任务类型
-            taskModel.put("id", task.getId());
-            taskModel.put("name", task.getName());
-            taskModel.put("suspended", instance.isSuspended());//流程状态
-            taskModel.put("processInstanceId", task.getProcessInstanceId());
-            // 获取流程变量
-            Map<String, Object> creater = (Map<String, Object>) map.get(ActivitiConstants.PROCESSINSTANCEID_TASK_VARABLES);//用户提交的form表单数据
-            if(creater != null && !creater.isEmpty() && creater.containsKey("createName")){//创建人
-                taskModel.put("userName", creater.get("createName"));
-            }else{
-                taskModel.put("userName", "");
-            }
-
+            Map<String, Object> taskModel = this.getTaskModelMationByProcessInstanceId(instance.getProcessInstanceId());
             rows.add(taskModel);
         }
         outputObject.setBeans(rows);
@@ -593,15 +522,13 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         Map<String, Object> map = inputObject.getParams();
         String taskId = map.get("taskId").toString();
 
-        //获取任务自定义id和名称
+        // 获取任务自定义id和名称
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         map.put("taskKey", task.getTaskDefinitionKey());
         map.put("taskKeyName", task.getName());
 
-        //获取流程关联页面类型
-        Map<String, Object> process = new HashMap<>();
-        process.put("processInstanceId", task.getProcessInstanceId());
-        process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(process);
+        // 获取流程关联页面类型
+        Map<String, Object> process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(task.getProcessInstanceId());
         map.put("pageTypes", process.get("pageTypes"));
 
         // 获取提交时候的信息
@@ -679,7 +606,26 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         // 获取审批结果
         boolean flag = getApprovedResult(map.get("flag").toString());
 
-        //获取审批人编辑的信息
+        // 设置审批人修改的信息
+        setApprovalEditMation(map, processInstanceId, taskId);
+        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+        // 处理任务
+        Map<String, Object> bean = new HashMap<>();
+        // 判断节点是否已经拒绝过一次了
+        setWhetherNeedEnd(bean, taskId, flag);
+        // 获取指定任务节点的审批信息
+        List<Map<String, Object>> leaveList = activitiModelService.getUpLeaveList(user.get("id").toString(), user.get("userName").toString(), map.get("opinion").toString(), flag, task);
+        bean.put("leaveOpinionList", leaveList);
+        bean.put("flag", map.get("flag"));//校验参数
+        taskService.complete(taskId, bean);
+        // 绘制图像
+        activitiModelService.queryProHighLighted(processInstanceId);
+        // 删除指定流程在redis中的缓存信息
+        activitiModelService.deleteProcessInRedisMation(task.getProcessInstanceId());
+    }
+
+    private void setApprovalEditMation(Map<String, Object> map, String processInstanceId, String taskId) throws Exception {
+        // 获取审批人编辑的信息
         String editStr = map.get("editStr").toString();
         if(!ToolUtil.isBlank(editStr) && ToolUtil.isJson(editStr)){
             List<Map<String, Object>> jArray = JSONUtil.toList(editStr, null);
@@ -695,19 +641,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
                 }
             }
         }
-        Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
-        // 处理任务
-        Map<String, Object> bean = new HashMap<>();
-        // 判断节点是否已经拒绝过一次了
-        setWhetherNeedEnd(bean, taskId, flag);
-        // 获取指定任务节点的审批信息
-        List<Map<String, Object>> leaveList = activitiModelService.getUpLeaveList(user.get("id").toString(), user.get("userName").toString(), map.get("opinion").toString(), flag, task);
-        bean.put("leaveOpinionList", leaveList);
-        bean.put("flag", map.get("flag"));//校验参数
-        taskService.complete(taskId, bean);
-        activitiModelService.queryProHighLighted(processInstanceId);//绘制图像
-        // 删除指定流程在redis中的缓存信息
-        activitiModelService.deleteProcessInRedisMation(task.getProcessInstanceId());
     }
 
     /**

@@ -341,7 +341,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 			taskService.complete(task.getId(), bean);
 			this.queryProHighLighted(processInstanceId);
 			// 删除指定流程在redis中的缓存信息
-			deleteProcessInRedisMation(task.getProcessInstanceId());
+			this.deleteProcessInRedisMation(task.getProcessInstanceId());
 		}
 		LOGGER.info("start process success, processInstanceId is: {}", processInstanceId);
 		return processInstanceId;
@@ -394,12 +394,8 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	 */
 	@Override
 	public void deleteProcessInRedisMation(String processInstanceId) {
-		// 删除流程在redis中的待办存储
-		jedisClient.delKeys(Constants.PROJECT_ACT_PROCESS_INSTANCE_USERAGENCYTASKS_ITEM + processInstanceId + "*");
-		// 删除流程在redis中的已办存储
-		jedisClient.delKeys(Constants.PROJECT_ACT_PROCESS_HIS_INSTANCE_ITEM + processInstanceId + "*");
-		// 删除流程在redis中的我的请求存储
-		jedisClient.delKeys(Constants.PROJECT_ACT_PROCESS_INSTANCE_ITEM + processInstanceId + "*");
+		// 删除流程在redis中的存储信息
+		jedisClient.delKeys(Constants.PROCESS_REDIS_CACHE_KEY + processInstanceId + "*");
 	}
 
 	/**

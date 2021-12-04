@@ -373,22 +373,10 @@ public class Constants {
 		return "CCSQ" + DateUtil.getTimeStrAndToString();
 	}
 
-	// 工作流我发起的流程在redis中的存储-我的请求功能查看
-	public static final String PROJECT_ACT_PROCESS_INSTANCE_ITEM = "project_act_process_instance_item_";
-	public static String getProjectActProcessInstanceItemById(String processInstanceId, String userId) {
-		return PROJECT_ACT_PROCESS_INSTANCE_ITEM + processInstanceId + "_" + userId;
-	}
-
-	// 工作流我的已办流程在redis中的存储-我的审批历史查看
-	public static final String PROJECT_ACT_PROCESS_HIS_INSTANCE_ITEM = "project_act_process_instance_item_";
-	public static String getProjectActProcessHisInstanceItemById(String processInstanceId, String userId) {
-		return PROJECT_ACT_PROCESS_HIS_INSTANCE_ITEM + processInstanceId + "_" + userId;
-	}
-
-	// 工作流我的待办流程在redis中的存储-我的待办查看
-	public static final String PROJECT_ACT_PROCESS_INSTANCE_USERAGENCYTASKS_ITEM = "project_act_process_instance_useragencytasks_item_";
-	public static String getProjectActProcessInstanceUserAgencyTasksItemById(String processInstanceId, String userId) {
-		return PROJECT_ACT_PROCESS_INSTANCE_USERAGENCYTASKS_ITEM + processInstanceId + "_" + userId;
+	// 工作流流程在redis中的存储
+	public static final String PROCESS_REDIS_CACHE_KEY = "process_redis_cache_key_";
+	public static String getActProcessInstanceRedisCacheKey(String processInstanceId) {
+		return PROCESS_REDIS_CACHE_KEY + processInstanceId;
 	}
 
 	/**

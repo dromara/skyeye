@@ -73,9 +73,7 @@ public interface SysEveUserDao {
 	
 	public List<Map<String, Object>> querySysDeskTopByUserId(Map<String, Object> user) throws Exception;
 
-	public Map<String, Object> queryUserMationByUserId(Map<String, Object> userMation) throws Exception;
-
-	public Map<String, Object> queryUserNameByProcessInstanceId(Map<String, Object> applicant) throws Exception;
+	Map<String, Object> queryUserMationByUserId(@Param("userId") String userId) throws Exception;
 
 	public Map<String, Object> queryUserSchoolMationByUserId(@Param("userId") String userId);
 	

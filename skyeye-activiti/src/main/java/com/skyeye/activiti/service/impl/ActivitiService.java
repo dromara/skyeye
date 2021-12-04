@@ -3,7 +3,7 @@
  ******************************************************************************/
 package com.skyeye.activiti.service.impl;
 
-import com.skyeye.common.constans.Constants;
+import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.common.util.FileUtil;
 import com.skyeye.eve.dao.ActUserProcessInstanceIdDao;
 import com.skyeye.jedis.JedisClientService;
@@ -56,6 +56,9 @@ public class ActivitiService {
 
 	@Value("${IMAGES_PATH}")
 	private String tPath;
+
+	@Autowired
+	private ActivitiModelService activitiModelService;
 	
 	/**
 	 * 取回流程
@@ -286,7 +289,6 @@ public class ActivitiService {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public void editDsFormContentToRevokeByProcessInstanceId(Map<String, Object> map) throws Exception{
 		//判断是否删除成功的参数
 		String code = "0";
@@ -320,18 +322,14 @@ public class ActivitiService {
 					}
 				}
 				if(edit){
-					//可以编辑
+					// 可以编辑
 					runtimeService.deleteProcessInstance(processInstanceId, "用户撤销");
-					//删除流程历史信息
+					// 删除流程历史信息
 					historyService.deleteHistoricProcessInstance(processInstanceId);
-					//删除数据库流程信息
+					// 删除数据库流程信息
 					actUserProcessInstanceIdDao.deleteProcessMationByProcessInstanceId(map);
-					//删除流程在redis中的待办存储
-					jedisClient.delKeys(Constants.PROJECT_ACT_PROCESS_INSTANCE_USERAGENCYTASKS_ITEM + task.getProcessInstanceId() + "*");
-					//删除流程在redis中的已办存储
-					jedisClient.del(Constants.PROJECT_ACT_PROCESS_HIS_INSTANCE_ITEM + task.getProcessInstanceId() + "*");
-					//删除流程在redis中的我的请求存储
-					jedisClient.del(Constants.PROJECT_ACT_PROCESS_INSTANCE_ITEM + task.getProcessInstanceId() + "*");
+					// 删除流程在redis中的缓存
+					activitiModelService.deleteProcessInRedisMation(task.getProcessInstanceId());
 				}else{
 					code = "-1";
 					message = "流程已有审批，不能撤回.";

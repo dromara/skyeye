@@ -34,14 +34,17 @@
 	     (#{id}, #{processInstanceId}, #{keyName}, #{dataId}, #{createId}, #{createTime})
 	</insert>
 	
-	<select id="queryProcessInstanceMationByProcessInstanceId" parameterType="java.util.Map" resultType="java.util.Map">
+	<select id="queryProcessInstanceMationByProcessInstanceId" resultType="java.util.Map">
 		SELECT
 			a.process_instance_id processInstanceId,
 			a.create_time createTime,
+		    IFNULL(b.title, '未知流程') title,
+			CONCAT_WS('_', seus.job_number, seus.user_name) createName,
 			b.page_types pageTypes
 		FROM
 			act_user_processinstanceid a
 			LEFT JOIN act_model b ON a.act_id = b.act_id AND b.state != '4'
+			LEFT JOIN sys_eve_user_staff seus on b.create_id = seus.user_id
 		WHERE
 			a.process_instance_id = #{processInstanceId}
 		GROUP BY a.process_instance_id

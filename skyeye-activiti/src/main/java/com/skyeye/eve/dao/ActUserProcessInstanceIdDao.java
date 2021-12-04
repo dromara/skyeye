@@ -11,17 +11,17 @@ import java.util.Map;
 
 public interface ActUserProcessInstanceIdDao {
 
-	public int insertActUserProInsIdMation(Map<String, Object> actUserProInsId) throws Exception;
+	int insertActUserProInsIdMation(Map<String, Object> actUserProInsId) throws Exception;
 
-	public List<Map<String, Object>> queryStartProcessNotSubByUserId(Map<String, Object> map) throws Exception;
+	List<Map<String, Object>> queryStartProcessNotSubByUserId(Map<String, Object> map) throws Exception;
 
-	public Map<String, Object> queryProcessInstanceMationByProcessInstanceId(Map<String, Object> process) throws Exception;
+	Map<String, Object> queryProcessInstanceMationByProcessInstanceId(@Param("processInstanceId") String processInstanceId) throws Exception;
 
-	public Map<String, Object> queryProcessMationByProcessInstanceId(Map<String, Object> map) throws Exception;
+	Map<String, Object> queryProcessMationByProcessInstanceId(Map<String, Object> map) throws Exception;
 
-	public int editDsFormStateIsDraftByProcessInstanceId(Map<String, Object> map) throws Exception;
+	int editDsFormStateIsDraftByProcessInstanceId(Map<String, Object> map) throws Exception;
 
-	public void deleteProcessMationByProcessInstanceId(Map<String, Object> map) throws Exception;
+	void deleteProcessMationByProcessInstanceId(Map<String, Object> map) throws Exception;
 
 	/**
 	 * 根据流程实例id获取该流程的创建人信息
@@ -30,6 +30,6 @@ public interface ActUserProcessInstanceIdDao {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map<String, Object> queryActUserProcessInstanceId(@Param("processInstanceId") String processInstanceId) throws Exception;
+	Map<String, Object> queryActUserProcessInstanceId(@Param("processInstanceId") String processInstanceId) throws Exception;
 
 }
