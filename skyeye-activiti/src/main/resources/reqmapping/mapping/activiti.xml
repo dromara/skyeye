@@ -154,7 +154,7 @@
 		<property id="pageId" name="pageId" ref="required" var="页面id" />
 	</url>
 	<url id="pagesequence006" path="/post/PageSequenceController/queryDsFormISDraftDetailsById" val="表单详情" allUse="2">
-		<property id="rowId" name="id" ref="required" var="表单提交序列id" />
+		<property id="rowId" name="sequenceId" ref="required" var="表单提交序列id" />
 	</url>
 	<!-- 动态表单草稿操作结束 -->
 	

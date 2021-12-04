@@ -113,20 +113,6 @@
 		WHERE
 			a.sequence_id = #{id}
 	</select>
-	
-	<select id="queryDsFormISDraftDetailsById" parameterType="java.util.Map" resultType="java.util.Map">
-		SELECT
-			a.title `name`,
-			a.text,
-			a.show_type showType,
-			a.default_width proportion,
-			a.content_id rowId
-		FROM
-			ds_form_page_data a
-		WHERE
-			a.sequence_id = #{id}
-		ORDER BY a.order_by ASC
-	</select>
 
 	<insert id="insertDsFormPageSequence" parameterType="java.util.Map">
 		INSERT INTO ds_form_page_sequence

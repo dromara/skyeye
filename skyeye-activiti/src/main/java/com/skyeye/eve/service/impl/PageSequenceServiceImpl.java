@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -205,7 +206,8 @@ public class PageSequenceServiceImpl implements PageSequenceService{
 	@Override
 	public void queryDsFormISDraftDetailsById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		List<Map<String, Object>> rows = dsFormPageSequenceDao.queryDsFormISDraftDetailsById(map);
+		String sequenceId = map.get("sequenceId").toString();
+		List<Map<String, Object>> rows = dsFormPageDataDao.queryDsFormPageDataListBySequenceId(Arrays.asList(sequenceId));
 		outputObject.setBeans(rows);
 		outputObject.settotal(rows.size());
 	}

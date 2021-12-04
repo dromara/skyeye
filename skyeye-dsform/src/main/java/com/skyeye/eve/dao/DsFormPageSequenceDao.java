@@ -35,8 +35,6 @@ public interface DsFormPageSequenceDao {
 
 	List<Map<String, Object>> queryDsFormContentBySequenceId(Map<String, Object> map) throws Exception;
 
-	List<Map<String, Object>> queryDsFormISDraftDetailsById(Map<String, Object> map) throws Exception;
-
 	int insertDsFormPageSequence(List<Map<String, Object>> pageSequence) throws Exception;
 
 	List<Map<String, Object>> queryDsFormPageSequenceListByObjectId(@Param("objectId") String objectId) throws Exception;
