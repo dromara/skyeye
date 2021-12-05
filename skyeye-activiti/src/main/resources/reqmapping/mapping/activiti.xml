@@ -16,10 +16,6 @@
 	<url id="activitimode003" path="/post/ActivitiModelController/editActivitiModelToDeploy" val="发布模型为流程定义" allUse="1" groupName="工作流操作">
 		<property id="modelId" name="modelId" ref="required" var="模型id"/>
 	</url>
-	<url id="activitimode004" path="/post/ActivitiModelController/editActivitiModelToStartProcess" val="启动流程" allUse="2" groupName="工作流操作">
-		<property id="keyName" name="keyName" ref="required" var="模型key"/>
-		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
-	</url>
 	<url id="activitimode006" path="/post/ActivitiModelController/deleteActivitiModelById" val="删除模型" allUse="1" groupName="工作流操作">
 		<property id="rowId" name="id" ref="required" var="模型id"/>
 	</url>
@@ -123,15 +119,16 @@
 	</url>
 	<!-- 工作流用户相关操作结束 -->
 
-	<!-- 动态表单审核中撤销开始 -->
+	<!-- 动态表单工作流开始 -->
 	<url id="activitimode022" path="/post/DsFormActivitiController/insertDSFormProcess" val="动态表单类型的工作流提交审批" allUse="2" groupName="动态表单工作流操作">
 		<property id="keyName" name="keyName" ref="required" var="模型key"/>
+		<property id="pageId" name="pageId" ref="required" var="页面id"/>
 		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
 	</url>
 	<url id="dsformrevoke001" path="/post/DsFormActivitiController/editDsFormContentToRevokeByProcessInstanceId" val="动态表单类型的工作流进行撤销操作" allUse="2" groupName="动态表单工作流操作">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
 	</url>
-	<!-- 动态表单审核中撤销结束 -->
+	<!-- 动态表单工作流结束 -->
 	
 	<!-- 动态表单草稿操作开始 -->
 	<url id="pagesequence001" path="/post/PageSequenceController/queryDsFormISDraftListByUser" val="获取所有草稿状态的动态表单提交项" allUse="2">
@@ -147,7 +144,7 @@
 		<property id="rowId" name="id" ref="required" var="表单提交序列id" />
 	</url>
 	<url id="pagesequence004" path="/post/PageSequenceController/editDsFormISDraftById" val="编辑动态表单(无工作流)" allUse="2">
-		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
+		<property id="jsonStr" name="jsonStr" ref="required,json" var="form表单数据json串"/>
 	</url>
 	<url id="pagesequence005" path="/post/PageSequenceController/editDsFormISDraftToSubApprovalById" val="按钮直接提交审批" allUse="2">
 		<property id="rowId" name="id" ref="required" var="表单提交序列id" />

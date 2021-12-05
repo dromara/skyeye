@@ -255,55 +255,6 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	}
 
 	/**
-	     * @Title: editActivitiModelToStartProcess
-	     * @Description: 启动流程
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
-	public void editActivitiModelToStartProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> user = inputObject.getLogParams();
-		// 流程定义的key
-		String keyName = map.get("keyName").toString();
-		/**
-		 * jsonStr参数介绍
-		 * name: "",----标题
-         * value: "",----值
-         * orderBy: 1,----排序，值越大越往后
-         * showType: 1----展示类型：1.文本展示；2.附件展示；3.富文本展示；4.图片上传；5.表格展示
-         * proportion: 6----展示比例，前端界面百分比分为12份
-         * editableNodeId：可编辑节点Id
-         * editableNodeName：可编辑节点名称
-         * formItemType: 原始表单类型
-         * formItem：表单内容
-		 */
-		String str = map.get("jsonStr").toString();
-		if(ToolUtil.isBlank(str)){
-			outputObject.setreturnMessage("数据不能为空.");
-		}else{
-			try{
-				// 流程存在的时候才能执行
-				if(judgeProcessKeyIsLive(keyName)){
-					// 启动流程
-					startProcess(str, user, keyName, "");
-					outputObject.setBean(map);
-				}else{
-					LOGGER.info("this processDefinitionKey's [{}] process is non-exits", keyName);
-					outputObject.setreturnMessage("任务发起失败,不存在该流程模型.");
-				}
-			}catch(Exception e){
-				LOGGER.warn("start Process failed", e);
-				outputObject.setreturnMessage("任务发起失败.");
-			}
-		}
-	}
-
-	/**
 	 * 启动流程
 	 *
 	 * @param str 前端传来的数据json串
@@ -438,6 +389,17 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	/**
 	 * 启动流程--其他方法调用
 	 *
+	 * 			jsonStr参数介绍
+	 * 		 	* name: "",----标题
+	 *          * value: "",----值
+	 *          * orderBy: 1,----排序，值越大越往后
+	 *          * showType: 1----展示类型：1.文本展示；2.附件展示；3.富文本展示；4.图片上传；5.表格展示
+	 *          * proportion: 6----展示比例，前端界面百分比分为12份
+	 *          * editableNodeId：可编辑节点Id
+	 *          * editableNodeName：可编辑节点名称
+	 *          * formItemType: 原始表单类型
+	 *          * formItem：表单内容
+	 *
 	 * @param map
 	 * @param user 用户信息
 	 * @param id 数据id
@@ -449,18 +411,6 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 		String keyName = map.get("keyName").toString();
 		map.put("code", "-1");
 		String message = "";
-		/**
-		 * jsonStr参数介绍
-		 * name: "",----标题
-         * value: "",----值
-         * orderBy: 1,----排序，值越大越往后
-         * showType: 1----展示类型：1.文本展示；2.附件展示；3.富文本展示；4.图片上传；5.表格展示
-         * proportion: 6----展示比例，前端界面百分比分为12份
-         * editableNodeId：可编辑节点Id
-         * editableNodeName：可编辑节点名称
-         * formItemType: 原始表单类型
-         * formItem：表单内容
-		 */
 		String str = JSONUtil.toJsonStr(map.get("jsonStr"));//前端传来的数据json串
 		if(ToolUtil.isBlank(str)){//如果数据为空
 			message = "数据不能为空.";

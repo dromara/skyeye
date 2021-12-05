@@ -4,7 +4,7 @@
 
 package com.skyeye.activiti.service.impl;
 
-import cn.hutool.json.JSONUtil;
+import com.gexin.fastjson.JSON;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.DsFormActivitiService;
 import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
@@ -15,14 +15,12 @@ import com.skyeye.eve.dao.ActUserProcessInstanceIdDao;
 import com.skyeye.eve.dao.DsFormPageDataDao;
 import com.skyeye.eve.dao.DsFormPageSequenceDao;
 import com.skyeye.eve.service.DsFormPageService;
+import net.sf.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @ClassName: DsFormActivitiServiceImpl
@@ -68,42 +66,54 @@ public class DsFormActivitiServiceImpl implements DsFormActivitiService {
     public void insertDSFormProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         Map<String, Object> user = inputObject.getLogParams();
+        String userId = user.get("id").toString();
         String str = map.get("jsonStr").toString();//前端传来的数据json串
-        if(ToolUtil.isBlank(str)){//如果数据为空
-            outputObject.setreturnMessage("数据不能为空.");
-        }else{
-            try{
-                List<Map<String, Object>> beans = new ArrayList<Map<String,Object>>();
-                List<Map<String, Object>> jsonArray = new ArrayList<>();
-                Map<String, Map<String, Object>> jOb = JSONUtil.toBean(str, null);
-                //遍历数据存入JSONArray集合
-                for(String key : jOb.keySet()){
-                    jsonArray.add(jOb.get(key));
-                }
-                String sequenceId = ToolUtil.getSurFaceId();
-                String userId = user.get("id").toString();
-                String pageId = "";
-                for (Map<String, Object> item : jsonArray) {
-                    String pageContentId = item.get("rowId").toString();
-                    String value = item.containsKey("value") == true ? item.get("value").toString() : "";
-                    String text = item.containsKey("text") == true ? item.get("text").toString() : "";
-                    Map<String, Object> m = dsFormPageService.getDsFormPageData(pageContentId, value, text, item.get("showType").toString(), sequenceId, userId);
-                    pageId = m.get("pageId").toString();
-                    beans.add(m);
-                }
-                activitiModelService.editActivitiModelToStartProcessByMap(map, user, sequenceId);
-                if("0".equals(map.get("code").toString())){//启动流程成功
-                    dsFormPageDataDao.insertDsFormPageData(beans);//插入DsFormPageData表
-                    Map<String, Object> entity = dsFormPageService.getDsFormPageSequence(userId, pageId, map.get("message").toString(), StringUtils.EMPTY);
-                    entity.put("sequenceId", sequenceId);
-                    dsFormPageSequenceDao.insertDsFormPageSequence(Arrays.asList(entity));
-                }else{
-                    outputObject.setreturnMessage(map.get("message").toString());
-                }
-            }catch(Exception e){
-                outputObject.setreturnMessage("任务发起失败.");
+        String pageId = map.get("pageId").toString();
+        try{
+            // 1.构造动态表单的数据
+            List<Map<String, Object>> jsonArray = JSONArray.fromObject(str);
+            String sequenceId = ToolUtil.getSurFaceId();
+            List<Map<String, Object>> pageDatas = getDsFormPageData(jsonArray, sequenceId, userId);
+            // 2.将动态表单的数据构造成工作流需要的数据
+            String actData = getActDataByDsFormData(pageDatas);
+            map.put("jsonStr", actData);
+            activitiModelService.editActivitiModelToStartProcessByMap(map, user, sequenceId);
+            if("0".equals(map.get("code").toString())){//启动流程成功
+                dsFormPageDataDao.insertDsFormPageData(pageDatas);//插入DsFormPageData表
+                Map<String, Object> entity = dsFormPageService.getDsFormPageSequence(userId, pageId, map.get("message").toString(), StringUtils.EMPTY);
+                entity.put("sequenceId", sequenceId);
+                dsFormPageSequenceDao.insertDsFormPageSequence(Arrays.asList(entity));
+            }else{
+                outputObject.setreturnMessage(map.get("message").toString());
             }
+        }catch(Exception e){
+            outputObject.setreturnMessage("任务发起失败.");
         }
+    }
+
+    private String getActDataByDsFormData(List<Map<String, Object>> pageDatas) {
+        Map<String, Object> result = new HashMap<>();
+        for(Map<String, Object> bean: pageDatas){
+            bean.put("formItem", bean);
+            bean.put("name", bean.get("title"));
+            bean.put("proportion", bean.get("defaultWidth"));
+            bean.put("rowId", bean.get("contentId"));
+            result.put(bean.get("contentId").toString(), bean);
+        }
+        return JSON.toJSONString(result);
+    }
+
+    private List<Map<String, Object>> getDsFormPageData(List<Map<String, Object>> jsonArray, String sequenceId, String userId) throws Exception {
+        List<Map<String, Object>> pageDatas = new ArrayList<>();
+        for (Map<String, Object> item : jsonArray) {
+            String pageContentId = item.get("rowId").toString();
+            String value = item.containsKey("value") == true ? item.get("value").toString() : "";
+            String text = item.containsKey("text") == true ? item.get("text").toString() : "";
+            Map<String, Object> pageData = dsFormPageService.getDsFormPageData(pageContentId, value, text, item.get("showType").toString(), sequenceId, userId);
+            pageData.put("formItemType", item.get("controlType"));
+            pageDatas.add(pageData);
+        }
+        return pageDatas;
     }
 
     /**

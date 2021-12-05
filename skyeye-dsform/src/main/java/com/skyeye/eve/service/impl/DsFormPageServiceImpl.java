@@ -8,7 +8,9 @@ import cn.hutool.json.JSONUtil;
 import com.gexin.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.skyeye.cache.redis.RedisCache;
 import com.skyeye.common.constans.Constants;
+import com.skyeye.common.constans.RedisConstants;
 import com.skyeye.common.constans.SystemFoundationSettingsConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -51,10 +53,13 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	private DsFormPageDataDao dsFormPageDataDao;
 	
 	@Autowired
-	public JedisClientService jedisClient;
+	private JedisClientService jedisClient;
 
 	@Autowired
 	private DsFormPageSequenceDao dsFormPageSequenceDao;
+
+	@Autowired
+	private RedisCache redisCache;
 	
 	/**
 	 * 
@@ -330,8 +335,8 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 	@Override
 	public void queryDsFormContentListByPageId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		String pageId = map.get("").toString();
-		List<Map<String, Object>> beans = getDsFormPageContentByFormId(pageId);
+		String pageId = map.get("pageId").toString();
+		List<Map<String, Object>> beans = this.getDsFormPageContentByFormId(pageId);
 		if(!beans.isEmpty()){
 			outputObject.setBeans(beans);
 			outputObject.settotal(beans.size());
@@ -340,16 +345,15 @@ public class DsFormPageServiceImpl implements DsFormPageService {
 
 	@Override
 	public List<Map<String, Object>> getDsFormPageContentByFormId(String dsFormPageId) throws Exception {
-		List<Map<String, Object>> beans;
-		if(ToolUtil.isBlank(jedisClient.get(Constants.dsFormContentListByPageId(dsFormPageId)))){
-			// 若缓存中无值,从数据库中查询
-			beans = dsFormPageDao.queryDsFormContentListByPageId(dsFormPageId);
-			// 将从数据库中查来的内容存到缓存中
-			jedisClient.set(Constants.dsFormContentListByPageId(dsFormPageId), JSONUtil.toJsonStr(beans));
-		}else{
-			beans = JSONUtil.toList(jedisClient.get(Constants.dsFormContentListByPageId(dsFormPageId)), null);
-		}
-		return beans;
+		String cacheKey = Constants.dsFormContentListByPageId(dsFormPageId);
+		return redisCache.getList(cacheKey, key -> {
+			try {
+				return dsFormPageDao.queryDsFormContentListByPageId(dsFormPageId);
+			} catch (Exception ee) {
+				LOGGER.warn("getDsFormPageContentByFormId failed, dsFormPageId is {}.", dsFormPageId, ee);
+			}
+			return null;
+		}, RedisConstants.THIRTY_DAY_SECONDS);
 	}
 
 	/**

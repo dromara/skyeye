@@ -132,13 +132,10 @@ public class PageSequenceServiceImpl implements PageSequenceService{
 	public void editDsFormISDraftById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String str = map.get("jsonStr").toString();//前端传来的数据json串
-		if(ToolUtil.isJson(str)){
-			List<Map<String, Object>> json = JSONUtil.toList(str, null);
-		    for(int i = 0; i < json.size(); i++){
-				Map<String, Object> jObject = json.get(i);// 遍历 jsonarray 数组，把每一个对象转成 json 对象
-				dsFormPageSequenceDao.editDsFormISDraftById(jObject);
-		    }
-		}
+		List<Map<String, Object>> json = JSONUtil.toList(str, null);
+		json.forEach(bean -> {
+			dsFormPageSequenceDao.editDsFormISDraftById(bean);
+		});
 	}
 
 	/**
@@ -156,7 +153,7 @@ public class PageSequenceServiceImpl implements PageSequenceService{
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> user = inputObject.getLogParams();
 		map.put("userId", user.get("id"));
-		//查询为草稿状态的提交项
+		// 查询为草稿状态的提交项
 		Map<String, Object> bean = dsFormPageSequenceDao.queryDsFormStateById(map);
 		if(bean != null && !bean.isEmpty()){
 			if(!bean.containsKey("actKey") || ToolUtil.isBlank(bean.get("actKey").toString())){

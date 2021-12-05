@@ -107,7 +107,7 @@
 			a.editable_node_name editableNodeName,
 			'' formItemType,
 			a.order_by orderBy,
-			IF(IFNULL(a.key_id, '') = '', a.content_id, a.key_id) keyId
+			a.content_id keyId
 		FROM
 			ds_form_page_data a
 		WHERE

@@ -29,7 +29,7 @@ public interface DsFormPageSequenceDao {
 
 	List<Map<String, Object>> queryDsFormISDraftToEditById(Map<String, Object> map) throws Exception;
 
-	int editDsFormISDraftById(Map<String, Object> map) throws Exception;
+	int editDsFormISDraftById(Map<String, Object> map);
 
 	int editDsFormISDraftToSubApprovalById(Map<String, Object> map) throws Exception;
 

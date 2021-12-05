@@ -5,10 +5,10 @@
 	<select id="queryStartProcessNotSubByUserId" parameterType="java.util.Map" resultType="java.util.Map">
 		SELECT
 			a.process_instance_id processInstanceId,
-			IFNULL(b.id, "") sequenceId,
+			IFNULL(b.id, '') sequenceId,
 			a.create_time createTime,
 			a.data_id dataId,
-			IF(IFNULL(c.edit_page_url, '') = '', '../../tpl/myactiviti/myactivitiedit.html', c.edit_page_url) pageUrl,
+			IF(IFNULL(c.edit_page_url, '') = '', '../../tpl/dsFormPageSequence/dsFormPageSequenceDraftProcessEditToAct.html', c.edit_page_url) pageUrl,
 			c.title taskType,
 			IF(IFNULL(c.revoke_mapping, '') = '', 'dsformrevoke001', c.revoke_mapping) revokeMapping
 		FROM

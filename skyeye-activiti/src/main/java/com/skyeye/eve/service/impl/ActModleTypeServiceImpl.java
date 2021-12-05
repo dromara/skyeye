@@ -650,28 +650,24 @@ public class ActModleTypeServiceImpl implements ActModleTypeService {
 	@Transactional(value="transactionManager")
 	public void editDsFormMationBySequenceId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
-		String str = map.get("jsonStr").toString();//前端传来的数据json串
 		String taskId = map.get("taskId").toString();//任务id
 		String processInstanceId = map.get("processInstanceId").toString();//流程id
-		if(ToolUtil.isJson(str)){
-			List<Map<String, Object>> json = JSONUtil.toList(str, null);
-			Map<String, Object> params = (Map<String, Object>) taskService.getVariable(taskId, "baseTask");
-			String contentId = "";
-			Map<String, Object> cenBean;
-		    for(int i = 0; i < json.size(); i++){
-				Map<String, Object> jObject = json.get(i);// 遍历 jsonarray 数组，把每一个对象转成 json 对象
-		    	actModleTypeDao.editDsFormMationBySequenceId(jObject);
-		    	contentId = jObject.get("contentId").toString();
-		    	System.out.println(contentId);
-				if(params.containsKey(contentId)){
-					cenBean = (Map<String, Object>) params.get(contentId);
-					cenBean.put("text", jObject.get("text"));
-					cenBean.put("value", jObject.get("value"));
-					params.put(contentId, cenBean);
-				}
-		    }
-			runtimeService.setVariable(processInstanceId, "baseTask", params);
+		List<Map<String, Object>> json = JSONUtil.toList(map.get("jsonStr").toString(), null);
+
+		Map<String, Object> params = (Map<String, Object>) taskService.getVariable(taskId, "baseTask");
+
+		for(int i = 0; i < json.size(); i++){
+			Map<String, Object> jObject = json.get(i);// 遍历 jsonarray 数组，把每一个对象转成 json 对象
+			actModleTypeDao.editDsFormMationBySequenceId(jObject);
+			String pageDataId = jObject.get("rowId").toString();
+			if(params.containsKey(pageDataId)){
+				Map<String, Object> cenBean = (Map<String, Object>) params.get(pageDataId);
+				cenBean.put("text", jObject.get("text"));
+				cenBean.put("value", jObject.get("value"));
+				params.put(pageDataId, cenBean);
+			}
 		}
+		runtimeService.setVariable(processInstanceId, "baseTask", params);
 	}
 
 	/**

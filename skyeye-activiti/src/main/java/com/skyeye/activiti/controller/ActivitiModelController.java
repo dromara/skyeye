@@ -79,22 +79,6 @@ public class ActivitiModelController {
 	
 	/**
 	 * 
-	     * @Title: editActivitiModelToStartProcess
-	     * @Description: 启动流程
-	     * @param inputObject
-	     * @param outputObject
-	     * @throws Exception    参数
-	     * @return void    返回类型
-	     * @throws
-	 */
-	@RequestMapping("/post/ActivitiModelController/editActivitiModelToStartProcess")
-	@ResponseBody
-	public void editActivitiModelToStartProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-		activitiModelService.editActivitiModelToStartProcess(inputObject, outputObject);
-	}
-	
-	/**
-	 * 
 	     * @Title: deleteActivitiModelById
 	     * @Description: 删除模型
 	     * @param inputObject
