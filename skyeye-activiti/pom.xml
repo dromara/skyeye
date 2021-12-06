@@ -97,7 +97,7 @@
 			<artifactId>activiti-spring</artifactId>
 			<version>${activiti.version}</version>
 		</dependency>
-	</dependencies>
+    </dependencies>
 
 	<build>
 	</build>

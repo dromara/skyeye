@@ -91,7 +91,7 @@ public class ConferenceRoomReserveServiceImpl implements ConferenceRoomReserveSe
             // 判断是否提交审批
             if("2".equals(map.get("subType").toString())){
                 // 提交审批
-                ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_CONFERENCEROOM_USE_PAGE_KEY).submitToActivi(rowId);
+                ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_CONFERENCEROOM_USE_PAGE_KEY).submitToActivi(rowId, ActivitiConstants.APPROVAL_ID);
             }
         }else{
             outputObject.setreturnMessage("会议室已被预定，请更换会议室或更改预定时间！");
@@ -163,7 +163,7 @@ public class ConferenceRoomReserveServiceImpl implements ConferenceRoomReserveSe
             // 判断是否提交审批
             if("2".equals(map.get("subType").toString())){
                 // 提交审批
-                ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_CONFERENCEROOM_USE_PAGE_KEY).submitToActivi(id);
+                ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_CONFERENCEROOM_USE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
             }
         }else{
             outputObject.setreturnMessage("会议室已被预定，请更换会议室或更改预定时间！");
@@ -218,7 +218,7 @@ public class ConferenceRoomReserveServiceImpl implements ConferenceRoomReserveSe
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_CONFERENCEROOM_USE_PAGE_KEY).submitToActivi(id);
+            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_CONFERENCEROOM_USE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }

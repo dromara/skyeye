@@ -26,4 +26,6 @@ public interface ActivitiProcessService {
     void editProcessInstancePicToRefresh(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     void nextPrcessApprover(InputObject inputObject, OutputObject outputObject) throws Exception;
+
+    void nextPrcessApproverByProcessDefinitionKey(InputObject inputObject, OutputObject outputObject) throws Exception;
 }

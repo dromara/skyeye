@@ -101,7 +101,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
 		// 判断是否提交审批
 		if("2".equals(map.get("subType").toString())){
 			// 提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId);
+			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId, ActivitiConstants.APPROVAL_ID);
 		}
 	}
 
@@ -163,7 +163,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
 				|| "12".equals(bean.get("state").toString())
 				|| "3".equals(bean.get("state").toString())){
 			// 草稿、审核不通过、撤销状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId);
+			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId, ActivitiConstants.APPROVAL_ID);
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}
@@ -257,7 +257,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
 		// 判断是否提交审批
 		if("2".equals(map.get("subType").toString())){
 			// 提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId);
+			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId, ActivitiConstants.APPROVAL_ID);
 		}
 	}
 

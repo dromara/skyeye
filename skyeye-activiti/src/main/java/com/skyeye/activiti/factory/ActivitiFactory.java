@@ -156,9 +156,10 @@ public abstract class ActivitiFactory {
      * 提交数据到工作流
      *
      * @param id 需要提交到工作流的主单据id
+     * @param approvalId 审批人id
      * @throws Exception
      */
-    public void submitToActivi(String id) throws Exception{
+    public void submitToActivi(String id, String approvalId) throws Exception{
         // 1.获取数据
         Map<String, Object> data = this.submitToActiviGetDate(id);
         judgeSubmitActiviti(data);
@@ -171,7 +172,7 @@ public abstract class ActivitiFactory {
             json.put("jsonStr", this.transform(data));
             // 4.请求工作流接口获取数据
             Map<String, Object> user = inputObject.getLogParams();
-            activitiModelService.editActivitiModelToStartProcessByMap(json, user, id);
+            activitiModelService.editActivitiModelToStartProcessByMap(json, user, id, approvalId);
             if("0".equals(json.get("code").toString())){
                 // 请求成功后返回流程实例id
                 String processInId = json.get("message").toString();

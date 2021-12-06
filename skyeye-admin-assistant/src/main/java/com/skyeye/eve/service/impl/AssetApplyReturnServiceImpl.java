@@ -119,7 +119,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
         // 判断是否提交审批
         if("2".equals(map.get("subType").toString())){
             // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId);
+            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId, ActivitiConstants.APPROVAL_ID);
         }
     }
 
@@ -145,7 +145,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以作废
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId);
+            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId, ActivitiConstants.APPROVAL_ID);
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -257,7 +257,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
         //判断是否提交审批
         if("2".equals(map.get("subType").toString())){
             //提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId);
+            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId, ActivitiConstants.APPROVAL_ID);
         }
     }
 

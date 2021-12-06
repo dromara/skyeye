@@ -28,9 +28,10 @@ public interface ActivitiFactoryResult {
      * 提交数据到工作流
      *
      * @param id 需要提交到工作流的主单据id
+     * @param approvalId 审批人id
      * @throws Exception
      */
-    void submitToActivi(String id) throws Exception;
+    void submitToActivi(String id, String approvalId) throws Exception;
 
     /**
      * 撤销工作流

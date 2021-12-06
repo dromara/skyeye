@@ -43,7 +43,7 @@ public interface ActModelDao {
 
     public List<Map<String, Object>> queryActModleUpStateByUpStateTypeId(Map<String, Object> map) throws Exception;
 
-    public Map<String, Object> queryActModelMationByPageUrl(@Param("pageUrl") String pageUrl) throws Exception;
+    Map<String, Object> queryActModelMationByPageUrl(@Param("pageUrl") String pageUrl) throws Exception;
 
     public List<Map<String, Object>> queryHasModelList(Map<String, Object> map) throws Exception;
 

@@ -111,7 +111,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 			// 判断是否提交审批
 			if("2".equals(map.get("subType").toString())){
 				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(id);
+				ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
 			}
 		}
 	}
@@ -199,7 +199,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 			// 判断是否提交审批
 			if("2".equals(map.get("subType").toString())){
 				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(id);
+				ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
 			}
 		}else{
 			outputObject.setreturnMessage("该商机名称已存在，不可进行二次保存");
@@ -408,7 +408,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 		Map<String, Object> bean = crmOpportunityDao.queryCrmOpportunityStateById(opportunityId);//查询商机的状态
 		if("0".equals(bean.get("state").toString()) || "12".equals(bean.get("state").toString())){
 			// 草稿、审核不通过状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(opportunityId);
+			ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(opportunityId, ActivitiConstants.APPROVAL_ID);
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}

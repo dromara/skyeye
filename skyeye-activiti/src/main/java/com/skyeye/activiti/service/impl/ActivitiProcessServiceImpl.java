@@ -13,6 +13,7 @@ import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.ActGroupUserDao;
+import com.skyeye.eve.dao.ActModelDao;
 import com.skyeye.eve.service.SysEveUserService;
 import net.sf.json.JSONObject;
 import org.activiti.engine.HistoryService;
@@ -33,12 +34,18 @@ import org.activiti.engine.impl.pvm.PvmActivity;
 import org.activiti.engine.impl.pvm.PvmTransition;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.impl.task.TaskDefinition;
+import org.activiti.engine.repository.Model;
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.task.Task;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -87,6 +94,9 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
     @Autowired
     private ActivitiTaskService activitiTaskService;
 
+    @Autowired
+    private ActModelDao actModelDao;
+
     /**
      *
      * @Title: updateProcessToHangUp
@@ -121,11 +131,10 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
     public void updateProcessToActivation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String processInstanceId = map.get("processInstanceId").toString();
-        //根据一个流程实例的id激活该流程实例
+        // 根据一个流程实例的id激活该流程实例
         runtimeService.activateProcessInstanceById(processInstanceId);
         // 删除指定流程在redis中的缓存信息
         activitiModelService.deleteProcessInRedisMation(processInstanceId);
-
     }
 
     /**
@@ -237,7 +246,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
         if(taskDefinition != null){
             // 1.获取下个节点的所有可选审批人
             List<Map<String, Object>> user = new ArrayList<>();
-            getNextTaskApprove(taskDefinition, user);
+            this.getNextTaskApprove(taskDefinition, user);
             outputObject.setBeans(user);
             // 2.获取节点信息
             Map<String, Object> nodeMation = new HashMap<>();
@@ -409,6 +418,79 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
         }
         ValueExpression e = factory.createValueExpression(context, el, boolean.class);
         return (Boolean) e.getValue(context);
+    }
+
+    /**
+     * 根据processDefinitionKey获取流程下一个用户节点的审批人
+     *
+     * @param inputObject
+     * @param outputObject
+     * @throws Exception
+     */
+    @Override
+    public void nextPrcessApproverByProcessDefinitionKey(InputObject inputObject, OutputObject outputObject) throws Exception {
+        String pageUrl = inputObject.getParams().get("pageUrl").toString();
+        Map<String, Object> actModel = actModelDao.queryActModelMationByPageUrl(pageUrl);
+        if(actModel == null || actModel.isEmpty()){
+            outputObject.setreturnMessage("流程不存在或未启动.");
+            return;
+        }
+        String processDefinitionKey = actModel.get("actKey").toString();
+        List<Map<String, Object>> user = this.nextPrcessApproverByProcessDefinitionKey(processDefinitionKey);
+        outputObject.setBeans(user);
+    }
+
+    public List<Map<String, Object>> nextPrcessApproverByProcessDefinitionKey(String processDefinitionKey) throws Exception {
+        List<Map<String, Object>> user = new ArrayList<>();
+        List<ProcessDefinition> processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionKey(processDefinitionKey).list();
+        if(processDefinition != null){
+            List<Model> beans = repositoryService.createModelQuery().latestVersion().orderByLastUpdateTime().desc().list();
+            List<String> deploymentIds = beans.stream().map(p -> p.getDeploymentId()).collect(Collectors.toList());
+            processDefinition = processDefinition.stream().filter(bean -> deploymentIds.contains(bean.getDeploymentId())).collect(Collectors.toList());
+            if(processDefinition != null && !processDefinition.isEmpty()){
+                user = getUserTaskList(processDefinition.get(0));
+            }
+        }
+        return user;
+    }
+
+    public List<Map<String, Object>> getUserTaskList(ProcessDefinition processDefinition) throws Exception {
+        String deploymentId = processDefinition.getDeploymentId();
+        // 实现读写bpmn文件信息
+        InputStream bpmnIs = repositoryService.getResourceAsStream(deploymentId, processDefinition.getResourceName());
+        SAXReader saxReader = new SAXReader();
+        // 获取流程图文件中的userTask节点的所有属性
+        Document document = saxReader.read(bpmnIs);
+        Element rootElement = document.getRootElement();
+        Element process = rootElement.element("process");
+        List<Element> userTaskList = process.elements("userTask");
+
+        List<Map<String, Object>> list = new ArrayList<>();
+        // 获取第一个用户任务节点
+        if(userTaskList != null && !userTaskList.isEmpty()){
+            Element element = userTaskList.get(0);
+            String assignee = element.attributeValue("assignee");
+            String candidateUsers = element.attributeValue("candidateUsers");
+            String candidateGroups = element.attributeValue("candidateGroups");
+
+            if(!ToolUtil.isBlank(candidateGroups)){
+                List<Map<String, Object>> groupUsers = actGroupUserDao.queryActGroupUserByGroupId(Arrays.asList(candidateGroups.split(",")));
+                groupUsers.forEach(bean -> {
+                    list.add(sysEveUserService.getUserMationByUserId(bean.get("userId").toString()));
+                });
+            }
+            // 2.候选人员获取
+            if(!ToolUtil.isBlank(candidateUsers)){
+                Arrays.asList(candidateUsers.split(",")).forEach(userId -> {
+                    list.add(sysEveUserService.getUserMationByUserId(userId));
+                });
+            }
+            // 3.代理人获取
+            if(!ToolUtil.isBlank(assignee)){
+                list.add(sysEveUserService.getUserMationByUserId(assignee));
+            }
+        }
+        return list;
     }
 
 }

@@ -18,7 +18,6 @@ import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
-import com.skyeye.eve.dao.ActModelDao;
 import com.skyeye.eve.dao.ActModleTypeDao;
 import com.skyeye.eve.dao.ActUserProcessInstanceIdDao;
 import com.skyeye.eve.dao.SysEveUserDao;
@@ -65,9 +64,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
 
     @Autowired
     private RuntimeService runtimeService;
-
-    @Autowired
-    private ActModelDao actModelDao;
 
     @Autowired
     private ActUserProcessInstanceIdDao actUserProcessInstanceIdDao;
@@ -118,7 +114,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         }
         // 获取总条数
         int count = taskQuery.list().size();
-        List<Task> taskList = taskQuery.orderByProcessInstanceId().desc()
+        List<Task> taskList = taskQuery.orderByTaskId().desc()
                 .listPage(Integer.parseInt(map.get("limit").toString()) * (Integer.parseInt(map.get("page").toString()) - 1), Integer.parseInt(map.get("limit").toString()));
         // 整理数据
         List<Map<String, Object>> rows = new ArrayList<>();
@@ -628,7 +624,8 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         setNextUserTaskApproval(processInstanceId, map.get("approverId").toString());
     }
 
-    private void setNextUserTaskApproval(String processInstanceId, String approverId){
+    @Override
+    public void setNextUserTaskApproval(String processInstanceId, String approverId){
         if(!ToolUtil.isBlank(approverId)){
             Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).active().singleResult();
             taskService.setAssignee(task.getId(), approverId);

@@ -116,7 +116,7 @@ public class ProProjectServiceImpl implements ProProjectService {
 			// 判断是否提交审批
 			if("2".equals(map.get("subType").toString())){
 				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, PRO_PROJECT_PAGE_KEY).submitToActivi(proId);
+				ActivitiRunFactory.run(inputObject, outputObject, PRO_PROJECT_PAGE_KEY).submitToActivi(proId, ActivitiConstants.APPROVAL_ID);
 			}
 		}
 	}
@@ -230,7 +230,7 @@ public class ProProjectServiceImpl implements ProProjectService {
 			// 判断是否提交审批
 			if("2".equals(map.get("subType").toString())){
 				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, PRO_PROJECT_PAGE_KEY).submitToActivi(proId);
+				ActivitiRunFactory.run(inputObject, outputObject, PRO_PROJECT_PAGE_KEY).submitToActivi(proId, ActivitiConstants.APPROVAL_ID);
 			}
 		}
 	}
@@ -253,7 +253,7 @@ public class ProProjectServiceImpl implements ProProjectService {
 				|| "12".equals(bean.get("state").toString())
 				|| "5".equals(bean.get("state").toString())){
 			// 草稿、审核不通过或者撤销状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_PROJECT_PAGE_KEY).submitToActivi(proId);
+			ActivitiRunFactory.run(inputObject, outputObject, PRO_PROJECT_PAGE_KEY).submitToActivi(proId, ActivitiConstants.APPROVAL_ID);
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}

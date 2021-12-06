@@ -106,4 +106,20 @@ public class ActivitiProcessController {
         activitiProcessService.nextPrcessApprover(inputObject, outputObject);
     }
 
+    /**
+     *
+     * @Title: nextPrcessApproverByProcessDefinitionKey
+     * @Description: 根据processDefinitionKey获取流程下一个用户节点的审批人
+     * @param inputObject
+     * @param outputObject
+     * @throws Exception    参数
+     * @return void    返回类型
+     * @throws
+     */
+    @RequestMapping("/post/ActivitiProcessController/nextPrcessApproverByProcessDefinitionKey")
+    @ResponseBody
+    public void nextPrcessApproverByProcessDefinitionKey(InputObject inputObject, OutputObject outputObject) throws Exception{
+        activitiProcessService.nextPrcessApproverByProcessDefinitionKey(inputObject, outputObject);
+    }
+
 }

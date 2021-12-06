@@ -183,7 +183,8 @@ public abstract class ErpOrderFactory {
         this.insertOrderOtherMation(map, orderId);
         this.submitData2Activiti(orderId,
                 Integer.parseInt(depothead.get("subType").toString()),
-                Integer.parseInt(depothead.get("submitType").toString()));
+                Integer.parseInt(depothead.get("submitType").toString()),
+                map.get("approvalId").toString());
         outputObject.setBean(depothead);
     }
 
@@ -193,9 +194,10 @@ public abstract class ErpOrderFactory {
      * @param orderId 订单id
      * @param subType 表单提交类型
      * @param submitType 单据提交类型  1.走工作流提交  2.直接提交
+     * @param approvalId 审批人id
      * @throws Exception
      */
-    private void submitData2Activiti(String orderId, Integer subType, Integer submitType) throws Exception {
+    private void submitData2Activiti(String orderId, Integer subType, Integer submitType, String approvalId) throws Exception {
         if(subType == 1){
             // 草稿，什么都不用做
         } else if(subType == 2){
@@ -203,7 +205,7 @@ public abstract class ErpOrderFactory {
             if(submitType == 1){
                 // 工作流提交
                 String actiriviKey = ErpConstants.DepoTheadSubType.getActivityKey(orderType);
-                ActivitiRunFactory.run(inputObject, outputObject, actiriviKey).submitToActivi(orderId);
+                ActivitiRunFactory.run(inputObject, outputObject, actiriviKey).submitToActivi(orderId, approvalId);
             }else if(submitType == 2){
                 // 直接提交
                 erpCommonDao.editOrderStateById(orderId, orderType, ErpConstants.ERP_HEADER_STATUS_IS_APPROVED_PASS);
@@ -326,7 +328,8 @@ public abstract class ErpOrderFactory {
         this.editOrderOtherMationById(map, orderId);
         this.submitData2Activiti(orderId,
                 Integer.parseInt(depothead.get("subType").toString()),
-                Integer.parseInt(depothead.get("submitType").toString()));
+                Integer.parseInt(depothead.get("submitType").toString()),
+                map.get("approvalId").toString());
         outputObject.setBean(depothead);
     }
 
@@ -392,7 +395,8 @@ public abstract class ErpOrderFactory {
         Map<String, Object> bean = erpCommonDao.queryDepotHeadDetailsMationById(orderId);
         if(bean != null && !bean.isEmpty()){
             this.submitData2Activiti(orderId, 2,
-                    Integer.parseInt(bean.get("submitType").toString()));
+                    Integer.parseInt(bean.get("submitType").toString()),
+                    map.get("approvalId").toString());
         }else{
             String message = String.format(Locale.ROOT, "The order[%s] status has changed or the data does not exist.", orderId);
             logger.warn(message);

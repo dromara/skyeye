@@ -45,4 +45,6 @@ public interface ActivitiTaskService {
 
     void editActivitiModelToRun(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+    void setNextUserTaskApproval(String processInstanceId, String approverId);
+
 }

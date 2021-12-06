@@ -88,7 +88,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
         // 判断是否提交审批
         if("2".equals(map.get("subType").toString())){
             // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId);
+            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId, ActivitiConstants.APPROVAL_ID);
         }
     }
 
@@ -149,7 +149,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
         // 判断是否提交审批
         if("2".equals(map.get("subType").toString())){
             // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId);
+            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId, ActivitiConstants.APPROVAL_ID);
         }
     }
 
@@ -217,7 +217,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId);
+            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId, ActivitiConstants.APPROVAL_ID);
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }

@@ -120,7 +120,7 @@ public class ProCostExpenseServiceImpl implements ProCostExpenseService {
 			// 判断是否提交审批
 			if("2".equals(map.get("subType").toString())){
 				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, PRO_COST_EXPENSE_PAGE_KEY).submitToActivi(expenseId);
+				ActivitiRunFactory.run(inputObject, outputObject, PRO_COST_EXPENSE_PAGE_KEY).submitToActivi(expenseId, ActivitiConstants.APPROVAL_ID);
 			}
 		}else{
 			outputObject.setreturnMessage("数据格式错误");
@@ -217,7 +217,7 @@ public class ProCostExpenseServiceImpl implements ProCostExpenseService {
 			// 判断是否提交审批
 			if("2".equals(map.get("subType").toString())){
 				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, PRO_COST_EXPENSE_PAGE_KEY).submitToActivi(expenseId);
+				ActivitiRunFactory.run(inputObject, outputObject, PRO_COST_EXPENSE_PAGE_KEY).submitToActivi(expenseId, ActivitiConstants.APPROVAL_ID);
 			}
 		}else{
 			outputObject.setreturnMessage("数据格式错误");
@@ -242,7 +242,7 @@ public class ProCostExpenseServiceImpl implements ProCostExpenseService {
 		Integer state = Integer.parseInt(bean.get("state").toString());
 		if(0 == state || 12 == state || 3 == state){
 			// 草稿、审核不通过、撤销状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_COST_EXPENSE_PAGE_KEY).submitToActivi(id);
+			ActivitiRunFactory.run(inputObject, outputObject, PRO_COST_EXPENSE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}

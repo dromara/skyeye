@@ -8,6 +8,7 @@ import com.gexin.fastjson.JSON;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.DsFormActivitiService;
 import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
+import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
@@ -77,7 +78,7 @@ public class DsFormActivitiServiceImpl implements DsFormActivitiService {
             // 2.将动态表单的数据构造成工作流需要的数据
             String actData = getActDataByDsFormData(pageDatas);
             map.put("jsonStr", actData);
-            activitiModelService.editActivitiModelToStartProcessByMap(map, user, sequenceId);
+            activitiModelService.editActivitiModelToStartProcessByMap(map, user, sequenceId, ActivitiConstants.APPROVAL_ID);
             if("0".equals(map.get("code").toString())){//启动流程成功
                 dsFormPageDataDao.insertDsFormPageData(pageDatas);//插入DsFormPageData表
                 Map<String, Object> entity = dsFormPageService.getDsFormPageSequence(userId, pageId, map.get("message").toString(), StringUtils.EMPTY);

@@ -56,7 +56,7 @@ public interface ActivitiModelService {
 	 */
 	List<Map<String, Object>> getUpLeaveList(String approvedId, String approvedName, String opinion, boolean flag, Task task);
 
-	public void editActivitiModelToStartProcessByMap(Map<String, Object> map, Map<String, Object> user, String id) throws Exception;
+	public void editActivitiModelToStartProcessByMap(Map<String, Object> map, Map<String, Object> user, String id, String approvalId) throws Exception;
 
 	/**
 	 * 流程图高亮显示

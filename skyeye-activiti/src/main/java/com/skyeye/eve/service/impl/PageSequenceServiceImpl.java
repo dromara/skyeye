@@ -8,6 +8,7 @@ import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.activiti.service.ActivitiModelService;
+import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.ToolUtil;
@@ -177,7 +178,7 @@ public class PageSequenceServiceImpl implements PageSequenceService{
 			map.put("jsonStr", JSONUtil.toJsonStr(subFormData));
 			map.put("keyName", bean.get("actKey"));
 			//请求工作流接口获取数据
-			activitiModelService.editActivitiModelToStartProcessByMap(map, user, map.get("id").toString());
+			activitiModelService.editActivitiModelToStartProcessByMap(map, user, map.get("id").toString(), ActivitiConstants.APPROVAL_ID);
 			if("0".equals(map.get("code").toString())){
 				//请求成功
 				map.put("processInId", map.get("message"));

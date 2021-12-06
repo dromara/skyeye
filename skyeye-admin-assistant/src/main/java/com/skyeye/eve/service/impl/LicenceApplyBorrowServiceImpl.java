@@ -98,7 +98,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
         // 判断是否提交审批
         if("2".equals(subType)){
             // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(useId);
+            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(useId, ActivitiConstants.APPROVAL_ID);
         }
     }
 
@@ -202,7 +202,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
         // 判断是否提交审批
         if("2".equals(subType)){
             // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(useId);
+            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(useId, ActivitiConstants.APPROVAL_ID);
         }
     }
 
@@ -255,7 +255,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(id);
+            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }

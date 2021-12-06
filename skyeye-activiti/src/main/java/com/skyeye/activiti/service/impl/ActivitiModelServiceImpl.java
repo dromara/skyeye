@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.skyeye.activiti.mapper.ActivityMapper;
 import com.skyeye.activiti.service.ActAssigneeService;
 import com.skyeye.activiti.service.ActivitiModelService;
+import com.skyeye.activiti.service.ActivitiTaskService;
 import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.Constants;
@@ -113,6 +114,9 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 
 	@Autowired
 	private ActModelDao actModelDao;
+
+	@Autowired
+	private ActivitiTaskService activitiTaskService;
 
     /**
 	     * @Title: insertNewActivitiModel
@@ -261,10 +265,11 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	 * @param user 用户信息
 	 * @param keyName 流程定义的key
 	 * @param dataId 数据id
+	 * @param approvalId 审批人id
 	 * @return
 	 * @throws Exception
 	 */
-	private String startProcess(String str, Map<String, Object> user, String keyName, String dataId) throws Exception {
+	private String startProcess(String str, Map<String, Object> user, String keyName, String dataId, String approvalId) throws Exception {
 		Map<String, Object> baseTask = JSONUtil.toBean(str, null);
 		String userId = user.get("id").toString();
 		baseTask.put("createId", userId);//创建人id
@@ -280,20 +285,8 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 		// 存储用户启动的流程
 		saveActUserProInsId(processInstanceId, userId, keyName, dataId);
 
-		// 完成第一个任务
-		Task task = taskService.createTaskQuery().taskAssignee(userId).processInstanceId(processInstanceId).active().singleResult();
-		if (task != null){
-			// 获取指定任务节点的审批信息
-			List<Map<String, Object>> leaveList = getUpLeaveList(userId, user.get("userName").toString(), "", true, task);
-			Map<String, Object> bean = new HashMap<>();
-			bean.put("needfinish", 1);//通过下一个节点
-			bean.put("leaveOpinionList", leaveList);
-			bean.put("flag", "1");//校验参数
-			taskService.complete(task.getId(), bean);
-			this.queryProHighLighted(processInstanceId);
-			// 删除指定流程在redis中的缓存信息
-			this.deleteProcessInRedisMation(task.getProcessInstanceId());
-		}
+		// 设置第一个userTask任务的审批人
+		activitiTaskService.setNextUserTaskApproval(processInstanceId, approvalId);
 		LOGGER.info("start process success, processInstanceId is: {}", processInstanceId);
 		return processInstanceId;
 	}
@@ -403,10 +396,12 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	 * @param map
 	 * @param user 用户信息
 	 * @param id 数据id
+	 * @param approvalId 审批人id
 	 * @throws Exception
 	 */
 	@Override
-	public void editActivitiModelToStartProcessByMap(Map<String, Object> map, Map<String, Object> user, String id) throws Exception {
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	public void editActivitiModelToStartProcessByMap(Map<String, Object> map, Map<String, Object> user, String id, String approvalId) throws Exception {
 		// 流程定义的key
 		String keyName = map.get("keyName").toString();
 		map.put("code", "-1");
@@ -421,7 +416,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 					// 返回信息
 					map.put("code", "0");
 					// 启动流程
-					message = startProcess(str, user, keyName, id);
+					message = startProcess(str, user, keyName, id, approvalId);
 				}else{
 					LOGGER.info("this processDefinitionKey's [{}] process is non-exits", keyName);
 					message = "任务发起失败,不存在该流程模型.";
