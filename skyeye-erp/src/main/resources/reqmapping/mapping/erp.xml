@@ -439,6 +439,7 @@
 		<property id="otherMoneyList" name="otherMoneyList" ref="required,json" var="其他相关金额json" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="purchasereturns003" path="/post/PurchaseReturnsController/queryPurchaseReturnsMationToEditById" val="编辑采购退货信息时进行回显" allUse="2" method="GET" groupName="采购退货单模块">
 		<property id="rowId" name="id" ref="required" var="采购退货id" />
@@ -457,6 +458,7 @@
 		<property id="otherMoneyList" name="otherMoneyList" ref="required,json" var="其他相关金额json" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 		<property id="rowId" name="id" ref="required" var="采购退货id" />
 	</url>
 	<url id="purchasereturns005" path="/post/PurchaseReturnsController/queryMationToExcel" val="导出Excel" allUse="1" groupName="采购退货单模块">
