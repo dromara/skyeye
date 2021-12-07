@@ -37,6 +37,7 @@
 	<url id="erpcommon006" path="/post/ErpCommonController/orderSubmitToApproval" val="订单信息提交审核" allUse="1" method="PUT" groupName="公共模块">
 		<property id="rowId" name="id" ref="required" var="订单id"></property>
 		<property id="orderType" name="orderType" ref="required,num" var="单据类型"></property>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<!-- erp公共部分结束 -->
 	
@@ -337,6 +338,7 @@
 		<property id="planComplateTime" name="planComplateTime" ref="" var="计划完成日期" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 		<property id="rowId" name="id" ref="required" var="采购单id" />
 	</url>
 	<url id="purchaseorder008" path="/post/PurchaseOrderController/queryPurchaseOrderToTurnPutById" val="采购单信息转采购入库回显" allUse="2" groupName="采购订单模块">
