@@ -493,18 +493,19 @@
 		<property id="needOverPlan" name="needOverPlan" ref="required,num" var="是否需要统筹  1.需要  2.不需要" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="salesorder004" path="/post/SalesOrderController/querySalesOrderToEditById" val="销售单信息编辑回显" allUse="2" method="GET" groupName="销售订单模块">
 		<property id="rowId" name="id" ref="required" var="销售单id" />
 	</url>
 	<url id="salesorder005" path="/post/SalesOrderController/editSalesOrderMationById" val="编辑销售单信息" allUse="1" method="PUT" groupName="销售订单模块">
+		<property id="rowId" name="id" ref="required" var="销售单id" />
 		<property id="supplierId" name="supplierId" ref="required" var="客户" />
 		<property id="operTime" name="operTime" ref="required" var="单据日期" />
 		<property id="accountId" name="accountId" ref="" var="账户" />
 		<property id="payType" name="payType" ref="required,num" var="付款类型" />
 		<property id="remark" name="remark" ref="" var="备注" />
 		<property id="depotheadStr" name="depotheadStr" ref="required,json" var="产品列表" />
-		<property id="rowId" name="id" ref="required" var="销售单id" />
 		<property id="discount" name="discount" ref="required,double" var="优惠率,默认为0.00" />
 		<property id="discountMoney" name="discountMoney" ref="required,double" var="优惠金额,默认为0.00" />
 		<property id="changeAmount" name="changeAmount" ref="required,double" var="收款金额,默认为0.00" />
@@ -515,8 +516,9 @@
 		<property id="needOverPlan" name="needOverPlan" ref="required,num" var="是否需要统筹  1.需要  2.不需要" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
-	<url id="salesorder008" path="/post/SalesOrderController/querySalesOrderToTurnPutById" val="销售单信息转销售出库回显" allUse="2" groupName="销售订单模块">
+	<url id="salesorder008" path="/post/SalesOrderController/querySalesOrderToTurnPutById" val="销售单信息转销售出库回显" allUse="2" method="GET" groupName="销售订单模块">
 		<property id="rowId" name="id" ref="required" var="销售单id" />
 	</url>
 	<url id="salesorder009" path="/post/SalesOrderController/insertSalesOrderToTurnPut" val="销售单信息转销售出库" allUse="1" groupName="销售订单模块">
