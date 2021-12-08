@@ -719,6 +719,7 @@
 		<property id="depotheadStr" name="depotheadStr" ref="required,json" var="产品列表" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="retailreturns003" path="/post/RetailReturnsController/queryRetailReturnsMationToEditById" val="编辑零售退货信息时进行回显" allUse="2" method="GET" groupName="零售退货单模块">
 		<property id="rowId" name="id" ref="required" var="零售退货id" />
@@ -735,6 +736,7 @@
 		<property id="rowId" name="id" ref="required" var="零售退货id" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="retailreturns005" path="/post/RetailReturnsController/queryMationToExcel" val="导出Excel" allUse="1" groupName="零售退货单模块">
 		<property id="defaultNumber" name="defaultNumber" ref="" var="票据单号" />
