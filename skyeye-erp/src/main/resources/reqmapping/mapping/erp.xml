@@ -625,6 +625,7 @@
 		<property id="salesMan" name="salesMan" ref="" var="销售人员" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="salesreturns003" path="/post/SalesReturnsController/querySalesReturnsMationToEditById" val="编辑销售退货信息时进行回显" allUse="2" method="GET" groupName="销售退货单模块">
 		<property id="rowId" name="id" ref="required" var="销售退货id" />
@@ -645,6 +646,7 @@
 		<property id="salesMan" name="salesMan" ref="" var="销售人员" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="salesreturns005" path="/post/SalesReturnsController/queryMationToExcel" val="导出Excel" allUse="1" groupName="销售退货单模块">
 		<property id="defaultNumber" name="defaultNumber" ref="" var="票据单号" />
