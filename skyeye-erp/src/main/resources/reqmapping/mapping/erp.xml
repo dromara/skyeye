@@ -521,7 +521,7 @@
 	<url id="salesorder008" path="/post/SalesOrderController/querySalesOrderToTurnPutById" val="销售单信息转销售出库回显" allUse="2" method="GET" groupName="销售订单模块">
 		<property id="rowId" name="id" ref="required" var="销售单id" />
 	</url>
-	<url id="salesorder009" path="/post/SalesOrderController/insertSalesOrderToTurnPut" val="销售单信息转销售出库" allUse="1" groupName="销售订单模块">
+	<url id="salesorder009" path="/post/SalesOrderController/insertSalesOrderToTurnPut" val="销售单信息转销售出库" allUse="1" method="PUT" groupName="销售订单模块">
 		<property id="supplierId" name="supplierId" ref="required" var="客户" />
 		<property id="operTime" name="operTime" ref="required" var="单据日期" />
 		<property id="accountId" name="accountId" ref="" var="账户" />
@@ -572,11 +572,13 @@
 		<property id="salesMan" name="salesMan" ref="" var="销售人员" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="salesoutlet003" path="/post/SalesOutLetController/querySalesOutLetMationToEditById" val="编辑销售出库信息时进行回显" allUse="2" method="GET" groupName="销售出库单模块">
 		<property id="rowId" name="id" ref="required" var="销售出库id" />
 	</url>
 	<url id="salesoutlet004" path="/post/SalesOutLetController/editSalesOutLetMationById" val="编辑销售出库信息" allUse="1" method="PUT" groupName="销售出库单模块">
+		<property id="rowId" name="id" ref="required" var="销售出库id" />
 		<property id="supplierId" name="supplierId" ref="required" var="客户" />
 		<property id="operTime" name="operTime" ref="required" var="单据日期" />
 		<property id="accountId" name="accountId" ref="" var="账户" />
@@ -588,10 +590,10 @@
 		<property id="otherMoney" name="otherMoney" ref="required,double" var="销售总金额,默认为0.00" />
 		<property id="depotheadStr" name="depotheadStr" ref="required,json" var="产品列表" />
 		<property id="otherMoneyList" name="otherMoneyList" ref="required,json" var="销售金额json" />
-		<property id="rowId" name="id" ref="required" var="销售出库id" />
 		<property id="salesMan" name="salesMan" ref="" var="销售人员" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="submitType" name="submitType" ref="required,num" var="单据提交类型  1.走工作流提交  2.直接提交" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="salesoutlet005" path="/post/SalesOutLetController/queryMationToExcel" val="导出Excel" allUse="1" groupName="销售出库单模块">
 		<property id="defaultNumber" name="defaultNumber" ref="" var="票据单号" />
