@@ -23,4 +23,18 @@ public interface ActivitiUserService {
 
     void insertSyncUserListMationToAct(InputObject inputObject, OutputObject outputObject) throws Exception;
 
+    /**
+     * 工作流相关的涉及到新增/编辑去操作工作流时的操作
+     *
+     * @param inputObject inputObject
+     * @param outputObject outputObject
+     * @param subType 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
+     * @param key com.skyeye.common.constans.ActivitiConstants.ActivitiObjectType的key
+     * @param dataId 数据的id
+     * @param approvalId 审批人id
+     * @throws Exception
+     */
+    void addOrEditToSubmit(InputObject inputObject, OutputObject outputObject,
+        int subType, String key, String dataId, String approvalId) throws Exception;
+
 }

@@ -5,6 +5,8 @@
 package com.skyeye.eve.service.impl;
 
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.AdminAssistantConstants;
 import com.skyeye.common.object.InputObject;
@@ -41,6 +43,9 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     /**
      * 用车申请关联的工作流的key
      */
@@ -72,7 +77,7 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertVehicleMationToUse(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         Map<String, Object> m = vehicleDao.queryVehicleMationByVehicleId(map);
@@ -87,11 +92,9 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
         map.put("createId", user.get("id").toString());
         map.put("createTime", DateUtil.getTimeAndToString());
         vehicleApplyUseDao.insertVehicleMationToUse(map);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_VEHICLE_USE_PAGE_KEY).submitToActivi(rowId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_VEHICLE_USE_PAGE_KEY, rowId, map.get("approvalId").toString());
     }
 
     /**
@@ -128,7 +131,7 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editVehicleUseToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -139,7 +142,8 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state) {
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_VEHICLE_USE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                ACTIVITI_VEHICLE_USE_PAGE_KEY, id, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -204,7 +208,7 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateVehicleUseMationToEdit(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -213,35 +217,9 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
             map.put("designatedVehicleInfo", m.get("designatedVehicleInfo").toString());
         }
         vehicleApplyUseDao.updateVehicleUseMationToEdit(map);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_VEHICLE_USE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
-        }
-    }
-
-    /**
-     *
-     * @Title: updateVehicleUseMationByIdInProcess
-     * @Description: 在工作流中编辑用车申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateVehicleUseMationByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        String id = map.get("id").toString();
-        Map<String, Object> m = vehicleDao.queryVehicleMationByVehicleId(map);
-        if(m != null && !m.isEmpty()){
-            map.put("designatedVehicleInfo", m.get("designatedVehicleInfo").toString());
-        }
-        vehicleApplyUseDao.updateVehicleUseMationToEdit(map);
-        // 编辑流程表参数
-        ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_VEHICLE_USE_PAGE_KEY).editApplyMationInActiviti(id);
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_VEHICLE_USE_PAGE_KEY, id, map.get("approvalId").toString());
     }
 
     /**

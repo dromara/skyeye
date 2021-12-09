@@ -140,22 +140,6 @@ public class VehicleApplyUseController {
 
     /**
      *
-     * @Title: updateVehicleUseMationByIdInProcess
-     * @Description: 在工作流中编辑用车申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/VehicleApplyUseController/updateVehicleUseMationByIdInProcess")
-    @ResponseBody
-    public void updateVehicleUseMationByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        vehicleApplyUseService.updateVehicleUseMationByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: updateVehicleUseToRevoke
      * @Description: 撤销用车申请
      * @param inputObject

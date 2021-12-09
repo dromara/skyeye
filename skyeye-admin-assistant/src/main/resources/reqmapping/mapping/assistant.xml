@@ -371,6 +371,7 @@
         <property id="remark" name="remark" ref="" var="描述" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="vehicle014" path="/post/VehicleApplyUseController/queryMyUseVehicleMation" val="获取我的用车申请信息列表" allUse="1" groupName="用车申请">
     	<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
@@ -384,6 +385,7 @@
     </url>
     <url id="vehicle017" path="/post/VehicleApplyUseController/editVehicleUseToSubApproval" val="用车申请提交审批" allUse="1" groupName="用车申请">
         <property id="rowId" name="id" ref="required" var="用车申请主表单id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="vehicle018" path="/post/VehicleApplyUseController/updateVehicleUseToCancellation" val="用车申请作废" allUse="1" groupName="用车申请">
         <property id="rowId" name="id" ref="required" var="用车申请主表单id" />
@@ -405,20 +407,7 @@
         <property id="remark" name="remark" ref="" var="描述" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
-    </url>
-    <url id="vehicle021" path="/post/VehicleApplyUseController/updateVehicleUseMationByIdInProcess" val="在工作流中编辑用车申请" allUse="2" groupName="用车申请">
-    	<property id="rowId" name="id" ref="required" var="申请单Id" />
-        <property id="passengerNum" name="passengerNum" ref="required" var="乘客数量" />
-        <property id="passengerInfo" name="passengerInfo" ref="" var="乘客信息" />
-        <property id="isSelfDrive" name="isSelfDrive" ref="required,num" var="是否自驾" />
-        <property id="driverId" name="driverId" ref="" var="驾驶员信息" />
-        <property id="departureTime" name="departureTime" ref="required" var="出发时间" />
-        <property id="returnTime" name="returnTime" ref="required" var="返回时间" />
-        <property id="designatedVehicleId" name="designatedVehicleId" ref="" var="指定车辆" />
-        <property id="timeAndPlaceOfTravel" name="timeAndPlaceOfTravel" ref="" var="乘车时间地点" />
-        <property id="reasonsForUsingCar" name="reasonsForUsingCar" ref="required" var="用车事由" />
-        <property id="remark" name="remark" ref="" var="描述" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="vehicle022" path="/post/VehicleApplyUseController/updateVehicleUseToRevoke" val="撤销用车申请" allUse="1" groupName="用车申请">
         <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>

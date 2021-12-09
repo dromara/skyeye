@@ -31,8 +31,6 @@ public interface VehicleApplyUseService {
 
     public void queryVehicleUseMationToEdit(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateVehicleUseMationByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void updateVehicleUseToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 }

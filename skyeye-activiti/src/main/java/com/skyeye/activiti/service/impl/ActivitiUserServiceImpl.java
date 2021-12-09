@@ -7,7 +7,9 @@ package com.skyeye.activiti.service.impl;
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -241,6 +243,32 @@ public class ActivitiUserServiceImpl implements ActivitiUserService {
         for(Map<String, Object> bean : userGroupList){
             identityService.deleteMembership(bean.get("userId").toString(), bean.get("groupId").toString());
             identityService.createMembership(bean.get("userId").toString(), bean.get("groupId").toString());
+        }
+    }
+
+    /**
+     * 工作流相关的涉及到新增/编辑去操作工作流时的操作
+     *
+     * @param inputObject inputObject
+     * @param outputObject outputObject
+     * @param subType    1：保存为草稿  2.提交到工作流  3.在工作流中编辑
+     * @param key        com.skyeye.common.constans.ActivitiConstants.ActivitiObjectType的key
+     * @param dataId     数据的id
+     * @param approvalId 审批人id
+     * @throws Exception
+     */
+    @Override
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    public void addOrEditToSubmit(InputObject inputObject, OutputObject outputObject,
+        int subType, String key, String dataId, String approvalId) throws Exception {
+        if(subType == 1){
+            // 草稿，什么都不用做
+        } else if(subType == 2){
+            // 提交审批
+            ActivitiRunFactory.run(inputObject, outputObject, key).submitToActivi(dataId, approvalId);
+        } else if(subType == 3) {
+            // 编辑工作流中的参数
+            ActivitiRunFactory.run(inputObject, outputObject, key).editApplyMationInActiviti(dataId);
         }
     }
 
