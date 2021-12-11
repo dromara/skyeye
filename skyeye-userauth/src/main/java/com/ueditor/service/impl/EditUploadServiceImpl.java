@@ -40,7 +40,6 @@ public class EditUploadServiceImpl implements EditUploadService{
 	/**
 	 * 上传富文本图片
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String,Object> uploadContentPic(HttpServletRequest req) throws Exception {
 		Map<String,Object> rs = new HashMap<>();

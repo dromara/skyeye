@@ -121,7 +121,7 @@ public class SessionFilter implements Filter {
 		servletResponse.setHeader("Access-Control-Allow-Methods", "*");
 		// userToken为用户的token
 		// requestType为请求类型，2为手机端请求，1或者空为PC端请求
-		servletResponse.setHeader("Access-Control-Allow-Headers", "Content-Type,userToken,requestType,x-prototype-version,x-requested-with");
+		servletResponse.setHeader("Access-Control-Allow-Headers", "Content-Type,userToken,requestType,x-prototype-version,x-requested-with,X_Requested_With");
 		// 解决跨域时，前台控制台报 Refused to get unsafe header的错
 		servletResponse.addHeader("Access-Control-Expose-Headers", "SESSIONSTATUS,REQUESTMATION,X-JSON");
 		servletResponse.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None");
