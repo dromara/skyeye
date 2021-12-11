@@ -31,8 +31,6 @@ public interface AssetArticlesApplyPurchaseService {
 
     public void updateAssetArticlesPurchaseToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateAssetArticlesListToPurchaseByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editAssetArticlesPurchaseToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 }

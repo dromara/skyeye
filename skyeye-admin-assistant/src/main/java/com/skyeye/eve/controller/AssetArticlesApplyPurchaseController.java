@@ -140,22 +140,6 @@ public class AssetArticlesApplyPurchaseController {
 
     /**
      *
-     * @Title: updateAssetArticlesListToPurchaseByIdInProcess
-     * @Description: 在工作流中编辑用品采购申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/AssetArticlesApplyPurchaseController/updateAssetArticlesListToPurchaseByIdInProcess")
-    @ResponseBody
-    public void updateAssetArticlesListToPurchaseByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        assetArticlesApplyPurchaseService.updateAssetArticlesListToPurchaseByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editAssetArticlesPurchaseToRevoke
      * @Description: 撤销用品采购申请
      * @param inputObject

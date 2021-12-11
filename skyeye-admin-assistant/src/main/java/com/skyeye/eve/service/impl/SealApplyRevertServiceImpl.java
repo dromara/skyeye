@@ -272,6 +272,7 @@ public class SealApplyRevertServiceImpl implements SealApplyRevertService {
      * @throws
      */
     @Override
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateRevertSealToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_SEAL_REVERT_PAGE_KEY).revokeActivi();
     }

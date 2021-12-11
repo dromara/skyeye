@@ -7,6 +7,7 @@ package com.skyeye.eve.service.impl;
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.AdminAssistantConstants;
 import com.skyeye.common.object.InputObject;
@@ -79,7 +80,7 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertBorrowSealMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String borrowId = ToolUtil.getSurFaceId();//借用单主表id
@@ -183,7 +184,7 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateBorrowSealMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String borrowId = map.get("id").toString();//借用单主表id
@@ -214,7 +215,7 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editBorrowSealToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String borrowId = map.get("id").toString();
@@ -271,6 +272,7 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @throws
      */
     @Override
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateBorrowSealToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_SEAL_USE_PAGE_KEY).revokeActivi();
     }

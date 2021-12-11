@@ -193,6 +193,7 @@
         <property id="assetArticlesStr" name="assetArticlesStr" ref="required,json" var="用品json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="assetarticles025" path="/post/AssetArticlesApplyPurchaseController/queryMyPurchaseAssetArticlesMation" val="获取我的用品采购申请单信息" allUse="1" groupName="用品采购">
         <property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
@@ -206,6 +207,7 @@
     </url>
     <url id="assetarticles027" path="/post/AssetArticlesApplyPurchaseController/editAssetArticlesUseToPurchaseSubApproval" val="用品采购申请提交审批" allUse="1" groupName="用品采购">
         <property id="rowId" name="id" ref="required" var="用品采购主表单id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="assetarticles028" path="/post/AssetArticlesApplyPurchaseController/queryAssetArticlesListPurchaseToEditById" val="用品采购申请编辑时进行回显" allUse="2" groupName="用品采购">
         <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
@@ -216,15 +218,10 @@
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="assetarticles031" path="/post/AssetArticlesApplyPurchaseController/updateAssetArticlesPurchaseToCancellation" val="作废用品采购申请" allUse="1" groupName="用品采购">
         <property id="rowId" name="id" ref="required" var="用品采购主表单id" />
-    </url>
-    <url id="assetarticles033" path="/post/AssetArticlesApplyPurchaseController/updateAssetArticlesListToPurchaseByIdInProcess" val="在工作流中编辑用品采购申请" allUse="2" groupName="用品采购">
-        <property id="remark" name="remark" ref="" var="描述" />
-        <property id="assetArticlesStr" name="assetArticlesStr" ref="required,json" var="用品json串" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
-        <property id="rowId" name="id" ref="required" var="用品领用主表单id" />
     </url>
     <url id="assetarticles035" path="/post/AssetArticlesApplyPurchaseController/editAssetArticlesPurchaseToRevoke" val="撤销用品采购申请" allUse="1" groupName="用品采购">
         <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
