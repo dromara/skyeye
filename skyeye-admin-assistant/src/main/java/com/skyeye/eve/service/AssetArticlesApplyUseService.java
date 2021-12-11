@@ -31,8 +31,6 @@ public interface AssetArticlesApplyUseService {
 
     public void updateAssetArticlesToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateAssetArticlesListToUseByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editAssetArticlesUseToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 }

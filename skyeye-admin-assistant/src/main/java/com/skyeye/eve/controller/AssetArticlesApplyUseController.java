@@ -140,22 +140,6 @@ public class AssetArticlesApplyUseController {
 
     /**
      *
-     * @Title: updateAssetArticlesListToUseByIdInProcess
-     * @Description: 在工作流中编辑用品领用申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/AssetArticlesApplyUseController/updateAssetArticlesListToUseByIdInProcess")
-    @ResponseBody
-    public void updateAssetArticlesListToUseByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        assetArticlesApplyUseService.updateAssetArticlesListToUseByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editAssetArticlesUseToRevoke
      * @Description: 撤销用品领用申请
      * @param inputObject
