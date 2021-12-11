@@ -6,6 +6,7 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.AdminAssistantConstants;
 import com.skyeye.common.object.InputObject;
@@ -43,6 +44,9 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
 
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
+
+    @Autowired
+    private ActivitiUserService activitiUserService;
 
     /**
      * 印章借用关联的工作流的key
@@ -95,11 +99,9 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
         map.put("createTime", DateUtil.getTimeAndToString());
         sealApplyBorrowDao.insertSealBorrowMation(map);
         sealApplyBorrowDao.insertSealBorrowGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(subType)){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_SEAL_USE_PAGE_KEY).submitToActivi(borrowId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_SEAL_USE_PAGE_KEY, borrowId, map.get("approvalId").toString());
     }
 
     private List<Map<String, Object>> getSealList(String sealBorrowStr, String borrowId, String state) throws Exception {
@@ -156,7 +158,6 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @return void    返回类型
      * @throws
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void queryBorrowSealMationToEdit(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
@@ -181,7 +182,6 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @return void    返回类型
      * @throws
      */
-    @SuppressWarnings("unchecked")
     @Override
     @Transactional(value="transactionManager")
     public void updateBorrowSealMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
@@ -198,39 +198,9 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
         sealApplyBorrowDao.updateSealBorrowMation(map);
         sealApplyBorrowDao.deleteSealBorrowGoodsMationById(map);
         sealApplyBorrowDao.insertSealBorrowGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_SEAL_USE_PAGE_KEY).submitToActivi(borrowId, ActivitiConstants.APPROVAL_ID);
-        }
-    }
-
-    /**
-     *
-     * @Title: updateBorrowSealMationToSave
-     * @Description: 编辑印章借用申请（已提交审批）
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateBorrowSealMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        String borrowId = map.get("id").toString();//借用单主表id
-        // 处理数据
-        List<Map<String, Object>> entitys = getSealList(map.get("sealStr").toString(), borrowId, "1");
-        if(entitys.size() == 0){
-            outputObject.setreturnMessage("请选择印章");
-            return;
-        }
-        sealApplyBorrowDao.updateSealBorrowMation(map);
-        sealApplyBorrowDao.deleteSealBorrowGoodsMationById(map);
-        sealApplyBorrowDao.insertSealBorrowGoodsMation(entitys);
-        // 修改流程中的数据
-        ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_SEAL_USE_PAGE_KEY).editApplyMationInActiviti(borrowId);
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_SEAL_USE_PAGE_KEY, borrowId, map.get("approvalId").toString());
     }
 
     /**
@@ -255,7 +225,8 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_SEAL_USE_PAGE_KEY).submitToActivi(borrowId, ActivitiConstants.APPROVAL_ID);
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                ACTIVITI_SEAL_USE_PAGE_KEY, borrowId, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }

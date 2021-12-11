@@ -27,8 +27,6 @@ public interface SealApplyBorrowService {
 
     public void updateBorrowSealMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateBorrowSealMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editBorrowSealToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     public void updateBorrowSealToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

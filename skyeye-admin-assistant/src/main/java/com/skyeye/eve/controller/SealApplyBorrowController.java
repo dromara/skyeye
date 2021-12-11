@@ -108,22 +108,6 @@ public class SealApplyBorrowController {
 
     /**
      *
-     * @Title: updateBorrowSealMationToSave
-     * @Description: 编辑印章借用申请（已提交审批）
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/SealApplyBorrowController/updateBorrowSealMationToSave")
-    @ResponseBody
-    public void updateBorrowSealMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception{
-        sealApplyBorrowService.updateBorrowSealMationToSave(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editBorrowSealToSubApproval
      * @Description: 印章借用申请提交审批
      * @param inputObject
