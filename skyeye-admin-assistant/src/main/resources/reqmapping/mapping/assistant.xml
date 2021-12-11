@@ -745,6 +745,7 @@
         <property id="sealStr" name="sealStr" ref="required,json" var="印章json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="sealrevert003" path="/post/SealApplyRevertController/queryRevertSealMationToDetails" val="印章归还申请详情" allUse="2" groupName="印章归还">
         <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
@@ -758,17 +759,13 @@
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="sealrevert006" path="/post/SealApplyRevertController/editRevertSealToSubApproval" val="印章归还申请提交审批" allUse="1" groupName="印章归还">
         <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="sealrevert007" path="/post/SealApplyRevertController/updateRevertSealToCancellation" val="作废印章归还申请" allUse="1" groupName="印章归还">
-        <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
-    </url>
-    <url id="sealrevert009" path="/post/SealApplyRevertController/updateRevertSealMationToSave" val="编辑印章归还申请（已提交审核）" allUse="2" groupName="印章归还">
-        <property id="remark" name="remark" ref="" var="描述" />
-        <property id="sealStr" name="sealStr" ref="required,json" var="印章json串" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="印章归还主表单id" />
     </url>
     <url id="sealrevert010" path="/post/SealApplyRevertController/updateRevertSealToRevoke" val="撤销印章归还申请" allUse="1" groupName="印章归还">

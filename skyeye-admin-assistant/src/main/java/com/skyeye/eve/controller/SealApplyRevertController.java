@@ -108,22 +108,6 @@ public class SealApplyRevertController {
 
     /**
      *
-     * @Title: updateRevertSealMationToSave
-     * @Description: 编辑印章归还申请（已提交审批）
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/SealApplyRevertController/updateRevertSealMationToSave")
-    @ResponseBody
-    public void updateRevertSealMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception{
-        sealApplyRevertService.updateRevertSealMationToSave(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editRevertSealToSubApproval
      * @Description: 印章归还申请提交审批
      * @param inputObject

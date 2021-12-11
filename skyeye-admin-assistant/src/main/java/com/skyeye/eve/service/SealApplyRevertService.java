@@ -27,8 +27,6 @@ public interface SealApplyRevertService {
 
     public void updateRevertSealMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateRevertSealMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editRevertSealToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     public void updateRevertSealToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

@@ -422,6 +422,9 @@ public class ActivitiConstants {
         } else if ("2".equals(subType)) {
             // 保存为提交审批，状态为等待审批
             state = "1";
+        }else if ("3".equals(subType)) {
+            // 工作流保存数据
+            state = "1";
         }
         return state;
     }
