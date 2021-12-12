@@ -213,7 +213,7 @@
             a.act_id actKey
         FROM
             act_model a
-        WHERE a.page_url = #{pageUrl}
+        WHERE (a.page_url = #{pageUrl} OR a.ds_form_id = #{pageUrl})
           AND a.state = '2'
     </select>
 

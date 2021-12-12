@@ -127,6 +127,7 @@
 		<property id="keyName" name="keyName" ref="required" var="模型key"/>
 		<property id="pageId" name="pageId" ref="required" var="页面id"/>
 		<property id="jsonStr" name="jsonStr" ref="required" var="form表单数据json串"/>
+		<property id="approvalId" name="approvalId" ref="required" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="dsformrevoke001" path="/post/DsFormActivitiController/editDsFormContentToRevokeByProcessInstanceId" val="动态表单类型的工作流进行撤销操作" allUse="2" groupName="动态表单工作流操作">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id" />
@@ -152,6 +153,7 @@
 	<url id="pagesequence005" path="/post/PageSequenceController/editDsFormISDraftToSubApprovalById" val="按钮直接提交审批" allUse="2">
 		<property id="rowId" name="id" ref="required" var="表单提交序列id" />
 		<property id="pageId" name="pageId" ref="required" var="页面id" />
+		<property id="approvalId" name="approvalId" ref="required" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="pagesequence006" path="/post/PageSequenceController/queryDsFormISDraftDetailsById" val="表单详情" allUse="2">
 		<property id="rowId" name="sequenceId" ref="required" var="表单提交序列id" />

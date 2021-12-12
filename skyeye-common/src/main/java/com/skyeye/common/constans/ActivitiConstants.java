@@ -25,8 +25,6 @@ public class ActivitiConstants {
 
     public static final String APPROVAL_NO_PASS = "nopass";
 
-    public static final String APPROVAL_ID = "template_approval_id";
-
     /**
      * form表单数据存储在task的varables的key
      */
