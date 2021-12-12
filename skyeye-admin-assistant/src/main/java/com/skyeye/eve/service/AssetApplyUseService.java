@@ -31,8 +31,6 @@ public interface AssetApplyUseService {
 
     public void editAssetUseToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateAssetListToUseByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editAssetUseToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 }

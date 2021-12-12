@@ -140,22 +140,6 @@ public class AssetApplyUseController {
 
     /**
      *
-     * @Title: updateAssetListToUseByIdInProcess
-     * @Description: 在工作流中编辑资产领用申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/AssetApplyUseController/updateAssetListToUseByIdInProcess")
-    @ResponseBody
-    public void updateAssetListToUseByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        assetApplyUseService.updateAssetListToUseByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editAssetUseToRevoke
      * @Description: 撤销资产领用申请
      * @param inputObject

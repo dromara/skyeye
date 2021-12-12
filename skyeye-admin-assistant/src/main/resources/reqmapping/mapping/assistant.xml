@@ -985,6 +985,7 @@
         <property id="assetListStr" name="assetListStr" ref="required,json" var="领用资产json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="asset013" path="/post/AssetApplyUseController/queryAssetListUseDetailsById" val="资产领用申请详情" allUse="2" method="GET" groupName="资产领用申请">
         <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
@@ -998,18 +999,14 @@
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="asset016" path="/post/AssetApplyUseController/updateAssetToCancellation" val="作废资产领用申请" allUse="1" groupName="资产领用申请">
         <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
     </url>
     <url id="asset017" path="/post/AssetApplyUseController/editAssetUseToSubApproval" val="资产领用申请提交审批" allUse="1" groupName="资产领用申请">
         <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
-    </url>
-    <url id="asset033" path="/post/AssetApplyUseController/updateAssetListToUseByIdInProcess" val="在工作流中编辑资产领用申请" allUse="2" groupName="资产领用申请">
-        <property id="remark" name="remark" ref="" var="描述" />
-        <property id="assetListStr" name="assetListStr" ref="required,json" var="领用资产json串" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
-        <property id="rowId" name="id" ref="required" var="资产领用主表单id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="asset036" path="/post/AssetApplyUseController/editAssetUseToRevoke" val="撤销资产领用申请" allUse="1" groupName="资产领用申请">
         <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
@@ -1072,9 +1069,11 @@
         <property id="assetListStr" name="assetListStr" ref="required,json" var="归还资产json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="asset028" path="/post/AssetApplyReturnController/editAssetReturnToSubApproval" val="资产归还申请提交审批" allUse="1" groupName="资产归还申请">
         <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="asset029" path="/post/AssetApplyReturnController/queryAssetListReturnDetailsById" val="资产归还申请详情" allUse="2" groupName="资产归还申请">
         <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
@@ -1085,18 +1084,13 @@
     <url id="asset031" path="/post/AssetApplyReturnController/queryAssetListReturnToEditById" val="资产归还申请编辑时进行回显" allUse="2" groupName="资产归还申请">
         <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
     </url>
-    <url id="asset032" path="/post/AssetApplyReturnController/updateAssetListToReturnById" val="编辑资产归还申请" allUse="1" groupName="资产归还申请">
+    <url id="asset032" path="/post/AssetApplyReturnController/updateAssetListToReturnById" val="编辑资产归还申请" allUse="1" method="PUT" groupName="资产归还申请">
         <property id="remark" name="remark" ref="" var="描述" />
         <property id="assetListStr" name="assetListStr" ref="required,json" var="归还资产json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
-    </url>
-    <url id="asset035" path="/post/AssetApplyReturnController/updateAssetListToReturnByIdInProcess" val="在工作流中编辑资产归还申请" allUse="2" groupName="资产归还申请">
-        <property id="remark" name="remark" ref="" var="描述" />
-        <property id="assetListStr" name="assetListStr" ref="required,json" var="归还资产json串" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
-        <property id="rowId" name="id" ref="required" var="资产归还主表单id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="asset038" path="/post/AssetApplyReturnController/editAssetReturnToRevoke" val="撤销资产归还申请" allUse="1" groupName="资产归还申请">
         <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>

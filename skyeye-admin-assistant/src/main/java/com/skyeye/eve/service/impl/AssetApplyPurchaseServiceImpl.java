@@ -127,7 +127,7 @@ public class AssetApplyPurchaseServiceImpl implements AssetApplyPurchaseService 
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editAssetPurchaseToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String purchaseId = map.get("id").toString();
@@ -221,7 +221,7 @@ public class AssetApplyPurchaseServiceImpl implements AssetApplyPurchaseService 
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateAssetListToPurchaseById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String purchaseId = map.get("id").toString();//采购单主表id
@@ -250,7 +250,7 @@ public class AssetApplyPurchaseServiceImpl implements AssetApplyPurchaseService 
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editAssetPurchaseToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_PURCHAES_PAGE_KEY).revokeActivi();
     }

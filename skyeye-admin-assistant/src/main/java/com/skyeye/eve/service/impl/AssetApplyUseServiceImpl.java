@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.AdminAssistantConstants;
 import com.skyeye.common.object.InputObject;
@@ -44,6 +46,9 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     /**
      * 资产领用关联的工作流的key
      */
@@ -59,7 +64,6 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
      * @return void    返回类型
      * @throws
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void queryMyUseAssetMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_USE_PAGE_KEY).queryWithActivitiList();
@@ -76,7 +80,7 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertAssetListToUse(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = ToolUtil.getSurFaceId();//领用单主表id
@@ -96,11 +100,9 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
         map.put("createTime", DateUtil.getTimeAndToString());
         assetApplyUseDao.insertAssetUseMation(map);
         assetApplyUseDao.insertAssetUseGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(subType)){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_USE_PAGE_KEY).submitToActivi(useId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_ASSET_USE_PAGE_KEY, useId, map.get("approvalId").toString());
     }
 
     /**
@@ -188,7 +190,7 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateAssetListToUseById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = map.get("id").toString();//领用单主表id
@@ -203,11 +205,9 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
         assetApplyUseDao.updateAssetUseMation(map);
         assetApplyUseDao.deleteAssetUseGoodsMationById(map);
         assetApplyUseDao.insertAssetUseGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(subType)){
-            //提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_USE_PAGE_KEY).submitToActivi(useId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_ASSET_USE_PAGE_KEY, useId, map.get("approvalId").toString());
     }
 
     /**
@@ -249,7 +249,7 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editAssetUseToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = map.get("id").toString();
@@ -260,38 +260,11 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
             || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
             || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_USE_PAGE_KEY).submitToActivi(useId, ActivitiConstants.APPROVAL_ID);
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                ACTIVITI_ASSET_USE_PAGE_KEY, useId, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
-    }
-
-    /**
-     *
-     * @Title: updateAssetListToUseByIdInProcess
-     * @Description: 在工作流中编辑资产领用申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateAssetListToUseByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        String useId = map.get("id").toString();//领用单主表id
-        //处理数据
-        List<Map<String, Object>> entitys = getAssetMationList(map.get("assetListStr").toString(), useId, "1");
-        if(entitys.size() == 0){
-            outputObject.setreturnMessage("请选择资产");
-            return;
-        }
-        assetApplyUseDao.updateAssetUseMation(map);
-        assetApplyUseDao.deleteAssetUseGoodsMationById(map);
-        assetApplyUseDao.insertAssetUseGoodsMation(entitys);
-        // 编辑流程表参数
-        ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_USE_PAGE_KEY).editApplyMationInActiviti(useId);
     }
 
     /**
@@ -302,7 +275,7 @@ public class AssetApplyUseServiceImpl implements AssetApplyUseService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editAssetUseToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_USE_PAGE_KEY).revokeActivi();
     }

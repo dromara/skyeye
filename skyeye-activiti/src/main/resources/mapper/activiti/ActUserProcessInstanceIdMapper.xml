@@ -44,7 +44,7 @@
 		FROM
 			act_user_processinstanceid a
 			LEFT JOIN act_model b ON a.act_id = b.act_id AND b.state != '4'
-			LEFT JOIN sys_eve_user_staff seus on b.create_id = seus.user_id
+			LEFT JOIN sys_eve_user_staff seus on a.create_id = seus.user_id
 		WHERE
 			a.process_instance_id = #{processInstanceId}
 		GROUP BY a.process_instance_id

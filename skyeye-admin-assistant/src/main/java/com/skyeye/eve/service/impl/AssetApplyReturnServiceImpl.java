@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.AdminAssistantConstants;
 import com.skyeye.common.object.InputObject;
@@ -43,6 +45,9 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
 
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
+
+    @Autowired
+    private ActivitiUserService activitiUserService;
 
     /**
      * 资产归还关联的工作流的key
@@ -94,9 +99,8 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @return void    返回类型
      * @throws
      */
-    @SuppressWarnings("unchecked")
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertAssetListToReturn(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String returnId = ToolUtil.getSurFaceId();//归还单主表id
@@ -116,11 +120,9 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
         map.put("createTime", DateUtil.getTimeAndToString());
         assetApplyReturnDao.insertAssetReturnMation(map);
         assetApplyReturnDao.insertAssetReturnGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_ASSET_RETURN_PAGE_KEY, returnId, map.get("approvalId").toString());
     }
 
     /**
@@ -134,7 +136,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editAssetReturnToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String returnId = map.get("id").toString();
@@ -145,7 +147,8 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以作废
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId, ActivitiConstants.APPROVAL_ID);
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                ACTIVITI_ASSET_RETURN_PAGE_KEY, returnId, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -239,7 +242,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateAssetListToReturnById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String returnId = map.get("id").toString();//归还单主表id
@@ -254,39 +257,9 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
         assetApplyReturnDao.updateAssetReturnMation(map);
         assetApplyReturnDao.deleteAssetReturnGoodsMationById(map);
         assetApplyReturnDao.insertAssetReturnGoodsMation(entitys);
-        //判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            //提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).submitToActivi(returnId, ActivitiConstants.APPROVAL_ID);
-        }
-    }
-
-    /**
-     *
-     * @Title: updateAssetListToReturnByIdInProcess
-     * @Description: 在工作流中编辑资产归还申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateAssetListToReturnByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        String returnId = map.get("id").toString();//归还单主表id
-        // 处理数据
-        List<Map<String, Object>> entitys = getAssetList(map, returnId, "1");
-        if(entitys.size() == 0){
-            outputObject.setreturnMessage("请选择资产");
-            return;
-        }
-        assetApplyReturnDao.updateAssetReturnMation(map);
-        assetApplyReturnDao.deleteAssetReturnGoodsMationById(map);
-        assetApplyReturnDao.insertAssetReturnGoodsMation(entitys);
-        // 编辑流程表参数
-        ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).editApplyMationInActiviti(returnId);
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_ASSET_RETURN_PAGE_KEY, returnId, map.get("approvalId").toString());
     }
 
     private List<Map<String, Object>> getAssetList(Map<String, Object> map, String returnId, String state) throws Exception {
@@ -316,7 +289,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editAssetReturnToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).revokeActivi();
     }

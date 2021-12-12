@@ -33,8 +33,6 @@ public interface AssetApplyReturnService {
 
     public void updateAssetListToReturnById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateAssetListToReturnByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editAssetReturnToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 }

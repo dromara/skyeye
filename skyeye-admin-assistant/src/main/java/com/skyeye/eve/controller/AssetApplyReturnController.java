@@ -156,22 +156,6 @@ public class AssetApplyReturnController {
 
     /**
      *
-     * @Title: updateAssetListToReturnByIdInProcess
-     * @Description: 在工作流中编辑资产归还申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/AssetApplyReturnController/updateAssetListToReturnByIdInProcess")
-    @ResponseBody
-    public void updateAssetListToReturnByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        assetApplyReturnService.updateAssetListToReturnByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editAssetReturnToRevoke
      * @Description: 撤销资产归还申请
      * @param inputObject

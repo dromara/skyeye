@@ -526,7 +526,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
 
         // 获取流程关联页面类型
         Map<String, Object> process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(task.getProcessInstanceId());
-        map.put("pageTypes", process.get("pageTypes"));
+        if(process != null){
+            map.put("pageTypes", process.get("pageTypes"));
+        }
 
         // 获取提交时候的信息
         Map<String, Object> params = this.getCurrentTaskParamsByTaskId(taskId);
