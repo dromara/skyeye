@@ -20,8 +20,6 @@ public interface CheckWorkOvertimeService {
 
     public void queryCheckWorkOvertimeDetailsById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateCheckWorkOvertimeByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editCheckWorkOvertimeToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     public void updateCheckWorkOvertimeToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

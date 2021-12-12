@@ -8,6 +8,8 @@ import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.CrmConstants;
 import com.skyeye.common.object.InputObject;
@@ -51,6 +53,9 @@ public class CrmContractServiceImpl implements CrmContractService {
 	
 	@Autowired
     private SysEveUserStaffDao sysEveUserStaffDao;
+
+	@Autowired
+	private ActivitiUserService activitiUserService;
 
 	/**
 	 * 客户合同提交到工作流中的key
@@ -139,7 +144,7 @@ public class CrmContractServiceImpl implements CrmContractService {
 	 * @throws Exception
 	 */
 	@Override
-	@Transactional(value = "transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void insertCrmContractMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		judgeParams(map);
@@ -156,11 +161,9 @@ public class CrmContractServiceImpl implements CrmContractService {
 			map.put("createTime", DateUtil.getTimeAndToString());
 			crmContractDao.insertCrmContractMation(map);
 			jedisClient.del(CrmConstants.sysContractListById(map.get("customerId").toString()));
-			// 判断是否提交审批
-			if("2".equals(map.get("subType").toString())){
-				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, CRM_CONTRACT_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
-			}
+			// 操作工作流数据
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+				CRM_CONTRACT_PAGE_KEY, id, map.get("approvalId").toString());
 		}
 	}
 
@@ -238,7 +241,7 @@ public class CrmContractServiceImpl implements CrmContractService {
 	* @throws Exception
 	*/
 	@Override
-	@Transactional(value = "transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editCrmContractMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		judgeParams(map);
@@ -249,36 +252,9 @@ public class CrmContractServiceImpl implements CrmContractService {
 			String id = map.get("id").toString();
 			crmContractDao.editCrmContractMationById(map);
 			jedisClient.del(CrmConstants.sysContractListById(map.get("customerId").toString()));
-			// 判断是否提交审批
-			if("2".equals(map.get("subType").toString())){
-				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, CRM_CONTRACT_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
-			}
-		}
-	}
-	
-	/**
-	*
-	* @Title: editCrmContractMationToSave
-	* @Description: 编辑合同信息(已提交审核)
-	* @param inputObject
-	* @param outputObject
-	* @throws Exception
-	*/
-	@Override
-	@Transactional(value = "transactionManager")
-	public void editCrmContractMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception {
-		Map<String, Object> map = inputObject.getParams();
-		judgeParams(map);
-		List<Map<String, Object>> list = crmContractDao.queryCrmContractMationByNameAndId(map);
-		if(list != null && list.size() > 0){
-			outputObject.setreturnMessage("合同名称或编号已存在！");
-		}else{
-			String id = map.get("id").toString();
-			crmContractDao.editCrmContractMationById(map);
-			jedisClient.del(CrmConstants.sysContractListById(map.get("customerId").toString()));
-			// 编辑工作流中的数据
-			ActivitiRunFactory.run(inputObject, outputObject, CRM_CONTRACT_PAGE_KEY).editApplyMationInActiviti(id);
+			// 操作工作流数据
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+				CRM_CONTRACT_PAGE_KEY, id, map.get("approvalId").toString());
 		}
 	}
 	
@@ -316,7 +292,7 @@ public class CrmContractServiceImpl implements CrmContractService {
          * @throws
      */
 	@Override
-	@Transactional(value="transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editCrmContractToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();
@@ -324,7 +300,8 @@ public class CrmContractServiceImpl implements CrmContractService {
 		int state = Integer.parseInt(bean.get("state").toString());
 		if(0 == state || 12 == state || 4 == state){
 			// 草稿、审核不通过或者撤销状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, CRM_CONTRACT_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+				CRM_CONTRACT_PAGE_KEY, id, map.get("approvalId").toString());
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}
@@ -462,6 +439,7 @@ public class CrmContractServiceImpl implements CrmContractService {
 	     * @throws
 	 */
 	@Override
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editCrmContractToRevokeByProcessInstanceId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, CRM_CONTRACT_PAGE_KEY).revokeActivi();
 	}

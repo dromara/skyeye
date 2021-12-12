@@ -27,8 +27,6 @@ public interface ConferenceRoomReserveService {
 
     public void updateReserveConferenceRoomMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateReserveConferenceRoomMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editReserveConferenceRoomToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     public void updateReserveConferenceRoomToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

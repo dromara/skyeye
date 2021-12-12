@@ -99,22 +99,6 @@ public class CheckWorkLeaveController {
 
     /**
      *
-     * @Title: updateCheckWorkLeaveByIdInProcess
-     * @Description: 在工作流中编辑请假申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/CheckWorkLeaveController/updateCheckWorkLeaveByIdInProcess")
-    @ResponseBody
-    public void updateCheckWorkLeaveByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        checkWorkLeaveService.updateCheckWorkLeaveByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editCheckWorkLeaveToSubApproval
      * @Description: 提交审批请假申请
      * @param inputObject

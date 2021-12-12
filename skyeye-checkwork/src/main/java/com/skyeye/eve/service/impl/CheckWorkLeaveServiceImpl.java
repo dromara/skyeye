@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.CheckWorkConstants;
 import com.skyeye.common.constans.Constants;
@@ -43,6 +45,9 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     /**
      * 请假申请关联的工作流的key
      */
@@ -68,7 +73,7 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertCheckWorkLeaveMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 请假申请id
@@ -87,11 +92,9 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
         map.put("createTime", DateUtil.getTimeAndToString());
         checkWorkLeaveDao.insertCheckWorkLeaveMation(map);
         checkWorkLeaveDao.insertCheckWorkLeaveDaysMation(beans);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_LEAVE_PAGE_KEY).submitToActivi(leaveId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            CHECK_WORK_LEAVE_PAGE_KEY, leaveId, map.get("approvalId").toString());
     }
 
     private List<Map<String, Object>> getLeaveDays(String leaveDayStr, String leaveId) {
@@ -134,7 +137,7 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateCheckWorkLeaveById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 请假申请id
@@ -148,11 +151,9 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
         checkWorkLeaveDao.updateCheckWorkLeaveMation(map);
         checkWorkLeaveDao.deleteCheckWorkLeaveDaysMationByLeaveId(leaveId);
         checkWorkLeaveDao.insertCheckWorkLeaveDaysMation(beans);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_LEAVE_PAGE_KEY).submitToActivi(leaveId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            CHECK_WORK_LEAVE_PAGE_KEY, leaveId, map.get("approvalId").toString());
     }
 
     /**
@@ -176,32 +177,6 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
     }
 
     /**
-     * 在工作流中编辑请假申请
-     *
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateCheckWorkLeaveByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        // 请假申请id
-        String leaveId = map.get("id").toString();
-        // 处理请假天数
-        List<Map<String, Object>> beans = getLeaveDays(map.get("leaveDayStr").toString(), leaveId);
-        if(beans.size() == 0){
-            outputObject.setreturnMessage("请填写请假日期.");
-            return;
-        }
-        checkWorkLeaveDao.updateCheckWorkLeaveMation(map);
-        checkWorkLeaveDao.deleteCheckWorkLeaveDaysMationByLeaveId(leaveId);
-        checkWorkLeaveDao.insertCheckWorkLeaveDaysMation(beans);
-        // 更新工作流中的数据
-        ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_LEAVE_PAGE_KEY).editApplyMationInActiviti(leaveId);
-    }
-
-    /**
      * 提交审批请假申请
      *
      * @param inputObject
@@ -209,7 +184,7 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editCheckWorkLeaveToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String leaveId = map.get("id").toString();
@@ -219,7 +194,8 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_LEAVE_PAGE_KEY).submitToActivi(leaveId, ActivitiConstants.APPROVAL_ID);
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                CHECK_WORK_LEAVE_PAGE_KEY, leaveId, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -257,7 +233,7 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editCheckWorkLeaveToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_LEAVE_PAGE_KEY).revokeActivi();
     }

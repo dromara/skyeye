@@ -216,6 +216,7 @@
 		<property id="remark" name="remark" ref="" var="备注" />
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkleave003" path="/post/CheckWorkLeaveController/queryCheckWorkLeaveDetailsById" val="请假申请详情" allUse="2" method="GET" groupName="请假申请">
 		<property id="rowId" name="id" ref="required" var="请假申请主表单id" />
@@ -229,18 +230,14 @@
 		<property id="remark" name="remark" ref="" var="备注" />
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkleave006" path="/post/CheckWorkLeaveController/editCheckWorkLeaveToSubApproval" val="提交审批请假申请" allUse="1" groupName="请假申请">
 		<property id="rowId" name="id" ref="required" var="请假申请id" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkleave007" path="/post/CheckWorkLeaveController/updateCheckWorkLeaveToCancellation" val="作废请假申请" allUse="1" groupName="请假申请">
 		<property id="rowId" name="id" ref="required" var="请假申请id" />
-	</url>
-	<url id="checkworkleave008" path="/post/CheckWorkLeaveController/updateCheckWorkLeaveByIdInProcess" val="在工作流中编辑请假申请" allUse="2" method="PUT" groupName="请假申请">
-		<property id="rowId" name="id" ref="required" var="请假申请id" />
-		<property id="leaveDayStr" name="leaveDayStr" ref="required,json" var="请假天数json串" />
-		<property id="remark" name="remark" ref="" var="备注" />
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 	</url>
 	<url id="checkworkleave009" path="/post/CheckWorkLeaveController/editCheckWorkLeaveToRevoke" val="撤销请假申请" allUse="1" groupName="请假申请">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
@@ -308,6 +305,7 @@
 		<property id="remark" name="remark" ref="" var="备注" />
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkovertime003" path="/post/CheckWorkOvertimeController/queryCheckWorkOvertimeDetailsById" val="加班申请详情" allUse="2" method="GET" groupName="加班申请">
 		<property id="rowId" name="id" ref="required" var="加班申请主表单id" />
@@ -322,19 +320,14 @@
 		<property id="remark" name="remark" ref="" var="备注" />
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkovertime006" path="/post/CheckWorkOvertimeController/editCheckWorkOvertimeToSubApproval" val="提交审批加班申请" allUse="1" groupName="加班申请">
 		<property id="rowId" name="id" ref="required" var="加班申请id" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkovertime007" path="/post/CheckWorkOvertimeController/updateCheckWorkOvertimeToCancellation" val="作废加班申请" allUse="1" groupName="加班申请">
 		<property id="rowId" name="id" ref="required" var="加班申请id" />
-	</url>
-	<url id="checkworkovertime008" path="/post/CheckWorkOvertimeController/updateCheckWorkOvertimeByIdInProcess" val="在工作流中编辑加班申请" allUse="2" method="PUT" groupName="加班申请">
-		<property id="rowId" name="id" ref="required" var="加班申请id" />
-		<property id="overtimeDayStr" name="overtimeDayStr" ref="required,json" var="加班天数json串" />
-		<property id="content" name="content" ref="required" var="加班内容" />
-		<property id="remark" name="remark" ref="" var="备注" />
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 	</url>
 	<url id="checkworkovertime009" path="/post/CheckWorkOvertimeController/editCheckWorkOvertimeToRevoke" val="撤销加班申请" allUse="1" groupName="加班申请">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>

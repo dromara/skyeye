@@ -107,22 +107,6 @@ public class ConferenceRoomReserveController {
 
     /**
      *
-     * @Title: updateReserveConferenceRoomMationToSave
-     * @Description: 编辑会议室预定申请（已提交审批）
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/ConferenceRoomReserveController/updateReserveConferenceRoomMationToSave")
-    @ResponseBody
-    public void updateReserveConferenceRoomMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception{
-        conferenceRoomReserveService.updateReserveConferenceRoomMationToSave(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editReserveConferenceRoomToSubApproval
      * @Description: 会议室预定申请提交审批
      * @param inputObject

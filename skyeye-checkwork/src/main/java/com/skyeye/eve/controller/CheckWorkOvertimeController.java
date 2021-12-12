@@ -111,22 +111,6 @@ public class CheckWorkOvertimeController {
 
     /**
      *
-     * @Title: updateCheckWorkOvertimeByIdInProcess
-     * @Description: 在工作流中编辑加班申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/CheckWorkOvertimeController/updateCheckWorkOvertimeByIdInProcess")
-    @ResponseBody
-    public void updateCheckWorkOvertimeByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        checkWorkOvertimeService.updateCheckWorkOvertimeByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editCheckWorkOvertimeToSubApproval
      * @Description: 提交审批加班申请
      * @param inputObject

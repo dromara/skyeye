@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.CheckWorkConstants;
 import com.skyeye.common.constans.Constants;
@@ -43,6 +45,9 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     /**
      * 加班申请关联的工作流的key
      */
@@ -68,7 +73,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertCheckWorkOvertimeMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 加班申请id
@@ -87,11 +92,9 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
         map.put("createTime", DateUtil.getTimeAndToString());
         checkWorkOvertimeDao.insertCheckWorkOvertimeMation(map);
         checkWorkOvertimeDao.insertCheckWorkOvertimeDaysMation(beans);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_OVERTIME_PAGE_KEY).submitToActivi(overtimeId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            CHECK_WORK_OVERTIME_PAGE_KEY, overtimeId, map.get("approvalId").toString());
     }
 
     private List<Map<String, Object>> getOverTimeDays(String overtimeDayStr, String overtimeId) {
@@ -134,7 +137,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateCheckWorkOvertimeById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 加班申请id
@@ -148,11 +151,9 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
         checkWorkOvertimeDao.updateCheckWorkOvertimeMation(map);
         checkWorkOvertimeDao.deleteCheckWorkOvertimeDaysMationByOvertimeId(overtimeId);
         checkWorkOvertimeDao.insertCheckWorkOvertimeDaysMation(beans);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_OVERTIME_PAGE_KEY).submitToActivi(overtimeId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            CHECK_WORK_OVERTIME_PAGE_KEY, overtimeId, map.get("approvalId").toString());
     }
 
     /**
@@ -176,32 +177,6 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
     }
 
     /**
-     * 在工作流中编辑加班申请
-     *
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateCheckWorkOvertimeByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        // 加班申请id
-        String overtimeId = map.get("id").toString();
-        // 处理加班天数
-        List<Map<String, Object>> beans = getOverTimeDays(map.get("overtimeDayStr").toString(), overtimeId);
-        if(beans.size() == 0){
-            outputObject.setreturnMessage("请填写加班日期.");
-            return;
-        }
-        checkWorkOvertimeDao.updateCheckWorkOvertimeMation(map);
-        checkWorkOvertimeDao.deleteCheckWorkOvertimeDaysMationByOvertimeId(overtimeId);
-        checkWorkOvertimeDao.insertCheckWorkOvertimeDaysMation(beans);
-        // 编辑工作流中的数据
-        ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_OVERTIME_PAGE_KEY).editApplyMationInActiviti(overtimeId);
-    }
-
-    /**
      * 提交审批加班申请
      *
      * @param inputObject
@@ -209,7 +184,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editCheckWorkOvertimeToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String overtimeId = map.get("id").toString();
@@ -219,7 +194,9 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_OVERTIME_PAGE_KEY).submitToActivi(overtimeId, ActivitiConstants.APPROVAL_ID);
+            // 操作工作流数据
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                CHECK_WORK_OVERTIME_PAGE_KEY, overtimeId, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -257,7 +234,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editCheckWorkOvertimeToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_OVERTIME_PAGE_KEY).revokeActivi();
     }

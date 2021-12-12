@@ -132,22 +132,6 @@ public class CrmContractController {
 	
 	/**
 	 *
-	 * @Title: editCrmContractMationToSave
-	 * @Description: 编辑合同信息(已提交审核)
-	 * @param inputObject
-	 * @param outputObject
-	 * @throws Exception 参数
-	 * @return void 返回类型
-	 * @throws
-	 */
-	@RequestMapping("/post/CrmContractController/editCrmContractMationToSave")
-	@ResponseBody
-	public void editCrmContractMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception {
-		crmContractService.editCrmContractMationToSave(inputObject, outputObject);
-	}
-	
-	/**
-	 *
 	 * @Title: queryCrmContractListToChoose
 	 * @Description: 根据客户id获取合同管理列表用于下拉框选择
 	 * @param inputObject

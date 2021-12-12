@@ -337,6 +337,7 @@
 		<property id="relationUserId" name="relationUserId" ref="required" var="关联人员"/>
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
 		<property id="subType" name="subType" ref="" var="提交类型"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="mycrmcontract003" path="/post/CrmContractController/editCrmContractMationById" val="编辑我的合同信息" allUse="1" groupName="合同模块">
 		<property id="rowId" name="id" ref="required" var="合同id"/>
@@ -360,6 +361,7 @@
 		<property id="relationUserId" name="relationUserId" ref="required" var="关联人员"/>
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
 		<property id="subType" name="subType" ref="" var="提交类型"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="mycrmcontract004" path="/post/CrmContractController/queryCrmContractMationById" val="获取合同信息进行回显" allUse="2" groupName="合同模块">
 		<property id="rowId" name="id" ref="required" var="合同id"/>
@@ -382,6 +384,7 @@
 	</url>
 	<url id="mycrmcontract009" path="/post/CrmContractController/editCrmContractToSubApproval" val="合同提交审批" allUse="1" groupName="合同模块">
 		<property id="rowId" name="id" ref="required" var="合同id"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="mycrmcontract010" path="/post/CrmContractController/editCrmContractToPerform" val="合同执行" allUse="1" groupName="合同模块">
 		<property id="rowId" name="id" ref="required" var="合同id"/>
@@ -394,28 +397,6 @@
 	</url>
 	<url id="mycrmcontract013" path="/post/CrmContractController/editCrmContractToRecovery" val="合同恢复" allUse="1" groupName="合同模块">
 		<property id="rowId" name="id" ref="required" var="合同id"/>
-	</url>
-	<url id="mycrmcontract014" path="/post/CrmContractController/editCrmContractMationToSave" val="编辑我的合同信息(已提交审核)" allUse="2" groupName="合同模块">
-		<property id="rowId" name="id" ref="required" var="合同id"/>
-		<property id="city" name="city" ref="" var="所在城市"/>
-		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
-		<property id="title" name="title" ref="required" var="合同名称"/>
-		<property id="num" name="num" ref="required" var="合同编号"/>
-		<property id="price" name="price" ref="double" var="合同金额"/>
-		<property id="signingTime" name="signingTime" ref="required" var="签约日期"/>
-		<property id="effectTime" name="effectTime" ref="" var="生效日期"/>
-		<property id="serviceEndTime" name="serviceEndTime" ref="" var="服务结束日期"/>
-		<property id="contacts" name="contacts" ref="required" var="联系人"/>
-		<property id="workPhone" name="workPhone" ref="" var="固定电话"/>
-		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
-		<property id="email" name="email" ref="email" var="邮箱"/>
-		<property id="qq" name="qq" ref="" var="QQ号"/>
-		<property id="technicalTerms" name="technicalTerms" ref="" var="主要技术条款"/>
-		<property id="businessTerms" name="businessTerms" ref="" var="主要商务条款"/>
-		<property id="customerId" name="customerId" ref="required" var="客户id"/>
-		<property id="departmentId" name="departmentId" ref="required" var="所属部门id"/>
-		<property id="relationUserId" name="relationUserId" ref="required" var="关联人员"/>
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
 	</url>
 	<url id="mycrmcontract015" path="/post/CrmContractController/deleteCrmContractById" val="删除合同信息" allUse="1" groupName="合同模块">
 		<property id="rowId" name="id" ref="required" var="合同id"/>

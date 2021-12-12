@@ -22,8 +22,6 @@ public interface CrmContractService {
     
     public void editCrmContractMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
     
-    public void editCrmContractMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception;
-    
     public void queryCrmContractListToChoose(InputObject inputObject, OutputObject outputObject) throws Exception;
     
     public void editCrmContractToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;

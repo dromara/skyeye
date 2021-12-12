@@ -71,6 +71,7 @@
         <property id="remark" name="remark" ref="" var="备注" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="conferenceroomreserve003" path="/post/ConferenceRoomReserveController/queryReserveConferenceRoomMationToDetails" val="会议室预定申请详情" allUse="2" groupName="会议室预定">
         <property id="rowId" name="id" ref="required" var="会议室预定主表单id" />
@@ -87,21 +88,14 @@
         <property id="remark" name="remark" ref="" var="备注" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="conferenceroomreserve006" path="/post/ConferenceRoomReserveController/editReserveConferenceRoomToSubApproval" val="会议室预定申请提交审批" allUse="1" groupName="会议室预定">
         <property id="rowId" name="id" ref="required" var="会议室预定id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="conferenceroomreserve007" path="/post/ConferenceRoomReserveController/updateReserveConferenceRoomToCancellation" val="作废会议室预定申请" allUse="1" groupName="会议室预定">
         <property id="rowId" name="id" ref="required" var="会议室预定id" />
-    </url>
-    <url id="conferenceroomreserve009" path="/post/ConferenceRoomReserveController/updateReserveConferenceRoomMationToSave" val="编辑会议室预定申请(已提交审批)" allUse="2" groupName="会议室预定">
-    	<property id="rowId" name="id" ref="required" var="会议室预定id" />
-        <property id="conferenceRoom" name="conferenceRoom" ref="required" var="会议室" />
-        <property id="startTime" name="startTime" ref="required" var="开始时间" />
-        <property id="endTime" name="endTime" ref="required" var="结束时间" />
-        <property id="reserveReason" name="reserveReason" ref="required" var="使用事由" />
-        <property id="remark" name="remark" ref="" var="备注" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
     </url>
     <url id="conferenceroomreserve010" path="/post/ConferenceRoomReserveController/editReserveConferenceRoomToRevoke" val="撤销会议室预定申请" allUse="1" groupName="会议室预定">
         <property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
