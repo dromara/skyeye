@@ -67,6 +67,7 @@ public class ProCostExpenseServiceImpl implements ProCostExpenseService {
 	public void queryProCostExpenseList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String userId = inputObject.getLogParams().get("id").toString();
+		map.put("pageUrl", PRO_COST_EXPENSE_PAGE_KEY);
 		Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
 		List<Map<String, Object>> beans = proCostExpenseDao.queryProCostExpenseList(map);
 		for(Map<String, Object> bean : beans){

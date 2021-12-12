@@ -138,6 +138,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
 	@Override
 	public void queryAllProWorkloadList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
+		map.put("pageUrl", PRO_WORKLOAD_PAGE_KEY);
 		Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
 		List<Map<String, Object>> beans = proWorkloadDao.queryAllProWorkloadList(map);
 		outputObject.setBeans(beans);

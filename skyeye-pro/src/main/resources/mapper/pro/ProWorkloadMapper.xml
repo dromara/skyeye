@@ -71,7 +71,7 @@
 		WHERE
 			a.pro_id = b.id
 		AND c.user_id = a.create_id
-		AND g.page_url = '../../tpl/proworkload/proworkloadadd.html'
+		AND g.page_url = #{pageUrl}
 		<if test="proName != '' and proName != null">
 			AND b.project_name like '%${proName}%'
 		</if>

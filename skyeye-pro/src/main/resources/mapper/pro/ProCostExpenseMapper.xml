@@ -17,7 +17,7 @@
 		FROM
 			pro_cost_expense a
 			LEFT JOIN pro_cost_expense_process b ON a.id = b.expense_id
-			LEFT JOIN act_model g ON g.page_url = '../../tpl/procostexpense/procostexpenseadd.html',
+			LEFT JOIN act_model g ON g.page_url = #{pageUrl},
 			pro_project c,
 			sys_eve_user_staff d
 		WHERE a.pro_id = c.id
