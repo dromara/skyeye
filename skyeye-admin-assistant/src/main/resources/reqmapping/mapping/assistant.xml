@@ -822,6 +822,7 @@
         <property id="licenceStr" name="licenceStr" ref="required,json" var="关联的证照json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="licenceborrow003" path="/post/LicenceApplyBorrowController/queryBorrowLicenceMationToDetails" val="证照借用申请详情" allUse="2" groupName="证照借用管理">
         <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
@@ -835,17 +836,13 @@
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="licenceborrow006" path="/post/LicenceApplyBorrowController/editBorrowLicenceToSubApproval" val="证照借用申请提交审批" allUse="1" groupName="证照借用管理">
         <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="licenceborrow007" path="/post/LicenceApplyBorrowController/updateBorrowLicenceToCancellation" val="作废证照借用申请" allUse="1" groupName="证照借用管理">
-        <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
-    </url>
-    <url id="licenceborrow009" path="/post/LicenceApplyBorrowController/updateBorrowLicenceMationToSave" val="编辑证照借用申请（已提交审批）" allUse="2" groupName="证照借用管理">
-        <property id="remark" name="remark" ref="" var="描述" />
-        <property id="licenceStr" name="licenceStr" ref="required,json" var="关联的证照json串" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="证照借用主表单id" />
     </url>
     <url id="licenceborrow010" path="/post/LicenceApplyBorrowController/updateBorrowLicenceMationToRevoke" val="撤销证照借用申请" allUse="1" groupName="证照借用管理">
@@ -867,6 +864,7 @@
         <property id="licenceStr" name="licenceStr" ref="required,json" var="证照json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="licencerevert003" path="/post/LicenceApplyRevertController/queryRevertLicenceMationToDetails" val="证照归还申请详情" allUse="2" groupName="证照归还管理">
         <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
@@ -880,17 +878,13 @@
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="licencerevert006" path="/post/LicenceApplyRevertController/editRevertLicenceToSubApproval" val="证照归还申请提交审批" allUse="1" groupName="证照归还管理">
         <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
+        <property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="licencerevert007" path="/post/LicenceApplyRevertController/updateRevertLicenceToCancellation" val="作废证照归还申请" allUse="1" groupName="证照归还管理">
-        <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
-    </url>
-    <url id="licencerevert009" path="/post/LicenceApplyRevertController/updateRevertLicenceMationToSave" val="编辑证照归还申请（已提交审批）" allUse="2" groupName="证照归还管理">
-        <property id="remark" name="remark" ref="" var="描述" />
-        <property id="licenceStr" name="licenceStr" ref="required,json" var="证照json串" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="rowId" name="id" ref="required" var="证照归还主表单id" />
     </url>
     <url id="licencerevert010" path="/post/LicenceApplyRevertController/updateRevertLicenceMationToRevoke" val="撤销证照归还申请" allUse="1" groupName="证照归还管理">

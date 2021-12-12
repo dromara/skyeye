@@ -5,6 +5,8 @@
 package com.skyeye.service.impl;
 
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -38,6 +40,9 @@ public class ProTaskServiceImpl implements ProTaskService {
 	
 	@Autowired
 	private SysEnclosureDao sysEnclosureDao;
+
+	@Autowired
+	private ActivitiUserService activitiUserService;
 
 	/**
 	 * 项目任务申请在工作流中的key
@@ -79,7 +84,7 @@ public class ProTaskServiceImpl implements ProTaskService {
     * @throws
     */
 	@Override
-	@Transactional(value = "transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void insertProTaskMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = proTaskDao.queryProTaskByTaskName(map);
@@ -95,11 +100,9 @@ public class ProTaskServiceImpl implements ProTaskService {
 			map.put("createId", user.get("id"));
 			map.put("createTime", DateUtil.getTimeAndToString());
 			proTaskDao.insertProTaskMation(map);
-			// 判断是否提交审批
-			if("2".equals(map.get("subType").toString())){
-				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, PRO_TASK_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
-			}
+			// 操作工作流数据
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+				PRO_TASK_PAGE_KEY, id, map.get("approvalId").toString());
 		}
 	}
 	
@@ -163,7 +166,7 @@ public class ProTaskServiceImpl implements ProTaskService {
     * @throws
     */
 	@Override
-	@Transactional(value="transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProTaskMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = proTaskDao.queryProTaskByTaskName(map);
@@ -175,11 +178,9 @@ public class ProTaskServiceImpl implements ProTaskService {
 				map.put("endTime", null);
 			}
 			proTaskDao.editProTaskMation(map);
-			// 判断是否提交审批
-			if("2".equals(map.get("subType").toString())){
-				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, PRO_TASK_PAGE_KEY).submitToActivi(taskId, ActivitiConstants.APPROVAL_ID);
-			}
+			// 操作工作流数据
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+				PRO_TASK_PAGE_KEY, taskId, map.get("approvalId").toString());
 		}
 	}
 	
@@ -223,7 +224,7 @@ public class ProTaskServiceImpl implements ProTaskService {
     * @throws
     */
 	@Override
-	@Transactional(value = "transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProTaskProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, PRO_TASK_PAGE_KEY).revokeActivi();
 	}
@@ -239,7 +240,7 @@ public class ProTaskServiceImpl implements ProTaskService {
     * @throws
     */
 	@Override
-	@Transactional(value="transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProTaskToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();
@@ -249,7 +250,8 @@ public class ProTaskServiceImpl implements ProTaskService {
 				|| "12".equals(bean.get("state").toString())
 				|| "5".equals(bean.get("state").toString())){
 			// 草稿、审核不通过、撤销状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_TASK_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+				PRO_TASK_PAGE_KEY, id, map.get("approvalId").toString());
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}
@@ -286,34 +288,6 @@ public class ProTaskServiceImpl implements ProTaskService {
 
 	/**
      * 
-     * @Title: editProTaskMationInProcess
-     * @Description: 在工作流中编辑任务信息
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-	@Override
-	@Transactional(value="transactionManager")
-	public void editProTaskMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = proTaskDao.queryProTaskByTaskName(map);
-		if(bean == null){
-			if(map.get("endTime").toString().isEmpty()){
-				map.put("endTime", null);
-			}
-			String id = map.get("id").toString();
-			proTaskDao.editProTaskMation(map);
-			// 编辑流程表参数
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_TASK_PAGE_KEY).editApplyMationInActiviti(id);
-		}else{
-			outputObject.setreturnMessage("该任务名称已存在，不可进行二次保存");
-		}
-	}
-
-	/**
-     * 
      * @Title: queryMyProTaskList
      * @Description: 获取我的任务列表
      * @param inputObject
@@ -322,7 +296,6 @@ public class ProTaskServiceImpl implements ProTaskService {
      * @return void    返回类型
      * @throws
      */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void queryMyProTaskList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();

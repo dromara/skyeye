@@ -33,8 +33,6 @@ public interface ProCostExpenseService {
 
 	public void editProCostExpenseProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void editProCostExpenseMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
 	public void deleteProCostExpenseMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void updateProCostExpenseToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

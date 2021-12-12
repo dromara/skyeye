@@ -7,6 +7,8 @@ package com.skyeye.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -17,7 +19,6 @@ import com.skyeye.eve.dao.SysEnclosureDao;
 import com.skyeye.service.ProFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,9 @@ public class ProFileServiceImpl implements ProFileService {
     @Autowired
 	private SysEnclosureDao sysEnclosureDao;
 
+	@Autowired
+	private ActivitiUserService activitiUserService;
+
 	/**
 	 * 项目文档审核在工作流中配置的key
 	 */
@@ -61,6 +65,7 @@ public class ProFileServiceImpl implements ProFileService {
 		Map<String, Object> map = inputObject.getParams();
 		String userId = inputObject.getLogParams().get("id").toString();
 		map.put("userId", userId);
+		map.put("pageUrl", PRO_FILE_PAGE_KEY);
 		Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
 		List<Map<String, Object>> beans = proFileDao.queryProFileList(map);
 		for(Map<String, Object> bean : beans){
@@ -82,7 +87,7 @@ public class ProFileServiceImpl implements ProFileService {
     * @throws
     */
 	@Override
-	@Transactional(value="transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void insertProFileMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = proFileDao.queryProFileByTitle(map);
@@ -98,11 +103,9 @@ public class ProFileServiceImpl implements ProFileService {
 			map.put("createTime", time);
 			map.put("updateTime", time);
 			proFileDao.insertProFileMation(map);
-			// 判断是否提交审批
-			if("2".equals(map.get("subType").toString())){
-				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, PRO_FILE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
-			}
+			// 操作工作流数据
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+				PRO_FILE_PAGE_KEY, id, map.get("approvalId").toString());
 		}
 	}
 	
@@ -160,6 +163,7 @@ public class ProFileServiceImpl implements ProFileService {
 	 * @throws
 	 */
 	@Override
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProFileMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = proFileDao.queryProFileByTitle(map);
@@ -168,11 +172,9 @@ public class ProFileServiceImpl implements ProFileService {
 		}else{
 			String id = map.get("id").toString();//文档id
 			proFileDao.editProFileMation(map);
-			// 判断是否提交审批
-			if("2".equals(map.get("subType").toString())){
-				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, PRO_FILE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
-			}
+			// 操作工作流数据
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+				PRO_FILE_PAGE_KEY, id, map.get("approvalId").toString());
 		}
 	}
 
@@ -187,6 +189,7 @@ public class ProFileServiceImpl implements ProFileService {
 	 * @throws
 	 */
 	@Override
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProFileToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();
@@ -195,7 +198,8 @@ public class ProFileServiceImpl implements ProFileService {
 		Integer state = Integer.parseInt(bean.get("state").toString());
 		if(0 == state || 12 == state || 3 == state){
 			// 草稿、审核不通过、撤销状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_FILE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+				PRO_FILE_PAGE_KEY, id, map.get("approvalId").toString());
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}
@@ -212,32 +216,9 @@ public class ProFileServiceImpl implements ProFileService {
 	 * @throws
 	 */
 	@Override
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProFileProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, PRO_FILE_PAGE_KEY).revokeActivi();
-	}
-
-	/**
-	 *
-	 * @Title: editProFileMationInProcess
-	 * @Description: 在工作流中编辑文档信息
-	 * @param inputObject
-	 * @param outputObject
-	 * @throws Exception    参数
-	 * @return void    返回类型
-	 * @throws
-	 */
-	@Override
-	public void editProFileMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = proFileDao.queryProFileByTitle(map);
-		if(bean == null){
-			String id = map.get("id").toString();
-			proFileDao.editProFileMation(map);
-			// 编辑流程表参数
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_FILE_PAGE_KEY).editApplyMationInActiviti(id);
-		}else{
-			outputObject.setreturnMessage("该文档名称已存在，不可进行二次保存");
-		}
 	}
 
 	/**
@@ -302,6 +283,7 @@ public class ProFileServiceImpl implements ProFileService {
 	@Override
 	public void queryAllProFileList(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
+		map.put("pageUrl", PRO_FILE_PAGE_KEY);
 		Page pages = PageHelper.startPage(Integer.parseInt(map.get("page").toString()), Integer.parseInt(map.get("limit").toString()));
 		List<Map<String, Object>> beans = proFileDao.queryAllProFileList(map);
 		outputObject.setBeans(beans);

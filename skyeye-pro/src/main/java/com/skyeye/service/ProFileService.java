@@ -33,8 +33,6 @@ public interface ProFileService {
 
 	public void editProFileProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void editProFileMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
 	public void deleteProFileMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void updateProFileToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

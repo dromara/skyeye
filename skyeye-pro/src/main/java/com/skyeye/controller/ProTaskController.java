@@ -172,23 +172,7 @@ public class ProTaskController {
 	public void updateProTaskToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception {
 	   proTaskService.updateProTaskToCancellation(inputObject, outputObject);
 	}
-	
-	/**
-     * 
-     * @Title: editProTaskMationInProcess
-     * @Description: 在工作流中编辑任务信息
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-	@RequestMapping("/post/ProTaskController/editProTaskMationInProcess")
-	@ResponseBody
-	public void editProTaskMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-	   proTaskService.editProTaskMationInProcess(inputObject, outputObject);
-	}
-	
+
 	/**
      * 
      * @Title: queryMyProTaskList

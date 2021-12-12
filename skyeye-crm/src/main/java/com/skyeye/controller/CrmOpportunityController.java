@@ -242,22 +242,6 @@ public class CrmOpportunityController {
 	
 	/**
 	*
-	* @Title: editOpportunityMationByIdInProcess
-	* @Description: 在工作流中全部商机编辑商机信息
-	* @param inputObject
-	* @param outputObject
-	* @throws Exception    参数
-	* @return void    返回类型
-	* @throws
-	*/
-	@RequestMapping("/post/CrmOpportunityController/editOpportunityMationByIdInProcess")
-	@ResponseBody
-	public void editOpportunityMationByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-	   crmOpportunityService.editOpportunityMationByIdInProcess(inputObject, outputObject);
-	}
-	
-	/**
-	*
 	* @Title: editOpportunityToConmunicate
 	* @Description: 根据商机Id初期沟通
 	* @param inputObject

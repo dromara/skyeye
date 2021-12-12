@@ -7,6 +7,8 @@ package com.skyeye.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -49,6 +51,9 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 	
 	@Autowired
 	private SysEnclosureDao sysEnclosureDao;
+
+	@Autowired
+	private ActivitiUserService activitiUserService;
 
 	/**
 	 * 客户商机申请到工作流中的key
@@ -93,7 +98,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
     * @throws
     */
 	@Override
-	@Transactional(value = "transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void insertCrmOpportunityMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = crmOpportunityDao.queryOpportunityMationByName(map);
@@ -108,11 +113,9 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 			map.put("createName", user.get("userName"));
 			map.put("createTime", DateUtil.getTimeAndToString());
 			crmOpportunityDao.insertCrmOpportunityMation(map);
-			// 判断是否提交审批
-			if("2".equals(map.get("subType").toString())){
-				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
-			}
+			// 操作工作流数据
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+				CRM_OPPORTUNITY_PAGE_KEY, id, map.get("approvalId").toString());
 		}
 	}
 
@@ -188,7 +191,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 	* @throws
 	*/
 	@Override
-	@Transactional(value = "transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editOpportunityMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = crmOpportunityDao.queryOpportunityMationByName(map);
@@ -196,11 +199,9 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 			judgeParams(map);
 			String id = map.get("id").toString();
 			crmOpportunityDao.editOpportunityMationById(map);
-			// 判断是否提交审批
-			if("2".equals(map.get("subType").toString())){
-				// 提交审批
-				ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
-			}
+			// 操作工作流数据
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+				CRM_OPPORTUNITY_PAGE_KEY, id, map.get("approvalId").toString());
 		}else{
 			outputObject.setreturnMessage("该商机名称已存在，不可进行二次保存");
 		}
@@ -401,45 +402,21 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 	* @throws
 	*/
 	@Override
-	@Transactional(value = "transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editOpportunityToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String opportunityId = map.get("id").toString();
 		Map<String, Object> bean = crmOpportunityDao.queryCrmOpportunityStateById(opportunityId);//查询商机的状态
-		if("0".equals(bean.get("state").toString()) || "12".equals(bean.get("state").toString())){
+		Integer state = Integer.parseInt(bean.get("state").toString());
+		if(0 == state || 12 == state){
 			// 草稿、审核不通过状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).submitToActivi(opportunityId, ActivitiConstants.APPROVAL_ID);
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+				CRM_OPPORTUNITY_PAGE_KEY, opportunityId, map.get("approvalId").toString());
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}
 	}
 
-	/**
-	*
-	* @Title: editOpportunityMationByIdInProcess
-	* @Description: 在工作流中全部商机编辑商机信息
-	* @param inputObject
-	* @param outputObject
-	* @throws Exception    参数
-	* @return void    返回类型
-	* @throws
-	*/
-	@Override
-	@Transactional(value = "transactionManager")
-	public void editOpportunityMationByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		Map<String, Object> map = inputObject.getParams();
-		Map<String, Object> bean = crmOpportunityDao.queryOpportunityMationByName(map);
-		if(bean == null){
-			judgeParams(map);
-			String id = map.get("id").toString();
-			crmOpportunityDao.editOpportunityMationById(map);
-			// 编辑流程表参数
-			ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).editApplyMationInActiviti(id);
-		}else{
-			outputObject.setreturnMessage("该商机名称已存在，不可进行二次保存");
-		}
-	}
-	
 	/**
 	 * @throws Exception 
 	 * 
@@ -675,7 +652,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
          * @throws
      */
 	@Override
-	@Transactional(value = "transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editOpportunityProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).revokeActivi();
 	}

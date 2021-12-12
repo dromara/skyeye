@@ -107,22 +107,6 @@ public class LicenceApplyBorrowController {
 
     /**
      *
-     * @Title: updateBorrowLicenceMationToSave
-     * @Description: 编辑证照借用申请（已提交审批）
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/LicenceApplyBorrowController/updateBorrowLicenceMationToSave")
-    @ResponseBody
-    public void updateBorrowLicenceMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception{
-        licenceApplyBorrowService.updateBorrowLicenceMationToSave(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editBorrowLicenceToSubApproval
      * @Description: 证照借用申请提交审批
      * @param inputObject

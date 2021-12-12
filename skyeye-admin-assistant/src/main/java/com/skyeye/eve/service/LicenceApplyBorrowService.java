@@ -27,8 +27,6 @@ public interface LicenceApplyBorrowService {
 
     public void updateBorrowLicenceMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateBorrowLicenceMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editBorrowLicenceToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     public void updateBorrowLicenceToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

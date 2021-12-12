@@ -8,6 +8,8 @@ import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
@@ -18,7 +20,6 @@ import com.skyeye.eve.dao.SysEnclosureDao;
 import com.skyeye.service.ProWorkloadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,9 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
 
 	@Autowired
 	private SysEnclosureDao sysEnclosureDao;
+
+	@Autowired
+	private ActivitiUserService activitiUserService;
 
 	private static final String PRO_WORKLOAD_PAGE_KEY = ActivitiConstants.ActivitiObjectType.PRO_WORKLOAD_PAGE.getKey();
 
@@ -84,7 +88,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
     * @throws
     */
 	@Override
-	@Transactional(value="transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void insertProWorkloadMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String workloadId = ToolUtil.getSurFaceId();//工作量主表id
@@ -98,11 +102,9 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
 		map.put("createTime", DateUtil.getTimeAndToString());
 		proWorkloadDao.insertProWorkloadMation(map);
 		proWorkloadDao.insertProWorkloadRelatedTasksMation(entitys);
-		// 判断是否提交审批
-		if("2".equals(map.get("subType").toString())){
-			// 提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId, ActivitiConstants.APPROVAL_ID);
-		}
+		// 操作工作流数据
+		activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+			PRO_WORKLOAD_PAGE_KEY, workloadId, map.get("approvalId").toString());
 	}
 
 	private List<Map<String, Object>> getWorkloadTaskList(OutputObject outputObject, String workloadTaskStr, String workloadId) {
@@ -153,7 +155,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
     * @throws
     */
 	@Override
-	@Transactional(value="transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProWorkloadToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String workloadId = map.get("id").toString();
@@ -163,7 +165,8 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
 				|| "12".equals(bean.get("state").toString())
 				|| "3".equals(bean.get("state").toString())){
 			// 草稿、审核不通过、撤销状态下可以提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId, ActivitiConstants.APPROVAL_ID);
+			activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+				PRO_WORKLOAD_PAGE_KEY, workloadId, map.get("approvalId").toString());
 		}else{
 			outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
 		}
@@ -180,7 +183,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
     * @throws
     */
 	@Override
-	@Transactional(value="transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProWorkloadProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).revokeActivi();
 	}
@@ -244,7 +247,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
     * @throws
     */
 	@Override
-	@Transactional(value="transactionManager")
+	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
 	public void editProWorkloadMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String workloadId = map.get("id").toString();//工作量主表id
@@ -254,35 +257,9 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
 		proWorkloadDao.editProWorkloadMation(map);
 		proWorkloadDao.deleteProWorkloadRelatedTasksById(map);
 		proWorkloadDao.insertProWorkloadRelatedTasksMation(entitys);
-		// 判断是否提交审批
-		if("2".equals(map.get("subType").toString())){
-			// 提交审批
-			ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).submitToActivi(workloadId, ActivitiConstants.APPROVAL_ID);
-		}
-	}
-
-	/**
-    *
-    * @Title: editProWorkloadMationInProcess
-    * @Description: 在工作流中编辑工作量信息
-    * @param inputObject
-    * @param outputObject
-    * @throws Exception    参数
-    * @return void    返回类型
-    * @throws
-    */
-	@Override
-	public void editProWorkloadMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		Map<String, Object> map = inputObject.getParams();
-		String workloadId = map.get("id").toString();//工作量主表id
-		// 处理数据
-		List<Map<String, Object>> entitys = getWorkloadTaskList(outputObject, map.get("workloadTaskStr").toString(), workloadId);
-		if (entitys == null) return;
-		proWorkloadDao.editProWorkloadMation(map);
-		proWorkloadDao.deleteProWorkloadRelatedTasksById(map);
-		proWorkloadDao.insertProWorkloadRelatedTasksMation(entitys);
-		// 编辑流程表参数
-		ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).editApplyMationInActiviti(workloadId);
+		// 操作工作流数据
+		activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+			PRO_WORKLOAD_PAGE_KEY, workloadId, map.get("approvalId").toString());
 	}
 
 	/**

@@ -19,7 +19,7 @@
 			act_model g
 		WHERE a.create_id = #{userId}
 		AND a.pro_id = c.id
-		AND g.page_url = '../../tpl/profile/profileadd.html'
+		AND g.page_url = #{pageUrl}
 		<if test="state != '' and state != null">
 			AND a.state = #{state}
 		</if>
@@ -212,7 +212,7 @@
 			pro_project c,
 			act_model g
 		WHERE a.pro_id = c.id
-		AND g.page_url = '../../tpl/profile/profileadd.html'
+		AND g.page_url = #{pageUrl}
 		<if test="state != '' and state != null">
 			AND a.state = #{state}
 		</if>

@@ -91,6 +91,7 @@
 		<property id="partId" name="partId" ref="" var="商机参与人"/>
 		<property id="followId" name="followId" ref="" var="商机关注人"/>
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="opportunity012" path="/post/CrmOpportunityController/editOpportunityMationById" val="编辑商机信息" allUse="1" groupName="商机模块">
 		<property id="rowId" name="id" ref="required" var="商机id"/>
@@ -115,6 +116,7 @@
 		<property id="partId" name="partId" ref="" var="商机参与人"/>
 		<property id="followId" name="followId" ref="" var="商机关注人"/>
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="opportunity013" path="/post/CrmOpportunityController/deleteOpportunityMationById" val="商机根据id删除商机信息" allUse="1" groupName="商机模块">
 		<property id="rowId" name="id" ref="required" var="商机id"/>
@@ -132,6 +134,7 @@
 	</url>
 	<url id="opportunity017" path="/post/CrmOpportunityController/editOpportunityToApprovalById" val="根据商机Id提交审批" allUse="1" groupName="商机模块">
 		<property id="rowId" name="id" ref="required" var="商机id"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="opportunity018" path="/post/CrmOpportunityController/queryAllDiscussList" val="获取所有讨论板" allUse="1" groupName="商机模块">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
@@ -159,29 +162,6 @@
 	</url>
 	<url id="opportunity025" path="/post/CrmOpportunityController/editOpportunityToLayAside" val="根据商机Id搁置" allUse="1" groupName="商机模块">
 		<property id="rowId" name="id" ref="required" var="商机id"/>
-	</url>
-	<url id="opportunity026" path="/post/CrmOpportunityController/editOpportunityMationByIdInProcess" val="在工作流中全部商机编辑商机信息" allUse="2" groupName="商机模块">
-		<property id="rowId" name="id" ref="required" var="商机id"/>
-		<property id="customerId" name="customerId" ref="required" var="客户名称"/>
-		<property id="city" name="city" ref="" var="所在城市"/>
-		<property id="detailAddress" name="detailAddress" ref="" var="详细地址"/>
-		<property id="title" name="title" ref="required" var="商机名称"/>
-		<property id="fromId" name="fromId" ref="required" var="商机来源"/>
-		<property id="estimatePrice" name="estimatePrice" ref="" var="预计成交金额"/>
-		<property id="estimateEndTime" name="estimateEndTime" ref="" var="预计结单日期"/>
-		<property id="contacts" name="contacts" ref="required" var="联系人"/>
-		<property id="department" name="department" ref="" var="部门"/>
-		<property id="job" name="job" ref="" var="职位"/>
-		<property id="workPhone" name="workPhone" ref="" var="办公电话"/>
-		<property id="mobilePhone" name="mobilePhone" ref="phone" var="移动电话"/>
-		<property id="email" name="email" ref="email" var="邮箱"/>
-		<property id="qq" name="qq" ref="" var="QQ号"/>
-		<property id="businessNeed" name="businessNeed" ref="" var="主要业务需求"/>
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
-		<property id="subDepartments" name="subDepartments" ref="required" var="商机所属部门"/>
-		<property id="responsId" name="responsId" ref="required" var="商机负责人"/>
-		<property id="partId" name="partId" ref="" var="商机参与人"/>
-		<property id="followId" name="followId" ref="" var="商机关注人"/>
 	</url>
 	<url id="opportunity027" path="/post/CrmOpportunityController/editOpportunityProcessToRevoke" val="撤销商机审批申请" allUse="1" groupName="商机模块">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>

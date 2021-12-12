@@ -13,7 +13,7 @@
 			IF((a.state = 0 OR a.state = 1 OR a.state = 12 OR a.state = 3), 1, -1) editRow,
 			DATE_FORMAT(a.reimbursement_time, '%Y-%m-%d') reimbursementTime,
 			FORMAT(a.all_price, 2) allPrice,
-			g.title taskTpye
+			g.title taskType
 		FROM
 			pro_cost_expense a
 			LEFT JOIN pro_cost_expense_process b ON a.id = b.expense_id

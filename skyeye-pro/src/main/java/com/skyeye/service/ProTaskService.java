@@ -37,8 +37,6 @@ public interface ProTaskService {
 
 	public void updateProTaskToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void editProTaskMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
 	public void queryMyProTaskList(InputObject inputObject, OutputObject outputObject) throws Exception;
 
 	public void updateProTaskToExecutionBegin(InputObject inputObject, OutputObject outputObject) throws Exception;

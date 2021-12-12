@@ -27,8 +27,6 @@ public interface LicenceApplyRevertService {
 
     public void updateRevertLicenceMationById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateRevertLicenceMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editRevertLicenceToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     public void updateRevertLicenceToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

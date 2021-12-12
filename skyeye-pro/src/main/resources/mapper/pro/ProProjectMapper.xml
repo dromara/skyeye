@@ -20,7 +20,8 @@
 			GROUP_CONCAT(distinct g.user_name) projectSponsorName,
 			GROUP_CONCAT(distinct h.user_name) projectMembersName,
 			e.user_name createName,
-			d.`name` typeName
+			d.`name` typeName,
+			k.title taskType
 		FROM
 			pro_project a
 			LEFT JOIN pro_project_process c ON c.pro_id = a.id
@@ -29,6 +30,7 @@
 			LEFT JOIN sys_eve_user_staff f ON INSTR(CONCAT(',', a.project_manager, ','),CONCAT(',', f.user_id, ','))
 			LEFT JOIN sys_eve_user_staff g ON INSTR(CONCAT(',', a.project_sponsor, ','),CONCAT(',', g.user_id, ','))
 			LEFT JOIN sys_eve_user_staff h ON INSTR(CONCAT(',', a.project_members, ','),CONCAT(',', h.user_id, ','))
+			LEFT JOIN act_model k ON k.page_url = #{pageUrl}
 		WHERE 1 = 1
 			<if test="typeId != '' and typeId != null">
                 AND a.type_id = #{typeId}
@@ -68,7 +70,8 @@
 			a.project_content projectContent,
 			d.`name` typeName,
 			<!-- 默认可编辑 -->
-			IF((a.state = 0 OR a.state = 1 OR a.state = 5), 1, -1) editRow
+			IF((a.state = 0 OR a.state = 1 OR a.state = 5), 1, -1) editRow,
+			k.title taskType
 		FROM
 			pro_project a
 			LEFT JOIN pro_project_process c ON c.pro_id = a.id
@@ -77,6 +80,7 @@
 			LEFT JOIN sys_eve_user_staff f ON INSTR(CONCAT(',', a.project_manager, ','),CONCAT(',', f.user_id, ','))
 			LEFT JOIN sys_eve_user_staff g ON INSTR(CONCAT(',', a.project_sponsor, ','),CONCAT(',', g.user_id, ','))
 			LEFT JOIN sys_eve_user_staff h ON INSTR(CONCAT(',', a.project_members, ','),CONCAT(',', h.user_id, ','))
+        	LEFT JOIN act_model k ON k.page_url = #{pageUrl}
 		WHERE CASE WHEN a.create_id = #{userId} THEN 1 = 1 ELSE a.state IN(2, 3, 4) END
 			<if test="typeId != '' and typeId != null">
                 AND a.type_id = #{typeId}
@@ -216,7 +220,7 @@
 			a.estimated_cost estimatedCost,
 			a.business_content businessContent,
 			IFNULL(a.business_enclosure_info, '') businessEnclosureInfo,
-			c.process_instance_id processInstanceId,
+			IFNULL(c.process_instance_id, '') processInstanceId,
 			a.state,
 			<!-- 默认可编辑 -->
 			IF((a.state = 0 OR a.state = 1 OR a.state = 5), 1, -1) editRow

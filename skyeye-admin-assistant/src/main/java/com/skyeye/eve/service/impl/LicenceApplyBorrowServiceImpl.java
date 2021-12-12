@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.AdminAssistantConstants;
 import com.skyeye.common.object.InputObject;
@@ -44,6 +46,9 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     /**
      * 证照借用关联的工作流的key
      */
@@ -59,7 +64,6 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @return void    返回类型
      * @throws
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void queryMyBorrowLicenceList(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).queryWithActivitiList();
@@ -76,7 +80,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertBorrowLicenceMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = ToolUtil.getSurFaceId();//借用单主表id
@@ -95,11 +99,9 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
         map.put("createTime", DateUtil.getTimeAndToString());
         licenceApplyBorrowDao.insertLicenceBorrowMation(map);
         licenceApplyBorrowDao.insertLicenceBorrowGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(subType)){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(useId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_LICENCE_USE_PAGE_KEY, useId, map.get("approvalId").toString());
     }
 
     private List<Map<String, Object>> getLicenceList(String paramsStr, String useId, String state) throws Exception {
@@ -159,7 +161,6 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @return void    返回类型
      * @throws
      */
-    @SuppressWarnings("unchecked")
     @Override
     public void queryBorrowLicenceMationToEdit(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
@@ -183,9 +184,8 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @return void    返回类型
      * @throws
      */
-    @SuppressWarnings("unchecked")
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateBorrowLicenceMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = map.get("id").toString();//借用单主表id
@@ -199,38 +199,9 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
         licenceApplyBorrowDao.updateLicenceBorrowMation(map);
         licenceApplyBorrowDao.deleteLicenceBorrowGoodsMationById(map);
         licenceApplyBorrowDao.insertLicenceBorrowGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(subType)){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(useId, ActivitiConstants.APPROVAL_ID);
-        }
-    }
-
-    /**
-     *
-     * @Title: updateBorrowLicenceMationToSave
-     * @Description: 编辑证照借用申请（已提交审批）
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateBorrowLicenceMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        String useId = map.get("id").toString();//借用单主表id
-        List<Map<String, Object>> entitys = getLicenceList(map.get("licenceStr").toString(), useId, "1");
-        if(entitys.size() == 0){
-            outputObject.setreturnMessage("请选择证照");
-            return;
-        }
-        licenceApplyBorrowDao.updateLicenceBorrowMation(map);
-        licenceApplyBorrowDao.deleteLicenceBorrowGoodsMationById(map);
-        licenceApplyBorrowDao.insertLicenceBorrowGoodsMation(entitys);
-        // 更新工作流数据
-        ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).editApplyMationInActiviti(useId);
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_LICENCE_USE_PAGE_KEY, useId, map.get("approvalId").toString());
     }
 
     /**
@@ -244,7 +215,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editBorrowLicenceToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -255,7 +226,8 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                ACTIVITI_LICENCE_USE_PAGE_KEY, id, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -300,6 +272,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @throws
      */
     @Override
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateBorrowLicenceMationToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).revokeActivi();
     }

@@ -39,6 +39,7 @@
 		<property id="businessContent" name="businessContent" ref="required" var="业务需求和目标"/>
 		<property id="businessEnclosureInfo" name="businessEnclosureInfo" ref="" var="附件"/>
 		<property id="subType" name="subType" ref="required" var="提交类型"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="proproject004" path="/post/ProProjectController/queryAllProProjectToChoose" val="获取所有指定项目用于下拉框选择" allUse="2">
 	</url>
@@ -68,9 +69,11 @@
 		<property id="businessContent" name="businessContent" ref="required" var="业务需求和目标"/>
 		<property id="businessEnclosureInfo" name="businessEnclosureInfo" ref="" var="附件"/>
 		<property id="subType" name="subType" ref="required" var="提交类型"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="proproject008" path="/post/ProProjectController/editProProjectMationToSubApproval" val="项目提交审批" allUse="2">
 		<property id="rowId" name="id" ref="required" var="项目id"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="proproject009" path="/post/ProProjectController/deleteProProjectMationById" val="删除项目" allUse="1">
 		<property id="rowId" name="id" ref="required" var="项目id"/>
@@ -108,26 +111,6 @@
      	<property id="resultsContent" name="resultsContent" ref="required" var="成果与总结"/>
         <property id="subType" name="subType" ref="required,num" var="操作保存类型：1.保存，2.完结"/>
     </url>
-	<url id="proproject017" path="/post/ProProjectController/editProjectMationInProcess" val="在工作流中编辑项目信息" allUse="2">
-		<property id="rowId" name="id" ref="required" var="项目id"/>
-		<property id="projectName" name="projectName" ref="required" var="项目名称"/>
-		<property id="projectNumber" name="projectNumber" ref="" var="项目编号"/>
-		<property id="typeId" name="typeId" ref="required" var="项目分类"/>
-		<property id="startTime" name="startTime" ref="required" var="计划开始时间"/>
-		<property id="endTime" name="endTime" ref="required" var="计划完成时间"/>
-		<property id="customerId" name="customerId" ref="" var="客户名称"/>
-		<property id="contractId" name="contractId" ref="" var="关联合同"/>
-		<property id="contactName" name="contactName" ref="" var="对方联系人"/>
-		<property id="telphone" name="telphone" ref="" var="固定电话"/>
-		<property id="mobile" name="mobile" ref="" var="移动电话"/>
-		<property id="mail" name="mail" ref="" var="邮箱"/>
-		<property id="qq" name="qq" ref="" var="qq"/>
-		<property id="departmentId" name="departmentId" ref="" var="所属部门"/>
-		<property id="estimatedWorkload" name="estimatedWorkload" ref="" var="预估工作量"/>
-		<property id="estimatedCost" name="estimatedCost" ref="" var="预估成本费用"/>
-		<property id="businessContent" name="businessContent" ref="required" var="业务需求和目标"/>
-		<property id="businessEnclosureInfo" name="businessEnclosureInfo" ref="" var="附件"/>
-	</url>
 	<!-- 项目管理结束 -->
 	
 	<!-- 项目工作量开始 -->
@@ -148,6 +131,7 @@
         <property id="workloadTaskStr" name="workloadTaskStr" ref="required,json" var="工作量相关任务json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
     </url>
     <url id="proworkload003" path="/post/ProWorkloadController/queryAllProWorkloadList" val="获取所有的工作量列表" allUse="1">
 		<property id="limit" name="limit" ref="required,num" var="分页参数,每页多少条数据" />
@@ -158,6 +142,7 @@
 	</url>
 	<url id="proworkload004" path="/post/ProWorkloadController/editProWorkloadToApprovalById" val="提交审批" allUse="1">
 		<property id="rowId" name="id" ref="required" var="工作量id"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="proworkload005" path="/post/ProWorkloadController/editProWorkloadProcessToRevoke" val="撤销工作量审批申请" allUse="1">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="工作流程Id" />
@@ -179,17 +164,7 @@
         <property id="workloadTaskStr" name="workloadTaskStr" ref="required,json" var="工作量相关任务json串" />
         <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
-	</url>
-	<url id="proworkload009" path="/post/ProWorkloadController/editProWorkloadMationInProcess" val="在工作流中编辑工作量信息" allUse="2">
-		<property id="rowId" name="id" ref="required" var="工作量Id" />
-		<property id="title" name="title" ref="required" var="工作量名称" />
-        <property id="proId" name="proId" ref="required" var="项目Id" />
-        <property id="projectNumber" name="projectNumber" ref="" var="项目编号" />
-        <property id="desc" name="desc" ref="" var="附加描述" />
-        <property id="type" name="type" ref="required" var="填报工作量节点" />
-        <property id="allWorkLoad" name="allWorkLoad" ref="required" var="本周合计工作量" />
-        <property id="workloadTaskStr" name="workloadTaskStr" ref="required,json" var="工作量相关任务json串" />
-        <property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="proworkload010" path="/post/ProWorkloadController/deleteProWorkloadMationById" val="删除工作量" allUse="1">
 		<property id="rowId" name="id" ref="required" var="工作量Id" />
@@ -245,6 +220,7 @@
 		<property id="content" name="content" ref="required" var="文档内容"/>
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="profile003" path="/post/ProFileController/queryProFileMationToDetails" val="文档详情" allUse="2">
 		<property id="rowId" name="id" ref="required" var="文档Id" />
@@ -260,20 +236,14 @@
 		<property id="content" name="content" ref="required" var="文档内容"/>
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
         <property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="profile006" path="/post/ProFileController/editProFileToApprovalById" val="提交审批" allUse="1">
 		<property id="rowId" name="id" ref="required" var="文档id"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="profile007" path="/post/ProFileController/editProFileProcessToRevoke" val="撤销文档审批申请" allUse="1">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="工作流程Id" />
-	</url>
-	<url id="profile008" path="/post/ProFileController/editProFileMationInProcess" val="在工作流中编辑文档信息" allUse="2">
-		<property id="rowId" name="id" ref="required" var="文档Id" />
-		<property id="proId" name="proId" ref="required" var="项目id"/>
-		<property id="typeId" name="typeId" ref="required" var="所属分类id"/>
-		<property id="title" name="title" ref="required" var="文档名称"/>
-		<property id="content" name="content" ref="required" var="文档内容"/>
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
 	</url>
 	<url id="profile009" path="/post/ProFileController/deleteProFileMationById" val="删除文档" allUse="1">
 		<property id="rowId" name="id" ref="required" var="文档Id" />
@@ -311,6 +281,7 @@
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
         <property id="expensePurposeStr" name="expensePurposeStr" ref="required" var="成本费用用途详细json串" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="procostexpense003" path="/post/ProCostExpenseController/queryProCostExpenseMationToDetails" val="费用报销详情" allUse="2">
 		<property id="rowId" name="id" ref="required" var="费用报销Id" />
@@ -327,21 +298,14 @@
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
         <property id="expensePurposeStr" name="expensePurposeStr" ref="required" var="成本费用用途详细json串" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="procostexpense006" path="/post/ProCostExpenseController/editProCostExpenseToApprovalById" val="提交审批" allUse="2">
 		<property id="rowId" name="id" ref="required" var="费用报销id"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="procostexpense007" path="/post/ProCostExpenseController/editProCostExpenseProcessToRevoke" val="撤销费用报销审批申请" allUse="2">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="工作流程Id" />
-	</url>
-	<url id="procostexpense008" path="/post/ProCostExpenseController/editProCostExpenseMationInProcess" val="在工作流中编辑费用报销信息" allUse="2">
-		<property id="rowId" name="id" ref="required" var="费用报销Id" />
-		<property id="proId" name="proId" ref="required" var="项目id"/>
-		<property id="departmentId" name="departmentId" ref="required" var="所属部门id"/>
-		<property id="title" name="title" ref="required" var="费用报销名称"/>
-		<property id="reimbursementTime" name="reimbursementTime" ref="required" var="报销时间"/>
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件"/>
-        <property id="expensePurposeStr" name="expensePurposeStr" ref="required" var="成本费用用途详细json串" />
 	</url>
 	<url id="procostexpense009" path="/post/ProCostExpenseController/deleteProCostExpenseMationById" val="删除费用报销" allUse="2">
 		<property id="rowId" name="id" ref="required" var="费用报销Id" />
@@ -372,6 +336,7 @@
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="任务说明附件"/>
 		<property id="parentId" name="parentId" ref="required" var="所属主任务"/>
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="protask003" path="/post/ProTaskController/queryProTaskMationToDetails" val="任务详情" allUse="2">
 		<property id="rowId" name="id" ref="required" var="任务Id" />
@@ -392,6 +357,7 @@
 		<property id="taskInstructions" name="taskInstructions" ref="required" var="任务说明"/>
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="任务说明附件"/>
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="protask006" path="/post/ProTaskController/deleteProTaskMationById" val="删除任务" allUse="1">
 		<property id="rowId" name="id" ref="required" var="任务Id" />
@@ -401,22 +367,10 @@
 	</url>
 	<url id="protask008" path="/post/ProTaskController/editProTaskToApprovalById" val="根据任务Id提交审批" allUse="1">
 		<property id="rowId" name="id" ref="required" var="任务id"/>
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="protask009" path="/post/ProTaskController/updateProTaskToCancellation" val="作废任务" allUse="1">
 		<property id="rowId" name="id" ref="required" var="任务id"/>
-	</url>
-	<url id="protask010" path="/post/ProTaskController/editProTaskMationInProcess" val="在工作流中编辑任务信息" allUse="2">
-		<property id="rowId" name="id" ref="required" var="任务Id" />
-		<property id="taskName" name="taskName" ref="required" var="任务名称"/>
-		<property id="taskType" name="taskType" ref="required" var="任务分类"/>
-		<property id="proId" name="proId" ref="required" var="所属项目"/>
-		<property id="departments" name="departments" ref="required" var="所属部门"/>
-		<property id="startTime" name="startTime" ref="required" var="开始时间"/>
-		<property id="endTime" name="endTime" ref="" var="结束时间"/>
-		<property id="performId" name="performId" ref="required" var="执行人"/>
-		<property id="estimatedWorkload" name="estimatedWorkload" ref="required,num" var="预估工作量"/>
-		<property id="taskInstructions" name="taskInstructions" ref="required" var="任务说明"/>
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="任务说明附件"/>
 	</url>
 	<url id="protask011" path="/post/ProTaskController/queryMyProTaskList" val="获取我的任务列表" allUse="1">
 		<property id="taskName" name="taskName" ref="" var="任务名称"/>

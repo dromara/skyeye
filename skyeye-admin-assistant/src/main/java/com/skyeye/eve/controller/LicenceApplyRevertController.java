@@ -108,22 +108,6 @@ public class LicenceApplyRevertController {
 
     /**
      *
-     * @Title: updateRevertLicenceMationToSave
-     * @Description: 编辑证照归还申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/LicenceApplyRevertController/updateRevertLicenceMationToSave")
-    @ResponseBody
-    public void updateRevertLicenceMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception{
-        licenceApplyRevertService.updateRevertLicenceMationToSave(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editRevertLicenceToSubApproval
      * @Description: 证照归还申请提交审批
      * @param inputObject

@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.AdminAssistantConstants;
 import com.skyeye.common.object.InputObject;
@@ -44,6 +46,9 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     /**
      * 证照归还关联的工作流的key
      */
@@ -75,7 +80,7 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertRevertLicenceMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String revertId = ToolUtil.getSurFaceId();//归还单主表id
@@ -94,11 +99,9 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
         map.put("createTime", DateUtil.getTimeAndToString());
         licenceApplyRevertDao.insertLicenceRevertMation(map);
         licenceApplyRevertDao.insertLicenceRevertGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(subType)){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_REVERT_PAGE_KEY).submitToActivi(revertId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_LICENCE_REVERT_PAGE_KEY, revertId, map.get("approvalId").toString());
     }
 
     /**
@@ -162,7 +165,7 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateRevertLicenceMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String revertId = map.get("id").toString();//归还单主表id
@@ -176,11 +179,9 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
         licenceApplyRevertDao.updateLicenceRevertMation(map);
         licenceApplyRevertDao.deleteLicenceRevertGoodsMationById(map);
         licenceApplyRevertDao.insertLicenceRevertGoodsMation(entitys);
-        // 判断是否提交审批
-        if("2".equals(subType)){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_REVERT_PAGE_KEY).submitToActivi(revertId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            ACTIVITI_LICENCE_REVERT_PAGE_KEY, revertId, map.get("approvalId").toString());
     }
 
     /**
@@ -212,32 +213,6 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
 
     /**
      *
-     * @Title: updateRevertLicenceMationToSave
-     * @Description: 编辑证照归还申请（已提交审批）
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateRevertLicenceMationToSave(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        String revertId = map.get("id").toString();//归还单主表id
-        List<Map<String, Object>> entitys = getLicenceListByParams(map.get("licenceStr").toString(), revertId, "1");
-        if(entitys.size() == 0){
-            outputObject.setreturnMessage("请选择证照");
-            return;
-        }
-        licenceApplyRevertDao.updateLicenceRevertMation(map);
-        licenceApplyRevertDao.deleteLicenceRevertGoodsMationById(map);
-        licenceApplyRevertDao.insertLicenceRevertGoodsMation(entitys);
-        ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_REVERT_PAGE_KEY).editApplyMationInActiviti(revertId);
-    }
-
-    /**
-     *
      * @Title: editRevertLicenceToSubApproval
      * @Description: 证照归还申请提交审批
      * @param inputObject
@@ -247,7 +222,7 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
      * @throws
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editRevertLicenceToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -258,7 +233,9 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_REVERT_PAGE_KEY).submitToActivi(id, ActivitiConstants.APPROVAL_ID);
+            // 操作工作流数据
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                ACTIVITI_LICENCE_REVERT_PAGE_KEY, id, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -302,7 +279,7 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
      * @return void    返回类型
      * @throws
      */
-    @Override
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateRevertLicenceMationToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_REVERT_PAGE_KEY).revokeActivi();
     }

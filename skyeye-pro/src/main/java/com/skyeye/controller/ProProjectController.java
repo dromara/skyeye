@@ -275,20 +275,4 @@ public class ProProjectController {
 		proProjectService.editProjectProcessToPerFectById(inputObject, outputObject);
 	}
 
-	/**
-	 *
-	 * @Title: editProjectMationInProcess
-	 * @Description: 在工作流中编辑项目信息
-	 * @param inputObject
-	 * @param outputObject
-	 * @throws Exception 参数
-	 * @return void 返回类型
-	 * @throws
-	 */
-	@RequestMapping("/post/ProProjectController/editProjectMationInProcess")
-	@ResponseBody
-	public void editProjectMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		proProjectService.editProjectMationInProcess(inputObject, outputObject);
-	}
-	
 }

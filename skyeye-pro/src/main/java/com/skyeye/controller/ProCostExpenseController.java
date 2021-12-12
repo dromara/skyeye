@@ -143,22 +143,6 @@ public class ProCostExpenseController {
 	
 	/**
 	 *
-	 * @Title: editProCostExpenseMationInProcess
-	 * @Description: 在工作流中编辑费用报销信息
-	 * @param inputObject
-	 * @param outputObject
-	 * @throws Exception    参数
-	 * @return void    返回类型
-	 * @throws
-	 */
-	@RequestMapping("/post/ProCostExpenseController/editProCostExpenseMationInProcess")
-	@ResponseBody
-	public void editProCostExpenseMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		proCostExpenseService.editProCostExpenseMationInProcess(inputObject, outputObject);
-	}
-	
-	/**
-	 *
 	 * @Title: deleteProCostExpenseMationById
 	 * @Description: 删除费用报销
 	 * @param inputObject

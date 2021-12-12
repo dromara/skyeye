@@ -148,22 +148,6 @@ public class ProWorkloadController {
 	
 	/**
     *
-    * @Title: editProWorkloadMationInProcess
-    * @Description: 在工作流中编辑工作量信息
-    * @param inputObject
-    * @param outputObject
-    * @throws Exception    参数
-    * @return void    返回类型
-    * @throws
-    */
-	@RequestMapping("/post/ProWorkloadController/editProWorkloadMationInProcess")
-	@ResponseBody
-	public void editProWorkloadMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		proWorkloadService.editProWorkloadMationInProcess(inputObject, outputObject);
-	}
-	
-	/**
-    *
     * @Title: deleteProWorkloadMationById
     * @Description: 删除工作量
     * @param inputObject

@@ -143,22 +143,6 @@ public class ProFileController {
 	
 	/**
 	 *
-	 * @Title: editProFileMationInProcess
-	 * @Description: 在工作流中编辑文档信息
-	 * @param inputObject
-	 * @param outputObject
-	 * @throws Exception    参数
-	 * @return void    返回类型
-	 * @throws
-	 */
-	@RequestMapping("/post/ProFileController/editProFileMationInProcess")
-	@ResponseBody
-	public void editProFileMationInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-		proFileService.editProFileMationInProcess(inputObject, outputObject);
-	}
-	
-	/**
-	 *
 	 * @Title: deleteProFileMationById
 	 * @Description: 删除文档
 	 * @param inputObject

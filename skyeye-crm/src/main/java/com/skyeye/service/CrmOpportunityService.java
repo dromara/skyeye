@@ -36,8 +36,6 @@ public interface CrmOpportunityService {
 
 	public void editOpportunityToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-	public void editOpportunityMationByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
 	public void editOpportunityToConmunicate(InputObject inputObject, OutputObject outputObject) throws Exception;
 	
 	public void editOpportunityToQuotedPrice(InputObject inputObject, OutputObject outputObject) throws Exception;
