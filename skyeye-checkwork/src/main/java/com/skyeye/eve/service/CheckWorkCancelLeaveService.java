@@ -28,8 +28,6 @@ public interface CheckWorkCancelLeaveService {
 
     public void queryCheckWorkCancelLeaveDetailsById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateCheckWorkCancelLeaveByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editCheckWorkCancelLeaveToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     public void updateCheckWorkCancelLeaveToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

@@ -263,6 +263,7 @@
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="businessTripAddress" name="businessTripAddress" ref="required" var="出差地点" />
 		<property id="businessTripReason" name="businessTripReason" ref="required" var="出差事由" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkbusinesstrip003" path="/post/CheckWorkBusinessTripController/queryCheckWorkBusinessTripDetailsById" val="出差申请详情" allUse="2" method="GET" groupName="出差申请">
 		<property id="rowId" name="id" ref="required" var="出差申请主表单id" />
@@ -278,20 +279,14 @@
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
 		<property id="businessTripAddress" name="businessTripAddress" ref="required" var="出差地点" />
 		<property id="businessTripReason" name="businessTripReason" ref="required" var="出差事由" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkbusinesstrip006" path="/post/CheckWorkBusinessTripController/editCheckWorkBusinessTripToSubApproval" val="提交审批出差申请" allUse="1" groupName="出差申请">
 		<property id="rowId" name="id" ref="required" var="出差申请id" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkbusinesstrip007" path="/post/CheckWorkBusinessTripController/updateCheckWorkBusinessTripToCancellation" val="作废出差申请" allUse="1" groupName="出差申请">
 		<property id="rowId" name="id" ref="required" var="出差申请id" />
-	</url>
-	<url id="checkworkbusinesstrip008" path="/post/CheckWorkBusinessTripController/updateCheckWorkBusinessTripByIdInProcess" val="在工作流中编辑出差申请" allUse="2" method="PUT" groupName="出差申请">
-		<property id="rowId" name="id" ref="required" var="出差申请id" />
-		<property id="businessTripDayStr" name="businessTripDayStr" ref="required,json" var="出差天数json串" />
-		<property id="remark" name="remark" ref="" var="备注" />
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
-		<property id="businessTripAddress" name="businessTripAddress" ref="required" var="出差地点" />
-		<property id="businessTripReason" name="businessTripReason" ref="required" var="出差事由" />
 	</url>
 	<url id="checkworkbusinesstrip009" path="/post/CheckWorkBusinessTripController/editCheckWorkBusinessTripToRevoke" val="撤销出差申请" allUse="1" groupName="出差申请">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
@@ -360,6 +355,7 @@
 		<property id="remark" name="remark" ref="" var="备注" />
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkcancelleave003" path="/post/CheckWorkCancelLeaveController/queryCheckWorkCancelLeaveDetailsById" val="销假申请详情" allUse="2" method="GET" groupName="销假申请">
 		<property id="rowId" name="id" ref="required" var="销假申请主表单id" />
@@ -373,18 +369,14 @@
 		<property id="remark" name="remark" ref="" var="备注" />
 		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 		<property id="subType" name="subType" ref="required,num" var="表单提交类型" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkcancelleave006" path="/post/CheckWorkCancelLeaveController/editCheckWorkCancelLeaveToSubApproval" val="提交审批销假申请" allUse="1" groupName="销假申请">
 		<property id="rowId" name="id" ref="required" var="销假申请id" />
+		<property id="approvalId" name="approvalId" ref="" var="[提交审批]操作必填审批人" />
 	</url>
 	<url id="checkworkcancelleave007" path="/post/CheckWorkCancelLeaveController/updateCheckWorkCancelLeaveToCancellation" val="作废销假申请" allUse="1" groupName="销假申请">
 		<property id="rowId" name="id" ref="required" var="销假申请id" />
-	</url>
-	<url id="checkworkcancelleave008" path="/post/CheckWorkCancelLeaveController/updateCheckWorkCancelLeaveByIdInProcess" val="在工作流中编辑销假申请" allUse="2" method="PUT" groupName="销假申请">
-		<property id="rowId" name="id" ref="required" var="销假申请id" />
-		<property id="leaveDayStr" name="leaveDayStr" ref="required,json" var="销假天数json串" />
-		<property id="remark" name="remark" ref="" var="备注" />
-		<property id="enclosureInfo" name="enclosureInfo" ref="" var="附件" />
 	</url>
 	<url id="checkworkcancelleave009" path="/post/CheckWorkCancelLeaveController/editCheckWorkCancelLeaveToRevoke" val="撤销销假申请" allUse="1" groupName="销假申请">
 		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>

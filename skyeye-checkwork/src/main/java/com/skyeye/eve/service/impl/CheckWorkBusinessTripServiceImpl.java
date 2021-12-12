@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.CheckWorkConstants;
 import com.skyeye.common.constans.Constants;
@@ -41,6 +43,9 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     /**
      * 出差申请关联的工作流的key
      */
@@ -66,7 +71,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertCheckWorkBusinessTripMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 出差申请id
@@ -85,11 +90,9 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
         map.put("createTime", DateUtil.getTimeAndToString());
         checkWorkBusinessTripDao.insertCheckWorkBusinessTripMation(map);
         checkWorkBusinessTripDao.insertCheckWorkBusinessTripDaysMation(beans);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            CHECK_WORK_BUSINESS_TRIP_KEY, businessTripId, map.get("approvalId").toString());
     }
 
     private List<Map<String, Object>> getBusinessTripDays(String businessTripDayStr, String businessTripId) {
@@ -132,7 +135,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateCheckWorkBusinessTripById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 出差申请id
@@ -146,11 +149,9 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
         checkWorkBusinessTripDao.updateCheckWorkBusinessTripMation(map);
         checkWorkBusinessTripDao.deleteCheckWorkBusinessTripDaysMationByBusinessTripId(businessTripId);
         checkWorkBusinessTripDao.insertCheckWorkBusinessTripDaysMation(beans);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            CHECK_WORK_BUSINESS_TRIP_KEY, businessTripId, map.get("approvalId").toString());
     }
 
     /**
@@ -174,32 +175,6 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
     }
 
     /**
-     * 在工作流中编辑出差申请
-     *
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateCheckWorkBusinessTripByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        // 出差申请id
-        String businessTripId = map.get("id").toString();
-        // 处理出差天数
-        List<Map<String, Object>> beans = getBusinessTripDays(map.get("businessTripDayStr").toString(), businessTripId);
-        if(beans.size() == 0){
-            outputObject.setreturnMessage("请填写出差日期.");
-            return;
-        }
-        checkWorkBusinessTripDao.updateCheckWorkBusinessTripMation(map);
-        checkWorkBusinessTripDao.deleteCheckWorkBusinessTripDaysMationByBusinessTripId(businessTripId);
-        checkWorkBusinessTripDao.insertCheckWorkBusinessTripDaysMation(beans);
-        // 编辑工作流中的数据
-        ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).editApplyMationInActiviti(businessTripId);
-    }
-
-    /**
      * 提交审批出差申请
      *
      * @param inputObject
@@ -207,7 +182,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editCheckWorkBusinessTripToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String businessTripId = map.get("id").toString();
@@ -217,7 +192,8 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).submitToActivi(businessTripId, ActivitiConstants.APPROVAL_ID);
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                CHECK_WORK_BUSINESS_TRIP_KEY, businessTripId, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -255,7 +231,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editCheckWorkBusinessTripToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).revokeActivi();
     }

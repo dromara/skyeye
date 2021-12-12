@@ -108,22 +108,6 @@ public class CheckWorkBusinessTripController {
 
     /**
      *
-     * @Title: updateCheckWorkBusinessTripByIdInProcess
-     * @Description: 在工作流中编辑出差申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/CheckWorkBusinessTripController/updateCheckWorkBusinessTripByIdInProcess")
-    @ResponseBody
-    public void updateCheckWorkBusinessTripByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        checkWorkBusinessTripService.updateCheckWorkBusinessTripByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editCheckWorkBusinessTripToSubApproval
      * @Description: 提交审批出差申请
      * @param inputObject

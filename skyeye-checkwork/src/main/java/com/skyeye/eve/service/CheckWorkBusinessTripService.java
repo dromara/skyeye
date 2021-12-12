@@ -29,8 +29,6 @@ public interface CheckWorkBusinessTripService {
 
     public void queryCheckWorkBusinessTripDetailsById(InputObject inputObject, OutputObject outputObject) throws Exception;
 
-    public void updateCheckWorkBusinessTripByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception;
-
     public void editCheckWorkBusinessTripToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     public void updateCheckWorkBusinessTripToCancellation(InputObject inputObject, OutputObject outputObject) throws Exception;

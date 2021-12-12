@@ -6,6 +6,8 @@ package com.skyeye.eve.service.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.activiti.factory.ActivitiRunFactory;
+import com.skyeye.activiti.service.ActivitiUserService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
@@ -42,6 +44,9 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
     @Autowired
     private SysEnclosureDao sysEnclosureDao;
 
+    @Autowired
+    private ActivitiUserService activitiUserService;
+
     /**
      * 销假申请关联的工作流的key
      */
@@ -67,7 +72,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void insertCheckWorkCancelLeaveMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 销假申请id
@@ -86,11 +91,9 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
         map.put("createTime", DateUtil.getTimeAndToString());
         checkWorkCancelLeaveDao.insertCheckWorkCancelLeaveMation(map);
         checkWorkCancelLeaveDao.insertCheckWorkCancelLeaveDaysMation(beans);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_CANCEL_LEAVE_PAGE_KEY).submitToActivi(cancelLeaveId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            CHECK_WORK_CANCEL_LEAVE_PAGE_KEY, cancelLeaveId, map.get("approvalId").toString());
     }
 
     private List<Map<String, Object>> getCancelLeaveDays(String cancelLeaveDayStr, String cancelLeaveId) {
@@ -133,7 +136,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void updateCheckWorkCancelLeaveById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 销假申请id
@@ -147,11 +150,9 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
         checkWorkCancelLeaveDao.updateCheckWorkCancelLeaveMation(map);
         checkWorkCancelLeaveDao.deleteCheckWorkCancelLeaveDaysMationByCancelLeaveId(cancelLeaveId);
         checkWorkCancelLeaveDao.insertCheckWorkCancelLeaveDaysMation(beans);
-        // 判断是否提交审批
-        if("2".equals(map.get("subType").toString())){
-            // 提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_CANCEL_LEAVE_PAGE_KEY).submitToActivi(cancelLeaveId, ActivitiConstants.APPROVAL_ID);
-        }
+        // 操作工作流数据
+        activitiUserService.addOrEditToSubmit(inputObject, outputObject, Integer.parseInt(map.get("subType").toString()),
+            CHECK_WORK_CANCEL_LEAVE_PAGE_KEY, cancelLeaveId, map.get("approvalId").toString());
     }
 
     /**
@@ -175,32 +176,6 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
     }
 
     /**
-     * 在工作流中编辑销假申请
-     *
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception
-     */
-    @Override
-    @Transactional(value="transactionManager")
-    public void updateCheckWorkCancelLeaveByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception {
-        Map<String, Object> map = inputObject.getParams();
-        // 销假申请id
-        String cancelLeaveId = map.get("id").toString();
-        // 处理销假天数
-        List<Map<String, Object>> beans = getCancelLeaveDays(map.get("cancelLeaveDayStr").toString(), cancelLeaveId);
-        if(beans.size() == 0){
-            outputObject.setreturnMessage("请填写销假日期.");
-            return;
-        }
-        checkWorkCancelLeaveDao.updateCheckWorkCancelLeaveMation(map);
-        checkWorkCancelLeaveDao.deleteCheckWorkCancelLeaveDaysMationByCancelLeaveId(cancelLeaveId);
-        checkWorkCancelLeaveDao.insertCheckWorkCancelLeaveDaysMation(beans);
-        // 编辑工作流中的数据
-        ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_CANCEL_LEAVE_PAGE_KEY).editApplyMationInActiviti(cancelLeaveId);
-    }
-
-    /**
      * 提交审批销假申请
      *
      * @param inputObject
@@ -208,7 +183,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editCheckWorkCancelLeaveToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String cancelLeaveId = map.get("id").toString();
@@ -218,7 +193,8 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
                 || ActivitiConstants.ActivitiState.NO_PASS.getState() == state
                 || ActivitiConstants.ActivitiState.REVOKE.getState() == state){
             // 草稿、审核不通过或者撤销状态下可以提交审批
-            ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_CANCEL_LEAVE_PAGE_KEY).submitToActivi(cancelLeaveId, ActivitiConstants.APPROVAL_ID);
+            activitiUserService.addOrEditToSubmit(inputObject, outputObject, 2,
+                CHECK_WORK_CANCEL_LEAVE_PAGE_KEY, cancelLeaveId, map.get("approvalId").toString());
         }else{
             outputObject.setreturnMessage("该数据状态已改变，请刷新页面！");
         }
@@ -256,7 +232,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
      * @throws Exception
      */
     @Override
-    @Transactional(value="transactionManager")
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void editCheckWorkCancelLeaveToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_CANCEL_LEAVE_PAGE_KEY).revokeActivi();
     }

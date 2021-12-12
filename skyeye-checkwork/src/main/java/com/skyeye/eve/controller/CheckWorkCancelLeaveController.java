@@ -111,22 +111,6 @@ public class CheckWorkCancelLeaveController {
 
     /**
      *
-     * @Title: updateCheckWorkCancelLeaveByIdInProcess
-     * @Description: 在工作流中编辑销假申请
-     * @param inputObject
-     * @param outputObject
-     * @throws Exception    参数
-     * @return void    返回类型
-     * @throws
-     */
-    @RequestMapping("/post/CheckWorkCancelLeaveController/updateCheckWorkCancelLeaveByIdInProcess")
-    @ResponseBody
-    public void updateCheckWorkCancelLeaveByIdInProcess(InputObject inputObject, OutputObject outputObject) throws Exception{
-        checkWorkCancelLeaveService.updateCheckWorkCancelLeaveByIdInProcess(inputObject, outputObject);
-    }
-
-    /**
-     *
      * @Title: editCheckWorkCancelLeaveToSubApproval
      * @Description: 提交审批销假申请
      * @param inputObject
