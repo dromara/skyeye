@@ -25,6 +25,12 @@ public class ActivitiConstants {
 
     public static final String APPROVAL_NO_PASS = "nopass";
 
+    public static final String ASSIGNEE_USER = "assignee";
+
+    public static final String DEFAULT_ASSIGNEE_LIST_EXP = "${assigneeList}";
+
+    public static final String ASSIGNEE_USER_EXP = "${" + ASSIGNEE_USER + "}";
+
     /**
      * form表单数据存储在task的varables的key
      */

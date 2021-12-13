@@ -177,7 +177,6 @@ public class KnowledgeContentServiceImpl implements KnowledgeContentService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
 	@Override
 	public void insertUploadFileByUserId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
@@ -241,7 +240,6 @@ public class KnowledgeContentServiceImpl implements KnowledgeContentService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings({ "unchecked", "resource" })
 	@Override
 	public void insertUploadFileChunksByUserId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
@@ -321,7 +319,6 @@ public class KnowledgeContentServiceImpl implements KnowledgeContentService {
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings({ "unchecked", "unused" })
 	@Override
 	public void queryUploadFileChunksByChunkMd5(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();

@@ -205,7 +205,6 @@ public class SysEnclosureServiceImpl implements SysEnclosureService{
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings({ "static-access", "rawtypes", "unchecked" })
 	@Override
 	@Transactional(value="transactionManager")
 	public void insertUploadFileByUserId(InputObject inputObject, OutputObject outputObject) throws Exception {
@@ -271,7 +270,6 @@ public class SysEnclosureServiceImpl implements SysEnclosureService{
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings({ "resource", "unchecked" })
 	@Override
 	@Transactional(value="transactionManager")
 	public void insertUploadFileChunksByUserId(InputObject inputObject, OutputObject outputObject) throws Exception {
@@ -331,7 +329,6 @@ public class SysEnclosureServiceImpl implements SysEnclosureService{
 	     * @return void    返回类型
 	     * @throws
 	 */
-	@SuppressWarnings({ "unchecked", "unused" })
 	@Override
 	public void queryUploadFileChunksByChunkMd5(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
