@@ -7,9 +7,11 @@ package com.skyeye.activiti.service;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import org.activiti.bpmn.model.MultiInstanceLoopCharacteristics;
+import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @ClassName: CounterSignService
@@ -51,39 +53,43 @@ public interface CounterSignService {
     /**
      * 创建 多实例 行为解释器
      *
-     * @param processInstanceId
-     * @param sequential
+     * @param currentTask 当前任务节点
+     * @param activityImpl 流程节点信息
+     * @param sequential 是否串行
      * @return
      */
-    MultiInstanceActivityBehavior createMultiInstanceBehavior(String processInstanceId, boolean sequential);
+    MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, ActivityImpl activityImpl, boolean sequential);
 
     /**
      * 创建多实例行为解释器
      *
-     * @param processInstanceId 流程id
+     * @param currentTask 当前任务节点
+     * @param activityImpl 流程节点信息
      * @param sequential 是否串行
      * @param assigneeListExp 用户组表达
      * @param assigneeExp 用户标识
      * @return
      */
-    MultiInstanceActivityBehavior createMultiInstanceBehavior(String processInstanceId, boolean sequential, String assigneeListExp, String assigneeExp);
+    MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, ActivityImpl activityImpl, boolean sequential,
+        String assigneeListExp, String assigneeExp);
 
     /**
      * 将 普通节点转换成为会签 任务
      *
-     * @param taskId
-     * @param sequential
-     * @param data
+     * @param taskId 任务id
+     * @param sequential 是否串行
+     * @param userIds 用户id
      */
-    void covertToMultiInstance(String taskId, boolean sequential, Map<String, Object> data);
+    void covertToMultiInstance(String taskId, boolean sequential, List<String> userIds);
 
     /**
-     *  将 普通节点转换成为会签 任务
-     * @param taskId
-     * @param sequential
+     * 将 普通节点转换成为会签 任务
+     *
+     * @param taskId 任务id
+     * @param sequential 是否串行
      * @param assigneeExp 任务执行人表达式
-     * @param data
+     * @param userIds 用户id
      */
-    void covertToMultiInstance(String taskId, boolean sequential, String assigneeExp, Map<String, Object> data);
+    void covertToMultiInstance(String taskId, boolean sequential, String assigneeExp, List<String> userIds);
 
 }

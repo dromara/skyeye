@@ -4,33 +4,34 @@
 
 package com.skyeye.activiti.service.impl;
 
-import com.skyeye.activiti.service.CounterSignService;
-import com.skyeye.common.constans.ActivitiConstants;
-import com.skyeye.common.object.InputObject;
-import com.skyeye.common.object.OutputObject;
-import org.activiti.bpmn.model.BpmnModel;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.activiti.bpmn.model.MultiInstanceLoopCharacteristics;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
 import org.activiti.engine.impl.bpmn.behavior.SequentialMultiInstanceBehavior;
 import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
 import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.activiti.engine.impl.el.ExpressionManager;
-import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import com.skyeye.activiti.listener.MultiInstanceloopListener;
+import com.skyeye.activiti.service.ActivitiTaskService;
+import com.skyeye.activiti.service.CounterSignService;
+import com.skyeye.common.constans.ActivitiConstants;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
+
+import net.sf.json.JSONArray;
 
 /**
  * @ClassName: CounterSignServiceImpl
@@ -44,16 +45,19 @@ import java.util.Map;
 public class CounterSignServiceImpl implements CounterSignService {
 
     @Autowired
-    protected ProcessEngine processEngine;
+    private ProcessEngine processEngine;
 
     @Autowired
-    protected TaskService taskService;
+    private TaskService taskService;
 
     @Autowired
-    protected RepositoryService repositoryService;
+    private RepositoryService repositoryService;
 
     @Autowired
     private RuntimeService runtimeService;
+
+    @Autowired
+    private ActivitiTaskService activitiTaskService;
 
     /**
      * 将 普通节点转换成为会签 任务
@@ -65,6 +69,9 @@ public class CounterSignServiceImpl implements CounterSignService {
     @Override
     public void covertToMultiInstance(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
+        String taskId = params.get("taskId").toString();
+        boolean sequential = Boolean.parseBoolean(params.get("sequential").toString());
+        List<String> userIds = JSONArray.fromObject(params.get("userIds").toString());
 
     }
 
@@ -79,9 +86,14 @@ public class CounterSignServiceImpl implements CounterSignService {
     @Override
     public MultiInstanceLoopCharacteristics createMultiInstanceLoopCharacteristics(boolean isSequential, String assigneeListExp, String assignee) {
         MultiInstanceLoopCharacteristics multiInstanceLoopCharacteristics = new MultiInstanceLoopCharacteristics();
+        // 是否串行
         multiInstanceLoopCharacteristics.setSequential(isSequential);
+        // 审批人集合参数
         multiInstanceLoopCharacteristics.setInputDataItem(assigneeListExp);
+        // 迭代集合
         multiInstanceLoopCharacteristics.setElementVariable(assignee);
+        // 完成条件 已完成数等于实例数${nrOfActiveInstances == nrOfInstances}
+        multiInstanceLoopCharacteristics.setCompletionCondition("");
         return multiInstanceLoopCharacteristics;
     }
 
@@ -99,43 +111,42 @@ public class CounterSignServiceImpl implements CounterSignService {
     /**
      * 创建 多实例 行为解释器
      *
-     * @param processInstanceId 流程id
-     * @param sequential
+     * @param currentTask 当前任务节点
+     * @param activityImpl 流程节点信息
+     * @param sequential 是否串行
      * @return
      */
     @Override
-    public MultiInstanceActivityBehavior createMultiInstanceBehavior(String processInstanceId, boolean sequential) {
-        return createMultiInstanceBehavior(processInstanceId, sequential, ActivitiConstants.DEFAULT_ASSIGNEE_LIST_EXP, ActivitiConstants.ASSIGNEE_USER);
+    public MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, ActivityImpl activityImpl, boolean sequential) {
+        return createMultiInstanceBehavior(currentTask, activityImpl, sequential, ActivitiConstants.DEFAULT_ASSIGNEE_LIST_EXP,
+            ActivitiConstants.ASSIGNEE_USER);
     }
 
     /**
      * 创建多实例行为解释器
      *
-     * @param processInstanceId 流程id
-     * @param sequential        是否串行
-     * @param assigneeListExp   用户组表达
-     * @param assigneeExp       用户标识
+     * @param currentTask 当前任务节点
+     * @param activityImpl 流程节点信息
+     * @param sequential 是否串行
+     * @param assigneeListExp 用户组表达
+     * @param assigneeExp 用户标识
      * @return
      */
     @Override
-    public MultiInstanceActivityBehavior createMultiInstanceBehavior(String processInstanceId, boolean sequential, String assigneeListExp, String assigneeExp) {
-        ActivityImpl activityNode = this.getCurrentActivityNode(processInstanceId);
-        if(activityNode == null){
-            return null;
-        }
-        UserTask currentNode = this.getCurrentUserTask(processInstanceId);
+    public MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, ActivityImpl activityImpl, boolean sequential,
+        String assigneeListExp, String assigneeExp) {
         ProcessEngineConfigurationImpl processEngineConfiguration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
         /**
          *  创建解释器
          */
         UserTaskActivityBehavior userTaskActivityBehavior = processEngineConfiguration.getActivityBehaviorFactory()
-                .createUserTaskActivityBehavior(currentNode, ((UserTaskActivityBehavior) activityNode.getActivityBehavior()).getTaskDefinition());
+            .createUserTaskActivityBehavior(currentTask, ((UserTaskActivityBehavior) activityImpl.getActivityBehavior()).getTaskDefinition());
 
         MultiInstanceActivityBehavior behavior = null;
         if (sequential) {
-            behavior = new SequentialMultiInstanceBehavior(activityNode, userTaskActivityBehavior);
+            behavior = new SequentialMultiInstanceBehavior(activityImpl, userTaskActivityBehavior);
         } else {
-            behavior = new ParallelMultiInstanceBehavior(activityNode, userTaskActivityBehavior);
+            behavior = new ParallelMultiInstanceBehavior(activityImpl, userTaskActivityBehavior);
         }
 
         /**
@@ -152,63 +163,39 @@ public class CounterSignServiceImpl implements CounterSignService {
         return behavior;
     }
 
-    private UserTask getCurrentUserTask(String processInstanceId) {
-        Task cueerntTask = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
-        BpmnModel bpmnModel = repositoryService.getBpmnModel(cueerntTask.getProcessDefinitionId());
-        org.activiti.bpmn.model.Process process = bpmnModel.getProcesses().get(0);
-        // 当前节点
-        UserTask currentNode = (UserTask) process.getFlowElement(cueerntTask.getTaskDefinitionKey());
-        return currentNode;
-    }
-
-    /**
-     * 获取当前的activityImpl节点
-     *
-     * @param processInstanceId processInstanceId
-     * @return
-     */
-    private ActivityImpl getCurrentActivityNode(String processInstanceId){
-        // 获取流程发布Id信息
-        String definitionId = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult().getProcessDefinitionId();
-        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(definitionId);
-        ExecutionEntity execution = (ExecutionEntity) runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-
-        // 当前流程节点Id信息
-        String activitiId = execution.getActivityId();
-        // 获取流程所有节点信息
-        List<ActivityImpl> activitiList = processDefinitionEntity.getActivities();
-        // 遍历所有节点信息
-        for (ActivityImpl activityImpl : activitiList) {
-            String id = activityImpl.getId();
-            if (activitiId.equals(id)) {
-                return activityImpl;
-            }
-        }
-        return null;
-    }
-
     /**
      * 将 普通节点转换成为会签 任务
      *
-     * @param taskId
-     * @param sequential
-     * @param data
+     * @param taskId 任务id
+     * @param sequential 是否串行
+     * @param userIds 用户id
      */
     @Override
-    public void covertToMultiInstance(String taskId, boolean sequential, Map<String, Object> data) {
-
+    public void covertToMultiInstance(String taskId, boolean sequential, List<String> userIds) {
+        this.covertToMultiInstance(taskId, sequential, ActivitiConstants.ASSIGNEE_USER_EXP, userIds);
     }
 
     /**
      * 将 普通节点转换成为会签 任务
      *
-     * @param taskId
-     * @param sequential
+     * @param taskId 任务id
+     * @param sequential 是否串行
      * @param assigneeExp 任务执行人表达式
-     * @param data
+     * @param userIds 用户id
      */
     @Override
-    public void covertToMultiInstance(String taskId, boolean sequential, String assigneeExp, Map<String, Object> data) {
-
+    public void covertToMultiInstance(String taskId, boolean sequential, String assigneeExp, List<String> userIds) {
+        UserTask currentTaskNode = activitiTaskService.getCurrentUserTaskByTaskId(taskId);
+        currentTaskNode.setAssignee(assigneeExp);
+        // 设置多实例属性
+        currentTaskNode.setLoopCharacteristics(createMultiInstanceLoopCharacteristics(sequential));
+        currentTaskNode.setAssignee(ActivitiConstants.ASSIGNEE_USER_EXP);
+        // 设置监听器
+        // 这里需要注意一下，当用户节点设置了多实例属性后，设置监听器时是设置executionListeners而不是taskListeners。
+        // 类要实现ExecutionListener或者JavaDelegate，普通用户节点实现TaskListener。
+        // 还有多实例属性中loopCardinality和inputDataItem两个必须设置一个，这个在部署流程似有校验
+        currentTaskNode.setExecutionListeners(Arrays.asList(new MultiInstanceloopListener()));
+        // 设置审批人
+        currentTaskNode.setCandidateUsers(userIds);
     }
 }

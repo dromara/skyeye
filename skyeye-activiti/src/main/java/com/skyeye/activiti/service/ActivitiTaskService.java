@@ -6,6 +6,8 @@ package com.skyeye.activiti.service;
 
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
+import org.activiti.bpmn.model.UserTask;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 
 import java.util.Map;
 
@@ -46,5 +48,21 @@ public interface ActivitiTaskService {
     void editActivitiModelToRun(InputObject inputObject, OutputObject outputObject) throws Exception;
 
     void setNextUserTaskApproval(String processInstanceId, String approverId);
+
+    /**
+     * 根据taskId获取UserTask对象
+     *
+     * @param taskId 任务id
+     * @return UserTask对象
+     */
+    UserTask getCurrentUserTaskByTaskId(String taskId);
+
+    /**
+     * 根据流程id获取当前节点信息
+     *
+     * @param processInstanceId 流程id
+     * @return 当前节点信息
+     */
+    ActivityImpl getCurrentActivityNode(String processInstanceId);
 
 }

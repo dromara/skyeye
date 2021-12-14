@@ -22,13 +22,19 @@ import com.skyeye.eve.dao.ActModleTypeDao;
 import com.skyeye.eve.dao.ActUserProcessInstanceIdDao;
 import com.skyeye.eve.dao.SysEveUserDao;
 import com.skyeye.exception.CustomException;
-import com.skyeye.jedis.JedisClientService;
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.HistoryService;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -60,9 +66,6 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
     private TaskService taskService;
 
     @Autowired
-    public JedisClientService jedisClient;
-
-    @Autowired
     private RuntimeService runtimeService;
 
     @Autowired
@@ -85,6 +88,9 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
 
     @Autowired
     private RedisCache redisCache;
+
+    @Autowired
+    protected RepositoryService repositoryService;
 
     /**
      * @Title: queryUserAgencyTasksListByUserId
@@ -717,6 +723,35 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
                 bean.put("needfinish", 0);
             }
         }
+    }
+
+    public UserTask getCurrentUserTaskByTaskId(String taskId){
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
+        org.activiti.bpmn.model.Process process = bpmnModel.getProcesses().get(0);
+        // 当前节点
+        UserTask currentUserTask = (UserTask) process.getFlowElement(task.getTaskDefinitionKey());
+        return currentUserTask;
+    }
+
+    public ActivityImpl getCurrentActivityNode(String processInstanceId){
+        // 获取流程发布Id信息
+        String definitionId = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult().getProcessDefinitionId();
+        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(definitionId);
+        ExecutionEntity execution = (ExecutionEntity) runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+
+        // 当前流程节点Id信息
+        String activitiId = execution.getActivityId();
+        // 获取流程所有节点信息
+        List<ActivityImpl> activitiList = processDefinitionEntity.getActivities();
+        // 遍历所有节点信息
+        for (ActivityImpl activityImpl : activitiList) {
+            String id = activityImpl.getId();
+            if (activitiId.equals(id)) {
+                return activityImpl;
+            }
+        }
+        return null;
     }
 
 }
