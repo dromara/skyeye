@@ -32,6 +32,7 @@ import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
+import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -136,6 +137,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
                 }
                 return null;
             }, RedisConstants.TEN_DAY_SECONDS);
+            bean.put("isMultiInstance", this.isMultiInstance(task.getId()));
             rows.add(bean);
         }
         outputObject.setBeans(rows);
@@ -725,6 +727,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         }
     }
 
+    @Override
     public UserTask getCurrentUserTaskByTaskId(String taskId){
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
@@ -734,6 +737,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         return currentUserTask;
     }
 
+    @Override
     public ActivityImpl getCurrentActivityNode(String processInstanceId){
         // 获取流程发布Id信息
         String definitionId = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult().getProcessDefinitionId();
@@ -752,6 +756,33 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean isMultiInstance(String taskId) {
+        UserTask currentTaskNode = this.getCurrentUserTaskByTaskId(taskId);
+        // 1.判断任务节点是否是用户手动转的会签节点
+        if (currentTaskNode.getLoopCharacteristics() != null) {
+            return true;
+        }
+        // 2.判断工作流模型中的这个节点是否是会签节点
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        if (task != null) {
+            // 获取流程定义id
+            ProcessDefinitionEntity processDefinitionEntity =
+                (ProcessDefinitionEntity)repositoryService.getProcessDefinition(task.getProcessDefinitionId());
+
+            // 根据活动id获取活动实例
+            ActivityImpl activityImpl = processDefinitionEntity.findActivity(task.getTaskDefinitionKey());
+            if (activityImpl.getActivityBehavior() instanceof ParallelMultiInstanceBehavior) {
+                ParallelMultiInstanceBehavior behavior =
+                    (ParallelMultiInstanceBehavior)activityImpl.getActivityBehavior();
+                if (behavior != null && behavior.getCollectionExpression() != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

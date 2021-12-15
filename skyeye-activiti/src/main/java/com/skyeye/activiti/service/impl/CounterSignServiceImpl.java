@@ -4,16 +4,22 @@
 
 package com.skyeye.activiti.service.impl;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import com.skyeye.activiti.service.ActivitiModelService;
+import com.skyeye.activiti.service.ActivitiTaskService;
+import com.skyeye.activiti.service.CounterSignService;
+import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
+import com.skyeye.common.constans.ActivitiConstants;
+import com.skyeye.common.object.InputObject;
+import com.skyeye.common.object.OutputObject;
+import net.sf.json.JSONArray;
+import org.activiti.bpmn.model.ActivitiListener;
 import org.activiti.bpmn.model.MultiInstanceLoopCharacteristics;
 import org.activiti.bpmn.model.UserTask;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
 import org.activiti.engine.impl.bpmn.behavior.SequentialMultiInstanceBehavior;
@@ -24,14 +30,10 @@ import org.activiti.engine.impl.pvm.process.ActivityImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skyeye.activiti.listener.MultiInstanceloopListener;
-import com.skyeye.activiti.service.ActivitiTaskService;
-import com.skyeye.activiti.service.CounterSignService;
-import com.skyeye.common.constans.ActivitiConstants;
-import com.skyeye.common.object.InputObject;
-import com.skyeye.common.object.OutputObject;
-
-import net.sf.json.JSONArray;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: CounterSignServiceImpl
@@ -59,6 +61,9 @@ public class CounterSignServiceImpl implements CounterSignService {
     @Autowired
     private ActivitiTaskService activitiTaskService;
 
+    @Autowired
+    private ActivitiModelService activitiModelService;
+
     /**
      * 将 普通节点转换成为会签 任务
      *
@@ -67,12 +72,14 @@ public class CounterSignServiceImpl implements CounterSignService {
      * @throws Exception
      */
     @Override
+    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
     public void covertToMultiInstance(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
         String taskId = params.get("taskId").toString();
         boolean sequential = Boolean.parseBoolean(params.get("sequential").toString());
         List<String> userIds = JSONArray.fromObject(params.get("userIds").toString());
-
+        this.covertToMultiInstance(taskId, sequential, userIds);
+        activitiModelService.queryProHighLighted(params.get("processInstanceId").toString());
     }
 
     /**
@@ -93,7 +100,7 @@ public class CounterSignServiceImpl implements CounterSignService {
         // 迭代集合
         multiInstanceLoopCharacteristics.setElementVariable(assignee);
         // 完成条件 已完成数等于实例数${nrOfActiveInstances == nrOfInstances}
-        multiInstanceLoopCharacteristics.setCompletionCondition("");
+        multiInstanceLoopCharacteristics.setCompletionCondition("${nrOfActiveInstances == nrOfInstances}");
         return multiInstanceLoopCharacteristics;
     }
 
@@ -194,8 +201,26 @@ public class CounterSignServiceImpl implements CounterSignService {
         // 这里需要注意一下，当用户节点设置了多实例属性后，设置监听器时是设置executionListeners而不是taskListeners。
         // 类要实现ExecutionListener或者JavaDelegate，普通用户节点实现TaskListener。
         // 还有多实例属性中loopCardinality和inputDataItem两个必须设置一个，这个在部署流程似有校验
-        currentTaskNode.setExecutionListeners(Arrays.asList(new MultiInstanceloopListener()));
+        currentTaskNode.setExecutionListeners(this.getActivitiListener());
         // 设置审批人
         currentTaskNode.setCandidateUsers(userIds);
+
     }
+
+    private List<ActivitiListener> getActivitiListener(){
+        List<ActivitiListener> activitiListener = new ArrayList<>();
+        Map<String, String> listeners = new HashMap<>();
+        // 完成时回调
+        listeners.put(ExecutionListener.EVENTNAME_TAKE, "com.skyeye.activiti.listener.MultiInstanceloopListener");
+        for (String key: listeners.keySet()) {
+            ActivitiListener listener = new ActivitiListener();
+            listener.setEvent(key);
+            // Spring配置以变量形式调用无法写入，只能通过继承TaskListener方法，
+            listener.setImplementationType("class");
+            listener.setImplementation(listeners.get(key));
+            activitiListener.add(listener);
+        }
+        return activitiListener;
+    }
+
 }

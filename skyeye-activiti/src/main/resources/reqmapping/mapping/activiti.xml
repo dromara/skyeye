@@ -63,6 +63,12 @@
 	<url id="activitiProcess002" path="/post/ActivitiProcessController/nextPrcessApproverByProcessDefinitionKey" val="根据processDefinitionKey获取流程下一个用户节点的审批人" allUse="2" method="POST" groupName="工作流流程相关操作">
 		<property id="pageUrl" name="pageUrl" ref="required" var="流程实例的page_url参数"/>
 	</url>
+	<url id="activitiProcess003" path="/post/CounterSignController/covertToMultiInstance" val="将 普通节点转换成为会签 任务" allUse="2" method="POST" groupName="工作流流程相关操作">
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
+		<property id="taskId" name="taskId" ref="required" var="任务id"/>
+		<property id="sequential" name="sequential" ref="required" var="会签节点是否串行"/>
+		<property id="userIds" name="userIds" ref="required,json" var="会签人员id"/>
+	</url>
 	<!-- 工作流流程相关操作结束 -->
 
 	<!-- 工作流用户任务相关操作开始 -->

@@ -65,4 +65,12 @@ public interface ActivitiTaskService {
      */
     ActivityImpl getCurrentActivityNode(String processInstanceId);
 
+    /**
+     * 根据任务节点id判断该节点是否为会签节点
+     *
+     * @param taskId 任务节点id
+     * @return true：是会签节点；false：不是会签节点
+     */
+    boolean isMultiInstance(String taskId);
+
 }
