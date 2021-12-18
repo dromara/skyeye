@@ -114,6 +114,7 @@
 	</url>
 	<url id="activitimode016" path="/post/ActivitiTaskController/querySubFormMationByTaskId" val="根据taskId获取表单信息" allUse="2" groupName="工作流用户任务操作">
 		<property id="taskId" name="taskId" ref="required" var="任务id"/>
+		<property id="processInstanceId" name="processInstanceId" ref="required" var="流程id"/>
 	</url>
 	<!-- 工作流用户任务相关操作结束 -->
 

@@ -522,7 +522,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
     public void querySubFormMationByTaskId(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String taskId = map.get("taskId").toString();
-        activitiModelService.deleteProcessInRedisMation("647645");
+        activitiModelService.deleteProcessInRedisMation(map.get("processInstanceId").toString());
         // 获取任务自定义id和名称
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         map.put("taskKey", task.getTaskDefinitionKey());
