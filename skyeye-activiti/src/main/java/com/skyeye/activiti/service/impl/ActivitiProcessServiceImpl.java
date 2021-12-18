@@ -4,6 +4,7 @@
 
 package com.skyeye.activiti.service.impl;
 
+import com.skyeye.activiti.cmd.nextusertask.FindNextUserTaskNodeCmd;
 import com.skyeye.activiti.cmd.rollback.RollbackCmd;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.ActivitiProcessService;
@@ -21,13 +22,17 @@ import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.flowable.bpmn.model.*;
-import org.flowable.engine.*;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.UserTask;
+import org.flowable.engine.ManagementService;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.RuntimeService;
+import org.flowable.engine.TaskService;
 import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
-import org.flowable.engine.impl.util.condition.ConditionUtil;
 import org.flowable.engine.repository.Model;
 import org.flowable.engine.repository.ProcessDefinition;
 import org.flowable.task.api.Task;
+import org.nutz.trans.Trans;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -174,7 +179,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
         String taskId = params.get("taskId").toString();
         // 获取表单数据用于排他网关的参数校验
         Map<String, Object> map = getFormVariable(taskId, params);
-        UserTask userTask = getNextTaskInfo(processInstanceId, map);
+        UserTask userTask = getNextTaskInfo(taskId, map);
         if(userTask != null){
             // 1.获取下个节点的所有可选审批人
             List<Map<String, Object>> user = new ArrayList<>();
@@ -241,53 +246,22 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
     /**
      * 获取下一个用户任务信息
      *
-     * @param processInstanceId 流程Id信息
+     * @param taskId 任务Id信息
      * @param map 表单数据
      * @return 下一个用户任务用户组信息
      * @throws Exception
      */
-    public UserTask getNextTaskInfo(String processInstanceId, Map<String, Object> map) throws Exception {
-        // 获取流程发布Id信息
-        String definitionId = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult().getProcessDefinitionId();
-        BpmnModel bpmnModel = repositoryService.getBpmnModel(definitionId);
-        ExecutionEntity execution = (ExecutionEntity) runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-        execution.setVariablesLocal(map);
-        // 当前流程节点信息
-        FlowElement currentNode = bpmnModel.getFlowElement(execution.getActivityId());
-        // 获取流程曲线走向
-        List<SequenceFlow> outgoingFlows = ((FlowNode) currentNode).getOutgoingFlows();
-        if (CollectionUtils.isNotEmpty(outgoingFlows)) {
-            return this.findNextUserTaskNode(outgoingFlows, execution);
+    public UserTask getNextTaskInfo(String taskId, Map<String, Object> map) throws Exception {
+        try {
+            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+            String executionId = task.getExecutionId();
+            ExecutionEntity execution = (ExecutionEntity) runtimeService.createExecutionQuery().executionId(executionId).singleResult();
+            BpmnModel bpmnModel = repositoryService.getBpmnModel(execution.getProcessDefinitionId());
+            Trans.begin();
+            return managementService.executeCommand(new FindNextUserTaskNodeCmd(execution, bpmnModel, map));
+        } finally {
+            Trans.clear(true);
         }
-        return null;
-    }
-
-    /**
-     * 下一个任务节点信息,
-     *
-     * 如果下一个节点为用户任务则直接返回,
-     * 如果下一个节点为排他网关, 获取排他网关Id信息, 根据排他网关Id信息和execution获取流程实例排他网关Id为key的变量值,
-     * 根据变量值分别执行排他网关后线路中的el表达式, 并找到el表达式通过的线路后的用户任务
-     *
-     * @param outgoingFlows 曲线走向
-     * @param execution 执行器，包含form表单参数信息
-     * @return
-     */
-    private UserTask findNextUserTaskNode(List<SequenceFlow> outgoingFlows, ExecutionEntity execution) {
-        for (SequenceFlow outgoingFlow : outgoingFlows) {
-            if (ConditionUtil.hasTrueCondition(outgoingFlow, execution)) {
-                if (outgoingFlow.getTargetFlowElement() instanceof ExclusiveGateway) {
-                    // 只有排他网关才继续
-                    ExclusiveGateway exclusiveGateway = (ExclusiveGateway) outgoingFlow.getTargetFlowElement();
-                    return findNextUserTaskNode(exclusiveGateway.getOutgoingFlows(), execution);
-                } else if (outgoingFlow.getTargetFlowElement() instanceof UserTask) {
-                    UserTask nextUserTask = (UserTask) outgoingFlow.getTargetFlowElement();
-                    // 找到第一个符合条件的userTask就跳出循环
-                    return nextUserTask;
-                }
-            }
-        }
-        return null;
     }
 
     /**

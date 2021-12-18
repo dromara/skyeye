@@ -23,6 +23,13 @@
 			<version>5.5.4</version>
 		</dependency>
 
+		<!-- Springboot整合Nutz，Nutz可以用于自定义事务，例如：Trans.begin(); -->
+		<dependency>
+			<groupId>org.nutz</groupId>
+			<artifactId>nutz-plugins-spring-boot-starter</artifactId>
+			<version>1.r.66</version>
+		</dependency>
+
 		<!-- 引入中文拼音的依赖 -->
 		<dependency>
 			<groupId>com.belerweb</groupId>
