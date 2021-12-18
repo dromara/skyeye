@@ -11,9 +11,10 @@ import com.skyeye.dao.ProTaskDao;
 import com.skyeye.eve.constants.ScheduleDayConstants;
 import com.skyeye.eve.dao.SysEnclosureDao;
 import com.skyeye.eve.service.ScheduleDayService;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.Locale;
 import java.util.Map;
@@ -38,14 +39,9 @@ public class ProTaskNodeListener implements JavaDelegate {
 	 */
 	private static final String PRO_TASK_PAGE_KEY = ActivitiConstants.ActivitiObjectType.PRO_TASK_PAGE.getKey();
 
-	/**
-	 * 执行方法
-	 *
-	 * @param execution
-	 * @throws Exception
-	 */
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		ProTaskDao proTaskDao = SpringUtils.getBean(ProTaskDao.class);
 		SysEnclosureDao sysEnclosureDao = SpringUtils.getBean(SysEnclosureDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id

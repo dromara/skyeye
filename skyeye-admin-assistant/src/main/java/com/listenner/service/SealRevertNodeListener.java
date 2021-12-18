@@ -9,9 +9,10 @@ import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.eve.dao.SealApplyRevertDao;
 import com.skyeye.eve.dao.SealDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -36,14 +37,10 @@ public class SealRevertNodeListener implements JavaDelegate {
 	 * 印章归还关联的工作流的key
 	 */
 	private static final String ACTIVITI_SEAL_REVERT_PAGE_KEY = ActivitiConstants.ActivitiObjectType.ACTIVITI_SEAL_REVERT_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		SealDao sealDao = SpringUtils.getBean(SealDao.class);
 		SealApplyRevertDao sealApplyRevertDao = SpringUtils.getBean(SealApplyRevertDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id

@@ -535,7 +535,7 @@ public class ErpCommonServiceImpl implements ErpCommonService {
 	 * @throws Exception
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editDepotHeadToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		String orderType = inputObject.getParams().get("orderType").toString();
 		ErpRunFactory.run(inputObject, outputObject, orderType).revokeOrder();

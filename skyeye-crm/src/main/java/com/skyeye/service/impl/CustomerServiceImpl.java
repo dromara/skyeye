@@ -166,7 +166,7 @@ public class CustomerServiceImpl implements CustomerService {
 	* @throws Exception
 	*/
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void deleteCustomerMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		customerDao.deleteCustomerMationById(map); //删除客户

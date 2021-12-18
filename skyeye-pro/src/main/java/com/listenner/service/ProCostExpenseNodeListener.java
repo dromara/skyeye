@@ -8,9 +8,10 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.dao.ProCostExpenseDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.Map;
 
@@ -34,13 +35,9 @@ public class ProCostExpenseNodeListener implements JavaDelegate {
 	 */
 	private static final String PRO_COST_EXPENSE_PAGE_KEY = ActivitiConstants.ActivitiObjectType.PRO_COST_EXPENSE_PAGE.getKey();
 
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		ProCostExpenseDao proCostExpenseDao = SpringUtils.getBean(ProCostExpenseDao.class);
 		String processInstanceId = execution.getProcessInstanceId();// 流程实例id
 		// 获取费用报销工作流关联表信息

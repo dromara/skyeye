@@ -58,7 +58,7 @@ public class PurchaseReturnsServiceImpl implements PurchaseReturnsService{
      * @throws Exception
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertPurchaseReturnsMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ErpRunFactory.run(inputObject, outputObject, ORDER_TYPE).insertOrderMation();
 	}
@@ -81,7 +81,7 @@ public class PurchaseReturnsServiceImpl implements PurchaseReturnsService{
      * @throws Exception
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editPurchaseReturnsMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ErpRunFactory.run(inputObject, outputObject, ORDER_TYPE).editOrderMationById();
 	}

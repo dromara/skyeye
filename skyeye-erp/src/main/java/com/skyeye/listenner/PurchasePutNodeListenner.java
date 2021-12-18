@@ -9,9 +9,10 @@ import com.skyeye.common.constans.ErpConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.dao.ErpCommonDao;
 import com.skyeye.service.StoreHouseApprovalService;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.Map;
 
@@ -35,8 +36,9 @@ public class PurchasePutNodeListenner implements JavaDelegate {
      */
     private static final String ORDER_TYPE = ErpConstants.DepoTheadSubType.PUT_IS_PURCHASE.getType();
 
+    @SneakyThrows
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution execution) {
         ErpCommonDao erpCommonDao = SpringUtils.getBean(ErpCommonDao.class);
         // 流程实例id
         String processInstanceId = execution.getProcessInstanceId();

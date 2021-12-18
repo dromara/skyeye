@@ -8,9 +8,10 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.dao.CrmOpportunityDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.Map;
 
@@ -35,14 +36,10 @@ public class OpportunityTypeOneNodeListener implements JavaDelegate {
 	 * 客户商机申请到工作流中的key
 	 */
 	private static final String CRM_OPPORTUNITY_PAGE_KEY = ActivitiConstants.ActivitiObjectType.CRM_OPPORTUNITY_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		CrmOpportunityDao crmOpportunityDao = SpringUtils.getBean(CrmOpportunityDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id
 		// 获取商机工作流关联表信息

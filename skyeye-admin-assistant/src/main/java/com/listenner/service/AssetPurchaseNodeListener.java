@@ -12,9 +12,10 @@ import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.ActUserProcessInstanceIdDao;
 import com.skyeye.eve.dao.AssetApplyPurchaseDao;
 import com.skyeye.eve.dao.AssetDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.List;
 import java.util.Map;
@@ -40,14 +41,10 @@ public class AssetPurchaseNodeListener implements JavaDelegate {
 	 * 资产采购关联的工作流的key
 	 */
 	private static final String ACTIVITI_ASSET_PURCHAES_PAGE_KEY = ActivitiConstants.ActivitiObjectType.ACTIVITI_ASSET_PURCHAES_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		AssetDao assetDao = SpringUtils.getBean(AssetDao.class);
 		ActUserProcessInstanceIdDao actUserProcessInstanceIdDao = SpringUtils.getBean(ActUserProcessInstanceIdDao.class);
 		AssetApplyPurchaseDao assetApplyPurchaseDao = SpringUtils.getBean(AssetApplyPurchaseDao.class);

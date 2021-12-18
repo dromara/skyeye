@@ -104,7 +104,7 @@ public class ProProjectServiceImpl implements ProProjectService {
 	 * @throws Exception
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertProProjectMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		List<Map<String, Object>> beans = proProjectDao.queryProProjectMationByNameAndNum(map);
@@ -222,7 +222,7 @@ public class ProProjectServiceImpl implements ProProjectService {
 	 * @throws Exception
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProProjectMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String proId = map.get("id").toString();
@@ -247,7 +247,7 @@ public class ProProjectServiceImpl implements ProProjectService {
 	 * @throws Exception
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProProjectMationToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String proId = map.get("id").toString();
@@ -299,7 +299,7 @@ public class ProProjectServiceImpl implements ProProjectService {
 	 * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProjectProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, PRO_PROJECT_PAGE_KEY).revokeActivi();
 	}

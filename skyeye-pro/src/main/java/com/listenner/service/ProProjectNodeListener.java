@@ -7,9 +7,10 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.dao.ProProjectDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.Map;
 
@@ -28,13 +29,9 @@ public class ProProjectNodeListener  implements JavaDelegate{
 	 */
 	private static final String PRO_PROJECT_PAGE_KEY = ActivitiConstants.ActivitiObjectType.PRO_PROJECT_PAGE.getKey();
 
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		ProProjectDao proProjectDao = SpringUtils.getBean(ProProjectDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id
 		// 根据流程id获取对应的项目信息

@@ -88,7 +88,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertProWorkloadMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String workloadId = ToolUtil.getSurFaceId();//工作量主表id
@@ -156,7 +156,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProWorkloadToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String workloadId = map.get("id").toString();
@@ -184,7 +184,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProWorkloadProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, PRO_WORKLOAD_PAGE_KEY).revokeActivi();
 	}
@@ -248,7 +248,7 @@ public class ProWorkloadServiceImpl implements ProWorkloadService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProWorkloadMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String workloadId = map.get("id").toString();//工作量主表id

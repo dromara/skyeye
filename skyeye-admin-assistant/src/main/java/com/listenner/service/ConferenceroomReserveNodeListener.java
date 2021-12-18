@@ -8,9 +8,10 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.eve.dao.ConferenceRoomReserveDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.List;
 import java.util.Map;
@@ -34,14 +35,10 @@ public class ConferenceroomReserveNodeListener implements JavaDelegate {
 	 * 会议室预定关联的工作流的key
 	 */
 	private static final String ACTIVITI_CONFERENCEROOM_USE_PAGE_KEY = ActivitiConstants.ActivitiObjectType.ACTIVITI_CONFERENCEROOM_USE_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		ConferenceRoomReserveDao conferenceRoomReserveDao = SpringUtils.getBean(ConferenceRoomReserveDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id
 		// 获取会议室预定表信息

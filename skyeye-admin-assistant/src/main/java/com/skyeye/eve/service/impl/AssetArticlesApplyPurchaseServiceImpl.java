@@ -80,7 +80,7 @@ public class AssetArticlesApplyPurchaseServiceImpl implements AssetArticlesApply
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertAssetArticlesListToPurchase(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String purchaseId = ToolUtil.getSurFaceId();//采购单主表id
@@ -159,7 +159,7 @@ public class AssetArticlesApplyPurchaseServiceImpl implements AssetArticlesApply
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editAssetArticlesUseToPurchaseSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String purchaseId = map.get("id").toString();
@@ -211,7 +211,7 @@ public class AssetArticlesApplyPurchaseServiceImpl implements AssetArticlesApply
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateAssetArticlesListToPurchaseById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String purchaseId = map.get("id").toString();//采购单主表id
@@ -270,7 +270,7 @@ public class AssetArticlesApplyPurchaseServiceImpl implements AssetArticlesApply
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editAssetArticlesPurchaseToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSETARTICLES_PURCHASE_PAGE_KEY).revokeActivi();
     }

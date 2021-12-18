@@ -4,9 +4,10 @@
 
 package com.skyeye.activiti.listener;
 
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.ExecutionListener;
+
 import com.gexin.fastjson.JSON;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.ExecutionListener;
 
 /**
  * @ClassName: MultiInstanceloopListener
@@ -19,7 +20,7 @@ import org.activiti.engine.delegate.ExecutionListener;
 public class MultiInstanceloopListener implements ExecutionListener {
 
     @Override
-    public void notify(DelegateExecution execution) throws Exception {
+    public void notify(DelegateExecution execution) {
         System.out.println(JSON.toJSONString(execution));
     }
 

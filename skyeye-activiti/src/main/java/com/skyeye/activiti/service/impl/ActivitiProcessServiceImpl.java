@@ -4,49 +4,34 @@
 
 package com.skyeye.activiti.service.impl;
 
+import com.skyeye.activiti.cmd.rollback.RollbackCmd;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.ActivitiProcessService;
 import com.skyeye.activiti.service.ActivitiTaskService;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.ActGroupUserDao;
 import com.skyeye.eve.dao.ActModelDao;
 import com.skyeye.eve.service.SysEveUserService;
 import net.sf.json.JSONObject;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.impl.RepositoryServiceImpl;
-import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
-import org.activiti.engine.impl.javax.el.ExpressionFactory;
-import org.activiti.engine.impl.javax.el.ValueExpression;
-import org.activiti.engine.impl.juel.ExpressionFactoryImpl;
-import org.activiti.engine.impl.juel.SimpleContext;
-import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.PvmActivity;
-import org.activiti.engine.impl.pvm.PvmTransition;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.impl.task.TaskDefinition;
-import org.activiti.engine.repository.Model;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.task.Task;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.flowable.bpmn.model.*;
+import org.flowable.engine.*;
+import org.flowable.engine.impl.persistence.entity.ExecutionEntity;
+import org.flowable.engine.impl.util.condition.ConditionUtil;
+import org.flowable.engine.repository.Model;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.task.api.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,12 +46,6 @@ import java.util.stream.Collectors;
 @Service
 public class ActivitiProcessServiceImpl implements ActivitiProcessService {
 
-    /**
-     * 查询历史信息的类。在一个流程执行完成后，这个对象为我们提供查询历史信息
-     */
-    @Autowired
-    private HistoryService historyService;
-
     @Autowired
     private RuntimeService runtimeService;
 
@@ -75,9 +54,6 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
      */
     @Autowired
     private TaskService taskService;
-
-    @Autowired
-    private ActivitiService activitiService;
 
     @Autowired
     private ActivitiModelService activitiModelService;
@@ -96,6 +72,9 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
 
     @Autowired
     private ActModelDao actModelDao;
+
+    @Autowired
+    private ManagementService managementService;
 
     /**
      *
@@ -140,7 +119,7 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
     /**
      *
      * @Title: editProcessInstanceWithDraw
-     * @Description: 流程撤回
+     * @Description: 流程撤回(撤回审批过的流程)
      * @param inputObject
      * @param outputObject
      * @throws Exception    参数
@@ -154,61 +133,14 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
         String userId = user.get("id").toString();
         String processInstanceId = map.get("processInstanceId").toString();
         String hisTaskId = map.get("hisTaskId").toString();
-        //根据流程id查询代办任务中流程信息
+        // 根据流程id查询代办任务中流程信息
         Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
         if(task == null){
             outputObject.setreturnMessage("流程未启动或已执行完成，无法撤回");
             return;
         }
-        //处理任务
-        Map<String, Object> variables = taskService.getVariables(task.getId());
-        //获取审批信息
-        List<Map<String, Object>> leaveList = new ArrayList<>();
-        Object o = variables.get("leaveOpinionList");
-        if (o != null) {
-            leaveList = (List<Map<String, Object>>) o;
-        }
-        //根据时间倒叙排序
-        Collections.sort(leaveList, new Comparator<Map<String, Object>>() {
-            public int compare(Map<String, Object> p1, Map<String, Object> p2) {
-                String a = p1.get("createTime").toString();
-                String b = p2.get("createTime").toString();
-                try {
-                    if(DateUtil.compare(a, b)){
-                        return 1;
-                    }
-                } catch (ParseException e) {
-                }
-                return -1;
-            }
-        });
-        //如果最后一个审批人不是当前登录人
-        if(!userId.equals(leaveList.get(0).get("opId").toString())){
-            outputObject.setreturnMessage("该任务非当前用户提交，无法撤回");
-            return;
-        }
-        //获取历史任务
-        HistoricTaskInstance historicTaskInstance = historyService.createHistoricTaskInstanceQuery().taskId(hisTaskId).singleResult();
-        //取回流程接点 当前任务id 取回任务id
-        activitiService.callBackProcess(task.getId(), historicTaskInstance.getId());
-        //删除历史流程走向记录
-        historyService.deleteHistoricTaskInstance(historicTaskInstance.getId());
-        historyService.deleteHistoricTaskInstance(task.getId());
-
-        // 删除指定流程在redis中的缓存信息
-        activitiModelService.deleteProcessInRedisMation(processInstanceId);
-
-        //审批信息
-        Map<String, Object> leaveOpinion = new HashMap<>();
-        leaveOpinion.put("opId", user.get("id"));//审批人id
-        leaveOpinion.put("title", "撤回");//操作节点
-        leaveOpinion.put("opName", user.get("userName"));//审批人姓名
-        leaveOpinion.put("opinion", map.get("opinion"));//审批意见
-        leaveOpinion.put("createTime", DateUtil.getTimeAndToString());//审批时间
-        leaveOpinion.put("flag", true);
-        leaveOpinion.put("taskId", hisTaskId);//任务id
-        leaveList.add(leaveOpinion);
-        runtimeService.setVariable(processInstanceId, "leaveOpinionList", leaveList);
+        // 撤回
+        managementService.executeCommand(new RollbackCmd(hisTaskId, userId));
         activitiModelService.queryProHighLighted(processInstanceId);//绘制图像
     }
 
@@ -242,15 +174,15 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
         String taskId = params.get("taskId").toString();
         // 获取表单数据用于排他网关的参数校验
         Map<String, Object> map = getFormVariable(taskId, params);
-        TaskDefinition taskDefinition = getNextTaskInfo(processInstanceId, map);
-        if(taskDefinition != null){
+        UserTask userTask = getNextTaskInfo(processInstanceId, map);
+        if(userTask != null){
             // 1.获取下个节点的所有可选审批人
             List<Map<String, Object>> user = new ArrayList<>();
-            this.getNextTaskApprove(taskDefinition, user);
+            this.getNextTaskApprove(userTask, user);
             outputObject.setBeans(user);
             // 2.获取节点信息
             Map<String, Object> nodeMation = new HashMap<>();
-            nodeMation.put("nodeName", taskDefinition.getNameExpression().getExpressionText());
+            nodeMation.put("nodeName", userTask.getName());
             nodeMation.put("nodeType", ActivitiConstants.USER_TASK);
             outputObject.setBean(nodeMation);
         }
@@ -283,10 +215,9 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
         return variable;
     }
 
-    private void getNextTaskApprove(TaskDefinition taskDefinition, List<Map<String, Object>> user) throws Exception {
+    private void getNextTaskApprove(UserTask userTask, List<Map<String, Object>> user) throws Exception {
         // 1.候选组人员获取
-        Set<Expression> groupIdSet = taskDefinition.getCandidateGroupIdExpressions();
-        List<String> groupIds = new ArrayList<>(groupIdSet.stream().map(Expression::getExpressionText).collect(Collectors.toList()));
+        List<String> groupIds = userTask.getCandidateGroups();
         if(CollectionUtils.isNotEmpty(groupIds)){
             List<Map<String, Object>> groupUsers = actGroupUserDao.queryActGroupUserByGroupId(groupIds);
             groupUsers.forEach(bean -> {
@@ -294,17 +225,16 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
             });
         }
         // 2.候选人员获取
-        Set<Expression> userIdSet = taskDefinition.getCandidateUserIdExpressions();
-        List<String> userIds = new ArrayList<>(userIdSet.stream().map(Expression::getExpressionText).collect(Collectors.toList()));
+        List<String> userIds = userTask.getCandidateUsers();
         if(CollectionUtils.isNotEmpty(userIds)){
             userIds.forEach(userId -> {
                 user.add(sysEveUserService.getUserMationByUserId(userId));
             });
         }
         // 3.代理人获取
-        Expression userIdExpression = taskDefinition.getAssigneeExpression();
-        if(userIdExpression != null){
-            user.add(sysEveUserService.getUserMationByUserId(userIdExpression.getExpressionText()));
+        String assignee = userTask.getAssignee();
+        if(assignee != null){
+            user.add(sysEveUserService.getUserMationByUserId(assignee));
         }
     }
 
@@ -316,24 +246,18 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
      * @return 下一个用户任务用户组信息
      * @throws Exception
      */
-    public TaskDefinition getNextTaskInfo(String processInstanceId, Map<String, Object> map) throws Exception {
+    public UserTask getNextTaskInfo(String processInstanceId, Map<String, Object> map) throws Exception {
         // 获取流程发布Id信息
         String definitionId = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult().getProcessDefinitionId();
-        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(definitionId);
+        BpmnModel bpmnModel = repositoryService.getBpmnModel(definitionId);
         ExecutionEntity execution = (ExecutionEntity) runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-
-        // 当前流程节点Id信息
-        String activitiId = execution.getActivityId();
-        // 获取流程所有节点信息
-        List<ActivityImpl> activitiList = processDefinitionEntity.getActivities();
-        // 遍历所有节点信息
-        for (ActivityImpl activityImpl : activitiList) {
-            String id = activityImpl.getId();
-            if (activitiId.equals(id)) {
-                // 获取下一个节点信息
-                TaskDefinition task = nextTaskDefinition(activityImpl, activityImpl.getId(), processInstanceId, map);
-                return task;
-            }
+        execution.setVariablesLocal(map);
+        // 当前流程节点信息
+        FlowElement currentNode = bpmnModel.getFlowElement(execution.getActivityId());
+        // 获取流程曲线走向
+        List<SequenceFlow> outgoingFlows = ((FlowNode) currentNode).getOutgoingFlows();
+        if (CollectionUtils.isNotEmpty(outgoingFlows)) {
+            return this.findNextUserTaskNode(outgoingFlows, execution);
         }
         return null;
     }
@@ -342,82 +266,28 @@ public class ActivitiProcessServiceImpl implements ActivitiProcessService {
      * 下一个任务节点信息,
      *
      * 如果下一个节点为用户任务则直接返回,
-     *
      * 如果下一个节点为排他网关, 获取排他网关Id信息, 根据排他网关Id信息和execution获取流程实例排他网关Id为key的变量值,
      * 根据变量值分别执行排他网关后线路中的el表达式, 并找到el表达式通过的线路后的用户任务
      *
-     * @param activityImpl 流程节点信息
-     * @param activityId 当前流程节点Id信息
-     * @param processInstanceId 流程实例Id信息
-     * @param map 校验参数
+     * @param outgoingFlows 曲线走向
+     * @param execution 执行器，包含form表单参数信息
      * @return
      */
-    private TaskDefinition nextTaskDefinition(ActivityImpl activityImpl, String activityId, String processInstanceId, Map<String, Object> map) {
-        // 如果遍历节点为用户任务并且节点不是当前节点信息
-        if (ActivitiConstants.USER_TASK.equals(activityImpl.getProperty("type")) && !activityId.equals(activityImpl.getId())) {
-            // 获取该节点下一个节点信息
-            TaskDefinition taskDefinition = ((UserTaskActivityBehavior) activityImpl.getActivityBehavior()).getTaskDefinition();
-            return taskDefinition;
-        } else if (ActivitiConstants.EXCLUSIVE_GATEWAY.equals(activityImpl.getProperty("type"))) {// 当前节点为exclusiveGateway
-            List<PvmTransition> outTransitions = activityImpl.getOutgoingTransitions();
-            // 如果排他网关只有一条线路信息
-            if (outTransitions.size() == 1) {
-                return nextTaskDefinition((ActivityImpl) outTransitions.get(0).getDestination(), activityId, processInstanceId, map);
-            } else if (outTransitions.size() > 1) { // 如果排他网关有多条线路信息
-                for (PvmTransition tr1 : outTransitions) {
-                    Object s = tr1.getProperty("conditionText"); // 获取排他网关线路判断条件信息
-                    // 判断el表达式是否成立
-                    if (isCondition(activityImpl.getId(), StringUtils.trim(s.toString()), map)) {
-                        return nextTaskDefinition((ActivityImpl) tr1.getDestination(), activityId, processInstanceId, map);
-                    }
+    private UserTask findNextUserTaskNode(List<SequenceFlow> outgoingFlows, ExecutionEntity execution) {
+        for (SequenceFlow outgoingFlow : outgoingFlows) {
+            if (ConditionUtil.hasTrueCondition(outgoingFlow, execution)) {
+                if (outgoingFlow.getTargetFlowElement() instanceof ExclusiveGateway) {
+                    // 只有排他网关才继续
+                    ExclusiveGateway exclusiveGateway = (ExclusiveGateway) outgoingFlow.getTargetFlowElement();
+                    return findNextUserTaskNode(exclusiveGateway.getOutgoingFlows(), execution);
+                } else if (outgoingFlow.getTargetFlowElement() instanceof UserTask) {
+                    UserTask nextUserTask = (UserTask) outgoingFlow.getTargetFlowElement();
+                    // 找到第一个符合条件的userTask就跳出循环
+                    return nextUserTask;
                 }
             }
-        } else {
-            // 获取节点所有流向线路信息
-            List<PvmTransition> outTransitions = activityImpl.getOutgoingTransitions();
-            for (PvmTransition tr : outTransitions) {
-                PvmActivity ac = tr.getDestination(); // 获取线路的终点节点
-                // 如果流向线路为排他网关
-                if (ActivitiConstants.EXCLUSIVE_GATEWAY.equals(ac.getProperty("type"))) {
-                    List<PvmTransition> outTransitionsTemp = ac.getOutgoingTransitions();
-                    // 如果排他网关只有一条线路信息
-                    if (outTransitionsTemp.size() == 1) {
-                        return nextTaskDefinition((ActivityImpl) outTransitionsTemp.get(0).getDestination(), activityId, processInstanceId, map);
-                    } else if (outTransitionsTemp.size() > 1) { // 如果排他网关有多条线路信息
-                        for (PvmTransition tr1 : outTransitionsTemp) {
-                            Object s = tr1.getProperty("conditionText"); // 获取排他网关线路判断条件信息
-                            // 判断el表达式是否成立
-                            if (isCondition(ac.getId(), StringUtils.trim(s.toString()), map)) {
-                                return nextTaskDefinition((ActivityImpl) tr1.getDestination(), activityId, processInstanceId, map);
-                            }
-                        }
-                    }
-                } else if (ActivitiConstants.USER_TASK.equals(ac.getProperty("type"))) {
-                    return ((UserTaskActivityBehavior) ((ActivityImpl) ac).getActivityBehavior()).getTaskDefinition();
-                } else {
-                }
-            }
-            return null;
         }
         return null;
-    }
-
-    /**
-     * 根据key和value判断el表达式是否通过信息
-     *
-     * @param key el表达式key信息
-     * @param el el表达式信息
-     * @param map el表达式传入值信息
-     * @return
-     */
-    public boolean isCondition(String key, String el, Map<String, Object> map) {
-        ExpressionFactory factory = new ExpressionFactoryImpl();
-        SimpleContext context = new SimpleContext();
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
-            context.setVariable(entry.getKey(), factory.createValueExpression(entry.getValue(), activitiService.getValueClass(entry.getValue())));
-        }
-        ValueExpression e = factory.createValueExpression(context, el, boolean.class);
-        return (Boolean) e.getValue(context);
     }
 
     /**

@@ -77,7 +77,7 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertVehicleMationToUse(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         Map<String, Object> m = vehicleDao.queryVehicleMationByVehicleId(map);
@@ -131,7 +131,7 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editVehicleUseToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -208,7 +208,7 @@ public class VehicleApplyUseServiceImpl implements VehicleApplyUseService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateVehicleUseMationToEdit(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();

@@ -58,7 +58,7 @@ public class PurchasePutServiceImpl implements PurchasePutService{
      * @throws Exception
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertPurchasePutMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ErpRunFactory.run(inputObject, outputObject, ORDER_TYPE).insertOrderMation();
 	}
@@ -81,7 +81,7 @@ public class PurchasePutServiceImpl implements PurchasePutService{
      * @throws Exception
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editPurchasePutMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ErpRunFactory.run(inputObject, outputObject, ORDER_TYPE).editOrderMationById();
 	}

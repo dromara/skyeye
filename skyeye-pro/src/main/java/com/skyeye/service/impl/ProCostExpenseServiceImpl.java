@@ -89,7 +89,7 @@ public class ProCostExpenseServiceImpl implements ProCostExpenseService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertProCostExpenseMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String expensePurposeStr = map.get("expensePurposeStr").toString();
@@ -188,7 +188,7 @@ public class ProCostExpenseServiceImpl implements ProCostExpenseService {
 	 * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProCostExpenseMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String expensePurposeStr = map.get("expensePurposeStr").toString();
@@ -236,7 +236,7 @@ public class ProCostExpenseServiceImpl implements ProCostExpenseService {
 	 * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProCostExpenseToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();
@@ -262,7 +262,7 @@ public class ProCostExpenseServiceImpl implements ProCostExpenseService {
 	 * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProCostExpenseProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, PRO_COST_EXPENSE_PAGE_KEY).revokeActivi();
 	}

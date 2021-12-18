@@ -73,7 +73,7 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertCheckWorkLeaveMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 请假申请id
@@ -137,7 +137,7 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateCheckWorkLeaveById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 请假申请id
@@ -184,7 +184,7 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editCheckWorkLeaveToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String leaveId = map.get("id").toString();
@@ -233,7 +233,7 @@ public class CheckWorkLeaveServiceImpl implements CheckWorkLeaveService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editCheckWorkLeaveToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_LEAVE_PAGE_KEY).revokeActivi();
     }

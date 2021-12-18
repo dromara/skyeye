@@ -10,9 +10,10 @@ import com.skyeye.common.util.SpringUtils;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.AssetApplyUseDao;
 import com.skyeye.eve.dao.AssetDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.List;
 import java.util.Map;
@@ -39,13 +40,9 @@ public class AssetUseNodeListener implements JavaDelegate {
 	 */
 	private static final String ACTIVITI_ASSET_USE_PAGE_KEY = ActivitiConstants.ActivitiObjectType.ACTIVITI_ASSET_USE_PAGE.getKey();
 
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		AssetDao assetDao = SpringUtils.getBean(AssetDao.class);
 		AssetApplyUseDao assetApplyUseDao = SpringUtils.getBean(AssetApplyUseDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id

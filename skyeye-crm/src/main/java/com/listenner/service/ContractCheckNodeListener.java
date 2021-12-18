@@ -8,9 +8,10 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.dao.CrmContractDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.Map;
 
@@ -35,14 +36,10 @@ public class ContractCheckNodeListener implements JavaDelegate {
 	 * 客户合同提交到工作流中的key
 	 */
 	private static final String CRM_CONTRACT_PAGE_KEY = ActivitiConstants.ActivitiObjectType.CRM_CONTRACT_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		CrmContractDao crmContractDao = SpringUtils.getBean(CrmContractDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id
 		// 获取合同关联表信息

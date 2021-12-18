@@ -10,9 +10,10 @@ import com.skyeye.common.util.SpringUtils;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.SealApplyBorrowDao;
 import com.skyeye.eve.dao.SealDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.List;
 import java.util.Map;
@@ -36,14 +37,10 @@ public class SealBorrowNodeListener implements JavaDelegate {
 	 * 印章借用关联的工作流的key
 	 */
 	private static final String ACTIVITI_SEAL_USE_PAGE_KEY = ActivitiConstants.ActivitiObjectType.ACTIVITI_SEAL_USE_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		SealDao sealDao = SpringUtils.getBean(SealDao.class);
 		SealApplyBorrowDao sealApplyBorrowDao = SpringUtils.getBean(SealApplyBorrowDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id

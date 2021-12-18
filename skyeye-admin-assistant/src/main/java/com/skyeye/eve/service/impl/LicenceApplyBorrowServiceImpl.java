@@ -80,7 +80,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertBorrowLicenceMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = ToolUtil.getSurFaceId();//借用单主表id
@@ -185,7 +185,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateBorrowLicenceMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = map.get("id").toString();//借用单主表id
@@ -215,7 +215,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editBorrowLicenceToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -272,7 +272,7 @@ public class LicenceApplyBorrowServiceImpl implements LicenceApplyBorrowService 
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateBorrowLicenceMationToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_USE_PAGE_KEY).revokeActivi();
     }

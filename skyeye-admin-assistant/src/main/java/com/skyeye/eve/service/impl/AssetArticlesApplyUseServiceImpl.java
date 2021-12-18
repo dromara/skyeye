@@ -80,7 +80,7 @@ public class AssetArticlesApplyUseServiceImpl implements AssetArticlesApplyUseSe
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertAssetArticlesListToUse(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = ToolUtil.getSurFaceId();//领用单主表id
@@ -191,7 +191,7 @@ public class AssetArticlesApplyUseServiceImpl implements AssetArticlesApplyUseSe
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateAssetArticlesListToUseById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = map.get("id").toString();//领用单主表id
@@ -223,7 +223,7 @@ public class AssetArticlesApplyUseServiceImpl implements AssetArticlesApplyUseSe
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editAssetArticlesUseToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String useId = map.get("id").toString();
@@ -280,7 +280,7 @@ public class AssetArticlesApplyUseServiceImpl implements AssetArticlesApplyUseSe
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editAssetArticlesUseToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSETARTICLES_USE_PAGE_KEY).revokeActivi();
     }

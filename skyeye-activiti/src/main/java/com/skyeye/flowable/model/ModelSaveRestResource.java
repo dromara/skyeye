@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.skyeye.activity.model;
+package com.skyeye.flowable.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.skyeye.common.util.XssUtil;
-import org.activiti.editor.constants.ModelDataJsonConstants;
-import org.activiti.engine.ActivitiException;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.repository.Model;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
+import org.flowable.common.engine.api.FlowableException;
+import org.flowable.editor.constants.ModelDataJsonConstants;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.repository.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +38,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @author Tijs Rademakers
- * 编辑器制图之后，将节点信息以json的形式提交给这个Controller，然后由其进行持久化操作
+ *
+ * @ClassName: ModelSaveRestResource
+ * @Description: 编辑器制图之后，将节点信息以json的形式提交给这个Controller，然后由其进行持久化操作
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/12/17 20:36
+ *
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @RestController
 @RequestMapping(value = "/service")
@@ -90,7 +96,7 @@ public class ModelSaveRestResource implements ModelDataJsonConstants {
 
 		} catch (Exception e) {
 			LOGGER.error("Error saving model", e);
-			throw new ActivitiException("Error saving model", e);
+			throw new FlowableException("Error saving model", e);
 		} finally {
 			if (outStream != null) {
 				try {

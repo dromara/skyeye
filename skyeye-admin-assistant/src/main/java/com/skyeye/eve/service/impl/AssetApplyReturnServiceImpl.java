@@ -100,7 +100,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertAssetListToReturn(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String returnId = ToolUtil.getSurFaceId();//归还单主表id
@@ -136,7 +136,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editAssetReturnToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String returnId = map.get("id").toString();
@@ -242,7 +242,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateAssetListToReturnById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String returnId = map.get("id").toString();//归还单主表id
@@ -289,7 +289,7 @@ public class AssetApplyReturnServiceImpl implements AssetApplyReturnService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editAssetReturnToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_ASSET_RETURN_PAGE_KEY).revokeActivi();
     }

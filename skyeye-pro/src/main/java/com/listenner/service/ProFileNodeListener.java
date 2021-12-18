@@ -8,9 +8,10 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.dao.ProFileDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.Map;
 
@@ -28,14 +29,10 @@ public class ProFileNodeListener implements JavaDelegate {
 	 * 项目文档审核在工作流中配置的key
 	 */
 	private static final String PRO_FILE_PAGE_KEY = ActivitiConstants.ActivitiObjectType.PRO_FILE_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		ProFileDao proFileDao = SpringUtils.getBean(ProFileDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id
 		// 获取文档工作流关联表信息

@@ -57,7 +57,7 @@ public class RetailOutLetServiceImpl implements RetailOutLetService{
      * @throws Exception
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertRetailOutLetMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ErpRunFactory.run(inputObject, outputObject, ORDER_TYPE).insertOrderMation();
 	}
@@ -80,7 +80,7 @@ public class RetailOutLetServiceImpl implements RetailOutLetService{
      * @throws Exception
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editRetailOutLetMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ErpRunFactory.run(inputObject, outputObject, ORDER_TYPE).editOrderMationById();
 	}

@@ -8,9 +8,10 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.eve.dao.CheckWorkBusinessTripDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.List;
 import java.util.Map;
@@ -35,8 +36,9 @@ public class CheckWorkBusinessTripNodeListener implements JavaDelegate {
      */
     private static final String CHECK_WORK_BUSINESS_TRIP_KEY = ActivitiConstants.ActivitiObjectType.CHECK_WORK_BUSINESS_TRIP.getKey();
 
+    @SneakyThrows
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution execution) {
         CheckWorkBusinessTripDao checkWorkBusinessTripDao = SpringUtils.getBean(CheckWorkBusinessTripDao.class);
         String processInstanceId = execution.getProcessInstanceId();//流程实例id
         Map<String, Object> mation = checkWorkBusinessTripDao.queryCheckWorkBusinessTripByProcessInstanceId(processInstanceId);

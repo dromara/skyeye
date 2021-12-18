@@ -27,13 +27,6 @@ spring:
             max-connections: 100
         user: ${activite.username}
     datasource:
-        activiti:
-            check-process-definitions: false
-            driver-class-name: com.mysql.jdbc.Driver
-            type: com.zaxxer.hikari.HikariDataSource
-            jdbc-url: ${activiti.database.path}
-            username: ${activiti.database.username}
-            password: ${activiti.database.password}
         basedata:
             connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
             driver-class-name: ${jdbc.database.driverClassName}

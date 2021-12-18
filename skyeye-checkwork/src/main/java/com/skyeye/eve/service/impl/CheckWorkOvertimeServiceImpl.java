@@ -73,7 +73,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertCheckWorkOvertimeMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 加班申请id
@@ -137,7 +137,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateCheckWorkOvertimeById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 加班申请id
@@ -184,7 +184,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editCheckWorkOvertimeToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String overtimeId = map.get("id").toString();
@@ -234,7 +234,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editCheckWorkOvertimeToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_OVERTIME_PAGE_KEY).revokeActivi();
     }

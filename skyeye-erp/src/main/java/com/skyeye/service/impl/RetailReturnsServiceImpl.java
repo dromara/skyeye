@@ -57,7 +57,7 @@ public class RetailReturnsServiceImpl implements RetailReturnsService{
      * @throws Exception
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertRetailReturnsMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ErpRunFactory.run(inputObject, outputObject, ORDER_TYPE).insertOrderMation();
 	}
@@ -80,7 +80,7 @@ public class RetailReturnsServiceImpl implements RetailReturnsService{
      * @throws Exception
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editRetailReturnsMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ErpRunFactory.run(inputObject, outputObject, ORDER_TYPE).editOrderMationById();
 	}

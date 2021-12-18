@@ -87,7 +87,7 @@ public class ProFileServiceImpl implements ProFileService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertProFileMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = proFileDao.queryProFileByTitle(map);
@@ -163,7 +163,7 @@ public class ProFileServiceImpl implements ProFileService {
 	 * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProFileMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = proFileDao.queryProFileByTitle(map);
@@ -189,7 +189,7 @@ public class ProFileServiceImpl implements ProFileService {
 	 * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProFileToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();
@@ -216,7 +216,7 @@ public class ProFileServiceImpl implements ProFileService {
 	 * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProFileProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, PRO_FILE_PAGE_KEY).revokeActivi();
 	}

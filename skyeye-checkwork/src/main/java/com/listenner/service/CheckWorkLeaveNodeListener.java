@@ -13,9 +13,10 @@ import com.skyeye.common.util.SpringUtils;
 import com.skyeye.eve.dao.CheckWorkLeaveDao;
 import com.skyeye.eve.dao.SysEveUserStaffDao;
 import com.skyeye.eve.service.SystemFoundationSettingsService;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.List;
 import java.util.Map;
@@ -53,13 +54,9 @@ public class CheckWorkLeaveNodeListener implements JavaDelegate {
         systemFoundationSettingsService = SpringUtils.getBean(SystemFoundationSettingsService.class);
     }
 
-    /**
-     *
-     * @param execution
-     * @throws Exception
-     */
+    @SneakyThrows
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution execution) {
         // 流程实例id
         String processInstanceId = execution.getProcessInstanceId();
         Map<String, Object> mation = checkWorkLeaveDao.queryCheckWorkLeaveByProcessInstanceId(processInstanceId);

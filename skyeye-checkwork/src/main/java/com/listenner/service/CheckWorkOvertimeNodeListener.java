@@ -12,10 +12,10 @@ import com.skyeye.common.util.SpringUtils;
 import com.skyeye.eve.dao.CheckWorkOvertimeDao;
 import com.skyeye.eve.dao.SysEveUserStaffDao;
 import com.skyeye.eve.service.CompanyDepartmentService;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
-
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 import java.util.List;
 import java.util.Map;
 
@@ -51,13 +51,9 @@ public class CheckWorkOvertimeNodeListener implements JavaDelegate {
         companyDepartmentService = SpringUtils.getBean(CompanyDepartmentService.class);
     }
 
-    /**
-     *
-     * @param execution
-     * @throws Exception
-     */
+    @SneakyThrows
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution execution) {
         String processInstanceId = execution.getProcessInstanceId();//流程实例id
         Map<String, Object> mation = checkWorkOvertimeDao.queryCheckWorkOvertimeByProcessInstanceId(processInstanceId);
         String overtimeId = mation.get("id").toString();

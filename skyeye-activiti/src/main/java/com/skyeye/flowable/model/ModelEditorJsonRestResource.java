@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.skyeye.activity.model;
 
-import org.activiti.editor.constants.ModelDataJsonConstants;
-import org.activiti.engine.ActivitiException;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.repository.Model;
+package com.skyeye.flowable.model;
+
 import org.apache.commons.lang3.StringUtils;
+import org.flowable.common.engine.api.FlowableException;
+import org.flowable.editor.constants.ModelDataJsonConstants;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.repository.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
- * @author Tijs Rademakers
- * 根据modelId获取model的节点信息，编辑器根据返回的json进行绘图
+ *
+ * @ClassName: ModelEditorJsonRestResource
+ * @Description: 根据modelId获取model的节点信息，编辑器根据返回的json进行绘图
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/12/17 20:36
+ *
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @RestController
 @RequestMapping(value = "/service")
@@ -68,7 +75,7 @@ public class ModelEditorJsonRestResource implements ModelDataJsonConstants {
 
 			} catch (Exception e) {
 				LOGGER.error("Error creating model JSON", e);
-				throw new ActivitiException("Error creating model JSON", e);
+				throw new FlowableException("Error creating model JSON", e);
 			}
 		}
 		return modelNode;

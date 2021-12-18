@@ -8,9 +8,10 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.dao.ProWorkloadDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.List;
 import java.util.Map;
@@ -34,14 +35,10 @@ public class ProWorkloadNodeListener implements JavaDelegate {
 	 * 项目工作量在工作流中的key
 	 */
 	private static final String PRO_WORKLOAD_PAGE_KEY = ActivitiConstants.ActivitiObjectType.PRO_WORKLOAD_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		ProWorkloadDao proWorkloadDao = SpringUtils.getBean(ProWorkloadDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id
 		// 获取工作量工作流关联表信息

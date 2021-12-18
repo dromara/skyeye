@@ -12,9 +12,10 @@ import com.skyeye.common.util.SpringUtils;
 import com.skyeye.eve.dao.CheckWorkCancelLeaveDao;
 import com.skyeye.eve.dao.CheckWorkLeaveDao;
 import com.skyeye.eve.dao.SysEveUserStaffDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.List;
 import java.util.Map;
@@ -53,13 +54,9 @@ public class CheckWorkCancelLeaveNodeListener implements JavaDelegate {
         sysEveUserStaffDao = SpringUtils.getBean(SysEveUserStaffDao.class);
     }
 
-    /**
-     *
-     * @param execution
-     * @throws Exception
-     */
+    @SneakyThrows
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution execution) {
         String processInstanceId = execution.getProcessInstanceId();//流程实例id
         Map<String, Object> mation = checkWorkCancelLeaveDao.queryCheckWorkCancelLeaveByProcessInstanceId(processInstanceId);
         String cancelLeaveId = mation.get("id").toString();

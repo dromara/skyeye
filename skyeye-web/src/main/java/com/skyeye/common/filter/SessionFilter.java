@@ -10,7 +10,6 @@ import com.skyeye.common.object.GetUserToken;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.jedis.impl.JedisClientServiceImpl;
-import org.apache.log4j.MDC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,11 +92,6 @@ public class SessionFilter implements Filter {
 				// 权限校验通过
 				if(authPoints(authPoints, key) || "2".equals(allUse)){
 					url = Constants.REQUEST_MAPPING.get(key).get("path").toString();
-					// 设置日志
-					// userName：如果没有userCode则默认id
-					MDC.put("userName", !userMation.containsKey("userCode") ? userMation.get("id") : userMation.get("userCode"));
-					MDC.put("realPath", url);
-					MDC.put("ip", ToolUtil.getIpByRequest(servletRequest));
 					request.getRequestDispatcher(url + "?sessionKey=" + key + "&allUse=" + allUse + "&userToken=" + userToken).forward(request, response);
 				}else{
 					LOGGER.info("key[{}] is Forced visit, real url is {}", key, Constants.REQUEST_MAPPING.get(key).get("val").toString());

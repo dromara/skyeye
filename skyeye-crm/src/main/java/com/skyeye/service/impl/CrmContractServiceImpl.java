@@ -144,7 +144,7 @@ public class CrmContractServiceImpl implements CrmContractService {
 	 * @throws Exception
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertCrmContractMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		judgeParams(map);
@@ -241,7 +241,7 @@ public class CrmContractServiceImpl implements CrmContractService {
 	* @throws Exception
 	*/
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editCrmContractMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		judgeParams(map);
@@ -292,7 +292,7 @@ public class CrmContractServiceImpl implements CrmContractService {
          * @throws
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editCrmContractToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();
@@ -439,7 +439,7 @@ public class CrmContractServiceImpl implements CrmContractService {
 	     * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editCrmContractToRevokeByProcessInstanceId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, CRM_CONTRACT_PAGE_KEY).revokeActivi();
 	}

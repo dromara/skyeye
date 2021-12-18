@@ -80,7 +80,7 @@ public class SealApplyRevertServiceImpl implements SealApplyRevertService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertRevertSealMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String revertId = ToolUtil.getSurFaceId();//归还单主表id
@@ -183,7 +183,7 @@ public class SealApplyRevertServiceImpl implements SealApplyRevertService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateRevertSealMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String revertId = map.get("id").toString();//归还单主表id
@@ -214,7 +214,7 @@ public class SealApplyRevertServiceImpl implements SealApplyRevertService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editRevertSealToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String revertId = map.get("id").toString();
@@ -272,7 +272,7 @@ public class SealApplyRevertServiceImpl implements SealApplyRevertService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateRevertSealToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_SEAL_REVERT_PAGE_KEY).revokeActivi();
     }

@@ -84,7 +84,7 @@ public class ProTaskServiceImpl implements ProTaskService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertProTaskMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = proTaskDao.queryProTaskByTaskName(map);
@@ -166,7 +166,7 @@ public class ProTaskServiceImpl implements ProTaskService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProTaskMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = proTaskDao.queryProTaskByTaskName(map);
@@ -224,7 +224,7 @@ public class ProTaskServiceImpl implements ProTaskService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProTaskProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, PRO_TASK_PAGE_KEY).revokeActivi();
 	}
@@ -240,7 +240,7 @@ public class ProTaskServiceImpl implements ProTaskService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editProTaskToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String id = map.get("id").toString();

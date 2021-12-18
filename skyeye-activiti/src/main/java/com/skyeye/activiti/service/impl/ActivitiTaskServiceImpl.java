@@ -22,23 +22,19 @@ import com.skyeye.eve.dao.ActModleTypeDao;
 import com.skyeye.eve.dao.ActUserProcessInstanceIdDao;
 import com.skyeye.eve.dao.SysEveUserDao;
 import com.skyeye.exception.CustomException;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.HistoryService;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.history.HistoricTaskInstance;
-import org.activiti.engine.history.HistoricVariableInstance;
-import org.activiti.engine.impl.RepositoryServiceImpl;
-import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
-import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.UserTask;
+import org.flowable.engine.HistoryService;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.RuntimeService;
+import org.flowable.engine.TaskService;
+import org.flowable.engine.history.HistoricProcessInstance;
+import org.flowable.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
+import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.task.api.Task;
+import org.flowable.task.api.TaskQuery;
+import org.flowable.task.api.history.HistoricTaskInstance;
+import org.flowable.variable.api.history.HistoricVariableInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -598,7 +594,7 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editActivitiModelToRun(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String processInstanceId = map.get("processInstanceId").toString();
@@ -731,55 +727,26 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
     public UserTask getCurrentUserTaskByTaskId(String taskId){
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         BpmnModel bpmnModel = repositoryService.getBpmnModel(task.getProcessDefinitionId());
-        org.activiti.bpmn.model.Process process = bpmnModel.getProcesses().get(0);
+
+        org.flowable.bpmn.model.Process process = bpmnModel.getProcesses().get(0);
         // 当前节点
         UserTask currentUserTask = (UserTask) process.getFlowElement(task.getTaskDefinitionKey());
         return currentUserTask;
     }
 
     @Override
-    public ActivityImpl getCurrentActivityNode(String processInstanceId){
-        // 获取流程发布Id信息
-        String definitionId = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult().getProcessDefinitionId();
-        ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) repositoryService).getDeployedProcessDefinition(definitionId);
-        ExecutionEntity execution = (ExecutionEntity) runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-
-        // 当前流程节点Id信息
-        String activitiId = execution.getActivityId();
-        // 获取流程所有节点信息
-        List<ActivityImpl> activitiList = processDefinitionEntity.getActivities();
-        // 遍历所有节点信息
-        for (ActivityImpl activityImpl : activitiList) {
-            String id = activityImpl.getId();
-            if (activitiId.equals(id)) {
-                return activityImpl;
-            }
-        }
-        return null;
-    }
-
-    @Override
     public boolean isMultiInstance(String taskId) {
         UserTask currentTaskNode = this.getCurrentUserTaskByTaskId(taskId);
         // 1.判断任务节点是否是用户手动转的会签节点
-        if (currentTaskNode.getLoopCharacteristics() != null) {
+        if (currentTaskNode.getLoopCharacteristics() != null
+                || currentTaskNode.getBehavior() instanceof ParallelMultiInstanceBehavior) {
             return true;
         }
         // 2.判断工作流模型中的这个节点是否是会签节点
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        if (task != null) {
-            // 获取流程定义id
-            ProcessDefinitionEntity processDefinitionEntity =
-                (ProcessDefinitionEntity)repositoryService.getProcessDefinition(task.getProcessDefinitionId());
-
-            // 根据活动id获取活动实例
-            ActivityImpl activityImpl = processDefinitionEntity.findActivity(task.getTaskDefinitionKey());
-            if (activityImpl.getActivityBehavior() instanceof ParallelMultiInstanceBehavior) {
-                ParallelMultiInstanceBehavior behavior =
-                    (ParallelMultiInstanceBehavior)activityImpl.getActivityBehavior();
-                if (behavior != null && behavior.getCollectionExpression() != null) {
-                    return true;
-                }
+        if(currentTaskNode.getBehavior() instanceof ParallelMultiInstanceBehavior){
+            ParallelMultiInstanceBehavior behavior = (ParallelMultiInstanceBehavior) currentTaskNode.getBehavior();
+            if (behavior != null && behavior.getCollectionExpression() != null) {
+                return true;
             }
         }
         return false;

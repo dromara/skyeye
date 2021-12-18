@@ -12,26 +12,21 @@ import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import net.sf.json.JSONArray;
-import org.activiti.bpmn.model.ActivitiListener;
-import org.activiti.bpmn.model.MultiInstanceLoopCharacteristics;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.delegate.ExecutionListener;
-import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
-import org.activiti.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
-import org.activiti.engine.impl.bpmn.behavior.SequentialMultiInstanceBehavior;
-import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
-import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.activiti.engine.impl.el.ExpressionManager;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.flowable.bpmn.model.MultiInstanceLoopCharacteristics;
+import org.flowable.bpmn.model.UserTask;
+import org.flowable.common.engine.impl.el.ExpressionManager;
+import org.flowable.engine.ProcessEngine;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.RuntimeService;
+import org.flowable.engine.TaskService;
+import org.flowable.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
+import org.flowable.engine.impl.bpmn.behavior.ParallelMultiInstanceBehavior;
+import org.flowable.engine.impl.bpmn.behavior.SequentialMultiInstanceBehavior;
+import org.flowable.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
+import org.flowable.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -72,7 +67,7 @@ public class CounterSignServiceImpl implements CounterSignService {
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void covertToMultiInstance(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> params = inputObject.getParams();
         String taskId = params.get("taskId").toString();
@@ -119,13 +114,12 @@ public class CounterSignServiceImpl implements CounterSignService {
      * 创建 多实例 行为解释器
      *
      * @param currentTask 当前任务节点
-     * @param activityImpl 流程节点信息
      * @param sequential 是否串行
      * @return
      */
     @Override
-    public MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, ActivityImpl activityImpl, boolean sequential) {
-        return createMultiInstanceBehavior(currentTask, activityImpl, sequential, ActivitiConstants.DEFAULT_ASSIGNEE_LIST_EXP,
+    public MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, boolean sequential) {
+        return createMultiInstanceBehavior(currentTask, sequential, ActivitiConstants.DEFAULT_ASSIGNEE_LIST_EXP,
             ActivitiConstants.ASSIGNEE_USER);
     }
 
@@ -133,27 +127,26 @@ public class CounterSignServiceImpl implements CounterSignService {
      * 创建多实例行为解释器
      *
      * @param currentTask 当前任务节点
-     * @param activityImpl 流程节点信息
      * @param sequential 是否串行
      * @param assigneeListExp 用户组表达
      * @param assigneeExp 用户标识
      * @return
      */
     @Override
-    public MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, ActivityImpl activityImpl, boolean sequential,
-        String assigneeListExp, String assigneeExp) {
+    public MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, boolean sequential,
+                                                                     String assigneeListExp, String assigneeExp) {
         ProcessEngineConfigurationImpl processEngineConfiguration = (ProcessEngineConfigurationImpl) processEngine.getProcessEngineConfiguration();
         /**
          *  创建解释器
          */
         UserTaskActivityBehavior userTaskActivityBehavior = processEngineConfiguration.getActivityBehaviorFactory()
-            .createUserTaskActivityBehavior(currentTask, ((UserTaskActivityBehavior) activityImpl.getActivityBehavior()).getTaskDefinition());
+            .createUserTaskActivityBehavior(currentTask);
 
         MultiInstanceActivityBehavior behavior = null;
         if (sequential) {
-            behavior = new SequentialMultiInstanceBehavior(activityImpl, userTaskActivityBehavior);
+            behavior = new SequentialMultiInstanceBehavior(currentTask, userTaskActivityBehavior);
         } else {
-            behavior = new ParallelMultiInstanceBehavior(activityImpl, userTaskActivityBehavior);
+            behavior = new ParallelMultiInstanceBehavior(currentTask, userTaskActivityBehavior);
         }
 
         /**
@@ -201,26 +194,26 @@ public class CounterSignServiceImpl implements CounterSignService {
         // 这里需要注意一下，当用户节点设置了多实例属性后，设置监听器时是设置executionListeners而不是taskListeners。
         // 类要实现ExecutionListener或者JavaDelegate，普通用户节点实现TaskListener。
         // 还有多实例属性中loopCardinality和inputDataItem两个必须设置一个，这个在部署流程似有校验
-        currentTaskNode.setExecutionListeners(this.getActivitiListener());
+//        currentTaskNode.setExecutionListeners(this.getActivitiListener());
         // 设置审批人
         currentTaskNode.setCandidateUsers(userIds);
 
     }
 
-    private List<ActivitiListener> getActivitiListener(){
-        List<ActivitiListener> activitiListener = new ArrayList<>();
-        Map<String, String> listeners = new HashMap<>();
-        // 完成时回调
-        listeners.put(ExecutionListener.EVENTNAME_TAKE, "com.skyeye.activiti.listener.MultiInstanceloopListener");
-        for (String key: listeners.keySet()) {
-            ActivitiListener listener = new ActivitiListener();
-            listener.setEvent(key);
-            // Spring配置以变量形式调用无法写入，只能通过继承TaskListener方法，
-            listener.setImplementationType("class");
-            listener.setImplementation(listeners.get(key));
-            activitiListener.add(listener);
-        }
-        return activitiListener;
-    }
+//    private List<ActivitiListener> getActivitiListener(){
+//        List<ActivitiListener> activitiListener = new ArrayList<>();
+//        Map<String, String> listeners = new HashMap<>();
+//        // 完成时回调
+//        listeners.put(ExecutionListener.EVENTNAME_TAKE, "com.skyeye.activiti.listener.MultiInstanceloopListener");
+//        for (String key: listeners.keySet()) {
+//            ActivitiListener listener = new ActivitiListener();
+//            listener.setEvent(key);
+//            // Spring配置以变量形式调用无法写入，只能通过继承TaskListener方法，
+//            listener.setImplementationType("class");
+//            listener.setImplementation(listeners.get(key));
+//            activitiListener.add(listener);
+//        }
+//        return activitiListener;
+//    }
 
 }

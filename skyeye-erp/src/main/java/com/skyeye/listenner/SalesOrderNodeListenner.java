@@ -10,9 +10,10 @@ import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.dao.ErpCommonDao;
 import com.skyeye.dao.SalesOrderDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +38,9 @@ public class SalesOrderNodeListenner implements JavaDelegate {
      */
     private static final String ORDER_TYPE = ErpConstants.DepoTheadSubType.OUTCHASE_ORDER.getType();
 
+    @SneakyThrows
     @Override
-    public void execute(DelegateExecution execution) throws Exception {
+    public void execute(DelegateExecution execution) {
         ErpCommonDao erpCommonDao = SpringUtils.getBean(ErpCommonDao.class);
         SalesOrderDao salesOrderDao = SpringUtils.getBean(SalesOrderDao.class);
         // 流程实例id

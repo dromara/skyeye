@@ -6,10 +6,9 @@ package com.skyeye.activiti.service;
 
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import org.activiti.bpmn.model.MultiInstanceLoopCharacteristics;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.flowable.bpmn.model.MultiInstanceLoopCharacteristics;
+import org.flowable.bpmn.model.UserTask;
+import org.flowable.engine.impl.bpmn.behavior.MultiInstanceActivityBehavior;
 
 import java.util.List;
 
@@ -54,24 +53,22 @@ public interface CounterSignService {
      * 创建 多实例 行为解释器
      *
      * @param currentTask 当前任务节点
-     * @param activityImpl 流程节点信息
      * @param sequential 是否串行
      * @return
      */
-    MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, ActivityImpl activityImpl, boolean sequential);
+    MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, boolean sequential);
 
     /**
      * 创建多实例行为解释器
      *
      * @param currentTask 当前任务节点
-     * @param activityImpl 流程节点信息
      * @param sequential 是否串行
      * @param assigneeListExp 用户组表达
      * @param assigneeExp 用户标识
      * @return
      */
-    MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, ActivityImpl activityImpl, boolean sequential,
-        String assigneeListExp, String assigneeExp);
+    MultiInstanceActivityBehavior createMultiInstanceBehavior(UserTask currentTask, boolean sequential,
+                                                              String assigneeListExp, String assigneeExp);
 
     /**
      * 将 普通节点转换成为会签 任务

@@ -80,7 +80,7 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertBorrowSealMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String borrowId = ToolUtil.getSurFaceId();//借用单主表id
@@ -184,7 +184,7 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateBorrowSealMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String borrowId = map.get("id").toString();//借用单主表id
@@ -215,7 +215,7 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editBorrowSealToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String borrowId = map.get("id").toString();
@@ -272,7 +272,7 @@ public class SealApplyBorrowServiceImpl implements SealApplyBorrowService {
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateBorrowSealToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_SEAL_USE_PAGE_KEY).revokeActivi();
     }

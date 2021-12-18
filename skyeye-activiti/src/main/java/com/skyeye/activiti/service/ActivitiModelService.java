@@ -6,7 +6,7 @@ package com.skyeye.activiti.service;
 
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import org.activiti.engine.task.Task;
+import org.flowable.task.api.Task;
 
 import java.util.List;
 import java.util.Map;

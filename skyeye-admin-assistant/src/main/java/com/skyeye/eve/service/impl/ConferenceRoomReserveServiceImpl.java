@@ -78,7 +78,7 @@ public class ConferenceRoomReserveServiceImpl implements ConferenceRoomReserveSe
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertReserveConferenceRoomMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 获取该会议室预定时间段内已被其他人预定的数据
@@ -155,7 +155,7 @@ public class ConferenceRoomReserveServiceImpl implements ConferenceRoomReserveSe
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateReserveConferenceRoomMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -182,7 +182,7 @@ public class ConferenceRoomReserveServiceImpl implements ConferenceRoomReserveSe
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editReserveConferenceRoomToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -239,7 +239,7 @@ public class ConferenceRoomReserveServiceImpl implements ConferenceRoomReserveSe
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editReserveConferenceRoomToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_CONFERENCEROOM_USE_PAGE_KEY).revokeActivi();
     }

@@ -6,8 +6,7 @@ package com.skyeye.activiti.service;
 
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
+import org.flowable.bpmn.model.UserTask;
 
 import java.util.Map;
 
@@ -56,14 +55,6 @@ public interface ActivitiTaskService {
      * @return UserTask对象
      */
     UserTask getCurrentUserTaskByTaskId(String taskId);
-
-    /**
-     * 根据流程id获取当前节点信息
-     *
-     * @param processInstanceId 流程id
-     * @return 当前节点信息
-     */
-    ActivityImpl getCurrentActivityNode(String processInstanceId);
 
     /**
      * 根据任务节点id判断该节点是否为会签节点

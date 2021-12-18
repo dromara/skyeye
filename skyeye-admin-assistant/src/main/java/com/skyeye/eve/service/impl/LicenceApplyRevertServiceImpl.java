@@ -80,7 +80,7 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertRevertLicenceMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String revertId = ToolUtil.getSurFaceId();//归还单主表id
@@ -165,7 +165,7 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateRevertLicenceMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String revertId = map.get("id").toString();//归还单主表id
@@ -222,7 +222,7 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
      * @throws
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editRevertLicenceToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String id = map.get("id").toString();
@@ -279,7 +279,7 @@ public class LicenceApplyRevertServiceImpl implements LicenceApplyRevertService 
      * @return void    返回类型
      * @throws
      */
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateRevertLicenceMationToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, ACTIVITI_LICENCE_REVERT_PAGE_KEY).revokeActivi();
     }

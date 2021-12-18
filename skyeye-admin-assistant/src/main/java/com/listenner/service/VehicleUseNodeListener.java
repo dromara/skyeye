@@ -8,9 +8,10 @@ import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.util.SpringUtils;
 import com.skyeye.eve.dao.VehicleApplyUseDao;
 import com.skyeye.eve.dao.VehicleDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.Map;
 
@@ -28,14 +29,10 @@ public class VehicleUseNodeListener implements JavaDelegate {
 	 * 用车申请关联的工作流的key
 	 */
 	private static final String ACTIVITI_VEHICLE_USE_PAGE_KEY = ActivitiConstants.ActivitiObjectType.ACTIVITI_VEHICLE_USE_PAGE.getKey();
-	
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		VehicleDao vehicleDao = SpringUtils.getBean(VehicleDao.class);
 		VehicleApplyUseDao vehicleApplyUseDao = SpringUtils.getBean(VehicleApplyUseDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id

@@ -580,7 +580,6 @@ public class ToolUtil {
 	 * @param javaBean
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public static <K, V> Map<K, V> javaBean2Map(Object javaBean) {
 		Map<K, V> ret = new HashMap<>();
 		try {

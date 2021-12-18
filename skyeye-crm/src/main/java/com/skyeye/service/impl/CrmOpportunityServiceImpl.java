@@ -98,7 +98,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
     * @throws
     */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertCrmOpportunityMation(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = crmOpportunityDao.queryOpportunityMationByName(map);
@@ -191,7 +191,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 	* @throws
 	*/
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editOpportunityMationById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> bean = crmOpportunityDao.queryOpportunityMationByName(map);
@@ -402,7 +402,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
 	* @throws
 	*/
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editOpportunityToApprovalById(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String opportunityId = map.get("id").toString();
@@ -652,7 +652,7 @@ public class CrmOpportunityServiceImpl implements CrmOpportunityService {
          * @throws
      */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editOpportunityProcessToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
 		ActivitiRunFactory.run(inputObject, outputObject, CRM_OPPORTUNITY_PAGE_KEY).revokeActivi();
 	}

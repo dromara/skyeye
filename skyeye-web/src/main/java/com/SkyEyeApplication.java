@@ -4,10 +4,12 @@
 
 package com;
 
+import org.flowable.ui.modeler.properties.FlowableModelerAppProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.TaskScheduler;
@@ -19,9 +21,10 @@ import javax.servlet.MultipartConfigElement;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude={
-	org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class, 
-	org.activiti.spring.boot.SecurityAutoConfiguration.class
+	org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,
+	org.flowable.spring.boot.FlowableSecurityAutoConfiguration.class
 })
+@EnableConfigurationProperties({FlowableModelerAppProperties.class})
 @EnableTransactionManagement//启注解事务管理，等同于xml配置方式的 <tx:annotation-driven />
 @EnableScheduling
 public class SkyEyeApplication {

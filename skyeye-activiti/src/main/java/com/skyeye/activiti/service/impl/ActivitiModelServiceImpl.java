@@ -9,8 +9,8 @@ import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.skyeye.activiti.flowimg.FlowImgService;
 import com.skyeye.activiti.mapper.ActivityMapper;
-import com.skyeye.activiti.service.ActAssigneeService;
 import com.skyeye.activiti.service.ActivitiModelService;
 import com.skyeye.activiti.service.ActivitiTaskService;
 import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
@@ -23,26 +23,21 @@ import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.ActModelDao;
 import com.skyeye.eve.dao.ActUserProcessInstanceIdDao;
 import com.skyeye.jedis.JedisClientService;
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.editor.constants.ModelDataJsonConstants;
-import org.activiti.editor.language.json.converter.BpmnJsonConverter;
-import org.activiti.engine.*;
-import org.activiti.engine.history.HistoricActivityInstance;
-import org.activiti.engine.history.HistoricProcessInstance;
-import org.activiti.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
-import org.activiti.engine.impl.pvm.PvmTransition;
-import org.activiti.engine.impl.pvm.process.ActivityImpl;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.Model;
-import org.activiti.engine.repository.ModelQuery;
-import org.activiti.engine.repository.ProcessDefinition;
-import org.activiti.engine.runtime.Execution;
-import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
-import org.activiti.image.ProcessDiagramGenerator;
-import org.apache.commons.lang3.StringUtils;
+import org.flowable.bpmn.converter.BpmnXMLConverter;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.editor.constants.ModelDataJsonConstants;
+import org.flowable.editor.language.json.converter.BpmnJsonConverter;
+import org.flowable.engine.ProcessEngine;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.RuntimeService;
+import org.flowable.engine.TaskService;
+import org.flowable.engine.repository.Deployment;
+import org.flowable.engine.repository.Model;
+import org.flowable.engine.repository.ModelQuery;
+import org.flowable.engine.repository.ProcessDefinition;
+import org.flowable.engine.runtime.Execution;
+import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.task.api.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +46,10 @@ import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -80,12 +78,6 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
     private RepositoryService repositoryService;
 
 	/**
-	 * 查询历史信息的类。在一个流程执行完成后，这个对象为我们提供查询历史信息
-	 */
-	@Autowired
-	private HistoryService historyService;
-
-	/**
 	 * 任务服务类。可以从这个类中获取任务的信息
 	 */
 	@Autowired
@@ -93,12 +85,6 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
     
     @Autowired
 	private RuntimeService runtimeService;
-    
-    @Autowired
-	private ProcessEngineConfigurationImpl processEngineConfiguration;
-    
-    @Autowired
-    private ActAssigneeService actAssigneeService;
     
     @Autowired
     private ActUserProcessInstanceIdDao actUserProcessInstanceIdDao;
@@ -118,6 +104,9 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	@Autowired
 	private ActivitiTaskService activitiTaskService;
 
+	@Autowired
+	private FlowImgService flowImgService;
+
     /**
 	     * @Title: insertNewActivitiModel
 	     * @Description: 新建一个空模型
@@ -128,11 +117,11 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	     * @throws
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void insertNewActivitiModel(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		RepositoryService repositoryService = processEngine.getRepositoryService();
-        //初始化一个空模型
+        // 初始化一个空模型
         Model model = repositoryService.newModel();
         //设置一些默认信息
         String name = "new-process";
@@ -192,6 +181,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 					row.put("processKey", processDefinition.getKey());
 				}
 			}
+			row.put("id", model.getId());
 			rows.add(row);
 		}
 		outputObject.setBeans(rows);
@@ -400,7 +390,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	 * @throws Exception
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void editActivitiModelToStartProcessByMap(Map<String, Object> map, Map<String, Object> user, String id, String approvalId) throws Exception {
 		// 流程定义的key
 		String keyName = map.get("keyName").toString();
@@ -438,27 +428,8 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	 */
 	@Override
 	public void queryProHighLighted(String processInstanceId) throws Exception {
-		// 获取历史流程实例
-		HistoricProcessInstance processInstance = historyService.createHistoricProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-		// 获取流程图
-		BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
-
-		ProcessDiagramGenerator diagramGenerator = processEngineConfiguration.getProcessDiagramGenerator();
-		ProcessDefinitionEntity definitionEntity = (ProcessDefinitionEntity) repositoryService.getProcessDefinition(processInstance.getProcessDefinitionId());
-		//获取历史流程节点
-		List<HistoricActivityInstance> highLightedActivitList = historyService.createHistoricActivityInstanceQuery().processInstanceId(processInstanceId).list();
-		// 高亮环节id集合
-		List<String> highLightedActivitis = new ArrayList<String>();
-
-		// 高亮线路id集合
-		List<String> highLightedFlows = getHighLightedFlows(definitionEntity, highLightedActivitList);
-
-		for (HistoricActivityInstance tempActivity : highLightedActivitList) {
-			String activityId = tempActivity.getActivityId();
-			highLightedActivitis.add(activityId);
-		}
-		// 配置字体
-		InputStream imageStream = diagramGenerator.generateDiagram(bpmnModel, "png", highLightedActivitis, highLightedFlows, "宋体", "微软雅黑", "黑体", null, 2.0);
+		byte[] b = flowImgService.generateImageByProcInstId(processInstanceId);
+		ByteArrayInputStream imageStream = new ByteArrayInputStream(b);
 		BufferedImage bi = ImageIO.read(imageStream);
 		File fileFolder = new File(tPath + "upload/activiti/");
 		if(!fileFolder.isDirectory())//目录不存在
@@ -470,46 +441,6 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 		ImageIO.write(bi, "png", fos);
 		fos.close();
 		imageStream.close();
-	}
-
-	/**
-	 * 获取需要高亮的线
-	 *
-	 * @param processDefinitionEntity
-	 * @param historicActivityInstances
-	 * @return
-	 */
-	private List<String> getHighLightedFlows(ProcessDefinitionEntity processDefinitionEntity, List<HistoricActivityInstance> historicActivityInstances) {
-		List<String> highFlows = new ArrayList<String>();// 用以保存高亮的线flowId
-		for (int i = 0; i < historicActivityInstances.size() - 1; i++) {// 对历史流程节点进行遍历
-			ActivityImpl activityImpl = processDefinitionEntity.findActivity(historicActivityInstances.get(i).getActivityId());// 得到节点定义的详细信息
-			List<ActivityImpl> sameStartTimeNodes = new ArrayList<ActivityImpl>();// 用来保存后需开始时间相同的节点
-			ActivityImpl sameActivityImpl1 = processDefinitionEntity.findActivity(historicActivityInstances.get(i + 1).getActivityId());
-			// 将后面第一个节点放在时间相同节点的集合里
-			sameStartTimeNodes.add(sameActivityImpl1);
-			for (int j = i + 1; j < historicActivityInstances.size() - 1; j++) {
-				HistoricActivityInstance activityImpl1 = historicActivityInstances.get(j);// 后续第一个节点
-				HistoricActivityInstance activityImpl2 = historicActivityInstances.get(j + 1);// 后续第二个节点
-				if (activityImpl1.getStartTime().equals(activityImpl2.getStartTime())) {
-					// 如果第一个节点和第二个节点开始时间相同保存
-					ActivityImpl sameActivityImpl2 = processDefinitionEntity.findActivity(activityImpl2.getActivityId());
-					sameStartTimeNodes.add(sameActivityImpl2);
-				} else {
-					// 有不相同跳出循环
-					break;
-				}
-			}
-			List<PvmTransition> pvmTransitions = activityImpl.getOutgoingTransitions();// 取出节点的所有出去的线
-			for (PvmTransition pvmTransition : pvmTransitions) {
-				// 对所有的线进行遍历
-				ActivityImpl pvmActivityImpl = (ActivityImpl) pvmTransition.getDestination();
-				// 如果取出的线的目标节点存在时间相同的节点里，保存该线的id，进行高亮显示
-				if (sameStartTimeNodes.contains(pvmActivityImpl)) {
-					highFlows.add(pvmTransition.getId());
-				}
-			}
-		}
-		return highFlows;
 	}
 
 	/**
@@ -554,17 +485,6 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 		Map<String, Object> map = inputObject.getParams();
 		String deploymentId = map.get("deploymentId").toString();
 		try{
-			List<ActivityImpl> activityList = actAssigneeService.getActivityList(deploymentId);
-			if(activityList != null){
-				for (ActivityImpl activity : activityList) {
-					String nodeId = activity.getId();
-					if (StringUtils.isEmpty(nodeId) || "start".equals(nodeId) || "end".equals(nodeId)) {
-						continue;
-					}
-					/**接触节点和代办关联*/
-					actAssigneeService.deleteByNodeId(nodeId);
-				}
-			}
 			repositoryService.deleteDeployment(deploymentId, true);
 		}catch(Exception e){
 			outputObject.setreturnMessage("存在正在进行的流程，无法取消发布。");
@@ -725,7 +645,7 @@ public class ActivitiModelServiceImpl implements ActivitiModelService{
 	 * @throws Exception
 	 */
 	@Override
-	@ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+	@ActivitiAndBaseTransaction(value = {"transactionManager"})
 	public void copyModelByModelId(InputObject inputObject, OutputObject outputObject) throws Exception {
 		Map<String, Object> map = inputObject.getParams();
 		String modelId = map.get("modelId").toString();

@@ -10,9 +10,10 @@ import com.skyeye.common.util.SpringUtils;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.LicenceApplyBorrowDao;
 import com.skyeye.eve.dao.LicenceDao;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.Expression;
-import org.activiti.engine.delegate.JavaDelegate;
+import lombok.SneakyThrows;
+import org.flowable.common.engine.api.delegate.Expression;
+import org.flowable.engine.delegate.DelegateExecution;
+import org.flowable.engine.delegate.JavaDelegate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,13 +39,9 @@ public class LicenceBorrowNodeListener implements JavaDelegate {
 	 */
 	private static final String ACTIVITI_LICENCE_USE_PAGE_KEY = ActivitiConstants.ActivitiObjectType.ACTIVITI_LICENCE_USE_PAGE.getKey();
 
-	/**
-	 * 
-	 * @param execution
-	 * @throws Exception
-	 */
+	@SneakyThrows
 	@Override
-	public void execute(DelegateExecution execution) throws Exception {
+	public void execute(DelegateExecution execution) {
 		LicenceDao licenceDao = SpringUtils.getBean(LicenceDao.class);
 		LicenceApplyBorrowDao licenceApplyBorrowDao = SpringUtils.getBean(LicenceApplyBorrowDao.class);
 		String processInstanceId = execution.getProcessInstanceId();//流程实例id

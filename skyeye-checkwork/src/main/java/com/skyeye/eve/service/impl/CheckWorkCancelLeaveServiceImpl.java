@@ -72,7 +72,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertCheckWorkCancelLeaveMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 销假申请id
@@ -136,7 +136,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateCheckWorkCancelLeaveById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 销假申请id
@@ -183,7 +183,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editCheckWorkCancelLeaveToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String cancelLeaveId = map.get("id").toString();
@@ -232,7 +232,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editCheckWorkCancelLeaveToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_CANCEL_LEAVE_PAGE_KEY).revokeActivi();
     }

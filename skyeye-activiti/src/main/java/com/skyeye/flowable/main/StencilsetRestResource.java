@@ -13,20 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.skyeye.activity.main;
 
-import java.io.InputStream;
+package com.skyeye.flowable.main;
 
-import org.activiti.engine.ActivitiException;
 import org.apache.commons.io.IOUtils;
+import org.flowable.common.engine.api.FlowableException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.InputStream;
+
 /**
- * @author Tijs Rademakers
- * 获取编辑器组件及配置项信息
+ *
+ * @ClassName: StencilsetRestResource
+ * @Description: 获取编辑器组件及配置项信息
+ * @author: skyeye云系列--卫志强
+ * @date: 2021/12/17 20:35
+ *
+ * @Copyright: 2021 https://gitee.com/doc_wei01/skyeye Inc. All rights reserved.
+ * 注意：本内容仅限购买后使用.禁止私自外泄以及用于其他的商业目的
  */
 @RestController
 @RequestMapping(value = "/service")
@@ -38,7 +45,7 @@ public class StencilsetRestResource {
 		try {
 			return IOUtils.toString(stencilsetStream, "utf-8");
 		} catch (Exception e) {
-			throw new ActivitiException("Error while loading stencil set", e);
+			throw new FlowableException("Error while loading stencil set", e);
 		}
 	}
 }

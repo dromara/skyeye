@@ -71,7 +71,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void insertCheckWorkBusinessTripMation(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 出差申请id
@@ -135,7 +135,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void updateCheckWorkBusinessTripById(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         // 出差申请id
@@ -182,7 +182,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editCheckWorkBusinessTripToSubApproval(InputObject inputObject, OutputObject outputObject) throws Exception {
         Map<String, Object> map = inputObject.getParams();
         String businessTripId = map.get("id").toString();
@@ -231,7 +231,7 @@ public class CheckWorkBusinessTripServiceImpl implements CheckWorkBusinessTripSe
      * @throws Exception
      */
     @Override
-    @ActivitiAndBaseTransaction(value = {"activitiTransactionManager", "transactionManager"})
+    @ActivitiAndBaseTransaction(value = {"transactionManager"})
     public void editCheckWorkBusinessTripToRevoke(InputObject inputObject, OutputObject outputObject) throws Exception {
         ActivitiRunFactory.run(inputObject, outputObject, CHECK_WORK_BUSINESS_TRIP_KEY).revokeActivi();
     }
