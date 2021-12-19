@@ -21,8 +21,6 @@
 			<groupId>com.skyeye</groupId>
 			<artifactId>skyeye-base</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/skyeye-base-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
 
 		<!-- Springboot整合Nutz，Nutz可以用于自定义事务，例如：Trans.begin(); -->

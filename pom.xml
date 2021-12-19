@@ -57,6 +57,7 @@
         <module>skyeye-api</module>
         <module>skyeye-ifs</module>
         <module>skyeye-boss</module>
+		<module>skyeye-base</module>
     </modules>
 
 	<properties>
