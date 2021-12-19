@@ -10,7 +10,6 @@ import com.skyeye.activiti.service.ActivitiUserService;
 import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
 import com.skyeye.common.constans.CheckWorkConstants;
-import com.skyeye.common.constans.Constants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -85,7 +84,7 @@ public class CheckWorkOvertimeServiceImpl implements CheckWorkOvertimeService {
             return;
         }
         map.put("id", overtimeId);
-        map.put("oddNumber", Constants.getCheckWorkOvertimeOddNumber());
+        map.put("oddNumber", CheckWorkConstants.getCheckWorkOvertimeOddNumber());
         map.put("state", 0);//状态  默认草稿
         Map<String, Object> user = inputObject.getLogParams();//用户信息
         map.put("createId", user.get("id").toString());

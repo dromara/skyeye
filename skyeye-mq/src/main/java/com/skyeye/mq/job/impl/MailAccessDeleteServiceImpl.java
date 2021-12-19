@@ -6,6 +6,7 @@ package com.skyeye.mq.job.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.common.constans.MqConstants;
+import com.skyeye.common.util.EmailUtil;
 import com.skyeye.common.util.ShowMail;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.dao.MQUserEmailDao;
@@ -98,7 +99,7 @@ public class MailAccessDeleteServiceImpl implements JobMateService{
 					//收件人或者抄送人或者暗送人是当前账号
 					if(!ToolUtil.judgeInListByMessage(emailHasMail, re.getMessageId()) && !ToolUtil.isBlank(re.getMessageId())
 							&& (re.getMailAddress("to").indexOf(username) > -1 || re.getMailAddress("cc").indexOf(username) > -1 || re.getMailAddress("bcc").indexOf(username) > -1)){
-						bean = ToolUtil.getEmailMationByUtil(re, message[i]);
+						bean = EmailUtil.getEmailMationByUtil(re, message[i]);
 						String rowId = ToolUtil.getSurFaceId();
 						re.setDateFormat("yyyy-MM-dd HH:mm:ss");
 						bean.put("id", rowId);//id

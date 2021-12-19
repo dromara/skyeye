@@ -6,11 +6,9 @@ package com.skyeye.sys.quartz;
 
 import cn.hutool.json.JSONUtil;
 import com.skyeye.cache.local.LocalCacheMap;
-import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.util.CalculationUtil;
-import com.skyeye.common.util.DateUtil;
-import com.skyeye.common.util.IntervalUtil;
-import com.skyeye.common.util.ToolUtil;
+import com.skyeye.common.constans.QuartzConstants;
+import com.skyeye.common.util.*;
 import com.skyeye.eve.dao.*;
 import com.skyeye.eve.entity.quartz.SysQuartzRunHistory;
 import com.skyeye.eve.service.*;
@@ -300,7 +298,7 @@ public class StaffWagesQuartz {
                     if(ToolUtil.isBlank(formula)){
                         childField.put("moneyValue", staffModelFieldMap.get(key));
                     }else{
-                        childField.put("moneyValue", ToolUtil.convertToCode(formula, staffModelFieldMap));
+                        childField.put("moneyValue", ReflexUtil.convertToCode(formula, staffModelFieldMap));
                     }
                     childField.put("key", key);
                     childField.put("fieldType", field.get("fieldType"));

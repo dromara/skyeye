@@ -9,7 +9,7 @@ import com.skyeye.activiti.factory.ActivitiRunFactory;
 import com.skyeye.activiti.service.ActivitiUserService;
 import com.skyeye.annotation.transaction.ActivitiAndBaseTransaction;
 import com.skyeye.common.constans.ActivitiConstants;
-import com.skyeye.common.constans.Constants;
+import com.skyeye.common.constans.CheckWorkConstants;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
@@ -84,7 +84,7 @@ public class CheckWorkCancelLeaveServiceImpl implements CheckWorkCancelLeaveServ
             return;
         }
         map.put("id", cancelLeaveId);
-        map.put("oddNumber", Constants.getCheckWorkCancelLeaveOddNumber());
+        map.put("oddNumber", CheckWorkConstants.getCheckWorkCancelLeaveOddNumber());
         map.put("state", 0);//状态  默认草稿
         Map<String, Object> user = inputObject.getLogParams();//用户信息
         map.put("createId", user.get("id").toString());

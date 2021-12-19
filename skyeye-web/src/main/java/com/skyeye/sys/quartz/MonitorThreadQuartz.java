@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.skyeye.common.constans.QuartzConstants;
 import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.SpringUtils;
+import com.skyeye.common.util.SysServerUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.SysMonitorDao;
 import com.skyeye.eve.entity.quartz.SysQuartzRunHistory;
@@ -93,7 +94,7 @@ public class MonitorThreadQuartz {
             //cpu使用率
             double cpuRatio = 0;
             if (osName.toLowerCase().startsWith("windows")) {
-                cpuRatio = ToolUtil.getCpuRatioForWindows();
+                cpuRatio = SysServerUtil.getCpuRatioForWindows();
             }
             //ip
             InetAddress addr;

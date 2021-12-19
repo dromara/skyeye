@@ -4,13 +4,16 @@
 
 package com.skyeye.common.util;
 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @ClassName: FileUtil
@@ -77,6 +80,89 @@ public class FileUtil {
             }
         }
         return sbf.toString();
+    }
+
+    /**
+     * 创建一个空的docx文件
+     *
+     * @param path 文件路径
+     * @throws Exception
+     */
+    public static void createNewDocxFile(String path) throws Exception {
+        FileOutputStream out = null;
+        try{
+            XWPFDocument document = new XWPFDocument();
+            out = new FileOutputStream(path);
+            document.write(out);
+        }finally{
+            if(out != null) {
+                out.close();
+            }
+        }
+    }
+
+    /**
+     * 创建一个空的excel文件
+     *
+     * @param path 文件路径
+     * @throws Exception
+     */
+    public static void createNewExcelFile(String path) throws Exception {
+        FileOutputStream output = null;
+        HSSFWorkbook wb = null;
+        try {
+            // 创建Excel文件对象
+            wb = new HSSFWorkbook();
+            // 用文件对象创建sheet对象
+            HSSFSheet sheet = wb.createSheet("sheet");
+            // 用sheet对象创建行对象
+            HSSFRow row = sheet.createRow(0);
+            // 用行对象创建单元格对象Cell
+            Cell cell = row.createCell(0);
+            // 用cell对象读写。设置Excel工作表的值
+            cell.setCellValue("");
+            // 输出Excel文件
+            output = new FileOutputStream(path);
+            wb.write(output);
+            output.flush();
+        } finally {
+            if (output != null){
+                output.close();
+            }
+            if (wb != null){
+                wb.close();
+            }
+        }
+    }
+
+    /**
+     * 创建一个空的ppt文件
+     *
+     * @param path 文件路径
+     * @throws Exception
+     */
+    public static void createNewPPtFile(String path) throws Exception {
+        FileOutputStream out = null;
+        try {
+            XMLSlideShow ppt = new XMLSlideShow();
+            out = new FileOutputStream(new File(path));
+            ppt.write(out);
+        } finally {
+            if (out != null){
+                out.close();
+            }
+        }
+    }
+
+    /**
+     * 创建一个空的普通的文件
+     *
+     * @param path 文件路径
+     * @throws Exception
+     */
+    public static void createNewSimpleFile(String path) throws Exception {
+        File file = new File(path);
+        file.createNewFile();
     }
 
 }

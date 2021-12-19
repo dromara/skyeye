@@ -9,6 +9,7 @@ import com.github.pagehelper.PageHelper;
 import com.skyeye.common.object.InputObject;
 import com.skyeye.common.object.OutputObject;
 import com.skyeye.common.util.DateUtil;
+import com.skyeye.common.util.StringUtil;
 import com.skyeye.common.util.ToolUtil;
 import com.skyeye.eve.dao.AssetArticlesDao;
 import com.skyeye.eve.dao.SysEnclosureDao;
@@ -59,7 +60,7 @@ public class AssetArticlesServiceImpl implements AssetArticlesService {
 		Map<String, Object> map = inputObject.getParams();
 		Map<String, Object> user = inputObject.getLogParams();
         map.put("id", ToolUtil.getSurFaceId());
-        String str = ToolUtil.chineseToFirstLetter(map.get("articlesName").toString());
+        String str = StringUtil.chineseToFirstLetter(map.get("articlesName").toString());
         if(str.length()>10){
             map.put("articlesNum", str.substring(0, 10) + ToolUtil.getUniqueKey());
 		}else{

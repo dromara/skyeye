@@ -4,6 +4,7 @@
 
 package com.skyeye.common.constans;
 
+import com.skyeye.common.util.DateUtil;
 import com.skyeye.common.util.ToolUtil;
 import io.netty.util.internal.StringUtil;
 
@@ -202,6 +203,26 @@ public class CheckWorkConstants {
         mation.put("type", CheckDayType.DAY_IS_HOLIDAY.getType());
         mation.put("className", CheckDayType.DAY_IS_HOLIDAY.getClassName());
         return mation;
+    }
+
+    // 获取请假申请单单号
+    public static String getCheckWorkLeaveOddNumber() {
+        return "QJSQ" + DateUtil.getTimeStrAndToString();
+    }
+
+    // 获取加班申请单单号
+    public static String getCheckWorkOvertimeOddNumber() {
+        return "JBSQ" + DateUtil.getTimeStrAndToString();
+    }
+
+    // 获取销假申请单单号
+    public static String getCheckWorkCancelLeaveOddNumber() {
+        return "XJSQ" + DateUtil.getTimeStrAndToString();
+    }
+
+    // 获取出差申请单单号
+    public static String getCheckWorkBusinessTripOddNumber() {
+        return "CCSQ" + DateUtil.getTimeStrAndToString();
     }
 
 }

@@ -1174,13 +1174,13 @@ public class FileConsoleServiceImpl implements FileConsoleService{
 	 */
 	private void createFile(String fileExtName, String path) throws Exception {
 		if(DiskCloudConstants.FileMation.OFFICE_IS_DOCX.getFileExt().equalsIgnoreCase(fileExtName)){
-			ToolUtil.createNewDocxFile(path);
+			FileUtil.createNewDocxFile(path);
 		}else if(DiskCloudConstants.FileMation.OFFICE_IS_XLSX.getFileExt().equalsIgnoreCase(fileExtName)){
-			ToolUtil.createNewExcelFile(path);
+			FileUtil.createNewExcelFile(path);
 		}else if(DiskCloudConstants.FileMation.OFFICE_IS_PPT.getFileExt().equalsIgnoreCase(fileExtName)){
-			ToolUtil.createNewPPtFile(path);
+			FileUtil.createNewPPtFile(path);
 		}else{
-			ToolUtil.createNewSimpleFile(path);
+			FileUtil.createNewSimpleFile(path);
 		}
 
 	}

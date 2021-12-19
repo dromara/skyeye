@@ -16,11 +16,13 @@
 
 	<dependencies>
 
-		<!-- Hutool是一个小而全的Java工具类库，通过静态方法封装，降低相关API的学习成本，提高工作效率 https://apidoc.gitee.com/loolly/hutool/ -->
+		<!-- 引入架构基础模块的依赖 -->
 		<dependency>
-			<groupId>cn.hutool</groupId>
-			<artifactId>hutool-json</artifactId>
-			<version>5.5.4</version>
+			<groupId>com.skyeye</groupId>
+			<artifactId>skyeye-base</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/skyeye-base-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
 
 		<!-- Springboot整合Nutz，Nutz可以用于自定义事务，例如：Trans.begin(); -->
@@ -43,18 +45,6 @@
 			<version>2.5.0</version>
 			<scope>system</scope>
 			<systemPath>${basedir}/lib/protobuf-java-2.5.0.jar</systemPath>
-		</dependency>
-
-		<dependency>
-			<groupId>com.gexin.platform</groupId>
-			<artifactId>gexin-rp-sdk-http</artifactId>
-			<version>4.1.0.5</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>protobuf-java</artifactId>
-					<groupId>com.google.protobuf</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- 条形码工具 -->
@@ -118,10 +108,6 @@
 	</dependencies>
 
 	<repositories>
-		<repository>
-			<id>getui-nexus</id>
-			<url>http://mvn.gt.igexin.com/nexus/content/repositories/releases/</url>
-		</repository>
 
 		<!-- 京东并行框架 -->
 		<repository>
