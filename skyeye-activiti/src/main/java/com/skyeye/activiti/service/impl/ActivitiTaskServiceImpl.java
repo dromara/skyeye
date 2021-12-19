@@ -145,19 +145,24 @@ public class ActivitiTaskServiceImpl implements ActivitiTaskService {
         ProcessInstance instance = runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
         if (instance != null) {
             // 保证流程还没结束
-            Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).list().get(0);
-            // 获取流程创建信息
-            Map<String, Object> process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(task.getProcessInstanceId());
-            taskModel.put("assignee", task.getAssignee());
-            taskModel.put("createName", (process == null || process.isEmpty()) ? "" : process.get("createName"));//申请人姓名
-            taskModel.put("createTime", (process == null || process.isEmpty()) ? "" : process.get("createTime"));//申请时间
-            taskModel.put("taskType", (process == null || process.isEmpty()) ? "" : process.get("title"));//任务类型
-            // 任务id
-            taskModel.put("id", task.getId());
-            // 当前任务节点名称
-            taskModel.put("name", ToolUtil.isBlank(task.getName()) ? "" : task.getName());
-            taskModel.put("suspended", instance.isSuspended());//流程状态
-            taskModel.put("processInstanceId", task.getProcessInstanceId());
+            List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstanceId).list();
+            if(tasks != null && !tasks.isEmpty()){
+                Task task = taskService.createTaskQuery().processInstanceId(processInstanceId).list().get(0);
+                // 获取流程创建信息
+                Map<String, Object> process = actUserProcessInstanceIdDao.queryProcessInstanceMationByProcessInstanceId(task.getProcessInstanceId());
+                taskModel.put("assignee", task.getAssignee());
+                taskModel.put("createName", (process == null || process.isEmpty()) ? "" : process.get("createName"));//申请人姓名
+                taskModel.put("createTime", (process == null || process.isEmpty()) ? "" : process.get("createTime"));//申请时间
+                taskModel.put("taskType", (process == null || process.isEmpty()) ? "" : process.get("title"));//任务类型
+                // 任务id
+                taskModel.put("id", task.getId());
+                // 当前任务节点名称
+                taskModel.put("name", ToolUtil.isBlank(task.getName()) ? "" : task.getName());
+                taskModel.put("suspended", instance.isSuspended());//流程状态
+            }else{
+                taskModel.put("taskType", "未找到该流程");//任务类型
+            }
+            taskModel.put("processInstanceId", processInstanceId);
         }
         return taskModel;
     }
