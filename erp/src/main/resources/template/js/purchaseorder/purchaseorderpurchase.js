@@ -61,7 +61,7 @@ layui.config({
 
 		//初始化回显数据
 		function initDataShow(){
-			AjaxPostUtil.request({url: reqBasePath + "purchaseorder008", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
+			AjaxPostUtil.request({url: reqBasePath + "purchaseorder008", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
 				if(json.returnCode == 0) {
 					if(isNull(json.bean)){
 						$("#showForm").html("");
