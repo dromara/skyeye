@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <style type="text/css">
+    	.exam-fraction{
+    		width: 30px;
+    		text-align: center;
+    		border-width: 1px;
+    	}
+    	
+    	.exam-fraction:hover {
+			border-color: #80bdff !important;
+		}
+		
+		.exam-fraction:focus {
+			border-color: #80bdff !important;
+			outline: 0;
+			box-shadow: 0 0 0 .2rem rgba(0, 123, 255, .25);
+		}
+    </style>
+</head>
+<body>
+	<div>
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	        <div id="tools_wrap">
+				<div id="tools">
+					<div class="tools_tabs">
+						<div class="tools_tabs_left">
+							<ul id="tabType">
+								<li class="current" id="tools_tab1_li" style="width: 100%">基本</li>
+							</ul>
+						</div>
+					</div>
+					<div class="tools_contents">
+						<div id="tools_tab1" class="tools_tab_div" style="display: inline;">
+							<div id="toolsBashQu" class="tools_item">
+								<div class="tooltext" style="text-align: left; padding-left: 5px; width: auto;">基本题型</div>
+								<div class="toolbars">
+									<ul class="dragQuUl" id="_basemodel"></ul>
+								</div>
+							</div>
+							<div id="toolsChenQu" class="tools_item">
+								<div class="tooltext" style="text-align: left; padding-left: 5px; width: auto;">矩阵题型</div>
+								<div class="toolbars">
+									<ul class="dragQuUl" id="_rectanglemodel"></ul>
+								</div>
+							</div>
+							<div id="toolsAuxiliaryQu" class="tools_item">
+								<div class="tooltext" style="text-align: left; padding-left: 5px; width: auto;">辅助组件</div>
+								<div class="toolbars">
+									<ul class="dragQuUl" id="_auxiliarymodel"></ul>
+								</div>
+							</div>
+						</div>
+						
+						<div id="toolsPubBtn">
+							<div class="toolbars" style="padding: 0px 5px 0px 0px;">
+								<ul>
+									<li id="questionBankBtn" class="Btn" style="background-color: #1E9FFF">
+										<div class="dwToolbar_icon">题库</div>
+									</li>
+									<li id="saveBtn" class="Btn">
+										<div class="dwToolbar_icon">保存</div>
+									</li>
+							    </ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- 内容项 -->
+			<div id="dw_body">
+				
+			</div>
+	    </form>
+	</div>
+	
+	<!-- 1单选题radio -->
+	<script type="text/x-handlebars-template" id="radioTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="逻辑" class="dwQuLogic">
+						<div class="dwQuIcon">
+							<div class="quLogicInfo">{{questionLogic.length}}</div>
+						</div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+	
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li class="questionDown">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					{{#if hv}}
+					{{#compare1 hv '3'}}
+							<table class='tableQuColItem'>
+								{{#each questionRadio}}
+									<tr>
+										{{#cellCount001 cellCount}}{{/cellCount001}}
+									</tr>
+								{{/each}}
+							</table>
+						{{else}}
+							{{#if hv}}
+							{{#compare1 hv '1'}}
+									<ul class="transverse">
+										{{#each questionRadio}}
+											<li class="quCoItemUlLi">
+												<input type="radio" name="radioName{{../id}}" {{isDefaultAnswer}}>
+												<label class="editAble quCoOptionEdit">{{optionName}}</label>
+												<input type='text' class='optionInpText' style="{{#compare2 isNote 0}}{{/compare2}}" />
+												<div class="quItemInputCase">
+													<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+													<input type="hidden" name="isNote" value="{{isNote}}">
+													<input type="hidden" name="checkType" value="{{checkType}}">
+													<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
+												</div>
+											</li>
+										{{/each}}
+									</ul>
+								{{else}}
+									<ul>
+										{{#each questionRadio}}
+											<li class="quCoItemUlLi">
+												<input type="radio" name="radioName{{../id}}" {{isDefaultAnswer}}>
+												<label class="editAble quCoOptionEdit">{{optionName}}</label>
+												<input type='text' class='optionInpText' style="{{#compare2 isNote 0}}{{/compare2}}" />
+												<div class="quItemInputCase">
+													<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+													<input type="hidden" name="isNote" value="{{isNote}}">
+													<input type="hidden" name="checkType" value="{{checkType}}">
+													<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
+												</div>
+											</li>
+										{{/each}}
+									</ul>
+							{{/compare1}}
+							{{/if}}
+					{{/compare1}}
+					{{/if}}
+				</div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 2多选题checkbox -->
+	<script type="text/x-handlebars-template" id="checkBoxTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="逻辑" class="dwQuLogic">
+						<div class="dwQuIcon">
+							<div class="quLogicInfo">{{questionLogic.length}}</div>
+						</div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li class="questionDown">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					{{#if hv}} {{#compare1 hv '3'}}
+					<table class='tableQuColItem'>
+						{{#each questionCheckBox}}
+						<tr>
+							{{#cellCount002 cellCount}}{{/cellCount002}}
+						</tr>
+						{{/each}}
+					</table>
+					{{else}} {{#if hv}} {{#compare1 hv '1'}}
+					<ul class="transverse">
+						{{#each questionCheckBox}}
+						<li class="quCoItemUlLi">
+							<input type="checkbox" name="checkBoxName{{../id}}" {{isDefaultAnswer}}><label class="editAble quCoOptionEdit">{{optionName}}</label>
+							<input type='text' class='optionInpText' style="{{#compare2 isNote 0}}{{/compare2}}" />
+							<div class="quItemInputCase">
+								<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+								<input type="hidden" name="isNote" value="{{isNote}}">
+								<input type="hidden" name="checkType" value="{{checkType}}">
+								<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
+							</div>
+						</li>
+						{{/each}}
+					</ul>
+					{{else}}
+					<ul>
+						{{#each questionCheckBox}}
+						<li class="quCoItemUlLi">
+							<input type="checkbox" name="checkBoxName{{../id}}" {{isDefaultAnswer}}><label class="editAble quCoOptionEdit">{{optionName}}</label>
+							<input type='text' class='optionInpText' style="{{#compare2 isNote 0}}{{/compare2}}" />
+							<div class="quItemInputCase">
+								<input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+								<input type="hidden" name="isNote" value="{{isNote}}">
+								<input type="hidden" name="checkType" value="{{checkType}}">
+								<input type="hidden" name="isRequiredFill" value="{{isRequiredFill}}">
+							</div>
+						</li>
+						{{/each}}
+					</ul>
+					{{/compare1}} {{/if}} {{/compare1}} {{/if}}
+				</div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 3填空题fillblank -->
+	<script type="text/x-handlebars-template" id="fillblankTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="逻辑" class="dwQuLogic">
+						<div class="dwQuIcon">
+							<div class="quLogicInfo">{{questionLogic.length}}</div>
+						</div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li class="questionDown">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					<ul>
+						<li class="quCoItemUlLi">
+							<div class="quFillblankItem">
+								{{#if answerInputRow}} 
+									{{#compare1 answerInputRow '1'}}
+										<input type="text" style="width:{{answerInputWidth}}px; padding:5px;" class="quFillblankAnswerInput" value="{{isDefaultAnswer}}" />
+										<textarea rows="{{answerInputRow}}" style="width:{{answerInputWidth}}px; display: none;" class="quFillblankAnswerTextarea">{{isDefaultAnswer}}</textarea> 
+								{{else}}
+										<input type="text" style="width:{{answerInputWidth}}px; padding:5px; display: none;" class="quFillblankAnswerInput" value="{{isDefaultAnswer}}">
+										<textarea rows="{{answerInputRow}}" style="width:{{answerInputWidth}}px;" class="quFillblankAnswerTextarea">{{isDefaultAnswer}}</textarea>
+									{{/compare1}}
+								{{/if}}
+								<div class="dwFbMenuBtn"></div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 9排序题orderby -->
+	<script type="text/x-handlebars-template" id="orderbyTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li class="questionDown">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					<div class="quOrderByLeft">
+						<ul>
+							{{#each questionOrderBy}}
+							<li class="quCoItemUlLi"><label class="editAble quCoOptionEdit">{{optionName}}</label>
+								<div class="quItemInputCase">
+									<input type="hidden" name="quItemId" value="{{id}}">
+									<input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+								</div>
+							</li>
+							{{/each}}
+						</ul>
+					</div>
+					<div class="quOrderByRight">
+						<table class="quOrderByTable">
+							{{#each questionOrderBy}}
+							<tr>
+								<td class="quOrderyTableTd">{{showIndex @index}}</td>
+								<td></td>
+							</tr>
+							{{/each}}
+						</table>
+					</div>
+					<div style="clear: both;"></div>
+				</div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 16分页pagetag -->
+	<script type="text/x-handlebars-template" id="pagetagTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools" style="margin-top: 0px;">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li class="questionDown">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="pageBorderTop nohover"></div>
+			<div class="surveyQuItemContent" style="min-height: 10px;text-align: right;">
+				<div class="pageQuContent">下一页（1/2）</div>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 17段落paragraph -->
+	<script type="text/x-handlebars-template" id="paragraphTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools" style="margin-top: 5px;">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li class="questionDown">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent" style="min-height: 45px;">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum" style="display: none;">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{{quTitle}}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<!-- 4多项填空题multi-fillblank -->
+	<script type="text/x-handlebars-template" id="multiFillblankTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="逻辑" class="dwQuLogic">
+						<div class="dwQuIcon">
+							<div class="quLogicInfo">{{questionLogic.length}}</div>
+						</div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class=dwQuIcon></div>
+					</li>
+					<li class="questionDown">
+						<div class=dwQuIcon></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					<table class="mFillblankTable" cellpadding="0" cellspacing="0">
+						{{#each questionMultiFillBlank}}
+						<tr class="mFillblankTableTr">
+							<td align="right" class="mFillblankTableEditTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
+								<div class="quItemInputCase">
+									<input type="hidden" name="quItemId" value="{{id}}">
+									<input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+								</div>
+							</td>
+							<td>
+								<input type="text" style="width:200px; padding:5px;" class="multiFillBlank" value="{{isDefaultAnswer}}" />
+							</td>
+						</tr>
+						{{/each}}
+					</table>
+				</div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 11矩阵单选题chen-radio -->
+	<script type="text/x-handlebars-template" id="chenRadioTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="逻辑" class="dwQuLogic">
+						<div class="dwQuIcon">
+							<div class="quLogicInfo">{{questionLogic.length}}</div>
+						</div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class=dwQuIcon></div>
+					</li>
+					<li class="questionDown">
+						<div class=dwQuIcon></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					<div class="quCoItemLeftChenTableDiv">
+						<table class="quCoChenTable">
+							<tr>
+								<td></td>
+								{{#each questionChenColumn}}
+								<td class="quChenColumnTd">
+									<label class="editAble quCoOptionEdit">{{optionName}}</label>
+									<div class="quItemInputCase">
+										<input type="hidden" name="quItemId" value="{{id}}">
+										<input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+									</div>
+								</td>
+								{{/each}}
+							</tr>
+							{{#each questionChenRow}}
+							<tr class="quChenRowTr" checkNameInTr="{{id}}">
+								<td class="quChenRowTd">
+									<label class="editAble quCoOptionEdit">{{optionName}}</label>
+									<div class="quItemInputCase">
+										<input type="hidden" name="quItemId" value="{{id}}">
+										<input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+									</div>
+								</td>
+								{{#each questionChenColumn}}
+									<td><input type="radio" class="chenRadioInput" name="{{../id}}"></td>
+								{{/each}}
+							</tr>
+							{{/each}}
+						</table>
+					</div>
+					<div class="quCoRightTools">
+						<ul class="quCoBottomToolsUl">
+							<li class="addColumnOption" title="添加">
+								<div class="dwQuIcon"></div>
+							</li>
+							<li class="addMoreColumnOption" title="批量添加">
+								<div class="dwQuIcon"></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div style="clear: both;"></div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addRowOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreRowOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 13矩阵多选题chen-checkbox -->
+	<script type="text/x-handlebars-template" id="chenCheckboxTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="逻辑" class="dwQuLogic">
+						<div class="dwQuIcon">
+							<div class="quLogicInfo">{{questionLogic.length}}</div>
+						</div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class=dwQuIcon></div>
+					</li>
+					<li class="questionDown">
+						<div class=dwQuIcon></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					<div class="quCoItemLeftChenTableDiv">
+						<table class="quCoChenTable">
+							<tr>
+								<td></td>
+								{{#each questionChenColumn}}
+								<td class="quChenColumnTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
+									<div class="quItemInputCase">
+										<input type="hidden" name="quItemId" value="{{id}}">
+										<input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+									</div>
+								</td>
+								{{/each}}
+							</tr>
+							{{#each questionChenRow}}
+							<tr class="quChenRowTr">
+								<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
+									<div class="quItemInputCase">
+										<input type="hidden" name="quItemId" value="{{id}}">
+										<input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+									</div>
+								</td>
+								{{#each questionChenColumn}}
+									<td><input type="checkbox" class="chenCheckBoxInput"></td>
+								{{/each}}
+							</tr>
+							{{/each}}
+						</table>
+					</div>
+					<div class="quCoRightTools">
+						<ul class="quCoBottomToolsUl">
+							<li class="addColumnOption" title="添加">
+								<div class="dwQuIcon"></div>
+							</li>
+							<li class="addMoreColumnOption" title="批量添加">
+								<div class="dwQuIcon"></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div style="clear: both;"></div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addRowOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreRowOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 12矩阵填空题chen-fbk -->
+	<script type="text/x-handlebars-template" id="chenFbkTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="逻辑" class="dwQuLogic">
+						<div class="dwQuIcon">
+							<div class="quLogicInfo">{{questionLogic.length}}</div>
+						</div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class=dwQuIcon></div>
+					</li>
+					<li class="questionDown">
+						<div class=dwQuIcon></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					<div class="quCoItemLeftChenTableDiv">
+						<table class="quCoChenTable">
+							<tr>
+								<td></td>
+								{{#each questionChenColumn}}
+								<td class="quChenColumnTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
+									<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}"></div>
+								</td>
+								{{/each}}
+							</tr>
+							{{#each questionChenRow}}
+							<tr class="quChenRowTr">
+								<td class="quChenRowTd"><label class="editAble quCoOptionEdit">{{optionName}}</label>
+									<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}"></div>
+								</td>
+								{{#each questionChenColumn}}
+									<td><input type="text" class="questionChenColumnValue" value="{{isDefaultAnswer}}"></td>
+								{{/each}}
+							</tr>
+							{{/each}}
+						</table>
+					</div>
+					<div class="quCoRightTools">
+						<ul class="quCoBottomToolsUl">
+							<li class="addColumnOption" title="添加">
+								<div class="dwQuIcon"></div>
+							</li>
+							<li class="addMoreColumnOption" title="批量添加">
+								<div class="dwQuIcon"></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div style="clear: both;"></div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addRowOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreRowOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 18矩阵评分题chen-score -->
+	<script type="text/x-handlebars-template" id="chenScoreTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class=dwQuIcon></div>
+					</li>
+					<li class="questionDown">
+						<div class=dwQuIcon></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					<div class="quCoItemLeftChenTableDiv">
+						<table class="quCoChenTable">
+							<tr>
+								<td></td>
+								{{#each questionChenColumn}}
+								<td class="quChenColumnTd">
+									<label class="editAble quCoOptionEdit">{{optionName}}</label>
+									<div class="quItemInputCase">
+										<input type="hidden" name="quItemId" value="{{id}}">
+										<input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+									</div>
+								</td>
+								{{/each}}
+							</tr>
+							{{#each questionChenRow}}
+							<tr class="quChenRowTr">
+								<td class="quChenRowTd">
+									<label class="editAble quCoOptionEdit">{{optionName}}</label>
+									<div class="quItemInputCase">
+										<input type="hidden" name="quItemId" value="{{id}}">
+										<input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}">
+									</div>
+								</td>
+								{{#each questionChenColumn}}
+									<td>
+										<select class="quChenScoreSelect"> 
+											<option value="0">-评分-</option>
+											<option value="1">1分</option>
+											<option value="2">2分</option>
+											<option value="3">3分</option>
+											<option value="4">4分</option>
+											<option value="5">5分</option>
+										</select>
+									</td>
+								{{/each}}
+							</tr>
+							{{/each}}
+						</table>
+					</div>
+					<div class="quCoRightTools">
+						<ul class="quCoBottomToolsUl">
+							<li class="addColumnOption" title="添加">
+								<div class="dwQuIcon"></div>
+							</li>
+							<li class="addMoreColumnOption" title="批量添加">
+								<div class="dwQuIcon"></div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div style="clear: both;"></div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addRowOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreRowOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<!-- 8评分题score -->
+	<script type="text/x-handlebars-template" id="scoreTemplate">
+		<div class="surveyQuItem">
+			<div class="surveyQuItemLeftTools">
+				<ul class="surveyQuItemLeftToolsUl">
+					<li title="移动排序" class="dwQuMove">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="设置" class="dwQuSet">
+						<div class="dwQuIcon"></div>
+					</li>
+					<li title="逻辑" class="dwQuLogic">
+						<div class="dwQuIcon">
+							<div class="quLogicInfo">{{questionLogic.length}}</div>
+						</div>
+					</li>
+					<li title="知识点" class="knowledgeQuLogic" knowledgeIds="{{knowledgeIds}}">
+						<div class="dwQuIcon">
+							<div class="quKnowledgeInfo">{{questionKnowledge.length}}</div>
+						</div>
+					</li>
+					<li title="删除" class="dwQuDelete">
+						<div class="dwQuIcon"></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemRightTools">
+				<ul class="surveyQuItemRightToolsUl">
+					<li class="questionUp">
+						<div class=dwQuIcon></div>
+					</li>
+					<li class="questionDown">
+						<div class=dwQuIcon></div>
+					</li>
+				</ul>
+			</div>
+			<div class="surveyQuItemContent">
+				<div class="quCoTitle" id="{{id}}">
+					<div class="quCoNum">{{showQuestionIndex quType}}、</div>
+					<div class="editAble quCoTitleEdit">{{quTitle}}</div>
+					<input type="hidden" name="quTitleSaveTag" value="1">
+				</div>
+				<div class="layui-tab layui-tab-brief" lay-filter="tab{{id}}">
+          			<ul class="layui-tab-title">
+            			<li id="tab0" class="layui-this">默认</li>
+            			<li id="tab1" class=""><img src="../../assets/images/icon-vedio.png" class="layui-title-icon"/>插入视频</li>
+						<li id="tab2" class=""><img src="../../assets/images/icon-audio.png" class="layui-title-icon"/>插入音频</li>
+            			<li id="tab3" class=""><img src="../../assets/images/icon-picture.png" class="layui-title-icon"/>插入图片</li>
+          			</ul>
+          			<div class="layui-tab-content">
+            			<div class="layui-tab-item layui-show">不插入任何内容</div>
+            			<div class="layui-tab-item">
+		        			<div class="upload questionVedio" id="questionVedio{{id}}"></div>
+						</div>
+						<div class="layui-tab-item">
+							<div class="upload questionAudio" id="questionAudio{{id}}"></div>
+						</div>
+            			<div class="layui-tab-item">
+							<div class="upload questionPicture" id="questionPicture{{id}}"></div>
+						</div>
+          			</div>
+        		</div>
+				<div class="quCoItem">
+					<table class="quCoItemTable" cellpadding="0" cellspacing="0">
+						{{#each quScores}}
+						<tr class="quScoreOptionTr">
+							<td class="quCoItemTableTd quOptionEditTd">
+								<label class="editAble quCoOptionEdit">{{optionName}}</label>
+								<div class="quItemInputCase"><input type="hidden" name="quItemId" value="{{id}}"><input type="hidden" name="quItemSaveTag" value="{{quItemSaveTag}}"></div>
+							</td>
+							<td class="quCoItemTableTd">
+								<table class="scoreNumTable">
+									<tr>
+										{{#showParamInt02 paramInt02}}{{/showParamInt02}}
+									</tr>
+								</table>
+							</td>
+							<td class="quCoItemTableTd">分</td>
+						</tr>
+						{{/each}}
+					</table>
+				</div>
+				<div class="quCoBottomTools">
+					<ul class="quCoBottomToolsUl">
+						<li class="addOption" title="添加">
+							<div class="dwQuIcon"></div>
+						</li>
+						<li class="addMoreOption" title="批量添加">
+							<div class="dwQuIcon"></div>
+						</li>
+					</ul>
+				</div>
+				<fieldset class="layui-elem-field site-demo-button">
+					<legend>是否允许拍照/上传图片</legend>
+  					<div>
+    					<div class="layui-input-block winui-radio">
+            				<input type="radio" name="whetherUpload{{id}}" value="1" title="是" lay-filter="whetherUpload{{id}}"/>
+            				<input type="radio" name="whetherUpload{{id}}" value="2" title="否" lay-filter="whetherUpload{{id}}"/>
+        				</div>
+  					</div>
+				</fieldset>
+			</div>
+		</div>
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<!-- dragQuestion.js根据这个字段加载对应的文件1.问卷2.试卷 -->
+   	<script src="../../js/common/dragQuestion.js?type=2"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/examdesign/'}).use('examDesign');
+    </script>
+</body>
+</html>

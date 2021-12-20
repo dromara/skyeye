@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	    	<div class="layui-form-item layui-col-xs12">
+    			<span class="hr-title">加工单信息</span><hr>
+	    	</div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">加工商品<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="productName" name="productName" win-verify="required" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
+	                <i class="fa fa-plus-circle input-icon" id="productNameSel"></i>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">生产计划单</label>
+		        <div class="layui-input-block">
+		            <input type="text" id="productionOrder" name="productionOrder" placeholder="请选择生产计划单" class="layui-input" readonly="readonly"/>
+		            <i class="fa fa-plus-circle input-icon" id="productionOrderSel"></i>
+		        </div>
+		    </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">商品型号</label>
+	            <div class="layui-input-block">
+	                <input type="text" id="productModel" name="productModel" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">计量单位<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <select id="unitList" name="unitList" lay-filter="unitList" win-verify="required">
+	                	
+	               	</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">加工数量<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="number" name="number" win-verify="required|number" placeholder="请选择加工数量" class="layui-input" value="1"/>
+	            </div>
+	        </div>
+     	    <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">部门<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <select id="departmentId" name="departmentId" lay-filter="departmentId" win-verify="required" >
+	                	
+	               	</select>
+	               	<div class="layui-form-mid layui-word-aux">该列表为当前用户所在企业的部门列表</div>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">计划开始时间<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="starTime" name="starTime" win-verify="required" placeholder="请选择计划开始时间" class="layui-input"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">计划结束时间<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="endTime" name="endTime" win-verify="required" placeholder="请选择计划结束时间" class="layui-input"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">备注说明</label>
+	            <div class="layui-input-block">
+	                <textarea id="remark" name="remark" placeholder="请输入备注说明" maxlength="200" class="layui-textarea" style="height: 100px;"></textarea>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+    			<span class="hr-title">加工工序</span><hr>
+	    	</div>
+	    	<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">工序资料<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<div class="winui-tip alert-info">
+						直接选择加工商品，系统不会自动加载加工工序信息；通过选择生产计划单操作，系统会自动加载加工工序信息。
+					</div>
+		        	<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="procedureChoose">工序选择</button>
+		        	<table class="layui-table">
+			    		<thead>
+			    			<tr>
+			    				<th>工序编号</th>
+			    				<th>工序名称</th>
+			    				<th>加工单价</th>
+			    				<th>加工部门</th>
+			    			</tr>
+			    		</thead>
+			        	<tbody id="procedureBody">
+			            </tbody>
+					</table>
+		        </div>
+		    </div>
+	    	<div class="layui-form-item layui-col-xs12">
+    			<span class="hr-title">工序物料</span><hr>
+	    	</div>
+	    	<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">列表项<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<div class="winui-tip alert-info">
+						直接选择加工商品，系统不会自动加载工序物料信息；通过选择生产计划单操作，系统会自动加载工序物料信息。
+					</div>
+		        	<div class="winui-toolbar">
+				        <div class="winui-tool" style="text-align: left;">
+				            <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+				            <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+				        </div>
+				    </div>
+		            <table class="layui-table">
+		                <thead>
+		                    <tr>
+		                    	<th style="width: 30px;"></th>
+		                        <th style="width: 150px;">商品(型号)</th>
+		                        <th style="width: 50px;">单位</th>
+		                        <th style="width: 60px;">库存</th>
+		                        <th style="width: 80px;">所需总数量</th>
+		                        <th style="width: 80px; align:center;">待分配数量</th>
+		                        <th style="width: 80px;">数量</th>
+		                        <th style="width: 80px;">单价</th>
+		                        <th style="width: 80px;">金额</th>
+		                    </tr>
+		                </thead>
+		                <tbody id="useTable" class="insurance-table">
+		                </tbody>
+					</table>
+		        </div>
+		    </div>
+	        
+	        <div class="layui-form-item layui-col-xs12">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+	                <button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+	
+	<!-- usetableTemplate -->
+	<script type="text/x-handlebars-template" id="usetableTemplate">
+		<tr trcusid="{{trId}}">
+			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+			<td>
+				<input type="text" id="{{materialId}}" name="{{materialId}}" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
+		        <i class="fa fa-plus-circle input-icon chooseProductBtn" style="top: 12px;"></i>
+			</td>
+			<td><select id="{{unitId}}" lay-filter="selectUnitProperty" lay-search win-verify="required"></select></td>
+			<td id="{{currentTock}}"></td>
+			<td id="{{productionNum}}" style="text-align:center;">-</td>
+			<td id="{{machinNum}}" style="text-align:center;">-</td>
+			<td><input type="text" class="layui-input change-input rkNum" value="1" id="{{rkNum}}" win-verify="required|number"/></td>
+			<td><input type="text" class="layui-input change-input unitPrice" id="{{unitPrice}}" win-verify="required|money"/></td>
+			<td><input type="text" class="layui-input change-input amountOfMoney" id="{{amountOfMoney}}" win-verify="required|money"/></td>
+		</tr>
+	</script>
+    
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script src="../../js/erpcommon/calculatePrice.js"></script>
+	<script src="../../js/erpcommon/loadStock.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/erpMachin/'}).use('erpMachinEdit');
+    </script>
+</body>
+</html>

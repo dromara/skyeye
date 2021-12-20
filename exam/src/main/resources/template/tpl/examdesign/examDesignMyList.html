@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	            	<label class="layui-form-label">学校</label>
+	                <div class="layui-input-inline">
+	                    <select id="schoolId" lay-filter="schoolId" lay-search="">
+			                    
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">年级</label>
+	                <div class="layui-input-inline">
+	                    <select id="gradeId" lay-filter="gradeId" lay-search="">
+		            		<option value="">请选择</option>
+		            	</select>
+	                </div>
+	                <label class="layui-form-label">科目</label>
+	                <div class="layui-input-inline">
+	                    <select id="subjectId" lay-filter="subjectId" lay-search="">
+		            		<option value="">请选择</option>
+		            	</select>
+	                </div>
+	                <label class="layui-form-label">所属届</label>
+		            <div class="layui-input-inline">
+		            	<input type="text" id="year" name="year" class="layui-input" placeholder="请选择所属届" />
+		            </div>
+	                <label class="layui-form-label">试卷名称</label>
+	                <div class="layui-input-inline">
+	                    <input id="surveyName" name="surveyName" class="layui-input" placeholder="请输入试卷名称"/>
+	                </div>
+	                <label class="layui-form-label">试卷状态</label>
+	                <div class="layui-input-inline">
+	                    <select id="surveyState" name="surveyState">
+	                    	<option value="">全部</option>
+	                    	<option value="0">设计</option>
+	                    	<option value="1">执行中</option>
+	                    	<option value="2">结束</option>
+	                    </select>
+	                </div>
+	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn" auth="1587278427992"><i class="fa fa-plus" aria-hidden="true"></i>新增试卷</button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+			{{# if(auth('1587278480940')){ }}
+            	<a class="layui-btn layui-btn-xs" lay-event="fzWj">复制</a>
+			{{# } }}
+			{{# if(d.state == 0){ }}
+				{{# if(auth('1587278545823')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="edit">设计</a>
+				{{# } }}
+				{{# if(auth('1587278560971')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="showFb">发布</a>
+				{{# } }}
+				{{# if(auth('1587278577111')){ }}
+          			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
+				{{# } }}
+			{{# } else if(d.state == 1){ }}
+				{{# if(auth('1587278595493')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="endSurvey">结束考试</a>
+				{{# } }}
+				{{# if(auth('1587278612806')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="fxWj">试题分析</a>
+				{{# } }}
+			{{# } else if(d.state == 2){ }}
+				{{# if(auth('1587278612806')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="fxWj">试题分析</a>
+				{{# } }}
+			{{# } }}
+			{{# if(auth('1588645340287')){ }}
+				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="markExam">阅卷人</a>
+			{{# } }}
+        </script>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/examdesign/'}).use('examDesignMyList');
+    </script>
+</body>
+</html>

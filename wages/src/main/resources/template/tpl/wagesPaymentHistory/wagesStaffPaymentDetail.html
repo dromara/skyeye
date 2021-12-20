@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="margin:0 auto;padding:20px;">
+        <form class="layui-form" action="" id="showForm" autocomplete="off">
+
+        </form>
+    </div>
+
+    <script type="text/x-handlebars-template" id="showBaseTemplate">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">员工信息</span><hr>
+        </div>
+        <div class="layui-col-xs12" id="staffMation">
+        </div>
+
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">工资条信息</span><hr>
+        </div>
+        {{#bean}}
+            <div class="layui-form-item layui-col-xs12">
+                <table class="layui-table">
+                    <thead>
+                        <tr>
+                            {{#each wagesJson}}
+                                <th colspan="{{childFields.length}}" style="text-align: center">{{name}}</th>
+                            {{/each}}
+                            <th style="text-align: center" rowspan="2">实发工资</th>
+                        </tr>
+                        <tr>
+                            {{#each wagesJson}}
+                                {{#each childFields}}
+                                    <th style="text-align: center">{{name}}</th>
+                                {{/each}}
+                            {{/each}}
+                        </tr>
+                    </thead>
+                    <tbody class="insurance-table">
+                        <tr>
+                            {{#each wagesJson}}
+                                {{#each childFields}}
+                                    <td>{{moneyValue}}</td>
+                                {{/each}}
+                            {{/each}}
+                            <td>{{actWages}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        {{/bean}}
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/wagesPaymentHistory/'}).use('wagesStaffPaymentDetail');
+    </script>
+</body>
+</html>

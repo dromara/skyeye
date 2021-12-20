@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet"/>
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet"/>
+</head>
+<body style="background-color: RGB(245, 245, 245);">
+
+    <div style="margin:auto 10px;" id="showForm">
+
+    </div>
+
+    <script type="text/x-handlebars-template" id="beanTemplate">
+        {{#each rows}}
+            <div class="layui-card layui-col-md12" style="background-color: #FAFAFA;">
+                <div class="layui-card-header" style="border-bottom: 1px solid white;">{{title}}</div>
+                <div class="layui-card-body layui-col-md12">
+                    {{#each child}}
+                        <div class="task-launch-item launchTask" dsFormId="{{dsFormId}}" actid="{{actId}}" pageUrl="{{pageUrl}}" showTitle="{{title}}">
+							<div class="task-left-top" style="background-color: {{backgroundColor}};"></div>
+							<div class="task-launch-item-bk task-launch-item-bk_1" style="border-left: 2px solid {{backgroundColor}};"></div>
+							<div class="task-launch-item-bk task-launch-item-bk_2" style="border-top: 2px solid {{backgroundColor}};"></div>
+							<div class="task-launch-item-bk task-launch-item-bk_3" style="border-right: 2px solid {{backgroundColor}};"></div>
+							<div class="task-launch-item-bk task-launch-item-bk_4" style="border-bottom: 2px solid {{backgroundColor}};"></div>
+                            <div class="icon">{{#compare1 menuIconType menuIconPic menuIcon menuIconColor}}{{/compare1}}</div>
+                            <div class="hot-div">{{#compare2 commonUsed}}{{/compare2}}</div>
+                            <span>{{title}}</span>
+							<a class="remark" title="{{remark}}">{{remark}}</a>
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        {{/each}}
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/myActiviti/'}).use('newProcess');
+    </script>
+</body>
+</html>

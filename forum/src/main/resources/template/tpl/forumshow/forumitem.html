@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body style="background-color: RGB(242, 242, 242);">
+	<div class="forum-console">
+		<div class="forum-title" id="forumTitle">
+			
+		</div>
+		<div class="forum-detail">
+		    <div class="main-content">
+		    	<div class="forum-content-detail">
+    				<div class="user-title-img" id="photo">
+    				</div>
+    				<div class="item-content">
+    					<div class="user-title-name" id="title">
+    					</div>
+    					<div class="forum-item-send-time" id="createTime">
+    					</div>
+    					<span style="float:right;cursor: pointer" id="forumReport" class="layui-hide"><i class="fa fa-user-times"></i>举报</span>
+    					<div class="forum-item-content" id="content">
+    					</div>
+    				</div>
+		    	</div>
+		    	
+		    	<div class="center-top">
+	    			<div class="show-content">
+	    				<textarea rows="" cols="" class="layui-textarea" id="commentContent" placeholder="发表看法"></textarea>
+	    			</div>
+	    			<div class="show-content-btn">
+	    				<div class="file-type-item send-btn">
+	    					<button type="button" id="commentContentAdd" class="layui-btn layui-btn-sm layui-btn-warm">发布</button>
+	    				</div>
+	    			</div>
+	    		</div>
+		    	
+		    	<div class="forum-content-comment-box">
+		    		<div class="comment-title">
+		    			<span>评论</span>
+		    		</div>
+		    		<div class="comment-list" id="addCommentList">
+		    		
+		    		</div>
+		    	</div>
+			 </div>
+		</div>
+	</div>
+	
+	<!-- commentTemplate.tpl -->
+	<script type="text/x-handlebars-template" id="commentTemplate">
+	{{#each rows}}
+		<div class="first-comment-item">
+			<div class="people-photo">
+				<img userId="{{userId}}" alt="" src="{{userPhoto}}">
+			</div>
+			<div class="comment-text">
+				<div class="people-name">
+					<span class="name-span">{{commentName}}</span>：{{content}}
+					<div class="operator-box">
+						<span class="comment-time">{{commentTime}}</span>
+						<a class="operator-btn">
+							<span rowid="{{id}}" rowUserid="{{commentUserId}}" rowUsername="{{commentName}}">回复</span>
+						</a>
+					</div>
+				</div>
+				<div class="comment-text-textarea"></div>
+				<div class="second-comment-item layui-hide" rowid="{{id}}"></div>
+			</div>
+		</div>
+	{{/each}}
+	</script>
+	
+    <!-- replyTemplate.tpl -->
+	<script type="text/x-handlebars-template" id="replyTemplate">
+		<div class="se-comment-text">
+			<div class="se-people-name">
+				<span class="se-name-span">{{replyName}}</span>
+				<span>&nbsp;&nbsp;回复&nbsp;&nbsp;</span>
+				<span class="se-name-span">{{commentName}}</span>：{{content}}
+				<div class="se-operator-box">
+					<span class="se-comment-time">{{commentTime}}</span>
+					<a class="se-operator-btn">
+						<span rowid="{{belongCommentId}}" rowUserid="{{commentUserId}}" rowUsername="{{replyName}}">回复</span>
+					</a>
+				</div>
+			</div>
+			<div class="se-comment-text-textarea"></div>
+		</div>
+	</script>
+	
+	<!-- textareaTemplate.tpl -->
+	<script type="text/x-handlebars-template" id="textareaTemplate">
+		<div class="comment-textarea">
+			<textarea id="replyContent" placeholder="回复{{rowUsername}}" class="layui-textarea" style="height: 50px;" maxlength="200"></textarea>
+		</div>
+  		<div>
+			<button type="button" id="forumCommentAdd" class="layui-btn layui-btn-sm layui-btn-warm" style="float:right">发表</button>
+		</div>
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/forumshow/'}).use('forumitem');
+    </script>
+</body>
+</html>

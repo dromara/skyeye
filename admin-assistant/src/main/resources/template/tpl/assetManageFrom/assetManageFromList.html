@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto; height: 100%;">
+		<div class="txtcenter" style="margin:0 auto; padding-top: 10px;">
+		    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+		        <div class="layui-form-item">
+		            <div class="layui-inline">
+		                <label class="layui-form-label">来源名称</label>
+		                <div class="layui-input-inline">
+		                    <input type="text" id="fromName" name="typeName" placeholder="请输入资产来源名称" class="layui-input" />
+		                </div>
+		                <label class="layui-form-label">状态</label>
+						<div class="layui-input-inline">
+							<select id="fromState" name="fromState">
+								<option value="">全部</option>
+								<option value="0">新建</option>
+								<option value="1">线上</option>
+								<option value="2">线下</option>
+							</select>
+						</div>
+		                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+		                <button class="layui-btn list-form-search" type="button" id="assetfromSearch"><language showName="com.skyeye.search2"></language></button>
+		            </div>
+		        </div>
+		    </form>
+		</div>
+	    <div class="winui-toolbar">
+	        <div class="winui-tool" style="text-align: left;">
+	            <button id="assetfromreloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+	            <button id="assetfromaddBean" class="winui-toolbtn" auth="1596982401332"><i class="fa fa-plus" aria-hidden="true"></i>新增资产来源</button>
+	        </div>
+	    </div>
+	    <div style="margin:auto 10px;">
+	        <table id="assetfromTable" lay-filter="assetfromTable"></table>
+	        <script type="text/html" id="assetfromtableBar">
+				{{# if(d.state == 0 || d.state == 2){ }}
+					{{# if(auth('1596982411344')){ }}
+            			<a class="layui-btn layui-btn-xs" lay-event="assetfromedit"><language showName="com.skyeye.editBtn"></language></a>
+					{{# } }}
+					{{# if(auth('1596982420366')){ }}
+            			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="assetfromdelete"><language showName="com.skyeye.deleteBtn"></language></a>
+					{{# } }}
+					{{# if(auth('1596982429050')){ }}
+            			<a class="layui-btn layui-btn-xs" lay-event="assetfromup">上线</a>
+					{{# } }}
+				{{# } }}
+				{{# if(d.state == 1){ }}
+					{{# if(auth('1596982435671')){ }}
+						<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="assetfromdown">下线</a>
+					{{# } }}
+				{{# } }}
+         		{{# if(d.orderBy != 1 && auth('1596982443140')){ }}
+				    <a class="layui-btn layui-btn-xs" lay-event="assetfromtop">上移</a>
+				{{# } }}
+				{{# if(auth('1596982451894')){ }}
+				    <a class="layui-btn layui-btn-xs" lay-event="assetfromlower">下移</a>
+		 		{{# } }}
+        	</script>
+	    </div>
+	</div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/assetManageFrom/'}).use('assetManageFromList');
+    </script>
+</body>
+</html>

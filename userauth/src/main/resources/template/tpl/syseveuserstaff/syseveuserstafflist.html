@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="txtcenter" style="margin: 0 auto; padding-top: 10px;">
+		<div class="winui-tip alert-info" id="showInfo">在指定行上右键可以进行更多操作。</div>
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">姓名</label>
+	                <div class="layui-input-inline">
+	                    <input type="text" id="userName" name="userName" placeholder="请输入员工姓名" class="layui-input" />
+	                </div>
+	                <label class="layui-form-label">身份证</label>
+	                <div class="layui-input-inline">
+	                    <input type="text" id="userIdCard" name="userIdCard" placeholder="请输入员工姓名" class="layui-input" />
+	                </div>
+	                <label class="layui-form-label">性别</label>
+	                <div class="layui-input-inline">
+	                	<select id="userSex" name="userSex">
+	                		<option value="">全部</option>
+	                		<option value="0">保密</option>
+	                		<option value="1">男</option>
+	                		<option value="2">女</option>
+	                	</select>
+	                </div>
+	                <label class="layui-form-label">公司</label>
+	                <div class="layui-input-inline">
+	                    <select lay-filter="companyList" lay-search="" id="companyList">
+	                    
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">部门</label>
+	                <div class="layui-input-inline">
+	                    <select lay-filter="departmentList" lay-search="" id="departmentList">
+	                    
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">职位</label>
+	                <div class="layui-input-inline">
+	                    <select lay-filter="jobList" lay-search="" id="jobList">
+	                    
+	                    </select>
+	                </div>
+	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn" auth="1555562812681"><i class="fa fa-plus" aria-hidden="true"></i>新增员工</button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+			{{# if(d.state == 1){ }}
+				{{# if(auth('1555563042447')){ }}
+            		<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+				{{# } }}
+			{{# } }}
+			{{# if(d.staffType == 1){ }}
+				{{# if(auth('1585987419850')){ }}
+					<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="turnTeacher">转教职工</a>
+				{{# } }}
+			{{# } }}
+			{{# if(d.state == 1){ }}
+				{{# if(auth('1557906699018')){ }}
+					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="leave">离职</a>
+				{{# } }}
+			{{# } }}
+        </script>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/syseveuserstaff/'}).use('syseveuserstafflist');
+    </script>
+</body>
+</html>

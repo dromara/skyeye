@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	    	
+	    </form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		<tr trcusid="{{trId}}" unitid="{{unitId}}">
+			<td>{{unitNameType}}</td>
+			<td>{{unitName}}</td>
+			<td><input type="text" class="layui-input" id="{{safetyTock}}" win-verify="number"/></td>
+			<td><button type="button" class="layui-btn layui-btn-primary layui-btn-xs initialTockMore" id="{{initialTock}}">库存信息</button></td>
+			<td><input type="text" class="layui-input" id="{{retailPrice}}" win-verify="money"/></td>
+			<td><input type="text" class="layui-input" id="{{lowPrice}}" win-verify="money"/></td>
+			<td><input type="text" class="layui-input" id="{{estimatePurchasePrice}}" win-verify="money"/></td>
+			<td><input type="text" class="layui-input" id="{{salePrice}}" win-verify="money"/></td>
+		</tr>
+	</script>
+	
+	<script type="text/x-handlebars-template" id="showBaseTemplate">
+		{{#bean}}
+		<div class="layui-form-item layui-col-xs12">
+    		<span class="hr-title">基础信息</span><hr>
+    	</div>
+        <div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">商品名称<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="materialName" name="materialName" win-verify="required" placeholder="请输入商品名称" class="layui-input" maxlength="50" value="{{materialName}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+	        <label class="layui-form-label">型号<i class="red">*</i></label>
+	        <div class="layui-input-block">
+	            <input type="text" id="model" name="model" win-verify="required" placeholder="请输入型号" class="layui-input" maxlength="50" value="{{model}}"/>
+	        </div>
+	    </div>
+	    <div class="layui-form-item layui-col-xs12">
+	        <label class="layui-form-label">所属类型<i class="red">*</i></label>
+	        <div class="layui-input-block">
+	            <div class="layui-inline" style="width: 100%">
+		            <div class="layui-input-inline">
+		                <input type="text" id="name" name="name" placeholder="请输入要搜索的节点" class="layui-input" />
+		            </div>
+		        </div>
+		        <div class="layui-inline" style="max-height: 200px; width: 100%">
+		            <ul id="materialCategoryType" class="ztree fsTree" method="get" isRoot="0"
+   						treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name" style="overflow-y: auto; height: 100%;"></ul>
+		        </div>
+	        </div>
+	    </div>
+	    <div class="layui-form-item layui-col-xs6">
+	        <label class="layui-form-label">商品来源<i class="red">*</i></label>
+	        <div class="layui-input-block winui-switch">
+	            <input id="fromType" name="fromType" lay-filter="fromType" type="checkbox" lay-skin="switch" lay-text="自产|外购" {{#fromType type}}{{/fromType}} value="{{#fromTypeReturn type}}{{/fromTypeReturn}}"/>
+	        </div>
+	    </div>
+		<div class="layui-form-item layui-col-xs6">
+		    <label class="layui-form-label">工序资料</label>
+		    <div class="layui-input-block">
+				<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="procedureChoose">工序选择</button>
+				{{#each procedureMationList}}
+					<br>
+        			<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">{{procedureName}}
+						<span class="layui-badge layui-bg-gray">{{number}}</span>
+					</span>
+        		{{/each}}
+		    </div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+		    <label class="layui-form-label">备注</label>
+		    <div class="layui-input-block">
+		        <textarea id="remark" placeholder="请填写备注" maxlength="200" class="layui-textarea" style="height: 100px;">{{remark}}</textarea>
+		    </div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+        	<label class="layui-form-label">附件资料</label>
+			<div class="layui-input-block" id="enclosureUpload">
+        	</div>
+    	</div>
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">价格信息</span>
+			<hr>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">多单位<i class="red">*</i></label>
+			<div class="layui-input-block winui-switch">
+				<input id="unit" name="unit" lay-filter="unit" type="checkbox" lay-skin="switch" lay-text="是|否" {{#compare2 unit}}{{/compare2}} value="{{#compare3 unit}}{{/compare3}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 single-term">
+			<label class="layui-form-label">安全存量<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="safetyTock" name="safetyTock" win-verify="number" placeholder="请输入安全存量" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 single-term">
+		    <label class="layui-form-label">初始库存<i class="red">*</i></label>
+		    <div class="layui-input-block">
+		        <button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">库存信息</button>
+		    </div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 single-term">
+			<label class="layui-form-label">单位<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="unitName" name="unitName" win-verify="" placeholder="请输入单位" class="layui-input" maxlength="25"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 single-term">
+			<label class="layui-form-label">零售价<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="retailPrice" name="retailPrice" win-verify="money" placeholder="请输入零售价" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 single-term">
+			<label class="layui-form-label">最低售价<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="lowPrice" name="lowPrice" win-verify="money" placeholder="请输入最低售价" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 single-term">
+			<label class="layui-form-label">采购价/成本价<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="estimatePurchasePrice" name="estimatePurchasePrice" win-verify="money" placeholder="请输入采购价/成本价" class="layui-input"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 single-term">
+			<label class="layui-form-label">销售价<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="salePrice" name="salePrice" win-verify="money" placeholder="请输入销售价" class="layui-input"/>
+			</div>
+		</div>
+		
+		<div class="layui-form-item layui-col-xs12 many-term">
+			<label class="layui-form-label">单位<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<select lay-filter="unitGroupId" lay-search="" id="unitGroupId">
+
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 many-term">
+			<label class="layui-form-label">首选入库单位<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<select lay-filter="firstInUnit" lay-search="" id="firstInUnit">
+
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 many-term">
+			<label class="layui-form-label">首选出库单位<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<select lay-filter="firstOutUnit" lay-search="" id="firstOutUnit">
+
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12 many-term">
+			<label class="layui-form-label">价格表<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<table class="layui-table">
+					<thead>
+						<tr>
+							<th style="width: 60px;">单位类型</th>
+							<th style="width: 60px;">计量单位</th>
+							<th style="width: 80px;">安全存量<i class="red">*</i></th>
+		                    <th style="width: 150px;">初始库存<i class="red">*</i></th>
+							<th>零售价<i class="red">*</i></th>
+							<th>最低售价<i class="red">*</i></th>
+							<th>采购价/成本价<i class="red">*</i></th>
+							<th>销售价<i class="red">*</i></th>
+						</tr>
+					</thead>
+					<tbody id="useTable" class="insurance-table">
+					{{#each norms}}
+						{{#if unitId}}
+						<tr trcusid="tr{{addOne @index}}" unitid="{{unitId}}">
+							<td>{{baseUnit}}</td>
+							<td>{{unitName}}</td>
+							<td><input type="text" class="layui-input" id="safetyTock{{addOne @index}}" win-verify="number" value="{{safetyTock}}"/></td>
+							<td><button type="button" class="layui-btn layui-btn-primary layui-btn-xs initialTockMore" id="initialTock{{addOne @index}}">库存信息</button>
+								{{#each normStock}}
+									<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">{{depotName}}<span class="layui-badge layui-bg-gray">{{initialTock}}</span></span>
+								{{/each}}
+							</td>
+							<td><input type="text" class="layui-input" id="retailPrice{{addOne @index}}" win-verify="money" value="{{retailPrice}}"/></td>
+							<td><input type="text" class="layui-input" id="lowPrice{{addOne @index}}" win-verify="money" value="{{lowPrice}}"/></td>
+							<td><input type="text" class="layui-input" id="estimatePurchasePrice{{addOne @index}}" win-verify="money" value="{{estimatePurchasePrice}}"/></td>
+							<td><input type="text" class="layui-input" id="salePrice{{addOne @index}}" win-verify="money" value="{{salePrice}}"/></td>
+						</tr>
+						{{else}}
+						{{/if}}
+					{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+    		<span class="hr-title">扩展信息</span>
+	        <button id="addExtendRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增扩展字段</button><hr>
+	    </div>
+	    <div id="extendMationBox">
+		    {{#each extends}}
+				<div class="layui-form-item layui-col-xs6 extendMation">
+					<span class="close-btn">
+						<i class="fa fa-times-circle"></i>
+					</span>
+					<label class="layui-form-label">
+						<font>{{lableName}}</font>
+						<input type="text" class="layui-input label-edit" style="display: none;"/>
+					</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input" value="{{content}}"/>
+					</div>
+				</div>
+			{{/each}}
+		</div>
+		
+		<div class="layui-form-item layui-col-xs12">
+			<div class="layui-input-block">
+				<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+				<button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+			</div>
+		</div>
+		{{/bean}}
+	</script>
+	
+	<script type="text/x-handlebars-template" id="extendTemplate">
+		<div class="layui-form-item layui-col-xs6 extendMation">
+			<span class="close-btn">
+				<i class="fa fa-times-circle"></i>
+			</span>
+			<label class="layui-form-label">
+				<font>未命名</font>
+				<input type="text" class="layui-input label-edit" style="display: none;"/>
+			</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input"/>
+			</div>
+		</div>
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+   	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/material/'}).use('materialedit');
+	</script>
+</body>
+</html>

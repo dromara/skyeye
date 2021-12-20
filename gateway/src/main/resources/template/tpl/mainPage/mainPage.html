@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body style="background-color: rgb(242, 242, 242);">
+	<div class="layui-fluid">
+		<form class="layui-form" action="">
+			<div class="layui-col-xs12 margin-top-10 layui-col-space15">
+				
+				<div class="layui-col-sm6 layui-col-md3">
+					<div class="layui-card">
+			        	<div class="layui-card-header">
+			          		本月考勤
+			          		<span class="layui-badge layui-bg-blue header-right-top">天</span>
+			        	</div>
+			        	<div class="layui-card-body layuiadmin-card-list">
+				          	<p class="layuiadmin-big-font" id="checkOnWorkNum">0</p>
+				          	<p style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="合计已正常完成上下班打卡的考勤天数">合计已正常完成上下班打卡的考勤天数</p>
+			        	</div>
+			      	</div>
+				</div>
+				
+				<div class="layui-col-sm6 layui-col-md3">
+					<div class="layui-card">
+			        	<div class="layui-card-header">
+			          		我的文件数
+			          		<span class="layui-badge layui-bg-green header-right-top">个</span>
+			        	</div>
+			        	<div class="layui-card-body layuiadmin-card-list">
+				          	<p class="layuiadmin-big-font" id="diskCloudFileNum">0</p>
+				          	<p style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="文件管理里由我上传的所有文件数">文件管理里由我上传的所有文件数</p>
+			        	</div>
+			      	</div>
+				</div>
+				
+				<div class="layui-col-sm6 layui-col-md3">
+					<div class="layui-card">
+			        	<div class="layui-card-header">
+			          		我的论坛帖
+			          		<span class="layui-badge layui-bg-orange header-right-top">篇</span>
+			        	</div>
+			        	<div class="layui-card-body layuiadmin-card-list">
+				          	<p class="layuiadmin-big-font" id="forumNum">0</p>
+				          	<p style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="我发表的论坛帖">我发表的论坛帖</p>
+			        	</div>
+			      	</div>
+				</div>
+
+				<div class="layui-col-sm6 layui-col-md3">
+					<div class="layui-card">
+			        	<div class="layui-card-header">
+			          		我的知识库文章
+			          		<span class="layui-badge header-right-top">篇</span>
+			        	</div>
+			        	<div class="layui-card-body layuiadmin-card-list">
+				          	<p class="layuiadmin-big-font" id="knowledgeNum">0</p>
+				          	<p style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="已审批通过的知识库文章">已审批通过的知识库文章</p>
+			        	</div>
+			      	</div>
+				</div>
+
+				<!-- 常用/热门流程任务列表 -->
+				<div class="layui-col-sm12 layui-col-md6">
+					<div class="layui-card">
+						<div class="layui-tab layui-tab-brief layadmin-latestData" style="background-color: white;">
+							<ul class="layui-tab-title">
+								<li class="layui-this" title="常用/热门流程申请">常用/热门流程申请</li>
+							</ul>
+							<div class="layui-tab-content" id="actModelShow">
+
+							</div>
+						</div>
+					</div>
+				</div>
+				
+		      	<div class="layui-col-xs8">
+		      		<div class="layui-card">
+				      	<div class="layui-tab layui-tab-brief layadmin-latestData" style="background-color: white;">
+							<ul class="layui-tab-title" id="noticeTitle">
+								
+							</ul>
+							<div class="layui-tab-content" id="noticeContent">
+								
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-card">
+				      	<div class="layui-tab layui-tab-brief layadmin-latestData" style="background-color: white;">
+							<ul class="layui-tab-title">
+								<li class="layui-this" title="最新知识库">最新知识库</li>
+							</ul>
+							<div class="layui-tab-content">
+								<div class="layui-tab-item layui-show" style="height: 350px;">
+									<table class="layui-table" lay-skin="line">
+										<thead>
+							                <tr>
+							                    <th>主题</th>
+							                    <th style="width: 70px;">类型</th>
+							                    <th style="width: 140px;">时间</th>
+							                </tr>
+							            </thead>
+							            <tbody class="insurance-table" id="knowledgeList">
+											
+							            </tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="layui-col-xs4">
+					<div class="layui-card">
+						<div class="layui-card-header">热门论坛帖</div>
+						<div class="layui-card-body">
+							<ul class="layuiadmin-card-status layuiadmin-home2-usernote" id="forumContent">
+								
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-col-xs4">
+					<div class="layui-card">
+						<div class="layui-card-header">关于Skyeye云办公</div>
+						<div class="layui-card-body">
+							<div id="layer04_chart1" class="layui-row">
+								<ul>
+									<li>软件：<font style="color: blue">Skyeye云办公</font></li>
+									<li>软件所有权：<font style="color: blue">卫志强</font></li>
+									<li>描述：该软件分为开源版和企业版，企业版请购买正版后使用。</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+		      	
+			</div>
+		</form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="noticeTitleTemplate">
+		{{#each rows}}
+			<li class="{{className}}" title="{{name}}">{{name}}</li>
+		{{/each}}
+	</script>
+	
+	<script type="text/x-handlebars-template" id="noticeContentTemplate">
+		{{#each rows}}
+			<div class="layui-tab-item {{contentClassName}}" style="height: 350px;">
+				<table class="layui-table" lay-skin="line">
+					<thead>
+		                <tr>
+		                    <th>主题</th>
+		                    <th style="width: 70px;">发送人</th>
+		                    <th style="width: 140px;">时间</th>
+		                </tr>
+		            </thead>
+		            <tbody class="insurance-table">
+						{{#each content}}
+							<tr style="height: 38px;">
+								<td><a href="javascript:;" style="color: #01AAED;" class="notice" id="{{id}}">{{title}}</a></td>
+								<td>{{createName}}</td>
+								<td>{{linesTime}}</td>
+							</tr>
+						{{/each}}
+		            </tbody>
+				</table>
+			</div>
+		{{/each}}
+	</script>
+	
+	<script type="text/x-handlebars-template" id="forumContentTemplate">
+		{{#each rows}}
+			<li id="{{id}}" title="{{desc}}">
+				<h3>{{title}}</h3>
+				<p>{{desc}}</p>
+				<span>{{createTime}}</span>
+			</li>
+		{{/each}}
+	</script>
+	
+	<script type="text/x-handlebars-template" id="knowledgeContentTemplate">
+		{{#each rows}}
+			<tr style="height: 38px;">
+				<td><a href="javascript:;" style="color: #01AAED;" class="knowledge" id="{{id}}">{{title}}</a></td>
+				<td>{{typeName}}</td>
+				<td>{{createTime}}</td>
+			</tr>
+		{{/each}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="actModelTemplate">
+		{{#each rows}}
+			<li class="layui-col-sm2 act-model-li" dsFormId="{{dsFormId}}" actid="{{actId}}" pageUrl="{{pageUrl}}" showTitle="{{title}}" title="{{title}}">
+				<div class="icon">
+					{{#compare1 menuIconType menuIconPic menuIcon menuIconColor}}{{/compare1}}
+				</div>
+				<div class="title">{{title}}</div>
+			</li>
+		{{/each}}
+	</script>
+	
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/mainPage/'}).use('mainPage');
+    </script>
+</body>
+</html>

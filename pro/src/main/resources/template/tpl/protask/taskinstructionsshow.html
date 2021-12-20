@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../assets/lib/layui/lay/modules/ueditor/themes/iframe.css">
+</head>
+<body style="margin: 0px;">
+	<div style="margin:0 auto;" id="contentShow">
+	    
+	</div>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script type="text/javascript">
+   	layui.config({
+		base: basePath, 
+		version: skyeyeVersion
+	}).extend({
+	    window: 'js/winui.window',
+	}).define(['window', 'jquery'], function (exports) {
+		
+		winui.renderColor();
+		var $ = layui.$;
+		$("#contentShow").html(parent.content);
+		parent.$("#taskInstructionsShowBox").height($("body").height() + 30);
+		
+	});
+    </script>
+</body>
+</html>

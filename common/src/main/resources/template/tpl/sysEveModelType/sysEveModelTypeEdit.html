@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	        
+	    </form>
+	</div>
+
+	<script type="text/x-handlebars-template" id="showTemplate">
+		{{#bean}}
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">分类名称<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="typeName" name="typeName" win-verify="required" placeholder="请输入分类名称" class="layui-input" value="{{name}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">父级分类</label>
+			<div class="layui-input-block">
+				<select id="parentId" name="parentId" lay-filter="parentId" lay-search="" disabled>
+				</select>
+				<div class="layui-form-mid layui-word-aux">如果不选，则默认为父级分类。</div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<div class="layui-input-block layui-col-xs12">
+				<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+				<button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+			</div>
+		</div>
+		{{/bean}}
+	</script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/sysEveModelType/'}).use('sysEveModelTypeEdit');
+    </script>
+</body>
+</html>

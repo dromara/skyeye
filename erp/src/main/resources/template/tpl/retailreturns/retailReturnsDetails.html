@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	    <div class="layui-form-item layui-col-xs12">
+		    <div class="layui-input-block ver-center">
+		      <button class="winui-btn" type="button" id="jprint">打印</button>
+		    </div>
+		</div>
+	</div>
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<span class="detail-title" id="orderDetailTitle"></span><hr>
+    		</div>
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">基本信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">会员：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{supplierName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">单据日期：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{operTime}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">结算账户：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{accountName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">退款类型：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{payType}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">单据编号：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{defaultNumber}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">状态：</label>
+		        <div class="layui-input-block ver-center" id="statusName">
+					
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">操作人：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{operPersonName}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">操作日期：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{createTime}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">列表项：</label>
+		        <div class="layui-input-block ver-center">
+		            <table class="layui-table">
+		                <thead>
+		                    <tr>
+		                        <th style="width: 120px;">仓库</th>
+		                        <th style="width: 150px;">产品(型号)</th>
+		                        <th style="width: 70px;">单位</th>
+		                        <th style="width: 80px;">数量</th>
+		                        <th style="width: 80px;">单价</th>
+		                        <th style="width: 80px;">金额</th>
+		                        <th style="min-width: 100px;">备注</th>
+		                    </tr>
+		                </thead>
+		                <tbody id="useTable" class="insurance-table">
+							{{#each items}}
+								<tr>
+									<td>{{deportName}}</td>
+									<td>{{materialNames}}</td>
+									<td>{{unitName}}</td>
+									<td>{{operNumber}}</td>
+									<td>{{unitPrice}}</td>
+									<td>{{allPrice}}</td>
+									<td>{{remark}}</td>
+								</tr>
+							{{/each}}
+		                </tbody>
+					</table>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs4">
+		        <label class="layui-form-label">共计金额：</label>
+		        <div class="layui-input-block ver-center" style="min-height: 20px; border-bottom: 1px solid black; color: purple; font-weight: 700; font-size: 17px;">
+		            {{totalPrice}}元
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs4">
+		        <label class="layui-form-label">退款金额：</label>
+		        <div class="layui-input-block ver-center" style="min-height: 20px; border-bottom: 1px solid black; color: red; font-weight: 700; font-size: 17px;">
+		            {{changeAmount}}元
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs4">
+		        <label class="layui-form-label">折损扣费：</label>
+		        <div class="layui-input-block ver-center" style="min-height: 20px; border-bottom: 1px solid black; color: green; font-weight: 700; font-size: 17px;">
+		            {{giveChange}}元
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">备注：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{remark}}
+		        </div>
+		    </div>
+			<div id="dsFormShow">
+
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">完成信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">单据完成日期：</label>
+				<div class="layui-input-block ver-center">
+					{{realComplateTime}}
+				</div>
+			</div>
+		{{/bean}}
+	</script>
+	    
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/retailreturns/'}).use('retailReturnsDetails');
+    </script>
+</body>
+</html>

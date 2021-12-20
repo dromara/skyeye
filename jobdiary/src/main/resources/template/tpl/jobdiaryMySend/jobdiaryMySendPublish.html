@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+		<ul class="layui-tab-title">
+			<li class="layui-this">日报</li>
+			<li>周报</li>
+			<li>月报</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show">
+				<div style="margin: auto 10px;">
+					<form class="layui-form" action="" id="showForm">
+						<div class="layui-form-item">
+				            <div class="layui-form-item layui-col-xs4">
+				                <label class="layui-form-label">日报标题</label>
+				                <div class="layui-input-block">
+				                    <input type="text" id="jobTitle" name="jobTitle" placeholder="请输入日报标题" class="layui-input" />
+				                </div>
+			                </div>
+                            <div class="layui-form-item layui-col-xs8">
+				                <label class="layui-form-label">收件人</label>
+				                <div class="layui-input-block">
+                                    <input type="text" id="userName" name="userName" placeholder="收件人" class="layui-input" />
+                                    <i class="fa fa-user-plus input-icon" id="userNameSelPeople"></i>
+				                </div>
+				            </div>
+				        </div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">今日完成工作</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="todycompleted" name="todycompleted" lay-filter="todycompletedImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="completedtext" name="completedtext" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="completedcontent" name="completedcontent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">未完成工作</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="todyincomplete" name="todyincomplete" lay-filter="todyincompleteImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="incompletetext" name="incompletetext" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="incompletecontent" name="incompletecontent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">需协调工作</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="todycoordina" name="todycoordina" lay-filter="todycoordinaImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="coordinatext" name="coordinatext" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="coordinacontent" name="coordinacontent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">备注</label>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="jobRemark" name="jobRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+				            <label class="layui-form-label">附件</label>
+							<div class="layui-input-block" id="enclosureUpload">
+				            </div>
+				        </div>
+						<div class="layui-form-item layui-col-xs12">
+							<div class="layui-input-block">
+								<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+								<button class="winui-btn" lay-submit lay-filter="daysubmit">发送</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="layui-tab-item">
+				<div style="margin: auto 10px;">
+					<form class="layui-form" action="" id="showWeekForm">
+						<div class="layui-form-item">
+				            <div class="layui-form-item layui-col-xs4">
+				                <label class="layui-form-label">周报标题</label>
+				                <div class="layui-input-block">
+				                    <input type="text" id="jobWeekTitle" name="jobWeekTitle" placeholder="请输入周报标题" class="layui-input" />
+				                </div>
+				            </div>
+                            <div class="layui-form-item layui-col-xs8">
+				                <label class="layui-form-label">收件人</label>
+				                <div class="layui-input-block">
+                                    <input type="text" id="weekUserName" name="weekUserName" placeholder="收件人" class="layui-input" />
+                                    <i class="fa fa-user-plus input-icon" id="weekUserNameSelPeople"></i>
+				                </div>
+				            </div>
+				        </div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">本周完成工作</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="weekCompleted" name="weekCompleted" lay-filter="weekCompletedImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="weekCompletedText" name="weekCompletedText" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="weekCompletedContent" name="weekCompletedContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">本周工作总结</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="weekWorkSummary" name="weekWorkSummary" lay-filter="weekWorkSummaryImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="weekWorkSummaryText" name="weekWorkSummaryText" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="weekWorkSummaryContent" name="weekWorkSummaryContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">下周工作计划</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="weekNextWorkPlan" name="weekNextWorkPlan" lay-filter="weekNextWorkPlanImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="weekNextWorkPlanText" name="weekNextWorkPlanText" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="weekNextWorkPlanContent" name="weekNextWorkPlanContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">需协调工作</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="weekCoordinaJob" name="weekCoordinaJob" lay-filter="weekCoordinaJobImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="weekCoordinaJobText" name="weekCoordinaJobText" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="weekCoordinaJobContent" name="weekCoordinaJobContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">备注</label>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="weekJobRemark" name="weekJobRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+                            <label class="layui-form-label">附件</label>
+							<div class="layui-input-block" id="weekenclosureUpload">
+                            </div>
+                        </div>
+						<div class="layui-form-item layui-col-xs12">
+							<div class="layui-input-block">
+								<button class="winui-btn" id="weekCancle"><language showName="com.skyeye.cancel"></language></button>
+								<button class="winui-btn" lay-submit lay-filter="weekSubmit">发送</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="layui-tab-item">
+				<div style="margin: auto 10px;">
+					<form class="layui-form" action="" id="showMonthForm">
+						<div class="layui-form-item">
+				            <div class="layui-form-item layui-col-xs4">
+				                <label class="layui-form-label">月报标题</label>
+				                <div class="layui-input-block">
+				                    <input type="text" id="jobMonthTitle" name="jobMonthTitle" placeholder="请输入月报标题" class="layui-input" />
+				                </div>
+				            </div>
+                            <div class="layui-form-item layui-col-xs8">
+				                <label class="layui-form-label">收件人</label>
+				                <div class="layui-input-block">
+                                    <input type="text" id="monthUserName" name="monthUserName" placeholder="收件人" class="layui-input" />
+                                    <i class="fa fa-user-plus input-icon" id="monthUserNameSelPeople"></i>
+				                </div>
+				            </div>
+				        </div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">本月完成工作</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="monthCompleted" name="monthCompleted" lay-filter="monthCompletedImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="monthCompletedText" name="monthCompletedText" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="monthCompletedContent" name="monthCompletedContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">本月工作总结</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="monthWorkSummary" name="monthWorkSummary" lay-filter="monthWorkSummaryImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="monthWorkSummaryText" name="monthWorkSummaryText" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="monthWorkSummaryContent" name="monthWorkSummaryContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">下月工作计划</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="monthNextWorkPlan" name="monthNextWorkPlan" lay-filter="monthNextWorkPlanImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="monthNextWorkPlanText" name="monthNextWorkPlanText" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="monthNextWorkPlanContent" name="monthNextWorkPlanContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">需协调工作</label>
+							</div>
+							<div class="layui-inline" style="float: right">
+								<label class="layui-form-label">图文模式</label>
+								<div class="layui-input-block winui-switch">
+									<input id="monthCoordinaJob" name="monthCoordinaJob" lay-filter="monthCoordinaJobImagetext" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked"/>
+								</div>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center; display: none;">
+							<textarea id="monthCoordinaJobText" name="monthCoordinaJobText" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="monthCoordinaJobContent" name="monthCoordinaJobContent" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-inline">
+								<label class="layui-form-label">备注</label>
+							</div>
+						</div>
+						<div class="layui-form-item" style="align: center;">
+							<textarea id="monthJobRemark" name="monthJobRemark" placeholder="请输入内容" class="layui-textarea"></textarea>
+						</div>
+						<div class="layui-form-item">
+                            <label class="layui-form-label">附件</label>
+							<div class="layui-input-block" id="monthenclosureUpload">
+                            </div>
+                        </div>
+						<div class="layui-form-item layui-col-xs12">
+							<div class="layui-input-block">
+								<button class="winui-btn" id="monthCancle"><language showName="com.skyeye.cancel"></language></button>
+								<button class="winui-btn" lay-submit lay-filter="monthSubmit">发送</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../../assets/lib/layui/lay/modules/ace/ace.js"></script>
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+		layui.config({base : '../../js/jobdiaryMySend/'}).use('jobdiaryMySendPublish');
+	</script>
+</body>
+</html>

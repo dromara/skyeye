@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/css/file-tree.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+</head>
+<body style="background-color: white;">
+	<div class="file-console">
+	    <div class="file-write">
+	    	<div class="file-write-left">
+    			<div class="left-content">
+					<ul id="treeDemo" class="ztree fsTree" method="get" isRoot="0"
+    					treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
+				</div>
+	    	</div>
+	    	<div class="file-write-center">
+	    		<div class="center-title">
+	    			<i class="input-fa fa fa-search fa-fw"></i>
+	    			<input type="text" name="title" id="searchTitle" placeholder="搜索..." class="layui-input">
+	    		</div>
+	    		<div class="center-content" id="folderChildList">
+	    		</div>
+	    	</div>
+	    	<div class="file-write-right">
+	    		<div class="right-title">
+	    			<div class="note-title">
+	    				<input type="text" name="noteTitle" id="noteTitle" class="layui-input" placeholder="请输入名称">
+	    			</div>
+	    			<div class="note-operator">
+	    				<button class="layui-btn layui-btn-primary" id="editMyNote"><language showName="com.skyeye.save"></language></button>
+	    			</div>
+	    		</div>
+    			<div class="right-content">
+    				<iframe src="" id="childframe" name="childframe"></iframe>
+				</div>
+	    	</div>
+    	</div>
+	</div>
+	
+	<!-- 树右键 -->
+	<ul class="layui-dropdown-menu" id="treeRight">
+		<li class="is-file treereOutPutZIPContent">
+			<a href="javascript:;">
+				<img alt="" src="../../assets/images/decompression-now.png" />
+				<span>输出压缩包</span>
+			</a>
+		</li>
+		<li class="is-file treerefreshContent">
+			<a href="javascript:;">
+				<img alt="" src="../../assets/images/refresh-icon.png" />
+				<span>刷新</span>
+			</a>
+		</li>
+		<li class="is-file fileReName" >
+			<a href="javascript:;">
+				<img alt="" src="../../assets/images/rename-icon.png" />
+				<span>重命名</span>
+			</a>
+		</li>
+		<li class="is-file treedeleteFolderAndChild">
+			<a href="javascript:;">
+				<img alt="" src="../../assets/images/delete-icon.png" />
+				<span>删除</span>
+			</a>
+		</li>
+		<li class="divider"></li>
+		<li class="is-file treecreateNewFolder">
+			<a href="javascript:;">
+				<img alt="" src="../../assets/images/create-folder-icon.png" />
+				<span>新建文件夹</span>
+			</a>
+		</li>
+		<li class="is-file treecreateNewNote">
+			<a href="javascript:;">
+				<img alt="" src="../../assets/images/note-1.png" />
+				<span>新建笔记</span>
+			</a>
+		</li>
+		<li class="is-file treecreateNewNoteMarkdown">
+            <a href="javascript:;">
+                <img alt="" src="../../assets/images/note-2.png" />
+                <span>新建Markdown</span>
+            </a>
+        </li>
+		<li class="is-file treecreateNewNoteExcel">
+        	<a href="javascript:;">
+        		<img alt="" src="../../assets/images/note-4.png" />
+                <span>新建Excel表格</span>
+            </a>
+        </li>
+	</ul>
+	
+	<!-- folderchildlisetTemplate.tpl -->
+	<script type="text/x-handlebars-template" id="folderchildlisetTemplate">
+		{{#each rows}}
+			<div class="folder-item" id="{{id}}" rowname="{{name}}" rowtype="{{fileType}}" title="笔记：{{name}}&#10;简介：{{desc}}">
+				<div class="folder-item-title">
+					<div class="folder-item-title-icon">
+						<img src="{{icon}}"/>
+					</div>
+					<div class="folder-item-title-content">
+						<span>{{name}}</span>
+					</div>
+				</div>
+				<div class="folder-item-desc">
+					{{desc}}
+				</div>
+				<div class="folder-item-mation">
+					<div class="folder-item-mation-time">
+						{{createTime}}
+					</div>
+				</div>
+			</div>
+		{{/each}}
+	</script>
+	
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/index/'}).use('myNote');
+    </script>
+</body>
+</html>

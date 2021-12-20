@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin: 0 auto; padding: 20px;">
+	    <form class="layui-form" action="" id="showForm">
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">供应商<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		            <input type="text" id="supplierName" name="supplierName" placeholder="请选择供应商" class="layui-input" readonly="readonly"/>
+		            <i class="fa fa-plus-circle input-icon" id="supplierNameSel"></i>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">单据日期<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		            <input type="text" id="operTime" name="operTime" win-verify="required" placeholder="请选择单据日期" class="layui-input"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">入库仓库<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		            <select id="depotId" name="depotId" lay-search="" win-verify="required" lay-filter="depotId">
+		            	
+		            </select>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">列表项<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<div class="winui-toolbar">
+				        <div class="winui-tool" style="text-align: left;">
+				            <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+				            <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+				        </div>
+				    </div>
+		            <table class="layui-table">
+		                <thead>
+		                    <tr>
+		                    	<th style="width: 30px;"></th>
+		                        <th style="width: 150px;">商品(型号)</th>
+		                        <th style="width: 50px;">单位</th>
+		                        <th style="width: 80px;">库存</th>
+		                        <th style="width: 80px;">数量</th>
+		                        <th style="width: 80px;">单价</th>
+		                        <th style="width: 80px;">金额</th>
+		                        <th style="width: 80px;">税率(%)</th>
+		                        <th style="width: 80px;">税额</th>
+		                        <th style="width: 80px;">含税单价</th>
+		                        <th style="width: 80px;">合计价税</th>
+		                        <th style="min-width: 100px;">备注</th>
+		                    </tr>
+		                </thead>
+		                <tbody id="useTable" class="insurance-table">
+		                </tbody>
+					</table>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">结算账户</label>
+		        <div class="layui-input-block">
+		            <select id="accountId" lay-search></select>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">付款类型</label>
+		        <div class="layui-input-block">
+		            <select id="payType" lay-search>
+		            	<option value="1">现金</option>
+		            	<option value="2">记账</option>
+		            	<option value="3">其他</option>
+		            </select>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">金额合计</label>
+		        <div class="layui-input-block ver-center" id="allPrice">
+		            0.00
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">价税合计</label>
+		        <div class="layui-input-block ver-center" id="taxLastMoneyPrice">
+		            0.00
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">备注</label>
+		        <div class="layui-input-block">
+		        	<textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">优惠率(%)</label>
+		        <div class="layui-input-block">
+		            <input type="text" id="discount" placeholder="请填写优惠率" class="layui-input" value="0.00"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">优惠金额</label>
+		        <div class="layui-input-block">
+		            <input type="text" id="discountMoney" placeholder="请填写优惠金额" class="layui-input" value="0.00"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">优惠后金额</label>
+		        <div class="layui-input-block ver-center" id="discountLastMoney">
+		        	0.00
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">支付金额</label>
+		        <div class="layui-input-block">
+		            <input type="text" id="changeAmount" placeholder="请填写付款金额" class="layui-input" value="0.00"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">本次欠款</label>
+		        <div class="layui-input-block ver-center" id="arrears">
+		            0.00
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">其他费用</label>
+		        <div class="layui-input-block">
+		            <div class="winui-toolbar">
+				        <div class="winui-tool" style="text-align: left;">
+				            <button id="addPriceRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+				            <button id="deletePriceRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+				        </div>
+				    </div>
+		            <table class="layui-table">
+		                <thead>
+		                    <tr>
+		                    	<th style="width: 30px;"></th>
+		                        <th style="width: 120px;">支出项目：</th>
+		                        <th id="otherPriceTotal" style="width: 120px;">费用合计：0.00</th>
+		                    </tr>
+		                </thead>
+		                <tbody id="otherPriceTable" class="insurance-table">
+		                </tbody>
+					</table>
+		        </div>
+		    </div>
+			<div id="dsFormShow">
+
+			</div>
+		    <div class="layui-form-item layui-col-xs12">
+				<div class="layui-input-block">
+					<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+					<button class="winui-btn" lay-submit lay-filter="formAddBean">保存为草稿</button>
+					<button class="winui-btn submitTypeIsOne" lay-submit lay-filter="formSubOneBean">提交审批</button>
+					<button class="winui-btn submitTypeIsTwo" lay-submit lay-filter="formSubTwoBean">提交</button>
+				</div>
+		    </div>
+	    </form>
+	</div>
+	
+	<!-- usetableTemplate -->
+	<script type="text/x-handlebars-template" id="usetableTemplate">
+		<tr trcusid="{{trId}}">
+			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+			<td>
+				<input type="text" id="{{materialId}}" name="{{materialId}}" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
+		        <i class="fa fa-plus-circle input-icon chooseProductBtn" style="top: 12px;"></i>
+			</td>
+			<td><select id="{{unitId}}" lay-filter="selectUnitProperty" lay-search win-verify="required"></select></td>
+			<td id="{{currentTock}}"></td>
+			<td><input type="text" class="layui-input change-input rkNum" value="1" id="{{rkNum}}" win-verify="required|number"/></td>
+			<td><input type="text" class="layui-input change-input unitPrice" id="{{unitPrice}}" win-verify="required|money"/></td>
+			<td><input type="text" class="layui-input change-input amountOfMoney" id="{{amountOfMoney}}" win-verify="required|money"/></td>
+			<td><input type="text" class="layui-input change-input taxRate" value="0.00" id="{{taxRate}}" win-verify="required|double"/></td>
+			<td><input type="text" class="layui-input change-input taxMoney" id="{{taxMoney}}" win-verify="required|money"/></td>
+			<td><input type="text" class="layui-input change-input taxUnitPrice" id="{{taxUnitPrice}}" win-verify="required|money"/></td>
+			<td><input type="text" class="layui-input change-input taxLastMoney" id="{{taxLastMoney}}" win-verify="required|money"/></td>
+			<td><input type="text" class="layui-input" id="{{remark}}"/></td>
+		</tr>
+	</script>
+	
+	<!-- otherTemplate -->
+	<script type="text/x-handlebars-template" id="otherTemplate">
+		<tr trcusid="{{trId}}">
+			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+			<td><select id="{{inoutitemId}}" lay-search win-verify="required"></select></td>
+			<td><input type="text" class="layui-input otherPrice" id="{{otherPrice}}" win-verify="required||money"/></td>
+		</tr>
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script src="../../js/erpcommon/calculatePrice.js"></script>
+	<script src="../../js/erpcommon/loadStock.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/purchaseput/'}).use('purchaseputadd');
+	</script>
+</body>
+</html>

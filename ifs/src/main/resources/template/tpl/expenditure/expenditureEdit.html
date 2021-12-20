@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="margin: 0 auto; padding: 20px;">
+        <form class="layui-form" action="" id="showForm">
+
+        </form>
+    </div>
+
+    <!-- beanTemplate -->
+    <script type="text/x-handlebars-template" id="beanTemplate">
+        {{#bean}}
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">往来单位<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="supplierName" name="supplierName" placeholder="请选择往来单位" class="layui-input" readonly="readonly"/>
+                <i class="fa fa-plus-circle input-icon" id="supplierNameSel"></i>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">单据日期<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="operTime" name="operTime" win-verify="required" placeholder="请选择单据日期" class="layui-input" value="{{billTime}}"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">列表项<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <div class="winui-toolbar">
+                    <div class="winui-tool" style="text-align: left;">
+                        <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+                        <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+                    </div>
+                </div>
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 30px;"></th>
+                        <th style="width: 120px;">支出项目</th>
+                        <th style="width: 80px;">金额</th>
+                        <th style="min-width: 100px;">备注</th>
+                    </tr>
+                    </thead>
+                    <tbody id="useTable" class="insurance-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs3">
+            <label class="layui-form-label">付款账户</label>
+            <div class="layui-input-block">
+                <select id="accountId" lay-search></select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs3">
+            <label class="layui-form-label">共计金额</label>
+            <div class="layui-input-block ver-center" id="allPrice">
+                {{totalPrice}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs3">
+            <label class="layui-form-label">付款金额</label>
+            <div class="layui-input-block">
+                <input type="text" id="changeAmount" name="changeAmount" win-verify="required|money" placeholder="请输入付款金额" class="layui-input" value="{{changeAmount}}"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">经手人<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="handsPersonId" name="handsPersonId" placeholder="请选择经手人员" class="layui-input" style="padding-right: 30px;"/>
+                <i class="fa fa-user-plus input-icon" id="toHandsPersonSelPeople"></i>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="200">{{remark}}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <div class="layui-input-block">
+                <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                <button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+            </div>
+        </div>
+        {{/bean}}
+    </script>
+
+    <!-- usetableTemplate -->
+    <script type="text/x-handlebars-template" id="usetableTemplate">
+        <tr trcusid="{{trId}}">
+            <td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+            <td><select id="{{initemId}}" lay-search win-verify="required"></select></td>
+            <td><input type="text" class="layui-input rkMoney" id="{{initemMoney}}" win-verify="required|money"/></td>
+            <td><input type="text" class="layui-input" id="{{remark}}"/></td>
+        </tr>
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/expenditure/'}).use('expenditureEdit');
+    </script>
+</body>
+</html>

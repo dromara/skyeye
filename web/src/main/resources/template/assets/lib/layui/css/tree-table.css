@@ -1,0 +1,73 @@
+/*ztree表格*/
+.ztree {
+	padding: 0;
+	border: 2px solid #CDD6D5;
+}
+
+.ztree li a {
+	vertical-align: middle;
+	height: 30px;
+}
+
+.ztree li>a {
+	width: 100%;
+}
+
+.ztree li>span{
+	display: block !important;
+	position: absolute;
+    margin-left: 60.5% !important;
+    margin-top: 10px !important;
+}
+
+.ztree li>a, .ztree li a.curSelectedNode {
+	padding-top: 0px;
+	background: none;
+	height: auto;
+	border: none;
+	cursor: default;
+	opacity: 1;
+}
+
+.ztree li ul {
+	padding-left: 0px
+}
+
+.ztree div.diy span {
+	line-height: 30px;
+	vertical-align: middle;
+}
+
+.ztree div.diy {
+	height: 100%;
+	width: 20%;
+	line-height: 30px;
+	border-top: 1px dotted #ccc;
+	border-left: 1px solid #eeeeee;
+	text-align: center;
+	display: inline-block;
+	box-sizing: border-box;
+	font-family: "SimSun";
+	font-size: 12px;
+	overflow: hidden;
+    float: left;
+}
+
+.ztree div.diy:first-child {
+	text-align: left;
+	text-indent: 10px;
+	border-left: none;
+}
+
+.ztree .head {
+	background: #5787EB;
+}
+
+.ztree .head div.diy {
+	border-top: none;
+	border-right: 1px solid #CDD2D4;
+	color: #fff;
+	font-family: "Microsoft YaHei";
+	font-size: 14px;
+}
+/*end--ztree表格*/

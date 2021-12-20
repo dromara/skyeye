@@ -1,0 +1,123 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">类型实体：</label>
+				<div class="layui-input-block ver-center">
+					{{title}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">工作流模型：</label>
+				<div class="layui-input-block ver-center">
+					{{actName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">工作流模型ID：</label>
+				<div class="layui-input-block ver-center">
+					{{actId}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">页面类型：</label>
+				<div class="layui-input-block ver-center" id="pageTypes">
+
+				</div>
+			</div>
+			<div class="layui-form-item TypeIsOne layui-col-xs6">
+				<label class="layui-form-label">新增页面：</label>
+				<div class="layui-input-block ver-center">
+					{{pageUrl}}
+					<div class="layui-form-mid layui-word-aux">格式为：../../tpl/model/modellist.html</div>
+				</div>
+			</div>
+			<div class="layui-form-item TypeIsOne layui-col-xs6">
+				<label class="layui-form-label">编辑页面：</label>
+				<div class="layui-input-block ver-center">
+					{{editPageUrl}}
+					<div class="layui-form-mid layui-word-aux">格式为：../../tpl/model/modellist.html</div>
+				</div>
+			</div>
+			<div class="layui-form-item TypeIsOne layui-col-xs6">
+				<label class="layui-form-label">撤销接口：</label>
+				<div class="layui-input-block ver-center">
+					{{revokeMapping}}<br>
+					<div class="layui-form-mid layui-word-aux">格式为：bbb001；直接填写接口名即可</div>
+				</div>
+			</div>
+			<div class="layui-form-item TypeIsTwo layui-col-xs12">
+				<label class="layui-form-label">表单页面：</label>
+				<div class="layui-input-block ver-center">
+					{{dsFormName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">图标类型：</label>
+				<div class="layui-input-block ver-center" id="menuIconType">
+
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12 menuIconTypeIsOne">
+				<label class="layui-form-label">图标：</label>
+				<div class="layui-input-block">
+					<i class="fa fa-fw {{menuIcon}}" style="font-size: 48px; line-height: 65px;color: {{menuIconColor}}"></i>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12 menuIconTypeIsTwo">
+				<label class="layui-form-label">图片：</label>
+				<div class="layui-input-block ver-center">
+					<img src="{{menuIconPic}}" class="photo-img" id="userPhoto">
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">背景颜色：</label>
+				<div class="layui-input-block ver-center">
+					{{backgroundColor}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">回调地址：</label>
+				<div class="layui-input-block ver-center">
+					{{tokenUrl}}
+					<div class="layui-form-mid layui-word-aux">格式为：http://localhost:8081/tpl/model.html</div>
+					<div class="layui-form-mid layui-word-aux">流程执行完之后进行该地址回调。</div>
+					<div class="layui-form-mid layui-word-aux">动态表单回调参数以自定义id为准。</div>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">是否常用/热门：</label>
+				<div class="layui-input-block ver-center" id="commonUsed">
+
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">备注说明：</label>
+				<div class="layui-input-block ver-center">
+					{{remark}}
+				</div>
+			</div>
+		{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/actmodletype/'}).use('actModleDetails');
+    </script>
+</body>
+</html>

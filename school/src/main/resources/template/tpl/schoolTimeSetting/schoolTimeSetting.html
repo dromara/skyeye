@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	            	<label class="layui-form-label">学校</label>
+	                <div class="layui-input-inline">
+	                    <select lay-filter="schoolId" lay-search="" id="schoolId">
+	                    
+	                    </select>
+	                </div>
+	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+	                <button class="layui-btn list-form-search" type="button" id="formSearch"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+    <div style="margin:auto 10px;" id="showTemplate">
+        
+    </div>
+    <script type="text/x-handlebars-template" id="timeSettingTemplate">
+		{{#bean}}
+			<table class="layui-table" style="width: 70%; margin-left: 15%;">
+				<tr>
+					<td></td>
+					{{#each semesterList}}
+						<td class="layui-table-cell"><label class="quCoOptionEdit">{{semesterName}}</label>
+						</td>
+					{{/each}}
+				</tr>
+				{{#each gradeList}}
+					<tr>
+						<td class="layui-table-cell">
+							<label class="quCoOptionEdit">{{gradeName}}</label>
+						</td>
+						{{#each ../semesterList}}
+							<td class="layui-table-cell">
+								<div>
+									<!-- 年级id_学期id -->
+									<input id="{{../id}}_{{id}}" class="layui-input timeRange" type="text">
+								</div>
+							</td>
+						{{/each}}
+					</tr>
+				{{/each}}
+			</table>
+			<div class="layui-form-item layui-col-xs12" style="text-align: center;">
+		        <button class="layui-btn layui-btn-normal layui-btn-radius" type="buttom" id="saveBtn"><language showName="com.skyeye.save"></language></button>
+		    </div>
+		{{/bean}}
+    </script>
+    
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/schoolTimeSetting/'}).use('schoolTimeSetting');
+    </script>
+</body>
+</html>

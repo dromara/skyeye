@@ -1,0 +1,341 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta name="renderer" content="webkit">
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta http-equiv="Expires" content="-1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<link rel="icon" type="image/x-icon" href="../../assets/images/eye.png" />
+<title></title>
+<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+<link href="../../assets/lib/animate/animate.min.css" rel="stylesheet" />
+<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+<script>
+	/^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+</script>
+</head>
+<body style="-webkit-user-select: none; overflow: hidden; -moz-user-select: none; -ms-user-select: none; user-select: none;">
+	<div class="optreat-box">
+		<div class="optreat-win">
+			<!-- 背景图片-模糊化 -->
+			<div class="win-bg-img" id="waterMarkBox">
+			
+			</div>
+			<!-- 加载进度条 -->
+			<div class="winui-load-mation-bg"></div>
+			<div class="winui-load-mation">
+				<div class="winui-load-mation-box">
+					<div class="load-title">
+						<font> 正在加载配置</font>
+					</div>
+					<div class="load-wait">
+						<font>请稍后</font>
+					</div>
+					<div class="load-rotate">
+						<i class='fa fa-spinner fa-pulse'></i>
+					</div>
+					<div class="prg-cont rad-prg winui-load" id="winui-load">
+					</div>
+				</div>
+			</div>
+
+			<!-- 桌面 -->
+			<section class="winui-desktop" id="winui-desktop">
+                <article class="desktop-item-page section fixed-page" id="winfixedpage00000000" art-title="默认桌面">
+                </article>
+            </section>
+
+			<!-- 开始菜单 -->
+			<div class="winui-start sp" style="display: none;">
+				<!-- 左边设置 -->
+				<div class="winui-start-left">
+					<div class="winui-start-item winui-start-show top" data-text="开始">
+						<i class="fa fa-align-justify"></i><span>开始</span>
+					</div>
+					<div class="winui-start-item bottom logout" matchLanguage="{'data-text': 'com.skyeye.logOut'}">
+						<i class="fa fa-power-off"></i>
+						<span><language showName="com.skyeye.logOut"></language></span>
+					</div>
+				</div>
+				<!-- 中间导航 -->
+				<div class="winui-start-center">
+					<div class="layui-side-scroll">
+						<ul class="winui-menu layui-nav layui-nav-tree" lay-filter="winuimenu"></ul>
+					</div>
+				</div>
+				<!-- 右边磁贴 -->
+				<div class="winui-start-right">
+					<div class="layui-side-scroll">
+						<div class="winui-nav-tile">
+							<div class="winui-tilebox">
+								<div class="winui-tilebox-head">组件示例</div>
+								<div class="winui-tilebox-body">
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-fw fa-adjust"></i> 
+										<span>按钮</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-fw fa-circle-o-notch"></i> 
+										<span>进度条</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-fw fa-list-alt"></i> 
+										<span>表单</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-fw fa-window-maximize"></i> 
+										<span>面板</span>
+									</div>
+									<div class="winui-tile winui-tile-long">
+										<p style="font-size: 30px; font-family: 'STKaiti';">Tab</p>
+										<span>选项卡</span>
+									</div>
+									<div class="winui-tile winui-tile-long">
+										<i class="fa fa-fw fa-spin fa-spinner"></i> 
+										<span>流加载</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-fw fa-spin fa-refresh"></i> 
+										<span>动画</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-fw fa-calendar"></i> 
+										<span>日期时间</span>
+									</div>
+									<div class="winui-tile winui-tile-long">
+										<i class="fa fa-fw fa-clock-o"></i> 
+										<span>时间线</span>
+									</div>
+								</div>
+							</div>
+							<div class="winui-tilebox">
+								<div class="winui-tilebox-head">占位菜单</div>
+								<div class="winui-tilebox-body">
+									<div class="winui-tile winui-tile-long">
+										<i class="fa fa-file-text"></i> 
+										<span>文章管理</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-file-text"></i> 
+										<span>文章管理</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<img src="../../assets/images/logo_100.png" /> 
+										<span>自定义图片</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-file-text"></i> 
+										<span>文章管理</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<img src="../../assets/images/qzone_32.png" /> 
+										<span>QQ空间</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-photo fa-fw"></i> 
+										<span>图片</span>
+									</div>
+								</div>
+							</div>
+							<div class="winui-tilebox">
+								<div class="winui-tilebox-head">占位菜单</div>
+								<div class="winui-tilebox-body">
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-file-text"></i> 
+										<span>文章管理</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-file-text"></i> 
+										<span>文章管理</span>
+									</div>
+									<div class="winui-tile winui-tile-normal">
+										<i class="fa fa-file-text"></i> 
+										<span>文章管理</span>
+									</div>
+								</div>
+							</div>
+							<div class="winui-tilebox">
+								<div class="winui-tilebox-head">占位菜单</div>
+								<div class="winui-tilebox-body">
+									<div class="winui-tile winui-tile-long">
+										<i class="fa fa-file-text"></i> 
+										<span>文章管理</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 任务栏 -->
+			<div class="winui-taskbar">
+				<!-- 开始菜单触发按钮 -->
+				<div class="winui-taskbar-start sp">
+					<i class="fa fa-windows"></i>
+				</div>
+				<!-- 任务项名称 -->
+				<div class="winui-taskbar-task-name">
+					<select id="desktop-sel">
+						
+                    </select>
+				</div>
+				<!-- 任务项 -->
+				<ul class="winui-taskbar-task"></ul>
+				<!-- 任务栏时间 -->
+				<div class="winui-taskbar-time"></div>
+				<!-- 控制中心 -->
+				<div class="winui-taskbar-console sp">
+					<i class="fa fa-comment-o"></i>
+					<span id="showMyNoticeNum">0</span>
+				</div>
+				<!-- 显示桌面 -->
+				<div class="winui-taskbar-desktop">
+				</div>
+			</div>
+
+			<!--控制中心-->
+			<div class="winui-console layui-hide slideOutRight sp">
+				<h1>
+					<span><language showName="com.skyeye.latestNotice"></language></span>
+					<div class="notice-remove"><language showName="com.skyeye.deleteAll"></language></div>
+				</h1>
+				<div class="winui-message">
+					<div class="layui-side-scroll" id="notice-list">
+					
+					</div>
+				</div>
+				<div class="winui-shortcut">
+					<!-- <h2>
+						<span class="extend-switch sp">展开</span>
+					</h2>
+					<div class="winui-shortcut-item">
+						<i class="fa fa-cog"></i> 
+						<span>设置</span>
+					</div> -->
+				</div>
+			</div>
+		</div>
+
+		<!-- 日程 -->
+		<div class="optreat-schedule win-sys-wicket optreat-schedule-bg div-filter-bg"></div>
+	    <div class="optreat-schedule win-sys-wicket optreat-schedule-content">
+	    	<iframe src=""></iframe>
+		</div>
+
+		<!-- 笔记 -->
+	    <div class="optreat-filewrite win-sys-wicket optreat-filewrite-bg div-filter-bg"></div>
+	    <div class="optreat-filewrite win-sys-wicket optreat-filewrite-content">
+	    	<iframe src=""></iframe>
+		</div>
+		
+		<!-- 文件管理 -->
+	    <div class="optreat-fileconsole win-sys-wicket optreat-fileconsole-bg div-filter-bg"></div>
+	    <div class="optreat-fileconsole win-sys-wicket optreat-fileconsole-content">
+	    	<iframe src=""></iframe>
+	    </div>
+	    
+	    <!-- 论坛 -->
+        <div class="optreat-forum win-sys-wicket optreat-forum-bg div-filter-bg"></div>
+        <div class="optreat-forum win-sys-wicket optreat-forum-content">
+            <iframe src=""></iframe>
+        </div>
+        
+	</div>
+
+	<div class="win-file-switch">
+		<div class="sys-logo">
+			<div class="win-10-menu menu-logo">
+				<font id="sysTitle" style="padding: 0px 5px"></font>
+			</div>
+		</div>
+		<div class="switch-menu">
+			<div class="win-10-menu switch-checked" id="win10Btn">
+				<font><i class="fa fa-desktop"></i>桌面</font>
+			</div>
+			<div class="win-10-menu" id="file10Console">
+				<font><i class="fa fa-list"></i><language showName="com.skyeye.fileManagement"></language></font>
+			</div>
+			<div class="win-10-menu" id="scheduleBtn">
+				<font><i class="fa fa-calendar"></i><language showName="com.skyeye.schedule"></language></font>
+			</div>
+			<div class="win-10-menu" id="file10Btn">
+				<font><i class="fa fa-pencil-square-o"></i><language showName="com.skyeye.note"></language></font>
+			</div>
+			<div class="win-10-menu" id="forumBtn">
+                <font><i class="fa fa-calendar"></i><language showName="com.skyeye.forum"></language></font>
+            </div>
+			<div class="win-10-menu">
+				<font><i class="fa fa-home"></i>官网</font>
+			</div>
+		</div>
+		<div class="switch-menu-scoolor">
+			<div class="scoolor-btn" id="left-scoolor">
+				<i class="fa fa-angle-double-left"></i>
+			</div>
+			<div class="scoolor-btn" id="right-scoolor">
+				<i class="fa fa-angle-double-right"></i>
+			</div>
+		</div>
+
+		<div class="notice-process-box" id="switchLanguage" style="text-align: center; padding-top: 10px;">
+			<a href="javascript:;" title="" style="padding-top: 3px; height: 45px;">
+
+			</a>
+		</div>
+		<div class="user-main-mation">
+			<ul class="layui-nav">
+				<li class="layui-nav-item" lay-unselect="">
+					<a href="javascript:;">
+						<img src="" class="layui-nav-img" id="userPhoto">
+						<font id="userName"></font>
+					</a>
+					<dl class="layui-nav-child">
+						<dd>
+							<a href="javascript:;" class="winui-start-syspersonal"
+								win-url="../../../tpl/syspersonal/syspersonal.html"
+								win-menuiconbg="#0491fe"
+								win-menuiconcolor="#ecf3f8"
+								win-icon="fa-user"
+								matchLanguage="{'win-title': 'com.skyeye.personalCenter'}"
+								win-id="winui-syspersonal"
+								win-opentype="2"
+								win-maxopen="-1">
+								<i class="fa fa-user"></i>
+								<language showName="com.skyeye.personalCenter"></language>
+							</a>
+						</dd>
+						<dd>
+							<hr class="layui-bg-gray">
+						</dd>
+						<dd>
+							<a href="javascript:;" class="winui-switching-style">
+								<i class="fa fa-cog"></i>
+								<language showName="com.skyeye.switchingStyles"></language>
+							</a>
+						</dd>
+						<dd>
+							<hr class="layui-bg-gray">
+						</dd>
+						<dd>
+							<a href="javascript:;" class="logout">
+								<i class="fa fa-power-off"></i>
+								<language showName="com.skyeye.logOut"></language>
+							</a>
+						</dd>
+					</dl>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--layui.js-->
+	<script src="../../assets/lib/layui/layui.js" type="text/javascript"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script>
+		layui.config({base : '../../js/index/', version : '1.0.0-beta'}).use('index');
+	</script>
+	<script src="../../js/common/socketCommon.js"></script>
+</body>
+</html>

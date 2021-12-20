@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+
+	    </form>
+	</div>
+
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">基础信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">名称<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="title" name="title" win-verify="required" placeholder="请输入名称" class="layui-input" maxlength="200" value="{{title}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">执行月份<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="executeMonth" name="executeMonth" win-verify="required" placeholder="请选择执行区间" class="layui-input" maxlength="50" value="{{startMonth}} ~ {{endMonth}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">说明</label>
+			<div class="layui-input-block">
+				<textarea id="desc" name="desc" placeholder="请输入相关描述" class="layui-textarea" style="height: 100px;" maxlength="400">{{desc}}</textarea>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">类型<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<select lay-filter="typeId" lay-search="" win-verify="required" id="typeId">
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">序号<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="sortNo" name="sortNo" win-verify="required|number" placeholder="请输入序号" class="layui-input" value="{{sortNo}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">适用企业</label>
+			<div class="layui-input-block">
+				<input type="text" id="company" name="company" placeholder="请选择适用企业" class="layui-input"/>
+				<i class="fa fa-user-plus input-icon" id="companySel"></i>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">适用部门</label>
+			<div class="layui-input-block">
+				<input type="text" id="department" name="department" placeholder="请选择适用部门" class="layui-input"/>
+				<i class="fa fa-user-plus input-icon" id="departmentSel"></i>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">适用员工</label>
+			<div class="layui-input-block">
+				<input type="text" id="userStaff" name="userStaff" placeholder="请选择适用员工" class="layui-input"/>
+				<i class="fa fa-user-plus input-icon" id="userStaffSel"></i>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">列表项<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<div class="winui-toolbar">
+					<div class="winui-tool" style="text-align: left;">
+						<button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+						<button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+					</div>
+				</div>
+				<table class="layui-table">
+					<thead>
+					<tr>
+						<th style="width: 30px;"></th>
+						<th style="min-width: 120px;">字段<i class="red">*</i></th>
+						<th style="width: 80px;">类型<i class="red">*</i></th>
+						<th style="min-width: 100px;">默认值(优先以员工个人薪资设计维度为准，如果员工该字段薪资为0，则在计算时，系统默认取该默认值。)<i class="red">*</i></th>
+						<th style="min-width: 100px;">公式</th>
+						<th style="min-width: 100px;">备注</th>
+					</tr>
+					</thead>
+					<tbody id="useTable" class="insurance-table">
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<div class="layui-input-block">
+				<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+				<button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+			</div>
+		</div>
+		{{/bean}}
+	</script>
+
+	<!-- usetableTemplate -->
+	<script type="text/x-handlebars-template" id="usetableTemplate">
+		<tr trcusid="{{trId}}">
+			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+			<td>
+				<input type="text" id="{{fieldId}}" name="{{fieldId}}" placeholder="请选择字段" class="layui-input" win-verify="required" readonly="readonly"/>
+				<i class="fa fa-plus-circle input-icon chooseFieldBtn" style="top: 12px;"></i>
+			</td>
+			<td>
+				<select lay-search="" win-verify="required" id="{{fieldType}}" win-verify="required">
+					<option value="">请选择</option>
+					<option value="1">字段</option>
+					<option value="2">增加</option>
+					<option value="3">减少</option>
+					<option value="4">仅实发增加</option>
+					<option value="5">仅实发减少</option>
+					<option value="6">仅应发增加</option>
+					<option value="7">仅应发减少</option>
+				</select>
+			</td>
+			<td><input type="text" class="layui-input" id="{{defaultMoney}}" win-verify="required|money" value="0"/></td>
+			<td><input type="text" class="layui-input" id="{{formula}}"/></td>
+			<td><input type="text" class="layui-input" id="{{remark}}"/></td>
+		</tr>
+	</script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/wagesModel/'}).use('wagesModelEdit');
+	</script>
+</body>
+</html>

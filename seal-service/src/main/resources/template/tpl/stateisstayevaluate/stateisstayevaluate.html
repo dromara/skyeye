@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">工单号：</label>
+		        <div class="layui-input-block ver-center">
+					{{orderNum}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">服务类型：</label>
+		        <div class="layui-input-block ver-center">
+		            {{serviceTypeName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">派工时间：</label>
+		        <div class="layui-input-block ver-center">
+					{{declarationTime}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">联系人：</label>
+		        <div class="layui-input-block ver-center">
+		            {{contacts}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">联系电话：</label>
+		        <div class="layui-input-block ver-center">
+		            {{phone}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">邮箱：</label>
+		        <div class="layui-input-block ver-center">
+		            {{email}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">QQ：</label>
+		        <div class="layui-input-block ver-center">
+		            {{qq}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">详细地址：</label>
+		        <div class="layui-input-block ver-center">
+		            {{addressProvince}}  {{addressCity}} {{addressArea}}  {{addressTownship}}  {{addressDetailed}}
+		        </div>
+		    </div>
+		    
+			
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">满意程度<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<select id="evaluateType" name="evaluateType" win-verify="required" lay-filter="evaluateType" lay-search="">
+					</select>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">评价内容<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<textarea id="content" name="content" placeholder="请输入评价内容" win-verify="required" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+		        </div>
+		    </div>
+		    
+		    <div class="layui-form-item layui-col-xs12">
+				<div class="layui-input-block">
+					<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+					<button class="winui-btn" lay-submit lay-filter="evaluate">评价</button>
+				</div>
+			</div>
+		{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/stateisstayevaluate/'}).use('stateisstayevaluate');
+    </script>
+</body>
+</html>

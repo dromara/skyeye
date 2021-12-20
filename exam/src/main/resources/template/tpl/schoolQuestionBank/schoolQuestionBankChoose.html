@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+		<div class="winui-tip alert-info" id="showInfo">
+		
+		</div>
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">学校</label>
+	                <div class="layui-input-inline">
+	                    <select id="schoolId" lay-filter="schoolId" lay-search="">
+			                    
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">年级</label>
+	                <div class="layui-input-inline">
+	                    <select id="gradeId" lay-filter="gradeId" lay-search="">
+		            		<option value="">请选择</option>
+		            	</select>
+	                </div>
+	                <label class="layui-form-label">科目</label>
+	                <div class="layui-input-inline">
+	                    <select id="subjectId" lay-filter="subjectId" lay-search="">
+		            		<option value="">请选择</option>
+		            	</select>
+	                </div>
+	                <label class="layui-form-label">题目</label>
+	                <div class="layui-input-inline">
+	                    <input id="quTitle" name="quTitle" class="layui-input" placeholder="请输入题目标题"/>
+	                </div>
+            	    <label class="layui-form-label">类型</label>
+	                <div class="layui-input-inline">
+	                    <select id="type" name="type">
+	                    	<option value="">全部</option>
+	                    	<option value="1">公开</option>
+	                    	<option value="2">私有</option>
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">题型</label>
+	                <div class="layui-input-inline">
+	                    <select id="quType" name="quType">
+	                    	<option value="">全部</option>
+	                    	<!-- <option value="0">是非题</option> -->
+	                    	<option value="1">单选题</option>
+	                    	<option value="2">多选题</option>
+	                    	<option value="3">填空题</option>
+	                    	<option value="4">多项填空题</option>
+	                    	<!-- <option value="5">多行填空题</option> -->
+	                    	<!-- <option value="6">大题</option>
+	                    	<option value="7">枚举题</option> -->
+	                    	<option value="8">评分题</option>
+	                    	<option value="9">排序题</option>
+	                    	<!-- <option value="10">比重题</option> -->
+	                    	<option value="11">矩阵单选题</option>
+	                    	<option value="12">矩阵填空题</option>
+	                    	<option value="13">矩阵多选题</option>
+	                    	<!-- <option value="14">复合矩阵单选题</option> -->
+	                    	<option value="18">矩阵评分题</option>
+	                    </select>
+	                </div>
+					<button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" type="button" id="saveChoose" style="float: right;">
+	        	<i class="fa fa-save" aria-hidden="true" style="margin-right: 5px"></i>保存
+	        </button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+    	<div style="float: left;">
+	    	<div style="margin:auto 10px;">
+		        <table id="messageTable" lay-filter="messageTable"></table>
+		    </div>
+    	</div>
+    </div>
+    
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/schoolQuestionBank/'}).use('schoolQuestionBankChoose');
+    </script>
+</body>
+</html>

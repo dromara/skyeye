@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+		    <div class="layui-form-item layui-col-xs3  typeConmunicate layui-hide" auth="1573892971460">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" type="button" id="conmunicate">初期沟通</button>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3  typeQuotedPrice layui-hide" auth="1573893005457">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" type="button" id="quotedPrice">方案与报价</button>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3  typeTender layui-hide" auth="1573893015682">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" type="button" id="tender">竞争与投标</button>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3  typeNegotiate layui-hide" auth="1573893026003">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" type="button" id="negotiate">商务谈判</button>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3  typeTurnover layui-hide" auth="1573893035164">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" type="button" id="turnover">成交</button>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3  typeLosingTable layui-hide" auth="1573893044277">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" type="button" id="losingTable">丢单</button>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3  typeLayAside layui-hide" auth="1573893055234">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" type="button" id="layAside">搁置</button>
+		        </div>
+		    </div>
+	    </form>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/crmopportunity/'}).use('stateChange');
+    </script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>开发API接口</title>
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body class="corlor-36" style="overflow-x: hidden">
+	<div class="share-file-title">
+		<div class="sys-logo" style="cursor: pointer">
+		</div>
+		<div class="sys-login-mation">
+			<div class="login-btn" id="operatorBtn">
+				
+			</div>
+		</div>
+	</div>
+	<div class="apiListForm">
+		<div class="api-left">
+			<div class="api-search">
+				<form class="layui-form" action="" id="showForm" autocomplete="off">
+					<div class="layui-form-item">
+		                <select lay-filter="modelId" lay-search="" win-verify="required" id="modelId">
+
+                    	</select>
+			        </div>
+			        <div class="layui-form-item" style="margin-top: 5px">
+		                <input type="text" id="menuName" placeholder="请输入名称或者链接" class="layui-input" data-search/>
+			        </div>
+			    </form>
+			</div>
+			<div class="app-list" id="appList">
+
+			</div>
+		</div>
+		<div class="api-right" id="contentDesc">
+			
+		</div>
+	</div>
+
+	<script type="text/x-handlebars-template" id="defaultTemplate">
+		{{#bean}}
+			<div class="api-right-title">
+				Skyeye接口开发文档
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">开发者：</label>
+				<div class="layui-input-block ver-center">
+					卫志强
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">作者微信：</label>
+				<div class="layui-input-block ver-center">
+					wzq_598748873
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">清单以及价格表：</label>
+				<div class="layui-input-block ver-center">
+					<a target="_blank" href="https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1" style="color: blue">
+						https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1</a>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">OA开源地址：</label>
+				<div class="layui-input-block ver-center">
+					<a target="_blank" href="https://gitee.com/doc_wei01/skyeye" style="color: blue">
+						https://gitee.com/doc_wei01/skyeye</a>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">ERP开源地址：</label>
+				<div class="layui-input-block ver-center">
+					<a target="_blank" href="https://gitee.com/doc_wei01/erp-pro" style="color: blue">
+						https://gitee.com/doc_wei01/erp-pro</a>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">商业版提单地址：</label>
+				<div class="layui-input-block ver-center">
+					<a target="_blank" href="https://gitee.com/doc_wei01/erp-pro/issues/new?issue%5Bassignee_id%5D=0&issue%5Bmilestone_id%5D=0" style="color: blue">地址1</a>
+					<a target="_blank" href="https://gitee.com/doc_wei01/skyeye/issues/new?issue%5Bassignee_id%5D=0&issue%5Bmilestone_id%5D=0" style="color: blue">地址2</a>
+					<a target="_blank" href="https://gitee.com/doc_wei01/editorAnnotate/issues/new?issue%5Bassignee_id%5D=0&issue%5Bmilestone_id%5D=0" style="color: blue">地址3</a>
+					<a target="_blank" href="https://gitee.com/doc_wei01/skyeye-report/issues/new?issue%5Bassignee_id%5D=0&issue%5Bmilestone_id%5D=0" style="color: blue">地址4(报表)</a>
+					<a target="_blank" href="https://gitee.com/doc_wei01/knowlg-pro/issues/new?issue%5Bassignee_id%5D=0&issue%5Bmilestone_id%5D=0" style="color: blue">地址5</a>
+				</div>
+			</div>
+			<div class="layui-col-xs6">
+				<div class="layui-form-item layui-col-xs12">
+					<span class="hr-title">前台限制信息（多个使用|隔开）</span><hr>
+				</div>
+				<table class="layui-table">
+					<thead>
+					<tr>
+						<th lay-data="{field:'key', width:150}">key</th>
+						<th lay-data="{field:'value', width:150}">描述</th>
+					</tr>
+					</thead>
+					<tbody>
+					{{#each reception}}
+						<tr>
+							<td>{{key}}</td>
+							<td>{{value}}</td>
+						</tr>
+					{{/each}}
+					</tbody>
+				</table>
+			</div>
+			<div class="layui-col-xs6">
+				<div class="layui-form-item layui-col-xs12">
+					<span class="hr-title">后台限制信息（多个使用逗号隔开）</span><hr>
+				</div>
+				<table class="layui-table">
+					<thead>
+					<tr>
+						<th lay-data="{field:'key', width:150}">key</th>
+						<th lay-data="{field:'value', width:150}">描述</th>
+					</tr>
+					</thead>
+					<tbody>
+					{{#each backstage}}
+					<tr>
+						<td>{{key}}</td>
+						<td>{{value}}</td>
+					</tr>
+					{{/each}}
+					</tbody>
+				</table>
+			</div>
+			<div class="layui-col-xs12">
+				<div class="layui-form-item layui-col-xs12">
+					<span class="hr-title">后台接口XML定义</span><hr>
+				</div>
+				<div class="layui-form-item layui-col-xs12" id="chart-container">
+
+				</div>
+			</div>
+		{{/bean}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="modelTemplate">
+		{{#each rows}}
+			<ul class="layui-nav layui-nav-tree layui-bg-cyan layui-inline" style="display: {{show}}; height: 100%; overflow-y: auto;" id="model{{id}}" layui-filter="model{{id}}">
+				
+			</ul>
+		{{/each}}
+	</script>
+	
+	<script type="text/x-handlebars-template" id="menuBoxTemplate">
+		{{#bean}}
+			<li class="layui-nav-item">
+				<a href="javascript:;" class="menu-box-none">
+					<cite style="float: left; margin-left: 10px;">{{boxName}}</cite>
+					<span class="layui-nav-more"></span>
+				</a>
+				<dl class="layui-nav-child" id="child{{boxId}}">
+					
+				</dl>
+			</li>
+		{{/bean}}
+	</script>
+	
+	<script type="text/x-handlebars-template" id="fileListTemplate">
+		{{#bean}}
+			<dd>
+				<a href="javascript:;" class="page-item-click" style="height: auto; padding: 0px 5px;" title="{{title}}-/{{id}}">
+					<div class="api-item filtr-item method-{{method}}" data-category="1" rowid="{{id}}">
+						<div class="api-title">
+							<font class="method method-type-{{method}}">{{method}}</font>
+							<font class="url">/{{id}}</font>
+						</div>
+						<div class="api-url">
+							<font>{{title}}</font>
+						</div>
+					</div>
+				</a>
+			</dd>
+		{{/bean}}
+	</script>
+	
+	<script type="text/x-handlebars-template" id="fileMationTemplate">
+	{{#bean}}
+		<div class="api-right-title">
+			接口：{{val}}
+		</div>
+		<div class="api-right-power">
+			权限：{{sq}}
+		</div>
+		<div class="api-right-requrl method-{{method}}">
+			请求地址：/{{requestId}}
+		</div>
+		<div class="api-right-requrl method-{{method}}" style="margin-top: 10px;">
+			映射地址：{{path}}
+		</div>
+		<div class="api-right-params">
+			<font class="method-color-{{method}}">参数（Parameters）：</font>
+			<table lay-filter="parse-table-demo">
+				<thead>
+					<tr>
+						<th lay-data="{field:'number', width:50}">序号</th>
+						<th lay-data="{field:'id', width:150}">前端参数</th>
+						<th lay-data="{field:'name', width:150}">后端参数</th>
+						<th lay-data="{field:'var', width:200}">参数描述</th>
+						<th lay-data="{field:'ref', minWidth: 100}">限制条件</th>
+						<th lay-data="{field:'default', width: 150}">默认值</th>
+						<th lay-data="{field:'exampleDefault', width:150}">示例值</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each list}}
+						<tr>
+							<td>{{number}}</td>
+							<td>{{id}}</td>
+							<td>{{name}}</td>
+							<td>{{var}}</td>
+							<td>{{ref}}</td>
+							<td>{{default}}</td>
+							<td>{{exampleDefault}}</td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+		<div class="api-right-result">
+			<!--返回结果：-->
+			<font class="method-color-{{method}}">接口返回结果（Result）：</font>
+			<table lay-filter="parse-table-demo">
+				<thead>
+					<tr>
+						<th lay-data="{field:'id', width:150}">参数</th>
+						<th lay-data="{field:'name', width:150}">示例值</th>
+						<th lay-data="{field:'var', width:500}">描述</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>returnCode</td>
+						<td>0</td>
+						<td>接口的调用状态，成功是0，失败是-9999，系统已做封装。</td>
+					</tr>
+					<tr>
+						<td>returnMessage</td>
+						<td>成功</td>
+						<td>单独调用后台接口，如果后台处理失败或者数据有误，后台会给出提示。</td>
+					</tr>
+					<tr>
+						<td>total</td>
+						<td>15</td>
+						<td>记录一个数字，常用于分页加载时记录数据总条数。</td>
+					</tr>
+					<tr>
+						<td>rows</td>
+						<td>集合</td>
+						<td>后台返回的集合。</td>
+					</tr>
+					<tr>
+						<td>bean</td>
+						<td>实体</td>
+						<td>后台返回的实体。</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+		layui.config({base : '../../js/apipage/'}).use('apipage');
+	</script>
+</body>
+</html>

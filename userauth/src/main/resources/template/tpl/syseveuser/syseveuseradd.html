@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	    	<div class="layui-form-item layui-col-xs12">
+    			<span class="hr-title">基础信息</span><hr>
+	    	</div>
+	        <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">账号<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="userCode" name="userCode" win-verify="required" placeholder="请输入账号" class="layui-input" maxlength="18"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">有效期<i class="red">*</i></label>
+		        <div class="layui-input-block winui-radio">
+		            <input type="radio" id="isTermOfValidity" name="isTermOfValidity" value="1" title="长期有效" checked="checked"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">密码<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="password" id="password" name="password" win-verify="required" placeholder="请输入密码" class="layui-input" maxlength="18" lay-verify=""/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">确认密码<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="password" id="confirmPwd" name="confirmPwd" win-verify="required" placeholder="请再次输入密码" class="layui-input" maxlength="18" lay-verify="confirmPwd"/>
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">员工姓名<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		            <input type="text" id="userName" name="userName" win-verify="required" placeholder="请输入真实姓名" class="layui-input" readonly/>
+		        </div>
+		    </div>
+		    <div id="replaceContent2">
+				<iframe style="width: 100%; height: 100%; border: 0px;" id="userStaffIframe"></iframe>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+		            <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+		        </div>
+		    </div>
+	    </form>
+	</div>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/syseveuser/'}).use('syseveuseradd');
+    </script>
+</body>
+</html>

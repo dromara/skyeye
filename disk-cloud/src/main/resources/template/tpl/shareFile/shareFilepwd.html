@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="layui-form shareForm" id="showForm" style="display: none;">
+		<div class="layui-form-item top-share-div">
+            <label class="layui-form-label">
+            	<img alt="" src="" id="userPhoto"/>
+            </label>
+            <div class="layui-input-block">
+                <span class="verify-property"><strong id="userName"></strong>给您加密分享了文件</span>
+            </div>
+        </div>
+		<div class="layui-form-item bottom-share-div">
+            <label class="layui-form-label">请输入提取码：</label>
+            <div class="layui-input-block">
+                <input class="layui-input" id="sharePassword" name="sharePassword" win-verify="required" type="text" maxlength="10">
+				<button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="tqShareFile">提取文件</button>
+            </div>
+        </div>
+	</div>
+	<div class="layui-form showFormNone" id="showFormNone" style="display: none;">
+		<img alt="" src="../../assets/images/file-no-icon.png" /><br>
+		<font>您来晚了一步，分享的文件被取消了，下次记得早点来呦。</font>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+		layui.config({base : '../../js/shareFile/'}).use('shareFilepwd');
+	</script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	
+	    </form>
+		
+		<div class="layui-form-item layui-col-xs12">
+		    <div class="layui-input-block ver-center">
+		      <button class="winui-btn" type="button" id="jprint">打印</button>
+		    </div>
+		</div>
+	</div>
+
+    <script type="text/x-handlebars-template" id="beanTemplate">
+        {{#bean}}
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">来往单位：</label>
+            <div class="layui-input-block ver-center">
+                {{customerName}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">单据日期：</label>
+            <div class="layui-input-block ver-center">
+                {{operTime}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">单据编号：</label>
+            <div class="layui-input-block ver-center">
+                {{billNo}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">列表项：</label>
+            <div class="layui-input-block ver-center">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 120px;">收入项目</th>
+                        <th style="width: 80px;">金额</th>
+                        <th style="min-width: 100px;">备注</th>
+                    </tr>
+                    </thead>
+                    <tbody id="useTable" class="insurance-table">
+                    {{#each items}}
+                    <tr>
+                        <td>{{inoutitemName}}</td>
+                        <td>{{eachAmount}}</td>
+                        <td>{{remark}}</td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs3">
+            <label class="layui-form-label">收款账户：</label>
+            <div class="layui-input-block ver-center">
+                {{accountName}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs3">
+            <label class="layui-form-label">共计金额：</label>
+            <div class="layui-input-block ver-center">
+                {{totalPrice}}元
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs3">
+            <label class="layui-form-label">收款金额：</label>
+            <div class="layui-input-block ver-center">
+                {{changeAmount}}元
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">经手人：</label>
+            <div class="layui-input-block ver-center">
+                {{#each userInfo}}<span class="layui-badge layui-bg-blue skyeye-badge">{{name}}</span>{{/each}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">备注：</label>
+            <div class="layui-input-block ver-center">
+                {{remark}}
+            </div>
+        </div>
+        {{/bean}}
+    </script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+	    layui.config({base: '../../js/income/'}).use('incomeInfo');
+	</script>
+</body>
+</html>

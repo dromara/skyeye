@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto; height: 100%;">
+		<div class="txtcenter" style="margin:0 auto;padding-top: 10px;">
+		    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+		        <div class="layui-form-item">
+		            <div class="layui-inline">
+		                <label class="layui-form-label">状态</label>
+		                <div class="layui-input-inline">
+		                    <select id="revertstate">
+		                    	<option value="">全部</option>
+		                    	<option value="0">草稿</option>
+		                    	<option value="1">审核中</option>
+		                    	<option value="2">审核通过</option>
+		                    	<option value="3">审核不通过</option>
+		                    	<option value="4">作废</option>
+		                    	<option value="5">撤销</option>
+		                    </select>
+		                </div>
+		                <label class="layui-form-label">申请时间</label>
+		                <div class="layui-input-inline">
+		                    <input type="text" id="revertTime" name="revertTime" placeholder="请选择申请时间" class="layui-input" />
+		                </div>
+		                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+						<button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+		            </div>
+		        </div>
+		    </form>
+		</div>
+	    <div class="winui-toolbar">
+	        <div class="winui-tool" style="text-align: left;">
+	            <button id="reloadRevertTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+	            <button id="addRevertBean" class="winui-toolbtn" auth="1596972093939"><i class="fa fa-plus" aria-hidden="true"></i>证照归还申请</button>
+	        </div>
+	    </div>
+	    <div style="margin:auto 10px;">
+	        <table id="revertTable" lay-filter="revertTable"></table>
+	        <script type="text/html" id="revertTableBar">
+				{{# if(d.editRow == '1'){ }}
+					{{# if(auth('1596972053502')){ }}
+						<a class="layui-btn layui-btn-xs" lay-event="revertsubapproval">提交审批</a>
+					{{# } }}
+					{{# if(auth('1596972061187')){ }}
+						<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revertcancellation">作废</a>
+					{{# } }}
+				{{# } }}
+				{{# if(d.editRow == '1' || d.editRow == '2'){ }}
+					{{# if(auth('1596972115215')){ }}
+						<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="revertedit"><language showName="com.skyeye.editBtn"></language></a>
+					{{# } }}
+				{{# } }}
+				{{# if(d.editRow == '2'){ }}
+					{{# if(auth('1596972035777')){ }}
+						<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revertrevoke">撤销</a>
+					{{# } }}
+				{{# } }}
+			</script>
+		</div>
+	</div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/licenceManageRevert/'}).use('licenceManageRevertList');
+    </script>
+</body>
+</html>

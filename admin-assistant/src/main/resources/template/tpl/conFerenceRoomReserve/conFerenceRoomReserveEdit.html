@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+	
+	<!-- reserveTemplate -->
+	<script type="text/x-handlebars-template" id="reserveTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">标题<i class="red">*</i></label>
+		        <div class="layui-input-block ver-center" id="title">
+		            {{title}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">申请人<i class="red">*</i></label>
+		        <div class="layui-input-block ver-center" id="userName">
+		            {{userName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">会议室<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<select id="conferenceRoom" name="conferenceRoom" lay-filter="conferenceRoom" lay-search="">
+						
+					</select>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">预定时间<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="reserveTime" name="reserveTime" win-verify="required" placeholder="请输入预定时间" class="layui-input" value="{{reserveTime}}"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">使用事由<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<textarea id="reserveReason" name="reserveReason" win-verify="required" placeholder="请输入使用事由" class="layui-textarea" style="height: 100px;" maxlength="200">{{reserveReason}}</textarea>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">备注</label>
+		        <div class="layui-input-block">
+		        	<textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="200">{{remark}}</textarea>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">相关附件</label>
+				<div class="layui-input-block" id="enclosureUpload">
+		        	
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+					<button class="winui-btn typeOne layui-hide" lay-submit lay-filter="formEditBean">保存为草稿</button>
+            		<button class="winui-btn typeOne layui-hide" lay-submit lay-filter="formSubBean">提交审批</button>
+            		<button class="winui-btn typeTwo layui-hide" lay-submit lay-filter="save"><language showName="com.skyeye.save"></language></button>
+		        </div>
+		    </div>
+		{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/conFerenceRoomReserve/'}).use('conFerenceRoomReserveEdit');
+	</script>
+</body>
+</html>

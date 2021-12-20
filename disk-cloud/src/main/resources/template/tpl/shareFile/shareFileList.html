@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body class="corlor-36">
+	<div class="share-file-title">
+		<div class="sys-logo">
+			
+		</div>
+		<div class="sys-login-mation">
+			<div class="login-btn" id="operatorBtn">
+				
+			</div>
+		</div>
+	</div>
+	<div class="fileListForm">
+		<div class="share-file-list">
+			<div class="share-file-mation">
+				<div class="file-title" id="fileTitle">
+					
+				</div>
+				<div class="file-operator" id="file-operator">
+					
+				</div>
+				<div class="share-time-validity">
+					<div class="share-time">
+						<i class="fa fa-clock-o"></i>
+						<span id="shareTime"></span>
+					</div>
+					<div class="share-validity">
+						<span>失效时间：</span>
+						<span>长期有效</span>
+					</div>
+				</div>
+			</div>
+			<div class="share-file-list-path">
+				<span class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;" id="filePathShow">
+		            
+				</span>
+			</div>
+			<div class="share-file-list-mation">
+				<ul class="file-list-title">
+					<li class="check_box">
+						<input type="checkbox" id="checkAll" name="fileShareCheck" />
+						<label for="checkAll"></label >
+					</li>
+					<li class="file_name">文件名</li>
+					<li class="size">大小</li>
+					<li class="time">修改日期</li>
+				</ul>
+				<div class="file-list-content" id="fileListContent">
+					
+				</div>
+			</div>
+		</div>
+		<div class="share-user-mation">
+			<div class="user-mation">
+				<img alt="" src="" id="userPhoto">
+				<font id="userName"></font>
+			</div>
+		</div>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+		layui.config({base : '../../js/shareFile/'}).use('shareFileList');
+	</script>
+</body>
+</html>

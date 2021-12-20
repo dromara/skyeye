@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">基础信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">工单号：</label>
+		        <div class="layui-input-block ver-center">
+					{{orderNum}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">服务类型：</label>
+		        <div class="layui-input-block ver-center">
+		            {{serviceTypeName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">报单时间：</label>
+		        <div class="layui-input-block ver-center">
+					{{declarationTime}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">联系人：</label>
+		        <div class="layui-input-block ver-center">
+		            {{contacts}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">联系电话：</label>
+		        <div class="layui-input-block ver-center">
+		            {{phone}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">邮箱：</label>
+		        <div class="layui-input-block ver-center">
+		            {{email}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">QQ：</label>
+		        <div class="layui-input-block ver-center">
+		            {{qq}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">产品信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">产品名称：</label>
+		        <div class="layui-input-block ver-center">
+		            {{productName}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">规格型号：</label>
+		        <div class="layui-input-block ver-center">
+		            {{productNorms}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">序列号：</label>
+		        <div class="layui-input-block ver-center">
+		            {{productSerialNum}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">质保类型：</label>
+		        <div class="layui-input-block ver-center">
+		            {{productWarranty}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">完工信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">实际开工时间<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<input type="text" id="comStarTime" name="comStarTime" win-verify="required" placeholder="请选择开工时间" class="layui-input" value="{{comStarTime}}"/>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">实际完工时间<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<input type="text" id="comTime" name="comTime" win-verify="required" placeholder="请选择完工时间" class="layui-input" value="{{comTime}}"/>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">故障类型<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<select id="faultTypeId" name="faultTypeId" win-verify="required" lay-search="">
+					</select>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">工时<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<input type="text" id="comWorkTime" name="comWorkTime" win-verify="required" placeholder="请输入工时" class="layui-input" value="{{comWorkTime}}"/>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">故障关键组件</label>
+		        <div class="layui-input-block">
+					<input type="text" id="faultKeyPartsId" name="faultKeyPartsId" placeholder="请选择故障关键组件" class="layui-input" readonly="readonly"/>
+	                <i class="fa fa-plus-circle input-icon" id="faultKeyPartsIdSel"></i>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">真实故障</label>
+		        <div class="layui-input-block">
+					<textarea id="actualFailure" name="actualFailure" placeholder="请输入真实故障" class="layui-textarea" style="height: 100px;" maxlength="200">{{actualFailure}}</textarea>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">解决方案</label>
+		        <div class="layui-input-block">
+					<textarea id="solution" name="solution" placeholder="请输入解决方案" class="layui-textarea" style="height: 100px;" maxlength="200">{{solution}}</textarea>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">完成情况<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<textarea id="comExecution" name="comExecution" win-verify="required" placeholder="请输入完成情况" class="layui-textarea" style="height: 100px;" maxlength="250">{{comExecution}}</textarea>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+        		<label class="layui-form-label">完工拍照</label>
+       			<div class="layui-input-block">
+					<div class="upload" id="comPic"></div>
+        		</div>
+    		</div>
+    		<div class="layui-form-item layui-col-xs12">
+        		<label class="layui-form-label">完工附件</label>
+				<div class="layui-input-block" id="enclosureUpload">
+        		</div>
+    		</div>
+    		<div class="layui-form-item layui-col-xs12">
+        		<label class="layui-form-label">完工备注</label>
+        		<div class="layui-input-block">
+        			<textarea id="comRemark" name="comRemark" placeholder="请输入完工备注" class="layui-textarea" style="height: 100px;" maxlength="200">{{comEemark}}</textarea>
+        		</div>
+    		</div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">应收材料费<i class="red">*</i></label>
+		        <div class="layui-input-block ver-center" id="materialCost">
+					{{materialCost}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">应收服务费<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<input type="text" id="coverCost" name="coverCost" win-verify="required,money" placeholder="请输入服务费" class="layui-input" value="{{coverCost}}"/>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">应收其他费<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<input type="text" id="otherCost" name="otherCost" win-verify="required,money" placeholder="请输入其他费" class="layui-input" value="{{otherCost}}"/>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">应收合计费<i class="red">*</i></label>
+		        <div class="layui-input-block ver-center" id="allPrice">
+					{{allPrice}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">配件使用明细：</label>
+		        <div class="layui-input-block">
+		        	<div class="winui-toolbar">
+				        <div class="winui-tool" style="text-align: left;">
+				            <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+				            <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+				        </div>
+				    </div>
+		            <table class="layui-table">
+		                <thead>
+		                    <tr>
+		                    	<th style="width: 30px;"></th>
+		                        <th style="width: 120px;">配件(型号)</th>
+		                        <th style="width: 70px;">单位</th>
+		                        <th style="width: 80px;">库存</th>
+		                        <th style="width: 80px;">数量</th>
+		                        <th style="width: 80px;">单价</th>
+		                        <th style="width: 80px;">金额</th>
+		                        <th style="min-width: 100px;">备注</th>
+		                    </tr>
+		                </thead>
+		                <tbody id="useTable" class="insurance-table">
+		                </tbody>
+					</table>
+		        </div>
+		    </div>
+			
+		    <div class="layui-form-item layui-col-xs12">
+				<div class="layui-input-block">
+					<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+					<button class="winui-btn" lay-submit lay-filter="temSub">暂存</button>
+					<button class="winui-btn" lay-submit lay-filter="finishedSub">完工</button>
+				</div>
+			</div>
+		{{/bean}}
+	</script>
+	
+	<!-- usetableTemplate -->
+	<script type="text/x-handlebars-template" id="usetableTemplate">
+		<tr trcusid="{{trId}}">
+			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+			<td>
+				<input type="text" id="{{materialId}}" name="{{materialId}}" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
+		        <i class="fa fa-plus-circle input-icon chooseProductBtn" style="top: 12px;"></i>
+			</td>
+			<td><select id="{{unitId}}" lay-filter="selectUnitProperty" lay-search win-verify="required"></select></td>
+			<td id="{{currentTock}}"></td>
+			<td><input type="text" class="layui-input change-input rkNum" value="1" id="{{rkNum}}" win-verify="required|number"/></td>
+			<td id="{{unitPrice}}"></td>
+			<td id="{{amountOfMoney}}"></td>
+			<td><input type="text" class="layui-input" id="{{remark}}"/></td>
+		</tr>
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/stateisstayfinishedpro/'}).use('stateisstayfinished');
+    </script>
+</body>
+</html>

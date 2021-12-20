@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/css/file-tree3.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="fileconsole-mask">
+		<div class="cent">
+			<i class="fa fa-spin fa-spinner fa-fw" style="color: gainsboro"></i><br><br>
+			<font style="color: gainsboro">加载中</font>
+		</div>
+	</div>
+	<div id="jszip_utils">
+		<div class="title">
+			<div class="name">名称</div>
+			<div class="size">压缩后大小</div>
+			<div class="updateTime">修改时间</div>
+		</div>
+		<ul id="treeDemo" class="ztree"></ul>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+	<script src="../../assets/lib/layui/lay/modules/jszip/jquery.js"></script>
+	<script src="../../assets/lib/layui/lay/modules/jszip/jszip.js"></script>
+	<script src="../../assets/lib/layui/lay/modules/jszip/jszip-utils.js"></script>
+	<script src="../../assets/lib/layui/lay/modules/jszip/FileSaver.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+	<!--[if IE]>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/jszip/jszip-utils-ie.js"></script>
+	<![endif]-->
+	<script type="text/javascript">
+		layui.config({
+			base: basePath, 
+			version: skyeyeVersion
+		}).extend({
+		    window: 'js/winui.window',
+		}).define(['window', 'jquery'], function (exports) {
+			
+			winui.renderColor();
+			
+			var $ = layui.$;
+			var json = new Array();
+			var zTreeObj;
+			var setting = {
+				view: {
+					addDiyDom: addDiyDom,
+					showIcon: true,
+					showLine: false,
+				},
+				data: {
+					key: {
+						name: 'name'
+					},
+					simpleData: {
+						enable: false,
+						idKey: 'id',
+						pIdKey: 'pId',
+						rootPId: 0
+					}
+				},
+			};
+			
+			JSZipUtils.getBinaryContent(fileBasePath + parent.fileUrl, function(err, data) {
+				if(err) {
+					throw err; // or handle err
+				}
+				JSZip.loadAsync(data).then(function (zip) {
+					for (var key in zip.files) {
+	                	var fileName = zip.files[key].name;
+		                //内置函数,判断是否是文件夹
+		                if (!zip.files[key].dir) {//文件
+		                	var pId = getFilePathName(fileName);
+		                	if(isNull(pId)){
+		                		pId = "0";
+		                	}
+		                	json.push({
+		                		id: fileName,
+		                		pId: pId,
+		                		name: getFileName(fileName),
+		                		icon: '../../assets/images/my-file-icon.png',
+		                		updateTime: getTimeForUpdate(zip.files[key].date),
+		                		fileSize: zip.files[key]._data.compressedSize
+		                	});
+		                }else{//文件夹
+		                	json.push({
+		                		id: fileName,
+		                		pId: getFileFolderUpOneName(fileName),
+		                		name: getFileFolderName(fileName),
+		                		icon: '../../assets/images/my-folder-icon.png',
+		                		updateTime: getTimeForUpdate(zip.files[key].date),
+		                		fileSize: 0
+		                	});
+		                }
+					}
+					json = fn(json, "0");
+                	zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, json);
+                	$(".fileconsole-mask").hide();
+				}).then(function success(data) {   
+	            	console.log(data);
+	            }, function error(e) {
+	            	alert('暂不支持rar格式的文件预览。');
+	            });
+		
+			});
+			
+			//获取路径文件名
+			function getFileName(o){
+		        var pos = o.lastIndexOf("/");
+		        return o.substring(pos + 1);  
+		    }
+			
+			//获取路径文件名之外的路径
+			function getFilePathName(o){
+		        var pos = o.lastIndexOf("/");
+		        return o.substring(0, pos + 1);  
+		    }
+			
+			//获取文件目录最后一个目录
+			function getFileFolderName(o){
+		        var pos = o.split("/").length;
+		        return o.split("/")[pos - 2];  
+		    }
+			
+			//获取文件目录上一个目录
+			function getFileFolderUpOneName(o){
+				var tmp = o.substring(0, o.lastIndexOf("/"));
+				if(tmp.lastIndexOf("/") != -1){
+					return tmp.substring(0, tmp.lastIndexOf("/") + 1);
+				}else{
+					return "0";
+				}
+		    }
+			
+			//树形数据转换
+			function fn(data, pid) {
+				var result = [],
+					temp;
+				for(var i = 0; i < data.length; i++) {
+					if(data[i].pId == pid) {
+						var obj = {
+							name: data[i].name,
+							id: escapeJquery(data[i].id),
+							pId: escapeJquery(data[i].pId),
+							icon: data[i].icon,
+							updateTime: data[i].updateTime,
+							fileSize: data[i].fileSize
+						};
+						temp = fn(data, data[i].id);
+						if(temp.length > 0) {
+							var size = 0;
+							for(var j = 0; j < temp.length; j++){
+								size += temp[j].fileSize;
+							}
+							obj.fileSize = size;
+							obj.children = temp;
+						}
+						result.push(obj);
+					}
+				}
+				return result;
+			}
+			
+			function escapeJquery(srcString) {
+			    // 转义之后的结果
+			    var escapseResult = srcString;
+			    // javascript正则表达式中的特殊字符
+			    var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
+			        "]", "|", "{", "}"];
+			    // jquery中的特殊字符,不是正则表达式中的特殊字符
+			    var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
+			        ":", ";", "<", ">", ",", "/"];
+			    for (var i = 0; i < jsSpecialChars.length; i++) {
+			        escapseResult = escapseResult.replace(new RegExp("\\"
+			            + jsSpecialChars[i], "g"), "\\"
+			            + jsSpecialChars[i]);
+			    }
+			    for (var i = 0; i < jquerySpecialChars.length; i++) {
+			        escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i],
+			            "g"), "\\" + jquerySpecialChars[i]);
+			    }
+			    return escapseResult;
+			}
+			
+			function addDiyDom(treeId, treeNode) {
+				var aObj = $("#" + treeNode.tId + "_a");
+				if ($("#diyBtn_" + treeNode.id).length > 0) return;
+				var strOperator = "<span class='updateTime'>" + treeNode.updateTime + "</span>";
+				strOperator += "<span class='size'>" + bytesToSize(treeNode.fileSize) + "</span>";
+				aObj.append(strOperator);
+				aObj.addClass("tree_a");
+			}
+			
+			//文件单位转换
+			function bytesToSize(bytes) {
+				if(bytes === 0) return '0 B';
+				var k = 1000, // or 1024
+					sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+					i = Math.floor(Math.log(bytes) / Math.log(k));
+			
+				return(bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+			}
+			
+			function getTimeForUpdate(str){
+				var date = new Date(str);  
+				return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds(); 
+			}
+			
+		});
+		
+	</script>
+</body>
+</html>
