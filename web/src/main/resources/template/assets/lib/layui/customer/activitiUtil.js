@@ -146,7 +146,7 @@ var activitiUtil = {
     },
 
     /**
-     * 用户节点转为会签节点
+     * 用户节点转为会签节点-----该功能未实现
      *
      * @param processInstanceId 流程id
      * @param taskId 任务id
