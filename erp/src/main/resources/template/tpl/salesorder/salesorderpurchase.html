@@ -31,7 +31,7 @@
 		    <div class="layui-form-item layui-col-xs6">
 		        <label class="layui-form-label">出库仓库<i class="red">*</i></label>
 		        <div class="layui-input-block">
-		            <select id="depotId" name="depotId" lay-search="" win-verify="required">
+		            <select id="depotId" name="depotId" lay-search="" win-verify="required" lay-filter="depotId">
 		            	
 		            </select>
 		        </div>
@@ -161,10 +161,15 @@
 					</table>
 		        </div>
 		    </div>
+			<div id="dsFormShow">
+
+			</div>
 		    <div class="layui-form-item layui-col-xs12">
 		        <div class="layui-input-block">
-		            <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
-		            <button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+					<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+					<button class="winui-btn" lay-submit lay-filter="formAddBean">保存为草稿</button>
+					<button class="winui-btn submitTypeIsOne" lay-submit lay-filter="formSubOneBean">提交审批</button>
+					<button class="winui-btn submitTypeIsTwo" lay-submit lay-filter="formSubTwoBean">提交</button>
 		        </div>
 		    </div>
 	    </form>

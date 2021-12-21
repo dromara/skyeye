@@ -158,8 +158,6 @@ layui.config({
 			var product = allChooseProduct["tr" + thisRowNum.toString()];
 			$.each(product.unitList, function(j, bean) {
 				if(thisRowValue == bean.id){//获取规格
-					//获取当前行数量
-					var rkNum = parseInt($("#rkNum" + thisRowNum).val());
 					$("#unitPrice" + thisRowNum).val(bean.estimatePurchasePrice.toFixed(2));//单价
 					return false;
 				}
@@ -172,6 +170,11 @@ layui.config({
 		loadTockByDepotAndMUnit(thisRowNum, $("#depotId").val());
 		//计算价格
 		calculatedTotalPrice();
+	});
+
+	// 仓库变化事件
+	form.on('select(depotId)', function(data) {
+		loadMaterialDepotStockByDepotId(data.value);
 	});
 
 	// 保存为草稿

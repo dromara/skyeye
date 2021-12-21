@@ -92,8 +92,6 @@ layui.config({
 			var product = allChooseProduct["tr" + thisRowNum.toString()];
 			$.each(product.unitList, function(j, bean) {
 				if(thisRowValue == bean.id){//获取规格
-					//获取当前行数量
-					var rkNum = parseInt($("#rkNum" + thisRowNum).val());
 					$("#unitPrice" + thisRowNum).val(bean.salePrice.toFixed(2));//单价
 					return false;
 				}
