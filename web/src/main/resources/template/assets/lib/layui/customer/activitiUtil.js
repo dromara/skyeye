@@ -168,6 +168,42 @@ var activitiUtil = {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }, async: false});
+    },
+
+    /**
+     * 工作流的其他操作
+     *
+     * @param boxId 按钮展示的位置
+     * @param taskId 任务id
+     * @param callback 回调函数
+     */
+    activitiMenuOperator: function (boxId, taskId, callback){
+        var operatorBtnHtml = '<a class="layui-btn layui-btn-normal" id="delegate" style="height: 30px; line-height: 30px; padding: 0 15px;">委派</a>' +
+            '<a class="layui-btn layui-btn-normal" id="transfer" style="height: 30px; line-height: 30px; padding: 0 15px;">转办</a>';
+        $("#" + boxId).html(operatorBtnHtml);
+        // 初始化监听事件
+        activitiUtil.activitiMenuEvent(taskId, callback);
+    },
+
+    /**
+     * 工作流的其他操作监听事件
+     *
+     * @param taskId 任务id
+     * @param callback 回调函数
+     */
+    activitiMenuEvent: function (taskId, callback){
+        // 委派
+        $("body").on("click", "#delegate", function() {
+            systemCommonUtil.userReturnList = [];
+            systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+            systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+            systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+            systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
+                systemCommonUtil.userReturnList = [].concat(staffChooseList);
+                console.log(staffChooseList)
+                console.log(taskId)
+            });
+        });
     }
 
 };

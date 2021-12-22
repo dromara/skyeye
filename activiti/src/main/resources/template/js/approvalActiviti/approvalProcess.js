@@ -197,6 +197,13 @@ layui.config({
 			// 加载审批历史
 			inboxTimeTreeApprovalHistory();
 			matchingLanguage();
+
+			// 工作流的其他操作
+			activitiUtil.activitiMenuOperator("otherMenuOperator", taskId, function (){
+				parent.layer.close(index);
+				parent.refreshCode = '0';
+			});
+
 			form.render();
 		}else{
 			winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
