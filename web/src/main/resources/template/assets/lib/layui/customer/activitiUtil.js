@@ -200,8 +200,19 @@ var activitiUtil = {
             systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
             systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
                 systemCommonUtil.userReturnList = [].concat(staffChooseList);
-                console.log(staffChooseList)
-                console.log(taskId)
+                var params = {
+                    taskId: taskId,
+                    principalUserId: staffChooseList[0].id
+                };
+                AjaxPostUtil.request({url: reqBasePath + "activitiTask001", params: params, method: "POST", type: 'json', callback: function(json) {
+                    if(json.returnCode == 0) {
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
+                    } else {
+                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                    }
+                }, async: false});
             });
         });
     }

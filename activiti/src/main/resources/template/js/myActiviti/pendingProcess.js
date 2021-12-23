@@ -33,7 +33,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'processInstanceId', title: '流程ID', width: 100 },
-	        { field: 'taskType', title: '类型', width: 100 },
+	        { field: 'taskType', title: '类型', width: 150 },
 	        { field: 'createName', title: '申请人', width: 140},
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 140, templet: function(d){
 	        	if(!isNull(d.createTime)){
