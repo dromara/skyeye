@@ -174,24 +174,28 @@ var activitiUtil = {
      * 工作流的其他操作
      *
      * @param boxId 按钮展示的位置
-     * @param taskId 任务id
+     * @param task 任务信息
      * @param callback 回调函数
      */
-    activitiMenuOperator: function (boxId, taskId, callback){
-        var operatorBtnHtml = '<a class="layui-btn layui-btn-normal" id="delegate" style="height: 30px; line-height: 30px; padding: 0 15px;">委派</a>' +
-            '<a class="layui-btn layui-btn-normal" id="transfer" style="height: 30px; line-height: 30px; padding: 0 15px;">转办</a>';
+    activitiMenuOperator: function (boxId, task, callback){
+        var operatorBtnHtml = '';
+        if(!task.delegation){
+            // 不是委派任务节点可以委派
+            operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="delegate" style="height: 30px; line-height: 30px; padding: 0 15px;">委派</a>';
+        }
+        operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="transfer" style="height: 30px; line-height: 30px; padding: 0 15px;">转办</a>';
         $("#" + boxId).html(operatorBtnHtml);
         // 初始化监听事件
-        activitiUtil.activitiMenuEvent(taskId, callback);
+        activitiUtil.activitiMenuEvent(task, callback);
     },
 
     /**
      * 工作流的其他操作监听事件
      *
-     * @param taskId 任务id
+     * @param task 任务信息
      * @param callback 回调函数
      */
-    activitiMenuEvent: function (taskId, callback){
+    activitiMenuEvent: function (task, callback){
         // 委派
         $("body").on("click", "#delegate", function() {
             systemCommonUtil.userReturnList = [];
@@ -201,7 +205,7 @@ var activitiUtil = {
             systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
                 systemCommonUtil.userReturnList = [].concat(staffChooseList);
                 var params = {
-                    taskId: taskId,
+                    taskId: task.taskId,
                     principalUserId: staffChooseList[0].id
                 };
                 AjaxPostUtil.request({url: reqBasePath + "activitiTask001", params: params, method: "POST", type: 'json', callback: function(json) {

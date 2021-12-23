@@ -192,14 +192,19 @@ layui.config({
 			
 			// 加载流程图片
 			$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png");
-			// 加载下个节点审批人选择信息
-			activitiUtil.initApprovalPerson("approvalOpinionDom", processInstanceId, taskId, $("input[name='flag']:checked").val());
+
+			// 是否委派，如果是委派，则不需要选择下一个节点的审批人
+			if(!j.bean.delegation){
+				// 加载下个节点审批人选择信息
+				activitiUtil.initApprovalPerson("approvalOpinionDom", processInstanceId, taskId, $("input[name='flag']:checked").val());
+			}
+
 			// 加载审批历史
 			inboxTimeTreeApprovalHistory();
 			matchingLanguage();
 
 			// 工作流的其他操作
-			activitiUtil.activitiMenuOperator("otherMenuOperator", taskId, function (){
+			activitiUtil.activitiMenuOperator("otherMenuOperator", j.bean, function (){
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			});
