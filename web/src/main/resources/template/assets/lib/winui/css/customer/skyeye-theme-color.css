@@ -1,0 +1,383 @@
+/****************************************颜色*********************************************/
+:root {
+    --taskbar-color: #002D4F;
+    --start-color: #004275;
+    --navhover-color: #195583;
+    --tile-color: #0063B1;
+    --taskbar-btnhover-color: #194260;
+    --start-btn-color: #1E91EA;
+}
+
+/* 第一排 */
+.winui-color11 {
+    --taskbar-color: #805E00;
+    --start-color: #BA8900;
+    --navhover-color: #C19519;
+    --tile-color: #FFB900;
+    --taskbar-btnhover-color: #8C6E19;
+    --start-btn-color: #FFD35C;
+}
+
+.winui-color12 {
+    --taskbar-color: #733F00;
+    --start-color: #B36200;
+    --navhover-color: #BA7119;
+    --tile-color: #FF8C00;
+    --taskbar-btnhover-color: #815219;
+    --start-btn-color: #FFAF4C;
+}
+
+.winui-color13 {
+    --taskbar-color: #9C311A;
+    --start-color: #D04122;
+    --navhover-color: #D55438;
+    --tile-color: #F7630C;
+    --taskbar-btnhover-color: #A64530;
+    --start-btn-color: #F86342;
+}
+
+.winui-color14 {
+    --taskbar-color: #722D09;
+    --start-color: #953B0C;
+    --navhover-color: #9F4E24;
+    --tile-color: #CA5010;
+    --taskbar-btnhover-color: #804221;
+    --start-btn-color: #E86F2E;
+}
+
+.winui-color15 {
+    --taskbar-color: #661C01;
+    --start-color: #9C2B02;
+    --navhover-color: #A6401B;
+    --tile-color: #DA3B01;
+    --taskbar-btnhover-color: #75321A;
+    --start-btn-color: #E76B3E;
+}
+
+.winui-color16 {
+    --taskbar-color: #662C22;
+    --start-color: #9E4434;
+    --navhover-color: #A85648;
+    --tile-color: #EF6950;
+    --taskbar-btnhover-color: #754138;
+    --start-btn-color: #FA9482;
+}
+
+.winui-color17 {
+    --taskbar-color: #751D1F;
+    --start-color: #992629;
+    --navhover-color: #A33B3E;
+    --tile-color: #D13438;
+    --taskbar-btnhover-color: #833335;
+    --start-btn-color: #FF6469;
+}
+
+.winui-color18 {
+    --taskbar-color: #801212;
+    --start-color: #B82A2A;
+    --navhover-color: #BF3F3F;
+    --tile-color: #FF4343;
+    --taskbar-btnhover-color: #8C2929;
+    --start-btn-color: #FF8383;
+}
+
+/* 第二排 */
+.winui-color21 {
+    --taskbar-color: #6E1018;
+    --start-color: #9E212C;
+    --navhover-color: #A83741;
+    --tile-color: #E74856;
+    --taskbar-btnhover-color: #7D2830;
+    --start-btn-color: #F7838D;
+}
+
+.winui-color22 {
+    --taskbar-color: #6E0009;
+    --start-color: #99000D;
+    --navhover-color: #A31925;
+    --tile-color: #E81123;
+    --taskbar-btnhover-color: #7D1A22;
+    --start-btn-color: #F05965;
+}
+
+.winui-color23 {
+    --taskbar-color: #880037;
+    --start-color: #AC0046;
+    --navhover-color: #B41958;
+    --tile-color: #EA005E;
+    --taskbar-btnhover-color: #941A4B;
+    --start-btn-color: #F75294;
+}
+
+.winui-color24 {
+    --taskbar-color: #69002C;
+    --start-color: #8C003A;
+    --navhover-color: #97194D;
+    --tile-color: #C30052;
+    --taskbar-btnhover-color: #781A42;
+    --start-btn-color: #F74A92;
+}
+
+.winui-color25 {
+    --taskbar-color: #700045;
+    --start-color: #A30065;
+    --navhover-color: #AC1974;
+    --tile-color: #E3008C;
+    --taskbar-btnhover-color: #7F1A58;
+    --start-btn-color: #F75CBC;
+}
+
+.winui-color26 {
+    --taskbar-color: #66003F;
+    --start-color: #8A0055;
+    --navhover-color: #951966;
+    --tile-color: #BF0077;
+    --taskbar-btnhover-color: #761A53;
+    --start-btn-color: #C84898;
+}
+
+.winui-color27 {
+    --taskbar-color: #631D5B;
+    --start-color: #8C2981;
+    --navhover-color: #973E8D;
+    --tile-color: #C239B3;
+    --taskbar-btnhover-color: #6D3166;
+    --start-btn-color: #CF62C3;
+}
+
+.winui-color28 {
+    --taskbar-color: #500047;
+    --start-color: #700063;
+    --navhover-color: #7E1972;
+    --tile-color: #9A0089;
+    --taskbar-btnhover-color: #5D1955;
+    --start-btn-color: #CB3DBB;
+}
+
+/* 第三排 */
+.winui-color31 {
+    --taskbar-color: #004275;
+    --start-color: #005A9E;
+    --navhover-color: #196AA8;
+    --tile-color: #0078D7;
+    --taskbar-btnhover-color: #195583;
+    --start-btn-color: #429CE3;
+}
+
+.winui-color32 {
+    --taskbar-color: #002D4F;
+    --start-color: #004275;
+    --navhover-color: #195583;
+    --tile-color: #0063B1;
+    --taskbar-btnhover-color: #194260;
+    --start-btn-color: #1E91EA;
+}
+
+.winui-color33 {
+    --taskbar-color: #565582;
+    --start-color: #6F6DA8;
+    --navhover-color: #7D7BB1;
+    --tile-color: #8E8CD8;
+    --taskbar-btnhover-color: #67668E;
+    --start-btn-color: #ABA9E8;
+}
+
+.winui-color34 {
+    --taskbar-color: #2D2B61;
+    --start-color: #4F4D9E;
+    --navhover-color: #605EA8;
+    --tile-color: #6B69D6;
+    --taskbar-btnhover-color: #424070;
+    --start-btn-color: #8987E4;
+}
+
+.winui-color35 {
+    --taskbar-color: #3C2759;
+    --start-color: #5B3E83;
+    --navhover-color: #6B518F;
+    --tile-color: #8764B8;
+    --taskbar-btnhover-color: #4F3C69;
+    --start-btn-color: #A882DD;
+}
+
+.winui-color36 {
+    --taskbar-color: #372254;
+    --start-color: #4E3078;
+    --navhover-color: #5F4485;
+    --tile-color: #744DA9;
+    --taskbar-btnhover-color: #4B3865;
+    --start-btn-color: #8F6BC0;
+}
+
+.winui-color37 {
+    --taskbar-color: #512059;
+    --start-color: #7D3189;
+    --navhover-color: #8A4595;
+    --tile-color: #B146C2;
+    --taskbar-btnhover-color: #623669;
+    --start-btn-color: #CC7BD9;
+}
+
+.winui-color38 {
+    --taskbar-color: #470C4F;
+    --start-color: #62116E;
+    --navhover-color: #71287C;
+    --tile-color: #881798;
+    --taskbar-btnhover-color: #592460;
+    --start-btn-color: #D157E2;
+}
+
+/* 第四排 */
+.winui-color41 {
+    --taskbar-color: #004B5C;
+    --start-color: #006B83;
+    --navhover-color: #197A8F;
+    --tile-color: #0099BC;
+    --taskbar-btnhover-color: #195D6C;
+    --start-btn-color: #48D2F2;
+}
+
+.winui-color42 {
+    --taskbar-color: #0E4357;
+    --start-color: #215D73;
+    --navhover-color: #376D81;
+    --tile-color: #2D7D9A;
+    --taskbar-btnhover-color: #265567;
+    --start-btn-color: #4DACCF;
+}
+
+.winui-color43 {
+    --taskbar-color: #004A4F;
+    --start-color: #007C85;
+    --navhover-color: #198991;
+    --tile-color: #00B7C3;
+    --taskbar-btnhover-color: #195C60;
+    --start-btn-color: #5CDCE6;
+}
+
+.winui-color44 {
+    --taskbar-color: #00393B;
+    --start-color: #005659;
+    --navhover-color: #196769;
+    --tile-color: #038387;
+    --taskbar-btnhover-color: #194C4E;
+    --start-btn-color: #37A9AD;
+}
+
+.winui-color45 {
+    --taskbar-color: #004A3E;
+    --start-color: #00826C;
+    --navhover-color: #198E7A;
+    --tile-color: #00B294;
+    --taskbar-btnhover-color: #195C51;
+    --start-btn-color: #32E3C5;
+}
+
+.winui-color46 {
+    --taskbar-color: #004037;
+    --start-color: #005E52;
+    --navhover-color: #196E63;
+    --tile-color: #018574;
+    --taskbar-btnhover-color: #19534B;
+    --start-btn-color: #00B39B;
+}
+
+.winui-color47 {
+    --taskbar-color: #00522A;
+    --start-color: #008746;
+    --navhover-color: #199358;
+    --tile-color: #00CC6A;
+    --taskbar-btnhover-color: #19633F;
+    --start-btn-color: #68E3A8;
+}
+
+.winui-color48 {
+    --taskbar-color: #08421E;
+    --start-color: #0B5C2A;
+    --navhover-color: #236C3F;
+    --tile-color: #10893E;
+    --taskbar-btnhover-color: #205534;
+    --start-btn-color: #3DAD68;
+}
+
+/* 第五排 */
+.winui-color51 {
+    --taskbar-color: #393636;
+    --start-color: #5F5B5A;
+    --navhover-color: #6F6B6A;
+    --tile-color: #7A7574;
+    --taskbar-btnhover-color: #4C4A4A;
+    --start-btn-color: #A7A09F;
+}
+
+.winui-color52 {
+    --taskbar-color: #2B2A29;
+    --start-color: #3E3C3B;
+    --navhover-color: #514F4E;
+    --tile-color: #5D5A58;
+    --taskbar-btnhover-color: #403F3E;
+    --start-btn-color: #878380;
+}
+
+.winui-color53 {
+    --taskbar-color: #37404F;
+    --start-color: #4F5C6E;
+    --navhover-color: #606C7C;
+    --tile-color: #68768A;
+    --taskbar-btnhover-color: #4B5360;
+    --start-btn-color: #7F90A8;
+}
+
+.winui-color54 {
+    --taskbar-color: #262F3B;
+    --start-color: #3B4452;
+    --navhover-color: #4E5663;
+    --tile-color: #515C6B;
+    --taskbar-btnhover-color: #3B434E;
+    --start-btn-color: #6E7D91;
+}
+
+.winui-color55 {
+    --taskbar-color: #293A36;
+    --start-color: #3A544E;
+    --navhover-color: #4D655F;
+    --tile-color: #567C73;
+    --taskbar-btnhover-color: #3E4D4A;
+    --start-btn-color: #76A297;
+}
+
+.winui-color56 {
+    --taskbar-color: #23332F;
+    --start-color: #334A44;
+    --navhover-color: #475C56;
+    --tile-color: #486860;
+    --taskbar-btnhover-color: #394743;
+    --start-btn-color: #688F85;
+}
+
+.winui-color57 {
+    --taskbar-color: #244001;
+    --start-color: #355E03;
+    --navhover-color: #496E1C;
+    --tile-color: #498205;
+    --taskbar-btnhover-color: #39531A;
+    --start-btn-color: #79AB3C;
+}
+
+.winui-color58 {
+    --taskbar-color: #094209;
+    --start-color: #0C5C0C;
+    --navhover-color: #246C24;
+    --tile-color: #107C10;
+    --taskbar-btnhover-color: #215521;
+    --start-btn-color: #3D9C3D;
+}
+
+.winui-color59 {
+    --taskbar-color: RGB(7, 16, 24);
+    --start-color: RGB(16, 35, 33);
+    --navhover-color: RGB(39, 54, 31);
+    --tile-color: RGB(191, 211, 180);
+    --taskbar-btnhover-color: RGB(56, 77, 45);
+    --start-btn-color: RGB(63, 86, 50);
+}

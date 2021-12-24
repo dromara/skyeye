@@ -1,0 +1,430 @@
+.file-panel-upload{
+    position: fixed;
+    top: 90px;
+    left: 270px;
+    width: 40%;
+    height: 40%;
+    min-width: 300px;
+    min-height: 400px;
+    border-radius: 8px;
+    display: none;
+    background-color: #F5F5F5;
+    border: 1px solid rgba(0, 0, 0, .15);
+    box-sizing: border-box;
+    border-radius: 4px;
+    -ms-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
+    -o-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
+    -webkit-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
+    -moz-box-shadow: 0 10px 80px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 80px rgba(0,0,0,0.4);
+}
+
+.file-panel-upload .filelist li p.title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    top: 5px;
+    text-indent: 5px;
+    text-align: left;
+}
+
+.file-panel-upload .filelist li p.imgWrap {
+    position: relative;
+    z-index: 2;
+    line-height: 110px;
+    vertical-align: middle;
+    overflow: hidden;
+    width: 110px;
+    height: 110px;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webit-transition: 200ms ease-out;
+    -moz-transition: 200ms ease-out;
+    -o-transition: 200ms ease-out;
+    -ms-transition: 200ms ease-out;
+    transition: 200ms ease-out;
+}
+
+.file-panel-upload .filelist li p.progress {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 8px;
+    overflow: hidden;
+    z-index: 50;
+    margin: 0;
+    border-radius: 0;
+    background: none;
+    -webkit-box-shadow: 0 0 0;
+}
+
+.file-panel-upload .filelist div.file-panel {
+    position: absolute;
+    height: 0;
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#80000000', endColorstr='#80000000')\0;
+    background: rgba( 0, 0, 0, 0.5 );
+    width: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 300;
+}
+
+.file-panel-upload .filelist li img {
+    width: 100%;
+}
+
+.file-panel-upload .filelist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: calc(100% - 50px);
+    overflow-y: auto;
+}
+
+.file-panel-upload .filelist:after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    clear: both;
+}
+
+.file-panel-upload .filelist li {
+    width: 90px;
+    height: 110px;
+    background: url(../../../../images/bg.png) no-repeat;
+    text-align: center;
+    margin: 8px;
+    position: relative;
+    display: inline;
+    float: left;
+    overflow: hidden;
+    font-size: 12px;
+}
+
+.file-panel-upload .filelist li p.log {
+    position: relative;
+    top: -45px;
+}
+
+.file-panel-upload .filelist li p.title {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow : ellipsis;
+    top: 90px;
+    text-indent: 5px;
+    text-align: left;
+}
+
+.file-panel-upload .filelist li p.progress {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 8px;
+    overflow: hidden;
+    z-index: 50;
+    margin: 0;
+    border-radius: 0;
+    background: none;
+    -webkit-box-shadow: 0 0 0;
+}
+.file-panel-upload .filelist li p.progress span {
+    display: none;
+    overflow: hidden;
+    width: 0;
+    height: 100%;
+    background: #1483d8 url(../../../../images/progress.png) repeat-x;
+    -webit-transition: width 200ms linear;
+    -moz-transition: width 200ms linear;
+    -o-transition: width 200ms linear;
+    -ms-transition: width 200ms linear;
+    transition: width 200ms linear;
+    -webkit-animation: progressmove 2s linear infinite;
+    -moz-animation: progressmove 2s linear infinite;
+    -o-animation: progressmove 2s linear infinite;
+    -ms-animation: progressmove 2s linear infinite;
+    animation: progressmove 2s linear infinite;
+    -webkit-transform: translateZ(0);
+}
+
+.file-panel-upload .filelist li p.imgWrap {
+    position: relative;
+    z-index: 2;
+    line-height: 90px;
+    vertical-align: middle;
+    overflow: hidden;
+    width: 90px;
+    height: 90px;
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    -webit-transition: 200ms ease-out;
+    -moz-transition: 200ms ease-out;
+    -o-transition: 200ms ease-out;
+    -ms-transition: 200ms ease-out;
+    transition: 200ms ease-out;
+}
+
+.file-panel-upload .filelist li img {
+    width: 100%;
+}
+
+.file-panel-upload .filelist li p.error {
+    background: #f43838;
+    color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 28px;
+    line-height: 28px;
+    width: 100%;
+    z-index: 100;
+}
+
+.file-panel-upload .filelist li .success {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+    z-index: 200;
+    background: url(../../../../images/success.png) no-repeat right bottom;
+}
+
+.file-panel-upload .filelist div.file-panel {
+    position: absolute;
+    height: 0;
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#80000000', endColorstr='#80000000')\0;
+    background: rgba( 0, 0, 0, 0.5 );
+    width: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 300;
+}
+
+.file-panel-upload .filelist div.file-panel span {
+    width: 24px;
+    height: 24px;
+    display: inline;
+    float: right;
+    text-indent: -9999px;
+    overflow: hidden;
+    background: url(../../../../images/icons.png) no-repeat;
+    margin: 5px 1px 1px;
+    cursor: pointer;
+}
+
+.file-panel-upload .filelist div.file-panel span.rotateLeft {
+    background-position: 0 -24px;
+}
+.file-panel-upload .filelist div.file-panel span.rotateLeft:hover {
+    background-position: 0 0;
+}
+
+.file-panel-upload .filelist div.file-panel span.rotateRight {
+    background-position: -24px -24px;
+}
+.file-panel-upload .filelist div.file-panel span.rotateRight:hover {
+    background-position: -24px 0;
+}
+
+.file-panel-upload .filelist div.file-panel span.cancel {
+    background-position: -48px -24px;
+}
+.file-panel-upload .filelist div.file-panel span.cancel:hover {
+    background-position: -48px 0;
+}
+
+.file-panel-upload .statusBar {
+    height: 50px;
+    border-top: 1px solid #ffffff;
+    padding: 0 20px;
+    line-height: 50px;
+    vertical-align: middle;
+    position: relative;
+}
+
+.file-panel-upload .statusBar .progress {
+    border: 1px solid #1483d8;
+    width: 198px;
+    background: #fff;
+    height: 18px;
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    line-height: 20px;
+    color: #6dbfff;
+    position: relative;
+    margin: 0 10px 0 0;
+}
+.file-panel-upload .statusBar .progress span.percentage {
+    width: 0;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background: #1483d8;
+    position: absolute;
+}
+.file-panel-upload .statusBar .progress span.text {
+    position: relative;
+    z-index: 10;
+}
+
+.file-panel-upload .statusBar .info {
+    display: inline-block;
+    font-size: 12px;
+    color: #666666;
+}
+
+.file-panel-upload .statusBar .btns {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+    line-height: 27px;
+}
+
+.file-panel-upload .statusBar .btns .webuploader-pick,
+.file-panel-upload .statusBar .btns .uploadBtn,
+.file-panel-upload .statusBar .btns .closeBtn,
+.file-panel-upload .statusBar .btns .uploadBtn.state-uploading,
+.file-panel-upload .statusBar .btns .uploadBtn.state-paused {
+    background: #ffffff;
+    border: 1px solid #cfcfcf;
+    color: #565656;
+    padding: 0 10px;
+    display: inline-block;
+    border-radius: 3px;
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    float: left;
+}
+
+.file-panel-upload .statusBar .btns .webuploader-pick-hover,
+.file-panel-upload .statusBar .btns .uploadBtn:hover,
+.file-panel-upload .statusBar .btns .closeBtn:HOVER,
+.file-panel-upload .statusBar .btns .uploadBtn.state-uploading:hover,
+.file-panel-upload .statusBar .btns .uploadBtn.state-paused:hover {
+    background: #f0f0f0;
+}
+
+.file-panel-upload .statusBar .btns .uploadBtn {
+    background: #00b7ee;
+    color: #fff;
+    border-color: transparent;
+}
+
+.file-panel-upload .statusBar .btns .uploadBtn:hover {
+    background: #00a2d4;
+}
+
+.file-panel-upload .statusBar .btns .uploadBtn.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.move_box{
+    width: 70px;
+    height: 100px;
+    margin-left: 45px;
+    margin-top: 25px;
+    background-color: darkseagreen;
+    border-radius: 5px;
+}
+
+.move_box .logo_icon{
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+}
+
+.move_box .logo_icon img{
+    width: 100%;
+    height: 100%;
+}
+
+.move_box .title{
+    width: 71px;
+    cursor: default;
+    text-align: center;
+    word-break: break-all;
+    font-size: 0.9em;
+    margin: 0 auto;
+    line-height: 1.5em;
+    padding-bottom: 5px;
+    display: block;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    font-family: "Helvetica Neue", Helvetica, "Microsoft Yahei", 微软雅黑, "Lantinghei SC", STXihei, "WenQuanYi Micro Hei", Arial, sans-serif !important;
+}
+
+.move_box .title span{
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.resize-bar {
+    width: 270px;
+    min-width: 190px;
+    max-width: 500px;
+    height: inherit;
+    resize: horizontal;
+    cursor: ew-resize;
+    opacity: 0;
+    overflow: scroll;
+}
+/* 拖拽线 */
+.resize-line {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-right: 2px solid #eee;
+    border-left: 1px solid #bbb;
+    pointer-events: none;
+}
+.resize-bar:hover~.resize-line,
+.resize-bar:active~.resize-line {
+    border-left: 1px dashed skyblue;
+}
+.resize-bar::-webkit-scrollbar {
+    height: inherit;
+}
+/* Firefox只有下面一小块区域可以拉伸 */
+@supports (-moz-user-select: none) {
+    .resize-bar:hover~.resize-line,
+    .resize-bar:active~.resize-line {
+        border-left: 1px solid #bbb;
+    }
+    .resize-bar:hover~.resize-line::after,
+    .resize-bar:active~.resize-line::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        bottom: 0;
+        right: -8px;
+        background: url(./resize.svg);
+        background-size: 100% 100%;
+    }
+}
