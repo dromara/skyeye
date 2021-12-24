@@ -69,96 +69,59 @@ var systemCommonUtil = {
      * @param src 图片地址
      */
     showPicImg: function (src){
-        var pageWidth = systemCommonUtil.pageWidth();
-        var imgWidth = pageWidth * 0.8;
-        var left = pageWidth * 0.1;
-        var str = '<div id="sysShowPicBox" style="position: absolute; left: ' + left + 'px; top: 80px">' +
-            '<img id="sysShowPicImg" src="' + src + '" style="width: ' + imgWidth + 'px;" /></div>';
-        layer.open({
-            type: 1,
-            title: false,
-            closeBtn: 1,
-            skin: 'pic-show-bg',
-            area: ['100vw', '100vh'],
-            shadeClose: true,
-            content: str,
-            scrollbar: false
+        var imagesList = [];
+        imagesList.push({
+            "alt": "",
+            "pid": "skyeye", //图片id
+            "src": src, //原图地址
+            "thumb": "" //缩略图地址
         });
-        $("#sysShowPicImg").on('click', function (e){
-            e.stopPropagation();
-        });
-        var myimage = document.getElementById("sysShowPicImg");
-        systemCommonUtil.drag($("#sysShowPicBox"));
-        myimage.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
-        myimage.attachEvent ? myimage.attachEvent("onmousewheel", MouseWheelHandler)
-            : myimage.addEventListener("mousewheel", MouseWheelHandler, false);
-        function MouseWheelHandler(e) {
-            // cross-browser wheel delta
-            var e = window.event || e; // old IE support
-            var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-            myimage.style.width = Math.max(50, Math.min(3600, myimage.width + (30 * delta))) + "px";
-            return false;
-        }
-    },
+        layer.photos({
+            photos: {
+                "title": "", //相册标题
+                "id": 123, //相册id
+                "start": 0, //初始显示的图片序号，默认0
+                "data": imagesList
+            },
+            anim: 5, //0-6的选择，指定弹出图片动画类型，默认随机
+            tab: function () {
+                var num = 0;
+                $("#layui-layer-photos").parent().append('<div class="skyeye-image-operator">' +
+                    '<button id="xuanzhuan" type="button" class="layui-btn layui-btn-normal layui-btn-xs">旋转</button>' +
+                    '</div>');
 
-    /**
-     * 对象拖动
-     *
-     * @param obj
-     */
-    drag: function(obj) {
-        obj.bind("mousedown", start);
-        function start(event) {
-            if (event.button == 0) { //判断是否点击鼠标左键
-                /*
-                 * clientX和clientY代表鼠标当前的横纵坐标
-                 * offset()该方法返回的对象包含两个整型属性：top 和 left，以像素计。此方法只对可见元素有效。
-                 * bind()绑定事件，同样unbind解绑定，此效果的实现最后必须要解绑定，否则鼠标松开后拖拽效果依然存在
-                 * getX获取当前鼠标横坐标和对象离屏幕左侧距离之差（也就是left）值，
-                 * getY和getX同样道理，这两个差值就是鼠标相对于对象的定位，因为拖拽后鼠标和拖拽对象的相对位置是不变的
-                 */
-                gapX = event.clientX - obj.offset().left;
-                gapY = event.clientY - 80;
-                // mousemove事件必须绑定到$(document)上，鼠标移动是在整个屏幕上的
-                $(document).bind("mousemove", move);
-                // 此处的$(document)可以改为obj
-                $(document).bind("mouseup", stop);
+                $(document).on("click", "#xuanzhuan", function(e) {
+                    num = (num + 45) % 360;
+                    $("#layui-layer-photos").css('transform', 'rotate(' + num + 'deg)');
+                });
+
+                $(document).on("mousewheel DOMMouseScroll", ".layui-layer-phimg", function (e) {
+                    var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) || // chrome & ie
+                        (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1)); // firefox
+                    var imagep = $(".layui-layer-phimg").parent().parent();
+                    var image = $(".layui-layer-phimg").parent();
+                    var h = image.height();
+                    var w = image.width();
+                    if (delta > 0) {
+                        if (h < (window.innerHeight)) {
+                            h = h * 1.05;
+                            w = w * 1.05;
+                        }
+                    } else if (delta < 0) {
+                        if (h > 100) {
+                            h = h * 0.95;
+                            w = w * 0.95;
+                        }
+                    }
+                    imagep.css("top", (window.innerHeight - h) / 2);
+                    imagep.css("left", (window.innerWidth - w) / 2);
+                    image.height(h);
+                    image.width(w);
+                    imagep.height(h);
+                    imagep.width(w);
+                });
             }
-            return false; //阻止默认事件或冒泡
-        }
-
-        function move(event) {
-            obj.css({
-                "left": (event.clientX - gapX) + "px",
-                "top": (event.clientY - gapY) + "px"
-            });
-            return false; //阻止默认事件或冒泡
-        }
-
-        function stop() {
-            // 解绑定，这一步很必要，前面有解释
-            $(document).unbind("mousemove", move);
-            $(document).unbind("mouseup", stop);
-        }
-    },
-
-    /**
-     * 获取当前页面的高度
-     * @returns {(function())|number|*|number}
-     */
-    pageHeight: function (){
-        return document.compatMode == "CSS1Compat"? document.documentElement.clientHeight :
-            document.body.clientHeight;
-    },
-
-    /**
-     * 获取当前页面的宽度
-     *
-     * @returns {(function())|number|*|number}
-     */
-    pageWidth: function (){
-        return document.compatMode == "CSS1Compat"? document.documentElement.clientWidth :
-            document.body.clientWidth;
+        });
     },
 
     /**
