@@ -32,7 +32,9 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'processInstanceId', title: '流程ID', width: 100 },
+	        { field: 'processInstanceId', title: '流程ID', width: 280, templet: function(d){
+				return '<a lay-event="details" class="notice-title-click">' + d.processInstanceId + '</a>';
+			}},
 	        { field: 'taskType', title: '类型', width: 150 },
 	        { field: 'createName', title: '申请人', width: 140},
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 140, templet: function(d){
@@ -54,7 +56,7 @@ layui.config({
 	        		return "<span class='state-up'>正常</span>";
 	        	}
 	        }},
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#myNeedDealtTableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#myNeedDealtTableBar'}
 	    ]],
 	    done: function(){
 	    	matchingLanguage();
