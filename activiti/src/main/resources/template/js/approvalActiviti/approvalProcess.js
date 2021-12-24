@@ -191,7 +191,7 @@ layui.config({
 			});
 			
 			// 加载流程图片
-			$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png");
+			$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date()/3600000));
 
 			// 是否委派，如果是委派，则不需要选择下一个节点的审批人
 			if(!j.bean.delegation){
@@ -349,7 +349,7 @@ layui.config({
     });
     
     $("body").on("click", "#processInstanceIdImg", function(){
-		systemCommonUtil.showPicImg({src: $(this).attr("src")});
+		systemCommonUtil.showPicImg($(this).attr("src"));
     });
     
     // 取消
