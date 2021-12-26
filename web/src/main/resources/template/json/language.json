@@ -63,6 +63,7 @@
   "com.skyeye.determine": {"zh": "确定", "cn": "Determine"},
   "com.skyeye.cancel": {"zh": "取消", "cn": "Cancel"},
   "com.skyeye.save": {"zh": "保存", "cn": "Save"},
+  "com.skyeye.submit": {"zh": "提交", "cn": "Submit"},
   "com.skyeye.exportExcel": {"zh": "导出Excel", "cn": "Export Excel"},
   
   "com.skyeye.moveUpOperationSuccessMsg": {"zh": "上移成功", "cn": "Move Up Successfully"},

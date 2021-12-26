@@ -75,6 +75,8 @@ var activitiUtil = {
                     $("#" + appendDomId).append(approvalPersonChooseDom);
                     activitiUtil.initApprovalPersonChooseBtnEvent();
                 }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }, async: false});
     },
@@ -184,6 +186,8 @@ var activitiUtil = {
             operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="delegate" style="height: 30px; line-height: 30px; padding: 0 15px;">委派</a>';
         }
         operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="transfer" style="height: 30px; line-height: 30px; padding: 0 15px;">转办</a>';
+        operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="beforeAddSignTask" style="height: 30px; line-height: 30px; padding: 0 15px;">前加签</a>';
+        operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="afterAddSignTask" style="height: 30px; line-height: 30px; padding: 0 15px;">后加签</a>';
         $("#" + boxId).html(operatorBtnHtml);
         // 初始化监听事件
         activitiUtil.activitiMenuEvent(task, callback);
@@ -241,6 +245,44 @@ var activitiUtil = {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: false});
+            });
+        });
+
+        // 前加签
+        $("body").on("click", "#beforeAddSignTask", function() {
+            _openNewWindows({
+                url: "../../tpl/addSignTask/beforeAddSignTask.html?taskId=" + task.taskId,
+                title: "前加签",
+                pageId: "beforeAddSignTaskPage",
+                area: ['90vw', '90vh'],
+                callBack: function(refreshCode){
+                    if (refreshCode == '0') {
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
+                    } else if (refreshCode == '-9999') {
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    }
+                }
+            });
+        });
+
+        // 后加签
+        $("body").on("click", "#afterAddSignTask", function() {
+            _openNewWindows({
+                url: "../../tpl/addSignTask/afterAddSignTask.html?taskId=" + task.taskId,
+                title: "后加签",
+                pageId: "afterAddSignTaskPage",
+                area: ['90vw', '90vh'],
+                callBack: function(refreshCode){
+                    if (refreshCode == '0') {
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
+                    } else if (refreshCode == '-9999') {
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    }
+                }
             });
         });
 
