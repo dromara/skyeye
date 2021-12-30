@@ -28,7 +28,7 @@ layui.config({
             { field: 'jobNumber', title: '工号', align: 'left', rowspan: '2', width: 120},
             { field: 'userName', title: '姓名', align: 'left', rowspan: '2', width: 120},
             { title: '公司信息', align: 'center', colspan: '3'},
-            { field: 'userEmail', title: '邮箱', align: 'left', rowspan: '2', width: 200}
+            { field: 'email', title: '邮箱', align: 'left', rowspan: '2', width: 200}
         ],[
             { field: 'companyName', title: '公司', align: 'left', width: 120},
             { field: 'departmentName', title: '部门', align: 'left', width: 120},

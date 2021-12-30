@@ -70,9 +70,7 @@ layui.config({
         	subTasks(data, obj);
         } else if (layEvent === 'details') { //详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEvent === 'turnMultiInstance') { //转为会签
-			activitiUtil.turnMultiInstance(data.processInstanceId, data.id);
-		}
+        }
     });
 	
 	// 提交任务
