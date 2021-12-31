@@ -44,9 +44,21 @@ layui.config({
         cols: [[
             { type: 'checkbox', align: 'center' },
             { field: 'name', title: '会签人', align: 'left', width: 180, templet: function(d){
-                return '<input type="text" id="approvalId' + d.id + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
-                    'value="' + (isNull(d.name) ? "" : d.name) + '"/>' +
-                    '<i class="fa fa-plus-circle input-icon chooseApprovalIdBtn" style="top: 8px;"></i>';
+                if(d.type == 1){
+                    return '<input type="text" id="approvalId' + d.LAY_TABLE_INDEX + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
+                        'value="' + (isNull(d.name) ? "" : d.name) + '"/>';
+                }else{
+                    return '<input type="text" id="approvalId' + d.LAY_TABLE_INDEX + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
+                        'value="' + (isNull(d.name) ? "" : d.name) + '"/>' +
+                        '<i class="fa fa-plus-circle input-icon chooseApprovalIdBtn" style="top: 8px;"></i>';
+                }
+            }},
+            { field: 'type', title: '角色', align: 'left', width: 180, templet: function(d){
+                if(d.type == 1){
+                    return "主持人";
+                }else{
+                    return "参与人";
+                }
             }},
             { field: 'email', title: '邮箱', align: 'left', width: 200}
         ]],
@@ -128,29 +140,16 @@ layui.config({
 
     // 人员选择
     $("body").on("click", ".chooseApprovalIdBtn", function(){
-        var trId = $(this).parent().find("input").attr("id").replace("approvalId", "");
+        var rowIndex = $(this).parent().find("input").attr("id").replace("approvalId", "");
         systemCommonUtil.userReturnList = [];
         systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
         systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
         systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
-            loadUseTableMation(trId, staffChooseList[0]);
+            chooseUserList[rowIndex] = staffChooseList[0];
+            table.reload("messageTable", {data: chooseUserList});
         });
     });
-
-    function loadUseTableMation(trId, userReturnMation){
-        var inIndex = -1;
-        $.each(chooseUserList, function(j, item){
-            if(item.id == trId){
-                inIndex = j;
-                return;
-            }
-        });
-        if(inIndex != -1){
-            chooseUserList[inIndex] = userReturnMation;
-        }
-        table.reload("messageTable", {data: chooseUserList});
-    }
 
     // 取消
     $("body").on("click", "#cancle", function(){
