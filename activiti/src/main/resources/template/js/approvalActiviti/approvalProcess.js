@@ -209,6 +209,11 @@ layui.config({
 				parent.refreshCode = '0';
 			});
 
+			// 加载会签信息
+			if(j.bean.isMultiInstance){
+				$("#multiInstanceBox").html(getDataUseHandlebars($("#multiInstance").html(), j));
+			}
+
 			form.render();
 		}else{
 			winui.window.msg(j.returnMessage, {icon: 2,time: 2000});

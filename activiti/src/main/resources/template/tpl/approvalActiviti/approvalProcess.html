@@ -39,6 +39,9 @@
 			   			<span class="hr-title">审批</span><hr>
 			    	</div>
 				    <form class="layui-form" action="">
+						<div class="layui-form-item layui-col-xs12" id="multiInstanceBox">
+
+						</div>
 				        <div class="layui-form-item layui-col-xs12">
 							<label class="layui-form-label">审批结果<i class="red">*</i></label>
 							<div class="layui-input-block winui-radio">
@@ -152,6 +155,36 @@
 						<div>[{{flagName}}]<br/>审批意见：{{{opinion}}}</div>
 					</li>
 				</ul>
+			</div>
+		{{/bean}}
+	</script>
+
+	<!-- 多实例会签信息 -->
+	<script type="text/x-handlebars-template" id="multiInstance">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">完成条件：</label>
+				<div class="layui-input-block ver-center">
+					{{completionCondition}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs4">
+				<label class="layui-form-label">会签任务总数：</label>
+				<div class="layui-input-block ver-center">
+					{{nrOfInstances}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs4">
+				<label class="layui-form-label">正在执行的会签总数：</label>
+				<div class="layui-input-block ver-center">
+					{{nrOfActiveInstances}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs4">
+				<label class="layui-form-label">已完成的会签任务总数：</label>
+				<div class="layui-input-block ver-center">
+					{{nrOfCompletedInstances}}
+				</div>
 			</div>
 		{{/bean}}
 	</script>
