@@ -119,7 +119,7 @@ var activitiUtil = {
             return "";
         }
         var chooseData = JSON.parse(chooseDataStr);
-        return chooseData.userId;
+        return chooseData.id;
     },
 
     /**
@@ -138,7 +138,7 @@ var activitiUtil = {
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
                     if (typeof callback === 'function') {
-                        callback(activitiUtil.chooseApprovalPersonMation.userId);
+                        callback(activitiUtil.chooseApprovalPersonMation.id);
                     }
                 } else if (refreshCode == '-9999') {
                     winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
