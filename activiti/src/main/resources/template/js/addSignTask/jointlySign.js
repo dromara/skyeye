@@ -44,7 +44,7 @@ layui.config({
         cols: [[
             { type: 'checkbox', align: 'center' },
             { field: 'name', title: '会签人', align: 'left', width: 180, templet: function(d){
-                if(d.type == 1){
+                if(d.type == 1 || d.noDelete){
                     return '<input type="text" id="approvalId' + d.LAY_TABLE_INDEX + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
                         'value="' + (isNull(d.name) ? "" : d.name) + '"/>';
                 }else{
@@ -53,11 +53,18 @@ layui.config({
                         '<i class="fa fa-plus-circle input-icon chooseApprovalIdBtn" style="top: 8px;"></i>';
                 }
             }},
-            { field: 'type', title: '角色', align: 'left', width: 180, templet: function(d){
+            { field: 'type', title: '角色', align: 'center', width: 100, templet: function(d){
                 if(d.type == 1){
                     return "主持人";
                 }else{
                     return "参与人";
+                }
+            }},
+            { field: 'isActive', title: '状态', align: 'center', width: 100, templet: function(d){
+                if(!d.isActive){
+                    return "<span class='state-up'>已评审</span>";
+                }else{
+                    return "<span class='state-down'>未评审</span>";
                 }
             }},
             { field: 'email', title: '邮箱', align: 'left', width: 200}

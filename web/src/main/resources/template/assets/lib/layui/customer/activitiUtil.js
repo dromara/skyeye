@@ -181,13 +181,16 @@ var activitiUtil = {
      */
     activitiMenuOperator: function (boxId, task, callback){
         var operatorBtnHtml = '';
-        if(!task.delegation){
-            // 不是委派任务节点可以委派
-            operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="delegate" style="height: 30px; line-height: 30px; padding: 0 15px;">委派</a>';
+        if((task.nrOfInstances == 0 && !isNull(task.nrOfInstances)) || isNull(task.nrOfInstances)) {
+            // 不是多实例会签||是会签但是还没有设定会签人
+            if (!task.delegation) {
+                // 不是委派任务节点可以委派
+                operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="delegate" style="height: 30px; line-height: 30px; padding: 0 15px;">委派</a>';
+            }
+            operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="transfer" style="height: 30px; line-height: 30px; padding: 0 15px;">转办</a>';
+            operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="beforeAddSignTask" style="height: 30px; line-height: 30px; padding: 0 15px;">前加签</a>';
+            operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="afterAddSignTask" style="height: 30px; line-height: 30px; padding: 0 15px;">后加签</a>';
         }
-        operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="transfer" style="height: 30px; line-height: 30px; padding: 0 15px;">转办</a>';
-        operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="beforeAddSignTask" style="height: 30px; line-height: 30px; padding: 0 15px;">前加签</a>';
-        operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="afterAddSignTask" style="height: 30px; line-height: 30px; padding: 0 15px;">后加签</a>';
         if(task.isMultiInstance){
             // 会签节点进行加签
             operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="jointlySign" style="height: 30px; line-height: 30px; padding: 0 15px;">会签设定</a>';

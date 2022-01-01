@@ -199,21 +199,36 @@ layui.config({
 				activitiUtil.initApprovalPerson("approvalOpinionDom", processInstanceId, taskId, $("input[name='flag']:checked").val());
 			}
 
-			// 加载审批历史
-			inboxTimeTreeApprovalHistory();
-			matchingLanguage();
-
-			// 工作流的其他操作
-			activitiUtil.activitiMenuOperator("otherMenuOperator", j.bean, function (){
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			});
+			// 并行会签的子实例，不支持工作流的其他操作
+			if(!j.bean.parallelMultilnStanceExecttionChild){
+				activitiUtil.activitiMenuOperator("otherMenuOperator", j.bean, function (){
+					parent.layer.close(index);
+					parent.refreshCode = '0';
+				});
+			}else{
+				$("#otherMenuOperator").parent().hide();
+			}
 
 			// 加载会签信息
 			if(j.bean.isMultiInstance){
 				$("#multiInstanceBox").html(getDataUseHandlebars($("#multiInstance").html(), j));
+				$("#multiInstanceState").html('已开启');
+				if(j.bean.nrOfInstances != 0){
+					// 会签任务总数为0说明没有设置会签人，可以自行审批通过，如果不为0，说明设置了会签人，需要通过会签投票获取结果
+					$("#resultTitle").html('会签结果');
+					$("#multiInstanceState").html('已完成');
+					if(j.bean.nrOfActiveInstances != 0){
+						// 正在执行的会签总数不为0，说明会签还未结束，不能提交到下一个审批节点
+						$("#approvalOpinionDom").hide();
+						$("#subBtnBox").hide();
+						$("#multiInstanceState").html('进行中');
+					}
+				}
 			}
 
+			// 加载审批历史
+			inboxTimeTreeApprovalHistory();
+			matchingLanguage();
 			form.render();
 		}else{
 			winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
