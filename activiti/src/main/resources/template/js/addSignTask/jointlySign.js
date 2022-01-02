@@ -5,20 +5,22 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'soulTable', 'table', 'form'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'table', 'form'], function (exports) {
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
         form = layui.form,
-        table = layui.table,
-        soulTable = layui.soulTable;
+        table = layui.table;
 
     var chooseUserList = new Array();
     var taskId = GetUrlParam("taskId");
 
+    var taskBean;
+
     // 获取会签节点信息
     AjaxPostUtil.request({url: reqBasePath + "activitiTask006", params: {taskId: taskId}, method: "GET", type: 'json', callback: function(json) {
         if(json.returnCode == 0) {
+            taskBean = json.bean;
             if(json.bean.isSequential){
                 $("#jointlySignType").html("串行多实例会签");
             }else{
@@ -37,19 +39,15 @@ layui.config({
         data: chooseUserList,
         even: true,
         page: false,
-        rowDrag: {
-            trigger: 'row',
-            done: function(obj) {}
-        },
         cols: [[
             { type: 'checkbox', align: 'center' },
             { field: 'name', title: '会签人', align: 'left', width: 180, templet: function(d){
                 if(d.type == 1 || d.noDelete){
                     return '<input type="text" id="approvalId' + d.LAY_TABLE_INDEX + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
-                        'value="' + (isNull(d.name) ? "" : d.name) + '"/>';
+                        'value="' + (isNull(d.name) ? "" : d.name) + '" win-verify="required"/>';
                 }else{
                     return '<input type="text" id="approvalId' + d.LAY_TABLE_INDEX + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
-                        'value="' + (isNull(d.name) ? "" : d.name) + '"/>' +
+                        'value="' + (isNull(d.name) ? "" : d.name) + '" win-verify="required"/>' +
                         '<i class="fa fa-plus-circle input-icon chooseApprovalIdBtn" style="top: 8px;"></i>';
                 }
             }},
@@ -84,7 +82,6 @@ layui.config({
                 }
             }
             matchingLanguage();
-            soulTable.render(this);
         }
     });
 
@@ -112,8 +109,8 @@ layui.config({
     form.render();
     form.on('submit(formAddBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
-            if(table.cache.messageTable.length == 0){
-                winui.window.msg('请最少选择一条数据.', {icon: 2,time: 2000});
+            if(table.cache.messageTable.length == 1){
+                winui.window.msg('请最少选择一位参与人.', {icon: 2,time: 2000});
                 return false;
             }
             if(!judgeSimple()){
@@ -170,8 +167,17 @@ layui.config({
     // 新增行
     var rowNum = 1;
     function addRow() {
+        // 串行
         chooseUserList = [].concat(table.cache.messageTable);
-        chooseUserList.push({id: rowNum});
+        if(taskBean.isSequential){
+            var length = chooseUserList.length;
+            var tmp = chooseUserList[length - 1];
+            chooseUserList[length - 1] = {id: rowNum};
+            chooseUserList.push(tmp);
+        }else{
+            // 并行
+            chooseUserList.push({id: rowNum});
+        }
         table.reload("messageTable", {data: chooseUserList});
         rowNum++;
     }

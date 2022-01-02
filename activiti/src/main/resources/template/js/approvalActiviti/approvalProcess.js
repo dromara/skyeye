@@ -194,13 +194,13 @@ layui.config({
 			$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date()/3600000));
 
 			// 是否委派，如果是委派||并行会签的子实例，则不需要选择下一个节点的审批人
-			if(!j.bean.delegation && !j.bean.parallelMultilnStanceExecttionChild){
+			if(!j.bean.delegation && !j.bean.multilnStanceExecttionChild){
 				// 加载下个节点审批人选择信息
 				activitiUtil.initApprovalPerson("approvalOpinionDom", processInstanceId, taskId, $("input[name='flag']:checked").val());
 			}
 
 			// 并行会签的子实例，不支持工作流的其他操作
-			if(!j.bean.parallelMultilnStanceExecttionChild){
+			if(!j.bean.multilnStanceExecttionChild){
 				activitiUtil.activitiMenuOperator("otherMenuOperator", j.bean, function (){
 					parent.layer.close(index);
 					parent.refreshCode = '0';
@@ -219,7 +219,7 @@ layui.config({
 					$("#multiInstanceState").html('已完成');
 					if(j.bean.nrOfActiveInstances != 0){
 						// 正在执行的会签总数不为0并且不是子实例，说明会签还未结束，不能提交到下一个审批节点
-						if(!j.bean.parallelMultilnStanceExecttionChild){
+						if(!j.bean.multilnStanceExecttionChild){
 							$("#approvalOpinionDom").hide();
 							$("#subBtnBox").hide();
 						}
