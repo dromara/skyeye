@@ -218,10 +218,23 @@ layui.config({
 					$("#resultTitle").html('会签结果');
 					$("#multiInstanceState").html('已完成');
 					if(j.bean.nrOfActiveInstances != 0){
-						// 正在执行的会签总数不为0，说明会签还未结束，不能提交到下一个审批节点
-						$("#approvalOpinionDom").hide();
-						$("#subBtnBox").hide();
+						// 正在执行的会签总数不为0并且不是子实例，说明会签还未结束，不能提交到下一个审批节点
+						if(!j.bean.parallelMultilnStanceExecttionChild){
+							$("#approvalOpinionDom").hide();
+							$("#subBtnBox").hide();
+						}
 						$("#multiInstanceState").html('进行中');
+					}
+					if(!isNull(j.bean.approvalResult + "")){
+						// 如果已经获得会签结果，则可以进行提交到下一步
+						if(j.bean.approvalResult){
+							$("input:radio[name=flag][value='1']").attr("checked", true);
+						}else{
+							$("input:radio[name=flag][value='2']").attr("checked", true);
+						}
+						$("input[name='flag']").attr('disabled', true);
+						$("#approvalOpinionDom").show();
+						$("#subBtnBox").show();
 					}
 				}
 			}
