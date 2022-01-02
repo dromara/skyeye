@@ -61,13 +61,20 @@ layui.config({
                 }
             }},
             { field: 'isActive', title: '状态', align: 'center', width: 100, templet: function(d){
-                if(!d.isActive){
-                    return "<span class='state-up'>已评审</span>";
-                }else{
+                if(d.type != 1) {
+                    if(!isNull(d.isActive + "")){
+                        if (!d.isActive) {
+                            return "<span class='state-up'>已评审</span>";
+                        } else {
+                            return "<span class='state-down'>未评审</span>";
+                        }
+                    }
                     return "<span class='state-down'>未评审</span>";
                 }
+                return "-";
             }},
-            { field: 'email', title: '邮箱', align: 'left', width: 200}
+            { field: 'email', title: '邮箱', align: 'left', width: 200},
+            { field: 'test', title: '必选评审人', align: 'center', width: 140, templet: '#checkboxTpl', unresize: true }
         ]],
         done: function(res){
             for (var i = 0; i < res.rows.length; i++) {
@@ -79,6 +86,19 @@ layui.config({
             matchingLanguage();
             soulTable.render(this);
         }
+    });
+
+    form.on('checkbox(lockDemo)', function(obj) {
+        var rowIndex = $(this).val();
+        var tem = chooseUserList[rowIndex];
+        delete tem["echo"];
+        if(obj.elem.checked){
+            tem["isMandatory"] = 1;
+        }else{
+            delete tem["isMandatory"];
+        }
+        chooseUserList[rowIndex] = tem;
+        table.reload("messageTable", {data: chooseUserList});
     });
 
     function disabledRow(index) {

@@ -47,6 +47,10 @@
         </form>
     </div>
 
+    <script type="text/html" id="checkboxTpl">
+        <input type="checkbox" name="lock" value="{{d.LAY_TABLE_INDEX}}" title="" lay-filter="lockDemo" {{d.isMandatory == 1 ? 'checked': ''}}>
+    </script>
+
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
