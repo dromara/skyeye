@@ -419,8 +419,8 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 .pic-item{
     border: 1px solid #ddd;
-    width: 140px;
-    height: 115px;
+    width: 150px;
+    padding: 8px 5px;
     margin-right: 10px;
     margin-bottom: 10px;
     margin-top: 5px;
@@ -439,9 +439,9 @@ body .layer-ext-winconfirm .layui-layer-content {
 
 .pic-item-div-top{
 	text-align: center;
-	width: 120px;
-    height: 70px;
-    margin: 10px;
+    width: 135px;
+    height: 77px;
+    margin: 2px 2px;
     text-align: center;
     overflow: hidden;
 }

@@ -7,7 +7,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'upload'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		upload = layui.upload;
@@ -40,15 +39,7 @@ layui.config({
 		    		}});
 				});
 	 		}, 'click .sel':function(index, row){
-	 			layer.open({
-	        		type:1,
-	        		title:false,
-	        		closeBtn:0,
-	        		skin: 'demo-class',
-	        		shadeClose:true,
-	        		content:'<img src="' + fileBasePath + row.picUrl + '" style="max-height:600px;max-width:100%;">',
-	        		scrollbar:false
-	            });
+				systemCommonUtil.showPicImg(fileBasePath + row.picUrl);
 	 		}
 	 	},
 	 	ajaxSendAfter:function(json){

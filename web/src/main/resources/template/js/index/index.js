@@ -33,7 +33,7 @@ layui.config({
     $("#sysTitle").html(sysMainMation.mationTitle);
     
     // 页面加载进度条
-    $(".winui-load-mation-bg").css({"background-image": "url('" + fileBasePath + '/assets/images/win-load.jpg' + "')"});
+    $(".winui-load-mation-bg").css({"background-image": "url('/assets/images/win-load.jpg')"});
     winuiLoad = radialIndicator($('#winui-load'), {
     	barBgColor: '#E3E3E3',
         barColor: '#8A2BE2',

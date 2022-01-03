@@ -426,7 +426,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				offset: "rb",
 				resize: !1,
 				area: ["50px", "40px"],
-				content: '<img src="' + fileBasePath + '/assets//images//qq_32.png" class="qq_32"/>',
+				content: '<img src="/assets//images//qq_32.png" class="qq_32"/>',
 				move: false,
 				success: function(i, a) {
 					b = i, j.base.right && i.css("margin-left", "-" + j.base.right), i.on("click", function() {

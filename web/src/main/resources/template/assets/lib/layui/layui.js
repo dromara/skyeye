@@ -13,8 +13,6 @@ var reqBasePath = "http://127.0.0.1:8081/";
 var basePath = "../../assets/lib/winui/";
 var maskReqStr = '<div class="mask-req-str"><div class="cent"><i class="fa fa-spin fa-spinner fa-fw"></i><br><br><font>数据请求中</font></div></div>';
 var skyeyeVersion = "1.0.0-beta";
-var filePicType = ['png', 'jpg', 'gif', 'jpeg', 'PNG', 'JPG', 'GIF', 'JPEG'];
-var fileDocType = ['txt', 'docx', 'doc', 'xlsx', 'xls', 'pdf', 'ppt', 'TXT', 'DOCX', 'DOC', 'XLSX', 'XLS', 'PDF', 'PPT'];
 var webSocketPath = "";//聊天socket-开发
 var returnCitySN = {"cip": "", "cid": "CN", "cname": "CHINA"};//ip json
 var sysMainMation = '';//系统基础信息json

@@ -409,6 +409,9 @@ dataGrid.prototype = {
                 dataType: "json",
                 type: method,
                 data: parms,
+                beforeSend: function () {
+                    $("body").append(maskReqStr);
+                },
                 success: function(data) {
                     //移除请求遮罩层
                     $("body").find(".mask-req-str").remove();

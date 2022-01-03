@@ -19,6 +19,7 @@ var customerJS = {
 	"accountSubjectUtil": "../../assets/lib/layui/customer/accountSubjectUtil.js", // 财务会计相关的工具函数
 	"sysCustomerUtil": "../../assets/lib/layui/customer/sysCustomerUtil.js", // CRM相关的工具函数
 	"sysIfsUtil": "../../assets/lib/layui/customer/sysIfsUtil.js", // 财务相关的工具函数
+	"sysFileUtil": "../../assets/lib/layui/customer/sysFileUtil.js", // 系统文件相关处理工具
 };
 
 // 编辑加载自定义的js文件
@@ -978,7 +979,7 @@ function download(url, filename) {
 };
 
 //下载图片
-function downloadImage(path,imgName) {
+function downloadImage(path, imgName) {
 	var _OBJECT_URL;
 	var request = new XMLHttpRequest();
 	request.addEventListener('readystatechange', function (e) {

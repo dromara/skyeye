@@ -338,7 +338,7 @@ layui.define('layer', function(exports) {
 					}
 				});
 				if(check) {
-					that.msg('选择的图片中包含不支持的格式');
+					that.msg('选择的文件中包含不支持的格式');
 					return elemFile.value = '';
 				}
 				break;
