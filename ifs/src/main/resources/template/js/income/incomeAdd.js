@@ -1,9 +1,4 @@
 
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "2";//人员选择类型，1.多选；其他。单选
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -141,7 +136,10 @@ layui.config({
 	    
 	    // 人员选择
 		$("body").on("click", "#toHandsPersonSelPeople", function(e){
-			userReturnList = [].concat(handsPersonList);
+            systemCommonUtil.userReturnList = [].concat(handsPersonList);
+            systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+            systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+            systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
             systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
                 // 移除所有tag
                 var tags = $('#handsPersonId').tagEditor('getTags')[0].tags;
@@ -210,6 +208,15 @@ layui.config({
             sysIfsUtil.openSysAccountSubjectChoosePage(function (chooseAccountSubjectMation){
                 _this.parent().find("input").attr("accountSubject", JSON.stringify(chooseAccountSubjectMation));
                 _this.parent().find("input").val(chooseAccountSubjectMation.num + "_" + chooseAccountSubjectMation.name);
+            });
+        });
+
+        // 选择凭证
+        $("body").on("click", ".chooseVoucherBtn", function(e){
+            var _this = $(this);
+            sysIfsUtil.openIfsVoucherChoosePage(function (chooseVoucherMation){
+                _this.parent().find("input").attr("voucher", JSON.stringify(chooseVoucherMation));
+                _this.parent().find("input").val(chooseVoucherMation.fileName);
             });
         });
 
