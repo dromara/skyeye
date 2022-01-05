@@ -42,7 +42,13 @@ layui.config({
             }},
             { field: 'startTime', title: '开始日期', align: 'center', width: 100},
             { field: 'endTime', title: '截至日期', align: 'center', width: 100},
-            { field: 'state', title: '状态', align: 'center', width: 80},
+            { field: 'state', title: '状态', align: 'center', width: 80, templet: function(d){
+                if(d.state == 1){
+                    return "<span class='state-up'>启用</span>";
+                }else {
+                    return "<span class='state-down'>停用</span>";
+                }
+            }},
             { field: 'remark', title: '备注', align: 'left', width: 200},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 100 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },

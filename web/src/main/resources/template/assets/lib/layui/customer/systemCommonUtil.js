@@ -178,6 +178,20 @@ var systemCommonUtil = {
         for (i = 0; i < tags.length; i++) {
             $('#' + id).tagEditor('removeTag', tags[i]);
         }
+    },
+
+    /**
+     * 表格禁止指定行数据选择
+     *
+     * @param index 行坐标
+     * @param type 'radio': 单选；'checkbox': 多选
+     */
+    disabledRow: function(index, type) {
+        // 第index行复选框不可选
+        let t = $(".layui-table tr[data-index=" + index + "] input[type='" + type + "']");
+        t.prop('disabled', true);
+        t.addClass('layui-btn-disabled');
+        t.next().css("cursor", "not-allowed");
     }
 
 };

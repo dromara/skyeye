@@ -202,6 +202,14 @@ layui.config({
             });
  	    });
 
+        // 选择账套
+        $("body").on("click", "#chooseSetOfBooksBtn", function(e){
+            var _this = $(this);
+            sysIfsUtil.openIfsSetOfBooksListChoosePage(function (ifsSetOfBooksMation){
+                _this.parent().find("input").val(ifsSetOfBooksMation.name);
+            });
+        });
+
         // 选择会计科目
         $("body").on("click", ".chooseIfsAccountSubjectBtn", function(e){
             var _this = $(this);

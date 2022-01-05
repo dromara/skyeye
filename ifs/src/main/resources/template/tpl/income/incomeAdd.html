@@ -22,6 +22,13 @@
 	                <input type="text" id="operTime" name="operTime" win-verify="required" placeholder="请选择单据日期" class="layui-input"/>
 	            </div>
 	        </div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">所属账套<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<input type="text" id="setOfBooksName" name="setOfBooksName" win-verify="required" placeholder="请选择账套" class="layui-input" readonly="readonly"/>
+					<i class="fa fa-plus-circle input-icon" id="chooseSetOfBooksBtn"></i>
+				</div>
+			</div>
 	        <div class="layui-form-item layui-col-xs12">
 	            <label class="layui-form-label">列表项<i class="red">*</i></label>
 	            <div class="layui-input-block">

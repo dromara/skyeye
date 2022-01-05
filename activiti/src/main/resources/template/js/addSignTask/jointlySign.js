@@ -78,7 +78,7 @@ layui.config({
             for (var i = 0; i < res.rows.length; i++) {
                 // 不允许删除的设置为不可选中
                 if(res.rows[i].noDelete){
-                    disabledRow(res.rows[i].LAY_TABLE_INDEX);
+                    systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'checkbox');
                 }
             }
             matchingLanguage();
@@ -97,14 +97,6 @@ layui.config({
         chooseUserList[rowIndex] = tem;
         table.reload("messageTable", {data: chooseUserList});
     });
-
-    function disabledRow(index) {
-        // 第index行复选框不可选
-        let t = $(".layui-table tr[data-index=" + index + "] input[type='checkbox']");
-        t.prop('disabled', true);
-        t.addClass('layui-btn-disabled');
-        t.next().css("cursor", "not-allowed");
-    }
 
     form.render();
     form.on('submit(formAddBean)', function (data) {
