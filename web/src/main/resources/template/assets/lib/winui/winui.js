@@ -443,11 +443,20 @@
         		$("body").append(maskReqStr);
                 layui.each(verifyElem, function (index, item) {
                     var othis = $(this), ver = othis.attr('win-verify').split('|');
-                    var tips = '', value = othis.val();
+                    var tips = '';
+                    var value = othis.val();
+                    // 如果是单选，则获取单选的值
+                    if(othis.hasClass("winui-radio")){
+                        value = othis.find("input:checked").val();
+                        if(value === undefined){
+                            value = "";
+                        }
+                    }
                     othis.removeClass(DANGER);
                     layui.each(ver, function (_, thisVer) {
                         var isFn = typeof that.verify[thisVer] === 'function';
-                        if (that.verify[thisVer] && (isFn ? tips = that.verify[thisVer](value, item) : !that.verify[thisVer][0].test(value))) {
+                        if (that.verify[thisVer]
+                            && (isFn ? tips = that.verify[thisVer](value, item) : !that.verify[thisVer][0].test(value))) {
                         	layer.msg(tips || that.verify[thisVer][1], {
                                 icon: 5,
                                 shift: 6

@@ -36,7 +36,16 @@ layui.config({
             { field: 'type', title: '类型', align: 'center', width: 120, templet: function(d){
                 return getInPoingArr(accountSubjectUtil.accountSubjectType, "id", d.type, "name");
             }},
-            { field: 'state', title: '状态', align: 'center', width: 80},
+            { field: 'amountDirection', title: '余额方向', align: 'center', width: 80, templet: function(d){
+                return sysIfsUtil.getAmountDirectionById(d.amountDirection);
+            }},
+            { field: 'state', title: '状态', align: 'center', width: 80, templet: function(d){
+                if(d.state == 1){
+                    return "<span class='state-up'>启用</span>";
+                }else {
+                    return "<span class='state-down'>停用</span>";
+                }
+            }},
             { field: 'remark', title: '备注', align: 'left', width: 200},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 100 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },

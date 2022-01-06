@@ -10,8 +10,12 @@ layui.config({
         var $ = layui.$,
         	textool = layui.textool;
         var selTemplate = getFileContent('tpl/template/select-option.tpl');
+        var radioTemplate = getFileContent('tpl/template/radio-property.tpl');
 
         $("#type").html(getDataUseHandlebars(selTemplate, {rows: accountSubjectUtil.accountSubjectType}));
+
+        // 余额方向
+        $("#amountDirectionBox").html(getDataUseHandlebars(radioTemplate, {rows: sysIfsUtil.amountDirection}));
 
         textool.init({
 	    	eleId: 'remark',
@@ -26,6 +30,7 @@ layui.config({
                 var params = {
                     name: $("#name").val(),
                     state: $("input[name='state']:checked").val(),
+                    amountDirection: $("input[name='radioProperty']:checked").val(),
                     num: $("#num").val(),
                     type: $("#type").val(),
                     remark: $("#remark").val()

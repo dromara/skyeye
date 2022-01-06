@@ -9,6 +9,8 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$,
         	textool = layui.textool;
+        var selTemplate = getFileContent('tpl/template/select-option.tpl');
+        var radioTemplate = getFileContent('tpl/template/radio-property.tpl');
 
         showGrid({
             id: "showForm",
@@ -27,9 +29,12 @@ layui.config({
 			    	tools: ['count', 'copy', 'reset', 'clear']
 			    });
 
-                var selTemplate = getFileContent('tpl/template/select-option.tpl');
                 $("#type").html(getDataUseHandlebars(selTemplate, {rows: accountSubjectUtil.accountSubjectType}));
                 $("#type").val(json.bean.type);
+
+                // 余额方向
+                $("#amountDirectionBox").html(getDataUseHandlebars(radioTemplate, {rows: sysIfsUtil.amountDirection}));
+                $("input:radio[name=radioProperty][value=" + json.bean.amountDirection + "]").attr("checked", true);
 
                 $("input:radio[name=state][value=" + json.bean.state + "]").attr("checked", true);
                 
@@ -41,6 +46,7 @@ layui.config({
                             rowId: parent.rowId,
                             name: $("#name").val(),
                             state: $("input[name='state']:checked").val(),
+                            amountDirection: $("input[name='radioProperty']:checked").val(),
                             num: $("#num").val(),
                             type: $("#type").val(),
                             remark: $("#remark").val()

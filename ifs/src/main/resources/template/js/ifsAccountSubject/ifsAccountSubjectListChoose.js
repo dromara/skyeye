@@ -37,6 +37,9 @@ layui.config({
 			{ field: 'type', title: '类型', align: 'center', width: 120, templet: function(d){
 				return getInPoingArr(accountSubjectUtil.accountSubjectType, "id", d.type, "name");
 			}},
+			{ field: 'amountDirection', title: '余额方向', align: 'center', width: 80, templet: function(d){
+				return sysIfsUtil.getAmountDirectionById(d.amountDirection);
+			}},
 			{ field: 'remark', title: '备注', align: 'left', width: 200}
 		]],
 		done: function(res, curr, count){
@@ -89,7 +92,7 @@ layui.config({
 	function getTableParams(){
 		return {
 			name: $("#name").val(),
-			state: 1,
+			state: 1, // 已启用
 			type: $("#type").val()
 		};
 	}

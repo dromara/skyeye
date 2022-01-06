@@ -18,6 +18,7 @@ layui.config({
             template: $("#simpleTemplate").html(),
             ajaxSendAfter:function(json){
                 $("#state").html(json.bean.state == "1" ? "<span class='state-up'>启用</span>" : "<span class='state-down'>停用</span>");
+                $("#amountDirectionBox").html(sysIfsUtil.getAmountDirectionById(json.bean.amountDirection));
                 $("#type").html(getInPoingArr(accountSubjectUtil.accountSubjectType, "id", json.bean.type, "name"));
                 matchingLanguage();
                 form.render();
