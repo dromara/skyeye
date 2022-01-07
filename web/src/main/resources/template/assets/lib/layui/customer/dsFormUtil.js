@@ -91,7 +91,7 @@ var dsFormUtil = {
         showGrid({
             id: domId,
             url: reqBasePath + "dsformpagetype006",
-            params: {parentId: parentId},
+            params: {parentId: parentId, language: languageType},
             pagination: false,
             method: "GET",
             template: getFileContent('tpl/template/select-option.tpl'),

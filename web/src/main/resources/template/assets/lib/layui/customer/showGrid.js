@@ -405,7 +405,7 @@ dataGrid.prototype = {
             parms.loginPCIp = returnCitySN["cip"];
             layui.$.ajax({
                 url: url,
-                async: false, //改为同步方式
+                async: false, // 改为同步方式
                 dataType: "json",
                 type: method,
                 data: parms,

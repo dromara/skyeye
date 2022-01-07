@@ -15,22 +15,34 @@
 
 	<script type="text/x-handlebars-template" id="showTemplate">
 		{{#bean}}
-		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">分类名称<i class="red">*</i></label>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">中文名称<i class="red">*</i></label>
 			<div class="layui-input-block">
-				<input type="text" id="typeName" name="typeName" win-verify="required" placeholder="请输入分类名称" class="layui-input" value="{{name}}"/>
+				<input type="text" id="typeName" name="typeName" win-verify="required" placeholder="请输入中文名称" class="layui-input" value="{{typeName}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">英文名称<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="typeNameEn" name="typeNameEn" win-verify="required" placeholder="请输入英文名称" class="layui-input" value="{{typeNameEn}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">唯一编码<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="encoded" name="encoded" win-verify="required" placeholder="请输入唯一编码，例如：1101" class="layui-input" value="{{code}}"/>
 			</div>
 		</div>
 		<div class="layui-form-item layui-col-xs12">
-			<label class="layui-form-label">父级分类</label>
+			<label class="layui-form-label">所属父级</label>
 			<div class="layui-input-block">
 				<select id="parentId" name="parentId" lay-filter="parentId" lay-search="" disabled>
 				</select>
-				<div class="layui-form-mid layui-word-aux">如果不选，则默认为父级分类。</div>
+				<div class="layui-form-mid layui-word-aux">如果不选，则默认为一级分类。</div>
 			</div>
 		</div>
-		<div class="layui-form-item">
-			<div class="layui-input-block layui-col-xs12">
+		<div class="layui-form-item layui-col-xs12">
+			<div class="layui-input-block">
 				<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
 				<button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
 			</div>

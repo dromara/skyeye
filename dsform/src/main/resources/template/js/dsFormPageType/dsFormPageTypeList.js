@@ -26,11 +26,13 @@ layui.config({
 		treeShowName: 'typeName',//以树形式显示的字段
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'typeName', title: '名称',  width: 360 },
-			{ field: 'createName', title: '创建人', align: 'left', width: 100 },
-			{ field: 'createTime', title: '创建时间', align: 'center', width: 150 },
-			{ field: 'lastUpdateName', title: '最后修改人', align: 'left', width: 100 },
-			{ field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 150 },
+			{ field: 'typeName', title: '中文名称', width: 180 },
+			{ field: 'typeNameEn', title: '英文名称', width: 180 },
+			{ field: 'code', title: '编码', align: 'left', width: 100 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 100 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 100 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 130, toolbar: '#tableBar'}
 	    ]],
 		isPage: false,
@@ -118,7 +120,8 @@ layui.config({
     
     function getTableParams(){
     	return {
-    		typeName: $("#typeName").val()
+    		typeName: $("#typeName").val(),
+			encoded: $("#encoded").val()
     	};
 	}
     
