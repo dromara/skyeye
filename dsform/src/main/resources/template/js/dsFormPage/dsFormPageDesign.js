@@ -33,30 +33,19 @@ layui.config({
  		}
  	}});
  	
- 	function loadPageMation(json){
-		$.each(json.rows, function(i, item){
-			if(parseInt(item.state) == 1){
-				loadNewControl(item);
-			}else{
-				jsonArray.push(item);
-			}
-		});
-		loadFormItemDrop();
-		matchingLanguage();
- 	}
- 	
  	// 加载新增加的控件信息
     function loadNewControl(item){
     	if(item.associatedDataTypes == 1){//json串
-			var obj = JSON.parse(item.aData);
-			tplContent = getDataUseHandlebars(item.templateContent, obj);
-			item.context = tplContent;
+			var obj = item.aData;
+			if(typeof item.aData == 'string'){
+				obj = JSON.parse(item.aData);
+			}
+			item.context = getDataUseHandlebars(item.templateContent, obj);
 		}else if(item.associatedDataTypes == 2){//接口
 			AjaxPostUtil.request({url:reqBasePath + "dsformpage011", params:{interfa: item.aData}, type:'json', callback:function(j){
 	   			if(j.returnCode == 0){
 	   				var obj = JSON.parse(j.bean.aData);
-	   				tplContent = getDataUseHandlebars(item.templateContent, obj);
-	   				item.context = tplContent;
+	   				item.context = getDataUseHandlebars(item.templateContent, obj);
 	   			}else{
 	   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
 	   			}
@@ -73,7 +62,20 @@ layui.config({
 		jsonArray.push(item);
 		form.render();
     }
- 	
+
+	function loadPageMation(json){
+		$.each(json.rows, function(i, item){
+			if(parseInt(item.state) == 1){
+				// 加载非删除状态的数据
+				loadNewControl(item);
+			}else{
+				jsonArray.push(item);
+			}
+		});
+		loadFormItemDrop();
+		matchingLanguage();
+	}
+
  	function loadFormItemDrop(){
  		$.each($("#showForm").find(".layui-form-item"), function(i, item){
  			var _this = $(item);
@@ -161,6 +163,7 @@ layui.config({
     		pageId: rowId,
 			defaultWidth: 'layui-col-xs12',
 			title: '标题',
+			linkedData: linkedData,
 			require: '',
 			placeholder: '',
 			defaultValue: '',
@@ -204,7 +207,7 @@ layui.config({
 	
 	// 保存“新增控件”
     function reqSaveData(params, templateContent){
-    	AjaxPostUtil.request({url:reqBasePath + "dsformpage003", params:params, type:'json', callback:function(json){
+    	AjaxPostUtil.request({url: reqBasePath + "dsformpage003", params: params, type: 'json', callback: function(json){
 			if(json.returnCode == 0){
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
 				var templateJson = json.bean;
@@ -213,7 +216,7 @@ layui.config({
 				loadNewControl(templateJson);
 				loadFormItemDrop();
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}, async: false});
     }
@@ -224,7 +227,7 @@ layui.config({
     	$(this).addClass("ui-sortable-placeholder-choose");
     	var rowid = $(this).attr("rowid");
     	var arr = [];
-    	$.each(jsonArray, function(i, item){ 
+    	$.each(jsonArray, function(i, item){
 			if(item.id === rowid){
 				$("#btnBoxDesignForm").html(getDataUseHandlebars($("#controlItemEdit").html(), {bean: item}));
 				$("#deleteBtn").attr("rowid", rowid);
@@ -234,8 +237,12 @@ layui.config({
 					$("#isAssociated").removeClass("layui-hide");
  					associatedDataTypesChange(associatedDataTypes);
  					if(associatedDataTypes == "1"){
+						var obj = item.aData;
+						if(typeof item.aData != 'string'){
+							obj = JSON.stringify(item.aData);
+						}
  						// json串
- 						$("#JsonData").val(item.aData);
+ 						$("#JsonData").val(obj);
  					}else if(associatedDataTypes == "2"){
  						// 接口
  						$("#nterfac").val(item.aData);
@@ -247,6 +254,7 @@ layui.config({
 				form.on('submit(formAddBean)', function (data) {
 					if (winui.verifyForm(data.elem)) {
 						saveNodeData(data, rowid, arr);
+						winui.window.msg("保存成功", {icon: 1,time: 2000});
 					}
 					return false;
 				});
@@ -297,7 +305,7 @@ layui.config({
     	var newParams = jsonArray[inDataIndex];
     	newParams.labelContent = $("#title").val();
     	newParams.placeholder = $("#placeholder").val();
-    	newParams.require = arr.join(",");
+    	newParams.requireId = arr.join(",");
     	newParams.value = $("#defaultValue").val();
     	newParams.defaultWidth = $("#defaultWidth").val();
     	newParams.keyId = $("#keyId").val();
@@ -412,8 +420,8 @@ layui.config({
    				var contentModel = getFileContent('tpl/template/select-option.tpl');//获取html模板
    				var jsonStr = getDataUseHandlebars(contentModel, json);//模板和数据结合
 				$("#require").html(jsonStr);
-				if(!isNull(item.require)){
-					$("#require").val(item.require.split(","));//给这个元素赋值
+				if(!isNull(item.requireId)){
+					$("#require").val(item.requireId.split(","));//给这个元素赋值
 				}
    				form.render();
    			}else{
