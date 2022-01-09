@@ -6,11 +6,13 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate', 'fsCommon', 'fsTree'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
         laydate = layui.laydate,
+        fsTree = layui.fsTree,
+        fsCommon = layui.fsCommon,
         table = layui.table;
     authBtn('1571638020191');//新增
     authBtn('1572313776196');//导出
@@ -20,31 +22,33 @@ layui.config({
         range: '~'
     });
 
-    table.render({
-        id: 'messageTable',
-        elem: '#messageTable',
-        method: 'post',
-        url: reqBasePath + 'income001',
-        where: getTableParams(),
-        even: true,
-        page: true,
-        limits: getLimits(),
-	    limit: getLimit(),
-        cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'billNo', title: '单据编号', align: 'left', width: 200, templet: function(d){
-                return '<a lay-event="details" class="notice-title-click">' + d.billNo + '</a>';
-            }},
-            { field: 'customerName', title: '往来单位', align: 'left', width: 150},
-            { field: 'totalPrice', title: '合计金额', align: 'left', width: 120},
-            { field: 'hansPersonName', title: '经手人', align: 'left', width: 100},
-            { field: 'billTime', title: '单据日期', align: 'center', width: 140 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
-        ]],
-	    done: function(){
-	    	matchingLanguage();
-	    }
-    });
+    function initLoadTable(){
+        table.render({
+            id: 'messageTable',
+            elem: '#messageTable',
+            method: 'post',
+            url: reqBasePath + 'income001',
+            where: getTableParams(),
+            even: true,
+            page: true,
+            limits: getLimits(),
+            limit: getLimit(),
+            cols: [[
+                { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+                { field: 'billNo', title: '单据编号', align: 'left', width: 200, templet: function(d){
+                        return '<a lay-event="details" class="notice-title-click">' + d.billNo + '</a>';
+                    }},
+                { field: 'customerName', title: '往来单位', align: 'left', width: 150},
+                { field: 'totalPrice', title: '合计金额', align: 'left', width: 120},
+                { field: 'hansPersonName', title: '经手人', align: 'left', width: 100},
+                { field: 'billTime', title: '单据日期', align: 'center', width: 140 },
+                { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
+            ]],
+            done: function(){
+                matchingLanguage();
+            }
+        });
+    }
 
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
@@ -57,6 +61,34 @@ layui.config({
             edit(data);
         }
     });
+
+    /********* tree 处理   start *************/
+    var orderType = "";
+    var ztree = null;
+    fsTree.render({
+        id: "treeDemo",
+        url: "dsFormObjectRelation007?userToken=" + getCookie('userToken') + "&loginPCIp=" + returnCitySN["cip"] + "&firstTypeCode=IFS" + "&language=" + languageType,
+        clickCallback: onClickTree,
+        onDblClick: onClickTree
+    }, function(id){
+        ztree = $.fn.zTree.getZTreeObj(id);
+        initLoadTable();
+    });
+
+    // 异步加载的方法
+    function onClickTree(event, treeId, treeNode) {
+        if(treeNode == undefined) {
+            orderType = "";
+        } else {
+            if(treeNode.isParent != 0){
+                return;
+            }
+            // 订单类型
+            orderType = treeNode.id;
+        }
+        loadTable();
+    }
+    /********* tree 处理   end *************/
 
     // 编辑
     function edit(data){
@@ -159,6 +191,7 @@ layui.config({
         }
         return {
             billNo: $("#billNo").val(),
+            orderType: orderType,
             startTime: startTime,
             endTime: endTime
         };
