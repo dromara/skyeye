@@ -1,0 +1,154 @@
+.voucher {
+    border-collapse: collapse
+}
+
+.voucher th {
+    height: 48px;
+    color: #555555;
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+.voucher .col_money {
+    font-size: 12px;
+}
+
+.voucher .col_money .tit {
+    display: block;
+    height: 25px;
+    line-height: 25px;
+}
+
+.voucher .money_unit {
+    height: 22px;
+    line-height: 22px;
+    font-weight: normal;
+    border-top: 1px solid #dadada;
+    text-align: center;
+}
+
+.voucher .money_unit span {
+    float: left;
+    display: inline;
+    width: 19px;
+    height: 100%;
+    margin-right: 1px;
+    background-color: #fff;
+}
+
+.voucher .money_unit .last {
+    margin-right: 0;
+    width: 18px;
+}
+
+.voucher th, .voucher td {
+    border: 1px solid #ccc;
+}
+
+.voucher td.col_debite, .voucher td.col_credit, .voucher td.col_money, .money_unit {
+    background-image: url(../../../../images/voucher/money_rp.png);
+    background-repeat: repeat-y;
+}
+
+.voucher td {
+    height: 60px;
+}
+
+.voucher .col_debite, .voucher .col_credit, .voucher .col_money {
+    width: 218px;
+}
+
+.col_summary textarea {
+    width: 200px;
+    height: 50px;
+    min-height: 50px;
+    border: 0px;
+}
+
+.col_voucher .cell_val {
+    width: 240px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.col_subject .cell_val {
+    width: 240px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.col_debite .cell_val,
+.col_credit .cell_val{
+    width: 220px;
+}
+
+.voucher .col_operate {
+    text-align: center;
+    width: 26px;
+    border-right: 1px solid #ccc;
+}
+
+.voucher .col_operate .operate{
+    height: 100%;
+}
+
+.voucher .col_operate .operate i{
+    line-height: 50px;
+    width: 26px;
+    font-size: 15px;
+    z-index: 100;
+}
+
+.voucher .col_operate .operate i:hover{
+    cursor: pointer;
+}
+
+.edit_summary, .edit_money, .edit_subject {
+    float: left;
+    outline: none;
+    resize: none;
+    border: 2px solid #4bb8f3;
+    box-shadow: rgba(0, 0, 0, .1) 0 1px 2px 1px inset;
+    height: 50px;
+    padding: 3px;
+    overflow: hidden;
+    line-height: 50px \9;
+}
+
+.edit_money {
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 20px;
+    width: 208px;
+    text-align: right;
+    overflow: hidden;
+    ime-mode: disabled;
+}
+
+.voucher .col_debite .cell_val, .voucher .col_credit .cell_val {
+    overflow: hidden;
+    font-family: 'tahoma';
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 11px;
+    overflow: hidden;
+    position: relative;
+    right: -5px;
+    *right: 4px;
+    text-align: right;
+}
+
+.cell_val {
+}
+
+.choose_btn{
+    top: 0px;
+    right: 0px;
+    position: relative;
+    float: right;
+}
+
+.entry_item:hover {
+    background-color: #f8f8f8;
+}

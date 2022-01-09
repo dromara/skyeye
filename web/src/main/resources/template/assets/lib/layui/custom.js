@@ -20,6 +20,7 @@ var customerJS = {
 	"sysCustomerUtil": "../../assets/lib/layui/customer/sysCustomerUtil.js", // CRM相关的工具函数
 	"sysIfsUtil": "../../assets/lib/layui/customer/sysIfsUtil.js", // 财务相关的工具函数
 	"sysFileUtil": "../../assets/lib/layui/customer/sysFileUtil.js", // 系统文件相关处理工具
+	"publicKeyCode": "../../assets/lib/layui/customer/publicKeyCode.js", // 快捷键
 };
 
 // 编辑加载自定义的js文件
