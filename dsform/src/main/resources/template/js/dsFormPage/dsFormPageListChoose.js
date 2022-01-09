@@ -12,21 +12,27 @@ layui.config({
 		table = layui.table,
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 
-	var ids = [];
-	$.each(parent.dsFormUtil.dsFormChooseList, function(i, item){
-		ids.push(item.id);
-	});
-	tableCheckBoxUtil.setIds({
-		gridId: 'messageTable',
-		fieldName: 'farmId',
-		ids: ids
-	});
+	if(parent.dsFormUtil.chooseType) {
+		// 多选
+		var ids = [];
+		$.each(parent.dsFormUtil.dsFormChooseList, function (i, item) {
+			ids.push(item.id);
+		});
+		tableCheckBoxUtil.setIds({
+			gridId: 'messageTable',
+			fieldName: 'farmId',
+			ids: ids
+		});
 
-	tableCheckBoxUtil.init({
-		gridId: 'messageTable',
-		filterId: 'messageTable',
-		fieldName: 'id'
-	});
+		tableCheckBoxUtil.init({
+			gridId: 'messageTable',
+			filterId: 'messageTable',
+			fieldName: 'id'
+		});
+	}else{
+		// 单选
+		$("#saveCheckBox").hide();
+	}
 
 	dsFormUtil.loadDsFormPageTypeByPId("firstTypeId", "0");
 
@@ -48,7 +54,7 @@ layui.config({
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	    	{ type: 'checkbox', fixed: 'left'},
+	    	{ type: parent.dsFormUtil.chooseType ? 'checkbox' : 'radio', fixed: 'left'},
 			{ field: 'pageName', title: '页面名称', align: 'left', width: 120 },
 			{ field: 'firstTypeName', title: '一级分类', align: 'left', width: 120 },
 			{ field: 'secondTypeName', title: '二级分类', align: 'left', width: 120 },
@@ -63,10 +69,32 @@ layui.config({
 				}
 			});
 
-			tableCheckBoxUtil.checkedDefault({
-				gridId: 'messageTable',
-				fieldName: 'id'
-			});
+			if(parent.dsFormUtil.chooseType) {
+				// 多选
+				tableCheckBoxUtil.checkedDefault({
+					gridId: 'messageTable',
+					fieldName: 'id'
+				});
+			}else{
+				// 单选
+				$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
+					var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
+					dubClick.find("input[type='radio']").prop("checked", true);
+					form.render();
+					var chooseIndex = JSON.stringify(dubClick.data('index'));
+					var obj = res.rows[chooseIndex];
+					parent.dsFormUtil.dsFormChooseMation = obj;
+
+					parent.refreshCode = '0';
+					parent.layer.close(index);
+				});
+
+				$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
+					var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
+					click.find("input[type='radio']").prop("checked", true);
+					form.render();
+				});
+			}
 	    }
 	});
 	
@@ -75,6 +103,10 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
+		if(selectedData.length == 0){
+			winui.window.msg("请选择表单", {icon: 2,time: 2000});
+			return false;
+		}
 		var result = [];
 		$.each(selectedData, function(i, item){
 			result.push(getInPoingArr(tableList, "id", item, ""));

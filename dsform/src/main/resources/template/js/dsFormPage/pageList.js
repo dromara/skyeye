@@ -14,7 +14,6 @@ layui.config({
 	authBtn('1567731484858');
 
 	dsFormUtil.loadDsFormPageTypeByPId("firstTypeId", "0");
-
 	form.on('select(firstTypeId)', function(data) {
 		var thisRowValue = data.value;
 		dsFormUtil.loadDsFormPageTypeByPId("secondTypeId", isNull(thisRowValue) ? "-" : thisRowValue);
@@ -122,7 +121,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			refreshTable();
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -134,10 +133,6 @@ layui.config({
     
     function loadTable(){
     	table.reload("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
     function getTableParams(){

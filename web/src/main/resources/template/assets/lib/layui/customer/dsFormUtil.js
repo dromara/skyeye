@@ -1,7 +1,10 @@
 // 动态表单工具函数
 var dsFormUtil = {
 
-    dsFormChooseList: [],
+    dsFormChooseList: [], // 动态表单选择页面类型为【多选】时返回的参数
+    dsFormChooseMation: {}, // 动态表单选择页面类型为【单选】时返回的参数
+    chooseType: true, // 动态表单选择页面类型，true：多选；false：单选
+
     dsFormDataKey: "initData",
     dsFormBtnTemplate: '<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="{{btnId}}">表单选择</button>',
     customDsFormBox: '<div class="layui-form-item layui-col-xs12"><span class="hr-title">{{pageName}}</span><hr></div><div id="{{id}}" class="ds-form-page layui-col-xs12"></div>',
@@ -106,10 +109,10 @@ var dsFormUtil = {
      * 加载动态表单到页面
      *
      * @param showBoxId要追加的boxid后面
-     * @param code com.skyeye.common.constans.SystemFoundationSettingsConstants.CustomWithDsFormObject中的code
+     * @param code 动态表单-----业务逻辑表单关联表中的code
      */
     loadPageByCode: function(showBoxId, code){
-        AjaxPostUtil.request({url: reqBasePath + "dsformpage013", params: {dsFormCode: code}, method: "GET", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation006", params: {dsFormObjectRelationCode: code}, method: "GET", type: 'json', callback: function(json) {
             if(json.returnCode == 0) {
                 dsFormUtil.loadDsFormItem(showBoxId, json);
             } else {

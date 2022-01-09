@@ -15,7 +15,7 @@ layui.config({
 	var actKey = parent.actKey;
 	
 	// 加载动态表单页
-	AjaxPostUtil.request({url:reqBasePath + "dsformpage012", params:{rowId: parent.dsFormId}, type:'json', callback:function(json){
+	AjaxPostUtil.request({url:reqBasePath + "dsformpage004", params:{rowId: parent.dsFormId}, type:'json', callback:function(json){
  		if(json.returnCode == 0){
 			dsFormUtil.loadDsFormItemToEdit("showForm", json.rows);
  			$("#showForm").append('<div class="layui-form-item layui-col-xs12"><div class="layui-input-block">' +
