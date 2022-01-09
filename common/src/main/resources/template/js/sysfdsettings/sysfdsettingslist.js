@@ -51,9 +51,6 @@ layui.config({
 				// 加载ERP以及生产订单的审核设置
 				loadErpExamineBasicDesign(json);
 
-				// 加载动态表单关联信息
-				loadCustomWithDsFormList(json);
-
 				// 加载事件
 				loadEvent();
 
@@ -134,23 +131,6 @@ layui.config({
 					}else{
 						$("input:radio[name='" + item.code + "'][value='2']").attr("checked", true);
 					}
-				});
-			}
-		}
-
-		/**
-		 * 加载动态表单关联信息
-		 *
-		 * @param json
-		 */
-		function loadCustomWithDsFormList(json) {
-			if (!isNull(json.bean.customWithDsFormList)) {
-				var customWithDsFormList = JSON.parse(json.bean.customWithDsFormList);
-				$("#customWithDsFormListBox").append(getDataUseHandlebars($("#customWithDsFormListTemplate").html(), {bean: customWithDsFormList}));
-				$.each(customWithDsFormList, function(key, values){
-					$.each(values, function(i, item){
-						dsFormUtil.initDsFormChooseBtn("daFormChoose" + item.code, item.dsFormList);
-					});
 				});
 			}
 		}
@@ -247,8 +227,6 @@ layui.config({
 					params.abnormalMation = getAbnormalMation();
 					// 获取ERP(生产)审核标识信息
 					params.erpExamineBasicDesign = getErpExamineBasicDesign();
-					// 获取动态表单关联项
-					params.customWithDsFormList = getCustomWithDsFormList();
 
 					AjaxPostUtil.request({url: reqBasePath + "sysfdsettings002", params: params, type: 'json', method: "PUT", callback: function (json) {
 						if (json.returnCode == 0) {
@@ -297,29 +275,6 @@ layui.config({
 					examineSwitch: $("input[name='" + $(item).attr("code") + "']:checked").val() == 1 ? true : false
 				};
 				tableData.push(row);
-			});
-			return JSON.stringify(tableData);
-		}
-
-		/**
-		 * 获取动态表单关联项
-		 *
-		 * @returns {any[]}
-		 */
-		function getCustomWithDsFormList(){
-			var tableData = {};
-			$.each($("#customWithDsFormListBox .customWithDsFormBoxItem"), function (i, item) {
-				var key = $(item).find(".hr-title").html();
-				var values = new Array();
-				$.each($(item).find(".customWithDsFormItem"), function (j, bean) {
-					var row = {
-						title: $(bean).attr("title"),
-						code: $(bean).attr("code"),
-						dsFormList: dsFormUtil.getJSONDsFormListByBoxId($(bean).find(".layui-input-block").attr("id"))
-					};
-					values.push(row);
-				});
-				tableData[key] = values;
 			});
 			return JSON.stringify(tableData);
 		}

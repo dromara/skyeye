@@ -6,7 +6,6 @@
             <li>CRM</li>
             <li>考勤制度</li>
             <li>ERP(生产)审核制度</li>
-            <li>动态表单关联</li>
         </ul>
         <div class="layui-tab-content">
 
@@ -201,10 +200,6 @@
             </div>
 
             <div class="layui-tab-item" id="erpOrderExamineMationBox">
-
-            </div>
-
-            <div class="layui-tab-item" id="customWithDsFormListBox">
 
             </div>
 

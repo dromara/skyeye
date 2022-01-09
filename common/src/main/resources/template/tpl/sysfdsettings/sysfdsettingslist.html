@@ -71,25 +71,6 @@
 		{{/each}}
 	</script>
 
-	<!-- 动态表单关联信息 -->
-	<script type="text/x-handlebars-template" id="customWithDsFormListTemplate">
-		{{#each bean}}
-		<div class="customWithDsFormBoxItem">
-			<div class="layui-form-item layui-col-xs12">
-				<span class="hr-title">{{@key}}</span><hr>
-			</div>
-			{{#each this}}
-			<div class="layui-form-item layui-col-xs6 customWithDsFormItem" title="{{title}}" code="{{code}}">
-				<label class="layui-form-label">{{title}}：</label>
-				<div class="layui-input-block" id="daFormChoose{{code}}">
-
-				</div>
-			</div>
-			{{/each}}
-		</div>
-		{{/each}}
-	</script>
-
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
    	<script type="text/javascript">
