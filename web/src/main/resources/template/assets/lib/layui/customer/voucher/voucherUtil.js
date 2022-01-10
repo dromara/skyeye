@@ -56,6 +56,26 @@ var voucherUtil = {
         voucherUtil.initClickEvent();
     },
 
+    initData: function (boxId, data){
+        $("#" + boxId).html(voucherUtil.tableHtmlDom);
+        for(var i = 0; i < data.length; i++){
+            voucherUtil.addItem();
+            var _this = $("#useTable").find("tr")[i];
+            _this.find(".col_summary").find("textarea").val(); // 摘要
+
+            _this.find(".col_voucher").find(".cell_val").attr("dataId"); // 凭证
+            _this.find(".col_voucher").find(".cell_val").html();
+
+            _this.find(".col_subject").find(".cell_val").attr("dataId", ""); // 会计科目
+            _this.find(".col_subject").find(".cell_val").html();
+
+            _this.find(".col_debite").find(".cell_val").html(); // 借方金额
+            _this.find(".col_credit").find(".cell_val").html(); // 贷方金额
+        }
+
+        voucherUtil.initClickEvent();
+    },
+
     initClickEvent: function (){
         $("body").on("click", "td[data-edit]", function(){
             var _this = $(this);

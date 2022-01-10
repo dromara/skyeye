@@ -119,6 +119,14 @@ layui.config({
             });
         });
 
+        // 选择单据类型
+        $("body").on("click", "#chooseOrderTypeBtn", function(e){
+            var _this = $(this);
+            dsFormUtil.openDsFormObjectRelationChooseByFirstTypeCodeChoosePage("IFS", function (dsFormObjectRelationChoose){
+                _this.parent().find("input").val(dsFormObjectRelationChoose.name);
+            });
+        });
+
         $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });

@@ -350,6 +350,30 @@ var dsFormUtil = {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }, async: false});
-    }
+    },
+
+    /**
+     * 业务逻辑与动态表单的关联关系类型，也可叫单据类型
+     *
+     * @param firstTypeCode 所属一级分类的code
+     * @param callback 回调函数
+     */
+    dsFormObjectRelationChoose: {}, // 已经选择的单据类型
+    openDsFormObjectRelationChooseByFirstTypeCodeChoosePage: function (firstTypeCode, callback){
+        _openNewWindows({
+            url: "../../tpl/dsFormObjectRelation/dsFormObjectRelationChooseByFirstTypeCode.html?firstTypeCode=" + firstTypeCode,
+            title: "单据类型",
+            pageId: "dsFormObjectRelationChooseByFirstTypeCode",
+            area: ['480px', '500px'],
+            callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                    if(typeof(callback) == "function") {
+                        callback(dsFormUtil.dsFormObjectRelationChoose);
+                    }
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                }
+            }});
+    },
 
 };
