@@ -317,7 +317,7 @@ layui.config({
 			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
-		}});
+		}, async: true});
 	}
 
 	//判断选中的商品是否也在数组中
