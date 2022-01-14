@@ -8,14 +8,12 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
 		
 	authBtn('1582381689724');
-	
-	
+
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',

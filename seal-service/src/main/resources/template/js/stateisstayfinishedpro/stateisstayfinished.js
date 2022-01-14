@@ -74,8 +74,6 @@ layui.config({
 					$("#faultKeyPartsId").val(faultKeyParts.productName);
 				}
 				
-				matchingLanguage();
-				form.render();
 				// 加载配件使用明细
 				if(json.bean.partsList.length > 0){
 					initDataToShow(json);
@@ -122,158 +120,94 @@ layui.config({
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
+				matchingLanguage();
 		 		form.render();
 		 		// 暂存
 		 		form.on('submit(temSub)', function (data) {
-		 	        if (winui.verifyForm(data.elem)) {
-		 	        	// 获取已选配件数据
-						var rowTr = $("#useTable tr");
-						var tableData = new Array();
-						var noError = false; // 循环遍历表格数据时，是否有其他错误信息
-						$.each(rowTr, function(i, item) {
-							// 获取行编号
-							var rowNum = $(item).attr("trcusid").replace("tr", "");
-							// 表格数量对象
-							var rkNum = $("#rkNum" + rowNum);
-							if(parseInt(rkNum.val()) == 0) {
-								rkNum.addClass("layui-form-danger");
-								rkNum.focus();
-								winui.window.msg('数量不能为0', {icon: 2, time: 2000});
-								noError = true;
-								return false;
-							}
-							if(parseInt(rkNum.val()) > parseInt($("#currentTock" + rowNum).html())){
-								rkNum.addClass("layui-form-danger");
-								rkNum.focus();
-								winui.window.msg('超过库存数量.', {icon: 2, time: 2000});
-								noError = true;
-								return false;
-							}
-							// 商品对象
-							var product = allChooseProduct["tr" + rowNum.toString()];
-							if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
-								winui.window.msg('一张单中不允许出现相同单位的配件信息.', {icon: 2, time: 2000});
-								noError = true;
-								return false;
-							}
-							var row = {
-								materialId: product.productId,
-								mUnitId: $("#unitId" + rowNum).val(),
-								rkNum: rkNum.val(),
-								remark: $("#remark" + rowNum).val()
-							};
-							tableData.push(row);
-						});
-						if(noError) {
-							return false;
-						}
-		 	        	var picUrl = $("#comPic").find("input[type='hidden'][name='upload']").attr("oldurl");
-		 	        	var params = {
-		        			serviceId: parent.rowId,
-		        			faultTypeId: $("#faultTypeId").val(),
-		        			comTime: $("#comTime").val(),
-		        			comWorkTime: $("#comWorkTime").val(),
-		        			comExecution: $("#comExecution").val(),
-		        			comPic: isNull(picUrl) ? "" : picUrl, //完工拍照，可为空
-							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'), //完工附件，可为空
-		        			comRemark: $("#comRemark").val(),
-		        			coverCost: $("#coverCost").val(),
-		        			otherCost: $("#otherCost").val(),
-		        			comStarTime: $("#comStarTime").val(),
-		        			faultKeyPartsId: isNull(faultKeyParts.productId) ? "" : faultKeyParts.productId,
-		        			actualFailure: $("#actualFailure").val(),
-		        			solution: $("#solution").val(),
-		        			useStr: JSON.stringify(tableData),
-		        			subType: '1' //暂存
-		 	        	};
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "sealseservice035", params: params, type: 'json', callback: function(json){
-	 		 	   			if (json.returnCode == 0){
-	 			 	   			parent.layer.close(index);
-	 			 	        	parent.refreshCode = '0';
-	 		 	   			} else {
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 		 	   			}
-	 		 	   		}});
-		 	        }
+					saveData(data, "1");
 		 	        return false;
 		 	    });
 		 		
-		 	    //完工
+		 	    // 完工
 		 	    form.on('submit(finishedSub)', function (data) {
-		 	        if (winui.verifyForm(data.elem)) {
-		 	        	// 获取已选配件数据
-						var rowTr = $("#useTable tr");
-						var tableData = new Array();
-						var noError = false; // 循环遍历表格数据时，是否有其他错误信息
-						$.each(rowTr, function(i, item) {
-							// 获取行编号
-							var rowNum = $(item).attr("trcusid").replace("tr", "");
-							// 表格数量对象
-							var rkNum = $("#rkNum" + rowNum);
-							if(parseInt(rkNum.val()) == 0) {
-								rkNum.addClass("layui-form-danger");
-								rkNum.focus();
-								winui.window.msg('数量不能为0', {icon: 2, time: 2000});
-								noError = true;
-								return false;
-							}
-							if(parseInt(rkNum.val()) > parseInt($("#currentTock" + rowNum).html())){
-								rkNum.addClass("layui-form-danger");
-								rkNum.focus();
-								winui.window.msg('超过库存数量.', {icon: 2, time: 2000});
-								noError = true;
-								return false;
-							}
-							// 商品对象
-							var product = allChooseProduct["tr" + rowNum.toString()];
-							if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
-								winui.window.msg('一张单中不允许出现相同单位的配件信息.', {icon: 2, time: 2000});
-								noError = true;
-								return false;
-							}
-							var row = {
-								materialId: product.productId,
-								mUnitId: $("#unitId" + rowNum).val(),
-								rkNum: rkNum.val(),
-								remark: $("#remark" + rowNum).val()
-							};
-							tableData.push(row);
-						});
-						if(noError) {
-							return false;
-						}
-		 	        	var picUrl = $("#comPic").find("input[type='hidden'][name='upload']").attr("oldurl");
-		 	        	var params = {
-		        			serviceId: parent.rowId,
-		        			faultTypeId: $("#faultTypeId").val(),
-		        			comTime: $("#comTime").val(),
-		        			comWorkTime: $("#comWorkTime").val(),
-		        			comExecution: $("#comExecution").val(),
-		        			comPic: isNull(picUrl) ? "" : picUrl, //完工拍照，可为空
-							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'), //完工附件，可为空
-		        			comRemark: $("#comRemark").val(),
-		        			coverCost: $("#coverCost").val(),
-		        			otherCost: $("#otherCost").val(),
-		        			comStarTime: $("#comStarTime").val(),
-		        			faultKeyPartsId: isNull(faultKeyParts.productId) ? "" : faultKeyParts.productId,
-		        			actualFailure: $("#actualFailure").val(),
-		        			solution: $("#solution").val(),
-		        			useStr: JSON.stringify(tableData),
-		        			subType: '2' //完工
-		 	        	};
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "sealseservice035", params: params, type: 'json', callback: function(json){
-	 		 	   			if (json.returnCode == 0){
-	 			 	   			parent.layer.close(index);
-	 			 	        	parent.refreshCode = '0';
-	 		 	   			} else {
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 		 	   			}
-	 		 	   		}});
-		 	        }
+					saveData(data, "2");
 		 	        return false;
 		 	    });
 		 	}
 		});
+
+	    function saveData(data, subType){
+			if (winui.verifyForm(data.elem)) {
+				// 获取已选配件数据
+				var rowTr = $("#useTable tr");
+				var tableData = new Array();
+				var noError = false; // 循环遍历表格数据时，是否有其他错误信息
+				$.each(rowTr, function(i, item) {
+					// 获取行编号
+					var rowNum = $(item).attr("trcusid").replace("tr", "");
+					// 表格数量对象
+					var rkNum = $("#rkNum" + rowNum);
+					if(parseInt(rkNum.val()) == 0) {
+						rkNum.addClass("layui-form-danger");
+						rkNum.focus();
+						winui.window.msg('数量不能为0', {icon: 2, time: 2000});
+						noError = true;
+						return false;
+					}
+					if(parseInt(rkNum.val()) > parseInt($("#currentTock" + rowNum).html())){
+						rkNum.addClass("layui-form-danger");
+						rkNum.focus();
+						winui.window.msg('超过库存数量.', {icon: 2, time: 2000});
+						noError = true;
+						return false;
+					}
+					// 商品对象
+					var product = allChooseProduct["tr" + rowNum.toString()];
+					if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
+						winui.window.msg('一张单中不允许出现相同单位的配件信息.', {icon: 2, time: 2000});
+						noError = true;
+						return false;
+					}
+					var row = {
+						materialId: product.productId,
+						mUnitId: $("#unitId" + rowNum).val(),
+						rkNum: rkNum.val(),
+						remark: $("#remark" + rowNum).val()
+					};
+					tableData.push(row);
+				});
+				if(noError) {
+					return false;
+				}
+				var picUrl = $("#comPic").find("input[type='hidden'][name='upload']").attr("oldurl");
+				var params = {
+					serviceId: parent.rowId,
+					faultTypeId: $("#faultTypeId").val(),
+					comTime: $("#comTime").val(),
+					comWorkTime: $("#comWorkTime").val(),
+					comExecution: $("#comExecution").val(),
+					comPic: isNull(picUrl) ? "" : picUrl, //完工拍照，可为空
+					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'), //完工附件，可为空
+					comRemark: $("#comRemark").val(),
+					coverCost: $("#coverCost").val(),
+					otherCost: $("#otherCost").val(),
+					comStarTime: $("#comStarTime").val(),
+					faultKeyPartsId: isNull(faultKeyParts.productId) ? "" : faultKeyParts.productId,
+					actualFailure: $("#actualFailure").val(),
+					solution: $("#solution").val(),
+					useStr: JSON.stringify(tableData),
+					subType: subType
+				};
+				AjaxPostUtil.request({url: reqBasePath + "sealseservice035", params: params, type: 'json', callback: function(json){
+					if (json.returnCode == 0){
+						parent.layer.close(index);
+						parent.refreshCode = '0';
+					} else {
+						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+					}
+				}});
+			}
+		}
 		
 		//判断选中的备件是否也在数组中
 		function inTableDataArrayByAssetarId(materialId, unitId, array) {
@@ -324,11 +258,11 @@ layui.config({
 			//当两个都不为空时
 			if(!isNull(chooseUnitId)){
 				//获取库存
-				AjaxPostUtil.request({url: reqBasePath + "sealseservice034", params: {mUnitId: chooseUnitId, servierId: parent.rowId}, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: reqBasePath + "sealseservice034", params: {mUnitId: chooseUnitId}, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						var currentTock = 0;
 						if(!isNull(json.bean)){
-							currentTock = json.bean.currentTock;
+							currentTock = json.bean.stockNum;
 						}
 						$("#currentTock" + rowNum).html(currentTock);
 					} else {

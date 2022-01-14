@@ -18,7 +18,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: reqBasePath + 'sealseservice032',
-	    where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val(), materialGroupName: $("#materialGroupName").val()},
+	    where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()},
 	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -29,8 +29,7 @@ layui.config({
 	        { field: 'unitName', title: '计量单位', align: 'left', width: 80 },
 	        { field: 'materialModel', title: '配件规格', align: 'left', width: 150 },
 	        { field: 'unitPrice', title: '单价', align: 'left', width: 100 },
-	        { field: 'operNumber', title: '已用数量', align: 'left', width: 100 },
-	        { field: 'groupName', title: '所属ERP组', align: 'left', width: 100 }
+	        { field: 'operNumber', title: '已用数量', align: 'left', width: 100 }
 	    ]],
 	    done: function(){
 	    	matchingLanguage();
@@ -60,11 +59,11 @@ layui.config({
 	});
     
     function loadTable(){
-    	table.reload("messageTable", {where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val(), materialGroupName: $("#materialGroupName").val()}});
+    	table.reload("messageTable", {where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val(), materialGroupName: $("#materialGroupName").val()}});
+    	table.reload("messageTable", {page: {curr: 1}, where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()}});
     }
 
     exports('myusepartslist', {});
