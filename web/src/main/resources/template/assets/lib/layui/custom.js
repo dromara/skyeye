@@ -21,6 +21,7 @@ var customerJS = {
 	"sysIfsUtil": "../../assets/lib/layui/customer/sysIfsUtil.js", // 财务相关的工具函数
 	"sysFileUtil": "../../assets/lib/layui/customer/sysFileUtil.js", // 系统文件相关处理工具
 	"publicKeyCode": "../../assets/lib/layui/customer/publicKeyCode.js", // 快捷键
+	"sysSupplierUtil": "../../assets/lib/layui/customer/sysSupplierUtil.js", // 供应商相关工具
 };
 
 // 编辑加载自定义的js文件

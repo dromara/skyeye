@@ -1,9 +1,6 @@
 //商品信息
 var productMation = {};
 
-//供应商信息
-var supplierMation = {};
-
 //根据那一列的值进行变化,默认根据数量
 var showTdByEdit = 'rkNum';
 //表格的序号
@@ -81,7 +78,7 @@ layui.config({
 				}
 
 				//供应商信息赋值
-				supplierMation = {
+				sysSupplierUtil.supplierMation = {
 					id: json.bean.organId,
 					supplierName: json.bean.supplierName
 				}
@@ -204,10 +201,6 @@ layui.config({
 	});
 
 	function saveData(subType, approvalId){
-		if(isNull(supplierMation.id)){
-			winui.window.msg('请选择供应商.', {icon: 2, time: 2000});
-			return false;
-		}
 		//获取已选商品数据
 		var rowTr = $("#useTable tr");
 		if(rowTr.length == 0) {
@@ -272,7 +265,7 @@ layui.config({
 		});
 
 		var params = {
-			supplierId: supplierMation.id,
+			supplierId: sysSupplierUtil.supplierMation.id,
 			operTime: $("#operTime").val(),
 			accountId: $("#accountId").val(),
 			payType: $("#payType").val(),
@@ -359,20 +352,11 @@ layui.config({
 		}
 	}
 
-	//供应商选择
+	// 供应商选择
 	$("body").on("click", "#supplierNameSel", function(e){
-		_openNewWindows({
-			url: "../../tpl/supplier/supplierChoose.html",
-			title: "选择供应商",
-			pageId: "supplierChoose",
-			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					$("#supplierName").val(supplierMation.supplierName);
-				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-				}
-			}});
+		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation){
+			$("#supplierName").val(supplierMation.supplierName);
+		});
 	});
 
 	//商品选择

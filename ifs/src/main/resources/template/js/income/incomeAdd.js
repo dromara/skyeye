@@ -67,6 +67,11 @@ layui.config({
         return false;
     });
 
+    // 往来单位变化监听
+    form.on('select(correspondentUnitType)', function(data){
+        $("#customName").val("");
+    });
+
     $('#handsPersonId').tagEditor({
         initialTags: [],
         placeholder: '请选择经手人员',
@@ -110,11 +115,21 @@ layui.config({
         voucherUtil.addItem();
     });
 
-    // 客户选择
+    // 往来单位选择
     $("body").on("click", "#customMationSel", function(e){
-        sysCustomerUtil.openSysCustomerChoosePage(function (customerMation){
-            $("#customName").val(customerMation.customName);
-        });
+        var correspondentUnitType = $("#correspondentUnitType").val();
+        if(correspondentUnitType == 1){
+            // 供应商
+            sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation){
+                $("#customName").val(supplierMation.supplierName);
+            });
+        } else if (correspondentUnitType == 2){
+            // 客户
+            sysCustomerUtil.openSysCustomerChoosePage(function (customerMation){
+                $("#customName").val(customerMation.customName);
+            });
+        }
+
     });
 
     // 选择账套

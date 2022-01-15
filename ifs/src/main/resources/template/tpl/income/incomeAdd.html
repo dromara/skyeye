@@ -13,9 +13,15 @@
 			<div class="layui-form-item layui-col-xs12">
 				<span class="hr-title">基本信息</span><hr>
 			</div>
-	        <div class="layui-form-item layui-col-xs6">
+	        <div class="layui-form-item layui-col-xs6" style="height: 40px">
 	            <label class="layui-form-label">往来单位<i class="red">*</i></label>
-	            <div class="layui-input-block">
+				<div class="layui-input-block" style="width: 80px">
+					<select id="correspondentUnitType" lay-search win-verify="required" lay-filter="correspondentUnitType" style="width: 100px">
+						<option value="1">供应商</option>
+						<option value="2">客户</option>
+					</select>
+				</div>
+	            <div class="layui-input-block" style="width: calc(100% - 220px); top: -40px; left: 85px;">
 	                <input type="text" id="customName" name="customName" win-verify="required" placeholder="请选择往来单位" class="layui-input" readonly="readonly"/>
 		            <i class="fa fa-plus-circle input-icon" id="customMationSel"></i>
 	            </div>
@@ -34,9 +40,9 @@
 				</div>
 			</div>
 			<div class="layui-form-item layui-col-xs6">
-				<label class="layui-form-label">单据类型<i class="red">*</i></label>
+				<label class="layui-form-label">类型<i class="red">*</i></label>
 				<div class="layui-input-block">
-					<input type="text" id="orderType" name="orderType" win-verify="required" placeholder="请选择单据类型" class="layui-input" readonly="readonly"/>
+					<input type="text" id="orderType" name="orderType" win-verify="required" placeholder="请选择类型" class="layui-input" readonly="readonly"/>
 					<i class="fa fa-plus-circle input-icon" id="chooseOrderTypeBtn"></i>
 				</div>
 			</div>

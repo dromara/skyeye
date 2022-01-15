@@ -6,10 +6,8 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
-	
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -51,7 +49,7 @@ layui.config({
 				form.render();
 				var id = JSON.stringify(dubClick.data('index'));
 				var obj = res.rows[id];
-				parent.supplierMation = obj;
+				parent.sysSupplierUtil.supplierMation = obj;
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			});
@@ -71,14 +69,28 @@ layui.config({
             selectSupplier(data)
         }
     });
+
+	// 详情
+	function selectSupplier(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/supplier/supplierinfo.html",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+			pageId: "supplierinfo",
+			area: ['90vw', '90vh'],
+			callBack: function(refreshCode){
+			}
+		});
+	}
 	
 	form.render();
-	
-	
-	$("body").on("click", "#formSearch", function(){
-		refreshTable();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
 	});
-	
+
 	$("body").on("click", "#reloadTable", function(){
     	loadTable();
     });
@@ -87,23 +99,6 @@ layui.config({
     	table.reload("messageTable", {where: getTableParams()});
     }
     
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-
-	//详情
-    function selectSupplier(data){
-        rowId = data.id;
-        _openNewWindows({
-            url: "../../tpl/supplier/supplierinfo.html",
-            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "supplierinfo",
-            area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
-            }
-        });
-    }
-	
 	function getTableParams(){
 		return {
 			supplierName:$("#supplierName").val(),
