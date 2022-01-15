@@ -80,7 +80,7 @@ layui.config({
 	});
 
 	// 加载动态表单
-	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["outIsSalesOutlet"]["code"]);
+	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["outIsSalesOutlet"]["code"], null);
 
 	matchingLanguage();
 	//商品规格加载变化事件

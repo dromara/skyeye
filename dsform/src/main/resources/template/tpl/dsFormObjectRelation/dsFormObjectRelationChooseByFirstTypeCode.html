@@ -10,7 +10,7 @@
 </head>
 <body>
     <div style="margin: 0 auto; padding: 20px;">
-        <form class="layui-form" action="" id="showForm">
+        <form class="layui-form" action="" id="showForm" autocomplete="off">
             <div class="layui-form-item layui-col-xs12">
                 <div style="width: 100%; float: left;">
                     <ul id="treeDemo" class="ztree fsTree" method="get" isRoot="1" treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name"></ul>
@@ -18,8 +18,8 @@
             </div>
             <div class="layui-form-item layui-col-xs12">
                 <div class="layui-input-block">
-                    <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
-                    <button class="winui-btn" lay-submit lay-filter="formChooseBean"><language showName="com.skyeye.save"></language></button>
+                    <button class="winui-btn" id="cancle" type="button"><language showName="com.skyeye.cancel"></language></button>
+                    <button class="winui-btn" lay-submit lay-filter="formChooseBean">选择</button>
                 </div>
             </div>
         </form>

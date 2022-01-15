@@ -111,8 +111,12 @@ var dsFormUtil = {
      * @param showBoxId要追加的boxid后面
      * @param code 动态表单-----业务逻辑表单关联表中的code
      */
-    loadPageByCode: function(showBoxId, code){
-        AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation006", params: {dsFormObjectRelationCode: code}, method: "GET", type: 'json', callback: function(json) {
+    loadPageByCode: function(showBoxId, code, dsFormObjectRelationId){
+        var params = {
+            dsFormObjectRelationCode: isNull(code) ? "" : code,
+            dsFormObjectRelationId: isNull(dsFormObjectRelationId) ? "" : dsFormObjectRelationId
+        };
+        AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
             if(json.returnCode == 0) {
                 dsFormUtil.loadDsFormItem(showBoxId, json);
             } else {
@@ -156,6 +160,9 @@ var dsFormUtil = {
 
             $("#" + item.id).val(item.value); //给能通过id赋值的控件赋值
             var _this = $("#" + customBoxId + " .layui-form-item").eq(i);//当前控件
+            if(!isNull(item.require) && item.require.indexOf("required") >= 0){
+                _this.find(".layui-form-label").append('<i class="red">*</i>');
+            }
             _this.attr("controId", item.id);
             var vid = _this.attr("controlType");//控件类型
             if(vid === 'color'){//类型为颜色选择器
@@ -363,7 +370,7 @@ var dsFormUtil = {
         _openNewWindows({
             url: "../../tpl/dsFormObjectRelation/dsFormObjectRelationChooseByFirstTypeCode.html?firstTypeCode=" + firstTypeCode,
             title: "单据类型",
-            pageId: "dsFormObjectRelationChooseByFirstTypeCode",
+            pageId: "dsFormObjectRelationChooseByFirstTypeCodePage",
             area: ['480px', '500px'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {

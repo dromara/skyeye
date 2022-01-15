@@ -75,7 +75,7 @@ layui.config({
 	});
 
 	// 加载动态表单
-	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["outIsSalesOutlet"]["code"]);
+	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["outIsSalesOutlet"]["code"], null);
 
 	//初始化回显数据
 	function initDataShow(){
