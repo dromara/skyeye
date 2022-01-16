@@ -60,18 +60,24 @@ var voucherUtil = {
         $("#" + boxId).html(voucherUtil.tableHtmlDom);
         for(var i = 0; i < data.length; i++){
             voucherUtil.addItem();
-            var _this = $("#useTable").find("tr")[i];
-            _this.find(".col_summary").find("textarea").val(); // 摘要
+            var _this = $("#useTable").find("tr").eq(i);
+            _this.find(".col_summary").find("textarea").val(data[i].remark); // 摘要
 
-            _this.find(".col_voucher").find(".cell_val").attr("dataId"); // 凭证
-            _this.find(".col_voucher").find(".cell_val").html();
+            _this.find(".col_voucher").find(".cell_val").attr("dataId", data[i].voucherId); // 凭证
+            _this.find(".col_voucher").find(".cell_val").html(data[i].voucherName);
 
-            _this.find(".col_subject").find(".cell_val").attr("dataId", ""); // 会计科目
-            _this.find(".col_subject").find(".cell_val").html();
+            _this.find(".col_subject").find(".cell_val").attr("dataId", data[i].subjectId); // 会计科目
+            _this.find(".col_subject").find(".cell_val").html(data[i].subjectName);
 
-            _this.find(".col_debite").find(".cell_val").html(); // 借方金额
-            _this.find(".col_credit").find(".cell_val").html(); // 贷方金额
+            if(data[i].directionType == 1){
+                _this.find(".col_debite").find(".cell_val").html(data[i].eachAmount); // 借方金额
+            }else{
+                _this.find(".col_credit").find(".cell_val").html(data[i].eachAmount); // 贷方金额
+            }
         }
+
+        $("#debit_total").text(voucherUtil.adddebit_total($(".debit_val")))
+        $("#credit_total").text(voucherUtil.adddebit_total($(".credit_val")))
 
         voucherUtil.initClickEvent();
     },
@@ -156,6 +162,7 @@ var voucherUtil = {
     adddebit_total: function (obj) {
         var number = 0;
         for (var i = 0; i < obj.length; i++) {
+            console.log(obj.eq(i).text())
             if (obj.eq(i).text() != '') {
                 number = number + parseFloat(obj.eq(i).text())
             }

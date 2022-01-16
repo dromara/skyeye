@@ -5,6 +5,7 @@
     <title></title>
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/customer/voucherUtil.css" rel="stylesheet" />
 </head>
 <body>
 	<div style="margin: 0 auto; padding: 20px;">
@@ -16,10 +17,19 @@
     <!-- beanTemplate -->
     <script type="text/x-handlebars-template" id="beanTemplate">
         {{#bean}}
-        <div class="layui-form-item layui-col-xs6">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">基本信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs6" style="height: 40px">
             <label class="layui-form-label">往来单位<i class="red">*</i></label>
-            <div class="layui-input-block">
-                <input type="text" id="customName" name="customName" win-verify="required" placeholder="请选择往来单位" class="layui-input" readonly="readonly" value="{{customName}}"/>
+            <div class="layui-input-block" style="width: 80px">
+                <select id="correspondentUnitType" lay-search win-verify="required" lay-filter="correspondentUnitType" style="width: 100px">
+                    <option value="1">供应商</option>
+                    <option value="2">客户</option>
+                </select>
+            </div>
+            <div class="layui-input-block" style="width: calc(100% - 220px); top: -40px; left: 85px;">
+                <input type="text" id="customName" name="customName" win-verify="required" placeholder="请选择往来单位" class="layui-input" readonly="readonly" value="{{supplierName}}"/>
                 <i class="fa fa-plus-circle input-icon" id="customMationSel"></i>
             </div>
         </div>
@@ -29,48 +39,40 @@
                 <input type="text" id="operTime" name="operTime" win-verify="required" placeholder="请选择单据日期" class="layui-input" value="{{billTime}}"/>
             </div>
         </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">所属账套<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="setOfBooksName" name="setOfBooksName" win-verify="required" placeholder="请选择账套" class="layui-input" readonly="readonly" value="{{setOfBooksName}}"/>
+                <i class="fa fa-plus-circle input-icon" id="chooseSetOfBooksBtn"></i>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">类型<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="orderType" name="orderType" win-verify="required" placeholder="请选择类型" class="layui-input" readonly="readonly" value="{{typeName}}"/>
+                <i class="fa fa-plus-circle input-icon" id="chooseOrderTypeBtn"></i>
+            </div>
+        </div>
         <div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">列表项<i class="red">*</i></label>
             <div class="layui-input-block">
                 <div class="winui-toolbar">
                     <div class="winui-tool" style="text-align: left;">
                         <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
-                        <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
                     </div>
                 </div>
-                <table class="layui-table">
-                    <thead>
-                    <tr>
-                        <th style="width: 30px;"></th>
-                        <th style="width: 120px;">收入项目</th>
-                        <th style="width: 80px;">金额</th>
-                        <th style="min-width: 100px;">备注</th>
-                    </tr>
-                    </thead>
-                    <tbody id="useTable" class="insurance-table">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="layui-form-item layui-col-xs3">
-            <label class="layui-form-label">收款账户</label>
-            <div class="layui-input-block">
-                <select id="accountId" lay-search></select>
-            </div>
-        </div>
-        <div class="layui-form-item layui-col-xs3">
-            <label class="layui-form-label">共计金额</label>
-            <div class="layui-input-block ver-center" id="allPrice">
-                {{totalPrice}}
-            </div>
-        </div>
-        <div class="layui-form-item layui-col-xs3">
-            <label class="layui-form-label">收款金额</label>
-            <div class="layui-input-block">
-                <input type="text" id="changeAmount" name="changeAmount" win-verify="required|money" placeholder="请输入收款金额" class="layui-input" value="{{changeAmount}}"/>
+                <div id="showVoucherUtilBox" style="overflow-x: auto;">
+
+                </div>
             </div>
         </div>
         <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">收款账户<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <select id="accountId" lay-search win-verify="required"></select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">经手人<i class="red">*</i></label>
             <div class="layui-input-block">
                 <input type="text" id="handsPersonId" name="handsPersonId" win-verify="required" placeholder="请选择经手人员" class="layui-input" style="padding-right: 30px;"/>
@@ -83,27 +85,25 @@
                 <textarea id="remark" name="remark" placeholder="请输入备注" class="layui-textarea" style="height: 100px;" maxlength="200">{{remark}}</textarea>
             </div>
         </div>
+        <div id="dsFormShow">
+
+        </div>
         <div class="layui-form-item layui-col-xs12">
             <div class="layui-input-block">
                 <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
-                <button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+                <button class="winui-btn formEditBean layui-hide" lay-submit lay-filter="formEditBean">保存为草稿</button>
+                <button class="winui-btn formSubOneBean layui-hide" lay-submit lay-filter="formSubOneBean">提交审批</button>
+                <button class="winui-btn formSubTwoBean layui-hide" lay-submit lay-filter="formSubTwoBean">提交</button>
+                <button class="winui-btn save layui-hide" lay-submit lay-filter="save"><language showName="com.skyeye.save"></language></button>
             </div>
         </div>
         {{/bean}}
     </script>
 	
-	<!-- usetableTemplate -->
-	<script type="text/x-handlebars-template" id="usetableTemplate">
-    	<tr trcusid="{{trId}}">
-       		<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
-        	<td><select id="{{initemId}}" lay-search win-verify="required"></select></td>
-        	<td><input type="text" class="layui-input rkMoney" id="{{initemMoney}}" win-verify="required|money"/></td>
-        	<td><input type="text" class="layui-input" id="{{remark}}"/></td>
-    	</tr>
-	</script>
-	
 	<script src="../../assets/lib/layui/layui.js"></script>
 	<script src="../../assets/lib/layui/custom.js"></script>
+    <script src="../../assets/lib/layui/customer/voucher/spinbox.js"></script>
+    <script src="../../assets/lib/layui/customer/voucher/voucherUtil.js"></script>
 	<script type="text/javascript">
 	    layui.config({base: '../../js/income/'}).use('incomeEdit');
 	</script>
