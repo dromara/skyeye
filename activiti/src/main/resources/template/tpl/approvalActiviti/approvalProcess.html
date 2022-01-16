@@ -6,6 +6,7 @@
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
     <link href="../../assets/lib/layui/lay/modules/timeaxis/timeaxis.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/customer/voucherUtil.css" rel="stylesheet" />
     <style type="text/css">
     	.history-date h2{
     		margin-bottom: 0px;
@@ -146,6 +147,17 @@
 	        </div>
         {{/bean}}
     </script>
+
+	<!-- 凭证展示 -->
+	<script type="text/x-handlebars-template" id="voucherTemplate">
+		{{#bean}}
+		<div class="layui-form-item layui-col-xs{{proportion}}">
+			<label class="layui-form-label">{{name}}：</label>
+			<div class="layui-input-block ver-center" id="showVoucher{{orderBy}}" style="overflow-x: auto;">
+			</div>
+		</div>
+		{{/bean}}
+	</script>
     
     <!-- 时间线审批历史列表模板 -->
     <script type="text/x-handlebars-template" id="timeTreeApprovalHistory">
@@ -200,6 +212,8 @@
 	
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
+	<script src="../../assets/lib/layui/customer/voucher/spinbox.js"></script>
+	<script src="../../assets/lib/layui/customer/voucher/voucherUtil.js"></script>
    	<script type="text/javascript">
         layui.config({base: '../../js/approvalActiviti/'}).use('approvalProcess');
     </script>

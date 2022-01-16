@@ -156,14 +156,14 @@ layui.config({
             }});
     }
 
-    // 撤销用品采购
+    // 撤销申请
     function revorke(data){
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "income009", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg("提交成功", {icon: 1, time: 2000});
-                    loadCaigouTable();
+                    loadTable();
                 }else{
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
@@ -195,10 +195,10 @@ layui.config({
         });
     }
     function subToData(params){
-        AjaxPostUtil.request({url: reqBasePath + "", params: params, type: 'json', callback: function(json){
+        AjaxPostUtil.request({url: reqBasePath + "income008", params: params, type: 'json', callback: function(json){
             if(json.returnCode == 0){
                 winui.window.msg("提交成功", {icon: 1, time: 2000});
-                loadCaigouTable();
+                loadTable();
             }else{
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
@@ -225,7 +225,7 @@ layui.config({
     form.render();
     form.on('submit(formSearch)', function (data) {
         if (winui.verifyForm(data.elem)) {
-            refreshTable();
+            table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
         }
         return false;
     });
@@ -239,11 +239,6 @@ layui.config({
         table.reload("messageTable", {where: getTableParams()});
     }
 
-    // 搜索
-    function refreshTable(){
-        table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
-    }
-    
     // 导出excel
     $("body").on("click", "#downloadExcel", function () {
     	postDownLoadFile({

@@ -225,7 +225,7 @@ layui.config({
 
 					// 获取异常考勤制度信息
 					params.abnormalMation = getAbnormalMation();
-					// 获取ERP(生产)审核标识信息
+					// 获取订单审核标识信息
 					params.erpExamineBasicDesign = getErpExamineBasicDesign();
 
 					AjaxPostUtil.request({url: reqBasePath + "sysfdsettings002", params: params, type: 'json', method: "PUT", callback: function (json) {
@@ -262,7 +262,7 @@ layui.config({
 		}
 
 		/**
-		 * 获取ERP(生产)审核标识信息
+		 * 获取订单审核标识信息
 		 *
 		 * @returns {any[]}
 		 */

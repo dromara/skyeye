@@ -5,7 +5,7 @@
             <li>论坛数据</li>
             <li>CRM</li>
             <li>考勤制度</li>
-            <li>ERP(生产)审核制度</li>
+            <li>订单审核制度</li>
         </ul>
         <div class="layui-tab-content">
 

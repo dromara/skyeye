@@ -33,7 +33,8 @@ layui.config({
     	enclosureTemplate = $("#enclosureTemplate").html(),//附件展示
     	eichTextTemplate = $("#eichTextTemplate").html(),//富文本展示
     	picTemplate = $("#picTemplate").html(),//图片展示
-    	tableTemplate = $("#tableTemplate").html();//表格展示
+    	tableTemplate = $("#tableTemplate").html(),//表格展示
+		voucherTemplate = $("#voucherTemplate").html();//凭证展示
 
     AjaxPostUtil.request({url:reqBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type:'json', callback:function(j){
 		if(j.returnCode == 0){
@@ -151,6 +152,13 @@ layui.config({
 							    cols: [getHeaderTitle(item.headerTitle)]
 							});
 							str = "";
+						}else if(item.showType == 6){//凭证展示
+							str = getDataUseHandlebars(voucherTemplate, jsonStr);
+							$("#showForm").append(str);
+							var boxId = "showVoucher" + item.orderBy;
+							// 初始化凭证
+							voucherUtil.initDataDetails(boxId, item.value);
+							str = "";
 						}
 					}
 				}else{
@@ -184,6 +192,13 @@ layui.config({
 						    page: false,
 						    cols: [getHeaderTitle(item.headerTitle)]
 						});
+						str = "";
+					}else if(item.showType == 6){//凭证展示
+						str = getDataUseHandlebars(voucherTemplate, jsonStr);
+						$("#showForm").append(str);
+						var boxId = "showVoucher" + item.orderBy;
+						// 初始化凭证
+						voucherUtil.initDataDetails(boxId, item.value);
 						str = "";
 					}
 				}
