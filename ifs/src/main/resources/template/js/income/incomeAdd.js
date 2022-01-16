@@ -103,7 +103,7 @@ layui.config({
             return sysSupplierUtil.supplierMation.id;
         } else if (correspondentUnitType == 2){
             // 客户
-            return sysCustomerUtilcustomerMation;
+            return sysCustomerUtil.customerMation.id;
         }
     }
 

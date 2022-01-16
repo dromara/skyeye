@@ -18,6 +18,13 @@ layui.config({
             pagination: false,
             template: beanTemplate,
             ajaxSendAfter:function(json){
+
+                // 初始化列表项选择
+                voucherUtil.initDataDetails('showVoucherUtilBox', json.bean.items);
+
+                // 加载动态表单
+                dsFormUtil.loadPageShowDetailsByObjectId("dsFormShow", json.bean.id);
+
 				matchingLanguage();
                 form.render();
             }
