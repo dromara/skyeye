@@ -34,15 +34,29 @@ layui.config({
             limits: getLimits(),
             limit: getLimit(),
             cols: [[
-                { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-                { field: 'billNo', title: '单据编号', align: 'left', width: 200, templet: function(d){
-                        return '<a lay-event="details" class="notice-title-click">' + d.billNo + '</a>';
-                    }},
-                { field: 'customerName', title: '往来单位', align: 'left', width: 150},
-                { field: 'totalPrice', title: '合计金额', align: 'left', width: 120},
-                { field: 'hansPersonName', title: '经手人', align: 'left', width: 100},
-                { field: 'billTime', title: '单据日期', align: 'center', width: 140 },
-                { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
+                { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
+                { field: 'billNo', title: '单据编号', align: 'left', rowspan: '2', width: 200, templet: function(d){
+                    return '<a lay-event="details" class="notice-title-click">' + d.billNo + '</a>';
+                }},
+                { title: '审批模式', align: 'center', colspan: '2'},
+                { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function(d){
+                    return activitiUtil.showStateName2(d.state, d.submitType);
+                }},
+                { field: 'organTypeName', title: '往来单类型', rowspan: '2', align: 'left', width: 100},
+                { field: 'supplierName', title: '往来单位', rowspan: '2', align: 'left', width: 150},
+                { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120},
+                { field: 'handsPersonName', title: '经手人', rowspan: '2', align: 'left', width: 120},
+                { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
+                { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 110 },
+                { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
+                { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
+            ],[
+                { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function(d){
+                    return erpOrderUtil.getSubmitTypeName(d);
+                }},
+                { field: 'processInstanceId', title: '流程实例id', align: 'left', width: 120, templet: function(d){
+                    return erpOrderUtil.getProcessInstanceIdBySubmitType(d);
+                }}
             ]],
             done: function(){
                 matchingLanguage();
@@ -59,6 +73,14 @@ layui.config({
             details(data);
         }else if (layEvent === 'edit') { //编辑
             edit(data);
+        }else if (layEvent === 'submitToSave') { //提交
+            subExamine(data, 'submitToSave');
+        }else if (layEvent === 'subExamine') { //提交审核
+            subExamine(data, 'subExamine');
+        }else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
+            activitiUtil.activitiDetails(data);
+        }else if (layEvent === 'revoke') { //撤销
+            revorke(data);
         }
     });
 
@@ -80,13 +102,13 @@ layui.config({
         if(treeNode == undefined) {
             orderType = "";
         } else {
-            if(treeNode.isParent != 0){
+            if(treeNode.id != 0 && treeNode.isParent != 0){
                 return;
             }
             // 订单类型
-            orderType = treeNode.id;
+            orderType = treeNode.id == 0 ? "" : treeNode.id;
         }
-        loadTable();
+        refreshTable();
     }
     /********* tree 处理   end *************/
 
@@ -132,6 +154,55 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
             }});
+    }
+
+    // 撤销用品采购
+    function revorke(data){
+        layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
+            layer.close(index);
+            AjaxPostUtil.request({url: reqBasePath + "", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+                if(json.returnCode == 0){
+                    winui.window.msg("提交成功", {icon: 1, time: 2000});
+                    loadCaigouTable();
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }});
+        });
+    }
+
+    // 提交数据
+    function subExamine(data, type){
+        layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
+            layer.close(index);
+            if(type == 'submitToSave'){
+                // 直接提交
+                var params = {
+                    rowId: data.id,
+                    approvalId: ""
+                };
+                subToData(params);
+            }else{
+                // 工作流提交
+                activitiUtil.startProcess(sysActivitiModel["incomeOrder"]["key"], function (approvalId) {
+                    var params = {
+                        rowId: data.id,
+                        approvalId: approvalId
+                    };
+                    subToData(params);
+                });
+            }
+        });
+    }
+    function subToData(params){
+        AjaxPostUtil.request({url: reqBasePath + "", params: params, type: 'json', callback: function(json){
+            if(json.returnCode == 0){
+                winui.window.msg("提交成功", {icon: 1, time: 2000});
+                loadCaigouTable();
+            }else{
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }});
     }
 
     // 添加
@@ -191,7 +262,7 @@ layui.config({
         }
         return {
             billNo: $("#billNo").val(),
-            orderType: orderType,
+            type: orderType,
             startTime: startTime,
             endTime: endTime
         };

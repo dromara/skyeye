@@ -194,12 +194,14 @@ var voucherUtil = {
                 winui.window.msg("借方金额和贷方金额最少填写一项.", {icon: 2, time: 2000});
                 return false;
             }
+            var eachAmount = isNull(debiteMoney) ? creditMoney : debiteMoney;
+            var directionType = isNull(debiteMoney) ? 2 : 1;
             result.push({
                 remark: _this.find(".col_summary").find("textarea").val(),
                 voucherId: _this.find(".col_voucher").find(".cell_val").attr("dataId"),
                 subjectId: subjectId,
-                debiteMoney: debiteMoney,
-                creditMoney: creditMoney
+                eachAmount: eachAmount,
+                directionType: directionType
             });
         });
         return result;

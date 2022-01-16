@@ -46,11 +46,38 @@
 	</div>
 
 	<script type="text/html" id="tableBar">
-		{{# if(auth('1571638030608')){ }}
-			<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-		{{# } }}
-		{{# if(auth('1571638039187')){ }}
-			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+		<!-- 单据提交类型  1.走工作流提交  2.直接提交-->
+		{{# if(d.submitType == 1){ }}
+			{{# if(d.editRow == '1'){ }}
+				{{# if(auth('')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="subExamine">提交审核</a>
+				{{# } }}
+				{{# if(auth('1571638039187')){ }}
+					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+				{{# } }}
+			{{# } }}
+			{{# if(d.editRow == '1' || d.editRow == '2'){ }}
+				{{# if(auth('1571638030608')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+				{{# } }}
+			{{# } }}
+			{{# if(d.editRow == '2'){ }}
+				{{# if(auth('')){ }}
+					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
+				{{# } }}
+			{{# } }}
+		{{# } else if(d.submitType == 2) { }}
+			{{# if(d.state == 0){ }}
+				{{# if(auth('1571638030608')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+				{{# } }}
+				{{# if(auth('1571638039187')){ }}
+					<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+				{{# } }}
+				{{# if(auth('')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="submitToSave">提交</a>
+				{{# } }}
+			{{# } }}
 		{{# } }}
 	</script>
 

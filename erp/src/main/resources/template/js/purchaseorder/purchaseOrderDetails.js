@@ -24,7 +24,7 @@ layui.config({
 						winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
 					}
 				}, async: false});
-				$("#statusName").html(erpOrderUtil.showStateName(json.bean.state, json.bean.submitType));
+				$("#statusName").html(activitiUtil.showStateName(json.bean.state, json.bean.submitType));
 
 				$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=4");
 

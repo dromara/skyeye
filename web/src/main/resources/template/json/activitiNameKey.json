@@ -30,5 +30,7 @@
     "assetManageReturn": {"name": "资产归还", "key": "../../tpl/assetManageReturn/assetManageReturnAdd.html", "complate": true},
     "assetManagePurchase": {"name": "资产采购", "key": "../../tpl/assetManagePurchase/assetManagePurchaseAdd.html", "complate": true},
     "assetArticlesUse": {"name": "用品领用", "key": "../../tpl/assetArticlesUse/assetArticlesUseAdd.html", "complate": true},
-    "assetArticlesPurchase": {"name": "用品采购", "key": "../../tpl/assetArticlesPurchase/assetArticlesPurchaseAdd.html", "complate": true}
+    "assetArticlesPurchase": {"name": "用品采购", "key": "../../tpl/assetArticlesPurchase/assetArticlesPurchaseAdd.html", "complate": true},
+
+    "incomeOrder": {"name": "财务明细账", "key": "../../tpl/income/incomeAdd.html", "complate": true}
 }

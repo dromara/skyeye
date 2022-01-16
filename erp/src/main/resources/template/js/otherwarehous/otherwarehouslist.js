@@ -38,7 +38,7 @@ layui.config({
             { field: 'supplierName', title: '供应商', align: 'left', rowspan: '2', width: 150},
             { title: '审批模式', align: 'center', colspan: '2'},
             { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function(d){
-                return erpOrderUtil.showStateName(d.state, d.submitType);
+                return activitiUtil.showStateName(d.state, d.submitType);
             }},
             { field: 'totalPrice', title: '合计金额', align: 'left', rowspan: '2', width: 120},
             { field: 'operPersonName', title: '操作人', align: 'left', rowspan: '2', width: 100},

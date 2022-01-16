@@ -25,7 +25,7 @@ layui.config({
 					}
 				}, async: false});
 				
-				$("#statusName").html(erpOrderUtil.showStateName(json.bean.state, json.bean.submitType));
+				$("#statusName").html(activitiUtil.showStateName(json.bean.state, json.bean.submitType));
 
 		 		var str = '无';
 		 		var defaultNumber = json.bean.defaultNumber;

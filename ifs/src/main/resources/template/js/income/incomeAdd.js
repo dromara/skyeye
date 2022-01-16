@@ -12,9 +12,11 @@ layui.config({
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
         laydate = layui.laydate;
-
     layedit = layui.layedit,
     form = layui.form;
+
+    // 获取单据提交类型
+    var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["incomeOrder"]["orderType"]);
 
     var selOption = getFileContent('tpl/template/select-option.tpl');
     var handsPersonList = new Array();//经手人员
@@ -38,34 +40,72 @@ layui.config({
 
     matchingLanguage();
     form.render();
+    // 保存为草稿
     form.on('submit(formAddBean)', function(data) {
         if(winui.verifyForm(data.elem)) {
-            var result = voucherUtil.getData();
-            console.log(result);
-            if(result.length < 2){
-                return false;
-            }
-            var params = {
-                organId: sysCustomerUtil.customerMation.id,
-                handsPersonId: handsPersonList[0].id,
-                operTime: $("#operTime").val(),
-                accountId: $("#accountId").val(),
-                remark: $("#remark").val(),
-                changeAmount: $("#changeAmount").val(),
-                initemStr: JSON.stringify(result)
-            };
-            AjaxPostUtil.request({url: reqBasePath + "income002", params: params, type: 'json', method: "POST", callback: function(json) {
-                if(json.returnCode == 0) {
-                    dsFormUtil.savePageData("dsFormShow", json.bean.id);
-                    parent.layer.close(index);
-                    parent.refreshCode = '0';
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
-            }});
+            saveData("1", "");
         }
         return false;
     });
+
+    // 走工作流的提交审批
+    form.on('submit(formSubOneBean)', function(data) {
+        if(winui.verifyForm(data.elem)) {
+            activitiUtil.startProcess(sysActivitiModel["incomeOrder"]["key"], function (approvalId) {
+                saveData("2", approvalId);
+            });
+        }
+        return false;
+    });
+
+    // 不走工作流的提交
+    form.on('submit(formSubTwoBean)', function(data) {
+        if(winui.verifyForm(data.elem)) {
+            saveData("2", "");
+        }
+        return false;
+    });
+
+    function saveData(subType, approvalId){
+        var result = voucherUtil.getData();
+        if(result.length < 2){
+            return false;
+        }
+        var params = {
+            organType: $("#correspondentUnitType").val(),
+            organId: getOrganId(),
+            type: dsFormUtil.dsFormObjectRelationChoose.id,
+            handsPersonId: handsPersonList[0].id,
+            operTime: $("#operTime").val(),
+            accountId: $("#accountId").val(),
+            remark: $("#remark").val(),
+            setOfBooksId: sysIfsUtil.ifsSetOfBooksMation.id,
+            initemStr: JSON.stringify(result),
+            submitType: submitType,
+            subType: subType,
+            approvalId: approvalId
+        };
+        AjaxPostUtil.request({url: reqBasePath + "income002", params: params, type: 'json', method: "POST", callback: function(json) {
+            if(json.returnCode == 0) {
+                dsFormUtil.savePageData("dsFormShow", json.bean.id);
+                parent.layer.close(index);
+                parent.refreshCode = '0';
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }});
+    }
+
+    function getOrganId(){
+        var correspondentUnitType = $("#correspondentUnitType").val();
+        if(correspondentUnitType == 1){
+            // 供应商
+            return sysSupplierUtil.supplierMation.id;
+        } else if (correspondentUnitType == 2){
+            // 客户
+            return sysCustomerUtilcustomerMation;
+        }
+    }
 
     // 往来单位变化监听
     form.on('select(correspondentUnitType)', function(data){

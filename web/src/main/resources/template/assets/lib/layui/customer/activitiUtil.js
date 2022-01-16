@@ -312,6 +312,66 @@ var activitiUtil = {
             });
         });
 
-    }
+    },
+
+    showStateName: function (state, submitType){
+        if(submitType == 1){
+            if(state == '0'){
+                return "<span class='state-down'>未审核</span>";
+            }else if(state == '1'){
+                return "<span class='state-up'>审核中</span>";
+            }else if(state == '2'){
+                return "<span class='state-new'>审核通过</span>";
+            }else if(state == '3'){
+                return "<span class='state-down'>拒绝通过</span>";
+            }else if(state == '4'){
+                return "<span class='state-new'>已完成</span>";
+            }else if(state == '5'){
+                return "<span class='state-error'>撤销</span>";
+            }else{
+                return "参数错误";
+            }
+        } else if(submitType == 2){
+            if(state == '0'){
+                return "<span class='state-down'>未提交</span>";
+            }else if(state == '2'){
+                return "<span class='state-new'>已提交</span>";
+            }else if(state == '4'){
+                return "<span class='state-new'>已完成</span>";
+            }else{
+                return "参数错误";
+            }
+        }
+    },
+
+    showStateName2: function (state, submitType){
+        if(submitType == 1){
+            if(state == '0'){
+                return "<span>草稿</span>";
+            }else if(state == '1'){
+                return "<span class='state-up'>审核中</span>";
+            }else if(state == '2'){
+                return "<span class='state-new'>审核通过</span>";
+            }else if(state == '3'){
+                return "<span class='state-down'>拒绝通过</span>";
+            }else if(state == '4'){
+                return "<span class='state-down'>作废</span>";
+            }else if(state == '5'){
+                return "<span class='state-error'>撤销</span>";
+            }else{
+                return "参数错误";
+            }
+        } else if(submitType == 2){
+            if(state == '0'){
+                return "<span>草稿</span>";
+            }else if(state == '2'){
+                return "<span class='state-new'>已提交</span>";
+            }else if(state == '4'){
+                return "<span class='state-new'>作废</span>";
+            }else{
+                return "参数错误";
+            }
+        }
+    },
 
 };

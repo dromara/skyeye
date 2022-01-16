@@ -83,8 +83,10 @@
 			</div>
 	        <div class="layui-form-item layui-col-xs12">
 	            <div class="layui-input-block">
-	                <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
-	                <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+					<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+					<button class="winui-btn" lay-submit lay-filter="formAddBean">保存为草稿</button>
+					<button class="winui-btn submitTypeIsOne" lay-submit lay-filter="formSubOneBean">提交审批</button>
+					<button class="winui-btn submitTypeIsTwo" lay-submit lay-filter="formSubTwoBean">提交</button>
 	            </div>
 	        </div>
 	    </form>

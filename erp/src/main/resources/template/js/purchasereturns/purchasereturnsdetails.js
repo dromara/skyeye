@@ -25,7 +25,7 @@ layui.config({
 						winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
 					}
 				}, async: false});
-				$("#statusName").html(erpOrderUtil.showStateName(json.bean.state, json.bean.submitType));
+				$("#statusName").html(activitiUtil.showStateName(json.bean.state, json.bean.submitType));
 
 				// 加载动态表单
 				dsFormUtil.loadPageShowDetailsByObjectId("dsFormShow", json.bean.id);
