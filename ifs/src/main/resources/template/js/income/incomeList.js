@@ -108,7 +108,7 @@ layui.config({
             // 订单类型
             orderType = treeNode.id == 0 ? "" : treeNode.id;
         }
-        refreshTable();
+        table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
     }
     /********* tree 处理   end *************/
 
