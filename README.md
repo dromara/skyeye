@@ -13,8 +13,9 @@
 # 开源版请下载`master`分支
 
 - erp+生产演示视频：https://mp.weixin.qq.com/s/CrFM_VZShi-FIJ8zD0_Nqg
-- 需要进微信群(加我拉你进群，wzq_598748873)，请提供自己的邮箱，默认订阅每周更新内容推送。
-- 不需要进群的，请直接加微信：ZhiJinShuLi
+- 企业版请加微信：wzq_598748873
+  - 加微信后需提供所在企业、姓名、邮箱、联系方式，默认订阅每周更新内容推送。
+- 非企业版请进QQ群：1016439713，进群后请自行修改备注：职业-地域-昵称，群内只回答开源版问题
 - `本项目分为开源版和企业版，不喜勿喷，谢谢。`
 - 企业版信息：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - 参加企业版改进计划，享受最优惠价格，[点我查看](https://mp.weixin.qq.com/s/YIms04X-bbGJwMs1gree1g)

@@ -1,0 +1,28 @@
+
+// 招聘模块工具函数
+var bossUtil = {
+
+    /**
+     * 打开面试者来源选择页面
+     *
+     * @param callback 回调函数
+     */
+    bossIntervieweeFromChooseMation: {}, // 已经选择的面试者来源信息
+    openBossIntervieweeFromChoosePage: function (callback){
+        _openNewWindows({
+            url: "../../tpl/",
+            title: "面试者来源",
+            pageId: "dsFormObjectRelationChooseByFirstTypeCodePage",
+            area: ['480px', '500px'],
+            callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                    if(typeof(callback) == "function") {
+                        callback(bossUtil.bossIntervieweeFromChooseMation);
+                    }
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                }
+            }});
+    }
+
+};
