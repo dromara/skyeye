@@ -140,9 +140,10 @@ layui.config({
     function getTableParams(){
         return {
             name: $("#name").val(),
-            phone: $("#phone").val()
+            phone: $("#phone").val(),
+            type: 1
         };
     }
 
-    exports('bossIntervieweeList', {});
+    exports('myEnterBossIntervieweeList', {});
 });

@@ -42,6 +42,7 @@ layui.config({
                 { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function(d){
                     return activitiUtil.showStateName2(d.state, d.submitType);
                 }},
+                { field: 'typeName', title: '类型', rowspan: '2', align: 'left', width: 80},
                 { field: 'organTypeName', title: '往来单类型', rowspan: '2', align: 'left', width: 100},
                 { field: 'supplierName', title: '往来单位', rowspan: '2', align: 'left', width: 150},
                 { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120},

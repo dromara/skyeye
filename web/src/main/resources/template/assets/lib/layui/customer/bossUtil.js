@@ -10,10 +10,10 @@ var bossUtil = {
     bossIntervieweeFromChooseMation: {}, // 已经选择的面试者来源信息
     openBossIntervieweeFromChoosePage: function (callback){
         _openNewWindows({
-            url: "../../tpl/",
+            url: "../../tpl/bossIntervieweeFrom/bossIntervieweeFromListChoose.html",
             title: "面试者来源",
-            pageId: "dsFormObjectRelationChooseByFirstTypeCodePage",
-            area: ['480px', '500px'],
+            pageId: "bossIntervieweeFromListChoosePage",
+            area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
                     if(typeof(callback) == "function") {
