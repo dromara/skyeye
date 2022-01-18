@@ -177,7 +177,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetArticlesUse/assetArticlesUseDetails.html", 
-			title: "用品领用详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetArticlesUseDetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){

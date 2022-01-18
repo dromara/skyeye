@@ -80,7 +80,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageInsurance/vehicleManageInsuranceDetails.html", 
-			title: "保险详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageInsuranceDetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){

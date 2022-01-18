@@ -98,16 +98,10 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/conFerenceRoom/conFerenceRoomDetails.html", 
-			title: "会议室详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "conFerenceRoomDetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                }
 			}});
 	}
 	

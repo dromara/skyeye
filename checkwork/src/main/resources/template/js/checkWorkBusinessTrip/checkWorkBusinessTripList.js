@@ -177,7 +177,7 @@ layui.config({
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/checkWorkBusinessTrip/checkWorkBusinessTripDetails.html",
-            title: "详情",
+            title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "checkWorkBusinessTripDetails",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){

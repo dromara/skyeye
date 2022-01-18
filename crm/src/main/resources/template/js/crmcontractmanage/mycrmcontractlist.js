@@ -145,7 +145,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmcontractmanage/mycrmcontractdetails.html", 
-			title: "合同详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmcontractdetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){

@@ -107,7 +107,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/customermanage/customerdetails.html", 
-			title: "客户详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "customerdetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){

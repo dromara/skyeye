@@ -175,7 +175,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageUse/vehicleManageUseDetails.html", 
-			title: "用车申请详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageUseDetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){

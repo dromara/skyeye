@@ -150,7 +150,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/checkWorkAbnormalAttendance/checkWorkAbnormalAttendanceDetails.html", 
-			title: "申诉详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "checkWorkAbnormalAttendanceDetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){

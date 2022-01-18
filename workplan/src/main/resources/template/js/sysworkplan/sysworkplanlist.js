@@ -174,7 +174,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysworkplan/sysworkplandetails.html", 
-			title: "计划详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysworkplantiming",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){

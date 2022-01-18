@@ -17,7 +17,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'bossIntervieweeFrom001',
+        url: reqBasePath + 'bossInterviewee001',
         where: getTableParams(),
         even: true,
         page: true,

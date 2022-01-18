@@ -164,7 +164,7 @@ layui.config({
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/conFerenceRoomReserve/conFerenceRoomReserveDetails.html", 
-			title: "会议室预定详情",
+			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "conFerenceRoomReserveDetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
