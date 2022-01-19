@@ -53,7 +53,7 @@ layui.config({
                         return "<span class='state-error'>参数错误</span>";
                     }
                 }},
-            { field: 'createTime', title: '创建时间', align: 'center', width: 140 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
         ]],
 	    done: function(){
@@ -107,7 +107,8 @@ layui.config({
 
     //删除供应商
     function deleteSupplier(data){
-        layer.confirm('确认要删除该供应商信息吗？', { icon: 3, title: '删除操作' }, function (index) {
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+            layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "supplier004", params: {rowId: data.id}, type:'json', callback:function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});

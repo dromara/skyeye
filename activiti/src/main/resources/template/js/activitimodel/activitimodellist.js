@@ -38,7 +38,7 @@ layui.config({
 	        }},
 	        { field: 'deploymentId', title: '部署id', width: 100},
 	        { field: 'processDefinitionVersion', title: '部署版本', width: 100},
-	        { field: 'createTime', title: '创建时间', align: 'center', width: 150, templet: function(d){
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150, templet: function(d){
 	        	var str = d.createTime.toString();
 	        	str = str.substring(0, str.length - 3);
 	        	return date('Y-m-d H:i:s', str);

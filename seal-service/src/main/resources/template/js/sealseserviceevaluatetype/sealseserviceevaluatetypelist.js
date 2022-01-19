@@ -36,7 +36,7 @@ layui.config({
 	        		return "参数错误";
 	        	}
 	        }},
-	        { field: 'createTime', title: '创建时间', align: 'center', width: 200},
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 200},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){
@@ -114,10 +114,8 @@ layui.config({
 	
 	//删除
 	function del(data, obj){
-		var msg = obj ? '确认删除【' + obj.data.typeName + '】吗？' : '确认删除选中数据吗？';
-		layer.confirm(msg, {icon: 3, title: '删除操作'}, function (index) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            
             AjaxPostUtil.request({url: reqBasePath + "sealseserviceevaluatetype005", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});

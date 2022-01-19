@@ -65,7 +65,7 @@ layui.config({
 		        		return "<span class='state-up'>启用</span>";
 		        	}
 		        }},
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 150 }
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
 		    ]],
 		    done: function(){
 		    	matchingLanguage();

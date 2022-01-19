@@ -62,8 +62,8 @@ layui.config({
 	        { field: 'responsId', title: '负责人', width: 80 },
 	        { field: 'partId', title: '参与人', width: 120 },
 	        { field: 'followId', title: '关注人', width: 120 },
-	        { field: 'createId', title: '创建人', width: 80 },
-	        { field: 'createTime', title: '创建时间', align: 'center', width: 130 },
+	        { field: 'createId', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { field: 'documentaryTime', title: '最后跟单时间', align: 'center', width: 130 },
 	        { field: 'discussNum', title: '讨论版', align: 'center', width: 70, templet: function(d){
 	        	return '<a lay-event="discussDetails" class="notice-title-click">' + d.discussNum + '</a>';

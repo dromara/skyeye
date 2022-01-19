@@ -39,7 +39,7 @@ layui.config({
             { field: 'allNeedGet', title: '累计应收', align: 'left', width: 100},
             { field: 'allNeedPay', title: '累计应付', align: 'left', width: 100},
             { field: 'taxRate', title: '税率(%)',  align: 'left',width: 100},
-            { field: 'createTime', title: '创建时间', align: 'center', width: 140 }
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 }
 	    ]],
 	    done: function(res, curr, count){
 	    	matchingLanguage();

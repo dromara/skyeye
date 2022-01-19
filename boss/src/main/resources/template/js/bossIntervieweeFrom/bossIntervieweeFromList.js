@@ -27,7 +27,7 @@ layui.config({
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 			{ field: 'title', title: '来源', align: 'left', width: 150 },
 			{ field: 'fromUrl', title: '来源地址', align: 'left', width: 300 },
-			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 100 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 100 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},

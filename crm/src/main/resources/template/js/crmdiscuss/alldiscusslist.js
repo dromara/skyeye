@@ -33,7 +33,7 @@ layui.config({
 	        { field: 'opportunityTitle', title: '所属商机', align: 'left', width: 200 },
 	        { field: 'createName', title: '作者', align: 'left', width: 80 },
 	        { field: 'replyNum', title: '回复', align: 'left', width: 80 },
-	        { field: 'createTime', title: '创建时间', align: 'center', width: 120 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 120 },
 	        { field: 'recoveryTime', title: '最后回复时间', align: 'center', width: 120 }
 	    ]],
 	    done: function(){

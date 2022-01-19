@@ -30,7 +30,7 @@ layui.config({
 	        { field: 'title', title: '属性值别名', width: 180 },
 	        { field: 'propertyValue', title: '属性值', width: 180 },
 	        { field: 'propertyTitle', title: '所属标签', width: 180 },
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

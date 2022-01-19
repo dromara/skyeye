@@ -122,8 +122,8 @@ layui.config({
 	            { field: 'gradeName', width: 80, align: 'center', title: '所属年级'},
 	            { field: 'subjectName', width: 80, align: 'center', title: '科目'},
 	            { field: 'sessionYear', width: 80, align: 'center', title: '所属届'},
-		        { field: 'userName', width:80, title: '创建人', align: 'center'},
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 140 },
+		        { field: 'userName', width: 120, title: systemLanguage["com.skyeye.createName"][languageType], align: 'left'},
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 		    ]],
 		    done: function(){

@@ -48,7 +48,7 @@ layui.config({
                 { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120},
                 { field: 'handsPersonName', title: '经手人', rowspan: '2', align: 'left', width: 120},
                 { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
-                { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 110 },
+                { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: '2', width: 120 },
                 { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
                 { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
             ],[

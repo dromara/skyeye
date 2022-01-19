@@ -52,7 +52,7 @@ layui.config({
 		        { field: 'typeName', title: '商品来源', rowspan: '2', align: 'left', width: 100 },
 		        { field: 'unitName', title: '单位', rowspan: '2', align: 'center', width: 80},
 	        	{ title: '库存', colspan: '3', align: 'center', width: 100},
-		        { field: 'createTime', title: '创建时间', rowspan: '2', align: 'center', width: 150 }
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 }
 		    ],[
 		    	{ field: 'safetyTock', title: '安全存量', align: 'center', width: 80},
 		        { field: 'allTock', title: '当前库存', align: 'center', width: 120}

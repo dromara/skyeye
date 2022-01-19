@@ -44,7 +44,7 @@ layui.config({
 			{ field: 'stateName', title: '状态', width: 90, templet: function(d){
 				return activitiUtil.showStateName2(d.state, 1);
 			}},
-			{ field: 'createTime', title: '创建时间', width: 150},
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150},
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#caigouTableBar'}
 		]],
 		done: function(){

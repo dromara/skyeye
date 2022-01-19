@@ -40,7 +40,7 @@ layui.config({
 	        }},
 	        { field:'childsTypeOneNum', width: 120, title: '目录数量'},
 	        { field:'childsTypeTwoNum', width: 120, title: '流程图数量'},
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

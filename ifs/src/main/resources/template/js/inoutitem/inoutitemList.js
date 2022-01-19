@@ -39,7 +39,7 @@ layui.config({
                 }
             }},
             { field: 'remark', title: '备注', align: 'left', width: 400},
-            { field: 'createTime', title: '创建时间', align: 'center', width: 180 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 180 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar'}
         ]],
 	    done: function(){

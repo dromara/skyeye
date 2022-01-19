@@ -60,8 +60,8 @@ layui.config({
 	        		return "<span class='state-down'>审核不通过</span>";
 	        	} 
 	        }},
-	        { field: 'createName', title: '创建人',  width: 70 },
-	        { field: 'createTime', title: '创建时间',  width: 115 }
+	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType],  width: 120 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType],  width: 150 }
 	    ]],
 	    done: function(){
 	    	matchingLanguage();

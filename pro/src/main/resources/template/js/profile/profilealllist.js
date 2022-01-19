@@ -43,7 +43,7 @@ layui.config({
 	        		return "<span class='state-error'>撤销</span>";
 	        	}
 	        }},
-	        { field: 'createName', title: '创建人', align: 'left', width: 100},
+	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120},
 	        { field: 'updateTime', title: '更新时间', align: 'center', width: 140},
 	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function(d){
 	        	if(!isNull(d.processInstanceId)){

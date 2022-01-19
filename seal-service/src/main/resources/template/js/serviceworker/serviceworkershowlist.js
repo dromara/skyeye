@@ -39,7 +39,7 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'addDetail', title: '详细地址', align: 'left', width: 400 },
-	        { field: 'createTime', title: '创建时间', align: 'center', width: 150}
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150}
 	    ]],
 	    done: function(res, curr, count){
 	    	matchingLanguage();

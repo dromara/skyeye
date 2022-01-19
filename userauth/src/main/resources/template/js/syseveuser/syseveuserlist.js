@@ -50,7 +50,7 @@ layui.config({
 	        { field: 'jobName', title: '担任职位', width: 120},
 	        { field: 'userLock', title: '是否锁定', align: 'center', width: 90, templet: '#checkboxTpl', unresize: true},
 	        { field: 'roleName', title: '角色', width: 120},
-	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 100 },
+	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],

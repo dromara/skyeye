@@ -138,7 +138,7 @@ layui.config({
 		        { field: 'schoolName', width: 200, title: '学校'},
 	            { field: 'gradeName', width: 80, align: 'center', title: '年级'},
 	            { field: 'subjectName', width: 80, align: 'center', title: '科目'},
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 140 }
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 }
 		    ]],
 		    done: function(res, curr, count){
 		    	matchingLanguage();

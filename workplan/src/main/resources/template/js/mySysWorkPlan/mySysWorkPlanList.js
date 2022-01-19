@@ -79,7 +79,7 @@ layui.config({
 			{ field: 'whetherTime', title: '定时通知', align: 'center', width: 100 },
 			{ field: 'whetherNotify', title: '通知状态', align: 'center', width: 100 },
 			{ field: 'userName', title: '计划下达人', width: 100 },
-			{ field: 'createTime', title: '创建时间', align: 'center', width: 100 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar'}
 		]],
 		done: function(){

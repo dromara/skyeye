@@ -29,7 +29,7 @@ layui.config({
             {field:'title', width:200, title: '目录'},
             {field:'contentNum', width:80, title: '文档数'},
             {field:'stateName', width: 80, align: 'center', title: '状态'},
-            {field:'createTime', width: 130, align: 'center', title: '创建时间'},
+            {field:'createTime', width: 130, align: 'center', title: systemLanguage["com.skyeye.createTime"][languageType]},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
         ]],
 	    done: function(){

@@ -29,7 +29,7 @@ layui.config({
 	        { field: 'tableName', title: '表名', width: 180 },
 	        { field: 'filePath', title: '文件名', width: 300 },
 	        { field: 'isExist', title: '是否可下载', width: 120 },
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

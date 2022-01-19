@@ -28,7 +28,7 @@ layui.config({
 	        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 	        }},
 	        { field: 'typeName', title: '文档分类', align: 'left', width: 120},
-	        { field: 'createName', title: '创建人', align: 'left', width: 100},
+	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120},
 	        { field: 'updateTime', title: '更新时间', align: 'center', width: 140}
 	    ]],
 	    done: function(){

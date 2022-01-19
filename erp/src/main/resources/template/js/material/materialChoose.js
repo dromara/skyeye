@@ -119,7 +119,7 @@ layui.config({
 		        { field: 'productModel', title: '型号', align: 'left', width: 150 },
 		        { field: 'categoryName', title: '所属类型', align: 'left', width: 100 },
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 150 }
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
 		    ]],
 		    done: function(res, curr, count){
 		    	matchingLanguage();

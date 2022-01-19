@@ -36,7 +36,7 @@ layui.config({
 	        		return "<span class='state-new'>新建</span>";
 	        	}
 	        }},
-			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 100 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar'}
 	    ]],

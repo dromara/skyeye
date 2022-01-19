@@ -23,13 +23,11 @@ layui.config({
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
 	 	ajaxSendAfter:function(json){
-	 		
 	 		form.render();
 	 		form.on('select(selectParent)', function(data){
 	 			
 	 		});
 	 		form.on('submit(formSearch)', function (data) {
-	 	    	
 	 	        if (winui.verifyForm(data.elem)) {
 	 	        	refreshTable();
 	 	        }
@@ -37,7 +35,6 @@ layui.config({
 	 		});
 	 	}
     });
-	
 	
 	table.render({
 	    id: 'messageTable',
@@ -58,7 +55,7 @@ layui.config({
 	        }},
 	        { field: 'typeName', title: '所属分类', width: 120 },
 	        { field: 'groupMemberNum', title: '组件数量', width: 120 },
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

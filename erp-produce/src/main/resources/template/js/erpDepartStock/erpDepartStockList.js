@@ -7,9 +7,7 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'eleTree', 'soulTable'], function (exports) {
-	
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -57,7 +55,7 @@ layui.config({
 		        		return "<span class='state-up'>启用</span>";
 		        	}
 		        }},
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 150 }
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
 		    ]],
 		    done: function(){
 		    	matchingLanguage();

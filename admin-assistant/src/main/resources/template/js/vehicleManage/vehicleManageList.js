@@ -153,7 +153,7 @@ layui.config({
 
 	// 删除车辆
 	function vehicledelet(data){
-		layer.confirm('确认删除该车辆吗？', { icon: 3, title: '删除操作' }, function (index) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "vehicle003", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){

@@ -60,7 +60,7 @@ layui.config({
 	        		return "<span class='state-error'>" + d.stateName + "</span>";
 	        	}
 	        }},
-	        { field: 'createTime', title: '创建时间', width: 150, align: 'center'},
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150, align: 'center'},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#reserveTableBar'}
 	    ]],
 	    done: function(){

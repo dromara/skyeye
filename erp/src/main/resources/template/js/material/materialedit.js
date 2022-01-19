@@ -436,7 +436,7 @@ layui.config({
  	    //删除
  	    $("body").on("click", "#extendMationBox .close-btn", function(){
  	    	var _this = this;
- 	    	layer.confirm('确定删除该扩展字段吗？', { icon: 3, title: '删除操作' }, function (index) {
+			layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 				layer.close(index);
 	            $(_this).parent().remove();
 			});

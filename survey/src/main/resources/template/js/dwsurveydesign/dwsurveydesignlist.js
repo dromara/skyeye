@@ -29,11 +29,11 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field:'surveyName', width:300, title: '问卷名称'},
-	        { field:'answerNum', width:140, title: '答卷'},
-	        { field:'surveyState', width:120, title: '状态'},
-	        { field:'userName', width:120, title: '创建人'},
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'surveyName', width: 300, title: '问卷名称'},
+	        { field: 'answerNum', width: 140, title: '答卷'},
+	        { field: 'surveyState', width: 120, title: '状态'},
+	        { field: 'userName', width: 120, title: systemLanguage["com.skyeye.createName"][languageType]},
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

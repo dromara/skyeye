@@ -31,7 +31,7 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'title', title: '文档标题', width: 400 },
 	        { field: 'stateName', title: '状态', width: 120 },
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

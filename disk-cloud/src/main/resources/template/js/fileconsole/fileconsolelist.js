@@ -391,7 +391,7 @@ layui.config({
 	
 	// 文件夹或者文件删除
 	$("body").on("click", ".deleteFolderAndChild", function(e){
-		layer.confirm("确定删除该文件夹及其子文件吗?", { icon: 3, title: '删除操作' }, function (index) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
 			var checkItems = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
 			var deleteArray = new Array();
@@ -787,7 +787,7 @@ layui.config({
 	
 	// 树操作--文件夹或者文件删除
 	$("body").on("click", ".treedeleteFolderAndChild", function(e){
-		layer.confirm("确定删除该文件夹及其子文件吗?", { icon: 3, title: '删除操作' }, function (index) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             // 向服务端发送删除指令
 			var deleteArray = new Array();

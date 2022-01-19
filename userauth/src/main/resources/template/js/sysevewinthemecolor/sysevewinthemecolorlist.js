@@ -31,7 +31,7 @@ layui.config({
 	        { field: 'id', title: '主题颜色', width: 180, templet: function(d){
 	        	return '<div class="color-choose" style="width: auto"><div class="' + d.colorClass + '"></div></div>';
 	        }},
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

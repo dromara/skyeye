@@ -66,8 +66,8 @@ layui.config({
 	        }},
 	        { field: 'projectName', title: '所属项目', rowspan: 2, width: 120 },
 	        { field: 'performId', title: '执行人', rowspan: 2, width: 200 },
-	        { field: 'createId', title: '创建人', rowspan: 2, width: 70 },
-	        { field: 'createTime', title: '创建时间', rowspan: 2, width: 115 },
+	        { field: 'createId', title: systemLanguage["com.skyeye.createName"][languageType], rowspan: 2, width: 120 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: 2, width: 115 },
 	        { field: 'startTime', title: '开始时间', rowspan: 2, width: 80 },
 	        { title: '工作量(天)', align: 'center', colspan: 2 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], align: 'center', width: 300, rowspan: 2, toolbar: '#tableBar'}

@@ -45,7 +45,7 @@ layui.config({
 	        { field: 'num', title: '合同编号', align: 'left', width: 120 },
 	        { field: 'price', title: '合同金额（元）', align: 'left', width: 120 },
 	        { field: 'signingTime', title: '签约日期', align: 'center', width: 100 },
-	        { field: 'createTime', title: '创建时间', align: 'center', width: 100 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
 	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function(d){
 	        	if(!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';

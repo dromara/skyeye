@@ -29,7 +29,7 @@ layui.config({
 	        { field: 'requireName', title: '限制标题', width: 120 },
 	        { field: 'formerRequirement', title: '前端限制标签', width: 140 },
 	        { field: 'afterRequirement', title: '后端限制标签', width: 140 },
-	        { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

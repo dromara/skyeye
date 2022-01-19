@@ -76,7 +76,7 @@ layui.config({
 		        { field: 'responsId', title: '商机负责人', align: 'left', width: 120 },
 		        { field: 'estimatePrice', title: '预计成交金额（元）', align: 'left', width: 150 },
 		        { field: 'estimateEndTime', title: '预计结单日期', align: 'center', width: 120 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 120 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 120 },
 		        { field: 'state', title: '状态', align: 'left', width: 120 }
 		    ]]
 		});
@@ -139,7 +139,7 @@ layui.config({
 		        { field: 'num', title: '合同编号', align: 'left', width: 120 },
 		        { field: 'price', title: '合同金额（元）', align: 'left', width: 120 },
 		        { field: 'signingTime', title: '签约日期', align: 'center', width: 120 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 120 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 120 },
 		        { field: 'state', title: '状态', align: 'left', width: 120 }
 		    ]]
 		});
@@ -323,8 +323,8 @@ layui.config({
 		        { field: 'email', title: '邮箱', align: 'left', width: 140 },
 		        { field: 'qq', title: 'QQ', align: 'left', width: 100 },
 		        { field: 'wechat', title: '微信', align: 'left', width: 100 },
-		        { field: 'createName', title: '创建人', align: 'left', width: 80 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 100 },
+		        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
 		        { field: 'lastUpdateName', title: '最后修改人', align: 'left', width: 100 },
 		        { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 100}
 		    ]]
@@ -368,7 +368,7 @@ layui.config({
 		        { field: 'opportunityName', title: '所属商机', align: 'left', width: 200 },
 		        { field: 'createName', title: '作者', align: 'left', width: 80 },
 		        { field: 'replyNum', title: '回复', align: 'left', width: 80 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 120 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 120 },
 		        { field: 'recoveryTime', title: '最后回复时间', align: 'center', width: 120 }
 		    ]]
 		});

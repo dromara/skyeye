@@ -114,7 +114,7 @@ layui.config({
 	        { field: 'groupName', title: '所属分组', width: 120 },
 	        { field: 'memberUseNum', title: '使用次数', width: 120 },
 	        { field: 'propertyNum', title: '标签属性数量', width: 120 },
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

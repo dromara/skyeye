@@ -65,7 +65,7 @@ layui.config({
 		        { field: 'userNum', title: '员工数', width: 100 },
 		        { field: 'companyName', title: '所属公司', width: 150 },
 		        { field: 'departmentName', title: '所属部门', width: 100 },
-		        { field: 'createTime', title: '创建时间', width: 150 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 		    ]],
 		    isPage:false,

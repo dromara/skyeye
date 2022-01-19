@@ -309,8 +309,8 @@ layui.config({
 		        		return "参数错误";
 		        	}
 		        }},
-		        { field: 'createName', title: '创建人', align: 'left', width: 80 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 160 },
+		        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#tableBar'}
 		    ]],
 		    done: function(){

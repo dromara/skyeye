@@ -183,8 +183,7 @@ layui.config({
 
 	// 删除
 	function del(data, obj){
-		var msg = obj ? '确认删除【' + obj.data.title + '】吗？' : '确认删除选中数据吗？';
-		layer.confirm(msg, {icon: 3, title: '删除操作'}, function (index) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "profile009", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){

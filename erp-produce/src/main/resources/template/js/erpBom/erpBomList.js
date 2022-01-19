@@ -87,9 +87,10 @@ layui.config({
         });
     }
 
-    //删除
+    // 删除
     function deleteAccount(data){
-        layer.confirm('确认删除该方案吗？', { icon: 3, title: '删除操作' }, function (index) {
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+            layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "erpbom004", params: {rowId: data.id}, type:'json', callback:function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
@@ -101,7 +102,7 @@ layui.config({
         });
     }
 
-    //添加
+    // 添加
     $("body").on("click", "#addBean", function(){
         _openNewWindows({
             url: "../../tpl/erpBom/erpBomAdd.html",
@@ -118,7 +119,7 @@ layui.config({
             }});
     });
     
-    //详情
+    // 详情
 	function details(data){
 		rowId = data.id;
 		_openNewWindows({

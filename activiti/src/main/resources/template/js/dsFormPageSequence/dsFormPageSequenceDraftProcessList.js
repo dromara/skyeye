@@ -118,8 +118,8 @@ layui.config({
 	
 	// 删除
 	function deleteRow(data){
-		layer.confirm('确认删除该数据吗？', { icon: 3, title: '删除操作' }, function (i) {
-			layer.close(i);
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+			layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "pagesequence002", params: {rowId: data.id}, type:'json', callback:function(json){
  	   			if(json.returnCode == 0){
                 	winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});

@@ -89,7 +89,7 @@ layui.config({
 	
 	// 删除事故信息
 	function accidentdelet(data){
-		layer.confirm('确认删除该事故信息吗？', {icon: 3, title: '删除操作'}, function (index) {
+		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "accident003", params: {rowId: data.id}, type:'json', callback: function(json){
     			if(json.returnCode == 0){

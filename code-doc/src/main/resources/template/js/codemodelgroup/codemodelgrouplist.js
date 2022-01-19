@@ -32,7 +32,7 @@ layui.config({
 	        }},
 	        { field: 'modelNum', title: '模板数量', width: 120 },
 	        { field: 'useNum', title: '调用次数', width: 120 },
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 280, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

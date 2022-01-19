@@ -29,7 +29,7 @@ layui.config({
 			{ field: 'typeName', title: '中文名称', width: 180 },
 			{ field: 'typeNameEn', title: '英文名称', width: 180 },
 			{ field: 'code', title: '编码', align: 'left', width: 100 },
-			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 100 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 100 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},

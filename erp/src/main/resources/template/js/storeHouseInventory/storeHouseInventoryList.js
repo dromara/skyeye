@@ -78,7 +78,7 @@ layui.config({
 		        		return "<span class='state-up'>启用</span>";
 		        	}
 		        }},
-		        { field: 'createTime', title: '创建时间', rowspan: '2', align: 'center', width: 150 }
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 }
 		    ],[
 		        { field: 'allTock', title: '总库存', align: 'center', width: 80},
 		    	{ field: 'initialTock', title: '初始库存', align: 'center', width: 80},

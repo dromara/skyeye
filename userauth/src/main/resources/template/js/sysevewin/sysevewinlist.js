@@ -47,7 +47,7 @@ layui.config({
 	        { field: 'secondTypeName', title: '二级分类', width: 120 },
 	        { field: 'menuNum', title: '菜单数量', width: 100 },
 	        { field: 'useNum', title: '客户数量', width: 100 },
-	        { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 180, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

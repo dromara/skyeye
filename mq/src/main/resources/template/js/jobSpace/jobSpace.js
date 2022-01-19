@@ -95,8 +95,8 @@ layui.config({
 		        	}
 		        	return '';
 		        }},
-		        { field: 'userName', title: '创建人', align: 'center', width: 100 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
+		        { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 		        { field: 'complateTime', title: '完成时间', align: 'center', width: 150 }
 		    ]],
 		    done: function(){
@@ -176,8 +176,8 @@ layui.config({
 		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function(d){
 		        	return '';
 		        }},
-		        { field: 'userName', title: '创建人', align: 'center', width: 100 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
+		        { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 		        { field: 'complateTime', title: '完成时间', align: 'center', width: 150 }
 		    ]]
 		});
@@ -232,8 +232,8 @@ layui.config({
 		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function(d){
 		        	return '';
 		        }},
-		        { field: 'userName', title: '创建人', align: 'center', width: 100 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
+		        { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 		        { field: 'complateTime', title: '完成时间', align: 'center', width: 150 }
 		    ]]
 		});

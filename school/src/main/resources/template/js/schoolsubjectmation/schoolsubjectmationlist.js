@@ -45,7 +45,7 @@ layui.config({
 		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="descSel"></i>';
 		        }},
 		        { field: 'schoolName', title: '所属学校', align: 'left', width: 150 },
-		        { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
+		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 		    ]],
 		    done: function(){

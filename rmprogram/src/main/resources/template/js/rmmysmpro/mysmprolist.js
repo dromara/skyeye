@@ -30,7 +30,7 @@ layui.config({
 	        { field: 'proDesc', title: '项目描述', width: 520 },
 	        { field: 'pageNum', title: '页面数量', width: 120 },
 	        { field: 'modelNum', title: '组件数量', width: 120 },
-	        { field: 'createTime', title: '创建时间', width: 180 },
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){
