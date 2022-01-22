@@ -42,12 +42,12 @@ layui.config({
 						+ '<font id="exitBtn">退出</font>';
 						$("#operatorBtn").html(str);
 					}else{
-						location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apipage/apipage.html");
+						location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apiPage/apiPage.html");
 					}
 					loadListMation();
 				}});
 			}else{
-				location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apipage/apipage.html");
+				location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apiPage/apiPage.html");
 			}
 		}
 		
@@ -217,7 +217,7 @@ layui.config({
 				layer.close(index);
 	        	AjaxPostUtil.request({url:reqBasePath + "login003", params:{}, type:'json', callback:function(json){
 	        		$.cookie('userToken', "", {path: '/' });
-	        		location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apipage/apipage.html");
+	        		location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apiPage/apiPage.html");
 	 	   		}});
 	        });
 		});

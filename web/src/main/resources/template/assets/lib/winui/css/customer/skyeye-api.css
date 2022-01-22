@@ -9,7 +9,7 @@
     background-color: white;
 }
 .apiListForm .api-left{
-    width: 220px;
+    width: 250px;
     float: left;
     height: 100%;
     border-right: 1px solid grey;
@@ -142,7 +142,7 @@
     overflow: hidden;
 }
 .apiListForm .api-right{
-    width: calc(100% - 241px);
+    width: calc(100% - 271px);
     float: left;
     height: 100%;
     padding: 0px 10px;

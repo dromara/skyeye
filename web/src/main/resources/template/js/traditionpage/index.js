@@ -83,14 +83,14 @@ layui.config({
 				initDeskTopMenuBox();
 				
 				// 加载菜单
-				AjaxPostUtil.request({url:reqBasePath + "login004", params:{}, type:'json', method: "GET", callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "login005", params:{}, type:'json', method: "GET", callback:function(json){
 		   			if(json.returnCode == 0){
 		   				var menuStr;
 		   				$.each(json.rows, function(i, row){
 		   					menuStr = "";
-		   					if(row.menuIconType === '1'){//icon
+		   					if(row.menuIconType === 1){//icon
 		   						row.icon = '<i class="fa ' + row.icon + ' fa-fw"></i>';
-		   					}else if(row.menuIconType === '2'){//图片
+		   					}else if(row.menuIconType === 2){//图片
 		   						row.icon = '<img src="' + fileBasePath + row.menuIconPic + '" />';
 		   					}
 	   						if(languageType == 'cn'){
@@ -109,9 +109,9 @@ layui.config({
 		   						//二级菜单
 		   						if(!isNull(row.childs)){
 			   						$.each(row.childs, function(j, child){
-			   							if(child.menuIconType === '1'){//icon
+			   							if(child.menuIconType === 1){//icon
 			   								child.icon = '<i class="fa ' + child.icon + ' fa-fw"></i>';
-					   					}else if(child.menuIconType === '2'){//图片
+					   					}else if(child.menuIconType === 2){//图片
 					   						child.icon = '<img src="' + fileBasePath + child.menuIconPic + '" />';
 					   					}
 					   					if(languageType == 'cn'){
