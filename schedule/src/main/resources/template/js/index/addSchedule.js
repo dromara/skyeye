@@ -134,7 +134,6 @@ layui.config({
         });
 		
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
         			scheduleTitle: $("#scheduleTitle").val(),
