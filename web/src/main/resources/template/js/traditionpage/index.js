@@ -52,7 +52,7 @@ layui.config({
     //加载菜单数据
     function loadMenuListToShow(){
     	//获取桌面消息
-        AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type:'json', callback:function(l){
+        AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type:'json', method: "GET", callback:function(l){
             if(l.returnCode == 0) {
             	var str = "";//顶部桌面字符串
             	var menuBoxStr = "";//多个菜单的字符串

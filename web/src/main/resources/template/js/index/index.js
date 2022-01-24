@@ -79,7 +79,7 @@ layui.config({
     				json.bean.winLockBgPicUrl = fileBasePath + json.bean.winLockBgPicUrl;
     			}
     			//获取桌面消息
-                AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type:'json', callback:function(l){
+                AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type:'json', method: "GET", callback:function(l){
                     if(l.returnCode == 0) {
                     	var deskTopName = new Array();
                     	var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");

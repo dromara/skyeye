@@ -138,7 +138,7 @@ var AjaxPostUtil = {
             xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xmlhttp.send(formateParams);
         } else if("DELETE" === method.toUpperCase()){
-            // 如果是POST提交，设置请求头信息
+            // 如果是DELETE提交，设置请求头信息
             xmlhttp.setRequestHeader("Content-Type", "application/json");
             xmlhttp.send(formateParams);
         }
