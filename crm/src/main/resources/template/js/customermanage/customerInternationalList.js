@@ -83,7 +83,7 @@ layui.config({
 	        { field: 'noDocumentaryDayNum', title: '未跟单天数', align: 'left', width: 100 },
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
-	        { field: 'lastUpdateName', title: '最后修改人', align: 'left', width: 100 },
+	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 100 },
 	        { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 100}
 	    ]],
 	    done: function(json){

@@ -37,7 +37,7 @@ layui.config({
                 }},
                 { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
                 { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
-                { field: 'lastUpdateName', title: '最后修改人', align: 'left', width: 100 },
+                { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 100 },
                 { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 100},
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar'}
 		    ]],
