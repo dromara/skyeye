@@ -16,16 +16,12 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'member001',
-        where: {memberName:$("#memberName").val(),
-            telephone: $("#telephone").val(),
-            email: $("#email").val(),
-            fax: $("#fax").val(),
-            enabled: $("#enabled").val()},
+        url: shopBasePath + 'member001',
+        where: getTableParams(),
         even: true,
         page: true,
-        limits: [8, 16, 24, 32, 40, 48, 56],
-        limit: 8,
+        limits: getLimits(),
+        limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
             { field: 'memberName', title: '会员名称', align: 'left', width: 140,templet: function(d){
@@ -75,15 +71,7 @@ layui.config({
         }
     });
 
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            loadTable();
-        }
-        return false;
-    });
-
-    //编辑
+    // 编辑
     function editmember(data){
         rowId = data.id;
         _openNewWindows({
@@ -101,7 +89,7 @@ layui.config({
             }});
     }
 
-    //删除会员
+    // 删除会员
     function deletemember(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
@@ -116,7 +104,7 @@ layui.config({
         });
     }
 
-    //设置启用状态
+    // 设置启用状态
     function editEnabled(data){
         layer.confirm('确认要更改该会员为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url:reqBasePath + "member006", params: {rowId: data.id}, type:'json', callback:function(json){
@@ -130,7 +118,7 @@ layui.config({
         });
     }
     
-    //设置禁用状态
+    // 设置禁用状态
     function editNotEnabled(data){
         layer.confirm('确认要更改该会员为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url:reqBasePath + "member007", params: {rowId: data.id}, type:'json', callback:function(json){
@@ -144,7 +132,7 @@ layui.config({
         });
     }
 	
-    //详情
+    // 详情
     function selectMember(data){
         rowId = data.id;
         _openNewWindows({
@@ -174,29 +162,31 @@ layui.config({
             }});
     });
 
+    form.render();
+    form.on('submit(formSearch)', function (data) {
+        if (winui.verifyForm(data.elem)) {
+            table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
+        }
+        return false;
+    });
+
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 
-    $("body").on("click", "#formSearch", function () {
-        refreshTable();
-    })
-    //刷新
+    // 刷新
     function loadTable(){
-        table.reload("messageTable", {where:{memberName:$("#memberName").val(),
-                telephone: $("#telephone").val(),
-                email: $("#email").val(),
-                fax: $("#fax").val(),
-                enabled: $("#enabled").val()}});
+        table.reload("messageTable", {where: getTableParams()});
     }
 
-    //搜索
-    function refreshTable(){
-        table.reload("messageTable", {page: {curr: 1}, where:{memberName:$("#memberName").val(),
-                telephone: $("#telephone").val(),
-                email: $("#email").val(),
-                fax: $("#fax").val(),
-                enabled: $("#enabled").val()}})
+    function getTableParams(){
+        return {
+            memberName:$("#memberName").val(),
+            telephone: $("#telephone").val(),
+            email: $("#email").val(),
+            fax: $("#fax").val(),
+            enabled: $("#enabled").val()
+        };
     }
 
     exports('memberlist', {});
