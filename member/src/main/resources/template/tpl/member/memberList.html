@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+        <form class="layui-form layui-form-pane" action="" autocomplete="off">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">会员称呼</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="contacts" name="contacts" placeholder="请输入会员称呼" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="phone" name="phone" placeholder="请输入手机号码" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">电子邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="email" name="email" placeholder="请输入电子邮箱" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label"><language showName="com.skyeye.state"></language></label>
+                    <div class="layui-input-inline">
+                        <select id="enabled" name="enabled">
+                            <option value="">全部</option>
+                            <option value="1">启用</option>
+                            <option value="2">禁用</option>
+                        </select>
+                    </div>
+                    <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+                    <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn" auth="1569133228443"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+
+        <script type="text/html" id="tableBar">
+            {{# if(d.enabled == 2 && auth('1569133258254')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+            {{# } }}
+            {{# if(d.enabled == 2 && auth('1571154301068')){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+            {{# } }}
+            {{# if(d.enabled == 1 && auth('1569133276824')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="unenabled"><language showName="com.skyeye.disableBtn"></language></a>
+            {{# } }}
+            {{# if(d.enabled == 2 && auth('1569133267244')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="enabled"><language showName="com.skyeye.enableBtn"></language></a>
+            {{# } }}
+        </script>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/member/'}).use('memberList');
+    </script>
+</body>
+</html>

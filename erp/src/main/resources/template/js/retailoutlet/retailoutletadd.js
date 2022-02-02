@@ -54,7 +54,7 @@ layui.config({
 
 	//初始化会员
 	function initSupplierHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "member009", params: {}, type: 'json', method: "GET", callback: function(json) {
+		AjaxPostUtil.request({url: shopBasePath + "member009", params: {}, type: 'json', method: "GET", callback: function(json) {
 			if(json.returnCode == 0) {
 				//加载会员数据
 				$("#supplierId").html(getDataUseHandlebars(selOption, json));

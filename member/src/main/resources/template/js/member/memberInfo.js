@@ -12,9 +12,10 @@ layui.config({
         var simpleTemplate = $("#simpleTemplate").html();
         showGrid({
             id: "showForm",
-            url: reqBasePath + "member008",
+            url: shopBasePath + "member008",
             params: {rowId: parent.rowId},
             pagination: false,
+            method: "GET",
             template: simpleTemplate,
             ajaxSendAfter:function(json){
                 $("#enabled").html(json.bean.enabled == "1" ? "<span class='state-up'>启用</span>" : "<span class='state-down'>禁用</span>");

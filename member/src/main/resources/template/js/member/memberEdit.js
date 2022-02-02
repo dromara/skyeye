@@ -11,10 +11,11 @@ layui.config({
         	textool = layui.textool;
         showGrid({
             id: "showForm",
-            url: reqBasePath + "member003",
+            url: shopBasePath + "member003",
             params: {rowId:parent.rowId},
             pagination: false,
-            template: getFileContent('tpl/member/membereditTemplate.tpl'),
+            method: "GET",
+            template: $("#beanTemplate").html(),
             ajaxSendLoadBefore: function(hdb){},
             ajaxSendAfter:function(json){
             	
@@ -30,30 +31,18 @@ layui.config({
                     if (winui.verifyForm(data.elem)) {
                         var params = {
                             rowId: parent.rowId,
-                            memberName: $("#memberName").val(),
                             contacts: $("#contacts").val(),
-                            phonenum: $("#phonenum").val(),
+                            phone: $("#phone").val(),
                             email: $("#email").val(),
-                            description: $("#description").val(),
-                            advanceIn: isNull($("#advanceIn").val()) ? '0' : $("#advanceIn").val(),
-                            beginNeedGet: isNull($("#beginNeedGet").val()) ? '0' : $("#beginNeedGet").val(),
-                            beginNeedPay: isNull($("#beginNeedPay").val()) ? '0' : $("#beginNeedPay").val(),
-                            allNeedGet: isNull($("#allNeedGet").val()) ? '0' : $("#allNeedGet").val(),
-                            allNeedPay: isNull($("#allNeedPay").val()) ? '0' : $("#allNeedPay").val(),
-                            fax: $("#fax").val(),
-                            telephone: $("#telephone").val(),
                             address: $("#address").val(),
-                            taxNum: $("#taxNum").val(),
-                            bankName: $("#bankName").val(),
-                            accountNumber: $("#accountNumber").val(),
-                            taxRate: isNull($("#taxRate").val()) ? '0' : $("#taxRate").val()
+                            description: $("#description").val()
                         };
-                        AjaxPostUtil.request({url:reqBasePath + "member005", params:params, type:'json', callback:function(json){
+                        AjaxPostUtil.request({url: shopBasePath + "member005", params: params, type: 'json', method: "PUT", callback: function(json){
                             if(json.returnCode == 0){
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
                             }else{
-                                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});
                     }

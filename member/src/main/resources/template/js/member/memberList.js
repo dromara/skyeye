@@ -7,11 +7,11 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
-    authBtn('1569133228443');
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
-    
+    authBtn('1569133228443');
+
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
@@ -23,22 +23,14 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'memberName', title: '会员名称', align: 'left', width: 140,templet: function(d){
-                return '<a lay-event="select" class="notice-title-click">' + d.memberName + '</a>';
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
+            { field: 'contacts', title: '会员称呼', align: 'left', width: 140, fixed: 'left', templet: function(d){
+                return '<a lay-event="select" class="notice-title-click">' + d.contacts + '</a>';
             }},
-            { field: 'contacts', title: '联系人', align: 'left', width: 80},
-            { field: 'phonenum', title: '联系电话', align: 'center', width: 100},
+            { field: 'phone', title: '联系电话', align: 'center', width: 100},
             { field: 'email', title: '电子邮箱', align: 'left', width: 120},
-            { field: 'telephone', title: '手机号码', align: 'center', width: 100},
-            { field: 'fax', title: '传真', align: 'left', width: 100},
-            { field: 'advanceIn', title: '预收款', align: 'left', width: 100},
-            { field: 'beginNeedGet', title: '期初应收', align: 'left', width: 100},
-            { field: 'beginNeedPay', title: '期初应付', align: 'left', width: 100},
-            { field: 'allNeedGet', title: '累计应收', align: 'left', width: 100},
-            { field: 'allNeedPay', title: '累计应付', align: 'left', width: 100},
-            { field: 'taxRate', title: '税率(%)', align: 'left', width: 100},
-            { field: 'enabled', title: '状态', align: 'left', width: 80, templet: function(d){
+            { field: 'address', title: '地址', align: 'left', width: 100},
+            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function(d){
                 if(d.enabled == '1'){
                     return "<span class='state-up'>启用</span>";
                 }else if(d.enabled == '2'){
@@ -93,12 +85,12 @@ layui.config({
     function deletemember(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "member004", params: {rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: shopBasePath + "member004", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
                 if(json.returnCode == 0){
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         });
@@ -107,12 +99,12 @@ layui.config({
     // 设置启用状态
     function editEnabled(data){
         layer.confirm('确认要更改该会员为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
-            AjaxPostUtil.request({url:reqBasePath + "member006", params: {rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: shopBasePath + "member006", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function(json){
                 if(json.returnCode == 0){
-                    winui.window.msg("设置成功。", {icon: 1,time: 2000});
+                    winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         });
@@ -121,12 +113,12 @@ layui.config({
     // 设置禁用状态
     function editNotEnabled(data){
         layer.confirm('确认要更改该会员为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
-            AjaxPostUtil.request({url:reqBasePath + "member007", params: {rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: shopBasePath + "member007", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function(json){
                 if(json.returnCode == 0){
-                    winui.window.msg("设置成功。", {icon: 1,time: 2000});
+                    winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         });
@@ -181,13 +173,12 @@ layui.config({
 
     function getTableParams(){
         return {
-            memberName:$("#memberName").val(),
-            telephone: $("#telephone").val(),
+            contacts: $("#contacts").val(),
+            phone: $("#phone").val(),
             email: $("#email").val(),
-            fax: $("#fax").val(),
             enabled: $("#enabled").val()
         };
     }
 
-    exports('memberlist', {});
+    exports('memberList', {});
 });
