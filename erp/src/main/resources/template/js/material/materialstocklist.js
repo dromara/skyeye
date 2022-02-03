@@ -34,7 +34,6 @@ layui.config({
 		        return str;
 		    }},
 		    { field: 'subTypeName', title: '单据类型', align: 'left', width: 100},
-	        { field: 'supplierName', title: '供应商', align: 'left', width: 150},
 	        { field: 'unitPrice', title: '单价(元)', align: 'left', width: 100 },
 	        { field: 'operNumber', title: '数量', align: 'left', width: 80, templet: function(d){
 	        	if(d.subType == 12){//拆分单

@@ -48,7 +48,6 @@ layui.config({
                 }
             }},
             { field: 'totalPrice', title: '合计金额', align: 'left',width: 100},
-            { field: 'supplierName', title: '供应商/客户/会员', align: 'left', width: 140 },
             { field: 'payType', title: '付款类型', align: 'center',width: 80, templet: function (d) {
                 if(d.payType == 1){
                     return "<span class='state-up'>现金</span>";

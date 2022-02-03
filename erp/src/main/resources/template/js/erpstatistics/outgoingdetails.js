@@ -85,7 +85,6 @@ layui.config({
 	            { field: 'unitPrice', title: '单价', align: 'left', width: 120},
 	            { field: 'operNumber', title: '出库数量', align: 'left', width: 100},
 	            { field: 'allPrice', title: '金额', align: 'left', width: 120 },
-	            { field: 'supplierName', title: '供应商/客户/会员', align: 'left', width: 140 },
 	            { field: 'depotName', title: '仓库', align: 'left', width: 140 },
 	            { field: 'operTime', title: '出库日期', align: 'center', width: 140 }
 	        ]],
@@ -142,11 +141,10 @@ layui.config({
     	return {
     		materialName: $("#materialName").val(),
     		depotId: $("#depotId").val(),
-    		customerName: $("#customerName").val(),
     		startTime: startTime,
     		endTime: endTime
     	};
     }
 
-    exports('warehousingdetails', {});
+    exports('outgoingdetails', {});
 });
