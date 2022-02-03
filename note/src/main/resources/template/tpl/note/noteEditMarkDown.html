@@ -8,10 +8,43 @@
     <link href="../../assets/lib/editormd/css/editormd.css" rel="stylesheet" />
     <!-- 页面解析markdown为HTML显示需要的css -->
     <link href="../../assets/lib/editormd/css/editormd.preview.min.css"rel="stylesheet" />
+	<style type="text/css">
+		.show-folder{
+			position: absolute;
+			top: 120px;
+			right: 0px;
+			z-index: 999;
+			background-color: #FFFFFF;
+			width: 170px;
+			height: 400px;
+			border: 1px solid gainsboro;
+		}
+
+		.show-folder .title{
+			height: 40px;
+			line-height: 40px;
+			background-color: gainsboro;
+			padding-left: 10px;
+		}
+
+		.show-folder #custom-toc-container{
+			padding: 0px;
+			overflow-x: auto;
+			white-space: nowrap;
+			height: calc(100% - 40px);
+		}
+	</style>
 </head>
 <body>
 	<div class="file-console">
 	    <div id="content"></div>
+	</div>
+
+	<div class="show-folder" id="markdownFolder">
+		<div class="title">
+			<font>目录</font>
+		</div>
+		<div class="markdown-body editormd-preview-container" id="custom-toc-container"></div>
 	</div>
 	
 	<script src="../../assets/lib/layui/layui.js"></script>

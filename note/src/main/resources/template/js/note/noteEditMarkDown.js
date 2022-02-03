@@ -49,6 +49,10 @@ layui.config({
         onchange : function (){
             if(!initFirst){
                 initFirst = true;
+                layEditor.config({
+                    tocContainer : "#custom-toc-container",
+                    tocDropdown  : false
+                });
             }else{
                 parent.$("#editMyNote").addClass('select');
             }

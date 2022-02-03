@@ -61,7 +61,7 @@ layui.define(["jquery"], function(exports) {
             "h1", "h2", "h3", "h4", "h5", "h6", "|", 
             "list-ul", "list-ol", "hr", "|",
             "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
-            "goto-line", "watch", "preview", "fullscreen", "clear", "search"
+            "goto-line", "watch", "preview", "fullscreen", "clear", "search", "catalogue"
         ],
         simple : [
             "undo", "redo", "|", 
@@ -132,6 +132,7 @@ layui.define(["jquery"], function(exports) {
         onfullscreenExit     : function() {},
         onscroll             : function() {},
         onpreviewscroll      : function() {},
+        catalogue            : function() {},
         
         imageUpload          : false,
         imageFormats         : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
@@ -210,7 +211,8 @@ layui.define(["jquery"], function(exports) {
             fullscreen       : "fa-arrows-alt",
             clear            : "fa-eraser",
             help             : "fa-question-circle",
-            info             : "fa-info-circle"
+            info             : "fa-info-circle",
+            catalogue        : "fa-list"
         },        
         toolbarIconTexts     : {},
         
@@ -256,7 +258,8 @@ layui.define(["jquery"], function(exports) {
                 clear            : "清空",
                 search           : "搜索",
                 help             : "使用帮助",
-                info             : "关于" + editormd.title
+                info             : "关于" + editormd.title,
+                catalogue        : "目录"
             },
             buttons : {
                 enter  : "确定",
@@ -1425,9 +1428,9 @@ layui.define(["jquery"], function(exports) {
             var _this            = this;
             var editor           = this.editor;
             var settings         = this.settings;
-            
+
             this.codeMirror.remove();
-            
+
             this.setCodeMirror();
 
             if (!settings.readOnly) 
@@ -3167,6 +3170,14 @@ layui.define(["jquery"], function(exports) {
 
         info : function() {
             this.showInfoDialog();
+        },
+
+        catalogue: function (){
+            if($("#markdownFolder").is(':hidden')){
+                $("#markdownFolder").show();
+            }else{
+                $("#markdownFolder").hide();
+            }
         }
     };
     
