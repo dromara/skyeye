@@ -273,7 +273,7 @@ layui.define(["jquery"], function(exports) {
                     dialog.loading(true);
                 }
 
-				$.getJSON(reqBasePath + "assets/lib/editormd/plugins/emoji-dialog/emoji.json?temp=" + Math.random(), function(json) {
+				$.getJSON("../../assets/lib/editormd/plugins/emoji-dialog/emoji.json?temp=" + Math.random(), function(json) {
 
 					if (typeof dialog.loading === "function") {
                         dialog.loading(false);
