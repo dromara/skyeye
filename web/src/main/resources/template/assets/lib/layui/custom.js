@@ -23,6 +23,7 @@ var customerJS = {
 	"publicKeyCode": "../../assets/lib/layui/customer/publicKeyCode.js", // 快捷键
 	"sysSupplierUtil": "../../assets/lib/layui/customer/sysSupplierUtil.js", // 供应商相关工具
 	"bossUtil": "../../assets/lib/layui/customer/bossUtil.js", // 招聘模块相关工具
+	"shopUtil": "../../assets/lib/layui/customer/shopUtil.js", // 商城模块相关工具
 };
 
 // 编辑加载自定义的js文件
