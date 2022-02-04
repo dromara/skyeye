@@ -57,6 +57,7 @@
         <module>activiti</module>
         <module>boss</module>
         <module>member</module>
+        <module>shop</module>
     </modules>
 
     <properties>
