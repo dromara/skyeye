@@ -72,7 +72,7 @@ var AjaxPostUtil = {
                 while (win != win.top){
                     win = win.top;
                 }
-                win.location.href = reqBasePath + "/tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
+                win.location.href = "../../tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
             }else if(sessionstatus == "NOAUTHPOINT"){
                 returnValue = eval('(' + '{"returnMessage":"您不具备该权限。","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
             }

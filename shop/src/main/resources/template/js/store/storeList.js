@@ -48,16 +48,16 @@ layui.config({
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'edit') { // 编辑
-            editmember(data);
+            edit(data);
         }else if (layEvent === 'delete') { // 删除
-            deletemember(data);
+            delet(data);
         }else if(layEvent == 'select'){ // 详情
-            selectMember(data)
+            select(data)
         }
     });
 
     // 编辑
-    function editmember(data){
+    function edit(data){
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/store/storeEdit.html",
@@ -75,7 +75,7 @@ layui.config({
     }
 
     // 删除
-    function deletemember(data){
+    function delet(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "store004", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
@@ -90,7 +90,7 @@ layui.config({
     }
 
     // 详情
-    function selectMember(data){
+    function select(data){
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/store/storeInfo.html",
