@@ -23,7 +23,7 @@ layui.config({
 			menuBoxTemplate = $("#menuBoxTemplate").html(),
 			modelTemplate = $("#modelTemplate").html();
 
-		MiniSite.JsLoader.load(reqBasePath + "json/main.js", function(){
+		MiniSite.JsLoader.load("../../json/main.js", function(){
 			$.cookie('sysMainMation', "", {path: '/' });
 			setCookie('sysMainMation', JSON.stringify(sysMainMation), 'd30');
 			$(document).attr("title", sysMainMation.mationTitle);

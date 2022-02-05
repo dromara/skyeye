@@ -36,4 +36,21 @@ var shopUtil = {
         }, async: false});
     },
 
+    /**
+     * 获取当前登陆用户所属的门店列表
+     *
+     * @param callback 回执函数
+     */
+    queryStaffBelongStoreList: function (callback){
+        AjaxPostUtil.request({url: shopBasePath + "storeStaff005", params: {}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
 };

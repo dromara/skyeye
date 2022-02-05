@@ -483,3 +483,39 @@ function getAll(begin, end) {
     }
     return thisArray;
 }
+
+/**
+ * 计算开始时间和结束时间之间间隔minute分钟的多个时间段
+ *
+ * @param startTime 格式：HH:mm
+ * @param endTime 格式：HH:mm
+ * @param minute 例如：30
+ */
+function getTimePointMinute(startTime, endTime, minute){
+    var result = new Array();
+    var startHour = parseInt(startTime.split(":")[0]);
+    var startMinute = parseInt(startTime.split(":")[1]);
+    var currentMinute = startHour * 60 + startMinute;
+
+    var endHour = parseInt(endTime.split(":")[0]);
+    var endMinute = parseInt(endTime.split(":")[1]);
+    var maxMinute = endHour * 60 + endMinute;
+    if((currentMinute + minute) <= maxMinute){
+        var newStartTime = turnTime(startTime, minute);
+        result.push(startTime + " ~ " + newStartTime);
+        result = $.merge(result, getTimePointMinute(newStartTime, endTime, minute));
+    }
+    return result;
+}
+
+function turnTime(time, mm){
+    var hour = parseInt(time.split(":")[0]);
+    var minute = parseInt(time.split(":")[1]);
+    if((minute + mm) >= 60){
+        minute = minute + mm - 60;
+        hour = hour + 1;
+    }else{
+        minute = minute + mm;
+    }
+    return (hour < 10 ? ("0" + hour) : hour) + ":" + (minute < 10 ? (minute + "0") : minute);
+}
