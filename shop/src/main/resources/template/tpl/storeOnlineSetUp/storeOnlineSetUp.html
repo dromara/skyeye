@@ -98,8 +98,40 @@
                 </div>
             </div>
         </div>
-
         <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">门店成员</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">门店成员</label>
+            <div class="layui-input-block">
+                <div class=" layui-col-xs12" style="overflow-x: auto">
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>工号</th>
+                            <th>姓名</th>
+                            <th>企业</th>
+                            <th>部门</th>
+                            <th>职位</th>
+                        </tr>
+                        </thead>
+                        <tbody class="insurance-table">
+                            {{#each storeStaffList}}
+                            <tr>
+                                <td><div style="width: 100px;">{{jobNumber}}</div></td>
+                                <td><div style="width: 100px;">{{userName}}</div></td>
+                                <td><div style="width: 140px;">{{companyName}}</div></td>
+                                <td><div style="width: 100px;">{{departmentName}}</div></td>
+                                <td><div style="width: 120px;">{{jobName}}</div></td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12" style="height: 50px"></div>
+        <div class="layui-form-item layui-col-xs12" style="position: fixed; bottom: 0; background-color: white; border-top: 1px solid gainsboro; line-height: 41px;">
             <div class="layui-input-block">
                 <button class="winui-btn" lay-submit lay-filter="formSaveBean" auth="1644129110388"><language showName="com.skyeye.save"></language></button>
             </div>
