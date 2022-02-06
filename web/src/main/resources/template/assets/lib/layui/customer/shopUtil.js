@@ -8,7 +8,7 @@ var shopUtil = {
      * @param callback 回执函数
      */
     getShopAreaMation: function (callback){
-        AjaxPostUtil.request({url: shopBasePath + "area007", params: {}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: shopBasePath + "queryAreaList", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(json.returnCode == 0) {
                 if(typeof(callback) == "function") {
                     callback(json);
