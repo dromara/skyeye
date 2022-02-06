@@ -54,7 +54,7 @@
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">维修基数(分钟)</label>
             <div class="layui-input-block">
-                <input type="text" id="onlineBookRadix" name="onlineBookRadix" win-verify="required|number" placeholder="请输入维修基数" class="layui-input" value="{{onlineBookRadix}}"/>
+                <input type="text" id="onlineBookRadix" name="onlineBookRadix" win-verify="number" placeholder="请输入维修基数" class="layui-input" value="{{onlineBookRadix}}"/>
             </div>
         </div>
         <div class="layui-form-item layui-col-xs6">
@@ -69,17 +69,30 @@
             <div class="layui-input-block">
                 <div class="winui-toolbar">
                     <div class="winui-tool" style="text-align: left;">
-                        <button id="calc" class="winui-toolbtn" type="button">计算</button>
+                        <button id="calc" class="winui-toolbtn" type="button"><i class="fa fa-calculator" aria-hidden="true"></i>计算</button>
                     </div>
                 </div>
                 <div class=" layui-col-xs12" style="overflow-x: auto">
                     <table class="layui-table">
                         <thead>
                             <tr id="tableHead">
-
+                                <th style="width: 30px;"></th>
+                                {{#each onlineBookJson}}
+                                    <th>{{time}}</th>
+                                {{/each}}
                             </tr>
                         </thead>
                         <tbody id="useTable" class="insurance-table">
+                            <tr>
+                                <td style="width: 30px;"></td>
+                                {{#each onlineBookJson}}
+                                <td>
+                                    <div style="width: 100px;">
+                                        <input type="text" id="td{{time}}" win-verify="required|number" placeholder="请输入数量" class="layui-input onlineJson" value="{{value}}"/>
+                                    </div>
+                                </td>
+                                {{/each}}
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -88,7 +101,7 @@
 
         <div class="layui-form-item layui-col-xs12">
             <div class="layui-input-block">
-                <button class="winui-btn" lay-submit lay-filter="formSaveBean"><language showName="com.skyeye.save"></language></button>
+                <button class="winui-btn" lay-submit lay-filter="formSaveBean" auth="1644129110388"><language showName="com.skyeye.save"></language></button>
             </div>
         </div>
         {{/bean}}
@@ -97,7 +110,7 @@
     <script type="text/x-handlebars-template" id="tableHeadTemplate">
         <th style="width: 30px;"></th>
         {{#each rows}}
-            <th style="width: 150px;">{{this}}</th>
+            <th>{{this}}</th>
         {{/each}}
     </script>
 
@@ -106,7 +119,7 @@
             <td style="width: 30px;"></td>
             {{#each rows}}
                 <td>
-                    <div style="width: 150px;">
+                    <div style="width: 100px;">
                         <input type="text" id="td{{this}}" win-verify="required|number" placeholder="请输入数量" class="layui-input onlineJson"/>
                     </div>
                 </td>
