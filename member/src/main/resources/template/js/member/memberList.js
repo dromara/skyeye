@@ -187,11 +187,18 @@ layui.config({
     }
 
     function getTableParams(){
+        var contacts = $("#contacts").val();
+        var phone = $("#phone").val();
+        var email = $("#email").val();
+        var enabled = $("#enabled").val();
+        if(isNull(contacts) && isNull(phone) && isNull(email) && isNull(enabled)){
+            contacts = "!-!";
+        }
         return {
-            contacts: $("#contacts").val(),
-            phone: $("#phone").val(),
-            email: $("#email").val(),
-            enabled: $("#enabled").val()
+            contacts: contacts,
+            phone: phone,
+            email: email,
+            enabled: enabled
         };
     }
 

@@ -23,7 +23,7 @@ layui.config({
         url: shopBasePath + 'memberCar001',
         where: getTableParams(),
         even: true,
-        page: true,
+        page: false,
         limits: getLimits(),
         limit: getLimit(),
         cols: [[

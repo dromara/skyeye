@@ -11,46 +11,86 @@
         <form class="layui-form" action="" id="showForm" autocomplete="off">
 
         </form>
-        <script type="text/x-handlebars-template" id="simpleTemplate">
-            {{#bean}}
-                <div class="layui-form-item layui-col-xs6">
-                    <label class="layui-form-label">会员称呼：</label>
-                    <div class="layui-input-block ver-center">
-                        {{contacts}}
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs6">
-                    <label class="layui-form-label">联系电话：</label>
-                    <div class="layui-input-block ver-center">
-                        {{phone}}
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs6">
-                    <label class="layui-form-label">电子邮箱：</label>
-                    <div class="layui-input-block ver-center">
-                        {{email}}
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs6">
-                    <label class="layui-form-label">状态：</label>
-                    <div class="layui-input-block ver-center" id="enabled">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs6">
-                    <label class="layui-form-label">地址：</label>
-                    <div class="layui-input-block ver-center">
-                        {{address}}
-                    </div>
-                </div>
-                <div class="layui-form-item layui-col-xs12">
-                    <label class="layui-form-label">备注：</label>
-                    <div class="layui-input-block ver-center">
-                        {{description}}
-                    </div>
-                </div>
-            {{/bean}}
-        </script>
     </div>
+
+    <script type="text/x-handlebars-template" id="simpleTemplate">
+        {{#bean}}
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">会员信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">会员称呼：</label>
+            <div class="layui-input-block ver-center">
+                {{contacts}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">联系电话：</label>
+            <div class="layui-input-block ver-center">
+                {{phone}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">电子邮箱：</label>
+            <div class="layui-input-block ver-center">
+                {{email}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block ver-center" id="enabled">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">地址：</label>
+            <div class="layui-input-block ver-center">
+                {{address}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">备注：</label>
+            <div class="layui-input-block ver-center">
+                {{description}}
+            </div>
+        </div>
+        {{/bean}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="memberCarTemplate">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">车辆信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">车辆信息：</label>
+            <div class="layui-input-block ver-center">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>车牌号</th>
+                        <th>VIN码</th>
+                        <th>车型</th>
+                        <th>是否购买保险</th>
+                        <th>录入人</th>
+                        <th>录入时间</th>
+                    </tr>
+                    </thead>
+                    <tbody class="insurance-table">
+                    {{#each rows}}
+                    <tr>
+                        <td><div style="width: 100px;">{{plate}}</div></td>
+                        <td><div style="width: 180px;">{{vinCode}}</div></td>
+                        <td><div style="width: 140px;">{{modelType}}</div></td>
+                        <td><div style="width: 140px;">{{insure}}</div></td>
+                        <td><div style="width: 120px;">{{createName}}</div></td>
+                        <td><div style="width: 140px;">{{createTime}}</div></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
