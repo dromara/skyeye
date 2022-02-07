@@ -1,5 +1,7 @@
 var rowId = "";
 
+var memberMation = {};
+
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -10,11 +12,9 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
+    authBtn('1644239500255');
 
-    // 加载我所在的门店
-    shopUtil.queryStaffBelongStoreList(function (json){
-        $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
-    });
+    memberMation = parent.memberMation;
 
     table.render({
         id: 'messageTable',
@@ -66,8 +66,6 @@ layui.config({
             delet(data);
         }else if(layEvent == 'select'){ // 详情
             select(data)
-        }else if(layEvent == 'complatePay'){ // 完成支付
-            complatePay(data)
         }
     });
 
@@ -99,13 +97,12 @@ layui.config({
         });
     }
 
-    // 完成支付
-    function complatePay(data){
-        rowId = data.id;
+    // 添加
+    $("body").on("click", "#addBean", function(){
         _openNewWindows({
-            url: "../../tpl/mealOrder/complatePayMealOrder.html",
-            title: '完成支付',
-            pageId: "complatePayMealOrder",
+            url: "../../tpl/mealOrder/storeMealOrderAdd.html",
+            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+            pageId: "storeMealOrderAdd",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -115,7 +112,7 @@ layui.config({
                     winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
                 }
             }});
-    }
+    });
 
     form.render();
     form.on('submit(formSearch)', function (data) {
@@ -135,17 +132,11 @@ layui.config({
     }
 
     function getTableParams(){
-        var storeId = $("#storeId").val();
-        if(isNull(storeId)){
-            storeId = "-";
-        }
         return {
             orderNum: $("#orderNum").val(),
-            memberName: $("#memberName").val(),
-            memberPhone: $("#memberPhone").val(),
-            storeId: storeId
+            memberId: memberMation.id
         };
     }
 
-    exports('storeMealOrderList', {});
+    exports('memberMealOrderList', {});
 });
