@@ -59,6 +59,9 @@
             {{# if(d.enabled == 2 && auth('1569133267244')){ }}
                 <a class="layui-btn layui-btn-xs" lay-event="enabled"><language showName="com.skyeye.enableBtn"></language></a>
             {{# } }}
+            {{# if(auth('1644234235243')){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="memberCar">车辆信息</a>
+            {{# } }}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>
