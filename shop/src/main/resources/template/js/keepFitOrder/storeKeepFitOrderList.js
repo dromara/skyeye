@@ -160,6 +160,7 @@ layui.config({
             memberName: $("#memberName").val(),
             memberPhone: $("#memberPhone").val(),
             state: $("#state").val(),
+            memberCarPlate: $("#memberCarPlate").val(),
             storeId: storeId
         };
     }

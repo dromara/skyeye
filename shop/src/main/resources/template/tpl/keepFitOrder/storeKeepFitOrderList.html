@@ -35,8 +35,13 @@
                         <select id="state" name="state" lay-filter="state" lay-search="">
                             <option value="">全部</option>
                             <option value="1">待支付</option>
-                            <option value="2">已支付</option>
+                            <option value="2">已支付(待核销)</option>
+                            <option value="3">已支付(已核销)</option>
                         </select>
+                    </div>
+                    <label class="layui-form-label">车牌号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="memberCarPlate" name="memberCarPlate" placeholder="请输入车牌号" class="layui-input" />
                     </div>
                     <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
                     <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
