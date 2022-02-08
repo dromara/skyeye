@@ -9,6 +9,9 @@
 <body>
     <div style="padding:20px; margin:0 auto;">
         <form class="layui-form" action="" id="showForm">
+            <div class="layui-form-item layui-col-xs12">
+                <span class="hr-title">保养订单信息</span><hr>
+            </div>
             <div class="layui-form-item layui-col-xs6">
                 <label class="layui-form-label">门店<i class="red">*</i></label>
                 <div class="layui-input-block">
@@ -18,13 +21,43 @@
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">用户类型<i class="red">*</i></label>
+                <div class="layui-input-block winui-radio">
+                    <input type="radio" name="userType" value="1" title="匿名用户" lay-filter="userType"/>
+                    <input type="radio" name="userType" value="2" title="会员" lay-filter="userType" checked="checked"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6 memberMation">
                 <label class="layui-form-label">会员<i class="red">*</i></label>
-                <div class="layui-input-block ver-center" id="memberName">
+                <div class="layui-input-block">
+                    <input type="text" id="memberId" name="memberId" placeholder="请选择会员" class="layui-input" readonly="readonly"/>
+                    <i class="fa fa-plus-circle input-icon chooseMemberBtn" style="top: 12px;"></i>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6 memberMation">
+                <label class="layui-form-label">车辆信息<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <select id="memberCar" name="memberCar" lay-filter="memberCar" lay-search="">
 
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12 memberMation">
+                <label class="layui-form-label">套餐信息</label>
+                <div class="layui-input-block">
+                    <select id="mealId" name="mealId" lay-filter="mealId" lay-search="">
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12 anonymousUserMation" style="display: none">
+                <label class="layui-form-label">车牌号<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="memberCarPlate" name="memberCarPlate" placeholder="请输入车牌号" class="layui-input"/>
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs12">
-                <label class="layui-form-label">套餐</label>
+                <label class="layui-form-label">耗材</label>
                 <div class="layui-input-block">
                     <div class="winui-toolbar">
                         <div class="winui-tool" style="text-align: left;">
@@ -36,15 +69,19 @@
                         <thead>
                         <tr>
                             <th style="width: 30px;"></th>
-                            <th style="width: 150px;">套餐<i class="red">*</i></th>
-                            <th style="width: 100px;">可使用次数</th>
-                            <th style="width: 100px;">金额</th>
-                            <th style="width: 100px;">车辆<i class="red">*</i></th>
+                            <th style="width: 150px;">耗材说明<i class="red">*</i></th>
+                            <th style="width: 150px;">金额<i class="red">*</i></th>
                         </tr>
                         </thead>
                         <tbody id="useTable" class="insurance-table">
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">服务费</label>
+                <div class="layui-input-block">
+                    <input type="text" id="servicePrice" name="servicePrice" placeholder="请输入服务费" class="layui-input calcPrice" win-verify="money"/>
                 </div>
             </div>
             <div class="layui-form-item layui-col-xs12">
@@ -71,17 +108,8 @@
     <script type="text/x-handlebars-template" id="usetableTemplate">
         <tr trcusid="{{trId}}">
             <td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
-            <td>
-                <input type="text" id="{{mealId}}" name="{{mealId}}" placeholder="请选择套餐" class="layui-input" readonly="readonly"/>
-                <i class="fa fa-plus-circle input-icon chooseMealBtn" style="top: 12px;"></i>
-            </td>
-            <td id="{{num}}"></td>
-            <td id="{{price}}"></td>
-            <td>
-                <select id="{{carId}}" name="{{carId}}" win-verify="required" lay-search="">
-
-                </select>
-            </td>
+            <td><input type="text" class="layui-input" id="{{consumeExplain}}" win-verify="required"/></td>
+            <td><input type="text" class="layui-input calcPrice" id="{{price}}" win-verify="required|money"/></td>
         </tr>
     </script>
 
@@ -94,7 +122,7 @@
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/mealOrder/'}).use('storeMealOrderAdd');
+        layui.config({base: '../../js/keepFitOrder/'}).use('keepFitOrderAdd');
     </script>
 </body>
 </html>

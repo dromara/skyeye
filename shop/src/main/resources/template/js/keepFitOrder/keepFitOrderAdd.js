@@ -1,0 +1,216 @@
+
+
+// 表格的序号
+var rowNum = 1;
+
+// 会员信息
+var memberMation = {};
+
+layui.config({
+    base: basePath,
+    version: skyeyeVersion
+}).extend({
+    window: 'js/winui.window'
+}).define(['window', 'table', 'jquery', 'winui', 'textool'], function (exports) {
+    winui.renderColor();
+    layui.use(['form'], function (form) {
+        var index = parent.layer.getFrameIndex(window.name);
+        var $ = layui.$,
+            textool = layui.textool;
+        var selOption = getFileContent('tpl/template/select-option.tpl');
+
+        var usetableTemplate = $("#usetableTemplate").html();
+        var memberCarHtml = "";
+
+        // 加载我所在的门店
+        shopUtil.queryStaffBelongStoreList(function (json){
+            $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
+        });
+
+        // 用户类型变化
+        form.on('radio(userType)', function(data) {
+            var val = data.value;
+            if(val == 1){
+                $(".memberMation").hide();
+                $(".anonymousUserMation").show();
+            }else{
+                $(".memberMation").show();
+                $(".anonymousUserMation").hide();
+            }
+        });
+
+        // 车辆信息变化
+        form.on('select(memberCar)', function(data) {
+            var val = data.value;
+            if(isNull(val)){
+                $("#mealId").html("");
+            }else{
+                // 获取车辆用于的套餐信息
+                AjaxPostUtil.request({url: shopBasePath + "queryMealMationByCarId", params: {carId: val}, type: 'json', method: "GET", callback: function(json){
+                    if(json.returnCode == 0){
+                        $("#mealId").html(getDataUseHandlebars(selOption, json));
+                        form.render('select');
+                    }else{
+                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                    }
+                }, async: false});
+            }
+        });
+
+        textool.init({
+            eleId: 'remark',
+            maxlength: 400,
+            tools: ['count', 'copy', 'reset', 'clear']
+        });
+
+        addRow();
+        matchingLanguage();
+        form.render();
+        form.on('submit(formAddBean)', function (data) {
+            if (winui.verifyForm(data.elem)) {
+                var tableData = new Array();
+                $.each($("#useTable tr"), function(i, item) {
+                    // 获取行编号
+                    var rowNum = $(item).attr("trcusid").replace("tr", "");
+                    var row = {
+                        consumeExplain: $("#consumeExplain" + rowNum.toString()).val(),
+                        price: $("#price" + rowNum.toString()).val()
+                    };
+                    tableData.push(row);
+                });
+
+                var userType = $("input[name='userType']:checked").val();
+
+                var params = {
+                    storeId: $("#storeId").val(),
+                    userType: userType,
+                    memberId: userType == 1 ? "" : memberMation.id,
+                    memberCarId: userType == 1 ? "" : $("#memberCar").val(),
+                    memberCarPlate: userType == 1 ? $("#memberCarPlate").val() : $("#memberCar").find("option:selected").text(),
+                    mealOrderChildId: userType == 1 ? "" : $("#mealId").val(),
+                    servicePrice: $("#servicePrice").val(),
+                    remark: $("#remark").val(),
+                    type: 2,
+                    source: 2,
+                    consumeMationList: JSON.stringify(tableData)
+                };
+
+                if(userType == 1){
+                    // 匿名客户
+                    if(isNull(params.memberCarPlate)){
+                        winui.window.msg('请输入车牌号.', {icon: 2,time: 2000});
+                        return false;
+                    }
+                }else{
+                    // 会员
+                    if(isNull(params.memberId)){
+                        winui.window.msg('请选择会员.', {icon: 2,time: 2000});
+                        return false;
+                    }
+                    if(isNull(params.memberCarId)){
+                        winui.window.msg('请选择车辆信息.', {icon: 2,time: 2000});
+                        return false;
+                    }
+                }
+
+                AjaxPostUtil.request({url: shopBasePath + "insertKeepFitOrder", params: params, type: 'json', method: "POST", callback: function(json){
+                    if(json.returnCode == 0){
+                        winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000}, function(){
+                            location.reload();
+                        });
+                    }else{
+                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                    }
+                }, async: true});
+            }
+            return false;
+        });
+
+        // 新增行
+        $("body").on("click", "#addRow", function() {
+            addRow();
+        });
+
+        // 删除行
+        $("body").on("click", "#deleteRow", function() {
+            deleteRow();
+        });
+
+        // 新增行
+        function addRow() {
+            var par = {
+                id: "row" + rowNum.toString(), //checkbox的id
+                trId: "tr" + rowNum.toString(), //行的id
+                consumeExplain: "consumeExplain" + rowNum.toString(),
+                price: "price" + rowNum.toString()
+            };
+            $("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
+            form.render();
+            rowNum++;
+        }
+
+        // 删除行
+        function deleteRow() {
+            var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']:checked");
+            if(checkRow.length > 0) {
+                $.each(checkRow, function(i, item) {
+                    // 移除界面上的信息
+                    $(item).parent().parent().remove();
+                });
+                calcAllPrice();
+            } else {
+                winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
+            }
+        }
+
+        // 会员选择
+        $("body").on("click", ".chooseMemberBtn", function(e){
+            _openNewWindows({
+                url: "../../tpl/member/memberSearchChoose.html",
+                title: "选择会员",
+                pageId: "memberSearchChoose",
+                area: ['90vw', '90vh'],
+                callBack: function(refreshCode){
+                    if (refreshCode == '0') {
+                        $("#memberId").val(memberMation.contacts);
+                        // 获取会员拥有的车辆信息
+                        AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: memberMation.id}, type: 'json', method: "POST", callback: function(json){
+                            if(json.returnCode == 0){
+                                $.each(json.rows, function (i, item){
+                                    item.name = item.modelType + "(" + item.plate + ")";
+                                });
+                                $("#memberCar").html(getDataUseHandlebars(selOption, json));
+                                form.render('select');
+                            }else{
+                                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                            }
+                        }, async: false});
+                    } else if (refreshCode == '-9999') {
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    }
+                }});
+        });
+
+        $("body").on("input", ".calcPrice", function() {
+            calcAllPrice();
+        });
+        $("body").on("change", ".calcPrice", function() {
+            calcAllPrice();
+        });
+
+        function calcAllPrice(){
+            var allPrice = "0.00";
+            $.each($("#useTable tr"), function(i, item) {
+                // 获取行编号
+                var rowNum = $(item).attr("trcusid").replace("tr", "");
+                allPrice = sum(allPrice, $("#price" + rowNum.toString()).val());
+            });
+            allPrice = sum(allPrice, $("#servicePrice").val());
+            $("#allPrice").html(allPrice + "元");
+        }
+
+        $("body").on("click", "#cancle", function(){
+            parent.layer.close(index);
+        });
+    });
+});
