@@ -76,7 +76,7 @@ layui.config({
                     storeId: $("#storeId").val(),
                     memberId: memberMation.id,
                     remark: $("#remark").val(),
-                    type: 1,
+                    type: 2,
                     source: 2,
                     mealList: JSON.stringify(tableData)
                 };

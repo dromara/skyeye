@@ -14,7 +14,7 @@ layui.config({
         AjaxPostUtil.request({url: shopBasePath + "mealOrder002", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function(json){
             if(json.returnCode == 0){
                 orderNum = json.bean.orderNum;
-                $("#payPrice").val(json.bean.payablePrice);
+                $("#payPrice").val(json.bean.unformatPayablePrice);
             }else{
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }

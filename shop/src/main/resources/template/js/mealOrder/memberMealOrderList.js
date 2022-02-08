@@ -88,9 +88,9 @@ layui.config({
     function select(data){
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/meal/mealInfo.html",
+            url: "../../tpl/mealOrder/storeMealOrderDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "mealInfo",
+            pageId: "storeMealOrderDetails",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
             }
