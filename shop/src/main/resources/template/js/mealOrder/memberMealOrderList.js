@@ -29,8 +29,8 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
             { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function(d){
-                    return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
-                }},
+                return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
+            }},
             { field: 'contacts', title: '会员名称', width: 100 },
             { field: 'phone', title: '会员手机号', width: 100, align: "center"},
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
