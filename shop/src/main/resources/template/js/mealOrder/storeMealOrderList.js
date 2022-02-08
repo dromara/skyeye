@@ -16,6 +16,10 @@ layui.config({
         $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
     });
 
+    form.on('select(storeId)', function(data) {
+        table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
+    });
+
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
@@ -36,9 +40,9 @@ layui.config({
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
             { field: 'state', title: '支付状态', width: 80, align: "center", templet: function(d){
                 if(d.state == 1){
-                    return "待支付";
+                    return "<span class='state-down'>待支付</span>";
                 }else{
-                    return "已支付";
+                    return "<span class='state-up'>已支付</span>";
                 }
             }},
             { field: 'payPrice', title: '实付金额', width: 100, align: "left"},
@@ -143,6 +147,7 @@ layui.config({
             orderNum: $("#orderNum").val(),
             memberName: $("#memberName").val(),
             memberPhone: $("#memberPhone").val(),
+            state: $("#state").val(),
             storeId: storeId
         };
     }

@@ -30,6 +30,14 @@
                     <div class="layui-input-inline">
                         <input type="text" id="memberPhone" name="memberPhone" placeholder="请输入会员手机号" class="layui-input" />
                     </div>
+                    <label class="layui-form-label">订单状态</label>
+                    <div class="layui-input-inline">
+                        <select id="state" name="state" lay-filter="state" lay-search="">
+                            <option value="">全部</option>
+                            <option value="1">待支付</option>
+                            <option value="2">已支付</option>
+                        </select>
+                    </div>
                     <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
                     <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
                 </div>

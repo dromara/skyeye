@@ -35,6 +35,18 @@ layui.config({
         shopUtil.queryStaffBelongStoreList(function (json){
             $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
         });
+        form.on('select(storeId)', function(data) {
+            // 门店变化需要重新选择套餐
+            $.each($("#useTable tr"), function(i, item) {
+                // 获取行编号
+                var rowNum = $(item).attr("trcusid").replace("tr", "");
+                $("#mealId" + rowNum.toString()).attr("mealMaion", "");
+                $("#mealId" + rowNum.toString()).val("");
+                $("#num" + rowNum.toString()).html("");
+                $("#price" + rowNum.toString()).html("");
+            });
+            $("#allPrice").html("0 元");
+        });
 
         textool.init({
             eleId: 'remark',
