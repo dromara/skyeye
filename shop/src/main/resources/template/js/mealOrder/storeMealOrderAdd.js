@@ -9,6 +9,9 @@ var memberMation = {};
 // 已选择的套餐信息
 var mealMation = {};
 
+// 当前选中的门店
+var storeId = "";
+
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -136,6 +139,11 @@ layui.config({
         // 套餐选择
         $("body").on("click", ".chooseMealBtn", function(e){
             var trId = $(this).parent().parent().attr("trcusid");
+            storeId = $("#storeId").val();
+            if(isNull(storeId)){
+                winui.window.msg('请优先选择门店.', {icon: 2,time: 2000});
+                return false;
+            }
             _openNewWindows({
                 url: "../../tpl/meal/mealChoose.html",
                 title: "选择套餐",

@@ -112,6 +112,7 @@ layui.config({
 	function getTableParams(){
 		return {
 			title: $("#title").val(),
+			storeId: parent.storeId,
 			state: 2
 		};
 	}

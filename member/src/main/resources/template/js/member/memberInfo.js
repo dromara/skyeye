@@ -11,8 +11,6 @@ layui.config({
         var $ = layui.$;
         var simpleTemplate = $("#simpleTemplate").html();
 
-        var type = GetUrlParam("type");
-
         showGrid({
             id: "showForm",
             url: shopBasePath + "member008",
@@ -24,25 +22,41 @@ layui.config({
                 $("#enabled").html(json.bean.enabled == "1" ? "<span class='state-up'>启用</span>" : "<span class='state-down'>禁用</span>");
 
                 // 加载车辆信息
-                AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: parent.rowId}, type: 'json', method: "POST", callback: function(json){
-                    if(json.returnCode == 0){
-                        $.each(json.rows, function (i, item){
-                            if(item.insure == '1'){
-                                item.insure = "已购买";
-                            }else if(item.insure == '2'){
-                                item.insure = "未购买";
-                            }
-                        });
-                        $("#showForm").append(getDataUseHandlebars($("#memberCarTemplate").html(), json));
-                    }else{
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
-                }});
+                loadCarMation();
+                // 加载套餐信息
+                loadMealMation();
 
                 matchingLanguage();
                 form.render();
             }
         });
+
+        function loadCarMation(){
+            AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: parent.rowId}, type: 'json', method: "POST", callback: function(json){
+                if(json.returnCode == 0){
+                    $.each(json.rows, function (i, item){
+                        if(item.insure == '1'){
+                            item.insure = "已购买";
+                        }else if(item.insure == '2'){
+                            item.insure = "未购买";
+                        }
+                    });
+                    $("#showForm").append(getDataUseHandlebars($("#memberCarTemplate").html(), json));
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }, async: false});
+        }
+
+        function loadMealMation(){
+            AjaxPostUtil.request({url: shopBasePath + "queryMealMationByMemberId", params: {memberId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
+                if(json.returnCode == 0){
+                    $("#showForm").append(getDataUseHandlebars($("#memberMealTemplate").html(), json));
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }, async: false});
+        }
 
         $("body").on("click", "#cancle", function(){
             parent.layer.close(index);

@@ -91,6 +91,41 @@
         </div>
     </script>
 
+    <script type="text/x-handlebars-template" id="memberMealTemplate">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">套餐信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">套餐信息：</label>
+            <div class="layui-input-block ver-center">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>套餐</th>
+                        <th>总次数</th>
+                        <th>可使用次数</th>
+                        <th>套餐价格</th>
+                        <th>可使用车辆</th>
+                        <th>购买日期</th>
+                    </tr>
+                    </thead>
+                    <tbody class="insurance-table">
+                    {{#each rows}}
+                    <tr>
+                        <td><div style="width: 180px;">{{title}}</div></td>
+                        <td><div style="width: 100px;">{{mealNum}}</div></td>
+                        <td><div style="width: 100px;">{{remainMealNum}}</div></td>
+                        <td><div style="width: 100px;">{{mealPrice}}</div></td>
+                        <td><div style="width: 120px;">{{plate}}</div></td>
+                        <td><div style="width: 100px;">{{createTime}}</div></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
