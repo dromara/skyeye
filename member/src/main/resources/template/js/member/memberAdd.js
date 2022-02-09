@@ -15,6 +15,11 @@ layui.config({
 	    	maxlength: 200,
 	    	tools: ['count', 'copy', 'reset', 'clear']
 	    });
+
+        // 加载我所在的门店
+        shopUtil.queryStaffBelongStoreList(function (json){
+            $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
+        });
         
 	    matchingLanguage();
         form.render();
@@ -25,7 +30,8 @@ layui.config({
                     phone: $("#phone").val(),
                     email: $("#email").val(),
                     address: $("#address").val(),
-                    description: $("#description").val()
+                    description: $("#description").val(),
+                    storeId: $("#storeId").val()
                 };
                 AjaxPostUtil.request({url: shopBasePath + "member002", params: params, type: 'json', method: "POST", callback: function(json){
                     if(json.returnCode == 0){
