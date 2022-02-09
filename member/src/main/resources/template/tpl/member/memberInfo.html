@@ -161,6 +161,41 @@
         </div>
     </script>
 
+    <script type="text/x-handlebars-template" id="memberKeepFitOrderTemplate">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">保养订单信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">保养订单信息：</label>
+            <div class="layui-input-block ver-center">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>订单编号</th>
+                        <th>应付金额</th>
+                        <th>实付金额</th>
+                        <th>实付日期</th>
+                        <th>支付状态</th>
+                        <th>单据日期</th>
+                    </tr>
+                    </thead>
+                    <tbody class="insurance-table">
+                    {{#each rows}}
+                    <tr>
+                        <td><div style="width: 180px;">{{orderNum}}</div></td>
+                        <td><div style="width: 100px;">{{payablePrice}}</div></td>
+                        <td><div style="width: 100px;">{{payPrice}}</div></td>
+                        <td><div style="width: 150px;">{{payTime}}</div></td>
+                        <td><div style="width: 80px;">{{state}}</div></td>
+                        <td><div style="width: 150px;">{{createTime}}</div></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">

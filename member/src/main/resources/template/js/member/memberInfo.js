@@ -27,6 +27,8 @@ layui.config({
                 loadMealMation();
                 // 加载套餐订单信息
                 loadMealOrderMation();
+                // 加载保养订单信息
+                loadKeepFitOrderMation();
 
                 matchingLanguage();
                 form.render();
@@ -76,6 +78,28 @@ layui.config({
                         }
                     });
                     $("#showForm").append(getDataUseHandlebars($("#memberMealOrderTemplate").html(), json));
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }, async: false});
+        }
+
+        function loadKeepFitOrderMation(){
+            var params = {
+                memberId: parent.rowId,
+                limit: 500,
+                page: 1
+            };
+            AjaxPostUtil.request({url: shopBasePath + "keepFitOrder001", params: params, type: 'json', method: "POST", callback: function(json){
+                if(json.returnCode == 0){
+                    $.each(json.rows, function (i, item){
+                        if(item.state == '1'){
+                            item.state = "待支付";
+                        }else if(item.state == '2' || item.state == '3'){
+                            item.state = "已支付";
+                        }
+                    });
+                    $("#showForm").append(getDataUseHandlebars($("#memberKeepFitOrderTemplate").html(), json));
                 }else{
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
