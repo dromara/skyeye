@@ -13,6 +13,9 @@
         </form>
         <script type="text/x-handlebars-template" id="simpleTemplate">
             {{#bean}}
+                <div class="layui-form-item layui-col-xs12">
+                    <span class="hr-title">门店信息</span><hr>
+                </div>
                 <div class="layui-form-item layui-col-xs6">
                     <label class="layui-form-label">门店：</label>
                     <div class="layui-input-block ver-center">
@@ -23,6 +26,18 @@
                     <label class="layui-form-label">所属区域：</label>
                     <div class="layui-input-block ver-center">
                         {{areaName}}
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12">
+                    <label class="layui-form-label">门店地址：</label>
+                    <div class="layui-input-block ver-center">
+                        {{provinceName}} {{cityName}} {{addressAreaName}} {{townshipName}}
+                    </div>
+                </div>
+                <div class="layui-form-item layui-col-xs12">
+                    <label class="layui-form-label">详细地址：</label>
+                    <div class="layui-input-block ver-center">
+                        {{addressDetailed}}
                     </div>
                 </div>
                 <div class="layui-form-item layui-col-xs12">

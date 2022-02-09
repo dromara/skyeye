@@ -15,6 +15,9 @@
 
     <script type="text/x-handlebars-template" id="beanTemplate">
         {{#bean}}
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">门店信息</span><hr>
+        </div>
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">门店<i class="red">*</i></label>
             <div class="layui-input-block">
@@ -26,6 +29,17 @@
             <div class="layui-input-block">
                 <select id="areaId" name="areaId" win-verify="required" lay-filter="areaId" lay-search="">
                 </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">门店地址<i class="red">*</i></label>
+            <div class="layui-input-block" id="lockParentSel">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">详细地址<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="addressDetailed" name="addressDetailed" win-verify="required" placeholder="请输入公司详细地址" class="layui-input" maxlength="50" value="{{addressDetailed}}"/>
             </div>
         </div>
         <div class="layui-form-item layui-col-xs12">
