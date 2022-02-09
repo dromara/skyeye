@@ -84,6 +84,8 @@ layui.config({
             select(data)
         }else if(layEvent == 'complatePay'){ // 完成支付
             complatePay(data)
+        }else if(layEvent == 'verification'){ // 核销
+            verification(data)
         }
     });
 
@@ -94,6 +96,21 @@ layui.config({
             AjaxPostUtil.request({url: shopBasePath + "deleteKeepFitOrder", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }});
+        });
+    }
+
+    // 核销
+    function verification(data){
+        layer.confirm("确认对该单据进行核销吗？", {icon: 3, title: "核销操作"}, function(index){
+            layer.close(index);
+            AjaxPostUtil.request({url: shopBasePath + "verificationKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
+                if(json.returnCode == 0){
+                    winui.window.msg('核销成功', {icon: 1, time: 2000});
                     loadTable();
                 }else{
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

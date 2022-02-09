@@ -64,6 +64,9 @@
             {{# if(d.state == 1 && auth('1644317746790')){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="complatePay">完成支付</a>
             {{# } }}
+            {{# if(d.state == 2 && auth('1644378387049')){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="verification">核销</a>
+            {{# } }}
         </script>
     </div>
 
