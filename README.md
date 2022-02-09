@@ -5,7 +5,7 @@
 
 智能办公OA系统[SpringBoot2-快速开发平台]，适用于医院，学校，中小型企业等机构的管理。包含文件在线操作、工作日志、多班次考勤、CRM、ERP进销存、项目管理、EHR、拖拽式生成问卷、日程、笔记、工作计划、行政办公、薪资模块、动态表单、知识库、公告模块、企业论坛、云售后模块、生产模块、系统模块化同步模块等多种复杂业务功能。
 
-- [近期更新内容](https://mp.weixin.qq.com/s/MrA4tX-5wtn4-mB_RZWbxw)
+- [云办公系统 skyeye v3.7.4 发布，ERP商城更新](https://mp.weixin.qq.com/s/uLbJLBcjvv7hRJ0LKUOvFg)
 - [上期更新内容](https://mp.weixin.qq.com/s/vdh7-hTAST0IefZdxBEozA)
 
 # 开源版请下载`master`分支
