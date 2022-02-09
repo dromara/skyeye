@@ -29,7 +29,7 @@ layui.config({
 			$(document).attr("title", sysMainMation.mationTitle);
 			$(".sys-logo").html(sysMainMation.mationTitle);
 		});
-			
+
 		loadUserMation();
 		//加载用户信息
 		function loadUserMation(){
@@ -44,12 +44,41 @@ layui.config({
 					}else{
 						location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apiPage/apiPage.html");
 					}
-					loadListMation();
+					loadApiMicroservices();
 				}});
 			}else{
 				location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apiPage/apiPage.html");
 			}
 		}
+
+		/**
+		 * 加载微服务
+		 */
+		function loadApiMicroservices(){
+			showGrid({
+				id: "apiMicroservicesId",
+				url: reqBasePath + "queryApiMicroservices",
+				params: {},
+				pagination: false,
+				template: $("#apiMicroservicesTemplate").html(),
+				method: "GET",
+				ajaxSendLoadBefore: function(hdb){
+				},
+				ajaxSendAfter:function(j){
+					form.render('select');
+				}
+			});
+		}
+
+		form.on('select(apiMicroservicesId)', function (data) {
+			var value = data.value;
+			if (isNull(value)) {
+				$("#modelId").html("");
+				$("#appList").html("");
+			} else {
+				loadListMation(value);
+			}
+		});
 		
 		// 模块
 		var model = new Array();
@@ -60,8 +89,8 @@ layui.config({
 		/**
 		 * 加载接口列表
 		 */
-		function loadListMation(){
-			AjaxPostUtil.request({url:reqBasePath + "api005", params:{}, type:'json', callback:function(json){
+		function loadListMation(appId){
+			AjaxPostUtil.request({url: reqBasePath + "queryAllSysEveReqMapping", params: {appId: appId}, type: 'json', method: "GET", callback: function(json){
 				if(json.returnCode == 0){
 					// 1.模块
 					model = loadModel(json);
@@ -76,7 +105,7 @@ layui.config({
 					form.render();
 					loadDefaultMain();
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		}
@@ -195,13 +224,17 @@ layui.config({
 			}else{
 				$("#appList .api-item").removeClass("active");
 				$(this).addClass("active");
-				AjaxPostUtil.request({url:reqBasePath + "api006", params:{rowId: $(this).attr("rowid")}, type:'json', method: "GET", callback:function(json){
+				var params = {
+					appId: $("#apiMicroservicesId").val(),
+					rowId: $(this).attr("rowid")
+				};
+				AjaxPostUtil.request({url: reqBasePath + "queryApiDetails", params: params, type: 'json', method: "GET", callback: function(json){
 					if(json.returnCode == 0){
 		   				var str = getDataUseHandlebars(fileMationTemplate, json);
 		   				$("#contentDesc").html(str);
 						active[type] ? active[type].call(this) : '';
 					}else{
-						winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
 			}
@@ -241,7 +274,7 @@ layui.config({
 		});
 
 		function loadDefaultMain(){
-			AjaxPostUtil.request({url:reqBasePath + "api004", params: {}, type:'json', method: "GET", callback:function(json){
+			AjaxPostUtil.request({url: reqBasePath + "queryLimitRestrictions", params: {}, type: 'json', method: "GET", callback: function(json){
 				if(json.returnCode == 0){
 					var item = {};
 					item.reception = getReceptionLimitMation();
@@ -257,7 +290,7 @@ layui.config({
 					});
 					form.render();
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		}

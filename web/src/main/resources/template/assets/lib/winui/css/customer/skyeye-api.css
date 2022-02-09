@@ -11,7 +11,7 @@
 .apiListForm .api-left{
     width: 250px;
     float: left;
-    height: 100%;
+    height: calc(100% - 40px);
     border-right: 1px solid grey;
 }
 .apiListForm .api-left .api-search{
@@ -144,7 +144,7 @@
 .apiListForm .api-right{
     width: calc(100% - 271px);
     float: left;
-    height: 100%;
+    height: calc(100% - 40px);
     padding: 0px 10px;
     text-align: left;
     overflow-y: auto;
