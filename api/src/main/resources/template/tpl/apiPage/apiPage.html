@@ -191,6 +191,8 @@
 	{{#bean}}
 		<div class="api-right-title">
 			接口：{{val}}
+			<button class="layui-btn layui-btn-xs layui-btn-normal" type="button" id="exportMD"
+				style="float: right; margin-top: 20px;" apiId="{{requestId}}" fileName="{{modelName}}-{{groupName}}-{{val}}.md">导出为MD</button>
 		</div>
 		<div class="api-right-power">
 			权限：{{sq}}
@@ -206,9 +208,9 @@
 			<table lay-filter="parse-table-demo">
 				<thead>
 					<tr>
-						<th lay-data="{field:'number', width:50}">序号</th>
 						<th lay-data="{field:'id', width:150}">前端参数</th>
 						<th lay-data="{field:'name', width:150}">后端参数</th>
+						<th lay-data="{field:'name', width:100}">字段类型</th>
 						<th lay-data="{field:'var', width:200}">参数描述</th>
 						<th lay-data="{field:'ref', minWidth: 100}">限制条件</th>
 						<th lay-data="{field:'default', width: 150}">默认值</th>
@@ -218,9 +220,9 @@
 				<tbody>
 					{{#each list}}
 						<tr>
-							<td>{{number}}</td>
 							<td>{{id}}</td>
 							<td>{{name}}</td>
+							<td>{{type}}</td>
 							<td>{{var}}</td>
 							<td>{{ref}}</td>
 							<td>{{default}}</td>

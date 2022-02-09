@@ -295,6 +295,23 @@ layui.config({
 			}});
 		}
 
+		// 导出为MD文档
+		$("body").on("click", "#exportMD", function(){
+			var params = {
+				appId: $("#apiMicroservicesId").val(),
+				rowId: $(this).attr("apiId")
+			};
+			var fileName = $("#apiMicroservicesId").find("option:selected").text() + "-" + $(this).attr("fileName");
+			AjaxPostUtil.request({url: reqBasePath + "queryApiDetails", params: params, type: 'json', method: "GET", callback: function(json){
+				if(json.returnCode == 0){
+					var str = getDataUseHandlebars(getFileContent('tpl/apiPage/mdModelFile.tpl'), json);
+					sysFileUtil.saveAs(new Blob([str]), fileName);
+				}else{
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				}
+			}});
+		});
+
 		// 获取前端限制条件
 		function getReceptionLimitMation(){
 			var list = new Array();
