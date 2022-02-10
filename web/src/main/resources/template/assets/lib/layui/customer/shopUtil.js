@@ -53,4 +53,25 @@ var shopUtil = {
         }, async: false});
     },
 
+    /**
+     * 获取指定区域下的门店列表
+     *
+     * @param areaId 区域id
+     * @param callback 回执函数
+     */
+    queryStoreListByAreaId: function (areaId, callback){
+        if(isNull(areaId)){
+            return [];
+        }
+        AjaxPostUtil.request({url: shopBasePath + "queryStoreList", params: {areaId: areaId}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
 };
