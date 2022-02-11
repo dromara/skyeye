@@ -60,7 +60,6 @@ layui.config({
             }},
             { field: 'createName', title: '录入人', width: 120, rowspan: '2' },
             { field: 'createTime', title: '单据日期', align: 'center', width: 150, rowspan: '2' },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', rowspan: '2', width: 150, toolbar: '#tableBar'}
         ],[
             { field: 'areaName', title: '区域', align: 'left', width: 120},
             { field: 'storeName', title: '门店', align: 'left', width: 120}
