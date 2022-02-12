@@ -28,7 +28,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: shopBasePath + 'mealOrder001',
+        url: shopBasePath + 'keepFitOrder001',
         where: getTableParams(),
         even: true,
         page: true,
@@ -39,19 +39,30 @@ layui.config({
             { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', rowspan: '2', templet: function(d){
                 return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
             }},
-            { field: 'contacts', title: '会员名称', width: 100, rowspan: '2' },
-            { field: 'phone', title: '会员手机号', width: 100, rowspan: '2', align: "center"},
-            { title: '下单地址', align: 'center', colspan: '2'},
-            { field: 'payablePrice', title: '应付金额', width: 100, align: "left", rowspan: '2'},
-            { field: 'state', title: '支付状态', width: 80, align: "center", rowspan: '2', templet: function(d){
-                if(d.state == 1){
-                    return "<span class='state-down'>待支付</span>";
+            { field: 'userType', title: '客户类型', width: 80, align: "center", rowspan: '2', templet: function(d){
+                if(d.userType == 1){
+                    return "匿名客户";
                 }else{
-                    return "<span class='state-up'>已支付</span>";
+                    return "会员";
                 }
             }},
-            { field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2'},
-            { field: 'payTime', title: '实付日期', align: 'center', rowspan: '2', width: 150 },
+            { field: 'memberCarPlate', title: '车牌号', width: 100, align: "left", rowspan: '2'},
+            { field: 'contacts', title: '会员名称', width: 100, rowspan: '2' },
+            { field: 'phone', title: '会员手机号', width: 100, align: "center", rowspan: '2'},
+            { field: 'payablePrice', title: '应付金额', width: 100, align: "left", rowspan: '2'},
+            { field: 'servicePrice', title: '服务费', width: 100, align: "left", rowspan: '2'},
+            { title: '下单地址', align: 'center', colspan: '2'},
+            { field: 'state', title: '支付状态', width: 150, align: "center", rowspan: '2', templet: function(d){
+                if(d.state == 1){
+                    return "<span class='state-down'>待支付</span>";
+                }else if(d.state == 2){
+                    return "<span class='state-up'>已支付(待核销)</span>";
+                }else if(d.state == 3){
+                    return "<span class='state-up'>已支付(已核销)</span>";
+                }
+            }},
+            { field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2' },
+            { field: 'payTime', title: '实付日期', align: 'center', width: 150, rowspan: '2' },
             { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function(d){
                 if(d.type == 1){
                     return "线上下单";
@@ -82,9 +93,9 @@ layui.config({
     function select(data){
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/mealOrder/storeMealOrderDetails.html",
+            url: "../../tpl/keepFitOrder/keepFitOrderDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "storeMealOrderDetails",
+            pageId: "keepFitOrderDetails",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
             }
@@ -114,10 +125,11 @@ layui.config({
             memberName: $("#memberName").val(),
             memberPhone: $("#memberPhone").val(),
             state: $("#state").val(),
+            memberCarPlate: $("#memberCarPlate").val(),
             areaId: $("#areaId").val(),
             storeId: $("#storeId").val()
         };
     }
 
-    exports('allMealOrderList', {});
+    exports('allKeepFitOrderList', {});
 });
