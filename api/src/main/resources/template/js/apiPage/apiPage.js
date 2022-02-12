@@ -13,6 +13,7 @@ layui.config({
 			active = {
 				parseTable: function() {
 					table.init('parse-table-demo', { //转化静态表格
+						limit: 100,
 					});
 				}
 			};
