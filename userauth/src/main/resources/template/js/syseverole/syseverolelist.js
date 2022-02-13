@@ -7,7 +7,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -58,22 +57,22 @@ layui.config({
         return false;
 	});
 	
-	//删除
+	// 删除
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], { icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType] }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sys018", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: reqBasePath + "sys018", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
     			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
 	}
 	
-	//编辑角色
+	// 编辑
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -91,7 +90,7 @@ layui.config({
 			}});
 	}
 	
-	//手机端菜单授权
+	// 手机端菜单授权
     function appmenu(data){
         rowId = data.id;
         _openNewWindows({

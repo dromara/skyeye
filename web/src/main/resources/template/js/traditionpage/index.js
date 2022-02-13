@@ -430,7 +430,7 @@ layui.config({
 			var zIndex = $("#exit-confim").parent().css("z-index");
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
-        	AjaxPostUtil.request({url:reqBasePath + "login003", params:{}, type:'json', callback:function(json){
+        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function(json){
  	   			if(json.returnCode == 0){
  	   				if (etiger != null) {
 		 	   			etiger.socket.close();

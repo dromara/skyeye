@@ -235,7 +235,7 @@ layui.config({
 				$("#layui-layer-shade" + times).css({'z-index': zIndex});
 			}}, function (index) {
 				layer.close(index);
-	        	AjaxPostUtil.request({url:reqBasePath + "login003", params:{}, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function(json){
 	        		$.cookie('userToken', "", {path: '/' });
 	        		$("#operatorBtn").html('<font id="loginBtn">登陆</font>');
 	        		$("#file-operator").html("");
