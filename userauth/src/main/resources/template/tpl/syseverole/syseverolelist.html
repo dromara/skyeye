@@ -31,11 +31,16 @@
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
 			{{# if(auth('1552900944072')){ }}
-            	<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+            	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
 			{{# if(d.userNum == 0 && auth('1552877034665')){ }}
 				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 			{{# } }}
+			{{# if(auth('1644726632357')){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="pcMenu">PC菜单授权</a>
+			{{# } }}
+			<!--			{{# if(auth('1644726632357')){ }}-->
+<!--			{{# } }}-->
 			{{# if(auth('1563605807171')){ }}
                 <a class="layui-btn layui-btn-xs" lay-event="appmenu">APP菜单授权</a>
             {{# } }}

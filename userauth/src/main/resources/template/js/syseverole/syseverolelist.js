@@ -30,7 +30,7 @@ layui.config({
 	        { field: 'userNum', title: '使用用户数量', width: 150 },
 	        { field: 'parentName', title: '父角色', width: 150 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 220, toolbar: '#tableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){
 	    	matchingLanguage();
@@ -40,13 +40,15 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'del') { //删除
+        if (layEvent === 'del') { // 删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        }else if (layEvent === 'edit') { // 编辑
         	edit(data);
-        }else if (layEvent === 'appmenu') { //手机端菜单授权
+        }else if (layEvent === 'appmenu') { // 手机端菜单授权
             appmenu(data);
-        }
+        }else if (layEvent === 'pcMenu') { // PC端菜单授权
+			pcMenu(data);
+		}
     });
 	
 	form.render();
@@ -99,14 +101,20 @@ layui.config({
             pageId: "syseveroleappmenu",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
-                    loadTable();
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                }
             }});
     }
+
+	// PC端菜单授权
+	function pcMenu(data){
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/syseverole/sysEveRolePCMenu.html",
+			title: "PC端菜单授权",
+			pageId: "sysEveRolePCMenu",
+			area: ['90vw', '90vh'],
+			callBack: function(refreshCode){
+			}});
+	}
 	
 	//刷新数据
     $("body").on("click", "#reloadTable", function(){
