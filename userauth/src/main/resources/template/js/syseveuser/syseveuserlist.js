@@ -168,22 +168,22 @@ layui.config({
 	
 	// 锁定
 	function lock(id){
-		AjaxPostUtil.request({url:reqBasePath + "sys002", params:{rowId: id}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url: reqBasePath + "sys002", params: {rowId: id}, type: 'json', method: "PUT", callback: function(json){
 			if(json.returnCode == 0){
-				winui.window.msg("已成功锁定，该账号目前无法登录.", {icon: 1,time: 2000});
+				winui.window.msg("已成功锁定，该账号目前无法登录.", {icon: 1, time: 2000});
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
 	
 	// 解锁
 	function unlock(id){
-		AjaxPostUtil.request({url:reqBasePath + "sys003", params:{rowId: id}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url: reqBasePath + "sys003", params: {rowId: id}, type: 'json', method: "PUT", callback: function(json){
 			if(json.returnCode == 0){
-				winui.window.msg("账号恢复正常.", {icon: 1,time: 2000});
+				winui.window.msg("账号恢复正常.", {icon: 1, time: 2000});
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
