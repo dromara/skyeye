@@ -3,9 +3,6 @@
 // 表格的序号
 var rowNum = 1;
 
-// 会员信息
-var memberMation = {};
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -84,7 +81,7 @@ layui.config({
                 var params = {
                     storeId: $("#storeId").val(),
                     userType: userType,
-                    memberId: userType == 1 ? "" : memberMation.id,
+                    memberId: userType == 1 ? "" : sysMemberUtil.memberMation.id,
                     memberCarId: userType == 1 ? "" : $("#memberCar").val(),
                     memberCarPlate: userType == 1 ? $("#memberCarPlate").val() : $("#memberCar").find("option:selected").text(),
                     mealOrderChildId: userType == 1 ? "" : $("#mealId").val(),
@@ -165,30 +162,21 @@ layui.config({
 
         // 会员选择
         $("body").on("click", ".chooseMemberBtn", function(e){
-            _openNewWindows({
-                url: "../../tpl/member/memberSearchChoose.html",
-                title: "选择会员",
-                pageId: "memberSearchChoose",
-                area: ['90vw', '90vh'],
-                callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        $("#memberId").val(memberMation.contacts);
-                        // 获取会员拥有的车辆信息
-                        AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: memberMation.id}, type: 'json', method: "POST", callback: function(json){
-                            if(json.returnCode == 0){
-                                $.each(json.rows, function (i, item){
-                                    item.name = item.modelType + "(" + item.plate + ")";
-                                });
-                                $("#memberCar").html(getDataUseHandlebars(selOption, json));
-                                form.render('select');
-                            }else{
-                                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                            }
-                        }, async: false});
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+            sysMemberUtil.openSysMemberChoosePage(function (memberMation){
+                $("#memberId").val(memberMation.contacts);
+                // 获取会员拥有的车辆信息
+                AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: memberMation.id}, type: 'json', method: "POST", callback: function(json){
+                    if(json.returnCode == 0){
+                        $.each(json.rows, function (i, item){
+                            item.name = item.modelType + "(" + item.plate + ")";
+                        });
+                        $("#memberCar").html(getDataUseHandlebars(selOption, json));
+                        form.render('select');
+                    }else{
+                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
-                }});
+                }, async: false});
+            });
         });
 
         $("body").on("input", ".calcPrice", function() {

@@ -56,7 +56,7 @@ layui.config({
 					form.render();
 					var chooseIndex = JSON.stringify(dubClick.data('index'));
 					var obj = res.rows[chooseIndex];
-					parent.memberMation = obj;
+					parent.sysMemberUtil.memberMation = obj;
 
 					parent.refreshCode = '0';
 					parent.layer.close(index);

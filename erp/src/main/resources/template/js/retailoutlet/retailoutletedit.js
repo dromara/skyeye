@@ -47,48 +47,33 @@ layui.config({
 				trigger: 'click'
 			});
 			orderObject = json;
-			initAccountHtml();
+			initOtherMation();
 		}
 	});
 
-	// 初始化账户
-	function initAccountHtml() {
+	function initOtherMation() {
+		// 初始化账户
 		systemCommonUtil.getSysAccountListByType(function(json){
-			// 加载账户数据
 			$("#accountId").html(getDataUseHandlebars(selOption, json));
-			// 初始化会员
-			initSupplierHtml();
 		});
-	}
 
-	//初始化会员
-	function initSupplierHtml() {
-		AjaxPostUtil.request({url: shopBasePath + "member009", params: {}, type: 'json', method: "GET", callback: function(json) {
-			if(json.returnCode == 0) {
-				//加载会员数据
-				$("#supplierId").html(getDataUseHandlebars(selOption, json));
-				//初始化仓库
-				initDepotHtml();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
-		}});
-	}
-
-	// 初始化仓库
-	function initDepotHtml() {
+		// 初始化仓库
 		erpOrderUtil.getDepotList(function (json){
-			// 加载仓库数据
 			$("#depotId").html(getDataUseHandlebars(selOption, json));
-			// 渲染数据到页面
-			initDataToShow();
 		});
+
+		// 渲染数据到页面
+		initDataToShow();
 	}
 
 	//渲染数据到页面
 	function initDataToShow(){
 		submitType = orderObject.bean.submitType;
-		$("#supplierId").val(orderObject.bean.organId);//会员
+		sysMemberUtil.memberMation = {
+			id: orderObject.bean.organId,
+			contacts: orderObject.bean.supplierName
+		};
+		$("#memberId").val(sysMemberUtil.memberMation.contacts);//会员
 		$("#accountId").val(orderObject.bean.accountId);//账户
 		$("#payType").val(orderObject.bean.payType);//付款类型
 		//渲染列表项
@@ -296,7 +281,7 @@ layui.config({
 		}
 
 		var params = {
-			supplierId: $("#supplierId").val(),
+			supplierId: sysMemberUtil.memberMation.id,
 			operTime: $("#operTime").val(),
 			accountId: $("#accountId").val(),
 			payType: $("#payType").val(),
@@ -380,7 +365,7 @@ layui.config({
 		}
 	}
 
-	//商品选择
+	// 商品选择
 	$("body").on("click", ".chooseProductBtn", function(e){
 		var trId = $(this).parent().parent().attr("trcusid");
 		_openNewWindows({
@@ -405,6 +390,13 @@ layui.config({
 					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
 				}
 			}});
+	});
+
+	// 会员选择
+	$("body").on("click", ".chooseMemberBtn", function(e){
+		sysMemberUtil.openSysMemberChoosePage(function (memberMation){
+			$("#memberId").val(memberMation.contacts);
+		});
 	});
 
 	$("body").on("click", "#cancle", function() {

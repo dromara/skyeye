@@ -39,7 +39,8 @@
 			<div class="layui-form-item layui-col-xs3">
 		        <label class="layui-form-label">会员<i class="red">*</i></label>
 		        <div class="layui-input-block">
-		            <select id="supplierId" lay-search win-verify="required"></select>
+					<input type="text" id="memberId" name="memberId" placeholder="请选择会员" win-verify="required" class="layui-input" readonly="readonly"/>
+					<i class="fa fa-plus-circle input-icon chooseMemberBtn"></i>
 		        </div>
 		    </div>
 		    <div class="layui-form-item layui-col-xs3">
@@ -106,7 +107,7 @@
 		        </div>
 		    </div>
 		    <div class="layui-form-item layui-col-xs4">
-		        <label class="layui-form-label">退款金额</label>
+		        <label class="layui-form-label">退款金额<i class="red">*</i></label>
 		        <div class="layui-input-block">
 		            <input type="text" id="changeAmount" name="changeAmount" win-verify="required|money" value="{{changeAmount}}" class="layui-input" style="color: red; font-size: 17px;"/>
 		        </div>
