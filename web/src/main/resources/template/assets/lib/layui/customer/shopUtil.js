@@ -2,6 +2,28 @@
 // 商城相关工具类
 var shopUtil = {
 
+    // 启用/禁用状态
+    enableState: {
+        "enable": {"type": 1, "name": "启用"},
+        "disable": {"type": 2, "name": "禁用"}
+    },
+
+    /**
+     * 根据启用/禁用状态获取对应的名称
+     *
+     * @param enabled 状态
+     * @returns {string}
+     */
+    getEnableStateName: function (enabled){
+        if(enabled == 1){
+            return "<span class='state-up'>启用</span>";
+        }else if(enabled == 2){
+            return "<span class='state-down'>禁用</span>";
+        }else{
+            return "<span class='state-error'>参数错误</span>";
+        }
+    },
+
     /**
      * 获取区域信息
      *

@@ -42,6 +42,9 @@ layui.config({
                     return "<span class='state-error'>参数错误</span>";
                 }
             }},
+            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function(d){
+                return shopUtil.getEnableStateName(d.enabled);
+            }},
             { field: 'createName', title: '录入人', align: 'left', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
@@ -60,6 +63,10 @@ layui.config({
             deletemember(data);
         }else if(layEvent == 'select'){ //详情
             selectMember(data)
+        }else if (layEvent === 'enabled') { // 启用
+            editEnabled(data);
+        }else if(layEvent == 'unenabled'){ // 禁用
+            editNotEnabled(data)
         }
     });
 
@@ -88,6 +95,34 @@ layui.config({
             AjaxPostUtil.request({url: shopBasePath + "memberCar004", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }});
+        });
+    }
+
+    // 设置启用状态
+    function editEnabled(data){
+        layer.confirm('确认要更改为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
+            AjaxPostUtil.request({url: shopBasePath + "editMemberCarEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["enable"]["type"]}, type: 'json', method: "PUT", callback: function(json){
+                if(json.returnCode == 0){
+                    winui.window.msg("设置成功。", {icon: 1, time: 2000});
+                    loadTable();
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }});
+        });
+    }
+
+    // 设置禁用状态
+    function editNotEnabled(data){
+        layer.confirm('确认要更改为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
+            AjaxPostUtil.request({url: shopBasePath + "editMemberCarEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["disable"]["type"]}, type: 'json', method: "PUT", callback: function(json){
+                if(json.returnCode == 0){
+                    winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();
                 }else{
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

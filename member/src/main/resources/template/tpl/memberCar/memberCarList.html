@@ -41,6 +41,12 @@
             {{# if(auth('1644234273590')){ }}
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
             {{# } }}
+            {{# if(d.enabled == 1 && auth('1644840134418')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="unenabled"><language showName="com.skyeye.disableBtn"></language></a>
+            {{# } }}
+            {{# if(d.enabled == 2 && auth('1644840134418')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="enabled"><language showName="com.skyeye.enableBtn"></language></a>
+            {{# } }}
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>

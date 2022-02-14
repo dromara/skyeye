@@ -33,13 +33,7 @@ layui.config({
             { field: 'email', title: '电子邮箱', align: 'left', width: 120},
             { field: 'address', title: '地址', align: 'left', width: 100},
             { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function(d){
-                if(d.enabled == '1'){
-                    return "<span class='state-up'>启用</span>";
-                }else if(d.enabled == '2'){
-                    return "<span class='state-down'>禁用</span>";
-                }else{
-                    return "<span class='state-error'>参数错误</span>";
-                }
+                return shopUtil.getEnableStateName(d.enabled);
             }},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
         ]],
