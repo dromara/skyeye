@@ -35,10 +35,14 @@ layui.config({
             { field: 'phone', title: '会员手机号', width: 100, align: "center"},
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
             { field: 'state', title: '支付状态', width: 80, align: "center", templet: function(d){
-                if(d.state == 1){
-                    return "待支付";
-                }else{
-                    return "已支付";
+                if(d.cancleState == 1) {
+                    if (d.state == 1) {
+                        return "<span class='state-down'>待支付</span>";
+                    } else {
+                        return "<span class='state-up'>已支付</span>";
+                    }
+                } else {
+                    return '已取消';
                 }
             }},
             { field: 'payPrice', title: '实付金额', width: 100, align: "left"},
@@ -52,7 +56,6 @@ layui.config({
             }},
             { field: 'createName', title: '录入人', width: 120 },
             { field: 'createTime', title: '单据日期', align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
         ]],
         done: function(){
             matchingLanguage();
@@ -62,27 +65,10 @@ layui.config({
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'delete') { // 删除
-            delet(data);
-        }else if(layEvent == 'select'){ // 详情
+        if(layEvent == 'select'){ // 详情
             select(data)
         }
     });
-
-    // 删除
-    function delet(data){
-        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
-            layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "deleteMealOrder", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json){
-                if(json.returnCode == 0){
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                }else{
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
-            }});
-        });
-    }
 
     // 详情
     function select(data){

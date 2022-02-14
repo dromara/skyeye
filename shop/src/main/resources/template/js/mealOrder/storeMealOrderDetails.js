@@ -19,7 +19,11 @@ layui.config({
             template: $("#simpleTemplate").html(),
             ajaxSendLoadBefore: function(hdb, json){
                 json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
-                json.bean.state = json.bean.state == 1 ? '待支付' : '已支付';
+                if(json.bean.cancleState == 1){
+                    json.bean.state = json.bean.state == 1 ? '待支付' : '已支付';
+                }else{
+                    json.bean.state = '已取消';
+                }
                 json.bean.type = json.bean.type == 1 ? '线上下单' : '线下下单';
             },
             ajaxSendAfter:function(json){

@@ -39,10 +39,14 @@ layui.config({
             { field: 'phone', title: '会员手机号', width: 100, align: "center"},
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
             { field: 'state', title: '支付状态', width: 80, align: "center", templet: function(d){
-                if(d.state == 1){
-                    return "<span class='state-down'>待支付</span>";
-                }else{
-                    return "<span class='state-up'>已支付</span>";
+                if(d.cancleState == 1) {
+                    if (d.state == 1) {
+                        return "<span class='state-down'>待支付</span>";
+                    } else {
+                        return "<span class='state-up'>已支付</span>";
+                    }
+                } else {
+                    return '已取消';
                 }
             }},
             { field: 'payPrice', title: '实付金额', width: 100, align: "left"},
@@ -56,7 +60,7 @@ layui.config({
             }},
             { field: 'createName', title: '录入人', width: 120 },
             { field: 'createTime', title: '单据日期', align: 'center', width: 150 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
         done: function(){
             matchingLanguage();
@@ -72,6 +76,8 @@ layui.config({
             select(data)
         }else if(layEvent == 'complatePay'){ // 完成支付
             complatePay(data)
+        }else if(layEvent == 'cancleOrder'){ // 取消订单
+            cancleOrder(data)
         }
     });
 
@@ -82,6 +88,21 @@ layui.config({
             AjaxPostUtil.request({url: shopBasePath + "deleteMealOrder", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                    loadTable();
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }});
+        });
+    }
+
+    // 取消订单
+    function cancleOrder(data){
+        layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function(index){
+            layer.close(index);
+            AjaxPostUtil.request({url: shopBasePath + "cancleMealOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
+                if(json.returnCode == 0){
+                    winui.window.msg('取消成功.', {icon: 1, time: 2000});
                     loadTable();
                 }else{
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

@@ -53,11 +53,14 @@
         <table id="messageTable" lay-filter="messageTable"></table>
 
         <script type="text/html" id="tableBar">
-            {{# if(d.state == 1 && auth('1644239605004')){ }}
+            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644239605004')){ }}
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
             {{# } }}
-            {{# if(d.state == 1 && auth('1644250434164')){ }}
+            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644250434164')){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="complatePay">完成支付</a>
+            {{# } }}
+            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644842735595')){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="cancleOrder">取消订单</a>
             {{# } }}
         </script>
     </div>
