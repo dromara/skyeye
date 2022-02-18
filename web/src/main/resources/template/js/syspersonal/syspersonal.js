@@ -17,7 +17,7 @@ layui.config({
 	// 从缓存中获取用户信息
 	AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
-			$(".layadmin-homepage-pad-img").attr("src", json.bean.userPhoto);
+			$(".layadmin-homepage-pad-img").attr("src", fileBasePath + json.bean.userPhoto);
 			$(".layadmin-homepage-font").html(json.bean.jobNumber + " " + json.bean.userName);
 			$(".layadmin-homepage-min-font").html(json.bean.companyName + " " + json.bean.departmentName + " " + json.bean.jobName);
 			loadMyOtherMation();
