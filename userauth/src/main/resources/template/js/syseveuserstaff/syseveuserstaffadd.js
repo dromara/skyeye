@@ -32,7 +32,7 @@ layui.config({
 			range: false
 		});
 	    
- 		//初始化上传
+ 		// 初始化上传
  		$("#userPhoto").upload({
             "action": reqBasePath + "common003",
             "data-num": "1",
@@ -43,10 +43,10 @@ layui.config({
             }
         });
  		
- 		//初始化公司
+ 		// 初始化公司
  		dtree.render({
  			elem: "#demoTree1",
- 			url: reqBasePath + 'companymation007',
+ 			url: reqBasePath + 'queryCompanyMationListTree',
  			dataStyle: 'layuiStyle',
  			done: function(){
  				if($("#demoTree1 li").length > 0){

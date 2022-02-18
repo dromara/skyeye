@@ -58,7 +58,7 @@ layui.config({
 		 		// 初始化公司
 		 		dtree.render({
 		 			elem: "#demoTree1",  // 绑定元素
-		 			url: reqBasePath + 'companymation007', // 异步接口
+		 			url: reqBasePath + 'queryCompanyMationListTree', // 异步接口
 		 			dataStyle: 'layuiStyle',
 		 			done: function(){
 		 				if($("#demoTree1 li").length > 0){
