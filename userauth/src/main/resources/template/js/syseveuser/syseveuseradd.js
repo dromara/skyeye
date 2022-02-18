@@ -35,7 +35,6 @@ layui.config({
  	    	searchPlaceholder: '员工姓名搜索',	//搜索输入框的提示文字 默认关键词搜索
  	    	table: {	//定义表格参数，与LAYUI的TABLE模块一致，只是无需再定义表格elem
  	    		url: reqBasePath + 'sys034',
- 	    		where: {userMation:$("#userName").val()},
  	    		method: 'post',
  	    		page: true,
  	    	    limits: [8, 16, 24, 32, 40, 48, 56],

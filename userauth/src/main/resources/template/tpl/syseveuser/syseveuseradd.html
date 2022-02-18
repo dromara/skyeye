@@ -12,13 +12,14 @@
 	    	<div class="layui-form-item layui-col-xs12">
     			<span class="hr-title">基础信息</span><hr>
 	    	</div>
-	        <div class="layui-form-item layui-col-xs6">
+	        <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">账号<i class="red">*</i></label>
 		        <div class="layui-input-block">
-		        	<input type="text" id="userCode" name="userCode" win-verify="required" placeholder="请输入账号" class="layui-input" maxlength="18"/>
-		        </div>
+		        	<input type="text" id="userCode" name="userCode" win-verify="required" placeholder="请输入账号" class="layui-input" onkeyup="value=value.replace(/[\u4e00-\u9fa5]/ig,'')" maxlength="18"/>
+					<div class="layui-form-mid layui-word-aux">禁止输入中文字符。</div>
+				</div>
 		    </div>
-		    <div class="layui-form-item layui-col-xs6">
+		    <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">有效期<i class="red">*</i></label>
 		        <div class="layui-input-block winui-radio">
 		            <input type="radio" id="isTermOfValidity" name="isTermOfValidity" value="1" title="长期有效" checked="checked"/>
