@@ -1220,7 +1220,7 @@ layui.config({
     	}else{
     		var rowId = $(this).attr("rowid");
     		var menuName = $("#childWindowInput").val();
-    		AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop005", params:{rowId: rowId}, type:'json', callback:function(json){
+    		AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop005", params: {rowId: rowId}, type: 'json', method: "POST", callback: function(json){
 				if(json.returnCode == 0){
 					var menuType = json.bean.menuType;
 					if(menuType == '1'){//系统菜单
@@ -1433,7 +1433,7 @@ layui.config({
             	icon: 'fa fa-tags',
         		text: "重命名/配置",
         		callBack: function (id, elem, events) {
-        			AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop005", params:{rowId: id}, type:'json', callback:function(json){
+        			AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop005", params: {rowId: id}, type: 'json', method: "POST", callback: function(json){
 						if(json.returnCode == 0){
 							var menuType = json.bean.menuType;
 							if(menuType == '1'){//系统菜单
@@ -1522,7 +1522,7 @@ layui.config({
             			$("#layui-layer-shade" + times).css({'z-index': zIndex});
             		}}, function (index) {
     					layer.close(index);
-    					AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop003", params:{rowId: id}, type:'json', callback:function(json){
+    					AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop003", params: {rowId: id}, type: 'json', method: "POST", callback: function(json){
     						if(json.returnCode == 0){
     							$(elem).remove();
     							$("i[win-i-id=" + $(elem).attr('win-id') + "]").remove();
