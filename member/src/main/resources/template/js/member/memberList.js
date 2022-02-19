@@ -201,15 +201,13 @@ layui.config({
         var contacts = $("#contacts").val();
         var phone = $("#phone").val();
         var email = $("#email").val();
-        var enabled = $("#enabled").val();
-        if(isNull(contacts) && isNull(phone) && isNull(email) && isNull(enabled)){
+        if(isNull(contacts) && isNull(phone) && isNull(email)){
             contacts = "!-!";
         }
         return {
             contacts: contacts,
             phone: phone,
             email: email,
-            enabled: enabled
         };
     }
 
