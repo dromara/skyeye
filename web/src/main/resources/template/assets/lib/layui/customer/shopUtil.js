@@ -25,6 +25,44 @@ var shopUtil = {
     },
 
     /**
+     * 套餐订单获取状态名称
+     *
+     * @param data
+     * @returns {string}
+     */
+    getMealOrderStateName: function (data){
+        if(data.cancleState == 1) {
+            if (data.state == 1) {
+                return "<span class='state-down'>待支付</span>";
+            } else {
+                return "<span class='state-up'>已支付</span>";
+            }
+        } else {
+            return '已取消';
+        }
+    },
+
+    /**
+     * 保养订单获取状态名称
+     *
+     * @param data
+     * @returns {string}
+     */
+    getKeepFitOrderStateName: function (data){
+        if(data.cancleState == 1){
+            if(data.state == 1){
+                return "<span class='state-down'>待支付</span>";
+            }else if(data.state == 2){
+                return "<span class='state-up'>已支付(待核销)</span>";
+            }else if(data.state == 3){
+                return "<span class='state-up'>已支付(已核销)</span>";
+            }
+        }else{
+            return '已取消';
+        }
+    },
+
+    /**
      * 获取区域信息
      *
      * @param callback 回执函数

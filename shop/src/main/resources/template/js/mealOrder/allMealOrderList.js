@@ -43,16 +43,8 @@ layui.config({
             { field: 'phone', title: '会员手机号', width: 100, rowspan: '2', align: "center"},
             { title: '下单地址', align: 'center', colspan: '2'},
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left", rowspan: '2'},
-            { field: 'state', title: '支付状态', width: 80, align: "center", rowspan: '2', templet: function(d){
-                if(d.cancleState == 1) {
-                    if (d.state == 1) {
-                        return "<span class='state-down'>待支付</span>";
-                    } else {
-                        return "<span class='state-up'>已支付</span>";
-                    }
-                } else {
-                    return '已取消';
-                }
+            { field: 'state', title: '订单状态', width: 80, align: "center", rowspan: '2', templet: function(d){
+                return shopUtil.getMealOrderStateName(d);
             }},
             { field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2'},
             { field: 'payTime', title: '实付日期', align: 'center', rowspan: '2', width: 150 },
