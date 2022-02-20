@@ -151,6 +151,7 @@ layui.config({
 		systemCommonUtil.getSysCompanyList(function(json){
 			// 加载企业数据
 			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
+			form.render('select');
 		});
 	}
 	
