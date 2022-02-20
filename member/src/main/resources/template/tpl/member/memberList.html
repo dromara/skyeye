@@ -51,10 +51,11 @@
             {{# if(d.enabled == 2 && auth('1569133267244')){ }}
                 <a class="layui-btn layui-btn-xs" lay-event="enabled"><language showName="com.skyeye.enableBtn"></language></a>
             {{# } }}
-            {{# if(auth('1644234235243')){ }}
+            <!-- 只有启用中的会员才可以进行车辆信息和套餐购买的操作 -->
+            {{# if(d.enabled == 1 && auth('1644234235243')){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="memberCar">车辆信息</a>
             {{# } }}
-            {{# if(auth('1644239451422')){ }}
+            {{# if(d.enabled == 1 && auth('1644239451422')){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="mealList">套餐购买</a>
             {{# } }}
         </script>
