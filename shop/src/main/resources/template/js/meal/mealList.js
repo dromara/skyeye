@@ -44,7 +44,9 @@ layui.config({
                     return "上线";
                 }
             }},
-            { field: 'price', title: '价格', width: 100 },
+            { field: 'price', title: '指导价', width: 100 },
+            { field: 'showPrice', title: '展示价', width: 100 },
+            { field: 'lowPrice', title: '底价', width: 100 },
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },

@@ -64,6 +64,8 @@ layui.config({
                     logo: $("#logo").find("input[type='hidden'][name='upload']").attr("oldurl"),
                     type: $("input[name='type']:checked").val(),
                     price: $("#price").val(),
+                    showPrice: $("#showPrice").val(),
+                    lowPrice: $("#lowPrice").val(),
                     mealNum: $("#mealNum").val(),
                     mealExplain: $("#mealExplain").val(),
                     state: $("input[name='state']:checked").val(),

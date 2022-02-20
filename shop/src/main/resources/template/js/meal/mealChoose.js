@@ -45,7 +45,9 @@ layui.config({
 					}
 					return "-";
 				}},
-				{ field: 'price', title: '价格', width: 100 }
+				{ field: 'price', title: '指导价', width: 100 },
+				{ field: 'showPrice', title: '展示价', width: 100 },
+				{ field: 'lowPrice', title: '底价', width: 100 }
 		    ]],
 		    done: function(res, curr, count){
 		    	matchingLanguage();
