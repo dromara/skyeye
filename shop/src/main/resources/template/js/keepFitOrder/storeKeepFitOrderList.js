@@ -57,7 +57,7 @@ layui.config({
                     }else if(d.state == 3){
                         return "<span class='state-up'>已支付(已核销)</span>";
                     }
-                }else{
+                } else {
                     return '已取消';
                 }
             }},
