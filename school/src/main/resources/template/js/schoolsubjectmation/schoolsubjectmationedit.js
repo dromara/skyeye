@@ -22,7 +22,7 @@ layui.config({
 		 		textool.init({
 			    	eleId: 'desc',
 			    	maxlength: 500,
-			    	tools: ['count', 'copy', 'reset', 'clear']
+			    	tools: ['count', 'copy', 'reset']
 			    });
 		 		
 		 		//初始化学校

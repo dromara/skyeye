@@ -34,7 +34,7 @@ layui.config({
             	textool.init({
 			    	eleId: 'content',
 			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset', 'clear']
+			    	tools: ['count', 'copy', 'reset']
 			    });
             	
                 showGrid({

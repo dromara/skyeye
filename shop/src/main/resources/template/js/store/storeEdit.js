@@ -22,7 +22,7 @@ layui.config({
             	textool.init({
 			    	eleId: 'remark',
 			    	maxlength: 400,
-			    	tools: ['count', 'copy', 'reset', 'clear']
+			    	tools: ['count', 'copy', 'reset']
 			    });
 
                 // 加载区域

@@ -18,7 +18,7 @@ layui.config({
 		textool.init({
 	    	eleId: 'remark',
 	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset', 'clear']
+	    	tools: ['count', 'copy', 'reset']
 	    });
 		
 		//加载树信息

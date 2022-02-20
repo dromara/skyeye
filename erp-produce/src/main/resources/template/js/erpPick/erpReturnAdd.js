@@ -35,7 +35,7 @@ layui.config({
  		textool.init({
 	    	eleId: 'remark',
 	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset', 'clear']
+	    	tools: ['count', 'copy', 'reset']
 	    });
 		
 		//单据时间

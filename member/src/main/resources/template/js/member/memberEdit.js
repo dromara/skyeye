@@ -22,7 +22,7 @@ layui.config({
             	textool.init({
 			    	eleId: 'description',
 			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset', 'clear']
+			    	tools: ['count', 'copy', 'reset']
 			    });
             	
 			    matchingLanguage();

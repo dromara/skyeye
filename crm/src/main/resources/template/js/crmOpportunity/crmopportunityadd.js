@@ -31,7 +31,7 @@ layui.config({
     textool.init({
     	eleId: 'businessNeed',
     	maxlength: 1000,
-    	tools: ['count', 'copy', 'reset', 'clear']
+    	tools: ['count', 'copy', 'reset']
     });
 
 	// 选择入职时间

@@ -18,7 +18,7 @@ layui.config({
 			textool.init({
 				eleId: 'roleDesc',
 				maxlength: 250,
-				tools: ['count', 'copy', 'reset', 'clear']
+				tools: ['count', 'copy', 'reset']
 			});
 		}else{
 			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});

@@ -47,7 +47,7 @@ layui.config({
 	 		textool.init({
 		    	eleId: 'businessNeed',
 		    	maxlength: 1000,
-		    	tools: ['count', 'copy', 'reset', 'clear']
+		    	tools: ['count', 'copy', 'reset']
 		    });
 	 		
 	 		if(json.bean.state == '1'){

@@ -19,7 +19,7 @@ layui.config({
         textool.init({
 	    	eleId: 'mealExplain',
 	    	maxlength: 500,
-	    	tools: ['count', 'copy', 'reset', 'clear']
+	    	tools: ['count', 'copy', 'reset']
 	    });
 
         // 初始化上传

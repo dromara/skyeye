@@ -23,7 +23,7 @@ layui.config({
 		textool.init({
 	    	eleId: 'detail',
 	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset', 'clear']
+	    	tools: ['count', 'copy', 'reset']
 	    });
 	    
 	    //分类

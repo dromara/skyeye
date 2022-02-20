@@ -14,7 +14,7 @@ layui.config({
 	textool.init({
 		eleId: 'roleDesc',
 		maxlength: 250,
-		tools: ['count', 'copy', 'reset', 'clear']
+		tools: ['count', 'copy', 'reset']
 	});
 
 	matchingLanguage();

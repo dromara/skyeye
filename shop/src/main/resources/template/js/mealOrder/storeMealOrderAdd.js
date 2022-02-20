@@ -51,7 +51,7 @@ layui.config({
         textool.init({
             eleId: 'remark',
             maxlength: 400,
-            tools: ['count', 'copy', 'reset', 'clear']
+            tools: ['count', 'copy', 'reset']
         });
 
         // 获取会员拥有的车辆信息

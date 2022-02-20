@@ -16,7 +16,7 @@ layui.config({
 	    textool.init({
 	    	eleId: 'opinion',
 	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset', 'clear']
+	    	tools: ['count', 'copy', 'reset']
 	    });
 	    
 	    rowId = parent.rowId;

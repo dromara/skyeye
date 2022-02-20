@@ -61,13 +61,13 @@ layui.config({
 			textool.init({
 				eleId: 'technicalTerms',
 				maxlength: 200,
-				tools: ['count', 'copy', 'reset', 'clear']
+				tools: ['count', 'copy', 'reset']
 			});
 
 			textool.init({
 				eleId: 'businessTerms',
 				maxlength: 200,
-				tools: ['count', 'copy', 'reset', 'clear']
+				tools: ['count', 'copy', 'reset']
 			});
 
 			var userNames = [];
