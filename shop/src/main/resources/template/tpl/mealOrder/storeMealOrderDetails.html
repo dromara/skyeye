@@ -58,6 +58,8 @@
                     <thead>
                     <tr>
                         <th>套餐</th>
+                        <th>套餐说明</th>
+                        <th>耗材说明</th>
                         <th>可使用次数</th>
                         <th>金额</th>
                         <th>车辆</th>
@@ -67,6 +69,8 @@
                         {{#each mealOrderChildMationList}}
                         <tr>
                             <td><div style="width: 100px;">{{title}}</div></td>
+                            <td><div style="width: 140px;" title="{{mealExplain}}">{{mealExplain}}</div></td>
+                            <td><div style="width: 140px;" title="{{mealConsume}}">{{mealConsume}}</div></td>
                             <td><div style="width: 80px;">{{mealNum}}</div></td>
                             <td><div style="width: 80px;">{{mealPrice}}</div></td>
                             <td><div style="width: 100px;">{{plate}}</div></td>
