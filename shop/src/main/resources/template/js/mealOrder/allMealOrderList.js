@@ -43,11 +43,11 @@ layui.config({
             { field: 'phone', title: '会员手机号', width: 100, rowspan: '2', align: "center"},
             { title: '下单地址', align: 'center', colspan: '2'},
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left", rowspan: '2'},
+            { field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2'},
             { field: 'state', title: '订单状态', width: 80, align: "center", rowspan: '2', templet: function(d){
                 return shopUtil.getMealOrderStateName(d);
             }},
-            { field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2'},
-            { field: 'payTime', title: '实付日期', align: 'center', rowspan: '2', width: 150 },
+            { field: 'payTime', title: '支付时间', align: 'center', rowspan: '2', width: 150 },
             { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function(d){
                 if(d.type == 1){
                     return "线上下单";
@@ -55,8 +55,8 @@ layui.config({
                     return "线下下单";
                 }
             }},
-            { field: 'createName', title: '录入人', width: 120, rowspan: '2' },
-            { field: 'createTime', title: '单据日期', align: 'center', width: 150, rowspan: '2' },
+            { field: 'createName', title: '专属顾问', width: 120, rowspan: '2' },
+            { field: 'createTime', title: '创建时间', align: 'center', width: 150, rowspan: '2' },
         ],[
             { field: 'areaName', title: '区域', align: 'left', width: 120},
             { field: 'storeName', title: '门店', align: 'left', width: 120}
