@@ -60,7 +60,6 @@ layui.config({
             tools: ['count', 'copy', 'reset']
         });
 
-        addRow();
         matchingLanguage();
         form.render();
         form.on('submit(formAddBean)', function (data) {
