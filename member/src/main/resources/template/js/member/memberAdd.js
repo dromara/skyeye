@@ -129,7 +129,7 @@ layui.config({
         function loadChildAreaTownShip(){
             AjaxPostUtil.request({url:reqBasePath + "commontarea004", params:{rowId: $("#addressAreaId").val()}, type:'json', method: "POST", callback:function(json){
                 if(json.returnCode == 0){
-                    var str = '<dd class="layui-col-xs3"><select id="townshipId" win-verify="required" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
+                    var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
                     for(var i = 0; i < json.rows.length; i++){
                         str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
                     }
