@@ -34,9 +34,9 @@
                     <div class="layui-input-inline">
                         <select id="state" name="state" lay-filter="state" lay-search="">
                             <option value="">全部</option>
-                            <option value="1">待支付</option>
-                            <option value="2">已支付(待核销)</option>
-                            <option value="3">已支付(已核销)</option>
+                            <option value="1">保养中</option>
+                            <option value="2">待核销</option>
+                            <option value="3">已核销</option>
                             <option value="10">已取消</option>
                         </select>
                     </div>
@@ -59,17 +59,14 @@
         <table id="messageTable" lay-filter="messageTable"></table>
 
         <script type="text/html" id="tableBar">
-            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644317759940')){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+            {{# if(d.cancleState == 1 && d.state == 1 && auth('1645623479038') && d.source == 2){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="complateKeepFit">完成保养</a>
             {{# } }}
-            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644317746790') && d.source == 2){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="complatePay">完成支付</a>
-            {{# } }}
-            {{# if(d.cancleState == 1 && d.state == 2 && auth('1644378387049') && !isNull(d.mealOrderChildId)){ }}
+            {{# if(d.cancleState == 1 && d.state == 2 && auth('1644378387049') && !isNull(d.mealOrderChildId) && d.source == 2){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="verification">核销</a>
             {{# } }}
-            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644842786855')){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="cancleOrder">取消订单</a>
+            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644842786855') && d.source == 2){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="cancleOrder">取消保养</a>
             {{# } }}
         </script>
     </div>

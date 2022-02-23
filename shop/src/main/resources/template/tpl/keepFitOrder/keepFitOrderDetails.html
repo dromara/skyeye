@@ -15,6 +15,9 @@
 
     <script type="text/x-handlebars-template" id="simpleTemplate">
         {{#bean}}
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">基本信息</span><hr>
+        </div>
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">订单编号：</label>
             <div class="layui-input-block ver-center">
@@ -69,7 +72,7 @@
                 {{mealName}}
             </div>
         </div>
-        <div class="layui-form-item layui-col-xs12">
+        <!--<div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">耗材</label>
             <div class="layui-input-block">
                 <table class="layui-table">
@@ -89,19 +92,19 @@
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div>-->
         <div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">应付金额：</label>
             <div class="layui-input-block ver-center">
                 {{payablePrice}}
             </div>
         </div>
-        <div class="layui-form-item layui-col-xs12">
+        <!--<div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">服务费：</label>
             <div class="layui-input-block ver-center">
                 {{servicePrice}}
             </div>
-        </div>
+        </div>-->
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">实付金额：</label>
             <div class="layui-input-block ver-center">
@@ -118,6 +121,27 @@
             <label class="layui-form-label">备注：</label>
             <div class="layui-input-block ver-center">
                 {{{remark}}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">保养信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">维修技师：</label>
+            <div class="layui-input-block ver-center">
+                {{serviceTechnicianName}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">下次保养公里数：</label>
+            <div class="layui-input-block ver-center">
+                {{nextServiceMileage}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">下次保养时间：</label>
+            <div class="layui-input-block ver-center">
+                {{nextServiceTime}}
             </div>
         </div>
         {{/bean}}

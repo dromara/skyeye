@@ -51,11 +51,11 @@ var shopUtil = {
     getKeepFitOrderStateName: function (data){
         if(data.cancleState == 1){
             if(data.state == 1){
-                return "<span class='state-down'>待支付</span>";
+                return "<span class='state-down'>保养中</span>";
             }else if(data.state == 2){
-                return "<span class='state-up'>已支付(待核销)</span>";
+                return "<span class='state-up'>待核销</span>";
             }else if(data.state == 3){
-                return "<span class='state-up'>已支付(已核销)</span>";
+                return "<span class='state-up'>已核销</span>";
             }
         }else{
             return '已取消';
@@ -132,6 +132,29 @@ var shopUtil = {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }, async: false});
+    },
+
+    /**
+     * 门店员工选择页面
+     *
+     * @param callback 回调函数
+     */
+    staffMation: {},
+    openStoreStaffChoosePage: function (callback){
+        _openNewWindows({
+            url: "../../tpl/storeStaff/storeStaffChoose.html",
+            title: "选择店员",
+            pageId: "storeStaffChoose",
+            area: ['90vw', '90vh'],
+            callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                    if(typeof(callback) == "function") {
+                        callback(shopUtil.staffMation);
+                    }
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                }
+            }});
     },
 
 };

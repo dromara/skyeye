@@ -65,15 +65,15 @@ layui.config({
         form.on('submit(formAddBean)', function (data) {
             if (winui.verifyForm(data.elem)) {
                 var tableData = new Array();
-                $.each($("#useTable tr"), function(i, item) {
-                    // 获取行编号
-                    var rowNum = $(item).attr("trcusid").replace("tr", "");
-                    var row = {
-                        consumeExplain: $("#consumeExplain" + rowNum.toString()).val(),
-                        price: $("#price" + rowNum.toString()).val()
-                    };
-                    tableData.push(row);
-                });
+                // $.each($("#useTable tr"), function(i, item) {
+                //     // 获取行编号
+                //     var rowNum = $(item).attr("trcusid").replace("tr", "");
+                //     var row = {
+                //         consumeExplain: $("#consumeExplain" + rowNum.toString()).val(),
+                //         price: $("#price" + rowNum.toString()).val()
+                //     };
+                //     tableData.push(row);
+                // });
 
                 var userType = $("input[name='userType']:checked").val();
 
@@ -84,7 +84,8 @@ layui.config({
                     memberCarId: userType == 1 ? "" : $("#memberCar").val(),
                     memberCarPlate: userType == 1 ? $("#memberCarPlate").val() : $("#memberCar").find("option:selected").text(),
                     mealOrderChildId: userType == 1 ? "" : $("#mealId").val(),
-                    servicePrice: $("#servicePrice").val(),
+                    // servicePrice: $("#servicePrice").val(),
+                    servicePrice: 0,
                     remark: $("#remark").val(),
                     type: 2,
                     source: 2,

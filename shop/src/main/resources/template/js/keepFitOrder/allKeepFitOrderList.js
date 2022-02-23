@@ -64,7 +64,7 @@ layui.config({
                     return "线下下单";
                 }
             }},
-            { field: 'createName', title: '录入人', width: 120, rowspan: '2' },
+            { field: 'createName', title: '服务顾问', width: 120, rowspan: '2' },
             { field: 'createTime', title: '单据日期', align: 'center', width: 150, rowspan: '2' },
         ],[
             { field: 'areaName', title: '区域', align: 'left', width: 120},
