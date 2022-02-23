@@ -45,14 +45,17 @@ layui.config({
             { field: 'memberCarPlate', title: '车牌号', width: 100, align: "left"},
             { field: 'contacts', title: '会员名称', width: 100 },
             { field: 'phone', title: '会员手机号', width: 100, align: "center"},
-            { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
-            { field: 'servicePrice', title: '服务费', width: 100, align: "left"},
-            { field: 'storeName', title: '所属门店', align: 'left', width: 120 },
-            { field: 'state', title: '订单状态', width: 150, align: "center", templet: function(d){
+            /*{ field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
+            { field: 'servicePrice', title: '服务费', width: 100, align: "left"},*/
+            { field: 'storeName', title: '保养门店', align: 'left', width: 120 },
+            { field: 'state', title: '订单状态', width: 100, align: "center", templet: function(d){
                 return shopUtil.getKeepFitOrderStateName(d);
             }},
-            { field: 'payPrice', title: '实付金额', width: 100, align: "left"},
-            { field: 'payTime', title: '实付日期', align: 'center', width: 150 },
+            /*{ field: 'payPrice', title: '实付金额', width: 100, align: "left"},
+            { field: 'payTime', title: '实付日期', align: 'center', width: 150 },*/
+            { field: 'mealName', title: '套餐名称', align: 'left', width: 150 },
+            { field: 'mealSinglePrice', title: '套餐内消耗', align: 'left', width: 120 },
+            { field: 'serviceTechnicianName', title: '维修技师', align: 'left', width: 120 },
             { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
                 if(d.type == 1){
                     return "线上下单";
@@ -61,7 +64,7 @@ layui.config({
                 }
             }},
             { field: 'createName', title: '服务顾问', width: 120 },
-            { field: 'createTime', title: '单据日期', align: 'center', width: 150 },
+            { field: 'createTime', title: '操作时间', align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
         done: function(){

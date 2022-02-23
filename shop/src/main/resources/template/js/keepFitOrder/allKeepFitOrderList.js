@@ -49,14 +49,17 @@ layui.config({
             { field: 'memberCarPlate', title: '车牌号', width: 100, align: "left", rowspan: '2'},
             { field: 'contacts', title: '会员名称', width: 100, rowspan: '2' },
             { field: 'phone', title: '会员手机号', width: 100, align: "center", rowspan: '2'},
-            { field: 'payablePrice', title: '应付金额', width: 100, align: "left", rowspan: '2'},
-            { field: 'servicePrice', title: '服务费', width: 100, align: "left", rowspan: '2'},
+            /*{ field: 'payablePrice', title: '应付金额', width: 100, align: "left", rowspan: '2'},
+            { field: 'servicePrice', title: '服务费', width: 100, align: "left", rowspan: '2'},*/
             { title: '下单地址', align: 'center', colspan: '2'},
-            { field: 'state', title: '订单状态', width: 150, align: "center", rowspan: '2', templet: function(d){
+            { field: 'state', title: '订单状态', width: 100, align: "center", rowspan: '2', templet: function(d){
                 return shopUtil.getKeepFitOrderStateName(d);
             }},
-            { field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2' },
-            { field: 'payTime', title: '实付日期', align: 'center', width: 150, rowspan: '2' },
+            /*{ field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2' },
+            { field: 'payTime', title: '实付日期', align: 'center', width: 150, rowspan: '2' },*/
+            { field: 'mealName', title: '套餐名称', align: 'left', width: 150, rowspan: '2' },
+            { field: 'mealSinglePrice', title: '套餐内消耗', align: 'left', width: 120, rowspan: '2' },
+            { field: 'serviceTechnicianName', title: '维修技师', align: 'left', width: 120, rowspan: '2' },
             { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function(d){
                 if(d.type == 1){
                     return "线上下单";
@@ -65,10 +68,10 @@ layui.config({
                 }
             }},
             { field: 'createName', title: '服务顾问', width: 120, rowspan: '2' },
-            { field: 'createTime', title: '单据日期', align: 'center', width: 150, rowspan: '2' },
+            { field: 'createTime', title: '操作时间', align: 'center', width: 150, rowspan: '2' },
         ],[
             { field: 'areaName', title: '区域', align: 'left', width: 120},
-            { field: 'storeName', title: '门店', align: 'left', width: 120}
+            { field: 'storeName', title: '保养门店', align: 'left', width: 120}
         ]],
         done: function(){
             matchingLanguage();

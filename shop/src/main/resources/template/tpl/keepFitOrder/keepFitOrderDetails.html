@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="layui-form-item layui-col-xs6">
-            <label class="layui-form-label">操作员：</label>
+            <label class="layui-form-label">服务顾问：</label>
             <div class="layui-input-block ver-center">
                 {{createName}}
             </div>
@@ -66,12 +66,6 @@
                 {{memberCarPlate}}
             </div>
         </div>
-        <div class="layui-form-item layui-col-xs6">
-            <label class="layui-form-label">套餐：</label>
-            <div class="layui-input-block ver-center">
-                {{mealName}}
-            </div>
-        </div>
         <!--<div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">耗材</label>
             <div class="layui-input-block">
@@ -92,19 +86,19 @@
                     </tbody>
                 </table>
             </div>
-        </div>-->
+        </div>
         <div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">应付金额：</label>
             <div class="layui-input-block ver-center">
                 {{payablePrice}}
             </div>
         </div>
-        <!--<div class="layui-form-item layui-col-xs12">
+        <div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">服务费：</label>
             <div class="layui-input-block ver-center">
                 {{servicePrice}}
             </div>
-        </div>-->
+        </div>
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">实付金额：</label>
             <div class="layui-input-block ver-center">
@@ -116,11 +110,38 @@
             <div class="layui-input-block ver-center">
                 {{payTime}}
             </div>
-        </div>
+        </div>-->
         <div class="layui-form-item layui-col-xs12">
             <label class="layui-form-label">备注：</label>
             <div class="layui-input-block ver-center">
                 {{{remark}}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">套餐信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">套餐：</label>
+            <div class="layui-input-block ver-center">
+                {{mealName}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">套餐内消耗：</label>
+            <div class="layui-input-block ver-center">
+                {{mealSinglePrice}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">套餐说明：</label>
+            <div class="layui-input-block ver-center">
+                {{mealExplain}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">耗材说明：</label>
+            <div class="layui-input-block ver-center">
+                {{mealConsume}}
             </div>
         </div>
         <div class="layui-form-item layui-col-xs12">
@@ -135,7 +156,7 @@
         <div class="layui-form-item layui-col-xs6">
             <label class="layui-form-label">下次保养公里数：</label>
             <div class="layui-input-block ver-center">
-                {{nextServiceMileage}}
+                {{nextServiceMileage}} KM
             </div>
         </div>
         <div class="layui-form-item layui-col-xs6">

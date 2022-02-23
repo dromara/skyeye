@@ -150,8 +150,8 @@
                         <th>应付金额</th>
                         <th>实付金额</th>
                         <th>实付日期</th>
-                        <th>支付状态</th>
-                        <th>单据日期</th>
+                        <th>订单状态</th>
+                        <th>操作时间</th>
                     </tr>
                     </thead>
                     <tbody class="insurance-table">
@@ -182,21 +182,21 @@
                     <thead>
                     <tr>
                         <th>订单编号</th>
-                        <th>应付金额</th>
-                        <th>实付金额</th>
-                        <th>实付日期</th>
-                        <th>支付状态</th>
-                        <th>单据日期</th>
+                        <th>套餐名称</th>
+                        <th>套餐内消耗</th>
+                        <th>维修技师</th>
+                        <th>订单状态</th>
+                        <th>操作时间</th>
                     </tr>
                     </thead>
                     <tbody class="insurance-table">
                     {{#each rows}}
                     <tr>
                         <td><div style="width: 180px;">{{orderNum}}</div></td>
-                        <td><div style="width: 100px;">{{payablePrice}}</div></td>
-                        <td><div style="width: 100px;">{{payPrice}}</div></td>
-                        <td><div style="width: 150px;">{{payTime}}</div></td>
-                        <td><div style="width: 80px;">{{state}}</div></td>
+                        <td><div style="width: 100px;">{{mealName}}</div></td>
+                        <td><div style="width: 100px;">{{mealSinglePrice}}</div></td>
+                        <td><div style="width: 100px;">{{serviceTechnicianName}}</div></td>
+                        <td><div style="width: 80px;">{{{state}}}</div></td>
                         <td><div style="width: 150px;">{{createTime}}</div></td>
                     </tr>
                     {{/each}}

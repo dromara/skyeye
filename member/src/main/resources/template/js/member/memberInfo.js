@@ -93,15 +93,7 @@ layui.config({
             AjaxPostUtil.request({url: shopBasePath + "keepFitOrder001", params: params, type: 'json', method: "POST", callback: function(json){
                 if(json.returnCode == 0){
                     $.each(json.rows, function (i, item){
-                        if(item.cancleState == 1){
-                            if(item.state == '1'){
-                                item.state = "待支付";
-                            }else if(item.state == '2' || item.state == '3'){
-                                item.state = "已支付";
-                            }
-                        } else {
-                            item.state = '已取消';
-                        }
+                        item.state = shopUtil.getKeepFitOrderStateName(item);
                     });
                     $("#showForm").append(getDataUseHandlebars($("#memberKeepFitOrderTemplate").html(), json));
                 }else{
