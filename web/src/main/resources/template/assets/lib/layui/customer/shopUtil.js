@@ -157,4 +157,24 @@ var shopUtil = {
             }});
     },
 
+    /**
+     * 根据门店id获取申科的套餐信息
+     *
+     * storeId 门店id
+     * @param callback 回执函数
+     */
+    queryShenkeMealList: function (storeId, callback){
+        // 查看获取申科的套餐列表的url
+        AjaxPostUtil.request({url: shopBasePath + "getMealListByShenke", params: {storeId: storeId}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                console.log(json)
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
 };

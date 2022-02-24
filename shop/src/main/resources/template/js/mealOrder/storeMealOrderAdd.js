@@ -28,6 +28,10 @@ layui.config({
         var usetableTemplate = $("#usetableTemplate").html();
         var memberCarHtml = "";
 
+        shopUtil.queryShenkeMealList("123", function (data){
+
+        });
+
         memberMation = parent.memberMation;
         $("#memberName").html(memberMation.contacts);
 
