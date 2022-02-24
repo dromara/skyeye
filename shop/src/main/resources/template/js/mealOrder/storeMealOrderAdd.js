@@ -28,10 +28,6 @@ layui.config({
         var usetableTemplate = $("#usetableTemplate").html();
         var memberCarHtml = "";
 
-        shopUtil.queryShenkeMealList("123", function (data){
-
-        });
-
         memberMation = parent.memberMation;
         $("#memberName").html(memberMation.contacts);
 
@@ -81,8 +77,14 @@ layui.config({
                     var rowNum = $(item).attr("trcusid").replace("tr", "");
                     var mealMation = JSON.parse($("#mealId" + rowNum.toString()).attr("mealMaion"));
                     var row = {
-                        mealId: mealMation.id,
-                        memberCarId: $("#carId" + rowNum.toString()).val()
+                        mealId: mealMation.mealId,
+                        memberCarId: $("#carId" + rowNum.toString()).val(),
+                        mealName: mealMation.name,
+                        mealNum: mealMation.totalCount,
+                        remainMealNum: mealMation.totalCount,
+                        mealExplain: mealMation.memberDes,
+                        mealConsume: mealMation.oilDes,
+                        mealPrice: mealMation.showPrice
                     };
                     tableData.push(row);
                 });
@@ -161,9 +163,9 @@ layui.config({
                 return false;
             }
             _openNewWindows({
-                url: "../../tpl/meal/mealChoose.html",
+                url: "../../tpl/meal/mealShenkeChoose.html",
                 title: "选择套餐",
-                pageId: "mealChoose",
+                pageId: "mealShenkeChoose",
                 area: ['90vw', '90vh'],
                 callBack: function(refreshCode){
                     if (refreshCode == '0') {
@@ -172,7 +174,7 @@ layui.config({
 
                         $("#mealId" + thisRowNum.toString()).val(mealMation.title);
                         $("#num" + thisRowNum.toString()).html(mealMation.mealNum);
-                        $("#price" + thisRowNum.toString()).html(mealMation.price);
+                        $("#price" + thisRowNum.toString()).html(mealMation.showPrice);
                         $("#mealId" + thisRowNum.toString()).attr("mealMaion", JSON.stringify(mealMation));
                         calcAllPrice();
                     } else if (refreshCode == '-9999') {
@@ -189,7 +191,8 @@ layui.config({
                 var mealMationJson = $("#mealId" + rowNum.toString()).attr("mealMaion");
                 if(!isNull(mealMationJson)){
                     var mealMation = JSON.parse(mealMationJson);
-                    allPrice = sum(allPrice, mealMation.unformatPrice);
+                    // allPrice = sum(allPrice, mealMation.unformatPrice);
+                    allPrice = sum(allPrice, mealMation.showPrice);
                 }
             });
             $("#allPrice").html(allPrice + "元");
