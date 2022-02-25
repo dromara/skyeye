@@ -24,7 +24,7 @@ layui.config({
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
-		    method: 'post',
+		    method: 'GET',
 		    url: shopBasePath + 'getMealListByShenke',
 		    where: getTableParams(),
 			even: true,
@@ -34,7 +34,7 @@ layui.config({
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 				{ field: 'mealName', title: '套餐', align: 'left', width: 200 },
 				{ field: 'name', title: '规格', align: 'left', width: 200 },
-				{ field: 'mealNum', title: '可使用次数', width: 120 },
+				{ field: 'totalCount', title: '可使用次数', width: 120 },
 				{ field: 'showPrice', title: '展示价', width: 100 },
 		    ]],
 		    done: function(res, curr, count){

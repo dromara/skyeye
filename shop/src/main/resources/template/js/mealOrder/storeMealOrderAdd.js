@@ -78,6 +78,7 @@ layui.config({
                     var mealMation = JSON.parse($("#mealId" + rowNum.toString()).attr("mealMaion"));
                     var row = {
                         mealId: mealMation.mealId,
+                        skuId: mealMation.id,
                         memberCarId: $("#carId" + rowNum.toString()).val(),
                         mealName: mealMation.name,
                         mealNum: mealMation.totalCount,
@@ -172,8 +173,8 @@ layui.config({
                         // 获取表格行号
                         var thisRowNum = trId.replace("tr", "");
 
-                        $("#mealId" + thisRowNum.toString()).val(mealMation.title);
-                        $("#num" + thisRowNum.toString()).html(mealMation.mealNum);
+                        $("#mealId" + thisRowNum.toString()).val(mealMation.name);
+                        $("#num" + thisRowNum.toString()).html(mealMation.totalCount);
                         $("#price" + thisRowNum.toString()).html(mealMation.showPrice);
                         $("#mealId" + thisRowNum.toString()).attr("mealMaion", JSON.stringify(mealMation));
                         calcAllPrice();
