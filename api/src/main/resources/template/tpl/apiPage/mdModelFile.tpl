@@ -7,12 +7,17 @@
 
 ### 映射地址：{{path}}
 
+### 请求类型：{{method}}
+
 ### 参数（Parameters）：
 
 | 前端参数 | 后端参数 | 字段类型 | 参数描述 | 限制条件 | 默认值 | 示例值 |
 | -------- | -------- | -------- | -------- | -------- | -------- | -------- |
 {{#each list}}
 | {{id}} | {{name}} | {{type}} | {{var}} | {{ref}} | {{default}} | {{exampleDefault}} |
+    {{#each children}}
+| - {{id}} | {{name}} | {{type}} | {{var}} | {{ref}} | {{default}} | {{exampleDefault}} |
+    {{/each}}
 {{/each}}
 
 ### 接口返回结果（Result）：

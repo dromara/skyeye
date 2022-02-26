@@ -228,6 +228,17 @@
 							<td>{{default}}</td>
 							<td>{{exampleDefault}}</td>
 						</tr>
+						{{#each children}}
+							<tr>
+								<td> - {{id}}</td>
+								<td>{{name}}</td>
+								<td>{{type}}</td>
+								<td>{{var}}</td>
+								<td>{{ref}}</td>
+								<td>{{default}}</td>
+								<td>{{exampleDefault}}</td>
+							</tr>
+						{{/each}}
 					{{/each}}
 				</tbody>
 			</table>
