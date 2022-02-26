@@ -34,8 +34,16 @@ var shopUtil = {
         if(data.cancleState == 1) {
             if (data.state == 1) {
                 return "<span class='state-down'>待支付</span>";
-            } else {
+            } else if (data.state == 2) {
                 return "<span class='state-up'>已支付</span>";
+            } else if (data.state == 3) {
+                return "<span class=''>已收货</span>";
+            } else if (data.state == 4) {
+                return "<span class=''>已关闭</span>";
+            } else if (data.state == 5) {
+                return "<span class=''>已退款</span>";
+            } else if (data.state == 0) {
+                return "<span class=''>已提交订单</span>";
             }
         } else {
             return '已取消';

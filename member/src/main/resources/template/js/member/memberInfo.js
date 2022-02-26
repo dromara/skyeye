@@ -71,11 +71,7 @@ layui.config({
             AjaxPostUtil.request({url: shopBasePath + "mealOrder001", params: params, type: 'json', method: "POST", callback: function(json){
                 if(json.returnCode == 0){
                     $.each(json.rows, function (i, item){
-                        if(item.state == '1'){
-                            item.state = "待支付";
-                        }else if(item.state == '2'){
-                            item.state = "已支付";
-                        }
+                        item.state = shopUtil.getMealOrderStateName(item);
                     });
                     $("#showForm").append(getDataUseHandlebars($("#memberMealOrderTemplate").html(), json));
                 }else{
