@@ -7,8 +7,8 @@ layui.config({
 	winui.renderColor();
     var $ = layui.$;
     var noteId = parent.noteId;
-    // 定义此变量用于editormd初始加载时也会触发onchange方法
-    var initFirst = false;
+    // 因为默认加载目录会触发change函数，所以当loadChange=2时,才出发保存按钮
+    var loadChange = 0;
 
     var layEditor = editormd("content", {
         width: ($(".file-console").width() - 5),
@@ -47,14 +47,16 @@ layui.config({
 			}});
         },
         onchange : function (){
-            if(!initFirst){
-                initFirst = true;
-                layEditor.config({
-                    tocContainer : "#custom-toc-container",
-                    tocDropdown  : false
-                });
-            }else{
+            if(loadChange == 2){
                 parent.$("#editMyNote").addClass('select');
+            }else{
+                loadChange++;
+                if(loadChange == 1){
+                    layEditor.config({
+                        tocContainer : "#custom-toc-container",
+                        tocDropdown  : false
+                    });
+                }
             }
         }
     });
