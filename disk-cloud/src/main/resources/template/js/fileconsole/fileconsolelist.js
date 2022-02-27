@@ -22,10 +22,8 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'jquery', 'winui', 'dropdown', 'fsCommon', 'fsTree', 'viewer', 'contextMenu', 'ClipboardJS', 'colorpicker', 'jqueryUI', 'webuploader'], function (exports) {
 	winui.renderColor();
-	
 	var clipboard;//复制对象
 	var clipboardcut;//剪切对象
-	
 	var $ = layui.$,
 		fsTree = layui.fsTree,
 		fsCommon = layui.fsCommon,
