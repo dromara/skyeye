@@ -36,7 +36,7 @@ layui.config({
 		    limits: getLimits(),
 			limit: getLimit(),
 		    cols: [[
-		        { title: '序号', type: 'numbers', rowspan: 2},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2},
 		        { field: 'projectName', title: '项目名称', align: 'left', width: 200, rowspan: 2, templet: function(d){
 		        	return '<a lay-event="details" class="notice-title-click">' + d.projectName + '</a>';
 		        }},

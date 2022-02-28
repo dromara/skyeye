@@ -36,7 +36,7 @@ layui.config({
         treeUpId: 'pId',//树形父id字段名称
         treeShowName: 'taskName',//以树形式显示的字段
 	    cols: [[
-	        { title: '序号', type: 'numbers', rowspan: 2},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2},
 	        { field: 'taskName', title: '名称', rowspan: 2, width: 200, templet: function(d){
 	        	return '<a lay-event="details" class="notice-title-click">' + d.taskName + '</a>';
 	        }},

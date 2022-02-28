@@ -30,7 +30,7 @@ layui.config({
 		    page: false,
 		    cols: [[
 		    	{ type: 'radio', rowspan: '2'},
-	            { title: '序号', rowspan: '2', type: 'numbers'},
+	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
 	            { field: 'orderNum', rowspan: '2', title: '单据编号', align: 'center', width: 180, templet: function(d){
 			        return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 			    }},

@@ -43,7 +43,7 @@ layui.config({
 	            maxWidth: 500 // 最大宽度
 	        },
 		    cols: [[
-		        { title: '序号', rowspan: '2', type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
 		        { field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function(d){
 			        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
 			    }},

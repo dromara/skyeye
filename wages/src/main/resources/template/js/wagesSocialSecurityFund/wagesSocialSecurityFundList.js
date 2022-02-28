@@ -43,7 +43,7 @@ layui.config({
             { field: 'accumulationCompanyAmount', title: '公积金单位(元)', align: 'center', width: 140},
             { field: 'startMonth', title: '开始月份', align: 'center', width: 80},
             { field: 'endMonth', title: '截止月份', align: 'center', width: 80},
-            { field: 'sortNo', title: '序号', align: 'left', width: 80},
+            { field: 'sortNo', title: systemLanguage["com.skyeye.serialNumber"][languageType], align: 'left', width: 80},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 100 },

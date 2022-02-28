@@ -69,7 +69,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 	        cols: [[
-	        	{ title: '序号', rowspan: '2', type: 'numbers'},
+	        	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
 	        	{ field: 'studentName', rowspan: '2', width: 80, title: '姓名'},
 	        	{ field: 'studentNo', rowspan: '2', width: 140, align: 'center', title: '学号'},
 		        { field: 'sessionYear', rowspan: '2', width: 80, align: 'center', title: '所属届'},
