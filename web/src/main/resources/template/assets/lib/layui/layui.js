@@ -4,12 +4,14 @@
  * MIT Licensed
  */
 
+var serviceIp = "127.0.0.1";
+
 // 文件路径
-var fileBasePath = "http://127.0.0.1:8081/";
+var fileBasePath = "http://" + serviceIp + ":8081/";
 
 // 接口请求地址
-var reqBasePath = "http://127.0.0.1:8081/"; // 总项目
-var shopBasePath = "http://127.0.0.1:8082/"; // 商城项目
+var reqBasePath = "http://" + serviceIp + ":8081/"; // 总项目
+var shopBasePath = "http://" + serviceIp + ":8082/"; // 商城项目
 
 var basePath = "../../assets/lib/winui/";
 var maskReqStr = '<div class="mask-req-str"><div class="cent"><i class="fa fa-spin fa-spinner fa-fw"></i><br><br><font>数据请求中</font></div></div>';
