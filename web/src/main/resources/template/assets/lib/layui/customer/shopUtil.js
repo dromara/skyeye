@@ -25,6 +25,22 @@ var shopUtil = {
     },
 
     /**
+     * 获取套餐订单是否赠送的字段信息
+     *
+     * @param data
+     * @returns {string}
+     */
+    getMealOrderWhetherGiveName: function (data){
+        if (data.whetherGive == 1) {
+            return "是";
+        } else if (data.whetherGive == 2) {
+            return "否";
+        } else {
+            return "";
+        }
+    },
+
+    /**
      * 套餐订单获取状态名称
      *
      * @param data

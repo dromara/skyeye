@@ -50,6 +50,9 @@ layui.config({
                     return "线下下单";
                 }
             }},
+            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function(d){
+                return shopUtil.getMealOrderWhetherGiveName(d);
+            }},
             { field: 'createName', title: '专属顾问', width: 120 },
             { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}

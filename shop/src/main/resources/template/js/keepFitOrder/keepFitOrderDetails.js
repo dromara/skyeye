@@ -21,6 +21,7 @@ layui.config({
                 json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
                 json.bean.userType = json.bean.userType == 1 ? '匿名客户' : '会员';
                 json.bean.state = shopUtil.getKeepFitOrderStateName(json.bean);
+                json.bean.whetherGive = shopUtil.getMealOrderWhetherGiveName(json.bean);
                 json.bean.type = json.bean.type == 1 ? '线上下单' : '线下下单';
             },
             ajaxSendAfter:function(json){

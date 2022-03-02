@@ -55,6 +55,9 @@ layui.config({
                     return "线下下单";
                 }
             }},
+            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", rowspan: '2', templet: function(d){
+                return shopUtil.getMealOrderWhetherGiveName(d);
+            }},
             { field: 'createName', title: '专属顾问', width: 120, rowspan: '2' },
             { field: 'createTime', title: '创建时间', align: 'center', width: 150, rowspan: '2' },
         ],[
