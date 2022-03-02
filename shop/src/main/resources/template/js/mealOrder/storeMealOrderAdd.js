@@ -54,8 +54,12 @@ layui.config({
             tools: ['count', 'copy', 'reset']
         });
 
-        // 获取会员拥有的车辆信息
-        AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: memberMation.id}, type: 'json', method: "POST", callback: function(json){
+        var params = {
+            memberId: memberMation.id,
+            enabled: 1
+        };
+        // 获取会员拥有的车辆信息(已启用)
+        AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: params, type: 'json', method: "POST", callback: function(json){
             if(json.returnCode == 0){
                 $.each(json.rows, function (i, item){
                     item.name = item.modelType + "(" + item.plate + ")";
