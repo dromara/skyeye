@@ -48,6 +48,7 @@ layui.config({
             /*{ field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
             { field: 'servicePrice', title: '服务费', width: 100, align: "left"},*/
             { field: 'storeName', title: '保养门店', align: 'left', width: 120 },
+            { field: 'mealBuyStoreName', title: '套餐购买门店', align: 'left', width: 120 },
             { field: 'state', title: '订单状态', width: 100, align: "center", templet: function(d){
                 return shopUtil.getKeepFitOrderStateName(d);
             }},
