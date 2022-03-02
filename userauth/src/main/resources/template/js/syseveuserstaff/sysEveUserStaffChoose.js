@@ -1,7 +1,4 @@
 
-var companyId = "";
-var departmentId = "";
-var jobId = "";
 var rowId = "";
 
 layui.config({
@@ -160,7 +157,7 @@ layui.config({
 		showGrid({
 		 	id: "departmentList",
 		 	url: reqBasePath + "companydepartment007",
-		 	params: {companyId: companyId},
+		 	params: {companyId: $("#companyList").val()},
 		 	pagination: false,
 		 	template: selTemplate,
 		 	ajaxSendLoadBefore: function(hdb){},
@@ -175,7 +172,7 @@ layui.config({
 		showGrid({
 		 	id: "jobList",
 		 	url: reqBasePath + "companyjob007",
-		 	params: {departmentId: departmentId},
+		 	params: {departmentId: $("#departmentList").val()},
 		 	pagination: false,
 		 	template: selTemplate,
 		 	ajaxSendLoadBefore: function(hdb){},
@@ -187,23 +184,13 @@ layui.config({
 	
 	// 公司监听事件
 	form.on('select(companyList)', function(data){
-		companyId = data.value;
-		departmentId = '';
-		jobId = '';
 		initDepartment();
 		initJob();
 	});
 	
 	// 部门监听事件
 	form.on('select(departmentList)', function(data){
-		departmentId = data.value;
-		jobId = '';
 		initJob();
-	});
-	
-	// 职位监听事件
-	form.on('select(jobList)', function(data){
-		jobId = data.value;
 	});
 	
 	// 保存
@@ -251,9 +238,9 @@ layui.config({
 			userName: $("#userName").val(),
     		userSex: $("#userSex").val(),
     		userIdCard: $("#userIdCard").val(),
-    		companyName: companyId,
-    		departmentName: departmentId,
-    		jobName: jobId
+    		companyName: $("#companyList").val(),
+    		departmentName: $("#departmentList").val(),
+    		jobName: $("#jobList").val()
 		};
 	}
 	
