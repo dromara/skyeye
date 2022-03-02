@@ -127,6 +127,9 @@ layui.config({
             state: $("#state").val(),
             memberCarPlate: $("#memberCarPlate").val(),
             areaId: $("#areaId").val(),
+            type: $("#type").val(),
+            serviceTechnicianName: $("#serviceTechnicianName").val(),
+            createName: $("#createName").val(),
             storeId: $("#storeId").val()
         };
     }
