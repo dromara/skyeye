@@ -36,6 +36,7 @@ layui.config({
             }
         });
 
+        var carHasMealList = [];
         // 车辆信息变化
         form.on('select(memberCar)', function(data) {
             var val = data.value;
@@ -45,12 +46,26 @@ layui.config({
                 // 获取车辆用于的套餐信息
                 AjaxPostUtil.request({url: shopBasePath + "queryMealMationByCarId", params: {carId: val}, type: 'json', method: "GET", callback: function(json){
                     if(json.returnCode == 0){
+                        carHasMealList = [].concat(json.rows);
                         $("#mealId").html(getDataUseHandlebars(selOption, json));
                         form.render('select');
                     }else{
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: false});
+            }
+        });
+
+        // 套餐变化
+        form.on('select(mealId)', function(data) {
+            var val = data.value;
+            if(isNull(val)){
+                $("#mealExplain").html("");
+                $("#mealConsume").html("");
+            }else{
+                var item = getInPoingArr(carHasMealList, "id", val, null);
+                $("#mealExplain").html(item.mealExplain);
+                $("#mealConsume").html(item.mealConsume);
             }
         });
 
