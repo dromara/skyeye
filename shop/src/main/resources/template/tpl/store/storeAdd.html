@@ -50,6 +50,14 @@
             </div>
         </form>
     </div>
+
+    <script type="text/x-handlebars-template" id="selectTemplate">
+        <option value="-">默认区域</option>
+        {{#each rows}}
+        <option value="{{id}}">{{name}}</option>
+        {{/each}}
+    </script>
+
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">

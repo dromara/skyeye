@@ -17,11 +17,15 @@ layui.config({
         var selOption = getFileContent('tpl/template/select-option.tpl');
 
         var usetableTemplate = $("#usetableTemplate").html();
-        var memberCarHtml = "";
 
+        var storeList = [];
         // 加载我所在的门店
         shopUtil.queryStaffBelongStoreList(function (json){
+            storeList = [].concat(json.rows);
             $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
+        });
+        form.on('select(storeId)', function(data) {
+            calcMealChoose();
         });
 
         // 用户类型变化
@@ -47,8 +51,7 @@ layui.config({
                 AjaxPostUtil.request({url: shopBasePath + "queryMealMationByCarId", params: {carId: val}, type: 'json', method: "GET", callback: function(json){
                     if(json.returnCode == 0){
                         carHasMealList = [].concat(json.rows);
-                        $("#mealId").html(getDataUseHandlebars(selOption, json));
-                        form.render('select');
+                        calcMealChoose();
                     }else{
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
@@ -68,6 +71,23 @@ layui.config({
                 $("#mealConsume").html(item.mealConsume);
             }
         });
+
+        function calcMealChoose(){
+            // 获取选中门店所属的区域id
+            var storeId = $("#storeId").val();
+            var chooseStoreAreaId = getInPoingArr(storeList, "id", storeId, "areaId");
+
+            var tempList = [].concat(carHasMealList);
+            $.each(tempList, function (i, item){
+                if(item.areaId != chooseStoreAreaId){
+                    item.choose = "disabled";
+                }else{
+                    item.choose = "";
+                }
+            });
+            $("#mealId").html(getDataUseHandlebars($("#mealTemplate").html(), {rows: tempList}));
+            form.render('select');
+        }
 
         textool.init({
             eleId: 'remark',

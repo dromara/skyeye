@@ -18,7 +18,7 @@ layui.config({
 
         // 加载区域
         shopUtil.getShopAreaMation(function (json){
-            $("#areaId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+            $("#areaId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
         });
 
         // 加载行政区划-省

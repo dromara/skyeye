@@ -127,7 +127,14 @@
 
     <script type="text/x-handlebars-template" id="selectTemplate">
         {{#each rows}}
-            <option value="{{id}}">{{name}}</option>
+            <option value="{{id}}">【{{areaName}}】 {{name}}</option>
+        {{/each}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="mealTemplate">
+        <option value="">全部</option>
+        {{#each rows}}
+        <option value="{{id}}" {{choose}}>{{name}} 适用区域：【{{areaName}}】</option>
         {{/each}}
     </script>
 
