@@ -174,7 +174,8 @@ layui.config({
     function getTableParams(){
         return {
             name: $("#name").val(),
-            areaId: $("#areaId").val()
+            areaId: $("#areaId").val(),
+            enabled: $("#enabled").val()
         };
     }
 
