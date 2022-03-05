@@ -64,6 +64,10 @@ layui.config({
             editNotEnabled(data)
         }else if(layEvent == 'select'){ //详情
             selectMember(data)
+        }else if(layEvent == 'memberCar'){ //车辆信息
+            memberCar(data)
+        }else if(layEvent == 'mealList'){ //套餐购买信息
+            mealList(data)
         }
     });
 
@@ -135,6 +139,33 @@ layui.config({
             url: "../../tpl/member/memberInfo.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "memberinfo",
+            area: ['90vw', '90vh'],
+            callBack: function(refreshCode){
+            }
+        });
+    }
+
+    // 车辆信息
+    function memberCar(data){
+        rowId = data.id;
+        _openNewWindows({
+            url: "../../tpl/memberCar/memberCarList.html",
+            title: '车辆信息',
+            pageId: "memberCarList",
+            area: ['90vw', '90vh'],
+            callBack: function(refreshCode){
+            }
+        });
+    }
+
+    // 套餐购买信息
+    function mealList(data){
+        rowId = data.id;
+        memberMation = data;
+        _openNewWindows({
+            url: "../../tpl/mealOrder/memberMealOrderList.html",
+            title: '套餐购买信息',
+            pageId: "memberMealOrderList",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
             }
