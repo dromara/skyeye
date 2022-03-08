@@ -10,10 +10,16 @@ layui.config({
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
+    var selOption = getFileContent('tpl/template/select-option.tpl');
 
     // 加载我所在的门店
     shopUtil.queryStaffBelongStoreList(function (json){
         $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
+    });
+
+    // 加载套餐订单性质
+    shopUtil.queryMealOrderNatureList(function (json){
+        $("#natureId").html(getDataUseHandlebars(selOption, json));
     });
 
     form.on('select(storeId)', function(data) {
@@ -42,6 +48,7 @@ layui.config({
             { field: 'state', title: '订单状态', width: 80, align: "center", templet: function(d){
                 return shopUtil.getMealOrderStateName(d);
             }},
+            { field: 'natureName', title: '订单性质', width: 80, align: "center"},
             { field: 'payTime', title: '支付时间', align: 'center', width: 150 },
             { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
                 if(d.type == 1){
@@ -163,6 +170,7 @@ layui.config({
             orderNum: $("#orderNum").val(),
             memberName: $("#memberName").val(),
             memberPhone: $("#memberPhone").val(),
+            natureId: $("#natureId").val(),
             state: $("#state").val(),
             storeId: storeId
         };

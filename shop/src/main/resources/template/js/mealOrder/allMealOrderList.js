@@ -24,6 +24,11 @@ layui.config({
         });
     });
 
+    // 加载套餐订单性质
+    shopUtil.queryMealOrderNatureList(function (json){
+        $("#natureId").html(getDataUseHandlebars(selOption, json));
+    });
+
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
@@ -47,6 +52,7 @@ layui.config({
             { field: 'state', title: '订单状态', width: 80, align: "center", rowspan: '2', templet: function(d){
                 return shopUtil.getMealOrderStateName(d);
             }},
+            { field: 'natureName', title: '订单性质', width: 80, rowspan: '2', align: "center"},
             { field: 'payTime', title: '支付时间', align: 'center', rowspan: '2', width: 150 },
             { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function(d){
                 if(d.type == 1){
@@ -112,6 +118,7 @@ layui.config({
             orderNum: $("#orderNum").val(),
             memberName: $("#memberName").val(),
             memberPhone: $("#memberPhone").val(),
+            natureId: $("#natureId").val(),
             state: $("#state").val(),
             areaId: $("#areaId").val(),
             storeId: $("#storeId").val()

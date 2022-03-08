@@ -38,6 +38,7 @@ layui.config({
             { field: 'state', title: '订单状态', width: 80, align: "center", templet: function(d){
                 return shopUtil.getMealOrderStateName(d);
             }},
+            { field: 'natureName', title: '订单性质', width: 80, align: "center"},
             { field: 'payTime', title: '支付时间', align: 'center', width: 150 },
             { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
                 if(d.type == 1){

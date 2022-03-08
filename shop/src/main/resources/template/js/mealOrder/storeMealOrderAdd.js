@@ -48,6 +48,11 @@ layui.config({
             $("#allPrice").html("0 元");
         });
 
+        // 加载套餐订单性质
+        shopUtil.queryMealOrderNatureList(function (json){
+            $("#natureId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
+        });
+
         textool.init({
             eleId: 'remark',
             maxlength: 400,
@@ -100,6 +105,7 @@ layui.config({
 
                 var params = {
                     storeId: $("#storeId").val(),
+                    natureId: $("#natureId").val(),
                     memberId: memberMation.id,
                     remark: $("#remark").val(),
                     type: 2,
