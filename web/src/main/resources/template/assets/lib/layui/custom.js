@@ -27,6 +27,26 @@ var customerJS = {
 	"shopUtil": "../../assets/lib/layui/customer/shopUtil.js", // 商城模块相关工具
 };
 
+//系统基础信息
+var sysMainMation = {}; // 系统基础信息json
+if(isNull(localStorage.getItem("sysMainMation"))){
+	jsGetJsonFile("../../configRation.json", function(data){
+		sysMainMation = data;
+		localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
+	});
+}else{
+	sysMainMation = JSON.parse(unescape(localStorage.getItem("sysMainMation")));
+}
+
+var skyeyeVersion = sysMainMation.skyeyeVersion;
+// 文件路径
+var fileBasePath = sysMainMation.fileBasePath;
+// 接口请求地址
+var reqBasePath = sysMainMation.reqBasePath; // 总项目
+var shopBasePath = sysMainMation.shopBasePath; // 商城项目
+
+var webSocketPath = sysMainMation.webSocketPath;//聊天socket-开发
+
 // 编辑加载自定义的js文件
 layui.each(customerJS, function(key, jsPath){
 	if(jsPath.lastIndexOf(".js") >=0){

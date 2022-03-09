@@ -18,12 +18,8 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 		var $ = layui.$;
 		
-		MiniSite.JsLoader.load(reqBasePath + "json/main.js", function(){
-			$.cookie('sysMainMation', "", {path: '/' });
-			setCookie('sysMainMation', JSON.stringify(sysMainMation), 'd30');
-			$(document).attr("title", sysMainMation.mationTitle);
-			$(".sys-logo").html(sysMainMation.mationTitle);
-		});
+		$(document).attr("title", sysMainMation.mationTitle);
+		$(".sys-logo").html(sysMainMation.mationTitle);
 		var rowId = GetUrlParam("id");
 	    
 		AjaxPostUtil.request({url:reqBasePath + "fileconsole019", params: {rowId: rowId}, type:'json', callback:function(json){

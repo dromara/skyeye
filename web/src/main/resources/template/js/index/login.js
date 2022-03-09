@@ -10,10 +10,10 @@ layui.config({
 	layui.use(['form'], function (form) {
 		var $ = layui.$;
 		form.render();
-		
-		MiniSite.JsLoader.load("../../json/main.js", function(){
-			$.cookie('sysMainMation', "", {path: '/' });
-			setCookie('sysMainMation', JSON.stringify(sysMainMation), 'd30');
+
+		jsGetJsonFile("../../configRation.json", function(data){
+			sysMainMation = data;
+			localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
 		});
 
 		// 主动发起多语言文件加载

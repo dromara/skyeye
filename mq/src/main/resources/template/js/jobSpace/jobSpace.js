@@ -20,13 +20,9 @@ layui.config({
     	tab2: {load: false, initMethod: myAccessList} // 我的获取
     };
 	
-	MiniSite.JsLoader.load(reqBasePath + "json/main.js", function(){
-		$.cookie('sysMainMation', "", {path: '/' });
-		setCookie('sysMainMation', JSON.stringify(sysMainMation), 'd30');
-		$(document).attr("title", sysMainMation.mationTitle);
-		$(".sys-logo").html(sysMainMation.mationTitle);
-	});
-	
+	$(document).attr("title", sysMainMation.mationTitle);
+	$(".sys-logo").html(sysMainMation.mationTitle);
+
 	element.on('tab(jobDetail)', function(obj){
 		var mation = tabTable["tab" + obj.index];
 		if(!isNull(mation)){

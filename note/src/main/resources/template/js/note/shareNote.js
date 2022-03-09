@@ -10,16 +10,11 @@ layui.config({
     var $ = layui.$,
 	    form = layui.form;
 	form.render();
-	
 	var rowId = GetUrlParam("id");
 	
-	MiniSite.JsLoader.load(reqBasePath + "json/main.js", function(){
-		$.cookie('sysMainMation', "", {path: '/' });
-		setCookie('sysMainMation', JSON.stringify(sysMainMation), 'd30');
-		$(document).attr("title", sysMainMation.mationTitle);
-		$(".sys-logo").html(sysMainMation.mationTitle);
-	});
-	
+	$(document).attr("title", sysMainMation.mationTitle);
+	$(".sys-logo").html(sysMainMation.mationTitle);
+
 	// 隐藏遮罩层
 	$(".fileconsole-mask").hide();
 	

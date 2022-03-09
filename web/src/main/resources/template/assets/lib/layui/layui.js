@@ -4,21 +4,9 @@
  * MIT Licensed
  */
 
-var serviceIp = "127.0.0.1";
-
-// 文件路径
-var fileBasePath = "http://" + serviceIp + ":8081/";
-
-// 接口请求地址
-var reqBasePath = "http://" + serviceIp + ":8081/"; // 总项目
-var shopBasePath = "http://" + serviceIp + ":8082/"; // 商城项目
-
 var basePath = "../../assets/lib/winui/";
 var maskReqStr = '<div class="mask-req-str"><div class="cent"><i class="fa fa-spin fa-spinner fa-fw"></i><br><br><font>数据请求中</font></div></div>';
-var skyeyeVersion = "1.0.0-beta";
-var webSocketPath = "";//聊天socket-开发
 var returnCitySN = {"cip": "", "cid": "CN", "cname": "CHINA"};//ip json
-var sysMainMation = '';//系统基础信息json
 var addrs = '';//地址json
 //文件类型
 var imageType = ["png", "jpg", "xbm", "bmp", "webp", "jpeg", "svgz", "git", "ico", "tiff", "svg", "jiff", "pjpeg", "pjp", "tif", "gif"];
@@ -89,17 +77,6 @@ MiniSite.JsLoader={
 		}
 	}
 };
-
-//系统基础信息
-if(isNull(getCookie("sysMainMation"))){
-	MiniSite.JsLoader.load("../../json/main.js", function(){
-		setCookie('sysMainMation', JSON.stringify(sysMainMation), 'd30');
-	});
-}else{
-	sysMainMation = JSON.parse(unescape(getCookie("sysMainMation")));
-}
-
-webSocketPath = sysMainMation.webSocketPath;
 
 // 用户中英文类型
 var languageType = isNull(getCookie("languageType")) ? "zh" : getCookie("languageType");

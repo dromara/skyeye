@@ -36,6 +36,8 @@ public class SessionFilter implements Filter {
 	public static final String LOGIN_PAGE = "/tpl/index/login.html";
 
 	public static final String WEB_API_URL = "http://localhost:8081/";
+
+	public static final String CONFIG_URL = "configRation.json";
 	
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -66,12 +68,17 @@ public class SessionFilter implements Filter {
 			return;
 		}
 
+		if(CONFIG_URL.equals(url.replaceAll("/", ""))){
+			request.getRequestDispatcher("/getConfigRation").forward(request, response);
+			return;
+		}
+
 		// 系统资源过滤/转换请求过滤
 		if(resourceFiltering(url) || requestFiltering(request, url)){
 			chain.doFilter(request, response);
 			return;
 		}
-		
+
 		return;
 	}
 

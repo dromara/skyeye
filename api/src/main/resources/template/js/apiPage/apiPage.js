@@ -24,12 +24,8 @@ layui.config({
 			menuBoxTemplate = $("#menuBoxTemplate").html(),
 			modelTemplate = $("#modelTemplate").html();
 
-		MiniSite.JsLoader.load("../../json/main.js", function(){
-			$.cookie('sysMainMation', "", {path: '/' });
-			setCookie('sysMainMation', JSON.stringify(sysMainMation), 'd30');
-			$(document).attr("title", sysMainMation.mationTitle);
-			$(".sys-logo").html(sysMainMation.mationTitle);
-		});
+		$(document).attr("title", sysMainMation.mationTitle);
+		$(".sys-logo").html(sysMainMation.mationTitle);
 
 		loadUserMation();
 		//加载用户信息
