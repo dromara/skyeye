@@ -50,22 +50,34 @@ layui.config({
 		    ]],
 		    done: function(res, curr, count){
 		    	matchingLanguage();
+
+				for (var i = 0; i < res.rows.length; i++) {
+					// 禁用的不可选中
+					if(res.rows[i].enabled == 2){
+						systemCommonUtil.disabledRow(res.rows[i].LAY_TABLE_INDEX, 'radio');
+					}
+				}
+
 				$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 					var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
-					dubClick.find("input[type='radio']").prop("checked", true);
-					form.render();
-					var chooseIndex = JSON.stringify(dubClick.data('index'));
-					var obj = res.rows[chooseIndex];
-					parent.sysMemberUtil.memberMation = obj;
+					if(!dubClick.find("input[type='radio']").prop("disabled")) {
+						dubClick.find("input[type='radio']").prop("checked", true);
+						form.render();
+						var chooseIndex = JSON.stringify(dubClick.data('index'));
+						var obj = res.rows[chooseIndex];
+						parent.sysMemberUtil.memberMation = obj;
 
-					parent.refreshCode = '0';
-					parent.layer.close(index);
+						parent.refreshCode = '0';
+						parent.layer.close(index);
+					}
 				});
 
 				$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('click',function(){
 					var click = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
-					click.find("input[type='radio']").prop("checked", true);
-					form.render();
+					if(!click.find("input[type='radio']").prop("disabled")) {
+						click.find("input[type='radio']").prop("checked", true);
+						form.render();
+					}
 				})
 		    }
 		});
