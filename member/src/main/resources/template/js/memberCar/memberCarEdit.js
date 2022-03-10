@@ -9,6 +9,7 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$,
         	textool = layui.textool;
+        var memberId = "";
         showGrid({
             id: "showForm",
             url: shopBasePath + "memberCar003",
@@ -18,7 +19,7 @@ layui.config({
             template: $("#beanTemplate").html(),
             ajaxSendLoadBefore: function(hdb){},
             ajaxSendAfter:function(data){
-            	
+                memberId = data.bean.memberId;
             	textool.init({
 			    	eleId: 'remark',
 			    	maxlength: 400,
@@ -36,6 +37,7 @@ layui.config({
                             modelType: $("#modelType").val(),
                             vinCode: $("#vinCode").val(),
                             insure: $("input[name='insure']:checked").val(),
+                            memberId: memberId,
                             remark: $("#remark").val()
                         };
                         AjaxPostUtil.request({url: shopBasePath + "memberCar005", params: params, type: 'json', method: "PUT", callback: function(json){
