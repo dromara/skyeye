@@ -252,7 +252,7 @@ layui.config({
 		    				winui.lockScreen(function(password) {
 		    					if(!isNull(password)) {
 		    						var pJudge = false;
-		    						AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', callback: function(json) {
+		    						AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function(json) {
 										if(json.returnCode == 0) {
 											pJudge = true;
 										}else{
@@ -426,17 +426,17 @@ layui.config({
 						winui.lockScreen(function (password) {
 	   		            	if(!isNull(password)){
 		   		         		var pJudge = false;
-		   		         		AjaxPostUtil.request({url:reqBasePath + "login008", params:{password: password}, type:'json', callback:function(json){
+		   		         		AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function(json){
 		   		      	   			if(json.returnCode == 0){
 		   		      	   				pJudge = true;
 		   		      	   			}else{
 		   		      	   				pJudge = false;
-		   		      	   				winui.window.msg(json.returnMessage, { shift: 6 });
+		   		      	   				winui.window.msg(json.returnMessage, {shift: 6});
 		   		      	   			}
 		   		      	   		}, async: false});
 		   		         		return pJudge;
 		   		         	}else{
-		   		         		winui.window.msg('请输入密码', { shift: 6 });
+		   		         		winui.window.msg('请输入密码', {shift: 6});
 		   		                return false;
 		   		         	}
 	   		             });
