@@ -16,9 +16,14 @@ layui.config({
             $("#mealRefundReasonId").html(getDataUseHandlebars(selOption, json));
         });
 
-        var mealSinglePrice = division(parent.dataMation.mealPrice, parent.dataMation.mealNum);
-        var refundPrice = multiplication(mealSinglePrice, parent.dataMation.remainMealNum);
-        $("#refundPrice").val(refundPrice);
+        if(parent.dataMation.mealNum == parent.dataMation.remainMealNum){
+            // 套餐未使用
+            $("#refundPrice").val(parent.dataMation.mealPrice);
+        }else{
+            var mealSinglePrice = division(parent.dataMation.mealPrice, parent.dataMation.mealNum);
+            var refundPrice = multiplication(mealSinglePrice, parent.dataMation.remainMealNum);
+            $("#refundPrice").val(refundPrice);
+        }
 
         matchingLanguage();
         form.render();
