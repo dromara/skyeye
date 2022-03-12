@@ -31,6 +31,11 @@ layui.config({
         memberMation = parent.memberMation;
         $("#memberName").html(memberMation.contacts);
 
+        // 获取当前登录员工信息
+        systemCommonUtil.getSysCurrentLoginUserMation(function (json){
+            $("#label").html(json.bean.label);
+        });
+
         // 加载我所在的门店
         shopUtil.queryStaffBelongStoreList(function (json){
             $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
@@ -108,6 +113,7 @@ layui.config({
                     natureId: $("#natureId").val(),
                     memberId: memberMation.id,
                     remark: $("#remark").val(),
+                    label: $("#label").html(),
                     type: 2,
                     source: 2,
                     mealList: JSON.stringify(tableData)

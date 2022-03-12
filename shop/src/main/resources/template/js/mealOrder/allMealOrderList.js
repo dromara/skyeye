@@ -53,6 +53,7 @@ layui.config({
                 return shopUtil.getMealOrderStateName(d);
             }},
             { field: 'natureName', title: '订单性质', width: 80, rowspan: '2', align: "center"},
+            { field: 'label', title: '员工标签', width: 120, align: "left"},
             { field: 'payTime', title: '支付时间', align: 'center', rowspan: '2', width: 150 },
             { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function(d){
                 if(d.type == 1){
@@ -119,6 +120,7 @@ layui.config({
             memberName: $("#memberName").val(),
             memberPhone: $("#memberPhone").val(),
             natureId: $("#natureId").val(),
+            label: $("#label").val(),
             state: $("#state").val(),
             areaId: $("#areaId").val(),
             storeId: $("#storeId").val()
