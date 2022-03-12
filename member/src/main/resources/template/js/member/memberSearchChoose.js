@@ -127,7 +127,7 @@ layui.config({
 		var phone = $("#phone").val();
 		var email = $("#email").val();
 		if(isNull(contacts) && isNull(phone) && isNull(email)){
-			contacts = "!-!";
+			contacts = "!-!!@#$%^&*";
 		}
 		return {
 			contacts: contacts,
