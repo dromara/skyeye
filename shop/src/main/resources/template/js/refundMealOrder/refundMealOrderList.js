@@ -58,8 +58,10 @@ layui.config({
                     return "待审核";
                 }else if(d.state == 2){
                     return "退款驳回";
-                }else {
+                }else if(d.state == 3){
                     return "已退款";
+                }else {
+                    return "取消退款";
                 }
             }},
             { field: 'storeName', title: '缴费门店', width: 150, align: "left"},

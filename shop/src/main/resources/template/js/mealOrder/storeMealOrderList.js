@@ -84,6 +84,8 @@ layui.config({
             cancleOrder(data)
         }else if(layEvent == 'refundMealOrder'){ // 退款
             refundMealOrder(data)
+        }else if(layEvent == 'cancleRefundMealOrder'){ // 取消退款
+            cancleRefundMealOrder(data)
         }
     });
 
@@ -107,6 +109,21 @@ layui.config({
         layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "cancleMealOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
+                if(json.returnCode == 0){
+                    winui.window.msg('取消成功.', {icon: 1, time: 2000});
+                    loadTable();
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
+            }, async: true});
+        });
+    }
+
+    // 取消退款
+    function cancleRefundMealOrder(data){
+        layer.confirm('确认取消退款申请吗？', {icon: 3, title: '取消退款'}, function(index){
+            layer.close(index);
+            AjaxPostUtil.request({url: shopBasePath + "approvelRefundMealOrder", params: {id: data.refundOrderId, state: 4}, type: 'json', method: "POST", callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg('取消成功.', {icon: 1, time: 2000});
                     loadTable();

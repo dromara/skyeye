@@ -75,6 +75,9 @@
             {{# if((d.state == 2 || d.state == 3 || d.state == 6) && auth('1647059493157')){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="refundMealOrder">退款</a>
             {{# } }}
+            {{# if(d.state == 51 && auth('1647068337312')){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="cancleRefundMealOrder">取消退款</a>
+            {{# } }}
         </script>
     </div>
 
