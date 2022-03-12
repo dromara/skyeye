@@ -35,9 +35,11 @@ layui.config({
                     return "会员";
                 }
             }},
-            { field: 'memberCarPlate', title: '车牌号', width: 100, align: "left"},
             { field: 'contacts', title: '会员名称', width: 100 },
             { field: 'phone', title: '会员手机号', width: 100, align: "center"},
+            { field: 'modelType', title: '车型', width: 100, align: "left"},
+            { field: 'plate', title: '车牌号', width: 100, align: "left"},
+            { field: 'vinCode', title: 'VIN码', width: 100, align: "left"},
             /*{ field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
             { field: 'servicePrice', title: '服务费', width: 100, align: "left"},*/
             { field: 'storeName', title: '保养门店', align: 'left', width: 120 },
@@ -49,6 +51,8 @@ layui.config({
             { field: 'payTime', title: '实付日期', align: 'center', width: 150 },*/
             { field: 'mealName', title: '套餐名称', align: 'left', width: 150 },
             { field: 'mealSinglePrice', title: '套餐内消耗', align: 'left', width: 120 },
+            { field: 'mealExplain', title: '套餐说明', align: 'left', width: 150 },
+            { field: 'mealConsume', title: '耗材说明', align: 'left', width: 150 },
             { field: 'serviceTechnicianName', title: '维修技师', align: 'left', width: 120 },
             { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
                 if(d.type == 1){
