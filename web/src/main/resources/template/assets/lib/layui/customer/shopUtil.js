@@ -42,6 +42,23 @@ var shopUtil = {
     },
 
     /**
+     * 获取套餐订单已启用的退款原因列表
+     *
+     * @param callback 回执函数
+     */
+    queryRefundMealOrderReasonList: function (callback){
+        AjaxPostUtil.request({url: shopBasePath + "queryUseingMealRefundOrderReasonList", params: {}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
+    /**
      * 获取套餐订单是否赠送的字段信息
      *
      * @param data
@@ -77,6 +94,10 @@ var shopUtil = {
                 return "<span class=''>已退款</span>";
             } else if (data.state == 0) {
                 return "<span class=''>已提交订单</span>";
+            } else if (data.state == 51) {
+                return "<span class=''>退款中</span>";
+            } else if (data.state == 6) {
+                return "<span class=''>退款驳回</span>";
             }
         } else {
             return '已取消';

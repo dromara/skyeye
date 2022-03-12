@@ -18,10 +18,6 @@
             </div>
             <div class="layui-form-item layui-col-xs12" style="margin-top: 10px;">
                 <div class="layui-inline">
-                    <label class="layui-form-label">订单编号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" id="orderNum" name="orderNum" placeholder="请输入订单编号" class="layui-input" />
-                    </div>
                     <label class="layui-form-label">会员名称</label>
                     <div class="layui-input-inline">
                         <input type="text" id="memberName" name="memberName" placeholder="请输入会员名称" class="layui-input" />
@@ -30,23 +26,43 @@
                     <div class="layui-input-inline">
                         <input type="text" id="memberPhone" name="memberPhone" placeholder="请输入会员手机号" class="layui-input" />
                     </div>
-                    <label class="layui-form-label">订单状态</label>
+                    <label class="layui-form-label">车牌号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="plate" name="plate" placeholder="请输入车牌号" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">VIN码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="vinCode" name="vinCode" placeholder="请输入VIN码" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">专属顾问</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="consultantName" name="consultantName" placeholder="请输入专属顾问" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">审核状态</label>
                     <div class="layui-input-inline">
                         <select id="state" name="state" lay-filter="state" lay-search="">
                             <option value="">全部</option>
-                            <option value="0">已提交</option>
-                            <option value="1">待支付</option>
-                            <option value="2">已支付</option>
-                            <option value="3">已收货</option>
-                            <option value="4">已关闭</option>
-                            <option value="5">已退款</option>
-                            <option value="10">已取消</option>
+                            <option value="1">待确认</option>
+                            <option value="2">退款驳回</option>
+                            <option value="3">已退款</option>
+                        </select>
+                    </div>
+                    <label class="layui-form-label">是否赠送</label>
+                    <div class="layui-input-inline">
+                        <select id="whetherGive" name="whetherGive" lay-filter="whetherGive" lay-search="">
+                            <option value="">全部</option>
+                            <option value="1">是</option>
+                            <option value="2">否</option>
                         </select>
                     </div>
                     <label class="layui-form-label">订单性质</label>
                     <div class="layui-input-inline">
                         <select id="natureId" name="natureId" lay-filter="natureId" lay-search="">
                         </select>
+                    </div>
+                    <label class="layui-form-label">退款时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="refundTime" name="refundTime" placeholder="请选择退款时间范围" class="layui-input" />
                     </div>
                     <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
                     <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
@@ -63,17 +79,11 @@
         <table id="messageTable" lay-filter="messageTable"></table>
 
         <script type="text/html" id="tableBar">
-            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644239605004')){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+            {{# if(d.state == 1 && auth('1647062128499')){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="rejection">驳回</a>
             {{# } }}
-            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644250434164')){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="complatePay">完成支付</a>
-            {{# } }}
-            {{# if(d.cancleState == 1 && d.state == 1 && auth('1644842735595')){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="cancleOrder">取消订单</a>
-            {{# } }}
-            {{# if((d.state == 2 || d.state == 3 || d.state == 6) && auth('1647059493157')){ }}
-                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="refundMealOrder">退款</a>
+            {{# if(d.state == 1 && auth('1647062128499')){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="pass">退款</a>
             {{# } }}
         </script>
     </div>
@@ -87,7 +97,7 @@
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/mealOrder/'}).use('storeMealOrderList');
+        layui.config({base: '../../js/refundMealOrder/'}).use('refundMealOrderList');
     </script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 var rowId = "";
 
+var dataMation = {};
+
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -80,6 +82,8 @@ layui.config({
             complatePay(data)
         }else if(layEvent == 'cancleOrder'){ // 取消订单
             cancleOrder(data)
+        }else if(layEvent == 'refundMealOrder'){ // 退款
+            refundMealOrder(data)
         }
     });
 
@@ -124,6 +128,24 @@ layui.config({
             callBack: function(refreshCode){
             }
         });
+    }
+
+    // 退款
+    function refundMealOrder(data){
+        dataMation = data;
+        _openNewWindows({
+            url: "../../tpl/refundMealOrder/refundMealOrder.html",
+            title: '退款',
+            pageId: "refundMealOrder",
+            area: ['90vw', '90vh'],
+            callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    loadTable();
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                }
+            }});
     }
 
     // 完成支付
