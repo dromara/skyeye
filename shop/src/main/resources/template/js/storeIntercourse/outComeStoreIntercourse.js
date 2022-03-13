@@ -43,9 +43,9 @@ layui.config({
             { field: 'intercourseTime', title: '往来时间', width: 120 },
             { field: 'state', title: '状态', align: 'center', width: 80, templet: function(d){
                 if(d.state == 1){
-                    return "<span class='state-down'>待确认</span>";
+                    return "<span class='state-down'>待支付</span>";
                 } else {
-                    return "<span class='state-up'>已确认</span>";
+                    return "<span class='state-up'>已支付</span>";
                 }
             }},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
