@@ -42,6 +42,14 @@ function getOneYMFormatDate(){
     return year.toString() + "-" + month.toString();
 }
 
+// 获取指定Date的日期
+function getPointYMFormatDate(date){
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" + month : month);
+    return year.toString() + "-" + month.toString();
+}
+
 /**
  * 获取指定日期是第几周
  *
@@ -396,6 +404,11 @@ function DateAdd(interval, number, date) {
         }
         case "m": {
             date.setMonth(date.getMonth() + number);
+            return date;
+            break;
+        }
+        case "-m": {
+            date.setMonth(date.getMonth() - number);
             return date;
             break;
         }

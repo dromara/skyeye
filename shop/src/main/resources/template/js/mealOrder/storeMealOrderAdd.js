@@ -56,6 +56,7 @@ layui.config({
         // 加载套餐订单性质
         shopUtil.queryMealOrderNatureList(function (json){
             $("#natureId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
+            form.render('select');
         });
 
         textool.init({

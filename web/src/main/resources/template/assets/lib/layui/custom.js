@@ -392,6 +392,45 @@ function getOption(title, subtext, xNameData, yTitle, yNameData, type){
 	};
 }
 
+/**
+ * echarts简单图形参数
+ * @param {} title		标题
+ * @param {} subtext	描述
+ * @param {} data	数据
+ * @return {}
+ */
+function getPieChatOption(title, subtext, data){
+	return {
+		title: {
+			text: title,
+			subtext: subtext,
+			left: 'center'
+		},
+		tooltip: {
+			trigger: 'item'
+		},
+		legend: {
+			bottom: '5%',
+			left: 'center'
+		},
+		series: [
+			{
+				name: '',
+				type: 'pie',
+				radius: '50%',
+				data: data,
+				emphasis: {
+					itemStyle: {
+						shadowBlur: 10,
+						shadowOffsetX: 0,
+						shadowColor: 'rgba(0, 0, 0, 0.5)'
+					}
+				}
+			}
+		]
+	};
+}
+
 // 移除指定value值
 function removeByValue(arr, val){
 	for(var i = 0; i < arr.length; i++){
