@@ -18,9 +18,9 @@ layui.config({
 
         if(parent.dataMation.mealNum == parent.dataMation.remainMealNum){
             // 套餐未使用
-            $("#refundPrice").val(parent.dataMation.mealPrice);
+            $("#refundPrice").val(parent.dataMation.unformatPayPrice);
         }else{
-            var mealSinglePrice = division(parent.dataMation.mealPrice, parent.dataMation.mealNum);
+            var mealSinglePrice = division(parent.dataMation.unformatPayPrice, parent.dataMation.mealNum);
             var refundPrice = multiplication(mealSinglePrice, parent.dataMation.remainMealNum);
             $("#refundPrice").val(refundPrice);
         }
