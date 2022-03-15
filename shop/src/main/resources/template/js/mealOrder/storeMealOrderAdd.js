@@ -148,6 +148,8 @@ layui.config({
                 id: "row" + rowNum.toString(), //checkbox的id
                 trId: "tr" + rowNum.toString(), //行的id
                 mealId: "mealId" + rowNum.toString(),
+                mealExplain: "mealExplain" + rowNum.toString(),
+                mealConsume: "mealConsume" + rowNum.toString(),
                 num: "num" + rowNum.toString(),
                 price: "price" + rowNum.toString(),
                 carId: "carId" + rowNum.toString()
@@ -191,6 +193,10 @@ layui.config({
                         var thisRowNum = trId.replace("tr", "");
 
                         $("#mealId" + thisRowNum.toString()).val(mealMation.name);
+                        $("#mealExplain" + thisRowNum.toString()).html(mealMation.memberDes);
+                        $("#mealExplain" + thisRowNum.toString()).attr("title", mealMation.memberDes);
+                        $("#mealConsume" + thisRowNum.toString()).html(mealMation.oilDes);
+                        $("#mealConsume" + thisRowNum.toString()).attr("title", mealMation.oilDes);
                         $("#num" + thisRowNum.toString()).html(mealMation.totalCount);
                         $("#price" + thisRowNum.toString()).html(mealMation.showPrice);
                         $("#mealId" + thisRowNum.toString()).attr("mealMaion", JSON.stringify(mealMation));

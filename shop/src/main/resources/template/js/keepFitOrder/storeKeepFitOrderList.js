@@ -42,21 +42,23 @@ layui.config({
                     return "会员";
                 }
             }},
-            { field: 'memberCarPlate', title: '车牌号', width: 100, align: "left"},
             { field: 'contacts', title: '会员名称', width: 100 },
             { field: 'phone', title: '会员手机号', width: 100, align: "center"},
+            { field: 'modelType', title: '车型', width: 100, align: "left"},
+            { field: 'memberCarPlate', title: '车牌号', width: 100, align: "left"},
+            { field: 'vinCode', title: 'VIN码', width: 120, align: "left"},
+            { field: 'mealName', title: '套餐名称', align: 'left', width: 150 },
+            { field: 'mealPrice', title: '应缴金额', align: 'left', width: 100 },
+            { field: 'payPrice', title: '实缴金额', align: 'left', width: 100 },
+            { field: 'mealSinglePrice', title: '套餐内消耗', align: 'left', width: 120 },
+            { field: 'mealBuyStoreName', title: '缴费门店', align: 'left', width: 150 },
+            { field: 'storeName', title: '保养门店', align: 'left', width: 150 },
+            { field: 'createName', title: '服务顾问', width: 120 },
+            { field: 'serviceTechnicianName', title: '维修技师', align: 'left', width: 120 },
             /*{ field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
             { field: 'servicePrice', title: '服务费', width: 100, align: "left"},*/
-            { field: 'storeName', title: '保养门店', align: 'left', width: 120 },
-            { field: 'mealBuyStoreName', title: '套餐购买门店', align: 'left', width: 120 },
-            { field: 'state', title: '订单状态', width: 100, align: "center", templet: function(d){
-                return shopUtil.getKeepFitOrderStateName(d);
-            }},
             /*{ field: 'payPrice', title: '实付金额', width: 100, align: "left"},
             { field: 'payTime', title: '实付日期', align: 'center', width: 150 },*/
-            { field: 'mealName', title: '套餐名称', align: 'left', width: 150 },
-            { field: 'mealSinglePrice', title: '套餐内消耗', align: 'left', width: 120 },
-            { field: 'serviceTechnicianName', title: '维修技师', align: 'left', width: 120 },
             { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
                 if(d.type == 1){
                     return "线上下单";
@@ -64,10 +66,12 @@ layui.config({
                     return "线下下单";
                 }
             }},
-            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", rowspan: '2', templet: function(d){
+            { field: 'state', title: '订单状态', width: 100, align: "center", templet: function(d){
+                return shopUtil.getKeepFitOrderStateName(d);
+            }},
+            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function(d){
                 return shopUtil.getMealOrderWhetherGiveName(d);
             }},
-            { field: 'createName', title: '服务顾问', width: 120 },
             { field: 'createTime', title: '操作时间', align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
