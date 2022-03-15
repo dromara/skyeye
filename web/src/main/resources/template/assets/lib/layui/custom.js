@@ -410,6 +410,7 @@ function getPieChatOption(title, subtext, data){
 			trigger: 'item'
 		},
 		legend: {
+			data:[],
 			bottom: '5%',
 			left: 'center'
 		},

@@ -35,18 +35,32 @@
         <table id="messageTable" lay-filter="messageTable"></table>
 
         <script type="text/html" id="tableBar">
-            {{# if(auth('1644234259629')){ }}
-                <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+            {{# if(d.enabled == 1){ }}
+                {{# if(auth('1644840134418')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="unenabled"><language showName="com.skyeye.disableBtn"></language></a>
+                {{# } }}
+                {{# if(auth('1647310167702')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="transferCar">过户</a>
+                {{# } }}
+                {{# if(auth('1644234259629')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+                {{# } }}
+                {{# if(auth('1644234273590')){ }}
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+                {{# } }}
             {{# } }}
-            {{# if(auth('1644234273590')){ }}
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+            {{# if(d.enabled == 2){ }}
+                {{# if(auth('1644840134418')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="enabled"><language showName="com.skyeye.enableBtn"></language></a>
+                {{# } }}
+                {{# if(auth('1644234259629')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+                {{# } }}
+                {{# if(auth('1644234273590')){ }}
+                    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+                {{# } }}
             {{# } }}
-            {{# if(d.enabled == 1 && auth('1644840134418')){ }}
-                <a class="layui-btn layui-btn-xs" lay-event="unenabled"><language showName="com.skyeye.disableBtn"></language></a>
-            {{# } }}
-            {{# if(d.enabled == 2 && auth('1644840134418')){ }}
-                <a class="layui-btn layui-btn-xs" lay-event="enabled"><language showName="com.skyeye.enableBtn"></language></a>
-            {{# } }}
+
         </script>
     </div>
     <script src="../../assets/lib/layui/layui.js"></script>

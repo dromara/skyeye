@@ -43,11 +43,11 @@ layui.config({
                 }
             }},
             { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function(d){
-                return shopUtil.getEnableStateName(d.enabled);
+                return shopUtil.getMemberCarEnableStateName(d.enabled);
             }},
             { field: 'createName', title: '录入人', align: 'left', width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
-            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
+            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
 	    done: function(){
 	    	matchingLanguage();
@@ -67,6 +67,8 @@ layui.config({
             editEnabled(data);
         }else if(layEvent == 'unenabled'){ // 禁用
             editNotEnabled(data)
+        }else if(layEvent == 'transferCar'){ // 过户
+            transferCar(data)
         }
     });
 
@@ -160,6 +162,24 @@ layui.config({
                 }
             }});
     });
+
+    // 过户
+    function transferCar(data){
+        rowId = data.id;
+        _openNewWindows({
+            url: "../../tpl/memberCar/memberCarTransfer.html",
+            title: '车辆过户',
+            pageId: "memberCarTransfer",
+            area: ['90vw', '90vh'],
+            callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    loadTable();
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                }
+            }});
+    }
 
     form.render();
     form.on('submit(formSearch)', function (data) {

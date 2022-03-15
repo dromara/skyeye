@@ -25,6 +25,24 @@ var shopUtil = {
     },
 
     /**
+     * 根据启用/禁用状态获取对应的名称--适用于车辆
+     *
+     * @param enabled 状态
+     * @returns {string}
+     */
+    getMemberCarEnableStateName: function (enabled){
+        if(enabled == 1){
+            return "<span class='state-up'>启用</span>";
+        }else if(enabled == 2){
+            return "<span class='state-down'>禁用</span>";
+        }else if(enabled == 3){
+            return "<span class='state-down'>已过户</span>";
+        }else{
+            return "<span class='state-error'>参数错误</span>";
+        }
+    },
+
+    /**
      * 获取套餐订单已启用的性质管理列表
      *
      * @param callback 回执函数

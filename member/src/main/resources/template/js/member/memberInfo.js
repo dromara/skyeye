@@ -44,6 +44,7 @@ layui.config({
                         }else if(item.insure == '2'){
                             item.insure = "未购买";
                         }
+                        item.stateName = shopUtil.getMemberCarEnableStateName(item.enabled);
                     });
                     $("#showForm").append(getDataUseHandlebars($("#memberCarTemplate").html(), json));
                 }else{
