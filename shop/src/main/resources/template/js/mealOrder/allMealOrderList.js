@@ -14,7 +14,7 @@ layui.config({
 
     // 加载区域
     shopUtil.getShopAreaMation(function (json){
-        $("#areaId").html(getDataUseHandlebars(selOption, json));
+        $("#areaId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
         form.render('select');
     });
     form.on('select(areaId)', function(data) {
@@ -54,7 +54,7 @@ layui.config({
                 return shopUtil.getMealOrderStateName(d);
             }},
             { field: 'natureName', title: '订单性质', width: 80, rowspan: '2', align: "center"},
-            { field: 'label', title: '员工标签', width: 120, align: "left"},
+            { field: 'label', title: '员工标签', width: 120, rowspan: '2', align: "left"},
             { field: 'payTime', title: '支付时间', align: 'center', rowspan: '2', width: 150 },
             { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function(d){
                 if(d.type == 1){

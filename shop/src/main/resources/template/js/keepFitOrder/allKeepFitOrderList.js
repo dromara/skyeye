@@ -14,7 +14,7 @@ layui.config({
 
     // 加载区域
     shopUtil.getShopAreaMation(function (json){
-        $("#areaId").html(getDataUseHandlebars(selOption, json));
+        $("#areaId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
         form.render('select');
     });
     form.on('select(areaId)', function(data) {
