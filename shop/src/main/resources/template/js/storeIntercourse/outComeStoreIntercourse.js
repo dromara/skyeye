@@ -1,4 +1,8 @@
 
+var intercourseTime = "";
+var keepfiStoreId = "";
+var mealByStoreId = "";
+
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -84,9 +88,11 @@ layui.config({
     }
 
     function queryDetail(data){
-        rowId = data.id;
+        intercourseTime = data.intercourseTime;
+        keepfiStoreId = data.keepfiStoreId;
+        mealByStoreId = data.mealByStoreId;
         _openNewWindows({
-            url: "../../tpl/keepFitOrder/dayKeepFitOrderList.html?intercourseTime=" + data.intercourseTime,
+            url: "../../tpl/keepFitOrder/dayKeepFitOrderList.html",
             title: '明细',
             pageId: "dayKeepFitOrderList",
             area: ['90vw', '90vh'],

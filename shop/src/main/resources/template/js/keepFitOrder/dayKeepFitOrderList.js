@@ -11,7 +11,9 @@ layui.config({
         form = layui.form,
         table = layui.table;
 
-    var intercourseTime = GetUrlParam('intercourseTime');
+    var intercourseTime = parent.intercourseTime;
+    var keepfiStoreId = parent.keepfiStoreId;
+    var mealByStoreId = parent.mealByStoreId;
 
     table.render({
         id: 'messageTable',
@@ -119,7 +121,9 @@ layui.config({
             type: $("#type").val(),
             serviceTechnicianName: $("#serviceTechnicianName").val(),
             createName: $("#createName").val(),
-            intercourseTime: intercourseTime
+            intercourseTime: intercourseTime,
+            storeId: keepfiStoreId,
+            mealByStoreId: mealByStoreId
         };
     }
 
