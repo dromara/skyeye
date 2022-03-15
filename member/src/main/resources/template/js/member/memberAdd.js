@@ -33,9 +33,13 @@ layui.config({
                     phone: $("#phone").val(),
                     email: $("#email").val(),
                     provinceId: $("#provinceId").val(),
+                    provinceName: $("#provinceId").find("option:selected").text(),
                     cityId: $("#cityId").val(),
+                    cityName: $("#cityId").find("option:selected").text(),
                     addressAreaId: $("#addressAreaId").val(),
+                    addressAreaName: $("#addressAreaId").find("option:selected").text(),
                     townshipId: $("#townshipId").val(),
+                    townshipName: $("#townshipId").find("option:selected").text(),
                     address: $("#address").val(),
                     description: $("#description").val(),
                     storeId: $("#storeId").val()
