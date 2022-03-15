@@ -84,11 +84,11 @@ layui.config({
                 $("#mealOrderNum").html(json.bean.mealOrderNum + "单");
                 $("#keepFitOrderNum").html(json.bean.keepFitOrderNum + "单");
                 $("#keepFitOrderPrice").html(json.bean.keepFitOrderPrice + "元");
-                myChart1 = renderEcharts("echart1", '保养套餐销售比对', '', '', json.bean.monthMealOrderNum);
-                myChart2 = renderEcharts("echart2", '保养对比', '', '', json.bean.monthKeepFitOrderNum);
-                myChart3 = renderEcharts2("echart3", '保养套餐销售门店比例', '', json.bean.storeMealOrderNum);
-                myChart4 = renderEcharts2("echart4", '保养门店比例', '', json.bean.storeKeepFitOrderNum);
-                myChart5 = renderEcharts2("echart5", '订单性质比例', '', json.bean.natureMealOrderNum);
+                myChart1 = renderEcharts("echart1", '', '', '', json.bean.monthMealOrderNum);
+                myChart2 = renderEcharts("echart2", '', '', '', json.bean.monthKeepFitOrderNum);
+                myChart3 = renderEcharts2("echart3", '', '', json.bean.storeMealOrderNum);
+                myChart4 = renderEcharts2("echart4", '', '', json.bean.storeKeepFitOrderNum);
+                myChart5 = renderEcharts2("echart5", '', '', json.bean.natureMealOrderNum);
             }else{
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
