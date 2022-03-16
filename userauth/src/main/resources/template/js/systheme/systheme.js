@@ -299,7 +299,11 @@ layui.config({
  			}else{
  				winBgPicVague = '1';
  			}
- 			AjaxPostUtil.request({url:reqBasePath + "sys029", params:{winBgPicVague: winBgPicVague, winBgPicVagueValue: winBgPicVagueValue}, type:'json', callback:function(json){
+ 			var params = {
+				winBgPicVague: winBgPicVague,
+				winBgPicVagueValue: winBgPicVagueValue
+			};
+ 			AjaxPostUtil.request({url: reqBasePath + "sys029", params: params, type: 'json', method: "POST", callback: function(json){
  	   			if(json.returnCode == 0){
  	   				winui.resetVagueBgSrc(winBgPicVague, winBgPicVagueValue);
  	   			}else{
