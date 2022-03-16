@@ -215,6 +215,27 @@ var shopUtil = {
     },
 
     /**
+     * 获取所有门店列表
+     *
+     * @param callback 回执函数
+     */
+    queryAllStoreList: function (callback){
+        var params = {
+            limit: 1000,
+            page: 1
+        };
+        AjaxPostUtil.request({url: shopBasePath + "store001", params: params, type: 'json', method: "POST", callback: function(json) {
+            if(json.returnCode == 0) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
+    /**
      * 门店员工选择页面
      *
      * @param callback 回调函数

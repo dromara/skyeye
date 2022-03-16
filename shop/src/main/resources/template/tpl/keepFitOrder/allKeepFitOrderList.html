@@ -35,6 +35,10 @@
                     <div class="layui-input-inline">
                         <input type="text" id="memberPhone" name="memberPhone" placeholder="请输入会员手机号" class="layui-input" />
                     </div>
+                    <label class="layui-form-label">VIN码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="vinCode" name="vinCode" placeholder="请输入VIN码" class="layui-input" />
+                    </div>
                     <label class="layui-form-label">订单状态</label>
                     <div class="layui-input-inline">
                         <select id="state" name="state" lay-filter="state" lay-search="">
@@ -61,9 +65,19 @@
                     <div class="layui-input-inline">
                         <input type="text" id="serviceTechnicianName" name="serviceTechnicianName" placeholder="请输入维修技师" class="layui-input" />
                     </div>
+                    <label class="layui-form-label">缴费门店</label>
+                    <div class="layui-input-inline">
+                        <select id="mealBuyStoreId" name="mealBuyStoreId" lay-filter="mealBuyStoreId" lay-search="">
+
+                        </select>
+                    </div>
                     <label class="layui-form-label">车牌号</label>
                     <div class="layui-input-inline">
                         <input type="text" id="memberCarPlate" name="memberCarPlate" placeholder="请输入车牌号" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">操作时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="createTime" name="createTime" placeholder="请选择操作时间范围" class="layui-input" />
                     </div>
                     <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
                     <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
