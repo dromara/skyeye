@@ -52,6 +52,8 @@ layui.config({
             /*{ field: 'payPrice', title: '实付金额', width: 100, align: "left"},
             { field: 'payTime', title: '实付日期', align: 'center', width: 150 },*/
             { field: 'mealName', title: '套餐名称', align: 'left', width: 150 },
+            { field: 'mealPrice', title: '应缴金额', align: 'left', width: 100 },
+            { field: 'payPrice', title: '实缴金额', align: 'left', width: 100 },
             { field: 'mealSinglePrice', title: '套餐内消耗', align: 'left', width: 120 },
             { field: 'mealExplain', title: '套餐说明', align: 'left', width: 150 },
             { field: 'mealConsume', title: '耗材说明', align: 'left', width: 150 },
