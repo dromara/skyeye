@@ -88,7 +88,7 @@ layui.config({
 					return "<span class='state-down'>未分配</span>";
 				}
 			}},
-			{ field: 'label', title: '员工标签', width: 120, align: "left"},
+			{ field: 'label', title: '员工标签', width: 120, rowspan: '3', align: "left"},
 	        { field: 'userIdCard', title: '身份证', rowspan: '3', align: 'center', width: 160 },
 			{ field: 'workTimeNum', title: '考勤班次', rowspan: '3', align: 'center', width: 80 },
 	        { field: 'userSex', title: '性别', width: 60, rowspan: '3', align: 'center', templet: function(d){
