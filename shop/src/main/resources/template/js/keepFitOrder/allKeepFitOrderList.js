@@ -5,10 +5,11 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
+        laydate = layui.laydate,
         table = layui.table;
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
@@ -22,6 +23,17 @@ layui.config({
             $("#storeId").html(getDataUseHandlebars(selOption, json));
             form.render('select');
         });
+    });
+
+    // 加载所有门店
+    shopUtil.queryAllStoreList(function (json){
+        $("#mealByStoreId").html(getDataUseHandlebars(selOption, json));
+        form.render('select');
+    });
+
+    laydate.render({
+        elem: '#createTime',
+        range: '~'
     });
 
     table.render({
@@ -126,17 +138,26 @@ layui.config({
     }
 
     function getTableParams(){
+        var startTime = "", endTime = "";
+        if(!isNull($("#createTime").val())){
+            startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
+            endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
+        }
         return {
             orderNum: $("#orderNum").val(),
             memberName: $("#memberName").val(),
             memberPhone: $("#memberPhone").val(),
             state: $("#state").val(),
+            vinCode: $("#vinCode").val(),
             memberCarPlate: $("#memberCarPlate").val(),
             areaId: $("#areaId").val(),
             type: $("#type").val(),
             serviceTechnicianName: $("#serviceTechnicianName").val(),
             createName: $("#createName").val(),
-            storeId: $("#storeId").val()
+            mealByStoreId: $("#mealByStoreId").val(),
+            storeId: $("#storeId").val(),
+            startTime: startTime,
+            endTime: endTime
         };
     }
 

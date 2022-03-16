@@ -5,10 +5,11 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
+        laydate = layui.laydate,
         table = layui.table;
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
@@ -30,6 +31,11 @@ layui.config({
         form.render('select');
     });
 
+    laydate.render({
+        elem: '#createTime',
+        range: '~'
+    });
+
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
@@ -48,8 +54,12 @@ layui.config({
             { field: 'contacts', title: '会员名称', width: 100, rowspan: '2' },
             { field: 'phone', title: '会员手机号', width: 100, rowspan: '2', align: "center"},
             { title: '下单地址', align: 'center', colspan: '2'},
+            { field: 'plate', title: '车牌号', width: 100, rowspan: '2', align: "left"},
+            { field: 'vinCode', title: 'VIN码', width: 100, rowspan: '2', align: "left"},
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left", rowspan: '2'},
             { field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2'},
+            { field: 'mealNum', title: '总保养次数', width: 100, align: "left", rowspan: '2'},
+            { field: 'remainMealNum', title: '剩余保养次数', width: 100, align: "left", rowspan: '2'},
             { field: 'state', title: '订单状态', width: 80, align: "center", rowspan: '2', templet: function(d){
                 return shopUtil.getMealOrderStateName(d);
             }},
@@ -116,15 +126,26 @@ layui.config({
     }
 
     function getTableParams(){
+        var startTime = "", endTime = "";
+        if(!isNull($("#createTime").val())){
+            startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
+            endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
+        }
         return {
             orderNum: $("#orderNum").val(),
             memberName: $("#memberName").val(),
             memberPhone: $("#memberPhone").val(),
+            vinCode: $("#vinCode").val(),
+            plate: $("#plate").val(),
+            createName: $("#createName").val(),
+            type: $("#type").val(),
             natureId: $("#natureId").val(),
             label: $("#label").val(),
             state: $("#state").val(),
             areaId: $("#areaId").val(),
-            storeId: $("#storeId").val()
+            storeId: $("#storeId").val(),
+            startTime: startTime,
+            endTime: endTime
         };
     }
 

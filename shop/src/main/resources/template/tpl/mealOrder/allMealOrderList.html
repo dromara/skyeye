@@ -35,6 +35,26 @@
                     <div class="layui-input-inline">
                         <input type="text" id="memberPhone" name="memberPhone" placeholder="请输入会员手机号" class="layui-input" />
                     </div>
+                    <label class="layui-form-label">车牌号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="plate" name="plate" placeholder="请输入车牌号" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">VIN码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="vinCode" name="vinCode" placeholder="请输入VIN码" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">专属顾问</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="createName" name="createName" placeholder="请输入专属顾问" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">订单来源</label>
+                    <div class="layui-input-inline">
+                        <select id="type" name="type" lay-filter="type" lay-search="">
+                            <option value="">全部</option>
+                            <option value="1">线上订单</option>
+                            <option value="2">线下订单</option>
+                        </select>
+                    </div>
                     <label class="layui-form-label">订单状态</label>
                     <div class="layui-input-inline">
                         <select id="state" name="state" lay-filter="state" lay-search="">
@@ -56,6 +76,10 @@
                     <label class="layui-form-label">员工标签</label>
                     <div class="layui-input-inline">
                         <input type="text" id="label" name="label" placeholder="请输入员工标签" class="layui-input" />
+                    </div>
+                    <label class="layui-form-label">创建时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="createTime" name="createTime" placeholder="请输入创建时间" class="layui-input" />
                     </div>
                     <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
                     <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
