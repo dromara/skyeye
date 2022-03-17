@@ -824,6 +824,18 @@ a cite {
 	content: "\e66d";
 }
 
+.layui-icon-cols:before {
+	content: "\e610"
+}
+
+.layui-icon-export:before {
+	content: "\e67d"
+}
+
+.layui-icon-print:before {
+	content: "\e66d"
+}
+
 
 /* 基本布局 */
 
@@ -3127,6 +3139,48 @@ hr,
 	border-width: 1px;
 	border-style: solid;
 	border-color: #e6e6e6;
+}
+
+.layui-table-tool .layui-table-tool-self .layui-inline[lay-event] {
+	margin: 0 0 0 10px;
+}
+
+.layui-table-tool .layui-inline[lay-event] {
+	position: relative;
+	width: 26px;
+	height: 26px;
+	padding: 5px;
+	line-height: 16px;
+	margin-right: 10px;
+	text-align: center;
+	color: #333;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	-webkit-transition: .5s all;
+	transition: .5s all;
+}
+
+.layui-table-tool-panel {
+	position: absolute;
+	top: 29px;
+	left: -1px;
+	padding: 5px 0;
+	min-width: 150px;
+	min-height: 40px;
+	border: 1px solid #d2d2d2;
+	text-align: left;
+	overflow-y: auto;
+	background-color: #fff;
+	box-shadow: 0 2px 4px rgb(0 0 0 / 12%);
+	z-index: 100;
+	max-height: 400px;
+}
+
+.layui-table-tool-panel li {
+	padding: 0 10px;
+	line-height: 30px;
+	-webkit-transition: .5s all;
+	transition: .5s all;
 }
 
 .layui-table th,

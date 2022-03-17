@@ -40,6 +40,7 @@ layui.config({
         where: getTableParams(),
         even: true,
         page: true,
+        toolbar: true,
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
@@ -74,6 +75,13 @@ layui.config({
             { field: 'remainMealNum', title: '剩余保养次数', width: 120, align: "left"},
             { field: 'mealSinglePrice', title: '单次保养金额', width: 120, align: "left"},
             { field: 'refundPrice', title: '退款金额', width: 120, align: "left"},
+            { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
+                if(d.type == 1){
+                    return "线上下单";
+                }else{
+                    return "线下下单";
+                }
+            }},
             { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function(d){
                 return shopUtil.getMealOrderWhetherGiveName(d);
             }},
@@ -178,6 +186,7 @@ layui.config({
             createName: $("#createName").val(),
             consultantName: $("#consultantName").val(),
             state: $("#state").val(),
+            type: $("#type").val(),
             whetherGive: $("#whetherGive").val(),
             natureId: $("#natureId").val(),
             storeId: storeId,

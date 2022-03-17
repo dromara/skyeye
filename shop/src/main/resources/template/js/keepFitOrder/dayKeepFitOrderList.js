@@ -23,6 +23,7 @@ layui.config({
         where: getTableParams(),
         even: true,
         page: true,
+        toolbar: true,
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
