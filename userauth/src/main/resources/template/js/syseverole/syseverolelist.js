@@ -18,11 +18,11 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: reqBasePath + 'sys013',
-	    where:{roleName:$("#roleName").val()},
+	    where: getTableParams(),
 	    even:true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'roleName', title: '角色名称', width: 120 },
@@ -50,14 +50,6 @@ layui.config({
 			pcMenu(data);
 		}
     });
-	
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	refreshTable();
-        }
-        return false;
-	});
 	
 	// 删除
 	function del(data, obj){
@@ -116,12 +108,7 @@ layui.config({
 			}});
 	}
 	
-	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
-    	loadTable();
-    });
-    
-    //新增角色
+    // 新增角色
     $("body").on("click", "#addBean", function(){
     	_openNewWindows({
 			url: "../../tpl/syseverole/syseveroleadd.html", 
@@ -137,14 +124,33 @@ layui.config({
                 }
 			}});
     });
-    
+
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			refreshTable();
+		}
+		return false;
+	});
+
+	// 刷新数据
+	$("body").on("click", "#reloadTable", function(){
+		loadTable();
+	});
+
     function loadTable(){
-    	table.reload("messageTable", {where:{roleName:$("#roleName").val()}});
+    	table.reload("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{roleName:$("#roleName").val()}});
+    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
+
+    function getTableParams() {
+    	return {
+			roleName: $("#roleName").val()
+		};
+	}
     
     exports('syseverolelist', {});
 });

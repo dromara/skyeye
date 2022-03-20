@@ -25,6 +25,7 @@ var customerJS = {
 	"sysMemberUtil": "../../assets/lib/layui/customer/sysMemberUtil.js", // 会员相关工具
 	"bossUtil": "../../assets/lib/layui/customer/bossUtil.js", // 招聘模块相关工具
 	"shopUtil": "../../assets/lib/layui/customer/shopUtil.js", // 商城模块相关工具
+	"indexMenu": "../../assets/lib/layui/customer/indexMenu.js", // 菜单按钮模块相关工具
 };
 
 //系统基础信息

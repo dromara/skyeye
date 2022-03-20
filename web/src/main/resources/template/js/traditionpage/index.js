@@ -151,27 +151,8 @@ layui.config({
 							},
 							onchange: function() {
 								if(!isNull(text2.id())){
-									var dataid = $("#sysMenuListBox").find("a[data-id='" + text2.id() + "']");
-							    	//这时会判断右侧#LAY_app_tabsheader属性下的有lay-id属性的li的数目，即已经打开的tab项数目
-							    	if($("#LAY_app_tabsheader li[lay-id]").length <= 0) {
-							    		//如果比零小，则直接打开新的tab项
-							    		active.tabAdd(dataid.attr("data-url"), dataid.attr("data-id"), dataid.attr("data-title"));
-							    	} else {
-							    		//否则判断该tab项是否以及存在
-							    		var isData = false; //初始化一个标志，为false说明未打开该tab项 为true则说明已有
-							    		$.each($("#LAY_app_tabsheader li[lay-id]"), function() {
-							    			//如果点击左侧菜单栏所传入的id 在右侧tab项中的lay-id属性可以找到，则说明该tab项已经打开
-							    			if($(this).attr("lay-id") === dataid.attr("data-id")) {
-							    				isData = true;
-							    			}
-							    		})
-							    		if(isData == false) {
-							    			//标志为false 新增一个tab项
-							    			active.tabAdd(dataid.attr("data-url"), dataid.attr("data-id"), dataid.attr("data-title"));
-							    		}
-							    	}
-							    	//最后不管是否新增tab，最后都转到要打开的选项页面上
-							    	active.tabChange(dataid.attr("data-id"));
+									var dataMenu = $("#sysMenuListBox").find("a[data-id='" + text2.id() + "']");
+									indexMenu.loadTraditionPage(dataMenu);
 								}
 							}
 						});
@@ -224,32 +205,13 @@ layui.config({
     	}
     };
 
-    //当点击有page-item-click属性的标签时，即左侧菜单栏中内容 ，触发点击事件
+    // 当点击有page-item-click属性的标签时，即左侧菜单栏中内容 ，触发点击事件
     $("body").on("click", ".page-item-click", function(e){
-    	var dataid = $(this);
-    	if("win" === dataid.attr("data-type")){
-    		window.open(dataid.attr("data-url"));
-    	}else{
-    		//这时会判断右侧#LAY_app_tabsheader属性下的有lay-id属性的li的数目，即已经打开的tab项数目
-	    	if($("#LAY_app_tabsheader li[lay-id]").length <= 0) {
-	    		//如果比零小，则直接打开新的tab项
-	    		active.tabAdd(dataid.attr("data-url"), dataid.attr("data-id"), dataid.attr("data-title"));
-	    	} else {
-	    		//否则判断该tab项是否以及存在
-	    		var isData = false; //初始化一个标志，为false说明未打开该tab项 为true则说明已有
-	    		$.each($("#LAY_app_tabsheader li[lay-id]"), function() {
-	    			//如果点击左侧菜单栏所传入的id 在右侧tab项中的lay-id属性可以找到，则说明该tab项已经打开
-	    			if($(this).attr("lay-id") === dataid.attr("data-id")) {
-	    				isData = true;
-	    			}
-	    		})
-	    		if(isData == false) {
-	    			//标志为false 新增一个tab项
-	    			active.tabAdd(dataid.attr("data-url"), dataid.attr("data-id"), dataid.attr("data-title"));
-	    		}
-	    	}
-	    	//最后不管是否新增tab，最后都转到要打开的选项页面上
-	    	active.tabChange(dataid.attr("data-id"));
+    	var dataMenu = $(this);
+    	if("win" === dataMenu.attr("data-type")){
+    		window.open(dataMenu.attr("data-url"));
+    	} else {
+			indexMenu.loadTraditionPage(dataMenu);
     	}
     });
 
@@ -465,7 +427,7 @@ layui.config({
         }
     });
     
-    //头部桌面列表点击事件
+    // 头部桌面列表点击事件
     $("body").on("click", ".desktop-menu-box ul .layui-nav-item", function(e){
     	$("#sysMenuListBox").find(".layui-nav-tree").hide();
     	$(".desktop-menu-box ul .layui-nav-item").removeClass('select');
@@ -474,53 +436,16 @@ layui.config({
     	$("#sysMenuListBox").find("ul[menurowid='" + rowId + "']").show();
     });
     
-    //消息中心
+    // 消息中心
     $("body").on("click", "#messageCenter", function(e){
-    	var dataid = $(this);
-    	if($("#LAY_app_tabsheader li[lay-id]").length <= 0) {
-			//如果比零小，则直接打开新的tab项
-			active.tabAdd(dataid.attr("data-url"), dataid.attr("data-id"), dataid.attr("data-title"));
-		} else {
-			//否则判断该tab项是否以及存在
-			var isData = false; //初始化一个标志，为false说明未打开该tab项 为true则说明已有
-			$.each($("#LAY_app_tabsheader li[lay-id]"), function() {
-				//如果点击左侧菜单栏所传入的id 在右侧tab项中的lay-id属性可以找到，则说明该tab项已经打开
-				if($(this).attr("lay-id") === dataid.attr("data-id")) {
-					isData = true;
-				}
-			})
-			if(isData == false) {
-				//标志为false 新增一个tab项
-				active.tabAdd(dataid.attr("data-url"), dataid.attr("data-id"), dataid.attr("data-title"));
-			}
-		}
-		//最后不管是否新增tab，最后都转到要打开的选项页面上
-		active.tabChange(dataid.attr("data-id"));
+		indexMenu.loadTraditionPage($(this));
     });
     
-    //左侧底部功能
+    // 左侧底部功能
     $("body").on("click", ".tradition-left-bottom .other-item", function(e){
-    	var dataid = $(this);
+    	var dataMenu = $(this);
     	var icon = dataid.find(".other-item-img").html();
-    	if($("#LAY_app_tabsheader li[lay-id]").length <= 0) {
-			//如果比零小，则直接打开新的tab项
-			active.tabAdd(dataid.attr("data-url"), dataid.attr("data-id"), icon + dataid.attr("data-title"));
-		} else {
-			//否则判断该tab项是否以及存在
-			var isData = false; //初始化一个标志，为false说明未打开该tab项 为true则说明已有
-			$.each($("#LAY_app_tabsheader li[lay-id]"), function() {
-				//如果点击左侧菜单栏所传入的id 在右侧tab项中的lay-id属性可以找到，则说明该tab项已经打开
-				if($(this).attr("lay-id") === dataid.attr("data-id")) {
-					isData = true;
-				}
-			})
-			if(isData == false) {
-				//标志为false 新增一个tab项
-				active.tabAdd(dataid.attr("data-url"), dataid.attr("data-id"), icon + dataid.attr("data-title"));
-			}
-		}
-		//最后不管是否新增tab，最后都转到要打开的选项页面上
-		active.tabChange(dataid.attr("data-id"));
+		indexMenu.loadTraditionPage(dataMenu, icon);
     });
     
 	$(window).resize(function () {

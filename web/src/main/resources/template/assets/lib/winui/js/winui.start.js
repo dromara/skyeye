@@ -113,8 +113,8 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
 
     //设置数据
     Menu.prototype.setData = function (callback) {
-        var obj = this
-            , currOptions = obj.options;
+        var obj = this,
+            currOptions = obj.options;
 
         if (!currOptions.url || !currOptions.method)
             return;
