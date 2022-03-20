@@ -1007,6 +1007,7 @@ layui.config({
         var menuIconBg = $this.attr("win-menuiconbg");
         var menuIconColor = $this.attr("win-menuiconcolor");
         var menuIcon = $this.attr("win-icon");
+		var menuSysWinUrl = $this.attr("win-sysWinUrl");
         var str = '', iconStr = '';
         if(menuIcon.indexOf('fa-') != -1){//icon图标
 	        str = '<i class="fa fa-fw title-icon ';//图标+文字
@@ -1044,76 +1045,34 @@ layui.config({
             winui.window.msg('菜单配置错误（菜单链接、标题、id缺一不可）');
             return;
         }
-        if((url.substr(0, 7).toLowerCase() == "http://"
-        	|| url.substr(0, 8).toLowerCase() == "https://")
-        	&& url.indexOf("/tpl/") != -1){
-        	url += '?userToken=' + getCookie("userToken");
-        }
-        var content;
+        url = indexMenu.getUrlPath(url, menuSysWinUrl);
         if (type === 1) {
-            $.ajax({
-                type: 'get',
-                url: url,
-                async: false,
-                success: function (data) {
-                    content = data;
-                },
-                error: function (e) {
-                    var page = '';
-                    switch (e.status) {
-                        case 404:
-                            page = '404.html';
-                            break;
-                        case 500:
-                            page = '500.html';
-                            break;
-                        default:
-                            content = "打开窗口失败";
-                    }
-                    $.ajax({
-                        type: 'get',
-                        url: reqBasePath + 'tpl/sysmessage/' + page,
-                        async: false,
-                        success: function (data) {
-                            content = data;
-                        },
-                        error: function () {
-                            layer.close(load);
-                        }
-                    });
-                }
-            });
+        	// 新窗口打开
+			window.open(url);
         } else {
-            content = url;
-        }
-        //核心方法（参数请看文档，config是全局配置 open是本次窗口配置 open优先级大于config）
-        winui.window.config({
-            anim: 0,
-            miniAnim: 0,
-            maxOpen: -1
-        }).open({
-            id: id,
-            type: type,
-            title: title,
-            content: content,
-            loadBgColor: menuIconBg,
-            loadIcon: menuIcon,
-            loadIconColor: menuIconColor,
-            area: ['90vw','90vh'],
-            maxOpen: maxOpen,
-            loadBottomMenuIcon: loadBottomMenuIcon,
-            iconTitle: iconTitle,
-            refresh: true,
-            success: function(){
-            	if((url.substr(0, 7).toLowerCase() == "http://"
-            		|| url.substr(0, 8).toLowerCase() == "https://")
-            		&& url.indexOf("/tpl/") != -1){
-            		var childIframe = $("#" + id).find('iframe')[0];
-            		//发送消息
-            		childIframe.contentWindow.postMessage(localStorage.getItem("authpoints"),"*");
-            	}
-            }
-        });
+			// 核心方法（参数请看文档，config是全局配置 open是本次窗口配置 open优先级大于config）
+			winui.window.config({
+				anim: 0,
+				miniAnim: 0,
+				maxOpen: -1
+			}).open({
+				id: id,
+				type: type,
+				title: title,
+				content: url,
+				loadBgColor: menuIconBg,
+				loadIcon: menuIcon,
+				loadIconColor: menuIconColor,
+				area: ['90vw','90vh'],
+				maxOpen: maxOpen,
+				loadBottomMenuIcon: loadBottomMenuIcon,
+				iconTitle: iconTitle,
+				refresh: true,
+				success: function(){
+					indexMenu.sendMessageToChildIFrame(url, id);
+				}
+			});
+		}
     }
     
     //打开二级窗口
@@ -1162,19 +1121,11 @@ layui.config({
             	}).on('drop', function (el, container) {//放置
             		var times = $("#childWindow").parent().attr("times");
             		$("#layui-layer-shade" + times).css({width: '100%'});
-            		var boxId = $(container).attr("win-id");//盒子id
-        			var drawer = $('#' + boxId).find(".icon-drawer");//盒子icon
-        			var child = $('#' + boxId).find(".icon-child");//盒子child
-        			
         			var thisMenuIcon = $(el).eq(0).attr("win-icon");
         			var thisMenuBg = $(el).eq(0).attr("win-menuiconbg");
         			var thisMenuIconColor = $(el).eq(0).attr("win-menuIconColor");
         			var thisMenuId = $(el).eq(0).attr("win-id");
-        			var thisMenuUrl = $(el).eq(0).attr("win-url");
-        			var thisMenuTitle = $(el).eq(0).attr("win-title");
-        			var thisMenuOpenType = $(el).eq(0).attr("win-opentype");
-        			var thisMenuMaxOpen = $(el).eq(0).attr("win-maxopen");
-        			
+
         			$('i[win-i-id="' + thisMenuId + '"]').remove();
         			$('div[class="winui-desktop-item sec-clsss-btn sec-btn"][win-id="' + thisMenuId + '"]').remove();
         			$(el).removeClass('sec-clsss-btn');
@@ -1238,7 +1189,7 @@ layui.config({
    			        	};
    			        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop007", params:params, type:'json', callback:function(json){
    			 	   			if(json.returnCode == 0){
-   			 	   				//此处不需要去获取当前滚动展示的模块
+   			 	   				// 此处不需要去获取当前滚动展示的模块
 	   			 	   			$("#winui-desktop").find('div[id="' + rowId + '"]').attr("win-title", menuName);
 			                	$("#winui-desktop").find('div[id="' + rowId + '"]').find('p').html(menuName);
 			                	$('#childWindowtext').show();
@@ -1256,7 +1207,7 @@ layui.config({
     	}
     });
 
-    //注销登录
+    // 注销登录
     $('.logout').on('click', function () {
         winui.hideStartMenu();
         winui.window.confirm('确认注销吗?', {id: 'exit-confim', icon: 3, title: '提示', skin: 'msg-skin-message', success: function(layero, index){

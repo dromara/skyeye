@@ -24,15 +24,16 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
         	if(languageType == 'cn'){
 				item.name = item.menuNameEn;
 			}
-            var id = (item.id == '' || item.id == undefined) ? '' : 'win-id="' + item.id + '"',
-                url = (item.pageURL == '' || item.pageURL == undefined) ? '' : 'win-url="' + item.pageURL + '"',
+            var id = isNull(item.id) ? '' : 'win-id="' + item.id + '"',
+                url = isNull(item.pageURL) ? '' : 'win-url="' + item.pageURL + '"',
                 title = isNull(item.name) ? '' : 'win-title="' + item.name + '"',
-                opentype = (item.openType == '' || item.openType == undefined) ? '' : 'win-opentype="' + item.openType + '"',
-                maxopen = (item.maxOpen == '' || item.maxOpen == undefined) ? '' : 'win-maxopen="' + item.maxOpen + '"',
-                winIcon = (item.icon == '' || item.icon == undefined) ? '' : 'win-icon="' + item.icon + '"',
+                opentype = isNull(item.openType) ? '' : 'win-opentype="' + item.openType + '"',
+                maxopen = isNull(item.maxOpen) ? '' : 'win-maxopen="' + item.maxOpen + '"',
+                winIcon = isNull(item.icon) ? '' : 'win-icon="' + item.icon + '"',
                 isParent = item.childs ? ' parent' : '',
-        		menuIconBg = (item.menuIconBg == '' || item.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + item.menuIconBg + '"',
-				menuIconColor = (item.menuIconColor == '' || item.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + item.menuIconColor + '"',
+        		menuIconBg = isNull(item.menuIconBg) ? '' : 'win-menuIconBg="' + item.menuIconBg + '"',
+				menuIconColor = isNull(item.menuIconColor) ? '' : 'win-menuIconColor="' + item.menuIconColor + '"',
+                menuSysWinUrl = isNull(item.sysWinUrl) ? '' : 'win-sysWinUrl="' + item.sysWinUrl + '"',
 				menuDeskTopId = 'win-menuDeskTopId="' + item.deskTopId + '"';
             var icon = "";
         	if(item.menuIconType === '1' || item.menuIconType == 1){//icon
@@ -51,7 +52,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
             }else{
             	var extend = '';
             }
-            html += '<li class="layui-nav-item ' + isParent + ' ' + extend + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxopen + ' ' + winIcon + ' ' + menuIconBg + ' ' + menuIconColor + ' ' + menuDeskTopId + '>';
+            html += '<li class="layui-nav-item ' + isParent + ' ' + extend + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxopen + ' ' + winIcon + ' ' + menuIconBg + ' ' + menuIconColor + ' ' + menuSysWinUrl + ' ' + menuDeskTopId + '>';
             if(!isNull(item.menuIconBg)){
             	html += '<a><div class="winui-menu-icon" style="background-color: ' + item.menuIconBg + '!important;">';
             }else{
@@ -74,6 +75,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                         cWinIcon = (cItem.icon == '' || cItem.icon == undefined) ? '' : 'win-icon="' + cItem.icon + '"',
                 		cmenuIconBg = (cItem.menuIconBg == '' || cItem.menuIconBg == undefined) ? '' : 'win-menuIconBg="' + cItem.menuIconBg + '"',
         				cmenuIconColor = (cItem.menuIconColor == '' || cItem.menuIconColor == undefined) ? '' : 'win-menuIconColor="' + cItem.menuIconColor + '"',
+                        cmenuSysWinUrl = isNull(cItem.sysWinUrl) ? '' : 'win-sysWinUrl="' + cItem.sysWinUrl + '"',
 						menuDeskTopId = 'win-menuDeskTopId="' + cItem.deskTopId + '"';;
                     var cicon = "";
                     if(cItem.menuIconType === '1' || cItem.menuIconType == 1){//icon
@@ -87,7 +89,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                 		cicon = '<img src="' + fileBasePath + cItem.menuIconPic + '" />';
                 		cWinIcon = (cItem.menuIconPic == '' || cItem.menuIconPic == undefined) ? '' : 'win-icon="' + cItem.menuIconPic + '"'
                 	}
-                    html += '<dd ' + cId + ' ' + cUrl + ' ' + cTitle + ' ' + cOpentype + ' ' + cMaxopen + ' ' + cWinIcon + ' ' + cmenuIconBg + ' ' + cmenuIconColor + ' ' + menuDeskTopId + '>';
+                    html += '<dd ' + cId + ' ' + cUrl + ' ' + cTitle + ' ' + cOpentype + ' ' + cMaxopen + ' ' + cWinIcon + ' ' + cmenuIconBg + ' ' + cmenuIconColor + ' ' + cmenuSysWinUrl + ' ' + menuDeskTopId + '>';
                     if(!isNull(cItem.menuIconBg)){
                     	html += '<a><div class="winui-menu-icon" style="background-color: ' + cItem.menuIconBg + '!important;">';
                     }else{

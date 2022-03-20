@@ -556,7 +556,7 @@ layui.define(['layer', 'winui'], function (exports) {
 
     var winLayer = new WinLayer();
     
-    //置顶窗口（显示窗口且置于顶层）
+    // 置顶窗口（显示窗口且置于顶层）
     winLayer.setTop = function (param) {
         var windowDom = common.getWindow(param);
         if (windowDom) {
@@ -571,7 +571,7 @@ layui.define(['layer', 'winui'], function (exports) {
         }
     };
 
-    //显示信息（为了显示在所有窗口最前面而添加的方法）
+    // 显示信息（为了显示在所有窗口最前面而添加的方法）
     winLayer.msg = function (msg, options, func) {
     	//移除请求遮罩层
         $("body").find(".mask-req-str").remove();
@@ -584,7 +584,7 @@ layui.define(['layer', 'winui'], function (exports) {
         layer.msg(msg, options, func);
     };
 
-    //显示提示框（为了显示在所有窗口最前面而添加的方法）
+    // 显示提示框（为了显示在所有窗口最前面而添加的方法）
     winLayer.confirm = function (msg, options, yes, cancel) {
         var type = typeof options === 'function';
         if (type) {
@@ -598,15 +598,15 @@ layui.define(['layer', 'winui'], function (exports) {
         else
         	options.skin = 'layer-ext-winconfirm';
         layer.confirm(msg, options, yes, cancel);
-        //替换窗体的关闭图标
+        // 替换窗体的关闭图标
         $('.layer-ext-winconfirm').find('.layui-layer-close').html('<i class="layui-icon">&#x1006;<i>');
-        //移除移动窗体的div
+        // 移除移动窗体的div
         $('.layui-layer-move').remove();
-        //移除最小化最大化关闭按钮a标签的href属性
+        // 移除最小化最大化关闭按钮a标签的href属性
         $('.layer-ext-winconfirm').find('.layui-layer-setwin').children('a').removeAttr('href');
     };
 
-    //显示加载（为了显示在所有窗口最前面而添加的方法）
+    // 显示加载（为了显示在所有窗口最前面而添加的方法）
     winLayer.load = function (icon, options) {
         icon = icon || 1;
         options = options || {};
@@ -614,7 +614,7 @@ layui.define(['layer', 'winui'], function (exports) {
         return layer.load(icon, options);
     };
 
-    //打开主题设置窗口
+    // 打开主题设置窗口
     winLayer.openTheme = function (loadBottomMenuIcon) {
         var that = this;
         $.get(winui.path + '../../../tpl/systheme/systheme.html', {}, function (content) {
@@ -631,7 +631,7 @@ layui.define(['layer', 'winui'], function (exports) {
         });
     }
     
-    //打开我的消息通知
+    // 打开我的消息通知
     winLayer.openSysNotice = function (loadBottomMenuIcon) {
         var that = this;
     	var title = '<i class="fa title-icon fa-fw fa-list-ul" style="background-color: #0491fe;color: #ecf3f8;"></i>' + '<font class="win-title-class">消息中心</font>';
