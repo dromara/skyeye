@@ -337,7 +337,7 @@ layui.config({
     		title:$("#checkedtitle").val(),
 			state:$("#state").val(),
 			typeId: isNull($("#typeId2").val()) ? "" : $("#typeId2").attr("typeId"),
-			createName: $("#createName").val(),
+			createUser: $("#createName").val(),
 			startTime: firstTime,
 			endTime: lastTime,
 			examineStartTime: theFirstTime,
