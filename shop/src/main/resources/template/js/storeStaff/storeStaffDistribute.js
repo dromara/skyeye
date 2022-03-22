@@ -38,7 +38,7 @@ layui.config({
             elem: '#storeTable',
             method: 'get',
             url: shopBasePath + 'queryStoreList',
-            where: {areaId: areaId},
+            where: {areaId: areaId, enabled: 1},
             even: false,
             page: false,
             limits: getLimits(),
