@@ -51,10 +51,10 @@ layui.config({
 		// 修改版权
 		$(".copyright-content").html(sysMainMation.copyright);
 		
-		$(".lock-body").css({'background-image': 'url("' + fileBasePath + '/images/upload/winbgpic/default.jpg")'});
+		$(".lock-body").css({'background-image': 'url("/images/upload/winbgpic/default.jpg")'});
 		
 		$.cookie('userToken', "", {path: '/' });
-		
+
 		matchingLanguage();
 		form.on('submit(login)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
