@@ -88,7 +88,8 @@ layui.config({
             contacts: $("#contacts").val(),
             phone: $("#phone").val(),
             email: $("#email").val(),
-            enabled: $("#enabled").val()
+            enabled: $("#enabled").val(),
+            vinCode: $("#vinCode").val()
         };
     }
 

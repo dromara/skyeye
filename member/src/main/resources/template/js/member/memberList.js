@@ -201,13 +201,15 @@ layui.config({
         var contacts = $("#contacts").val();
         var phone = $("#phone").val();
         var email = $("#email").val();
-        if(isNull(contacts) && isNull(phone) && isNull(email)){
+        var vinCode = $("#vinCode").val()
+        if(isNull(contacts) && isNull(phone) && isNull(email) && isNull(vinCode)){
             contacts = "!-!!@#$%^&*";
         }
         return {
             contacts: contacts,
             phone: phone,
             email: email,
+            vinCode: vinCode
         };
     }
 

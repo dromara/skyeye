@@ -216,7 +216,8 @@ layui.config({
             phone: $("#phone").val(),
             email: $("#email").val(),
             enabled: $("#enabled").val(),
-            storeId: storeId
+            storeId: storeId,
+            vinCode: $("#vinCode").val()
         };
     }
 
