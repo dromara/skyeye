@@ -444,7 +444,7 @@ layui.config({
     // 左侧底部功能
     $("body").on("click", ".tradition-left-bottom .other-item", function(e){
     	var dataMenu = $(this);
-    	var icon = dataid.find(".other-item-img").html();
+    	var icon = dataMenu.find(".other-item-img").html();
 		indexMenu.loadTraditionPage(dataMenu, icon);
     });
     

@@ -35,8 +35,6 @@ public class SessionFilter implements Filter {
 	 */
 	public static final String LOGIN_PAGE = "/tpl/index/login.html";
 
-	public static final String WEB_API_URL = "http://localhost:8081/";
-
 	public static final String CONFIG_URL = "configRation.json";
 	
 	@Override
@@ -64,7 +62,8 @@ public class SessionFilter implements Filter {
 		}
 
 		if(url.startsWith("/images")){
-			servletResponse.sendRedirect(WEB_API_URL + url);
+			String fileBasePath = PropertiesUtil.getPropertiesValue("${skyeye.configuation.config.fileBasePath}");
+			servletResponse.sendRedirect(fileBasePath + url);
 			return;
 		}
 
