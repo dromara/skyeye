@@ -47,6 +47,7 @@ var fileBasePath;
 // 接口请求地址
 var reqBasePath; // 总项目
 var shopBasePath; // 商城项目
+var flowableBasePath; // 工作流相关功能的项目
 
 var webSocketPath;//聊天socket-开发
 
@@ -56,6 +57,7 @@ function initBaseParams(){
 	reqBasePath = sysMainMation.reqBasePath;
 	shopBasePath = sysMainMation.shopBasePath;
 	webSocketPath = sysMainMation.webSocketPath;
+	flowableBasePath = sysMainMation.flowableBasePath;
 }
 
 // 编辑加载自定义的js文件

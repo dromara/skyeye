@@ -99,6 +99,15 @@ var AjaxPostUtil = {
             } else {
                 this.options.callback.call(this);
             }
+        }else if(xmlhttp.readyState == 4 && (xmlhttp.status == 404)) {
+            // 移除请求遮罩层
+            layui.$("body").find(".mask-req-str").remove();
+            returnValue = eval('(' + '{"returnMessage":"接口请求：404","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
+            if(returnValue) {
+                this.options.callback.call(this, returnValue);
+            } else {
+                this.options.callback.call(this);
+            }
         }
     },
 
