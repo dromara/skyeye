@@ -124,7 +124,6 @@ layui.config({
 		}
 
 		form.on('submit(formAddBean)', function(data) {
-			
 			if(winui.verifyForm(data.elem)) {
 				//获取已选商品数据
 				var rowTr = $("#useTable tr");
@@ -199,7 +198,7 @@ layui.config({
 					remark: $("#remark").val(),
 					depotheadStr: JSON.stringify(tableData)
 				};
-				AjaxPostUtil.request({url: reqBasePath + "assemblysheet002", params: params, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "assemblysheet002", params: params, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';

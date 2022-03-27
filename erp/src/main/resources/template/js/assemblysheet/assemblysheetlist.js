@@ -1,9 +1,6 @@
 
 var rowId = "";
 
-//单据的开始时间、结束时间
-var startTime = "", endTime = "";
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -27,7 +24,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'assemblysheet001',
+        url: flowableBasePath + 'assemblysheet001',
         where: getTableParams(),
         even: true,
         page: true,
@@ -78,43 +75,35 @@ layui.config({
         }
     });
 
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            loadTable();
-        }
-        return false;
-    });
-
-    //删除
+    // 删除
     function deletemember(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
-            AjaxPostUtil.request({url:reqBasePath + "delcommon010", params: {rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "delcommon010", params: {rowId: data.id}, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         });
     }
     
-    //提交审批
+    // 提交审批
 	function subExamine(data){
         layer.confirm('确认要提交审核吗？', { icon: 3, title: '提交审核操作' }, function (index) {
-            AjaxPostUtil.request({url:reqBasePath + "assemblysheet006", params: {rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "assemblysheet006", params: {rowId: data.id}, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
-                    winui.window.msg("提交成功。", {icon: 1,time: 2000});
+                    winui.window.msg("提交成功。", {icon: 1, time: 2000});
                     loadTable();
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         });
     }
     
-    //编辑
+    // 编辑
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -132,7 +121,7 @@ layui.config({
 			}});
 	}
     
-    //详情
+    // 详情
 	function details(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -144,7 +133,7 @@ layui.config({
 			}});
 	}
 
-    //添加
+    // 添加
     $("body").on("click", "#addBean", function(){
         _openNewWindows({
             url: "../../tpl/assemblysheet/assemblysheetadd.html",
@@ -161,25 +150,7 @@ layui.config({
             }});
     });
 
-    $("body").on("click", "#reloadTable", function() {
-        loadTable();
-    });
-
-    $("body").on("click", "#formSearch", function () {
-        refreshTable();
-    });
-    
-    //刷新
-    function loadTable(){
-        table.reload("messageTable", {where: getTableParams()});
-    }
-
-    //搜索
-    function refreshTable(){
-        table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
-    }
-    
-    //导出excel
+    // 导出excel
     $("body").on("click", "#downloadExcel", function () {
     	postDownLoadFile({
 			url : reqBasePath + 'assemblysheet005?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
@@ -187,14 +158,30 @@ layui.config({
 			method : 'post'
 		});
     });
+
+    form.render();
+    form.on('submit(formSearch)', function (data) {
+        if (winui.verifyForm(data.elem)) {
+            table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
+        }
+        return false;
+    });
+
+    $("body").on("click", "#reloadTable", function() {
+        loadTable();
+    });
+
+    // 刷新
+    function loadTable(){
+        table.reload("messageTable", {where: getTableParams()});
+    }
     
     function getTableParams(){
-    	if(isNull($("#operTime").val())){//一定要记得，当createTime为空时
-    		startTime = "";
-    		endTime = "";
-    	}else {
-    		startTime = $("#operTime").val().split('~')[0].trim() + ' 00:00:00';
-    		endTime = $("#operTime").val().split('~')[1].trim() + ' 23:59:59';
+        // 单据的开始时间、结束时间
+        var startTime = "", endTime = "";
+    	if(!isNull($("#operTime").val())){
+            startTime = $("#operTime").val().split('~')[0].trim() + ' 00:00:00';
+            endTime = $("#operTime").val().split('~')[1].trim() + ' 23:59:59';
     	}
     	return {
     		defaultNumber: $("#defaultNumber").val(),

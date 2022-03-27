@@ -26,7 +26,7 @@ layui.config({
  		var orderObject = [];
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "assemblysheet003",
+		 	url: flowableBasePath + "assemblysheet003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: beanTemplate,
@@ -167,7 +167,6 @@ layui.config({
 		}
 		
 		form.on('submit(formEditBean)', function(data) {
-			
 			if(winui.verifyForm(data.elem)) {
 				//获取已选商品数据
 				var rowTr = $("#useTable tr");
@@ -244,7 +243,7 @@ layui.config({
 					depotheadStr: JSON.stringify(tableData),
 					rowId: parent.rowId
 				};
-				AjaxPostUtil.request({url: reqBasePath + "assemblysheet004", params: params, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "assemblysheet004", params: params, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
