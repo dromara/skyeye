@@ -179,7 +179,7 @@ layui.config({
 					remark: $("#remark").val(),
 					depotheadStr: JSON.stringify(tableData)
 				};
-				AjaxPostUtil.request({url: reqBasePath + "allocation002", params: params, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "allocation002", params: params, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
