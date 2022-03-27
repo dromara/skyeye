@@ -6,7 +6,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -16,8 +15,8 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'crmcustomerfrom001',
-	    where: {typeName: $("#typeName").val(), state: $("#state").val()},
+	    url: flowableBasePath + 'crmcustomerfrom001',
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
 	    limits: getLimits(),
@@ -47,36 +46,18 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'edit') { //编辑
+        if (layEvent === 'edit') { // 编辑
         	edit(data);
-        }else if (layEvent === 'delete'){ //删除
+        }else if (layEvent === 'delete'){ // 删除
         	del(data);
-        }else if (layEvent === 'up') { //上线
+        }else if (layEvent === 'up') { // 上线
         	up(data);
-        }else if (layEvent === 'down') { //下线
+        }else if (layEvent === 'down') { // 下线
         	down(data);
         }
     });
-	
-	form.render();
-	
-	$("body").on("click", "#formSearch", function(){
-		refreshTable();
-	});
-	
-	$("body").on("click", "#reloadTable", function(){
-    	loadTable();
-    });
-    
-    function loadTable(){
-    	table.reload("messageTable", {where: {typeName: $("#typeName").val(), state: $("#state").val()}});
-    }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: {typeName: $("#typeName").val(), state: $("#state").val()}});
-    }
 
-	//新增
+	// 新增
 	$("body").on("click", "#addBean", function(){
     	_openNewWindows({
 			url: "../../tpl/crmcustomerfrom/crmcustomerfromadd.html", 
@@ -93,7 +74,7 @@ layui.config({
 			}});
     });
 	
-	//编辑
+	// 编辑
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -111,11 +92,11 @@ layui.config({
 			}});
 	}
 	
-	//删除
+	// 删除
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "crmcustomerfrom005", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom005", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -126,12 +107,12 @@ layui.config({
 		});
 	}
 	
-	//上线
+	// 上线
 	function up(data, obj){
 		var msg = obj ? '确认将【' + obj.data.typeName + '】上线吗？' : '确认将选中数据上线吗？';
 		layer.confirm(msg, {icon: 3, title: '客户来源上线'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "crmcustomerfrom006", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom006", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -142,12 +123,12 @@ layui.config({
 		});
 	}
 	
-	//下线
+	// 下线
 	function down(data, obj){
 		var msg = obj ? '确认将【' + obj.data.typeName + '】下线吗？' : '确认将选中数据下线吗？';
 		layer.confirm(msg, {icon: 3, title: '客户来源下线'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "crmcustomerfrom007", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom007", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -156,6 +137,30 @@ layui.config({
     			}
     		}});
 		});
+	}
+
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
+	});
+
+	// 刷新
+	$("body").on("click", "#reloadTable", function(){
+		loadTable();
+	});
+
+	function loadTable(){
+		table.reload("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams(){
+		return {
+			typeName: $("#typeName").val(),
+			state: $("#state").val()
+		};
 	}
 	
     exports('crmcustomerfromlist', {});
