@@ -75,7 +75,7 @@ layui.config({
 	function initHotActModel(){
 		showGrid({
 			id: "actModelShow",
-			url: reqBasePath + "actmodletype022",
+			url: flowableBasePath + "actmodletype022",
 			params: {},
 			pagination: false,
 			template: $("#actModelTemplate").html(),

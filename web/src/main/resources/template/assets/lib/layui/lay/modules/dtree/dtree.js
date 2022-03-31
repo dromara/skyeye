@@ -161,7 +161,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 							while (win != win.top){
 								win = win.top;
 							}
-							win.location.href = reqBasePath + "/tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");  
+							win.location.href = "../../tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
 						}else if(sessionstatus == "NOAUTHPOINT"){
 							layer.msg('您不具备该权限。',{icon:5, shift:6});
 						}

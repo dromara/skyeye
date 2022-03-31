@@ -96,7 +96,7 @@ layui.config({
 		 		
 		 		fsTree.render({
 					id: "materialCategoryType",
-					url: "materialcategory008?userToken=" + getCookie('userToken') + "&loginPCIp=",
+					url: flowableBasePath + "materialcategory008?userToken=" + getCookie('userToken') + "&loginPCIp=",
 					checkEnable: true,
 					loadEnable: false,//异步加载
 					chkStyle: "radio",

@@ -17,7 +17,7 @@ layui.config({
     var materialCategoryType;
     fsTree.render({
 		id: "materialCategoryType",
-		url: "salesorder011?userToken=" + getCookie('userToken') + "&loginPCIp=",
+		url: flowableBasePath + "salesorder011?userToken=" + getCookie('userToken') + "&loginPCIp=",
 		checkEnable: false,
 		loadEnable: false,//异步加载
 		showLine: false,

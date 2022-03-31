@@ -229,7 +229,7 @@ layui.config({
 		allPeopleFirstLoad = true;
 		fsTree.render({
 			id: "allPeopleTree",
-			url: "commonselpeople001" + urlParams,
+			url: reqBasePath + "commonselpeople001" + urlParams,
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			chkStyle: ztreeCheckType,
@@ -263,7 +263,7 @@ layui.config({
 		accordingCompanyFirstLoad = true;
 		fsTree.render({
 			id: "accordingCompanyTree",
-			url: "commonselpeople002" + urlParams,
+			url: reqBasePath + "commonselpeople002" + urlParams,
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			showLine: false,
@@ -297,7 +297,7 @@ layui.config({
 		accordingDepartmentFirstLoad = true;
 		fsTree.render({
 			id: "accordingDepartmentTree",
-			url: "commonselpeople003" + urlParams,
+			url: reqBasePath + "commonselpeople003" + urlParams,
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			showLine: false,
@@ -331,7 +331,7 @@ layui.config({
 		accordingJobFirstLoad = true;
 		fsTree.render({
 			id: "accordingJobTree",
-			url: "commonselpeople004" + urlParams,
+			url: reqBasePath + "commonselpeople004" + urlParams,
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			showLine: false,
@@ -365,7 +365,7 @@ layui.config({
 		accordingSimpleDepartmentFirstLoad = true;
 		fsTree.render({
 			id: "accordingSimpleDepartmentTree",
-			url: "commonselpeople005" + urlParams,
+			url: reqBasePath + "commonselpeople005" + urlParams,
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			showLine: false,
@@ -399,7 +399,7 @@ layui.config({
 		accordingGroupFirstLoad = true;
 		fsTree.render({
 			id: "accordingGroupTree",
-			url: "commonselpeople006" + urlParams,
+			url: reqBasePath + "commonselpeople006" + urlParams,
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			showLine: false,

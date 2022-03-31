@@ -20,7 +20,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: "mynote012?userToken=" + getCookie('userToken') + "&loginPCIp=" + returnCitySN["cip"]+ "&moveId=" + clickId,
+		url: reqBasePath + "mynote012?userToken=" + getCookie('userToken') + "&loginPCIp=" + returnCitySN["cip"]+ "&moveId=" + clickId,
 		checkEnable: true,
 		chkStyle: "radio",
 		loadEnable: true,//异步加载

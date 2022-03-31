@@ -246,7 +246,7 @@ function auth(urlNum){
 			while (win != win.top){
 				win = win.top;
 			}
-			win.location.href = reqBasePath + "/tpl/index/login.html";
+			win.location.href = "../../tpl/index/login.html";
 		});
 	}
 	return false;

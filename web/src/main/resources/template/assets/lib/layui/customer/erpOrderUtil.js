@@ -57,7 +57,7 @@ var erpOrderUtil = {
     getSubmitTypeByOrderType: function (orderType){
         // 1需要审核；2不需要审核
         var submitType = "";
-        AjaxPostUtil.request({url: reqBasePath + "erpcommon004", params: {orderType: orderType}, method: "GET", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "erpcommon004", params: {orderType: orderType}, method: "GET", type: 'json', callback: function(json) {
             if(json.returnCode == 0) {
                 submitType = json.bean.needExamine;
             } else {
@@ -105,7 +105,7 @@ var erpOrderUtil = {
      */
     deleteOrderMation: function (id, orderType, callback){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
-            AjaxPostUtil.request({url: reqBasePath + "erpcommon005", params: {rowId: id, orderType: orderType}, method: "DELETE", type: 'json', callback: function(json) {
+            AjaxPostUtil.request({url: flowableBasePath + "erpcommon005", params: {rowId: id, orderType: orderType}, method: "DELETE", type: 'json', callback: function(json) {
                 if(json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
                     if(typeof(callback) == "function") {
@@ -144,7 +144,7 @@ var erpOrderUtil = {
             orderType: orderType,
             approvalId: approvalId
         };
-        AjaxPostUtil.request({url: reqBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
             if(json.returnCode == 0) {
                 winui.window.msg("提交成功。", {icon: 1,time: 2000});
                 if(typeof(callback) == "function") {
@@ -164,7 +164,11 @@ var erpOrderUtil = {
      */
     revokeOrderMation: function (processInstanceId, orderType, callback){
         layer.confirm('确认要撤销吗？', { icon: 3, title: '撤销操作' }, function (index) {
-            AjaxPostUtil.request({url: reqBasePath + "erpcommon003", params: {processInstanceId: processInstanceId, orderType: orderType}, method: "GET", type: 'json', callback: function(json) {
+            var params = {
+                processInstanceId: processInstanceId,
+                orderType: orderType
+            };
+            AjaxPostUtil.request({url: flowableBasePath + "erpcommon003", params: params, method: "GET", type: 'json', callback: function(json) {
                 if(json.returnCode == 0) {
                     winui.window.msg("撤销成功。", {icon: 1,time: 2000});
                     if(typeof(callback) == "function") {
@@ -207,7 +211,7 @@ var erpOrderUtil = {
      * @param callback 回执函数
      */
     getDepotList: function (callback){
-        AjaxPostUtil.request({url: reqBasePath + "storehouse008", params: {}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "storehouse008", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(json.returnCode == 0) {
                 if(typeof(callback) == "function") {
                     callback(json);

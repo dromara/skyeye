@@ -36,7 +36,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: "mynote001?userToken=" + getCookie('userToken') + "&loginPCIp=" + returnCitySN["cip"],
+		url: reqBasePath + "mynote001?userToken=" + getCookie('userToken') + "&loginPCIp=" + returnCitySN["cip"],
 		checkEnable: false,
 		dragEnable: true,
 		loadEnable: true,//异步加载

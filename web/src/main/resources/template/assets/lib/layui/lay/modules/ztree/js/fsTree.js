@@ -134,13 +134,6 @@ layui.define(['layer', "fsCommon"], function(exports) {
 			fsCommon.warnMsg("功能号或请求地址为空!");
 			return;
 		}
-		if (isNull(url)) {
-			url = "/fsbus/" + funcNo;
-		}
-		var servletUrl = reqBasePath;
-		if (!isNull(servletUrl)) {
-			url = servletUrl + url;
-		}
 		if (isNull(_this.config.chkboxType)) {
 			_this.config.chkboxType = {
 				"Y" : "ps",
@@ -171,7 +164,7 @@ layui.define(['layer', "fsCommon"], function(exports) {
 			async : { // 异步加载
 				type : "get",
 				enable : _this.config.loadEnable,
-				url : reqBasePath + _this.config.url,
+				url : _this.config.url,
 				autoParam : ["id=parentId"],// 异步加载时需要自动提交父节点属性的参数
 				dataType : "json",
 				dataFilter : function(treeId, treeNode, responseData) {
@@ -266,7 +259,6 @@ layui.define(['layer', "fsCommon"], function(exports) {
 		var _this = this;
 		var funcNo = _this.config.funcNo;
 		var url = _this.config.url; // 请求url
-
 		if (isNull(funcNo) && isNull(url)) {
 			fsCommon.warnMsg("功能号或请求地址为空!");
 			return;
@@ -315,28 +307,28 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				}
 			}
 			fsCommon.invoke(url, otherParam, function(data) {
-						if (data.returnCode == 0) {
-							var array = data.rows;
-							if (!$.isArray(array)) {
-								array = new Array();
-							}
-							if (domTree.attr("isRoot") !== "0") { // 是否显示根目录
-								var arr = {};
-								arr["open"] = true;
-								arr["isParent"] = true;
-								arr["drag"] = false;
-								arr[_this.config.treeName] = "全部";
-								arr[_this.config.treeIdKey] = 0;
-								array.push(arr);
-							}
-							_this.showTree(array);
-						} else {
-							// 提示错误消息
-							fsCommon.warnMsg(data.returnMessage, {
-										icon : 0
-									});
-						}
-					}, false, method);
+				if (data.returnCode == 0) {
+					var array = data.rows;
+					if (!$.isArray(array)) {
+						array = new Array();
+					}
+					if (domTree.attr("isRoot") !== "0") { // 是否显示根目录
+						var arr = {};
+						arr["open"] = true;
+						arr["isParent"] = true;
+						arr["drag"] = false;
+						arr[_this.config.treeName] = "全部";
+						arr[_this.config.treeIdKey] = 0;
+						array.push(arr);
+					}
+					_this.showTree(array);
+				} else {
+					// 提示错误消息
+					fsCommon.warnMsg(data.returnMessage, {
+								icon : 0
+							});
+				}
+			}, false, method);
 		}
 
 	}

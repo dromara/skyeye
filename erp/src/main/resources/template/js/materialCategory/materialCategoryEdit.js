@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "materialcategory004",
+		 	url: flowableBasePath + "materialcategory004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 			method: "GET",
@@ -35,7 +35,7 @@ layui.config({
 		 	        		name: $("#typeName").val(),
 		 	        		remark: $("#remark").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "materialcategory005", params: params, type: 'json', method: "PUT", callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "materialcategory005", params: params, type: 'json', method: "PUT", callback: function(json){
 		 	        		if(json.returnCode == 0){
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

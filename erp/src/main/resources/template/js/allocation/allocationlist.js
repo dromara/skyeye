@@ -179,7 +179,7 @@ layui.config({
     function getTableParams(){
         // 单据的开始时间、结束时间
         var startTime = "", endTime = "";
-    	if(!isNull($("#operTime").val())){//一定要记得，当createTime为空时
+    	if(!isNull($("#operTime").val())){
             startTime = $("#operTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#operTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

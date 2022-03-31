@@ -392,7 +392,7 @@ layui.define(["laytpl", "laypage", "layer", "form", "util"], function(e) {
                                 while(win != win.top) {
                                     win = win.top;
                                 }
-                                win.location.href = reqBasePath + "/tpl/index/login.html"; //XMLHttpRequest.getResponseHeader("CONTEXTPATH");
+                                win.location.href = "../../tpl/index/login.html"; //XMLHttpRequest.getResponseHeader("CONTEXTPATH");
                             } else if(sessionstatus == "NOAUTHPOINT") {
                                 i.layMain.html('<div class="' + f + '">' + systemLanguage["com.skyeye.permission"][languageType] + '</div>'),
                                     i.renderForm(),

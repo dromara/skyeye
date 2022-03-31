@@ -6,10 +6,8 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'tableCheckBoxUtil', 'fsCommon', 'fsTree'], function (exports) {
-	
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -29,7 +27,7 @@ layui.config({
     var materialCategoryType;
     fsTree.render({
 		id: "materialCategoryType",
-		url: "materialcategory008?userToken=" + getCookie('userToken') + "&loginPCIp=",
+		url: flowableBasePath + "materialcategory008?userToken=" + getCookie('userToken') + "&loginPCIp=",
 		checkEnable: false,
 		loadEnable: false,//异步加载
 		showLine: false,
@@ -167,7 +165,7 @@ layui.config({
 			winui.window.msg("请选择商品", {icon: 2,time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url:reqBasePath + "material014", params: {ids: selectedData.toString()}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "material014", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				productMationList = json.rows;
    				$step.nextStep();
@@ -180,7 +178,7 @@ layui.config({
 				});
    				form.render();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	});

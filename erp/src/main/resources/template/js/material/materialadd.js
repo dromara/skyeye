@@ -52,7 +52,7 @@ layui.config({
 	    var materialCategoryType;
 	    fsTree.render({
 			id: "materialCategoryType",
-			url: "materialcategory008?userToken=" + getCookie('userToken') + "&loginPCIp=",
+			url: flowableBasePath + "materialcategory008?userToken=" + getCookie('userToken') + "&loginPCIp=",
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			chkStyle: "radio",
@@ -70,7 +70,7 @@ layui.config({
 		function initManyUnitSelect(){
 			showGrid({
 			 	id: "unitGroupId",
-			 	url: reqBasePath + "materialunit006",
+			 	url: flowableBasePath + "materialunit006",
 			 	params: {},
 			 	pagination: false,
 			 	template: selTemplate,
@@ -207,12 +207,12 @@ layui.config({
  	        	params.extendData = JSON.stringify(extendData);
  	        	//工序信息
  	        	params.procedureJsonStr = JSON.stringify(procedureMationList);
- 	        	AjaxPostUtil.request({url:reqBasePath + "material003", params: params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "material003", params: params, type: 'json', callback: function(json){
  	        		if(json.returnCode == 0){
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';
  	        		}else{
- 	        			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	        		}
  	        	}});
  	        }

@@ -427,7 +427,7 @@ dataGrid.prototype = {
                             win = win.top;
                         }
                         result = eval('(' + '{"returnMessage":"登录超时。","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
-                        win.location.href = reqBasePath + "/tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
+                        win.location.href = "../../tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
                     }else if(sessionstatus == "NOAUTHPOINT"){
                         result = eval('(' + '{"returnMessage":"您不具备该权限。","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
                     }

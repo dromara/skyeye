@@ -34,9 +34,6 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 			fsCommon.invoke(url, param, callBackFunc, async, method);
 		},
 		invoke: function(url, param, callBackFunc, async, method) {
-			if(!isNull(reqBasePath)) {
-				url = reqBasePath + url;
-			}
 			if(isNull(async)) {
 				async = true;
 			}
@@ -69,7 +66,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 							while (win != win.top){
 								win = win.top;
 							}
-							win.location.href = reqBasePath + "/tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");  
+							win.location.href = "../../tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
 						}else if(sessionstatus == "NOAUTHPOINT"){
 							fsCommon.errorMsg('您不具备该权限。');
 						}

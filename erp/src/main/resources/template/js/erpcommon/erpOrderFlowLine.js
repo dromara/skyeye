@@ -14,7 +14,7 @@ layui.config({
 	var orderId = GetUrlParam("rowId");
 	var type = GetUrlParam("type");
 	// 加载订单流水线信息
-	AjaxPostUtil.request({url: reqBasePath + "erpcommon002", params: {rowId: orderId, type: type}, type: 'json', method: 'GET', callback: function(data) {
+	AjaxPostUtil.request({url: flowableBasePath + "erpcommon002", params: {rowId: orderId, type: type}, type: 'json', method: 'GET', callback: function(data) {
 		if(data.returnCode == 0) {
 			var newData = dealWithData(data.bean);
 			$('#chart-container').orgchart({
