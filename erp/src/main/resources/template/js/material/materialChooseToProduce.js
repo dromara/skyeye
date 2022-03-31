@@ -86,13 +86,12 @@ layui.config({
 			filterId: 'messageTable',
 			fieldName: 'productId'
 		});
-			
-		
+
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'material010',
+		    url: flowableBasePath + 'material010',
 		    where: getTableParams(),
 			even: true,
 		    page: true,
@@ -215,7 +214,7 @@ layui.config({
 		var params = {
 			proList: JSON.stringify(proList)
 		};
-		AjaxPostUtil.request({url: reqBasePath + "material015", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "material015", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.productMationList = [].concat(json.rows);
 				parent.layer.close(index);

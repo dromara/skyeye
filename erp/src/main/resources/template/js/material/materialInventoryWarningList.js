@@ -30,7 +30,7 @@ layui.config({
 		    id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'material017',
+	        url: flowableBasePath + 'material017',
 	        where: getTableParams(),
 	        even: true,
 	        page: true,

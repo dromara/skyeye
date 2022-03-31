@@ -18,7 +18,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "material007",
+		 	url: flowableBasePath + "material007",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/material/materialdetailsTemplate.tpl'),

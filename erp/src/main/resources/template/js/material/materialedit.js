@@ -45,7 +45,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "material008",
+		 	url: flowableBasePath + "material008",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: showBaseTemplate,
@@ -116,7 +116,7 @@ layui.config({
 					//加载多单位下拉框
 			 		showGrid({
 					 	id: "unitGroupId",
-					 	url: reqBasePath + "materialunit006",
+					 	url: flowableBasePath + "materialunit006",
 					 	params: {},
 					 	pagination: false,
 					 	template: selTemplate,
@@ -276,12 +276,12 @@ layui.config({
 		 	        	params.extendData = JSON.stringify(extendData);
 		 	        	//工序信息
  	        			params.procedureJsonStr = JSON.stringify(procedureMationList);
-		 	        	AjaxPostUtil.request({url:reqBasePath + "material009", params: params, type:'json', callback:function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "material009", params: params, type: 'json', callback: function(json){
 		 	        		if(json.returnCode == 0){
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
 		 	        		}else{
-		 	        			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	        		}
 		 	        	}});
 		 	        }

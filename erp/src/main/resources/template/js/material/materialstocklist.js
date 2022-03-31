@@ -13,7 +13,7 @@ layui.config({
 	    id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'material012',
+        url: flowableBasePath + 'material012',
         where: {mUnitId: parent.mUnitId},
         even: true,
         page: true,

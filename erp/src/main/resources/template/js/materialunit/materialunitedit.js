@@ -18,7 +18,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "materialunit004",
+		 	url: flowableBasePath + "materialunit004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/materialunit/materialuniteditTemplate.tpl'),
@@ -56,12 +56,12 @@ layui.config({
 			 	        	unitNameStr: JSON.stringify(tableData),
 			 	        	rowId: parent.rowId
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "materialunit005", params: params, type:'json', callback:function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "materialunit005", params: params, type: 'json', callback: function(json){
 		 	        		if(json.returnCode == 0){
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
 		 	        		}else{
-		 	        			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	        		}
 		 	        	}});
 		 	        }

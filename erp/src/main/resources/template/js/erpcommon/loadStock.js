@@ -61,7 +61,7 @@ function loadMaterialDepotStockByDepotId(depotId){
  * @param callBack 回调函数
  */
 function getStockAjaxByDepotAndNormsId(normsIds, depotId, callBack){
-    AjaxPostUtil.request({url: reqBasePath + "material011", params: {depotId: depotId, normsIds: normsIds}, type: 'json', method: "POST", callback: function(json) {
+    AjaxPostUtil.request({url: flowableBasePath + "material011", params: {depotId: depotId, normsIds: normsIds}, type: 'json', method: "POST", callback: function(json) {
         if(json.returnCode == 0) {console.log(typeof(callBack))
             if(typeof(callBack) == "function") {
                 callBack(json);

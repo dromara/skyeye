@@ -7,9 +7,7 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'eleTree', 'soulTable'], function (exports) {
-	
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -26,12 +24,11 @@ layui.config({
 	});
 
 	function initTable(){
-		
 		table.render({
 		    id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'material016',
+	        url: flowableBasePath + 'material016',
 	        where: getTableParams(),
 	        even: true,
 	        page: true,
