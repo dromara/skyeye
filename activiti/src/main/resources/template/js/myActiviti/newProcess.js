@@ -18,7 +18,7 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: reqBasePath + "actmodletype019",
+        url: flowableBasePath + "actmodletype019",
         params: {},
         pagination: false,
         template: beanTemplate,

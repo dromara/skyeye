@@ -19,7 +19,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'activitiProcess002',
+        url: flowableBasePath + 'activitiProcess002',
         where: getTableParams(),
         even: true,
         page: false,

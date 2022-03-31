@@ -24,8 +24,8 @@ layui.config({
 	    id: 'messageMyNeedDealtTable',
 	    elem: '#messageMyNeedDealtTable',
 	    method: 'post',
-	    url: reqBasePath + 'activitimode008',
-	    where: {taskName: $("#taskName").val(), processInstanceId: $("#processInstanceId").val()},
+	    url: flowableBasePath + 'activitimode008',
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
 		limits: getLimits(),
@@ -93,30 +93,36 @@ layui.config({
 			}});
 	}
 	
-    // 刷新我的待办
-	$("body").on("click", "#reloadMyNeedDealtTable", function(){
-		loadMyNeedDealtTable();
-	});
-	
-	// 搜索
-	$("body").on("click", "#formSearch", function(){
-		refreshTable();
-	});
-	
-    function loadMyNeedDealtTable(){
-    	table.reload("messageMyNeedDealtTable", {where:{taskName: $("#taskName").val(), processInstanceId: $("#processInstanceId").val()}});
-    }
-    
-    function refreshTable(){
-    	table.reload("messageMyNeedDealtTable", {page: {curr: 1}, where:{taskName: $("#taskName").val(), processInstanceId: $("#processInstanceId").val()}});
-    }
-    
     $("body").on("click", "#stateDesc", function() {
 		layer.tips('该状态分为挂机和正常，被挂机待办无法进行审批操作', $("#stateDesc"), {
 			tips: [1, '#3595CC'],
 			time: 4000
 		});
 	});
+
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageMyNeedDealtTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
+	});
+
+	// 刷新我的待办
+	$("body").on("click", "#reloadMyNeedDealtTable", function(){
+		loadMyNeedDealtTable();
+	});
+
+	function loadMyNeedDealtTable(){
+		table.reload("messageMyNeedDealtTable", {where: getTableParams()});
+	}
+
+    function getTableParams(){
+    	return {
+    		taskName: $("#taskName").val(),
+			processInstanceId: $("#processInstanceId").val()
+    	};
+	}
     
     exports('pendingProcess', {});
 });
