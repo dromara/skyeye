@@ -22,7 +22,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'erpordersaleoverplan001',
+        url: flowableBasePath + 'erpordersaleoverplan001',
         where: getTableParams(),
         even: true,
         page: true,

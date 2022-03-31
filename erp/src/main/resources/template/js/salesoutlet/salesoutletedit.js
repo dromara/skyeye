@@ -75,7 +75,7 @@ layui.config({
 
 	// 初始化回显数据
 	function initDataShow(){
-		AjaxPostUtil.request({url: reqBasePath + "salesoutlet003", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "salesoutlet003", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
 			if(json.returnCode == 0) {
 				submitType = json.bean.submitType;
 				// 客户信息赋值
@@ -325,7 +325,7 @@ layui.config({
 			approvalId: approvalId,
 			rowId: parent.rowId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "salesoutlet004", params: params, type: 'json', method: "PUT", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "salesoutlet004", params: params, type: 'json', method: "PUT", callback: function(json) {
 			if(json.returnCode == 0) {
 				dsFormUtil.savePageData("dsFormShow", json.bean.id);
 				parent.layer.close(index);

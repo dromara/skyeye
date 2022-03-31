@@ -24,7 +24,7 @@ layui.config({
 	initDepotHtml();
 	//初始化仓库
 	function initDepotHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "storehouse009", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "storehouse009", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				//加载仓库数据
 				$("#depotId").html(getDataUseHandlebars(selOption, json)); 
@@ -46,7 +46,7 @@ layui.config({
 		    id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'erpstockinventory002',
+	        url: flowableBasePath + 'erpstockinventory002',
 	        where: getTableParams(),
 	        even: true,
 	        page: true,
@@ -116,7 +116,7 @@ layui.config({
 	    				number: value,
 	    				depotId: data.depotId
 	    			};
-	    			AjaxPostUtil.request({url: reqBasePath + "erpstockinventory001", params: params, type: 'json', callback: function(json) {
+	    			AjaxPostUtil.request({url: flowableBasePath + "erpstockinventory001", params: params, type: 'json', callback: function(json) {
 						if(json.returnCode == 0) {
 							winui.window.msg("盘点成功", {icon: 1,time: 2000});
 						} else {

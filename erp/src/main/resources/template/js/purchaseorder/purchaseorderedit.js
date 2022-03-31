@@ -60,7 +60,7 @@ layui.config({
 
 	//渲染数据到页面
 	function initDataToShow(){
-		AjaxPostUtil.request({url: reqBasePath + "purchaseorder004", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "purchaseorder004", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
 			if(json.returnCode == 0) {
 				submitType = json.bean.submitType;
 				// 供应商信息赋值
@@ -255,7 +255,7 @@ layui.config({
 			approvalId: approvalId,
 			rowId: parent.rowId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "purchaseorder005", params: params, type: 'json', method: "PUT", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "purchaseorder005", params: params, type: 'json', method: "PUT", callback: function(json) {
 			if(json.returnCode == 0) {
 				dsFormUtil.savePageData("dsFormShow", json.bean.id);
 				parent.layer.close(index);

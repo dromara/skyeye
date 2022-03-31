@@ -34,7 +34,7 @@ layui.config({
 	var orderObject = [];
 	showGrid({
 		id: "showForm",
-		url: reqBasePath + "retailreturns003",
+		url: flowableBasePath + "retailreturns003",
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: beanTemplate,
@@ -292,7 +292,7 @@ layui.config({
 			approvalId: approvalId,
 			rowId: parent.rowId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "retailreturns004", params: params, type: 'json', method: "PUT", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "retailreturns004", params: params, type: 'json', method: "PUT", callback: function(json) {
 			if(json.returnCode == 0) {
 				dsFormUtil.savePageData("dsFormShow", json.bean.id);
 				parent.layer.close(index);

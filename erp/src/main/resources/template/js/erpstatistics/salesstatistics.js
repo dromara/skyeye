@@ -41,7 +41,7 @@ layui.config({
 	        id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'statistics004',
+	        url: flowableBasePath + 'statistics004',
 	        where: {materialName: $("#materialName").val(), operTime: operTime},
 	        even: true,
 	        page: true,

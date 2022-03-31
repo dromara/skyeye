@@ -25,7 +25,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'purchaseput001',
+        url: flowableBasePath + 'purchaseput001',
         where: getTableParams(),
         even: true,
         page: true,
@@ -180,7 +180,7 @@ layui.config({
     // 导出excel
     $("body").on("click", "#downloadExcel", function () {
     	postDownLoadFile({
-			url : reqBasePath + 'purchaseput005?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
+			url : flowableBasePath + 'purchaseput005?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
 			params: getTableParams(),
 			method : 'post'
 		});

@@ -16,7 +16,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'supplier009',
+	    url: flowableBasePath + 'supplier009',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,

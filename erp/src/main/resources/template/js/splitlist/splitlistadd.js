@@ -198,7 +198,7 @@ layui.config({
 					remark: $("#remark").val(),
 					depotheadStr: JSON.stringify(tableData)
 				};
-				AjaxPostUtil.request({url: reqBasePath + "splitlist002", params: params, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "splitlist002", params: params, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';

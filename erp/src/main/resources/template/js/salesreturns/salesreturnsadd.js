@@ -225,7 +225,7 @@ layui.config({
 			subType: subType,
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "salesreturns002", params: params, type: 'json', method: "POST", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "salesreturns002", params: params, type: 'json', method: "POST", callback: function(json) {
 			if(json.returnCode == 0) {
 				dsFormUtil.savePageData("dsFormShow", json.bean.id);
 				parent.layer.close(index);

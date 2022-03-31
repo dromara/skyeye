@@ -39,12 +39,12 @@ layui.config({
                     accountNumber: $("#accountNumber").val(),
                     taxRate: isNull($("#taxRate").val()) ? '0' : $("#taxRate").val()
                 };
-                AjaxPostUtil.request({url:reqBasePath + "supplier002", params:params, type:'json', callback:function(json){
+                AjaxPostUtil.request({url: flowableBasePath + "supplier002", params: params, type: 'json', callback: function(json){
                     if(json.returnCode == 0){
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }else{
-                        winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }});
             }

@@ -59,7 +59,7 @@ layui.config({
 	        id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'statistics002',
+	        url: flowableBasePath + 'statistics002',
 	        where: getTableParams(),
 	        even: true,
 	        page: true,

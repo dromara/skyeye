@@ -28,7 +28,7 @@ layui.config({
 	initDepotHtml();
 	//初始化仓库
 	function initDepotHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "storehouse009", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "storehouse009", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				//加载仓库数据
 				$("#depotId").html(getDataUseHandlebars(selOption, json)); 
@@ -49,7 +49,7 @@ layui.config({
 	        id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'storehouseapproval005',
+	        url: flowableBasePath + 'storehouseapproval005',
 	        where: getTableParams(),
 	        even: true,
 	        page: true,

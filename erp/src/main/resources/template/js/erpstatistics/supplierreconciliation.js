@@ -41,7 +41,7 @@ layui.config({
 	        id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'statistics006',
+	        url: flowableBasePath + 'statistics006',
 	        where: {operTime: operTime, organName: $("#organName").val()},
 	        even: true,
 	        page: true,

@@ -20,7 +20,7 @@ layui.config({
         
         showGrid({
             id: "showForm",
-            url: reqBasePath + "storehouse003",
+            url: flowableBasePath + "storehouse003",
             params: {rowId: parent.rowId},
             pagination: false,
             template: $("#beanTemplate").html(),
@@ -86,12 +86,12 @@ layui.config({
 		                    params.principal = userId;
 		                }
 		                
-                        AjaxPostUtil.request({url:reqBasePath + "storehouse005", params:params, type:'json', callback:function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "storehouse005", params: params, type: 'json', callback: function(json){
                             if(json.returnCode == 0){
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
                             }else{
-                                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});
                     }

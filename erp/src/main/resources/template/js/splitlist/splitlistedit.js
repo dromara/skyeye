@@ -26,7 +26,7 @@ layui.config({
  		var orderObject = [];
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "splitlist003",
+		 	url: flowableBasePath + "splitlist003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: beanTemplate,
@@ -244,7 +244,7 @@ layui.config({
 					depotheadStr: JSON.stringify(tableData),
 					rowId: parent.rowId
 				};
-				AjaxPostUtil.request({url: reqBasePath + "splitlist004", params: params, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "splitlist004", params: params, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';

@@ -69,7 +69,7 @@ layui.config({
 
 	// 初始化回显数据
 	function initDataShow(){
-		AjaxPostUtil.request({url: reqBasePath + "purchaseorder008", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "purchaseorder008", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
 			if(json.returnCode == 0) {
 				if(isNull(json.bean)){
 					$("#showForm").html("");
@@ -292,7 +292,7 @@ layui.config({
 	}
 
 	function sendRequest(params){
-		AjaxPostUtil.request({url: reqBasePath + "purchaseorder009", params: params, type: 'json', method: "POST", callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "purchaseorder009", params: params, type: 'json', method: "POST", callback: function(json) {
 			if(json.returnCode == 0) {
 				dsFormUtil.savePageData("dsFormShow", json.bean.id);
 				parent.layer.close(index);

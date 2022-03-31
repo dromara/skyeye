@@ -11,7 +11,7 @@ layui.config({
         var simpleTemplate = $("#simpleTemplate").html();
         showGrid({
             id: "showForm",
-            url: reqBasePath + "storehouse007",
+            url: flowableBasePath + "storehouse007",
             params: {rowId: parent.rowId},
             pagination: false,
             template: simpleTemplate,
