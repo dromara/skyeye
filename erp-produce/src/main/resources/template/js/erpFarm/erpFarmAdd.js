@@ -34,7 +34,7 @@ layui.config({
 		
  		showGrid({
 			id: "departmentId",
-			url: reqBasePath + "mycrmcontract006",
+			url: flowableBasePath + "mycrmcontract006",
 			params: {},
 			pagination: false,
 			template: selOption,

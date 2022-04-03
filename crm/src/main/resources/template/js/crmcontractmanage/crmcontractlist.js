@@ -16,7 +16,7 @@ layui.config({
 	//客户
 	showGrid({
 	 	id: "customer",
-	 	url: reqBasePath + "customer007",
+	 	url: flowableBasePath + "customer007",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -32,7 +32,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'mycrmcontract007',
+	    url: flowableBasePath + 'mycrmcontract007',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,

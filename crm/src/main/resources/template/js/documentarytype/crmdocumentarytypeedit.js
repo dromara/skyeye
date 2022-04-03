@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "crmdocumentarytype003",
+		 	url: flowableBasePath + "crmdocumentarytype003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/documentarytype/crmdocumentarytypeeditTemplate.tpl'),
@@ -27,7 +27,7 @@ layui.config({
 	 	        			rowId: parent.rowId,
 	 	        			typeName: $("#typeName").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "crmdocumentarytype004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "crmdocumentarytype004", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

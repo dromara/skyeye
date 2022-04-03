@@ -15,7 +15,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "customercontact003",
+		 	url: flowableBasePath + "customercontact003",
 		 	params: {contactId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/crmCustomerContact/crmCustomerContactEditTemplate.tpl'),
@@ -50,7 +50,7 @@ layui.config({
 		 	        		wechat: $("#wechat").val(),
 		 	        		isDefault: $("input[name='isDefault']:checked").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "customercontact004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customercontact004", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

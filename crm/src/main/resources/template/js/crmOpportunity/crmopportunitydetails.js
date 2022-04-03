@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "opportunity003",
+		 	url: flowableBasePath + "opportunity003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/crmOpportunity/crmopportunitydetailsTemplate.tpl'),

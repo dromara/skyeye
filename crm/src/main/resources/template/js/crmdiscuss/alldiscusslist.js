@@ -19,7 +19,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'opportunity018',
+	    url: flowableBasePath + 'opportunity018',
 	    where: {title: $("#title").val(), opportunityTitle: $("#opportunityTitle").val()},
 	    even: true,
 	    page: true,

@@ -62,7 +62,7 @@ layui.config({
 		//所属部门
 		showGrid({
 			id: "departmentId",
-			url: reqBasePath + "mycrmcontract006",
+			url: flowableBasePath + "mycrmcontract006",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -79,7 +79,7 @@ layui.config({
 		//客户
 		showGrid({
 			id: "customerId",
-			url: reqBasePath + "customer007",
+			url: flowableBasePath + "customer007",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -115,7 +115,7 @@ layui.config({
 		//合同
 		showGrid({
 			id: "contractId",
-			url: reqBasePath + "mycrmcontract008",
+			url: flowableBasePath + "mycrmcontract008",
 			params: {id: id},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),

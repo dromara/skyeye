@@ -16,7 +16,7 @@ layui.config({
 	// 客户
 	showGrid({
 	 	id: "customer",
-	 	url: reqBasePath + "customer007",
+	 	url: flowableBasePath + "customer007",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -31,7 +31,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'mycrmcontract001',
+	    url: flowableBasePath + 'mycrmcontract001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -161,7 +161,7 @@ layui.config({
 					rowId: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: reqBasePath + "mycrmcontract009", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract009", params: params, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadTable();
@@ -177,7 +177,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "mycrmcontract015", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract015", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -193,7 +193,7 @@ layui.config({
 		var msg = '确认执行该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '执行申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "mycrmcontract010", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "mycrmcontract010", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();
@@ -209,7 +209,7 @@ layui.config({
 		var msg = '确认关闭该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '关闭申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "mycrmcontract011", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "mycrmcontract011", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();
@@ -225,7 +225,7 @@ layui.config({
 		var msg = '确认搁置该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '搁置申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "mycrmcontract012", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "mycrmcontract012", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();
@@ -241,7 +241,7 @@ layui.config({
 		var msg = '确认恢复该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '恢复申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "mycrmcontract013", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "mycrmcontract013", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();
@@ -257,7 +257,7 @@ layui.config({
 		var msg = '确认撤销该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "mycrmcontract016", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "mycrmcontract016", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();

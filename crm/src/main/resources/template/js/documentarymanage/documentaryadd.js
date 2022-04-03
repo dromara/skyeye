@@ -29,7 +29,7 @@ layui.config({
 	    //分类
 		showGrid({
 		 	id: "typeId",
-		 	url: reqBasePath + "crmdocumentarytype008",
+		 	url: flowableBasePath + "crmdocumentarytype008",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -45,7 +45,7 @@ layui.config({
 		function opportunityFrom(){
 			showGrid({
 			 	id: "opportunityId",
-			 	url: reqBasePath + "opportunity008",
+			 	url: flowableBasePath + "opportunity008",
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -69,7 +69,7 @@ layui.config({
 					opportunityId: $("#opportunityId").val(),
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "documentary002", params: params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "documentary002", params: params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

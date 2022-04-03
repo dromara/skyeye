@@ -20,7 +20,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'opportunity007',
+	    url: flowableBasePath + 'opportunity007',
 	    where: {rowId: rowId},
 	    even: true,
 	    page: true,

@@ -61,7 +61,7 @@ layui.config({
 		//所属部门
 		showGrid({
 			id: "departmentId",
-			url: reqBasePath + "mycrmcontract006",
+			url: flowableBasePath + "mycrmcontract006",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -201,7 +201,7 @@ layui.config({
 			});
 			params.relationUserId = relationUserId;
 		}
-		AjaxPostUtil.request({url: reqBasePath + "mycrmcontract002", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract002", params: params, type: 'json', callback: function(json){
 			if (json.returnCode == 0){
 				parent.layer.close(index);
 				parent.refreshCode = '0';

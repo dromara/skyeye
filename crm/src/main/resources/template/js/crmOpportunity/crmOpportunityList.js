@@ -19,7 +19,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'opportunity001',
+	    url: flowableBasePath + 'opportunity001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -101,7 +101,7 @@ layui.config({
 	function revoke(data){
 		layer.confirm('确认撤销该商机审批申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "opportunity027", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "opportunity027", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();
@@ -138,7 +138,7 @@ layui.config({
 					rowId: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: reqBasePath + "opportunity017", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "opportunity017", params: params, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadTable();
@@ -217,7 +217,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "opportunity013", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "opportunity013", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();

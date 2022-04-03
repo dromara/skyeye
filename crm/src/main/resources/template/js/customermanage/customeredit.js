@@ -20,7 +20,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "customer003",
+		 	url: flowableBasePath + "customer003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/customermanage/customereditTemplate.tpl'),
@@ -30,7 +30,7 @@ layui.config({
 			    // 分类
 		 		showGrid({
 				 	id: "typeId",
-				 	url: reqBasePath + "customertype008",
+				 	url: flowableBasePath + "customertype008",
 				 	params: {},
 				 	pagination: false,
 				 	template: selectMust,
@@ -46,7 +46,7 @@ layui.config({
 		 		function customerFrom(){
 		 			showGrid({
 		 			 	id: "fromId",
-		 			 	url: reqBasePath + "crmcustomerfrom008",
+		 			 	url: flowableBasePath + "crmcustomerfrom008",
 		 			 	params: {},
 		 			 	pagination: false,
 		 			 	template: selectMust,
@@ -63,7 +63,7 @@ layui.config({
 		 		function customerIndustry(){
 		 			showGrid({
 		 			 	id: "industryId",
-		 			 	url: reqBasePath + "crmcustomerindustry008",
+		 			 	url: flowableBasePath + "crmcustomerindustry008",
 		 			 	params: {},
 		 			 	pagination: false,
 		 			 	template: selectMust,
@@ -81,7 +81,7 @@ layui.config({
 		 		function customerGroup(){
 		 			showGrid({
 		 			 	id: "groupId",
-		 			 	url: reqBasePath + "customergroup008",
+		 			 	url: flowableBasePath + "customergroup008",
 		 			 	params: {},
 		 			 	pagination: false,
 		 			 	template: selectMust,
@@ -150,7 +150,7 @@ layui.config({
 	 	        			params.chargeUser = userList[0].id;
 		                }
 	 	        		
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "customer004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customer004", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

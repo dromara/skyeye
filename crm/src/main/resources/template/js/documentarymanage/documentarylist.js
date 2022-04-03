@@ -16,7 +16,7 @@ layui.config({
 	// 分类
 	showGrid({
 	 	id: "typeId",
-	 	url: reqBasePath + "crmdocumentarytype008",
+	 	url: flowableBasePath + "crmdocumentarytype008",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -38,7 +38,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'documentary007',
+	    url: flowableBasePath + 'documentary007',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,

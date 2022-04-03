@@ -19,7 +19,7 @@ layui.config({
 	// 分类
 	showGrid({
 	 	id: "typeId",
-	 	url: reqBasePath + "customertype008",
+	 	url: flowableBasePath + "customertype008",
 	 	params: {},
 	 	pagination: false,
 	 	template: selectOption,
@@ -35,7 +35,7 @@ layui.config({
 	function customerFrom(){
 		showGrid({
 		 	id: "fromId",
-		 	url: reqBasePath + "crmcustomerfrom008",
+		 	url: flowableBasePath + "crmcustomerfrom008",
 		 	params: {},
 		 	pagination: false,
 		 	template: selectOption,
@@ -52,7 +52,7 @@ layui.config({
 	function customerIndustry(){
 		showGrid({
 		 	id: "industryId",
-		 	url: reqBasePath + "crmcustomerindustry008",
+		 	url: flowableBasePath + "crmcustomerindustry008",
 		 	params: {},
 		 	pagination: false,
 		 	template: selectOption,
@@ -69,7 +69,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'customer011',
+	    url: flowableBasePath + 'customer011',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -159,7 +159,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "customer006", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "customer006", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();

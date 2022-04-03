@@ -17,7 +17,7 @@ layui.config({
 	// 分类
 	showGrid({
 	 	id: "typeId",
-	 	url: reqBasePath + "customertype008",
+	 	url: flowableBasePath + "customertype008",
 	 	params: {},
 	 	pagination: false,
 	 	template: selectOption,
@@ -33,7 +33,7 @@ layui.config({
 	function customerFrom(){
 		showGrid({
 		 	id: "fromId",
-		 	url: reqBasePath + "crmcustomerfrom008",
+		 	url: flowableBasePath + "crmcustomerfrom008",
 		 	params: {},
 		 	pagination: false,
 		 	template: selectOption,
@@ -50,7 +50,7 @@ layui.config({
 	function customerIndustry(){
 		showGrid({
 		 	id: "industryId",
-		 	url: reqBasePath + "crmcustomerindustry008",
+		 	url: flowableBasePath + "crmcustomerindustry008",
 		 	params: {},
 		 	pagination: false,
 		 	template: selectOption,
@@ -67,7 +67,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'customer010',
+	    url: flowableBasePath + 'customer010',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,

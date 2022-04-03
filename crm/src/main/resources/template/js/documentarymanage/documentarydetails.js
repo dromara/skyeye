@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "documentary005",
+		 	url: flowableBasePath + "documentary005",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/documentarymanage/documentarydetailsTemplate.tpl'),

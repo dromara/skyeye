@@ -45,7 +45,7 @@ layui.config({
 	function fromSelect(){
 		showGrid({
 			id: "fromId",
-			url: reqBasePath + "crmopportunityfrom008",
+			url: flowableBasePath + "crmopportunityfrom008",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -62,7 +62,7 @@ layui.config({
 	function departmentsSelect(){
 		showGrid({
 			id: "subDepartments",
-			url: reqBasePath + "mycrmcontract006",
+			url: flowableBasePath + "mycrmcontract006",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -148,7 +148,7 @@ layui.config({
             });
             params.followId = followId;
         }
-        AjaxPostUtil.request({url: reqBasePath + "opportunity011", params: params, type: 'json', callback: function(json){
+        AjaxPostUtil.request({url: flowableBasePath + "opportunity011", params: params, type: 'json', callback: function(json){
             if (json.returnCode == 0){
                 parent.layer.close(index);
                 parent.refreshCode = '0';

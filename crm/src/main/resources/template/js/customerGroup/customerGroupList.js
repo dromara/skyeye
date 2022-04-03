@@ -17,7 +17,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'customergroup001',
+	    url: flowableBasePath + 'customergroup001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -122,7 +122,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "customergroup005", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "customergroup005", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -137,7 +137,7 @@ layui.config({
 	function up(data, obj){
 		layer.confirm('确认将选中数据上线吗？', {icon: 3, title: '上线操作'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "customergroup006", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "customergroup006", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -152,7 +152,7 @@ layui.config({
 	function down(data, obj){
 		layer.confirm('确认将选中数据下线吗？', {icon: 3, title: '下线操作'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "customergroup007", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "customergroup007", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				loadTable();

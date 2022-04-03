@@ -78,7 +78,7 @@ layui.config({
 	function departmentsSelect(j){
 		showGrid({
 			id: "departments",
-			url: reqBasePath + "mycrmcontract006",
+			url: flowableBasePath + "mycrmcontract006",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),

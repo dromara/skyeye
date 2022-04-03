@@ -25,7 +25,7 @@ layui.config({
  	        		groupName: $("#groupName").val(),
  	        		desc: $("#desc").val()
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "customergroup002", params: params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "customergroup002", params: params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

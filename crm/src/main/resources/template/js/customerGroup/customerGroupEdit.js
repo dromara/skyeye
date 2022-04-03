@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "customergroup003",
+		 	url: flowableBasePath + "customergroup003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/customerGroup/customerGroupEditTemplate.tpl'),
@@ -34,7 +34,7 @@ layui.config({
 	 	        			groupName: $("#groupName").val(),
  	        				desc: $("#desc").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "customergroup004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customergroup004", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
