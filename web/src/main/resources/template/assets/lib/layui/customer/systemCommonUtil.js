@@ -17,7 +17,7 @@ var systemCommonUtil = {
      * @param callback 回执函数
      */
     getSysAccountListByType: function (callback){
-        AjaxPostUtil.request({url: reqBasePath + "account009", params: {}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "account009", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(json.returnCode == 0) {
                 if(typeof(callback) == "function") {
                     callback(json);
@@ -69,7 +69,7 @@ var systemCommonUtil = {
      * @param callback 回执函数
      */
     getSysInoutitemListByType: function (type, callback){
-        AjaxPostUtil.request({url: reqBasePath + "inoutitem007", params: {type: type}, type: 'json', method: "GET", callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "inoutitem007", params: {type: type}, type: 'json', method: "GET", callback: function(json) {
             if(json.returnCode == 0) {
                 if(typeof(callback) == "function") {
                     callback(json);

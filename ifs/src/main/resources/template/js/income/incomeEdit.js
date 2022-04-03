@@ -24,7 +24,7 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: reqBasePath + "income003",
+        url: flowableBasePath + "income003",
         params: {rowId: parent.rowId},
         pagination: false,
         template: beanTemplate,
@@ -168,7 +168,7 @@ layui.config({
             approvalId: approvalId,
             rowId: parent.rowId
         };
-        AjaxPostUtil.request({url: reqBasePath + "income004", params: params, type: 'json', method: "PUT", callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "income004", params: params, type: 'json', method: "PUT", callback: function(json) {
             if(json.returnCode == 0) {
                 dsFormUtil.savePageData("dsFormShow", json.bean.id);
                 parent.layer.close(index);

@@ -13,7 +13,7 @@ layui.config({
 
         showGrid({
             id: "showForm",
-            url: reqBasePath + "ifssetofbooks003",
+            url: flowableBasePath + "ifssetofbooks003",
             params: {rowId: parent.rowId},
             pagination: false,
             method: "GET",
@@ -47,7 +47,7 @@ layui.config({
                             endTime: $("#dateScope").val().split('~')[1].trim(),
                             remark: $("#remark").val()
                         };
-                        AjaxPostUtil.request({url: reqBasePath + "ifssetofbooks004", params: params, type: 'json', method: "PUT", callback: function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "ifssetofbooks004", params: params, type: 'json', method: "PUT", callback: function(json){
                             if(json.returnCode == 0){
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

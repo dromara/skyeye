@@ -14,7 +14,7 @@ layui.config({
 
         showGrid({
             id: "showForm",
-            url: reqBasePath + "ifsaccountsubject003",
+            url: flowableBasePath + "ifsaccountsubject003",
             params: {rowId: parent.rowId},
             pagination: false,
             method: "GET",
@@ -51,7 +51,7 @@ layui.config({
                             type: $("#type").val(),
                             remark: $("#remark").val()
                         };
-                        AjaxPostUtil.request({url: reqBasePath + "ifsaccountsubject004", params: params, type: 'json', method: "PUT", callback: function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "ifsaccountsubject004", params: params, type: 'json', method: "PUT", callback: function(json){
                             if(json.returnCode == 0){
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

@@ -12,7 +12,7 @@ layui.config({
 
         showGrid({
             id: "showForm",
-            url: reqBasePath + "inoutitem003",
+            url: flowableBasePath + "inoutitem003",
             params: {rowId:parent.rowId},
             pagination: false,
             method: "GET",
@@ -37,7 +37,7 @@ layui.config({
                             inoutitemType: $("#inoutitemType").val(),
                             remark: $("#remark").val()
                         };
-                        AjaxPostUtil.request({url: reqBasePath + "inoutitem005", params: params, type: 'json', method: "PUT", callback: function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "inoutitem005", params: params, type: 'json', method: "PUT", callback: function(json){
                             if(json.returnCode == 0){
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

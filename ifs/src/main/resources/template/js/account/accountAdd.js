@@ -27,7 +27,7 @@ layui.config({
                     isDefault: $("input[name='isDefault']:checked").val(),
                     remark: $("#remark").val()
                 };
-                AjaxPostUtil.request({url: reqBasePath + "account002", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: flowableBasePath + "account002", params: params, type: 'json', method: "POST", callback: function(json){
                     if(json.returnCode == 0){
                         parent.layer.close(index);
                         parent.refreshCode = '0';

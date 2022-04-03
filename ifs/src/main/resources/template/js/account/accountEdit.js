@@ -11,7 +11,7 @@ layui.config({
         	textool = layui.textool;
         showGrid({
             id: "showForm",
-            url: reqBasePath + "account003",
+            url: flowableBasePath + "account003",
             params: {rowId:parent.rowId},
             pagination: false,
             method: "GET",
@@ -41,7 +41,7 @@ layui.config({
                             isDefault: $("input[name='isDefault']:checked").val(),
                             remark: $("#remark").val()
                         };
-                        AjaxPostUtil.request({url: reqBasePath + "account005", params: params, type: 'json', method: "PUT", callback: function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "account005", params: params, type: 'json', method: "PUT", callback: function(json){
                             if(json.returnCode == 0){
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

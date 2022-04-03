@@ -12,7 +12,7 @@ layui.config({
 	
     showGrid({
 	 	id: "showForm",
-	 	url: reqBasePath + "ifsVoucher001",
+	 	url: flowableBasePath + "ifsVoucher001",
 	 	params: getTableParams(),
 	 	pagination: true,
 	 	pagesize: 18,
