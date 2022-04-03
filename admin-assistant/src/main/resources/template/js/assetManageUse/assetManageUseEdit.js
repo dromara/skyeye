@@ -19,7 +19,7 @@ layui.config({
 
 	var sTableData = "";
 
-	AjaxPostUtil.request({url: reqBasePath + "asset014", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
+	AjaxPostUtil.request({url: flowableBasePath + "asset014", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
 			$("#useTitle").html(json.bean.title);
 			$("#useName").html(json.bean.userName);
@@ -42,7 +42,7 @@ layui.config({
 
 	// 初始化资产类别
 	function initTypeHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
 				//渲染
@@ -58,7 +58,7 @@ layui.config({
 							resetAssetList(thisRowNum, list); //重置选择行的资产列表
 						} else {
 							//类型对应的资产不存在js对象中
-							AjaxPostUtil.request({url: reqBasePath + "asset011", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
+							AjaxPostUtil.request({url: flowableBasePath + "asset011", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
 								if(json.returnCode == 0) {
 									assetList.push({
 										id: thisRowValue,
@@ -169,7 +169,7 @@ layui.config({
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId,
 		};
-		AjaxPostUtil.request({url: reqBasePath + "asset015", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "asset015", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
@@ -235,7 +235,7 @@ layui.config({
 				form.render('select');
 			} else {
 				//类型对应的资产不存在js对象中
-				AjaxPostUtil.request({url: reqBasePath + "asset011", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "asset011", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						assetList.push({
 							id: thisRowValue,

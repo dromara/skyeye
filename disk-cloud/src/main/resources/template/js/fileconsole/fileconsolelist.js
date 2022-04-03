@@ -787,7 +787,6 @@ layui.config({
 	$("body").on("click", ".treedeleteFolderAndChild", function(e){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            // 向服务端发送删除指令
 			var deleteArray = new Array();
 			deleteArray.push({
 				rowId: folderId,

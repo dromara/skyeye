@@ -21,7 +21,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "vehicle008",
+		 	url: flowableBasePath + "vehicle008",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/vehicleManage/vehicleManageEditTemplate.tpl'),
@@ -137,7 +137,7 @@ layui.config({
 	 	 	        	}else{
 	 	        			params.vehicleAdmin = userList[0].id;
 	 	        		}
-	 	 	        	AjaxPostUtil.request({url:reqBasePath + "vehicle009", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url:flowableBasePath + "vehicle009", params:params, type:'json', callback:function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

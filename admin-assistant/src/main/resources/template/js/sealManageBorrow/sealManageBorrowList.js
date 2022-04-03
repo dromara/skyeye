@@ -25,7 +25,7 @@ layui.config({
 		id: 'borrowTable',
 		elem: '#borrowTable',
 		method: 'post',
-		url: reqBasePath + 'sealborrow001',
+		url: flowableBasePath + 'sealborrow001',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -91,7 +91,7 @@ layui.config({
 		var msg = '确认撤销该借用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sealborrow010", params:{processInstanceId: data.processInstanceId}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "sealborrow010", params:{processInstanceId: data.processInstanceId}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadBorrowTable();
@@ -130,7 +130,7 @@ layui.config({
 					rowId: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: reqBasePath + "sealborrow006", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "sealborrow006", params: params, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadBorrowTable();
@@ -147,8 +147,7 @@ layui.config({
 		var msg = '确认作废该条借用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            //向服务端发送借用申请作废指令
-            AjaxPostUtil.request({url:reqBasePath + "sealborrow007", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "sealborrow007", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
     				loadBorrowTable();

@@ -59,7 +59,7 @@ layui.config({
 
 	//初始化指定用车
 	function initDesignatedVehicle(num) {
-		AjaxPostUtil.request({url: reqBasePath + "vehicle011", params: {passengerNum: num}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "vehicle011", params: {passengerNum: num}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				var designatedVehicleHtml = getDataUseHandlebars(selOption, json); //加载类别数据
 				$("#designatedVehicleId").html(designatedVehicleHtml);
@@ -74,7 +74,7 @@ layui.config({
 	//初始化司机选择
 	function initDriver() {
 		loadDriver = true;
-		AjaxPostUtil.request({url: reqBasePath + "vehicle012", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "vehicle012", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				var driverHtml = getDataUseHandlebars(selOption, json); //加载类别数据
 				$("#driverId").html(driverHtml);
@@ -122,7 +122,7 @@ layui.config({
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "vehicle013", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "vehicle013", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

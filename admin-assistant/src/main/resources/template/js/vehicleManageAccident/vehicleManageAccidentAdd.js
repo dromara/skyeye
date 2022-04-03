@@ -25,7 +25,7 @@ layui.config({
 	    // 车牌号
  		showGrid({
 		 	id: "licensePlate",
-		 	url: reqBasePath + "vehicle010",
+		 	url: flowableBasePath + "vehicle010",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -82,7 +82,7 @@ layui.config({
 					vehicleId: $("#licensePlate").val(),
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
  	        	};
- 	        	AjaxPostUtil.request({url:reqBasePath + "accident002", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:flowableBasePath + "accident002", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

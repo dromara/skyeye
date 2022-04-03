@@ -23,7 +23,7 @@ layui.config({
  		function initTypeId(id){
  			showGrid({
  				id: "typeId",
- 				url: reqBasePath + "assetarticles010",
+ 				url: flowableBasePath + "assetarticles010",
  				params: {},
  				pagination: false,
  				template: getFileContent('tpl/template/select-option.tpl'),
@@ -40,8 +40,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "assetarticles015",
-		 	params: {rowId:parent.rowId},
+		 	url: flowableBasePath + "assetarticles015",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/assetArticles/assetArticlesEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
@@ -103,12 +103,12 @@ layui.config({
 	 	 	        	}else{
 	 	        			params.assetAdmin = userList[0].id;
 	 	        		}
-	 	 	        	AjaxPostUtil.request({url:reqBasePath + "assetarticles016", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles016", params: params, type: 'json', callback: function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
 	 		 	   			}else{
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});
 		 	        }

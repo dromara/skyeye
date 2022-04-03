@@ -143,7 +143,6 @@ layui.config({
 		var msg = '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '上线公告类型' }, function (index) {
 			layer.close(index);
-            //向服务端发送上线指令
             AjaxPostUtil.request({url:reqBasePath + "noticetype004", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("上线成功", {icon: 1,time: 2000});
@@ -160,7 +159,6 @@ layui.config({
 		var msg = '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '下线公告类型' }, function (index) {
 			layer.close(index);
-            //向服务端发送下线指令
             AjaxPostUtil.request({url:reqBasePath + "noticetype005", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("下线成功", {icon: 1,time: 2000});

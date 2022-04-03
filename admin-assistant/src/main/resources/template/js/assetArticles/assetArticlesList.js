@@ -16,7 +16,7 @@ layui.config({
 	function initTypeId(){
 		showGrid({
 			id: "typeId",
-			url: reqBasePath + "assetarticles010",
+			url: flowableBasePath + "assetarticles010",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -33,7 +33,7 @@ layui.config({
 		    id: 'liebiaoTable',
 		    elem: '#liebiaoTable',
 		    method: 'post',
-		    url: reqBasePath + 'assetarticles012',
+		    url: flowableBasePath + 'assetarticles012',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -106,12 +106,12 @@ layui.config({
 	function liebiaoDelete(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "assetarticles014", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "assetarticles014", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadLiebiaoTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});

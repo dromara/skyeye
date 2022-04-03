@@ -13,8 +13,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "conferenceroom007",
-		 	params: {rowId:parent.rowId},
+		 	url: flowableBasePath + "conferenceroom007",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/conFerenceRoom/conFerenceRoomDetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){

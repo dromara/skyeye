@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "vehicle007",
+		 	url: flowableBasePath + "vehicle007",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/vehicleManage/vehicleManageDetailsTemplate.tpl'),

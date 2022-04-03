@@ -21,7 +21,7 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "seal004",
+		 	url: flowableBasePath + "seal004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sealManage/sealManageEditTemplate.tpl'),
@@ -114,7 +114,7 @@ layui.config({
 	 	 	        	}else{
 	 	        			params.borrowId = borrowuserList[0].id;
 	 	        		}
-	 	 	        	AjaxPostUtil.request({url:reqBasePath + "seal005", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "seal005", params:params, type:'json', callback:function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

@@ -26,7 +26,7 @@ layui.config({
 	    id: 'reserveTable',
 	    elem: '#reserveTable',
 	    method: 'post',
-	    url: reqBasePath + 'conferenceroomreserve001',
+	    url: flowableBasePath + 'conferenceroomreserve001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -92,7 +92,10 @@ layui.config({
 		var msg = '确认撤销该预定申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "conferenceroomreserve010", params:{processInstanceId: data.processInstanceId}, type:'json', callback:function(json){
+			var params = {
+				processInstanceId: data.processInstanceId
+			};
+            AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve010", params: params, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadReserveTable();
@@ -131,7 +134,7 @@ layui.config({
 					rowId: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: reqBasePath + "conferenceroomreserve006", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve006", params: params, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadReserveTable();
@@ -148,12 +151,12 @@ layui.config({
 		var msg = '确认作废该条预定申请吗？';
 		layer.confirm(msg, { icon: 3, title: '申请作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "conferenceroomreserve007", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve007", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadReserveTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});

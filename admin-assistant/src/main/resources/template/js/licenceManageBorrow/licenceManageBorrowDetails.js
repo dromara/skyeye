@@ -11,7 +11,7 @@ layui.config({
 	    var $ = layui.$;
 	    var useTemplate = $("#useTemplate").html();
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "licenceborrow003", params:{rowId: parent.rowId}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "licenceborrow003", params:{rowId: parent.rowId}, type:'json', callback:function(json){
     		if(json.returnCode == 0) {
     			//状态
     			if(json.bean.state == '0'){

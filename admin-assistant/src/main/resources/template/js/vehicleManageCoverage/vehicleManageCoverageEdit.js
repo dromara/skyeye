@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "coverage004",
+		 	url: flowableBasePath + "coverage004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/vehicleManageCoverage/vehicleManageCoverageEditTemplate.tpl'),
@@ -27,7 +27,7 @@ layui.config({
 	 	        			rowId: parent.rowId,
 	 	        			coverageName: $("#coverageName").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "coverage005", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "coverage005", params: params, type: 'json', callback: function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

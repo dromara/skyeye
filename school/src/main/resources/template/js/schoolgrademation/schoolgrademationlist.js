@@ -137,7 +137,6 @@ layui.config({
     
     //上移
 	function upMove(data){
-        //向服务端发送上移指令
         AjaxPostUtil.request({url:reqBasePath + "grademation007", params:{rowId: data.id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
@@ -150,7 +149,6 @@ layui.config({
 	
 	//下移
 	function downMove(data){
-        //向服务端发送下移指令
         AjaxPostUtil.request({url:reqBasePath + "grademation008", params:{rowId: data.id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1,time: 2000});

@@ -31,7 +31,7 @@ layui.config({
 
 	//初始化资产类别
 	function initTypeHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				initFromHtml();
 				typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
@@ -45,7 +45,7 @@ layui.config({
 	}
 	//初始化资产来源
 	function initFromHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "assetfrom006", params: {}, type: 'json', async:false, callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "assetfrom006", params: {}, type: 'json', async:false, callback: function(json) {
 			if(json.returnCode == 0) {
 				fromHtml = getDataUseHandlebars(selOption, json); //加载资产来源数据
 				matchingLanguage();
@@ -119,7 +119,7 @@ layui.config({
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "asset019", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "asset019", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

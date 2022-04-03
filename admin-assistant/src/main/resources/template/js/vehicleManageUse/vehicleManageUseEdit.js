@@ -16,7 +16,7 @@ layui.config({
 	var loadDriver = false;
 	var useEditTemplate = $("#useEditTemplate").html();
 
-	AjaxPostUtil.request({url: reqBasePath + "vehicle019", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
+	AjaxPostUtil.request({url: flowableBasePath + "vehicle019", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
 			$("#useTitle").html(json.bean.title);
 			$("#useName").html(json.bean.userName);
@@ -74,7 +74,7 @@ layui.config({
 	function initDesignatedVehicle(num, id){
 		showGrid({
 			id: "designatedVehicleId",
-			url: reqBasePath + "vehicle011",
+			url: flowableBasePath + "vehicle011",
 			params: {passengerNum: num},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -90,7 +90,7 @@ layui.config({
 		loadDriver = true;
 		showGrid({
 			id: "driverId",
-			url: reqBasePath + "vehicle012",
+			url: flowableBasePath + "vehicle012",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -147,7 +147,7 @@ layui.config({
 		if(params.isSelfDrive == '1'){
 			params.driverId = "";
 		}
-		AjaxPostUtil.request({url: reqBasePath + "vehicle020", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "vehicle020", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

@@ -139,7 +139,6 @@ layui.config({
 		var msg = obj ? '确认作废【' + obj.data.title + '】吗？' : '确认作废该任务信息吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            //向服务端发送领用申请作废指令
             AjaxPostUtil.request({url:reqBasePath + "profile010", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});

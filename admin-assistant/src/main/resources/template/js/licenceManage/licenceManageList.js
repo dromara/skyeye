@@ -24,7 +24,7 @@ layui.config({
 		    id: 'licencelistTable',
 		    elem: '#licencelistTable',
 		    method: 'post',
-		    url: reqBasePath + 'licence001',
+		    url: flowableBasePath + 'licence001',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -80,7 +80,7 @@ layui.config({
 		var msg = '确认删除该证照吗？';
 		layer.confirm(msg, { icon: 3, title: '删除证照' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "licence003", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "licence003", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();

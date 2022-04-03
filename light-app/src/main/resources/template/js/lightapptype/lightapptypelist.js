@@ -165,7 +165,6 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.typeName + '】上线吗？' : '确认将选中数据上线吗？';
 		layer.confirm(msg, { icon: 3, title: '轻应用类型上线' }, function (index) {
 			layer.close(index);
-            //向服务端发送上线指令
             AjaxPostUtil.request({url:reqBasePath + "lightapptype008", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("上线成功", {icon: 1,time: 2000});
@@ -182,7 +181,6 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.typeName + '】下线吗？' : '确认将选中数据下线吗？';
 		layer.confirm(msg, { icon: 3, title: '轻应用类型下线' }, function (index) {
 			layer.close(index);
-            //向服务端发送下线指令
             AjaxPostUtil.request({url:reqBasePath + "lightapptype009", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("下线成功", {icon: 1,time: 2000});

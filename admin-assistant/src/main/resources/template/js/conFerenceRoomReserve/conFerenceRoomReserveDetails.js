@@ -12,7 +12,7 @@ layui.config({
 	    
 	    var reserveTemplate = $("#reserveTemplate").html();
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "conferenceroomreserve003", params:{rowId: parent.rowId}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve003", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
     		if(json.returnCode == 0) {
     			//状态
     			if(json.bean.state == '0'){

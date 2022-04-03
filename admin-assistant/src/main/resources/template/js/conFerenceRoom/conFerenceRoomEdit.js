@@ -21,8 +21,8 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "conferenceroom008",
-		 	params: {rowId:parent.rowId},
+		 	url: flowableBasePath + "conferenceroom008",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/conFerenceRoom/conFerenceRoomEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
@@ -104,12 +104,12 @@ layui.config({
 	 	 	        	}else{
 	 	        			params.roomAdmin = userList[0].id;
 	 	        		}
-	 	 	        	AjaxPostUtil.request({url:reqBasePath + "conferenceroom009", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "conferenceroom009", params: params, type: 'json', callback: function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
 	 		 	   			}else{
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});
 		 	        }

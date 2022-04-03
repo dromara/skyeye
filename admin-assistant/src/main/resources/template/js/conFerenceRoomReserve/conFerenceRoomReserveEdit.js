@@ -13,7 +13,7 @@ layui.config({
 		laydate = layui.laydate;
 	var reserveTemplate = $("#reserveTemplate").html();
 
-	AjaxPostUtil.request({url: reqBasePath + "conferenceroomreserve004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
+	AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
 			$("#showForm").append(getDataUseHandlebars(reserveTemplate, json));
 			// 附件回显
@@ -30,7 +30,7 @@ layui.config({
 			// 会议室
 			showGrid({
 				id: "conferenceRoom",
-				url: reqBasePath + "conferenceroomreserve008",
+				url: flowableBasePath + "conferenceroomreserve008",
 				params: {},
 				pagination: false,
 				template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -91,7 +91,7 @@ layui.config({
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId,
 		};
-		AjaxPostUtil.request({url: reqBasePath + "conferenceroomreserve005", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve005", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

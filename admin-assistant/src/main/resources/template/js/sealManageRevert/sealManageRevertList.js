@@ -26,7 +26,7 @@ layui.config({
 		id: 'revertTable',
 		elem: '#revertTable',
 		method: 'post',
-		url: reqBasePath + 'sealrevert001',
+		url: flowableBasePath + 'sealrevert001',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -92,7 +92,7 @@ layui.config({
 		var msg = '确认撤销该归还申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sealrevert010", params:{processInstanceId: data.processInstanceId}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "sealrevert010", params:{processInstanceId: data.processInstanceId}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadRevertTable();
@@ -131,7 +131,7 @@ layui.config({
 					rowId: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: reqBasePath + "sealrevert006", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "sealrevert006", params: params, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadRevertTable();
@@ -148,7 +148,7 @@ layui.config({
 		var msg = '确认作废该条归还申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sealrevert007", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "sealrevert007", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
     				loadRevertTable();

@@ -14,7 +14,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "accident004",
+		 	url: flowableBasePath + "accident004",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/vehicleManageAccident/vehicleManageAccidentEditTemplate.tpl'),
@@ -68,7 +68,7 @@ layui.config({
 	 	        			driverBearPrice: $("#driverBearPrice").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url:reqBasePath + "accident005", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url:flowableBasePath + "accident005", params:params, type:'json', callback:function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

@@ -19,7 +19,7 @@ layui.config({
 
 	var sTableData = ""
 
-	AjaxPostUtil.request({url: reqBasePath + "licencerevert004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
+	AjaxPostUtil.request({url: flowableBasePath + "licencerevert004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
 			$("#revertTitle").html(json.bean.title);
 			$("#revertName").html(json.bean.userName);
@@ -42,7 +42,7 @@ layui.config({
 
 	//初始化证照名称
 	function initLicenceNameHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "licencerevert008", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "licencerevert008", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				nameHtml = getDataUseHandlebars(selOption, json); //加载名称数据
 				matchingLanguage();
@@ -117,7 +117,7 @@ layui.config({
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId,
 		};
-		AjaxPostUtil.request({url: reqBasePath + "licencerevert005", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "licencerevert005", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

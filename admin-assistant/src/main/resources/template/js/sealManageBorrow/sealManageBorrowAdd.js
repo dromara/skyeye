@@ -30,7 +30,7 @@ layui.config({
 
 	//初始化印章名称
 	function initSealNameHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "seal007", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "seal007", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				nameHtml = getDataUseHandlebars(selOption, json); //加载类别数据
 				matchingLanguage();
@@ -92,7 +92,7 @@ layui.config({
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "sealborrow002", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "sealborrow002", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

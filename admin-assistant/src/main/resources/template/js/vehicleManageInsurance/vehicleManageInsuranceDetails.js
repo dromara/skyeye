@@ -14,7 +14,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "insurance006",
+		 	url: flowableBasePath + "insurance006",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/vehicleManageInsurance/vehicleManageInsuranceDetailsTemplate.tpl'),
@@ -32,7 +32,7 @@ layui.config({
 		 		//险种
 		 		showGrid({
 		 		 	id: "coverageChoose",
-		 		 	url: reqBasePath + "coverage006",
+		 		 	url: flowableBasePath + "coverage006",
 		 		 	params: {},
 		 		 	pagination: false,
 		 		 	template: getFileContent('tpl/template/checkbox-property.tpl'),
@@ -58,7 +58,7 @@ layui.config({
 	    			$("#enclosureUploadBtn").html(str);
 		        }
 		        matchingLanguage();
-			    AjaxPostUtil.request({url:reqBasePath + "coverage006", params:{}, type:'json', callback:function(thisjson){
+			    AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type:'json', callback:function(thisjson){
 		    		if(thisjson.returnCode == 0) {
 		    			var row = thisjson.rows;
 		    			var coveragearr = coveragestr.split(",");

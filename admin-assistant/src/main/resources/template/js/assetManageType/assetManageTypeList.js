@@ -23,7 +23,7 @@ layui.config({
 		    id: 'assettypeTable',
 		    elem: '#assettypeTable',
 		    method: 'post',
-		    url: reqBasePath + 'assettype001',
+		    url: flowableBasePath + 'assettype001',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -75,7 +75,7 @@ layui.config({
 	function assettypedelet(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "assettype003", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "assettype003", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadassettypeTable();
@@ -126,7 +126,7 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.typeName + '】上线吗？' : '确认将选中数据上线吗？';
 		layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "assettype007", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "assettype007", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("上线成功", {icon: 1,time: 2000});
     				loadassettypeTable();
@@ -142,7 +142,7 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.typeName + '】下线吗？' : '确认将选中数据下线吗？';
 		layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "assettype008", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "assettype008", params:{rowId: data.id}, type:'json', callback:function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("下线成功", {icon: 1,time: 2000});
     				loadassettypeTable();
@@ -155,7 +155,7 @@ layui.config({
 	
 	// 上移
 	function assettypetopOne(data){
-		AjaxPostUtil.request({url:reqBasePath + "assettype009", params:{rowId: data.id}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:flowableBasePath + "assettype009", params:{rowId: data.id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
 				loadassettypeTable();
@@ -167,7 +167,7 @@ layui.config({
 	
 	// 下移
 	function assettypelowerOne(data){
-		AjaxPostUtil.request({url:reqBasePath + "assettype010", params:{rowId: data.id}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:flowableBasePath + "assettype010", params:{rowId: data.id}, type:'json', callback:function(json){
 			if(json.returnCode == 0){
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
 				loadassettypeTable();

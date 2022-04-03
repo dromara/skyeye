@@ -20,7 +20,7 @@ layui.config({
 	// 车牌号
 	showGrid({
 	 	id: "insurancePlate",
-	 	url: reqBasePath + "vehicle010",
+	 	url: flowableBasePath + "vehicle010",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -38,7 +38,7 @@ layui.config({
 		    id: 'insuranceTable',
 		    elem: '#insuranceTable',
 		    method: 'post',
-		    url: reqBasePath + 'insurance001',
+		    url: flowableBasePath + "insurance001",
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -91,7 +91,7 @@ layui.config({
 	function insurancedelet(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "insurance003", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "insurance003", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadInsuranceTable();

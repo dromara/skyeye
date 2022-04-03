@@ -49,7 +49,7 @@ layui.config({
  		//资产类型
  		showGrid({
 		 	id: "typeId",
-		 	url: reqBasePath + "assettype006",
+		 	url: flowableBasePath + "assettype006",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -63,7 +63,7 @@ layui.config({
  		//资产来源
  		showGrid({
 		 	id: "fromId",
-		 	url: reqBasePath + "assetfrom006",
+		 	url: flowableBasePath + "assetfrom006",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -109,7 +109,7 @@ layui.config({
  	        	}else{
         			params.employeeId = employeeuserList[0].id;
         		}
- 	        	AjaxPostUtil.request({url:reqBasePath + "asset002", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:flowableBasePath + "asset002", params:params, type:'json', callback:function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

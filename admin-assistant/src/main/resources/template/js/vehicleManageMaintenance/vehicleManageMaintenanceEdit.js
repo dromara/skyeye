@@ -14,7 +14,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "maintenance004",
+		 	url: flowableBasePath + "maintenance004",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/vehicleManageMaintenance/vehicleManageMaintenanceEditTemplate.tpl'),
@@ -48,7 +48,7 @@ layui.config({
 	 	 	        		maintenanceType: $("input[name='maintenanceType']:checked").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url:reqBasePath + "maintenance005", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url:flowableBasePath + "maintenance005", params:params, type:'json', callback:function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

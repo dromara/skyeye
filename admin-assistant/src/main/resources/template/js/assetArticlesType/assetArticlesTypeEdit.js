@@ -12,7 +12,7 @@ layui.config({
     
     showGrid({
 	 	id: "showForm",
-	 	url: reqBasePath + "assetarticles006",
+	 	url: flowableBasePath + "assetarticles006",
 	 	params: {rowId: parent.rowId},
 	 	pagination: false,
 	 	template: getFileContent('tpl/assetArticlesType/assetArticlesTypeEditTemplate.tpl'),
@@ -25,7 +25,7 @@ layui.config({
 	 	        		rowId: parent.rowId,
 	 	        		typeName: $("#typeName").val()
 	 	        	};
-	 	        	AjaxPostUtil.request({url: reqBasePath + "assetarticles007", params: params, type: 'json', callback: function(json){
+	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles007", params: params, type: 'json', callback: function(json){
 	 	        		if(json.returnCode == 0){
 	 	        			parent.layer.close(index);
 	 	        			parent.refreshCode = '0';

@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "assetfrom004",
+		 	url: flowableBasePath + "assetfrom004",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/assetManageFrom/assetManageFromEditTemplate.tpl'),
@@ -27,7 +27,7 @@ layui.config({
 	 	        			rowId: parent.rowId,
 	 	        			fromName: $("#fromName").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url:reqBasePath + "assetfrom005", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url:flowableBasePath + "assetfrom005", params:params, type:'json', callback:function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

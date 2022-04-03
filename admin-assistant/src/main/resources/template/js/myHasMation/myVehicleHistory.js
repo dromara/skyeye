@@ -19,7 +19,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'myhasmation005',
+		    url: flowableBasePath + 'myhasmation005',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,

@@ -12,8 +12,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "seal006",
-		 	params: {rowId:parent.rowId},
+		 	url: flowableBasePath + "seal006",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sealManage/sealManageDetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){

@@ -14,7 +14,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "oiling004",
+		 	url: flowableBasePath + "oiling004",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/vehicleManageOiling/vehicleManageOilingEditTemplate.tpl'),
@@ -43,7 +43,7 @@ layui.config({
 	 	 	        		roomAddDesc: $("#roomAddDesc").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url:reqBasePath + "oiling005", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url:flowableBasePath + "oiling005", params:params, type:'json', callback:function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

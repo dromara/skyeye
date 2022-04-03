@@ -31,7 +31,7 @@ layui.config({
 
 	//初始化证照名称
 	function initLincenceNameHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "licenceborrow008", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "licenceborrow008", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				nameHtml = getDataUseHandlebars(selOption, json); //加载类别数据
 				matchingLanguage();
@@ -92,7 +92,7 @@ layui.config({
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "licenceborrow002", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "licenceborrow002", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

@@ -20,7 +20,7 @@ layui.config({
 
 	var sTableData = ""
 
-	AjaxPostUtil.request({url: reqBasePath + "sealborrow004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
+	AjaxPostUtil.request({url: flowableBasePath + "sealborrow004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
 			$("#useTitle").html(json.bean.title);
 			$("#useName").html(json.bean.userName);
@@ -43,7 +43,7 @@ layui.config({
 
 	//初始化印章名称
 	function initSealNameHtml() {
-		AjaxPostUtil.request({url: reqBasePath + "seal007", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "seal007", params: {}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				nameHtml = getDataUseHandlebars(selOption, json); //加载名称数据
 				matchingLanguage();
@@ -118,7 +118,7 @@ layui.config({
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "sealborrow005", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "sealborrow005", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
