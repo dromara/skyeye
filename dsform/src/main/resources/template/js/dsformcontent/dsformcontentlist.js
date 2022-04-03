@@ -19,7 +19,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'dsform001',
+	    url: flowableBasePath + 'dsform001',
 	    where:{contentName:$("#contentName").val()},
 	    even:true,
 	    page: true,
@@ -109,7 +109,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "dsform003", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "dsform003", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();

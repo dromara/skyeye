@@ -92,7 +92,7 @@ layui.config({
       	//展现形式
       	showGrid({
     	 	id: "dsFormContentId",
-    	 	url: reqBasePath + "dsform006",
+    	 	url: flowableBasePath + "dsform006",
     	 	params: {},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -111,7 +111,7 @@ layui.config({
 	    		$("#dataShowModel").show();
 	    		showGrid({
 	    		 	id: "displayTemplateId",
-	    		 	url: reqBasePath + "dsformdisplaytemplate006",
+	    		 	url: flowableBasePath + "dsformdisplaytemplate006",
 	    		 	params: {},
 	    		 	pagination: false,
 	    		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -130,7 +130,7 @@ layui.config({
         });
       	
       	form.on('select(selectParent)', function(data){
-      		AjaxPostUtil.request({url:reqBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
+      		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				htmlModelContent.setValue(json.bean.htmlContent);
     				jsModelContent.setValue(json.bean.jsContent);

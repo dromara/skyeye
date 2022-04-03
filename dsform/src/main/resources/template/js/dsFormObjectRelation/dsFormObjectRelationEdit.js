@@ -14,7 +14,7 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: reqBasePath + "dsFormObjectRelation004",
+        url: flowableBasePath + "dsFormObjectRelation004",
         params: {id: parent.rowId},
         pagination: false,
         method: 'GET',
@@ -64,7 +64,7 @@ layui.config({
                         dsFormPageIds: formPageId.join(","),
                         id: parent.rowId
                     };
-                    AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation005", params: params, type: 'json', method: "PUT", callback: function(json){
+                    AjaxPostUtil.request({url: flowableBasePath + "dsFormObjectRelation005", params: params, type: 'json', method: "PUT", callback: function(json){
                         if(json.returnCode == 0){
                             parent.layer.close(index);
                             parent.refreshCode = '0';

@@ -93,7 +93,7 @@ var dsFormUtil = {
     loadDsFormPageTypeByPId: function (domId, parentId){
         showGrid({
             id: domId,
-            url: reqBasePath + "dsformpagetype006",
+            url: flowableBasePath + "dsformpagetype006",
             params: {parentId: parentId, language: languageType},
             pagination: false,
             method: "GET",
@@ -116,7 +116,7 @@ var dsFormUtil = {
             dsFormObjectRelationCode: isNull(code) ? "" : code,
             dsFormObjectRelationId: isNull(dsFormObjectRelationId) ? "" : dsFormObjectRelationId
         };
-        AjaxPostUtil.request({url: reqBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
             if(json.returnCode == 0) {
                 dsFormUtil.loadDsFormItem(showBoxId, json);
             } else {
@@ -143,7 +143,7 @@ var dsFormUtil = {
                 }
                 item.context = getDataUseHandlebars(item.templateContent, obj);
             }else if(item.associatedDataTypes == 2){//接口
-                AjaxPostUtil.request({url:reqBasePath + "dsformpage011", params:{interfa: item.aData}, type: 'json', callback: function(j){
+                AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params:{interfa: item.aData}, type: 'json', callback: function(j){
                     if(j.returnCode == 0){
                         var obj = JSON.parse(j.bean.aData);
                         item.context = getDataUseHandlebars(item.templateContent, obj);
@@ -210,7 +210,7 @@ var dsFormUtil = {
             dataJson: JSON.stringify(result),
             objectId: objectId
         }
-        AjaxPostUtil.request({url: reqBasePath + "dsformpage014", params: params, type: 'json', method: "POST", callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "dsformpage014", params: params, type: 'json', method: "POST", callback: function(json) {
             if(json.returnCode == 0) {
 
             } else {
@@ -306,7 +306,7 @@ var dsFormUtil = {
      * @param objectId 绑定的objectId
      */
     loadPageShowDetailsByObjectId: function(showBoxId, objectId){
-        AjaxPostUtil.request({url: reqBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function(json) {
             if(json.returnCode == 0) {
                 $.each(json.rows, function(j, bean) {
                     var customBoxId = bean.id;
@@ -350,7 +350,7 @@ var dsFormUtil = {
      * @param objectId 绑定的objectId
      */
     loadPageToEditByObjectId: function(showBoxId, objectId) {
-        AjaxPostUtil.request({url: reqBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: flowableBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function (json) {
             if (json.returnCode == 0) {
                 dsFormUtil.loadDsFormItem(showBoxId, json);
             } else {

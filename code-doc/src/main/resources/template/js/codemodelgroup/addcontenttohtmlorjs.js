@@ -25,7 +25,7 @@ layui.config({
  		});
 		
 		form.on('select(showModel)', function(data){
- 			AjaxPostUtil.request({url:reqBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
+ 			AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				var mode = returnModel(json.bean.htmlType);
     				if (!isNull(mode.length)) {
@@ -54,7 +54,7 @@ layui.config({
 		//展现形式
 		showGrid({
     	 	id: "showModel",
-    	 	url: reqBasePath + "dsform006",
+    	 	url: flowableBasePath + "dsform006",
     	 	params: {},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -65,7 +65,7 @@ layui.config({
     	 		//限制条件
     	 		showGrid({
 	 	    	 	id: "limitRequire",
-	 	    	 	url: reqBasePath + "dsformlimitrequirement006",
+	 	    	 	url: flowableBasePath + "dsformlimitrequirement006",
 	 	    	 	params: {},
 	 	    	 	pagination: false,
 	 	    	 	template: getFileContent('tpl/template/checkbox-limit.tpl'),

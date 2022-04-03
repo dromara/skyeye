@@ -12,7 +12,7 @@ layui.config({
 	    
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "dsformdisplaytemplate004",
+		 	url: flowableBasePath + "dsformdisplaytemplate004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/dsformdisplaytemplate/dsformdisplaytemplateeditTemplate.tpl'),
@@ -52,7 +52,7 @@ layui.config({
 		        			templateContent:encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
 		        			rowId:parent.rowId
 			        	};
-			        	AjaxPostUtil.request({url:reqBasePath + "dsformdisplaytemplate005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate005", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

@@ -1,7 +1,7 @@
 //下拉框模板 展现形式   例如：输入框，选择框
 showGrid({
  	id: "showModel",
- 	url: reqBasePath + "dsform006",
+ 	url: flowableBasePath + "dsform006",
  	params: {},
  	pagination: false,
  	template: getFileContent('tpl/template/select-option.tpl'),

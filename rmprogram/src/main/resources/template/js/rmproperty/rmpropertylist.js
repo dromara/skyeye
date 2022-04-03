@@ -144,7 +144,7 @@ layui.config({
 	//展现形式
   	showGrid({
 	 	id: "dsFormContentId",
-	 	url: reqBasePath + "dsform006",
+	 	url: flowableBasePath + "dsform006",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),

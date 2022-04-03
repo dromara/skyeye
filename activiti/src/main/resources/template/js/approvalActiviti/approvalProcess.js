@@ -59,7 +59,7 @@ layui.config({
 							tplContent = getDataUseHandlebars(formItem.templateContent, obj);
 							formItem.context = tplContent;
 						}else if(formItem.associatedDataTypes == 2){//接口
-							AjaxPostUtil.request({url:reqBasePath + "dsformpage011", params:{interfa: formItem.aData}, type: 'json', callback: function(j){
+							AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params:{interfa: formItem.aData}, type: 'json', callback: function(j){
 					   			if(j.returnCode == 0){
 					   				var obj = JSON.parse(j.bean.aData);
 					   				tplContent = getDataUseHandlebars(formItem.templateContent, obj);

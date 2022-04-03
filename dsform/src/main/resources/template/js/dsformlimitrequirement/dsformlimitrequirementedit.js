@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "dsformlimitrequirement004",
+		 	url: flowableBasePath + "dsformlimitrequirement004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/dsformlimitrequirement/dsformlimitrequirementeditTemplate.tpl'),
@@ -30,7 +30,7 @@ layui.config({
 	        				afterRequirement: $("#afterRequirement").val(),
 	        				rowId: parent.rowId
 		        		};
-			        	AjaxPostUtil.request({url:reqBasePath + "dsformlimitrequirement005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement005", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

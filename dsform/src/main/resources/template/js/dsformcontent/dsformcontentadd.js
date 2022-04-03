@@ -44,7 +44,7 @@ layui.config({
  			initDatatpl = true;
  			showGrid({
 			 	id: "dataShowTpl",
-			 	url: reqBasePath + "dsformdisplaytemplate006",
+			 	url: flowableBasePath + "dsformdisplaytemplate006",
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -190,7 +190,7 @@ layui.config({
 	 	        		params.dataShowTpl = "";
 	 	        		params.defaultData = "";
 	 	        	}
-	        		AjaxPostUtil.request({url:reqBasePath + "dsform002", params:params, type: 'json', callback: function(json){
+	        		AjaxPostUtil.request({url: flowableBasePath + "dsform002", params:params, type: 'json', callback: function(json){
 	        			if(json.returnCode == 0){
 	        				parent.layer.close(index);
 	        				parent.refreshCode = '0';
