@@ -24,7 +24,7 @@ layui.config({
 	    id: 'messageMyStartTable',
 	    elem: '#messageMyStartTable',
 	    method: 'post',
-	    url: reqBasePath + 'pagesequence001',
+	    url: flowableBasePath + 'pagesequence001',
 	    where: getTableParams(),
 	    even:true,
 	    page: true,
@@ -104,7 +104,7 @@ layui.config({
 					pageId: data.pageId,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: reqBasePath + "pagesequence005", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "pagesequence005", params: params, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						winui.window.msg("申请提交成功，等待审核...", {icon: 1, time: 2000});
 						reloadMyStartTable();
@@ -120,7 +120,7 @@ layui.config({
 	function deleteRow(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "pagesequence002", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "pagesequence002", params: {rowId: data.id}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
                 	winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
                 	reloadMyStartTable();

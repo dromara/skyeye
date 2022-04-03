@@ -120,7 +120,7 @@
 			"displayLength": that.data.pageInfo.pageSize, // 每页记录条数，默认为10
 			"serverSide": true,
 			"ajaxDataProp": "data",
-			"ajaxSource": reqBasePath + "activitimode011",
+			"ajaxSource": flowableBasePath + "activitimode011",
 			"fnServerData": $.proxy(that.fillDataTable, that),
 			"fnInitComplete": $.proxy(that.fnInitComplete, that),
 			"singleSelect": true, //单选
@@ -492,7 +492,7 @@
 		dataCache.data("pageInfo", pageInfo);
 		var retData = null;
 		//注释以上部分，统一用ajaxPost处理，以便处理session超时（ajax请求超时）
-		ajaxPost(reqBasePath + "activitimode011", {
+		ajaxPost(flowableBasePath + "activitimode011", {
 			"reqObj": this.toJSONString(reqParam)
 		}, function(result, status) {
 			retData = result;

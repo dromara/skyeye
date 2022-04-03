@@ -15,7 +15,7 @@ layui.config({
 	    id: 'messageAllComplateTable',
 	    elem: '#messageAllComplateTable',
 	    method: 'post',
-	    url: reqBasePath + 'activitimode018',
+	    url: flowableBasePath + 'activitimode018',
 	    where:{},
 	    even:true,
 	    page: true,

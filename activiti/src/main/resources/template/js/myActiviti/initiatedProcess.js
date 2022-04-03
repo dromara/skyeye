@@ -33,7 +33,7 @@ layui.config({
 	    id: 'messageMyStartTable',
 	    elem: '#messageMyStartTable',
 	    method: 'post',
-	    url: reqBasePath + 'activitimode013',
+	    url: flowableBasePath + 'activitimode013',
 	    where:{startTime: startTime, endTime: endTime, processInstanceId: $("#processInstanceId").val()},
 	    even:true,
 	    page: true,
@@ -136,7 +136,7 @@ layui.config({
 	function refreshPic(data){
 		layer.confirm('确认重新生成流程图吗？', { icon: 3, title: '刷新流程图操作' }, function (i) {
 			layer.close(i);
-            AjaxPostUtil.request({url:reqBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
  	   			}else{

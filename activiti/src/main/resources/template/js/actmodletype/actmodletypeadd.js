@@ -65,7 +65,7 @@ layui.config({
 
         showGrid({
             id: "actId",
-            url: reqBasePath + "activitimode009",
+            url: flowableBasePath + "activitimode009",
             params: {},
             pagination: false,
             template: getFileContent('tpl/template/select-option.tpl'),
@@ -94,7 +94,7 @@ layui.config({
  		function initDsForm(){
  			showGrid({
  				id: "dsFormId",
- 				url: reqBasePath + "actmodletype020",
+ 				url: flowableBasePath + "actmodletype020",
  				params: {},
  				pagination: false,
  				template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -168,7 +168,7 @@ layui.config({
 					return false;
 				}
 
- 	        	AjaxPostUtil.request({url:reqBasePath + "actmodletype003", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url:flowableBasePath + "actmodletype003", params:params, type: 'json', callback: function(json){
  	        		if(json.returnCode == 0){
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';

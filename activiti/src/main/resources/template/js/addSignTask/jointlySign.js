@@ -18,7 +18,7 @@ layui.config({
     var taskBean;
 
     // 获取会签节点信息
-    AjaxPostUtil.request({url: reqBasePath + "activitiTask006", params: {taskId: taskId}, method: "GET", type: 'json', callback: function(json) {
+    AjaxPostUtil.request({url: flowableBasePath + "activitiTask006", params: {taskId: taskId}, method: "GET", type: 'json', callback: function(json) {
         if(json.returnCode == 0) {
             taskBean = json.bean;
             if(json.bean.isSequential){
@@ -112,7 +112,7 @@ layui.config({
                 taskId: taskId,
                 chooseUserMation: JSON.stringify(table.cache.messageTable)
             };
-            AjaxPostUtil.request({url: reqBasePath + "activitiTask005", params: params, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "activitiTask005", params: params, type: 'json', method: "POST", callback: function(json){
                 if(json.returnCode == 0){
                     parent.layer.close(index);
                     parent.refreshCode = '0';

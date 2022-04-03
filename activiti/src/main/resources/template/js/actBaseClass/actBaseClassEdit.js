@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "actbaseclass004",
+		 	url: flowableBasePath + "actbaseclass004",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: $('#beanTemplate').html(),
@@ -26,7 +26,7 @@ layui.config({
 		 	        		classUrl: $("#classUrl").val(),
 		 	        		desc: $("#desc").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "actbaseclass005", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "actbaseclass005", params:params, type: 'json', callback: function(json){
 		 	        		if(json.returnCode == 0){
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

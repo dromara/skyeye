@@ -62,7 +62,7 @@ var activitiUtil = {
             flag: flag
         };
         // 优先请求一次获取下个用户节点的信息，如果没有审批节点信息，则不加载审批人选项
-        AjaxPostUtil.request({url:reqBasePath + "activitiProcess001", params: params, type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "activitiProcess001", params: params, type: 'json', callback: function(json) {
             if (json.returnCode == 0) {
                 if(!isNull(json.bean)){
                     var approvalPersonChooseDom = '<div class="layui-form-item layui-col-xs12">' +
@@ -161,7 +161,7 @@ var activitiUtil = {
             sequential: false,
             userIds: JSON.stringify(["300b878c5c6744f2b48e6bc40beefd11", "0f17e3da88bc4e22841156388964e12e"])
         };
-        AjaxPostUtil.request({url: reqBasePath + "activitiProcess003", params: params, method: "POST", type: 'json', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "activitiProcess003", params: params, method: "POST", type: 'json', callback: function(json) {
             if(json.returnCode == 0) {
                 if (typeof callback === 'function') {
                     callback();
@@ -219,7 +219,7 @@ var activitiUtil = {
                     taskId: task.taskId,
                     principalUserId: staffChooseList[0].id
                 };
-                AjaxPostUtil.request({url: reqBasePath + "activitiTask001", params: params, method: "POST", type: 'json', callback: function(json) {
+                AjaxPostUtil.request({url: flowableBasePath + "activitiTask001", params: params, method: "POST", type: 'json', callback: function(json) {
                     if(json.returnCode == 0) {
                         if (typeof callback === 'function') {
                             callback();
@@ -243,7 +243,7 @@ var activitiUtil = {
                     taskId: task.taskId,
                     transferredPersonId: staffChooseList[0].id
                 };
-                AjaxPostUtil.request({url: reqBasePath + "activitiTask002", params: params, method: "POST", type: 'json', callback: function(json) {
+                AjaxPostUtil.request({url: flowableBasePath + "activitiTask002", params: params, method: "POST", type: 'json', callback: function(json) {
                     if(json.returnCode == 0) {
                         if (typeof callback === 'function') {
                             callback();

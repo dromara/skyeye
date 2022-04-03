@@ -15,7 +15,7 @@ layui.config({
 	    id: 'messageAllConductTable',
 	    elem: '#messageAllConductTable',
 	    method: 'post',
-	    url: reqBasePath + 'activitimode019',
+	    url: flowableBasePath + 'activitimode019',
 	    where:{},
 	    even:true,
 	    page: true,
@@ -68,7 +68,7 @@ layui.config({
 		var msg = '确认挂起该流程吗？';
 		layer.confirm(msg, { icon: 3, title: '挂起' }, function (index) {
 			layer.close(index);
-	        AjaxPostUtil.request({url:reqBasePath + "activitimode020", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+	        AjaxPostUtil.request({url:flowableBasePath + "activitimode020", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
 				if(json.returnCode == 0){
 					winui.window.msg("该流程已挂起", {icon: 1,time: 2000});
 					reloadAllConductTable();
@@ -84,7 +84,7 @@ layui.config({
 		var msg = '确认激活该流程吗？';
 		layer.confirm(msg, { icon: 3, title: '激活' }, function (index) {
 			layer.close(index);
-	        AjaxPostUtil.request({url:reqBasePath + "activitimode021", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+	        AjaxPostUtil.request({url:flowableBasePath + "activitimode021", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
 				if(json.returnCode == 0){
 					winui.window.msg("该流程已激活", {icon: 1,time: 2000});
 					reloadAllConductTable();
