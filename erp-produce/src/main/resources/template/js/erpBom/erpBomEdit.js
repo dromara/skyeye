@@ -26,7 +26,7 @@ layui.config({
 	    //下拉框模板
 	    var selTemplate = getFileContent('tpl/template/select-option-must.tpl');
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "erpbom005", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "erpbom005", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
             if(json.returnCode == 0){
                 $("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
             	textool.init({
@@ -98,7 +98,7 @@ layui.config({
                     rowId: parent.rowId
                 };
                 
-                AjaxPostUtil.request({url:reqBasePath + "erpbom006", params:params, type: 'json', method: "PUT", callback: function(json){
+                AjaxPostUtil.request({url: flowableBasePath + "erpbom006", params:params, type: 'json', method: "PUT", callback: function(json){
                     if(json.returnCode == 0){
                         parent.layer.close(index);
                         parent.refreshCode = '0';

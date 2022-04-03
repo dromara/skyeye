@@ -21,7 +21,7 @@ layui.config({
 	
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	
-	AjaxPostUtil.request({url: reqBasePath + "erpworkprocedure009", params: {}, type: 'json', callback: function(json) {
+	AjaxPostUtil.request({url: flowableBasePath + "erpworkprocedure009", params: {}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
 			// 加载工序数据
 			$("#procedureId").html(getDataUseHandlebars(selOption, json));
@@ -70,7 +70,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'erpfarm010',
+		    url: flowableBasePath + 'erpfarm010',
 		    where: getTableParams(),
 			even: true,
 		    page: true,
@@ -136,7 +136,7 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url:reqBasePath + "erpfarm011", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url:flowableBasePath + "erpfarm011", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				parent.procedureMationList = [].concat(json.rows);
  	   			parent.layer.close(index);

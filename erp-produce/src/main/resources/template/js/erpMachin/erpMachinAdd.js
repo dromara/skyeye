@@ -157,7 +157,7 @@ layui.config({
 			    	materielStr: JSON.stringify(tableData),
 			    	procedureJsonStr: JSON.stringify(procedureMationList)
 			    };
-	        	AjaxPostUtil.request({url:reqBasePath + "erpmachin002", params: params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:flowableBasePath + "erpmachin002", params: params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

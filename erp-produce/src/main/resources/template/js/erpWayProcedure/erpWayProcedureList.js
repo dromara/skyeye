@@ -19,7 +19,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'erpwayprocedure001',
+        url: flowableBasePath + 'erpwayprocedure001',
         where: getTablePatams(),
         even: true,
         page: true,
@@ -104,7 +104,7 @@ layui.config({
     // 删除
     function deletemember(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
-            AjaxPostUtil.request({url:reqBasePath + "erpwayprocedure007", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure007", params: {rowId: data.id}, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
                     loadTable();
@@ -130,7 +130,7 @@ layui.config({
     // 启用
     function norms(data){
         layer.confirm(systemLanguage["com.skyeye.enableOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.enableOperation"][languageType]}, function(index) {
-            AjaxPostUtil.request({url:reqBasePath + "erpwayprocedure006", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure006", params: {rowId: data.id}, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.enableOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
                     loadTable();
@@ -144,7 +144,7 @@ layui.config({
     // 禁用
     function rectification(data){
         layer.confirm(systemLanguage["com.skyeye.disableOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.disableOperation"][languageType]}, function(index) {
-            AjaxPostUtil.request({url:reqBasePath + "erpwayprocedure005", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure005", params: {rowId: data.id}, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.disableOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
                     loadTable();

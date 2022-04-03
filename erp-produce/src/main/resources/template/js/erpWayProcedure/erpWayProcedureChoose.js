@@ -15,7 +15,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'erpwayprocedure009',
+	    url: flowableBasePath + 'erpwayprocedure009',
 	    where: getTablePatams(),
 	    even: true,
 	    page: true,

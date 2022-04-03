@@ -63,7 +63,7 @@ layui.config({
 	    });
  		
  		//回显数据
- 		AjaxPostUtil.request({url:reqBasePath + "erpproduction003", params: {orderId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
+ 		AjaxPostUtil.request({url: flowableBasePath + "erpproduction003", params: {orderId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
    			if(json.returnCode == 0){
    				//商品信息
    				productMation = {
@@ -126,7 +126,7 @@ layui.config({
 	    
 	    //加载bom方案列表
 	    function loadBomList(normsId){
-	    	AjaxPostUtil.request({url:reqBasePath + "erpbom007", params: {normsId: normsId}, type: 'json', callback: function(json){
+	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom007", params: {normsId: normsId}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
 	 	   			$("#bomList").html(getDataUseHandlebars(selTemplate, json));
 	 	   			form.render("select");
@@ -149,7 +149,7 @@ layui.config({
 	    
 	    //加载bom方案下的子件列表
 	    function loadBomChildProList(bomId){
-	    	AjaxPostUtil.request({url:reqBasePath + "erpbom008", params: {bomId: bomId}, type: 'json', callback: function(json){
+	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {bomId: bomId}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
 	 	   			childProList = [].concat(json.rows);
 	 	   			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
@@ -226,7 +226,7 @@ layui.config({
  	        	//子件清单信息
  	        	params.childProStr = JSON.stringify(childList);
  	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "erpproduction004", params: params, type: 'json', method: "PUT", callback: function(json){
+	        	AjaxPostUtil.request({url: flowableBasePath + "erpproduction004", params: params, type: 'json', method: "PUT", callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
@@ -264,14 +264,14 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
 					if (refreshCode == '0') {
-						AjaxPostUtil.request({url:reqBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function(json){
-								if(json.returnCode == 0){
-									procedureMationList = [].concat(json.bean.procedureList);
-									loadProcedureMation();
-								}else{
-									winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-								}
-							}});
+						AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function(json){
+							if(json.returnCode == 0){
+								procedureMationList = [].concat(json.bean.procedureList);
+								loadProcedureMation();
+							}else{
+								winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+							}
+						}});
 					} else if (refreshCode == '-9999') {
 						winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
 					}

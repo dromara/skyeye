@@ -51,7 +51,7 @@ layui.config({
 		});
 
  		function loadData(){
-			AjaxPostUtil.request({url:reqBasePath + "erppick005", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url:flowableBasePath + "erppick005", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
 	 	   			var data = json.bean;
 	 	   			if(!isNull(data.machinId)){
@@ -177,7 +177,7 @@ layui.config({
 			    	depotId: $("#depotId").val(),
 			    	rowId: parent.rowId
 			    };
-	        	AjaxPostUtil.request({url:reqBasePath + "erppick006", params: params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:flowableBasePath + "erppick006", params: params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

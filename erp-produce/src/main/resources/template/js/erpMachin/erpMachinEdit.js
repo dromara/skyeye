@@ -72,7 +72,7 @@ layui.config({
 		});
 		
 		function loadData(){
-			AjaxPostUtil.request({url:reqBasePath + "erpmachin003", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url:flowableBasePath + "erpmachin003", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
 	 	   			var data = json.bean;
 	 	   			if(!isNull(data.productionId)){
@@ -229,7 +229,7 @@ layui.config({
 			    	procedureJsonStr: JSON.stringify(procedureMationList),
 			    	rowId: parent.rowId
 			    };
-	        	AjaxPostUtil.request({url:reqBasePath + "erpmachin004", params: params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:flowableBasePath + "erpmachin004", params: params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

@@ -21,7 +21,7 @@ layui.config({
 		    id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'erpdepartstock001',
+	        url: flowableBasePath + 'erpdepartstock001',
 	        where: getTableParams(),
 	        even: true,
 	        page: true,

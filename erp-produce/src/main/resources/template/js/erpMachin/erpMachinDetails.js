@@ -24,7 +24,7 @@ layui.config({
 		function initData(){
 	 		showGrid({
 				id: "showForm",
-				url: reqBasePath + "erpmachin006",
+				url: flowableBasePath + "erpmachin006",
 				params: {rowId: parent.rowId},
 				pagination: false,
 				template: $("#useTemplate").html(),

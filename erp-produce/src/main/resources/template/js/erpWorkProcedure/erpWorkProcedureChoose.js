@@ -57,7 +57,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'erpworkprocedure006',
+		    url: flowableBasePath + 'erpworkprocedure006',
 		    where: getTableParams(),
 			even: true,
 		    page: true,
@@ -111,7 +111,7 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url:reqBasePath + "erpworkprocedure007", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "erpworkprocedure007", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				parent.procedureMationList = [].concat(json.rows);
  	   			parent.layer.close(index);

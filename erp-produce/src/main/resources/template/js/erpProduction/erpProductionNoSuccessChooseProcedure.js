@@ -26,7 +26,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'erpproduction009',
+		    url: flowableBasePath + 'erpproduction009',
 		    where: getTableParams(),
 			even: true,
 		    page: false,
@@ -172,7 +172,7 @@ layui.config({
 		
 		//根据生产计划单id获取该单据下的所有外购商品以及剩余数量
 		//chooseType：根据生产计划单选择工序时，加工单需要回显自产和外购两种类型的商品
-		AjaxPostUtil.request({url: reqBasePath + "erpproduction010", params: {orderId: chooseMation.id, chooseType: "2"}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "erpproduction010", params: {orderId: chooseMation.id, chooseType: "2"}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				chooseMation.norms = [].concat(json.rows);
 				chooseMation.procedureList = procedureList[chooseIndex].procedureArray;

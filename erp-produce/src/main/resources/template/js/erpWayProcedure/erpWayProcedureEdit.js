@@ -27,7 +27,7 @@ layui.config({
 		
 		showGrid({
             id: "showForm",
-            url: reqBasePath + "erpwayprocedure003",
+            url: flowableBasePath + "erpwayprocedure003",
             params: {rowId: parent.rowId},
             pagination: false,
             template: $("#usetableTemplate").html(),
@@ -86,7 +86,7 @@ layui.config({
 		                    procedureMation: JSON.stringify(table.cache.messageTable),
 		                    rowId: parent.rowId
 					    };
-			        	AjaxPostUtil.request({url:reqBasePath + "erpwayprocedure004", params: params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure004", params: params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

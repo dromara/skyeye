@@ -10,7 +10,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "erpproduction006", params: {orderId: parent.rowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "erpproduction006", params: {orderId: parent.rowId}, type: 'json', callback: function(json){
             if(json.returnCode == 0){
                 $("#showForm").html(getDataUseHandlebars($("#beanTemplate").html(), json));
                 
@@ -26,7 +26,7 @@ layui.config({
 				    			state: $("input[name='flag']:checked").val(),
 				    			orderId: parent.rowId
 				            };
-				            AjaxPostUtil.request({url:reqBasePath + "erpproduction008", params: jStr, type: 'json', callback: function(json){
+				            AjaxPostUtil.request({url: flowableBasePath + "erpproduction008", params: jStr, type: 'json', callback: function(json){
 				 	   			if(json.returnCode == 0){
 			                    	parent.layer.close(index);
 			                    	parent.refreshCode = '0';

@@ -28,7 +28,7 @@ layui.config({
 
         showGrid({
             id: "showForm",
-            url: reqBasePath + "erpfarm003",
+            url: flowableBasePath + "erpfarm003",
             params: {rowId: parent.rowId},
             pagination: false,
             template: $("#beanTemplate").html(),
@@ -83,7 +83,7 @@ layui.config({
                             farmProcedure: JSON.stringify(procedureMationList),
                             rowId: parent.rowId
                         };
-                        AjaxPostUtil.request({url:reqBasePath + "erpfarm004", params: params, type: 'json', callback: function(json){
+                        AjaxPostUtil.request({url:flowableBasePath + "erpfarm004", params: params, type: 'json', callback: function(json){
                                 if(json.returnCode == 0){
                                     parent.layer.close(index);
                                     parent.refreshCode = '0';

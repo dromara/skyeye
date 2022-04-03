@@ -71,7 +71,7 @@ layui.config({
 	    
 	    //加载bom方案列表
 	    function loadBomList(normsId){
-	    	AjaxPostUtil.request({url:reqBasePath + "erpbom007", params: {normsId: normsId}, type: 'json', callback: function(json){
+	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom007", params: {normsId: normsId}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
 	 	   			$("#bomList").html(getDataUseHandlebars(selTemplate, json));
 	 	   			form.render("select");
@@ -94,7 +94,7 @@ layui.config({
 	    
 	    //加载bom方案下的子件列表
 	    function loadBomChildProList(bomId){
-	    	AjaxPostUtil.request({url:reqBasePath + "erpbom008", params: {bomId: bomId}, type: 'json', callback: function(json){
+	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {bomId: bomId}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
 	 	   			childProList = [].concat(json.rows);
 	 	   			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
@@ -172,7 +172,7 @@ layui.config({
  	        	//子件清单信息
  	        	params.childProStr = JSON.stringify(childList);
  	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "erpproduction002", params: params, type: 'json', method: "POST", callback: function(json){
+	        	AjaxPostUtil.request({url: flowableBasePath + "erpproduction002", params: params, type: 'json', method: "POST", callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
@@ -210,7 +210,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
 					if (refreshCode == '0') {
-						AjaxPostUtil.request({url:reqBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function(json){
+						AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function(json){
 							if(json.returnCode == 0){
 								procedureMationList = [].concat(json.bean.procedureList);
 								loadProcedureMation();

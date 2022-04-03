@@ -24,7 +24,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'erpmachin010',
+		    url: flowableBasePath + 'erpmachin010',
 		    where: getTableParams(),
 			even: true,
 		    page: false,
@@ -72,7 +72,7 @@ layui.config({
 					var obj = res.rows[chooseIndex];
 					
 					//根据加工单id获取该单据下的所有单据中商品以及剩余领料数量
-					AjaxPostUtil.request({url: reqBasePath + "erpmachin011", params: {rowId: obj.id}, type: 'json', callback: function(json) {
+					AjaxPostUtil.request({url: flowableBasePath + "erpmachin011", params: {rowId: obj.id}, type: 'json', callback: function(json) {
 						if(json.returnCode == 0) {
 							obj.norms = [].concat(json.rows);
 							parent.machinMation = obj;

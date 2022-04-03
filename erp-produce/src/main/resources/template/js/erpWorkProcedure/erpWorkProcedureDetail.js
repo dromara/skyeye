@@ -12,7 +12,7 @@ layui.config({
 
         showGrid({
             id: "showForm",
-            url: reqBasePath + "erpworkprocedure008",
+            url: flowableBasePath + "erpworkprocedure008",
             params: {rowId: parent.rowId},
             pagination: false,
             template: getFileContent('tpl/erpWorkProcedure/erpWorkProcedureDetailTemplate.tpl'),

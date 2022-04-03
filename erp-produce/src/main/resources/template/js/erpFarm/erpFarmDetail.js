@@ -13,7 +13,7 @@ layui.config({
 
         showGrid({
             id: "showForm",
-            url: reqBasePath + "erpfarm006",
+            url: flowableBasePath + "erpfarm006",
             params: {rowId: parent.rowId},
             pagination: false,
             template: $("#beanTemplate").html(),

@@ -23,7 +23,7 @@ layui.config({
         	
         showGrid({
             id: "showForm",
-            url: reqBasePath + "erpworkprocedure003",
+            url: flowableBasePath + "erpworkprocedure003",
             params: {rowId: parent.rowId},
             pagination: false,
             template: getFileContent('tpl/erpWorkProcedure/erpWorkProcedureEditTemplate.tpl'),
@@ -50,7 +50,7 @@ layui.config({
 						// 加载工序类别
                         showGrid({
                             id: "procedureType",
-                            url: reqBasePath + "erpworkproceduretype008",
+                            url: flowableBasePath + "erpworkproceduretype008",
                             params: {},
                             pagination: false,
                             template: selOption,
@@ -111,7 +111,7 @@ layui.config({
                             });
                             params.procedureUserId = procedureUserId;
                         }
-                        AjaxPostUtil.request({url:reqBasePath + "erpworkprocedure005", params:params, type: 'json', callback: function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "erpworkprocedure005", params:params, type: 'json', callback: function(json){
                             if(json.returnCode == 0){
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

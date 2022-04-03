@@ -17,7 +17,7 @@ layui.config({
 		
 		showGrid({
             id: "showForm",
-            url: reqBasePath + "erpwayprocedure008",
+            url: flowableBasePath + "erpwayprocedure008",
             params: {rowId: parent.rowId},
             pagination: false,
 			method: "GET",
