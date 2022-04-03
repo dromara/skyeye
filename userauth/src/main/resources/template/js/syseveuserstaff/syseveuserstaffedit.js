@@ -153,7 +153,7 @@ layui.config({
 		 		// 考勤时间段
 		 		showGrid({
 			     	id: "checkTimeBox",
-			     	url: reqBasePath + "checkworktime006",
+			     	url: flowableBasePath + "checkworktime006",
 			     	params: {},
 			     	pagination: false,
 			     	template: $("#checkTimeStrTemplate").html(),
@@ -215,7 +215,7 @@ layui.config({
 		 	        		return false;
 		 	        	}
 
-		 	        	AjaxPostUtil.request({url:reqBasePath + "staff004", params:params, type:'json', callback:function(json){
+		 	        	AjaxPostUtil.request({url:reqBasePath + "staff004", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

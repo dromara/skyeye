@@ -53,7 +53,7 @@ layui.config({
     function runTask(data){
         layer.confirm('确认启动任务吗？', {icon: 3, title: '启动任务'}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sysquartz003", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "sysquartz003", params:{rowId: data.id}, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg('启动成功', {icon: 1,time: 2000});
                     loadTable();

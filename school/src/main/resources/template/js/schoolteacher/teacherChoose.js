@@ -174,7 +174,7 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url:reqBasePath + "schoolteacher007", params: {staffIds: selectedData.toString()}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "schoolteacher007", params: {staffIds: selectedData.toString()}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				parent.chooseTeacherList = [].concat(json.rows);
  	   			parent.layer.close(index);

@@ -15,7 +15,7 @@ layui.config({
 		
 	var jsonData = new Array();
 		
-	AjaxPostUtil.request({url:reqBasePath + "fileconsole037", params: {}, type:'json', callback:function(json){
+	AjaxPostUtil.request({url:reqBasePath + "fileconsole037", params: {}, type: 'json', callback: function(json){
 		if(json.returnCode == 0){
 			jsonData = json.bean;
 			$("#layer02_01 .layer02-data").find('span').eq(0).html(jsonData.allNum.fileNum);

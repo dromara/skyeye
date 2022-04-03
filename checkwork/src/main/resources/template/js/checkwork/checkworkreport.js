@@ -66,7 +66,7 @@ layui.config({
 	// 加载考勤班次
 	/*showGrid({
 	 	id: "timeId",
-	 	url: reqBasePath + "checkworktime006",
+	 	url: flowableBasePath + "checkworktime006",
 	 	params: {},
 	 	pagination: false,
 	 	template: selTemplate,
@@ -87,7 +87,7 @@ layui.config({
 			id: 'messageTable',
 			elem: '#messageTable',
 			method: 'post',
-			url: reqBasePath + 'checkwork015',
+			url: flowableBasePath + 'checkwork015',
 			where: getTableParams(),
 			even: true,
 			page: true,
@@ -205,7 +205,7 @@ layui.config({
 	//初始化公司
 	function initCompany(){
 		loadCompany = true;
-		AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
       		if(json.returnCode == 0){
 				systemCommonUtil.getSysCompanyList(function(data){
 					// 加载企业数据
@@ -284,7 +284,7 @@ layui.config({
 	//导出
 	$("body").on("click", "#download", function(){
 		postDownLoadFile({
-			url : reqBasePath + 'checkwork020?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
+			url : flowableBasePath + 'checkwork020?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
 			params: getTableParams(),
 			method : 'post'
 		});
@@ -405,7 +405,7 @@ layui.config({
     	initEcharts();
     	
     	function initEcharts(){
-	    	AjaxPostUtil.request({url: reqBasePath + "checkwork016", params: getEchartsParams(), type: 'json', method: "POST", callback: function(json){
+	    	AjaxPostUtil.request({url: flowableBasePath + "checkwork016", params: getEchartsParams(), type: 'json', method: "POST", callback: function(json){
 	    		if(json.returnCode == 0){
 	    			ydata = json.rows;
 	    			var pieInitialized;

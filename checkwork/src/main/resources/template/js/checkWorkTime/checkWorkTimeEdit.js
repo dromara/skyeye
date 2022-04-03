@@ -15,7 +15,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "checkworktime003",
+		 	url: flowableBasePath + "checkworktime003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	method: "GET",
@@ -148,7 +148,7 @@ layui.config({
 		 	        		state: $("input[name='state']:checked").val(),
 		 	        		weekDay: JSON.stringify(weekDay)
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "checkworktime004", params: params, type:'json', method: "PUT", callback:function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "checkworktime004", params: params, type: 'json', method: "PUT", callback: function(json){
 		 	        		if(json.returnCode == 0){
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

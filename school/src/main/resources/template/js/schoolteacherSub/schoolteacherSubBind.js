@@ -11,7 +11,7 @@ layui.config({
 	    var $ = layui.$;
 	    
 	    //获取教师部分信息以及当前拥有的技能列表
-	    AjaxPostUtil.request({url:reqBasePath + "schoolteachersubject002", params: {rowId: parent.rowId}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url:reqBasePath + "schoolteachersubject002", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				$("#userName").html(json.bean.userName);
    				$("#schoolName").html(json.bean.schoolName);
@@ -50,7 +50,7 @@ layui.config({
 		 	        		propertyIds: propertyIds
 		 	        	};
 		 	        	
-		 	        	AjaxPostUtil.request({url:reqBasePath + "schoolteachersubject003", params:params, type:'json', callback:function(json){
+		 	        	AjaxPostUtil.request({url:reqBasePath + "schoolteachersubject003", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

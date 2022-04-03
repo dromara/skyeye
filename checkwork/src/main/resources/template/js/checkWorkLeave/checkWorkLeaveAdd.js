@@ -41,7 +41,7 @@ layui.config({
                     holidayNumber = json.bean.holidayNumber;
                     $("#messageTips").html("截至当前剩余年假：" + staffYearHoliday + "小时，剩余补休为：" + holidayNumber + "小时");
                     // 获取当前员工的考勤班次
-                    AjaxPostUtil.request({url: reqBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
+                    AjaxPostUtil.request({url: flowableBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
                         if(json.returnCode == 0) {
                             $.each(json.rows, function (i, item){
                                 checkWorkTime.push({
@@ -208,7 +208,7 @@ layui.config({
             subType: subType, // 表单类型 1.保存草稿  2.提交审批
             approvalId: approvalId
         };
-        AjaxPostUtil.request({url: reqBasePath + "checkworkleave002", params: params, type: 'json', method: 'POST',  callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "checkworkleave002", params: params, type: 'json', method: 'POST',  callback: function(json) {
             if(json.returnCode == 0) {
                 parent.layer.close(index);
                 parent.refreshCode = '0';

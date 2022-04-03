@@ -46,7 +46,7 @@ layui.config({
  	        		reportDesc: $("#reportDesc").val()
  	        	};
  	        	params.reportType = data.field.reportType;
- 	        	AjaxPostUtil.request({url:reqBasePath + "forumreport001", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:reqBasePath + "forumreport001", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

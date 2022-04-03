@@ -151,7 +151,7 @@ layui.config({
 		        });
 		      	
 		      	//展示规范说明
-		      	AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 4}, type:'json', callback:function(j){
+		      	AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 4}, type: 'json', callback: function(j){
 					if(j.returnCode == 0){
 		   				$("#exexplaintormpropertyTitle").html(j.bean.title);
 		   				$("#exexplaintormpropertyContent").html(j.bean.content);
@@ -161,7 +161,7 @@ layui.config({
 		   		}});
               	
               	form.on('select(selectParent)', function(data){
-              		AjaxPostUtil.request({url:reqBasePath + "dsform007", params:{rowId: data.value}, type:'json', callback:function(json){
+              		AjaxPostUtil.request({url:reqBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
             			if(json.returnCode == 0){
             				htmlModelContent.setValue(json.bean.htmlContent);
             				jsModelContent.setValue(json.bean.jsContent);
@@ -199,7 +199,7 @@ layui.config({
 			        		params.displayTemplateId = "";
 			        	}
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "rmproperty005", params:params, type:'json', callback:function(json){
+			        	AjaxPostUtil.request({url:reqBasePath + "rmproperty005", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

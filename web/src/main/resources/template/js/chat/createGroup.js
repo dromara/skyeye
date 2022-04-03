@@ -63,7 +63,7 @@ layui.config({
  	        		params.userIds = params.userIds + $(item).attr("id").replace('layim-friend', '') + ",";
  	        	});
  	        	
- 	        	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup001", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup001", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				parent.friendChooseList = params.userIds;
 	 	   				parent.layim.addList({

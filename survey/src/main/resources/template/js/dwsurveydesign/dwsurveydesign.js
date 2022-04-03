@@ -206,7 +206,7 @@ layui.config({
 				layer.close(index);
 				var quId = quBody.find("input[name='quId']").val();
 				if(!isNull(quId)){
-					AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory015", params:{quId: quId}, type:'json', callback:function(json){
+					AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory015", params:{quId: quId}, type: 'json', callback: function(json){
 		 	   			if(json.returnCode == 0){
 		 	   				quBody.hide("slow", function(){
 		 	   					$(this).parent().remove();
@@ -253,7 +253,7 @@ layui.config({
 			optionParent = $(curEditObj).parents("td.quChenColumnTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
-				AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory016", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory016", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
@@ -272,7 +272,7 @@ layui.config({
 			optionParent = $(curEditObj).parents("td.quChenRowTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
-				AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory017", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory017", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
@@ -400,7 +400,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory010", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory010", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -439,7 +439,7 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory018", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory018", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
@@ -488,7 +488,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory011", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory011", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -527,7 +527,7 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory019", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory019", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
@@ -620,7 +620,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory006", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory006", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -679,7 +679,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory007", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory007", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -711,7 +711,7 @@ layui.config({
 	    	optionParent = $(curEditObj).parents("tr.quScoreOptionTr");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory020", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory020", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
@@ -750,7 +750,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory008", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory008", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -784,7 +784,7 @@ layui.config({
 	    	var rmQuOrderTableTr = quItemBody.find(".quOrderByRight table.quOrderByTable tr:last");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory021", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory021", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				delQuOptionCallBack(optionParent);
 	 	   				rmQuOrderTableTr.remove();
@@ -807,7 +807,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory009", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory009", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -840,7 +840,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory013", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory013", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -896,7 +896,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory012", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory012", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -928,7 +928,7 @@ layui.config({
 	    	optionParent = $(curEditObj).parents("tr.mFillblankTableTr");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory022", params:{quItemId: quOptionId}, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory022", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
@@ -985,7 +985,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory014", params:data, type:'json', callback:function(json){
+	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory014", params:data, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);

@@ -115,7 +115,7 @@ layui.config({
 		var msg = obj ? '确认开始执行【' + obj.data.taskName + '】吗？' : '确认开始执行该任务吗？';
 		layer.confirm(msg, { icon: 3, title: '任务开始执行' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "protask012", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "protask012", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -131,7 +131,7 @@ layui.config({
 		var msg = obj ? '确认关闭【' + obj.data.taskName + '】吗？' : '确认关闭该任务吗？';
 		layer.confirm(msg, { icon: 3, title: '关闭任务' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "protask014", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "protask014", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -147,7 +147,7 @@ layui.config({
 		var msg = '确认从工作流中撤销选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销任务审批申请' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "protask007", params:{processInstanceId: data.processInstanceId}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "protask007", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();
@@ -240,7 +240,7 @@ layui.config({
 		var msg = obj ? '确认作废【' + obj.data.taskName + '】吗？' : '确认作废该任务信息吗？';
 		layer.confirm(msg, { icon: 3, title: '任务作废' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "protask009", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "protask009", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
     				loadTable();

@@ -62,7 +62,7 @@ layui.config({
  	        	}else if($("input[name='level']:checked").val() === '1'){
  	        		params.parentId = '0';
  	        	}
- 	        	AjaxPostUtil.request({url:reqBasePath + "noticetype002", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:reqBasePath + "noticetype002", params:params, type: 'json', callback: function(json){
  	        		if(json.returnCode == 0){
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';

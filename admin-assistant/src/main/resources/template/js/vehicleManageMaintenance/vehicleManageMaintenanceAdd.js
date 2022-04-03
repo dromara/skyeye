@@ -13,7 +13,7 @@ layui.config({
 	    	laydate = layui.laydate;
 
 		skyeyeEnclosure.init('enclosureUpload');
-	    AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
     		if(json.returnCode == 0) {
     			var userName = json.bean.userName;
     			$("#maintenanceTitle").html("车辆维修保养登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random()*100);
@@ -60,7 +60,7 @@ layui.config({
  	        		maintenanceType: $("input[name='maintenanceType']:checked").val(),
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
  	        	};
- 	        	AjaxPostUtil.request({url:flowableBasePath + "maintenance002", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "maintenance002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

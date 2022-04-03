@@ -68,7 +68,7 @@ layui.config({
     		}
     	}, 10);
     	//获取用户信息
-    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				$("#userPhoto").attr("src", fileBasePath + json.bean.userPhoto);
     			$("#userName").html(json.bean.userCode + '(' + json.bean.userName + ')');
@@ -85,7 +85,7 @@ layui.config({
     				json.bean.winLockBgPicUrl = fileBasePath + json.bean.winLockBgPicUrl;
     			}
     			//获取桌面消息
-                AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type:'json', method: "GET", callback:function(l){
+                AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
                     if(l.returnCode == 0) {
                     	var deskTopName = new Array();
                     	var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
@@ -150,7 +150,7 @@ layui.config({
 		    								$(_this).parent().prev().remove();
 		    								$(_this).remove();
 		    							}else{
-		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type:'json', callback:function(json){
+		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function(json){
 		    									if(json.returnCode == 0) {
 		    										$(_this).parent().prev().remove();
 		    										$(_this).remove();
@@ -161,7 +161,7 @@ layui.config({
 		    							}
 		    						}else{
 		    							if(isNull(id)){
-		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type:'json', callback:function(json){
+		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function(json){
 		    									if(json.returnCode == 0) {
 		    										$(_this).attr("rowid", json.bean.id);
 		    									}else{
@@ -169,7 +169,7 @@ layui.config({
 		    									}
 		    								}});
 		    							}else{
-		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type:'json', callback:function(json){
+		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function(json){
 		    									if(json.returnCode == 0) {
 		    									}else{
 		    										winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
@@ -204,7 +204,7 @@ layui.config({
 		        								$(_this).parent().prev().remove();
 		        								$(_this).remove();
 		        							}else{
-		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type:'json', callback:function(json){
+		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function(json){
 		        									if(json.returnCode == 0) {
 		        										$(_this).parent().prev().remove();
 		        										$(_this).remove();
@@ -215,7 +215,7 @@ layui.config({
 		        							}
 		        						}else{
 		        							if(isNull(id)){
-		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type:'json', callback:function(json){
+		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function(json){
 		        									if(json.returnCode == 0) {
 		        										$(_this).attr("rowid", json.bean.id);
 		        									}else{
@@ -223,7 +223,7 @@ layui.config({
 		        									}
 		        								}});
 		        							}else{
-		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type:'json', callback:function(json){
+		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function(json){
 		        									if(json.returnCode == 0) {
 		        									}else{
 		        										winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
@@ -610,7 +610,7 @@ layui.config({
 		
 		//监听签名修改
 		layim.on('sign', function(value) {
-			AjaxPostUtil.request({url:reqBasePath + "companychat002", params:{userSign: value}, type:'json', callback:function(json){
+			AjaxPostUtil.request({url:reqBasePath + "companychat002", params:{userSign: value}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
  	   				winui.window.msg('保存成功', {icon: 1, skin: 'msg-skin-message'});
  		   		}else{
@@ -739,7 +739,7 @@ layui.config({
                         	icon: ' fa-copy', 
                         	text: '发送到桌面',
                         	callBack: function (id, elem) {
-                        		AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop010", params:{rowId: id}, type:'json', callback:function(json){
+                        		AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop010", params:{rowId: id}, type: 'json', callback: function(json){
         			 	   			if(json.returnCode == 0){
         			 	   				top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
 	        			 	   			var thisMenuIcon = json.bean.icon;
@@ -897,7 +897,7 @@ layui.config({
 		 			$("#showMyNoticeNum").hide();
                     $("#showMyNoticeNum").html("0");
 		 			if(!isNull(idsStr)){
-		 				AjaxPostUtil.request({url:reqBasePath + "syseveusernotice006", params:{rowIds: idsStr}, type:'json', callback:function(json){
+		 				AjaxPostUtil.request({url:reqBasePath + "syseveusernotice006", params:{rowIds: idsStr}, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			$.each(noticeList, function(index, item){
 					 				setTimeout(function(e){
@@ -917,7 +917,7 @@ layui.config({
 		 		$(".winui-message-item").on("click", function(e){
 		 			var _this = $(this);
 		 			parentRowId = _this.attr("rowid");
-		 			AjaxPostUtil.request({url:reqBasePath + "syseveusernotice003", params:{rowId: parentRowId}, type:'json', callback:function(json){
+		 			AjaxPostUtil.request({url:reqBasePath + "syseveusernotice003", params:{rowId: parentRowId}, type: 'json', callback: function(json){
 		 	   			if(json.returnCode == 0){
 			 	   			_openNewWindows({
 									url: "../../tpl/index/noticeDetail.html", 
@@ -947,7 +947,7 @@ layui.config({
 		 		$(".notice-item-remove").on("click", function(e){
 		 			var _this = $(this).parent().parent();
 		 			parentRowId = _this.attr("rowid");
-		 			AjaxPostUtil.request({url:reqBasePath + "syseveusernotice004", params:{rowId: parentRowId}, type:'json', callback:function(json){
+		 			AjaxPostUtil.request({url:reqBasePath + "syseveusernotice004", params:{rowId: parentRowId}, type: 'json', callback: function(json){
 		 	   			if(json.returnCode == 0){
 			 	   			_this.animate({'margin-left': '390px'}, 500, function(){
 			 	   				_this.remove();
@@ -1140,7 +1140,7 @@ layui.config({
         					OpenWindow(elem);
         				}
         			});
-        			AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: ""}, type:'json', callback:function(json){
+        			AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: ""}, type: 'json', callback: function(json){
     					if(json.returnCode == 0){
     					}else{
     						winui.window.msg(json.returnMessage, { shift: 6 });
@@ -1187,7 +1187,7 @@ layui.config({
    		        			menuBoxName: menuName,
    		        			rowId: rowId
    			        	};
-   			        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop007", params:params, type:'json', callback:function(json){
+   			        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop007", params:params, type: 'json', callback: function(json){
    			 	   			if(json.returnCode == 0){
    			 	   				// 此处不需要去获取当前滚动展示的模块
 	   			 	   			$("#winui-desktop").find('div[id="' + rowId + '"]').attr("win-title", menuName);
@@ -1306,7 +1306,7 @@ layui.config({
                                 OpenWindow(elem);
                             }
                         });
-                        AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: boxId}, type:'json', callback:function(json){
+                        AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: boxId}, type: 'json', callback: function(json){
                             if(json.returnCode == 0){
                             }else{
                                 winui.window.msg(json.returnMessage, { shift: 6 });

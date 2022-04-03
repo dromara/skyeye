@@ -135,7 +135,7 @@ layui.config({
 			layer.confirm('确定从该地址：[' + val + ']进行数据同步吗？', { icon: 3, title: '数据同步' }, function (index) {
 				layer.close(index);
 	            
-				AjaxPostUtil.request({url:reqBasePath + "sysimportantsynchronization001", params:{rowId: downLoadId, url: val}, type:'json', callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "sysimportantsynchronization001", params:{rowId: downLoadId, url: val}, type: 'json', callback: function(json){
 	    			if(json.returnCode == 0){
 	    				winui.window.msg("同步成功", {icon: 1,time: 2000});
 	    			}else{

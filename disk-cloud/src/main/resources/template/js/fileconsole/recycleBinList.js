@@ -46,7 +46,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '还原文件' }, function (index) {
 			layer.close(index);
 			parent.refreshCode = '0';
-            AjaxPostUtil.request({url:reqBasePath + "fileconsole015", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "fileconsole015", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("还原成功", {icon: 1,time: 2000});
     				loadTable();

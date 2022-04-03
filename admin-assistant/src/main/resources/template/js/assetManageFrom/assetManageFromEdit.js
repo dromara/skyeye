@@ -27,7 +27,7 @@ layui.config({
 	 	        			rowId: parent.rowId,
 	 	        			fromName: $("#fromName").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url:flowableBasePath + "assetfrom005", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetfrom005", params:params, type: 'json', callback: function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

@@ -23,7 +23,7 @@ layui.config({
     var beanTemplate = $("#beanTemplate").html();
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
-    AjaxPostUtil.request({url: reqBasePath + "checkworkcancelleave004", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(mation) {
+    AjaxPostUtil.request({url: flowableBasePath + "checkworkcancelleave004", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(mation) {
         if(mation.returnCode == 0) {
             $("#useTitle").html(mation.bean.title);
             $("#useName").html(mation.bean.userName);
@@ -37,7 +37,7 @@ layui.config({
                 $(".typeOne").removeClass("layui-hide");
             }
             // 获取当前员工的考勤班次
-            AjaxPostUtil.request({url: reqBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
+            AjaxPostUtil.request({url: flowableBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
                 if(json.returnCode == 0) {
                     $.each(json.rows, function (i, item){
                         checkWorkTime.push({
@@ -177,7 +177,7 @@ layui.config({
             subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
             approvalId: approvalId,
         };
-        AjaxPostUtil.request({url: reqBasePath + "checkworkcancelleave005", params: params, type: 'json', method: 'PUT',  callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "checkworkcancelleave005", params: params, type: 'json', method: 'PUT',  callback: function(json) {
             if(json.returnCode == 0) {
                 parent.layer.close(index);
                 parent.refreshCode = '0';

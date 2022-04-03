@@ -12,7 +12,7 @@ layui.config({
 		    layedit = layui.layedit;
 	    var layEditor;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc013", params:{rowId: parent.rowId}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc013", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				$("#title").val(json.bean.title);
    				
@@ -60,7 +60,7 @@ layui.config({
    		        			parentId: parent.parentId,
    		        			rowId: parent.rowId
    			        	};
-   			        	AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc014", params:params, type:'json', callback:function(json){
+   			        	AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc014", params:params, type: 'json', callback: function(json){
    			 	   			if(json.returnCode == 0){
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';

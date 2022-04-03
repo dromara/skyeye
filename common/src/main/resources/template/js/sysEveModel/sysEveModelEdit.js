@@ -13,7 +13,7 @@ layui.config({
 	    
 	    var type;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysevemodel004", params:{id: parent.rowId}, type:'json', method: "GET", callback:function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "sysevemodel004", params:{id: parent.rowId}, type: 'json', method: "GET", callback: function(json){
    			if(json.returnCode == 0){
 				// 初始化上传
 				$("#logo").upload({
@@ -68,7 +68,7 @@ layui.config({
 							winui.window.msg('请填写模板内容', {icon: 2,time: 2000});
 							return false;
 						}
-						AjaxPostUtil.request({url: reqBasePath + "sysevemodel005", params:params, type:'json', method: "PUT", callback:function(json){
+						AjaxPostUtil.request({url: reqBasePath + "sysevemodel005", params:params, type: 'json', method: "PUT", callback: function(json){
 							if(json.returnCode == 0){
 								parent.layer.close(index);
 								parent.refreshCode = '0';

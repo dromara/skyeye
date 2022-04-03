@@ -133,7 +133,7 @@ layui.config({
 			 	   			
 			 	   			params.img = $("#printsPicUrl").find("input[type='hidden'][name='upload']").attr("oldurl");
 			 	   			
-				        	AjaxPostUtil.request({url:reqBasePath + "rmxcx021", params:params, type:'json', callback:function(json){
+				        	AjaxPostUtil.request({url:reqBasePath + "rmxcx021", params:params, type: 'json', callback: function(json){
 				 	   			if(json.returnCode == 0){
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';

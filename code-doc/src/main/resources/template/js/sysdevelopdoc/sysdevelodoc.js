@@ -82,7 +82,7 @@ layui.config({
 	//初始化文档内容
 	function initDate(){
 		if(!isNull($("#showDocList").find("dd[class='active']").find("a").attr("rowid"))){
-			AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc023", params:{rowId: $("#showDocList").find("dd[class='active']").find("a").attr("rowid")}, type:'json', callback:function(json){
+			AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc023", params:{rowId: $("#showDocList").find("dd[class='active']").find("a").attr("rowid")}, type: 'json', callback: function(json){
 				if(json.returnCode == 0){
 					$('#contentDiv').empty();
 					$('#contentDiv').append('<textarea id="content" style="display:none;" placeholder="markdown语言"></textarea>');

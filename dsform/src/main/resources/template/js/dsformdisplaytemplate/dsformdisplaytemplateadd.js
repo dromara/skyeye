@@ -10,7 +10,7 @@ layui.config({
 	    var $ = layui.$,
 	    	form = layui.form;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 3}, type:'json', callback:function(j){
+	    AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 3}, type: 'json', callback: function(j){
    			if(j.returnCode == 0){
    				$("#exexplaintodsformdisplaytemplateTitle").html(j.bean.title);
    				$("#exexplaintodsformdisplaytemplateContent").html(j.bean.content);
@@ -40,7 +40,7 @@ layui.config({
         			templateName:$("#templateName").val(),
         			templateContent:encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26"))
 	        	};
-	        	AjaxPostUtil.request({url:reqBasePath + "dsformdisplaytemplate002", params:params, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url:reqBasePath + "dsformdisplaytemplate002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

@@ -15,7 +15,7 @@ layui.config({
 	    	form = layui.form;
 	    
 	    //表单内容列表
-	    AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 2}, type:'json', callback:function(j){
+	    AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 2}, type: 'json', callback: function(j){
    			if(j.returnCode == 0){
    				$("#exexplaintodsformcontentTitle").html(j.bean.title);
    				$("#exexplaintodsformcontentContent").html(j.bean.content);
@@ -190,7 +190,7 @@ layui.config({
 	 	        		params.dataShowTpl = "";
 	 	        		params.defaultData = "";
 	 	        	}
-	        		AjaxPostUtil.request({url:reqBasePath + "dsform002", params:params, type:'json', callback:function(json){
+	        		AjaxPostUtil.request({url:reqBasePath + "dsform002", params:params, type: 'json', callback: function(json){
 	        			if(json.returnCode == 0){
 	        				parent.layer.close(index);
 	        				parent.refreshCode = '0';

@@ -89,7 +89,7 @@ layui.config({
 		function loadData(){
 			// 如果问题id不为空，则说明是编辑，加载编辑信息
 			if(!isNull(parent.rowId)){
-				AjaxPostUtil.request({url:reqBasePath + "schoolquestionbank012", params: {rowId: parent.rowId}, type:'json', callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "schoolquestionbank012", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						$("#schoolId").val(json.bean.schoolId);
 						showGrid({
@@ -207,7 +207,7 @@ layui.config({
 	    		});
 	    		params.orderquTd = JSON.stringify(orderquTd);
 	    		
-    			AjaxPostUtil.request({url:reqBasePath + "schoolquestionbank011", params: params, type:'json', callback:function(json){
+    			AjaxPostUtil.request({url:reqBasePath + "schoolquestionbank011", params: params, type: 'json', callback: function(json){
     				if(json.returnCode == 0){
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';

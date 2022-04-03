@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "checkwork012",
+		 	url: flowableBasePath + "checkwork012",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/checkWorkAbnormalAttendance/checkWorkAbnormalAttendanceDetailsTemplate.tpl'),

@@ -62,7 +62,7 @@ var activitiUtil = {
             flag: flag
         };
         // 优先请求一次获取下个用户节点的信息，如果没有审批节点信息，则不加载审批人选项
-        AjaxPostUtil.request({url:reqBasePath + "activitiProcess001", params: params, type:'json', callback:function(json) {
+        AjaxPostUtil.request({url:reqBasePath + "activitiProcess001", params: params, type: 'json', callback: function(json) {
             if (json.returnCode == 0) {
                 if(!isNull(json.bean)){
                     var approvalPersonChooseDom = '<div class="layui-form-item layui-col-xs12">' +

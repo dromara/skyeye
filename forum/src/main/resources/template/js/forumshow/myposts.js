@@ -71,7 +71,7 @@ layui.config({
 	function del(){
 		layer.confirm('确认删除该帖子吗？', { icon: 3, title: '删除帖子' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "forumcontent003", params:{rowId: rowId}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "forumcontent003", params:{rowId: rowId}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadList();

@@ -25,7 +25,7 @@ layui.config({
  		});
 		
 		form.on('select(showModel)', function(data){
- 			AjaxPostUtil.request({url:reqBasePath + "dsform007", params:{rowId: data.value}, type:'json', callback:function(json){
+ 			AjaxPostUtil.request({url:reqBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				var mode = returnModel(json.bean.htmlType);
     				if (!isNull(mode.length)) {

@@ -1231,7 +1231,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 					dHistory = n.history;
 				var reGroupId = l.data("id").replace("layim-", "");//获取id类型 --group + id
 				var reId = reGroupId.replace("group", "");//获取id类型 --id
-				AjaxPostUtil.request({url:reqBasePath + "companytalkgroup010", params:{groupId: reId}, type:'json', callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "companytalkgroup010", params:{groupId: reId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				//删除对应的对象群聊
 						var groupIndex = -1;
@@ -1296,7 +1296,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 					dHistory = n.history;
 				var reGroupId = l.data("id").replace("layim-", "");//获取id类型 --group + id
 				var reId = reGroupId.replace("group", "");//获取id类型 --id
-				AjaxPostUtil.request({url:reqBasePath + "companytalkgroup009", params:{groupId: reId}, type:'json', callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "companytalkgroup009", params:{groupId: reId}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				//删除对应的对象群聊
 						var groupIndex = -1;

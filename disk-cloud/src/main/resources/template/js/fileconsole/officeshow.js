@@ -70,9 +70,9 @@ layui.config({
 		}
 		
 		$("title").html(title);
-		AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
     		if(json.returnCode == 0) {
-    			AjaxPostUtil.request({url:reqBasePath + "fileconsole036", params:{rowId: thisId}, type:'json', callback:function(j){
+    			AjaxPostUtil.request({url:reqBasePath + "fileconsole036", params:{rowId: thisId}, type: 'json', callback: function(j){
     	    		if(j.returnCode == 0) {
     	    			if(!isNull(j.bean)){
     	    				window.docEditor = new DocsAPI.DocEditor("placeholder", {

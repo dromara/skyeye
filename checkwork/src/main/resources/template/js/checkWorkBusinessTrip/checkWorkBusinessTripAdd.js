@@ -25,7 +25,7 @@ layui.config({
             $("#useTitle").html("用户出差申请单-" + getYMDFormatDate() + '-' + json.bean.userName);
             $("#useName").html(json.bean.userName);
             // 获取当前员工的考勤班次
-            AjaxPostUtil.request({url: reqBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
+            AjaxPostUtil.request({url: flowableBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
                 if(json.returnCode == 0) {
                     $.each(json.rows, function (i, item){
                         checkWorkTime.push({
@@ -128,7 +128,7 @@ layui.config({
             subType: subType, // 表单类型 1.保存草稿  2.提交审批
             approvalId: approvalId
         };
-        AjaxPostUtil.request({url: reqBasePath + "checkworkbusinesstrip002", params: params, type: 'json', method: 'POST',  callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "checkworkbusinesstrip002", params: params, type: 'json', method: 'POST',  callback: function(json) {
             if(json.returnCode == 0) {
                 parent.layer.close(index);
                 parent.refreshCode = '0';

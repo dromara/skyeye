@@ -75,7 +75,7 @@ layui.config({
 				});
 				
 		 		$("#insuranceAllPrice").html(json.bean.insuranceAllPrice);
-		 		AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type:'json', callback:function(thisjson){
+		 		AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function(thisjson){
 		    		if(thisjson.returnCode == 0) {
 		    			var row = thisjson.rows;
 		 		 		for(var i = 0;i < thisjson.total; i++){
@@ -172,7 +172,7 @@ layui.config({
 	 				 	 	        		return false;
 	 				 	                }
 	 				 	        	}
-	 			 	 	        	AjaxPostUtil.request({url:flowableBasePath + "insurance005", params:params, type:'json', callback:function(json){
+	 			 	 	        	AjaxPostUtil.request({url: flowableBasePath + "insurance005", params:params, type: 'json', callback: function(json){
 	 			 		 	   			if(json.returnCode == 0){
 	 			 			 	   			parent.layer.close(index);
 	 			 			 	        	parent.refreshCode = '0';

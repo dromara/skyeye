@@ -24,7 +24,7 @@ layui.config({
 	// 初始化申诉原因类型
 	showGrid({
 	 	id: "appealReasonId",
-	 	url: reqBasePath + "checkworkreason010",
+	 	url: flowableBasePath + "checkworkreason010",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -41,7 +41,7 @@ layui.config({
     	searchKey: 'userName',	//搜索输入框的name值 默认keyword
     	searchPlaceholder: '审批人搜索',	//搜索输入框的提示文字 默认关键词搜索
     	table: {	//定义表格参数，与LAYUI的TABLE模块一致，只是无需再定义表格elem
-    		url: reqBasePath + 'checkwork008',
+    		url: flowableBasePath + 'checkwork008',
     		where: {userName: $("#userName").val()},
     		method: 'post',
     		page: true,
@@ -80,7 +80,7 @@ layui.config({
 		    id: 'myGetTable',
 		    elem: '#myGetTable',
 		    method: 'post',
-		    url: reqBasePath + 'checkwork007',
+		    url: flowableBasePath + 'checkwork007',
 		    where: getTablePatams(),
 		    even: true,
 		    page: true,

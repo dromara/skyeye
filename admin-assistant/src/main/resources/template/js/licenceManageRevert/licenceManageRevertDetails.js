@@ -11,7 +11,7 @@ layui.config({
 	    var $ = layui.$;
 	    var revertTemplate = $("#revertTemplate").html();
 	    
-	    AjaxPostUtil.request({url:flowableBasePath + "licencerevert003", params:{rowId: parent.rowId}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "licencerevert003", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
     		if(json.returnCode == 0) {
     			//状态
     			if(json.bean.state == '0'){

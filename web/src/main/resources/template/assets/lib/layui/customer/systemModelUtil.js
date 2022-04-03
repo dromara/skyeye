@@ -33,7 +33,7 @@ var systemModelUtil = {
      * @param parentId 父id
      */
     getSysEveModelTypeDataByPId: function (parentId, callback){
-        AjaxPostUtil.request({url: reqBasePath + "sysevemodeltype006", params: {parentId: parentId}, type:'json', method: "GET", callback:function(json){
+        AjaxPostUtil.request({url: reqBasePath + "sysevemodeltype006", params: {parentId: parentId}, type: 'json', method: "GET", callback: function(json){
             if(json.returnCode == 0){
                 if(typeof(callback) == "function") {
                     callback(json);

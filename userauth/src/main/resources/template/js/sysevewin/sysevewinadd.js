@@ -132,7 +132,7 @@ layui.config({
  	        		winui.window.msg('请上传系统图片', {icon: 2,time: 2000});
  	        		return false;
  	        	}
-    			AjaxPostUtil.request({url:reqBasePath + "sysevewin002", params:params, type:'json', callback:function(json){
+    			AjaxPostUtil.request({url:reqBasePath + "sysevewin002", params:params, type: 'json', callback: function(json){
     				if(json.returnCode == 0){
     					parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

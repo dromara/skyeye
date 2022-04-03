@@ -61,7 +61,7 @@ layui.config({
         			winui.window.msg("请选择应用logo", {icon: 2,time: 2000});
  	        		return false;
         	    }
- 	        	AjaxPostUtil.request({url:reqBasePath + "lightapp002", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:reqBasePath + "lightapp002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

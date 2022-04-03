@@ -65,7 +65,7 @@ layui.config({
                     chargePerson: chargeUser[0].id,
                     farmProcedure: JSON.stringify(procedureMationList)
 			    };
-	        	AjaxPostUtil.request({url:reqBasePath + "erpfarm002", params: params, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url:reqBasePath + "erpfarm002", params: params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

@@ -11,7 +11,7 @@ layui.config({
 	    var $ = layui.$;
 	    
 	    //获取年级部分信息以及当前拥有的技能列表
-	    AjaxPostUtil.request({url:reqBasePath + "schoolgradesubject002", params: {rowId: parent.rowId}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url:reqBasePath + "schoolgradesubject002", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				$("#gradeName").html(json.bean.gradeName);
    				$("#schoolName").html(json.bean.schoolName);
@@ -49,7 +49,7 @@ layui.config({
 		 	        		propertyIds: propertyIds
 		 	        	};
 		 	        	
-		 	        	AjaxPostUtil.request({url:reqBasePath + "schoolgradesubject003", params:params, type:'json', callback:function(json){
+		 	        	AjaxPostUtil.request({url:reqBasePath + "schoolgradesubject003", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

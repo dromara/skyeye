@@ -89,7 +89,7 @@ layui.config({
             subType: subType, // 表单类型 1.保存草稿  2.提交审批
             approvalId: approvalId
         };
-        AjaxPostUtil.request({url: reqBasePath + "checkworkovertime002", params: params, type: 'json', method: 'POST',  callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "checkworkovertime002", params: params, type: 'json', method: 'POST',  callback: function(json) {
             if(json.returnCode == 0) {
                 parent.layer.close(index);
                 parent.refreshCode = '0';

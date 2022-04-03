@@ -34,7 +34,7 @@ layui.config({
 				   	toCc: $('#toCc').tagEditor('getTags')[0].tags,
 				   	toBcc: $('#toBcc').tagEditor('getTags')[0].tags
 			   	};
-			   	AjaxPostUtil.request({url: reqBasePath + "emailsendmodel002", params: params, type:'json', method: "POST", callback:function(json){
+			   	AjaxPostUtil.request({url: reqBasePath + "emailsendmodel002", params: params, type: 'json', method: "POST", callback: function(json){
 				   	if(json.returnCode == 0){
 						parent.layer.close(index);
 						parent.refreshCode = '0';

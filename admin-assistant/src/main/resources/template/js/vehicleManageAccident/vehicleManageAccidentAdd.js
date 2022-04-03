@@ -12,7 +12,7 @@ layui.config({
 	    var $ = layui.$,
 	    	laydate = layui.laydate;
 	    
-    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
     		if(json.returnCode == 0) {
     			var userId = json.bean.id;
     			var userName = json.bean.userName;
@@ -82,7 +82,7 @@ layui.config({
 					vehicleId: $("#licensePlate").val(),
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
  	        	};
- 	        	AjaxPostUtil.request({url:flowableBasePath + "accident002", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "accident002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

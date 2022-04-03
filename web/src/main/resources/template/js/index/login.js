@@ -70,7 +70,7 @@ layui.config({
 	 	        			password:$("#password").val()
 	 	        		};
 	 	        		isLogin = true;
-	 	        		AjaxPostUtil.request({url:reqBasePath + "login001", params:params, type:'json', callback:function(json){
+	 	        		AjaxPostUtil.request({url:reqBasePath + "login001", params:params, type: 'json', callback: function(json){
 	 	        			isLogin = false;
  	        				$("#loginBtn").find("i").attr("class", "fa fa-arrow-right");
 	 		 	   			if(json.returnCode == 0){

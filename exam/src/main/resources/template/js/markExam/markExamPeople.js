@@ -18,7 +18,7 @@ layui.config({
 		    form = layui.form;
 		    
 		//获取试卷详情信息以及阅卷人信息
-		AjaxPostUtil.request({url:reqBasePath + "exam036", params: {surveyId: parent.rowId}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "exam036", params: {surveyId: parent.rowId}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				$("#showForm").html(getDataUseHandlebars($("#assignmentTemplate").html(), json));
    				//回显阅卷人
@@ -43,7 +43,7 @@ layui.config({
 		        			surveyId: parent.rowId,
 		        			arrayStr: JSON.stringify(array)
 			        	};
-			        	AjaxPostUtil.request({url:reqBasePath + "exam037", params:params, type:'json', callback:function(json){
+			        	AjaxPostUtil.request({url:reqBasePath + "exam037", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 			 	   				parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

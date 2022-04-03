@@ -36,7 +36,7 @@ layui.config({
     	tableTemplate = $("#tableTemplate").html(),//表格展示
 		voucherTemplate = $("#voucherTemplate").html();//凭证展示
 
-    AjaxPostUtil.request({url:reqBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type:'json', callback:function(j){
+    AjaxPostUtil.request({url:reqBasePath + "activitimode016", params: {taskId: taskId, processInstanceId: processInstanceId}, type: 'json', callback: function(j){
 		if(j.returnCode == 0){
 			pageTypes = isNull(j.bean.pageTypes) ? '1' : j.bean.pageTypes;
 			var jsonStr = "";//实体json对象
@@ -59,7 +59,7 @@ layui.config({
 							tplContent = getDataUseHandlebars(formItem.templateContent, obj);
 							formItem.context = tplContent;
 						}else if(formItem.associatedDataTypes == 2){//接口
-							AjaxPostUtil.request({url:reqBasePath + "dsformpage011", params:{interfa: formItem.aData}, type:'json', callback:function(j){
+							AjaxPostUtil.request({url:reqBasePath + "dsformpage011", params:{interfa: formItem.aData}, type: 'json', callback: function(j){
 					   			if(j.returnCode == 0){
 					   				var obj = JSON.parse(j.bean.aData);
 					   				tplContent = getDataUseHandlebars(formItem.templateContent, obj);
@@ -349,7 +349,7 @@ layui.config({
 	    			pageTypes: pageTypes,
 					approverId: activitiUtil.getApprovalPersonId()
 	            };
-	            AjaxPostUtil.request({url:reqBasePath + "activitimode005", params: jStr, type:'json', callback:function(json){
+	            AjaxPostUtil.request({url:reqBasePath + "activitimode005", params: jStr, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
                     	parent.layer.close(index);
                     	parent.refreshCode = '0';
@@ -371,7 +371,7 @@ layui.config({
 			done: function(page, next) { //到达临界点（默认滚动触发），触发下一页
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-				AjaxPostUtil.request({url:reqBasePath + "activitimode017", params:{processInstanceId: parent.processInstanceId}, type:'json', callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "activitimode017", params:{processInstanceId: parent.processInstanceId}, type: 'json', callback: function(json){
 		   			if(json.returnCode == 0){
 		   				var jsonStr = "";//实体json对象
 		   				$.each(json.rows, function(index, bean) {

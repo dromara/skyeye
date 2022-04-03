@@ -179,7 +179,7 @@ layui.config({
 	 	 	        	}else{
 	 	        			params.employeeId = employeeuserList[0].id;
 	 	        		}
-	 	 	        	AjaxPostUtil.request({url:flowableBasePath + "asset005", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "asset005", params:params, type: 'json', callback: function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

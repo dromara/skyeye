@@ -136,7 +136,7 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url:reqBasePath + "erpfarm011", params: {ids: selectedData.toString()}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "erpfarm011", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				parent.procedureMationList = [].concat(json.rows);
  	   			parent.layer.close(index);

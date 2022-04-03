@@ -143,7 +143,7 @@ var dsFormUtil = {
                 }
                 item.context = getDataUseHandlebars(item.templateContent, obj);
             }else if(item.associatedDataTypes == 2){//接口
-                AjaxPostUtil.request({url:reqBasePath + "dsformpage011", params:{interfa: item.aData}, type:'json', callback:function(j){
+                AjaxPostUtil.request({url:reqBasePath + "dsformpage011", params:{interfa: item.aData}, type: 'json', callback: function(j){
                     if(j.returnCode == 0){
                         var obj = JSON.parse(j.bean.aData);
                         item.context = getDataUseHandlebars(item.templateContent, obj);

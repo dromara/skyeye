@@ -13,7 +13,7 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
         
-        AjaxPostUtil.request({url:reqBasePath + "erpproduction006", params: {orderId: parent.rowId}, type:'json', callback:function(json){
+        AjaxPostUtil.request({url:reqBasePath + "erpproduction006", params: {orderId: parent.rowId}, type: 'json', callback: function(json){
             if(json.returnCode == 0){
             	json.bean.stateName = getStateName(json.bean);
             	$.each(json.bean.procedureMationList, function(i, item){

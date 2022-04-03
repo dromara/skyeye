@@ -19,7 +19,7 @@ layui.config({
 
     var beanTemplate = $("#beanTemplate").html();
 
-    AjaxPostUtil.request({url: reqBasePath + "checkworkovertime004", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(mation) {
+    AjaxPostUtil.request({url: flowableBasePath + "checkworkovertime004", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(mation) {
         if(mation.returnCode == 0) {
             $("#useTitle").html(mation.bean.title);
             $("#useName").html(mation.bean.userName);
@@ -115,7 +115,7 @@ layui.config({
             subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
             approvalId: approvalId,
         };
-        AjaxPostUtil.request({url: reqBasePath + "checkworkovertime005", params: params, type: 'json', method: 'PUT', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "checkworkovertime005", params: params, type: 'json', method: 'PUT', callback: function(json) {
             if(json.returnCode == 0) {
                 parent.layer.close(index);
                 parent.refreshCode = '0';

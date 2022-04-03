@@ -50,7 +50,7 @@ layui.config({
         			subData[i].modelContent = "";
         			subData[i].content = subData[i].content.replace(/\+/g, "%2B").replace(/\&/g, "%26").replace(/\%/g, "%25");
         		}
-        		AjaxPostUtil.request({url:reqBasePath + "codemodel014", params:{jsonData: JSON.stringify(subData)}, type:'json', callback:function(json){
+        		AjaxPostUtil.request({url:reqBasePath + "codemodel014", params:{jsonData: JSON.stringify(subData)}, type: 'json', callback: function(json){
         			if(json.returnCode == 0){
         				winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1,time: 2000}, function(){
 	        				parent.layer.close(index);
@@ -277,7 +277,7 @@ layui.config({
     	 	},
     	 	ajaxSendAfter:function(json){
     	 		tableColumn = json;
-    	 		AjaxPostUtil.request({url:reqBasePath + "codemodel012", params:{tableName: $("#tableName").val()}, type:'json', callback:function(json){
+    	 		AjaxPostUtil.request({url:reqBasePath + "codemodel012", params:{tableName: $("#tableName").val()}, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				$(".createResult").removeClass("layui-btn-normal");
 	 	   				jsCreateClick = true;

@@ -12,7 +12,7 @@ layui.config({
 	    var $ = layui.$,
 	    	form = layui.form;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "exexplain004", params: {type: 1}, type:'json', callback:function(j){
+	    AjaxPostUtil.request({url:reqBasePath + "exexplain004", params: {type: 1}, type: 'json', callback: function(j){
 			if(j.returnCode == 0){
    				$("#exexplaintocodemodelTitle").html(j.bean.title);
    				$("#exexplaintocodemodelContent").html(j.bean.content);
@@ -57,7 +57,7 @@ layui.config({
         				groupId: parent.groupId,
 	        		};
 	        		
-	        		AjaxPostUtil.request({url:reqBasePath + "codemodel007", params:params, type:'json', callback:function(json){
+	        		AjaxPostUtil.request({url:reqBasePath + "codemodel007", params:params, type: 'json', callback: function(json){
 	        			if(json.returnCode == 0){
 	        				parent.layer.close(index);
 	        				parent.refreshCode = '0';

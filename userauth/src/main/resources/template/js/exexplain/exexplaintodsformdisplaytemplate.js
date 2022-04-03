@@ -18,7 +18,7 @@ layui.config({
 	    
 	    var layContent;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "exexplain002", params:{type: type}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url:reqBasePath + "exexplain002", params:{type: type}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				if(!isNull(json.bean)){
    					rowId = json.bean.id;
@@ -60,7 +60,7 @@ layui.config({
 						type: type
 	        		};
 	        		if(isNull(rowId)){
-	        			AjaxPostUtil.request({url:reqBasePath + "exexplain001", params:params, type:'json', callback:function(json){
+	        			AjaxPostUtil.request({url:reqBasePath + "exexplain001", params:params, type: 'json', callback: function(json){
 	        				if(json.returnCode == 0){
 	        					rowId = json.bean.id;
 	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
@@ -70,7 +70,7 @@ layui.config({
 	        			}});
 	        		}else{
 	        			params.rowId = rowId;
-	        			AjaxPostUtil.request({url:reqBasePath + "exexplain003", params:params, type:'json', callback:function(json){
+	        			AjaxPostUtil.request({url:reqBasePath + "exexplain003", params:params, type: 'json', callback: function(json){
 	        				if(json.returnCode == 0){
 	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
 	        				}else{

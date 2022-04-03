@@ -26,7 +26,7 @@ layui.config({
 	var userToken = getCookie('userToken');
 	
 	//帖子信息展示
-	AjaxPostUtil.request({url:reqBasePath + "forumcontent006", params: {rowId:rowId}, type:'json', callback:function(json){
+	AjaxPostUtil.request({url:reqBasePath + "forumcontent006", params: {rowId:rowId}, type: 'json', callback: function(json){
 		if(json.returnCode == 0){
 			if(json.bean.createId != userToken){//如果不是用户自己的帖子，则显示举报按钮
 				$("#forumReport").removeClass("layui-hide");
@@ -47,7 +47,7 @@ layui.config({
 		if(isNull(content)){
 			winui.window.msg("评论内容不能为空！", {icon: 2,time: 2000});
 		}else{
-			AjaxPostUtil.request({url:reqBasePath + "forumcontent008", params:{forumId:rowId, content:content}, type:'json', callback:function(json){
+			AjaxPostUtil.request({url:reqBasePath + "forumcontent008", params:{forumId:rowId, content:content}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
  	   				loadCommentList();//刷新评论信息
  	   				$("#commentContent").val("");
@@ -90,13 +90,13 @@ layui.config({
 		if(isNull(replyContent)){
 			winui.window.msg("回复内容不能为空！", {icon: 2,time: 2000});
 		}else{
-			AjaxPostUtil.request({url:reqBasePath + "forumcontent010", params:{forumId:rowId, belongCommentId:belongCommentId, content:replyContent, replyId:commentUserId}, type:'json', callback:function(json){
+			AjaxPostUtil.request({url:reqBasePath + "forumcontent010", params:{forumId:rowId, belongCommentId:belongCommentId, content:replyContent, replyId:commentUserId}, type: 'json', callback: function(json){
  	   			if(json.returnCode == 0){
  	   				$(".comment-text-textarea").empty();
  	   				$(".se-comment-text-textarea").empty();
  	   			    var commentName = "";
  	   			    var commentUserId = "";
-	 	   			AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+	 	   			AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
 		 	       		if(json.returnCode == 0) {
 		 	       			commentName =  json.bean.userName;
 		 	       			commentUserId =  json.bean.id;
@@ -165,7 +165,7 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function(j){
-		 		AjaxPostUtil.request({url:reqBasePath + "forumcontent011", params:{forumId:rowId}, type:'json', callback:function(json){
+		 		AjaxPostUtil.request({url:reqBasePath + "forumcontent011", params:{forumId:rowId}, type: 'json', callback: function(json){
 	 				if(json.returnCode == 0) {
 	 					var row = json.rows;
 	 			 		for(var i = 0;i < row.length; i++){

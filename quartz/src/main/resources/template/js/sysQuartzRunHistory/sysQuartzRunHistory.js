@@ -25,7 +25,7 @@ layui.config({
                 limit: 12,
                 quartzId: quartzId
             };
-            AjaxPostUtil.request({url:reqBasePath + "sysQuartzRunHistory001", params: params, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "sysQuartzRunHistory001", params: params, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
                     var jsonStr = "";//实体json对象
                     $.each(json.rows, function(index, bean) {

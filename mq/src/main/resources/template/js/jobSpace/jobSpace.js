@@ -34,7 +34,7 @@ layui.config({
 	});
 	
 	// 获取用户信息
-	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
 		if(json.returnCode == 0){
 			var str = '<img alt="' + json.bean.userName + '" src="' + fileBasePath + json.bean.userPhoto + '"/>'
 					+ '<font>' + json.bean.userName + '</font>'

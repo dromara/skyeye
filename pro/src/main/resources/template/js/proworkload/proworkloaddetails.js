@@ -13,7 +13,7 @@ layui.config({
 	
 	var beanTemplate = $("#beanTemplate").html();
 	
-	AjaxPostUtil.request({url:reqBasePath + "proworkload006", params:{rowId: parent.rowId}, type:'json', callback:function(json){
+	AjaxPostUtil.request({url:reqBasePath + "proworkload006", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
 		if(json.returnCode == 0) {
 			//附件回显
 			var str = "暂无附件";

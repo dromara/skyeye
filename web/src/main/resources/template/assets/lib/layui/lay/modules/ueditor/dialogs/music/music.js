@@ -23,7 +23,7 @@ function Music() {
                 me.dosearch();
             });
         },
-        callback:function (data) {
+        callback: function (data) {
             var me = this;
             me.data = data.song_list;
             setTimeout(function () {

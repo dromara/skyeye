@@ -120,7 +120,7 @@ layui.config({
  		
  		showGrid({
 	     	id: "checkTimeBox",
-	     	url: reqBasePath + "checkworktime006",
+	     	url: flowableBasePath + "checkworktime006",
 	     	params: {},
 	     	pagination: false,
 	     	template: $("#checkTimeStrTemplate").html(),
@@ -180,7 +180,7 @@ layui.config({
  	        		return false;
  	        	}
  	        	
- 	        	AjaxPostUtil.request({url:reqBasePath + "staff002", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:reqBasePath + "staff002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

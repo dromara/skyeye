@@ -25,7 +25,7 @@ layui.config({
 	     		var params = {
         			rowId: parent.rowId
         		};
-	     		AjaxPostUtil.request({url:reqBasePath + "rmxcx039", params:params, type:'json', callback:function(json){
+	     		AjaxPostUtil.request({url:reqBasePath + "rmxcx039", params:params, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						if(json.total != 0){
 							for(var i in json.rows){
@@ -55,7 +55,7 @@ layui.config({
 	        			rowId: parent.rowId,
 	        			propertyIds: propertyIds
 	        		};
-	        		AjaxPostUtil.request({url:reqBasePath + "rmxcx038", params:params, type:'json', callback:function(json){
+	        		AjaxPostUtil.request({url:reqBasePath + "rmxcx038", params:params, type: 'json', callback: function(json){
 						if(json.returnCode == 0){
 							parent.layer.close(index);
 							parent.refreshCode = '0';

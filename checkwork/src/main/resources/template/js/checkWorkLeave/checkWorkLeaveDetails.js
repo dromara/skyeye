@@ -9,7 +9,7 @@ layui.config({
     layui.use(['form'], function(form) {
         var $ = layui.$;
 
-        AjaxPostUtil.request({url: reqBasePath + "checkworkleave003", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(json) {
+        AjaxPostUtil.request({url: flowableBasePath + "checkworkleave003", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(json) {
             if(json.returnCode == 0) {
                 json.bean.stateName = getStateNameByState(json.bean.state, json.bean.stateName);
 

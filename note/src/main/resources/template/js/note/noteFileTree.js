@@ -49,7 +49,7 @@ layui.config({
 		if(clickType == "folder"){
 			var arrId = new Array();
 			arrId[0] = clickId;
-			AjaxPostUtil.request({url:reqBasePath + "mynote010", params: {targetId: chooseId, arrId : arrId}, type:'json', callback:function(json){
+			AjaxPostUtil.request({url:reqBasePath + "mynote010", params: {targetId: chooseId, arrId : arrId}, type: 'json', callback: function(json){
 	   			if(json.returnCode == 0){
 	   				parent.layer.close(index);
 	   				parent.refreshCode = chooseId;
@@ -58,7 +58,7 @@ layui.config({
 	   			}
 	   		}});
 		}else{
-			AjaxPostUtil.request({url:reqBasePath + "mynote011", params: {toId: chooseId, moveId : clickId}, type:'json', callback:function(json){
+			AjaxPostUtil.request({url:reqBasePath + "mynote011", params: {toId: chooseId, moveId : clickId}, type: 'json', callback: function(json){
 	   			if(json.returnCode == 0){
 	   				parent.layer.close(index);
 	   				parent.refreshCode = '0';

@@ -35,7 +35,7 @@ layui.config({
         			propertyId: $("#propertyId").val()
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "rmpropertyvalue002", params:params, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url:reqBasePath + "rmpropertyvalue002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

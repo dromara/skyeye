@@ -18,7 +18,7 @@ layui.config({
     var loadNum = 0;
     var interval = null;
 	
-	AjaxPostUtil.request({url:reqBasePath + "knowledgecontent006", params:{rowId: rowId}, type:'json', callback:function(json){
+	AjaxPostUtil.request({url:reqBasePath + "knowledgecontent006", params:{rowId: rowId}, type: 'json', callback: function(json){
 		if(json.returnCode == 0){
 			$("#title").html(json.bean.title);
 			content = json.bean.content;

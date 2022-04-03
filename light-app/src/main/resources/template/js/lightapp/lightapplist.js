@@ -139,7 +139,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除轻应用' }, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url:reqBasePath + "lightapp005", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "lightapp005", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -155,7 +155,7 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.appName + '】上线吗？' : '确认将选中数据上线吗？';
 		layer.confirm(msg, { icon: 3, title: '轻应用上线' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "lightapp006", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "lightapp006", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("上线成功", {icon: 1,time: 2000});
     				loadTable();
@@ -171,7 +171,7 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.appName + '】下线吗？' : '确认将选中数据下线吗？';
 		layer.confirm(msg, { icon: 3, title: '轻应用下线' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "lightapp007", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "lightapp007", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("下线成功", {icon: 1,time: 2000});
     				loadTable();

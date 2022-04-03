@@ -37,7 +37,7 @@ layui.config({
 					jobId: parent.jobId,
 					fieldStr: JSON.stringify(tableData)
  	        	};
- 	        	AjaxPostUtil.request({url:reqBasePath + "companyjobscore002", params: params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:reqBasePath + "companyjobscore002", params: params, type: 'json', callback: function(json){
  	        		if(json.returnCode == 0){
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';

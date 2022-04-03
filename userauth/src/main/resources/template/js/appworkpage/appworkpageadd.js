@@ -45,7 +45,7 @@ layui.config({
 					urlType: data.field.urlType
  	        	};
  	        	params.logo = $("#logo").find("input[name='upload']").attr("oldurl");
- 	        	AjaxPostUtil.request({url:reqBasePath + "appworkpage004", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:reqBasePath + "appworkpage004", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

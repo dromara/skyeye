@@ -12,7 +12,7 @@ layui.config({
 	    	form = layui.form;
 	    var colorpicker = layui.colorpicker;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop008", params:{rowId: parent.parentRowId}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop008", params:{rowId: parent.parentRowId}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				$("#menuName").val(json.bean.menuName);
    				$("#menuNameEn").val(json.bean.menuNameEn);
@@ -126,7 +126,7 @@ layui.config({
 		 	        		return false;
 		 	        	}
    			        	
-   			        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop009", params:params, type:'json', callback:function(json){
+   			        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop009", params:params, type: 'json', callback: function(json){
    			 	   			if(json.returnCode == 0){
    			 	   				parent.childParams = params;
    				 	   			parent.layer.close(index);

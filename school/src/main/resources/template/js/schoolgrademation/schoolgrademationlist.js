@@ -84,7 +84,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "grademation003", params:{rowId: data.id}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "grademation003", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -137,7 +137,7 @@ layui.config({
     
     //上移
 	function upMove(data){
-        AjaxPostUtil.request({url:reqBasePath + "grademation007", params:{rowId: data.id}, type:'json', callback:function(json){
+        AjaxPostUtil.request({url:reqBasePath + "grademation007", params:{rowId: data.id}, type: 'json', callback: function(json){
 			if(json.returnCode == 0){
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
 				loadTable();
@@ -149,7 +149,7 @@ layui.config({
 	
 	//下移
 	function downMove(data){
-        AjaxPostUtil.request({url:reqBasePath + "grademation008", params:{rowId: data.id}, type:'json', callback:function(json){
+        AjaxPostUtil.request({url:reqBasePath + "grademation008", params:{rowId: data.id}, type: 'json', callback: function(json){
 			if(json.returnCode == 0){
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
 				loadTable();

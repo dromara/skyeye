@@ -34,7 +34,7 @@ layui.config({
 	
     $(function () {
     	//获取用户信息
-    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type:'json', callback:function(json){
+    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				userId = json.bean.id;
    				$("#userPhoto").attr("src", fileBasePath + json.bean.userPhoto);
@@ -58,7 +58,7 @@ layui.config({
     //加载菜单数据
     function loadMenuListToShow(){
     	//获取桌面消息
-        AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type:'json', method: "GET", callback:function(l){
+        AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
             if(l.returnCode == 0) {
             	var str = "";//顶部桌面字符串
             	var menuBoxStr = "";//多个菜单的字符串
@@ -89,7 +89,7 @@ layui.config({
 				initDeskTopMenuBox();
 				
 				// 加载菜单
-				AjaxPostUtil.request({url:reqBasePath + "login005", params:{}, type:'json', method: "GET", callback:function(json){
+				AjaxPostUtil.request({url:reqBasePath + "login005", params:{}, type: 'json', method: "GET", callback: function(json){
 		   			if(json.returnCode == 0){
 		   				var menuStr;
 		   				$.each(json.rows, function(i, row){

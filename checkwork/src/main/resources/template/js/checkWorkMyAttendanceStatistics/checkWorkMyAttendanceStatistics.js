@@ -21,7 +21,7 @@ layui.config({
 	
 	showGrid({
      	id: "checkTime",
-     	url: reqBasePath + "checkworktime007",
+     	url: flowableBasePath + "checkworktime007",
      	params: {},
      	pagination: false,
      	template: $("#workTimeTemplate").html(),
@@ -39,7 +39,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'checkwork003',
+		    url: flowableBasePath + 'checkwork003',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -162,7 +162,7 @@ layui.config({
 	// 个人考勤情况导出
     $("body").on("click", "#download", function(){
         postDownLoadFile({
-            url : reqBasePath + 'checkwork017?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
+            url : flowableBasePath + 'checkwork017?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
             params: getTableParams(),
             method : 'post'
         });

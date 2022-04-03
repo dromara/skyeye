@@ -52,7 +52,7 @@ layui.config({
         			content: encodeURI(layEditor.getMarkdown()),
         			parentId: parent.parentId,
 	        	};
-	        	AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc012", params:params, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc012", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

@@ -55,7 +55,7 @@ layui.config({
  	 	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
  	 	    		return false;
  	 	    	}
- 	        	AjaxPostUtil.request({url:reqBasePath + "sysevewintype003", params:params, type:'json', callback:function(json){
+ 	        	AjaxPostUtil.request({url:reqBasePath + "sysevewintype003", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

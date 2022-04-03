@@ -68,7 +68,7 @@ layui.config({
 	 	        			driverBearPrice: $("#driverBearPrice").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url:flowableBasePath + "accident005", params:params, type:'json', callback:function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "accident005", params:params, type: 'json', callback: function(json){
 	 		 	   			if(json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

@@ -61,7 +61,7 @@ layui.config({
 		 	        		winui.window.msg('请上传个人头像', {icon: 2,time: 2000});
 		 	        		return false;
 		 	        	}
-		 	        	AjaxPostUtil.request({url:reqBasePath + "sys033", params:params, type:'json', callback:function(json){
+		 	        	AjaxPostUtil.request({url:reqBasePath + "sys033", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 			 	   				winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
 			 	   			}else{

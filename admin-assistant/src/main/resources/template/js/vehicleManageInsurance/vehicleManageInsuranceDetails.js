@@ -58,7 +58,7 @@ layui.config({
 	    			$("#enclosureUploadBtn").html(str);
 		        }
 		        matchingLanguage();
-			    AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type:'json', callback:function(thisjson){
+			    AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function(thisjson){
 		    		if(thisjson.returnCode == 0) {
 		    			var row = thisjson.rows;
 		    			var coveragearr = coveragestr.split(",");

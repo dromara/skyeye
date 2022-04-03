@@ -33,7 +33,7 @@ layui.config({
 						encoded: $("#encoded").val(),
 						parentId: isNull($("#parentId").val()) ? "0" : $("#parentId").val()
 					};
-					AjaxPostUtil.request({url:reqBasePath + "dsformpagetype005", params:params, type:'json', method: "PUT", callback:function(json){
+					AjaxPostUtil.request({url:reqBasePath + "dsformpagetype005", params:params, type: 'json', method: "PUT", callback: function(json){
 						if(json.returnCode == 0){
 							parent.layer.close(index);
 							parent.refreshCode = '0';

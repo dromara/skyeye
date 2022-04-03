@@ -55,7 +55,7 @@ layui.config({
 		 		//同意
 			    $("body").on("click", ".aggreIn", function(e){
 			    	var _this = $(this);
-			    	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup003", params:{rowId: $(this).attr("rowid")}, type:'json', callback:function(json){
+			    	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup003", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
 		 	   			if(json.returnCode == 0){
 		 	   				_this.parent().html('<font>已同意</font>');
 		 	   				if(json.bean.inGroupType == '1'){//被邀请进群
@@ -85,7 +85,7 @@ layui.config({
 			    //拒绝
 			    $("body").on("click", ".refuseIn", function(e){
 			    	var _this = $(this);
-			    	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup004", params:{rowId: $(this).attr("rowid")}, type:'json', callback:function(json){
+			    	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup004", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
 		 	   			if(json.returnCode == 0){
 		 	   				_this.parent().html('<font>已拒绝</font>');
 		 	   				winui.window.msg('操作成功', {icon: 1,time: 2000});

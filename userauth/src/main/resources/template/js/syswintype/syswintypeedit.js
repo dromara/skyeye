@@ -10,7 +10,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "sysevewintype004", params:{rowId: parent.rowId}, type:'json', callback:function(json){
+	    AjaxPostUtil.request({url:reqBasePath + "sysevewintype004", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				$("#typeName").val(json.bean.typeName);
    				
@@ -73,7 +73,7 @@ layui.config({
    		 	 	    		return false;
    		 	 	    	}
    		 	        	
-   		 	        	AjaxPostUtil.request({url:reqBasePath + "sysevewintype005", params:params, type:'json', callback:function(json){
+   		 	        	AjaxPostUtil.request({url:reqBasePath + "sysevewintype005", params:params, type: 'json', callback: function(json){
    			 	   			if(json.returnCode == 0){
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';

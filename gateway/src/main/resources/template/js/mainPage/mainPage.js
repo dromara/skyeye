@@ -17,7 +17,7 @@ layui.config({
 	
 	initFourNumList();
 	function initFourNumList(){
-		AjaxPostUtil.request({url:reqBasePath + "mainpage001", params: {}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "mainpage001", params: {}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
  	   			$("#checkOnWorkNum").html(json.bean.checkOnWorkNum);
  	   			$("#diskCloudFileNum").html(json.bean.diskCloudFileNum);
@@ -31,7 +31,7 @@ layui.config({
 	}
 	
 	function initNoticeList(){
-		AjaxPostUtil.request({url:reqBasePath + "mainpage002", params: {}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "mainpage002", params: {}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				$.each(json.rows, function(i, item){
    					if(i == 0){
@@ -49,7 +49,7 @@ layui.config({
 	}
 	
 	function initForumList(){
-		AjaxPostUtil.request({url:reqBasePath + "mainpage003", params: {}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "mainpage003", params: {}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
  	   			$("#forumContent").append(getDataUseHandlebars($("#forumContentTemplate").html(), json));
  	   			initKnowledgeList();
@@ -60,7 +60,7 @@ layui.config({
 	}
 	
 	function initKnowledgeList(){
-		AjaxPostUtil.request({url:reqBasePath + "mainpage004", params: {}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "mainpage004", params: {}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
  	   			$("#knowledgeList").html(getDataUseHandlebars($("#knowledgeContentTemplate").html(), json));
  	   			matchingLanguage();

@@ -21,7 +21,7 @@ layui.config({
 	    	searchKey: 'userName',	//搜索输入框的name值 默认keyword
 	    	searchPlaceholder: '审批人搜索',	//搜索输入框的提示文字 默认关键词搜索
 	    	table: {	//定义表格参数，与LAYUI的TABLE模块一致，只是无需再定义表格elem
-	    		url: reqBasePath + 'checkwork008',
+	    		url: flowableBasePath + 'checkwork008',
 	    		where: {userName:$("#userName").val()},
 	    		method: 'post',
 	    		page: true,
@@ -58,7 +58,7 @@ layui.config({
 		function initWorkId(){
 			showGrid({
 			 	id: "workId",
-			 	url: reqBasePath + "checkwork004",
+			 	url: flowableBasePath + "checkwork004",
 			 	params: {appealType: appealType},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -73,7 +73,7 @@ layui.config({
 		function initAppealReasonId(){
 			showGrid({
 			 	id: "appealReasonId",
-			 	url: reqBasePath + "checkworkreason010",
+			 	url: flowableBasePath + "checkworkreason010",
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -122,7 +122,7 @@ layui.config({
  	        		approvalId: ids
  	        	};
  	        	if(!isNull($("#approvalId").val()) && !isNull(ids)){
- 	        		AjaxPostUtil.request({url:reqBasePath + "checkwork005", params:params, type:'json', callback:function(json){
+ 	        		AjaxPostUtil.request({url: flowableBasePath + "checkwork005", params:params, type: 'json', callback: function(json){
  	 	        		if(json.returnCode == 0){
  	 	        			parent.layer.close(index);
  	 	        			parent.refreshCode = '0';

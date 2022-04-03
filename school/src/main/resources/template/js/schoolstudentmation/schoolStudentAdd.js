@@ -274,7 +274,7 @@ layui.config({
 	            });
 	            params.bodyMind = bodyMindIds;
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "studentmation002", params:params, type:'json', callback:function(json){
+	        	AjaxPostUtil.request({url:reqBasePath + "studentmation002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				winui.window.msg("录入成功", {icon: 1, time: 3000}, function(){
 		 	   				location.reload();

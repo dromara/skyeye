@@ -84,7 +84,7 @@ layui.config({
         layer.confirm('确认删除该评论吗？', { icon: 3, title: '删除评论' }, function (index) {
             layer.close(index);
             
-            AjaxPostUtil.request({url:reqBasePath + "forumcontent022", params:{rowId: rowId}, type:'json', callback:function(json){
+            AjaxPostUtil.request({url:reqBasePath + "forumcontent022", params:{rowId: rowId}, type: 'json', callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
                     loadList();

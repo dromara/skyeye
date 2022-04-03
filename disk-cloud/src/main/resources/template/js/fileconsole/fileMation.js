@@ -10,7 +10,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 		var $ = layui.$;
 		
-		AjaxPostUtil.request({url:reqBasePath + "fileconsole031", params:{rowId: parent.shareId}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url:reqBasePath + "fileconsole031", params:{rowId: parent.shareId}, type: 'json', callback: function(json){
 			if(json.returnCode == 0){
 				$("#fileName").html(json.bean.fileName);
 				$("#fileType").html(json.bean.fileType);

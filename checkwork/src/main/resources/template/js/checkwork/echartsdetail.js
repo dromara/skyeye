@@ -17,7 +17,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'checkwork019',
+	    url: flowableBasePath + 'checkwork019',
 	    where: params,
 	    even: true,
 	    page: true,

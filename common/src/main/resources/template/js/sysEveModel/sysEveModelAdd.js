@@ -55,7 +55,7 @@ layui.config({
 					winui.window.msg('请填写模板内容', {icon: 2,time: 2000});
 					return false;
 				}
-    			AjaxPostUtil.request({url: reqBasePath + "sysevemodel002", params:params, type:'json', method: "POST", callback:function(json){
+    			AjaxPostUtil.request({url: reqBasePath + "sysevemodel002", params:params, type: 'json', method: "POST", callback: function(json){
     				if(json.returnCode == 0){
     					parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

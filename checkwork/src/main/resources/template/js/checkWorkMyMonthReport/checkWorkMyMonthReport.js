@@ -32,7 +32,7 @@ layui.config({
 	// 加载我的考勤班次
 	showGrid({
      	id: "checkTime",
-     	url: reqBasePath + "checkworktime007",
+     	url: flowableBasePath + "checkworktime007",
      	params: {},
      	pagination: false,
      	template: $("#workTimeTemplate").html(),
@@ -110,7 +110,7 @@ layui.config({
     }
     
     function loadThisMonthHis(callback, start){
-        AjaxPostUtil.request({url:reqBasePath + "checkwork014", params:{monthMation: start._d.format("yyyy-MM"), timeId: $("#checkTime").val()}, type:'json', callback:function(json){
+        AjaxPostUtil.request({url: flowableBasePath + "checkwork014", params:{monthMation: start._d.format("yyyy-MM"), timeId: $("#checkTime").val()}, type: 'json', callback: function(json){
             if(json.returnCode == 0){
                 var event = [];
                 if(!isNull(json.rows)){
@@ -142,7 +142,7 @@ layui.config({
 	// 判断显示打上班卡或者下班卡
     function initIsCheck(callBack){
     	checkWorkDescShow = true;
-        AjaxPostUtil.request({url:reqBasePath + "checkwork013", params: {timeId: $("#checkTime").val()}, type:'json', callback:function(json){
+        AjaxPostUtil.request({url: flowableBasePath + "checkwork013", params: {timeId: $("#checkTime").val()}, type: 'json', callback: function(json){
             if(json.returnCode == 0){
             	clockOut = json.bean.clockOut;
 				dayType = json.bean.type;
@@ -252,7 +252,7 @@ layui.config({
 		if(dayType == 2){
 			timeId = "-";
 		}
-		AjaxPostUtil.request({url:reqBasePath + "checkwork001", params:{timeId: timeId}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "checkwork001", params:{timeId: timeId}, type: 'json', callback: function(json){
 			if(json.returnCode == 0){
 				$("#clockInBtn").hide();
 				calendar.fullCalendar('refetchEvents');
@@ -281,7 +281,7 @@ layui.config({
 		if(dayType == 2){
 			timeId = "-";
 		}
-		AjaxPostUtil.request({url:reqBasePath + "checkwork002", params:{timeId: timeId}, type:'json', callback:function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "checkwork002", params:{timeId: timeId}, type: 'json', callback: function(json){
 			if(json.returnCode == 0){
 				$("#clockOutBtn").hide();
 				calendar.fullCalendar('refetchEvents');

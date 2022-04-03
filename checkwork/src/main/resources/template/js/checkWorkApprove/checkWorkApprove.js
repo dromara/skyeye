@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "checkwork010",
+		 	url: flowableBasePath + "checkwork010",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/checkWorkApprove/checkWorkApproveTemplate.tpl'),
@@ -27,7 +27,7 @@ layui.config({
 		 	        		appealRemark: $("#appealRemark").val()
 		 	        	};
 
-		 	        	AjaxPostUtil.request({url:reqBasePath + "checkwork011", params:params, type:'json', callback:function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "checkwork011", params:params, type: 'json', callback: function(json){
 		 	        		if(json.returnCode == 0){
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

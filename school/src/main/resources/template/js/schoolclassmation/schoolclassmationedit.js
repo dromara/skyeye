@@ -60,7 +60,7 @@ layui.config({
 			        		params.masterStaffId = teacherMation.staffId;
 			        	}
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "classmation005", params:params, type:'json', callback:function(json){
+			        	AjaxPostUtil.request({url:reqBasePath + "classmation005", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
