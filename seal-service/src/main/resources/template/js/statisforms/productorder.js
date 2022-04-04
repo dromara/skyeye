@@ -45,7 +45,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'sealseservicestatisforms004',
+		    url: flowableBasePath + 'sealseservicestatisforms004',
 		    where: {productName: $("#productName").val(), startTime: startTime, endTime: endTime},
 		    even: true,
 		    page: true,

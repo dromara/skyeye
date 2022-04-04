@@ -16,7 +16,7 @@ layui.config({
 	    var rowId = parent.parent.rowId;
 	    showGrid({
 			id: "typeId",
-			url: reqBasePath + "proprojectdiscusstype008",
+			url: flowableBasePath + "proprojectdiscusstype008",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -98,7 +98,7 @@ layui.config({
 				} else {
 					params.content = encodeURIComponent(layedit.getContent(completedContent));
 				}
-    			AjaxPostUtil.request({url: reqBasePath + "prodiscuss002", params: params, type: 'json', callback: function(json){
+    			AjaxPostUtil.request({url: flowableBasePath + "prodiscuss002", params: params, type: 'json', callback: function(json){
     				if (json.returnCode == 0){
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';

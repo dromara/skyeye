@@ -40,7 +40,7 @@ layui.config({
 	
 	showGrid({
 	 	id: "serviceType",
-	 	url: reqBasePath + "sealseservicetype008",
+	 	url: flowableBasePath + "sealseservicetype008",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -57,7 +57,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'sealseservicestatisforms001',
+		    url: flowableBasePath + 'sealseservicestatisforms001',
 		    where: {customName: $("#customName").val(), serviceType: $("#serviceType").val(), startTime: startTime, endTime: endTime},
 		    even: true,
 		    page: true,

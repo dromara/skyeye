@@ -30,13 +30,13 @@ layui.config({
 			$("#writePeople").html(json.bean.userName);
 			matchingLanguage();
 			//支出分类
-			AjaxPostUtil.request({url: reqBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
+			AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
 				if(data.returnCode == 0) {
 					costTypeList = getDataUseHandlebars(selOption, data);
 					addRow();
 					showGrid({
 						id: "proId",
-						url: reqBasePath + "proproject004",
+						url: flowableBasePath + "proproject004",
 						params: {},
 						pagination: false,
 						template: getFileContent('tpl/template/select-option.tpl'),
@@ -138,7 +138,7 @@ layui.config({
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "procostexpense002", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "procostexpense002", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

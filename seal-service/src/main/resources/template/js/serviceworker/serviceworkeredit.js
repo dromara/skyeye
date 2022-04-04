@@ -18,7 +18,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sealseserviceworker004", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker004", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
    			if (json.returnCode == 0){
  	   			longitude = json.bean.longitude;
  	   			latitude = json.bean.latitude;
@@ -48,7 +48,7 @@ layui.config({
 							areaName: result.regeocode.addressComponent.district,
 							addressDetail: $("#userAddressInput").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "sealseserviceworker005", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker005", params: params, type: 'json', callback: function(json){
 			 	   			if (json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

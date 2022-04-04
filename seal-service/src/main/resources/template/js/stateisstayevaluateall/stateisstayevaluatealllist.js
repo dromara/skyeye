@@ -19,7 +19,7 @@ layui.config({
 	//分类
 	showGrid({
 	 	id: "typeId",
-	 	url: reqBasePath + "sealseservicetype008",
+	 	url: flowableBasePath + "sealseservicetype008",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -43,7 +43,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'sealseservice007',
+		    url: flowableBasePath + 'sealseservice007',
 		    where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: '', lastTime: ''},
 		    even: true,
 		    page: true,

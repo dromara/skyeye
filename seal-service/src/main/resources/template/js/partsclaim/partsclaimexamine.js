@@ -14,7 +14,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sealseservice028",
+		 	url: flowableBasePath + "sealseservice028",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: beanTemplate,
@@ -39,7 +39,7 @@ layui.config({
 				    			isAgree: $("input[name='flag']:checked").val(),
 				    			rowId: parent.rowId
 				            };
-				            AjaxPostUtil.request({url:reqBasePath + "sealseservice030", params: jStr, type: 'json', callback: function(json){
+				            AjaxPostUtil.request({url:flowableBasePath + "sealseservice030", params: jStr, type: 'json', callback: function(json){
 				 	   			if(json.returnCode == 0){
 			                    	parent.layer.close(index);
 			                    	parent.refreshCode = '0';

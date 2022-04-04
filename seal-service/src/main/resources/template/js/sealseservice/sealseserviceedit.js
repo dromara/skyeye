@@ -29,7 +29,7 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sealseservice012",
+		 	url: flowableBasePath + "sealseservice012",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sealseservice/sealseserviceeditTemplate.tpl'),
@@ -176,7 +176,7 @@ layui.config({
 		                    });
 		                    params.cooperationUserId = cooperationUserId;
 		                }
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "sealseservice015", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice015", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -194,7 +194,7 @@ layui.config({
  		function typeId(json){
  	 		showGrid({
  			 	id: "typeId",
- 			 	url: reqBasePath + "sealseservicetype008",
+ 			 	url: flowableBasePath + "sealseservicetype008",
  			 	params: {},
  			 	pagination: false,
  			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -211,7 +211,7 @@ layui.config({
  		function urgencyId(json){
  	 		showGrid({
  			 	id: "urgencyId",
- 			 	url: reqBasePath + "sealseserviceurgency008",
+ 			 	url: flowableBasePath + "sealseserviceurgency008",
  			 	params: {},
  			 	pagination: false,
  			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -228,7 +228,7 @@ layui.config({
  		function modeId(json){
  	 		showGrid({
  			 	id: "modeId",
- 			 	url: reqBasePath + "sealseservicemode008",
+ 			 	url: flowableBasePath + "sealseservicemode008",
  			 	params: {},
  			 	pagination: false,
  			 	template: getFileContent('tpl/template/select-option.tpl'),

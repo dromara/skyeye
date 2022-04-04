@@ -171,7 +171,7 @@ layui.config({
 					serviceId: chooseOrderId,
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 				};
-				AjaxPostUtil.request({url: reqBasePath + "sealseservice021", params: params, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "sealseservice021", params: params, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';

@@ -17,7 +17,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "proproject015",
+		 	url: flowableBasePath + "proproject015",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
@@ -104,7 +104,7 @@ layui.config({
 			        		winui.window.msg("请填写项目成果和总结", {icon: 2,time: 2000});
 			        		return false;
 			        	}
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "proproject016", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject016", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -132,7 +132,7 @@ layui.config({
 			        		winui.window.msg("请填写项目成果和总结", {icon: 2,time: 2000});
 			        		return false;
 			        	}
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "proproject016", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject016", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

@@ -17,7 +17,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'sealseservice032',
+	    url: flowableBasePath + 'sealseservice032',
 	    where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()},
 	    even: true,
 	    page: true,

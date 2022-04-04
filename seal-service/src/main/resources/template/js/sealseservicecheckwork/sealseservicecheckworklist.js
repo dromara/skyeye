@@ -17,7 +17,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'sealseservicecheckwork001',
+	    url: flowableBasePath + 'sealseservicecheckwork001',
 	    where: {userName: $("#userName").val()},
 	    even: true,
 	    page: true,

@@ -11,7 +11,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 		var $ = layui.$;
 		
-		AjaxPostUtil.request({url: reqBasePath + "feedback002", params: {serviceId: parent.serviceId}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "feedback002", params: {serviceId: parent.serviceId}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				$("#orderNum").html(json.bean.orderNum);
 				$("#customerName").html(json.bean.customerName);
@@ -19,7 +19,7 @@ layui.config({
 				
 				showGrid({
 				 	id: "typeId",
-				 	url: reqBasePath + "crmservicefeedbacktype008",
+				 	url: flowableBasePath + "crmservicefeedbacktype008",
 				 	params: {},
 				 	pagination: false,
 				 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -28,7 +28,7 @@ layui.config({
 				 	ajaxSendAfter:function(data){
 				 		form.render("select");
 				 		//获取反馈信息
-				 		AjaxPostUtil.request({url: reqBasePath + "feedback004", params: {rowId: parent.rowId}, type: 'json', callback: function(j) {
+				 		AjaxPostUtil.request({url: flowableBasePath + "feedback004", params: {rowId: parent.rowId}, type: 'json', callback: function(j) {
 							if(j.returnCode == 0) {
 								$("#typeId").val(j.bean.typeId);
 								$("#content").val(j.bean.content);
@@ -45,7 +45,7 @@ layui.config({
 											rowId: parent.rowId,
 											enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 										};
-										AjaxPostUtil.request({url: reqBasePath + "feedback005", params: params, type: 'json', callback: function(json) {
+										AjaxPostUtil.request({url: flowableBasePath + "feedback005", params: params, type: 'json', callback: function(json) {
 											if(json.returnCode == 0) {
 												parent.layer.close(index);
 												parent.refreshCode = '0';

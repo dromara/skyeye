@@ -17,7 +17,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sealseservice010",
+		 	url: flowableBasePath + "sealseservice010",
 		 	params: {rowId: serviceId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sealseservice/sealseservicedetailsTemplate.tpl'),

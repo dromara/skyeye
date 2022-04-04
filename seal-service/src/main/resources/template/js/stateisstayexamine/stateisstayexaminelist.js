@@ -19,7 +19,7 @@ layui.config({
 	//分类
 	showGrid({
 	 	id: "typeId",
-	 	url: reqBasePath + "sealseservicetype008",
+	 	url: flowableBasePath + "sealseservicetype008",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -43,7 +43,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'sealseservice008',
+		    url: flowableBasePath + 'sealseservice008',
 		    where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: '', lastTime: ''},
 		    even: true,
 		    page: true,
@@ -114,7 +114,7 @@ layui.config({
 		layer.confirm('确认审核该数据吗？', {icon: 3, title: '审核操作'}, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url: reqBasePath + "sealseservice038", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "sealseservice038", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("审核成功", {icon: 1, time: 2000});
     				loadTable();

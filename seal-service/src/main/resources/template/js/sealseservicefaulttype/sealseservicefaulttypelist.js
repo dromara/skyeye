@@ -16,7 +16,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'sealseservicefaulttype001',
+	    url: flowableBasePath + 'sealseservicefaulttype001',
 	    where: {typeName: $("#typeName").val(), state: $("#state").val()},
 	    even: true,
 	    page: true,
@@ -116,7 +116,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sealseservicefaulttype005", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "sealseservicefaulttype005", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -132,7 +132,7 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.typeName + '】上线吗？' : '确认将选中数据上线吗？';
 		layer.confirm(msg, {icon: 3, title: '上线操作'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sealseservicefaulttype006", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "sealseservicefaulttype006", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -148,7 +148,7 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.typeName + '】下线吗？' : '确认将选中数据下线吗？';
 		layer.confirm(msg, {icon: 3, title: '下线操作'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sealseservicefaulttype007", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "sealseservicefaulttype007", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				loadTable();

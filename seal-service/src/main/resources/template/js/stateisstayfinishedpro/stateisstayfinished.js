@@ -27,7 +27,7 @@ layui.config({
 	    //获取完工信息
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sealseservice033",
+		 	url: flowableBasePath + "sealseservice033",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
@@ -51,7 +51,7 @@ layui.config({
 		 		
 				showGrid({
 				 	id: "faultTypeId",
-				 	url: reqBasePath + "sealseservicefaulttype008",
+				 	url: flowableBasePath + "sealseservicefaulttype008",
 				 	params: {},
 				 	pagination: false,
 				 	template: selOption,
@@ -198,7 +198,7 @@ layui.config({
 					useStr: JSON.stringify(tableData),
 					subType: subType
 				};
-				AjaxPostUtil.request({url: reqBasePath + "sealseservice035", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "sealseservice035", params: params, type: 'json', callback: function(json){
 					if (json.returnCode == 0){
 						parent.layer.close(index);
 						parent.refreshCode = '0';
@@ -258,7 +258,7 @@ layui.config({
 			//当两个都不为空时
 			if(!isNull(chooseUnitId)){
 				//获取库存
-				AjaxPostUtil.request({url: reqBasePath + "sealseservice034", params: {mUnitId: chooseUnitId}, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "sealseservice034", params: {mUnitId: chooseUnitId}, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						var currentTock = 0;
 						if(!isNull(json.bean)){

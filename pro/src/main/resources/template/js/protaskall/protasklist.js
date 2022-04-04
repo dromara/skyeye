@@ -24,7 +24,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    idField: 'id',
-	    url: reqBasePath + 'protask001',
+	    url: flowableBasePath + 'protask001',
 	    cellMinWidth: 100,
 	    where: getTableParams(),
 	    treeId: 'id',//树形id字段名称

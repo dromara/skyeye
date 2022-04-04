@@ -46,7 +46,7 @@ layui.config({
 							areaName: result.regeocode.addressComponent.district,
 							addressDetail: $("#userAddressInput").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "sealseserviceworker002", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker002", params: params, type: 'json', callback: function(json){
 			 	   			if (json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

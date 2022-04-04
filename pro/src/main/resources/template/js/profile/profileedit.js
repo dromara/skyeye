@@ -14,7 +14,7 @@ layui.config({
 
 	showGrid({
 		id: "showForm",
-		url: reqBasePath + "profile004",
+		url: flowableBasePath + "profile004",
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: getFileContent('tpl/profile/profileeditTemplate.tpl'),
@@ -50,7 +50,7 @@ layui.config({
 			//所属分类选择
 			showGrid({
 				id: "fileType",
-				url: reqBasePath + "profiletype008",
+				url: flowableBasePath + "profiletype008",
 				params: {},
 				pagination: false,
 				template: getFileContent('tpl/template/select-option.tpl'),
@@ -67,7 +67,7 @@ layui.config({
 			function proIdSelect(){
 				showGrid({
 					id: "proId",
-					url: reqBasePath + "proproject004",
+					url: flowableBasePath + "proproject004",
 					params: {},
 					pagination: false,
 					template: getFileContent('tpl/template/select-option.tpl'),
@@ -126,7 +126,7 @@ layui.config({
 			winui.window.msg('请填写文档内容！', {icon: 2,time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: reqBasePath + "profile005", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "profile005", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

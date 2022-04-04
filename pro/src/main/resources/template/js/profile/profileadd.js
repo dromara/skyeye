@@ -33,7 +33,7 @@ layui.config({
 	function taskTypeSelect(){
 		showGrid({
 			id: "fileType",
-			url: reqBasePath + "profiletype008",
+			url: flowableBasePath + "profiletype008",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -50,7 +50,7 @@ layui.config({
 	function proIdSelect(){
 		showGrid({
 			id: "proId",
-			url: reqBasePath + "proproject004",
+			url: flowableBasePath + "proproject004",
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -97,7 +97,7 @@ layui.config({
 			winui.window.msg('请填写文档内容！', {icon: 2,time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: reqBasePath + "profile002", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "profile002", params: params, type: 'json', callback: function(json){
 			if (json.returnCode == 0){
 				parent.layer.close(index);
 				parent.refreshCode = '0';

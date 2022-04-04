@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "proproject005",
+		 	url: flowableBasePath + "proproject005",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/proproject/proprojectdetailsTemplate.tpl'),

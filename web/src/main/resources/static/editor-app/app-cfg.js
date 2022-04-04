@@ -21,5 +21,5 @@
 var ACTIVITI = ACTIVITI || {};
 
 ACTIVITI.CONFIG = {
-	'contextRoot' : reqBasePath + '/service',
+	'contextRoot' : flowableBasePath + '/service',
 };

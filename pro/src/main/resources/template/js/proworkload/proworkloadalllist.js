@@ -15,7 +15,7 @@ layui.config({
 	//项目名称
 	showGrid({
 	 	id: "proId",
-	 	url: reqBasePath + "proproject004",
+	 	url: flowableBasePath + "proproject004",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -28,7 +28,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'proworkload003',
+	    url: flowableBasePath + 'proworkload003',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,

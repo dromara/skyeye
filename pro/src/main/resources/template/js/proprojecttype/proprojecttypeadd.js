@@ -17,7 +17,7 @@ layui.config({
  	        	var params = {
  	        		typeName: $("#typeName").val()
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "proprojecttype002", params: params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "proprojecttype002", params: params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

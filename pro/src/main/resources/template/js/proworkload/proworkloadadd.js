@@ -25,7 +25,7 @@ layui.config({
 			$("#writePeople").html(json.bean.userName);
 			showGrid({
 				id: "proId",
-				url: reqBasePath + "proproject004",
+				url: flowableBasePath + "proproject004",
 				params: {},
 				pagination: false,
 				template: getFileContent('tpl/template/select-option.tpl'),
@@ -56,7 +56,7 @@ layui.config({
 						$("#title").val(item.name + "-" + item.customerName + "-" + getYMDFormatDate());
 					}
 					//获取我的任务
-					AjaxPostUtil.request({url: reqBasePath + "protask015", params: {proId: item.id}, type: 'json', callback: function(json) {
+					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: item.id}, type: 'json', callback: function(json) {
 						if(json.returnCode == 0) {
 							taskListHtml = getDataUseHandlebars(selOption, json);
 							resetTableTask();
@@ -212,7 +212,7 @@ layui.config({
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: reqBasePath + "proworkload002", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "proworkload002", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

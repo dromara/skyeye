@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sealseservice016",
+		 	url: flowableBasePath + "sealseservice016",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/stateisstayreceipt/receiptTemplate.tpl'),
@@ -37,7 +37,7 @@ layui.config({
 		        			subscribeTime: $("#subscribeTime").val(),
 		        			remark: $("#remark").val()
 		 	        	};
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "sealseservice017", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice017", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

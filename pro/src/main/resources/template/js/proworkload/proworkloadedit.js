@@ -20,7 +20,7 @@ layui.config({
 	var showTemplate = $("#showTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
-	AjaxPostUtil.request({url: reqBasePath + "proworkload007", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
+	AjaxPostUtil.request({url: flowableBasePath + "proworkload007", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
 			$("#title").val(json.bean.title);
 			$("#desc").val(json.bean.desc);
@@ -54,7 +54,7 @@ layui.config({
 			//获取项目
 			showGrid({
 				id: "proId",
-				url: reqBasePath + "proproject004",
+				url: flowableBasePath + "proproject004",
 				params: {},
 				pagination: false,
 				template: getFileContent('tpl/template/select-option.tpl'),
@@ -65,7 +65,7 @@ layui.config({
 					$("#proId").val(json.bean.proId);
 					form.render('select');
 					//获取我的任务
-					AjaxPostUtil.request({url: reqBasePath + "protask015", params: {proId: json.bean.proId}, type: 'json', callback: function(data) {
+					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: json.bean.proId}, type: 'json', callback: function(data) {
 						if(data.returnCode == 0) {
 							taskListHtml = getDataUseHandlebars(selOption, data);
 							$.each(json.bean.tasks, function(i, item){
@@ -97,7 +97,7 @@ layui.config({
 						$("#title").val(item.name + "-" + item.customerName + "-" + getYMDFormatDate());
 					}
 					//获取我的任务
-					AjaxPostUtil.request({url: reqBasePath + "protask015", params: {proId: item.id}, type: 'json', callback: function(json) {
+					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: item.id}, type: 'json', callback: function(json) {
 						if(json.returnCode == 0) {
 							taskListHtml = getDataUseHandlebars(selOption, json);
 							resetTableTask();
@@ -258,7 +258,7 @@ layui.config({
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId,
 		};
-		AjaxPostUtil.request({url: reqBasePath + "proworkload008", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "proworkload008", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

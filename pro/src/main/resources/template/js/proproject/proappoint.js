@@ -27,7 +27,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "proproject013",
+		 	url: flowableBasePath + "proproject013",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
@@ -198,7 +198,7 @@ layui.config({
 			        		return false;
 			        	}
 		 	        	params.planContent = encodeURIComponent(planUe.getContent());
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "proproject014", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject014", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

@@ -12,7 +12,7 @@ layui.config({
 	
 	showGrid({
 	 	id: "typeId",
-	 	url: reqBasePath + "proprojecttype008",
+	 	url: flowableBasePath + "proprojecttype008",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -29,7 +29,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'proproject001',
+		    url: flowableBasePath + 'proproject001',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,

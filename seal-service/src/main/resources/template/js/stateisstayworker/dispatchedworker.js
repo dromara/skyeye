@@ -22,7 +22,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sealseservice013",
+		 	url: flowableBasePath + "sealseservice013",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/stateisstayworker/dispatchedworkerTemplate.tpl'),
@@ -52,7 +52,7 @@ layui.config({
 		                    });
 		                    params.cooperationUserId = cooperationUserId;
 		                }
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "sealseservice014", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice014", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

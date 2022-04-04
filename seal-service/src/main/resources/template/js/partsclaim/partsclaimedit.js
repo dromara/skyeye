@@ -35,7 +35,7 @@ layui.config({
  		var orderObject = [];
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sealseservice026",
+		 	url: flowableBasePath + "sealseservice026",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: beanTemplate,
@@ -229,7 +229,7 @@ layui.config({
 					rowId: parent.rowId,
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 				};
-				AjaxPostUtil.request({url: reqBasePath + "sealseservice027", params: params, type: 'json', callback: function(json) {
+				AjaxPostUtil.request({url: flowableBasePath + "sealseservice027", params: params, type: 'json', callback: function(json) {
 					if(json.returnCode == 0) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';

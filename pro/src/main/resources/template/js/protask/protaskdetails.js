@@ -15,7 +15,7 @@ layui.config({
 	    
 	    var useTemplate = $("#useTemplate").html();
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "protask003", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "protask003", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
     		if(json.returnCode == 0) {
     			//任务说明附件回显
     			var str = "暂无附件";

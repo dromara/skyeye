@@ -20,7 +20,7 @@ layui.config({
 	var showTemplate = $("#showTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
-	AjaxPostUtil.request({url: reqBasePath + "procostexpense004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
+	AjaxPostUtil.request({url: flowableBasePath + "procostexpense004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
 		if(json.returnCode == 0) {
 			$("#title").val(json.bean.title);
 			$("#writePeople").html(json.bean.userName);
@@ -44,7 +44,7 @@ layui.config({
 			//获取项目
 			showGrid({
 				id: "proId",
-				url: reqBasePath + "proproject004",
+				url: flowableBasePath + "proproject004",
 				params: {},
 				pagination: false,
 				template: getFileContent('tpl/template/select-option.tpl'),
@@ -54,7 +54,7 @@ layui.config({
 					$("#proId").val(json.bean.proId);
 					form.render('select');
 					//支出分类
-					AjaxPostUtil.request({url: reqBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
+					AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
 						if(data.returnCode == 0) {
 							departmentsSelect(json);
 							costTypeList = getDataUseHandlebars(selOption, data);
@@ -165,7 +165,7 @@ layui.config({
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId,
 		};
-		AjaxPostUtil.request({url: reqBasePath + "procostexpense005", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "procostexpense005", params: params, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

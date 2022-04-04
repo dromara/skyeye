@@ -18,7 +18,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'prodiscuss006',
+	    url: flowableBasePath + 'prodiscuss006',
 	    where: {title: $("#title").val(), projectName: $("#projectName").val()},
 	    even: true,
 	    page: true,

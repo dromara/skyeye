@@ -18,7 +18,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'sealseservice023',
+	    url: flowableBasePath + 'sealseservice023',
 	    where: {orderNum: $("#orderNum").val(), state: $("#state").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()},
 	    even: true,
 	    page: true,
@@ -129,7 +129,7 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             
-            AjaxPostUtil.request({url: reqBasePath + "sealseservice025", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "sealseservice025", params: {rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();

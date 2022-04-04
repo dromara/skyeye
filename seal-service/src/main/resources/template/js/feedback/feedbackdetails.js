@@ -11,14 +11,14 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 		var $ = layui.$;
 		
-		AjaxPostUtil.request({url: reqBasePath + "feedback002", params: {serviceId: parent.serviceId}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "feedback002", params: {serviceId: parent.serviceId}, type: 'json', callback: function(json) {
 			if(json.returnCode == 0) {
 				$("#orderNum").html(json.bean.orderNum);
 				$("#customerName").html(json.bean.customerName);
 				$("#productName").html(json.bean.productName);
 				
 		 		//获取反馈信息
-		 		AjaxPostUtil.request({url: reqBasePath + "feedback007", params: {rowId: parent.rowId}, type: 'json', callback: function(j) {
+		 		AjaxPostUtil.request({url: flowableBasePath + "feedback007", params: {rowId: parent.rowId}, type: 'json', callback: function(j) {
 					if(j.returnCode == 0) {
 						$("#createName").html(j.bean.createName);
 						$("#typeName").html(j.bean.typeName);

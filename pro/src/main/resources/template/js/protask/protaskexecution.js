@@ -14,7 +14,7 @@ layui.config({
 		
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "protask003",
+		 	url: flowableBasePath + "protask003",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/protask/protaskexecutionTemplate.tpl'),
@@ -66,7 +66,7 @@ layui.config({
 							winui.window.msg('请填写执行结果！', {icon: 2,time: 2000});
 							return false;
 						}
-						AjaxPostUtil.request({url: reqBasePath + "protask013", params: params, type: 'json', callback: function(j) {
+						AjaxPostUtil.request({url: flowableBasePath + "protask013", params: params, type: 'json', callback: function(j) {
 							if(j.returnCode == 0) {
 								parent.layer.close(index);
 								parent.refreshCode = '0';

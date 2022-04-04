@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sealseservice036",
+		 	url: flowableBasePath + "sealseservice036",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
@@ -22,7 +22,7 @@ layui.config({
 		 		
 		 		showGrid({
 				 	id: "evaluateType",
-				 	url: reqBasePath + "sealseserviceevaluatetype008",
+				 	url: flowableBasePath + "sealseserviceevaluatetype008",
 				 	params: {},
 				 	pagination: false,
 				 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -42,7 +42,7 @@ layui.config({
 		        			evaluateType: $("#evaluateType").val(),
 		        			content: $("#content").val()
 		 	        	};
-	 	 	        	AjaxPostUtil.request({url: reqBasePath + "sealseservice037", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice037", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

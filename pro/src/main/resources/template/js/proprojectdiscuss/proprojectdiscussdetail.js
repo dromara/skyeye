@@ -17,7 +17,7 @@ layui.config({
 	    var leftTemplate = $("#leftTemplate").html();
 	    var rightTemplate = $("#rightTemplate").html();
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "prodiscuss005", params: {rowId: rowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "prodiscuss005", params: {rowId: rowId}, type: 'json', callback: function(json){
 			if (json.returnCode == 0){
 				$(".disheader").html(json.bean.title);
 				$(".disdesc").html('由 ' + json.bean.createName + ' 于 ' + json.bean.createTime + '发布');
@@ -110,7 +110,7 @@ layui.config({
 				} else {
 					params.content = encodeURIComponent(layedit.getContent(completedContent));
 				}
-    			AjaxPostUtil.request({url: reqBasePath + "prodiscuss003", params: params, type: 'json', callback: function(json){
+    			AjaxPostUtil.request({url: flowableBasePath + "prodiscuss003", params: params, type: 'json', callback: function(json){
     				if (json.returnCode == 0){
     					winui.window.msg("提交成功", {icon: 1, time: 2000}, function(){
     						location.reload();

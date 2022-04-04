@@ -16,7 +16,7 @@ layui.config({
 
 	showGrid({
 		id: "showForm",
-		url: reqBasePath + "proproject006",
+		url: flowableBasePath + "proproject006",
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: getFileContent('tpl/proproject/proprojecteditTemplate.tpl'),
@@ -64,7 +64,7 @@ layui.config({
 			//项目分类
 			showGrid({
 				id: "typeId",
-				url: reqBasePath + "proprojecttype008",
+				url: flowableBasePath + "proprojecttype008",
 				params: {},
 				pagination: false,
 				template: getFileContent('tpl/template/select-option.tpl'),
@@ -217,7 +217,7 @@ layui.config({
 			winui.window.msg("请填写业务需求和目标", {icon: 2,time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: reqBasePath + "proproject007", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "proproject007", params: params, type: 'json', callback: function(json){
 			if (json.returnCode == 0){
 				parent.layer.close(index);
 				parent.refreshCode = '0';
