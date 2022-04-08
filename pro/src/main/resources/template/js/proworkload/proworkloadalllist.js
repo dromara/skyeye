@@ -12,18 +12,6 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
-	//项目名称
-	showGrid({
-	 	id: "proId",
-	 	url: flowableBasePath + "proproject004",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendAfter: function(json){
-	 		form.render('select');
-	 	}
-	});
-
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',

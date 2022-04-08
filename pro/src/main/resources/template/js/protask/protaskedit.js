@@ -17,6 +17,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate;
+	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	var pId = "";//是否是主任务
 	var restWorkload = "";//主任务拆分剩下的工作量
@@ -104,22 +105,14 @@ layui.config({
 				}
 			});
 
-			//所属项目选择
+			// 获取我参与的项目列表
 			function proIdSelect(){
-				showGrid({
-					id: "proId",
-					url: flowableBasePath + "proproject004",
-					params: {},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb){
-					},
-					ajaxSendAfter: function(j){
-						$("#proId").val(json.bean.proId);
-						form.render('select');
-						departmentsSelect();
-					}
+				proUtil.queryMyProjectsList(function (data){
+					$("#proId").html(getDataUseHandlebars(selOption, data));
+					$("#proId").val(json.bean.proId);
+					form.render('select');
 				});
+				departmentsSelect();
 			}
 
 			//所属部门选择

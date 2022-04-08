@@ -23,20 +23,12 @@ layui.config({
 		if(json.returnCode == 0) {
 			$("#title").val(getYMDFormatDate());
 			$("#writePeople").html(json.bean.userName);
-			showGrid({
-				id: "proId",
-				url: flowableBasePath + "proproject004",
-				params: {},
-				pagination: false,
-				template: getFileContent('tpl/template/select-option.tpl'),
-				ajaxSendLoadBefore: function(hdb){
-				},
-				ajaxSendAfter: function(json){
-					proList = json.rows;
-					addRow();
-					form.render('select');
-				}
+			proUtil.queryMyProjectsList(function (data){
+				proList = data.rows;
+				$("#proId").html(getDataUseHandlebars(selOption, data));
+				form.render('select');
 			});
+			addRow();
 			matchingLanguage();
 		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

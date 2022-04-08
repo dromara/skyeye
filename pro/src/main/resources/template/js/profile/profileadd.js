@@ -10,6 +10,7 @@ layui.config({
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form;
+	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	var ue = UE.getEditor('content',{
 		//初始化高度
@@ -36,7 +37,7 @@ layui.config({
 			url: flowableBasePath + "profiletype008",
 			params: {},
 			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
+			template: selOption,
 			ajaxSendLoadBefore: function(hdb){
 			},
 			ajaxSendAfter: function(json){
@@ -46,19 +47,11 @@ layui.config({
 		});
 	}
 
-	//所属项目选择
+	// 获取我参与的项目列表
 	function proIdSelect(){
-		showGrid({
-			id: "proId",
-			url: flowableBasePath + "proproject004",
-			params: {},
-			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function(json){
-				form.render('select');
-			}
+		proUtil.queryMyProjectsList(function (data){
+			$("#proId").html(getDataUseHandlebars(selOption, data));
+			form.render('select');
 		});
 	}
 

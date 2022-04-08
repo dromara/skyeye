@@ -41,32 +41,24 @@ layui.config({
 
 			// 附件回显
 			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
-			//获取项目
-			showGrid({
-				id: "proId",
-				url: flowableBasePath + "proproject004",
-				params: {},
-				pagination: false,
-				template: getFileContent('tpl/template/select-option.tpl'),
-				ajaxSendLoadBefore: function(hdb){
-				},
-				ajaxSendAfter: function(j){
-					$("#proId").val(json.bean.proId);
-					form.render('select');
-					//支出分类
-					AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
-						if(data.returnCode == 0) {
-							departmentsSelect(json);
-							costTypeList = getDataUseHandlebars(selOption, data);
-							$.each(json.bean.purposes, function(i, item){
-								showRow(item);
-							});
-						} else {
-							winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-						}
-					}});
-				}
+			// 获取我参与的项目列表
+			proUtil.queryMyProjectsList(function (data){
+				$("#proId").html(getDataUseHandlebars(selOption, data));
+				$("#proId").val(json.bean.proId);
 			});
+			form.render('select');
+			// 支出分类
+			AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', method: "POST", callback: function(data) {
+				if(data.returnCode == 0) {
+					departmentsSelect(json);
+					costTypeList = getDataUseHandlebars(selOption, data);
+					$.each(json.bean.purposes, function(i, item){
+						showRow(item);
+					});
+				} else {
+					winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
+				}
+			}});
 			matchingLanguage();
 			form.render();
 		} else {

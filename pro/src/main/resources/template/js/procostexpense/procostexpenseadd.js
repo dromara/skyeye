@@ -34,19 +34,11 @@ layui.config({
 				if(data.returnCode == 0) {
 					costTypeList = getDataUseHandlebars(selOption, data);
 					addRow();
-					showGrid({
-						id: "proId",
-						url: flowableBasePath + "proproject004",
-						params: {},
-						pagination: false,
-						template: getFileContent('tpl/template/select-option.tpl'),
-						ajaxSendLoadBefore: function(hdb){
-						},
-						ajaxSendAfter: function(json){
-							form.render('select');
-							departmentsSelect();
-						}
+					proUtil.queryMyProjectsList(function (data){
+						$("#proId").html(getDataUseHandlebars(selOption, data));
+						form.render('select');
 					});
+					departmentsSelect();
 				} else {
 					winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
 				}

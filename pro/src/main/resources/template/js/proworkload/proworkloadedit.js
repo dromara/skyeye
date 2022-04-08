@@ -51,32 +51,24 @@ layui.config({
 
 			// 附件回显
 			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
-			//获取项目
-			showGrid({
-				id: "proId",
-				url: flowableBasePath + "proproject004",
-				params: {},
-				pagination: false,
-				template: getFileContent('tpl/template/select-option.tpl'),
-				ajaxSendLoadBefore: function(hdb){
-				},
-				ajaxSendAfter: function(j){
-					proList = j.rows;
-					$("#proId").val(json.bean.proId);
-					form.render('select');
-					//获取我的任务
-					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: json.bean.proId}, type: 'json', callback: function(data) {
-						if(data.returnCode == 0) {
-							taskListHtml = getDataUseHandlebars(selOption, data);
-							$.each(json.bean.tasks, function(i, item){
-								showRow(item);
-							});
-						} else {
-							winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-						}
-					}});
-				}
+			// 获取我参与的项目列表
+			proUtil.queryMyProjectsList(function (data){
+				$("#proId").html(getDataUseHandlebars(selOption, data));
+				$("#proId").val(json.bean.proId);
+				proList = data.rows;
+				form.render('select');
 			});
+			// 获取我的任务
+			AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: json.bean.proId}, type: 'json', callback: function(data) {
+				if(data.returnCode == 0) {
+					taskListHtml = getDataUseHandlebars(selOption, data);
+					$.each(json.bean.tasks, function(i, item){
+						showRow(item);
+					});
+				} else {
+					winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
+				}
+			}});
 			matchingLanguage();
 			form.render();
 		} else {

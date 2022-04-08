@@ -18,6 +18,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate;
+	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	var ue = UE.getEditor('taskInstructions',{
 		//初始化高度
@@ -87,21 +88,13 @@ layui.config({
 		});
 	}
 
-	//所属项目选择
+	// 获取我参与的项目列表
 	function proIdSelect(){
-		showGrid({
-			id: "proId",
-			url: flowableBasePath + "proproject004",
-			params: {},
-			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function(json){
-				form.render('select');
-				departmentsSelect();
-			}
+		proUtil.queryMyProjectsList(function (data){
+			$("#proId").html(getDataUseHandlebars(selOption, data));
+			form.render('select');
 		});
+		departmentsSelect();
 	}
 
 	//所属部门选择
