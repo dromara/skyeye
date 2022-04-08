@@ -54,24 +54,11 @@ layui.config({
 		tools: ['count', 'copy', 'reset']
 	});
 
-	//加载所属部门
-	departmentId();
-
-	function departmentId(){
-		//所属部门
-		showGrid({
-			id: "departmentId",
-			url: flowableBasePath + "mycrmcontract006",
-			params: {},
-			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter:function(json){
-				form.render('select');
-			}
-		});
-	}
+	// 获取当前登录用户所属企业的所有部门信息
+	systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+		$("#departmentId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+		form.render('select');
+	});
 
 	skyeyeEnclosure.init('enclosureUpload');
 	matchingLanguage();

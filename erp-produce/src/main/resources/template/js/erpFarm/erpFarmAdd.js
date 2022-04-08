@@ -31,20 +31,13 @@ layui.config({
 	    	maxlength: 200,
 	    	tools: ['count', 'copy', 'reset']
 	    });
-		
- 		showGrid({
-			id: "departmentId",
-			url: flowableBasePath + "mycrmcontract006",
-			params: {},
-			pagination: false,
-			template: selOption,
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function(json){
-				form.render('select');
-			}
+
+		// 获取当前登录用户所属企业的所有部门信息
+		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+			$("#departmentId").html(getDataUseHandlebars(selOption, data));
+			form.render('select');
 		});
-		
+
 		matchingLanguage();
 	    form.render();
 	    form.on('submit(formAddBean)', function (data) {

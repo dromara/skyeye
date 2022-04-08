@@ -57,20 +57,13 @@ layui.config({
 			value: getFormatDate(),
 			trigger: 'click'
  		});
- 		
- 		showGrid({
-			id: "departmentId",
-			url: flowableBasePath + "mycrmcontract006",
-			params: {},
-			pagination: false,
-			template: selOption,
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function(json){
-				form.render('select');
-			}
+
+		// 获取当前登录用户所属企业的所有部门信息
+		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+			$("#departmentId").html(getDataUseHandlebars(selOption, data));
+			form.render('select');
 		});
-		
+ 		
 		//商品规格加载变化事件
 		form.on('select(selectUnitProperty)', function(data) {
 			var thisRowValue = data.value;

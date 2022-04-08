@@ -27,19 +27,12 @@ layui.config({
 	    	tools: ['count', 'copy', 'reset']
 	    });
 
-        // 加载部门
-	    showGrid({
-			id: "departmentId",
-			url: flowableBasePath + "mycrmcontract006",
-			params: {},
-			pagination: false,
-			template: selOption,
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function(json){
-                loadProcedureType();
-			}
-		});
+        // 获取当前登录用户所属企业的所有部门信息
+        systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+            $("#departmentId").html(getDataUseHandlebars(selOption, data));
+            form.render('select');
+        });
+        loadProcedureType();
 
         // 加载工序类别
         function loadProcedureType(){

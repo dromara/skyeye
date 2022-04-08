@@ -66,29 +66,21 @@ layui.config({
 		}
 	}});
 
-	//所属部门选择
 	function departmentsSelect(j){
-		showGrid({
-			id: "departments",
-			url: flowableBasePath + "mycrmcontract006",
-			params: {},
-			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function(json){
-				$("#departments").val(j.bean.departmentId);
-				form.render('select');
-			}
+		// 获取当前登录用户所属企业的所有部门信息
+		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+			$("#departments").html(getDataUseHandlebars(selOption, data));
+			$("#departments").val(j.bean.departmentId);
+			form.render('select');
 		});
 	}
 
-	//价格变化
+	// 价格变化
 	$("body").on("input", ".priceInput", function() {
 		calculatedTotalPrice();
 	});
 
-	//计算总价
+	// 计算总价
 	function calculatedTotalPrice(){
 		var rowTr = $("#useTable tr");
 		var allLoad = 0;

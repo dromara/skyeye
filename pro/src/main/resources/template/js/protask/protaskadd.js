@@ -71,7 +71,7 @@ layui.config({
 
 	taskTypeSelect();
 
-	//所属分类选择
+	// 所属分类选择
 	function taskTypeSelect(){
 		showGrid({
 			id: "taskType",
@@ -94,22 +94,11 @@ layui.config({
 			$("#proId").html(getDataUseHandlebars(selOption, data));
 			form.render('select');
 		});
-		departmentsSelect();
-	}
 
-	//所属部门选择
-	function departmentsSelect(){
-		showGrid({
-			id: "departments",
-			url: flowableBasePath + "mycrmcontract006",
-			params: {},
-			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function(json){
-				form.render('select');
-			}
+		// 获取当前登录用户所属企业的所有部门信息
+		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(json){
+			$("#departments").html(getDataUseHandlebars(selOption, json));
+			form.render('select');
 		});
 	}
 

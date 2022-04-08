@@ -24,6 +24,7 @@ layui.config({
     	laydate = layui.laydate,
     	form = layui.form,
     	textool = layui.textool;
+    var selOption = getFileContent('tpl/template/select-option.tpl');
     
     var partId = "";            //商机参与人id
     var followId = "";        //商机关注人id
@@ -77,18 +78,11 @@ layui.config({
 			
 			// 商机所属部门选择
 			function departmentsSelect(){
-				showGrid({
-					id: "subDepartments",
-					url: flowableBasePath + "mycrmcontract006",
-					params: {},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb){
-					},
-					ajaxSendAfter: function(j){
-						$("#subDepartments").val(json.bean.subDepartments);
-						form.render('select');
-					}
+				// 获取当前登录用户所属企业的所有部门信息
+				systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+					$("#subDepartments").html(getDataUseHandlebars(selOption, data));
+					$("#subDepartments").val(json.bean.subDepartments);
+					form.render('select');
 				});
 			}
 			

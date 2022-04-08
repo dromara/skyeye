@@ -21,6 +21,7 @@ layui.config({
 		form = layui.form,
 		laydate = layui.laydate,
 		textool = layui.textool;
+	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	showGrid({
 		id: "showForm",
@@ -41,21 +42,18 @@ layui.config({
 			laydate.render({
 			  elem: '#signingTime',
 			  type: 'date',
-			  trigger: 'click'
 			});
 
 			//生效日期
 			laydate.render({
 			  elem: '#effectTime',
 			  type: 'date',
-			  trigger: 'click'
 			});
 
 			//服务结束日期
 			laydate.render({
 			  elem: '#serviceEndTime',
 			  type: 'date',
-			  trigger: 'click'
 			});
 
 			textool.init({
@@ -98,25 +96,13 @@ layui.config({
 			customerMation = {
 				id: json.bean.customerId
 			};
-			// 加载部门信息
-			departmentId();
 
-			function departmentId(){
-				// 所属部门
-				showGrid({
-					id: "departmentId",
-					url: flowableBasePath + "mycrmcontract006",
-					params: {},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb){
-					},
-					ajaxSendAfter:function(j){
-						$("#departmentId").val(json.bean.departmentId);
-						form.render('select');
-					}
-				});
-			}
+			// 获取当前登录用户所属企业的所有部门信息
+			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+				$("#departmentId").html(getDataUseHandlebars(selOption, data));
+				$("#departmentId").val(json.bean.departmentId);
+				form.render('select');
+			});
 
 			// 附件回显
 			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});

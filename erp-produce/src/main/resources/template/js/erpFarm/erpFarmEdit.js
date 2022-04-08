@@ -37,18 +37,11 @@ layui.config({
             ajaxSendAfter: function(json){
                 procedureMationList = [].concat(json.bean.procedureList);
 
-                showGrid({
-                    id: "departmentId",
-                    url: flowableBasePath + "mycrmcontract006",
-                    params: {},
-                    pagination: false,
-                    template: selOption,
-                    ajaxSendLoadBefore: function(hdb){
-                    },
-                    ajaxSendAfter: function(data){
-                    	$("#departmentId").val(json.bean.departmentId);
-                        form.render('select');
-                    }
+                // 获取当前登录用户所属企业的所有部门信息
+                systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+                    $("#departmentId").html(getDataUseHandlebars(selOption, data));
+                    $("#departmentId").val(json.bean.departmentId);
+                    form.render('select');
                 });
 
                 chargeUser.push({

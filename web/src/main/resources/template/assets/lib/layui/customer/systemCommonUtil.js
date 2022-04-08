@@ -29,6 +29,23 @@ var systemCommonUtil = {
     },
 
     /**
+     * 获取当前登录用户所属企业的所有部门信息
+     *
+     * @param callback 回执函数
+     */
+    queryDepartmentListByCurrentUserBelong: function (callback){
+        AjaxPostUtil.request({url: reqBasePath + "queryDepartmentListByCurrentUserBelong", params: {}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
+    /**
      * 获取当前登录员工信息
      *
      * @param callback 回执函数

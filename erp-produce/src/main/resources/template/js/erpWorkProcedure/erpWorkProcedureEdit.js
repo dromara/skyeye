@@ -36,34 +36,28 @@ layui.config({
 			    	maxlength: 200,
 			    	tools: ['count', 'copy', 'reset']
 			    });
-            	
+
+                // 获取当前登录用户所属企业的所有部门信息
+                systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+                    $("#departmentId").html(getDataUseHandlebars(selOption, data));
+                    $("#departmentId").val(json.bean.departmentId);
+                    form.render('select');
+                });
+
+                // 加载工序类别
                 showGrid({
-					id: "departmentId",
-					url: flowableBasePath + "mycrmcontract006",
-					params: {},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb){
-					},
-					ajaxSendAfter: function(data){
-						$("#departmentId").val(json.bean.departmentId);
-						// 加载工序类别
-                        showGrid({
-                            id: "procedureType",
-                            url: flowableBasePath + "erpworkproceduretype008",
-                            params: {},
-                            pagination: false,
-                            template: selOption,
-                            ajaxSendLoadBefore: function(hdb){
-                            },
-                            ajaxSendAfter: function(data){
-                                $("#procedureType").val(json.bean.procedureType);
-                                form.render('select');
-                            }
-                        });
-						form.render('select');
-					}
-				});
+                    id: "procedureType",
+                    url: flowableBasePath + "erpworkproceduretype008",
+                    params: {},
+                    pagination: false,
+                    template: selOption,
+                    ajaxSendLoadBefore: function(hdb){
+                    },
+                    ajaxSendAfter: function(data){
+                        $("#procedureType").val(json.bean.procedureType);
+                        form.render('select');
+                    }
+                });
 
                 var userNames = [];
                 procedureUser = [].concat(json.bean.operators);
