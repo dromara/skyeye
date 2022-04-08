@@ -169,8 +169,7 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				dataType : "json",
 				dataFilter : function(treeId, treeNode, responseData) {
 					if (responseData.rows.length > 0) {
-						$.fn.zTree.getZTreeObj(treeId).addNodes(treeNode,
-								responseData.rows);
+						$.fn.zTree.getZTreeObj(treeId).addNodes(treeNode, responseData.rows);
 					}
 				}
 			},
@@ -323,14 +322,10 @@ layui.define(['layer', "fsCommon"], function(exports) {
 					}
 					_this.showTree(array);
 				} else {
-					// 提示错误消息
-					fsCommon.warnMsg(data.returnMessage, {
-								icon : 0
-							});
+					fsCommon.warnMsg(data.returnMessage, {icon : 0});
 				}
 			}, false, method);
 		}
-
 	}
 
 	/**

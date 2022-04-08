@@ -34,7 +34,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 			fsCommon.invoke(url, param, callBackFunc, async, method);
 		},
 		invoke: function(url, param, callBackFunc, async, method) {
-			if(isNull(async)) {
+			if(isNull(String(async))) {
 				async = true;
 			}
 			if(isNull(method)) {
