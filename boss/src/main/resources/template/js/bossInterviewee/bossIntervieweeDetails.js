@@ -12,7 +12,7 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: reqBasePath + "bossInterviewee004",
+        url: flowableBasePath + "bossInterviewee004",
         params: {id: parent.rowId},
         pagination: false,
         method: "GET",

@@ -14,7 +14,7 @@ layui.config({
 
     showGrid({
         id: "showForm",
-        url: reqBasePath + "bossInterviewee004",
+        url: flowableBasePath + "bossInterviewee004",
         params: {id: parent.rowId},
         pagination: false,
         method: "GET",
@@ -74,7 +74,7 @@ layui.config({
                         enclosureResume: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
                         id: parent.rowId
                     };
-                    AjaxPostUtil.request({url: reqBasePath + "bossInterviewee005", params: params, type: 'json', method: "PUT", callback: function(json){
+                    AjaxPostUtil.request({url: flowableBasePath + "bossInterviewee005", params: params, type: 'json', method: "PUT", callback: function(json){
                         if(json.returnCode == 0){
                             parent.layer.close(index);
                             parent.refreshCode = '0';
