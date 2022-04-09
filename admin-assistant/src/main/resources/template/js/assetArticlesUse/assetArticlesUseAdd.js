@@ -28,63 +28,60 @@ layui.config({
 
 	// 初始化用品类别
 	function initTypeHtml() {
-		AjaxPostUtil.request({url: flowableBasePath + "assetarticles010", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-				matchingLanguage();
-				//渲染
-				form.render();
-				//类型加载变化事件
-				form.on('select(selectTypeProperty)', function(data) {
-					var thisRowNum = data.elem.id.replace("typeId", "");
-					var thisRowValue = data.value;
-					if(!isNull(thisRowValue) && thisRowValue != '请选择') {
-						if(inPointArray(thisRowValue, assetArticles)) {
-							//类型对应的用品存在js对象中
-							var list = getListPointArray(thisRowValue, assetArticles);
-							resetAssetList(thisRowNum, list); //重置选择行的用品列表
+		// 获取已经上线的用品类别列表
+		adminAssistantUtil.queryAssetArticlesTypeUpStateList(function (data){
+			typeHtml = getDataUseHandlebars(selOption, data);
+		});
+		matchingLanguage();
+		//渲染
+		form.render();
+		//类型加载变化事件
+		form.on('select(selectTypeProperty)', function(data) {
+			var thisRowNum = data.elem.id.replace("typeId", "");
+			var thisRowValue = data.value;
+			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+				if(inPointArray(thisRowValue, assetArticles)) {
+					//类型对应的用品存在js对象中
+					var list = getListPointArray(thisRowValue, assetArticles);
+					resetAssetList(thisRowNum, list); //重置选择行的用品列表
+				} else {
+					//类型对应的用品不存在js对象中
+					AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', method: "POST", callback: function(json) {
+						if(json.returnCode == 0) {
+							assetArticles.push({
+								id: thisRowValue,
+								list: json.rows
+							});
+							resetAssetList(thisRowNum, json.rows); //重置选择行的用品列表
 						} else {
-							//类型对应的用品不存在js对象中
-							AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
-								if(json.returnCode == 0) {
-									assetArticles.push({
-										id: thisRowValue,
-										list: json.rows
-									});
-									resetAssetList(thisRowNum, json.rows); //重置选择行的用品列表
-								} else {
-									winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-								}
-							}});
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
-					}
-				});
-
-				//商品加载变化事件
-				form.on('select(selectAssetarProperty)', function(data) {
-					var thisRowNum = data.elem.id.replace("assetarId", "");
-					var thisRowValue = data.value;
-					var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
-					if(!isNull(thisRowValue) && thisRowValue != '请选择') {
-						var list = getListPointArray(thisRowTypeChooseId, assetArticles);
-						$.each(list, function(i, item) {
-							if(item.id === thisRowValue) {
-								$("#specificationsName" + thisRowNum).html(item.specificationsName);
-								$("#residualNum" + thisRowNum).html(item.residualNum);
-								return false;
-							}
-						});
-					} else {
-						$("#specificationsName" + thisRowNum).html(""); //重置规格为空
-						$("#residualNum" + thisRowNum).html(""); //重置库存为空
-					}
-				});
-				//初始化一行数据
-				addRow();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+					}});
+				}
 			}
-		}});
+		});
+
+		//商品加载变化事件
+		form.on('select(selectAssetarProperty)', function(data) {
+			var thisRowNum = data.elem.id.replace("assetarId", "");
+			var thisRowValue = data.value;
+			var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
+			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+				var list = getListPointArray(thisRowTypeChooseId, assetArticles);
+				$.each(list, function(i, item) {
+					if(item.id === thisRowValue) {
+						$("#specificationsName" + thisRowNum).html(item.specificationsName);
+						$("#residualNum" + thisRowNum).html(item.residualNum);
+						return false;
+					}
+				});
+			} else {
+				$("#specificationsName" + thisRowNum).html(""); //重置规格为空
+				$("#residualNum" + thisRowNum).html(""); //重置库存为空
+			}
+		});
+		// 初始化一行数据
+		addRow();
 	}
 
 	// 保存为草稿
@@ -156,7 +153,7 @@ layui.config({
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
-		AjaxPostUtil.request({url: flowableBasePath + "assetarticles019", params: params, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "assetarticles019", params: params, type: 'json', method: "POST", callback: function(json) {
 			if(json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

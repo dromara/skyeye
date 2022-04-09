@@ -44,6 +44,9 @@ var AjaxPostUtil = {
         for(var pro in newOptions) {
             this.options[pro] = newOptions[pro];
         }
+        if(isNull(String(newOptions['method']))){
+            this.options['method'] = 'POST';
+        }
     },
     // 格式化请求参数
     formateParameters: function() {

@@ -27,6 +27,7 @@ var customerJS = {
 	"shopUtil": "../../assets/lib/layui/customer/shopUtil.js", // 商城模块相关工具
 	"indexMenu": "../../assets/lib/layui/customer/indexMenu.js", // 菜单按钮模块相关工具
 	"proUtil": "../../assets/lib/layui/customer/proUtil.js", // 项目管理模块相关工具
+	"adminAssistantUtil": "../../assets/lib/layui/customer/adminAssistantUtil.js", // 行政管理模块相关工具
 };
 
 //系统基础信息

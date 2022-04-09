@@ -5,7 +5,6 @@ var userReturnList = new Array();//选择用户返回的集合或者进行回显
 var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
 var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
 var checkType = "2";//人员选择类型，1.多选；其他。单选
-var typeId = "";//用品类别Id
 
 // 用品信息
 layui.config({
@@ -19,37 +18,20 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 
- 		initTypeId();
- 		// 初始化用品类别
- 		function initTypeId(){
- 			showGrid({
- 				id: "typeId",
- 				url: flowableBasePath + "assetarticles010",
- 				params: {},
- 				pagination: false,
- 				template: getFileContent('tpl/template/select-option.tpl'),
- 				ajaxSendAfter: function(json){
- 					form.render('select');
- 				}
- 			})
- 		}
- 		// 用品类别的监听事件
- 		form.on('select(typeId)', function(data){
- 			typeId = data.value;
- 		})
+		// 获取已经上线的用品类别列表
+		adminAssistantUtil.queryAssetArticlesTypeUpStateList(function (data){
+			$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+			form.render('select');
+		});
 
 		skyeyeEnclosure.init('enclosureUpload');
  		matchingLanguage();
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
- 	        	if(isNull(typeId)){
- 	        		winui.window.msg('请选择用品类别', {icon: 2,time: 2000});
- 	        		return false;
- 	        	}
  	        	var params = {
         			articlesName: $("#articlesName").val(),
-        			typeId: typeId,
+        			typeId: $("#typeId").val(),
         			specifications: $("#specifications").val(),
         			unitOfMeasurement: $("#unitOfMeasurement").val(),
         			initialNum: $("#initialNum").val(),

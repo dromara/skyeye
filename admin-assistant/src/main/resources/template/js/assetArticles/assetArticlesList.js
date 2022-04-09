@@ -11,22 +11,13 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 	
-	initTypeId();
-	// 初始化用品类别
-	function initTypeId(){
-		showGrid({
-			id: "typeId",
-			url: flowableBasePath + "assetarticles010",
-			params: {},
-			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendAfter: function(json){
-				form.render('select');
-				showliebiaoList();
-			}
-		})
-	}
-	
+	// 获取已经上线的用品类别列表
+	adminAssistantUtil.queryAssetArticlesTypeUpStateList(function (data){
+		$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+		form.render('select');
+	});
+
+	showliebiaoList();
 	// 展示用品列表
 	function showliebiaoList(){
 		table.render({

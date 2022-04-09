@@ -5,7 +5,6 @@ var userReturnList = new Array();//选择用户返回的集合或者进行回显
 var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
 var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
 var checkType = "2";//人员选择类型，1.多选；其他。单选
-var typeId = "";//用品类别Id
 
 // 用品信息
 layui.config({
@@ -19,25 +18,6 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 
-	    //初始化用品类别
- 		function initTypeId(id){
- 			showGrid({
- 				id: "typeId",
- 				url: flowableBasePath + "assetarticles010",
- 				params: {},
- 				pagination: false,
- 				template: getFileContent('tpl/template/select-option.tpl'),
- 				ajaxSendAfter: function(json){
- 					$("#typeId").val(id);
- 					form.render('select');
- 				}
- 			})
- 		}
- 		//用品类别的监听事件
- 		form.on('select(typeId)', function(data){
- 			typeId = data.value;
- 		})
-	    
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "assetarticles015",
@@ -53,9 +33,13 @@ layui.config({
 					}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
-		 		typeId = json.bean.typeId;
-		 		initTypeId(json.bean.typeId);
+		 	ajaxSendAfter:function(json) {
+				// 获取已经上线的用品类别列表
+				adminAssistantUtil.queryAssetArticlesTypeUpStateList(function (data){
+					$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+					$("#typeId").val(json.bean.typeId);
+					form.render('select');
+				});
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.assetAdmin);
 		 		$.each(json.bean.assetAdmin, function(i, item){
@@ -89,7 +73,7 @@ layui.config({
 		 	        	var params = {
 	 	        			rowId: parent.rowId,
 	 	        			articlesName: $("#articlesName").val(),
-	 	        			typeId: typeId,
+	 	        			typeId: $("#typeId").val(),
 	 	        			specifications: $("#specifications").val(),
 	 	        			unitOfMeasurement: $("#unitOfMeasurement").val(),
 	 	        			initialNum: $("#initialNum").val(),
