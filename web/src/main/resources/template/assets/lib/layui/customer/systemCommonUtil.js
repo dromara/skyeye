@@ -49,15 +49,20 @@ var systemCommonUtil = {
      * 获取当前登录员工信息
      *
      * @param callback 回执函数
+     * @param errorCallback 接口返回失败时的回调函数
      */
-    getSysCurrentLoginUserMation: function (callback){
+    getSysCurrentLoginUserMation: function (callback, errorCallback){
         AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', method: "POST", callback: function(json) {
             if(json.returnCode == 0) {
                 if(typeof(callback) == "function") {
                     callback(json);
                 }
             } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                if(typeof(errorCallback) == "function") {
+                    errorCallback();
+                } else {
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                }
             }
         }, async: false});
     },

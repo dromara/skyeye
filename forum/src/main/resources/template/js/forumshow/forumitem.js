@@ -96,28 +96,25 @@ layui.config({
  	   				$(".se-comment-text-textarea").empty();
  	   			    var commentName = "";
  	   			    var commentUserId = "";
-	 	   			AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-		 	       		if(json.returnCode == 0) {
-		 	       			commentName =  json.bean.userName;
-		 	       			commentUserId =  json.bean.id;
-			 	       		var params = {
-			 					belongCommentId: belongCommentId,
-			 					replyName: commentName,
-			 					commentName: rowUsername,
-			 					content: replyContent,
-			 					commentTime: '刚刚',
-			 					commentUserId: commentUserId
-		 			 	    };
-				 	       	if(replyType == "1"){
-	                            $("span[rowid=" + belongCommentId + "]").parents('div[class^="comment-text"]').eq(0).find(".second-comment-item").removeClass("layui-hide");
-	                            $("span[rowid=" + belongCommentId + "]").parents('div[class^="first-comment-item"]').eq(0).find(".second-comment-item").append(getDataUseHandlebars(replyTemplate, params));
-	                        }else if(replyType == "2"){
-	                            $("span[rowid=" + belongCommentId + "]").parents('div[class^="se-comment-text"]').eq(0).after(getDataUseHandlebars(replyTemplate, params));
-	                        }
-		 	       		}else {
-		 	       			location.href = "login.html";
-		 	       		}
-	 	   			}});
+					// 获取当前登录员工信息
+					systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+						commentName =  data.bean.userName;
+						commentUserId =  data.bean.id;
+					});
+					var params = {
+						belongCommentId: belongCommentId,
+						replyName: commentName,
+						commentName: rowUsername,
+						content: replyContent,
+						commentTime: '刚刚',
+						commentUserId: commentUserId
+					};
+					if(replyType == "1"){
+						$("span[rowid=" + belongCommentId + "]").parents('div[class^="comment-text"]').eq(0).find(".second-comment-item").removeClass("layui-hide");
+						$("span[rowid=" + belongCommentId + "]").parents('div[class^="first-comment-item"]').eq(0).find(".second-comment-item").append(getDataUseHandlebars(replyTemplate, params));
+					}else if(replyType == "2"){
+						$("span[rowid=" + belongCommentId + "]").parents('div[class^="se-comment-text"]').eq(0).after(getDataUseHandlebars(replyTemplate, params));
+					}
  	   			}else{
  	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
  	   			}

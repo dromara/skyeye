@@ -70,87 +70,86 @@ layui.config({
 		}
 		
 		$("title").html(title);
-		AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-    		if(json.returnCode == 0) {
-    			AjaxPostUtil.request({url:reqBasePath + "fileconsole036", params:{rowId: thisId}, type: 'json', callback: function(j){
-    	    		if(j.returnCode == 0) {
-    	    			if(!isNull(j.bean)){
-    	    				window.docEditor = new DocsAPI.DocEditor("placeholder", {
-    	    					"document": {
-    	    						"fileType": selFileType,//定义源查看或编辑文档的文件类型
-    	    						"key": thisId + "-" + j.bean.updateTime + "",//定义服务用于文档识别的唯一文档标识符。 如果发送已知密钥，文档将从缓存中获取。 每次文档被编辑和保存时，都必须重新生成密钥。 文档url可以用作密钥，但不包含特殊字符，长度限制为20个符号。（注意如果秘钥值不更换那么看到的文档还是最先加载的缓存文档）
-    	    						"title": title,//为查看或编辑的文档定义所需的文件名，当文档被下载时它也将被用作文件名。
-    	    						"url": "http://192.168.1.105:8081/" + fileUrl,//定义存储源查看或编辑文档的绝对URL
-    	    						"userdata": thisId
-    	    					},
-    	    					"documentType": documentType,//文件编辑类型，根据文件的类型在客户端用不通的编辑器来编辑文件主要三种 文档类-text、表格类-spreadsheet、ppt类-presentation
-    	    					"editorConfig": {
-    	    						"callbackUrl": "http://192.168.1.105:8081/fileconsole010?id=" + thisId,//文件关闭后回调路劲 这个用来保存文件用的 文件编辑保存后 当你关闭窗口后 server端会请求把你在服务器上的编辑提交到这个路劲 ，所以这个路劲的代码 一般就是上传保存 ；
-    	    						"lang": "zh-CN",//"en-US",汉化
-    	    						"mode": mode,
-    	    						"user": {
-    	    							"id": json.bean.id,
-    	    							"name": json.bean.userName
-    	    						},
-    	    						"customization":{
-    	    							"autosave": true,
-    	    							"chat": true,
-    	    							"commentAuthorOnly": false,
-    	    				            "compactToolbar": false,
-    	    				            "zoom": 100,
-    	    				            "about": true,
-    	    				            "customer": {//关于
-    	    				                "address": "广州",
-    	    				                "info": "",
-    	    				                "logo": "",
-    	    				                "mail": "598748873@qq.com",
-    	    				                "name": "skyeye",
-    	    				                "www": "https://gitee.com/doc_wei01/skyeye"
-    	    				            },
-    	    				            "feedback": {//反馈与支持
-    	    				                "url": "https://gitee.com/doc_wei01/skyeye",
-    	    				                "visible": true
-    	    				            },
-    	    				            "logo": {//自定义编辑器左上角标题和跳转地址
-    	    				                "image": "https://example.com/logo.png",
-    	    				                "imageEmbedded": "https://example.com/logo_em.png",
-    	    				                "url": "https://gitee.com/doc_wei01/skyeye"
-    	    				            },
-    	    				            "goback": {//自定义按钮
-    	    				                "blank": true,
-    	    				                "text": "公司",
-    	    				                "url": "https://gitee.com/doc_wei01/skyeye"
-    	    				            },
-    	    				            "help": true,
-    	    				            "showReviewChanges": false,
-    	    							"forcesave": false//在编辑器初始化配置中将其设置为true,在这种情况下，每次用户单击“ 保存”按钮时，将请求发送回ONLYOFFICE Document Server执行保存操作
-    	    						}
-    	    					},
-    	    					"events": {
-    	    						"onAppReady": onAppReady,
-    	    						"onDocumentStateChange": onDocumentStateChange,
-    	    						'onRequestEditRights': onRequestEditRights,
-    	    						"onError": onError,
-    	    						"onOutdatedVersion": onOutdatedVersion
-    	    					},
-    	    					"height": "100%",//页面高度
-    	    					"width": "100%",//页面宽度
-    	    					"type": "desktop"
-    	    				});
-    	    				
-    	    				matchingLanguage();
-    	    			}else{
-    	    				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
-    	    			}
-    	    		} else {
-    	    			winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
-    	    		}
-    			}});
-    		} else {
-    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    		}
-   		}});
-		
+		// 获取当前登录员工信息
+		var currentUserMation = {};
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			currentUserMation = data.bean;
+		});
+		AjaxPostUtil.request({url:reqBasePath + "fileconsole036", params:{rowId: thisId}, type: 'json', callback: function(j){
+			if(j.returnCode == 0) {
+				if(!isNull(j.bean)){
+					window.docEditor = new DocsAPI.DocEditor("placeholder", {
+						"document": {
+							"fileType": selFileType,//定义源查看或编辑文档的文件类型
+							"key": thisId + "-" + j.bean.updateTime + "",//定义服务用于文档识别的唯一文档标识符。 如果发送已知密钥，文档将从缓存中获取。 每次文档被编辑和保存时，都必须重新生成密钥。 文档url可以用作密钥，但不包含特殊字符，长度限制为20个符号。（注意如果秘钥值不更换那么看到的文档还是最先加载的缓存文档）
+							"title": title,//为查看或编辑的文档定义所需的文件名，当文档被下载时它也将被用作文件名。
+							"url": "http://192.168.1.105:8081/" + fileUrl,//定义存储源查看或编辑文档的绝对URL
+							"userdata": thisId
+						},
+						"documentType": documentType,//文件编辑类型，根据文件的类型在客户端用不通的编辑器来编辑文件主要三种 文档类-text、表格类-spreadsheet、ppt类-presentation
+						"editorConfig": {
+							"callbackUrl": "http://192.168.1.105:8081/fileconsole010?id=" + thisId,//文件关闭后回调路劲 这个用来保存文件用的 文件编辑保存后 当你关闭窗口后 server端会请求把你在服务器上的编辑提交到这个路劲 ，所以这个路劲的代码 一般就是上传保存 ；
+							"lang": "zh-CN",//"en-US",汉化
+							"mode": mode,
+							"user": {
+								"id": currentUserMation.id,
+								"name": currentUserMation.userName
+							},
+							"customization":{
+								"autosave": true,
+								"chat": true,
+								"commentAuthorOnly": false,
+								"compactToolbar": false,
+								"zoom": 100,
+								"about": true,
+								"customer": {//关于
+									"address": "广州",
+									"info": "",
+									"logo": "",
+									"mail": "598748873@qq.com",
+									"name": "skyeye",
+									"www": "https://gitee.com/doc_wei01/skyeye"
+								},
+								"feedback": {//反馈与支持
+									"url": "https://gitee.com/doc_wei01/skyeye",
+									"visible": true
+								},
+								"logo": {//自定义编辑器左上角标题和跳转地址
+									"image": "https://example.com/logo.png",
+									"imageEmbedded": "https://example.com/logo_em.png",
+									"url": "https://gitee.com/doc_wei01/skyeye"
+								},
+								"goback": {//自定义按钮
+									"blank": true,
+									"text": "公司",
+									"url": "https://gitee.com/doc_wei01/skyeye"
+								},
+								"help": true,
+								"showReviewChanges": false,
+								"forcesave": false//在编辑器初始化配置中将其设置为true,在这种情况下，每次用户单击“ 保存”按钮时，将请求发送回ONLYOFFICE Document Server执行保存操作
+							}
+						},
+						"events": {
+							"onAppReady": onAppReady,
+							"onDocumentStateChange": onDocumentStateChange,
+							'onRequestEditRights': onRequestEditRights,
+							"onError": onError,
+							"onOutdatedVersion": onOutdatedVersion
+						},
+						"height": "100%",//页面高度
+						"width": "100%",//页面宽度
+						"type": "desktop"
+					});
+
+					matchingLanguage();
+				}else{
+					winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+				}
+			} else {
+				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+			}
+		}});
+
 		var onAppReady = function () {
             innerAlert("Document editor ready");
         };

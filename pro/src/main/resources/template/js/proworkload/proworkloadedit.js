@@ -89,7 +89,7 @@ layui.config({
 						$("#title").val(item.name + "-" + item.customerName + "-" + getYMDFormatDate());
 					}
 					//获取我的任务
-					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: item.id}, type: 'json', callback: function(json) {
+					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: item.id}, type: 'json', method: "POST", callback: function(json) {
 						if(json.returnCode == 0) {
 							taskListHtml = getDataUseHandlebars(selOption, json);
 							resetTableTask();

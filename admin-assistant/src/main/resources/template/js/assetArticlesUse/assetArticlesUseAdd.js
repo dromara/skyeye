@@ -19,15 +19,12 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	skyeyeEnclosure.init('enclosureUpload');
-	AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html("用品领用申请单-" + getYMDFormatDate() + '-' + json.bean.userName);
-			$("#useName").html(json.bean.userName);
-			initTypeHtml();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		}
-	}});
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		$("#useTitle").html("用品领用申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
+		$("#useName").html(data.bean.userName);
+		initTypeHtml();
+	});
 
 	// 初始化用品类别
 	function initTypeHtml() {

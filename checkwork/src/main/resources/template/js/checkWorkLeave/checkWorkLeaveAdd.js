@@ -30,36 +30,33 @@ layui.config({
     var beanTemplate = $("#beanTemplate").html();
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
-    AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
+    // 获取当前登录员工信息
+    systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+        $("#useTitle").html("用户请假申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
+        $("#useName").html(data.bean.userName);
+    });
+    // 获取当前员工的年假
+    AjaxPostUtil.request({url: reqBasePath + "staff010", params: {}, type: 'json', method: 'GET', callback: function(json) {
         if(json.returnCode == 0) {
-            $("#useTitle").html("用户请假申请单-" + getYMDFormatDate() + '-' + json.bean.userName);
-            $("#useName").html(json.bean.userName);
-            // 获取当前员工的年假
-            AjaxPostUtil.request({url: reqBasePath + "staff010", params: {}, type: 'json', method: 'GET', callback: function(json) {
+            staffYearHoliday = json.bean.annualLeave;
+            holidayNumber = json.bean.holidayNumber;
+            $("#messageTips").html("截至当前剩余年假：" + staffYearHoliday + "小时，剩余补休为：" + holidayNumber + "小时");
+            // 获取当前员工的考勤班次
+            AjaxPostUtil.request({url: flowableBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
                 if(json.returnCode == 0) {
-                    staffYearHoliday = json.bean.annualLeave;
-                    holidayNumber = json.bean.holidayNumber;
-                    $("#messageTips").html("截至当前剩余年假：" + staffYearHoliday + "小时，剩余补休为：" + holidayNumber + "小时");
-                    // 获取当前员工的考勤班次
-                    AjaxPostUtil.request({url: flowableBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
-                        if(json.returnCode == 0) {
-                            $.each(json.rows, function (i, item){
-                                checkWorkTime.push({
-                                    id: item.timeId,
-                                    name: item.title,
-                                    days: item.days,
-                                    startTime: item.startTime,
-                                    endTime: item.endTime,
-                                    restStartTime: item.restStartTime,
-                                    restEndTime: item.restEndTime,
-                                    type: item.type
-                                });
-                            });
-                            initTypeHtml();
-                        } else {
-                            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                        }
-                    }});
+                    $.each(json.rows, function (i, item){
+                        checkWorkTime.push({
+                            id: item.timeId,
+                            name: item.title,
+                            days: item.days,
+                            startTime: item.startTime,
+                            endTime: item.endTime,
+                            restStartTime: item.restStartTime,
+                            restEndTime: item.restEndTime,
+                            type: item.type
+                        });
+                    });
+                    initTypeHtml();
                 } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }

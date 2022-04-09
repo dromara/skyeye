@@ -48,14 +48,11 @@ layui.config({
 	});
 
 	skyeyeEnclosure.init('enclosureUpload');
-	AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html("用车申请单-" + getYMDFormatDate() + '-' + json.bean.userName);
-			$("#useName").html(json.bean.userName);
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		}
-	}});
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
+		$("#useTitle").html("用车申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
+		$("#useName").html(data.bean.userName);
+	});
 
 	//初始化指定用车
 	function initDesignatedVehicle(num) {

@@ -19,18 +19,15 @@ layui.config({
 
     var beanTemplate = $("#beanTemplate").html();
 
-    AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-        if(json.returnCode == 0) {
-            $("#useTitle").html("用户加班申请单-" + getYMDFormatDate() + '-' + json.bean.userName);
-            $("#useName").html(json.bean.userName);
-            form.render();
-            matchingLanguage();
-            // 初始化一行数据
-            addRow();
-        } else {
-            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-        }
-    }});
+    // 获取当前登录员工信息
+    systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+        $("#useTitle").html("用户加班申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
+        $("#useName").html(data.bean.userName);
+    });
+    form.render();
+    matchingLanguage();
+    // 初始化一行数据
+    addRow();
 
     skyeyeEnclosure.init('enclosureUpload');
     // 保存为草稿

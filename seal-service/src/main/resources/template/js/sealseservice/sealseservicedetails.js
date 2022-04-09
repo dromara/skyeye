@@ -24,13 +24,10 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter: function(json){
-				AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(data) {
-					if(data.returnCode == 0) {
-						$("#orderDetailTitle").html(data.bean.companyName + '售后工单');
-					} else {
-						winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-					}
-				}});
+				// 获取当前登录员工信息
+				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+					$("#orderDetailTitle").html(data.bean.companyName + '售后工单');
+				});
 		 		//工单协助人
 		 		if(!isNull(json.bean.cooperationUserId) && json.bean.cooperationUserId.length > 0){
 			    	var str = "";

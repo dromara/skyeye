@@ -15,15 +15,12 @@ layui.config({
 		table = layui.table;
 	
 	authBtn('1601784150851');
-	AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			staffId = json.bean.staffId;
-			initTable();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		}
-	}});
-		
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		staffId = data.bean.staffId;
+	});
+	initTable();
+
     function initTable(){
 		table.render({
 		    id: 'messageTable',

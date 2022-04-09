@@ -67,218 +67,217 @@ layui.config({
     			clearInterval(loadInterval);
     		}
     	}, 10);
-    	//获取用户信息
-    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
-   				$("#userPhoto").attr("src", fileBasePath + json.bean.userPhoto);
-    			$("#userName").html(json.bean.userCode + '(' + json.bean.userName + ')');
-    			userId = json.bean.id;
-    			loadBottomMenuIcon = json.bean.loadBottomMenuIcon;
-    			if(isNull(json.bean.winBgPicUrl)) {
-    				json.bean.winBgPicUrl = fileBasePath + '/images/upload/winbgpic/default.jpg';
-    			} else {
-    				json.bean.winBgPicUrl = fileBasePath + json.bean.winBgPicUrl;
-    			}
-    			if(isNull(json.bean.winLockBgPicUrl)) {
-    				json.bean.winLockBgPicUrl = fileBasePath + '/images/upload/winbgpic/default.jpg';
-    			} else {
-    				json.bean.winLockBgPicUrl = fileBasePath + json.bean.winLockBgPicUrl;
-    			}
-    			//获取桌面消息
-                AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
-                    if(l.returnCode == 0) {
-                    	var deskTopName = new Array();
-                    	var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
-                        deskTopName.push(defaultName);
-                        var desktopSel = '<option value="winfixedpage00000000">' + defaultName + '</option>';
-                        //初始化桌面
-                        $.each(l.rows, function(i, item){
-                            deskTopName.push(item.name);
-                            desktopSel += '<option value="' + item.id + '">' + item.name + '</option>';
-                            $("#winui-desktop").append('<article class="desktop-item-page section" id="' + item.id + '" art-title="' + item.name + '"></article>');
-                        });
-                        $('#winui-desktop').fullpage({
-                            'navigation': true,
-                            scrollingSpeed: 500,
-                            navigationTooltips: deskTopName,
-                            resize: true,
-                            afterLoad: function(anchorLink, index){
-                                var id = $("#winui-desktop").find(".desktop-item-page").eq(index - 1).attr("id");
-                                $("#desktop-sel").val(id);
-                            }
-                        });
-                        $("#desktop-sel").html(desktopSel);
-                        $("#winui-desktop").find(".desktop-item-page").html("");
-                        $("body").on('change', '#desktop-sel', function(e){
-                            var val = $("#desktop-sel").prop('selectedIndex');
-                            $.fn.fullpage.moveTo(++val);
-                        });
-                    	
-		    			//加载win系统内容
-		    			initWinConfig(json);
-		    			//加载聊天
-		    			initTalk();
-		    			//加载右键
-		    			initRightMenu();
-		    			//扩展桌面助手工具
-		    			winui.helper.addTool([{
-							tips: '主题设置',
-							icon: 'fa-paw',
-							click: function (e) {
-								winui.window.openTheme(loadBottomMenuIcon);
-							}
-						}, {
-		    				tips: '添加便签',
-		    				icon: 'fa-pencil-square-o',
-		    				click: function(e) {
-		    					var tagsCount = $('.winui-helper-content').children('.tags-content').length;
-		    					if(tagsCount >= 5) {
-		    						layer.msg('最多只能存五条便签', {
-		    							zIndex: layer.zIndex
-		    						});
-		    						return;
-		    					}
-		    					$('.winui-helper-content').append('<hr /><div class="tags-content"><textarea placeholder="请输入便签"></textarea></div>');
-		    					var $currTextarea = $('.winui-helper-content').children('.tags-content').eq(tagsCount).children('textarea');
-		    					$currTextarea.focus();
-		    					$currTextarea.on('blur', function() {
-		    						var _this = this;
-		    						var content = $(_this).val();
-		    						var id = $(_this).attr("rowid");
-		    						if($.trim(content) === '') {
-		    							if(isNull(id)){
-		    								$(_this).parent().prev().remove();
-		    								$(_this).remove();
-		    							}else{
-		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function(json){
-		    									if(json.returnCode == 0) {
-		    										$(_this).parent().prev().remove();
-		    										$(_this).remove();
-		    									}else{
-		    										winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		    									}
-		    								}});
-		    							}
-		    						}else{
-		    							if(isNull(id)){
-		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function(json){
-		    									if(json.returnCode == 0) {
-		    										$(_this).attr("rowid", json.bean.id);
-		    									}else{
-		    										winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		    									}
-		    								}});
-		    							}else{
-		    								AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function(json){
-		    									if(json.returnCode == 0) {
-		    									}else{
-		    										winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		    									}
-		    								}});
-		    							}
-		    						}
-		    					});
-		    				}
-		    			}, {
-		    				tips: '消息中心',
-		    				icon: 'fa-list-ul',
-		    				click: function(e) {
-		    					winui.window.openSysNotice(loadBottomMenuIcon);
-		    				}
-		    			}]);
-		
-		    			// 读取本地便签
-		    			AjaxPostUtil.request({url: reqBasePath + "stickynotes002", params: {}, type: 'json', method: "GET", callback: function(json){
-		    	    		if(json.returnCode == 0) {
-		    	    			var tags = json.rows;
-		    	    			$.each(tags, function(index, item) {
-		        					if(index >= 5)
-		        						return;
-		        					$('.winui-helper-content').append('<hr /><div class="tags-content"><textarea placeholder="请输入便签" rowid="' + item.id + '">' + item.content + '</textarea></div>');
-		        					$('.winui-helper-content').children('.tags-content').eq(index).children('textarea').on('blur', function() {
-		        						var _this = this;
-		        						var content = $(_this).val();
-		        						var id = $(_this).attr("rowid");
-		        						if($.trim(content) === '') {
-		        							if(isNull(id)){
-		        								$(_this).parent().prev().remove();
-		        								$(_this).remove();
-		        							}else{
-		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function(json){
-		        									if(json.returnCode == 0) {
-		        										$(_this).parent().prev().remove();
-		        										$(_this).remove();
-		        									}else{
-		        										winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		        									}
-		        								}});
-		        							}
-		        						}else{
-		        							if(isNull(id)){
-		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function(json){
-		        									if(json.returnCode == 0) {
-		        										$(_this).attr("rowid", json.bean.id);
-		        									}else{
-		        										winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		        									}
-		        								}});
-		        							}else{
-		        								AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function(json){
-		        									if(json.returnCode == 0) {
-		        									}else{
-		        										winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		        									}
-		        								}});
-		        							}
-		        						}
-		        					});
-		        				});
-		    	    		}else{
-		    	    			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		    	    		}
-		    			}});
-		
-		    			//加载消息通知
-		    			initNoticeList();
-		
-		    			//进度条加载到100
-		    			if(loadIndex != 100) {
-		    				clearInterval(loadInterval);
-		    				winuiLoad.animate(100);
-		    			}
-		
-		    			// 判断是否显示锁屏（这个要放在最后执行）
-		    			if(window.localStorage.getItem("lockscreen") == "true") {
-		    				winui.lockScreen(function(password) {
-		    					if(!isNull(password)) {
-		    						var pJudge = false;
-		    						AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function(json) {
+    	var currentUserMation = {};
+		// 获取当前登录员工信息
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			currentUserMation = data.bean;
+		});
+		$("#userPhoto").attr("src", fileBasePath + currentUserMation.userPhoto);
+		$("#userName").html(currentUserMation.userCode + '(' + currentUserMation.userName + ')');
+		userId = currentUserMation.id;
+		loadBottomMenuIcon = currentUserMation.loadBottomMenuIcon;
+		if(isNull(currentUserMation.winBgPicUrl)) {
+			currentUserMation.winBgPicUrl = fileBasePath + '/images/upload/winbgpic/default.jpg';
+		} else {
+			currentUserMation.winBgPicUrl = fileBasePath + currentUserMation.winBgPicUrl;
+		}
+		if(isNull(currentUserMation.winLockBgPicUrl)) {
+			currentUserMation.winLockBgPicUrl = fileBasePath + '/images/upload/winbgpic/default.jpg';
+		} else {
+			currentUserMation.winLockBgPicUrl = fileBasePath + currentUserMation.winLockBgPicUrl;
+		}
+
+		//获取桌面消息
+		AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
+			if(l.returnCode == 0) {
+				var deskTopName = new Array();
+				var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
+				deskTopName.push(defaultName);
+				var desktopSel = '<option value="winfixedpage00000000">' + defaultName + '</option>';
+				//初始化桌面
+				$.each(l.rows, function(i, item){
+					deskTopName.push(item.name);
+					desktopSel += '<option value="' + item.id + '">' + item.name + '</option>';
+					$("#winui-desktop").append('<article class="desktop-item-page section" id="' + item.id + '" art-title="' + item.name + '"></article>');
+				});
+				$('#winui-desktop').fullpage({
+					'navigation': true,
+					scrollingSpeed: 500,
+					navigationTooltips: deskTopName,
+					resize: true,
+					afterLoad: function(anchorLink, index){
+						var id = $("#winui-desktop").find(".desktop-item-page").eq(index - 1).attr("id");
+						$("#desktop-sel").val(id);
+					}
+				});
+				$("#desktop-sel").html(desktopSel);
+				$("#winui-desktop").find(".desktop-item-page").html("");
+				$("body").on('change', '#desktop-sel', function(e){
+					var val = $("#desktop-sel").prop('selectedIndex');
+					$.fn.fullpage.moveTo(++val);
+				});
+
+				//加载win系统内容
+				initWinConfig(currentUserMation);
+				//加载聊天
+				initTalk();
+				//加载右键
+				initRightMenu();
+				//扩展桌面助手工具
+				winui.helper.addTool([{
+					tips: '主题设置',
+					icon: 'fa-paw',
+					click: function (e) {
+						winui.window.openTheme(loadBottomMenuIcon);
+					}
+				}, {
+					tips: '添加便签',
+					icon: 'fa-pencil-square-o',
+					click: function(e) {
+						var tagsCount = $('.winui-helper-content').children('.tags-content').length;
+						if(tagsCount >= 5) {
+							layer.msg('最多只能存五条便签', {
+								zIndex: layer.zIndex
+							});
+							return;
+						}
+						$('.winui-helper-content').append('<hr /><div class="tags-content"><textarea placeholder="请输入便签"></textarea></div>');
+						var $currTextarea = $('.winui-helper-content').children('.tags-content').eq(tagsCount).children('textarea');
+						$currTextarea.focus();
+						$currTextarea.on('blur', function() {
+							var _this = this;
+							var content = $(_this).val();
+							var id = $(_this).attr("rowid");
+							if($.trim(content) === '') {
+								if(isNull(id)){
+									$(_this).parent().prev().remove();
+									$(_this).remove();
+								}else{
+									AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function(json){
 										if(json.returnCode == 0) {
-											pJudge = true;
+											$(_this).parent().prev().remove();
+											$(_this).remove();
 										}else{
-											pJudge = false;
-											winui.window.msg(json.returnMessage, {shift: 6});
+											winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
 										}
-									}, async: false});
-		    						return pJudge;
-		    					} else {
-		    						winui.window.msg('请输入密码', {
-		    							shift: 6
-		    						});
-		    						return false;
-		    					}
-		    				});
-		    			}
-		    			
-		    			matchingLanguage();
-                    } else {
-                    	winui.window.msg(l.returnMessage, {shift: 6});
-            		}
-           		}});
-    		} else {
-    			location.href = "login.html";
-    		}
-   		}});
+									}});
+								}
+							}else{
+								if(isNull(id)){
+									AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function(json){
+										if(json.returnCode == 0) {
+											$(_this).attr("rowid", json.bean.id);
+										}else{
+											winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+										}
+									}});
+								}else{
+									AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function(json){
+										if(json.returnCode == 0) {
+										}else{
+											winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+										}
+									}});
+								}
+							}
+						});
+					}
+				}, {
+					tips: '消息中心',
+					icon: 'fa-list-ul',
+					click: function(e) {
+						winui.window.openSysNotice(loadBottomMenuIcon);
+					}
+				}]);
+
+				// 读取本地便签
+				AjaxPostUtil.request({url: reqBasePath + "stickynotes002", params: {}, type: 'json', method: "GET", callback: function(json){
+					if(json.returnCode == 0) {
+						var tags = json.rows;
+						$.each(tags, function(index, item) {
+							if(index >= 5)
+								return;
+							$('.winui-helper-content').append('<hr /><div class="tags-content"><textarea placeholder="请输入便签" rowid="' + item.id + '">' + item.content + '</textarea></div>');
+							$('.winui-helper-content').children('.tags-content').eq(index).children('textarea').on('blur', function() {
+								var _this = this;
+								var content = $(_this).val();
+								var id = $(_this).attr("rowid");
+								if($.trim(content) === '') {
+									if(isNull(id)){
+										$(_this).parent().prev().remove();
+										$(_this).remove();
+									}else{
+										AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function(json){
+											if(json.returnCode == 0) {
+												$(_this).parent().prev().remove();
+												$(_this).remove();
+											}else{
+												winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+											}
+										}});
+									}
+								}else{
+									if(isNull(id)){
+										AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function(json){
+											if(json.returnCode == 0) {
+												$(_this).attr("rowid", json.bean.id);
+											}else{
+												winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+											}
+										}});
+									}else{
+										AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function(json){
+											if(json.returnCode == 0) {
+											}else{
+												winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+											}
+										}});
+									}
+								}
+							});
+						});
+					}else{
+						winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					}
+				}});
+
+				//加载消息通知
+				initNoticeList();
+
+				//进度条加载到100
+				if(loadIndex != 100) {
+					clearInterval(loadInterval);
+					winuiLoad.animate(100);
+				}
+
+				// 判断是否显示锁屏（这个要放在最后执行）
+				if(window.localStorage.getItem("lockscreen") == "true") {
+					winui.lockScreen(function(password) {
+						if(!isNull(password)) {
+							var pJudge = false;
+							AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function(json) {
+								if(json.returnCode == 0) {
+									pJudge = true;
+								}else{
+									pJudge = false;
+									winui.window.msg(json.returnMessage, {shift: 6});
+								}
+							}, async: false});
+							return pJudge;
+						} else {
+							winui.window.msg('请输入密码', {
+								shift: 6
+							});
+							return false;
+						}
+					});
+				}
+
+				matchingLanguage();
+			} else {
+				winui.window.msg(l.returnMessage, {shift: 6});
+			}
+		}});
     });
     
     /**
@@ -675,7 +674,7 @@ layui.config({
     }
     
     //初始化配置信息
-    function initWinConfig(json){
+    function initWinConfig(currentUserMation){
     	//设置窗口点击事件
     	$("body").on("click", ".sec-clsss-btn", function(e){
     		winui.window.close($('#childWindow').parent());
@@ -684,13 +683,13 @@ layui.config({
 
     	winui.config({
             settings: {
-                color: json.bean.winThemeColor,
-                taskbarMode: json.bean.winTaskPosition,
-                startSize: json.bean.winStartMenuSize,
-                bgSrc: json.bean.winBgPicUrl,
-                lockBgSrc: json.bean.winLockBgPicUrl,
-                vagueBgSrc: json.bean.winBgPicVague,
-                vagueBgSrcValue: json.bean.winBgPicVagueValue
+                color: currentUserMation.winThemeColor,
+                taskbarMode: currentUserMation.winTaskPosition,
+                startSize: currentUserMation.winStartMenuSize,
+                bgSrc: currentUserMation.winBgPicUrl,
+                lockBgSrc: currentUserMation.winLockBgPicUrl,
+                vagueBgSrc: currentUserMation.winBgPicVague,
+                vagueBgSrcValue: currentUserMation.winBgPicVagueValue
             },
             desktop: {//桌面菜单栏
                 options: {

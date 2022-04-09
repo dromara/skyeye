@@ -34,15 +34,12 @@ layui.config({
 		range : true
 	});
 
-	AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#title").html("会议室预定申请单-" + getYMDFormatDate() + '-' + json.bean.userName);
-			$("#name").html(json.bean.userName);
-			matchingLanguage();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		}
-	}});
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		$("#title").html("会议室预定申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
+		$("#name").html(data.bean.userName);
+	});
+	matchingLanguage();
 
 	skyeyeEnclosure.init('enclosureUpload');
 	// 保存为草稿

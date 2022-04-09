@@ -201,24 +201,21 @@ layui.config({
 		});
 	}
 	
-	var loadCompany = false;
-	//初始化公司
+	// 初始化公司
 	function initCompany(){
-		loadCompany = true;
-		AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-      		if(json.returnCode == 0){
-				systemCommonUtil.getSysCompanyList(function(data){
-					// 加载企业数据
-					$("#companyList").html(getDataUseHandlebars(selTemplate, data));
-					$("#companyList").val(json.bean.companyId);
-					form.render('select');
-					initDepartment();
-					initTable();
-				});
-      		}else{
-      			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-      		}
-      	}});
+		var companyId = "";
+		// 获取当前登录员工信息
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			companyId = data.bean.companyId;
+		});
+		// 加载企业数据
+		systemCommonUtil.getSysCompanyList(function(data){
+			$("#companyList").html(getDataUseHandlebars(selTemplate, data));
+			$("#companyList").val(companyId);
+			form.render('select');
+		});
+		initDepartment();
+		initTable();
 	}
 	
 	//初始化部门

@@ -59,23 +59,21 @@ layui.config({
 		//加载用户信息
 		function loadUserMation(){
 			if(!isNull(getCookie('userToken'))){
-				AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-					if(json.returnCode == 0){
-						var str = '<img alt="' + json.bean.userName + '" src="' + fileBasePath + json.bean.userPhoto + '"/>'
-						+ '<font>' + json.bean.userName + '</font>'
+				// 获取当前登录员工信息
+				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+					var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
+						+ '<font>' + data.bean.userName + '</font>'
 						+ '<font id="consoleDesk">控制台</font>'
 						+ '<font id="exitBtn">退出</font>';
-						$("#operatorBtn").html(str);
-						$("#file-operator").html('<button class="layui-btn layui-btn-primary" id="saveBtn"><language showName="com.skyeye.save"></language></button>');
-					}else{
-						$("#operatorBtn").html('<font id="loginBtn">登陆</font>');
-					}
-					loadFileMation();
-				}});
+					$("#operatorBtn").html(str);
+					$("#file-operator").html('<button class="layui-btn layui-btn-primary" id="saveBtn"><language showName="com.skyeye.save"></language></button>');
+				}, function (){
+					$("#operatorBtn").html('<font id="loginBtn">登陆</font>');
+				});
 			}else{
 				$("#operatorBtn").html('<font id="loginBtn">登陆</font>');
-				loadFileMation();
 			}
+			loadFileMation();
 		}
 		
 		//加载列表

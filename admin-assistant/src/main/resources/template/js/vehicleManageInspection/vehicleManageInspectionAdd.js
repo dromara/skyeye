@@ -11,17 +11,13 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 	    	laydate = layui.laydate;
-	    
-    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-    		if(json.returnCode == 0) {
-    			var userId = json.bean.id;
-    			var userName = json.bean.userName;
-    			$("#inspectionTitle").html("车辆年检登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random() * 100);
-    		}else {
-    			location.href = "login.html";
-    		}
-		}});
-    	
+
+		// 获取当前登录员工信息
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			var userName = data.bean.userName;
+			$("#inspectionTitle").html("车辆年检登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random() * 100);
+		});
+
 	    // 车牌号
  		showGrid({
 		 	id: "licensePlate",

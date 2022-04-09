@@ -1,4 +1,5 @@
 
+// 个人中心
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -13,20 +14,16 @@ layui.config({
 		device = layui.device();
 		
 	var forumTemplate = $('#forumTemplate').html();
-	
-	// 从缓存中获取用户信息
-	AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$(".layadmin-homepage-pad-img").attr("src", fileBasePath + json.bean.userPhoto);
-			$(".layadmin-homepage-font").html(json.bean.jobNumber + " " + json.bean.userName);
-			$(".layadmin-homepage-min-font").html(json.bean.companyName + " " + json.bean.departmentName + " " + json.bean.jobName);
-			loadMyOtherMation();
-			matchingLanguage();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-		}
-	}});
-	
+
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		$(".layadmin-homepage-pad-img").attr("src", fileBasePath + data.bean.userPhoto);
+		$(".layadmin-homepage-font").html(data.bean.jobNumber + " " + data.bean.userName);
+		$(".layadmin-homepage-min-font").html(data.bean.companyName + " " + data.bean.departmentName + " " + data.bean.jobName);
+	});
+	loadMyOtherMation();
+	matchingLanguage();
+
 	// 加载我的其他信息
 	function loadMyOtherMation(){
 		AjaxPostUtil.request({url: reqBasePath + "sys032", params: {}, type: 'json', callback: function(json) {

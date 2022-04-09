@@ -18,15 +18,12 @@ layui.config({
 		var usetableTemplate = $("#usetableTemplate").html();
 		var selOption = getFileContent('tpl/template/select-option.tpl');
 
-		AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				$("#revertTitle").html("印章归还申请单-" + getYMDFormatDate() + '-' + json.bean.userName);
-				$("#revertName").html(json.bean.userName);
-				initSealNameHtml();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
-		}});
+		// 获取当前登录员工信息
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			$("#revertTitle").html("印章归还申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
+			$("#revertName").html(data.bean.userName);
+		});
+		initSealNameHtml();
 
 		//初始化印章名称
 		function initSealNameHtml() {

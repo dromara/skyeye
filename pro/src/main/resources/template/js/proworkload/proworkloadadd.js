@@ -19,21 +19,19 @@ layui.config({
 	var usetableTemplate = $("#usetableTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
-	AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#title").val(getYMDFormatDate());
-			$("#writePeople").html(json.bean.userName);
-			proUtil.queryMyProjectsList(function (data){
-				proList = data.rows;
-				$("#proId").html(getDataUseHandlebars(selOption, data));
-				form.render('select');
-			});
-			addRow();
-			matchingLanguage();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		}
-	}});
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		$("#writePeople").html(data.bean.userName);
+	});
+
+	$("#title").val(getYMDFormatDate());
+	proUtil.queryMyProjectsList(function (data){
+		proList = data.rows;
+		$("#proId").html(getDataUseHandlebars(selOption, data));
+		form.render('select');
+	});
+	addRow();
+	matchingLanguage();
 
 	//所属项目变化事件
 	form.on('select(proIdProperty)', function(data) {
@@ -48,7 +46,7 @@ layui.config({
 						$("#title").val(item.name + "-" + item.customerName + "-" + getYMDFormatDate());
 					}
 					//获取我的任务
-					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: item.id}, type: 'json', callback: function(json) {
+					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: item.id}, type: 'json', method: "POST", callback: function(json) {
 						if(json.returnCode == 0) {
 							taskListHtml = getDataUseHandlebars(selOption, json);
 							resetTableTask();

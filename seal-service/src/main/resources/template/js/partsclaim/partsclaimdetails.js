@@ -18,13 +18,10 @@ layui.config({
 		 	pagination: false,
 		 	template: beanTemplate,
 		 	ajaxSendAfter:function(json){
-				AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(data) {
-					if(data.returnCode == 0) {
-						$("#orderDetailTitle").html(data.bean.companyName + '配件申领订单');
-					} else {
-						winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-					}
-				}});
+				// 获取当前登录员工信息
+				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+					$("#orderDetailTitle").html(data.bean.companyName + '配件申领订单');
+				});
 		 		//相关附件回显
 			    if(!isNull(json.bean.enclosureInfo) && json.bean.enclosureInfo.length > 0){
 			    	var str = "";

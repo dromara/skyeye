@@ -32,23 +32,18 @@ layui.config({
 			}
 		}
 	});
-	
-	// 获取用户信息
-	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
-			var str = '<img alt="' + json.bean.userName + '" src="' + fileBasePath + json.bean.userPhoto + '"/>'
-					+ '<font>' + json.bean.userName + '</font>'
-					+ '<font id="consoleDesk">控制台</font>'
-					+ '<font id="exitBtn">退出</font>';
-			$("#operatorBtn").html(str);
-			
-			// 默认加载我的输出
-			myOutputList();
-		} else {
-			location.href = "login.html";
-		}
-	}});
-	
+
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
+			+ '<font>' + data.bean.userName + '</font>'
+			+ '<font id="consoleDesk">控制台</font>'
+			+ '<font id="exitBtn">退出</font>';
+		$("#operatorBtn").html(str);
+	});
+	// 默认加载我的输出
+	myOutputList();
+
 	// 我的输出列表
 	function myOutputList(){
 		table.render({
