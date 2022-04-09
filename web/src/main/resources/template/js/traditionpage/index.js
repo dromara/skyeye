@@ -33,23 +33,18 @@ layui.config({
 	authBtn('1645959237037');
 	
     $(function () {
-    	//获取用户信息
-    	AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
-   				userId = json.bean.id;
-   				$("#userPhoto").attr("src", fileBasePath + json.bean.userPhoto);
-    			$("#userName").html(json.bean.userCode + '(' + json.bean.userName + ')');
-   				
-   				//加载首页
-   				initDefaultPage();
-   				//加载菜单数据
-   				loadMenuListToShow();
-   				
-   				etiger.socket.init();
-    		} else {
-    			location.href = "login.html";
-    		}
-   		}});
+		// 获取当前登录员工信息
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			userId = data.bean.id;
+			$("#userPhoto").attr("src", fileBasePath + data.bean.userPhoto);
+			$("#userName").html(data.bean.userCode + '(' + data.bean.userName + ')');
+		});
+		// 加载首页
+		initDefaultPage();
+		// 加载菜单数据
+		loadMenuListToShow();
+
+		etiger.socket.init();
     });
     
     //搜索自动补充数据来源

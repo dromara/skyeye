@@ -1,3 +1,5 @@
+
+// 销售订单统筹
 layui.config({
 	base: basePath,
 	version: skyeyeVersion
@@ -18,24 +20,9 @@ layui.config({
 		 	pagination: false,
 		 	template: beanTemplate,
 		 	ajaxSendAfter:function(json){
-		 		AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(data) {
-					if(data.returnCode == 0) {
-						$("#orderDetailTitle").html(data.bean.companyName + '销售订单');
-					} else {
-						winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-					}
-				}});
-		 		if(json.bean.status == 0){
-		 			$("#statusName").html("<span class='state-down'>未审核</span>");
-		 		}else if(json.bean.status == 1){
-		 			$("#statusName").html("<span class='state-up'>审核中</span>");
-		 		}else if(json.bean.status == 2){
-		 			$("#statusName").html("<span class='state-new'>审核通过</span>");
-		 		}else if(json.bean.status == 3){
-		 			$("#statusName").html("<span class='state-down'>拒绝通过</span>");
-		 		}else if(json.bean.status == 4){
-		 			$("#statusName").html("<span class='state-new'>已完成</span>");
-		 		}
+				// 销售订单状态
+		 		$("#statusName").html(activitiUtil.showStateName(json.bean.state, json.bean.submitType));
+
 				laydate.render({
 					elem: '#lateDesignTime',
 					type: 'datetime',

@@ -12,31 +12,29 @@ layui.config({
 	    var $ = layui.$,
 	    	laydate = layui.laydate;
 	    var insuranceaddtableTemplate = $('#insuranceaddtableTemplate').html();
-	    
-	    AjaxPostUtil.request({url:reqBasePath + "login002", params:{}, type: 'json', callback: function(json){
-    		if(json.returnCode == 0) {
-    			var userName = json.bean.userName;
-    			$("#insuranceTitle").html("车辆保险登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random()*100);
-    			AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function(json){
-    	    		if(json.returnCode == 0) {
-    	    			var row = json.rows;
-    	 		 		for(var i = 0;i < json.total; i++){
-    	 		 			var params = {
-	 		 	        		id: row[i].id,
-	 		 	        		name: row[i].name
-	 		 	        	};
-    	 		 			$("#addTable").append(getDataUseHandlebars(insuranceaddtableTemplate, params));
-    	 		 			form.render('checkbox');
-    	 		 		}
-    	    		}else {
-    	    			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-    	    		}
-    			}});
-    		}else {
-    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    		}
-	    }});
-	    
+
+		// 获取当前登录员工信息
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			var userName = data.bean.userName;
+			$("#insuranceTitle").html("车辆保险登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random()*100);
+		});
+		
+		AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function(json){
+			if(json.returnCode == 0) {
+				var row = json.rows;
+				for(var i = 0;i < json.total; i++){
+					var params = {
+						id: row[i].id,
+						name: row[i].name
+					};
+					$("#addTable").append(getDataUseHandlebars(insuranceaddtableTemplate, params));
+					form.render('checkbox');
+				}
+			}else {
+				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			}
+		}});
+
 	    //车牌号
  		showGrid({
 		 	id: "licensePlate",

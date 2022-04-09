@@ -1,4 +1,5 @@
 
+// 销售退货订单
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -18,13 +19,6 @@ layui.config({
 		 	pagination: false,
 		 	template: beanTemplate,
 		 	ajaxSendAfter:function(json){
-		 		AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(data) {
-					if(data.returnCode == 0) {
-						$("#orderDetailTitle").html(data.bean.companyName + '销售退货订单');
-					} else {
-						winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-					}
-				}, async: false});
 				$("#statusName").html(activitiUtil.showStateName(json.bean.state, json.bean.submitType));
 
 				// 加载动态表单

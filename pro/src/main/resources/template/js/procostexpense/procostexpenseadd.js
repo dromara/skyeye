@@ -24,27 +24,25 @@ layui.config({
 		btns: ['now', 'confirm']
 	});
 
-	AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#title").val('费用报销-' + json.bean.userName + '-' + getYMDFormatDate());
-			$("#writePeople").html(json.bean.userName);
-			matchingLanguage();
-			//支出分类
-			AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
-				if(data.returnCode == 0) {
-					costTypeList = getDataUseHandlebars(selOption, data);
-					addRow();
-					proUtil.queryMyProjectsList(function (data){
-						$("#proId").html(getDataUseHandlebars(selOption, data));
-						form.render('select');
-					});
-					departmentsSelect();
-				} else {
-					winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-				}
-			}});
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		$("#title").val('费用报销-' + data.bean.userName + '-' + getYMDFormatDate());
+		$("#writePeople").html(data.bean.userName);
+	});
+
+	matchingLanguage();
+	//支出分类
+	AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
+		if(data.returnCode == 0) {
+			costTypeList = getDataUseHandlebars(selOption, data);
+			addRow();
+			proUtil.queryMyProjectsList(function (data){
+				$("#proId").html(getDataUseHandlebars(selOption, data));
+				form.render('select');
+			});
+			departmentsSelect();
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 

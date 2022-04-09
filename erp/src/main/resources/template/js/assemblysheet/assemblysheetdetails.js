@@ -17,22 +17,15 @@ layui.config({
 		 	pagination: false,
 		 	template: beanTemplate,
 		 	ajaxSendAfter:function(json){
-		 		AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', callback: function(data) {
-					if(data.returnCode == 0) {
-						$("#orderDetailTitle").html(data.bean.companyName + '组装订单');
-					} else {
-						winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-					}
-				}});
-				if(json.bean.status == 0){
+				if(json.bean.state == 0){
 		 			$("#statusName").html("<span class='state-down'>未审核</span>");
-		 		}else if(json.bean.status == 1){
+		 		}else if(json.bean.state == 1){
 		 			$("#statusName").html("<span class='state-up'>审核中</span>");
-		 		}else if(json.bean.status == 2){
+		 		}else if(json.bean.state == 2){
 		 			$("#statusName").html("<span class='state-new'>已组装</span>");
-		 		}else if(json.bean.status == 3){
+		 		}else if(json.bean.state == 3){
 		 			$("#statusName").html("<span class='state-down'>拒绝通过</span>");
-		 		}else if(json.bean.status == 4){
+		 		}else if(json.bean.state == 4){
 		 			$("#statusName").html("<span class='state-new'>已组装</span>");
 		 		}
 		 		matchingLanguage();
@@ -40,7 +33,7 @@ layui.config({
 		 	}
 		});
 		
-		//打印
+		// 打印
 		$("body").on("click", "#jprint", function(e){
 			$("#showForm").jqprint({
 				title: sysMainMation.mationTitle,
