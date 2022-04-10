@@ -25,9 +25,9 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'id', title: '模型编号', width: 100 },
-	        { field: 'name', title: '模型名称', width: 120 },
+	        { field: 'name', title: '模型名称', width: 150 },
 	        { field: 'key', title: '编码', width: 120 },
-			{ field: 'processKey', title: 'key', width: 160 },
+			{ field: 'processKey', title: 'key', width: 250 },
 	        { field: 'version', title: '版本', width: 80},
 	        { field: 'deploymentId', title: '发布状态', align: "center", width: 80, templet: function(d){
 	        	if(isNull(d.deploymentId)){
@@ -38,11 +38,7 @@ layui.config({
 	        }},
 	        { field: 'deploymentId', title: '部署id', width: 100},
 	        { field: 'processDefinitionVersion', title: '部署版本', width: 100},
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150, templet: function(d){
-	        	var str = d.createTime.toString();
-	        	str = str.substring(0, str.length - 3);
-	        	return date('Y-m-d H:i:s', str);
-	        }},
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150},
 	        { field: 'metaInfo', title: '元数据', width: 120},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 340, toolbar: '#tableBar'}
 	    ]],

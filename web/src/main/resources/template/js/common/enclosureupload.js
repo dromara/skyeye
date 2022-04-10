@@ -31,10 +31,10 @@ layui.config({
 	        }
 	        return false;
 	    });
-	    
-	    /********* tree 处理   start *************/
+
+		var ztree = null;
+		/********* tree 处理   start *************/
 	    loadMyEnclosureList();
-	    var ztree = null;
 	    function loadMyEnclosureList(){
 	    	fsTree.render({
 	    		id: "treeDemo",
@@ -50,11 +50,11 @@ layui.config({
 	    		onCheck: zTreeOnCheck //选中回调函数
 	    	}, function(id){
 	    		ztree = $.fn.zTree.getZTreeObj(id);
-	    		var zTree = ztree.getCheckedNodes(false);  
-			    for (var i = 0; i < zTree.length; i++) {
+	    		var zTreeChecked = ztree.getCheckedNodes(false);
+			    for (var i = 0; i < zTreeChecked.length; i++) {
 			    	for(var j = 0; j < enclosureList.length; j++){
-			    		if(zTree[i].id == enclosureList[j].id){
-			    			ztree.checkNode(zTree[i], true, true);
+			    		if(zTreeChecked[i].id == enclosureList[j].id){
+			    			ztree.checkNode(zTreeChecked[i], true, true);
 			    		}
 			    	}
 			    }  

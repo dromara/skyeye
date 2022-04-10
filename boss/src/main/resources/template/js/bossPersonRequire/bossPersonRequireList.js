@@ -38,7 +38,7 @@ layui.config({
             { field: 'recruitJobName', title: '需求岗位', width: 150 },
             { field: 'recruitDepartmentName', title: '需求部门', width: 140 },
             { field: 'wages', title: '薪资', width: 120 },
-            { field: 'recruitNum', title: '需求人数', width: 140 },
+            { field: 'recruitNum', title: '需求人数', width: 100 },
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function(d){
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
@@ -54,11 +54,11 @@ layui.config({
     });
 
     // 用品采购的操作事件
-    table.on('tool(caigouTable)', function (obj) {
+    table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'dedails') { // 详情
-            dedails(data);
+        if (layEvent === 'details') { // 详情
+            details(data);
         }else if (layEvent === 'edit') { // 编辑
             edit(data);
         }else if (layEvent === 'subApproval') { // 提交审批
@@ -93,7 +93,7 @@ layui.config({
     function revoke(data){
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "revokeBossPersonRequire", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "revokeBossPersonRequire", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg("提交成功", {icon: 1, time: 2000});
                     loadTable();
@@ -132,7 +132,7 @@ layui.config({
                     id: data.id,
                     approvalId: approvalId
                 };
-                AjaxPostUtil.request({url: flowableBasePath + "editBossPersonRequireToSubApproval", params: params, type: 'json', callback: function(json){
+                AjaxPostUtil.request({url: flowableBasePath + "editBossPersonRequireToSubApproval", params: params, type: 'json', method: "POST", callback: function(json){
                     if(json.returnCode == 0){
                         winui.window.msg("提交成功", {icon: 1, time: 2000});
                         loadTable();
@@ -148,7 +148,7 @@ layui.config({
     function cancellation(data){
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "updateBossPersonRequireToCancellation", params: {id: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "updateBossPersonRequireToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                     loadTable();
@@ -160,7 +160,7 @@ layui.config({
     }
 
     // 详情
-    function dedails(data){
+    function details(data){
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossPersonRequire/bossPersonRequireDetails.html",
