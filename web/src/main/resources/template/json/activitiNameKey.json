@@ -32,5 +32,7 @@
     "assetArticlesUse": {"name": "用品领用", "key": "../../tpl/assetArticlesUse/assetArticlesUseAdd.html", "complate": true},
     "assetArticlesPurchase": {"name": "用品采购", "key": "../../tpl/assetArticlesPurchase/assetArticlesPurchaseAdd.html", "complate": true},
 
-    "incomeOrder": {"name": "财务明细账", "key": "../../tpl/income/incomeAdd.html", "complate": true}
+    "incomeOrder": {"name": "财务明细账", "key": "../../tpl/income/incomeAdd.html", "complate": true},
+
+    "bossPersonRequire": {"name": "财务明细账", "key": "../../tpl/bossPersonRequire/bossPersonRequireAdd.html", "complate": true}
 }

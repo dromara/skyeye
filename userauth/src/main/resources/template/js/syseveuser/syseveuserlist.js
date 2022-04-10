@@ -111,19 +111,12 @@ layui.config({
 	    });
 	}
 	
-	// 初始化职位
 	function initJob(){
-		showGrid({
-		 	id: "jobList",
-		 	url: reqBasePath + "companyjob007",
-		 	params: {departmentId: departmentId},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
-		 		form.render('select');
-		 	}
-	    });
+		// 根据部门id获取岗位集合
+		systemCommonUtil.queryJobListByDepartmentId(departmentId, function(data) {
+			$("#jobList").html(getDataUseHandlebars(selTemplate, data));
+			form.render('select');
+		});
 	}
 	
 	form.render();

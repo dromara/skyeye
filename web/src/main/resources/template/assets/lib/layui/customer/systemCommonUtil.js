@@ -46,6 +46,23 @@ var systemCommonUtil = {
     },
 
     /**
+     * 根据部门id获取岗位集合
+     *
+     * @param callback 回执函数
+     */
+    queryJobListByDepartmentId: function (departmentId, callback){
+        AjaxPostUtil.request({url: reqBasePath + "companyjob007", params: {departmentId: departmentId}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
+    /**
      * 获取当前登录员工信息
      *
      * @param callback 回执函数
