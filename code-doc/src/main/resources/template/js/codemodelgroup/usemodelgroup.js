@@ -1,8 +1,4 @@
 
-var tableColumn = '';//数据库表中的列
-
-var result = '';//html/xml/js添加的内容项
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -12,7 +8,6 @@ layui.config({
            'solr', 'sql', 'vue'], function (exports) {
 	var index = parent.layer.getFrameIndex(window.name);
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -21,11 +16,9 @@ layui.config({
 	
 	var editId = "";//当前编辑的模板id
 	
-	$("#addContentToHTMLorJS").hide();
-	
 	var list = [];//存储模板生成集合
 	//集合内容
-	//var s = {
+	//{
 	//		modelId:模板id,
 	//		content:当前内容,
 	//		tableName:表名,
@@ -48,7 +41,10 @@ layui.config({
         	}else{
         		for(var i = 0; i < subData.length; i++){
         			subData[i].modelContent = "";
-        			subData[i].content = subData[i].content.replace(/\+/g, "%2B").replace(/\&/g, "%26").replace(/\%/g, "%25");
+        			subData[i].content = subData[i].content
+						.replace(/\+/g, "%2B")
+						.replace(/\&/g, "%26")
+						.replace(/\%/g, "%25");
         		}
         		AjaxPostUtil.request({url:reqBasePath + "codemodel014", params:{jsonData: JSON.stringify(subData)}, type: 'json', callback: function(json){
         			if(json.returnCode == 0){
@@ -64,7 +60,8 @@ layui.config({
         }
         return false;
 	});
-	
+
+	// 展示模板内容的对象
 	var editor = CodeMirror.fromTextArea(document.getElementById("modelContent"), {
         mode : "text/x-java",  // 模式
         theme : "eclipse",  // CSS样式选择
@@ -91,62 +88,14 @@ layui.config({
         matchBrackets: true,
     });
 	
-	textEditor.on("change",function(){
-		for(var i = 0; i < list.length; i++){
-			if(list[i].modelId == editId){
-				list[i].content = textEditor.getValue();
-				break;
-			}
-		}
-	});
-	
-	var showCreateHtmlMation = CodeMirror.fromTextArea(document.getElementById("showCreateHtmlMation"), {
-        mode : "xml",  // 模式
-        theme : "eclipse",  // CSS样式选择
-        indentUnit : 2,  // 缩进单位，默认2
-        smartIndent : true,  // 是否智能缩进
-        tabSize : 4,  // Tab缩进，默认4
-        readOnly : false,  // 是否只读，默认false
-        showCursorWhenSelecting : true,
-        lineNumbers : true,  // 是否显示行号
-        styleActiveLine: true, //line选择是是否加亮
-        matchBrackets: true,
-    });
-	
-	var showCreateRequireMation = CodeMirror.fromTextArea(document.getElementById("showCreateRequireMation"), {
-        mode : "xml",  // 模式
-        theme : "eclipse",  // CSS样式选择
-        indentUnit : 2,  // 缩进单位，默认2
-        smartIndent : true,  // 是否智能缩进
-        tabSize : 4,  // Tab缩进，默认4
-        readOnly : false,  // 是否只读，默认false
-        showCursorWhenSelecting : true,
-        lineNumbers : true,  // 是否显示行号
-        styleActiveLine: true, //line选择是是否加亮
-        matchBrackets: true,
-    });
-	
-	var showCreateJsMation = CodeMirror.fromTextArea(document.getElementById("showCreateJsMation"), {
-        mode : "text/javascript",  // 模式
-        theme : "eclipse",  // CSS样式选择
-        indentUnit : 2,  // 缩进单位，默认2
-        smartIndent : true,  // 是否智能缩进
-        tabSize : 4,  // Tab缩进，默认4
-        readOnly : false,  // 是否只读，默认false
-        showCursorWhenSelecting : true,
-        lineNumbers : true,  // 是否显示行号
-        styleActiveLine: true, //line选择是是否加亮
-        matchBrackets: true,
-    });
-	
-	//加载模块
+	// 加载模块
 	showGrid({
 	 	id: "modelList",
 	 	url: reqBasePath + "codemodel013",
 	 	params: {groupId: parent.rowId},
 	 	pagination: false,
-	 	template: getFileContent('tpl/codemodelgroup/usemodelgroupmodel.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
+	 	template: getFileContent('tpl/codemodelgroup/codeModelListItem.tpl'),
+	 	ajaxSendLoadBefore: function(hdb, json){
 	 	},
 	 	options: {
 	 		'click .selModel':function(index, row){//查看模板
@@ -160,7 +109,7 @@ layui.config({
 		            type: 1,
 		            title: '模板内容',
 		            shade: 0.3,
-		            area: ['1200px', '600px'],
+		            area: ['90vw', '90vh'],
 		            content: $("#modelContentDiv").html(),
 		        });
 	 		},
@@ -170,50 +119,24 @@ layui.config({
 	 				if(isNull(s)){
 	 					winui.window.msg('请先转换模板', {icon: 2,time: 2000});
 	 				}else{
-	 					if(row.modelType == 'xml' || row.modelType == 'javascript' || row.modelType == 'html'){
-	 						$("#addContentToHTMLorJS").show();
-	 					}else{
-	 						$("#addContentToHTMLorJS").hide();
-	 					}
 	 					editId = row.id;
 	 					var mode = returnModel(row.modelType);
 	 					if (!isNull(mode.length)) {
 	 						textEditor.setOption('mode', mode);
 	 					} 
-	 					textEditor.setOption('readOnly', false);
 	 					textEditor.setValue(s.content);
 	 				}
-	 			}else{
-	 				winui.window.msg('请先选择数据库表名检索生成', {icon: 2,time: 2000});
-	 			}
-	 		},
-	 		'click .createResult':function(index, row){//转换结果
-	 			if(jsCreateClick){
-	 				var content = replaceModelContent(row.modelContent, $("#ControllerPackageName").val(), $("#ServicePackageName").val(),
-	 						$("#ServiceImplPackageName").val(), $("#DaoPackageName").val(), $("#tableZhName").val(),
-	 						$("#tableFirstISlowerName").val(), $("#tableISlowerName").val(), $("#tableBzName").val());
-	 				var s = {
- 						modelId: row.id,
- 						content: content,
- 						tableName: $("#tableName").val(),
- 						groupId: parent.rowId,
- 						modelName: row.modelName,
- 						modelContent: row.modelContent,
- 						fileName: $("#tableZhName").val() + row.modelName,
- 						modelType: row.modelType,
-	 				};
-	 				insertListIn(list, s);
-	 				winui.window.msg('转换成功', {icon: 1,time: 2000});
 	 			}else{
 	 				winui.window.msg('请先选择数据库表名检索生成', {icon: 2,time: 2000});
 	 			}
 	 		}
 	 	},
 	 	ajaxSendAfter:function(json){
+			list = [].concat(json.rows);
 	 	}
 	});
 	
-	//加载数据库表列表
+	// 加载数据库表列表
 	showGrid({
 	 	id: "tableName",
 	 	url: reqBasePath + "database002",
@@ -227,96 +150,73 @@ layui.config({
 	 	}
 	});
 	
-	//转换结果效果切换
-	$("body").on("click", ".createResult", function(e){
-		if(jsCreateClick){
-			$(this).addClass("layui-btn-normal");
-		}
-	});
-	
-	//给html、xml或者js添加内容
-	$("body").on("click", "#addContentToHTMLorJS", function(e){
-		_openNewWindows({
-			url: "../../tpl/codemodelgroup/addcontenttohtmlorjs.html", 
-			title: "添加内容",
-			pageId: "addcontenttohtmlorjs",
-			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	showCreateHtmlMation.setValue(result.htmlContent);
-                	showCreateRequireMation.setValue("前端限制参数：" + result.formermation + "\n后端限制参数：" + result.aftermation);
-                	showCreateJsMation.setValue(result.jsContent);
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                }
-			}});
-	});
-	
-	//txtcenter DIV内的输入框内容变化事件
+	// txtcenter DIV内的输入框内容变化事件
 	$("body").on("keyup", ".txtcenter input", function(e){
 		for(var i = 0; i < list.length; i++){
-			list[i].content = replaceModelContent(list[i].modelContent, $("#ControllerPackageName").val(), $("#ServicePackageName").val(),
-								$("#ServiceImplPackageName").val(), $("#DaoPackageName").val(), $("#tableZhName").val(),
-		 						$("#tableFirstISlowerName").val(), $("#tableISlowerName").val(), $("#tableBzName").val());
+			list[i].content = codeDocUtil.replaceModelContent(list[i].modelContent);
 			list[i].fileName = $("#tableZhName").val() + list[i].modelName;
 			if(list[i].modelId == editId){
-				textEditor.setOption('readOnly', false);
 				textEditor.setValue(list[i].content);
 			}
 		}
 	});
 	
-	//检索生成
+	// 检索数据
 	$("body").on("click", "#jsCreate", function(e){
-		showGrid({
-    	 	id: "tableParameterBody",
-    	 	url: reqBasePath + "codemodel011",
-    	 	params: {tableName: $("#tableName").val()},
-    	 	pagination: false,
-    	 	template: getFileContent('tpl/codemodelgroup/usemodelgrouptableparameter.tpl'),
-    	 	ajaxSendLoadBefore: function(hdb){
-    	 	},
-    	 	ajaxSendAfter:function(json){
-    	 		tableColumn = json;
-    	 		AjaxPostUtil.request({url:reqBasePath + "codemodel012", params:{tableName: $("#tableName").val()}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
-	 	   				$(".createResult").removeClass("layui-btn-normal");
-	 	   				jsCreateClick = true;
-	 	   				list = [];
-	 	   				editId = "";
-		 	   			textEditor.setOption('readOnly', true);
-	 					textEditor.setValue('');
-	 	   				$("#tableZhName").val(json.bean.tableName);
-	 	   				$("#tableFirstISlowerName").val(json.bean.tableFirstISlowerName);
-	 	   				$("#ControllerPackageName").val(json.bean.ControllerPackageName);
-	 	   				$("#ServicePackageName").val(json.bean.ServicePackageName);
-    	 	   			$("#ServiceImplPackageName").val(json.bean.ServiceImplPackageName);
-    	 	   			$("#DaoPackageName").val(json.bean.DaoPackageName);
-    	 	   			$("#tableISlowerName").val(json.bean.tableISlowerName);
-    	 	   			$("#tableBzName").val(json.bean.tableBzName);
-    	 	   			//遍历模板
+		AjaxPostUtil.request({url: reqBasePath + "codemodel011", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(data){
+			if(data.returnCode == 0) {
+				console.log(data)
+				AjaxPostUtil.request({url: reqBasePath + "codemodel012", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(json){
+					if(json.returnCode == 0) {
+						jsCreateClick = true;
+						editId = "";
+						textEditor.setValue('');
+						$("#tableZhName").val(json.bean.tableName);
+						$("#tableFirstISlowerName").val(json.bean.tableFirstISlowerName);
+						$("#ControllerPackageName").val(json.bean.ControllerPackageName);
+						$("#ServicePackageName").val(json.bean.ServicePackageName);
+						$("#ServiceImplPackageName").val(json.bean.ServiceImplPackageName);
+						$("#DaoPackageName").val(json.bean.DaoPackageName);
+						$("#tableISlowerName").val(json.bean.tableISlowerName);
+						$("#tableBzName").val(json.bean.tableBzName);
+						// 遍历模板赋值文件名
 						$('#modelList').find('li').each(function() {
 							var label = $(this).find("label");
-							if(($("#" + label.attr("relation")).attr('modeltype') == 'javascript'
-								|| $("#" + label.attr("relation")).attr('modeltype') == 'xml'
-								|| $("#" + label.attr("relation")).attr('modeltype') == 'html') && $("#" + label.attr("relation")).attr('modelname') != 'Mapper'){
-								$("#" + label.attr("relation")).val(json.bean.tableISlowerName + label.attr("thiscontent"));
+							var modleType = label.attr('modeltype');
+							if(modleType == 'Java' || modleType == 'xml') {
+								label.html(json.bean.tableName + label.attr("thiscontent"));
 							}else{
-								$("#" + label.attr("relation")).val(json.bean.tableName + label.attr("thiscontent"));
+								label.html(json.bean.tableFirstISlowerName + label.attr("thiscontent"));
 							}
 						});
-						//模板内容转换
-		 				var createResultList = $("#modelList").find(".code-model-li").find(".createResult");//获取所有模板中的转换按钮
-		 				$.each(createResultList, function(i, item){
-		 					$(item).click();
-		 				});
+						transformResult();
 						winui.window.msg('检索成功', {icon: 1,time: 2000});
-	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-	 	   			}
-	 	   		}});
-    	 	}
-    	});
+					}else{
+						winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					}
+				}});
+			}else{
+				winui.window.msg(data.returnMessage, {icon: 2,time: 2000});
+			}
+		}});
 	});
+
+	function transformResult() {
+		$.each(list, function (i, row){
+			var content = codeDocUtil.replaceModelContent(row.modelContent);
+			var s = {
+				modelId: row.id,
+				content: content,
+				tableName: $("#tableName").val(),
+				groupId: parent.rowId,
+				modelName: row.modelName,
+				modelContent: row.modelContent,
+				fileName: $("#tableZhName").val() + row.modelName,
+				modelType: row.modelType,
+			};
+			insertListIn(list, s);
+		});
+	}
 	
 	/**
 	 * 向集合中添加新元素

@@ -28,6 +28,7 @@ var customerJS = {
 	"indexMenu": "../../assets/lib/layui/customer/indexMenu.js", // 菜单按钮模块相关工具
 	"proUtil": "../../assets/lib/layui/customer/proUtil.js", // 项目管理模块相关工具
 	"adminAssistantUtil": "../../assets/lib/layui/customer/adminAssistantUtil.js", // 行政管理模块相关工具
+	"codeDocUtil": "../../assets/lib/layui/customer/codeDocUtil.js", // 代码生成器相关工具类
 };
 
 //系统基础信息
@@ -856,23 +857,6 @@ function returnModel(lang){
 		'vue': 'text/x-vue'
 	};
 	return type[lang];
-}
-
-/**
- * 替换代码生成器模板内容
- * @param str
- */
-function replaceModelContent(str, ControllerPackageName, ServicePackageName, ServiceImplPackageName,
-							 DaoPackageName, tableZhName, tableFirstISlowerName, tableISlowerName, tableBzName){
-	str = str.replace(/[$]{{controllerPackage}}/g, ControllerPackageName);
-	str = str.replace(/[$]{{servicePackage}}/g, ServicePackageName);
-	str = str.replace(/[$]{{serviceImplPackage}}/g, ServiceImplPackageName);
-	str = str.replace(/[$]{{daoPackage}}/g, DaoPackageName);
-	str = str.replace(/[$]{{tableName}}/g, tableZhName);
-	str = str.replace(/[$]{{objectName}}/g, tableFirstISlowerName);
-	str = str.replace(/[$]{{urlName}}/g, tableISlowerName);
-	str = str.replace(/[$]{{notesName}}/g, tableBzName);
-	return str;
 }
 
 function show(_object, url) {

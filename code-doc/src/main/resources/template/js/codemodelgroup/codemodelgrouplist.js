@@ -112,7 +112,7 @@ layui.config({
 		_openNewWindows({
 			url: "../../tpl/codemodel/codemodellist.html", 
 			title: "模板管理",
-			maxmin: true,
+			area: ['100vw', '100vh'],
 			pageId: "codemodelgroupmodelconcle"
 		});
 	}
@@ -123,7 +123,7 @@ layui.config({
 		_openNewWindows({
 			url: "../../tpl/codemodelhistory/codemodelhistorylist.html", 
 			title: "生成历史",
-			maxmin: true,
+			area: ['100vw', '100vh'],
 			pageId: "codemodelhistorylist"
 		});
 	}
@@ -134,7 +134,7 @@ layui.config({
 		_openNewWindows({
 			url: "../../tpl/codemodelgroup/usemodelgroup.html", 
 			title: "代码生成",
-			maxmin: true,
+			area: ['100vw', '100vh'],
 			pageId: "usemodelgroup"
 		});
 	}

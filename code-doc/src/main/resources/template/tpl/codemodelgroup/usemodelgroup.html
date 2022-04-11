@@ -7,9 +7,9 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
     <link href="../../assets/lib/layui/css/codemirror.css" rel="stylesheet" />
 </head>
-<body>
+<body style="overflow: hidden">
     <form class="layui-form layui-form-pane" action="" autocomplete="off">
-		<div class="txtcenter" style="margin:0 auto;padding-top:20px;">
+		<div class="txtcenter" style="margin: 0 auto; padding-top: 10px;">
 	        <div class="layui-form-item">
 	            <div class="layui-inline">
 	                <label class="layui-form-label">数据库表</label>
@@ -19,7 +19,7 @@
 	            </div>
 	            <div class="layui-inline">
 	                <div class="layui-input-inline">
-	                    <button class="layui-btn" id="jsCreate" type="button">检索数据</button>
+	                    <button class="layui-btn layui-btn-sm" id="jsCreate" type="button">检索数据</button>
 	                </div>
 	            </div>
 	        </div>
@@ -80,66 +80,27 @@
 	            </div>
 	        </div>
 		</div>
-	    <div class="layui-row smpro">
-	        <div class="layui-col-xs3 left-menu">
+	    <div class="layui-row" style="height: calc(100vh - 165px)">
+	        <div class="layui-col-xs3 left-menu" style="border: 0px">
 	    		<div class="winui-toolbar">
 			        <div class="winui-tool">模板</div>
 			    </div>
-			    <div class="layui-row" style="height: calc(100vh - 75px);">
+			    <div class="layui-row" style="height: calc(100% - 20px); overflow-y: auto">
 			    	<ul style="overflow-y: scroll;height: 100%;" id="modelList">
 			    		
 					</ul>
 			    </div>
 	    	</div>
-	    	<div class="layui-col-xs6 center-content">
-		    	<div class="winui-toolbar">
-			        <div class="winui-tool">参数设置(最终保存内容)<button type="button" class="layui-btn layui-btn-xs" style="float: right;" id="addContentToHTMLorJS">添加参数</button></div>
-			    </div>
-			    <div class="layui-row" style="height: calc(100vh - 75px);">
+	    	<div class="layui-col-xs9 center-content">
+			    <div class="layui-row" style="height: 100%;">
 			    	<textarea id="textContent"></textarea>
 			    </div>
 	    	</div>
-	    	<div class="layui-col-xs3 right-menu">
-	    		<div class="winui-toolbar">
-			        <div class="winui-tool">表参数</div>
-			    </div>
-				<table class="layui-table">
-					<tbody id="tableParameterBody" style="height: calc(100vh - 85px);overflow-y: auto;position: absolute;">
-						
-					</tbody>
-				</table>
-			</div>
-	    </div>
-	    <div class="layui-row" style="height: 150px">
-	    	<div class="layui-col-xs3 left-menu">
-	    		<div class="winui-toolbar">
-			        <div class="winui-tool">限制条件</div>
-			    </div>
-			    <div class="layui-row" style="height: calc(42vh - 85px);">
-			    	<textarea id="showCreateRequireMation"></textarea>
-			    </div>
-	    	</div>
-	    	<div class="layui-col-xs6 center-content">
-		    	<div class="winui-toolbar">
-			        <div class="winui-tool">html代码</div>
-			    </div>
-			    <div class="layui-row" style="height: calc(42vh - 85px);">
-			    	<textarea id="showCreateHtmlMation"></textarea>
-			    </div>
-	    	</div>
-	    	<div class="layui-col-xs3 right-menu">
-	    		<div class="winui-toolbar">
-			        <div class="winui-tool">js代码</div>
-			    </div>
-				<div class="layui-row" style="height: calc(42vh - 85px);">
-			    	<textarea id="showCreateJsMation"></textarea>
-			    </div>
-			</div>
 	    </div>
 	    <div class="layui-row" style="height: 50px;text-align: center;">
 		    <div class="layui-inline">
 	            <div class="layui-input-inline">
-	                <button class="layui-btn" lay-submit lay-filter="formSearch">保存结果</button>
+	                <button class="layui-btn layui-btn-sm" lay-submit lay-filter="formSearch">保存结果</button>
 	            </div>
 	        </div>
 	    </div>

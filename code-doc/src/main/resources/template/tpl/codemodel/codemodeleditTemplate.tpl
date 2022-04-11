@@ -5,12 +5,13 @@
 	<div class="layui-form-item layui-col-xs12" id="exexplaintocodemodelContent" style="padding: 0px 15px; font-size: 12px; color: grey; display: contents;">
     </div>
 	<div class="layui-form-item layui-col-xs12">
-		<span class="hr-title">模板内容</span><hr>
+		<span class="hr-title">基本信息</span><hr>
 	</div>
     <div class="layui-form-item">
-        <label class="layui-form-label">模板别名<i class="red">*</i></label>
+        <label class="layui-form-label">模板后缀<i class="red">*</i></label>
         <div class="layui-input-block">
-        	<input type="text" id="modelName" name="modelName" win-verify="required" placeholder="请输入模板别名" class="layui-input" maxlength="20" value="{{modelName}}"/>
+        	<input type="text" id="modelName" name="modelName" win-verify="required" placeholder="请输入模板后缀" class="layui-input" maxlength="20" value="{{modelName}}"/>
+        	<div class="layui-form-mid layui-word-aux">例如：想要生成BossPersonRequireDao.java文件，只需要填写 Dao 即可</div>
         </div>
     </div>
     <div class="layui-form-item">

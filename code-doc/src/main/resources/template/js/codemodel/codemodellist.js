@@ -6,7 +6,7 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
-           'solr', 'sql', 'vue'], function (exports) {
+   'solr', 'sql', 'vue'], function (exports) {
 	winui.renderColor();
 	//模板分组ID
 	groupId = parent.rowId;
@@ -15,7 +15,6 @@ layui.config({
 		table = layui.table;
 	
 	authBtn('1560217136068');
-	
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -28,7 +27,7 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'modelName', title: '模板别名', width: 120 },
+	        { field: 'modelName', title: '模板后缀', width: 120 },
 	        { field: 'modelType', title: '模板类型', width: 120 },
 	        { field: 'id', title: '模板内容', width: 120, templet: function(d){
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="modelContent"></i>';
@@ -73,7 +72,7 @@ layui.config({
 	            type: 1,
 	            title: '模板内容',
 	            shade: 0.3,
-	            area: ['1200px', '600px'],
+	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html(),
 	        });
         }

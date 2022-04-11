@@ -17,7 +17,6 @@ layui.config({
 		    layedit = layui.layedit;
 	    
 	    var layContent;
-	    
 	    AjaxPostUtil.request({url:reqBasePath + "exexplain002", params: {type: type}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				if(!isNull(json.bean)){
@@ -47,7 +46,6 @@ layui.config({
    		}});
 	    
 		form.render();
-		
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	if(isNull(layedit.getContent(layContent))){
@@ -83,5 +81,4 @@ layui.config({
 	    });
 	    
 	});
-	    
 });
