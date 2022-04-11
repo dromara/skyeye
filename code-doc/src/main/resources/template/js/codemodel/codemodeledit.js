@@ -4,12 +4,13 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window',
-}).define(['window', 'table', 'jquery', 'winui'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'element'], function (exports) {
 	winui.renderColor();
 	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
 	           'solr', 'sql', 'vue'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
+			element = layui.element,
 	    	form = layui.form;
 	    var editor;
 	    
@@ -24,12 +25,13 @@ layui.config({
 		 	ajaxSendAfter:function(json){
 		 		AjaxPostUtil.request({url:reqBasePath + "exexplain004", params: {type: 1}, type: 'json', callback: function(j){
 					if(j.returnCode == 0){
-		   				$("#exexplaintocodemodelTitle").html(j.bean.title);
-		   				$("#exexplaintocodemodelContent").html(j.bean.content);
+						$(".layui-colla-title").html(j.bean.title);
+						$(".layui-colla-content").html(j.bean.content);
 		   			}else{
 		   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
 		   			}
 		   		}});
+				element.init();
 		 		
 		 		editor = CodeMirror.fromTextArea(document.getElementById("modelContent"), {
 		 			mode : returnModel(json.bean.modelType),  // 模式

@@ -31,7 +31,6 @@ layui.config({
 	    matchingLanguage();
 		form.render();
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
         			groupName: $("#groupName").val(),

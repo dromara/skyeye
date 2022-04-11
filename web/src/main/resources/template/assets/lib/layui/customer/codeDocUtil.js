@@ -12,6 +12,8 @@ var codeDocUtil = {
         'tableFirstISlowerName': /[$]{{objectName}}/g,
         'tableISlowerName': /[$]{{urlName}}/g,
         'tableBzName': /[$]{{notesName}}/g,
+        'currentTime': /[$]{{currentTime}}/g,
+        'table': /[$]{{table}}/g,
     },
 
     /**

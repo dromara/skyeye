@@ -1,8 +1,11 @@
 {{#bean}}
-	<div class="layui-form-item layui-col-xs12">
-		<span class="hr-title" id="exexplaintocodemodelTitle"></span><hr>
-	</div>
-	<div class="layui-form-item layui-col-xs12" id="exexplaintocodemodelContent" style="padding: 0px 15px; font-size: 12px; color: grey; display: contents;">
+	<div class="layui-collapse">
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title"></h2>
+            <div class="layui-colla-content">
+
+            </div>
+        </div>
     </div>
 	<div class="layui-form-item layui-col-xs12">
 		<span class="hr-title">基本信息</span><hr>

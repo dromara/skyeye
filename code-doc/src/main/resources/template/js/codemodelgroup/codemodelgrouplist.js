@@ -95,7 +95,7 @@ layui.config({
 			url: "../../tpl/codemodelgroup/codemodelgroupedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "codemodelgroupedit",
-			area: ['700px', '90vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
@@ -150,7 +150,7 @@ layui.config({
 			url: "../../tpl/codemodelgroup/codemodelgroupadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "codemodelgroupadd",
-			area: ['700px', '90vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});

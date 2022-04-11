@@ -14,8 +14,8 @@ layui.config({
 	    
 	    AjaxPostUtil.request({url:reqBasePath + "exexplain004", params: {type: 1}, type: 'json', callback: function(j){
 			if(j.returnCode == 0){
-   				$("#exexplaintocodemodelTitle").html(j.bean.title);
-   				$("#exexplaintocodemodelContent").html(j.bean.content);
+   				$(".layui-colla-title").html(j.bean.title);
+   				$(".layui-colla-content").html(j.bean.content);
    			}else{
    				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
    			}
