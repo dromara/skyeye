@@ -153,7 +153,7 @@ layui.config({
 	
 	// txtcenter DIV内的输入框内容变化事件
 	$("body").on("keyup", ".txtcenter input", function(e){
-		for(var i = 0; i < list.length; i++){
+		for(var i = 0; i < list.length; i++) {
 			list[i].content = codeDocUtil.replaceModelContent(list[i].modelContent);
 			list[i].fileName = $("#tableZhName").val() + list[i].modelName;
 			if(list[i].modelId == editId){
@@ -166,7 +166,7 @@ layui.config({
 	$("body").on("click", "#jsCreate", function(e){
 		AjaxPostUtil.request({url: reqBasePath + "codemodel011", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(data){
 			if(data.returnCode == 0) {
-				console.log(data)
+				codeDocUtil.setTableColumnData(data.rows);
 				AjaxPostUtil.request({url: reqBasePath + "codemodel012", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(json){
 					if(json.returnCode == 0) {
 						jsCreateClick = true;
