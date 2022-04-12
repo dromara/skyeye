@@ -53,7 +53,6 @@ layui.config({
         }
     });
 
-    // 用品采购的操作事件
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;

@@ -33,7 +33,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
         if (winui.verifyForm(data.elem)) {
-        	var subData = list;
+        	var subData = [].concat(list);
         	if(subData.length == 0){
         		winui.window.msg('请先生成转换结果', {icon: 2,time: 2000});
         	}else if($('#modelList').find('li').length > subData.length){
@@ -41,12 +41,9 @@ layui.config({
         	}else{
         		for(var i = 0; i < subData.length; i++){
         			subData[i].modelContent = "";
-        			subData[i].content = subData[i].content
-						.replace(/\+/g, "%2B")
-						.replace(/\&/g, "%26")
-						.replace(/\%/g, "%25");
+					subData[i].modelText = "";
         		}
-        		AjaxPostUtil.request({url:reqBasePath + "codemodel014", params:{jsonData: JSON.stringify(subData)}, type: 'json', callback: function(json){
+        		AjaxPostUtil.request({url: reqBasePath + "codemodel014", params: {jsonData: encodeURIComponent(JSON.stringify(subData))}, type: 'json', method: 'POST', callback: function(json){
         			if(json.returnCode == 0){
         				winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1,time: 2000}, function(){
 	        				parent.layer.close(index);
@@ -133,6 +130,10 @@ layui.config({
 	 	},
 	 	ajaxSendAfter:function(json){
 			list = [].concat(json.rows);
+			$.each(list, function (i, item){
+				item.modelId = item.id;
+				item.groupId = parent.rowId;
+			});
 	 	}
 	});
 	
@@ -182,8 +183,8 @@ layui.config({
 						// 遍历模板赋值文件名
 						$('#modelList').find('li').each(function() {
 							var label = $(this).find("label");
-							var modleType = label.attr('modeltype');
-							if(modleType == 'Java' || modleType == 'xml') {
+							var modelType = label.attr('modeltype');
+							if(modelType == 'Java' || modelType == 'xml') {
 								label.html(json.bean.tableName + label.attr("thiscontent"));
 							}else{
 								label.html(json.bean.tableFirstISlowerName + label.attr("thiscontent"));
@@ -204,15 +205,18 @@ layui.config({
 	function transformResult() {
 		$.each(list, function (i, row){
 			var content = codeDocUtil.replaceModelContent(row.modelContent);
+			var modelType = row.modelType;
+			var fileName = "";
+			if(modelType == 'Java' || modelType == 'xml') {
+				fileName = $("#tableZhName").val() + row.modelName;
+			}else{
+				fileName = $("#tableFirstISlowerName").val() + row.modelName;
+			}
 			var s = {
 				modelId: row.id,
 				content: content,
 				tableName: $("#tableName").val(),
-				groupId: parent.rowId,
-				modelName: row.modelName,
-				modelContent: row.modelContent,
-				fileName: $("#tableZhName").val() + row.modelName,
-				modelType: row.modelType,
+				fileName: fileName
 			};
 			insertListIn(list, s);
 		});
@@ -226,6 +230,8 @@ layui.config({
 		for(var i = 0; i < list.length; i++){
 			if(list[i].modelId == s.modelId){//存在则替换
 				list[i].content = s.content;
+				list[i].tableName = s.tableName;
+				list[i].fileName = s.fileName;
 				isIn = true;
 				break;
 			}

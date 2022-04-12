@@ -1,4 +1,3 @@
-var assetArticles = new Array(); //用品集合
 
 layui.config({
     base: basePath,
