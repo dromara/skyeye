@@ -181,7 +181,7 @@ var systemCommonUtil = {
     },
 
     /**
-     * 员工选择页面
+     * 员工选择页面(包含账号)
      *
      * @param callback 回调函数
      */

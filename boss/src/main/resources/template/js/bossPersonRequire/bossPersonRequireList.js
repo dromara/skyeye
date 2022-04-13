@@ -68,6 +68,8 @@ layui.config({
             activitiUtil.activitiDetails(data);
         }else if(layEvent === 'revoke') { // 撤销申请
             revoke(data);
+        }else if(layEvent === 'setPersonLiable') { // 设置责任人
+            setPersonLiable(data);
         }
     });
 
@@ -110,6 +112,25 @@ layui.config({
             url: "../../tpl/bossPersonRequire/bossPersonRequireEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "bossPersonRequireEdit",
+            area: ['90vw', '90vh'],
+            callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    loadTable();
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                }
+            }
+        });
+    }
+
+    // 设置责任人
+    function setPersonLiable(data){
+        rowId = data.id;
+        _openNewWindows({
+            url: "../../tpl/bossPersonRequire/bossPersonRequirePersonLiable.html",
+            title: '设置责任人',
+            pageId: "bossPersonRequirePersonLiable",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
