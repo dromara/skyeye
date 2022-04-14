@@ -48,7 +48,7 @@ layui.config({
             	}
 	        	return str;
 	        }},
-	        { field:'createTime', width:150, align: 'center', title: '录入时间'},
+	        { field:'createTime', width:150, align: 'center', title: 'systemLanguage["com.skyeye.entryTime"][languageType]'},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],
         isPage:false,

@@ -33,7 +33,7 @@ layui.config({
 	        { field: 'end', title: '结束日期', width: 150, align: 'center' },
 	        { field: 'scheduleRemindTime', title: '提醒日期', width: 180 },
 	        { field: 'userName', title: '录入人', width: 120 },
-	        { field: 'scheduleCreateTime', title: '录入时间', width: 180 },
+	        { field: 'scheduleCreateTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 160, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

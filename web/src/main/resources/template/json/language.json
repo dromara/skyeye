@@ -1,5 +1,6 @@
 {
   "com.skyeye.createTime": {"zh": "创建时间", "cn": "Create Time"},
+  "com.skyeye.entryTime": {"zh": "录入时间", "cn": "Entry Time"},
   "com.skyeye.createName": {"zh": "创建人", "cn": "Create By"},
   "com.skyeye.createName2": {"zh": "操作人", "cn": "Operator"},
   "com.skyeye.lastUpdateTime": {"zh": "最后修改时间", "cn": "Last Modification Time"},

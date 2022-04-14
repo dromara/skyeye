@@ -39,7 +39,7 @@ layui.config({
                     return "<span class='state-error'>参数错误</span>";
                 }
             }},
-            { field: 'createTime', title: '录入时间', align: 'center', width: 140 },
+            { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 140 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
 	    done: function(){

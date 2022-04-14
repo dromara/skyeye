@@ -33,7 +33,7 @@ layui.config({
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="schoolDesc"></i>';
 	        }},
             { field:'addressDetailed', width: 400, title: '学校地址'},
-	        { field:'createTime', width: 150, align: 'center', title: '录入时间'},
+	        { field:'createTime', width: 150, align: 'center', title: 'systemLanguage["com.skyeye.entryTime"][languageType]'},
 	        { field:'powerName', width: 120, align: 'center', title: '数据权限'},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],

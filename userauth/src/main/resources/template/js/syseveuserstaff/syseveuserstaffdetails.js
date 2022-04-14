@@ -81,7 +81,7 @@ layui.config({
 	                        return "退休";
 	                    }
 	                }},
-	                { field: 'createTime', title: '录入时间', align: 'center', width: 100}
+	                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100}
 			    ]]
 			});
 		}
@@ -123,7 +123,7 @@ layui.config({
 	                }},
 	                { field: 'learningModalityName', title: '学习形式', align: 'left', width: 150 },
 	                { field: 'schoolNatureName', title: '学校性质', align: 'left', width: 100 },
-	                { field: 'createTime', title: '录入时间', align: 'center', width: 100}
+	                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100}
 			    ]]
 			});
 		}
@@ -164,7 +164,7 @@ layui.config({
 	                        return "退休";
 	                    }
 	                }},
-	                { field: 'createTime', title: '录入时间', align: 'center', width: 100}
+	                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100}
 			    ]]
 			});
 		}
@@ -202,7 +202,7 @@ layui.config({
 	                        return "退休";
 	                    }
 	                }},
-	                { field: 'createTime', title: '录入时间', align: 'center', width: 100}
+	                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100}
 			    ]]
 			});
 		}
@@ -250,7 +250,7 @@ layui.config({
 	                }},
 	                { field: 'issueTime', title: '签发时间', align: 'center', width: 100 },
 	                { field: 'validityTime', title: '截至时间', align: 'center', width: 100 },
-	                { field: 'createTime', title: '录入时间', align: 'center', width: 100}
+	                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100}
 			    ]]
 			});
 		}
@@ -292,7 +292,7 @@ layui.config({
 	                        return "退休";
 	                    }
 	                }},
-	                { field: 'createTime', title: '录入时间', align: 'center', width: 100}
+	                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100}
 			    ]]
 			});
 		}
@@ -342,7 +342,7 @@ layui.config({
 	                        return "退休";
 	                    }
 	                }},
-	                { field: 'createTime', title: '录入时间', align: 'center', width: 100}
+	                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100}
 			    ]]
 			});
 		}

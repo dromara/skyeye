@@ -56,7 +56,7 @@ layui.config({
                 }},
                 { field: 'learningModalityName', title: '学习形式', align: 'left', width: 150 },
                 { field: 'schoolNatureName', title: '学校性质', align: 'left', width: 100 },
-                { field: 'createTime', title: '录入时间', align: 'center', width: 100},
+                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100},
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar'}
 		    ]],
 		    done: function(){

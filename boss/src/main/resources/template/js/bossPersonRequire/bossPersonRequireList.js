@@ -43,9 +43,15 @@ layui.config({
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
             { field: 'stateName', title: '状态', width: 90, templet: function(d){
-                return activitiUtil.showStateName2(d.state, 1);
+                if(d.state == 6){
+                    return '<span class="state-new">招聘中</span>';
+                } else if(d.state == 7){
+                    return '<span class="state-new">招聘结束</span>';
+                } else{
+                    return activitiUtil.showStateName2(d.state, 1);
+                }
             }},
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150},
+            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], width: 150},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
         ]],
         done: function(){
