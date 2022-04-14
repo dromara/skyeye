@@ -2735,6 +2735,10 @@ body .layer-ext-winconfirm .layui-layer-content {
 	color: orange !important;
 }
 
+.state-success {
+    color: #0e90d2 !important;
+}
+
 .zzc{
 	width:100%;
     height:100%;
