@@ -1,6 +1,6 @@
 var rowId = "";
 
-// 面试安排
+// 获取我录入的人员需求关联的面试者信息列表
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -13,9 +13,6 @@ layui.config({
         laydate = layui.laydate,
         table = layui.table;
 
-    // 新增
-    authBtn('1649929352279');
-
     laydate.render({
         elem: '#createTime',
         range: '~'
@@ -25,7 +22,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'queryMyEntryBossInterviewArrangementList',
+        url: flowableBasePath + 'queryMyEntryBossPersonRequireAboutArrangementList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -54,39 +51,18 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details') { // 详情
             details(data);
-        }else if (layEvent === 'edit') { // 编辑
-            edit(data);
-        }else if (layEvent === 'sub') { // 提交
-            sub(data);
-        }else if(layEvent === 'cancellation') { // 作废
-            cancellation(data);
+        }else if (layEvent === 'arrangeInterviewer') { // 安排面试官
+            arrangeInterviewer(data);
         }
     });
 
-    // 添加
-    $("body").on("click", "#addBean", function(){
-        _openNewWindows({
-            url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementAdd.html",
-            title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "bossInterviewArrangementAdd",
-            area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
-                    loadTable();
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                }
-            }});
-    });
-
-    // 编辑
-    function edit(data){
+    // 安排面试官
+    function arrangeInterviewer(data){
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementEdit.html",
-            title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "bossInterviewArrangementEdit",
+            url: "../../tpl/bossInterviewArrangement/arrangeInterviewer.html",
+            title: '安排面试官',
+            pageId: "arrangeInterviewer",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -96,39 +72,6 @@ layui.config({
                     winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
                 }
             }
-        });
-    }
-
-    // 提交
-    function sub(data){
-        layer.confirm('确认提交该数据吗？', {icon: 3, title: '提交操作'}, function (index) {
-            layer.close(index);
-            var params = {
-                id: data.id,
-            };
-            AjaxPostUtil.request({url: flowableBasePath + "submitBossInterviewArrangement", params: params, type: 'json', method: "PUT", callback: function(json){
-                if(json.returnCode == 0){
-                    winui.window.msg("提交成功", {icon: 1, time: 2000});
-                    loadTable();
-                }else{
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
-            }});
-        });
-    }
-
-    // 作废
-    function cancellation(data){
-        layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
-            layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "nullifyBossInterviewArrangement", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
-                if(json.returnCode == 0){
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                }else{
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
-            }});
         });
     }
 
@@ -175,5 +118,5 @@ layui.config({
         };
     }
 
-    exports('bossInterviewArrangementList', {});
+    exports('bossInterviewerList', {});
 });

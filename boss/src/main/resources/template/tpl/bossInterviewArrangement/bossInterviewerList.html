@@ -16,14 +16,12 @@
                         <div class="layui-input-inline">
                             <select id="state">
                                 <option value="">全部</option>
-                                <option value="0">草稿</option>
-                                <option value="1">审核中</option>
-                                <option value="2">审核通过</option>
-                                <option value="3">审核不通过</option>
-                                <option value="4">作废</option>
-                                <option value="5">撤销</option>
-                                <option value="6">招聘中</option>
-                                <option value="7">招聘结束</option>
+                                <option value="2">已提交(待安排面试人员)</option>
+                                <option value="3">已提交(待面试)</option>
+                                <option value="4">面试通过</option>
+                                <option value="5">面试不通过</option>
+                                <option value="6">已完成入职</option>
+                                <option value="7">已完成拒绝入职</option>
                             </select>
                         </div>
                         <label class="layui-form-label">录入时间</label>
@@ -39,29 +37,13 @@
         <div class="winui-toolbar">
             <div class="winui-tool" style="text-align: left;">
                 <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-                <button id="addBean" class="winui-toolbtn" auth="1649569413156"><i class="fa fa-plus" aria-hidden="true"></i>录入申请</button>
             </div>
         </div>
         <div style="margin:auto 10px;">
             <table id="messageTable" lay-filter="messageTable"></table>
             <script type="text/html" id="messageTableBar">
-                {{# if(d.editRow == '1'){ }}
-                    {{# if(auth('1649569422475')){ }}
-                        <a class="layui-btn layui-btn-xs" lay-event="subApproval">提交审批</a>
-                    {{# } }}
-                    {{# if(auth('1649569431934')){ }}
-                        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="cancellation">作废</a>
-                    {{# } }}
-                {{# } }}
-                {{# if(d.editRow == '1' || d.editRow == '2'){ }}
-                    {{# if(auth('1649569440944')){ }}
-                        <a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-                    {{# } }}
-                {{# } }}
-                {{# if(d.editRow == '2'){ }}
-                    {{# if(auth('1649569448876')){ }}
-                        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="revoke">撤销</a>
-                    {{# } }}
+                {{# if((d.state == '2' || d.state == '3') && auth('1649993901134')){ }}
+                    <a class="layui-btn layui-btn-xs" lay-event="arrangeInterviewer">安排面试官</a>
                 {{# } }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="details">详情</a>
             </script>
@@ -70,7 +52,7 @@
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/bossPersonRequire/'}).use('bossPersonRequireList');
+        layui.config({base: '../../js/bossInterviewArrangement/'}).use('bossInterviewerList');
     </script>
 </body>
 </html>

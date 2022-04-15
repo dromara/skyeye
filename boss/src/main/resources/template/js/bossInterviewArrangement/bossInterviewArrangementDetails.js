@@ -6,7 +6,7 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'jquery', 'winui', 'form'], function(exports) {
     winui.renderColor();
-    var $ = layui.$
+    var $ = layui.$,
         form = layui.form;
 
     showGrid({
