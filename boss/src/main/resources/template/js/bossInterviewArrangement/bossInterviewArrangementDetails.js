@@ -9,6 +9,8 @@ layui.config({
     var $ = layui.$,
         form = layui.form;
 
+    var type = GetUrlParam('type');
+
     showGrid({
         id: "showForm",
         url: flowableBasePath + "queryBossInterviewArrangementById",
@@ -18,7 +20,12 @@ layui.config({
         template: $("#beanTemplate").html(),
         ajaxSendLoadBefore: function(hdb, json){
             json.bean.basicResume = stringManipulation.textAreaShow(json.bean.basicResume);
-            json.bean.stateName = bossUtil.showStateName(json.bean.state);
+            json.bean.evaluation = stringManipulation.textAreaShow(json.bean.evaluation);
+            if (type == 'interviewerResult') {
+                json.bean.stateName = bossUtil.showArrangeInterviewerStateName(json.bean.state);
+            } else {
+                json.bean.stateName = bossUtil.showStateName(json.bean.state);
+            }
         },
         ajaxSendAfter: function (json) {
             skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.enclosureInfo});

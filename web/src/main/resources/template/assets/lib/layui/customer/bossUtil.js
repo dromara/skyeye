@@ -54,6 +54,22 @@ var bossUtil = {
     },
 
     /**
+     * 面试官列表展示的面试状态
+     *
+     * @param state
+     * @returns {string}
+     */
+    showArrangeInterviewerStateName: function (state){
+        if (state == '3') {
+            return "<span class='state-new'>待面试</span>";
+        } else if (state == '4' || state == '6' || state == '7') {
+            return "<span class='state-up'>面试通过</span>";
+        } else if (state == '5') {
+            return "<span class='state-down'>面试不通过</span>";
+        }
+    },
+
+    /**
      * 打开我负责的未入职的面试者选择页面
      *
      * @param callback 回调函数
