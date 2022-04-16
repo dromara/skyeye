@@ -7,7 +7,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -15,19 +14,11 @@ layui.config({
 	
 	// 新增车辆维修保养
 	authBtn('1597478766486');
-    
-	//车牌号
-    showGrid({
-	 	id: "maintenancePlate",
-	 	url: flowableBasePath + "vehicle010",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function(json){
-	 		form.render('select');
-	 	}
+
+	// 查询所有的车牌号用于下拉选择框
+	adminAssistantUtil.queryAllVehicleList(function (data){
+		$("#maintenancePlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+		form.render('select');
 	});
 
 	showMaintenanceList();

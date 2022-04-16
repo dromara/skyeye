@@ -19,20 +19,12 @@ layui.config({
 			$("#maintenanceTitle").html("车辆维修保养登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random()*100);
 		});
 
-	    // 车牌号
- 		showGrid({
-		 	id: "licensePlate",
-		 	url: flowableBasePath + "vehicle010",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option-must.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function(json){
-		 		form.render('select');
-		 	}
+		// 查询所有的车牌号用于下拉选择框
+		adminAssistantUtil.queryAllVehicleList(function (data){
+			$("#licensePlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), data));
+			form.render('select');
 		});
-	    
+
  		// 维修保养时间段选择
 		laydate.render({
 			elem: '#maintenanceTime',
