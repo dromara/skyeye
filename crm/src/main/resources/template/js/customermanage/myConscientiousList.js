@@ -8,27 +8,18 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
 	var selectOption = getFileContent('tpl/template/select-option.tpl');
-	
-	// 分类
-	showGrid({
-	 	id: "typeId",
-	 	url: flowableBasePath + "customertype008",
-	 	params: {},
-	 	pagination: false,
-	 	template: selectOption,
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function(j){
-	 		form.render('select');
-	 		customerFrom();
-	 	}
+
+	// 获取客户类型状态为上线的所有记录
+	sysCustomerUtil.queryCustomerTypeIsUpList(function (data){
+		$("#typeId").html(getDataUseHandlebars(selectOption, data));
+		form.render('select');
+		customerFrom();
 	});
-	
+
 	// 来源
 	function customerFrom(){
 		showGrid({
@@ -114,16 +105,6 @@ layui.config({
 			}});
 	}
 	
-	function getTableParams(){
-    	return {
-    		name: $("#customerName").val(),
-    		typeId: $("#typeId").val(),
-    		fromId: $("#fromId").val(),
-    		industryId: $("#industryId").val()
-    	};
-    }
-    
-    
 	$("body").on("click", "#formSearch", function(){
 		refreshTable();
 	});
@@ -139,6 +120,15 @@ layui.config({
     function refreshTable(){
     	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
+
+	function getTableParams(){
+		return {
+			name: $("#customerName").val(),
+			typeId: $("#typeId").val(),
+			fromId: $("#fromId").val(),
+			industryId: $("#industryId").val()
+		};
+	}
 	
     exports('myConscientiousList', {});
 });

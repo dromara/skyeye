@@ -12,22 +12,15 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
-	// 分类
-	showGrid({
-	 	id: "typeId",
-	 	url: flowableBasePath + "customertype008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function(j){
-	 		form.render('select');
-	 		customerFrom();
-	 	}
+	var selOption = getFileContent('tpl/template/select-option.tpl');
+
+	// 获取客户类型状态为上线的所有记录
+	sysCustomerUtil.queryCustomerTypeIsUpList(function (data){
+		$("#typeId").html(getDataUseHandlebars(selOption, data));
+		form.render('select');
+		customerFrom();
 	});
-	
+
 	// 来源
 	function customerFrom(){
 		showGrid({

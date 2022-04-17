@@ -18,22 +18,14 @@ layui.config({
 	    var $ = layui.$,
 	    	textool = layui.textool;
 	    var selectMust = getFileContent('tpl/template/select-option-must.tpl');
-	    
-	    // 分类
- 		showGrid({
-		 	id: "typeId",
-		 	url: flowableBasePath + "customertype008",
-		 	params: {},
-		 	pagination: false,
-		 	template: selectMust,
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function(json){
-		 		form.render('select');
-		 		customerFrom();
-		 	}
+
+		// 获取客户类型状态为上线的所有记录
+		sysCustomerUtil.queryCustomerTypeIsUpList(function (data){
+			$("#typeId").html(getDataUseHandlebars(selectMust, data));
+			form.render('select');
+			customerFrom();
 		});
- 		
+
  		// 来源
  		function customerFrom(){
  			showGrid({
