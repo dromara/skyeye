@@ -99,6 +99,7 @@ function _openNewWindows(mation){
 			s += "&" + param + "=" + mation.params[param];
 		mation.url = mation.url + "?" + s.slice(1);
 	}
+	mation.url = systemCommonUtil.getHasVersionUrl(mation.url);
 	if(isNull(mation.area)){
 		if(mation.maxmin){
 			mation.area = ['100vw', '100vh'];

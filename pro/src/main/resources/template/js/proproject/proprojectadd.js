@@ -29,21 +29,7 @@ layui.config({
 	  trigger: 'click'
 	});
 
-	var ue = UE.getEditor('container',{
-		//初始化高度
-		initialFrameHeight: 800,
-		maximumWords: 100000
-	});
-	UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-	UE.Editor.prototype.getActionUrl = function(action){
-		if (action == 'uploadimage' || action == 'uploadfile' || action == 'uploadvideo' || action == 'uploadimage'){//上传单个图片,上传附件,上传视频,多图上传
-			return reqBasePath + '/upload/editUploadController/uploadContentPic?userToken=' + getCookie('userToken');
-		} else if(action == 'listimage'){
-			return reqBasePath + '/upload/editUploadController/downloadContentPic?userToken=' + getCookie('userToken');
-		}else{
-			return this._bkGetActionUrl.call(this, action);
-		}
-	};
+	var ue = ueEditorUtil.initEditor('container');
 
 	//项目分类
 	showGrid({
@@ -64,7 +50,7 @@ layui.config({
 		// 获取当前登录用户所属企业的所有部门信息
 		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
 			$("#departmentId").html(getDataUseHandlebars(selOption, data));
-			$("#departmentId").val(json.bean.departments);
+			$("#departmentId").val(data.bean.departments);
 			form.render('select');
 		});
 		customerId();

@@ -248,6 +248,18 @@ var systemCommonUtil = {
         t.prop('disabled', true);
         t.addClass('layui-btn-disabled');
         t.next().css("cursor", "not-allowed");
+    },
+
+    /**
+     * 对页面url添加版本控制
+     *
+     * @param url
+     */
+    getHasVersionUrl: function (url){
+        // 判断是否有问号
+        url += (url.indexOf("?") == -1 ? "?" : "&");
+        url = url + 'v='+ skyeyeVersion;
+        return url;
     }
 
 };

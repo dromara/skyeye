@@ -20,6 +20,7 @@ var indexMenu = {
                 url = menuSysWinUrl + url + '?userToken=' + getCookie("userToken");
             }
         }
+        url = systemCommonUtil.getHasVersionUrl(url);
         return url;
     },
 
