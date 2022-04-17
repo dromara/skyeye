@@ -18,26 +18,15 @@ layui.config({
 	sysCustomerUtil.queryCustomerTypeIsUpList(function (data){
 		$("#typeId").html(getDataUseHandlebars(selOption, data));
 		form.render('select');
-		customerFrom();
 	});
 
-	// 来源
-	function customerFrom(){
-		showGrid({
-		 	id: "fromId",
-		 	url: flowableBasePath + "crmcustomerfrom008",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function(j){
-		 		form.render('select');
-		 		customerIndustry();
-		 	}
-		});
-	}
-	
+	// 获取已上线的客户来源类型
+	sysCustomerUtil.queryCustomerFromIsUpList(function (data){
+		$("#fromId").html(getDataUseHandlebars(selOption, data));
+		form.render('select');
+		customerIndustry();
+	});
+
 	//行业
 	function customerIndustry(){
 		showGrid({
