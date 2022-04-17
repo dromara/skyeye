@@ -21,14 +21,27 @@ layui.config({
         ajaxSendLoadBefore: function(hdb, json){
             json.bean.basicResume = stringManipulation.textAreaShow(json.bean.basicResume);
             json.bean.evaluation = stringManipulation.textAreaShow(json.bean.evaluation);
+            json.bean.reason = stringManipulation.textAreaShow(json.bean.reason);
             if (type == 'interviewerResult') {
+                // 面试官查看
                 json.bean.stateName = bossUtil.showArrangeInterviewerStateName(json.bean.state);
             } else {
+                // HR以及部门经理查看
                 json.bean.stateName = bossUtil.showStateName(json.bean.state);
+                // 入职信息的状态
+                json.bean.inductionResultStateName = bossUtil.showInductionResultStateName(json.bean.state);
             }
         },
         ajaxSendAfter: function (json) {
             skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.enclosureInfo});
+
+            console.log(type)
+            if (type == 'interviewerResult') {
+                // 面试官查看
+                $("#inductionResultMation").hide();
+            } else {
+                // HR以及部门经理查看
+            }
 
             matchingLanguage();
             form.render();

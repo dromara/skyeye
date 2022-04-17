@@ -60,6 +60,8 @@ layui.config({
             sub(data);
         }else if(layEvent === 'cancellation') { // 作废
             cancellation(data);
+        }else if(layEvent === 'inductionResult') { // 入职
+            inductionResult(data);
         }
     });
 
@@ -87,6 +89,25 @@ layui.config({
             url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "bossInterviewArrangementEdit",
+            area: ['90vw', '90vh'],
+            callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    loadTable();
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                }
+            }
+        });
+    }
+
+    // 入职
+    function inductionResult(data){
+        rowId = data.id;
+        _openNewWindows({
+            url: "../../tpl/bossInterviewArrangement/inductionResult.html",
+            title: '入职',
+            pageId: "inductionResult",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {

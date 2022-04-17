@@ -60,7 +60,7 @@ layui.config({
     function interview(data){
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewer/interviewerResult.html?type=interviewerResult",
+            url: "../../tpl/bossInterviewer/interviewerResult.html",
             title: '面试',
             pageId: "interviewerResult",
             area: ['90vw', '90vh'],
@@ -79,7 +79,7 @@ layui.config({
     function details(data){
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementDetails.html",
+            url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementDetails.html?type=interviewerResult",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossInterviewArrangementDetails",
             area: ['90vw', '90vh'],
