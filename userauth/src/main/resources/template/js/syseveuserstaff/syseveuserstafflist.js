@@ -423,7 +423,6 @@ layui.config({
     		userName:$("#userName").val(),
     		userSex:$("#userSex").val(),
     		userIdCard:$("#userIdCard").val(),
-			label: $("#label").val(),
     		companyName:companyId,
     		departmentName:departmentId,
     		jobName:jobId
