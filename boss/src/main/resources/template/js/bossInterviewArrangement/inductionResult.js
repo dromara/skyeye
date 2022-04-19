@@ -4,10 +4,11 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'form'], function(exports) {
+}).define(['window', 'jquery', 'winui', 'form', 'laydate'], function(exports) {
     winui.renderColor();
     var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$,
+        laydate = layui.laydate,
         form = layui.form;
 
     showGrid({
@@ -24,13 +25,27 @@ layui.config({
         ajaxSendAfter: function (json) {
             skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.enclosureInfo});
 
+            // 入职时间
+            laydate.render({
+                elem: '#entryTime',
+                range: false
+            });
+
+            // 参加工作时间
+            laydate.render({
+                elem: '#workTime',
+                range: false
+            });
+
             $("#reasonBox").hide();
             form.on('radio(state)', function(data) {
                 var thisRowValue = data.value;
                 if(thisRowValue == 6){ // 同意入职
                     $("#reasonBox").hide();
+                    $(".agreePass").show();
                 }else if(thisRowValue == 7){ // 拒绝入职
                     $("#reasonBox").show();
+                    $(".agreePass").hide();
                 }
             });
 
@@ -39,10 +54,28 @@ layui.config({
             // 提交
             form.on('submit(formSubBean)', function(data) {
                 if(winui.verifyForm(data.elem)) {
+                    var state = $("input[name='state']:checked").val();
+                    if(state == 6) {
+                        if(isNull($("#entryTime").val())){
+                            winui.window.msg('请选择入职时间', {icon: 2,time: 2000});
+                            return false;
+                        }
+                        if(isNull($("#workTime").val())){
+                            winui.window.msg('请选择参加工作时间', {icon: 2,time: 2000});
+                            return false;
+                        }
+                        if(isNull($("#userIdCard").val())){
+                            winui.window.msg('请输入身份证', {icon: 2,time: 2000});
+                            return false;
+                        }
+                    }
                     var params = {
                         id: parent.rowId,
-                        state: $("input[name='state']:checked").val(),
-                        reason: $("#reason").val()
+                        state: state,
+                        reason: $("#reason").val(),
+                        entryTime: $("#entryTime").val(),
+                        workTime: $("#workTime").val(),
+                        userIdCard: $("#userIdCard").val()
                     };
                     AjaxPostUtil.request({url: flowableBasePath + "setInductionResult", params: params, type: 'json', method: "PUT", callback: function(json) {
                         if(json.returnCode == 0) {
