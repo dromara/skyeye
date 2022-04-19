@@ -123,7 +123,6 @@ layui.config({
                     servicePrice: 0,
                     remark: $("#remark").val(),
                     type: 2,
-                    source: 2,
                     consumeMationList: JSON.stringify(tableData)
                 };
 

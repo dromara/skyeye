@@ -65,7 +65,6 @@ layui.config({
             }},
             { field: 'natureName', title: '订单性质', width: 80, align: "center"},
             { field: 'createName', title: '专属顾问', width: 120 },
-            { field: 'label', title: '员工标签', width: 120, align: "left"},
             { field: 'payTime', title: '支付时间', align: 'center', width: 150 },
             { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
                 if(d.type == 1){
@@ -233,7 +232,6 @@ layui.config({
             createName: $("#createName").val(),
             type: $("#type").val(),
             natureId: $("#natureId").val(),
-            label: $("#label").val(),
             state: $("#state").val(),
             storeId: storeId,
             startTime: startTime,

@@ -31,11 +31,6 @@ layui.config({
         memberMation = parent.memberMation;
         $("#memberName").html(memberMation.contacts);
 
-        // 获取当前登录员工信息
-        systemCommonUtil.getSysCurrentLoginUserMation(function (json){
-            $("#label").html(json.bean.label);
-        });
-
         // 加载我所在的门店
         shopUtil.queryStaffBelongStoreList(function (json){
             $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
@@ -114,9 +109,7 @@ layui.config({
                     natureId: $("#natureId").val(),
                     memberId: memberMation.id,
                     remark: $("#remark").val(),
-                    label: $("#label").html(),
                     type: 2,
-                    source: 2,
                     mealList: JSON.stringify(tableData)
                 };
 
@@ -183,9 +176,9 @@ layui.config({
                 return false;
             }
             _openNewWindows({
-                url: "../../tpl/meal/mealShenkeChoose.html",
+                url: "../../tpl/meal/mealChoose.html",
                 title: "选择套餐",
-                pageId: "mealShenkeChoose",
+                pageId: "mealChoose",
                 area: ['90vw', '90vh'],
                 callBack: function(refreshCode){
                     if (refreshCode == '0') {
@@ -215,8 +208,7 @@ layui.config({
                 var mealMationJson = $("#mealId" + rowNum.toString()).attr("mealMaion");
                 if(!isNull(mealMationJson)){
                     var mealMation = JSON.parse(mealMationJson);
-                    // allPrice = sum(allPrice, mealMation.unformatPrice);
-                    allPrice = sum(allPrice, mealMation.showPrice);
+                    allPrice = sum(allPrice, mealMation.unformatPrice);
                 }
             });
             $("#allPrice").html(allPrice + "元");
