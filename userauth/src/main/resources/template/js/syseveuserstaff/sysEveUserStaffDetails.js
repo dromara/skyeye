@@ -29,7 +29,7 @@ layui.config({
 		 			$("#leaveTime").hide();
 		 			$("#leaveReason").hide();
 		 		}
-		 		$("#userPhoto").attr("src", fileBasePath + json.bean.userPhoto);
+		 		$("#userPhoto").attr("src", systemCommonUtil.getFilePath(json.bean.userPhoto));
 		 		matchingLanguage();
 		 		form.render();
 		 	}

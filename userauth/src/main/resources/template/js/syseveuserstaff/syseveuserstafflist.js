@@ -78,7 +78,7 @@ layui.config({
 	        	if(isNull(d.userPhoto)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 	        	}else{
-	        		return '<img src="' + fileBasePath + d.userPhoto + '" class="photo-img" lay-event="userPhoto">';
+	        		return '<img src="' + systemCommonUtil.getFilePath(d.userPhoto) + '" class="photo-img" lay-event="userPhoto">';
 	        	}
 	        }},
 			{ field: 'userId', title: '系统账号', rowspan: '3', align: 'center', width: 80, templet: function(d){
@@ -136,7 +136,7 @@ layui.config({
         		closeBtn:0,
         		skin: 'demo-class',
         		shadeClose:true,
-        		content:'<img src="' + fileBasePath + data.userPhoto + '" style="max-height:600px;max-width:100%;">',
+        		content:'<img src="' + systemCommonUtil.getFilePath(data.userPhoto) + '" style="max-height:600px;max-width:100%;">',
         		scrollbar:false
             });
         }else if (layEvent === 'details') { //员工详情

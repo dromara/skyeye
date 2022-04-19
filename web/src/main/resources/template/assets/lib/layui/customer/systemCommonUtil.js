@@ -255,11 +255,24 @@ var systemCommonUtil = {
      *
      * @param url
      */
-    getHasVersionUrl: function (url){
+    getHasVersionUrl: function (url) {
         // 判断是否有问号
         url += (url.indexOf("?") == -1 ? "?" : "&");
         url = url + 'v='+ skyeyeVersion;
         return url;
+    },
+
+    /**
+     * 获取路径的访问地址
+     *
+     * @param url
+     */
+    getFilePath: function (url) {
+        if (url.startsWith("../../assets/")) {
+            return homePagePath + url;
+        } else {
+            return fileBasePath + url;
+        }
     }
 
 };

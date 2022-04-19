@@ -438,7 +438,7 @@ layui.config({
                         if(clickType == "folder"){
                             winui.window.msg("目前仅支持分享笔记", {icon: 2,time: 2000});
                         }else{
-                            var shareUrl = sysMainMation.homePagePath + "tpl/note/shareNote.html?id=" + clickId;
+                            var shareUrl = homePagePath + "tpl/note/shareNote.html?id=" + clickId;
                             var json = {"bean":{"shareUrl":shareUrl}};
                             var html = getDataUseHandlebars(getFileContent('tpl/note/shareNoteTemplate.tpl'), json);
                                 layer.open({

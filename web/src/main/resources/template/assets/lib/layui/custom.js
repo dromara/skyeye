@@ -51,7 +51,7 @@ var fileBasePath;
 var reqBasePath; // 总项目
 var shopBasePath; // 商城项目
 var flowableBasePath; // 工作流相关功能的项目
-
+var homePagePath; // 前端请求地址
 var webSocketPath;//聊天socket-开发
 
 function initBaseParams(){
@@ -61,6 +61,7 @@ function initBaseParams(){
 	shopBasePath = sysMainMation.shopBasePath;
 	webSocketPath = sysMainMation.webSocketPath;
 	flowableBasePath = sysMainMation.flowableBasePath;
+	homePagePath = sysMainMation.homePagePath;
 }
 
 // 编辑加载自定义的js文件
