@@ -72,9 +72,9 @@ layui.config({
 		$("body").on("click", ".notice-title-click", function(){
 			rowId = $(this).attr("rowId");
 			_openNewWindows({
-				url: "../../tpl/syseveuserstaff/syseveuserstaffdetails.html",
+				url: "../../tpl/syseveuserstaff/sysEveUserStaffDetails.html",
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-				pageId: "syseveuserstaffdetails",
+				pageId: "sysEveUserStaffDetails",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
 				}});

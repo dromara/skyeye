@@ -218,9 +218,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/syseveuserstaffedit.html", 
+			url: "../../tpl/syseveuserstaff/sysEveUserStaffEdit.html",
 			title: "编辑员工",
-			pageId: "syseveuserstaffedit",
+			pageId: "sysEveUserStaffEdit",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -236,9 +236,9 @@ layui.config({
 	function details(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/syseveuserstaffdetails.html", 
+			url: "../../tpl/syseveuserstaff/sysEveUserStaffDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "syseveuserstaffdetails",
+			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 			}});
@@ -391,9 +391,9 @@ layui.config({
 	// 新增员工
 	$("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/syseveuserstaff/syseveuserstaffadd.html?type=1",
+			url: "../../tpl/syseveuserstaff/sysEveUserStaffAdd.html?type=1",
 			title: "新增员工",
-			pageId: "syseveuserstaffadd",
+			pageId: "sysEveUserStaffAdd",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {

@@ -238,9 +238,9 @@ layui.config({
 	function details(data){
 		rowId = data.staffId;
 		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/syseveuserstaffdetails.html", 
+			url: "../../tpl/syseveuserstaff/sysEveUserStaffDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "syseveuserstaffdetails",
+			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 			}});

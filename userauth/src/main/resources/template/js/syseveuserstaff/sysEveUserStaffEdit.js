@@ -20,9 +20,10 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "staff003",
-		 	params: {rowId:parent.rowId},
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/syseveuserstaff/syseveuserstaffeditTemplate.tpl'),
+			method: "GET",
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 		hdb.registerHelper("compare1", function(v1, options){
 					if(isNull(v1)){
@@ -196,6 +197,7 @@ layui.config({
 		 	        	var params = {
 		 	        		rowId: parent.rowId,
 		 	        		userIdCard: $("#userIdCard").val(),
+							userName: $("#userName").html(),
 		 	        		userSex: $("input[name='userSex']:checked").val(),
 		 	        		email: $("#email").val(),
 		 	        		qq: $("#qq").val(),
@@ -203,6 +205,7 @@ layui.config({
 		 	        		homePhone: $("#homePhone").val(),
 		 	        		userSign: $("#userSign").val(),
 							workTime: $("#workTime").val(),
+							entryTime: $("#entryTime").html(),
 		 	        		companyId: companyId,
 		 	        		departmentId: departmentId,
 		 	        		jobId: jobId,
