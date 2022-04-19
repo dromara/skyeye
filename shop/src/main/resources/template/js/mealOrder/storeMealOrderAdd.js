@@ -87,15 +87,8 @@ layui.config({
                     var rowNum = $(item).attr("trcusid").replace("tr", "");
                     var mealMation = JSON.parse($("#mealId" + rowNum.toString()).attr("mealMaion"));
                     var row = {
-                        mealId: mealMation.mealId,
-                        skuId: mealMation.id,
+                        mealId: mealMation.id,
                         memberCarId: $("#carId" + rowNum.toString()).val(),
-                        mealName: mealMation.name,
-                        mealNum: mealMation.totalCount,
-                        remainMealNum: mealMation.totalCount,
-                        mealExplain: mealMation.memberDes,
-                        mealConsume: mealMation.oilDes,
-                        mealPrice: mealMation.showPrice
                     };
                     tableData.push(row);
                 });
@@ -185,12 +178,10 @@ layui.config({
                         // 获取表格行号
                         var thisRowNum = trId.replace("tr", "");
 
-                        $("#mealId" + thisRowNum.toString()).val(mealMation.name);
-                        $("#mealExplain" + thisRowNum.toString()).html(mealMation.memberDes);
-                        $("#mealExplain" + thisRowNum.toString()).attr("title", mealMation.memberDes);
+                        $("#mealId" + thisRowNum.toString()).val(mealMation.title);
+                        $("#mealExplain" + thisRowNum.toString()).html(mealMation.mealExplain);
                         $("#mealConsume" + thisRowNum.toString()).html(mealMation.oilDes);
-                        $("#mealConsume" + thisRowNum.toString()).attr("title", mealMation.oilDes);
-                        $("#num" + thisRowNum.toString()).html(mealMation.totalCount);
+                        $("#num" + thisRowNum.toString()).html(mealMation.mealNum);
                         $("#price" + thisRowNum.toString()).html(mealMation.showPrice);
                         $("#mealId" + thisRowNum.toString()).attr("mealMaion", JSON.stringify(mealMation));
                         calcAllPrice();
