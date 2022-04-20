@@ -39,27 +39,16 @@ layui.config({
 					$("#fromId").html(getDataUseHandlebars(selectMust, data));
 					$("#fromId").val(json.bean.fromId);
 					form.render('select');
-					customerIndustry();
 				});
 
-		 		// 行业
-		 		function customerIndustry(){
-		 			showGrid({
-		 			 	id: "industryId",
-		 			 	url: flowableBasePath + "crmcustomerindustry008",
-		 			 	params: {},
-		 			 	pagination: false,
-		 			 	template: selectMust,
-		 			 	ajaxSendLoadBefore: function(hdb){
-		 			 	},
-		 			 	ajaxSendAfter:function(j){
-		 			 		$("#industryId").val(json.bean.industryId);
-		 			 		form.render('select');
-		 			 		customerGroup();
-		 			 	}
-		 			});
-		 		}
-		 		
+				// 获取已上线的客户所属行业列表
+				sysCustomerUtil.queryCrmCustomerIndustryIsUpList(function (data){
+					$("#industryId").html(getDataUseHandlebars(selectMust, data));
+					$("#industryId").val(json.bean.industryId);
+					form.render('select');
+					customerGroup();
+				});
+
 		 		// 客户分组
 		 		function customerGroup(){
 		 			showGrid({

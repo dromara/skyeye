@@ -22,25 +22,14 @@ layui.config({
 	sysCustomerUtil.queryCustomerFromIsUpList(function (data){
 		$("#fromId").html(getDataUseHandlebars(selectOption, data));
 		form.render('select');
-		customerIndustry();
 	});
 
-	// 行业
-	function customerIndustry(){
-		showGrid({
-		 	id: "industryId",
-		 	url: flowableBasePath + "crmcustomerindustry008",
-		 	params: {},
-		 	pagination: false,
-		 	template: selectOption,
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function(j){
-		 		form.render('select');
-		 	}
-		});
-	}
-	
+	// 获取已上线的客户所属行业列表
+	sysCustomerUtil.queryCrmCustomerIndustryIsUpList(function (data){
+		$("#industryId").html(getDataUseHandlebars(selectOption, data));
+		form.render('select');
+	});
+
 	// 公海客户群
 	table.render({
 	    id: 'messageTable',
