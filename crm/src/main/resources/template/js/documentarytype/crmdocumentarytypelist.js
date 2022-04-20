@@ -111,11 +111,11 @@ layui.config({
 			}});
 	}
 	
-	//删除
+	// 删除
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "crmdocumentarytype005", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "crmdocumentarytype005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();
@@ -126,7 +126,7 @@ layui.config({
 		});
 	}
 	
-	//上线
+	// 上线
 	function up(data, obj){
 		var msg = obj ? '确认将【' + obj.data.typeName + '】上线吗？' : '确认将选中数据上线吗？';
 		layer.confirm(msg, {icon: 3, title: '类型上线'}, function (index) {

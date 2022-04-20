@@ -63,4 +63,21 @@ var sysCustomerUtil = {
         }, async: false});
     },
 
+    /**
+     * 获取已上线的跟单分类列表
+     *
+     * @param callback 回执函数
+     */
+    queryCrmDocumentaryTypeIsUpList: function (callback){
+        AjaxPostUtil.request({url: flowableBasePath + "crmdocumentarytype008", params: {}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
 }

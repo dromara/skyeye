@@ -49,9 +49,7 @@ layui.config({
 	});
 	
 	form.render();
-	
 	form.on('submit(formSearch)', function (data) {
-    	
         if (winui.verifyForm(data.elem)) {
         	refreshTable();
         }

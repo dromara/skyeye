@@ -25,22 +25,14 @@ layui.config({
 	    	maxlength: 200,
 	    	tools: ['count', 'copy', 'reset']
 	    });
-	    
-	    //分类
-		showGrid({
-		 	id: "typeId",
-		 	url: flowableBasePath + "crmdocumentarytype008",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function(j){
-		 		form.render('select');
-		 		opportunityFrom();
-		 	}
+
+		// 获取已上线的跟单分类列表
+		sysCustomerUtil.queryCrmDocumentaryTypeIsUpList(function (data){
+			$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+			form.render('select');
+			opportunityFrom();
 		});
-		
+
 		//商机
 		function opportunityFrom(){
 			showGrid({

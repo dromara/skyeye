@@ -1,6 +1,4 @@
 var rowId = "";
-var startTime = "";
-var endTime = "";
 
 layui.config({
 	base: basePath, 
@@ -9,28 +7,19 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate,
 		table = layui.table;
 	
 	authBtn('1572595572098');
-	
-	//分类
-	showGrid({
-	 	id: "typeId",
-	 	url: flowableBasePath + "crmdocumentarytype008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function(j){
-	 		form.render('select');
-	 	}
+
+	// 获取已上线的跟单分类列表
+	sysCustomerUtil.queryCrmDocumentaryTypeIsUpList(function (data){
+		$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+		form.render('select');
 	});
-	
+
 	//跟单时间
 	laydate.render({
 		elem: '#documentaryTime',
@@ -42,7 +31,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: flowableBasePath + 'documentary001',
-	    where: {opportunityName: $("#opportunityName").val(), typeId: $("#typeId").val(), startTime: startTime, endTime: endTime},
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -66,55 +55,22 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'edit') { //编辑
+        if (layEvent === 'edit') { // 编辑
         	edit(data);
-        }else if (layEvent === 'delete'){ //删除
+        }else if (layEvent === 'delete'){ // 删除
         	del(data);
-        }else if (layEvent === 'details'){ //详情
+        }else if (layEvent === 'details'){ // 详情
         	details(data);
         }
     });
 	
-	form.render();
-	
-	
-	$("body").on("click", "#formSearch", function(){
-		refreshTable();
-	});
-	
-	$("body").on("click", "#reloadTable", function(){
-    	loadTable();
-    });
-    
-    function loadTable(){
-    	if(isNull($("#documentaryTime").val())){
-    		startTime = "";
-    		endTime = "";
-    	}else{
-    		startTime = $("#documentaryTime").val().split('~')[0].trim();
-    		endTime = $("#documentaryTime").val().split('~')[1].trim();
-    	}
-    	table.reload("messageTable", {where: {opportunityName: $("#opportunityName").val(), typeId: $("#typeId").val(), startTime:startTime, endTime:endTime}});
-    }
-    
-    function refreshTable(){
-    	if(isNull($("#documentaryTime").val())){
-    		startTime = "";
-    		endTime = "";
-    	}else{
-    		startTime = $("#documentaryTime").val().split('~')[0].trim();
-    		endTime = $("#documentaryTime").val().split('~')[1].trim();
-    	}
-    	table.reload("messageTable", {page: {curr: 1}, where: {opportunityName: $("#opportunityName").val(), typeId: $("#typeId").val(), startTime:startTime, endTime:endTime}});
-    }
-
-	//新增
+	// 新增
 	$("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/documentarymanage/documentaryadd.html", 
+			url: "../../tpl/documentarymanage/documentaryAdd.html",
 			title: "新增跟单",
-			pageId: "documentaryadd",
-			area: ['70vw', '70vh'],
+			pageId: "documentaryAdd",
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
@@ -125,14 +81,14 @@ layui.config({
 			}});
     });
 	
-	//编辑
+	// 编辑
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/documentarymanage/documentaryedit.html", 
 			title: "编辑跟单",
 			pageId: "documentaryedit",
-			area: ['70vw', '70vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
@@ -143,19 +99,19 @@ layui.config({
 			}});
 	}
 	
-	//详情
+	// 详情
 	function details(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/documentarymanage/documentarydetails.html", 
+			url: "../../tpl/documentarymanage/documentaryDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "documentarydetails",
-			area: ['70vw', '70vh'],
+			pageId: "documentaryDetails",
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 			}});
 	}
 	
-	//删除
+	// 删除
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
@@ -168,6 +124,37 @@ layui.config({
     			}
     		}});
 		});
+	}
+
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
+	});
+
+	$("body").on("click", "#reloadTable", function(){
+		loadTable();
+	});
+
+	function loadTable(){
+		table.reload("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams(){
+		var startTime = "";
+		var endTime = "";
+		if(!isNull($("#documentaryTime").val())){
+			startTime = $("#documentaryTime").val().split('~')[0].trim();
+			endTime = $("#documentaryTime").val().split('~')[1].trim();
+		}
+		return {
+			opportunityName: $("#opportunityName").val(),
+			typeId: $("#typeId").val(),
+			startTime: startTime,
+			endTime: endTime
+		};
 	}
 	
     exports('mydocumentarylist', {});

@@ -281,9 +281,9 @@ layui.config({
 	function documentaryDetails(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/documentarymanage/documentarydetails.html", 
+			url: "../../tpl/documentarymanage/documentaryDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "documentarydetails",
+			pageId: "documentaryDetails",
 			area: ['70vw', '70vh'],
 			callBack: function(refreshCode){
 			}});

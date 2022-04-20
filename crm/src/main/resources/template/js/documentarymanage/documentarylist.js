@@ -7,26 +7,17 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate,
 		table = layui.table;
-	
-	// 分类
-	showGrid({
-	 	id: "typeId",
-	 	url: flowableBasePath + "crmdocumentarytype008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function(j){
-	 		form.render('select');
-	 	}
+
+	// 获取已上线的跟单分类列表
+	sysCustomerUtil.queryCrmDocumentaryTypeIsUpList(function (data){
+		$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+		form.render('select');
 	});
-	
+
 	// 跟单时间
 	laydate.render({
 		elem: '#documentaryTime',
@@ -67,34 +58,32 @@ layui.config({
         }
     });
 	
-	form.render();
-	
-	$("body").on("click", "#formSearch", function(){
-		refreshTable();
-	});
-	
-	$("body").on("click", "#reloadTable", function(){
-    	loadTable();
-    });
-    
-    function loadTable(){
-    	table.reload("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-	
 	// 详情
 	function details(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/documentarymanage/documentarydetails.html", 
+			url: "../../tpl/documentarymanage/documentaryDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "documentarydetails",
-			area: ['70vw', '70vh'],
+			pageId: "documentaryDetails",
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 			}});
+	}
+
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
+	});
+
+	$("body").on("click", "#reloadTable", function(){
+		loadTable();
+	});
+
+	function loadTable(){
+		table.reload("messageTable", {where: getTableParams()});
 	}
 	
 	function getTableParams(){
