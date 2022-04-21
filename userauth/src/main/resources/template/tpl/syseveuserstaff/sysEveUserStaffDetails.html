@@ -38,7 +38,7 @@
 					{{jobNumber}}
 				</div>
 			</div>
-		    <div class="layui-form-item layui-col-xs12">
+		    <div class="layui-form-item layui-col-xs6">
 		        <label class="layui-form-label">身份证件：</label>
 		        <div class="layui-input-block ver-center">
 		        	{{userIdCard}}
@@ -50,16 +50,10 @@
 		            {{userSex}}
 		        </div>
 		    </div>
-		    <div class="layui-form-item layui-col-xs6">
+		    <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">个人头像：</label>
 		        <div class="layui-input-block ver-center">
 		        	<img src="" class="photo-img" id="userPhoto">
-		        </div>
-		    </div>
-		    <div class="layui-form-item layui-col-xs6">
-		        <label class="layui-form-label">在职状态：</label>
-		        <div class="layui-input-block ver-center {{colorClass}}">
-		        	{{state}}
 		        </div>
 		    </div>
 			<div class="layui-form-item layui-col-xs6">
@@ -74,13 +68,25 @@
 		        	{{entryTime}}
 		        </div>
 		    </div>
-		    <div class="layui-form-item layui-col-xs6" id="leaveTime">
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">在职状态：</label>
+				<div class="layui-input-block ver-center {{colorClass}}">
+					{{stateName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6" id="trialTimeBox">
+				<label class="layui-form-label">预计试用结束日期：</label>
+				<div class="layui-input-block ver-center">
+					{{trialTime}}
+				</div>
+			</div>
+		    <div class="layui-form-item layui-col-xs6" id="leaveTime" style="display: none">
 		        <label class="layui-form-label">离职时间：</label>
 		        <div class="layui-input-block ver-center">
 		        	{{quitTime}}
 		        </div>
 		    </div>
-		    <div class="layui-form-item layui-col-xs6" id="leaveReason">
+		    <div class="layui-form-item layui-col-xs6" id="leaveReason" style="display: none">
 		        <label class="layui-form-label">离职原因：</label>
 		        <div class="layui-input-block ver-center">
 		        	{{quitReason}}

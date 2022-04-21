@@ -273,6 +273,23 @@ var systemCommonUtil = {
         } else {
             return fileBasePath + url;
         }
+    },
+
+    // 员工在职状态
+    sysUserStaffState: {
+        "onTheJob": {"id": 1, "name": "在职(转正的员工)"},
+        "quit": {"id": 2, "name": "离职"},
+        "probation": {"id": 3, "name": "见习(用于实习生)"},
+        "probationPeriod": {"id": 4, "name": "试用期(用于未转正的员工)"},
+        "retire": {"id": 5, "name": "退休"}
+    },
+
+    getSysUserStaffStateList: function (){
+        var list = [];
+        $.each(systemCommonUtil.sysUserStaffState, function (key, value){
+            list.push(value);
+        });
+        return list;
     }
 
 };

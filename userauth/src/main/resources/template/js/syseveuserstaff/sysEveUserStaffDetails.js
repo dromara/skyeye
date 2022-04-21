@@ -25,9 +25,9 @@ layui.config({
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function(json){
-		 		if(json.bean.state == "在职"){
-		 			$("#leaveTime").hide();
-		 			$("#leaveReason").hide();
+		 		if(json.bean.state == systemCommonUtil.sysUserStaffState["quit"]["id"]){
+		 			$("#leaveTime").show();
+		 			$("#leaveReason").show();
 		 		}
 		 		$("#userPhoto").attr("src", systemCommonUtil.getFilePath(json.bean.userPhoto));
 		 		matchingLanguage();

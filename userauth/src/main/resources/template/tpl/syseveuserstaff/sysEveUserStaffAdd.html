@@ -44,10 +44,24 @@
 		        	<div class="upload" id="userPhoto"></div>
 		        </div>
 		    </div>
-			<div class="layui-form-item layui-col-xs6">
+			<div class="layui-form-item layui-col-xs6" style="height: 108px">
 				<label class="layui-form-label">参加工作时间<i class="red">*</i></label>
 				<div class="layui-input-block">
 					<input type="text" id="workTime" name="workTime" win-verify="required" placeholder="XXXX-XX-XX" class="layui-input"/>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">在职状态<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<select lay-filter="state" lay-search="" id="state" name="state">
+
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6" id="trialTimeBox" style="display: none">
+				<label class="layui-form-label">预计试用结束日期<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<input type="text" id="trialTime" name="trialTime" placeholder="请选择预计试用结束日期" class="layui-input"/>
 				</div>
 			</div>
 		    <div class="layui-form-item layui-col-xs12">

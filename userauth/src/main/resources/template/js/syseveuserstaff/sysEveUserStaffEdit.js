@@ -210,7 +210,9 @@ layui.config({
 		 	        		departmentId: departmentId,
 		 	        		jobId: jobId,
 							jobScoreId: jobScoreId,
-		 	        		checkTimeStr: timeIds
+		 	        		checkTimeStr: timeIds,
+							state: $("#state").attr("state"),
+							trialTime: $("#trialTime").html()
 		 	        	};
 		 	        	params.userPhoto = $("#userPhoto").find("input[type='hidden'][name='upload']").attr("oldurl");
 		 	        	if(isNull(params.userPhoto)){

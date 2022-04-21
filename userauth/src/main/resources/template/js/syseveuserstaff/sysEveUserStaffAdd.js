@@ -18,19 +18,28 @@ layui.config({
 	    var $ = layui.$,
 	    	laydate = layui.laydate,
 	    	dtree = layui.dtree;
+		var selTemplate = getFileContent('tpl/template/select-option.tpl');
 		type = GetUrlParam("type");
 
-	    // 入职时间
-		laydate.render({
-			elem: '#entryTime',
-			range: false
+		// 员工在职状态加载
+		$("#state").html(getDataUseHandlebars(selTemplate, {rows: systemCommonUtil.getSysUserStaffStateList()}));
+		form.on('select(state)', function (data) {
+			if (data.value == '4') {
+				// 试用期
+				$("#trialTimeBox").show();
+			} else {
+				$("#trialTimeBox").hide();
+			}
 		});
 
+	    // 入职时间
+		laydate.render({elem: '#entryTime', range: false});
+
 		// 参加工作时间
-		laydate.render({
-			elem: '#workTime',
-			range: false
-		});
+		laydate.render({elem: '#workTime', range: false});
+
+		// 预计试用结束日期
+		laydate.render({elem: '#trialTime', range: false});
 	    
  		// 初始化上传
  		$("#userPhoto").upload({
@@ -156,6 +165,11 @@ layui.config({
  	        		winui.window.msg('请选择考勤段', {icon: 2,time: 2000});
  	        		return false;
  	        	}
+	            var state = $("#state").val();
+	            if(state == '4' && isNull($("#trialTime").val())){
+					winui.window.msg('请选择预计试用结束日期', {icon: 2,time: 2000});
+					return false;
+				}
  	        	var params = {
  	        		userName: $("#userName").val(),
  	        		email: $("#email").val(),
@@ -172,7 +186,9 @@ layui.config({
  	        		jobId: jobId,
 					jobScoreId: jobScoreId,
  	        		checkTimeStr: timeIds,
-					type: type
+					type: type,
+					state: state,
+					trialTime: $("#trialTime").val()
  	        	};
  	        	params.userPhoto = $("#userPhoto").find("input[type='hidden'][name='upload']").attr("oldurl");
  	        	if(isNull(params.userPhoto)){
