@@ -62,7 +62,7 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-			{{# if(d.state == 1){ }}
+			{{# if(d.state != 2){ }}
 				{{# if(auth('1555563042447')){ }}
             		<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}
@@ -72,7 +72,7 @@
 					<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="turnTeacher">转教职工</a>
 				{{# } }}
 			{{# } }}
-			{{# if(d.state == 1){ }}
+			{{# if(d.state != 2){ }}
 				{{# if(auth('1557906699018')){ }}
 					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="leave">离职</a>
 				{{# } }}
