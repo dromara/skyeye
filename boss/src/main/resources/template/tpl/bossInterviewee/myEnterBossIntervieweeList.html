@@ -34,10 +34,10 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-            {{# if(auth('1637677825950')){ }}
+            {{# if(auth('1637677825950') && d.state != 2){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
             {{# } }}
-            {{# if(auth('1637677817862')){ }}
+            {{# if(auth('1637677817862') && d.state != 2){ }}
                 <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delet"><language showName="com.skyeye.deleteBtn"></language></a>
             {{# } }}
         </script>
