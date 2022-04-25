@@ -1,6 +1,6 @@
 var rowId = "";
 
-// 转正申请
+// 离职申请申请
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -14,7 +14,7 @@ layui.config({
         table = layui.table;
 
     // 新增
-    authBtn('1650787545029');
+    authBtn('1650894715778');
 
     laydate.render({
         elem: '#createTime',
@@ -25,7 +25,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: flowableBasePath + 'queryBossInterviewRegularWorkerList',
+        url: flowableBasePath + 'queryBossInterviewQuitList',
         where: getTableParams(),
         even: true,
         page: true,
@@ -34,13 +34,14 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
             { field: 'createName', title: '申请人', width: 120},
-            { field: 'departmentName', title: '转正部门', width: 140},
-            { field: 'jobName', title: '转正岗位', width: 150 },
-            { field: 'regularTime', title: '转正日期', align: 'center', width: 100 },
+            { field: 'leaveType', title: '离职类型', width: 100, templet: function(d){
+                return bossUtil.getLeaveTypeNameById(d.leaveType);
+            }},
+            { field: 'leaveTime', title: '离职日期', width: 100},
             { field: 'processInstanceId', title: '流程ID', width: 100, templet: function(d){
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
-            { field: 'stateName', title: '状态', width: 90, templet: function(d) {
+            { field: 'stateName', title: '状态', width: 90, templet: function(d){
                 return activitiUtil.showStateName2(d.state, 1);
             }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
@@ -75,9 +76,9 @@ layui.config({
     // 添加
     $("body").on("click", "#addBean", function(){
         _openNewWindows({
-            url: "../../tpl/bossInterviewRegularWorker/bossInterviewRegularWorkerAdd.html",
+            url: "../../tpl/bossInterviewQuit/bossInterviewQuitAdd.html",
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-            pageId: "bossInterviewRegularWorkerAdd",
+            pageId: "bossInterviewQuitAdd",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -93,7 +94,7 @@ layui.config({
     function revoke(data){
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "revokeBossInterviewRegularWorker", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "revokeBossInterviewQuit", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg("提交成功", {icon: 1, time: 2000});
                     loadTable();
@@ -108,9 +109,9 @@ layui.config({
     function edit(data){
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewRegularWorker/bossInterviewRegularWorkerEdit.html",
+            url: "../../tpl/bossInterviewQuit/bossInterviewQuitEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-            pageId: "bossInterviewRegularWorkerEdit",
+            pageId: "bossInterviewQuitEdit",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -127,12 +128,12 @@ layui.config({
     function subApproval(data){
         layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
             layer.close(index);
-            activitiUtil.startProcess(sysActivitiModel["bossInterviewRegularWorker"]["key"], function (approvalId) {
+            activitiUtil.startProcess(sysActivitiModel["bossInterviewQuit"]["key"], function (approvalId) {
                 var params = {
                     id: data.id,
                     approvalId: approvalId
                 };
-                AjaxPostUtil.request({url: flowableBasePath + "editBossInterviewRegularWorkerToSubApproval", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: flowableBasePath + "editBossInterviewQuitToSubApproval", params: params, type: 'json', method: "POST", callback: function(json){
                     if(json.returnCode == 0){
                         winui.window.msg("提交成功", {icon: 1, time: 2000});
                         loadTable();
@@ -148,7 +149,7 @@ layui.config({
     function cancellation(data){
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "updateBossInterviewRegularWorkerToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "updateBossInterviewQuitToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
                 if(json.returnCode == 0){
                     winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                     loadTable();
@@ -163,9 +164,9 @@ layui.config({
     function details(data){
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/bossInterviewRegularWorker/bossInterviewRegularWorkerDetails.html",
+            url: "../../tpl/bossInterviewQuit/bossInterviewQuitDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-            pageId: "bossInterviewRegularWorkerDetails",
+            pageId: "bossInterviewQuitDetails",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
             }
@@ -202,5 +203,5 @@ layui.config({
         };
     }
 
-    exports('bossInterviewRegularWorkerList', {});
+    exports('bossInterviewQuitList', {});
 });

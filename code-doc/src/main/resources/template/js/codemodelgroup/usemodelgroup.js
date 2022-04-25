@@ -14,8 +14,6 @@ layui.config({
 	
 	var jsCreateClick = false;//是否检索生成
 	
-	var editId = "";//当前编辑的模板id
-	
 	var list = [];//存储模板生成集合
 	//集合内容
 	//{
@@ -116,7 +114,6 @@ layui.config({
 	 				if(isNull(s)){
 	 					winui.window.msg('请先转换模板', {icon: 2,time: 2000});
 	 				}else{
-	 					editId = row.id;
 	 					var mode = returnModel(row.modelType);
 	 					if (!isNull(mode.length)) {
 	 						textEditor.setOption('mode', mode);
@@ -153,13 +150,7 @@ layui.config({
 	
 	// txtcenter DIV内的输入框内容变化事件
 	$("body").on("keyup", ".txtcenter input", function(e){
-		for(var i = 0; i < list.length; i++) {
-			list[i].content = codeDocUtil.replaceModelContent(list[i].modelContent);
-			list[i].fileName = $("#tableZhName").val() + list[i].modelName;
-			if(list[i].modelId == editId){
-				textEditor.setValue(list[i].content);
-			}
-		}
+		transformResult();
 	});
 	
 	// 检索数据
@@ -170,7 +161,6 @@ layui.config({
 				AjaxPostUtil.request({url: reqBasePath + "codemodel012", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(json){
 					if(json.returnCode == 0) {
 						jsCreateClick = true;
-						editId = "";
 						textEditor.setValue('');
 						$("#tableZhName").val(json.bean.tableName);
 						$("#tableFirstISlowerName").val(json.bean.tableFirstISlowerName);
@@ -180,16 +170,7 @@ layui.config({
 						$("#DaoPackageName").val(json.bean.DaoPackageName);
 						$("#tableISlowerName").val(json.bean.tableISlowerName);
 						$("#tableBzName").val(json.bean.tableBzName);
-						// 遍历模板赋值文件名
-						$('#modelList').find('li').each(function() {
-							var label = $(this).find("label");
-							var modelType = label.attr('modeltype');
-							if(modelType == 'Java' || modelType == 'xml') {
-								label.html(json.bean.tableName + label.attr("thiscontent"));
-							}else{
-								label.html(json.bean.tableFirstISlowerName + label.attr("thiscontent"));
-							}
-						});
+
 						transformResult();
 						winui.window.msg('检索成功', {icon: 1,time: 2000});
 					}else{
@@ -212,6 +193,7 @@ layui.config({
 			}else{
 				fileName = $("#tableFirstISlowerName").val() + row.modelName;
 			}
+			$("#modelList").find("li").find("label[relation='" + row.id + "']").html(fileName);
 			var s = {
 				modelId: row.id,
 				content: content,

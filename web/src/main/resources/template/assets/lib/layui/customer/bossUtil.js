@@ -130,4 +130,24 @@ var bossUtil = {
             }});
     },
 
+    // 离职类型状态
+    leaveTypeList: {
+        "automaticResignation": {"id": 1, "name": "自动离职"},
+        "retire": {"id": 2, "name": "退休"},
+        "diseaseWords": {"id": 3, "name": "病辞"},
+        "dismiss": {"id": 4, "name": "辞退"},
+        "resignation": {"id": 5, "name": "辞职"}
+    },
+    getLeaveTypeList: function () {
+        var list = [];
+        $.each(bossUtil.leaveTypeList, function (key, value) {
+            list.push(value);
+        });
+        return list;
+    },
+    getLeaveTypeNameById: function (id){
+        var list = bossUtil.getLeaveTypeList();
+        return getInPoingArr(list, "id", id, "name");
+    }
+
 };

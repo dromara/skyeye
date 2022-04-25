@@ -8,7 +8,7 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	//模板分组ID
+	// 模板分组ID
 	groupId = parent.rowId;
 	var $ = layui.$,
 		form = layui.form,
@@ -22,8 +22,8 @@ layui.config({
 	    where:{groupId:groupId},
 	    even:true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'tableName', title: '表名', width: 180 },
