@@ -20,6 +20,22 @@ layui.config({
         tools: ['count', 'copy', 'reset']
     });
 
+    if(!systemCommonUtil.judgeCurrentUserRegularWorker()) {
+        winui.window.msg('您已提交转正申请，无法重复提交', {icon: 5, time: 2000}, function(){
+            parent.layer.close(index);
+            parent.refreshCode = '-9999';
+        });
+    }
+
+    // 获取当前登录员工信息
+    systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
+        $("#regularWorkerId").html(data.bean.jobNumber + '_' + data.bean.userName);
+        $("#departmentId").attr("departmentId", data.bean.departmentId);
+        $("#departmentId").html(data.bean.departmentName);
+        $("#jobId").attr("jobId", data.bean.jobId);
+        $("#jobId").html(data.bean.jobName);
+    });
+
     skyeyeEnclosure.init('enclosureUpload');
     matchingLanguage();
     // 保存为草稿

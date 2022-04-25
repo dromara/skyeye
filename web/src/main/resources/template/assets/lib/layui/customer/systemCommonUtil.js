@@ -29,6 +29,21 @@ var systemCommonUtil = {
     },
 
     /**
+     * 判断当前登录用户是否可以申请转正
+     */
+    judgeCurrentUserRegularWorker: function () {
+        var result = false;
+        AjaxPostUtil.request({url: flowableBasePath + "judgeCurrentUserRegularWorker", params: {}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                result = json.bean.canApply;
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+        return result;
+    },
+
+    /**
      * 获取当前登录用户所属企业的所有部门信息
      *
      * @param callback 回执函数
