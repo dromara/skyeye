@@ -401,12 +401,12 @@ dataGrid.prototype = {
         var result;
         if(!isNull(url)){
             //用ajax的同步方式
-            parms.userToken = getCookie('userToken');
             parms.loginPCIp = returnCitySN["cip"];
             layui.$.ajax({
                 url: url,
                 async: false, // 改为同步方式
                 dataType: "json",
+                headers: getRequestHeaders(),
                 type: method,
                 data: parms,
                 beforeSend: function () {

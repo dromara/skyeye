@@ -207,11 +207,11 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         var obj = this, currOptions = obj.options;
         if (!currOptions.url || !currOptions.method)
             return;
-        currOptions.data.userToken = getCookie('userToken');
         $.ajax({
             url: currOptions.url,
             type: currOptions.method,
             data: $.extend({}, currOptions.data),
+			headers: getRequestHeaders(),
             dataType: 'json',
             async: false,
             success: function (res) {

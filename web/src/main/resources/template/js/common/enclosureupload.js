@@ -38,7 +38,7 @@ layui.config({
 	    function loadMyEnclosureList(){
 	    	fsTree.render({
 	    		id: "treeDemo",
-	    		url: reqBasePath + "sysenclosure010?userToken=" + getCookie('userToken') + "&loginPCIp=" + returnCitySN["cip"],
+	    		url: reqBasePath + "sysenclosure010?loginPCIp=" + returnCitySN["cip"],
 	    		checkEnable: true,
 	    		loadEnable: false,//异步加载
 	    		showLine: false,

@@ -77,7 +77,7 @@ layui.config({
 	 		 	   				if(json.rows != null){
 			 	   					localStorage.setItem("authpoints", JSON.stringify(json.rows));
 			 	   				}
-	 		 	   				$.cookie('userToken', json.bean.id, {path: '/' });
+	 		 	   				$.cookie('userToken', json.bean.userToken, {path: '/' });
 	 		 	   				if(!isNull(json.bean.id)){
 	 		 	   					if(checkURL(url)){
 			 	   						location.href = url;

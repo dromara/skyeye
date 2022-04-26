@@ -708,7 +708,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 			}
 
 			that.loading();
-			data.userToken = getCookie('userToken');
 			data.loginPCIp = returnCitySN["cip"];
 
 			$.ajax({
@@ -717,7 +716,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 				,contentType: options.contentType
 				,data: data
 				,dataType: 'json'
-				,headers: options.headers || {}
+				,headers: getRequestHeaders()
 				,success: function(res){
 					//移除请求遮罩层
 					$("body").find(".mask-req-str").remove();

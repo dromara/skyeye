@@ -63,7 +63,7 @@ layui.config({
 		var el5;
 		el5 = eleTree.render({
 			elem: '.ele5',
-			url: "knowledgetype008?userToken=" + getCookie('userToken') + "&loginPCIp=",
+			url: "knowledgetype008?loginPCIp=",
 			defaultExpandAll: true,
 			expandOnClickNode: false,
 			highlightCurrent: true

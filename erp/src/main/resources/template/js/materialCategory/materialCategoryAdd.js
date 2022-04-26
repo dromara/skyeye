@@ -24,7 +24,7 @@ layui.config({
 		//加载树信息
 	    fsTree.render({
 			id: "materialCategoryType",
-			url: flowableBasePath + "materialcategory008?userToken=" + getCookie('userToken') + "&loginPCIp=",
+			url: flowableBasePath + "materialcategory008?loginPCIp=",
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			chkStyle: "radio",

@@ -30,21 +30,17 @@ layui.config({
 		loadUserMation();
 		//加载用户信息
 		function loadUserMation(){
-			if(!isNull(getCookie('userToken'))){
-				// 获取当前登录员工信息
-				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
-					var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
-						+ '<font>' + data.bean.userName + '</font>'
-						+ '<font id="consoleDesk">控制台</font>'
-						+ '<font id="exitBtn">退出</font>';
-					$("#operatorBtn").html(str);
-				}, function (){
-					location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apiPage/apiPage.html");
-				});
-				loadApiMicroservices();
-			} else {
+			// 获取当前登录员工信息
+			systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+				var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
+					+ '<font>' + data.bean.userName + '</font>'
+					+ '<font id="consoleDesk">控制台</font>'
+					+ '<font id="exitBtn">退出</font>';
+				$("#operatorBtn").html(str);
+			}, function (){
 				location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/apiPage/apiPage.html");
-			}
+			});
+			loadApiMicroservices();
 		}
 
 		/**
@@ -236,7 +232,7 @@ layui.config({
 			}
 		});
 		
-		//退出
+		// 退出
 		$("body").on("click", "#exitBtn", function(){
 			winui.window.confirm('确认注销吗?', {id: 'exit-confim', icon: 3, title: '提示', skin: 'msg-skin-message', success: function(layero, index){
 				var times = $("#exit-confim").parent().attr("times");

@@ -36,7 +36,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: reqBasePath + "mynote001?userToken=" + getCookie('userToken') + "&loginPCIp=" + returnCitySN["cip"],
+		url: reqBasePath + "mynote001?loginPCIp=" + returnCitySN["cip"],
 		checkEnable: false,
 		dragEnable: true,
 		loadEnable: true,//异步加载
@@ -679,7 +679,7 @@ layui.config({
 			isNewNote = true;
 			showNewNoteList();//展示最新的笔记
 		}else{
-			AjaxPostUtil.request({url:reqBasePath + "mynote006", params: {parentId: folderId, search: searchTitle}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "mynote006", params: {parentId: folderId, search: searchTitle}, type: 'json', callback: function(json){
 				if(json.returnCode == 0){
 			 		$("#folderChildList").html(getDataUseHandlebars(folderchildlisetTemplate, json));
 			 		initRightMenu();

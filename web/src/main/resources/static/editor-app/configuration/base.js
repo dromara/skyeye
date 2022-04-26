@@ -173,13 +173,12 @@ function isNull(str){
 
 function ajaxPost(url, params, callback) {
     var result = null;
-    var headers = {};
+    var headers = getRequestHeaders();
     headers['CSRFToken'] = jQuery("#csrftoken").val();
 
     if (params && typeof params == "object") {
         params = deleteEmptyProp(params);
     }
-    params.userToken = getCookie('userToken');
     params.loginPCIp = "";
 
     jQuery.ajax({

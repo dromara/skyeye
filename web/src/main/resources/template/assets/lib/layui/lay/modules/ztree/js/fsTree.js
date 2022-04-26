@@ -167,6 +167,10 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				url : _this.config.url,
 				autoParam : ["id=parentId"],// 异步加载时需要自动提交父节点属性的参数
 				dataType : "json",
+				beforeSend: function(XHR){
+					XHR.setRequestHeader("userToken", getCookie('userToken'));
+				},
+				headers: getRequestHeaders(),
 				dataFilter : function(treeId, treeNode, responseData) {
 					if (responseData.rows.length > 0) {
 						$.fn.zTree.getZTreeObj(treeId).addNodes(treeNode, responseData.rows);

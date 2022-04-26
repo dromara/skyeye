@@ -287,6 +287,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				url: i.url,
 				type: i.type || "get",
 				data: i.data,
+				headers: getRequestHeaders(),
 				dataType: i.dataType || "json",
 				cache: !1,
 				success: function(json) {
@@ -1153,6 +1154,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 						url : l.url || "",
 						type : 'POST',
 						async : false,
+						headers: getRequestHeaders(),
 						data : formData,
 						// 告诉jQuery不要去处理发送的数据
 						processData : false,

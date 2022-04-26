@@ -92,9 +92,8 @@ public class SessionFilter implements Filter {
 		servletResponse.setHeader("Access-Control-Allow-Origin", "*");
 		servletResponse.setHeader("Access-Control-Allow-Credentials", "true");
 		servletResponse.setHeader("Access-Control-Allow-Methods", "*");
-		// userToken为用户的token
 		// requestType为请求类型，2为手机端请求，1或者空为PC端请求
-		servletResponse.setHeader("Access-Control-Allow-Headers", "Content-Type,userToken,requestType");//这里“userToken”是我要传到后台的内容key  
+		servletResponse.setHeader("Access-Control-Allow-Headers", "Content-Type,userToken,requestType");
 		servletResponse.setHeader("Access-Control-Expose-Headers", "*");
 	}
 

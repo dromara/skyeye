@@ -46,6 +46,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 				url: url,
 				type: method,
 				async: async,
+				headers: getRequestHeaders(),
 				data: param,
 				dataType: "json",
 				success: function(result) {

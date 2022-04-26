@@ -799,6 +799,7 @@
                 $.ajax({
                     url: currOptions.url,
                     type: currOptions.method,
+                    headers: getRequestHeaders(),
                     success: function (res) {
                         res = res.data;
                         if (typeof res === "string") {

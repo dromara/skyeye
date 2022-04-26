@@ -74,7 +74,7 @@ layui.config({
 		var el5;
 		el5 = eleTree.render({
             elem: '.ele5',
-            url: flowableBasePath + "materialcategory009?userToken=" + getCookie('userToken') + "&loginPCIp=",
+            url: flowableBasePath + "materialcategory009?loginPCIp=",
             defaultExpandAll: true,
             expandOnClickNode: false,
             highlightCurrent: true

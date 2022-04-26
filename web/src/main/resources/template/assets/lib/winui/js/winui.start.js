@@ -120,10 +120,10 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
 
         if (!currOptions.url || !currOptions.method)
             return;
-        currOptions.data.userToken = getCookie('userToken');
         $.ajax({
             url: currOptions.url,
             type: currOptions.method,
+            headers: getRequestHeaders(),
             data: $.extend({}, currOptions.data),
             dataType: 'json',
             async: false,

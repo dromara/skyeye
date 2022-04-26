@@ -64,6 +64,12 @@ function initBaseParams(){
 	homePagePath = sysMainMation.homePagePath;
 }
 
+function getRequestHeaders() {
+	return {
+		userToken: getCookie('userToken')
+	};
+}
+
 // 编辑加载自定义的js文件
 layui.each(customerJS, function(key, jsPath){
 	if(jsPath.lastIndexOf(".js") >=0){

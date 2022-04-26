@@ -19,7 +19,7 @@ layui.config({
     var ztree = null;
     fsTree.render({
         id: "treeDemo",
-        url: flowableBasePath + "dsFormObjectRelation007?userToken=" + getCookie('userToken') + "&loginPCIp=" + returnCitySN["cip"] + "&firstTypeCode=" + firstTypeCode + "&language=" + languageType,
+        url: flowableBasePath + "dsFormObjectRelation007?loginPCIp=" + returnCitySN["cip"] + "&firstTypeCode=" + firstTypeCode + "&language=" + languageType,
         clickCallback: onClickTree,
         onDblClick: onClickTree
     }, function(id){
