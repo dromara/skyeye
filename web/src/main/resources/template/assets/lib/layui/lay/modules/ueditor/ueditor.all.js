@@ -8240,6 +8240,7 @@ UE.ajax = function() {
                 }
             }
         };
+        xhr.setRequestHeader('userToken', getCookie('userToken'));
         if (method == "POST") {
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.send(submitStr);
@@ -23841,6 +23842,7 @@ UE.plugin.register('autoupload', function (){
         fd.append('type', 'ajax');
         xhr.open("post", url, true);
         xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        xhr.setRequestHeader('userToken', getCookie('userToken'));
         xhr.addEventListener('load', function (e) {
             try{
                 var json = (new Function("return " + utils.trim(e.target.response)))();
@@ -24626,6 +24628,7 @@ UE.plugin.register('simpleupload', function (){
                     type: 'POST',
                     cache: false,
                     data: formData,
+                    headers: getRequestHeaders(),
                     processData: false,
                     contentType: false,
                     success: function (data) {

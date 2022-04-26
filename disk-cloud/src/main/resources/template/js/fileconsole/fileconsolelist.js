@@ -30,6 +30,12 @@ layui.config({
 		colorpicker = layui.colorpicker,
 		device = layui.device();
 
+	var currentUserId = "";
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		currentUserId = data.bean.id;
+	});
+
 	//遮罩层显示
 	$(".fileconsole-mask").show();
 	matchingLanguage();
@@ -1427,7 +1433,7 @@ layui.config({
 	//文件权限控制
 	function authControllerFile(createId){
 		//如果当前登陆人是文件创建人,可以删除，回收站，重命名，剪切，否则不能
-		if(getCookie('userToken') === createId){
+		if(currentUserId === createId){
 			$(".fileReName").show();//重命名显示
 			$(".deleteFolderAndChild").show();//删除显示
 			$(".cutUrl").show();//剪切显示

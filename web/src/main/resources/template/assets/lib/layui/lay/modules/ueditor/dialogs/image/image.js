@@ -704,6 +704,7 @@
             uploader.on('uploadBeforeSend', function (file, data, header) {
                 //这里可以通过data对象添加POST参数
                 header['X_Requested_With'] = 'XMLHttpRequest';
+                $.extend(header, getRequestHeaders());
             });
 
             uploader.on('uploadProgress', function (file, percentage) {
