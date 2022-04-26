@@ -121,12 +121,12 @@ layui.config({
 		}
 		layer.confirm('确定撤销该流程吗？', { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-	        AjaxPostUtil.request({url:reqBasePath + data.revokeMapping, params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
-					winui.window.msg("撤销成功", {icon: 1,time: 2000});
+	        AjaxPostUtil.request({url: flowableBasePath + data.revokeMapping, params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function(json){
+				if (json.returnCode == 0) {
+					winui.window.msg("撤销成功", {icon: 1, time: 2000});
 					reloadMyStartTable();
-				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				} else {
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		});

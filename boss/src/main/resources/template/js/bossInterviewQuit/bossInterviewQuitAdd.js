@@ -24,6 +24,13 @@ layui.config({
         tools: ['count', 'copy', 'reset']
     });
 
+    if(!systemCommonUtil.judgeCurrentUserQuit()) {
+        winui.window.msg('您已提交离职申请，无法重复提交', {icon: 5, time: 2000}, function(){
+            parent.layer.close(index);
+            parent.refreshCode = '-9999';
+        });
+    }
+
     // 获取当前登录员工信息
     systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
         $("#applyUser").html(data.bean.jobNumber + '_' + data.bean.userName);
