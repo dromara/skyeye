@@ -172,7 +172,7 @@ layui.config({
     //导出excel
     $("body").on("click", "#downloadExcel", function () {
     	postDownLoadFile({
-			url : flowableBasePath + 'salesoutlet005?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
+			url : flowableBasePath + 'salesoutlet005?loginPCIp=' + returnCitySN["cip"],
 			params: getTableParams(),
 			method : 'post'
 		});

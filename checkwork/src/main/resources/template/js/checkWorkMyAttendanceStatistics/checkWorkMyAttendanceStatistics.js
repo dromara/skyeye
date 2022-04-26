@@ -162,7 +162,7 @@ layui.config({
 	// 个人考勤情况导出
     $("body").on("click", "#download", function(){
         postDownLoadFile({
-            url : flowableBasePath + 'checkwork017?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
+            url : flowableBasePath + 'checkwork017?loginPCIp=' + returnCitySN["cip"],
             params: getTableParams(),
             method : 'post'
         });

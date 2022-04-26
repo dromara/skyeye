@@ -157,7 +157,7 @@ layui.config({
 	// 下载模板
 	$("body").on("click", "#download", function(){
 		postDownLoadFile({
-			url : reqBasePath + 'syseveschedule009?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
+			url : reqBasePath + 'syseveschedule009?loginPCIp=' + returnCitySN["cip"],
 			method : 'post'
 		});
     });
@@ -173,10 +173,11 @@ layui.config({
 	    formData.append("file", $("#upfile")[0].files[0]);
 	    formData.append("name", name);
 	    $.ajax({
-	        url : reqBasePath + 'syseveschedule010?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
+	        url : reqBasePath + 'syseveschedule010?loginPCIp=' + returnCitySN["cip"],
 	        type : 'POST',
 	        async : false,
 	        data : formData,
+			headers: getRequestHeaders(),
 	        // 告诉jQuery不要去处理发送的数据
 	        processData : false,
 	        // 告诉jQuery不要去设置Content-Type请求头

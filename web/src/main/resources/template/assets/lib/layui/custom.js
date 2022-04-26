@@ -227,6 +227,7 @@ var postDownLoadFile = function(options) {
 		for (var key in config.params) {
 			$form.append('<input type="hidden" name="' + key + '" value="' + config.params[key] + '" />');
 		}
+		$form.append('<input type="hidden" name="userToken" value="' + getCookie('userToken') + '" />');
 	}
 	// 图片
 	if(!isNull(config.data)){

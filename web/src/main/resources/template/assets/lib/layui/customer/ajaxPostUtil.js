@@ -56,7 +56,6 @@ var AjaxPostUtil = {
             var paramValue = params[pro];
             paramsArray.push(pro + "=" + paramValue);
         }
-        paramsArray.push("userToken=" + getCookie('userToken'));
         paramsArray.push("loginPCIp=" + returnCitySN["cip"]);
         return paramsArray.join("&");
     },

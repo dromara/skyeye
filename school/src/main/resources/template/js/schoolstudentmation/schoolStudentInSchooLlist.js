@@ -169,7 +169,7 @@ layui.config({
     // 下载模板
     $("body").on("click", "#exportStudentModel", function(){
     	postDownLoadFile({
-			url : reqBasePath + 'studentmation009?userToken=' + getCookie('userToken') + '&loginPCIp=' + returnCitySN["cip"],
+			url : reqBasePath + 'studentmation009?loginPCIp=' + returnCitySN["cip"],
 			params: getTableParams(),
 			method : 'post'
 		});
