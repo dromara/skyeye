@@ -36,16 +36,8 @@ layui.config({
 				return '<a lay-event="details" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
 	        { field: 'taskType', title: '类型', width: 150 },
-	        { field: 'createName', title: '申请人', width: 140},
-	        { field: 'createTime', title: '申请时间', align: 'center', width: 140, templet: function(d){
-	        	if(!isNull(d.createTime)){
-		        	var str = d.createTime.toString();
-		        	str = str.substring(0, str.length - 3);
-		        	return date('Y-m-d H:i', str);
-	        	}else{
-	        		return "";
-	        	}
-	        }},
+	        { field: 'createName', title: '申请人', width: 120},
+	        { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
 	        { field: 'name', title: '当前节点', width: 130, templet: function(d){
 	        	return '[' + d.name + ']';
 	        }},

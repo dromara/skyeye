@@ -25,12 +25,8 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'processInstanceId', title: '流程ID', width: 100 },
 	        { field: 'taskType', title: '类型', width: 100 },
-	        { field: 'createName', title: '申请人', width: 100},
-	        { field: 'createTime', title: '申请时间', align: 'center', width: 180, templet: function(d){
-	        	var str = d.createTime.toString();
-	        	str = str.substring(0, str.length - 3);
-	        	return date('Y-m-d H:i:s', str);
-	        }},
+	        { field: 'createName', title: '申请人', width: 120},
+	        { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
 	        { field: 'name', title: '当前节点', width: 130, templet: function(d){
 	        	return '[' + d.name + ']';
 	        }},
