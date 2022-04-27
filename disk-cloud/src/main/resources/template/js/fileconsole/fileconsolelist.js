@@ -746,14 +746,14 @@ layui.config({
 	// 新建文件夹
 	$("body").on("click", "#createNewFolder", function(e){
 		hideRMenu();
-		createFolder(folderId, refreshTreePointNode, initMenuToBox);
+		createFolder(folderId, refreshTreePointNode, initMenuToBox, currentUserId);
 	});
 	
 	// 树操作--新建文件夹
 	$("body").on("click", ".treecreateNewFolder", function(e){
 		hideRMenu();
 		loadThisFolderChild();
-		createFolder(folderId, refreshTreePointNode, initMenuToBox);
+		createFolder(folderId, refreshTreePointNode, initMenuToBox, currentUserId);
 	});
 	
 	// 树操作--刷新
@@ -1464,7 +1464,7 @@ layui.config({
 					text: "新建文件夹",
 					img: "../../assets/images/create-folder-icon.png",
 					callback: function() {
-						createFolder(folderId, refreshTreePointNode, initMenuToBox);
+						createFolder(folderId, refreshTreePointNode, initMenuToBox, currentUserId);
 					}
 				}, { // 菜单项
 					text: "新建文件",
@@ -1792,7 +1792,6 @@ layui.config({
 		// 实例化
 		uploader = WebUploader.create({
 		    formData: {
-		    	userToken: getCookie('userToken'),
 		    	loginPCIp: returnCitySN["cip"],
 		    	folderId: folderId
 		    },
@@ -1858,7 +1857,7 @@ layui.config({
 		});
 		uploader.on('uploadBeforeSend', function(block, data, headers) {
 			headers['X-Requested-With']=  'XMLHttpRequest';
-			data.userToken = getCookie('userToken');
+			$.extend(headers, getRequestHeaders());
 			data.loginPCIp = returnCitySN["cip"];
 			data.folderId = folderId;
 			data.md5 = md5;

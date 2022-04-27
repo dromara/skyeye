@@ -58,21 +58,17 @@ layui.config({
 		
 		//加载用户信息
 		function loadUserMation(){
-			if(!isNull(getCookie('userToken'))){
-				// 获取当前登录员工信息
-				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
-					var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
-						+ '<font>' + data.bean.userName + '</font>'
-						+ '<font id="consoleDesk">控制台</font>'
-						+ '<font id="exitBtn">退出</font>';
-					$("#operatorBtn").html(str);
-					$("#file-operator").html('<button class="layui-btn layui-btn-primary" id="saveBtn"><language showName="com.skyeye.save"></language></button>');
-				}, function (){
-					$("#operatorBtn").html('<font id="loginBtn">登陆</font>');
-				});
-			}else{
+			// 获取当前登录员工信息
+			systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+				var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
+					+ '<font>' + data.bean.userName + '</font>'
+					+ '<font id="consoleDesk">控制台</font>'
+					+ '<font id="exitBtn">退出</font>';
+				$("#operatorBtn").html(str);
+				$("#file-operator").html('<button class="layui-btn layui-btn-primary" id="saveBtn"><language showName="com.skyeye.save"></language></button>');
+			}, function (){
 				$("#operatorBtn").html('<font id="loginBtn">登陆</font>');
-			}
+			});
 			loadFileMation();
 		}
 		

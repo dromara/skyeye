@@ -81,10 +81,10 @@ function createHtmlFile(folderId, callBack){
 }
 
 // 创建文件夹
-function createFolder(folderId, refreshCallBack, initDragCallBack){
+function createFolder(folderId, refreshCallBack, initDragCallBack, currentUserId){
 	AjaxPostUtil.request({url:reqBasePath + "fileconsole002", params: {parentId: folderId, catalogName: '新建文件夹'}, type: 'json', callback: function(json){
 		if(json.returnCode == 0){
-			initNewFolder(json.bean.id, json.bean.catalogName, json.bean.logoPath, true);
+			initNewFolder(json.bean.id, json.bean.catalogName, json.bean.logoPath, true, currentUserId);
 			// 刷新节点
 			if(typeof(refreshCallBack) == "function") {
 				refreshCallBack();
@@ -100,7 +100,7 @@ function createFolder(folderId, refreshCallBack, initDragCallBack){
 }
 
 // 加载新建的文件夹
-function initNewFolder(id, folderName, icon, isEdit){
+function initNewFolder(id, folderName, icon, isEdit, currentUserId){
 	$("#file-content").find("div[class='filename-edit']").hide();
 	$("#file-content").find("div[class='filename']").show();
 	var json = {
@@ -109,7 +109,7 @@ function initNewFolder(id, folderName, icon, isEdit){
 			name: folderName,
 			icon: icon,
 			isShow: 'none',
-			createId: getCookie('userToken')
+			createId: currentUserId
 		}
 	};
 	var html = getDataUseHandlebars(folderTemplate, json);

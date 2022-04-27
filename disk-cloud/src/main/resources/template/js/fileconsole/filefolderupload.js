@@ -134,7 +134,6 @@ function loadUploadMethod(){
 	        webkitdirectory: true
 	    },
 	    formData: {
-	    	userToken: getCookie('userToken'),
 	    	loginPCIp: returnCitySN["cip"],
 	    	folderId: parent.folderId
 	    },
@@ -201,7 +200,7 @@ function loadUploadMethod(){
 	});
 	uploader.on('uploadBeforeSend', function(block, data, headers) {
 		headers['X-Requested-With']=  'XMLHttpRequest';
-		data.userToken = getCookie('userToken');
+        $.extend(headers, getRequestHeaders());
 		data.loginPCIp = returnCitySN["cip"];
 		data.folderId = parent.folderId;
 		data.md5 = md5;

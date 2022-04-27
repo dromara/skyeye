@@ -20,19 +20,17 @@ layui.config({
 	
 	loadUserMation();
 	function loadUserMation(){
-		if(!isNull(getCookie('userToken'))){
-			// 获取当前登录员工信息
-			systemCommonUtil.getSysCurrentLoginUserMation(function (data){
-				var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
-					+ '<font>' + data.bean.userName + '</font>'
-					+ '<font id="consoleDesk">控制台</font>'
-					+ '<font id="exitBtn">退出</font>';
-				$("#operatorBtn").html(str);
-				loadNote();
-			});
-		}else{
+		// 获取当前登录员工信息
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
+				+ '<font>' + data.bean.userName + '</font>'
+				+ '<font id="consoleDesk">控制台</font>'
+				+ '<font id="exitBtn">退出</font>';
+			$("#operatorBtn").html(str);
+			loadNote();
+		}, function (){
 			location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/note/shareNote.html?id=" + rowId);
-		}
+		});
 	}
 	
 	function loadNote(){

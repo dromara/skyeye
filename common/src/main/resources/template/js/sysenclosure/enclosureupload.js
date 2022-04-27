@@ -134,7 +134,7 @@ function loadUploadMethod(){
     		}});
 		 }
 	});
-	
+
 	// 实例化
 	uploader = WebUploader.create({
 	    pick: {
@@ -142,7 +142,6 @@ function loadUploadMethod(){
 	        label: '选择文件'
 	    },
 	    formData: {
-	    	userToken: getCookie('userToken'),
 	    	loginPCIp: returnCitySN["cip"],
 	    	folderId: folderId
 	    },
@@ -209,7 +208,7 @@ function loadUploadMethod(){
 	});
 	uploader.on('uploadBeforeSend', function(block, data, headers) {
 		headers['X-Requested-With']=  'XMLHttpRequest';
-		data.userToken = getCookie('userToken');
+        $.extend(headers, getRequestHeaders());
 		data.loginPCIp = returnCitySN["cip"];
 		data.folderId = folderId;
 		data.md5 = md5;

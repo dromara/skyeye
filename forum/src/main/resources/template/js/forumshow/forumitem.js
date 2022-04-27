@@ -9,10 +9,8 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'jquery', 'winui'], function (exports) {
-	
 	winui.renderColor();
 	var $ = layui.$;
-	
 	var commentTemplate = $('#commentTemplate').html();
 	var replyTemplate = $('#replyTemplate').html();
 	var textareaTemplate = $('#textareaTemplate').html();
@@ -23,12 +21,18 @@ layui.config({
 	$("body").append(getFileContent("tpl/forumshow/commonmenu.tpl"));
 	
 	rowId = GetUrlParam("id");
-	var userToken = getCookie('userToken');
-	
+
+	var currentUserId = "";
+	// 获取当前登录员工信息
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		currentUserId = data.bean.id;
+	});
+
 	//帖子信息展示
 	AjaxPostUtil.request({url:reqBasePath + "forumcontent006", params: {rowId:rowId}, type: 'json', callback: function(json){
 		if(json.returnCode == 0){
-			if(json.bean.createId != userToken){//如果不是用户自己的帖子，则显示举报按钮
+			if(json.bean.createId != currentUserId){
+				// 如果不是用户自己的帖子，则显示举报按钮
 				$("#forumReport").removeClass("layui-hide");
 			}
 			$("#content").html(json.bean.content);

@@ -1486,12 +1486,12 @@ layui.config({}).extend({}).define(['laytpl', 'laypage', 'layer', 'form'], funct
 			params[request.limitName] = options.limit;
 			that.filterRulesSet(params); //行内过滤条件
 			that.sortSet(params); //排序条件
-			options.where.userToken = getCookie('userToken');
 			options.where.loginPCIp = returnCitySN["cip"];
 			$.ajax({
 				type: options.method || 'get',
 				url: options.url,
 				data: $.extend(params, options.where),
+				headers: getRequestHeaders(),
 				dataType: 'json',
 				success: function(res) {
 					//移除请求遮罩层

@@ -640,7 +640,7 @@ layui.define(['layer', 'winui'], function (exports) {
             id: 'winui-sys-notice',
             type: 2,
             title: title,
-            content: '../../tpl/mymessage/myNoticeList.html?userToken=' + getCookie("userToken"),
+            content: '../../tpl/mymessage/myNoticeList.html',
             loadBottomMenuIcon: loadBottomMenuIcon,
             iconTitle: iconTitle
         });

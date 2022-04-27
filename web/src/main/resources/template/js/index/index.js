@@ -546,11 +546,11 @@ layui.config({
 			title: '天眼',
 			init: {
 				url: reqBasePath + "companychat001",
-				data: {userToken: getCookie('userToken'), loginPCIp: returnCitySN["cip"]}
+				data: {loginPCIp: returnCitySN["cip"]}
 			},//好友接口
 			members: {
 				url: reqBasePath + 'companytalkgroup007',
-				data: {userToken: getCookie('userToken'), loginPCIp: returnCitySN["cip"]}
+				data: {loginPCIp: returnCitySN["cip"]}
 			},//群员借口
 			uploadImage: {
 				url: reqBasePath + "common003?type=9", //（返回的数据格式见下文）

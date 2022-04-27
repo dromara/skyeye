@@ -141,8 +141,8 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 		request : function(config) {
 			var data = config.data ? config.data : {};
 			var async = (typeof (config.async) === "boolean") ? config.async : true;
-			data.userToken = getCookie('userToken');
 			data.loginPCIp = returnCitySN["cip"];
+			$.extend(config.headers, getRequestHeaders());
 			$.ajax({
 				type : config.type ? config.type : "POST",
 				headers : config.headers,
