@@ -92,7 +92,7 @@ layui.config({
 		var msg = '确认撤销该借用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "licenceborrow010", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "licenceborrow010", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadBorrowTable();

@@ -88,7 +88,7 @@ layui.config({
 		var msg = '确认从工作流中撤销选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销任务审批申请' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "proworkload005", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "proworkload005", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();

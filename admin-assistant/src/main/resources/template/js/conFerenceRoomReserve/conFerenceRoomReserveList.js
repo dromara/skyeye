@@ -95,7 +95,7 @@ layui.config({
 			var params = {
 				processInstanceId: data.processInstanceId
 			};
-            AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve010", params: params, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve010", params: params, type: 'json', method: "PUT", callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadReserveTable();

@@ -168,7 +168,7 @@ var erpOrderUtil = {
                 processInstanceId: processInstanceId,
                 orderType: orderType
             };
-            AjaxPostUtil.request({url: flowableBasePath + "erpcommon003", params: params, method: "GET", type: 'json', callback: function(json) {
+            AjaxPostUtil.request({url: flowableBasePath + "erpcommon003", params: params, type: 'json', method: "PUT", callback: function(json) {
                 if(json.returnCode == 0) {
                     winui.window.msg("撤销成功。", {icon: 1,time: 2000});
                     if(typeof(callback) == "function") {
