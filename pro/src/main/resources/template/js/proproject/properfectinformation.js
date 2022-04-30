@@ -11,10 +11,8 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 	    	laydate = layui.laydate;
-	    
 	    var ue;
-	    var resultsEnclosureInfoList = new Array();//项目成果和总结的附件
-	    
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "proproject015",
@@ -54,21 +52,7 @@ layui.config({
  	        	// 项目成果和总结的附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.resultsEnclosureInfoList});
 
- 	        	ue = UE.getEditor('resultsContent',{
-			    	//初始化高度
-			    	initialFrameHeight: 400,
-			    	maximumWords: 100000
-			    });
-			    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-			    UE.Editor.prototype.getActionUrl = function(action){
-			        if (action == 'uploadimage' || action == 'uploadfile' || action == 'uploadvideo' || action == 'uploadimage'){//上传单个图片,上传附件,上传视频,多图上传
-			            return reqBasePath + '/upload/editUploadController/uploadContentPic';
-			        } else if(action == 'listimage'){
-			        	return reqBasePath + '/upload/editUploadController/downloadContentPic';
-			        }else{
-			            return this._bkGetActionUrl.call(this, action);
-			        }
-			    };
+				ue = ueEditorUtil.initEditor('resultsContent');
 			    ue.addListener("ready", function () {
 			    	if(!isNull(json.bean.resultsContent))
 			    		ue.setContent(json.bean.resultsContent);
