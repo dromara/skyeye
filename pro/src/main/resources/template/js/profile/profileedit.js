@@ -29,21 +29,7 @@ layui.config({
 				$(".typeOne").removeClass("layui-hide");
 			}
 
-			ue = UE.getEditor('content',{
-				//初始化高度
-				initialFrameHeight: 400,
-				maximumWords: 10000
-			});
-			UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-			UE.Editor.prototype.getActionUrl = function(action){
-				if (action == 'uploadimage' || action == 'uploadfile' || action == 'uploadvideo' || action == 'uploadimage'){//上传单个图片,上传附件,上传视频,多图上传
-					return reqBasePath + '/upload/editUploadController/uploadContentPic';
-				} else if(action == 'listimage'){
-					return reqBasePath + '/upload/editUploadController/downloadContentPic';
-				}else{
-					return this._bkGetActionUrl.call(this, action);
-				}
-			};
+			ue = ueEditorUtil.initEditor('content');
 			ue.addListener("ready", function () {
 				ue.setContent(json.bean.content);
 			});

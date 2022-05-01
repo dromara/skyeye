@@ -56,12 +56,14 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'del') { //删除
-        	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
-        	edit(data);
-        }else if (layEvent === 'details') { //详情
+		if (layEvent === 'del') { // 删除
+			del(data, obj);
+		} else if (layEvent === 'edit') { // 编辑
+			edit(data);
+		} else if (layEvent === 'details') { // 详情
 			details(data);
+		} else if (layEvent === 'sysPic') { // 图片
+			systemCommonUtil.showPicImg(fileBasePath + data.logo);
 		}
     });
 	

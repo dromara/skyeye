@@ -13,29 +13,15 @@ layui.config({
 			eleTree = layui.eleTree;
 
 	    initTypeId();
-	    
-	    var ue = UE.getEditor('container',{
-	    	//初始化高度
-	    	initialFrameHeight: 700,
-	    	maximumWords: 100000
-	    });
-	    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-	    UE.Editor.prototype.getActionUrl = function(action){
-	        if (action == 'uploadimage' || action == 'uploadfile' || action == 'uploadvideo' || action == 'uploadimage'){//上传单个图片,上传附件,上传视频,多图上传
-	            return reqBasePath + '/upload/editUploadController/uploadContentPic';
-	        } else if(action == 'listimage'){
-	        	return reqBasePath + '/upload/editUploadController/downloadContentPic';
-	        }else{
-	            return this._bkGetActionUrl.call(this, action);
-	        }
-	    };
+
+		var ue = ueEditorUtil.initEditor('container');
 	    
 	    // 初始化类型
 		function initTypeId(){
 			var el5;
 			el5 = eleTree.render({
 				elem: '.ele5',
-				url: "knowledgetype008?loginPCIp=",
+				url: reqBasePath + "knowledgetype008?loginPCIp=",
 				defaultExpandAll: true,
 				expandOnClickNode: false,
 				highlightCurrent: true

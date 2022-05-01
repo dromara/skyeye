@@ -302,13 +302,14 @@ layui.define(["jquery","laytpl"], function (exports) {
               data = JSON.stringify(data);
             }
 
+            $.extend(options.headers, getRequestHeaders());
             $.ajax({
                 type: options.method || 'get'
-                ,url: reqBasePath + options.url
+                ,url: options.url
                 ,contentType: options.contentType
                 ,data: data
                 ,dataType: 'json'
-                ,headers: options.headers || {}
+                ,headers: options.headers
                 ,success: function(res){
                     // response接口支持多级子项的方式，即"a.b"为res.a.b
                     var fn=function (responseMsg) {

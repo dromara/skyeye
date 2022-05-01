@@ -130,15 +130,7 @@ layui.config({
         if (layEvent === 'edit') { //编辑
         	edit(data);
         }else if (layEvent === 'userPhoto') { //头像预览
-        	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + systemCommonUtil.getFilePath(data.userPhoto) + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
+			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.userPhoto));
         }else if (layEvent === 'details') { //员工详情
         	details(data);
         }else if (layEvent === 'leave'){ //离职
