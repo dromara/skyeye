@@ -62,7 +62,7 @@ layui.config({
                 }},
                 { field: 'issueTime', title: '签发时间', align: 'center', width: 100 },
                 { field: 'validityTime', title: '截至时间', align: 'center', width: 100 },
-                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100},
+                { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 100},
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar'}
 		    ]],
 		    done: function(){
@@ -90,7 +90,7 @@ layui.config({
 			title: "录入证书",
 			pageId: "sysStaffCertificateAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
                 	loadTable();
@@ -108,12 +108,12 @@ layui.config({
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sysStaffCertificateEdit",
             area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}
 		});
@@ -121,14 +121,14 @@ layui.config({
 	
 	// 删除
     function deleteRow(data){
-        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index) {
             layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sysstaffcertificate005", params:{rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
-                if(json.returnCode == 0){
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+            AjaxPostUtil.request({url: reqBasePath + "sysstaffcertificate005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
+                if(json.returnCode == 0) {
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
-                }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                } else {
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         });

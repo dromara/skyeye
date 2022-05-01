@@ -46,7 +46,7 @@ layui.config({
 				        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 				        { field: 'typeName', title: '反馈类型', align: 'left', width: 120},
 				        { field: 'createName', title: '反馈人', align: 'left', width: 80 },
-				        { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 140 },
+				        { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 140 },
 				        { field: 'content', title: '反馈内容', align: 'left', width: 300 },
 				        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 				    ]]

@@ -54,7 +54,7 @@ layui.config({
                 }},
                 { field: 'issueTime', title: '签发时间', align: 'center', width: 100 },
                 { field: 'validityTime', title: '截至时间', align: 'center', width: 100 },
-                { field: 'createTime', title: 'systemLanguage["com.skyeye.entryTime"][languageType]', align: 'center', width: 100},
+                { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 100},
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar'}
 		    ]],
 		    done: function(){
