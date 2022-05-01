@@ -233,6 +233,30 @@ var systemCommonUtil = {
     },
 
     /**
+     * 员工选择页面(所有员工)
+     *
+     * @param callback 回调函数
+     */
+    userStaffCheckType: false, // 选择类型，默认单选，true:多选，false:单选
+    checkStaffMation: [], // 选择时返回的对象
+    openSysAllUserStaffChoosePage: function (callback){
+        _openNewWindows({
+            url: "../../tpl/syseveuserstaff/sysEveUserStaffChoose.html",
+            title: "员工选择",
+            pageId: "sysuserselpage",
+            area: ['90vw', '90vh'],
+            callBack: function(refreshCode){
+                if (refreshCode == '0') {
+                    if(typeof(callback) == "function") {
+                        callback(systemCommonUtil.checkStaffMation);
+                    }
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                }
+            }});
+    },
+
+    /**
      * 系统资源图标选择页面
      *
      * @param callback 回调函数

@@ -6,7 +6,6 @@ var companyList = [];
 var departmentList = [];
 
 // 选择员工，多选
-var userStaffCheckType = true;
 var checkStaffList = [];
 
 // 五险一金设置
@@ -233,26 +232,18 @@ layui.config({
 
 	// 选择员工
 	$("body").on("click", "#userStaffSel", function(){
-		_openNewWindows({
-			url: "../../tpl/syseveuserstaff/sysEveUserStaffChoose.html",
-			title: "选择员工",
-			pageId: "sysEveUserStaffChoose",
-			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					var templateArray = [].concat(checkStaffList);
-					var tags = $('#userStaff').tagEditor('getTags')[0].tags;
-					for (i = 0; i < tags.length; i++) {
-						$('#userStaff').tagEditor('removeTag', tags[i]);
-					}
-					checkStaffList = [].concat(templateArray);
-					$.each(checkStaffList, function(i, item){
-						$('#userStaff').tagEditor('addTag', item.name);
-					});
-				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-				}
-			}});
+		systemCommonUtil.userStaffCheckType = true; // 选择类型，默认单选，true:多选，false:单选
+		systemCommonUtil.checkStaffMation = [].concat(checkStaffList); // 选择时返回的对象
+		systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
+			var tags = $('#userStaff').tagEditor('getTags')[0].tags;
+			for (i = 0; i < tags.length; i++) {
+				$('#userStaff').tagEditor('removeTag', tags[i]);
+			}
+			checkStaffList = [].concat(checkStaffMation);
+			$.each(checkStaffList, function(i, item){
+				$('#userStaff').tagEditor('addTag', item.name);
+			});
+		});
 	});
 
 	// 五险金额变化

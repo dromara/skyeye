@@ -1,10 +1,5 @@
 var rowId = "";
 
-// 已选择的员工信息
-var checkStaffList = [];
-// 多选
-var userStaffCheckType = true;
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -121,31 +116,25 @@ layui.config({
             winui.window.msg('请先选择门店信息.', {icon: 2, time: 2000});
             return false;
         }
-        checkStaffList = [];
-        _openNewWindows({
-            url: "../../tpl/syseveuserstaff/sysEveUserStaffChoose.html",
-            title: "选择员工",
-            pageId: "sysEveUserStaffChoose",
-            area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    var list = new Array();
-                    $.each(checkStaffList, function (i, item){
-                        list.push(item.id);
-                    });
-                    var params = {
-                        storeId: chooseStoreId,
-                        staffId: JSON.stringify(list)
-                    };
-                    AjaxPostUtil.request({url: shopBasePath + "storeStaff003", params: params, type: 'json', method: "POST", callback: function(json){
-                        if(json.returnCode == 0){
-                            loadStaff(chooseStoreId);
-                        }else{
-                            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                        }
-                    }});
+        systemCommonUtil.userStaffCheckType = true; // 选择类型，默认单选，true:多选，false:单选
+        systemCommonUtil.checkStaffMation = []; // 选择时返回的对象
+        systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
+            var list = new Array();
+            $.each(checkStaffMation, function (i, item){
+                list.push(item.id);
+            });
+            var params = {
+                storeId: chooseStoreId,
+                staffId: JSON.stringify(list)
+            };
+            AjaxPostUtil.request({url: shopBasePath + "storeStaff003", params: params, type: 'json', method: "POST", callback: function(json){
+                if(json.returnCode == 0){
+                    loadStaff(chooseStoreId);
+                }else{
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
+        });
     });
 
     exports('storeStaffDistribute', {});

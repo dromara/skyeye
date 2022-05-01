@@ -36,5 +36,6 @@
 
     "bossPersonRequire": {"name": "人员需求申请", "key": "../../tpl/bossPersonRequire/bossPersonRequireAdd.html", "complate": true},
     "bossInterviewRegularWorker": {"name": "转正申请", "key": "../../tpl/bossInterviewRegularWorker/bossInterviewRegularWorkerAdd.html", "complate": true},
-    "bossInterviewQuit": {"name": "离职申请", "key": "../../tpl/bossInterviewQuit/bossInterviewQuitAdd.html", "complate": true}
+    "bossInterviewQuit": {"name": "离职申请", "key": "../../tpl/bossInterviewQuit/bossInterviewQuitAdd.html", "complate": true},
+    "bossInterviewJobTransfer": {"name": "岗位调动申请", "key": "../../tpl/bossInterviewJobTransfer/bossInterviewJobTransferAdd.html", "complate": true}
 }

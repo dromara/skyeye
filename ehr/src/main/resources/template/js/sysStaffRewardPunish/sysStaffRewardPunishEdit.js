@@ -1,7 +1,4 @@
 
-// 员工信息
-var staffMation = {};
-
 // 员工奖惩信息
 layui.config({
 	base: basePath, 
@@ -27,7 +24,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){},
 		 	ajaxSendAfter:function(json){
-		 		staffMation = {
+				systemCommonUtil.checkStaffMation = {
 		 			id: json.bean.staffId,
 		 			userName: json.bean.userName
 		 		};
@@ -77,7 +74,7 @@ layui.config({
 		 	        		awardUnit: $("#awardUnit").val(),
 		 	        		content: $("#content").val(),
 		 	        		desc: $("#desc").val(),
-			 	        	staffId: staffMation.id,
+			 	        	staffId: systemCommonUtil.checkStaffMation.id,
 			 	        	rowId: parent.rowId,
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 		 	        	};
@@ -98,16 +95,10 @@ layui.config({
 
 	    // 选择员工
 	    $("body").on("click", "#staffNameSel", function(){
-	    	_openNewWindows({
-				url: "../../tpl/syseveuserstaff/sysEveUserStaffChoose.html", 
-				title: "选择员工",
-				pageId: "sysEveUserStaffChoose",
-				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						$("#staffName").val(staffMation.jobNumber + "_" + staffMation.userName);
-                	}
-				}});
+			systemCommonUtil.userStaffCheckType = false; // 选择类型，默认单选，true:多选，false:单选
+			systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
+				$("#staffName").val(checkStaffMation.jobNumber + "_" + checkStaffMation.userName);
+			});
 	    });
 	    
 	    $("body").on("click", "#cancle", function(){

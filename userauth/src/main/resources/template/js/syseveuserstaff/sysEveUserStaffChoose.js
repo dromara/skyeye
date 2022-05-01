@@ -16,17 +16,17 @@ layui.config({
 	var selTemplate = getFileContent('tpl/template/select-option.tpl')
 
 	// 选择类型，默认单选，true:多选，false:单选
-	var userStaffCheckType = isNull(parent.userStaffCheckType) ? false : parent.userStaffCheckType;
+	var userStaffCheckType = isNull(parent.systemCommonUtil.userStaffCheckType) ? false : parent.systemCommonUtil.userStaffCheckType;
 
 	// 设置提示信息
 	var s = '员工选择规则：';
 	if(userStaffCheckType){
 		s += '1.多选；如没有查到要选择的员工，请检查员工信息是否满足当前规则。';
 		// 多选保存的员工对象信息
-		var checkStaffList = [].concat(parent.checkStaffList);
+		var checkStaffMation = [].concat(parent.systemCommonUtil.checkStaffMation);
 		// 初始化值
 		var ids = [];
-		$.each(checkStaffList, function(i, item){
+		$.each(checkStaffMation, function(i, item){
 			ids.push(item.id);
 		});
 		tableCheckBoxUtil.setIds({
@@ -121,7 +121,7 @@ layui.config({
 					form.render();
 					var chooseIndex = JSON.stringify(dubClick.data('index'));
 					var obj = res.rows[chooseIndex];
-					parent.staffMation = obj;
+					parent.systemCommonUtil.checkStaffMation = obj;
 
 					parent.refreshCode = '0';
 					parent.layer.close(index);
@@ -197,7 +197,7 @@ layui.config({
 		}
 		AjaxPostUtil.request({url: reqBasePath + "staff009", params: {ids: selectedData.toString()}, type: 'json', method: "POST", callback: function(json){
 			if(json.returnCode == 0){
-				parent.checkStaffList = [].concat(json.rows);
+				parent.systemCommonUtil.checkStaffMation = [].concat(json.rows);
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}else{
