@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	    	
+	    </form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="showBaseTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">基础信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">中文名称：</label>
+				<div class="layui-input-block ver-center">
+					{{nameCn}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">英文名称：</label>
+				<div class="layui-input-block ver-center">
+					{{nameEn}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">列表项：</label>
+				<div class="layui-input-block">
+					<table class="layui-table">
+						<thead>
+						<tr>
+							<th style="min-width: 120px;">字段</th>
+							<th style="min-width: 100px;">最小薪资范围</th>
+							<th style="min-width: 100px;">最大薪资范围</th>
+							<th style="min-width: 100px;">备注</th>
+						</tr>
+						</thead>
+						<tbody id="useTable" class="insurance-table">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{{/bean}}
+	</script>
+
+	<!-- usetableTemplate -->
+	<script type="text/x-handlebars-template" id="usetableTemplate">
+		<tr trcusid="{{trId}}">
+			<td id="{{fieldId}}"></td>
+			<td id="{{minMoney}}"></td>
+			<td id="{{maxMoney}}"></td>
+			<td id="{{remark}}"></td>
+		</tr>
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/companyJobScore/'}).use('companyJobScoreDetail');
+	</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+           	<button id="addBean" class="winui-toolbtn" auth="1566201610886"><i class="fa fa-plus" aria-hidden="true"></i>数据备份</button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+			{{# if(auth('1566201620396')){ }}
+            	<a class="layui-btn layui-btn-xs" lay-event="reduction">还原</a>
+			{{# } }}
+        </script>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/sysdatasql/'}).use('sysdatasqllist');
+    </script>
+</body>
+</html>

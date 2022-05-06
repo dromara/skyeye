@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>skyeye-web</artifactId>
+        <groupId>com.skyeye.web</groupId>
+        <version>1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>web</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
+
+        <!-- 商城模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>shop</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 会员管理模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>member</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 招聘管理模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>boss</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 用户管理模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>userauth</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 工作计划管理模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>workplan</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 薪资管理模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>wages</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 3d管理模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>threed</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 问卷模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>survey</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 售后服务模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>seal-service</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 学校模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>school</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 定时任务模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>schedule</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 小程序设计模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>rmprogram</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 定时任务模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>quartz</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 项目管理模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>pro</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 流程规划模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>planpro</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 组织管理模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>organization</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 笔记模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>note</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 任务模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>mq</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 消息通知模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>message</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 通讯录模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>mail</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 轻应用模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>light-app</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 知识库模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>knowlg</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 日程模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>jobdiary</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 财务模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>ifs</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 统计模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>gateway</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 论坛模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>forum</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 考试模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>exam</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- erp生产模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>erp-produce</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- erp模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>erp</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 邮箱模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>email</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- ehr模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>ehr</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 动态表单模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>dsform</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 云文件模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>disk-cloud</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- crm模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>crm</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 公共模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>common</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 代码编辑器模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>code-doc</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 考勤模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>checkwork</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- api模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>api</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 行政模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>admin-assistant</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 工作流模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>activiti</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!-- 资源文件拷贝插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!--spring-boot打包 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                    <webResources>
+                        <resource>
+                            <directory>${basedir}/lib</directory>
+                            <targetPath>WEB-INF/lib</targetPath>
+                            <filtering>false</filtering>
+                            <includes>
+                                <include>**/*.jar</include>
+                            </includes>
+                        </resource>
+                    </webResources>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>springloaded</artifactId>
+                        <version>1.2.5.RELEASE</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <!--打包跳过测试 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <!-- java编译插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

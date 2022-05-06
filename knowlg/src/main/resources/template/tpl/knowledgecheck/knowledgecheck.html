@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	    	<div id="checkDetails">
+        		
+    		</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">审核结果<i class="red">*</i></label>
+				<div class="layui-input-block winui-radio">
+					<input type="radio" name="examineState" value="2" title="审核通过" lay-filter="examineState" checked /> 
+					<input type="radio" name="examineState" value="3" title="审核不通过" lay-filter="examineState" />
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12 layui-hide" id="reasonHide">
+				<label class="layui-form-label">不通过原因<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<textarea id="examineNopassReason" name="examineNopassReason" placeholder="请输入审核不通过原因" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<div class="layui-input-block">
+					<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+					<button class="winui-btn" lay-submit lay-filter="formAddBean">确定</button>
+				</div>
+			</div>
+	    </form>
+	</div>
+	<script type="text/x-handlebars-template" id="beanTemplate">
+        {{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+        		<label class="layui-form-label">标题：</label>
+        		<div class="layui-input-block ver-center">
+        			{{title}}
+        		</div>
+    		</div>
+			<div class="layui-form-item layui-col-xs6">
+	    		<label class="layui-form-label">所属分类：</label>
+        		<div class="layui-input-block ver-center">
+            		{{typeName}}
+        		</div>
+			</div>
+    		<div class="layui-form-item layui-col-xs12">
+        		<label class="layui-form-label">内容：</label>
+        		<div class="layui-input-block ver-center">
+					<iframe id="knowledgecontentshowBox" style="width: 100%; border: 0px;" scrolling="no"></iframe>
+				</div>
+    		</div>
+        {{/bean}}
+    </script>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/knowledgecheck/'}).use('knowledgecheck');
+    </script>
+</body>
+</html>

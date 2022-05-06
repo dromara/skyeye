@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="padding:20px; margin:0 auto;">
+        <form class="layui-form" action="" id="showForm">
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">维修技师<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="serviceTechnician" name="serviceTechnician" win-verify="required" placeholder="请选择维修技师" class="layui-input" readonly="readonly"/>
+                    <i class="fa fa-plus-circle input-icon chooseServiceTechnicianBtn"></i>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">下次保养公里数<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="nextServiceMileage" name="nextServiceMileage" win-verify="required|number" placeholder="请输入下次保养公里数" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">下次保养时间<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="nextServiceTime" name="nextServiceTime" win-verify="required" placeholder="请选择下次保养时间" class="layui-input"/>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-col-xs12">
+                <div class="layui-input-block">
+                    <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                    <button class="winui-btn" lay-submit lay-filter="formAddBean">完成保养</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/keepFitOrder/'}).use('complateKeepFitOrder');
+    </script>
+</body>
+</html>

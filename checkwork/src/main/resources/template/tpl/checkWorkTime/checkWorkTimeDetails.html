@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding: 20px; margin: 0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+	
+	<script type="text/html" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">标题：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{title}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">工作时间段：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{startTime}} ~ {{endTime}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">作息时间段：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{restStartTime}} ~ {{restEndTime}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">类型：</label>
+		        <div class="layui-input-block ver-center">
+		            {{typeName}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">工作日：</label>
+		        <div class="layui-input-block ver-center">
+		            <span class="layui-badge layui-bg-blue weekDay" value="1">一</span>
+		            <span class="layui-badge layui-bg-blue weekDay" value="2">二</span>
+		            <span class="layui-badge layui-bg-blue weekDay" value="3">三</span>
+		            <span class="layui-badge layui-bg-blue weekDay" value="4">四</span>
+		            <span class="layui-badge layui-bg-blue weekDay" value="5">五</span>
+		            <span class="layui-badge layui-bg-blue weekDay" value="6">六</span>
+		            <span class="layui-badge layui-bg-gray weekDay" value="7">日</span><br>
+		            <div class="layui-form-mid layui-word-aux ver-center" style="padding-top: 8px !important">
+		            	<span class="layui-badge layui-bg-blue" style="height: 12px;"> </span>：每周的当天都工作；
+		            	<span class="layui-badge layui-bg-gray" style="height: 12px;"> </span>：每周的当天都休假；
+		            	<span class="layui-badge layui-bg-orange" style="height: 12px;"> </span>：单周上班，双周休假。
+		            </div>
+		        </div>
+		    </div>
+		{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+		layui.config({base: '../../js/checkWorkTime/'}).use('checkWorkTimeDetails');
+	</script>
+</body>
+</html>

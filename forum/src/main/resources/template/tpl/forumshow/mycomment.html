@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body style="background-color: RGB(242, 242, 242);">
+	<div class="forum-console">
+		<div class="forum-title" id="forumTitle">
+			
+		</div>
+	    <div class="main-content layui-row layui-col-space10" style="background-color: white;">
+	    	<div class="layadmin-caller">
+				<div class="layui-tab layui-tab-brief caller-tab" lay-filter="docDemoTabBrief">
+					<ul class="layui-tab-title">
+						<li class="layui-this">我的评论</li>
+					</ul>
+				</div>
+				<div class="caller-contar">
+					<div class="layui-col-xs12 row-model" id="addList">
+					</div>
+				</div>
+			</div>
+	    </div>
+	</div>
+	
+	<!-- addListTemplate.tpl -->
+    <script type="text/x-handlebars-template" id="addListTemplate">
+    {{#each rows}}
+    <div class="caller-item" style="padding: 10px 0px;">
+        <div class="my-forum-main caller-fl" commentId='{{commentId}}' forumId='{{forumId}}'>
+            <p>
+                <span class="my-forum-main-span"></span>
+                <em>{{title}}</em>
+            </p>
+            <div class="caller-fl my-operator-list">
+                <a type="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+            </div>
+            <p class="forum-desc">
+                <div class="people-name">
+                    <span class="name-span">{{commentName}}</span><span class="replyperson"></span>：{{content}}
+                </div>
+            </p>
+        </div>
+        <em class="caller-fr send-forum-time">{{commentTime}}</em>
+    </div>
+    {{/each}}
+    </script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/forumshow/'}).use('mycomment');
+    </script>
+</body>
+</html>

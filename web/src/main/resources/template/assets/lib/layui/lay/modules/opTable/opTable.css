@@ -1,0 +1,101 @@
+/**
+ @ Name：表格可展开显示更多列
+ @ Author：hbm
+ @ License：MIT
+ @ gitee：https://gitee.com/hbm_461/layui_extend_opTable
+ */
+
+/* 样式加载完毕的标识 */
+html #layuicss-opTable {
+    display: none;
+    position: absolute;
+    width: 1989px;
+}
+
+.layui-opTable {
+
+}
+
+/* 组件样式 */
+.opTable-i-table-open {
+    width: 10px;
+    height: 10px;
+    user-select: none;
+    background: url(icon/optable.right.svg) 0 0 no-repeat;
+    background-size: 10px 10px !important;
+    position: relative;
+    display: inline-block;
+    transition: transform .2s ease-in-out;
+}
+
+/*图标与内容占位块*/
+.opTable-span-seize {
+    display: inline-block;
+    width: 11px;
+}
+
+/*表格展开三角动画*/
+.opTable-open-dow {
+    transform: rotate(90deg)
+}
+
+.opTable-open-td {
+    padding-bottom: 20px !important;
+    background-color: #fdfdfd !important;
+}
+
+.opTable-open-td:hover {
+    background-color: white;
+}
+
+
+/*展开列 容器*/
+.opTable-open-item-div {
+    margin-top: 20px;
+    margin-right: 20px;
+    font-size: 16px;
+}
+
+.opTable-open-item-div[opOrientation='v'] {
+    display: block;
+}
+
+/*水平排列*/
+.opTable-open-item-div[opOrientation='h'] {
+    display: inline-block;
+}
+
+/*展开列 title*/
+.opTable-item-title {
+    color: #99a9bf;
+}
+
+
+/*展开列 可修改 */
+.opTable-exp-value-edit {
+    background-color: #F6F6F6;
+}
+
+/*展开列 仅展示 */
+.opTable-exp-value {
+    padding: 0 0 2px 20px;
+    min-width: 80px;
+    display: inline-block;
+    border: none;
+    /*border-bottom: #dedede solid 1px;
+    padding-top: 4px !important*/
+
+}
+
+
+.opTable-open-item-div input {
+    height: 29px !important;
+}
+
+/*网络版加载中*/
+.opTable-network-message {
+    width: 80%;
+    text-align: center;
+    height: 80px;
+    padding-top: 16px;
+}

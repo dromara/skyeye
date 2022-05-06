@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+		<div class="winui-tip alert-info" id="showInfo">
+            销售单选择规则：<br>
+                1.单选，双击指定行数据即可选中；<br>
+                2.已审批通过的未完成的销售订单。<br>
+                3.如果销售订单需要统筹，则需要进行统筹后才能进行加工生产。如没有查到要选择的销售单，请检查销售单信息是否满足当前规则。
+		</div>
+	</div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <div style="width: 260px; float: left;">
+    		<div class="layui-inline" style="width: 100%">
+                <div class="layui-input-inline" style="width: 100%">
+                    <input type="text" id="name" name="name" placeholder="请输入要搜索的节点" class="layui-input" />
+                </div>
+            </div>
+            <div class="layui-inline" style="width: 100%">
+            	<ul id="materialCategoryType" class="ztree fsTree" method="get" isRoot="1"
+ 							treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name" style="overflow-y: auto; height: 100%;"></ul>
+            </div>
+    	</div>
+    	<div style="width: calc(100% - 260px); float: left;">
+	    	<div style="margin:auto 10px;">
+		        <table id="messageTable" lay-filter="messageTable"></table>
+		    </div>
+    	</div>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+   	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/fuzzysearch.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/salesorder/'}).use('salesOrderChoose');
+    </script>
+</body>
+</html>

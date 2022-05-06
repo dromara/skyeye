@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto; height: 100%;">
+		<div class="txtcenter" style="margin: 0 auto; padding-top: 10px;">
+			<form class="layui-form layui-form-pane" action=""
+				autocomplete="off">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label">主题</label>
+						<div class="layui-input-inline">
+							<input type="text" id="maintenanceTitle" name="maintenanceTitle"
+								placeholder="请输入主题" class="layui-input" />
+						</div>
+						<label class="layui-form-label">车牌号</label>
+						<div class="layui-input-inline">
+							<select id="maintenancePlate" name="maintenancePlate" lay-filter="maintenancePlate" lay-search="">
+							</select>
+						</div>
+						<button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+						<button class="layui-btn list-form-search" type="button" id="maintenanceformSearch"><language showName="com.skyeye.search2"></language></button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="winui-toolbar">
+			<div class="winui-tool" style="text-align: left;">
+				<button id="reloadMaintenanceTable" class="winui-toolbtn">
+					<i class="fa fa-refresh" aria-hidden="true"></i>刷新数据
+				</button>
+				<button id="addMaintenanceBean" class="winui-toolbtn" auth="1597478766486">
+					<i class="fa fa-plus" aria-hidden="true"></i>登记
+				</button>
+			</div>
+		</div>
+		<div style="margin: auto 10px;">
+			<table id="maintenanceTable" lay-filter="maintenanceTable"></table>
+			<script type="text/html" id="maintenancetableBar">
+				{{# if(auth('1597478776971')){ }}
+					<a class="layui-btn layui-btn-xs" lay-event="maintenanceedit"><language showName="com.skyeye.editBtn"></language></a>
+				{{# } }}
+				{{# if(auth('1597478786829')){ }}
+					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="maintenancedelet"><language showName="com.skyeye.deleteBtn"></language></a>
+				{{# } }}
+        	</script>
+		</div>
+	</div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/vehicleManageMaintenance/'}).use('vehicleManageMaintenanceList');
+    </script>
+</body>
+</html>

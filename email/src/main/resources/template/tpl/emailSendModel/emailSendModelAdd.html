@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">收件人<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		            <input type="text" id="toPeople" name="toPeople" placeholder="请选择收件人" class="layui-input" style="padding-right: 30px;"/>
+		            <i class="fa fa-user-plus input-icon" id="toPeopleSelPeople" title="从员工选择" style="right: 28px;"></i>
+					<i class="fa fa-address-book input-icon" id="toPeopleSelMail" title="从通讯录选择"></i>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">抄送</label>
+		        <div class="layui-input-block">
+		            <input type="text" id="toCc" name="toCc" placeholder="请选择抄送人" class="layui-input" style="padding-right: 30px;"/>
+		            <i class="fa fa-user-plus input-icon" id="toCcSelPeople" title="从员工选择" style="right: 28px;"></i>
+					<i class="fa fa-address-book input-icon" id="toCcSelMail" title="从通讯录选择"></i>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">密送</label>
+		        <div class="layui-input-block">
+		            <input type="text" id="toBcc" name="toBcc" placeholder="请选择密送人" class="layui-input" style="padding-right: 30px;"/>
+		            <i class="fa fa-user-plus input-icon" id="toBccSelPeople" title="从员工选择" style="right: 28px;"></i>
+					<i class="fa fa-address-book input-icon" id="toBccSelMail" title="从通讯录选择"></i>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">主题<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		            <input type="text" id="title" name="title" win-verify="required" placeholder="请填写邮件主题" class="layui-input"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <div class="layui-input-block">
+					<button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+					<button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+		        </div>
+		    </div>
+	    </form>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+		layui.config({base: '../../js/emailSendModel/'}).use('emailSendModelAdd');
+	</script>
+</body>
+</html>

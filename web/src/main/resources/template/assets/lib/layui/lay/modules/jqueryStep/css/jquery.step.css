@@ -1,0 +1,72 @@
+body,
+div,
+ul,
+li {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "微软雅黑";
+}
+
+.ui-step-wrap {
+	position: relative;
+}
+
+.ui-step-wrap .ui-step-bg,
+.ui-step-wrap .ui-step-progress {
+	height: 6px;
+	position: absolute;
+	top: 50px;
+	left: 0;
+}
+
+.ui-step-wrap .ui-step-bg {
+	width: 100%;
+	background: #ddd;
+}
+
+.ui-step-wrap .ui-step-progress {
+	width: 0;
+	background: #64BD2E;
+}
+
+.ui-step-wrap .ui-step {
+	position: relative;
+	z-index: 1;
+	list-style: none;
+}
+
+.ui-step-wrap .ui-step:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+.ui-step-wrap .ui-step .ui-step-item {
+	float: left;
+}
+
+.ui-step-wrap .ui-step .ui-step-item div {
+	text-align: center;
+	color: #625454;
+}
+
+.ui-step-wrap .ui-step .ui-step-item .ui-step-item-num {
+	margin-top: 22px;
+}
+
+.ui-step-wrap .ui-step .ui-step-item .ui-step-item-num span {
+	display: inline-block;
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: #dad9d9;
+	line-height: 24px;
+}
+
+.ui-step-wrap .ui-step .ui-step-item.active .ui-step-item-num span {
+	color: #fff;
+	background: #64BD2E;
+}

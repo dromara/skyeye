@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/editormd/css/editormd.css" rel="stylesheet" />
+    <!-- 页面解析markdown为HTML显示需要的css -->
+    <link href="../../assets/lib/editormd/css/editormd.preview.min.css"rel="stylesheet" />
+	<style type="text/css">
+		.show-folder{
+			position: absolute;
+			top: 120px;
+			right: 0px;
+			z-index: 999;
+			background-color: #FFFFFF;
+			width: 170px;
+			height: 400px;
+			border: 1px solid gainsboro;
+		}
+
+		.show-folder .title{
+			height: 40px;
+			line-height: 40px;
+			background-color: gainsboro;
+			padding-left: 10px;
+		}
+
+		.show-folder #custom-toc-container{
+			padding: 0px;
+			overflow-x: auto;
+			white-space: nowrap;
+			height: calc(100% - 40px);
+		}
+	</style>
+</head>
+<body>
+	<div class="file-console">
+	    <div id="content"></div>
+	</div>
+
+	<div class="show-folder" id="markdownFolder">
+		<div class="title">
+			<font>目录</font>
+		</div>
+		<div class="markdown-body editormd-preview-container" id="custom-toc-container"></div>
+	</div>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script src="../../assets/lib/editormd/js/editormd.js"></script>
+   	<!-- 页面markdown解析成HTML需要的js -->
+	<script src="../../assets/lib/editormd/lib/marked.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/prettify.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/raphael.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/underscore.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/sequence-diagram.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/flowchart.min.js"></script>
+	<script src="../../assets/lib/editormd/lib/jquery.flowchart.min.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/note/'}).use('noteEditMarkDown');
+    </script>
+</body>
+</html>

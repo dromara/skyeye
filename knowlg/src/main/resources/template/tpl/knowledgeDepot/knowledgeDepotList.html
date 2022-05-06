@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+	<style type="text/css">
+		.layui-badge{
+			margin-right: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">标题</label>
+	                <div class="layui-input-inline">
+	                    <input type="text" id="title" name="title" placeholder="请输入标题" class="layui-input" />
+	                </div>
+					<label class="layui-form-label">标签</label>
+					<div class="layui-input-inline">
+						<input type="text" id="label" name="label" placeholder="请输入标签" class="layui-input" />
+					</div>
+	                <label class="layui-form-label">所属分类</label>
+					<div class="layui-input-inline">
+						<input type="text" id="typeId" name="typeId" placeholder="请选择分类" class="layui-input" readonly="readonly" typeId=""/>
+						<div class="eleTree ele5" lay-filter="data5"></div>
+					</div>
+	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+					<button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/knowledgeDepot/'}).use('knowledgeDepotList');
+    </script>
+</body>
+</html>

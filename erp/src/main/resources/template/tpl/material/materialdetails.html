@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	    
+	    <script type="text/x-handlebars-template" id="simpleTemplate">
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">当前存量：</label>
+		        <div class="layui-input-block ver-center">
+		        	<a class="notice-title-click" rowid="{{id}}">{{allTock}}</a>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">安全存量：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{safetyTock}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">初始库存：</label>
+		        <div class="layui-input-block" id="initialTock">
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">单位：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{unitName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">零售价：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{retailPrice}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">最低售价：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{lowPrice}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">采购价/成本价：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{estimatePurchasePrice}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">销售价：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{salePrice}}
+		        </div>
+		    </div>
+		</script>
+		
+		<script type="text/x-handlebars-template" id="manyTemplate">
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">单位：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{unitGroupName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">首选入库单位：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{firstInUnit}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">首选出库单位：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{firstOutUnit}}
+		        </div>
+		    </div>
+	        <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">价格表：</label>
+		        <div class="layui-input-block ver-center">
+		            <table class="layui-table">
+		                <thead>
+		                    <tr>
+		                    	<th style="width: 60px;">单位类型</th>
+		                        <th style="width: 60px;">计量单位</th>
+		                        <th style="width: 80px;">安全存量</th>
+		                    	<th style="width: 150px;">初始库存</th>
+								<th>当前存量</th>
+		                        <th>零售价</th>
+		                        <th>最低售价</th>
+		                        <th>采购价/成本价</th>
+		                        <th>销售价</th>
+		                    </tr>
+		                </thead>
+		                <tbody id="useTable" class="insurance-table">
+							{{#each norms}}
+								<tr>
+									<td>{{baseUnit}}</td>
+									<td>{{unitName}}</td>
+									<td>{{safetyTock}}</td>
+									<td>
+										{{#each normStock}}
+											<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">{{depotName}}<span class="layui-badge layui-bg-gray">{{initialTock}}</span></span><br>
+										{{/each}}
+									</td>
+									<td><a class="notice-title-click" rowid="{{id}}">{{allTock}}</a></td>
+									<td>{{retailPrice}}</td>
+									<td>{{lowPrice}}</td>
+									<td>{{estimatePurchasePrice}}</td>
+									<td>{{salePrice}}</td>
+								</tr>
+							{{/each}}
+		                </tbody>
+					</table>
+		        </div>
+		    </div>
+		</script>
+		
+		<script type="text/x-handlebars-template" id="extendsTemplate">
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">扩展信息</span><hr>
+    		</div>
+    		{{#each extends}}
+				<div class="layui-form-item layui-col-xs6 extendMation">
+					<label class="layui-form-label">
+						<font>{{lableName}}：</font>
+					</label>
+					<div class="layui-input-block ver-center">
+						{{content}}
+					</div>
+				</div>
+			{{/each}}
+		</script>
+	    
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/material/'}).use('materialdetails');
+    </script>
+</body>
+</html>

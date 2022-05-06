@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+<div style="padding:20px; margin:0 auto;">
+    <form class="layui-form" action="" id="showForm" autocomplete="off">
+
+    </form>
+    <script type="text/x-handlebars-template" id="simpleTemplate">
+        {{#bean}}
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">供应商名称：</label>
+                <div class="layui-input-block ver-center">
+                    {{supplierName}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">联系人：</label>
+                <div class="layui-input-block ver-center">
+                    {{contacts}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">联系电话：</label>
+                <div class="layui-input-block ver-center">
+                    {{phonenum}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">电子邮箱：</label>
+                <div class="layui-input-block ver-center">
+                    {{email}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">手机号码：</label>
+                <div class="layui-input-block ver-center">
+                    {{telephone}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">状态：</label>
+                <div class="layui-input-block ver-center" id="enabled">
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">传真：</label>
+                <div class="layui-input-block ver-center">
+                    {{fax}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">预收款：</label>
+                <div class="layui-input-block ver-center">
+                    {{advanceIn}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">期初应收：</label>
+                <div class="layui-input-block ver-center">
+                    {{beginNeedGet}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">期初应付：</label>
+                <div class="layui-input-block ver-center">
+                    {{beginNeedPay}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">累计应收：</label>
+                <div class="layui-input-block ver-center">
+                    {{allNeedGet}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">累计应付：</label>
+                <div class="layui-input-block ver-center">
+                    {{allNeedPay}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">纳税人识别号：</label>
+                <div class="layui-input-block ver-center">
+                    {{taxNum}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">税率(%)：</label>
+                <div class="layui-input-block ver-center">
+                    {{taxRate}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">开户行：</label>
+                <div class="layui-input-block ver-center">
+                    {{bankName}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">账号：</label>
+                <div class="layui-input-block ver-center">
+                    {{accountNumber}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">地址：</label>
+                <div class="layui-input-block ver-center">
+                    {{address}}
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">备注：</label>
+                <div class="layui-input-block ver-center">
+                    {{description}}
+                </div>
+            </div>
+        {{/bean}}
+    </script>
+</div>
+<script src="../../assets/lib/layui/layui.js"></script>
+<script src="../../assets/lib/layui/custom.js"></script>
+<script type="text/javascript">
+    layui.config({base: '../../js/supplier/'}).use('supplierinfo');
+</script>
+</body>
+</html>

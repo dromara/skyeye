@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	    	
+	    </form>
+	</div>
+
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">基础信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">类型：</label>
+			<div class="layui-input-block ver-center">
+				{{categoryName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6" id="typeIdBox">
+			<label class="layui-form-label">类别：</label>
+			<div class="layui-input-block ver-center">
+				{{typeName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6 layui-hide" id="readonlyBox">
+			<label class="layui-form-label">他人只读：</label>
+			<div class="layui-input-block ver-center">
+				{{readonlyName}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">姓名：</label>
+			<div class="layui-input-block ver-center">
+				{{name}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">称呼：</label>
+			<div class="layui-input-block ver-center">
+				{{nameCall}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">公司：</label>
+			<div class="layui-input-block ver-center">
+				{{company}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">部门：</label>
+			<div class="layui-input-block ver-center">
+				{{department}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">联系方式</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">个人电话：</label>
+			<div class="layui-input-block ver-center">
+				{{personalPhone}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">办公电话：</label>
+			<div class="layui-input-block ver-center">
+				{{workPhone}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">传真：</label>
+			<div class="layui-input-block ver-center">
+				{{fax}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">个人邮箱：</label>
+			<div class="layui-input-block ver-center">
+				{{email}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">其他电话：</label>
+			<div class="layui-input-block ver-center">
+				{{otherPhone}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">其他邮箱：</label>
+			<div class="layui-input-block ver-center">
+				{{otherEmail}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">微信号：</label>
+			<div class="layui-input-block ver-center">
+				{{wechatNum}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">通讯地址</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">商务地址：</label>
+			<div class="layui-input-block ver-center">
+				{{workAddress}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">商务邮编：</label>
+			<div class="layui-input-block ver-center">
+				{{workCode}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">个人地址：</label>
+			<div class="layui-input-block ver-center">
+				{{personAddress}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">个人邮编：</label>
+			<div class="layui-input-block ver-center">
+				{{personCode}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">其他信息</span><hr>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">公司网站：</label>
+			<div class="layui-input-block ver-center">
+				{{companyUrl}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">个人网站：</label>
+			<div class="layui-input-block ver-center">
+				{{personUrl}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs6">
+			<label class="layui-form-label">生日：</label>
+			<div class="layui-input-block ver-center">
+				{{birthday}}
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">备注：</label>
+			<div class="layui-input-block ver-center">
+				{{remarks}}
+			</div>
+		</div>
+		{{/bean}}
+	</script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/mail/'}).use('mailDetails');
+    </script>
+</body>
+</html>

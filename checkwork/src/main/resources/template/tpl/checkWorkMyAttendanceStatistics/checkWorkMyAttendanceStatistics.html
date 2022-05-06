@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <style type="text/css">
+    	.scheduleContent .ui-widget-content .fc-day-number{
+    		color: black !important;
+    	}
+    </style>
+</head>
+<body>
+	<div class="txtcenter" style="margin: 0 auto; padding-top: 10px;">
+		<form class="layui-form layui-form-pane" action="" autocomplete="off">
+			<div class="layui-form-item">
+	            <div class="layui-inline">
+			        <label class="layui-form-label">班次：</label>
+			        <div class="layui-input-inline">
+			        	<select lay-filter="checkTime" lay-search="" id="checkTime">
+		                    
+	                    </select>
+			        </div>
+	                <label class="layui-form-label">时间</label>
+	                <div class="layui-input-inline">
+	                    <input type="text" id="checkDate" name="checkDate" placeholder="" class="layui-input" />
+	                </div>
+	                <label class="layui-form-label">考勤状态</label>
+	                <div class="layui-input-inline">
+	                    <select id="state">
+	                    	<option value="">全部</option>
+	                    	<option value="2">缺勤</option>
+	                    	<option value="1">全勤</option>
+	                    	<option value="3">工时不足</option>
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">迟到</label>
+	                <div class="layui-input-inline">
+	                    <select id="clockInState">
+	                    	<option value="">全部</option>
+	                    	<option value="2">是</option>
+	                    	<option value="1">否</option>
+	                    	<option value="3">未打卡</option>
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">早退</label>
+	                <div class="layui-input-inline">
+	                    <select id="clockOutState">
+	                    	<option value="">全部</option>
+	                    	<option value="2">是</option>
+	                    	<option value="1">否</option>
+	                    	<option value="3">未打卡</option>
+	                    </select>
+	                </div>
+	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+	                <button class="layui-btn list-form-search" type="button" id="searchForm"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+        </form>
+    </div>
+    
+    <script type="text/html" id="workTimeTemplate">
+		<option value="">全部</option>
+		{{#each rows}}
+			<option value="{{timeId}}">{{title}}[{{startTime}}~{{endTime}}]</option>
+		{{/each}}
+	</script>
+    
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadMyDkTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="download" class="winui-toolbtn" type="button"><i class="fa fa-download" aria-hidden="true"></i>导出考勤表</button>
+        </div>
+    </div>
+	<div style="margin:auto 10px;">
+		<table id="messageTable" lay-filter="messageTable"></table>
+	</div>
+			
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/checkWorkMyAttendanceStatistics/'}).use('checkWorkMyAttendanceStatistics');
+    </script>
+</body>
+</html>

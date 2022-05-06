@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <style type="text/css">
+        .layui-table-cell {
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div style="margin:0 auto;padding:20px;">
+        <form class="layui-form" action="" id="showForm" autocomplete="off">
+            <div class="layui-form-item layui-col-xs12">
+                <span class="hr-title">前加签</span><hr>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <div class="winui-tip alert-info">
+                    每一个用户代表一个审批节点，可通过拖拽的方式实现审批顺序。
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">审批类型：</label>
+                <div class="layui-input-block ver-center">
+                    并行
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <div class="winui-tool" style="text-align: left;">
+                    <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+                    <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+                </div>
+                <table class="layui-table" id="messageTable">
+
+                </table>
+            </div>
+
+            <div class="layui-form-item layui-col-xs12">
+                <div class="layui-input-block">
+                    <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                    <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.submit"></language></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/addSignTask/'}).use('beforeAddSignTask');
+    </script>
+</body>
+</html>

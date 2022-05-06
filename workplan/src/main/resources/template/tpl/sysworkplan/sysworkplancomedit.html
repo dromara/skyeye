@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">主题<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" id="title" name="title" win-verify="required" placeholder="请输入计划主题" class="layui-input" maxlength="50"/>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">计划周期</label>
+	            <div class="layui-input-block ver-center" id="nowCheckTypeBox">
+                	
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">人员选择<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" id="carryPeople" name="carryPeople" placeholder="请选择人员" class="layui-input"/>
+                	<i class="fa fa-user-plus input-icon" id="carryPeopleSelPeople"></i>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">时间段</label>
+	            <div class="layui-input-block ver-center" id="timeSlotBox">
+                	
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">内容<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<textarea id="content" name="content" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">邮件通知<i class="red">*</i></label>
+	            <div class="layui-input-block winui-switch">
+                	<input id="whetherMail" name="whetherMail" lay-filter="whetherMailFilter" type="checkbox" lay-skin="switch" lay-text="是|否" value="false" />
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">系统消息通知<i class="red">*</i></label>
+	            <div class="layui-input-block winui-switch">
+                	<input id="whetherNotice" name="whetherNotice" lay-filter="whetherNoticeFilter" type="checkbox" lay-skin="switch" lay-text="是|否" value="true" checked="checked" />
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">定时通知<i class="red">*</i></label>
+	            <div class="layui-input-block winui-switch">
+                	<input id="whetherTime" name="whetherTime" lay-filter="whetherTimeFilter" type="checkbox" lay-skin="switch" lay-text="是|否" value="false" />
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-hide" id="notifyTimeBox">
+	            <label class="layui-form-label">通知时间<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" id="notifyTime" name="notifyTime" placeholder="请选择通知时间" class="layui-input"/>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <label class="layui-form-label">附件</label>
+	            <div class="layui-input-block">
+                	<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="enclosureUploadBtn">附件上传</button>
+                </div>
+	        </div>
+	        <div class="layui-form-item">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+	                <button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/sysworkplan/'}).use('sysworkplancomedit');
+    </script>
+</body>
+</html>

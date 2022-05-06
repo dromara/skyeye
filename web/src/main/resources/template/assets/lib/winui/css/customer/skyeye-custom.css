@@ -1,0 +1,60 @@
+
+/*标识类的样式*/
+.skyeye-badge{
+    margin-bottom: 5px;
+    color: #46799b !important;
+    background-color: #e0eaf1 !important;
+}
+
+/*图片预览时底部操作按钮所在DOM的样式*/
+.skyeye-image-operator{
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(190,190,190,0.3);
+    box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+}
+
+/*提示信息*/
+.winui-tip{
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,.07);
+    padding: 5px 5px;
+    font-size: 13px;
+    position: relative;
+    margin: 5px;
+    text-align: left;
+}
+
+.alert-info{
+    color: #2f73c8;
+    background-color: #d9e7f9;
+}
+
+.alert-warning{
+    color: #94780a;
+    background-color: #f9e69b;
+}
+
+.alert-danger{
+    color: #d83945;
+    background-color: #fbdbde;
+}
+
+.alert-success{
+    color: #155724;
+    background-color: #d4edda;
+}
+
+.alert-primary{
+    color: #3f037a;
+    background: #d8bff2;
+}
+
+.alert-secondary{
+    color: #383d41;
+    background-color: #e2e3e5;
+}

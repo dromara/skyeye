@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+	<style type="text/css">
+		.collection{
+			margin-top: -50px;
+			display: block;
+			width: 45%;
+			height: 35px;
+			font-size: 1em;
+			float: left;
+		}
+	</style>
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:20px;">
+		<div class="layui-col-xs8 layui-col-xs-offset2" style="height: 150px;">
+			<div class="store-cat-item">
+				<span>一级分类：</span>
+				<ul class="chooseLiItem" id="firstType">
+
+				</ul>
+			</div>
+			<div class="store-cat-item colorFilt">
+				<span>二级分类：</span>
+				<ul class="chooseLiItem" id="secondType">
+
+				</ul>
+			</div>
+		</div>
+		<div class="layui-col-xs8 layui-col-xs-offset2" id="showForm">
+
+		</div>
+	</div>
+
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#each rows}}
+		<div class="app-store-item">
+			<div class="app-store-item-content">
+				<div class="layui-col-xs12 app-store-item-top" rowid="{{id}}">
+					<img class="app-store-pic" src="{{#compare1 logo}}{{/compare1}}">
+				</div>
+			</div>
+			<div class="layui-col-xs12 app-store-item-bottom">
+			</div>
+			<div class="layui-col-xs12 app-store-item-bottom-card">
+				<button class="layui-btn layui-btn-normal layui-btn-sm collection" rowid="{{id}}">选择</button>
+			</div>
+			<div class="layui-col-xs12 app-store-item-center">
+				<p>{{title}}</p>
+			</div>
+		</div>
+		{{/each}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="firstTemplate">
+		<li class="active"><a href="javascript:;" rowid="0">全部</a></li>
+		{{#each rows}}
+			<li><a href="javascript:;" rowid="{{id}}">{{name}}</a></li>
+		{{/each}}
+	</script>
+
+	<script type="text/x-handlebars-template" id="secondTemplate">
+		<li class="active"><a href="javascript:;" rowid="">全部</a></li>
+		{{#each rows}}
+		<li><a href="javascript:;" rowid="{{id}}">{{name}}</a></li>
+		{{/each}}
+	</script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/sysEveModel/'}).use('sysEveModelChoose');
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+
+	<!-- 假期类型设置模板 -->
+	<script type="text/x-handlebars-template" id="holidaysTypeJsonTemplate">
+		<tr trcusid="{{trId}}">
+			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+			<td><input type="text" class="layui-input" id="{{holidayName}}" win-verify="required"/></td>
+			<td><input type="text" class="layui-input" id="{{holidayNo}}" win-verify="required"/></td>
+			<td><input type="text" class="layui-input" id="{{offPercentageMoney}}" win-verify="required|percentage"/></td>
+			<td>
+				<select id="{{whetherYearHour}}" lay-search win-verify="required">
+					<option value="1">是</option>
+					<option value="2">否</option>
+				</select>
+			</td>
+			<td>
+				<select id="{{whetherComLeave}}" lay-search win-verify="required">
+					<option value="1">是</option>
+					<option value="2">否</option>
+				</select>
+			</td>
+			<td><input type="text" class="layui-input" id="{{remark}}"/></td>
+		</tr>
+	</script>
+
+	<!-- 年假类型设置模板 -->
+	<script type="text/x-handlebars-template" id="yearHolidaysMationTemplate">
+		<tr trcusid="{{trId}}">
+			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+			<td>
+				<select id="{{yearType}}" lay-search win-verify="required">
+					<option value="">请选择</option>
+					<option value="1">1年以下</option>
+					<option value="2">1年 ~ 3年</option>
+					<option value="3">3年 ~ 5年</option>
+					<option value="4">5年 ~ 8年</option>
+					<option value="5">8年以上</option>
+				</select>
+			</td>
+			<td><input type="text" class="layui-input" id="{{yearHour}}" win-verify="required|number"/></td>
+			<td><input type="text" class="layui-input" id="{{yearRemark}}"/></td>
+		</tr>
+	</script>
+
+	<!-- ERP以及生产单据审核设置 -->
+	<script type="text/x-handlebars-template" id="erpOrderExamineMationTemplate">
+		<div class="layui-form-item layui-col-xs12">
+			<span class="hr-title">订单是否需要审核标识</span><hr>
+		</div>
+		{{#each rows}}
+		<div class="layui-form-item layui-col-xs6 examineItem" title="{{title}}" code="{{code}}">
+			<label class="layui-form-label">{{title}}：</label>
+			<div class="layui-input-block winui-radio">
+				<input type="radio" name="{{code}}" value="1" title="需要" />
+				<input type="radio" name="{{code}}" value="2" title="不需要" />
+			</div>
+		</div>
+		{{/each}}
+	</script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/sysfdsettings/'}).use('sysfdsettingslist');
+    </script>
+</body>
+</html>

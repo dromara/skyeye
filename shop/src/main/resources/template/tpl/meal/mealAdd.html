@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="padding:20px; margin:0 auto;">
+        <form class="layui-form" action="" id="showForm">
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">套餐名称<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="title" name="title" win-verify="required" placeholder="请输入套餐名称" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">套餐LOGO<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <div class="upload" id="logo"></div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6" style="height: 108px">
+                <label class="layui-form-label">套餐类型<i class="red">*</i></label>
+                <div class="layui-input-block winui-radio">
+                    <input type="radio" name="type" value="1" title="保养套餐" checked="checked"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">指导价<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="price" name="price" win-verify="required|money" placeholder="请输入指导价" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">展示价<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="showPrice" name="showPrice" win-verify="required|money" placeholder="请输入展示价" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">底价<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="lowPrice" name="lowPrice" win-verify="required|money" placeholder="请输入底价" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">可使用次数<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <input type="text" id="mealNum" name="mealNum" win-verify="required|number" placeholder="请输入可使用次数" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">套餐说明<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <textarea id="mealExplain" name="mealExplain" win-verify="required" placeholder="请输入套餐说明" maxlength="500" class="layui-textarea" style="height: 100px;"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">状态<i class="red">*</i></label>
+                <div class="layui-input-block winui-radio">
+                    <input type="radio" name="state" value="1" title="下线" />
+                    <input type="radio" name="state" value="2" title="上线" checked="checked"/>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">可用区域<i class="red">*</i></label>
+                <div class="layui-input-block winui-radio" win-verify="required">
+                    <div id="areaMation"></div>
+                    <div class="layui-form-mid layui-word-aux ver-center" style="padding-top: 8px !important">
+                        该区域来源于当前用户所在区域，如果当前用户拥有多个区域，则会展示多个供选择。
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">套餐耗材</label>
+                <div class="layui-input-block">
+                    <div class="winui-toolbar">
+                        <div class="winui-tool" style="text-align: left;">
+                            <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+                            <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+                        </div>
+                    </div>
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th style="width: 30px;"></th>
+                            <th style="width: 150px;">耗材说明</th>
+                        </tr>
+                        </thead>
+                        <tbody id="useTable" class="insurance-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <div class="layui-input-block">
+                    <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                    <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/x-handlebars-template" id="usetableTemplate">
+        <tr trcusid="{{trId}}">
+            <td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+            <td><input type="text" class="layui-input" id="{{consumeExplain}}" win-verify="required"/></td>
+        </tr>
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/meal/'}).use('mealAdd');
+    </script>
+</body>
+</html>

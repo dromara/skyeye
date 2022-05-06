@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="file-console">
+	    <div class="schedule-write">
+    		<div class="scheduleCalendar">
+    			<div class="scheduleTitle">
+    				<font>我的日程</font>
+    				<div class="scheduleIntroduce">
+    					<div class="introduce-item">
+    						<div class="introduce-color1"></div>
+    						<font>个人</font>
+    					</div>
+    					<div class="introduce-item">
+    						<div class="introduce-color2"></div>
+    						<font>工作</font>
+    					</div>
+    					<div class="introduce-item">
+    						<div class="introduce-color4"></div>
+    						<font>生日</font>
+    					</div>
+    					<div class="introduce-item">
+    						<div class="introduce-color5"></div>
+    						<font>自定义</font>
+    					</div>
+    				</div>
+					<form class="layui-form" action="" id="showForm" autocomplete="off" style="width: 200px; float:left; padding: 5px 0px;">
+						<select lay-filter="checkTime" lay-search="" id="checkTime" name="checkTime">
+
+						</select>
+					</form>
+					<button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" id="addSchedule">新增日程</button>
+    			</div>
+    			<div id="scheduleCalendar" class="scheduleContent" style="height: 100%; overflow-y: auto;"></div>
+    		</div>
+    		<div class="right-schedule">
+    			<div class="scheduleTitle">
+    				<font>今日日程</font>
+    			</div>
+    			<div class="schedule-list" id="schedule-list">
+    				
+    			</div>
+    			<div class="scheduleTitle">
+    				<font>日程详情</font>
+    			</div>
+    			<div class="schedule-detail" id="schedule-detail">
+    				
+    			</div>
+    		</div>
+    	</div>
+	</div>
+
+	<script type="text/html" id="workTimeTemplate">
+		{{#each rows}}
+			<option value="{{timeId}}">{{title}}[{{startTime}}~{{endTime}}]</option>
+		{{/each}}
+	</script>
+	
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/fullcalendar/moment.min.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/index/'}).use('mySchedule');
+    </script>
+</body>
+</html>

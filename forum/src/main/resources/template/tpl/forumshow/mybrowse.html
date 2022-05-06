@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body style="background-color: RGB(242, 242, 242);">
+	<div class="forum-console">
+		<div class="forum-title" id="forumTitle">
+			
+		</div>
+	    <div class="main-content layui-row layui-col-space10" style="background-color: white;">
+	    	<div class="layadmin-caller">
+				<div class="layui-tab layui-tab-brief caller-tab" lay-filter="docDemoTabBrief">
+					<ul class="layui-tab-title">
+						<li class="layui-this">我的浏览</li>
+					</ul>
+				</div>
+				<div class="caller-contar" id="addList">
+					
+				</div>
+			</div>
+	    </div>
+	</div>
+	<!-- addListTemplate.tpl -->
+	<script type="text/x-handlebars-template" id="addListTemplate">
+	{{#each rows}}
+		<div class="caller-item">
+			<img userId="{{userId}}" src="{{userPhoto}}" alt="" class="caller-img caller-fl">
+			<div class="forum-main caller-fl" rowId='{{forumId}}'>
+				<p><span class="my-forum-main-span"></span> <em>{{title}}</em></p>
+				<p class="forum-desc">{{desc}}</p>
+			</div>
+			<div class="caller-fl hi-list">
+				<em><i class="fa fa-eye"></i>{{browseNum}}</em>
+				<em><i class="fa fa-commenting"></i>{{commentNum}}</em>
+			</div>
+			<em class="caller-fr send-forum-time">浏览时间：{{browseTime}}</em>
+		</div>
+	{{/each}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/forumshow/'}).use('mybrowse');
+    </script>
+</body>
+</html>

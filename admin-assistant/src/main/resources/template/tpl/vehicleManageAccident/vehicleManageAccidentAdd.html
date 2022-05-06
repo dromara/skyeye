@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">标题<i class="red">*</i></label>
+		        <div class="layui-input-block ver-center">
+		        	<span id="accidentTitle"></span>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">车牌号<i class="red">*</i></label>
+	            <div class="layui-input-block">
+					<select id="licensePlate" name="licensePlate" lay-filter="licensePlate" lay-search="" win-verify="required">
+						
+					</select>
+	            </div>
+	        </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">司机姓名<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		            <input type="text" id="driver" name="driver" win-verify="required" placeholder="请输入司机姓名" class="layui-input" maxlength="10"/>
+		        </div>
+		    </div>
+	        <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">事故时间<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="accidentTime" name="accidentTime" win-verify="required" placeholder="请输入事故时间" class="layui-input"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">事故地点<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="accidentArea" name="accidentArea" win-verify="required" placeholder="请输入事故地点" class="layui-input"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">责任认定</label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="confirmationResponsibility" name="confirmationResponsibility" placeholder="请输入责任认定" class="layui-input"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">维修厂家</label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="manufacturer" name="manufacturer" placeholder="请输入维修厂家" class="layui-input"/>
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">送修时间段</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input" id="repairTime" placeholder="请选择送修时间段" />
+				</div>
+			</div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">维修费用</label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="repairPrice" name="repairPrice" placeholder="请输入维修费用（元）" class="layui-input" win-verify="money"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">车损费</label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="lossFeePrice" name="lossFeePrice" placeholder="请输入车损费（元）" class="layui-input" win-verify="money"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">保险理赔金额</label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="claimsFeePrice" name="claimsFeePrice" placeholder="请输入保险理赔金额（元）" class="layui-input" win-verify="money"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">司机承担费用</label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="driverBearPrice" name="driverBearPrice" placeholder="请输入司机承担费用（元）" class="layui-input" win-verify="money"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">事故详情</label>
+		        <div class="layui-input-block">
+		        	<textarea id="accidentDetail" name="accidentDetail" placeholder="请输入事故详情" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">维修内容</label>
+		        <div class="layui-input-block">
+		        	<textarea id="repairContent" name="repairContent" placeholder="请输入维修内容" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">相关附件</label>
+				<div class="layui-input-block" id="enclosureUpload">
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+		            <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+		        </div>
+		    </div>
+	    </form>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/vehicleManageAccident/'}).use('vehicleManageAccidentAdd');
+    </script>
+</body>
+</html>

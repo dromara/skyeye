@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	    	
+	    </form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="assignmentTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+    			<span class="hr-title">基本信息</span><hr>
+	    	</div>
+	    	<div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">试卷名称：</label>
+	            <div class="layui-input-block ver-center">
+                	{{surveyName}}
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">试卷语：</label>
+	            <div class="layui-input-block ver-center">
+                	{{surveyNote}}
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">所属学校：</label>
+	            <div class="layui-input-block ver-center">
+                	{{schoolName}}
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">考试年级：</label>
+	            <div class="layui-input-block ver-center">
+                	{{gradeName}}
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">第几届：</label>
+	            <div class="layui-input-block ver-center">
+                	{{sessionYear}}
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">考试科目：</label>
+	            <div class="layui-input-block ver-center">
+                	{{subjectName}}
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">考试班级：</label>
+               	<div class="layui-input-block ver-center">
+                	{{className}}
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">学期：</label>
+	            <div class="layui-input-block ver-center">
+                	{{semesterName}}
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">考试结果：</label>
+		        <div class="layui-input-block ver-center">
+                	{{viewAnswer}}
+                </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">状态：</label>
+		        <div class="layui-input-block ver-center">
+                	{{surveyStateName}}
+                </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">满分值：</label>
+		        <div class="layui-input-block ver-center">
+                	{{fraction}}
+                </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">创建时间：</label>
+		        <div class="layui-input-block ver-center">
+                	{{createTime}}
+                </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs12">
+    			<span class="hr-title">阅卷人</span><hr>
+	    	</div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">其他阅卷人：</label>
+	            <div class="layui-input-block">
+	            	<input type="text" id="markPeople" name="markPeople" placeholder="请选择阅卷人" class="layui-input" readonly="readonly"/>
+				    <i class="fa fa-user-plus input-icon" id="markPeopleNameSel"></i>
+	            </div>
+	        </div>
+	        
+	        <div class="layui-form-item layui-col-xs12">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+	            </div>
+	        </div>
+		{{/bean}}
+	</script>
+
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/markExam/'}).use('markExamPeople');
+    </script>
+</body>
+</html>

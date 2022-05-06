@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="margin:0 auto;padding:20px;">
+        <form class="layui-form" action="" id="showForm">
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">标题<i class="red">*</i></label>
+                <div class="layui-input-block ver-center" id="useTitle">
+
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">步骤</label>
+                <div class="layui-input-block ver-center">
+                    填单
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs6">
+                <label class="layui-form-label">责任人<i class="red">*</i></label>
+                <div class="layui-input-block ver-center" id="useName">
+
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">请假日期<i class="red">*</i></label>
+                <div class="layui-input-block">
+                    <div class="winui-toolbar">
+                        <div class="winui-tool" style="text-align: left;">
+                            <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
+                            <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
+                        </div>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux" id="messageTips"></div>
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th style="width: 30px;"></th>
+                            <th style="width: 100px;">班次<i class="red">*</i></th>
+                            <th style="width: 80px;">打卡时间</th>
+                            <th style="width: 80px;">假期类型<i class="red">*</i></th>
+                            <th style="width: 100px;">请假日期<i class="red">*</i></th>
+                            <th style="width: 80px;">开始时间<i class="red">*</i></th>
+                            <th style="width: 80px;">结束时间<i class="red">*</i></th>
+                            <th style="width: 80px;">请假工时</th>
+                            <th style="min-width: 80px;">备注</th>
+                        </tr>
+                        </thead>
+                        <tbody id="beanTable" class="insurance-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">相关描述</label>
+                <div class="layui-input-block">
+                    <textarea id="remark" name="remark" placeholder="请输入相关描述" class="layui-textarea" style="height: 100px;" maxlength="200"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <label class="layui-form-label">相关附件</label>
+                <div class="layui-input-block" id="enclosureUpload">
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+                <div class="layui-input-block">
+                    <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+                    <button class="winui-btn typeOne layui-hide" lay-submit lay-filter="formEditBean">保存为草稿</button>
+                    <button class="winui-btn typeOne layui-hide" lay-submit lay-filter="formSubBean">提交审批</button>
+                    <button class="winui-btn typeTwo layui-hide" lay-submit lay-filter="subBean"><language showName="com.skyeye.save"></language></button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- beanTemplate -->
+    <script type="text/x-handlebars-template" id="beanTemplate">
+        <tr trcusid="{{trId}}">
+            <td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
+            <td><select id="{{timeId}}" lay-filter="timeId" win-verify="required"></select></td>
+            <td id="{{workTime}}">-</td>
+            <td><select id="{{leaveType}}" lay-filter="leaveType" win-verify="required"></select></td>
+            <td><input type="text" class="layui-input" id="{{leaveDay}}" win-verify="required"/></td>
+            <td><input type="text" class="layui-input" id="{{leaveStartTime}}" win-verify="required"/></td>
+            <td><input type="text" class="layui-input" id="{{leaveEndTime}}" win-verify="required"/></td>
+            <td id="{{leaveHour}}">0</td>
+            <td><input type="text" class="layui-input" id="{{remark}}"/></td>
+        </tr>
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/checkWorkLeave/'}).use('checkWorkLeaveEdit');
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="Cache-Control" content="no-cache" />
+		<meta http-equiv="Expires" content="-1" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<link rel="icon" type="image/x-icon" href="../../assets/images/eye.png" />
+		<title></title>
+		<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+		<link href="../../assets/lib/animate/animate.min.css" rel="stylesheet" />
+		<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+		<style type="text/css">
+			.tradition-right-top .layui-nav-more,
+			.tradition-right-center .layui-nav-more{
+				border-top-color: black !important;
+			}
+			
+			.tradition-right-top .layui-nav-mored,
+			.tradition-right-center .layui-nav-mored{
+				border-top-color: white !important;
+				border-bottom-color: black !important;
+			}
+		</style>
+		<script>
+			/^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+		</script>
+	</head>
+	<body style="-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;">
+		<div class="layui-fluid layadmin-homepage-fluid">
+			<div class="layui-row layui-col-space8">
+				<div class="layui-col-md2">
+					<div class="layadmin-homepage-panel layadmin-homepage-shadow">
+						<div class="layui-card text-center">
+							<div class="layui-card-body">
+								<div class="layadmin-homepage-pad-ver">
+									<img class="layadmin-homepage-pad-img" src="" width="96" height="96">
+								</div>
+								<h4 class="layadmin-homepage-font"></h4>
+								<p class="layadmin-homepage-min-font">中国知名演员</p>
+								<button type="button" id="updatePassword" class="layui-btn layui-btn-fluid">修改密码</button>
+							</div>
+						</div>
+						<p class="layadmin-homepage-about">关于我</p>
+						<ul class="layadmin-homepage-list-group">
+							<li class="list-group-item"><i
+								class="layui-icon layui-icon-location"></i>中国上海</li>
+						</ul>
+						<div class="layadmin-homepage-pad-hor">
+							<mdall></mdall>
+						</div>
+					</div>
+				</div>
+				<div class="layui-col-md10">
+					<div class="layui-fluid layadmin-homepage-content">
+						<div class="layui-row layui-col-space20 layadmin-homepage-list-imgtxt">
+							<div class="layui-col-md12 layadmin-caller">
+								<div class="grid-demo caller-contar">
+									<div class="panel-body layadmin-homepage-shadow" id="myForum">
+									
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/x-handlebars-template" id="forumTemplate">
+		{{#each rows}}
+			<div class="caller-item">
+				<div class="my-forum-main caller-fl" rowId='{{id}}'>
+					<p><span class="my-forum-main-span"></span><em>{{title}}</em></p>
+					<div class="caller-fl my-operator-list">
+						<a type="edit"><language showName="com.skyeye.editBtn"></language></a>
+						<a type="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+					</div>
+					<p class="forum-desc">{{desc}}</p>
+				</div>
+				<div class="caller-fl my-hi-list">
+					<em><i class="fa fa-eye"></i>{{browseNum}}</em>
+					<em><i class="fa fa-commenting"></i>{{commentNum}}</em>
+				</div>
+				<em class="caller-fr send-forum-time">{{createTime}}</em>
+			</div>
+		{{/each}}
+		</script>
+		
+		<script src="../../assets/lib/layui/layui.js" type="text/javascript"></script>
+		<script src="../../assets/lib/layui/custom.js"></script>
+		<script>
+			layui.config({base: '../../js/syspersonal/', version: skyeyeVersion}).use('syspersonal');
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	            	<label class="layui-form-label">学校</label>
+	                <div class="layui-input-inline">
+	                    <select id="schoolId" lay-filter="schoolId" lay-search="">
+			                    
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">年级</label>
+	                <div class="layui-input-inline">
+	                    <select id="gradeId" lay-filter="gradeId" lay-search="">
+		            		<option value="">请选择</option>
+		            	</select>
+	                </div>
+	                <label class="layui-form-label">科目</label>
+	                <div class="layui-input-inline">
+	                    <select id="subjectId" lay-filter="subjectId" lay-search="">
+		            		<option value="">请选择</option>
+		            	</select>
+	                </div>
+	                <label class="layui-form-label">标题</label>
+	                <div class="layui-input-inline">
+	                    <input id="title" name="title" class="layui-input" placeholder="请输入知识点标题"/>
+	                </div>
+            	    <label class="layui-form-label">类型</label>
+	                <div class="layui-input-inline">
+	                    <select id="typeState" name="typeState">
+	                    	<option value="">全部</option>
+	                    	<option value="1">公开</option>
+	                    	<option value="2">私有</option>
+	                    </select>
+	                </div>
+	                
+	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn" auth="1589084814532"><i class="fa fa-plus" aria-hidden="true"></i>新增知识点</button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+			{{# if(auth('1589084822468')){ }}
+          		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
+			{{# } }}
+			{{# if(auth('1589084829744')){ }}
+				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+			{{# } }}
+        </script>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/schoolKnowledgePoints/'}).use('schoolKnowledgePointsList');
+    </script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+		<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+		<style type="text/css">
+			::-webkit-scrollbar {
+			    width: 10px;
+			    height: 10px;
+			}
+			
+			::-webkit-scrollbar-track, ::-webkit-scrollbar-corner {
+			    background-color: #e2e2e2;
+			}
+			
+			::-webkit-scrollbar-thumb {
+			    border-radius: 0;
+			    background-color: rgba(0, 0, 0, .3);
+			}
+			
+			::-webkit-scrollbar-track, ::-webkit-scrollbar-corner {
+			    background-color: #e2e2e2;
+			}
+			
+			html, body {
+			    height: 100%;
+			    background-size: cover;
+			        overflow: hidden;
+			}
+			
+			.email-right-content {
+				width: 100%;
+				height: 100%;
+				background-color: rgb(219, 226, 232);
+				overflow-y: auto;
+			}
+			
+			.email-right-content .email-title {
+				height: 40px;
+				text-align: left;
+				padding-left: 20px;
+				line-height: 40px;
+				font-size: 15px;
+				font-weight: 600;
+			}
+			
+			.email-right-content .email-desc {
+				min-height: calc(100% - 60px);
+				border: 1px solid rgb(158, 166, 170);
+				margin: 5px 10px 10px 10px;
+				background-color: white;
+				float: left;
+				width: calc(100% - 20px);
+			}
+			
+			.email-right-content .email-desc .email-send-mation {
+				height: 50px;
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-left {
+				height: 100%;
+				width: 40%;
+				text-align: left;
+				float: left;
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-left font {
+				height: 50%;
+				width: 100%;
+				float: left;
+				line-height: 25px;
+				padding-left: 15px;
+				font-size: 12px;
+				color: black;
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-left font:not(:first-child) {
+				color: rgb(169, 169, 169);
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-left .send-user-mation {
+				font-weight: 600;
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-center {
+				height: 100%;
+				width: calc(60% - 80px);
+				text-align: right;
+				float: left;
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-center font {
+				height: 25px;
+				line-height: 25px;
+				margin-top: 25px;
+				top: 25px;
+				position: relative;
+				color: rgb(169, 169, 169);
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-right {
+				float: left;
+				text-align: left;
+				width: 70px;
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-right font {
+				height: 50%;
+				width: 100%;
+				float: left;
+				line-height: 25px;
+				padding-left: 15px;
+				font-size: 12px;
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-right font i {
+				color: RGB(114, 157, 169);
+				cursor: pointer;
+			}
+			
+			.email-right-content .email-desc .email-send-mation .email-send-mation-right #hideOrShowMessage {
+				color: blue;
+				cursor: pointer;
+			}
+			
+			.email-right-content .email-desc .email-desc-send-mation {
+				width: calc(100% - 20px);
+				float: left;
+				margin: 0px 10px;
+				margin-top: 10px;
+				border-bottom: 1px solid rgb(219, 221, 221);
+			}
+			
+			.email-right-content .email-desc .email-desc-send-mation .send-mation-out {
+			    width: 0;
+			    height: 0px;
+			    border: 10px solid transparent;
+			    border-bottom-color: RGB(241, 246, 245);
+			    margin-top: -20px;
+			    margin-right: 20px;
+			    float: right;
+			}
+			
+			.email-right-content .email-desc .email-desc-send-mation .send-mation-in {
+				text-align: left;
+				padding-left: 10px;
+				float: left;
+				background-color: RGB(241, 246, 245);
+				width: calc(100% - 10px);
+				border-bottom: 1px solid rgb(219, 221, 221);
+				border-top: 1px solid rgb(219, 221, 221);
+			}
+			
+			.email-right-content .email-desc .email-desc-send-mation .send-mation-in font {
+				width: 100%;
+				float: left;
+				line-height: 28px;
+				font-size: 13px;
+			}
+			
+			.email-right-content .email-desc .email-desc-send-mation .send-mation-in .fj div{
+				width: calc(100% - 45px);
+			    float: right;
+			    text-align: left;
+			}
+			
+			.email-right-content .email-desc .email-desc-send-mation .send-mation-in .fj div a{
+		        white-space: nowrap;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+		        max-width: 170px;
+			    float: left;
+			    line-height: 24px;
+			    padding: 0px 5px;
+			    height: 24px;
+			    font-size: 12px;
+			    cursor: pointer;
+			}
+			
+			.email-right-content .email-desc .email-desc-send-mation .send-mation-in .fj div a:HOVER{
+				background-color: RGB(241, 248, 255);
+				border: 1px solid rgb(219, 221, 221);
+				height: 22px;
+				padding: 0px 4px;
+				line-height: 22px;
+			}
+			
+			.email-right-content .email-desc .email-desc-send-content {
+			    float: left;
+			    padding: 0 15px;
+			    width: calc(100% - 30px);
+			    overflow-y: auto;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div style="margin:0 auto; height: 100%;">
+			<div class="email-right-content" id="emailRightContent">
+
+			</div>
+			<script type="text/x-handlebars-template" id="emailContentMobel">
+				{{#bean}}
+					<div class="email-title">{{title}}</div>
+					<div class="email-desc">
+						<div class="email-send-mation">
+							<div class="email-send-mation-left">
+								<font class="send-user-mation">{{fromPeople}}</font>
+								<font>发送给&nbsp;&nbsp;&nbsp;
+									{{#each toPeople}}
+									<span class="layui-badge layui-bg-blue skyeye-badge">{{this}}</span>
+									{{/each}}
+								</font>
+							</div>
+							<div class="email-send-mation-center">
+								<font>{{sendDay}} {{sendTime}}</font>
+							</div>
+							<div class="email-send-mation-right">
+								<font id="forwardEmail" rowid="{{id}}" title="答复"><i class="fa fa-reply"></i></font>
+								<font id="hideOrShowMessage">隐藏信息</font>
+							</div>
+						</div>
+						<div class="email-desc-send-mation">
+							<div class="send-mation-out"></div>
+							<div class="send-mation-in message-height">
+								<font>发件人：&nbsp;{{fromPeople}}</font>
+								<font>收件人：&nbsp;
+									{{#each toPeople}}
+									<span class="layui-badge layui-bg-blue skyeye-badge">{{this}}</span>
+									{{/each}}
+								</font>
+								<font>抄送：&nbsp;
+									{{#each toCc}}
+									<span class="layui-badge layui-bg-blue skyeye-badge">{{this}}</span>
+									{{/each}}
+								</font>
+								<font>密送：&nbsp;
+									{{#each toBcc}}
+									<span class="layui-badge layui-bg-blue skyeye-badge">{{this}}</span>
+									{{/each}}
+								</font>
+								<font>时间：&nbsp;{{sendDay}} {{sendTime}}</font>
+								<font class="fj">附件：&nbsp;
+									<div>
+										{{#each enclosureBeans}}
+											<a title="{{fileName}}" class="enclosureItem" rowpath="{{filePath}}">{{fileName}}</a>
+										{{/each}}
+									</div>
+								</font>
+							</div>
+						</div>
+						<div class="email-desc-send-content">
+							{{{content}}}
+						</div>
+					</div>
+				{{/bean}}
+			</script>
+		</div>
+		<script src="../../assets/lib/layui/layui.js"></script>
+		<script src="../../assets/lib/layui/custom.js"></script>
+		<script type="text/javascript">
+			layui.config({base: '../../js/useremail/'}).use('emailshow');
+		</script>
+	</body>
+
+</html>

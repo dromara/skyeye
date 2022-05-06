@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+	<meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="icon" type="image/x-icon" href="../../assets/images/eye.png"/>
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/animate/animate.min.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <script>
+        /^http(s*):\/\//.test(location.href) || alert('请先部署到 localhost 下再访问');
+    </script>
+</head>
+<body>
+	<div style="padding: 0px 5px; height: 100%;">
+		<div class="layui-card" style="box-shadow: none;height: 100%;">
+			<div class="layui-card-header custom-card-header" id="title"></div>
+			<div class="layui-card-body layui-text custom-card-body" style="padding: 0px 5px; height: calc(100% - 35px);">
+				<iframe id="knowledgecontentshowBox" style="width: 100%; border: 0px;" scrolling="no"></iframe>
+			</div>
+		</div>
+	</div>
+    <!--layui.js-->
+    <script src="../../assets/lib/layui/layui.js" type="text/javascript"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script>
+        layui.config({
+            base: '../../js/knowledgePageShow/' //指定 index.js 路径
+        }).use('details');
+    </script>
+</body>
+</html>

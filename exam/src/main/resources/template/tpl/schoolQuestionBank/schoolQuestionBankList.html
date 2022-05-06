@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	            	<label class="layui-form-label">学校</label>
+	                <div class="layui-input-inline">
+	                    <select id="schoolId" lay-filter="schoolId" lay-search="">
+			                    
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">年级</label>
+	                <div class="layui-input-inline">
+	                    <select id="gradeId" lay-filter="gradeId" lay-search="">
+		            		<option value="">请选择</option>
+		            	</select>
+	                </div>
+	                <label class="layui-form-label">科目</label>
+	                <div class="layui-input-inline">
+	                    <select id="subjectId" lay-filter="subjectId" lay-search="">
+		            		<option value="">请选择</option>
+		            	</select>
+	                </div>
+	                <label class="layui-form-label">题目</label>
+	                <div class="layui-input-inline">
+	                    <input id="quTitle" name="quTitle" class="layui-input" placeholder="请输入题目标题"/>
+	                </div>
+            	    <label class="layui-form-label">类型</label>
+	                <div class="layui-input-inline">
+	                    <select id="type" name="type">
+	                    	<option value="">全部</option>
+	                    	<option value="1">公开</option>
+	                    	<option value="2">私有</option>
+	                    </select>
+	                </div>
+	                <label class="layui-form-label">题型</label>
+	                <div class="layui-input-inline">
+	                    <select id="quType" name="quType">
+	                    	<option value="">全部</option>
+	                    	<!-- <option value="0">是非题</option> -->
+	                    	<option value="1">单选题</option>
+	                    	<option value="2">多选题</option>
+	                    	<option value="3">填空题</option>
+	                    	<option value="4">多项填空题</option>
+	                    	<!-- <option value="5">多行填空题</option> -->
+	                    	<!-- <option value="6">大题</option>
+	                    	<option value="7">枚举题</option> -->
+	                    	<option value="8">评分题</option>
+	                    	<option value="9">排序题</option>
+	                    	<!-- <option value="10">比重题</option> -->
+	                    	<option value="11">矩阵单选题</option>
+	                    	<option value="12">矩阵填空题</option>
+	                    	<option value="13">矩阵多选题</option>
+	                    	<!-- <option value="14">复合矩阵单选题</option> -->
+	                    	<option value="18">矩阵评分题</option>
+	                    </select>
+	                </div>
+	                
+	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addRadio" class="winui-toolbtn" auth="1590311376667"><img src="../../assets/images/question_radio_icon.png" class="btn-icon">单选题</button>
+            <button id="addCheckBox" class="winui-toolbtn" auth="1595035353158"><img src="../../assets/images/question_checkbox_icon.png" class="btn-icon">多选题</button>
+            <button id="addFillblank" class="winui-toolbtn" auth="1595035365737"><img src="../../assets/images/question_input_icon.png" class="btn-icon">填空题</button>
+            <button id="addScore" class="winui-toolbtn" auth="1595035378333"><img src="../../assets/images/question_score_icon.png" class="btn-icon">评分题</button>
+            <button id="addOrderby" class="winui-toolbtn" auth="1595035394243"><img src="../../assets/images/question_sort_icon.png" class="btn-icon">排序题</button>
+            <button id="addMultiFillblank" class="winui-toolbtn" auth="1595035411818"><img src="../../assets/images/question_m_input_icon.png" class="btn-icon">多项填空题</button>
+            <button id="addChenradio" class="winui-toolbtn" auth="1595035432596"><img src="../../assets/images/question_matrix_radio_icon.png" class="btn-icon">矩阵单选题</button>
+            <button id="addChencheckbox" class="winui-toolbtn" auth="1595035460391"><img src="../../assets/images/question_matrix_checkbox_icon.png" class="btn-icon">矩阵多选题</button>
+            <button id="addChenscore" class="winui-toolbtn" auth="1595035473610"><img src="../../assets/images/question_matrix_score_icon.png" class="btn-icon">矩阵评分题</button>
+            <button id="addChenfbk" class="winui-toolbtn" auth="1595035491337"><img src="../../assets/images/question_matrix_input_icon.png" class="btn-icon">矩阵填空题</button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+			{{# if(auth('1590317366043')){ }}
+          		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
+			{{# } }}
+			{{# if(auth('1595035325000')){ }}
+				<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+			{{# } }}
+        </script>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/schoolQuestionBank/'}).use('schoolQuestionBankList');
+    </script>
+</body>
+</html>

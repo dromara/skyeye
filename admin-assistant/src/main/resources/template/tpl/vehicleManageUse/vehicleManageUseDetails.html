@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm">
+		    
+	    </form>
+	</div>
+	
+	<!-- useTemplate -->
+	<script type="text/x-handlebars-template" id="useTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">标题：</label>
+		        <div class="layui-input-block ver-center">
+		            {{title}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">单号：</label>
+		        <div class="layui-input-block ver-center">
+		            {{oddNumber}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">审批状态：</label>
+		        <div class="layui-input-block ver-center">
+		            {{{stateName}}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">步骤：</label>
+		        <div class="layui-input-block ver-center">
+		            填单
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">责任人：</label>
+		        <div class="layui-input-block ver-center">
+		            {{userName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">乘车人数：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{passengerNum}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">乘车人信息：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{passengerInfo}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">是否自驾：</label>
+		        <div class="layui-input-block ver-center">
+		            {{isSelfDrive}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">驾驶人信息：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{driverName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">用车时间段：</label>
+		        <div class="layui-input-block ver-center">
+		            {{departureTime}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">指定车辆：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{designatedVehicleInfo}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">乘车时间地点：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{timeAndPlaceOfTravel}}
+		        </div>
+		    </div>
+			<div class="actual layui-hide">
+				<div class="layui-form-item layui-col-xs12">
+					<label class="layui-form-label">用车状态：</label>
+					<div class="layui-input-block ver-center">
+						{{{vehicleStateName}}}
+					</div>
+				</div>
+				<div class="layui-form-item layui-col-xs12">
+					<label class="layui-form-label">实际用车：</label>
+					<div class="layui-input-block ver-center">
+						{{vehicleInfo}}
+					</div>
+				</div>
+				<div class="layui-form-item layui-col-xs12">
+					<label class="layui-form-label">车图片：</label>
+					<div class="layui-input-block">
+						<img src="" class="photo-img" id="vehicleImg">
+					</div>
+				</div>
+				<div class="layui-form-item layui-col-xs6">
+					<label class="layui-form-label">用车油耗(L)：</label>
+					<div class="layui-input-block ver-center">
+						{{fuelConsumption}}
+					</div>
+				</div>
+				<div class="layui-form-item layui-col-xs6">
+					<label class="layui-form-label">用车费用(元)：</label>
+					<div class="layui-input-block ver-center">
+						{{vehicleCost}}
+					</div>
+				</div>
+			</div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">用车事由：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{reasonsForUsingCar}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">相关描述：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{remark}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">相关附件：</label>
+		        <div class="layui-input-block ver-center" id="enclosureUploadBtn">
+		        </div>
+		    </div>
+		{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/vehicleManageUse/'}).use('vehicleManageUseDetails');
+	</script>
+</body>
+</html>

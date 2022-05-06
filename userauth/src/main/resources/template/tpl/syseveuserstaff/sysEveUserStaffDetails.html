@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <style type="text/css">
+    	.workDay{
+    		cursor: pointer;
+    	}
+    	
+    	.workDay:HOVER {
+			border-color: #429CE3;
+		}
+    </style>
+</head>
+<body>
+	<div style="padding: 20px; margin: 0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	        
+	    </form>
+	</div>
+	<script type="text/html" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">基础信息</span><hr>
+			</div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">真实姓名：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{userName}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">工号：</label>
+				<div class="layui-input-block ver-center">
+					{{jobNumber}}
+				</div>
+			</div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">身份证件：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{userIdCard}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">性别：</label>
+		       	<div class="layui-input-block ver-center">
+		            {{userSex}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">个人头像：</label>
+		        <div class="layui-input-block ver-center">
+		        	<img src="" class="photo-img" id="userPhoto">
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">参加工作时间：</label>
+				<div class="layui-input-block ver-center">
+					{{workTime}}
+				</div>
+			</div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">入职时间：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{entryTime}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">在职状态：</label>
+				<div class="layui-input-block ver-center {{colorClass}}">
+					{{stateName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">预计试用结束日期：</label>
+				<div class="layui-input-block ver-center">
+					{{trialTime}}
+				</div>
+			</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">转正日期：</label>
+			<div class="layui-input-block ver-center">
+				{{becomeWorkerTime}}
+			</div>
+		</div>
+		    <div class="layui-form-item layui-col-xs6" id="leaveTime" style="display: none">
+		        <label class="layui-form-label">离职时间：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{quitTime}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6" id="leaveReason" style="display: none">
+		        <label class="layui-form-label">离职原因：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{quitReason}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">组织机构</span><hr>
+			</div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">公司：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{companyName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">部门：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{departmentName}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs3">
+		        <label class="layui-form-label">职位：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{jobName}}
+		        </div>
+		    </div>
+			<div class="layui-form-item layui-col-xs3">
+				<label class="layui-form-label">职位定级：</label>
+				<div class="layui-input-block ver-center">
+					{{jobScoreName}}
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">考勤段：</label>
+				<div class="layui-input-block ver-center">
+					{{#each checkTimeStr}}
+						<span class="layui-badge-rim workDay" rowid="{{timeId}}">{{title}}[{{startTime}} ~ {{endTime}}]{{typeName}}</span>
+					{{/each}}
+				</div>
+			</div>
+		    <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">联系方式</span><hr>
+			</div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">邮箱：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{email}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">手机号：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{phone}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">家庭电话：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{homePhone}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">QQ：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{qq}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">个性签名</span><hr>
+			</div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">签名：</label>
+		        <div class="layui-input-block ver-center">
+		        	{{userSign}}
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">家庭情况</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+            	<table id="sysStaffFamilyTable" class="layui-table"></table>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">教育信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+            	<table id="sysStaffEducationTable" class="layui-table"></table>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">工作履历</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+            	<table id="sysStaffJobTable" class="layui-table"></table>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">语种能力</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+            	<table id="sysStaffLanguageTable" class="layui-table"></table>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">证书信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+            	<table id="sysStaffCertificateTable" class="layui-table"></table>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">奖惩信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+            	<table id="sysStaffRewardTable" class="layui-table"></table>
+            </div>
+            <div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">合同信息</span><hr>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+            	<table id="sysStaffContractTable" class="layui-table"></table>
+            </div>
+		{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/syseveuserstaff/'}).use('sysEveUserStaffDetails');
+    </script>
+</body>
+</html>

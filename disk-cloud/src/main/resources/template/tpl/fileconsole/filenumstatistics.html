@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>文件统计报表</title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="../../assets/images/eye.png" />
+    <style type="text/css">
+		body {
+			background-size: 100% 100%;
+			font-weight: bold;
+			font-family: 苹方;
+			overflow: hidden;
+			background: linear-gradient(-45deg, #17213e, #000000, #006970, #007c5f);
+			background-size: 400% 400%;
+			animation: gradientBG 15s ease infinite;
+		}
+		
+		div {
+			border: 0px solid white;
+			margin: 1px;
+		}
+		
+		.layer {
+			position: relative;
+			width: 100%;
+			height: 40%;
+		}
+		
+		.layer02{
+			height: 15%;
+		}
+		
+		.layer02>div {
+			height: 100%;
+			float: left;
+			position: relative;
+			width: 16%;
+		}
+		
+		.layer02-data {
+			position: absolute;
+			width: auto;
+			height: 100px;
+			color: white;
+			top: 45px;
+			left: 65px;
+		}
+		
+		.layer-panel {
+			height: 100%;
+			position: relative;
+			float: left;
+			width: 49%;
+		}
+		
+		.layer03-left-label {
+			position: absolute;
+		}
+		
+		.layer03-left-chart {
+			position: relative;
+			float: left;
+			height: 100%;
+		}
+		
+		.label-text {
+			color: white;
+			height: 15px;
+			width: 100%;
+			padding-top: 5px;
+		}
+		
+		.layer03-right-chart {
+			position: relative;
+			float: left;
+			height: 100%;
+			width: 32%;
+			text-align: center;
+		}
+		
+		.layer03-right-chart-label {
+			color: white;
+			text-align: center;
+			position: absolute;
+			padding-top: 35px;
+			width: 100%;
+		}
+		
+		.layer04-panel-chart {
+			width: 100%;
+			height: 85%;
+		}
+	</style>
+</head>
+<body>
+	<div style="margin:auto; height: 100%;">
+	    <div class="layer layer02">
+			<div id="layer02_01">
+				<div class="layer02-data">
+					<span style="font-size:26px;"></span>
+					<span style="font-size:16px;">个</span>
+				</div>
+				<canvas width="200" height="100"></canvas>
+			</div>
+			<div id="layer02_02">
+				<div class="layer02-data">
+					<span style="font-size:26px;"></span>
+					<span style="font-size:16px;">个</span>
+				</div>
+				<canvas width="200" height="100"></canvas>
+			</div>
+			<div id="layer02_03">
+				<div class="layer02-data">
+					<span style="font-size:26px;"></span>
+					<span style="font-size:16px;">个</span>
+				</div>
+				<canvas width="200" height="100"></canvas>
+			</div>
+			<div id="layer02_04">
+				<div class="layer02-data">
+					<span style="font-size:26px;"></span>
+				</div>
+				<canvas width="200" height="100"></canvas>
+			</div>
+			<div id="layer02_05">
+				<div class="layer02-data">
+					<span style="font-size:26px;"></span>
+				</div>
+				<canvas width="200" height="100"></canvas>
+			</div>
+			<div id="layer02_06">
+				<div class="layer02-data">
+					<span style="font-size:26px;"></span>
+				</div>
+				<canvas width="200" height="100"></canvas>
+			</div>
+		</div>
+		<div id="layer03" class="layer">
+			<div class="layer-panel">
+				<div class="label-text">文件类型占比</div>
+				<div id="layer03_left_02" class="layer03-left-chart" style="width:100%;"></div>
+			</div>
+			<div class="layer-panel" id="fileStorageListShow">
+				<div class="label-text">文件存储占比（前三）</div>
+				
+			</div>
+		</div>
+		<div id="layer04" class="layer">
+			<div class="layer-panel">
+				<div class="label-text">本年度新增文件数</div>
+				<div id="layer04_left_chart" class="layer04-panel-chart"></div>
+			</div>
+			<div class="layer-panel">
+				<div class="label-text">
+					<span>新增文件数/</span><span style="color:#00A09A;">近七天</span>
+				</div>
+				<div id="layer04_right_chart" class="layer04-panel-chart"></div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="fileStorageBean">
+		{{#bean}}
+			<div class="layer03-right-chart" id="{{id}}">
+				<canvas width="130" height="150" style="margin: 30px auto;"></canvas>
+				<div class="layer03-right-chart-label">{{typeName}}</div>
+			</div>
+		{{/bean}}
+	</script>
+	
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+		layui.config({base: '../../js/fileconsole/'}).use('filenumstatistics');
+    </script>
+</body>
+</html>

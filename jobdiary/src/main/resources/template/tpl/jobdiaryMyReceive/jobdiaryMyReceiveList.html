@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+		<div class="txtcenter" style="margin: 0 auto; padding-top: 10px;">
+			<div class="winui-tip alert-info" id="showInfo">
+				员工已发出日志两小时之内可以撤回修改并再次发送。
+			</div>
+			<form class="layui-form layui-form-pane" action="" autocomplete="off">
+				<div class="layui-form-item">
+		            <div class="layui-inline">
+		                <label class="layui-form-label">发件人</label>
+		                <div class="layui-input-inline">
+		                    <input type="text" id="userName" name="userName" placeholder="请选择发件人" class="layui-input" />
+		                </div>
+		                <label class="layui-form-label">时间</label>
+		                <div class="layui-input-inline">
+		                    <input type="text" id="receivedTime" name="receivedTime" placeholder="请选择发件时间段" class="layui-input" />
+		                </div>
+		                <label class="layui-form-label">日志类型</label>
+		                <div class="layui-input-inline">
+		                    <select id="diaryType">
+		                    	<option value="">全部</option>
+		                    	<option value="1">日报</option>
+		                    	<option value="2">周报</option>
+		                    	<option value="3">月报</option>
+		                    </select>
+		                </div>
+		                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+		                <button class="layui-btn list-form-search" type="button" id="searchMyReceived"><language showName="com.skyeye.search2"></language></button>
+		            </div>
+		        </div>
+		    </form>
+		</div>
+		<div class="winui-toolbar">
+            <div class="winui-tool">
+                <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+                <button id="timeLineSel" class="winui-toolbtn"><i class="fa fa-sort-amount-asc" aria-hidden="true"></i>时间线查看日志</button>
+                <button id="alreadyRead" class="winui-toolbtn"><i class="fa fa-book fa-fw" aria-hidden="true"></i>全部设置为已读</button>
+            </div>
+        </div>
+		<div style="margin:auto 10px;">
+			<table id="messageTable" lay-filter="messageTable"></table>
+			<script type="text/html" id="tableBar">
+				{{# if(auth('1597545171764')){ }}
+            		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
+				{{# } }}
+			</script>
+		</div>
+    </div> 
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    
+    <script type="text/javascript">
+        layui.config({base: '../../js/jobdiaryMyReceive/'}).use('jobdiaryMyReceiveList');
+    </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin: 0 auto; padding: 20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	        
+	    </form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">档案编号<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="archivesNumber" name="archivesNumber" win-verify="required" placeholder="请输入档案编号" class="layui-input" value="{{archivesNumber}}" maxlength="50"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">管理单位</label>
+	            <div class="layui-input-block">
+	                <select lay-filter="managementUnit" lay-search="" id="managementUnit">
+					</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">档案室</label>
+	            <div class="layui-input-block">
+	                <input type="text" id="archivesCenter" name="archivesCenter" placeholder="请输入档案室" class="layui-input" value="{{archivesCenter}}" maxlength="100"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">档案保管地</label>
+	            <div class="layui-input-block">
+	                <input type="text" id="custodyPlace" name="custodyPlace" placeholder="请输入档案保管地" class="layui-input" value="{{custodyPlace}}" maxlength="100"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">档案学历</label>
+	            <div class="layui-input-block">
+	                <select lay-filter="educationId" lay-search="" id="educationId">
+					</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">入档日期<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="archivesTime" name="archivesTime" win-verify="required" placeholder="请选择入档日期" class="layui-input" value="{{archivesTime}}" maxlength="50"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">是否在档<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <select lay-filter="whetherArchives" lay-search="" win-verify="required" id="whetherArchives">
+						<option value="1">在档</option>
+						<option value="2">不在档</option>
+					</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">档案状态<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <select lay-filter="archivesState" lay-search="" win-verify="required" id="archivesState">
+						<option value="1">有效</option>
+						<option value="2">无效</option>
+					</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">备注</label>
+		        <div class="layui-input-block">
+		        	<textarea id="remark" placeholder="请填写备注" maxlength="200" class="layui-textarea" style="height: 100px;">{{remark}}</textarea>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">附件资料</label>
+				<div class="layui-input-block" id="enclosureUpload">
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+		            <button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+		        </div>
+		    </div>
+		{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/sysStaffArchives/'}).use('sysStaffArchivesEdit');
+	</script>
+</body>
+</html>

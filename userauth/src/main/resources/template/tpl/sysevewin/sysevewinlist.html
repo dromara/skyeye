@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
+	        <div class="layui-form-item">
+	            <div class="layui-inline">
+	                <label class="layui-form-label">系统</label>
+	                <div class="layui-input-inline">
+	                	<input type="text" id="sysName" name="sysName" placeholder="请输入系统" class="layui-input" />
+	                </div>
+	                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+	                <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+	
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn" auth="1552961221651"><i class="fa fa-plus" aria-hidden="true"></i>新增系统</button>
+        </div>
+    </div>
+    
+    <div class="layui-row">
+    	<div class="layui-col-xs12">
+	    	<div style="margin:auto 10px;">
+		        <table id="messageTable" lay-filter="messageTable"></table>
+		    </div>
+    	</div>
+   	</div>
+   	
+   	<script type="text/html" id="tableBar">
+		{{# if(d.useNum == 0 && d.menuNum == 0 && auth('1552961260671')){ }}
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
+		{{# } }}
+		{{# if(auth('1552961242663')){ }}
+			<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+		{{# } }}
+		{{# if(d.useNum == 0 && auth('1552961291422')){ }}
+			<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="authorization">授权</a>
+		{{# } else{ }}
+			{{# if(auth('1552961341773')){ }}
+				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="cancleauthorization">取消授权</a>
+			{{# } }}
+		{{# } }}
+	</script>
+   	
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/sysevewin/'}).use('sysevewinlist');
+    </script>
+</body>
+</html>

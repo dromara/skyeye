@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="layui-fluid">
+        <form class="layui-form" action="" id="showForm">
+            <div class="layui-col-xs12 margin-top-10 layui-col-space15">
+                <div class="winui-toolbar layui-col-xs12">
+                    <div class="winui-tool layui-col-xs3">
+                        <select id="storeId" name="storeId" lay-filter="storeId" lay-search="">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-col-xs12" id="formContent">
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/x-handlebars-template" id="beanTemplate">
+        {{#bean}}
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">营业时间</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">开始时间<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="businessStartTime" name="businessStartTime" win-verify="required" placeholder="请选择开始时间" class="layui-input" value="{{businessStartTime}}"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">结束时间<i class="red">*</i></label>
+            <div class="layui-input-block">
+                <input type="text" id="businessEndTime" name="businessEndTime" win-verify="required" placeholder="请选择结束时间" class="layui-input" value="{{businessEndTime}}"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">线上预约时间段设定</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">是否开启线上预约<i class="red">*</i></label>
+            <div class="layui-input-block winui-radio">
+                <input type="radio" name="onlineBookAppoint" value="1" title="开启" />
+                <input type="radio" name="onlineBookAppoint" value="2" title="关闭" />
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">维修基数(分钟)</label>
+            <div class="layui-input-block">
+                <input type="text" id="onlineBookRadix" name="onlineBookRadix" win-verify="number" placeholder="请输入维修基数" class="layui-input" value="{{onlineBookRadix}}"/>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-block winui-radio">
+                <input type="radio" name="onlineBookType" value="1" title="按维修工位" />
+                <input type="radio" name="onlineBookType" value="2" title="按维修人数" />
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">时间段数量设定</label>
+            <div class="layui-input-block">
+                <div class="winui-toolbar">
+                    <div class="winui-tool" style="text-align: left;">
+                        <button id="calc" class="winui-toolbtn" type="button"><i class="fa fa-calculator" aria-hidden="true"></i>计算</button>
+                    </div>
+                </div>
+                <div class=" layui-col-xs12" style="overflow-x: auto">
+                    <table class="layui-table">
+                        <thead>
+                            <tr id="tableHead">
+                                <th style="width: 30px;"></th>
+                                {{#each onlineBookJson}}
+                                    <th>{{time}}</th>
+                                {{/each}}
+                            </tr>
+                        </thead>
+                        <tbody id="useTable" class="insurance-table">
+                            <tr>
+                                <td style="width: 30px;"></td>
+                                {{#each onlineBookJson}}
+                                <td>
+                                    <div style="width: 100px;">
+                                        <input type="text" id="td{{time}}" win-verify="required|number" placeholder="请输入数量" class="layui-input onlineJson" value="{{value}}"/>
+                                    </div>
+                                </td>
+                                {{/each}}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">门店成员</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">门店成员</label>
+            <div class="layui-input-block">
+                <div class=" layui-col-xs12" style="overflow-x: auto">
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>工号</th>
+                            <th>姓名</th>
+                            <th>企业</th>
+                            <th>部门</th>
+                            <th>职位</th>
+                        </tr>
+                        </thead>
+                        <tbody class="insurance-table">
+                            {{#each storeStaffList}}
+                            <tr>
+                                <td><div style="width: 100px;">{{jobNumber}}</div></td>
+                                <td><div style="width: 100px;">{{userName}}</div></td>
+                                <td><div style="width: 140px;">{{companyName}}</div></td>
+                                <td><div style="width: 100px;">{{departmentName}}</div></td>
+                                <td><div style="width: 120px;">{{jobName}}</div></td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12" style="height: 50px"></div>
+        <div class="layui-form-item layui-col-xs12" style="position: fixed; bottom: 0; background-color: white; border-top: 1px solid gainsboro; line-height: 41px;">
+            <div class="layui-input-block">
+                <button class="winui-btn" lay-submit lay-filter="formSaveBean" auth="1644129110388"><language showName="com.skyeye.save"></language></button>
+            </div>
+        </div>
+        {{/bean}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="tableHeadTemplate">
+        <th style="width: 30px;"></th>
+        {{#each rows}}
+            <th>{{this}}</th>
+        {{/each}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="tableBodyTemplate">
+        <tr>
+            <td style="width: 30px;"></td>
+            {{#each rows}}
+                <td>
+                    <div style="width: 100px;">
+                        <input type="text" id="td{{this}}" win-verify="required|number" placeholder="请输入数量" class="layui-input onlineJson"/>
+                    </div>
+                </td>
+            {{/each}}
+        </tr>
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/storeOnlineSetUp/'}).use('storeOnlineSetUp');
+    </script>
+</body>
+</html>

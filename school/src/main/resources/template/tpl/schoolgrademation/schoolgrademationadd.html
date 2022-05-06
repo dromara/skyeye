@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">年级名称<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" id="gradeName" name="gradeName" win-verify="required" placeholder="请输入年级名称" class="layui-input" maxlength="50"/>
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">所属学校<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	            	<select id="OverAllSchool" lay-filter="OverAllSchool" lay-search="">
+	            		<option value="">请选择</option>
+	            	</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">年级状态<i class="red">*</i></label>
+	            <div class="layui-input-block winui-radio">
+	                <input type="radio" name="type" value="1" title="正常年级" lay-filter="type" checked/>
+	                <input type="radio" name="type" value="2" title="补习班" lay-filter="type" />
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12 layui-hide" id="parentIdBox">
+	            <label class="layui-form-label">所属年级<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	            	<select id="OverAllGrade" lay-filter="OverAllGrade" lay-search="">
+	            		<option value="">请选择</option>
+	            	</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12" id="yearNBox">
+	            <label class="layui-form-label">N年后达到这个级别<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<input type="text" id="yearN" name="yearN" win-verify="required|number" placeholder="N年后达到这个级别" class="layui-input"/>
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+	                <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+	            </div>
+	        </div>
+	    </form>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+        layui.config({base: '../../js/schoolgrademation/'}).use('schoolgrademationadd');
+    </script>
+</body>
+</html>

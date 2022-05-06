@@ -1,17 +1,31 @@
+
 # skyeye
 
 #### 项目介绍
 
 智能办公OA系统[SpringBoot2-快速开发平台]，适用于医院，学校，中小型企业等机构的管理。包含文件在线操作、工作日志、多班次考勤、CRM、ERP进销存、项目管理、EHR、拖拽式生成问卷、日程、笔记、工作计划、行政办公、薪资模块、动态表单、知识库、公告模块、企业论坛、云售后模块、生产模块、系统模块化同步模块等多种复杂业务功能。
 
-- 开源不易，给个`star`吧
+- [2022-05-02 云办公系统 skyeye v3.7.12 大版本更新](https://mp.weixin.qq.com/s/nhadQJDPgdVwSVcdAklTIw)
+- [云办公系统 skyeye v3.7.11 发布](https://mp.weixin.qq.com/s/ohbDoUxNzQY9sGt0kwhhSA)
+- [云办公系统 skyeye v3.7.10 发布](https://mp.weixin.qq.com/s/DWoT4gR0GThRUxbKWd2ieg)
+- [云办公系统 skyeye v3.7.9 发布，招聘模块](https://mp.weixin.qq.com/s/NtAfOMv6npHkeDZtP20RWw)
+- [云办公系统 skyeye v3.7.8 发布，ERP，CRM，工作流等服务拆分](https://mp.weixin.qq.com/s/ijMsoaXEL2aDvK9upcUMLw)
+- [云办公系统 skyeye v3.7.7 发布，ERP 商城更新](https://mp.weixin.qq.com/s/vvartsTv16nr1tqJBhYzOg)
+
+# 开源版请下载`master`分支
+# 开源版请下载`master`分支
+# 开源版请下载`master`分支
+
+- 已和 **申科** 达成长期合作
 - erp+生产演示视频：https://mp.weixin.qq.com/s/CrFM_VZShi-FIJ8zD0_Nqg
-- 需要进微信群(加我拉你进群，wzq_598748873)，请提供自己的邮箱，默认订阅每周更新内容推送。
-- 不需要进群的，请直接加微信：ZhiJinShuLi
+- 企业版请加微信：wzq_598748873
+  - 加微信后需提供所在企业、姓名、邮箱、联系方式，默认订阅每周更新内容推送。
+- 非企业版请进QQ群：1016439713，进群后请自行修改备注：职业-地域-昵称，群内只回答开源版问题
 - `本项目分为开源版和企业版，不喜勿喷，谢谢。`
-- 企业版信息：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
-- [项目文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
+- 企业版信息：https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1
+- 参加企业版改进计划，享受最优惠价格，[点我查看](https://mp.weixin.qq.com/s/YIms04X-bbGJwMs1gree1g)
+- [说明文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 - 采用Redis缓存做单点登录功能，全新风格的后台管理系统
 - [MIT协议的高性能报表软件](https://gitee.com/doc_wei01/skyeye-report)
 
@@ -41,7 +55,10 @@
 [ERP进销存管理](https://gitee.com/doc_wei01/erp-pro)(企业版)|包含采购、销售、零售、客户、供应商等多个模块化功能；[效果地址](https://gitee.com/doc_wei01/erp-pro)|[项目管理](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86.md)(企业版)|包含项目、工作量、讨论帖、项目文档、成本费用等功能
 [云售后管理系统](https://gitee.com/doc_wei01/skyeye/blob/master/%E5%8A%9F%E8%83%BD%E6%96%87%E6%A1%A3%E4%BB%8B%E7%BB%8D/%E5%94%AE%E5%90%8E%E5%B7%A5%E5%8D%95%E6%A8%A1%E5%9D%97.md)(企业版)|包含工单的派工，接单，签到，配件申领审批，完工，评价，审核等操作|生产模块(企业版)|已完成，[演示视频](https://www.bilibili.com/video/BV1yA411e7mm/)
 |学校模块以及考试模块(企业版)|[地址](https://gitee.com/doc_wei01/schoolExam)|EHR模块(企业版)|管理企业员工的基础信息|
-|薪资模块(企业版)|员工薪资管理，支持多种类型设定|||
+|会员模块(企业版)|支持会员的操作以及会员订单的操作|门店模块(企业版)|支持门店管理|
+|部署平台(企业版)|支持界面操作一键部署功能|||
+|薪资模块(企业版)|员工薪资管理，支持多种类型设定|财务模块|狂吃狂吃开发中|
+|招聘模块|狂吃狂吃开发中|||
 
 #### 技术选型
 

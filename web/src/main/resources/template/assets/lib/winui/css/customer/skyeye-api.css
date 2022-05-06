@@ -1,0 +1,196 @@
+.apiListForm{
+    width: 100%;
+    height: calc(100% - 70px);
+    border-radius: 4px;
+    border: 1px solid #dee9f5;
+    position: absolute;
+    text-align: center;
+    margin-top: 65px;
+    background-color: white;
+}
+.apiListForm .api-left{
+    width: 250px;
+    float: left;
+    height: calc(100% - 40px);
+    border-right: 1px solid grey;
+}
+.apiListForm .api-left .api-search{
+    width: calc(100% - 10px);
+    margin: 5px 5px;
+    float: left;
+    border-radius: 5px;
+    height: 70px;;
+}
+.apiListForm .api-left .app-list{
+    width: 100%;
+    float: left;
+    overflow-y: auto;
+    height: calc(100% - 80px) !important;
+}
+.apiListForm .api-left .app-list ul{
+    background-color: white !important;
+}
+
+.apiListForm .api-left .app-list ul .layui-nav-child dd{
+    background: #F2F2F2 !important;
+}
+
+.apiListForm .api-left .app-list ul i,
+.apiListForm .api-left .app-list ul cite{
+    color: #555555 !important;
+}
+
+.apiListForm .api-left .app-list .layui-nav-item>.menu-box-none:HOVER,
+.apiListForm .api-left .app-list .layui-nav-item .page-item-click:HOVER{
+    background-color: #F5F5F5 !important;
+}
+
+.apiListForm .api-left .app-list ul .layui-nav-itemed .layui-nav-more{
+    border-bottom-color: #555555 !important;
+    border-top-color: white;
+}
+
+.apiListForm .api-left .app-list ul .layui-nav-more{
+    border-top-color: #555555;
+}
+
+.apiListForm .api-left .app-list .active{
+    background-color: darkgray !important;
+}
+.apiListForm .api-left .app-list .active .api-title font{
+    color: white !important;
+}
+
+.apiListForm .api-left .app-list .active .api-url font{
+    color: white !important;
+}
+.apiListForm .api-left .app-list .api-item{
+    width: 100%;
+    margin: 5px 0px;
+    float: left;
+    height: 60px;
+    cursor: pointer;
+}
+.apiListForm .api-left .app-list .api-item .api-title{
+    width: calc(100% - 20px);
+    float: left;
+    height: 32px;
+    line-height: 32px;
+    text-align: left;
+    padding: 0px 10px;
+}
+
+.apiListForm .api-left .app-list .api-item .api-title font{
+    font-size: 13px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    color: dimgrey;
+}
+
+.apiListForm .api-left .app-list .api-item .api-title .method{
+    width: 45px;
+    float: left;
+    color: white;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    margin-top: 6px;
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+.apiListForm .api-left .app-list .api-item .api-title .url{
+    color: rgb(183, 16, 83);
+    font-family: 宋体;
+    height: 20px;
+    line-height: 20px;
+    margin-top: 5px;
+}
+
+.apiListForm .api-left .app-list .api-item .api-title .method-type-POST{
+    background-color: rgb(99, 166, 34);
+}
+
+.apiListForm .api-left .app-list .api-item .api-title .method-type-GET{
+    background-color: rgb(63, 105, 183);
+}
+
+.apiListForm .api-left .app-list .api-item .api-title .method-type-DELETE{
+    background-color: rgb(138, 33, 28);
+}
+
+.apiListForm .api-left .app-list .api-item .api-title .method-type-PUT{
+    background-color: rgb(203, 129, 20);
+}
+
+.apiListForm .api-left .app-list .api-item .api-url{
+    width: calc(100% - 20px);
+    float: left;
+    height: 18px;
+    line-height: 18px;
+    text-align: left;
+    padding: 0px 10px;
+}
+.apiListForm .api-left .app-list .api-item .api-url font{
+    font-size: 12px;
+    color: darkgray;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+.apiListForm .api-right{
+    width: calc(100% - 271px);
+    float: left;
+    height: calc(100% - 40px);
+    padding: 0px 10px;
+    text-align: left;
+    overflow-y: auto;
+}
+.apiListForm .api-right .api-right-title{
+    width: 100%;
+    float: left;
+    height: 60px;
+    border-bottom: 1px solid gainsboro;
+    font-size: 22px;
+    line-height: 80px;
+}
+.apiListForm .api-right .api-right-power{
+    width: calc(100% - 10px);
+    float: left;
+    height: 45px;
+    line-height: 45px;
+    color: gray;
+    padding-left: 10px;
+}
+.apiListForm .api-right .api-right-requrl{
+    width: calc(100% - 10px);
+    float: left;
+    height: 45px;
+    line-height: 45px;
+    color: gray;
+    padding-left: 10px;
+}
+.apiListForm .api-right .api-right-params{
+    width: calc(100% - 20px);
+    float: left;
+    color: gray;
+    padding: 0px 10px;
+}
+
+.apiListForm .api-right .api-right-params font{
+    font-size: 21px;
+}
+
+.apiListForm .api-right .api-right-result{
+    width: 100%;
+    float: left;
+    color: gray;
+    padding-left: 10px;
+}
+
+.apiListForm .api-right .api-right-result font{
+    font-size: 21px;
+}

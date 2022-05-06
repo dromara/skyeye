@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin: 0 auto; padding: 20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	        
+	    </form>
+	</div>
+	
+	<script type="text/x-handlebars-template" id="beanTemplate">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">名称<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="name" name="name" win-verify="required" placeholder="请输入名称" class="layui-input" value="{{name}}" maxlength="20"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">性别<i class="red">*</i></label>
+	            <div class="layui-input-block winui-radio">
+		            <input type="radio" name="userSex" value="0" title="保密" checked="checked"/>
+		            <input type="radio" name="userSex" value="1" title="男" />
+		            <input type="radio" name="userSex" value="2" title="女" />
+		        </div>
+	        </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">与本人关系<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<select lay-filter="relationshipId" lay-search="" win-verify="required" id="relationshipId">
+					</select>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">证件类型<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<select lay-filter="cardType" lay-search="" win-verify="required" id="cardType">
+					</select>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">证件编号<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="cardNumber" name="cardNumber" win-verify="required" placeholder="请输入证件编号" class="layui-input" value="{{cardNumber}}" maxlength="50"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">政治面貌<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <select lay-filter="politicId" lay-search="" win-verify="required" id="politicId">
+					</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">工作单位<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="workUnit" name="workUnit" win-verify="required" placeholder="请输入工作单位" class="layui-input" value="{{workUnit}}" maxlength="100"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">职务<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="job" name="job" win-verify="required" placeholder="请输入职务" class="layui-input" value="{{job}}" maxlength="50"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">紧急联系人<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <select lay-filter="emergencyContact" lay-search="" win-verify="required" id="emergencyContact">
+						<option value="1">是</option>
+						<option value="2">否</option>
+					</select>
+	            </div>
+	        </div>
+			<div class="layui-form-item layui-col-xs12">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+		            <button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+		        </div>
+		    </div>
+		{{/bean}}
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+   	<script src="../../assets/lib/layui/custom.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/sysStaffFamily/'}).use('sysStaffFamilyEdit');
+	</script>
+</body>
+</html>

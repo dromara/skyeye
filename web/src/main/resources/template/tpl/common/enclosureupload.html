@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/css/file-tree4.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+	<style>  
+	    #filePicker div:nth-child(2){
+	    	position: absolute !important;
+			inset: 0px auto auto 130px !important;
+			width: 72px !important;
+			height: 30px !important;
+			overflow: hidden !important;
+			top: 0px !important;
+	    }  
+	</style>
+</head>
+<body>
+	<div class="txtcenter">
+		<div class="layui-tab layui-tab-card" style="margin: 0px">
+			<ul class="layui-tab-title">
+				<li class="layui-this">本地上传</li>
+				<li>我的附件库</li>
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show">
+					<form class="layui-form" action="" id="showForm" style="height: 240px;">
+						<div class="layui-form-item layui-col-xs12">
+							<div id="uploader" class="wu-example">
+							    <div class="queueList">
+							        <div id="dndArea" class="placeholder">
+							            <div id="filePicker"></div>
+							            <p>或将文件拖到这里，单次最多可选300个</p>
+							        </div>
+							    </div>
+							    <div class="statusBar" style="display:none;">
+							        <div class="progress">
+							            <span class="text">0%</span>
+							            <span class="percentage"></span>
+							        </div><div class="info"></div>
+							        <div class="btns">
+							            <div id="filePicker2"></div><div class="uploadBtn">开始上传</div>
+							        </div>
+							    </div>
+							</div>
+					    </div>
+					</form>
+				</div>
+				<div class="layui-tab-item">
+					<ul id="treeDemo" class="ztree fsTree" method="get" isRoot="0"
+   						treeIdKey="id" inputs="parentId" treePIdKey="pId" clickCallbackInputs="parentId:$id" treeName="name" style="height: 240px;"></ul>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12" style="margin-top: 10px;">
+			<div class="layui-input-block">
+				<button class="winui-btn" type="button" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+				<button class="winui-btn" type="button" id="confimChoose"><language showName="com.skyeye.determine"></language></button>
+			</div>
+		</div>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+	<script type="text/javascript">
+		layui.config({base : '../../js/common/'}).use('enclosureupload');
+	</script>
+</body>
+</html>

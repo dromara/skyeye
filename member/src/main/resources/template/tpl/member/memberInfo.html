@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="padding:20px; margin:0 auto;">
+        <form class="layui-form" action="" id="showForm" autocomplete="off">
+
+        </form>
+    </div>
+
+    <script type="text/x-handlebars-template" id="simpleTemplate">
+        {{#bean}}
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">会员信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">会员称呼：</label>
+            <div class="layui-input-block ver-center">
+                {{contacts}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">联系电话：</label>
+            <div class="layui-input-block ver-center">
+                {{phone}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">电子邮箱：</label>
+            <div class="layui-input-block ver-center">
+                {{email}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block ver-center" id="enabled">
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">家庭住址：</label>
+            <div class="layui-input-block ver-center">
+                {{provinceName}} {{cityName}} {{addressAreaName}} {{townshipName}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">详细地址：</label>
+            <div class="layui-input-block ver-center">
+                {{address}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">备注：</label>
+            <div class="layui-input-block ver-center">
+                {{description}}
+            </div>
+        </div>
+        {{/bean}}
+    </script>
+
+    <script type="text/x-handlebars-template" id="memberCarTemplate">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">车辆信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">车辆信息：</label>
+            <div class="layui-input-block ver-center">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>车牌号</th>
+                        <th>VIN码</th>
+                        <th>车型</th>
+                        <th>是否购买保险</th>
+                        <th>状态</th>
+                        <th>录入人</th>
+                        <th>录入时间</th>
+                    </tr>
+                    </thead>
+                    <tbody class="insurance-table">
+                    {{#each rows}}
+                    <tr>
+                        <td><div style="width: 100px;">{{plate}}</div></td>
+                        <td><div style="width: 180px;">{{vinCode}}</div></td>
+                        <td><div style="width: 140px;">{{modelType}}</div></td>
+                        <td><div style="width: 140px;">{{insure}}</div></td>
+                        <td><div style="width: 100px;">{{{stateName}}}</div></td>
+                        <td><div style="width: 120px;">{{createName}}</div></td>
+                        <td><div style="width: 140px;">{{createTime}}</div></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-handlebars-template" id="memberMealTemplate">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">套餐信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">套餐信息：</label>
+            <div class="layui-input-block ver-center">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>套餐</th>
+                        <th>套餐说明</th>
+                        <th>耗材说明</th>
+                        <th>总次数</th>
+                        <th>可使用次数</th>
+                        <th>套餐价格</th>
+                        <th>可使用车辆</th>
+                        <th>购买日期</th>
+                    </tr>
+                    </thead>
+                    <tbody class="insurance-table">
+                    {{#each rows}}
+                    <tr>
+                        <td><div style="width: 180px;">{{title}}</div></td>
+                        <td><div style="width: 140px;" title="{{mealExplain}}">{{mealExplain}}</div></td>
+                        <td><div style="width: 140px;" title="{{mealConsume}}">{{mealConsume}}</div></td>
+                        <td><div style="width: 100px;">{{mealNum}}</div></td>
+                        <td><div style="width: 100px;">{{remainMealNum}}</div></td>
+                        <td><div style="width: 100px;">{{mealPrice}}</div></td>
+                        <td><div style="width: 120px;">{{plate}}</div></td>
+                        <td><div style="width: 100px;">{{createTime}}</div></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-handlebars-template" id="memberMealOrderTemplate">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">套餐订单信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">套餐订单信息：</label>
+            <div class="layui-input-block ver-center">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>订单编号</th>
+                        <th>应付金额</th>
+                        <th>实付金额</th>
+                        <th>实付日期</th>
+                        <th>缴费门店</th>
+                        <th>订单状态</th>
+                        <th>操作时间</th>
+                    </tr>
+                    </thead>
+                    <tbody class="insurance-table">
+                    {{#each rows}}
+                    <tr>
+                        <td><div style="width: 180px;">{{orderNum}}</div></td>
+                        <td><div style="width: 100px;">{{payablePrice}}</div></td>
+                        <td><div style="width: 100px;">{{payPrice}}</div></td>
+                        <td><div style="width: 150px;">{{payTime}}</div></td>
+                        <td><div style="width: 150px;">{{storeName}}</div></td>
+                        <td><div style="width: 80px;">{{{state}}}</div></td>
+                        <td><div style="width: 150px;">{{createTime}}</div></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-handlebars-template" id="memberKeepFitOrderTemplate">
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">保养订单信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">保养订单信息：</label>
+            <div class="layui-input-block ver-center">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>订单编号</th>
+                        <th>套餐名称</th>
+                        <th>套餐内消耗</th>
+                        <th>维修技师</th>
+                        <th>保养门店</th>
+                        <th>订单状态</th>
+                        <th>操作时间</th>
+                    </tr>
+                    </thead>
+                    <tbody class="insurance-table">
+                    {{#each rows}}
+                    <tr>
+                        <td><div style="width: 180px;">{{orderNum}}</div></td>
+                        <td><div style="width: 100px;">{{mealName}}</div></td>
+                        <td><div style="width: 100px;">{{mealSinglePrice}}</div></td>
+                        <td><div style="width: 100px;">{{serviceTechnicianName}}</div></td>
+                        <td><div style="width: 150px;">{{storeName}}</div></td>
+                        <td><div style="width: 80px;">{{{state}}}</div></td>
+                        <td><div style="width: 150px;">{{createTime}}</div></td>
+                    </tr>
+                    {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </script>
+
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/member/'}).use('memberInfo');
+    </script>
+</body>
+</html>

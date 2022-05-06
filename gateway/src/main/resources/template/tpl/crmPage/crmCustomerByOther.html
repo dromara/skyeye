@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body style="background-color: rgb(242, 242, 242);">
+	<div class="layui-fluid">
+		<form class="layui-form" action="">
+			<div class="layui-col-xs12 margin-top-10 layui-col-space15">
+			    
+				<div class="layui-col-xs6">
+		      		<div class="layui-card">
+				      	<div class="layui-card-header">客户类型分析</div>
+						<div class="layui-card-body">
+							<div id="charts1" class="layui-row" style="height: 300px;">
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="layui-col-xs6">
+		      		<div class="layui-card">
+				      	<div class="layui-card-header">客户来源分析</div>
+						<div class="layui-card-body">
+							<div id="charts2" class="layui-row" style="height: 300px;">
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="layui-col-xs6">
+		      		<div class="layui-card">
+				      	<div class="layui-card-header">所属行业分析</div>
+						<div class="layui-card-body">
+							<div id="charts3" class="layui-row" style="height: 300px;">
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="layui-col-xs6">
+		      		<div class="layui-card">
+				      	<div class="layui-card-header">客户分组分析</div>
+						<div class="layui-card-body">
+							<div id="charts4" class="layui-row" style="height: 300px;">
+							
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</form>
+	</div>
+	
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/crmPage/'}).use('crmCustomerByOther');
+    </script>
+</body>
+</html>

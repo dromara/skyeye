@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/css/tree-table.css" rel="stylesheet" />
+    <link href="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.css" rel="stylesheet" />
+	<style type="text/css">
+		.remove{
+			position: absolute;
+		    left: 3px;
+		    margin-top: 10px !important;
+		}
+		.layui-badge{
+			line-height: 15px !important;
+		}
+		.curSelectedNode{
+			background-color: #e6e6e6 !important;
+		}
+		.procedureBox{
+			word-break: keep-all;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.procedureSel{
+		    float: left;
+		    height: 20px;
+		    width: 20px;
+		    margin-top: 5px;
+		    cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div style="padding:20px; margin:0 auto;">
+	    <form class="layui-form" action="" id="showForm">
+	    	
+	    </form>
+	</div>
+	
+	<script type="text/html" id="mainHtml">
+		{{#bean}}
+			<div class="layui-form-item layui-col-xs12">
+    			<span class="hr-title">父件资料</span><hr>
+	    	</div>
+	    	<div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">BOM方案名称<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="bomTitle" name="bomTitle" win-verify="required" placeholder="请选择BOM方案名称" class="layui-input" maxlength="50" value="{{title}}"/>
+	            	<div class="layui-form-mid layui-word-aux">该名称在系统中唯一。</div>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">商品名称<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <input type="text" id="productName" name="productName" win-verify="required" placeholder="请选择商品" class="layui-input" readonly="readonly" value="{{productName}}"/>
+	                <i class="fa fa-plus-circle input-icon" id="productNameSel"></i>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">商品型号</label>
+	            <div class="layui-input-block">
+	                <input type="text" id="productModel" name="productModel" placeholder="请选择商品" class="layui-input" value="{{productModel}}" readonly="readonly"/>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">计量单位<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	                <select id="unitList" name="unitList" lay-filter="unitList" >
+	                	{{#each unitList}}
+							<option value="{{id}}">{{name}}</option>
+						{{/each}}
+	               	</select>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">备注说明</label>
+	            <div class="layui-input-block">
+	                <textarea id="remark" name="remark" placeholder="请输入备注说明" maxlength="200" class="layui-textarea" style="height: 100px;">{{remark}}</textarea>
+	            </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs12">
+    			<span class="hr-title">子件清单</span><hr>
+	    	</div>
+	    	<div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">列表项<i class="red">*</i></label>
+	            <div class="layui-input-block">
+	            	<div class="winui-toolbar">
+				        <div class="winui-tool" style="text-align: left;">
+				            <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>选择子件</button>
+				        </div>
+				    </div>
+	            	<ul id="treeDemo" class="ztree fsTree"></ul>
+	            </div>
+	        </div>
+	    	
+	        <div class="layui-form-item layui-col-xs12">
+	            <div class="layui-input-block">
+	                <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+	                <button class="winui-btn" lay-submit lay-filter="formEditBean"><language showName="com.skyeye.save"></language></button>
+	            </div>
+	        </div>
+	    {{/bean}}
+	</script>
+	
+	<!-- 表格标题 -->
+	<script type="text/html" id="tableHeader">
+		<li class="head">
+			<a>
+				<div class="diy" style="width: 20%">商品名称</div>
+				<div class="diy" style="width: 13%">商品型号</div>
+				<div class="diy" style="width: 6%">计量单位</div>
+				<div class="diy" style="width: 15%">工序</div>
+				<div class="diy" style="width: 6%">数量</div>
+				<div class="diy" style="width: 6%">单价</div>
+				<div class="diy" style="width: 6%">金额</div>
+				<div class="diy" style="width: 6%">耗损</div>
+				<div class="diy" style="width: 6%">商品来源</div>
+				<div class="diy" style="width: 15%">备注</div>
+			</a>
+		</li>
+	</script>
+	
+	<!-- 表格行 -->
+	<script type="text/html" id="tableBody">
+		<div class="diy" style="width: 13%">{{productModel}}</div>
+		<div class="diy" style="width: 6%">{{unitName}}</div>
+		<div class="diy procedureBox" style="width: 15%" id="procedureBox{{productId}}" 
+			title="
+			{{#each procedureMationList}}{{number}}、{{procedureName}}&#10;{{/each}}">
+			<img class="procedureSel" id="procedureSel{{productId}}" src="../../assets/images/forum-menu.png"/>
+			{{#each procedureMationList}}
+				<span class="layui-badge layui-bg-gray">{{number}}</span>{{procedureName}}，
+			{{/each}}
+		</div>
+		<div class="diy" style="width: 6%">
+			<input type="text" id="needNum{{productId}}" name="needNum{{productId}}" win-verify="required|number" placeholder="请输入数量" class="layui-input diy-input needNum" value="{{needNum}}"/>
+		</div>
+		<div class="diy" style="width: 6%">{{unitPrice}}</div>
+		<div class="diy" style="width: 6%; min-height: 30px;" id="allPrice{{productId}}"></div>
+		<div class="diy" style="width: 6%">
+			<input type="text" id="wastage{{productId}}" name="wastage{{productId}}" win-verify="required|money" placeholder="请输入耗损" class="layui-input diy-input" value="{{wastagePrice}}"/>
+		</div>
+		<div class="diy" style="width: 6%; overflow: visible !important;">
+			<select lay-filter="typeId" lay-search="" id="type{{productId}}" disabled>
+				<option value="1">自产</option>
+				<option value="2">外购</option>
+			</select>
+		</div>
+		<div class="diy" style="width: 15%">
+			<input type="text" id="remark{{productId}}" name="remark{{productId}}" placeholder="请输入备注" class="layui-input diy-input" maxlength="200" value="{{remark}}"/>
+		</div>
+	</script>
+	
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/jquery-min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/contextMenu/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../assets/lib/layui/lay/modules/ztree/js/jquery.ztree.exhide.min.js"></script>
+	<script type="text/javascript">
+	    layui.config({base: '../../js/erpBom/'}).use('erpBomEdit');
+	</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+</head>
+<body>
+	<div style="margin:0 auto;padding:20px;">
+	    <form class="layui-form" action="" id="showForm" autocomplete="off">
+	    	<div class="layui-form-item layui-col-xs12">
+	            <label class="layui-form-label">所属学校<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<select id="schoolId" lay-filter="schoolId" lay-search="" win-verify="required">
+	            	</select>
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">所属年级<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<select id="gradeId" lay-filter="gradeId" lay-search="" win-verify="required">
+	            	</select>
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+	            <label class="layui-form-label">所属科目<i class="red">*</i></label>
+	            <div class="layui-input-block">
+                	<select id="subjectId" lay-filter="subjectId" lay-search="" win-verify="required">
+	            	</select>
+                </div>
+	        </div>
+	        <div class="layui-form-item layui-col-xs6">
+		        <label class="layui-form-label">类型<i class="red">*</i></label>
+		        <div class="layui-input-block winui-radio">
+		            <input type="radio" name="typeState" value="1" title="公开" />
+		            <input type="radio" name="typeState" value="2" title="私有" checked="checked"/>
+		        </div>
+		    </div>
+	        <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">标题<i class="red">*</i></label>
+		        <div class="layui-input-block">
+		        	<input type="text" id="title" name="title" win-verify="required" placeholder="请输入知识库标题" class="layui-input"/>
+		        </div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <label class="layui-form-label">内容<i class="red">*</i></label>
+		        <div class="layui-input-block">
+					<script id="container" name="content" type="text/plain"></script>
+				</div>
+		    </div>
+		    <div class="layui-form-item layui-col-xs12">
+		        <div class="layui-input-block">
+		            <button class="winui-btn" id="cancle"><language showName="com.skyeye.cancel"></language></button>
+		            <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+		        </div>
+		    </div>
+	    </form>
+	</div>
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/ueditor.all.js"></script>
+	<script type="text/javascript" src="../../assets/lib/layui/lay/modules/ueditor/lang/zh-cn/zh-cn.js"></script>
+   	<script type="text/javascript">
+		layui.config({base: '../../js/schoolKnowledgePoints/'}).use('schoolKnowledgePointsAdd');
+	</script>
+</body>
+</html>
