@@ -26,40 +26,23 @@ function Loader( editor ) {
 	};
 
 	this.loadFiles = function ( files, filesMap ) {
-
 		if ( files.length > 0 ) {
-
 			var filesMap = filesMap || LoaderUtils.createFilesMap( files );
-
 			var manager = new THREE.LoadingManager();
 			manager.setURLModifier( function ( url ) {
-
 				url = url.replace( /^(\.?\/)/, '' ); // remove './'
-
 				var file = filesMap[ url ];
-
 				if ( file ) {
-
 					console.log( 'Loading', url );
-
 					return URL.createObjectURL( file );
-
 				}
-
 				return url;
-
 			} );
-
 			manager.addHandler( /\.tga$/i, new TGALoader() );
-
 			for ( var i = 0; i < files.length; i ++ ) {
-
 				scope.loadFile( files[ i ], manager );
-
 			}
-
 		}
-
 	};
 
 	this.loadFile = function ( file, manager ) {
@@ -78,28 +61,18 @@ function Loader( editor ) {
 		} );
 
 		switch ( extension ) {
-
 			case '3dm':
-
 				reader.addEventListener( 'load', async function ( event ) {
-
 					var contents = event.target.result;
-
 					var { Rhino3dmLoader } = await import( '../../examples/jsm/loaders/3DMLoader.js' );
-
 					var loader = new Rhino3dmLoader();
 					loader.setLibraryPath( '../examples/jsm/libs/rhino3dm/' );
 					loader.parse( contents, function ( object ) {
-
 						editor.execute( new AddObjectCommand( editor, object ) );
-
 					} );
-
 				}, false );
 				reader.readAsArrayBuffer( file );
-
 				break;
-
 			case '3ds':
 
 				reader.addEventListener( 'load', async function ( event ) {
@@ -149,23 +122,15 @@ function Loader( editor ) {
 				break;
 
 			case 'dae':
-
 				reader.addEventListener( 'load', async function ( event ) {
-
 					var contents = event.target.result;
-
 					var { ColladaLoader } = await import( '../../examples/jsm/loaders/ColladaLoader.js' );
-
 					var loader = new ColladaLoader( manager );
 					var collada = loader.parse( contents );
-
 					collada.scene.name = filename;
-
 					editor.execute( new AddObjectCommand( editor, collada.scene ) );
-
 				}, false );
 				reader.readAsText( file );
-
 				break;
 
 			case 'drc':
@@ -257,45 +222,28 @@ function Loader( editor ) {
 				break;
 
 			case 'gltf':
-
 				reader.addEventListener( 'load', async function ( event ) {
-
 					var contents = event.target.result;
-
 					var loader;
-
 					if ( isGLTF1( contents ) ) {
-
 						alert( 'Import of glTF asset not possible. Only versions >= 2.0 are supported. Please try to upgrade the file to glTF 2.0 using glTF-Pipeline.' );
-
 					} else {
-
 						var { DRACOLoader } = await import( '../../examples/jsm/loaders/DRACOLoader.js' );
 						var { GLTFLoader } = await import( '../../examples/jsm/loaders/GLTFLoader.js' );
-
 						var dracoLoader = new DRACOLoader();
 						dracoLoader.setDecoderPath( '../examples/js/libs/draco/gltf/' );
-
 						loader = new GLTFLoader( manager );
 						loader.setDRACOLoader( dracoLoader );
-
 					}
-
 					loader.parse( contents, '', function ( result ) {
-
 						var scene = result.scene;
 						scene.name = filename;
-
 						scene.animations.push( ...result.animations );
 						editor.execute( new AddObjectCommand( editor, scene ) );
-
 					} );
-
 				}, false );
 				reader.readAsArrayBuffer( file );
-
 				break;
-
 			case 'js':
 			case 'json':
 

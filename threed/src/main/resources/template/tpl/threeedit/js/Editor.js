@@ -550,54 +550,34 @@ Editor.prototype = {
 	},
 
 	selectById: function ( id ) {
-
 		if ( id === this.camera.id ) {
-
 			this.select( this.camera );
 			return;
-
 		}
-
 		this.select( this.scene.getObjectById( id ) );
-
 	},
 
 	selectByUuid: function ( uuid ) {
-
 		var scope = this;
-
 		this.scene.traverse( function ( child ) {
-
 			if ( child.uuid === uuid ) {
-
 				scope.select( child );
-
 			}
-
 		} );
-
 	},
 
 	deselect: function () {
-
 		this.select( null );
-
 	},
 
 	focus: function ( object ) {
-
 		if ( object !== undefined ) {
-
 			this.signals.objectFocused.dispatch( object );
-
 		}
-
 	},
 
 	focusById: function ( id ) {
-
 		this.focus( this.scene.getObjectById( id ) );
-
 	},
 
 	clear: function () {
@@ -626,58 +606,38 @@ Editor.prototype = {
 		this.materials = {};
 		this.textures = {};
 		this.scripts = {};
-
 		this.materialsRefCounter.clear();
-
 		this.animations = {};
 		this.mixer.stopAllAction();
-
 		this.deselect();
-
 		this.signals.editorCleared.dispatch();
-
 	},
 
-	//
-
 	fromJSON: async function ( json ) {
-
 		var loader = new THREE.ObjectLoader();
 		var camera = await loader.parseAsync( json.camera );
 
 		this.camera.copy( camera );
 		this.signals.cameraResetted.dispatch();
-
 		this.history.fromJSON( json.history );
 		this.scripts = json.scripts;
-
 		this.setScene( await loader.parseAsync( json.scene ) );
 
 	},
 
 	toJSON: function () {
-
 		// scripts clean up
-
 		var scene = this.scene;
 		var scripts = this.scripts;
 
 		for ( var key in scripts ) {
-
 			var script = scripts[ key ];
-
 			if ( script.length === 0 || scene.getObjectByProperty( 'uuid', key ) === undefined ) {
-
 				delete scripts[ key ];
-
 			}
-
 		}
 
-		//
-
 		return {
-
 			metadata: {},
 			project: {
 				shadows: this.config.getKey( 'project/renderer/shadows' ),
@@ -691,33 +651,23 @@ Editor.prototype = {
 			scene: this.scene.toJSON(),
 			scripts: this.scripts,
 			history: this.history.toJSON()
-
 		};
-
 	},
 
 	objectByUuid: function ( uuid ) {
-
 		return this.scene.getObjectByProperty( 'uuid', uuid, true );
-
 	},
 
 	execute: function ( cmd, optionalName ) {
-
 		this.history.execute( cmd, optionalName );
-
 	},
 
 	undo: function () {
-
 		this.history.undo();
-
 	},
 
 	redo: function () {
-
 		this.history.redo();
-
 	}
 
 };
