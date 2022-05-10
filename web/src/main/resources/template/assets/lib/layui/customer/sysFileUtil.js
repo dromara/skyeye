@@ -61,6 +61,36 @@ var sysFileUtil = {
     },
 
     /**
+     * 根据文件路径转换成File对象
+     *
+     * @param url 文件路径
+     * @param callback 回调函数
+     */
+    getFileByUrl: function (url, callback) {
+        sysFileUtil.getBlob(url, function(blob) {
+            const files = new File(
+                [blob],
+                sysFileUtil.getFileNameByUrl(url)
+            );
+            callback(files);
+        });
+    },
+
+    /**
+     * 根据文件路径获取文件名
+     *
+     * @param url 文件路径
+     * @returns {*}
+     */
+    getFileNameByUrl: function (url) {
+        // 通过\分隔字符串，成字符串数组
+        var arr = url.split('\\');
+        // 取最后一个，就是文件全名,含后缀
+        var fileName = arr[arr.length-1];
+        return fileName;
+    },
+
+    /**
      * 保存
      * @param  {Blob} blob
      * @param  {String} filename 想要保存的文件名称

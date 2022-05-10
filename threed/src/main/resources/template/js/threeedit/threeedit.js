@@ -8,11 +8,12 @@ layui.config({
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 
-	//加入模型到场景
+	// 加入模型到场景
 	$("body").on("click", "#modeList .item", function(e){
 		var url = $(this).attr("src");
-		editor.loader.loadFileByUrls(url, function(object){
-//			editor.scene.add(object);
+		sysFileUtil.getFileByUrl(url, function(file) {
+			var manager = new THREE.LoadingManager();
+			editor.loader.loadFile(file, manager);
 		});
 	});
 	
