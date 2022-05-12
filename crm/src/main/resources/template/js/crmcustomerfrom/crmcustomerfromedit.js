@@ -13,8 +13,9 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "crmcustomerfrom003",
-		 	params: {rowId: parent.rowId},
+		 	params: {id: parent.rowId},
 		 	pagination: false,
+			method: 'GET',
 		 	template: getFileContent('tpl/crmcustomerfrom/crmcustomerfromeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
@@ -24,10 +25,10 @@ layui.config({
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
-	 	        			rowId: parent.rowId,
+	 	        			id: parent.rowId,
 	 	        			typeName: $("#typeName").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom004", params: params, type: 'json', method: 'PUT', callback: function(json){
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

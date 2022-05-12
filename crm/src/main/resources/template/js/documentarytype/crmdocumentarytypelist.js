@@ -82,7 +82,7 @@ layui.config({
 			url: "../../tpl/documentarytype/crmdocumentarytypeadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "crmdocumentarytypeadd",
-			area: ['40vw', '40vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
@@ -100,7 +100,7 @@ layui.config({
 			url: "../../tpl/documentarytype/crmdocumentarytypeedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "crmdocumentarytypeedit",
-			area: ['40vw', '40vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});

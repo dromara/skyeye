@@ -63,7 +63,7 @@ layui.config({
 			url: "../../tpl/crmcustomerfrom/crmcustomerfromadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "crmcustomerfromadd",
-			area: ['40vw', '40vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
@@ -81,7 +81,7 @@ layui.config({
 			url: "../../tpl/crmcustomerfrom/crmcustomerfromedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "crmcustomerfromedit",
-			area: ['40vw', '40vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
@@ -96,7 +96,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom005", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom005", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();

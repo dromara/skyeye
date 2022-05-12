@@ -83,7 +83,7 @@ layui.config({
 			url: "../../tpl/sealseserviceurgency/sealseserviceurgencyadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "sealseserviceurgencyadd",
-			area: ['40vw', '40vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
@@ -101,7 +101,7 @@ layui.config({
 			url: "../../tpl/sealseserviceurgency/sealseserviceurgencyedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sealseserviceurgencyedit",
-			area: ['40vw', '40vh'],
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
