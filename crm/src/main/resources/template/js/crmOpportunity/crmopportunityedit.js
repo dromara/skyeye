@@ -56,36 +56,21 @@ layui.config({
 			}else{
 				$(".typeOne").removeClass("layui-hide");
 			}
-			
-			fromSelect();
-	 		// 商机来源选择
-			function fromSelect(){
-				showGrid({
-					id: "fromId",
-					url: flowableBasePath + "crmopportunityfrom008",
-					params: {},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb){
-					},
-					ajaxSendAfter: function(j){
-						$("#fromId").val(json.bean.fromId);
-						departmentsSelect();
-						form.render('select');
-					}
-				});
-			}
-			
-			// 商机所属部门选择
-			function departmentsSelect(){
-				// 获取当前登录用户所属企业的所有部门信息
-				systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
-					$("#subDepartments").html(getDataUseHandlebars(selOption, data));
-					$("#subDepartments").val(json.bean.subDepartments);
-					form.render('select');
-				});
-			}
-			
+
+	 		// 获取已经上线的商机来源信息
+			sysCustomerUtil.queryCustomerOpportunityFromIsUpList(function(data){
+				$("#fromId").html(getDataUseHandlebars(selOption, data));
+				$("#fromId").val(json.bean.fromId);
+				form.render('select');
+			});
+
+			// 获取当前登录用户所属企业的所有部门信息
+			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+				$("#subDepartments").html(getDataUseHandlebars(selOption, data));
+				$("#subDepartments").val(json.bean.subDepartments);
+				form.render('select');
+			});
+
 			// 选择入职时间
 			laydate.render({
 				elem: '#estimateEndTime',

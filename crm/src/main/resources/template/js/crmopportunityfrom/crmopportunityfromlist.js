@@ -6,7 +6,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -20,8 +19,8 @@ layui.config({
 	    where: {typeName: $("#typeName").val(), state: $("#state").val()},
 	    even: true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'typeName', title: '类型名称', align: 'center', width: 120 },
@@ -36,7 +35,7 @@ layui.config({
 	        		return "参数错误";
 	        	}
 	        }},
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 200},
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

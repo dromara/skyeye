@@ -26,9 +26,6 @@ layui.config({
     	textool = layui.textool;
     var selOption = getFileContent('tpl/template/select-option.tpl');
     
-    var partId = "";            // 商机参与人id
-    var followId = "";        // 商机关注人id
-
     textool.init({
     	eleId: 'businessNeed',
     	maxlength: 1000,
@@ -40,32 +37,18 @@ layui.config({
 		elem: '#estimateEndTime',
 		range: false
 	});
-	
-	fromSelect();
-	// 商机来源选择
-	function fromSelect(){
-		showGrid({
-			id: "fromId",
-			url: flowableBasePath + "crmopportunityfrom008",
-			params: {},
-			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function(json){
-				departmentsSelect();
-				form.render('select');
-			}
-		});
-	}
-	
-	function departmentsSelect(){
-        // 获取当前登录用户所属企业的所有部门信息
-        systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
-            $("#subDepartments").html(getDataUseHandlebars(selOption, data));
-            form.render('select');
-        });
-	}
+
+    // 获取已经上线的商机来源信息
+    sysCustomerUtil.queryCustomerOpportunityFromIsUpList(function(data){
+        $("#fromId").html(getDataUseHandlebars(selOption, data));
+        form.render('select');
+    });
+
+    // 获取当前登录用户所属企业的所有部门信息
+    systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+        $("#subDepartments").html(getDataUseHandlebars(selOption, data));
+        form.render('select');
+    });
 
 	skyeyeEnclosure.init('enclosureUpload');
 	matchingLanguage();
@@ -127,6 +110,7 @@ layui.config({
         if(partIdList.length == 0 || isNull($('#partId').tagEditor('getTags')[0].tags)){
             params.partId = "";
         }else{
+            var partId = "";
             $.each(partIdList, function (i, item) {
                 partId += item.id + ',';
             });
@@ -136,6 +120,7 @@ layui.config({
         if(followIdList.length == 0 || isNull($('#followId').tagEditor('getTags')[0].tags)){
             params.followId = "";
         }else{
+            var followId = "";
             $.each(followIdList, function (i, item) {
                 followId += item.id + ',';
             });
