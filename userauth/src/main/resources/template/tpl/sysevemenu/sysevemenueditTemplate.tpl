@@ -11,46 +11,8 @@
             <input type="text" id="menuNameEn" name="menuNameEn" win-verify="required" placeholder="请输入英文名称" class="layui-input" value="{{menuNameEn}}" />
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">图标类型<i class="red">*</i></label>
-        <div class="layui-input-block winui-radio">
-            <input type="radio" name="menuIconType" value="1" title="Icon" lay-filter="menuIconType" checked/>
-            <input type="radio" name="menuIconType" value="2" title="图片" lay-filter="menuIconType" />
-        </div>
-    </div>
-    <div class="layui-form-item menuIconTypeIsOne">
-        <label class="layui-form-label">菜单图标<i class="red">*</i></label>
-        <div class="layui-input-block">
-            <input type="text" id="menuIcon" name="menuIcon" placeholder="请输入图标src或者class" class="layui-input" value="{{menuIcon}}" />
-        </div>
-    </div>
-    <div class="layui-form-item menuIconTypeIsOne">
-        <label class="layui-form-label">图标预览</label>
-        <div class="layui-input-block">
-            <div class="layui-col-xs12">
-            	<div class="layui-col-xs2">
-            		<div class="winui-icon winui-icon-font" style="width: 60px; height: 60px;"><i id="iconShow" class="" style="font-size: 48px; line-height: 65px;"></i></div>
-            	</div>
-            	<div class="layui-col-xs5">
-            		<div class="layui-input-inline" style="width: 120px;">
-			            <input type="text" value="" class="layui-input" placeholder="请选择图标颜色" id="menuIconColorinput" />
-			        </div>
-			        <div id="menuIconColor"></div>
-            	</div>
-            	<div class="layui-col-xs5">
-            		<div class="layui-input-inline" style="width: 120px;">
-			            <input type="text" value="" class="layui-input" placeholder="请选择背景颜色" id="menuIconBginput" />
-			        </div>
-			        <div id="menuIconBg"></div>
-            	</div>
-			</div>
-        </div>
-    </div>
-    <div class="layui-form-item menuIconTypeIsTwo">
-        <label class="layui-form-label">菜单图片<i class="red">*</i></label>
-        <div class="layui-input-block">
-            <div class="upload" id="menuIconPic"></div>
-        </div>
+    <div class="layui-form-item" id="iconMation">
+
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">所属桌面</label>
@@ -70,7 +32,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">所属系统<i class="red">*</i></label>
         <div class="layui-input-block">
-			<select id="menuSysWinId" name="menuSysWinId" class="menuSysWinId" lay-filter="selectMenuSysWinId" lay-search="">
+			<select id="menuSysWinId" name="menuSysWinId" class="menuSysWinId" win-verify="required" lay-filter="selectMenuSysWinId" lay-search="">
 				
 			</select>
         </div>

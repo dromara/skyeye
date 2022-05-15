@@ -12,17 +12,10 @@ layui.config({
 	    var colorpicker = layui.colorpicker;
 	    
 	    var parentId = "0";
-	    
-	    $("#menuIconPic").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 12,
-            "function": function (_this, data) {
-                show("#menuIconPic", data);
-            }
-        });
-	    
+
+	    // 加载图标信息
+		systemCommonUtil.initIconChooseHtml('iconMation', form, colorpicker, 12);
+
         matchingLanguage();
  		form.render();
  		
@@ -52,46 +45,7 @@ layui.config({
                 });
             }
         });
- 		
- 		
- 		colorpicker.render({
- 		    elem: '#menuIconBg',
- 		    color: '#1c97f5',
- 		    done: function(color){
- 		        $('#menuIconBginput').val(color);
- 		        $("#iconShow").parent().css({'background-color': color});
- 		    },
- 		    change: function(color){
- 		    	$("#iconShow").parent().css({'background-color': color});
- 		    }
- 		});
- 		
- 		colorpicker.render({
- 		    elem: '#menuIconColor',
- 		    color: '#1c97f5',
- 		    done: function(color){
- 		        $('#menuIconColorinput').val(color);
- 		        $("#iconShow").css({'color': color});
- 		    },
- 		    change: function(color){
- 		    	$("#iconShow").css({'color': color});
- 		    }
- 		});
- 		
- 		//菜单图标类型变化事件
- 		form.on('radio(menuIconType)', function (data) {
- 			var val = data.value;
-	    	if(val == '1'){//icon
-	    		$(".menuIconTypeIsTwo").addClass("layui-hide");
-	    		$(".menuIconTypeIsOne").removeClass("layui-hide");
-	    	}else if(val == '2'){//图片
-	    		$(".menuIconTypeIsTwo").removeClass("layui-hide");
-	    		$(".menuIconTypeIsOne").addClass("layui-hide");
-	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
-	    	}
-        });
- 		
+
  		//菜单级别变化事件
  		form.on('radio(menuLevel)', function (data) {
  			var val = data.value;
@@ -141,41 +95,17 @@ layui.config({
  	        	var params = {
         			menuName: $("#menuName").val(),
         			menuNameEn: $("#menuNameEn").val(),
-        			menuIcon: $("#menuIcon").val(),
+					sysWinId: data.field.menuSysWinId,
+					desktopId: data.field.desktop,
         			menuUrl: $("#menuUrl").val(),
-        			menuIconType: data.field.menuIconType,
-        			menuType: data.field.menuType,
-        			menuIconBg: $('#menuIconBginput').val(),
-        			menuIconColor: $('#menuIconColorinput').val()
+        			menuType: data.field.menuType
  	        	};
- 	        	
- 	        	if(data.field.menuIconType == '1'){
- 	        		if(isNull($("#menuIcon").val())){
- 	        			winui.window.msg("请选择菜单图标", {icon: 2,time: 2000});
- 	 	        		return false;
- 	        		}
- 	        		params.menuIconPic = '';
- 	        	}else if(data.field.menuIconType == '2'){
- 	        		params.menuIconPic = $("#menuIconPic").find("input[type='hidden'][name='upload']").attr("oldurl");
- 	 	        	if(isNull(params.menuIconPic)){
- 	 	        		winui.window.msg('请上传菜单logo', {icon: 2,time: 2000});
- 	 	        		return false;
- 	 	        	}
- 	 	        	params.menuIcon = '';
- 	 	        	params.menuIconBg = '';
- 	 	        	params.menuIconColor = '';
- 	        	}else{
- 	        		winui.window.msg("状态值错误。", {icon: 2,time: 2000});
- 	        		return false;
- 	        	}
- 	        	
- 	        	if(isNull(data.field.menuSysWinId)){
- 	        		winui.window.msg("请选择菜单所属系统", {icon: 2,time: 2000});
- 	        		return false;
- 	        	}
- 	        	
- 	        	params.sysWinId = data.field.menuSysWinId;
- 	        	params.desktopId = data.field.desktop;
+
+				// 获取图标信息
+				params = systemCommonUtil.getIconChoose(params);
+				if (!params["iconChooseResult"]) {
+					return false;
+				}
  	        	
  	        	if(data.field.menuLevel == '1'){//创世菜单
  	        		params.parentId = '0';
@@ -206,13 +136,13 @@ layui.config({
  	        	}else{
  	        		params.isShare = '0';
  	        	}
- 	        	AjaxPostUtil.request({url:reqBasePath + "sys007", params:params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
-		 	   			parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-	 	   			}
+ 	        	AjaxPostUtil.request({url: reqBasePath + "sys007", params: params, type: 'json', callback: function(json) {
+					if (json.returnCode == 0) {
+						parent.layer.close(index);
+						parent.refreshCode = '0';
+					} else {
+						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+					}
 	 	   		}});
  	        }
  	        return false;
@@ -243,15 +173,6 @@ layui.config({
         		return level + "级子菜单";
         	}
  	    }
- 	    
- 	    // 菜单图标选中事件
- 	    $("body").on("focus", "#menuIcon", function(e){
-			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
-				$("#menuIcon").val(sysIconChooseClass);
-				$("#iconShow").css({'color': 'white'});
-				$("#iconShow").attr("class", "fa fa-fw " + $("#menuIcon").val());
-			});
- 	    });
  	    
  	    //初始化加载隐藏创世菜单
  	    $("#parentIdBox").addClass("layui-hide");

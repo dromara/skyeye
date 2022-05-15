@@ -61,34 +61,10 @@ layui.config({
 				});
 		 	},
 		 	ajaxSendAfter:function(json){
-		 		
-		 		//菜单类型
-		 		$("input:radio[name=menuIconType][value=" + json.bean.menuIconType + "]").attr("checked", true);
-		 		if(json.bean.menuIconType == '1'){//icon
-		 			$("#menuIconPic").upload({
-			            "action": reqBasePath + "common003",
-			            "data-num": "1",
-			            "data-type": "PNG,JPG,jpeg,gif",
-			            "uploadType": 12,
-			            "function": function (_this, data) {
-			                show("#menuIconPic", data);
-			            }
-			        });
-		 			$(".menuIconTypeIsTwo").addClass("layui-hide");
-		 		}else if(json.bean.menuIconType == '2'){//图片
-		 			$("#menuIconPic").upload({
-			            "action": reqBasePath + "common003",
-			            "data-num": "1",
-			            "data-type": "PNG,JPG,jpeg,gif",
-			            "uploadType": 12,
-			            "data-value": json.bean.menuIconPic,
-			            "function": function (_this, data) {
-			                show("#menuIconPic", data);
-			            }
-			        });
-		 			$(".menuIconTypeIsOne").addClass("layui-hide");
-		 		}
-		 		
+
+				// 加载图标信息
+				systemCommonUtil.initEditIconChooseHtml('iconMation', form, colorpicker, 12, json.bean);
+
 		 		//所属桌面
                 showGrid({
                     id: "desktop",
@@ -128,64 +104,11 @@ layui.config({
 		 			loadChildMenuAll(json.bean.parentId.split(','));
 		 		}
 		 		
-		 		colorpicker.render({
-		 		    elem: '#menuIconBg',
-		 		    color: json.bean.menuIconBg,
-		 		    done: function(color){
-		 		        $('#menuIconBginput').val(color);
-		 		        $("#iconShow").parent().css({'background-color': color});
-		 		    },
-		 		    change: function(color){
-		 		    	$("#iconShow").parent().css({'background-color': color});
-		 		    }
-		 		});
-		 		
-		 		colorpicker.render({
-		 		    elem: '#menuIconColor',
-		 		    color: json.bean.menuIconColor,
-		 		    done: function(color){
-		 		        $('#menuIconColorinput').val(color);
-		 		        $("#iconShow").css({'color': color});
-		 		    },
-		 		    change: function(color){
-		 		    	$("#iconShow").css({'color': color});
-		 		    }
-		 		});
-		 		
-		 		$("#iconShow").attr("class", "fa fa-fw " + $("#menuIcon").val());
-		 		if(isNull(json.bean.menuIconColor)){
-		 			$("#iconShow").css({'color': 'white'});
-		 		}else{
-		 			$('#menuIconColorinput').val(json.bean.menuIconColor);
-		 			$("#iconShow").css({'color': json.bean.menuIconColor});
-		 		}
-		 		
-		 		if(isNull(json.bean.menuIconBg)){
-		 			$("#iconShow").css({'color': 'white'});
-		 		}else{
-		 			$('#menuIconBginput').val(json.bean.menuIconBg);
-		 			$("#iconShow").parent().css({'background-color': json.bean.menuIconBg});
-		 		}
-		 		
-		 		//菜单类型
+		 		// 菜单类型
 		 		$("input:radio[name=menuType][value=" + json.bean.menuType + "]").attr("checked", true);
 		 		
 		 		matchingLanguage();
 		 		form.render();
-		 		
-		 		//菜单图标类型变化事件
-		 		form.on('radio(menuIconType)', function (data) {
-		 			var val = data.value;
-			    	if(val == '1'){//icon
-			    		$(".menuIconTypeIsTwo").addClass("layui-hide");
-			    		$(".menuIconTypeIsOne").removeClass("layui-hide");
-			    	}else if(val == '2'){//图片
-			    		$(".menuIconTypeIsTwo").removeClass("layui-hide");
-			    		$(".menuIconTypeIsOne").addClass("layui-hide");
-			    	}else{
-			    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
-			    	}
-		        });
 		 		
 		 		//菜单级别变化事件
 		 		form.on('radio(menuLevel)', function (data) {
@@ -237,43 +160,19 @@ layui.config({
 		 	        	var params = {
 		        			menuName: $("#menuName").val(),
 		        			menuNameEn: $("#menuNameEn").val(),
-		        			menuIcon: $("#menuIcon").val(),
+							sysWinId: data.field.menuSysWinId,
+							desktopId: data.field.desktop,
 		        			menuUrl: $("#menuUrl").val(),
-		        			menuIconType: data.field.menuIconType,
 		        			menuType: data.field.menuType,
 		        			rowId: parent.rowId,
-		        			menuIconBg: $('#menuIconBginput').val(),
-		        			menuIconColor: $('#menuIconColorinput').val()
 		 	        	};
-		 	        	
-		 	        	if(data.field.menuIconType == '1'){
-		 	        		if(isNull($("#menuIcon").val())){
-		 	        			winui.window.msg("请选择菜单图标", {icon: 2,time: 2000});
-		 	 	        		return false;
-		 	        		}
-		 	        		params.menuIconPic = '';
-		 	        	}else if(data.field.menuIconType == '2'){
-		 	        		params.menuIconPic = $("#menuIconPic").find("input[type='hidden'][name='upload']").attr("oldurl");
-		 	 	        	if(isNull(params.menuIconPic)){
-		 	 	        		winui.window.msg('请上传菜单logo', {icon: 2,time: 2000});
-		 	 	        		return false;
-		 	 	        	}
-		 	 	        	params.menuIcon = '';
-		 	 	        	params.menuIconBg = '';
-		 	 	        	params.menuIconColor = '';
-		 	        	}else{
-		 	        		winui.window.msg("状态值错误。", {icon: 2,time: 2000});
-		 	        		return false;
-		 	        	}
-		 	        	
-		 	        	if(isNull(data.field.menuSysWinId)){
-		 	        		winui.window.msg("请选择菜单所属系统", {icon: 2,time: 2000});
-		 	        		return false;
-		 	        	}
-		 	        	
-		 	        	params.sysWinId = data.field.menuSysWinId;
-		 	        	params.desktopId = data.field.desktop;
-		 	        	
+
+						// 获取图标信息
+						params = systemCommonUtil.getIconChoose(params);
+						if (!params["iconChooseResult"]) {
+							return false;
+						}
+
 		 	        	if(data.field.menuLevel == '1'){//创世菜单
 		 	        		params.parentId = '0';
 		 	 	    	}else if(data.field.menuLevel == '2'){//子菜单
@@ -305,12 +204,12 @@ layui.config({
 		 	        		params.isShare = '0';
 		 	        	}
 		 	        	
-		 	        	AjaxPostUtil.request({url:reqBasePath + "sys010", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "sys010", params: params, type: 'json', method: 'PUT', callback: function(json) {
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
-			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
 		 	        }

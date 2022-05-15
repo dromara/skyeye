@@ -366,4 +366,162 @@ var systemCommonUtil = {
         }, async: false});
     },
 
+    // 给部分功能设置图标
+    iconChooseHtml: '<div class="layui-form-item">' +
+        '            <label class="layui-form-label">图标类型<i class="red">*</i></label>' +
+        '            <div class="layui-input-block winui-radio">' +
+        '                <input type="radio" name="iconType" value="1" title="Icon" lay-filter="iconType" checked/>' +
+        '                <input type="radio" name="iconType" value="2" title="图片" lay-filter="iconType" />' +
+        '            </div>' +
+        '        </div>' +
+        '        <div class="layui-form-item iconTypeIsOne">' +
+        '            <label class="layui-form-label">图标<i class="red">*</i></label>' +
+        '            <div class="layui-input-block">' +
+        '                <input type="text" id="icon" name="icon" placeholder="请输入图标src或者class" class="layui-input"/>' +
+        '            </div>' +
+        '        </div>' +
+        '        <div class="layui-form-item iconTypeIsOne">' +
+        '            <label class="layui-form-label">图标预览</label>' +
+        '            <div class="layui-input-block">' +
+        '                <div class="layui-col-xs12">' +
+        '                <div class="layui-col-xs2">' +
+        '                <div class="winui-icon winui-icon-font" style="width: 60px; height: 60px;"><i id="iconShow" class="" style="font-size: 48px; line-height: 65px;"></i></div>' +
+        '                </div>' +
+        '                <div class="layui-col-xs5">' +
+        '                <div class="layui-input-inline" style="width: 120px;">' +
+        '            <input type="text" value="" class="layui-input" placeholder="请选择图标颜色" id="iconColorinput" />' +
+        '        </div>' +
+        '        <div id="iconColor"></div>' +
+        '                </div>' +
+        '                <div class="layui-col-xs5">' +
+        '                <div class="layui-input-inline" style="width: 120px;">' +
+        '            <input type="text" value="" class="layui-input" placeholder="请选择背景颜色" id="iconBginput" />' +
+        '        </div>' +
+        '        <div id="iconBg"></div>' +
+        '                </div>' +
+        '</div>' +
+        '            </div>' +
+        '        </div>' +
+        '        <div class="layui-form-item iconTypeIsTwo layui-hide">' +
+        '            <label class="layui-form-label">菜单图片<i class="red">*</i></label>' +
+        '            <div class="layui-input-block">' +
+        '                <div class="upload" id="iconPic"></div>' +
+        '            </div>' +
+        '        </div>',
+    // 新增时初始化html,并添加监听事件
+    initIconChooseHtml: function (showBoxId, form, colorpicker, uploadType){
+        $("#" + showBoxId).html(systemCommonUtil.iconChooseHtml);
+        systemCommonUtil.initIconEvent(form, colorpicker, uploadType, "", "#1c97f5" , "#1c97f5");
+    },
+    // 编辑时初始化html,并添加监听事件
+    initEditIconChooseHtml: function (showBoxId, form, colorpicker, uploadType, params){
+        $("#" + showBoxId).html(systemCommonUtil.iconChooseHtml);
+        $("input:radio[name=iconType][value=" + params.iconType + "]").attr("checked", true);
+        $("#icon").val(params.icon);
+        $("#iconShow").attr("class", "fa fa-fw " + $("#icon").val());
+        if (parseInt(params.iconType) == 1) { // icon
+            $(".iconTypeIsTwo").addClass("layui-hide");
+        } else if (parseInt(params.iconType) == 2) { // 图片
+            $(".iconTypeIsTwo").removeClass("layui-hide");
+            $(".iconTypeIsOne").addClass("layui-hide");
+        }
+        if(isNull(params.iconColor)){
+            $("#iconShow").css({'color': 'white'});
+        }else{
+            $('#iconColorinput').val(params.iconColor);
+            $("#iconShow").css({'color': params.iconColor});
+        }
+
+        if(isNull(params.iconBg)){
+            $("#iconShow").css({'color': 'white'});
+        }else{
+            $('#iconBginput').val(params.iconBg);
+            $("#iconShow").parent().css({'background-color': params.iconBg});
+        }
+        systemCommonUtil.initIconEvent(form, colorpicker, uploadType, params.iconPic, params.iconBg, params.iconColor);
+    },
+    initIconEvent: function (form, colorpicker, uploadType, uploadDefaultValue, iconBg, iconColor) {
+        $("#iconPic").upload({
+            "action": reqBasePath + "common003",
+            "data-num": "1",
+            "data-type": "PNG,JPG,jpeg,gif",
+            "uploadType": uploadType,
+            "data-value": uploadDefaultValue,
+            "function": function (_this, data) {
+                show("#iconPic", data);
+            }
+        });
+
+        // 菜单图标类型变化事件
+        form.on('radio(iconType)', function (data) {
+            var val = data.value;
+            if (val == '1') {//icon
+                $(".iconTypeIsTwo").addClass("layui-hide");
+                $(".iconTypeIsOne").removeClass("layui-hide");
+            } else if (val == '2') {//图片
+                $(".iconTypeIsTwo").removeClass("layui-hide");
+                $(".iconTypeIsOne").addClass("layui-hide");
+            }
+        });
+
+        colorpicker.render({
+            elem: '#iconBg',
+            color: iconBg,
+            done: function(color){
+                $('#iconBginput').val(color);
+                $("#iconShow").parent().css({'background-color': color});
+            },
+            change: function(color){
+                $("#iconShow").parent().css({'background-color': color});
+            }
+        });
+
+        colorpicker.render({
+            elem: '#iconColor',
+            color: iconColor,
+            done: function(color){
+                $('#iconColorinput').val(color);
+                $("#iconShow").css({'color': color});
+            },
+            change: function(color){
+                $("#iconShow").css({'color': color});
+            }
+        });
+
+        // 菜单图标选中事件
+        $("body").on("focus", "#icon", function(e){
+            systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
+                $("#icon").val(sysIconChooseClass);
+                $("#iconShow").css({'color': 'white'});
+                $("#iconShow").attr("class", "fa fa-fw " + $("#icon").val());
+            });
+        });
+    },
+    // 获取图标选中数据
+    getIconChoose: function (params) {
+        params["iconChooseResult"] = true;
+        var iconType = $("input[name='iconType']:checked").val();
+        params["iconType"] = iconType;
+        if(iconType == '1'){
+            if(isNull($("#icon").val())){
+                winui.window.msg("请选择菜单图标", {icon: 2,time: 2000});
+                params["iconChooseResult"] = false;
+            }
+            params["iconPic"] = '';
+            params["icon"] = $("#icon").val();
+            params["iconBg"] = $('#iconBginput').val();
+            params["iconColor"] = $('#iconColorinput').val();
+        }else if(iconType == '2'){
+            params["iconPic"] = $("#iconPic").find("input[type='hidden'][name='upload']").attr("oldurl");
+            if(isNull(params["iconPic"])){
+                winui.window.msg('请上传菜单logo', {icon: 2,time: 2000});
+                params["iconChooseResult"] = false;
+            }
+            params["icon"] = '';
+            params["iconBg"] = '';
+            params["iconColor"] = '';
+        }
+        return params;
+    }
+
 };
