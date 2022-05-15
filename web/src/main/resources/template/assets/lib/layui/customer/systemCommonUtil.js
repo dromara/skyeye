@@ -310,9 +310,12 @@ var systemCommonUtil = {
      * @param url
      */
     getHasVersionUrl: function (url) {
-        // 判断是否有问号
-        url += (url.indexOf("?") == -1 ? "?" : "&");
-        url = url + 'v='+ skyeyeVersion;
+        var versionStr = 'v='+ skyeyeVersion;
+        if(url.indexOf(versionStr) == -1) {
+            // 判断是否有问号
+            url += (url.indexOf("?") == -1 ? "?" : "&");
+            url = url + versionStr;
+        }
         return url;
     },
 
@@ -337,13 +340,30 @@ var systemCommonUtil = {
         "probationPeriod": {"id": 4, "name": "试用期(用于未转正的员工)"},
         "retire": {"id": 5, "name": "退休"}
     },
-
     getSysUserStaffStateList: function (){
         var list = [];
         $.each(systemCommonUtil.sysUserStaffState, function (key, value){
             list.push(value);
         });
         return list;
-    }
+    },
+
+    /**
+     * 根据类型获取部分功能的使用说明
+     *
+     * @param type 类型  1.代码生成器模板介绍  2.动态表单内容项说明介绍  3.动态表单数据展示模板说明介绍  4.小程序标签属性说明介绍
+     * @param callback 回调函数
+     */
+    queryExplainMationByType: function (type, callback) {
+        AjaxPostUtil.request({url: reqBasePath + "queryExExplainMationToShow", params: {type: type}, type: 'json', method: "GET", callback: function(json) {
+            if(json.returnCode == 0) {
+                if(typeof(callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
 
 };

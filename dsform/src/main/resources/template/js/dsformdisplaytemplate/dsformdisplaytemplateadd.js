@@ -9,16 +9,13 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 	    	form = layui.form;
-	    
-	    AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 3}, type: 'json', callback: function(j){
-   			if(j.returnCode == 0){
-   				$("#exexplaintodsformdisplaytemplateTitle").html(j.bean.title);
-   				$("#exexplaintodsformdisplaytemplateContent").html(j.bean.content);
-   			}else{
-   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
-   			}
-   		}});
-	    
+
+		// 根据类型获取部分功能的使用说明
+		systemCommonUtil.queryExplainMationByType(3, function(json){
+			$("#exexplaintodsformdisplaytemplateTitle").html(json.bean.title);
+			$("#exexplaintodsformdisplaytemplateContent").html(json.bean.content);
+		});
+
 	    var templateContent = CodeMirror.fromTextArea(document.getElementById("templateContent"), {
             mode : "xml",  // 模式
             theme : "eclipse",  // CSS样式选择

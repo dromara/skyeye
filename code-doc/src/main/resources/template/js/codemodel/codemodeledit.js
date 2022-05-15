@@ -23,14 +23,11 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function(json){
-		 		AjaxPostUtil.request({url:reqBasePath + "exexplain004", params: {type: 1}, type: 'json', callback: function(j){
-					if(j.returnCode == 0){
-						$(".layui-colla-title").html(j.bean.title);
-						$(".layui-colla-content").html(j.bean.content);
-		   			}else{
-		   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
-		   			}
-		   		}});
+				// 根据类型获取部分功能的使用说明
+				systemCommonUtil.queryExplainMationByType(1, function(json){
+					$(".layui-colla-title").html(json.bean.title);
+					$(".layui-colla-content").html(json.bean.content);
+				});
 				element.init();
 		 		
 		 		editor = CodeMirror.fromTextArea(document.getElementById("modelContent"), {

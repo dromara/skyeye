@@ -14,16 +14,13 @@ layui.config({
 		form.render();
 		
 		$("#dataShowModel").hide();
-		
-		AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 4}, type: 'json', callback: function(j){
-			if(j.returnCode == 0){
-   				$("#exexplaintormpropertyTitle").html(j.bean.title);
-   				$("#exexplaintormpropertyContent").html(j.bean.content);
-   			}else{
-   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
-   			}
-   		}});
-      	
+
+		// 根据类型获取部分功能的使用说明
+		systemCommonUtil.queryExplainMationByType(4, function(json){
+			$("#exexplaintormpropertyTitle").html(json.bean.title);
+			$("#exexplaintormpropertyContent").html(json.bean.content);
+		});
+
       	var htmlModelContent = CodeMirror.fromTextArea(document.getElementById("htmlModelContent"), {
             mode : "xml",  // 模式
             theme : "eclipse",  // CSS样式选择

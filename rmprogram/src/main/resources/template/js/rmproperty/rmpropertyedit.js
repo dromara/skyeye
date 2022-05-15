@@ -149,17 +149,13 @@ layui.config({
 		    	 		form.render('select');
 		    	 	}
 		        });
-		      	
-		      	//展示规范说明
-		      	AjaxPostUtil.request({url:reqBasePath + "exexplain004", params:{type: 4}, type: 'json', callback: function(j){
-					if(j.returnCode == 0){
-		   				$("#exexplaintormpropertyTitle").html(j.bean.title);
-		   				$("#exexplaintormpropertyContent").html(j.bean.content);
-		   			}else{
-		   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
-		   			}
-		   		}});
-              	
+
+				// 根据类型获取部分功能的使用说明
+				systemCommonUtil.queryExplainMationByType(4, function(json){
+					$("#exexplaintormpropertyTitle").html(json.bean.title);
+					$("#exexplaintormpropertyContent").html(json.bean.content);
+				});
+
               	form.on('select(selectParent)', function(data){
               		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
             			if(json.returnCode == 0){

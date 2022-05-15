@@ -1,8 +1,6 @@
 
 var rowId = "";
 
-var type = 1;
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -15,8 +13,10 @@ layui.config({
 	    var $ = layui.$,
 		    form = layui.form;
 
+	    var type = GetUrlParam("type");
+
 		var ue
-	    AjaxPostUtil.request({url:reqBasePath + "exexplain002", params: {type: type}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "exexplain002", params: {type: type}, type: 'json', callback: function(json) {
    			if(json.returnCode == 0){
    				if(!isNull(json.bean)){
    					rowId = json.bean.id;
@@ -29,7 +29,7 @@ layui.config({
 				});
    			    matchingLanguage();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	    
@@ -37,7 +37,7 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	if(isNull(ue.getContent())){
-	        		winui.window.msg('请输入内容。', {icon: 2,time: 2000});
+	        		winui.window.msg('请输入内容。', {icon: 2, time: 2000});
 	        	}else{
 	        		var params = {
         				title: $("#title").val(),
@@ -45,21 +45,21 @@ layui.config({
 						type: type
 	        		};
 	        		if(isNull(rowId)){
-	        			AjaxPostUtil.request({url:reqBasePath + "exexplain001", params:params, type: 'json', callback: function(json){
+	        			AjaxPostUtil.request({url: reqBasePath + "exexplain001", params: params, type: 'json', callback: function(json) {
 	        				if(json.returnCode == 0){
 	        					rowId = json.bean.id;
-	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 	        				}else{
-	        					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	        				}
 	        			}});
 	        		}else{
 	        			params.rowId = rowId;
-	        			AjaxPostUtil.request({url:reqBasePath + "exexplain003", params:params, type: 'json', callback: function(json){
+	        			AjaxPostUtil.request({url: reqBasePath + "exexplain003", params: params, type: 'json', callback: function(json) {
 	        				if(json.returnCode == 0){
-	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 	        				}else{
-	        					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	        				}
 	        			}});
 	        		}
