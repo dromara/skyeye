@@ -32,13 +32,16 @@ layui.config({
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        }},
 	        { title: 'JS内容', align: 'center', width: 80, templet: function(d){
-	        	if(!isNull(d.jsContent)){
-	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsContent"></i>';
-	        	}else{
-	        		return '-';
-	        	}
+				if (!isNull(d.jsContent)) {
+					return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsContent"></i>';
+				} else {
+					return '-';
+				}
 	        }},
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){

@@ -166,35 +166,35 @@ layui.config({
 	 	 	        		return false;
 	 	 	        	}
 	 	        		var defaultDataStr = $("#defaultData").val();//默认数据值
-		        		if(defaultDataStr.length != 0){
-		        			if(isJSON(defaultDataStr)){
-		        				var defaultKey = getOutKey(defaultDataStr);//从默认数据中取出json串的键
-		        				if(subset(tplContentVal,defaultKey)){
-		        					params.defaultData = defaultDataStr;
-		        				}else{
-		        					winui.window.msg('默认数据内容有误，请重新填写!', {icon: 2,time: 2000});
-			 	 	        		return false;
-		        				}
-		        			}else{
-		        				winui.window.msg('默认数据格式不正确，请重新填写!', {icon: 2,time: 2000});
-		 	 	        		return false;
-		        			}
-		        		}else{
-		        			winui.window.msg('请填写默认数据', {icon: 2,time: 2000});
-	 	 	        		return false;
-		        		}
-	 	        	}else{
-	 	        		params.linkedData = '2';
-	 	        		params.dataShowTpl = "";
-	 	        		params.defaultData = "";
-	 	        	}
-	        		AjaxPostUtil.request({url: flowableBasePath + "dsform002", params:params, type: 'json', callback: function(json){
-	        			if(json.returnCode == 0){
-	        				parent.layer.close(index);
-	        				parent.refreshCode = '0';
-	        			}else{
-	        				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
-	        			}
+						if (defaultDataStr.length != 0) {
+							if (isJSON(defaultDataStr)) {
+								var defaultKey = getOutKey(defaultDataStr);//从默认数据中取出json串的键
+								if (subset(tplContentVal, defaultKey)) {
+									params.defaultData = defaultDataStr;
+								} else {
+									winui.window.msg('默认数据内容有误，请重新填写!', {icon: 2, time: 2000});
+									return false;
+								}
+							} else {
+								winui.window.msg('默认数据格式不正确，请重新填写!', {icon: 2, time: 2000});
+								return false;
+							}
+						} else {
+							winui.window.msg('请填写默认数据', {icon: 2, time: 2000});
+							return false;
+						}
+					} else {
+						params.linkedData = '2';
+						params.dataShowTpl = "";
+						params.defaultData = "";
+					}
+	        		AjaxPostUtil.request({url: flowableBasePath + "dsform002", params: params, type: 'json', callback: function(json) {
+						if (json.returnCode == 0) {
+							parent.layer.close(index);
+							parent.refreshCode = '0';
+						} else {
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+						}
 	        		}});
 	        	}
 	        }

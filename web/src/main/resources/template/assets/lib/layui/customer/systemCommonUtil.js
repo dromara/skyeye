@@ -522,6 +522,6 @@ var systemCommonUtil = {
             params["iconColor"] = '';
         }
         return params;
-    }
+    },
 
 };
