@@ -1,9 +1,4 @@
 
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "1";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "1";//人员选择类型，1.多选；其他。单选
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -48,7 +43,7 @@ layui.config({
                 }
                 
                 AjaxPostUtil.request({url: flowableBasePath + "storehouse002", params: params, type: 'json', callback: function(json){
-                    if(json.returnCode == 0){
+                    if(json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }else{
@@ -78,30 +73,17 @@ layui.config({
 	        }
 	    });
 	    
-	    //仓库负责人选择
-		$("body").on("click", "#principalUserIdSelPeople", function(e){
-			userReturnList = [].concat(chooseUser);
-			_openNewWindows({
-				url: "../../tpl/common/sysusersel.html", 
-				title: "人员选择",
-				pageId: "sysuserselpage",
-				area: ['80vw', '80vh'],
-				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						//移除所有tag
-						var tags = $('#principal').tagEditor('getTags')[0].tags;
-						for (i = 0; i < tags.length; i++) { 
-							$('#principal').tagEditor('removeTag', tags[i]);
-						}
-						chooseUser = [].concat(userReturnList);
-					    //添加新的tag
-						$.each(chooseUser, function(i, item){
-							$('#principal').tagEditor('addTag', item.name);
-						});
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-	                }
-				}});
+	    // 仓库负责人选择
+		$("body").on("click", "#principalUserIdSelPeople", function(e) {
+			systemCommonUtil.userReturnList = [].concat(chooseUser);
+			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "1"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList) {
+				chooseUser = [].concat(staffChooseList);
+				// 重置数据
+				systemCommonUtil.tagEditorResetData('principal', chooseUser);
+			});
 		});
 
         $("body").on("click", "#cancle", function(){

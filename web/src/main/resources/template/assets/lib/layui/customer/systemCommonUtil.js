@@ -283,11 +283,26 @@ var systemCommonUtil = {
      *
      * @param id 对象id
      */
-    tagEditorRemoveAll: function(id){
+    tagEditorRemoveAll: function(id) {
         var tags = $('#' + id).tagEditor('getTags')[0].tags;
         for (i = 0; i < tags.length; i++) {
             $('#' + id).tagEditor('removeTag', tags[i]);
         }
+    },
+
+    /**
+     * tagEditor组件重置数据
+     *
+     * @param id 对象id
+     */
+    tagEditorResetData: function(id, data) {
+        // 移除所有tag
+        systemCommonUtil.tagEditorRemoveAll(id);
+        // 添加新的tag
+        $.each(data, function(i, item){
+            $('#' + id).tagEditor('addTag', item.name);
+        });
+        return data;
     },
 
     /**
