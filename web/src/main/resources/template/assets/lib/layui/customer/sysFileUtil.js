@@ -1,4 +1,3 @@
-
 // 系统文件相关处理工具
 var sysFileUtil = {
 
@@ -16,8 +15,8 @@ var sysFileUtil = {
      * @param  {String} url 目标文件地址
      * @param  {String} filename 想要保存的文件名称
      */
-    download: function(url, filename) {
-        sysFileUtil.getBlob(url, function(blob) {
+    download: function (url, filename) {
+        sysFileUtil.getBlob(url, function (blob) {
             sysFileUtil.saveAs(blob, filename);
         });
     },
@@ -28,7 +27,7 @@ var sysFileUtil = {
      * @param path
      * @param imgName
      */
-    downloadImage: function(path, imgName) {
+    downloadImage: function (path, imgName) {
         var _OBJECT_URL;
         var request = new XMLHttpRequest();
         request.addEventListener('readystatechange', function (e) {
@@ -48,11 +47,11 @@ var sysFileUtil = {
      * @param  {String} url 目标文件地址
      * @return {cb}
      */
-    getBlob: function (url,cb) {
+    getBlob: function (url, cb) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.responseType = 'blob';
-        xhr.onload = function() {
+        xhr.onload = function () {
             if (xhr.status === 200) {
                 cb(xhr.response);
             }
@@ -67,7 +66,7 @@ var sysFileUtil = {
      * @param callback 回调函数
      */
     getFileByUrl: function (url, callback) {
-        sysFileUtil.getBlob(url, function(blob) {
+        sysFileUtil.getBlob(url, function (blob) {
             const files = new File(
                 [blob],
                 sysFileUtil.getFileNameByUrl(url)
@@ -86,7 +85,7 @@ var sysFileUtil = {
         // 通过\分隔字符串，成字符串数组
         var arr = url.split('\\');
         // 取最后一个，就是文件全名,含后缀
-        var fileName = arr[arr.length-1];
+        var fileName = arr[arr.length - 1];
         return fileName;
     },
 
@@ -95,7 +94,7 @@ var sysFileUtil = {
      * @param  {Blob} blob
      * @param  {String} filename 想要保存的文件名称
      */
-    saveAs: function(blob, filename) {
+    saveAs: function (blob, filename) {
         if (window.navigator.msSaveOrOpenBlob) {
             navigator.msSaveBlob(blob, filename);
         } else {
@@ -109,7 +108,8 @@ var sysFileUtil = {
             link.click();
             body.removeChild(link);
             window.URL.revokeObjectURL(link.href);
-        };
+        }
+        ;
     }
 
 }

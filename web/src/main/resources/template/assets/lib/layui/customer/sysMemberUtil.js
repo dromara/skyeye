@@ -1,4 +1,3 @@
-
 // 会员工具类
 var sysMemberUtil = {
 
@@ -12,21 +11,22 @@ var sysMemberUtil = {
      *
      * @param callback 回调函数
      */
-    openSysMemberChoosePage: function (callback){
+    openSysMemberChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/member/memberSearchChoose.html",
             title: "选择会员",
             pageId: "memberSearchChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function (refreshCode) {
                 if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
+                    if (typeof (callback) == "function") {
                         callback(sysMemberUtil.memberMation);
                     }
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
-            }});
+            }
+        });
     },
 
 }
