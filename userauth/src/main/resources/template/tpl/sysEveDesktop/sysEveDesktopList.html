@@ -30,19 +30,9 @@
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-			{{# if(d.state == 3){ }}
-				{{# if(auth('1563780689514')){ }}
-            		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-				{{# } }}
-				{{# if(auth('1563780661048')){ }}
-            		<a class="layui-btn layui-btn-xs" lay-event="up">上线</a>
-				{{# } }}
-				{{# if(d.allNum == 0 && auth('1563780647628')){ }}
-            		<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delet"><language showName="com.skyeye.deleteBtn"></language></a>
-				{{# } }}
-			{{# }else if(d.state == 2 && auth('1563780674866')){ }}
+			{{# if(d.state == 2 && auth('1563780674866')){ }}
             	<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="down">下线</a>
-			{{# }else if(d.state == 1){ }}
+			{{# }else if(d.state == 1 || d.state == 3){ }}
 				{{# if(auth('1563780689514')){ }}
             		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}
@@ -67,7 +57,7 @@
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
-        layui.config({base: '../../js/sysevedesktop/'}).use('sysevedesktoplist');
+        layui.config({base: '../../js/sysEveDesktop/'}).use('sysEveDesktopList');
     </script>
 </body>
 </html>

@@ -15,7 +15,7 @@ layui.config({
 		 	url: reqBasePath + "desktop006",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/sysevedesktop/sysevedesktopeditTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function(json){
 		 		matchingLanguage();
 		 	    form.on('submit(formEditBean)', function (data) {

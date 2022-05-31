@@ -18,7 +18,7 @@ layui.config({
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: reqBasePath + 'desktop001',
-	    where: {desktopName:$("#desktopName").val()},
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
 	    limits: getLimits(),
@@ -37,8 +37,10 @@ layui.config({
 	        		return "<span class='state-new'>新建</span>";
 	        	}
 	        }},
-	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 357, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){
@@ -69,9 +71,9 @@ layui.config({
 	//添加
 	$("body").on("click", "#addBean", function(){
     	_openNewWindows({
-			url: "../../tpl/sysevedesktop/sysevedesktopadd.html?", 
-			title: "新增桌面名称",
-			pageId: "sysevedesktopadd",
+			url: "../../tpl/sysEveDesktop/sysEveDesktopAdd.html",
+			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
+			pageId: "sysEveDesktopAdd",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -150,9 +152,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/sysevedesktop/sysevedesktopedit.html", 
-			title: "编辑名称",
-			pageId: "sysevedesktopedit",
+			url: "../../tpl/sysEveDesktop/sysEveDesktopEdit.html",
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+			pageId: "sysEveDesktopEdit",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
@@ -197,18 +199,20 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			refreshTable();
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
 
 	function loadTable(){
-    	table.reload("messageTable", {where:{desktopName:$("#desktopName").val()}});
+    	table.reload("messageTable", {where: getTableParams()});
     }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{desktopName:$("#desktopName").val()}});
-    }
-    
-    exports('sysevedesktoplist', {});
+
+    function getTableParams() {
+		return {
+			desktopName: $("#desktopName").val()
+		};
+	}
+
+    exports('sysEveDesktopList', {});
 });
