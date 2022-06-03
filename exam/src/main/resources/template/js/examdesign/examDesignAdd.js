@@ -13,7 +13,7 @@ layui.config({
 	    //初始化学校
 		showGrid({
 		 	id: "schoolId",
-		 	url: reqBasePath + "schoolmation008",
+		 	url: schoolBasePath + "schoolmation008",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -43,7 +43,7 @@ layui.config({
 		function initGrade(){
 			showGrid({
 			 	id: "gradeId",
-			 	url: reqBasePath + "grademation006",
+			 	url: schoolBasePath + "grademation006",
 			 	params: {schoolId: $("#schoolId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -72,7 +72,7 @@ layui.config({
 		function initSemester(){
 			showGrid({
 			 	id: "semesterId",
-			 	url: reqBasePath + "schoolsemester006",
+			 	url: schoolBasePath + "schoolsemester006",
 			 	params: {schoolId: $("#schoolId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -87,7 +87,7 @@ layui.config({
 		function initSubject(){
 			showGrid({
 			 	id: "subjectId",
-			 	url: reqBasePath + "schoolsubjectmation007",
+			 	url: schoolBasePath + "schoolsubjectmation007",
 			 	params: {gradeId: $("#gradeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -102,7 +102,7 @@ layui.config({
 		function loadThisGradeNowYear(){
 			showGrid({
 			 	id: "classList",
-			 	url: reqBasePath + "grademation009",
+			 	url: schoolBasePath + "grademation009",
 			 	params: {gradeId: $("#gradeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/checkbox-property.tpl'),
@@ -141,7 +141,7 @@ layui.config({
         			viewAnswer: $("input[name='viewAnswer']:checked").val(),
         			propertyIds: propertyIds
 	        	};
-	        	AjaxPostUtil.request({url:reqBasePath + "exam002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:schoolBasePath + "exam002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

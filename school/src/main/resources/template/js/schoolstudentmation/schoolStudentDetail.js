@@ -12,7 +12,7 @@ layui.config({
 	    
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "studentmation008",
+		 	url: schoolBasePath + "studentmation008",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#detailTemplate").html(),

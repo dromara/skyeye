@@ -16,7 +16,7 @@ layui.config({
 	    
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "grademation004",
+		 	url: schoolBasePath + "grademation004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/schoolgrademation/schoolgrademationeditTemplate.tpl'),
@@ -41,7 +41,7 @@ layui.config({
 		        			yearN: $("#yearN").val()
 			        	};
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "grademation005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url:schoolBasePath + "grademation005", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

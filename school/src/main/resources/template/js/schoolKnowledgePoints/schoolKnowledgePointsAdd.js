@@ -16,7 +16,7 @@ layui.config({
 	    //初始化学校
 		showGrid({
 		 	id: "schoolId",
-		 	url: reqBasePath + "schoolmation008",
+		 	url: schoolBasePath + "schoolmation008",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -42,7 +42,7 @@ layui.config({
 		function initGrade(){
 			showGrid({
 			 	id: "gradeId",
-			 	url: reqBasePath + "grademation006",
+			 	url: schoolBasePath + "grademation006",
 			 	params: {schoolId: $("#schoolId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -67,7 +67,7 @@ layui.config({
 		function initSubject(){
 			showGrid({
 			 	id: "subjectId",
-			 	url: reqBasePath + "schoolsubjectmation007",
+			 	url: schoolBasePath + "schoolsubjectmation007",
 			 	params: {gradeId: $("#gradeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -94,7 +94,7 @@ layui.config({
     				winui.window.msg('请填写内容', {icon: 2,time: 2000});
     				return false;
     			}
-    			AjaxPostUtil.request({url:reqBasePath + "knowledgepoints002", params: params, type: 'json', callback: function(json){
+    			AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints002", params: params, type: 'json', callback: function(json){
     				if(json.returnCode == 0){
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';

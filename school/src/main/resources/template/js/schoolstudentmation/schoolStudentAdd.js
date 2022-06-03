@@ -44,7 +44,7 @@ layui.config({
 	    //所属学校
 	    showGrid({
     	 	id: "schoolId",
-    	 	url: reqBasePath + "schoolmation008",
+    	 	url: schoolBasePath + "schoolmation008",
     	 	params: {},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -78,7 +78,7 @@ layui.config({
 	    function initGradeId(){
 		    showGrid({
 	    	 	id: "gradeId",
-	    	 	url: reqBasePath + "grademation006",
+	    	 	url: schoolBasePath + "grademation006",
 	    	 	params: {schoolId: $("#schoolId").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -94,7 +94,7 @@ layui.config({
 	    function initTransportationId(){
 		    showGrid({
 	    	 	id: "modeOfTransportation",
-	    	 	url: reqBasePath + "schooltransportation006",
+	    	 	url: schoolBasePath + "schooltransportation006",
 	    	 	params: {schoolId: $("#schoolId").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -110,7 +110,7 @@ layui.config({
 	    function initHomeSituationId(){
 	    	showGrid({
 	    	 	id: "homeSituation",
-	    	 	url: reqBasePath + "schoolfamilysituation006",
+	    	 	url: schoolBasePath + "schoolfamilysituation006",
 	    	 	params: {schoolId: $("#schoolId").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
@@ -126,7 +126,7 @@ layui.config({
 	    function initBodyMindId(){
 	    	showGrid({
 	    	 	id: "bodyMind",
-	    	 	url: reqBasePath + "schoolbodymind006",
+	    	 	url: schoolBasePath + "schoolbodymind006",
 	    	 	params: {schoolId: $("#schoolId").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
@@ -162,7 +162,7 @@ layui.config({
 		function loadThisGradeNowYear(){
 			showGrid({
 			 	id: "classId",
-			 	url: reqBasePath + "grademation009",
+			 	url: schoolBasePath + "grademation009",
 			 	params: {gradeId: $("#gradeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -274,7 +274,7 @@ layui.config({
 	            });
 	            params.bodyMind = bodyMindIds;
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "studentmation002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:schoolBasePath + "studentmation002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 	 	   				winui.window.msg("录入成功", {icon: 1, time: 3000}, function(){
 		 	   				location.reload();

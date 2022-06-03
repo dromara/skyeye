@@ -30,7 +30,7 @@ layui.config({
 	    //所属学校
 	    showGrid({
     	 	id: "schoolId",
-    	 	url: reqBasePath + "schoolmation008",
+    	 	url: schoolBasePath + "schoolmation008",
     	 	params: {},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -56,7 +56,7 @@ layui.config({
         function initGradeId(){
 		    showGrid({
 	    	 	id: "gradeId",
-	    	 	url: reqBasePath + "grademation006",
+	    	 	url: schoolBasePath + "grademation006",
 	    	 	params: {schoolId: $("#schoolId").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -72,7 +72,7 @@ layui.config({
         function initFloorId(){
 		    showGrid({
 	    	 	id: "floorId",
-	    	 	url: reqBasePath + "schoolfloormation006",
+	    	 	url: schoolBasePath + "schoolfloormation006",
 	    	 	params: {schoolId: $("#schoolId").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -103,7 +103,7 @@ layui.config({
 	        		params.masterStaffId = teacherMation.staffId;
 	        	}
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "classmation002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:schoolBasePath + "classmation002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

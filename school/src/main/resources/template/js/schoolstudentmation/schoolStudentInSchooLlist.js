@@ -18,7 +18,7 @@ layui.config({
 	//初始化学校
 	showGrid({
 		id: "schoolId",
-		url: reqBasePath + "schoolmation008",
+		url: schoolBasePath + "schoolmation008",
 		params: {},
 		pagination: false,
 		template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -39,7 +39,7 @@ layui.config({
     function initGradeId(){
 	    showGrid({
     	 	id: "gradeId",
-    	 	url: reqBasePath + "grademation006",
+    	 	url: schoolBasePath + "grademation006",
     	 	params: {schoolId: $("#schoolId").val()},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -66,7 +66,7 @@ layui.config({
 	function loadThisGradeNowYear(){
 		showGrid({
 		 	id: "classId",
-		 	url: reqBasePath + "grademation009",
+		 	url: schoolBasePath + "grademation009",
 		 	params: {gradeId: $("#gradeId").val()},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -86,7 +86,7 @@ layui.config({
 	        id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        url: reqBasePath + 'studentmation001',
+	        url: schoolBasePath + 'studentmation001',
 	        where: getTableParams(),
 	        even: true,
 		    page: true,
@@ -169,7 +169,7 @@ layui.config({
     // 下载模板
     $("body").on("click", "#exportStudentModel", function(){
     	postDownLoadFile({
-			url : reqBasePath + 'studentmation009?loginPCIp=' + returnCitySN["cip"],
+			url : schoolBasePath + 'studentmation009?loginPCIp=' + returnCitySN["cip"],
 			params: getTableParams(),
 			method : 'post'
 		});

@@ -16,7 +16,7 @@ layui.config({
 	//初始化学校
 	showGrid({
 	 	id: "schoolId",
-	 	url: reqBasePath + "schoolmation008",
+	 	url: schoolBasePath + "schoolmation008",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -30,7 +30,7 @@ layui.config({
     	
 		showGrid({
 			id: "showTemplate",
-			url: reqBasePath + "schooltimesetting001",
+			url: schoolBasePath + "schooltimesetting001",
 			params: {schoolId: $("#schoolId").val()},
 			pagination: false,
 			template: $("#timeSettingTemplate").html(),
@@ -74,11 +74,11 @@ layui.config({
     		schoolId: $("#schoolId").val()
     	};
         
-        AjaxPostUtil.request({url:reqBasePath + "schooltimesetting002", params: params, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
-				winui.window.msg("修改成功", {icon: 1,time: 2000});
-			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+        AjaxPostUtil.request({url: schoolBasePath + "schooltimesetting002", params: params, type: 'json', callback: function(json) {
+			if(json.returnCode == 0) {
+				winui.window.msg("修改成功", {icon: 1, time: 2000});
+			} else {
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	});

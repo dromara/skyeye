@@ -14,7 +14,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "knowledgepoints006",
+		 	url: schoolBasePath + "knowledgepoints006",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: $("#detailTemplate").html(),

@@ -28,7 +28,7 @@ layui.config({
 	//初始化学校
 	showGrid({
 		id: "schoolId",
-		url: reqBasePath + "schoolmation008",
+		url: schoolBasePath + "schoolmation008",
 		params: {},
 		pagination: false,
 		template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -49,7 +49,7 @@ layui.config({
     function initGradeId(){
 	    showGrid({
     	 	id: "gradeId",
-    	 	url: reqBasePath + "grademation006",
+    	 	url: schoolBasePath + "grademation006",
     	 	params: {schoolId: $("#schoolId").val()},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -75,7 +75,7 @@ layui.config({
 	function initSubject(){
 		showGrid({
 		 	id: "subjectId",
-		 	url: reqBasePath + "schoolsubjectmation007",
+		 	url: schoolBasePath + "schoolsubjectmation007",
 		 	params: {gradeId: $("#gradeId").val()},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -100,7 +100,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'exam001-my',
+		    url: schoolBasePath + 'exam001-my',
 		    where: params,
 		    even:true,
 		    page: true,
@@ -169,12 +169,12 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除试卷' }, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url:reqBasePath + "exam025", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+            AjaxPostUtil.request({url: schoolBasePath + "exam025", params:{rowId: data.id}, type: 'json', callback: function(json) {
+    			if(json.returnCode == 0) {
+    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -238,8 +238,7 @@ layui.config({
 		var msg = obj ? '确认发布试卷【' + obj.data.surveyName + '】吗？' : '确认发布选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '试卷发布' }, function (index) {
 			layer.close(index);
-            
-            AjaxPostUtil.request({url:reqBasePath + "exam023", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:schoolBasePath + "exam023", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg("发布成功", {icon: 1,time: 2000});
     				loadTable();
@@ -255,8 +254,7 @@ layui.config({
 		var msg = obj ? '确认结束试卷【' + obj.data.surveyName + '】的考试吗？' : '确认结束选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '结束考试' }, function (index) {
 			layer.close(index);
-            
-            AjaxPostUtil.request({url:reqBasePath + "exam030", params:{surveyId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:schoolBasePath + "exam030", params:{surveyId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
     				loadTable();

@@ -17,7 +17,7 @@ layui.config({
 	    
 		showGrid({
 		 	id: "dwBodyUser",
-		 	url: reqBasePath + "exam026",
+		 	url: schoolBasePath + "exam026",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/examreport/examReport.tpl'),

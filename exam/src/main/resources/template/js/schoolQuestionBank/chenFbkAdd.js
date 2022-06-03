@@ -26,7 +26,7 @@ layui.config({
 	    // 初始化学校
 		showGrid({
 		 	id: "schoolId",
-		 	url: reqBasePath + "schoolmation008",
+		 	url: schoolBasePath + "schoolmation008",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -51,7 +51,7 @@ layui.config({
 		function initGrade(){
 			showGrid({
 			 	id: "gradeId",
-			 	url: reqBasePath + "grademation006",
+			 	url: schoolBasePath + "grademation006",
 			 	params: {schoolId: $("#schoolId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -76,7 +76,7 @@ layui.config({
 		function initSubject(){
 			showGrid({
 			 	id: "subjectId",
-			 	url: reqBasePath + "schoolsubjectmation007",
+			 	url: schoolBasePath + "schoolsubjectmation007",
 			 	params: {gradeId: $("#gradeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -90,12 +90,12 @@ layui.config({
 		function loadData(){
 			// 如果问题id不为空，则说明是编辑，加载编辑信息
 			if(!isNull(parent.rowId)){
-				AjaxPostUtil.request({url:reqBasePath + "schoolquestionbank016", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank016", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						$("#schoolId").val(json.bean.schoolId);
 						showGrid({
 						 	id: "gradeId",
-						 	url: reqBasePath + "grademation006",
+						 	url: schoolBasePath + "grademation006",
 						 	params: {schoolId: $("#schoolId").val()},
 						 	pagination: false,
 						 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -104,7 +104,7 @@ layui.config({
 						 		$("#gradeId").val(json.bean.gradeId);
 						 		showGrid({
 								 	id: "subjectId",
-								 	url: reqBasePath + "schoolsubjectmation007",
+								 	url: schoolBasePath + "schoolsubjectmation007",
 								 	params: {gradeId: $("#gradeId").val()},
 								 	pagination: false,
 								 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -265,7 +265,7 @@ layui.config({
 	    		});
 	    		params.isDefaultAnswer = JSON.stringify(isDefaultAnswer);
 	    		
-    			AjaxPostUtil.request({url:reqBasePath + "schoolquestionbank015", params: params, type: 'json', callback: function(json){
+    			AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank015", params: params, type: 'json', callback: function(json){
     				if(json.returnCode == 0){
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';

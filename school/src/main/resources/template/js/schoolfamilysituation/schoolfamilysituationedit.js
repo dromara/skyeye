@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "schoolfamilysituation003",
+		 	url: schoolBasePath + "schoolfamilysituation003",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/schoolfamilysituation/schoolfamilysituationeditTemplate.tpl'),
@@ -21,7 +21,7 @@ layui.config({
 		 		//初始化学校
 				showGrid({
 				 	id: "schoolId",
-				 	url: reqBasePath + "schoolmation008",
+				 	url: schoolBasePath + "schoolmation008",
 				 	params: {},
 				 	pagination: false,
 				 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -41,7 +41,7 @@ layui.config({
 		 	        		schoolId: $("#schoolId").val()
 		 	        	};
 
-		 	        	AjaxPostUtil.request({url:reqBasePath + "schoolfamilysituation004", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url:schoolBasePath + "schoolfamilysituation004", params:params, type: 'json', callback: function(json){
 		 	        		if(json.returnCode == 0){
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

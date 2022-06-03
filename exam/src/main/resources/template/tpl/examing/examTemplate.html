@@ -711,11 +711,11 @@
 						setCookie('userToken', userToken, 's1800');
 					}
 					bgAnDate = getFormatDate();
-					AjaxPostUtil.request({url:reqBasePath + "exam028", params: {surveyId: getUrlParam("rowId")}, type: 'json', callback: function(json){
+					AjaxPostUtil.request({url:schoolBasePath + "exam028", params: {surveyId: getUrlParam("rowId")}, type: 'json', callback: function(json){
 		 	   			if(json.returnCode == 0){
 			 	   			showGrid({
 								id: "wrap",
-								url: reqBasePath + "exam024",
+								url: schoolBasePath + "exam024",
 								params: {rowId: getUrlParam("rowId")},
 								pagination: false,
 								template: getFileContent('tpl/examing/examTemplate.tpl'),
@@ -1320,7 +1320,7 @@
 							});
 							params = $.extend({}, params, $("#surveyForm").serializeJson());
 							params.quAnswerFile = JSON.stringify(quAnswerFile);
-							AjaxPostUtil.request({url:reqBasePath + "exam029", params: params, type: 'json', callback: function(json){
+							AjaxPostUtil.request({url:schoolBasePath + "exam029", params: params, type: 'json', callback: function(json){
 				 	   			if(json.returnCode == 0){
 					 	   			$("#wrap").html('<span class="messageSpan">' + '答卷完成，感谢您的参与。' + '</span>');
 				 	   			}else{

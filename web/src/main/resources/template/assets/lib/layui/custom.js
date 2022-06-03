@@ -53,6 +53,7 @@ var fileBasePath;
 var reqBasePath; // 总项目
 var shopBasePath; // 商城项目
 var flowableBasePath; // 工作流相关功能的项目
+var schoolBasePath; // 学校模块请求地址
 var homePagePath; // 前端请求地址
 var webSocketPath;//聊天socket-开发
 
@@ -64,6 +65,7 @@ function initBaseParams(){
 	webSocketPath = sysMainMation.webSocketPath;
 	flowableBasePath = sysMainMation.flowableBasePath;
 	homePagePath = sysMainMation.homePagePath;
+	schoolBasePath = sysMainMation.schoolBasePath;
 }
 
 function getRequestHeaders() {

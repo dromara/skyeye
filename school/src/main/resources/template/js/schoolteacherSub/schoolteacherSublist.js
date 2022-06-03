@@ -18,7 +18,7 @@ layui.config({
 	//初始化学校
 	showGrid({
 	 	id: "schoolId",
-	 	url: reqBasePath + "schoolmation008",
+	 	url: schoolBasePath + "schoolmation008",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -34,7 +34,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'schoolteachersubject001',
+		    url: schoolBasePath + 'schoolteachersubject001',
 		    where: {userName:$("#userName").val(), userSex:$("#userSex").val(), userIdCard:$("#userIdCard").val(), schoolId:$("#schoolId").val()},
 		    even: true,
 		    page: true,

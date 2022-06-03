@@ -20,7 +20,7 @@ layui.config({
 	    
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "classmation004",
+		 	url: schoolBasePath + "classmation004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/schoolclassmation/schoolclassmationeditTemplate.tpl'),
@@ -60,7 +60,7 @@ layui.config({
 			        		params.masterStaffId = teacherMation.staffId;
 			        	}
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "classmation005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url:schoolBasePath + "classmation005", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
@@ -79,7 +79,7 @@ layui.config({
         function initFloorId(schoolId, chooseFloorId){
 		    showGrid({
 	    	 	id: "floorId",
-	    	 	url: reqBasePath + "schoolfloormation006",
+	    	 	url: schoolBasePath + "schoolfloormation006",
 	    	 	params: {schoolId: schoolId},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),

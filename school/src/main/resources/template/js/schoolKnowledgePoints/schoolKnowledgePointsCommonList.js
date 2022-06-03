@@ -20,7 +20,7 @@ layui.config({
 	// 初始化学校
 	showGrid({
 		id: "schoolId",
-		url: reqBasePath + "schoolmation008",
+		url: schoolBasePath + "schoolmation008",
 		params: {},
 		pagination: false,
 		template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -44,7 +44,7 @@ layui.config({
     function initGradeId(){
 	    showGrid({
     	 	id: "setting",
-    	 	url: reqBasePath + "grademation006",
+    	 	url: schoolBasePath + "grademation006",
     	 	params: {schoolId: $("#schoolId").val()},
     	 	pagination: false,
     	 	template: $("#gradeTemplate").html(),
@@ -60,7 +60,7 @@ layui.config({
 	function initSubject(){
 		showGrid({
 		 	id: "setting1",
-		 	url: reqBasePath + "schoolsubjectmation007",
+		 	url: schoolBasePath + "schoolsubjectmation007",
 		 	params: {gradeId: gradeId},
 		 	pagination: false,
 		 	template: $("#subjectTemplate").html(),
@@ -77,7 +77,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'knowledgepoints009',
+		    url: schoolBasePath + 'knowledgepoints009',
 		    where: getTablePatams(),
 		    even:true,
 		    page: true,

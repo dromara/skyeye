@@ -18,7 +18,7 @@ layui.config({
 	//初始化学校
 	showGrid({
 		id: "schoolId",
-		url: reqBasePath + "schoolmation008",
+		url: schoolBasePath + "schoolmation008",
 		params: {},
 		pagination: false,
 		template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -39,7 +39,7 @@ layui.config({
     function initGradeId(){
 	    showGrid({
     	 	id: "gradeId",
-    	 	url: reqBasePath + "grademation006",
+    	 	url: schoolBasePath + "grademation006",
     	 	params: {schoolId: $("#schoolId").val()},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -65,7 +65,7 @@ layui.config({
 	function initSubject(){
 		showGrid({
 		 	id: "subjectId",
-		 	url: reqBasePath + "schoolsubjectmation007",
+		 	url: schoolBasePath + "schoolsubjectmation007",
 		 	params: {gradeId: $("#gradeId").val()},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -82,7 +82,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'knowledgepoints001',
+		    url: schoolBasePath + 'knowledgepoints001',
 		    where: getTablePatams(),
 		    even:true,
 		    page: true,
@@ -138,7 +138,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "knowledgepoints003", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints003", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();

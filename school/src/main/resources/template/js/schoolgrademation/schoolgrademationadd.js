@@ -18,7 +18,7 @@ layui.config({
 	    //加载所属学校
 	    showGrid({
     	 	id: "OverAllSchool",
-    	 	url: reqBasePath + "schoolmation008",
+    	 	url: schoolBasePath + "schoolmation008",
     	 	params: {},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -38,7 +38,7 @@ layui.config({
 		function loadParentGrade(){
 			showGrid({
 	    	 	id: "OverAllGrade",
-	    	 	url: reqBasePath + "grademation006",
+	    	 	url: schoolBasePath + "grademation006",
 	    	 	params: {schoolId: $("#OverAllSchool").val()},
 	    	 	pagination: false,
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -87,7 +87,7 @@ layui.config({
         			type: $("input[name='type']:checked").val()
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "grademation002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:schoolBasePath + "grademation002", params:params, type: 'json', callback: function(json){
 	 	   			if(json.returnCode == 0){
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

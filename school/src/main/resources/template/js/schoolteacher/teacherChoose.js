@@ -52,7 +52,7 @@ layui.config({
 	//初始化学校
 	showGrid({
 	 	id: "schoolId",
-	 	url: reqBasePath + "schoolmation008",
+	 	url: schoolBasePath + "schoolmation008",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -86,7 +86,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'schoolteacher006',
+		    url: schoolBasePath + 'schoolteacher006',
 		    where: getTableParams(),
 			even: true,
 		    page: true,
@@ -174,7 +174,7 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url:reqBasePath + "schoolteacher007", params: {staffIds: selectedData.toString()}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: schoolBasePath + "schoolteacher007", params: {staffIds: selectedData.toString()}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				parent.chooseTeacherList = [].concat(json.rows);
  	   			parent.layer.close(index);

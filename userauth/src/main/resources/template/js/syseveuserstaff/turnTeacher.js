@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
     	 	id: "allSchool",
-    	 	url: reqBasePath + "schoolmation007",
+    	 	url: schoolBasePath + "schoolmation007",
     	 	params: {},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option.tpl'),

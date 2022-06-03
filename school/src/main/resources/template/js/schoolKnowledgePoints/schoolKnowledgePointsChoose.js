@@ -34,7 +34,7 @@ layui.config({
 	//初始化学校
 	showGrid({
 		id: "schoolId",
-		url: reqBasePath + "schoolmation008",
+		url: schoolBasePath + "schoolmation008",
 		params: {},
 		pagination: false,
 		template: getFileContent('tpl/template/select-option-must.tpl'),
@@ -55,7 +55,7 @@ layui.config({
     function initGradeId(){
 	    showGrid({
     	 	id: "gradeId",
-    	 	url: reqBasePath + "grademation006",
+    	 	url: schoolBasePath + "grademation006",
     	 	params: {schoolId: $("#schoolId").val()},
     	 	pagination: false,
     	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -81,7 +81,7 @@ layui.config({
 	function initSubject(){
 		showGrid({
 		 	id: "subjectId",
-		 	url: reqBasePath + "schoolsubjectmation007",
+		 	url: schoolBasePath + "schoolsubjectmation007",
 		 	params: {gradeId: $("#gradeId").val()},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -116,7 +116,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'knowledgepoints007',
+		    url: schoolBasePath + 'knowledgepoints007',
 		    where: getTableParams(),
 			even: true,
 		    page: true,
@@ -179,7 +179,7 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url:reqBasePath + "knowledgepoints008", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints008", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
    				parent.schoolKnowledgeMationList = [].concat(json.rows);
  	   			parent.layer.close(index);

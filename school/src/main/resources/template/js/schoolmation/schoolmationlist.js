@@ -21,7 +21,7 @@ layui.config({
         elem: '#messageTable',
         method: 'post',
         idField: 'id',
-        url: reqBasePath + 'schoolmation001',
+        url: schoolBasePath + 'schoolmation001',
         cellMinWidth: 100,
         where:{schoolName: $("#schoolName").val()},
         treeId: 'id',//树形id字段名称
@@ -75,7 +75,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "schoolmation003", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:schoolBasePath + "schoolmation003", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
     				loadTable();

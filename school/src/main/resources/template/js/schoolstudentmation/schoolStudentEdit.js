@@ -18,7 +18,7 @@ layui.config({
 		
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "studentmation006",
+		 	url: schoolBasePath + "studentmation006",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#editTemplate").html(),
@@ -93,7 +93,7 @@ layui.config({
 			    function initGradeId(){
 				    showGrid({
 			    	 	id: "gradeId",
-			    	 	url: reqBasePath + "grademation006",
+			    	 	url: schoolBasePath + "grademation006",
 			    	 	params: {schoolId: schoolId},
 			    	 	pagination: false,
 			    	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -111,7 +111,7 @@ layui.config({
 			    function initTransportationId(){
 				    showGrid({
 			    	 	id: "modeOfTransportation",
-			    	 	url: reqBasePath + "schooltransportation006",
+			    	 	url: schoolBasePath + "schooltransportation006",
 			    	 	params: {schoolId: schoolId},
 			    	 	pagination: false,
 			    	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -128,7 +128,7 @@ layui.config({
 			    function initHomeSituationId(){
 			    	showGrid({
 			    	 	id: "homeSituation",
-			    	 	url: reqBasePath + "schoolfamilysituation006",
+			    	 	url: schoolBasePath + "schoolfamilysituation006",
 			    	 	params: {schoolId: schoolId},
 			    	 	pagination: false,
 			    	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
@@ -148,7 +148,7 @@ layui.config({
 			    function initBodyMindId(){
 			    	showGrid({
 			    	 	id: "bodyMind",
-			    	 	url: reqBasePath + "schoolbodymind006",
+			    	 	url: schoolBasePath + "schoolbodymind006",
 			    	 	params: {schoolId: schoolId},
 			    	 	pagination: false,
 			    	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
@@ -188,7 +188,7 @@ layui.config({
 				function loadThisGradeNowYear(){
 					showGrid({
 					 	id: "classId",
-					 	url: reqBasePath + "grademation009",
+					 	url: schoolBasePath + "grademation009",
 					 	params: {gradeId: $("#gradeId").val()},
 					 	pagination: false,
 					 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -305,7 +305,7 @@ layui.config({
 			            });
 			            params.bodyMind = bodyMindIds;
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "studentmation007", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url:schoolBasePath + "studentmation007", params:params, type: 'json', callback: function(json){
 			 	   			if(json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
