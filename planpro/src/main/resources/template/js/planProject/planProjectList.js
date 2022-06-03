@@ -40,9 +40,9 @@ layui.config({
 	        }},
 	        { field: 'childsTypeOneNum', width: 120, title: '目录数量'},
 	        { field: 'childsTypeTwoNum', width: 120, title: '流程图数量'},
-			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 140 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 140 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	    ]],
@@ -73,10 +73,10 @@ layui.config({
     });
 	
 	// 删除
-	function del(data, obj){
+	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "planproject003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "planproject003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json) {
     			if(json.returnCode == 0){
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -88,7 +88,7 @@ layui.config({
 	}
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/planProject/planProjectEdit.html",
@@ -97,16 +97,16 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
 	
 	// 流程图设计
-	function flowChart(data){
+	function flowChart(data) {
 		rowId = data.id;
 		projectName = data.projectName;
 		_openNewWindows({
@@ -116,16 +116,16 @@ layui.config({
 			area: ['100vw', '100vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
 	
     // 新增
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/planProject/planProjectAdd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
@@ -133,10 +133,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
     });
@@ -150,7 +150,7 @@ layui.config({
 	});
 
 	// 刷新数据
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 
