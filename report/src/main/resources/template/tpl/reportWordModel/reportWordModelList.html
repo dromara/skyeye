@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <style type="text/css">
+        .layui-table-body .layui-table-cell {
+            height: 60px;
+            line-height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="txtcenter" style="margin:0 auto;padding-top:10px;">
+        <form class="layui-form layui-form-pane" action="" autocomplete="off">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">标题</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="title" name="title" placeholder="请输入标题" class="layui-input" />
+                    </div>
+                    <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
+                    <button class="layui-btn list-form-search" lay-submit lay-filter="formSearch"><language showName="com.skyeye.search2"></language></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="winui-toolbar">
+        <div class="winui-tool">
+            <button id="reloadTable" class="winui-toolbtn">
+                <i class="fa fa-refresh" aria-hidden="true"></i>
+                <language showName="com.skyeye.refreshDataBtn"></language>
+            </button>
+            <button id="addBean" class="winui-toolbtn" auth="1632727690803">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                <language showName="com.skyeye.addBtn"></language>
+            </button>
+        </div>
+    </div>
+    <div style="margin:auto 10px;">
+        <table id="messageTable" lay-filter="messageTable"></table>
+        <script type="text/html" id="tableBar">
+            {{# if(d.state == 1){ }}
+                {{# if(auth('1632727709149')){ }}
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+                {{# } }}
+                {{# if(auth('1632727699540')){ }}
+                    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delet"><language showName="com.skyeye.deleteBtn"></language></a>
+                {{# } }}
+                {{# if(auth('1632727736940')){ }}
+                    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="publish">发布</a>
+                {{# } }}
+            {{# } }}
+            {{# if(auth('1632727747447') && d.state == 2){ }}
+                <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="unPublish">取消发布</a>
+            {{# } }}
+        </script>
+    </div>
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/reportWordModel/'}).use('reportWordModelList');
+    </script>
+</body>
+</html>

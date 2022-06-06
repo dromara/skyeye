@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
+    <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+    <link href="../../assets/report/css/ruler.css" rel="stylesheet" />
+</head>
+<body>
+    <div style="margin:0 auto;padding:20px;">
+        <form class="layui-form" action="" id="showForm" autocomplete="off">
+    
+        </form>
+    </div>
+    
+    <script type="text/x-handlebars-template" id="showBaseTemplate">
+        {{#bean}}
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">基础信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">标题：</label>
+            <div class="layui-input-block ver-center">
+                {{title}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">默认宽度：</label>
+            <div class="layui-input-block ver-center">
+                {{defaultWidth}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs6">
+            <label class="layui-form-label">默认高度：</label>
+            <div class="layui-input-block ver-center">
+                {{defaultHeight}}
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <span class="hr-title">文字模型信息</span><hr>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label">属性值选项：</label>
+            <div class="layui-input-block">
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 150px;">属性</th>
+                        <th style="width: 150px;">是否可编辑</th>
+                        <th style="width: 200px;">是否展示</th>
+                    </tr>
+                    </thead>
+                    <tbody id="useTable" class="insurance-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label" style="line-height: 45px">效果图：</label>
+            <div class="layui-col-xs8" style="line-height: 60px">
+                <div class="layui-col-xs10" id="printPic">
+                    <font style="{{#each options}}{{code}}:{{defaultValue}};{{/each}}">Hello, Skyeye</font>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-col-xs12">
+            <label class="layui-form-label" style="line-height: 45px">预览图：</label>
+            <div class="layui-col-xs6" style="line-height: 60px">
+                <div class="layui-col-xs10" id="images">
+                    <img src="{{logo}}">
+                </div>
+            </div>
+        </div>
+        {{/bean}}
+    </script>
+    
+    <!-- usetableTemplate -->
+    <script type="text/x-handlebars-template" id="usetableTemplate">
+        <tr trcusid="{{trId}}">
+            <td id="{{propertyId}}"></td>
+            <td id="{{whetherEditor}}"></td>
+            <td id="{{whetherShow}}"></td>
+        </tr>
+    </script>
+    
+    <script src="../../assets/lib/layui/layui.js"></script>
+    <script src="../../assets/lib/layui/custom.js"></script>
+    <!-- html2canvas将Dom节点在Canvas里边画出来 -->
+    <script src="../../assets/html2canvas/js/html2canvas.min.js"></script>
+    <!-- 将canvas图片保存成图片 -->
+    <script src="../../assets/html2canvas/js/canvas2image.js"></script>
+    <script src="../../assets/html2canvas/js/base64.js"></script>
+    <script type="text/javascript">
+        layui.config({base: '../../js/reportWordModel/'}).use('reportWordModelDetails');
+    </script>
+</body>
+</html>

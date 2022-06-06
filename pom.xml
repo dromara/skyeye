@@ -58,6 +58,7 @@
         <module>boss</module>
         <module>member</module>
         <module>shop</module>
+        <module>report</module>
     </modules>
 
     <properties>

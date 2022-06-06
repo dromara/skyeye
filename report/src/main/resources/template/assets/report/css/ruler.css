@@ -1,0 +1,461 @@
+body {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	margin: 0px;
+}
+
+.skyeyeScaleBox {
+	position: fixed;
+	left: 0;
+	top: 60px;
+	_position: absolute;
+	overflow: hidden;
+	–webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+}
+
+.report-content {
+	position: fixed;
+	left: 44px;
+	top: 104px;
+	_position: absolute;
+	z-index: 990;
+	overflow: auto;
+	width: calc(100% - 420px);
+	height: calc(100% - 130px);
+	border: 1px solid RGB(130, 214, 195);
+	–webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	overflow-x: hidden;
+}
+
+.skyeyeScaleRuler_h,
+.skyeyeScaleRuler_v {
+	position: absolute;
+	left: 0;
+	top: 0;
+	overflow: hidden;
+	z-index: 999;
+}
+
+.skyeyeScaleRuler_h {
+	width: 100%;
+	height: 18px;
+	background-blend-mode: lighten;
+}
+
+.skyeyeScaleRuler_v {
+	width: 18px;
+	height: 100%;
+	background-blend-mode: lighten;
+}
+
+.skyeyeScaleRuler_v .n,
+.skyeyeScaleRuler_h .n {
+	position: absolute;
+	font: 10px/1 Arial, sans-serif;
+	color: #333;
+	cursor: default;
+}
+
+.skyeyeScaleRuler_v .n {
+	width: 8px;
+	left: 3px;
+	word-wrap: break-word;
+}
+
+.skyeyeScaleRuler_h .n {
+	top: 1px;
+}
+
+.hd-main {
+	height: 60px;
+	background: #fff;
+	z-index: 15;
+	border-bottom: #b3b3b3 1px solid;
+	box-shadow: 0 0 5px #333
+}
+
+.hd-main {
+	padding: 0 5px;
+	height: 60px;
+	min-width: 800px;
+	background: #252525;
+	border-bottom: 0
+}
+
+.hd-main .pulldown {
+	position: absolute;
+	cursor: default;
+	display: none;
+	top: 60px;
+	z-index: 9999;
+	width: 450px;
+	max-height: 270px;
+	overflow-y: auto;
+}
+
+.hd-main .pulldown .child-menu {
+	background: #F6F6F9;
+	color: #333;
+	text-align: left;
+	border-radius: 3px;
+	border: rgb(175, 175, 175) 1px solid;
+	border-width: 0 1px 1px 1px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, .2);
+	position: relative;
+	z-index: 1
+}
+
+.hd-main .navs {
+	padding: 0 0 0px 25px;
+	height: 100%;
+	float: left;
+}
+
+.hd-main .navs a:hover,
+.hd-main .navs a:active {
+	text-decoration: none;
+}
+
+.hd-main .navs .def-nav,
+.hd-main .navs .pulldown-nav,
+.hd-main .navs .separate {
+	display: block;
+	float: left;
+	height: 100%;
+	color: white;
+	text-align: center;
+	width: 90px;
+	font-size: 14px;
+}
+
+.hd-main .navs .separate {
+	width: 2px;
+}
+
+.hd-main .navs .app-url .child-menu {
+	display: flow-root;
+}
+
+.hd-main .navs .app-url .child-menu a,
+.hd-main .navs .app-url .child-menu a:hover {
+	color: #333;
+}
+
+.hd-main .navs .app-url .li {
+	cursor: pointer;
+	padding-top: 4px;
+	border-radius: 3px;
+	display: block;
+	float: left;
+	text-align: center;
+	margin: 8px 0px;
+}
+
+.hd-main .navs .app-url .li:hover {
+	background-color: #e0e1e5;
+}
+
+.hd-main .navs .def-nav .icon,
+.hd-main .navs .app-url .li .icon {
+	margin: 0 auto;
+	width: 35px;
+	height: 35px;
+	display: block;
+	font-size: 21px;
+	line-height: 35px;
+}
+
+.hd-main .navs .app-url .li .image{
+	margin: 0 auto;
+	width: 90px;
+	height: 60px;
+	display: block;
+	font-size: 25px;
+	line-height: 40px;
+}
+
+.hd-main .navs .def-nav .icon,
+.hd-main .navs .app-url .li:hover .icon {}
+
+.hd-main .navs .app-url .li .text {
+	height: 30px;
+	display: block;
+	font: 14px/30px "Microsoft YaHei", "Microsoft JhengHei";
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.hd-main .navs .pulldown-nav {
+	position: relative
+}
+
+.hd-main .navs .pulldown-nav em {
+	position: absolute;
+	display: block;
+	left: 69px;
+	top: 30px;
+	font-size: 0;
+	background-position: -89px -45px
+}
+
+.arrow-bottom {
+	width: 0;
+	height: 0;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-top: 8px solid white;
+	font-size: 0;
+	line-height: 0;
+}
+
+.arrow-top {
+	width: 0;
+	height: 0;
+	border-left: 6px solid transparent;
+	border-right: 6px solid transparent;
+	border-bottom: 8px solid white;
+	font-size: 0;
+	line-height: 0;
+}
+
+.logo-title{
+	float: left;
+	line-height: 60px;
+	color: cornflowerblue;
+	font-size: 16px;
+	font-family: cursive;
+}
+
+.kuang {
+	box-sizing: border-box;
+	border: 1px solid darkgray;
+	width: 450px;
+	height: 300px;
+	position: absolute;
+	top: 0px;
+	background-color: white;
+	z-index: 100;
+}
+
+.kuang .dian {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #0f0;
+}
+
+.left_top {
+	left: -5px;
+	top: -5px;
+	cursor: nw-resize;
+}
+
+.right_top {
+	right: -5px;
+	top: -5px;
+	cursor: ne-resize;
+}
+
+.left_bottom {
+	left: -5px;
+	bottom: -5px;
+	cursor: ne-resize;
+}
+
+.right_bottom {
+	right: -5px;
+	bottom: -5px;
+	cursor: nw-resize;
+}
+
+.top {
+	top: -5px;
+	left: 50%;
+	transform: translateX(-50%);
+	cursor: n-resize;
+}
+
+.bottom {
+	bottom: -5px;
+	left: 50%;
+	transform: translateX(-50%);
+	cursor: n-resize;
+}
+
+.left {
+	left: -5px;
+	top: 50%;
+	transform: translateY(-50%);
+	cursor: e-resize;
+}
+
+.right {
+	right: -5px;
+	top: 50%;
+	transform: translateY(-50%);
+	cursor: e-resize;
+}
+
+.echarts-box{
+	width: 100%;
+	height: 100%;
+}
+
+.word-box{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.form-box{
+	height: calc(100% - 78px);
+	position: fixed;
+	width: 350px;
+	top: 78px;
+	right: 0px;
+	background-color: white;
+	z-index: 300;
+	border-left: 1px solid gainsboro;
+}
+
+.layui-form-label{
+	width: 100px !important;
+}
+
+.layui-input-block {
+	margin-left: 115px !important;
+}
+
+/******************reportContent的八个角start**********************/
+.cape {
+	position: absolute;
+	width: 4px;
+	height: 4px;
+	background: RGB(131, 217, 179);
+}
+
+.cape_left1 {
+	left: 40px;
+	top: 100px;
+	height: 30px;
+}
+
+.cape_left1_top {
+	left: 40px;
+	top: 100px;
+	width: 30px;
+}
+
+.cape_right1 {
+	right: 372px;
+	top: 100px;
+	height: 30px;
+}
+
+.cape_right1_top {
+	right: 372px;
+	top: 100px;
+	width: 30px;
+}
+
+.cape_left2 {
+	bottom: 22px;
+	left: 40px;
+	height: 30px;
+}
+
+.cape_left2_bottom {
+	bottom: 22px;
+	left: 40px;
+	width: 30px;
+}
+
+.cape_right2 {
+	right: 372px;
+	bottom: 22px;
+	height: 30px;
+}
+
+.cape_right2_bottom {
+	right: 372px;
+	bottom: 22px;
+	width: 30px;
+}
+/******************reportContent的八个角end**********************/
+
+.layui-colorpicker-trigger-bgcolor{
+	height: 19px;
+}
+
+.layui-colla-item{
+	height: auto;
+	width: 100%;
+	display: table;
+}
+
+.layui-colla-title{
+	height: 35px;
+	line-height: 35px;
+	padding: 0 15px 0 15px;
+}
+
+.layui-colla-title .f-icon{
+	position: absolute;
+	line-height: 35px;
+	top: 13px;
+}
+
+.layui-colla-title .arrow-top{
+	border-bottom: 8px solid darkgray;
+}
+
+.layui-colla-title .arrow-bottom{
+	border-top: 8px solid darkgray;
+}
+
+.layui-colla-title span{
+	margin-left: 25px;
+}
+
+.layui-colla-content{
+	height: auto;
+	position: relative;
+	padding: 5px 0px;
+}
+
+.save-btn{
+	position: absolute;
+	right: 0px;
+	height: 60px !important;
+}
+
+.active{
+	border: 1px solid #0f0 !important;
+	z-index: 200 !important;
+}
+
+@keyframes masked-animation {
+	0% {
+		background-position: 0  0;
+	}
+	100% {
+		background-position: -100%  0;
+	}
+}
+
+
+
+
+
+
+
+
+

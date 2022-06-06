@@ -31,6 +31,7 @@ var customerJS = {
 	"codeDocUtil": "../../assets/lib/layui/customer/codeDocUtil.js", // 代码生成器相关工具类
 	"organizationUtil": "../../assets/lib/layui/customer/organizationUtil.js", // 组织机构相关工具类
 	"threeUtil": "../../assets/lib/layui/customer/threeUtil.js", // 3D编辑器相关工具类
+	"reportModelTypeUtil": "../../assets/lib/layui/customer/reportModelTypeUtil.js", // 模型分类工具类
 };
 
 //系统基础信息
@@ -54,6 +55,7 @@ var reqBasePath; // 总项目
 var shopBasePath; // 商城项目
 var flowableBasePath; // 工作流相关功能的项目
 var schoolBasePath; // 学校模块请求地址
+var reportBasePath; // 报表模块请求地址
 var homePagePath; // 前端请求地址
 var webSocketPath;//聊天socket-开发
 
@@ -66,6 +68,7 @@ function initBaseParams(){
 	flowableBasePath = sysMainMation.flowableBasePath;
 	homePagePath = sysMainMation.homePagePath;
 	schoolBasePath = sysMainMation.schoolBasePath;
+	reportBasePath = sysMainMation.reportBasePath;
 }
 
 function getRequestHeaders() {

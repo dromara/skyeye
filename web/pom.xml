@@ -23,6 +23,13 @@
             <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
 
+        <!-- 报表模块 -->
+        <dependency>
+            <groupId>com.skyeye.web</groupId>
+            <artifactId>report</artifactId>
+            <version>1-SNAPSHOT</version>
+        </dependency>
+
         <!-- 商城模块 -->
         <dependency>
             <groupId>com.skyeye.web</groupId>
