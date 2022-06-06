@@ -21,6 +21,8 @@ layui.config({
         var usetableTemplate = $("#usetableTemplate").html();
         var isPic = false; // 是否生成预览图
 
+        reportModelTypeUtil.showModelTypeOperator(form, "typeBox", null, null);
+
         matchingLanguage();
         form.render();
         form.on('submit(formAddBean)', function (data) {
@@ -55,6 +57,8 @@ layui.config({
                             defaultWidth: $("#defaultWidth").val(),
                             defaultHeight: $("#defaultHeight").val(),
                             options: JSON.stringify(tableData),
+                            firstTypeId: $("#firstTypeId").val(),
+                            secondTypeId: $("#secondTypeId").val(),
                             logo: json1.bean.picUrl
                         };
                         AjaxPostUtil.request({url:reportBasePath + "reportwordmodel002", params: params, type:'json', method: "POST", callback:function(json){

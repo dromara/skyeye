@@ -32,6 +32,8 @@ layui.config({
             },
             ajaxSendAfter: function (j) {
 
+                reportModelTypeUtil.showModelTypeOperator(form, "typeBox", j.bean.firstTypeId, j.bean.secondTypeId);
+
                 var options = j.bean.options;
                 // 加载属性值
                 $.each(options, function(i, item){
@@ -78,6 +80,8 @@ layui.config({
                                     defaultHeight: $("#defaultHeight").val(),
                                     options: JSON.stringify(tableData),
                                     logo: json1.bean.picUrl,
+                                    firstTypeId: $("#firstTypeId").val(),
+                                    secondTypeId: $("#secondTypeId").val(),
                                     id: parent.rowId
                                 };
                                 AjaxPostUtil.request({url: reportBasePath + "reportwordmodel004", params: params, type: 'json', method: "PUT", callback: function (json) {

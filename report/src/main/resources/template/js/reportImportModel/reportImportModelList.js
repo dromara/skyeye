@@ -20,6 +20,7 @@ layui.config({
         method: 'post',
         url: reportBasePath + 'reportimportmodel001',
         where: getTableParams(),
+        toolbar: true,
         even: true,
         page: true,
         limits: getLimits(),
