@@ -10,13 +10,17 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
 
+        reportModelTypeUtil.showModelTypeOperator(form, "typeBox", null, null);
+
         matchingLanguage();
         form.render();
         form.on('submit(formAddBean)', function (data) {
             if (winui.verifyForm(data.elem)) {
                 var params = {
                     fileName: $("#fileName").val(),
-                    modelId: $("#modelId").val()
+                    modelId: $("#modelId").val(),
+                    firstTypeId: $("#firstTypeId").val(),
+                    secondTypeId: $("#secondTypeId").val(),
                 };
                 AjaxPostUtil.request({url:reportBasePath + "reportimportmodel002", params: params, type:'json', method: "POST", callback:function(json){
                     if(json.returnCode == 0){

@@ -26,12 +26,14 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'fileName', title: '文件名称', align: 'left', width: 250},
+            { field: 'fileName', title: 'Echarts名称', align: 'left', width: 250},
             { field: 'modelId', title: '模型ID', align: 'left', width: 250 },
-            { field: 'createName', title: '创建人', align: 'left', width: 100 },
-            { field: 'createTime', title: '创建时间', align: 'center', width: 140 },
-            { field: 'lastUpdateName', title: '最后修改人', align: 'left', width: 100 },
-            { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 140},
+            { field: 'firstTypeName', title: '一级分类', align: 'left', width: 120 },
+            { field: 'secondTypeName', title: '二级分类', align: 'left', width: 120 },
+            { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+            { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
         done: function(){

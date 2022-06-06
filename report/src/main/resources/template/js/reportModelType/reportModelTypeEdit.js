@@ -21,20 +21,8 @@ layui.config({
             },
             ajaxSendAfter:function(j){
 
-                showGrid({
-                    id: "parentId",
-                    url: reportBasePath + "reportmodeltype006",
-                    params: {"parentId": 0},
-                    pagination: false,
-                    method: "GET",
-                    template: getFileContent('tpl/template/select-option.tpl'),
-                    ajaxSendLoadBefore: function(hdb){
-                    },
-                    ajaxSendAfter:function(json){
-                        $("#parentId").val(j.bean.parentId);
-                        form.render('select');
-                    }
-                });
+                reportModelTypeUtil.loadModelType("parentId", getFileContent('tpl/template/select-option.tpl'), "0", form);
+                $("#parentId").val(j.bean.parentId);
 
                 matchingLanguage();
                 form.render();

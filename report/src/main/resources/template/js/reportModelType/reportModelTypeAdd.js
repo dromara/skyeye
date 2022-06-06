@@ -10,19 +10,7 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
 
-        showGrid({
-            id: "parentId",
-            url: reportBasePath + "reportmodeltype006",
-            params: {"parentId": 0},
-            pagination: false,
-            method: "GET",
-            template: getFileContent('tpl/template/select-option.tpl'),
-            ajaxSendLoadBefore: function(hdb){
-            },
-            ajaxSendAfter:function(json){
-                form.render('select');
-            }
-        });
+        reportModelTypeUtil.loadModelType("parentId", getFileContent('tpl/template/select-option.tpl'), "0", form);
 
         matchingLanguage();
         form.render();

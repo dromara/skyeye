@@ -20,6 +20,9 @@ layui.config({
             ajaxSendLoadBefore: function(hdb){
             },
             ajaxSendAfter:function(j){
+
+                reportModelTypeUtil.showModelTypeOperator(form, "typeBox", j.bean.firstTypeId, j.bean.secondTypeId);
+
                 matchingLanguage();
                 form.render();
                 form.on('submit(formEditBean)', function (data) {
@@ -27,6 +30,8 @@ layui.config({
                         var params = {
                             fileName: $("#fileName").val(),
                             modelId: $("#modelId").val(),
+                            firstTypeId: $("#firstTypeId").val(),
+                            secondTypeId: $("#secondTypeId").val(),
                             id: parent.rowId
                         };
                         AjaxPostUtil.request({url:reportBasePath + "reportimportmodel004", params: params, type:'json', method: "PUT", callback:function(json){
