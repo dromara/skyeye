@@ -13,10 +13,10 @@
 - 活动内容：全部模块源代码，无后续更新，无bug修复
 
 > 近期更新资讯
-- [2022-05-26 云办公系统 skyeye v3.7.14 CRM，ERP更新](https://mp.weixin.qq.com/s/MsJ1HmFnlfFHRzh5nDfN3A)
+- [2022-06-06 云办公系统 skyeye v3.7.15 报表模块更新，新增体验地址](https://mp.weixin.qq.com/s/y46WM-Pj44fdc_HRAHmd5g)
+- [云办公系统 skyeye v3.7.14 CRM，ERP更新](https://mp.weixin.qq.com/s/MsJ1HmFnlfFHRzh5nDfN3A)
 - [云办公系统 skyeye v3.7.13 3D编辑器](https://mp.weixin.qq.com/s/3FeoBZ1XvHlyBQPDLD6TMA)
 - [云办公系统 skyeye v3.7.12 大版本更新](https://mp.weixin.qq.com/s/nhadQJDPgdVwSVcdAklTIw)
-- [云办公系统 skyeye v3.7.11 发布](https://mp.weixin.qq.com/s/ohbDoUxNzQY9sGt0kwhhSA)
 
 > 更多历史更新资讯 [点我](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md) 。 更多更新资讯以及相关资料关注微信公众号【Skyeye云办公】获取
 
