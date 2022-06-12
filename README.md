@@ -30,12 +30,10 @@
 - 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
 - [企业版信息](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
 - [开源版项目文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
-- [MIT协议的高性能报表软件](https://gitee.com/doc_wei01/skyeye-report)
 
 ### 联系作者
 
 - 企业版请加微信：wzq_598748873
-  - 加微信后需提供所在企业、姓名、邮箱、联系方式，默认订阅每周更新内容推送。
 - 非企业版请进QQ群：1016439713，进群后请自行修改备注：职业-地域-昵称，群内只回答开源版问题
 
 #### 功能介绍
