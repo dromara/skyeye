@@ -199,7 +199,7 @@ layui.config({
                         // 表格属性名称赋值
                         $("#propertyId" + thisRowNum.toString()).val(choosePropertyList[trId].title);
                     } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                     }
                 }});
         });
