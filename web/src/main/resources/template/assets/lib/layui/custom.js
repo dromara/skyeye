@@ -73,8 +73,17 @@ function initBaseParams(){
 
 function getRequestHeaders() {
 	return {
-		userToken: getCookie('userToken')
+		userToken: getCookie('userToken'),
+		loginPCIp: returnCitySN["cip"]
 	};
+}
+function setRequestHeaders(xmlhttp) {
+	var headers = getRequestHeaders();
+	$.each(headers, function (key, value) {
+		console.log(key)
+		console.log(value)
+		xmlhttp.setRequestHeader(key, value);
+	});
 }
 
 // 编辑加载自定义的js文件

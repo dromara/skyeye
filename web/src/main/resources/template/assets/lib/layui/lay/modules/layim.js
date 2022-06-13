@@ -106,7 +106,11 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 	     			'<ul class="layui-unselect layim-tab-content {{# if(d.base.isfriend){ }}layui-show{{# } }} layim-list-friend">', 
 	     				'{{# layui.each(d.friend, function(index, item){ var spread = d.local["spread"+index]; }}', 
 	     				"<li>", 
-	     					'<h5 layim-event="spread" lay-type="{{ spread }}"><i class="layui-icon">{{# if(spread === "true"){ }}&#xe61a;{{# } else {  }}&#xe602;{{# } }}</i><span>{{ item.groupname||"未命名分组"+index }}</span><em>(<cite class="layim-count"> {{ (item.list||[]).length }}</cite>)</em></h5>', 
+	     					'<h5 layim-event="spread" lay-type="{{ spread }}">' +
+								'<i class="layui-icon">{{# if(spread === "true"){ }}&#xe61a;{{# } else {  }}&#xe602;{{# } }}</i>' +
+								'<span>{{ item.groupname||"未命名分组"+index }}</span>' +
+								'<em>(<cite class="layim-count"> {{ (item.list||[]).length }}</cite>)</em>' +
+							'</h5>',
 		     				'<ul class="layui-layim-list {{# if(spread === "true"){ }}', " layui-show", '{{# } }}">', 
 		     					u({type: "friend", item: "item.list", index: "index"}), 
 		     				"</ul>", 

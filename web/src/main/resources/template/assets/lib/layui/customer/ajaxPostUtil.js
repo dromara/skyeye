@@ -141,7 +141,7 @@ var AjaxPostUtil = {
          * 异步: 请求通过事件触发->服务器处理（这是浏览器仍然可以作其他事情）->处理完毕
          */
         xmlhttp.open(method, url, ajaxObj.options.async);//异步
-        xmlhttp.setRequestHeader("userToken", getCookie('userToken'));
+        setRequestHeaders(xmlhttp);
         if("GET" === method.toUpperCase()) {
             xmlhttp.send(null);
         } else if("POST" === method.toUpperCase() || "PUT" === method.toUpperCase()) {

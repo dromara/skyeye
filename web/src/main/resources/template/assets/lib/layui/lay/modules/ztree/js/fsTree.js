@@ -168,7 +168,7 @@ layui.define(['layer', "fsCommon"], function(exports) {
 				autoParam : ["id=parentId"],// 异步加载时需要自动提交父节点属性的参数
 				dataType : "json",
 				beforeSend: function(XHR){
-					XHR.setRequestHeader("userToken", getCookie('userToken'));
+					setRequestHeaders(XHR);
 				},
 				headers: getRequestHeaders(),
 				dataFilter : function(treeId, treeNode, responseData) {
