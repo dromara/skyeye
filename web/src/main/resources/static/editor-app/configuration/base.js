@@ -179,7 +179,6 @@ function ajaxPost(url, params, callback) {
     if (params && typeof params == "object") {
         params = deleteEmptyProp(params);
     }
-    params.loginPCIp = "";
 
     jQuery.ajax({
         type: 'post',

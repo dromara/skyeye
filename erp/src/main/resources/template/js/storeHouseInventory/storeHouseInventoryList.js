@@ -134,10 +134,9 @@ layui.config({
 	//初始化商品类型
 	function initFirstType(){
 		loadFirstType = true;
-		var el5;
-		el5 = eleTree.render({
+		var el5 = eleTree.render({
             elem: '.ele5',
-            url: flowableBasePath + "materialcategory009?loginPCIp=",
+            url: flowableBasePath + "materialcategory009",
             defaultExpandAll: true,
             expandOnClickNode: false,
             highlightCurrent: true

@@ -38,7 +38,7 @@ layui.config({
 	    function loadMyEnclosureList(){
 	    	fsTree.render({
 	    		id: "treeDemo",
-	    		url: reqBasePath + "sysenclosure010?loginPCIp=" + returnCitySN["cip"],
+	    		url: reqBasePath + "sysenclosure010",
 	    		checkEnable: true,
 	    		loadEnable: false,//异步加载
 	    		showLine: false,
@@ -261,7 +261,6 @@ function loadUploadMethod(){
 	        label: '选择文件'
 	    },
 	    formData: {
-	    	loginPCIp: returnCitySN["cip"],
 	    	folderId: folderId
 	    },
 	    dnd: '#uploader .queueList',
@@ -328,7 +327,6 @@ function loadUploadMethod(){
 	uploader.on('uploadBeforeSend', function(block, data, headers) {
 		headers['X-Requested-With']=  'XMLHttpRequest';
 		$.extend(headers, getRequestHeaders());
-		data.loginPCIp = returnCitySN["cip"];
 		data.folderId = folderId;
 		data.md5 = md5;
 		data.chunk = block.chunk;

@@ -157,7 +157,7 @@ layui.config({
 	// 下载模板
 	$("body").on("click", "#download", function(){
 		postDownLoadFile({
-			url : reqBasePath + 'syseveschedule009?loginPCIp=' + returnCitySN["cip"],
+			url : reqBasePath + 'syseveschedule009',
 			method : 'post'
 		});
     });
@@ -173,7 +173,7 @@ layui.config({
 	    formData.append("file", $("#upfile")[0].files[0]);
 	    formData.append("name", name);
 	    $.ajax({
-	        url : reqBasePath + 'syseveschedule010?loginPCIp=' + returnCitySN["cip"],
+	        url : reqBasePath + 'syseveschedule010',
 	        type : 'POST',
 	        async : false,
 	        data : formData,

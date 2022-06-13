@@ -186,7 +186,7 @@ layui.config({
     // 导出excel
     $("body").on("click", "#downloadExcel", function () {
     	postDownLoadFile({
-			url : flowableBasePath + 'salesorder010?loginPCIp=' + returnCitySN["cip"],
+			url : flowableBasePath + 'salesorder010',
 			params: getTableParams(),
 			method : 'post'
 		});

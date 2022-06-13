@@ -38,7 +38,7 @@ layui.config({
     var materialCategoryType;
     fsTree.render({
 		id: "materialCategoryType",
-		url: flowableBasePath + "materialcategory008?loginPCIp=",
+		url: flowableBasePath + "materialcategory008",
 		checkEnable: false,
 		loadEnable: false,//异步加载
 		showLine: false,

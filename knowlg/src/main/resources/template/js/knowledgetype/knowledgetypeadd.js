@@ -15,7 +15,7 @@ layui.config({
 	    var parentType;
 		fsTree.render({
 			id: "parentType",
-			url: reqBasePath + "knowledgetype001?loginPCIp=",
+			url: reqBasePath + "knowledgetype001",
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			chkStyle: "radio",

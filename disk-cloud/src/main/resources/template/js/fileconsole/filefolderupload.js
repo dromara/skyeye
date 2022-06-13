@@ -134,7 +134,6 @@ function loadUploadMethod(){
 	        webkitdirectory: true
 	    },
 	    formData: {
-	    	loginPCIp: returnCitySN["cip"],
 	    	folderId: parent.folderId
 	    },
 	    dnd: '#uploader .queueList',
@@ -201,7 +200,6 @@ function loadUploadMethod(){
 	uploader.on('uploadBeforeSend', function(block, data, headers) {
 		headers['X-Requested-With']=  'XMLHttpRequest';
         $.extend(headers, getRequestHeaders());
-		data.loginPCIp = returnCitySN["cip"];
 		data.folderId = parent.folderId;
 		data.md5 = md5;
 		data.chunk = block.chunk;

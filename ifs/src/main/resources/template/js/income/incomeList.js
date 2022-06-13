@@ -90,7 +90,7 @@ layui.config({
     var ztree = null;
     fsTree.render({
         id: "treeDemo",
-        url: flowableBasePath + "dsFormObjectRelation007?loginPCIp=" + returnCitySN["cip"] + "&firstTypeCode=IFS" + "&language=" + languageType,
+        url: flowableBasePath + "dsFormObjectRelation007?firstTypeCode=IFS" + "&language=" + languageType,
         clickCallback: onClickTree,
         onDblClick: onClickTree
     }, function(id){
@@ -243,7 +243,7 @@ layui.config({
     // 导出excel
     $("body").on("click", "#downloadExcel", function () {
     	postDownLoadFile({
-			url : flowableBasePath + 'income007?loginPCIp=' + returnCitySN["cip"],
+			url : flowableBasePath + 'income007',
 			params: getTableParams(),
 			method : 'post'
 		});

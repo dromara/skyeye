@@ -36,7 +36,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: reqBasePath + "mynote001?loginPCIp=" + returnCitySN["cip"],
+		url: reqBasePath + "mynote001",
 		checkEnable: false,
 		dragEnable: true,
 		loadEnable: true,//异步加载

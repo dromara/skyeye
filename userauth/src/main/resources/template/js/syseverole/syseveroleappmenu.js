@@ -80,7 +80,7 @@ layui.config({
    						var tree = fsTree.render({
    							id: treeId,
    							funcNo: funcNo,
-   							url: reqBasePath + url + "?loginPCIp=" + returnCitySN["cip"],
+   							url: reqBasePath + url,
    							getTree: getTree,
    							checkEnable: true,
    							loadEnable: false,

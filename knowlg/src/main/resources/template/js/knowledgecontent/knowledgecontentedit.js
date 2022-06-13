@@ -16,7 +16,7 @@ layui.config({
 			var el5;
 			el5 = eleTree.render({
 				elem: '.ele5',
-				url: reqBasePath + "knowledgetype008?loginPCIp=",
+				url: reqBasePath + "knowledgetype008",
 				defaultExpandAll: true,
 				expandOnClickNode: false,
 				highlightCurrent: true

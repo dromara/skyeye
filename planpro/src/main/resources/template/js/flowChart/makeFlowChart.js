@@ -40,7 +40,7 @@ layui.config({
     function initTree(){
 		fsTree.render({
 			id: "treeDemo",
-			url: reqBasePath + 'planprojectflow001?projectId=' + parent.rowId + "&loginPCIp=" + returnCitySN["cip"],
+			url: reqBasePath + 'planprojectflow001?projectId=' + parent.rowId,
 			loadEnable: false,
 			clickCallback: onClickTree,
 			onDblClick: onClickTree,

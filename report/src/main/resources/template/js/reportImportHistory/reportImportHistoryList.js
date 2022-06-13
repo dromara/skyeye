@@ -55,7 +55,7 @@ layui.config({
         formData.append("file", $("#upfile")[0].files[0]);
         formData.append("name", name);
         $.ajax({
-            url : reportBasePath + 'reportimporthistory002?loginPCIp=' + returnCitySN["cip"],
+            url : reportBasePath + 'reportimporthistory002',
             type : 'POST',
             async : false,
             data : formData,

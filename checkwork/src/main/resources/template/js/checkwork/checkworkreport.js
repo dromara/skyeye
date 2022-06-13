@@ -274,7 +274,7 @@ layui.config({
 	//导出
 	$("body").on("click", "#download", function(){
 		postDownLoadFile({
-			url : flowableBasePath + 'checkwork020?loginPCIp=' + returnCitySN["cip"],
+			url : flowableBasePath + 'checkwork020',
 			params: getTableParams(),
 			method : 'post'
 		});

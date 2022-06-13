@@ -98,7 +98,7 @@ layui.config({
 	}
 
 	//加载树时的参数传递
-	urlParams = "?loginPCIp=" + returnCitySN["cip"] + "&chooseOrNotMy=" + chooseOrNotMy + "&chooseOrNotEmail=" + chooseOrNotEmail;
+	urlParams = "?chooseOrNotMy=" + chooseOrNotMy + "&chooseOrNotEmail=" + chooseOrNotEmail;
 
 	//各模块的初始化加载情况 false为没加载，true为加载
 	var allPeopleFirstLoad = false,//所有人员模块是否初始化加载

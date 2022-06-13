@@ -708,7 +708,6 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 			}
 
 			that.loading();
-			data.loginPCIp = returnCitySN["cip"];
 
 			$.ajax({
 				type: options.method || 'get'

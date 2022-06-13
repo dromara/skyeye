@@ -80,8 +80,6 @@ function getRequestHeaders() {
 function setRequestHeaders(xmlhttp) {
 	var headers = getRequestHeaders();
 	$.each(headers, function (key, value) {
-		console.log(key)
-		console.log(value)
 		xmlhttp.setRequestHeader(key, value);
 	});
 }

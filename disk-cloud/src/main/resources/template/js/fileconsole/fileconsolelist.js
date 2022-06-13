@@ -57,7 +57,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: reqBasePath + "fileconsole001?loginPCIp=" + returnCitySN["cip"],
+		url: reqBasePath + "fileconsole001",
 		checkEnable: false,
 		loadEnable: true,//异步加载
 		showLine: false,
@@ -1792,7 +1792,6 @@ layui.config({
 		// 实例化
 		uploader = WebUploader.create({
 		    formData: {
-		    	loginPCIp: returnCitySN["cip"],
 		    	folderId: folderId
 		    },
 		    dnd: '#file-content',
@@ -1858,7 +1857,6 @@ layui.config({
 		uploader.on('uploadBeforeSend', function(block, data, headers) {
 			headers['X-Requested-With']=  'XMLHttpRequest';
 			$.extend(headers, getRequestHeaders());
-			data.loginPCIp = returnCitySN["cip"];
 			data.folderId = folderId;
 			data.md5 = md5;
 			data.chunk = block.chunk;

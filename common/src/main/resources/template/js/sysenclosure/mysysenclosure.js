@@ -25,7 +25,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: reqBasePath + "sysenclosure001?loginPCIp=" + returnCitySN["cip"],
+		url: reqBasePath + "sysenclosure001",
 		checkEnable: false,
 		loadEnable: true,//异步加载
 		showLine: false,

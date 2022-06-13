@@ -133,7 +133,6 @@ function loadUploadMethod(){
 	        label: '选择文件',
 	    },
 	    formData: {
-	    	loginPCIp: returnCitySN["cip"],
 	    },
 	    dnd: '#uploader .queueList',
 	    paste: document.body,
@@ -204,7 +203,6 @@ function loadUploadMethod(){
 	uploader.on('uploadBeforeSend', function(block, data, headers) {
 		headers['X-Requested-With']=  'XMLHttpRequest';
         $.extend(headers, getRequestHeaders());
-		data.loginPCIp = returnCitySN["cip"];
 		data.md5 = md5;
 		data.chunk = block.chunk;
 		data.chunkSize = block.end - block.start;

@@ -169,7 +169,7 @@ layui.config({
     // 下载模板
     $("body").on("click", "#exportStudentModel", function(){
     	postDownLoadFile({
-			url : schoolBasePath + 'studentmation009?loginPCIp=' + returnCitySN["cip"],
+			url : schoolBasePath + 'studentmation009',
 			params: getTableParams(),
 			method : 'post'
 		});
