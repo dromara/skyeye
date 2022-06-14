@@ -13,10 +13,7 @@
 # 开源版请下载`master`分支
 # 开源版请下载`master`分支
 
-- [老版本 企业版erp+生产演示视频](https://mp.weixin.qq.com/s/CrFM_VZShi-FIJ8zD0_Nqg)
 - [项目功能结构](https://docs.qq.com/mind/DYXp0eHhvQ0d3ZmpW)
-- `本项目分为开源版和企业版，不喜勿喷，谢谢。`
-- 不会搭建环境的，可以出钱让作者帮忙搭建，一次100，先付。
 - [企业版信息](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
 - [开源版项目文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 
@@ -24,7 +21,7 @@
 
 | 作者微信/或者搜索 wzq_598748873 | QQ交流群/或者搜索 1016439713 | 更新资讯公众号 | 企业版设计思路知识星球 |
 | ------ | ---- | ---- | ---- |
-| ![      ](https://images.gitee.com/uploads/images/2019/1016/094014_96f92c56_1541735.png "微信截图_20191016093832.png") | ![     ](https://images.gitee.com/uploads/images/2019/1016/094025_65ba24f0_1541735.png "微信截图_20191016093850.png")|![输入图片说明](https://images.gitee.com/uploads/images/2021/0320/091531_8c3ba4d8_1541735.jpeg "qrcode_for_gh_e7f97ff1beda_430.jpg")| ![输入图片说明](%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) |
+| ![      ](https://gitee.com/doc_wei01/skyeye/blob/company_server/web/src/main/resources/template/tpl/common/%E5%BE%AE%E4%BF%A1.jpg) | ![     ](https://gitee.com/doc_wei01/skyeye/blob/company_server/web/src/main/resources/template/tpl/common/skyeye%E7%B3%BB%E5%88%97QQ%E7%BE%A4%E8%81%8A%E4%BA%8C%E7%BB%B4%E7%A0%81.png)|![输入图片说明](https://images.gitee.com/uploads/images/2021/0320/091531_8c3ba4d8_1541735.jpeg "qrcode_for_gh_e7f97ff1beda_430.jpg")| ![输入图片说明](https://gitee.com/doc_wei01/skyeye/blob/company_server/web/src/main/resources/template/tpl/common/%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) |
 
 #### 功能介绍
 
