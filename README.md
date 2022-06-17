@@ -19,6 +19,8 @@
 
 ### 联系作者
 
+> 凡是进入知识星球，即可获得企业版【主工程】源代码以及设计思路(不断更新)，包括但不限于：API，代码生成器，企业网盘，员工资料，邮件，考试，论坛，工作日志，知识库，轻应用，通讯录，公告，笔记，组织架构，工作计划，定时任务，小程序编辑器，日程，学校，薪资，业务流程规划，问卷设计，员工账号信息，基本操作。
+
 | 作者微信/或者搜索 wzq_598748873 | QQ交流群/或者搜索 1016439713 | 更新资讯公众号 | 企业版设计思路知识星球 |
 | ------ | ---- | ---- | ---- |
 | ![      ](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/%E5%BE%AE%E4%BF%A1.jpg) | ![     ](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/skyeye%E7%B3%BB%E5%88%97QQ%E7%BE%A4%E8%81%8A%E4%BA%8C%E7%BB%B4%E7%A0%81.png)|![输入图片说明](https://images.gitee.com/uploads/images/2021/0320/091531_8c3ba4d8_1541735.jpeg "qrcode_for_gh_e7f97ff1beda_430.jpg")| ![输入图片说明](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) |
