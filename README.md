@@ -7,6 +7,7 @@
 
 `该项目企业版有体验地址，需要的加微信(账号独立，不免费)`
 
+- [2022-06-18 云办公系统 skyeye v3.7.16 部分企业版开源](https://mp.weixin.qq.com/s/3-0FZTkcv7xmi9bwpPftcQ)
 > [软件更新资讯](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 
 # 开源版请下载`master`分支
