@@ -14,7 +14,7 @@
 # 开源版请下载`master`分支
 # 开源版请下载`master`分支
 
-- [项目功能结构](https://docs.qq.com/mind/DYXp0eHhvQ0d3ZmpW)
+- [项目功能结构](https://docs.qq.com/flowchart/DYUFQQnlCUm9Ua2FI)
 - [企业版信息](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
 - [开源版项目文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 
