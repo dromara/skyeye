@@ -12,28 +12,21 @@ layui.config({
 		    form = layui.form;
 
 		var ue = ueEditorUtil.initEditor('container');
-	    
-	    //初始化学校
-		showGrid({
-		 	id: "schoolId",
-		 	url: schoolBasePath + "schoolmation008",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option-must.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
-				form.render('select');
-		 		//加载年级
-		 		initGrade();
-		 	}
-	    });
-	    //学校监听事件
+
+		// 获取当前登陆用户所属的学校列表
+		schoolUtil.queryMyBelongSchoolList(function (json) {
+			$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+			form.render("select");
+			// 加载年级
+			initGrade();
+		});
+	    // 学校监听事件
 		form.on('select(schoolId)', function(data){
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#schoolId").html("");
 				form.render('select');
 			}else{
-				//加载年级
+				// 加载年级
 				initGrade();
 			}
 		});

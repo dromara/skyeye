@@ -21,22 +21,16 @@ layui.config({
 	// 设置提示信息
 	var s = "试题选择规则：1.多选；2.包含所有公开试题以及个人的私有试题。如没有查到要选择的试题，请检查试题信息是否满足当前规则。";
 	$("#showInfo").html(s);
-	
-	// 初始化学校
-	showGrid({
-		id: "schoolId",
-		url: schoolBasePath + "schoolmation008",
-		params: {},
-		pagination: false,
-		template: getFileContent('tpl/template/select-option-must.tpl'),
-		ajaxSendAfter: function(json){
-			form.render('select');
-			// 加载年级
- 			initGradeId();
-			initTable();
-		}
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		// 加载年级
+		initGradeId();
+		initTable();
 	});
-	
+
 	form.on('select(schoolId)', function(data){
 		// 加载年级
  		initGradeId();

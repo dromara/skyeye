@@ -8,24 +8,17 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
-	//初始化学校
-	showGrid({
-		id: "schoolId",
-		url: schoolBasePath + "schoolmation008",
-		params: {},
-		pagination: false,
-		template: getFileContent('tpl/template/select-option-must.tpl'),
-		ajaxSendAfter: function(json){
-			form.render('select');
-			//加载年级
- 			initGradeId();
-			initTable();
-		}
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		// 加载年级
+		initGradeId();
+		initTable();
 	});
 	//学校监听事件
 	form.on('select(schoolId)', function(data){
@@ -50,13 +43,12 @@ layui.config({
     }
     
 	function initTable(){
-		
 		table.render({
 	        id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
 	        url: schoolBasePath + 'studentmation003',
-	        where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val(), studentName: $("#studentName").val()},
+	        where: getTableParams(),
 	        even: true,
 		    page: true,
 		    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -93,7 +85,6 @@ layui.config({
 	    });
 	    form.render();
 	}
-	
 	
 	$("body").on("click", "#formSearch", function(){
 		refreshTable();
@@ -135,12 +126,20 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val(), studentName: $("#studentName").val()}});
+    	table.reload("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val(), studentName: $("#studentName").val()}});
+    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
+
+	function getTableParams() {
+		return {
+			gradeId: $("#gradeId").val(),
+			schoolId: $("#schoolId").val(),
+			studentName: $("#studentName").val()
+		};
+	}
     
     exports('schoolNotInClassStudentInSchooLlist', {});
 });

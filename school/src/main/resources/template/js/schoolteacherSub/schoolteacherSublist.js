@@ -7,35 +7,25 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'opTable', 'jquery', 'winui', 'form'], function (exports) {
-	
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form;
-	
 	var opTable;
-	
-	//初始化学校
-	showGrid({
-	 	id: "schoolId",
-	 	url: schoolBasePath + "schoolmation008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option-must.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){},
-	 	ajaxSendAfter:function(json){
-	 		initTable();
-	 	}
-    });
-	
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		initTable();
+	});
+
     function initTable(){
-    	
 		opTable = layui.opTable.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: schoolBasePath + 'schoolteachersubject001',
-		    where: {userName:$("#userName").val(), userSex:$("#userSex").val(), userIdCard:$("#userIdCard").val(), schoolId:$("#schoolId").val()},
+		    where: getTableParams(),
 		    even: true,
 		    page: true,
 		    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -116,7 +106,6 @@ layui.config({
 	    form.render();
     }
 	
-	
 	$("body").on("click", "#formSearch", function(){
 		refreshTable();
 	});
@@ -156,12 +145,21 @@ layui.config({
     });
     
     function loadTable(){
-    	layui.table.reload("messageTable", {where:{userName:$("#userName").val(), userSex:$("#userSex").val(), userIdCard:$("#userIdCard").val(), schoolId:$("#schoolId").val()}});
+    	layui.table.reload("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	layui.table.reload("messageTable", {page: {curr: 1}, where:{userName:$("#userName").val(), userSex:$("#userSex").val(), userIdCard:$("#userIdCard").val(), schoolId:$("#schoolId").val()}});
+    	layui.table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
+
+	function getTableParams() {
+		return {
+			userName: $("#userName").val(),
+			userSex: $("#userSex").val(),
+			userIdCard: $("#userIdCard").val(),
+			schoolId: $("#schoolId").val()
+		};
+	}
     
     exports('schoolteacherSublist', {});
 });

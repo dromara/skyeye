@@ -24,21 +24,14 @@ layui.config({
 			    	maxlength: 500,
 			    	tools: ['count', 'copy', 'reset']
 			    });
-		 		
-		 		//初始化学校
-				showGrid({
-				 	id: "schoolId",
-				 	url: schoolBasePath + "schoolmation008",
-				 	params: {},
-				 	pagination: false,
-				 	template: getFileContent('tpl/template/select-option-must.tpl'),
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#schoolId").val(json.bean.schoolId);
-				 		form.render("select");
-				 	}
-			    });
-		 		
+
+				// 获取当前登陆用户所属的学校列表
+				schoolUtil.queryMyBelongSchoolList(function (data) {
+					$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), data));
+					$("#schoolId").val(json.bean.schoolId);
+					form.render("select");
+				});
+
 			    matchingLanguage();
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {

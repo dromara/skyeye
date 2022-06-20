@@ -8,28 +8,20 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'treeGrid', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		treeGrid = layui.treeGrid;
 	
 	authBtn('1586314893391');
-	
-	//初始化学校
-	showGrid({
-		id: "schoolId",
-		url: schoolBasePath + "schoolmation008",
-		params: {},
-		pagination: false,
-		template: getFileContent('tpl/template/select-option-must.tpl'),
-		ajaxSendAfter: function(json){
-			form.render('select');
-			initTable();
-		}
-	})
-	
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		initTable();
+	});
+
 	function initTable(){
-		
 		treeGrid.render({
 	        id: 'messageTable',
 	        elem: '#messageTable',
@@ -37,7 +29,7 @@ layui.config({
 	        idField: 'id',
 	        url: schoolBasePath + 'grademation001',
 	        cellMinWidth: 100,
-	        where:{gradeName: $("#gradeName").val(), schoolId: $("#schoolId").val()},
+	        where: getTableParams(),
 	        treeId: 'id',//树形id字段名称
 	        treeUpId: 'pId',//树形父id字段名称
 	        treeShowName: 'gradeName',//以树形式显示的字段
@@ -71,9 +63,7 @@ layui.config({
 		form.render();
 	}
 	
-	
 	form.on('submit(formSearch)', function (data) {
-    	
         if (winui.verifyForm(data.elem)) {
         	loadTable();
         }
@@ -160,8 +150,15 @@ layui.config({
 	}
     
     function loadTable(){
-    	treeGrid.query("messageTable", {where:{gradeName: $("#gradeName").val(), schoolId: $("#schoolId").val()}});
+    	treeGrid.query("messageTable", {where: getTableParams()});
     }
+
+	function getTableParams() {
+		return {
+			gradeName: $("#gradeName").val(),
+			schoolId: $("#schoolId").val()
+		};
+	}
     
     exports('schoolgrademationlist', {});
 });

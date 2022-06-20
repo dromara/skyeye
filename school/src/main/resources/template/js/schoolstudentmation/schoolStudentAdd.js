@@ -41,36 +41,28 @@ layui.config({
         matchingLanguage();
 	    form.render();
 
-	    //所属学校
-	    showGrid({
-    	 	id: "schoolId",
-    	 	url: schoolBasePath + "schoolmation008",
-    	 	params: {},
-    	 	pagination: false,
-    	 	template: getFileContent('tpl/template/select-option-must.tpl'),
-    	 	ajaxSendLoadBefore: function(hdb){
-    	 	},
-    	 	ajaxSendAfter:function(json){
-    	 		form.render('select');
-    	 		//加载年级
-    	 		initGradeId();
-    	 		//加载交通方式
-	 			initTransportationId();
-	 			//加载家庭情况
-	 			initHomeSituationId();
-	 			//加载身心障碍
-	 			initBodyMindId();
-    	 	}
-        });
-        //学校监听事件
+		// 获取当前登陆用户所属的学校列表
+		schoolUtil.queryMyBelongSchoolList(function (json) {
+			$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+			form.render("select");
+			// 加载年级
+			initGradeId();
+			// 加载交通方式
+			initTransportationId();
+			// 加载家庭情况
+			initHomeSituationId();
+			// 加载身心障碍
+			initBodyMindId();
+		});
+        // 学校监听事件
 		form.on('select(schoolId)', function(data){
-			//加载年级
+			// 加载年级
 	 		initGradeId();
-	 		//加载交通方式
+	 		// 加载交通方式
 	 		initTransportationId();
-	 		//加载家庭情况
+	 		// 加载家庭情况
 	 		initHomeSituationId();
-	 		//加载身心障碍
+	 		// 加载身心障碍
 	 		initBodyMindId();
 		});
 		
@@ -178,7 +170,6 @@ layui.config({
 		}
         
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	var userPhoto = $("#userPhoto").find("input[type='hidden'][name='upload']").attr("oldurl");
 	        	var params = {

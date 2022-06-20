@@ -18,45 +18,38 @@ layui.config({
 		 	template: $("#editTemplate").html(),
 		 	ajaxSendAfter:function(json){
 		 		$("input:radio[name=typeState][value=" + json.bean.type + "]").attr("checked", true);
-		 		//初始化学校
+				// 获取当前登陆用户所属的学校列表
+				schoolUtil.queryMyBelongSchoolList(function (data) {
+					$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), data));
+					$("#schoolId").val(json.bean.schoolId);
+					form.render("select");
+				});
+				//年级
 				showGrid({
-				 	id: "schoolId",
-				 	url: schoolBasePath + "schoolmation008",
-				 	params: {},
-				 	pagination: false,
-				 	template: getFileContent('tpl/template/select-option-must.tpl'),
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#schoolId").val(json.bean.schoolId);
+					id: "gradeId",
+					url: schoolBasePath + "grademation006",
+					params: {schoolId: $("#schoolId").val()},
+					pagination: false,
+					template: getFileContent('tpl/template/select-option.tpl'),
+					ajaxSendLoadBefore: function(hdb){},
+					ajaxSendAfter:function(data){
+						$("#gradeId").val(json.bean.gradeId);
 						form.render('select');
-						//年级
-				 		showGrid({
-						 	id: "gradeId",
-						 	url: schoolBasePath + "grademation006",
-						 	params: {schoolId: $("#schoolId").val()},
-						 	pagination: false,
-						 	template: getFileContent('tpl/template/select-option.tpl'),
-						 	ajaxSendLoadBefore: function(hdb){},
-						 	ajaxSendAfter:function(data){
-						 		$("#gradeId").val(json.bean.gradeId);
-						 		form.render('select');
-						 		//科目
-						 		showGrid({
-								 	id: "subjectId",
-								 	url: schoolBasePath + "schoolsubjectmation007",
-								 	params: {gradeId: $("#gradeId").val()},
-								 	pagination: false,
-								 	template: getFileContent('tpl/template/select-option.tpl'),
-								 	ajaxSendLoadBefore: function(hdb){},
-								 	ajaxSendAfter:function(data){
-								 		$("#subjectId").val(json.bean.subjectId);
-								 		form.render('select');
-								 	}
-							    });
-						 	}
-					    });
-				 	}
-			    });
+						//科目
+						showGrid({
+							id: "subjectId",
+							url: schoolBasePath + "schoolsubjectmation007",
+							params: {gradeId: $("#gradeId").val()},
+							pagination: false,
+							template: getFileContent('tpl/template/select-option.tpl'),
+							ajaxSendLoadBefore: function(hdb){},
+							ajaxSendAfter:function(data){
+								$("#subjectId").val(json.bean.subjectId);
+								form.render('select');
+							}
+						});
+					}
+				});
 			    //学校监听事件
 				form.on('select(schoolId)', function(data){
 					if(isNull(data.value) || data.value === '请选择'){
@@ -130,12 +123,12 @@ layui.config({
 		    				winui.window.msg('请填写内容', {icon: 2,time: 2000});
 		    				return false;
 		    			}
-	 					AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints005", params: params, type: 'json', callback: function(json){
-	 						if(json.returnCode == 0){
+	 					AjaxPostUtil.request({url: schoolBasePath + "knowledgepoints005", params: params, type: 'json', callback: function(json) {
+	 						if (json.returnCode == 0) {
 	 							parent.layer.close(index);
 	 							parent.refreshCode = '0';
-	 						}else{
-	 							winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 						} else {
+	 							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 						}
 	 					}});
 	 				}

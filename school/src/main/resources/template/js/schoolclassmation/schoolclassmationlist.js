@@ -8,7 +8,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -21,28 +20,21 @@ layui.config({
 		type: 'year',
 		max: 'date'
 	});
-	
-	//初始化学校
-	showGrid({
-		id: "schoolId",
-		url: schoolBasePath + "schoolmation008",
-		params: {},
-		pagination: false,
-		template: getFileContent('tpl/template/select-option-must.tpl'),
-		ajaxSendAfter: function(json){
-			form.render('select');
-			//加载年级
- 			initGradeId();
-			initTable();
-		}
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		// 加载年级
+		initGradeId();
+		initTable();
 	});
-	
 	form.on('select(schoolId)', function(data){
-		//加载年级
+		// 加载年级
  		initGradeId();
 	});
 	
-	//所属年级
+	// 所属年级
     function initGradeId(){
 	    showGrid({
     	 	id: "gradeId",

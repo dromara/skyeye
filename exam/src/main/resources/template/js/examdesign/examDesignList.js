@@ -22,22 +22,16 @@ layui.config({
 		type: 'year',
 		max: 'date'
 	});
-	
-	//初始化学校
-	showGrid({
-		id: "schoolId",
-		url: schoolBasePath + "schoolmation008",
-		params: {},
-		pagination: false,
-		template: getFileContent('tpl/template/select-option-must.tpl'),
-		ajaxSendAfter: function(json){
-			form.render('select');
-			//加载年级
- 			initGradeId();
-			initTable();
-		}
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		// 加载年级
+		initGradeId();
+		initTable();
 	});
-	
+
 	form.on('select(schoolId)', function(data){
 		//加载年级
  		initGradeId();
@@ -85,21 +79,12 @@ layui.config({
 	}
 	
     function initTable(){
-    	var params = {
-    		surveyName: $("#surveyName").val(), 
-    		surveyState: $("#surveyState").val(), 
-    		gradeId: $("#gradeId").val(), 
-    		schoolId: $("#schoolId").val(), 
-    		year: $("#year").val(),
-    		subjectId: $("#subjectId").val()
-    	};
-		
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: schoolBasePath + 'exam001',
-		    where: params,
+		    where: getTableParams(),
 		    even:true,
 		    page: true,
 		    limits: getLimits(),
@@ -309,28 +294,23 @@ layui.config({
     });
     
     function loadTable(){
-    	var params = {
-    		surveyName: $("#surveyName").val(), 
-    		surveyState: $("#surveyState").val(), 
-    		gradeId: $("#gradeId").val(), 
-    		schoolId: $("#schoolId").val(), 
-    		year: $("#year").val(),
-    		subjectId: $("#subjectId").val()
-    	};
-    	table.reload("messageTable", {where: params});
+    	table.reload("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	var params = {
-    		surveyName: $("#surveyName").val(), 
-    		surveyState: $("#surveyState").val(), 
-    		gradeId: $("#gradeId").val(), 
-    		schoolId: $("#schoolId").val(), 
-    		year: $("#year").val(),
-    		subjectId: $("#subjectId").val()
-    	};
-    	table.reload("messageTable", {page: {curr: 1}, where: params});
+    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
+
+	function getTableParams() {
+		return {
+			surveyName: $("#surveyName").val(),
+			surveyState: $("#surveyState").val(),
+			gradeId: $("#gradeId").val(),
+			schoolId: $("#schoolId").val(),
+			year: $("#year").val(),
+			subjectId: $("#subjectId").val()
+		};
+	}
     
     exports('examDesignList', {});
 });

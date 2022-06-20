@@ -7,7 +7,6 @@ layui.config({
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'tableCheckBoxUtil'], function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -30,22 +29,15 @@ layui.config({
 	}
 	s += '如没有查到要选择的知识点，请检查知识点信息是否满足当前规则。';
 	$("#showInfo").html(s);
-	
-	//初始化学校
-	showGrid({
-		id: "schoolId",
-		url: schoolBasePath + "schoolmation008",
-		params: {},
-		pagination: false,
-		template: getFileContent('tpl/template/select-option-must.tpl'),
-		ajaxSendAfter: function(json){
-			form.render('select');
-			//加载年级
- 			initGradeId();
-			initTable();
-		}
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		// 加载年级
+		initGradeId();
+		initTable();
 	});
-	
 	form.on('select(schoolId)', function(data){
 		//加载年级
  		initGradeId();
@@ -110,8 +102,7 @@ layui.config({
 				fieldName: 'id'
 			});
 		}
-			
-		
+
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
@@ -190,10 +181,8 @@ layui.config({
    		}});
 	});
 	
-	
 	form.render();
 	form.on('submit(formSearch)', function (data) {
-        
         if (winui.verifyForm(data.elem)) {
             refreshTable();
         }

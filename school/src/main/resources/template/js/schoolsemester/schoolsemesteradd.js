@@ -9,24 +9,16 @@ layui.config({
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
-	    
-	    //初始化学校
-		showGrid({
-		 	id: "schoolId",
-		 	url: schoolBasePath + "schoolmation008",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option-must.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
-		 		form.render("select");
-		 	}
-	    });
-	    
+
+		// 获取当前登陆用户所属的学校列表
+		schoolUtil.queryMyBelongSchoolList(function (json) {
+			$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+			form.render("select");
+		});
+
 	    matchingLanguage();
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {
- 	    	
  	        if (winui.verifyForm(data.elem)) {
  	        	var params = {
  	        		name: $("#typeName").val(),

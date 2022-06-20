@@ -8,34 +8,26 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
 	
 	authBtn('1589084814532');
-	
-	//初始化学校
-	showGrid({
-		id: "schoolId",
-		url: schoolBasePath + "schoolmation008",
-		params: {},
-		pagination: false,
-		template: getFileContent('tpl/template/select-option-must.tpl'),
-		ajaxSendAfter: function(json){
-			form.render('select');
-			//加载年级
- 			initGradeId();
-			initTable();
-		}
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		// 加载年级
+		initGradeId();
+		initTable();
 	});
-	
 	form.on('select(schoolId)', function(data){
-		//加载年级
+		// 加载年级
  		initGradeId();
 	});
 	
-	//所属年级
+	// 所属年级
     function initGradeId(){
 	    showGrid({
     	 	id: "gradeId",
@@ -77,7 +69,6 @@ layui.config({
 	}
 	
     function initTable(){
-		
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
@@ -122,11 +113,9 @@ layui.config({
 	        	details(data);
 	        }
 	    });
-		
-		
+
 		form.render();
 		form.on('submit(formSearch)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	refreshTable();
 	        }
@@ -209,7 +198,7 @@ layui.config({
     	table.reload("messageTable", {page: {curr: 1}, where: getTablePatams()});
     }
     
-    function getTablePatams(){
+    function getTablePatams() {
     	return {
     		title: $("#title").val(), 
     		schoolId: $("#schoolId").val(), 

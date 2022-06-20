@@ -11,19 +11,13 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
-	// 初始化学校
-	showGrid({
-	 	id: "schoolId",
-	 	url: schoolBasePath + "schoolmation008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option-must.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){},
-	 	ajaxSendAfter:function(json){
-	 		initTable();
-	 	}
-    });
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		initTable();
+	});
 
 	// 学校教师列表
     function initTable(){

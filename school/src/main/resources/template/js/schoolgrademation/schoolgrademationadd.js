@@ -15,21 +15,13 @@ layui.config({
 		matchingLanguage();
 	    form.render();
 
-	    //加载所属学校
-	    showGrid({
-    	 	id: "OverAllSchool",
-    	 	url: schoolBasePath + "schoolmation008",
-    	 	params: {},
-    	 	pagination: false,
-    	 	template: getFileContent('tpl/template/select-option-must.tpl'),
-    	 	ajaxSendLoadBefore: function(hdb){
-    	 	},
-    	 	ajaxSendAfter:function(json){
-    	 		loadParentGrade();
-    	 		form.render('select');
-    	 	}
-        });
-	    
+		// 获取当前登陆用户所属的学校列表
+		schoolUtil.queryMyBelongSchoolList(function (json) {
+			$("#OverAllSchool").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+			form.render("select");
+			loadParentGrade();
+		});
+
 	    form.on('select(OverAllSchool)', function(data){
     		loadParentGrade();
  		});
@@ -65,7 +57,6 @@ layui.config({
         });
 		
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	var pId = '0';
 	        	var yearN = 0;

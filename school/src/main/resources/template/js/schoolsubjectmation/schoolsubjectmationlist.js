@@ -12,20 +12,14 @@ layui.config({
 		table = layui.table;
 	
 	authBtn('1586094186431');
-	
-	// 初始化学校
-	showGrid({
-	 	id: "schoolId",
-	 	url: schoolBasePath + "schoolmation008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option-must.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){},
-	 	ajaxSendAfter:function(json){
-	 		initTable();
-	 	}
-    });
-	
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		initTable();
+	});
+
     function initTable(){
 		table.render({
 		    id: 'messageTable',
@@ -127,7 +121,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			refreshTable();
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -139,10 +133,6 @@ layui.config({
     
     function loadTable(){
     	table.reload("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
     function getTableParams(){

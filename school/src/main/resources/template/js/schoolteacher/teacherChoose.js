@@ -48,20 +48,14 @@ layui.config({
 	}
 	s += '如没有查到要选择的人员，请检查人员信息是否满足当前规则。';
 	$("#showInfo").html(s);
-	
-	//初始化学校
-	showGrid({
-	 	id: "schoolId",
-	 	url: schoolBasePath + "schoolmation008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option-must.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){},
-	 	ajaxSendAfter:function(json){
-	 		initTable();
-	 	}
-    });
-	
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		initTable();
+	});
+
 	function initTable(){
 		if(checkType == '2'){
 			//初始化值
@@ -80,8 +74,7 @@ layui.config({
 				fieldName: 'staffId'
 			});
 		}
-			
-		
+
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
@@ -140,8 +133,7 @@ layui.config({
 						form.render();
 					})
 		    	}else{
-		    		//多选
-		    		//设置选中
+		    		//多选 设置选中
 		    		tableCheckBoxUtil.checkedDefault({
 						gridId: 'messageTable',
 						fieldName: 'staffId'
@@ -154,15 +146,7 @@ layui.config({
 	        var data = obj.data;
 	        var layEvent = obj.event;
 	        if (layEvent === 'userPhoto') { //头像预览
-	        	layer.open({
-	        		type:1,
-	        		title:false,
-	        		closeBtn:0,
-	        		skin: 'demo-class',
-	        		shadeClose:true,
-	        		content:'<img src="' + fileBasePath + data.userPhoto + '" style="max-height:600px;max-width:100%;">',
-	        		scrollbar:false
-	            });
+				systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.userPhoto));
 	        }
 	    });
 		

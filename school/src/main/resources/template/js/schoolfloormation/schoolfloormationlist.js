@@ -7,33 +7,26 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
 	
 	authBtn('1586146946646');
-	
-	//初始化学校
-	showGrid({
-	 	id: "schoolId",
-	 	url: schoolBasePath + "schoolmation008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option-must.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){},
-	 	ajaxSendAfter:function(json){
-	 		initTable();
-	 	}
-    });
-	
+
+	// 获取当前登陆用户所属的学校列表
+	schoolUtil.queryMyBelongSchoolList(function (json) {
+		$("#schoolId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), json));
+		form.render("select");
+		initTable();
+	});
+
     function initTable(){
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: schoolBasePath + 'schoolfloormation001',
-		    where: {name: $("#typeName").val(), schoolId: $("#schoolId").val()},
+		    where: getTableParams(),
 		    even: true,
 		    page: true,
 		    limits: getLimits(),
@@ -62,8 +55,7 @@ layui.config({
     }
 	
 	form.render();
-	
-	
+
 	$("body").on("click", "#formSearch", function(){
 		refreshTable();
 	});
@@ -125,12 +117,19 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{name:$("#typeName").val(), schoolId: $("#schoolId").val()}});
+    	table.reload("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{name:$("#typeName").val(), schoolId: $("#schoolId").val()}});
+    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
+
+	function getTableParams() {
+		return {
+			name: $("#typeName").val(),
+			schoolId: $("#schoolId").val()
+		};
+	}
     
     exports('schoolfloormationlist', {});
 });
