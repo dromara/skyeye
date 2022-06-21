@@ -10,26 +10,19 @@ layui.config({
 		laydate = layui.laydate;
 	winui.renderColor();
 
-	showGrid({
-		id: "checkTime",
-		url: flowableBasePath + "checkworktime007",
-		params: {},
-		pagination: false,
-		template: $("#workTimeTemplate").html(),
-		ajaxSendLoadBefore: function(hdb){
-		},
-		ajaxSendAfter:function(json){
-			initUserSchedule();
-			form.on('select(checkTime)', function (data) {
-				var value = data.value;
-				calendar.fullCalendar('refetchEvents');
-			});
-		}
+	// 获取当前登陆人的考勤班次
+	checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
+		$("#checkTime").html(getDataUseHandlebars($("#workTimeTemplate").html(), json));
 	});
+	form.on('select(checkTime)', function (data) {
+		calendar.fullCalendar('refetchEvents');
+	});
+
 	/**
 	 * 初始化日程
 	 */
 	var calendar;
+	initUserSchedule();
 	function initUserSchedule(){
 		layui.link(basePath + '../../lib/layui/lay/modules/jqueryui/jquery-ui.min.css');
 		var scheduleStartTime = laydate.render({
@@ -67,7 +60,6 @@ layui.config({
  		});
 		
 		form.render();
-
 		calendar = $('#scheduleCalendar').fullCalendar({
 			theme: true,
 			header: {
@@ -128,20 +120,21 @@ layui.config({
 					callBack: function(refreshCode){
 						if(refreshCode == '0') {
 							winui.window.msg('日程创建成功', { shift: 6, skin: 'msg-skin-message'});
-							joinCalendar(childParams);
+							calendar.fullCalendar('refetchEvents');
 							joinTodaySchedule(childParams);
 						}
 					}});
 			},
-			eventDrop: function(event, dayDelta, minuteDelta, allDay, revertFunc) {//拖动事件
-				if(allDay){
-					if(new Date(event.start.format("yyyy-MM-dd")) < new Date(getYMDFormatDate().replace("-", "/").replace("-", "/"))){
+			eventDrop: function(event, dayDelta, revertFunc) {//拖动事件
+				debugger
+				if(event.allDay){
+					if(new Date(event.start._d.format("yyyy-MM-dd")) < new Date(getYMDFormatDate().replace("-", "/").replace("-", "/"))){
 						winui.window.msg('即将重置的日期不能早于当前日期。', { shift: 6, skin: 'msg-skin-message'});
 						revertFunc();
 						return false;
 					}
 				}else{
-					if(event.start < new Date(getFormatDate().replace("-", "/").replace("-", "/"))){
+					if(event.start._d < new Date(getFormatDate().replace("-", "/").replace("-", "/"))){
 						winui.window.msg('即将重置的日期不能早于当前日期。', { shift: 6, skin: 'msg-skin-message'});
 						revertFunc();
 						return false;
@@ -150,12 +143,12 @@ layui.config({
 				$('div[rowid="' + event.id + '"]').parent().remove();
 				var params = {
 					scheduleTitle: event.title,
-					scheduleStartTime: event.start.format("yyyy-MM-dd hh:mm:ss"),
-					scheduleEndTime: event.end.format("yyyy-MM-dd hh:mm:ss"),
+					scheduleStartTime: event.start._d.format("yyyy-MM-dd hh:mm:ss"),
+					scheduleEndTime: event.end._d.format("yyyy-MM-dd hh:mm:ss"),
 					id: event.id,
 					rowId: event.id
 				};
-				AjaxPostUtil.request({url:reqBasePath + "syseveschedule005", params:params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url:reqBasePath + "syseveschedule005", params: params, type: 'json', callback: function(json){
 					if(json.returnCode == 0){
 						joinTodaySchedule(params);
 					}else{
@@ -218,8 +211,7 @@ layui.config({
 			callBack: function(refreshCode){
                 if(refreshCode == '0') {
                 	winui.window.msg('日程创建成功', { shift: 6, skin: 'msg-skin-message'});
-                	joinFolderList(childParams);
-                	joinCalendar(childParams);
+					calendar.fullCalendar('refetchEvents');
                 	joinTodaySchedule(childParams);
                 }
 			}});
@@ -262,36 +254,6 @@ layui.config({
 		});
 	});
 
-	//加入日程日历
-	function joinCalendar(bean){
-		var eventObj = new Object();
-		//构造每一个日历记录
-		eventObj.id = bean.id;
-		eventObj.title = bean.scheduleTitle;
-		eventObj.start = new Date(bean.scheduleStartTime);
-		eventObj.end = new Date(bean.scheduleEndTime);
-        eventObj.showBg = '1';
-		if(bean.type == '1'){//个人
-			eventObj.backgroundColor = '#63B8FF';
-		}else if(bean.type == '2'){//工作
-			eventObj.backgroundColor = '#CD69C9';
-		}else if(bean.type == '3'){//节假日
-			eventObj.backgroundColor = '#54FF9F';
-		}else if(bean.type == '4'){//生日
-			eventObj.backgroundColor = '#FF0000';
-		}else if(bean.type == '5'){//自定义
-			eventObj.backgroundColor = '#ADADAD';
-		}
-		var arr = [];
-		eventObj.className = arr;
-		if(bean.allDay == '1'){
-			eventObj.allDay = true;
-		}else{
-			eventObj.allDay = false;
-		}
-		calendar.fullCalendar('renderEvent', eventObj, true);
-	}
-	
 	//加入今日日程
 	function joinTodaySchedule(bean){
 		var day = bean.scheduleStartTime.split(' ')[0];

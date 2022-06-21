@@ -29,26 +29,18 @@ layui.config({
 	
 	var checkTimeList = [];
 
-	// 加载我的考勤班次
-	showGrid({
-     	id: "checkTime",
-     	url: flowableBasePath + "checkworktime007",
-     	params: {},
-     	pagination: false,
-     	template: $("#workTimeTemplate").html(),
-     	ajaxSendLoadBefore: function(hdb){
-     	},
-     	ajaxSendAfter:function(json){
-     		checkTimeList = json.rows;
-     		matchingLanguage();
-     		form.render('select');
-     		// 加载工作日
-     		loadWorkDays();
-     		// 加载考勤打卡日历
-     		loadCheckWorkRl();
-     	}
-    });
-    
+	// 获取当前登陆人的考勤班次
+	checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
+		$("#checkTime").html(getDataUseHandlebars($("#workTimeTemplate").html(), json));
+		checkTimeList = json.rows;
+		matchingLanguage();
+		form.render('select');
+		// 加载工作日
+		loadWorkDays();
+		// 加载考勤打卡日历
+		loadCheckWorkRl();
+	});
+
     form.on('select(checkTime)', function (data) {
  		// 重新加载今日打卡状态信息
  		initIsCheck(function(){
@@ -264,13 +256,13 @@ layui.config({
 	});
 	
 	// 下班打卡
-	$("body").on("click", "#clockOutBtn", function(){
-		if(compare_HHmmss(clockOut, getHMSFormatDate())){
-			var msg = '当前时间为<span class="state-down">' + getHMSFormatDate() +'</span>，确定现在打下班卡吗？';
-			layer.confirm(msg, { icon: 3, title: '下班打卡' }, function (index) {
+	$("body").on("click", "#clockOutBtn", function () {
+		if (compare_HHmmss(clockOut, getHMSFormatDate())) {
+			var msg = '当前时间为<span class="state-down">' + getHMSFormatDate() + '</span>，确定现在打下班卡吗？';
+			layer.confirm(msg, {icon: 3, title: '下班打卡'}, function (index) {
 				checkOutRequest();
 			});
-		}else{
+		} else {
 			checkOutRequest();
 		}
 	});
