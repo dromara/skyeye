@@ -1,7 +1,4 @@
 
-//商品信息
-var productMation = {};
-
 //bom表商品选择必备参数
 var productMationList = [];//选择的商品列表
 
@@ -33,7 +30,6 @@ layui.config({
 	    matchingLanguage();
         form.render();
         form.on('submit(formAddBean)', function (data) {
-            
             if (winui.verifyForm(data.elem)) {
             	if(ztreeNode.length == 0){
             		winui.window.msg('请选择子件清单。', {icon: 2,time: 2000});
@@ -47,7 +43,7 @@ layui.config({
             		item.wastagePrice = $("#wastage" + item.productId).val();
             		item.remark = $("#remark" + item.productId).val();
             		childObject.push(item);
-            		if(item.productId == productMation.productId){
+            		if(item.productId == erpOrderUtil.chooseProductMation.productId){
             			winui.window.msg('子件清单中不能包含父件信息。', {icon: 2,time: 2000});
             			wheatherError = true;
             			return false;
@@ -65,10 +61,10 @@ layui.config({
             	
                 var params = {
                     bomTitle: $("#bomTitle").val(),
-                    materialId: isNull(productMation.productId) ? '' : productMation.productId,//商品id
+                    materialId: isNull(erpOrderUtil.chooseProductMation.productId) ? '' : erpOrderUtil.chooseProductMation.productId,//商品id
                     normsId: $("#unitList").val(),
                     remark: $("#remark").val(),
-                    sealPrice: getSealPrice(productMation.unitList, $("#unitList").val()),
+                    sealPrice: getSealPrice(erpOrderUtil.chooseProductMation.unitList, $("#unitList").val()),
                     childStr: JSON.stringify(childObject)
                 };
                 
@@ -333,23 +329,14 @@ layui.config({
 			}
 	    });
 	    
-	    //商品选择
+	    // 商品选择
  	    $("body").on("click", "#productNameSel", function(e){
- 	    	_openNewWindows({
- 				url: "../../tpl/material/materialChoose.html", 
- 				title: "选择商品",
- 				pageId: "productlist",
- 				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	$("#productName").val(productMation.productName);
- 	                	$("#productModel").val(productMation.productModel);
- 	                	$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: productMation.unitList}));
- 	                	form.render("select");
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
- 	                }
- 				}});
+			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
+				$("#productName").val(chooseProductMation.productName);
+				$("#productModel").val(chooseProductMation.productModel);
+				$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: chooseProductMation.unitList}));
+				form.render("select");
+			});
  	    });
 		
 		/**

@@ -222,4 +222,27 @@ var erpOrderUtil = {
         }, async: false});
     },
 
+    /**
+     * ERP商品选择对象以及工具函数
+     */
+    productCheckType: 1, // 商品选择类型：1.单选；2.多选
+    chooseProductMation: {}, // 如果productCheckType=1，则为对象；如果productCheckType=2，则为集合
+    openMaterialChooseChoosePage: function (callback) {
+        _openNewWindows({
+            url: "../../tpl/material/materialChoose.html",
+            title: "选择商品",
+            pageId: "productlist",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                if (refreshCode == '0') {
+                    if (typeof (callback) == "function") {
+                        callback(erpOrderUtil.chooseProductMation);
+                    }
+                } else if (refreshCode == '-9999') {
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                }
+            }
+        });
+    },
+
 };

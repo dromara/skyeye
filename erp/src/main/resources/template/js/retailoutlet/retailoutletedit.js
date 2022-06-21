@@ -1,5 +1,3 @@
-// 商品信息
-var productMation = {};
 
 // 兼容动态表单
 var layedit, form;
@@ -368,28 +366,19 @@ layui.config({
 	// 商品选择
 	$("body").on("click", ".chooseProductBtn", function(e){
 		var trId = $(this).parent().parent().attr("trcusid");
-		_openNewWindows({
-			url: "../../tpl/material/materialChoose.html",
-			title: "选择商品",
-			pageId: "productlist",
-			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					//获取表格行号
-					var thisRowNum = trId.replace("tr", "");
-					//商品赋值
-					allChooseProduct[trId] = productMation;
-					//表格商品名称赋值
-					$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
-					//表格单位赋值
-					$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
-					form.render('select');
-					//计算价格
-					calculatedTotalPrice();
-				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-				}
-			}});
+		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
+			//获取表格行号
+			var thisRowNum = trId.replace("tr", "");
+			//商品赋值
+			allChooseProduct[trId] = chooseProductMation;
+			//表格商品名称赋值
+			$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
+			//表格单位赋值
+			$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
+			form.render('select');
+			//计算价格
+			calculatedTotalPrice();
+		});
 	});
 
 	// 会员选择

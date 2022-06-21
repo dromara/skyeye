@@ -14,11 +14,11 @@ layui.config({
 		fsTree = layui.fsTree,
 		fsCommon = layui.fsCommon,
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
-		
+
 	var checkType = '1';//商品选择类型：1.单选；2.多选
 	
-	if(!isNull(parent.productCheckType)){
-		checkType = parent.productCheckType;
+	if(!isNull(parent.erpOrderUtil.productCheckType)){
+		checkType = parent.erpOrderUtil.productCheckType;
 	}
 	
 	//设置提示信息
@@ -85,7 +85,7 @@ layui.config({
 		if(checkType == '2'){
 			//初始化值
 			var ids = [];
-			$.each(parent.productMationList, function(i, item){
+			$.each(parent.erpOrderUtil.chooseProductMation, function(i, item){
 				ids.push(item.productId);
 			});
 			tableCheckBoxUtil.setIds({
@@ -130,7 +130,7 @@ layui.config({
 						form.render();
 						var chooseIndex = JSON.stringify(dubClick.data('index'));
 						var obj = res.rows[chooseIndex];
-						parent.productMation = obj;
+						parent.erpOrderUtil.chooseProductMation = obj;
 						
 						parent.refreshCode = '0';
 						parent.layer.close(index);
@@ -142,8 +142,7 @@ layui.config({
 						form.render();
 					})
 		    	}else{
-		    		//多选
-		    		//设置选中
+		    		// 多选,设置选中
 		    		tableCheckBoxUtil.checkedDefault({
 						gridId: 'messageTable',
 						fieldName: 'productId'
@@ -182,7 +181,7 @@ layui.config({
 		});
 		AjaxPostUtil.request({url: flowableBasePath + "material013", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
    			if(json.returnCode == 0){
-   				parent.productMationList = [].concat(json.rows);
+   				parent.erpOrderUtil.chooseProductMation = [].concat(json.rows);
  	   			parent.layer.close(index);
  	        	parent.refreshCode = '0';
    			}else{

@@ -3,8 +3,6 @@ var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他�
 var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
 var checkType = "1";//人员选择类型，1.多选；其他。单选
 
-var productMation = {};//产品信息
-
 //工单接收人信息
 var serviceUser = {};
 
@@ -36,7 +34,7 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter: function(json){
-		 		productMation.productId = json.bean.productId;
+				erpOrderUtil.chooseProductMation.productId = json.bean.productId;
 		 		
 		 		textool.init({
 			    	eleId: 'content',
@@ -151,7 +149,7 @@ layui.config({
 		        			areaId: areaId,//区县，可为空
 		        			townshipId: townshipId,//乡镇，可为空
 		        			addressDetailed: $("#addressDetailed").val(),//详细地址，不可为空
-		        			productId: isNull(productMation.productId) ? '' : productMation.productId,//产品id，可为空
+		        			productId: isNull(erpOrderUtil.chooseProductMation.productId) ? '' : erpOrderUtil.chooseProductMation.productId,//产品id，可为空
 		        			productName: $("#productName").val(),//产品名称，可为空
 		        			productNorms: $("#productNorms").val(),//规格型号，可为空
 		        			productSerialNum: $("#productSerialNum").val(),//序列号，可为空
@@ -461,19 +459,10 @@ layui.config({
  	    
  	    //产品选择
  	    $("body").on("click", "#productNameSel", function(e){
- 	    	_openNewWindows({
- 				url: "../../tpl/material/materialChoose.html", 
- 				title: "选择商品",
- 				pageId: "productlist",
- 				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	$("#productName").val(productMation.productName);
- 	                	$("#productNorms").val(productMation.productModel);
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
- 	                }
- 				}});
+			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
+				$("#productName").val(chooseProductMation.productName);
+				$("#productNorms").val(chooseProductMation.productModel);
+			});
  	    });
  	    
  	    //客户选择

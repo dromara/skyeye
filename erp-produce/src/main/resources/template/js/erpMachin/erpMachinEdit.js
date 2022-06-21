@@ -1,7 +1,4 @@
 
-//商品信息
-var productMation = {};
-
 //工序选择必备参数
 var procedureCheckType = 2;//工序选择类型：1.单选procedureMation；2.多选procedureMationList
 var procedureMationList = new Array();
@@ -256,46 +253,36 @@ layui.config({
 	    
 	    //加工成品选择
  	    $("body").on("click", "#productNameSel", function(e){
- 	    	productMation = machinPro;
- 	    	_openNewWindows({
- 				url: "../../tpl/material/materialChoose.html", 
- 				title: "选择商品",
- 				pageId: "productlist",
- 				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	machinPro = productMation;
- 	                	//工序重置
- 	                	$("#procedureChoose").show();
- 	                	procedureMationList = [];
-	    				$("#procedureBody").html("");
-	    				//重置成品信息
- 	                	$("#productName").val(machinPro.productName);
- 	                	$("#productModel").val(machinPro.productModel);
- 	                	$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
- 	                	$("#number").val(1);
- 	                	//重置单据信息
- 	                	productionMation = {};
- 	                	$("#productionOrder").val("");
- 	                	
- 	                	//部门
-	    				$("#departmentId").val("");
- 	                	
- 	                	//移除之前填写的所有行
- 	                	var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']");
-						$.each(checkRow, function(i, item) {
-							//删除allChooseProduct已选择的商品信息
-							var trId = $(item).parent().parent().attr("trcusid");
-							allChooseProduct[trId] = undefined;
-							//移除界面上的信息
-							$(item).parent().parent().remove();
-						});
- 	                	
- 	                	form.render();
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
- 	                }
- 				}});
+			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
+				machinPro = chooseProductMation;
+				//工序重置
+				$("#procedureChoose").show();
+				procedureMationList = [];
+				$("#procedureBody").html("");
+				//重置成品信息
+				$("#productName").val(machinPro.productName);
+				$("#productModel").val(machinPro.productModel);
+				$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
+				$("#number").val(1);
+				//重置单据信息
+				productionMation = {};
+				$("#productionOrder").val("");
+
+				//部门
+				$("#departmentId").val("");
+
+				//移除之前填写的所有行
+				var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']");
+				$.each(checkRow, function(i, item) {
+					//删除allChooseProduct已选择的商品信息
+					var trId = $(item).parent().parent().attr("trcusid");
+					allChooseProduct[trId] = undefined;
+					//移除界面上的信息
+					$(item).parent().parent().remove();
+				});
+
+				form.render();
+			});
  	    });
  	    
  	    //新增行
@@ -346,33 +333,24 @@ layui.config({
 				winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
 			}
 		}
-		
+
 		//商品选择
- 	    $("body").on("click", ".chooseProductBtn", function(e){
- 	    	var trId = $(this).parent().parent().attr("trcusid");
- 	    	_openNewWindows({
- 				url: "../../tpl/material/materialChoose.html", 
- 				title: "选择商品",
- 				pageId: "productlist",
- 				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	//获取表格行号
- 	                	var thisRowNum = trId.replace("tr", "");
- 	                	//商品赋值
- 	                	allChooseProduct[trId] = productMation;
- 	                	//表格商品名称赋值
- 	                	$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
- 	                	//表格单位赋值
- 	                	$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
- 	                	form.render('select');
- 	                	//计算价格
-						calculatedTotalPrice();
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
- 	                }
- 				}});
- 	    });
+		$("body").on("click", ".chooseProductBtn", function (e) {
+			var trId = $(this).parent().parent().attr("trcusid");
+			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
+				// 获取表格行号
+				var thisRowNum = trId.replace("tr", "");
+				//商品赋值
+				allChooseProduct[trId] = chooseProductMation;
+				//表格商品名称赋值
+				$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
+				//表格单位赋值
+				$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
+				form.render('select');
+				//计算价格
+				calculatedTotalPrice();
+			});
+		});
  	    
  	    //计划加工单选择
  	    $("body").on("click", "#productionOrderSel", function(e){

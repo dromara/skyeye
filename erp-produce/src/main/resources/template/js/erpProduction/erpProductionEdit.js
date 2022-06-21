@@ -1,7 +1,4 @@
 
-//商品信息
-var productMation = {};
-
 //工序选择必备参数
 var procedureCheckType = 2;//工序选择类型：1.单选procedureMation；2.多选procedureMationList
 var procedureMationList = new Array();
@@ -66,7 +63,7 @@ layui.config({
  		AjaxPostUtil.request({url: flowableBasePath + "erpproduction003", params: {orderId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
    			if(json.returnCode == 0){
    				//商品信息
-   				productMation = {
+				erpOrderUtil.chooseProductMation = {
    					productId: json.bean.productId,
    					productName: json.bean.materialName,
    					productModel: json.bean.materialModel
@@ -199,7 +196,7 @@ layui.config({
 	        	}
 			    var params = {
 			    	orderId: isNull(salesOrder.orderHeaderId) ? '' : salesOrder.orderHeaderId,
-			    	materialId: productMation.productId,
+			    	materialId: erpOrderUtil.chooseProductMation.productId,
 			    	normsId: $("#unitList").val(),
 			    	number: $("#number").val(),
 			    	planStartDate: $("#planStartDate").val(),
@@ -289,26 +286,17 @@ layui.config({
 	    
 	    //商品选择
  	    $("body").on("click", "#productNameSel", function(e){
- 	    	_openNewWindows({
- 				url: "../../tpl/material/materialChoose.html", 
- 				title: "选择商品",
- 				pageId: "productlist",
- 				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	$("#productName").val(productMation.productName);
- 	                	$("#productModel").val(productMation.productModel);
- 	                	$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: productMation.unitList}));
- 	                	//重置单据信息
- 	                	salesOrder = {};
- 	                	$("#salesOrder").val("");
- 	                	//加载bom方案列表
- 	                	loadBomList(productMation.unitList[0].id);
- 	                	form.render("select");
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
- 	                }
- 				}});
+			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
+				$("#productName").val(chooseProductMation.productName);
+				$("#productModel").val(chooseProductMation.productModel);
+				$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: chooseProductMation.unitList}));
+				//重置单据信息
+				salesOrder = {};
+				$("#salesOrder").val("");
+				//加载bom方案列表
+				loadBomList(chooseProductMation.unitList[0].id);
+				form.render("select");
+			});
  	    });
  	    
  	    //销售单选择
@@ -320,13 +308,13 @@ layui.config({
  				area: ['90vw', '90vh'],
  				callBack: function(refreshCode){
  	                if (refreshCode == '0') {
- 	                	productMation = {
+						erpOrderUtil.chooseProductMation = {
  	                		productName: salesOrder.materialName,
  	                		productModel: salesOrder.materialModel,
  	                		productId: salesOrder.materialId
  	                	};
- 	                	$("#productName").val(productMation.productName);
- 	                	$("#productModel").val(productMation.productModel);
+ 	                	$("#productName").val(erpOrderUtil.chooseProductMation.productName);
+ 	                	$("#productModel").val(erpOrderUtil.chooseProductMation.productModel);
  	                	//加载数量
  	                	$("#number").val(salesOrder.operNum);
  	                	//单号
