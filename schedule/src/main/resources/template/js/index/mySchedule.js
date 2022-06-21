@@ -71,6 +71,7 @@ layui.config({
 				month: '月',
 				agendaDay: '日',
 			},
+			timezone: 'local', // 保证event的开始时间是从00:00:00点开始，结束时间是以23:59:59结束
 			slotLabelFormat: "H(:mm)a",    							//日期视图左边那一列显示的每一格日期时间格式
 			firstDay: 1, //设置一周中显示的第一天是哪天，周日是0，周一是1，类推
 			allDayText: "全天",            //自定义全天视图的名称
@@ -126,7 +127,6 @@ layui.config({
 					}});
 			},
 			eventDrop: function(event, dayDelta, revertFunc) {//拖动事件
-				debugger
 				if(event.allDay){
 					if(new Date(event.start._d.format("yyyy-MM-dd")) < new Date(getYMDFormatDate().replace("-", "/").replace("-", "/"))){
 						winui.window.msg('即将重置的日期不能早于当前日期。', { shift: 6, skin: 'msg-skin-message'});
