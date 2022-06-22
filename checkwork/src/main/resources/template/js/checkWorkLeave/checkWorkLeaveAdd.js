@@ -41,26 +41,22 @@ layui.config({
             staffYearHoliday = json.bean.annualLeave;
             holidayNumber = json.bean.holidayNumber;
             $("#messageTips").html("截至当前剩余年假：" + staffYearHoliday + "小时，剩余补休为：" + holidayNumber + "小时");
-            // 获取当前员工的考勤班次
-            AjaxPostUtil.request({url: flowableBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
-                if(json.returnCode == 0) {
-                    $.each(json.rows, function (i, item){
-                        checkWorkTime.push({
-                            id: item.timeId,
-                            name: item.title,
-                            days: item.days,
-                            startTime: item.startTime,
-                            endTime: item.endTime,
-                            restStartTime: item.restStartTime,
-                            restEndTime: item.restEndTime,
-                            type: item.type
-                        });
+            // 获取当前登陆人的考勤班次
+            checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
+                $.each(json.rows, function (i, item) {
+                    checkWorkTime.push({
+                        id: item.timeId,
+                        name: item.title,
+                        days: item.days,
+                        startTime: item.startTime,
+                        endTime: item.endTime,
+                        restStartTime: item.restStartTime,
+                        restEndTime: item.restEndTime,
+                        type: item.type
                     });
-                    initTypeHtml();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
-            }});
+                });
+                initTypeHtml();
+            });
         } else {
             winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
         }

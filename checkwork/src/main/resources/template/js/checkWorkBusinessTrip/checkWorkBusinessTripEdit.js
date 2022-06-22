@@ -20,8 +20,8 @@ layui.config({
     var beanTemplate = $("#beanTemplate").html();
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
-    AjaxPostUtil.request({url: flowableBasePath + "checkworkbusinesstrip004", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(mation) {
-        if(mation.returnCode == 0) {
+    AjaxPostUtil.request({url: flowableBasePath + "checkworkbusinesstrip004", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function (mation) {
+        if (mation.returnCode == 0) {
             $("#useTitle").html(mation.bean.title);
             $("#useName").html(mation.bean.userName);
             $("#remark").val(mation.bean.remark);
@@ -35,55 +35,51 @@ layui.config({
             }else{
                 $(".typeOne").removeClass("layui-hide");
             }
-            // 获取当前员工的考勤班次
-            AjaxPostUtil.request({url: flowableBasePath + "checkworktime007", params: {}, type: 'json', method: 'POST', callback: function(json) {
-                if(json.returnCode == 0) {
-                    $.each(json.rows, function (i, item){
-                        checkWorkTime.push({
-                            id: item.timeId,
-                            name: item.title,
-                            days: item.days,
-                            startTime: item.startTime,
-                            endTime: item.endTime,
-                            restStartTime: item.restStartTime,
-                            restEndTime: item.restEndTime,
-                            type: item.type
-                        });
+            // 获取当前登陆人的考勤班次
+            checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
+                $.each(json.rows, function (i, item) {
+                    checkWorkTime.push({
+                        id: item.timeId,
+                        name: item.title,
+                        days: item.days,
+                        startTime: item.startTime,
+                        endTime: item.endTime,
+                        restStartTime: item.restStartTime,
+                        restEndTime: item.restEndTime,
+                        type: item.type
                     });
-                    // 考勤班次变化
-                    form.on('select(timeId)', function(data) {
-                        var thisRowNum = data.elem.id.replace("timeId", "");
-                        var thisRowValue = data.value;
-                        $("#timeStartTime" + thisRowNum).html("");
-                        $("#timeEndTime" + thisRowNum).html("");
-                        $("#businessTravelHour" + thisRowNum).html("0");
-                        var timeMation = getInPoingArr(checkWorkTime, "id", thisRowValue);
-                        if(timeMation != null){
-                            businessTravelDayElem[thisRowNum].config.chooseDay = timeMation.days;
-                            $("#timeStartTime" + thisRowNum).html(timeMation.startTime);
-                            $("#timeEndTime" + thisRowNum).html(timeMation.endTime);
-                            calcBusinessTravelHour(thisRowNum);
-                        }else{
-                            businessTravelDayElem[thisRowNum].config.chooseDay = [];
-                        }
-                    });
-                    form.render();
-                    matchingLanguage();
-                    $.each(mation.bean.businessTripDay, function(i, item) {
-                        addRow();
-                        $("#timeId" + (rowNum - 1).toString()).val(item.timeId);
-                        $("#timeStartTime" + (rowNum - 1).toString()).html(item.timeStartTime);
-                        $("#timeEndTime" + (rowNum - 1).toString()).html(item.timeEndTime);
-                        $("#businessTravelDay" + (rowNum - 1).toString()).val(item.businessTravelDay);
-                        $("#businessTravelHour" + (rowNum - 1).toString()).html(item.businessTravelHour);
-                        $("#remark" + (rowNum - 1).toString()).val(item.remark);
-                        form.render('select');
-                        form.render('checkbox');
-                    });
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
-            }});
+                });
+                // 考勤班次变化
+                form.on('select(timeId)', function (data) {
+                    var thisRowNum = data.elem.id.replace("timeId", "");
+                    var thisRowValue = data.value;
+                    $("#timeStartTime" + thisRowNum).html("");
+                    $("#timeEndTime" + thisRowNum).html("");
+                    $("#businessTravelHour" + thisRowNum).html("0");
+                    var timeMation = getInPoingArr(checkWorkTime, "id", thisRowValue);
+                    if (timeMation != null) {
+                        businessTravelDayElem[thisRowNum].config.chooseDay = timeMation.days;
+                        $("#timeStartTime" + thisRowNum).html(timeMation.startTime);
+                        $("#timeEndTime" + thisRowNum).html(timeMation.endTime);
+                        calcBusinessTravelHour(thisRowNum);
+                    } else {
+                        businessTravelDayElem[thisRowNum].config.chooseDay = [];
+                    }
+                });
+                form.render();
+                matchingLanguage();
+                $.each(mation.bean.businessTripDay, function(i, item) {
+                    addRow();
+                    $("#timeId" + (rowNum - 1).toString()).val(item.timeId);
+                    $("#timeStartTime" + (rowNum - 1).toString()).html(item.timeStartTime);
+                    $("#timeEndTime" + (rowNum - 1).toString()).html(item.timeEndTime);
+                    $("#businessTravelDay" + (rowNum - 1).toString()).val(item.businessTravelDay);
+                    $("#businessTravelHour" + (rowNum - 1).toString()).html(item.businessTravelHour);
+                    $("#remark" + (rowNum - 1).toString()).val(item.remark);
+                    form.render('select');
+                    form.render('checkbox');
+                });
+            });
         } else {
             winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
         }

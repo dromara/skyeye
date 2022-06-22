@@ -13,6 +13,7 @@ layui.config({
 	// 获取当前登陆人的考勤班次
 	checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
 		$("#checkTime").html(getDataUseHandlebars($("#workTimeTemplate").html(), json));
+		form.render('select');
 	});
 	form.on('select(checkTime)', function (data) {
 		calendar.fullCalendar('refetchEvents');

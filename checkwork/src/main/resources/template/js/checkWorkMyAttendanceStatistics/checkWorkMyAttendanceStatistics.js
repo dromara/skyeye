@@ -18,21 +18,14 @@ layui.config({
 		elem: '#checkDate',
 		range: '~'
 	});
-	
-	showGrid({
-     	id: "checkTime",
-     	url: flowableBasePath + "checkworktime007",
-     	params: {},
-     	pagination: false,
-     	template: $("#workTimeTemplate").html(),
-     	ajaxSendLoadBefore: function(hdb){
-     	},
-     	ajaxSendAfter:function(json){
-     		form.render('select');
-     		loadMyCheckAttend();
-     	}
-    });
-	
+
+	// 获取当前登陆人的考勤班次
+	checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
+		$("#checkTime").html(getDataUseHandlebars($("#workTimeTemplate").html(), json));
+		form.render('select');
+		loadMyCheckAttend();
+	});
+
 	// 我的考勤统计列表
 	function loadMyCheckAttend(){
 		table.render({
