@@ -1,8 +1,6 @@
 
 var clickId = "";//选中的用户组id
 var name = ""; //用户组名
-var userList = new Array();//选择用户返回的集合或者进行回显的集合
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
 
 layui.config({
 	base: basePath, 
@@ -20,7 +18,6 @@ layui.config({
 	authBtn('1563451417564');//一键移除用户
 	authBtn('1572334408610');//同步人员到工作流
 	
-	var userInfo = "";	//用户id
 	showLeft();
 	
 	//初始化左侧菜单用户组数据
@@ -180,7 +177,7 @@ layui.config({
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: flowableBasePath + 'actgroup007',
-		    where: {groupId: clickId, userName: $("#userName").val()},
+		    where: getTableParams(),
 		    even: true,
 		    page: true,
 			limits: getLimits(),
@@ -210,32 +207,23 @@ layui.config({
 	
 	// 新增用户
 	$("body").on("click", "#addUser", function(e){
-		userReturnList = [].concat(userList);
-		_openNewWindows({
-			url: "../../tpl/common/sysusersel.html", 
-			title: "人员选择",
-			pageId: "sysuserselpage",
-			area: ['80vw', '80vh'],
-			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					userList = [].concat(userReturnList);
-					$.each(userList, function (i, item) {
-						userInfo += item.id + ',';
- 	                })
-					AjaxPostUtil.request({url: flowableBasePath + "actgroup003", params: {rowId: clickId, userId: userInfo}, type: 'json', callback: function(json){
-	    				if(json.returnCode == 0){
-	    					userList = [];
-	    					userReturnList = [];
-	    					userInfo = "";
-	    					loadTable();
-	    				}else{
-	    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    				}
-	    			}});
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+		systemCommonUtil.userReturnList = [];
+		systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+		systemCommonUtil.chooseOrNotEmail = "1"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+		systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+		systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+			var userInfo = "";
+			$.each(userReturnList, function (i, item) {
+				userInfo += item.id + ',';
+			})
+			AjaxPostUtil.request({url: flowableBasePath + "actgroup003", params: {rowId: clickId, userId: userInfo}, type: 'json', callback: function(json) {
+				if (json.returnCode == 0) {
+					loadTable();
+				} else {
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				}
 			}});
+		});
 	});
 	
 	//一键移除指定用户组下的所有用户
@@ -295,11 +283,19 @@ layui.config({
 	});
 	//搜索条件
     function loadTable(){
-    	table.reload("messageTable", {where:{groupId: clickId, userName: $("#userName").val()}});
+    	table.reload("messageTable", {where: getTableParams()});
     }
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{groupId: clickId, userName: $("#userName").val()}});
+    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
+
+	function getTableParams() {
+		return {
+			groupId: clickId,
+			userName: $("#userName").val()
+		};
+	}
+
   	//刷新用户
 	$("body").on("click", "#reloadTable", function(){
 		loadTable();

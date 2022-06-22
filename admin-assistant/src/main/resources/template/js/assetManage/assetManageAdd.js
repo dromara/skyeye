@@ -1,10 +1,6 @@
 
 var userList = new Array();//选择用户返回的集合或者进行回显的集合
 var employeeuserList = new Array();//选择用户返回的集合或者进行回显的集合
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "2";//人员选择类型，1.多选；其他。单选
 
 // 资产信息
 layui.config({
@@ -141,28 +137,14 @@ layui.config({
 	    });
 	    //资产管理人选择
 		$("body").on("click", "#userNameSelPeople", function(e){
-			userReturnList = [].concat(userList);
-			_openNewWindows({
-				url: "../../tpl/common/sysusersel.html", 
-				title: "人员选择",
-				pageId: "sysuserselpage",
-				area: ['80vw', '80vh'],
-				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						//移除所有tag
-						var tags = $('#assetAdmin').tagEditor('getTags')[0].tags;
-						for (i = 0; i < tags.length; i++) { 
-							$('#assetAdmin').tagEditor('removeTag', tags[i]);
-						}
-						userList = [].concat(userReturnList);
-					    //添加新的tag
-						$.each(userList, function(i, item){
-							$('#assetAdmin').tagEditor('addTag', item.name);
-						});
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-	                }
-				}});
+			systemCommonUtil.userReturnList = [].concat(userList);
+			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				// 重置数据
+				userList = [].concat(systemCommonUtil.tagEditorResetData('assetAdmin', userReturnList));
+			});
 		});
 		 //资产领用人
 	    $('#employeeId').tagEditor({
@@ -184,28 +166,14 @@ layui.config({
 	    });
 	    //资产领用人选择
 		$("body").on("click", "#employeePeople", function(e){
-			userReturnList = [].concat(employeeuserList);
-			_openNewWindows({
-				url: "../../tpl/common/sysusersel.html", 
-				title: "人员选择",
-				pageId: "sysuserselpage",
-				area: ['80vw', '80vh'],
-				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						//移除所有tag
-						var tags = $('#employeeId').tagEditor('getTags')[0].tags;
-						for (i = 0; i < tags.length; i++) { 
-							$('#employeeId').tagEditor('removeTag', tags[i]);
-						}
-						employeeuserList = [].concat(userReturnList);
-					    //添加新的tag
-						$.each(employeeuserList, function(i, item){
-							$('#employeeId').tagEditor('addTag', item.name);
-						});
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-	                }
-				}});
+			systemCommonUtil.userReturnList = [].concat(employeeuserList);
+			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				// 重置数据
+				employeeuserList = [].concat(systemCommonUtil.tagEditorResetData('employeeId', userReturnList));
+			});
 		});
  	    
 	    $("body").on("click", "#cancle", function(){

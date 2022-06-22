@@ -3,11 +3,6 @@ var layedit;
 
 var userList = new Array();//选择用户返回的集合或者进行回显的集合
 
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "2";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "1";//人员选择类型，1.多选；其他。单选
-
 // 发送日志
 layui.config({
 	base: basePath, 
@@ -22,10 +17,6 @@ layui.config({
 		    form = layui.form;
 	    layedit = layui.layedit;
 	    
-	    var userInfo = "";            //日报接收人id
-        var weekUserInfo = "";        //周报接收人id
-        var monthUserInfo = "";        //月报接收人id
-
 	    //日报标题
 	    var today = new Date();
 	    var submitTime = today.getFullYear() + '年' + (today.getMonth() + 1) + '月' + today.getDate() + '日日报'; 
@@ -174,6 +165,7 @@ layui.config({
                     winui.window.msg('请选择收件人', {icon: 2,time: 2000});
                     return false;
                 }else{
+					var userInfo = "";
                     $.each(userList, function (i, item) {
                         userInfo += item.id + ',';
                     });
@@ -286,6 +278,7 @@ layui.config({
                     winui.window.msg('请选择收件人', {icon: 2,time: 2000});
                     return false;
                 }else{
+					var weekUserInfo = "";
                     $.each(userList, function (i, item) {
                         weekUserInfo += item.id + ',';
                     });
@@ -402,6 +395,7 @@ layui.config({
                     winui.window.msg('请选择收件人', {icon: 2,time: 2000});
                     return false;
                 }else{
+					var monthUserInfo = "";
                     $.each(userList, function (i, item) {
                         monthUserInfo += item.id + ',';
                     });
@@ -475,28 +469,14 @@ layui.config({
         });
         //日报人员选择
         $("body").on("click", "#userNameSelPeople", function(e){
-            userReturnList = [].concat(userList);
-            _openNewWindows({
-                url: "../../tpl/common/sysusersel.html", 
-                title: "人员选择",
-                pageId: "sysuserselpage",
-                area: ['80vw', '80vh'],
-                callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        //移除所有tag
-                        var tags = $('#userName').tagEditor('getTags')[0].tags;
-                        for (i = 0; i < tags.length; i++) { 
-                            $('#userName').tagEditor('removeTag', tags[i]);
-                        }
-                        userList = [].concat(userReturnList);
-                        //添加新的tag
-                        $.each(userList, function(i, item){
-                            $('#userName').tagEditor('addTag', item.name);
-                        });
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                    }
-                }});
+			systemCommonUtil.userReturnList = [].concat(userList);
+			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				// 重置数据
+				userList = [].concat(systemCommonUtil.tagEditorResetData('userName', userReturnList));
+			});
         });
         //周报接收人
         $('#weekUserName').tagEditor({
@@ -518,28 +498,14 @@ layui.config({
         });
         //周报人员选择
         $("body").on("click", "#weekUserNameSelPeople", function(e){
-            userReturnList = [].concat(userList);
-            _openNewWindows({
-                url: "../../tpl/common/sysusersel.html", 
-                title: "人员选择",
-                pageId: "sysusersel",
-                area: ['80vw', '80vh'],
-                callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        //移除所有tag
-                        var tags = $('#weekUserName').tagEditor('getTags')[0].tags;
-                        for (i = 0; i < tags.length; i++) { 
-                            $('#weekUserName').tagEditor('removeTag', tags[i]);
-                        }
-                        userList = [].concat(userReturnList);
-                        //添加新的tag
-                        $.each(userList, function(i, item){
-                            $('#weekUserName').tagEditor('addTag', item.name);
-                        });
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                    }
-                }});
+			systemCommonUtil.userReturnList = [].concat(userList);
+			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				// 重置数据
+				userList = [].concat(systemCommonUtil.tagEditorResetData('weekUserName', userReturnList));
+			});
         });
         //月报接收人
         $('#monthUserName').tagEditor({
@@ -561,28 +527,14 @@ layui.config({
         });
         //月报人员选择
         $("body").on("click", "#monthUserNameSelPeople", function(e){
-            userReturnList = [].concat(userList);
-            _openNewWindows({
-                url: "../../tpl/common/sysusersel.html", 
-                title: "人员选择",
-                pageId: "sysusersel",
-                area: ['80vw', '80vh'],
-                callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        //移除所有tag
-                        var tags = $('#monthUserName').tagEditor('getTags')[0].tags;
-                        for (i = 0; i < tags.length; i++) { 
-                            $('#monthUserName').tagEditor('removeTag', tags[i]);
-                        }
-                        userList = [].concat(userReturnList);
-                        //添加新的tag
-                        $.each(userList, function(i, item){
-                            $('#monthUserName').tagEditor('addTag', item.name);
-                        });
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                    }
-                }});
+			systemCommonUtil.userReturnList = [].concat(userList);
+			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				// 重置数据
+				userList = [].concat(systemCommonUtil.tagEditorResetData('monthUserName', userReturnList));
+			});
         });
 
 	});

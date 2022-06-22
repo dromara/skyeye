@@ -82,13 +82,13 @@ layui.config({
             systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
             systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
             systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
-            systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
+            systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList){
                 // 移除所有tag
                 var tags = $('#personLiable').tagEditor('getTags')[0].tags;
                 for (i = 0; i < tags.length; i++) {
                     $('#personLiable').tagEditor('removeTag', tags[i]);
                 }
-                personLiable = [].concat(staffChooseList);
+                personLiable = [].concat(userReturnList);
                 // 添加新的tag
                 $.each(personLiable, function(i, item){
                     $('#personLiable').tagEditor('addTag', item.name);

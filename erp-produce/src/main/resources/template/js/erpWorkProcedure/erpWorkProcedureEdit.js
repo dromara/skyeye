@@ -1,9 +1,4 @@
 
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "1";//人员选择类型，1.多选；其他。单选
-
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -121,29 +116,14 @@ layui.config({
 
         // 工序操作员选择
         $("body").on("click", "#procedureUserIdSelPeople", function(e){
-            checkType = '1';
-            userReturnList = [].concat(procedureUser);
-            _openNewWindows({
-                url: "../../tpl/common/sysusersel.html",
-                title: "人员选择",
-                pageId: "sysuserselpage",
-                area: ['90vw', '90vh'],
-                callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        // 移除所有tag
-                        var tags = $('#procedureUserId').tagEditor('getTags')[0].tags;
-                        for (i = 0; i < tags.length; i++) {
-                            $('#procedureUserId').tagEditor('removeTag', tags[i]);
-                        }
-                        procedureUser = [].concat(userReturnList);
-                        // 添加新的tag
-                        $.each(procedureUser, function(i, item){
-                            $('#procedureUserId').tagEditor('addTag', item.name);
-                        });
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                    }
-                }});
+            systemCommonUtil.userReturnList = [].concat(procedureUser);
+            systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+            systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+            systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+            systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+                // 重置数据
+                procedureUser = [].concat(systemCommonUtil.tagEditorResetData('procedureUserId', userReturnList));
+            });
         });
 
         $("body").on("click", "#cancle", function(){

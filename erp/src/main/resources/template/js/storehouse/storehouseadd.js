@@ -79,8 +79,8 @@ layui.config({
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "1"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
 			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
-			systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList) {
-				chooseUser = [].concat(staffChooseList);
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				chooseUser = [].concat(userReturnList);
 				// 重置数据
 				systemCommonUtil.tagEditorResetData('principal', chooseUser);
 			});

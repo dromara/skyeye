@@ -67,9 +67,9 @@ layui.config({
 				$("body").on("click", "#toPeopleSelPeople, #toCcSelPeople, #toBccSelPeople", function(e){
 					userReturnList = [];
 					var clickId = $(this).attr("id");
-					systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
+					systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
 						// 添加新的tag
-						$.each(staffChooseList, function(i, item){
+						$.each(userReturnList, function(i, item){
 							if(clickId == 'toPeopleSelPeople'){
 								$('#toPeople').tagEditor('addTag', item.email);
 							}else if(clickId == 'toCcSelPeople'){

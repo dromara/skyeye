@@ -105,8 +105,8 @@ layui.config({
         systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
         systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
-        systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
-            chooseUserList[rowIndex] = staffChooseList[0];
+        systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList){
+            chooseUserList[rowIndex] = userReturnList[0];
             table.reload("messageTable", {data: chooseUserList});
         });
     });

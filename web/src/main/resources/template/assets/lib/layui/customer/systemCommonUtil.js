@@ -2,16 +2,6 @@
 var systemCommonUtil = {
 
     /**
-     * 已经选择的员工列表
-     */
-    staffChooseList: [],
-
-    /**
-     * 已经选择的图标资源列表
-     */
-    sysIconChooseClass: [],
-
-    /**
      * 获取系统账户信息
      *
      * @param callback 回执函数
@@ -215,6 +205,10 @@ var systemCommonUtil = {
      *
      * @param callback 回调函数
      */
+    chooseOrNotMy: 1, // 人员列表中是否包含自己--1.包含；其他参数不包含
+    chooseOrNotEmail: 1, // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+    checkType: 1, // 人员选择类型，1.多选；其他。单选
+    userReturnList: [], // 人员选择后的集合
     openSysUserStaffChoosePage: function (callback){
         _openNewWindows({
             url: "../../tpl/common/sysusersel.html",
@@ -224,7 +218,7 @@ var systemCommonUtil = {
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
                     if(typeof(callback) == "function") {
-                        callback(systemCommonUtil.staffChooseList);
+                        callback(systemCommonUtil.userReturnList);
                     }
                 } else if (refreshCode == '-9999') {
                     winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
@@ -261,6 +255,7 @@ var systemCommonUtil = {
      *
      * @param callback 回调函数
      */
+    sysIconChooseClass: [], // 已经选择的图标资源列表
     openSysEveIconChoosePage: function (callback){
         _openNewWindows({
             url: "../../tpl/sysEveIcon/sysEveIconListChoose.html",

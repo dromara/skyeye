@@ -12,13 +12,13 @@ var sysCustomerUtil = {
      *
      * @param callback 回调函数
      */
-    openSysCustomerChoosePage: function (callback){
+    openSysCustomerChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/customermanage/customerChoose.html",
             title: "客户选择",
             pageId: "customerChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 if (refreshCode == '0') {
                     if(typeof(callback) == "function") {
                         callback(sysCustomerUtil.customerMation);

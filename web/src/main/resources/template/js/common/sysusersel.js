@@ -29,8 +29,6 @@ layui.config({
 	//进行数据回显使用
 	if(parent.systemCommonUtil.userReturnList){
 		userOperatorReturnList = [].concat(parent.systemCommonUtil.userReturnList);
-	}else{
-		userOperatorReturnList = [].concat(parent.userReturnList);
 	}
 
 	//遍历加载已选人员列表
@@ -42,24 +40,12 @@ layui.config({
 	// 如果父页面有这个参数，则赋值
 	if(!isNull(parent.systemCommonUtil.chooseOrNotMy)){
 		chooseOrNotMy = parent.systemCommonUtil.chooseOrNotMy;
-	}else{
-		if(!isNull(parent.chooseOrNotMy)){
-			chooseOrNotMy = parent.chooseOrNotMy;
-		}
 	}
 	if(!isNull(parent.systemCommonUtil.chooseOrNotEmail)){
 		chooseOrNotEmail = parent.systemCommonUtil.chooseOrNotEmail;
-	}else {
-		if (!isNull(parent.chooseOrNotEmail)) {
-			chooseOrNotEmail = parent.chooseOrNotEmail;
-		}
 	}
 	if(!isNull(parent.systemCommonUtil.checkType)){
 		checkType = parent.systemCommonUtil.checkType;
-	}else {
-		if (!isNull(parent.checkType)) {
-			checkType = parent.checkType;
-		}
 	}
 
 	//设置提示信息
@@ -135,8 +121,7 @@ layui.config({
 
 	//确定
 	$("body").on("click", "#confimChoose", function(){
-		parent.userReturnList = [].concat(userOperatorReturnList);
-		parent.systemCommonUtil.staffChooseList = [].concat(userOperatorReturnList);
+		parent.systemCommonUtil.userReturnList = [].concat(userOperatorReturnList);
 		parent.layer.close(index);
 		parent.refreshCode = '0';
 	});

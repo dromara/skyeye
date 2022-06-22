@@ -1,9 +1,4 @@
 
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "2";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "1";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "1";//人员选择类型，1.多选；其他。单选
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -62,11 +57,14 @@ layui.config({
 	    
 	    // 人员选择
 		$("body").on("click", "#toPeopleSelPeople, #toCcSelPeople, #toBccSelPeople", function(e){
-			userReturnList = [];
 			var clickId = $(this).attr("id");
-			systemCommonUtil.openSysUserStaffChoosePage(function (staffChooseList){
+			systemCommonUtil.userReturnList = [];
+			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "1"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList){
 				// 添加新的tag
-				$.each(staffChooseList, function(i, item){
+				$.each(userReturnList, function(i, item){
 					if(clickId == 'toPeopleSelPeople'){
 						$('#toPeople').tagEditor('addTag', item.email);
 					}else if(clickId == 'toCcSelPeople'){

@@ -7,11 +7,6 @@ var marker = null;
 var longitude = "";//经度
 var latitude = "";//纬度
 
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "2";//人员选择类型，1.多选；其他。单选
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -64,24 +59,18 @@ layui.config({
  	    
 	    //人员选择
 		$("body").on("click", "#userIdSelPeople", function(e){
-			userReturnList = [].concat(userList);
-			_openNewWindows({
-				url: "../../tpl/common/sysusersel.html", 
-				title: "人员选择",
-				pageId: "sysuserselpage",
-				area: ['80vw', '80vh'],
-				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						userList = [].concat(userReturnList);
-						if(userList.length > 0){
-						    $("#userName").val(userList[0].name);
-						}else{
-							$("#userName").val("");
-						}
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-	                }
-				}});
+			systemCommonUtil.userReturnList = [].concat(userList);
+			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				userList = [].concat(userReturnList);
+				if(userList.length > 0){
+					$("#userName").val(userList[0].name);
+				}else{
+					$("#userName").val("");
+				}
+			});
 		});
  	    
  	    initMap();

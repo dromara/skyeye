@@ -3,11 +3,6 @@ var responsIdList = new Array();// 商机负责人返回的集合或者进行回
 var partIdList = new Array();// 商机参与人返回的集合或者进行回显的集合
 var followIdList = new Array();// 商机关注人返回的集合或者进行回显的集合
 
-var userReturnList = new Array();// 选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "1";// 人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "2";// 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "1";// 人员选择类型，1.多选；其他。单选
-
 // 已经选择的客户信息
 var customerMation = {};
 
@@ -26,9 +21,6 @@ layui.config({
     	textool = layui.textool;
     var selOption = getFileContent('tpl/template/select-option.tpl');
     
-    var partId = "";            //商机参与人id
-    var followId = "";        //商机关注人id
-
     showGrid({
 	 	id: "showForm",
 	 	url: flowableBasePath + "opportunity004",
@@ -106,29 +98,14 @@ layui.config({
 	           	}
            });
            $("body").on("click", "#responsIdSelPeople", function(e){
-               userReturnList = [].concat(responsIdList);
-               checkType = "2";// 人员选择类型，1.多选；其他。单选
-               _openNewWindows({
-                   url: "../../tpl/common/sysusersel.html", 
-                   title: "人员选择",
-                   pageId: "sysuserselpage",
-                   area: ['80vw', '80vh'],
-                   callBack: function(refreshCode){
-                       if (refreshCode == '0') {
-                           // 移除所有tag
-                           var tags = $('#responsId').tagEditor('getTags')[0].tags;
-                           for (i = 0; i < tags.length; i++) { 
-                               $('#responsId').tagEditor('removeTag', tags[i]);
-                           }
-                           responsIdList = [].concat(userReturnList);
-                           // 添加新的tag
-                           $.each(responsIdList, function(i, item){
-                               $('#responsId').tagEditor('addTag', item.name);
-                           });
-                       } else if (refreshCode == '-9999') {
-                           winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                       }
-                   }});
+			   systemCommonUtil.userReturnList = [].concat(responsIdList);
+			   systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			   systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			   systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+			   systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				   // 重置数据
+				   responsIdList = [].concat(systemCommonUtil.tagEditorResetData('responsId', userReturnList));
+			   });
            });
            /*商机负责人选择结束*/
            
@@ -156,29 +133,14 @@ layui.config({
 	           	}
            });
            $("body").on("click", "#partIdSelPeople", function(e){
-               userReturnList = [].concat(partIdList);
-               checkType = "1";// 人员选择类型，1.多选；其他。单选
-               _openNewWindows({
-                   url: "../../tpl/common/sysusersel.html", 
-                   title: "人员选择",
-                   pageId: "sysuserselpage",
-                   area: ['80vw', '80vh'],
-                   callBack: function(refreshCode){
-                       if (refreshCode == '0') {
-                           // 移除所有tag
-                           var tags = $('#partId').tagEditor('getTags')[0].tags;
-                           for (i = 0; i < tags.length; i++) { 
-                               $('#partId').tagEditor('removeTag', tags[i]);
-                           }
-                           partIdList = [].concat(userReturnList);
-                           // 添加新的tag
-                           $.each(partIdList, function(i, item){
-                               $('#partId').tagEditor('addTag', item.name);
-                           });
-                       } else if (refreshCode == '-9999') {
-                           winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                       }
-                   }});
+			   systemCommonUtil.userReturnList = [].concat(partIdList);
+			   systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			   systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			   systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			   systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				   // 重置数据
+				   partIdList = [].concat(systemCommonUtil.tagEditorResetData('partId', userReturnList));
+			   });
            });
            /*商机参与人选择结束*/
            
@@ -206,29 +168,14 @@ layui.config({
                	}
            });
            $("body").on("click", "#followIdSelPeople", function(e){
-               userReturnList = [].concat(followIdList);
-               checkType = "1";// 人员选择类型，1.多选；其他。单选
-               _openNewWindows({
-                   url: "../../tpl/common/sysusersel.html", 
-                   title: "人员选择",
-                   pageId: "sysuserselpage",
-                   area: ['80vw', '80vh'],
-                   callBack: function(refreshCode){
-                       if (refreshCode == '0') {
-                           // 移除所有tag
-                           var tags = $('#followId').tagEditor('getTags')[0].tags;
-                           for (i = 0; i < tags.length; i++) { 
-                               $('#followId').tagEditor('removeTag', tags[i]);
-                           }
-                           followIdList = [].concat(userReturnList);
-                           // 添加新的tag
-                           $.each(followIdList, function(i, item){
-                               $('#followId').tagEditor('addTag', item.name);
-                           });
-                       } else if (refreshCode == '-9999') {
-                           winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                       }
-                   }});
+			   systemCommonUtil.userReturnList = [].concat(followIdList);
+			   systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			   systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			   systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			   systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				   // 重置数据
+				   followIdList = [].concat(systemCommonUtil.tagEditorResetData('followId', userReturnList));
+			   });
            });
            /*商机关注人选择结束*/
            form.render();
@@ -301,6 +248,7 @@ layui.config({
 		if(partIdList.length == 0 || isNull($('#partId').tagEditor('getTags')[0].tags)){
 			params.partId = "";
 		}else{
+			var partId = "";
 			$.each(partIdList, function (i, item) {
 				partId += item.id + ',';
 			});
@@ -310,13 +258,14 @@ layui.config({
 		if(followIdList.length == 0 || isNull($('#followId').tagEditor('getTags')[0].tags)){
 			params.followId = "";
 		}else{
+			var followId = "";
 			$.each(followIdList, function (i, item) {
 				followId += item.id + ',';
 			});
 			params.followId = followId;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "opportunity012", params: params, type: 'json', callback: function(json){
-			if (json.returnCode == 0){
+		AjaxPostUtil.request({url: flowableBasePath + "opportunity012", params: params, type: 'json', callback: function(json) {
+			if (json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			} else {
@@ -326,7 +275,7 @@ layui.config({
 	}
 	
 	// 客户选择
-    $("body").on("click", "#customMationSel", function(e){
+    $("body").on("click", "#customMationSel", function(e) {
     	_openNewWindows({
 			url: "../../tpl/customermanage/customerChoose.html", 
 			title: "选择客户",

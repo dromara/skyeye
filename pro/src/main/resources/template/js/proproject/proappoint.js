@@ -1,9 +1,4 @@
 
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "1";//人员选择类型，1.多选；其他。单选
-
 // 项目任命
 layui.config({
 	base: basePath, 
@@ -21,9 +16,6 @@ layui.config({
 	    var toProjectManager = new Array();//项目经理
 	    var toProjectSponsor = new Array();//项目赞助人
 	    var toProjectMembers = new Array();//项目组成员
-	    
-	    var projectEnclosureInfoList = new Array();//项目组织和分工的附件
-	    var planEnclosureInfoList = new Array();//实施计划和方案的附件
 	    
 	    showGrid({
 		 	id: "showForm",
@@ -196,80 +188,38 @@ layui.config({
 		
 		//项目经理选择
 		$("body").on("click", "#toProjectManager", function(e){
-			userReturnList = [].concat(toProjectManager);
-			_openNewWindows({
-				url: "../../tpl/common/sysusersel.html", 
-				title: "人员选择",
-				pageId: "sysuserselpage",
-				area: ['80vw', '80vh'],
-				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						//移除所有tag
-						var tags = $('#projectManager').tagEditor('getTags')[0].tags;
-						for (i = 0; i < tags.length; i++) { 
-							$('#projectManager').tagEditor('removeTag', tags[i]);
-						}
-						toProjectManager = [].concat(userReturnList);
-					    //添加新的tag
-						$.each(toProjectManager, function(i, item){
-							$('#projectManager').tagEditor('addTag', item.name);
-						});
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-	                }
-				}});
+			systemCommonUtil.userReturnList = [].concat(toProjectManager);
+			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				// 重置数据
+				toProjectManager = [].concat(systemCommonUtil.tagEditorResetData('projectManager', userReturnList));
+			});
 		});
 		
 		//项目赞助人选择
 		$("body").on("click", "#toProjectSponsor", function(e){
-			userReturnList = [].concat(toProjectSponsor);
-			_openNewWindows({
-				url: "../../tpl/common/sysusersel.html", 
-				title: "人员选择",
-				pageId: "sysuserselpage",
-				area: ['80vw', '80vh'],
-				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						//移除所有tag
-						var tags = $('#projectSponsor').tagEditor('getTags')[0].tags;
-						for (i = 0; i < tags.length; i++) { 
-							$('#projectSponsor').tagEditor('removeTag', tags[i]);
-						}
-						toProjectSponsor = [].concat(userReturnList);
-					    //添加新的tag
-						$.each(toProjectSponsor, function(i, item){
-							$('#projectSponsor').tagEditor('addTag', item.name);
-						});
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-	                }
-				}});
+			systemCommonUtil.userReturnList = [].concat(toProjectSponsor);
+			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				// 重置数据
+				toProjectSponsor = [].concat(systemCommonUtil.tagEditorResetData('projectSponsor', userReturnList));
+			});
 		});
 		
 		//项目组成员选择
 		$("body").on("click", "#toProjectMembers", function(e){
-			userReturnList = [].concat(toProjectMembers);
-			_openNewWindows({
-				url: "../../tpl/common/sysusersel.html", 
-				title: "人员选择",
-				pageId: "sysuserselpage",
-				area: ['80vw', '80vh'],
-				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						//移除所有tag
-						var tags = $('#projectMembers').tagEditor('getTags')[0].tags;
-						for (i = 0; i < tags.length; i++) { 
-							$('#projectMembers').tagEditor('removeTag', tags[i]);
-						}
-						toProjectMembers = [].concat(userReturnList);
-					    //添加新的tag
-						$.each(toProjectMembers, function(i, item){
-							$('#projectMembers').tagEditor('addTag', item.name);
-						});
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-	                }
-				}});
+			systemCommonUtil.userReturnList = [].concat(toProjectMembers);
+			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+			systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+			systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+				// 重置数据
+				toProjectMembers = [].concat(systemCommonUtil.tagEditorResetData('projectMembers', userReturnList));
+			});
 		});
 		
 	    $("body").on("click", "#cancle", function(){

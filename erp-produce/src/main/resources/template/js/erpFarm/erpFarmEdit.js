@@ -3,11 +3,6 @@
 var procedureCheckType = 2;//工序选择类型：1.单选procedureMation；2.多选procedureMationList
 var procedureMationList = new Array();
 
-var userReturnList = new Array();//选择用户返回的集合或者进行回显的集合
-var chooseOrNotMy = "1";//人员列表中是否包含自己--1.包含；其他参数不包含
-var chooseOrNotEmail = "2";//人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
-var checkType = "2";//人员选择类型，1.多选；其他。单选
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -111,27 +106,21 @@ layui.config({
 	    });
 
 	    // 车间负责人选择
-        $("body").on("click", "#chargeUserIdSelPeople", function(e){
-            userReturnList = [].concat(chargeUser);
-            _openNewWindows({
-                url: "../../tpl/common/sysusersel.html",
-                title: "人员选择",
-                pageId: "sysuserselpage",
-                area: ['90vw', '90vh'],
-                callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        chargeUser = [].concat(userReturnList);
-                        if(chargeUser.length > 0){
-                        	$("#chargeUserId").val(chargeUser[0].name);
-						}
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
-                    }
-                }});
+        $("body").on("click", "#chargeUserIdSelPeople", function(e) {
+            systemCommonUtil.userReturnList = [].concat(chargeUser);
+            systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+            systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+            systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+            systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+                chargeUser = [].concat(userReturnList);
+                if(chargeUser.length > 0){
+                    $("#chargeUserId").val(chargeUser[0].name);
+                }
+            });
         });
 	    
 	    // 取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});
