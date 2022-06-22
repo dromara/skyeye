@@ -209,21 +209,22 @@ var systemCommonUtil = {
     chooseOrNotEmail: 1, // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
     checkType: 1, // 人员选择类型，1.多选；其他。单选
     userReturnList: [], // 人员选择后的集合
-    openSysUserStaffChoosePage: function (callback){
+    openSysUserStaffChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/common/sysusersel.html",
             title: "员工选择",
             pageId: "sysuserselpage",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function (refreshCode) {
                 if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
+                    if (typeof (callback) == "function") {
                         callback(systemCommonUtil.userReturnList);
                     }
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
-            }});
+            }
+        });
     },
 
     /**
@@ -239,15 +240,16 @@ var systemCommonUtil = {
             title: "员工选择",
             pageId: "sysuserselpage",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function (refreshCode) {
                 if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
+                    if (typeof (callback) == "function") {
                         callback(systemCommonUtil.checkStaffMation);
                     }
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
-            }});
+            }
+        });
     },
 
     /**
@@ -256,7 +258,7 @@ var systemCommonUtil = {
      * @param callback 回调函数
      */
     sysIconChooseClass: [], // 已经选择的图标资源列表
-    openSysEveIconChoosePage: function (callback){
+    openSysEveIconChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/sysEveIcon/sysEveIconListChoose.html",
             title: "图标选择",
@@ -268,7 +270,7 @@ var systemCommonUtil = {
                         callback(systemCommonUtil.sysIconChooseClass);
                     }
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }});
     },
@@ -294,7 +296,7 @@ var systemCommonUtil = {
         // 移除所有tag
         systemCommonUtil.tagEditorRemoveAll(id);
         // 添加新的tag
-        $.each(data, function(i, item){
+        $.each(data, function(i, item) {
             $('#' + id).tagEditor('addTag', item.name);
         });
         return data;
@@ -350,9 +352,9 @@ var systemCommonUtil = {
         "probationPeriod": {"id": 4, "name": "试用期(用于未转正的员工)"},
         "retire": {"id": 5, "name": "退休"}
     },
-    getSysUserStaffStateList: function (){
+    getSysUserStaffStateList: function () {
         var list = [];
-        $.each(systemCommonUtil.sysUserStaffState, function (key, value){
+        $.each(systemCommonUtil.sysUserStaffState, function (key, value) {
             list.push(value);
         });
         return list;
@@ -366,7 +368,7 @@ var systemCommonUtil = {
      */
     queryExplainMationByType: function (type, callback) {
         AjaxPostUtil.request({url: reqBasePath + "queryExExplainMationToShow", params: {type: type}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
+            if (json.returnCode == 0) {
                 if(typeof(callback) == "function") {
                     callback(json);
                 }
@@ -419,12 +421,12 @@ var systemCommonUtil = {
         '            </div>' +
         '        </div>',
     // 新增时初始化html,并添加监听事件
-    initIconChooseHtml: function (showBoxId, form, colorpicker, uploadType){
+    initIconChooseHtml: function (showBoxId, form, colorpicker, uploadType) {
         $("#" + showBoxId).html(systemCommonUtil.iconChooseHtml);
         systemCommonUtil.initIconEvent(form, colorpicker, uploadType, "", "#1c97f5" , "#1c97f5");
     },
     // 编辑时初始化html,并添加监听事件
-    initEditIconChooseHtml: function (showBoxId, form, colorpicker, uploadType, params){
+    initEditIconChooseHtml: function (showBoxId, form, colorpicker, uploadType, params) {
         $("#" + showBoxId).html(systemCommonUtil.iconChooseHtml);
         $("input:radio[name=iconType][value=" + params.iconType + "]").attr("checked", true);
         $("#icon").val(params.icon);
@@ -435,16 +437,16 @@ var systemCommonUtil = {
             $(".iconTypeIsTwo").removeClass("layui-hide");
             $(".iconTypeIsOne").addClass("layui-hide");
         }
-        if(isNull(params.iconColor)){
+        if (isNull(params.iconColor)) {
             $("#iconShow").css({'color': 'white'});
-        }else{
+        } else {
             $('#iconColorinput').val(params.iconColor);
             $("#iconShow").css({'color': params.iconColor});
         }
 
-        if(isNull(params.iconBg)){
+        if (isNull(params.iconBg)) {
             $("#iconShow").css({'color': 'white'});
-        }else{
+        } else {
             $('#iconBginput').val(params.iconBg);
             $("#iconShow").parent().css({'background-color': params.iconBg});
         }
@@ -477,11 +479,11 @@ var systemCommonUtil = {
         colorpicker.render({
             elem: '#iconBg',
             color: iconBg,
-            done: function(color){
+            done: function(color) {
                 $('#iconBginput').val(color);
                 $("#iconShow").parent().css({'background-color': color});
             },
-            change: function(color){
+            change: function(color) {
                 $("#iconShow").parent().css({'background-color': color});
             }
         });
@@ -489,18 +491,18 @@ var systemCommonUtil = {
         colorpicker.render({
             elem: '#iconColor',
             color: iconColor,
-            done: function(color){
+            done: function(color) {
                 $('#iconColorinput').val(color);
                 $("#iconShow").css({'color': color});
             },
-            change: function(color){
+            change: function(color) {
                 $("#iconShow").css({'color': color});
             }
         });
 
         // 菜单图标选中事件
-        $("body").on("focus", "#icon", function(e){
-            systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
+        $("body").on("focus", "#icon", function(e) {
+            systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass) {
                 $("#icon").val(sysIconChooseClass);
                 $("#iconShow").css({'color': 'white'});
                 $("#iconShow").attr("class", "fa fa-fw " + $("#icon").val());
@@ -512,19 +514,19 @@ var systemCommonUtil = {
         params["iconChooseResult"] = true;
         var iconType = $("input[name='iconType']:checked").val();
         params["iconType"] = iconType;
-        if(iconType == '1'){
-            if(isNull($("#icon").val())){
-                winui.window.msg("请选择菜单图标", {icon: 2,time: 2000});
+        if (iconType == '1') {
+            if (isNull($("#icon").val())) {
+                winui.window.msg("请选择菜单图标", {icon: 2, time: 2000});
                 params["iconChooseResult"] = false;
             }
             params["iconPic"] = '';
             params["icon"] = $("#icon").val();
             params["iconBg"] = $('#iconBginput').val();
             params["iconColor"] = $('#iconColorinput').val();
-        }else if(iconType == '2'){
+        } else if (iconType == '2') {
             params["iconPic"] = $("#iconPic").find("input[type='hidden'][name='upload']").attr("oldurl");
-            if(isNull(params["iconPic"])){
-                winui.window.msg('请上传菜单logo', {icon: 2,time: 2000});
+            if (isNull(params["iconPic"])) {
+                winui.window.msg('请上传菜单logo', {icon: 2, time: 2000});
                 params["iconChooseResult"] = false;
             }
             params["icon"] = '';

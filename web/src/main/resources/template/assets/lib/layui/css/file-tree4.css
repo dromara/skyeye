@@ -1,6 +1,6 @@
 
 .ztree{
-	padding: 0px;
+	padding: 0px 10px;
     margin-top: 10px;
     height: calc(100% - 10px);
     overflow-y: auto;
