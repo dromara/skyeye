@@ -112,16 +112,7 @@ layui.config({
 				placeholder: '请选择执行人',
 				editorTag: false,
 				beforeTagDelete: function(field, editor, tags, val) {
-					var inArray = -1;
-					$.each(performIdList, function(i, item) {
-						if(val === item.name) {
-							inArray = i;
-							return false;
-						}
-					});
-					if(inArray != -1) { //如果该元素在集合中存在
-						performIdList.splice(inArray, 1);
-					}
+					performIdList = [].concat(arrayUtil.removeArrayPointName(performIdList, val));
 				}
 			});
 			$("body").on("click", "#performIdSelPeople", function(e) {

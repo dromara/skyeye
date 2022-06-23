@@ -12,8 +12,9 @@ var arrayUtil = {
     removeArrayPointName: function (list, name) {
         var inArray = -1;
         $.each(list, function(i, item) {
-            if(name == item.name) {
+            if(name === item.name) {
                 inArray = i;
+                return false;
             }
         });
         if(inArray != -1) {

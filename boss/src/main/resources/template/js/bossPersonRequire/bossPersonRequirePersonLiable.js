@@ -36,16 +36,7 @@ layui.config({
                     placeholder: '请选择责任人',
                     editorTag: false,
                     beforeTagDelete: function(field, editor, tags, val) {
-                        var inArray = -1;
-                        $.each(personLiable, function(i, item) {
-                            if(val === item.name) {
-                                inArray = i;
-                                return false;
-                            }
-                        });
-                        if(inArray != -1) {
-                            personLiable.splice(inArray, 1);
-                        }
+                        personLiable = [].concat(arrayUtil.removeArrayPointName(personLiable, val));
                     }
                 });
 

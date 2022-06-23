@@ -82,16 +82,7 @@ layui.config({
 	        initialTags: [],
 	        placeholder: '请选择工单协助人',
 	        beforeTagDelete: function(field, editor, tags, val) {
-	        	var inArray = -1;
-		    	$.each(cooperationUser, function(i, item) {
-		    		if(val === item.name) {
-		    			inArray = i;
-		    			return false;
-		    		}
-		    	});
-		    	if(inArray != -1) { //如果该元素在集合中存在
-		    		cooperationUser.splice(inArray, 1);
-		    	}
+				cooperationUser = [].concat(arrayUtil.removeArrayPointName(cooperationUser, val));
 	        }
 	    });
 		//工单协助人选择

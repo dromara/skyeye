@@ -35,16 +35,7 @@ layui.config({
                 placeholder: '请选择面试官',
                 editorTag: false,
                 beforeTagDelete: function(field, editor, tags, val) {
-                    var inArray = -1;
-                    $.each(interviewer, function(i, item) {
-                        if(val === item.name) {
-                            inArray = i;
-                            return false;
-                        }
-                    });
-                    if(inArray != -1) {
-                        interviewer.splice(inArray, 1);
-                    }
+                    interviewer = [].concat(arrayUtil.removeArrayPointName(interviewer, val));
                 }
             });
 

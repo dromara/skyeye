@@ -140,16 +140,7 @@ layui.config({
 					initialTags: userNames.split(','),
 					placeholder: '请选择销售人员',
 					beforeTagDelete: function(field, editor, tags, val) {
-						var inArray = -1;
-						$.each(salesManList, function(i, item) {
-							if(val === item.name) {
-								inArray = i;
-								return false;
-							}
-						});
-						if(inArray != -1) { //如果该元素在集合中存在
-							salesManList.splice(inArray, 1);
-						}
+						salesManList = [].concat(arrayUtil.removeArrayPointName(salesManList, val));
 					}
 				});
 

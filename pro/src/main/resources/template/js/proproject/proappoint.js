@@ -81,16 +81,7 @@ layui.config({
 			        placeholder: '请选择项目经理',
 					editorTag: false,
 			        beforeTagDelete: function(field, editor, tags, val) {
-			        	var inArray = -1;
-				    	$.each(toProjectManager, function(i, item) {
-				    		if(val === item.name) {
-				    			inArray = i;
-				    			return false;
-				    		}
-				    	});
-				    	if(inArray != -1) { //如果该元素在集合中存在
-				    		toProjectManager.splice(inArray, 1);
-				    	}
+						toProjectManager = [].concat(arrayUtil.removeArrayPointName(toProjectManager, val));
 			        }
 			    });
 			    
@@ -99,16 +90,7 @@ layui.config({
 			        placeholder: '请选择项目赞助人',
 					editorTag: false,
 			        beforeTagDelete: function(field, editor, tags, val) {
-			        	var inArray = -1;
-				    	$.each(toProjectSponsor, function(i, item) {
-				    		if(val === item.name) {
-				    			inArray = i;
-				    			return false;
-				    		}
-				    	});
-				    	if(inArray != -1) { //如果该元素在集合中存在
-				    		toProjectSponsor.splice(inArray, 1);
-				    	}
+						toProjectSponsor = [].concat(arrayUtil.removeArrayPointName(toProjectSponsor, val));
 			        }
 			    });
 			    
@@ -117,16 +99,7 @@ layui.config({
 			        placeholder: '请选择项目组成员',
 					editorTag: false,
 			        beforeTagDelete: function(field, editor, tags, val) {
-			        	var inArray = -1;
-				    	$.each(toProjectMembers, function(i, item) {
-				    		if(val === item.name) {
-				    			inArray = i;
-				    			return false;
-				    		}
-				    	});
-				    	if(inArray != -1) { //如果该元素在集合中存在
-				    		toProjectMembers.splice(inArray, 1);
-				    	}
+						toProjectMembers = [].concat(arrayUtil.removeArrayPointName(toProjectMembers, val));
 			        }
 			    });
 			    

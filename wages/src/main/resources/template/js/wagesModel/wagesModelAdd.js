@@ -118,15 +118,7 @@ layui.config({
 		placeholder: '请选择企业',
 		editorTag: false,
 		beforeTagDelete: function(field, editor, tags, val) {
-			var inArray = -1;
-			$.each(companyList, function(i, item) {
-				if(val == item.name) {
-					inArray = i;
-				}
-			});
-			if(inArray != -1) { //如果该元素在集合中存在
-				companyList.splice(inArray, 1);
-			}
+			companyList = [].concat(arrayUtil.removeArrayPointName(companyList, val));
 		}
 	});
 	$("body").on("click", "#companySel", function(){
@@ -158,15 +150,7 @@ layui.config({
 		placeholder: '请选择部门',
 		editorTag: false,
 		beforeTagDelete: function(field, editor, tags, val) {
-			var inArray = -1;
-			$.each(departmentList, function(i, item) {
-				if(val == item.name) {
-					inArray = i;
-				}
-			});
-			if(inArray != -1) {
-				departmentList.splice(inArray, 1);
-			}
+			departmentList = [].concat(arrayUtil.removeArrayPointName(departmentList, val));
 		}
 	});
 	$("body").on("click", "#departmentSel", function(){
@@ -198,15 +182,7 @@ layui.config({
 		placeholder: '请选择员工',
 		editorTag: false,
 		beforeTagDelete: function(field, editor, tags, val) {
-			var inArray = -1;
-			$.each(checkStaffList, function(i, item) {
-				if(val == item.name) {
-					inArray = i;
-				}
-			});
-			if(inArray != -1) { //如果该元素在集合中存在
-				checkStaffList.splice(inArray, 1);
-			}
+			checkStaffList = [].concat(arrayUtil.removeArrayPointName(checkStaffList, val));
 		}
 	});
 	$("body").on("click", "#userStaffSel", function(){

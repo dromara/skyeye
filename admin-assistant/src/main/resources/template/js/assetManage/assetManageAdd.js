@@ -123,16 +123,7 @@ layui.config({
 	        placeholder: '请选择资产管理人',
 			editorTag: false,
 	        beforeTagDelete: function(field, editor, tags, val) {
-	        	var inArray = -1;
-		    	$.each(userList, function(i, item) {
-		    		if(val === item.name) {
-		    			inArray = i;
-		    			return false;
-		    		}
-		    	});
-		    	if(inArray != -1) { //如果该元素在集合中存在
-		    		userList.splice(inArray, 1);
-		    	}
+				userList = [].concat(arrayUtil.removeArrayPointName(userList, val));
 	        }
 	    });
 	    //资产管理人选择
@@ -152,16 +143,7 @@ layui.config({
 	        placeholder: '请选择资产领用人',
 			editorTag: false,
 	        beforeTagDelete: function(field, editor, tags, val) {
-	        	var inArray = -1;
-		    	$.each(employeeuserList, function(i, item) {
-		    		if(val === item.name) {
-		    			inArray = i;
-		    			return false;
-		    		}
-		    	});
-		    	if(inArray != -1) { //如果该元素在集合中存在
-		    		employeeuserList.splice(inArray, 1);
-		    	}
+				employeeuserList = [].concat(arrayUtil.removeArrayPointName(employeeuserList, val));
 	        }
 	    });
 	    //资产领用人选择

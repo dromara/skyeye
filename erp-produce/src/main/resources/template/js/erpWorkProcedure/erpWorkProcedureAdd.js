@@ -84,16 +84,7 @@ layui.config({
             placeholder: '请选择工序操作员',
             editorTag: false,
             beforeTagDelete: function(field, editor, tags, val) {
-                var inArray = -1;
-                $.each(procedureUser, function(i, item) {
-                    if(val === item.name) {
-                        inArray = i;
-                        return false;
-                    }
-                });
-                if(inArray != -1) { //如果该元素在集合中存在
-                    procedureUser.splice(inArray, 1);
-                }
+                procedureUser = [].concat(arrayUtil.removeArrayPointName(procedureUser, val));
             }
         });
         // 工序操作员选择

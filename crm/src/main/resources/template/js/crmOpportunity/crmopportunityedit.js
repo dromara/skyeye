@@ -85,16 +85,7 @@ layui.config({
            		placeholder: '请选择商机负责人',
            		editorTag: false,
            		beforeTagDelete: function(field, editor, tags, val) {
-	           		var inArray = -1;
-	           		$.each(responsIdList, function(i, item) {
-	           			if(val === item.name) {
-	           				inArray = i;
-	           				return false;
-	           			}
-	           		});
-	           		if(inArray != -1) { //如果该元素在集合中存在
-	           			responsIdList.splice(inArray, 1);
-	           		}
+					responsIdList = [].concat(arrayUtil.removeArrayPointName(responsIdList, val));
 	           	}
            });
            $("body").on("click", "#responsIdSelPeople", function(e){
@@ -120,16 +111,7 @@ layui.config({
 	           	placeholder: '请选择商机参与人',
 	           	editorTag: false,
 	           	beforeTagDelete: function(field, editor, tags, val) {
-	           		var inArray = -1;
-	           		$.each(partIdList, function(i, item) {
-	           			if(val === item.name) {
-	           				inArray = i;
-	           				return false;
-	           			}
-	           		});
-	           		if(inArray != -1) { // 如果该元素在集合中存在
-	           			partIdList.splice(inArray, 1);
-	           		}
+					partIdList = [].concat(arrayUtil.removeArrayPointName(partIdList, val));
 	           	}
            });
            $("body").on("click", "#partIdSelPeople", function(e){
@@ -155,16 +137,7 @@ layui.config({
                	placeholder: '请选择商机关注人',
                	editorTag: false,
                	beforeTagDelete: function(field, editor, tags, val) {
-               		var inArray = -1;
-               		$.each(followIdList, function(i, item) {
-               			if(val === item.name) {
-               				inArray = i;
-               				return false;
-               			}
-               		});
-               		if(inArray != -1) { // 如果该元素在集合中存在
-               			followIdList.splice(inArray, 1);
-               		}
+					followIdList = [].concat(arrayUtil.removeArrayPointName(followIdList, val));
                	}
            });
            $("body").on("click", "#followIdSelPeople", function(e){

@@ -117,16 +117,7 @@ layui.config({
         placeholder: '请选择经手人员',
         editorTag: false,
         beforeTagDelete: function(field, editor, tags, val) {
-            var inArray = -1;
-            $.each(handsPersonList, function(i, item) {
-                if(val === item.name) {
-                    inArray = i;
-                    return false;
-                }
-            });
-            if(inArray != -1) { //如果该元素在集合中存在
-                handsPersonList.splice(inArray, 1);
-            }
+            handsPersonList = [].concat(arrayUtil.removeArrayPointName(handsPersonList, val));
         }
     });
 

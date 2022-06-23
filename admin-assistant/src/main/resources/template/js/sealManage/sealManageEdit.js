@@ -49,16 +49,7 @@ layui.config({
 			        placeholder: '请选择管理人',
 			        editorTag: false,
 			        beforeTagDelete: function(field, editor, tags, val) {
-			        	var inArray = -1;
-				    	$.each(userList, function(i, item) {
-				    		if(val === item.name) {
-				    			inArray = i;
-				    			return false;
-				    		}
-				    	});
-				    	if(inArray != -1) { //如果该元素在集合中存在
-				    		userList.splice(inArray, 1);
-				    	}
+						userList = [].concat(arrayUtil.removeArrayPointName(userList, val));
 			        }
 			    });
 				
@@ -73,16 +64,7 @@ layui.config({
 			        placeholder: '请选择借用人',
 			        editorTag: false,
 			        beforeTagDelete: function(field, editor, tags, val) {
-			        	var inArray = -1;
-				    	$.each(borrowuserList, function(i, item) {
-				    		if(val === item.name) {
-				    			inArray = i;
-				    			return false;
-				    		}
-				    	});
-				    	if(inArray != -1) { //如果该元素在集合中存在
-				    		borrowuserList.splice(inArray, 1);
-				    	}
+						borrowuserList = [].concat(arrayUtil.removeArrayPointName(borrowuserList, val));
 			        }
 			    });
 				// 附件回显

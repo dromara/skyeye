@@ -22,16 +22,7 @@ layui.config({
         placeholder: '请选择标签',
         editorTag: false,
         beforeTagDelete: function(field, editor, tags, val) {
-        	var inArray = -1;
-	    	$.each(tagList, function(i, item) {
-	    		if(val === item.name) {
-	    			inArray = i;
-	    			return false;
-	    		}
-	    	});
-	    	if(inArray != -1) { //如果该元素在集合中存在
-	    		tagList.splice(inArray, 1);
-	    	}
+			tagList = [].concat(arrayUtil.removeArrayPointName(tagList, val));
         }
     });
 	$("body").on("click", "#chooseTag", function(e){

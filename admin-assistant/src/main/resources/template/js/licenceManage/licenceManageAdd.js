@@ -105,16 +105,7 @@ layui.config({
 	        placeholder: '请选择管理人',
 	        editorTag: false,
 	        beforeTagDelete: function(field, editor, tags, val) {
-	        	var inArray = -1;
-		    	$.each(userList, function(i, item) {
-		    		if(val === item.name) {
-		    			inArray = i;
-		    			return false;
-		    		}
-		    	});
-		    	if(inArray != -1) { //如果该元素在集合中存在
-		    		userList.splice(inArray, 1);
-		    	}
+				userList = [].concat(arrayUtil.removeArrayPointName(userList, val));
 	        }
 	    });
 	    // 管理人选择
@@ -135,16 +126,7 @@ layui.config({
 	        placeholder: '请选择借用人',
 	        editorTag: false,
 	        beforeTagDelete: function(field, editor, tags, val) {
-	        	var inArray = -1;
-		    	$.each(borrowList, function(i, item) {
-		    		if(val === item.name) {
-		    			inArray = i;
-		    			return false;
-		    		}
-		    	});
-		    	if(inArray != -1) { //如果该元素在集合中存在
-		    		borrowList.splice(inArray, 1);
-		    	}
+				borrowList= [].concat(arrayUtil.removeArrayPointName(borrowList, val));
 	        }
 	    });
 	    // 借用人选择

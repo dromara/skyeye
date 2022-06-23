@@ -34,11 +34,11 @@ layui.config({
                 chargePersonId: chargePerson[0].id,
                 enclosureResume: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
             };
-            AjaxPostUtil.request({url: flowableBasePath + "bossInterviewee002", params: params, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+            AjaxPostUtil.request({url: flowableBasePath + "bossInterviewee002", params: params, type: 'json', method: "POST", callback: function(json) {
+                if (json.returnCode == 0) {
                     parent.layer.close(index);
                     parent.refreshCode = '0';
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -52,16 +52,7 @@ layui.config({
         placeholder: '请选择负责人',
         editorTag: false,
         beforeTagDelete: function(field, editor, tags, val) {
-            var inArray = -1;
-            $.each(chargePerson, function(i, item) {
-                if(val === item.name) {
-                    inArray = i;
-                    return false;
-                }
-            });
-            if(inArray != -1) { //如果该元素在集合中存在
-                chargePerson.splice(inArray, 1);
-            }
+            chargePerson = [].concat(arrayUtil.removeArrayPointName(chargePerson, val));
         }
     });
 
