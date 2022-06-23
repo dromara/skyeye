@@ -15,52 +15,22 @@ layui.config({
 	    	laydate = layui.laydate;
 	    
  		// 初始化上传
- 		$("#vehicleImg").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 6,
-            "function": function (_this, data) {
-                show("#vehicleImg", data);
-            }
-        });
+ 		$("#vehicleImg").upload(systemCommonUtil.uploadCommon003Config('vehicleImg', 6, '', 1));
  		
  		// 生产日期
- 		laydate.render({ 
- 		  	elem: '#manufactureTime',
- 		  	type: 'date',
- 		  	max: getYMDFormatDate(),
-          	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#manufactureTime', type: 'date', max: getYMDFormatDate(), trigger: 'click'});
  		
  		// 采购日期
- 		laydate.render({ 
- 		  	elem: '#purchaseTime',
- 		  	type: 'date',
- 		  	max: getYMDFormatDate(),
- 		 	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#purchaseTime', type: 'date', max: getYMDFormatDate(), trigger: 'click'});
  		
  		// 下次年检时间
- 		laydate.render({ 
- 		  	elem: '#nextInspectionTime',
- 		  	type: 'date',
- 		 	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#nextInspectionTime', type: 'date', trigger: 'click'});
  		
  		// 保险截止期限
- 		laydate.render({ 
- 		  	elem: '#insuranceDeadline',
- 		  	type: 'date',
- 		 	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#insuranceDeadline', type: 'date', trigger: 'click'});
  		
  		// 上次保养日期
- 		laydate.render({ 
- 		  	elem: '#prevMaintainTime',
- 		  	type: 'date',
- 		 	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#prevMaintainTime', type: 'date', trigger: 'click'});
 
 		skyeyeEnclosure.init('enclosureUpload');
  		matchingLanguage();
@@ -85,23 +55,19 @@ layui.config({
  	        		nextInspectionTime: $("#nextInspectionTime").val(),
  	        		insuranceDeadline: $("#insuranceDeadline").val(),
  	        		prevMaintainTime: $("#prevMaintainTime").val(),
-					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+					vehicleAdmin: systemCommonUtil.tagEditorGetItemData('vehicleAdmin', userList)
  	        	};
  	        	params.vehicleImg = $("#vehicleImg").find("input[type='hidden'][name='upload']").attr("oldurl");
- 	        	if(isNull(params.vehicleImg)){
- 	        		winui.window.msg('请上传车辆图片', {icon: 2,time: 2000});
- 	        		return false;
- 	        	}
- 	        	if(userList.length == 0 || isNull($('#vehicleAdmin').tagEditor('getTags')[0].tags)){
- 	        		params.vehicleAdmin = "";
- 	        	}else{
-        			params.vehicleAdmin = userList[0].id;
-        		}
- 	        	AjaxPostUtil.request({url: flowableBasePath + "vehicle002", params: params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+				if (isNull(params.vehicleImg)) {
+					winui.window.msg('请上传车辆图片', {icon: 2, time: 2000});
+					return false;
+				}
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "vehicle002", params: params, type: 'json', callback: function(json) {
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

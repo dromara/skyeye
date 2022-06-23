@@ -286,11 +286,11 @@ var systemCommonUtil = {
             $('#' + id).tagEditor('removeTag', tags[i]);
         }
     },
-
     /**
      * tagEditor组件重置数据
      *
      * @param id 对象id
+     * @param data 数据
      */
     tagEditorResetData: function(id, data) {
         // 移除所有tag
@@ -300,6 +300,40 @@ var systemCommonUtil = {
             $('#' + id).tagEditor('addTag', item.name);
         });
         return data;
+    },
+    /**
+     * tagEditor组件获取第一条数据
+     *
+     * @param id 组件id
+     * @param list 集合
+     * @returns {string|*}
+     */
+    tagEditorGetItemData: function (id, list) {
+        var tags = $('#' + id).tagEditor('getTags')[0].tags;
+        if (list.length == 0 || isNull(tags)) {
+            return "";
+        } else {
+            return list[0].id;
+        }
+    },
+    /**
+     * tagEditor组件获取所有数据的id
+     *
+     * @param id 组件id
+     * @param list 集合
+     * @returns {string|*}
+     */
+    tagEditorGetAllData: function (id, list) {
+        var tags = $('#' + id).tagEditor('getTags')[0].tags;
+        if (list.length == 0 || isNull(tags)) {
+            return "";
+        } else {
+            var ids = "";
+            $.each(list, function (i, item) {
+                ids += item.id + ',';
+            });
+            return ids;
+        }
     },
 
     /**
@@ -535,5 +569,26 @@ var systemCommonUtil = {
         }
         return params;
     },
+
+    /**
+     * 统一上传到common003接口文件的配置信息
+     *
+     * @param id 组件id
+     * @param uploadType 上传类型
+     * @param uploadDefaultValue 默认展示的值
+     * @param uploadNum 允许上传的图片数量
+     */
+    uploadCommon003Config: function (id, uploadType, uploadDefaultValue, uploadNum) {
+        return {
+            "action": reqBasePath + "common003",
+            "data-num": uploadNum,
+            "data-type": "PNG,JPG,jpeg,gif",
+            "uploadType": uploadType,
+            "data-value": uploadDefaultValue,
+            "function": function (_this, data) {
+                show('#' + id, data);
+            }
+        };
+    }
 
 };

@@ -33,8 +33,6 @@ layui.config({
 			}
 		});
 	    
-	    var carryPeople = "";//指定人员id
-
 	    if(!isNull(parent.timeSolt)){
 			// 如果父页面传递时间段
 			timeSolt = parent.timeSolt;
@@ -203,8 +201,7 @@ layui.config({
 	        			winui.window.msg('请选择指定人员', {icon: 2,time: 2000});
 	        			return false;
 	        		}else{
-	        			carryPeople = userList[0].id;
-	        			params.carryPeople = carryPeople;
+	        			params.carryPeople = userList[0].id;
 	        		}
 	        	}
 	        	
