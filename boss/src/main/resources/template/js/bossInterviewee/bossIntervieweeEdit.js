@@ -66,10 +66,10 @@ layui.config({
                         id: parent.rowId
                     };
                     AjaxPostUtil.request({url: flowableBasePath + "bossInterviewee005", params: params, type: 'json', method: "PUT", callback: function(json){
-                        if(json.returnCode == 0){
+                        if (json.returnCode == 0) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
-                        }else{
+                        } else {
                             winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                         }
                     }});
@@ -86,16 +86,8 @@ layui.config({
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
         systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
         systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList){
-            // 移除所有tag
-            var tags = $('#chargePersonId').tagEditor('getTags')[0].tags;
-            for (i = 0; i < tags.length; i++) {
-                $('#chargePersonId').tagEditor('removeTag', tags[i]);
-            }
-            chargePerson = [].concat(userReturnList);
-            // 添加新的tag
-            $.each(chargePerson, function(i, item){
-                $('#chargePersonId').tagEditor('addTag', item.name);
-            });
+            // 重置数据
+            chargePerson = [].concat(systemCommonUtil.tagEditorResetData('chargePersonId', userReturnList));
         });
     });
 

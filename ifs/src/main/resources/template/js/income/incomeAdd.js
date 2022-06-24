@@ -128,16 +128,8 @@ layui.config({
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
         systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
         systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
-            // 移除所有tag
-            var tags = $('#handsPersonId').tagEditor('getTags')[0].tags;
-            for (i = 0; i < tags.length; i++) {
-                $('#handsPersonId').tagEditor('removeTag', tags[i]);
-            }
-            handsPersonList = [].concat(userReturnList);
-            // 添加新的tag
-            $.each(handsPersonList, function(i, item){
-                $('#handsPersonId').tagEditor('addTag', item.name);
-            });
+            // 重置数据
+            handsPersonList = [].concat(systemCommonUtil.tagEditorResetData('handsPersonId', userReturnList));
         });
     });
 

@@ -167,15 +167,8 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				if (refreshCode == '0') {
-					var templateArray = [].concat(companyList);
-					var tags = $('#company').tagEditor('getTags')[0].tags;
-					for (i = 0; i < tags.length; i++) {
-						$('#company').tagEditor('removeTag', tags[i]);
-					}
-					companyList = [].concat(templateArray);
-					$.each(companyList, function(i, item){
-						$('#company').tagEditor('addTag', item.name);
-					});
+					// 重置数据
+					companyList = [].concat(systemCommonUtil.tagEditorResetData('company', companyList));
 				} else if (refreshCode == '-9999') {
 					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
 				}
@@ -191,15 +184,8 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				if (refreshCode == '0') {
-					var templateArray = [].concat(departmentList);
-					var tags = $('#department').tagEditor('getTags')[0].tags;
-					for (i = 0; i < tags.length; i++) {
-						$('#department').tagEditor('removeTag', tags[i]);
-					}
-					departmentList = [].concat(templateArray);
-					$.each(departmentList, function(i, item){
-						$('#department').tagEditor('addTag', item.name);
-					});
+					// 重置数据
+					departmentList = [].concat(systemCommonUtil.tagEditorResetData('department', departmentList));
 				} else if (refreshCode == '-9999') {
 					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
 				}
@@ -211,14 +197,8 @@ layui.config({
 		systemCommonUtil.userStaffCheckType = true; // 选择类型，默认单选，true:多选，false:单选
 		systemCommonUtil.checkStaffMation = [].concat(checkStaffList); // 选择时返回的对象
 		systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
-			var tags = $('#userStaff').tagEditor('getTags')[0].tags;
-			for (i = 0; i < tags.length; i++) {
-				$('#userStaff').tagEditor('removeTag', tags[i]);
-			}
-			checkStaffList = [].concat(checkStaffMation);
-			$.each(checkStaffList, function(i, item){
-				$('#userStaff').tagEditor('addTag', item.name);
-			});
+			// 重置数据
+			checkStaffList = [].concat(systemCommonUtil.tagEditorResetData('userStaff', checkStaffMation));
 		});
 	});
 

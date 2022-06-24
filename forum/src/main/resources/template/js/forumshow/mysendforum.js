@@ -34,16 +34,8 @@ layui.config({
 			area: ['600px', '500px'],
 			callBack: function(refreshCode){
 				if (refreshCode == '0') {
-					//移除所有tag
-					var tags = $('#tagId').tagEditor('getTags')[0].tags;
-					for (i = 0; i < tags.length; i++) { 
-						$('#tagId').tagEditor('removeTag', tags[i]);
-					}
-					tagList = [].concat(tagReturnList);
-				    //添加新的tag
-					$.each(tagList, function(i, item){
-						$('#tagId').tagEditor('addTag', item.name);
-					});
+					// 重置数据
+					tagList = [].concat(systemCommonUtil.tagEditorResetData('tagId', tagReturnList));
                 } else if (refreshCode == '-9999') {
                 	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
                 }
