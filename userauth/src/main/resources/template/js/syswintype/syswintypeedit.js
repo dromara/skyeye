@@ -11,7 +11,7 @@ layui.config({
 	    var $ = layui.$;
 	    
 	    AjaxPostUtil.request({url:reqBasePath + "sysevewintype004", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				$("#typeName").val(json.bean.typeName);
    				
    				if(json.bean.parentId === '0'){
@@ -50,7 +50,7 @@ layui.config({
    			    	}else if(val == '2'){//二级分类
    			    		$("#parentIdDiv").show();
    			    	}else{
-   			    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+   			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
    			    	}
    		        });
    		 		
@@ -64,28 +64,28 @@ layui.config({
    		 	        		params.parentId = '0';
    		 	 	    	}else if(data.field.typeLevel == '2'){//二级分类
    		 	 	    		if(isNull($("#parentId").val())){
-   		 	 	    			winui.window.msg('请选择一级分类', {icon: 2,time: 2000});
+   		 	 	    			winui.window.msg('请选择一级分类', {icon: 2, time: 2000});
    		 	 	 	    		return false;
    		 	 	    		}
    		 	 	    		params.parentId = $("#parentId").val();
    		 	 	    	}else{
-   		 	 	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+   		 	 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
    		 	 	    		return false;
    		 	 	    	}
    		 	        	
    		 	        	AjaxPostUtil.request({url:reqBasePath + "sysevewintype005", params:params, type: 'json', callback: function(json){
-   			 	   			if(json.returnCode == 0){
+   			 	   			if (json.returnCode == 0) {
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';
    			 	   			}else{
-   			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			 	   			}
    			 	   		}});
    		 	        }
    		 	        return false;
    		 	    });
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	    

@@ -35,7 +35,7 @@ layui.config({
 	
 	function loadNote(){
 		AjaxPostUtil.request({url:reqBasePath + "mynote013", params: {rowId: rowId}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				$("#noteTile").html(json.bean.title);
 				$("#createName").html(json.bean.createName);
 				$("#createTime").html(json.bean.createTime);
@@ -74,7 +74,7 @@ layui.config({
 				loadPicImgClick();
 				matchingLanguage();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	}

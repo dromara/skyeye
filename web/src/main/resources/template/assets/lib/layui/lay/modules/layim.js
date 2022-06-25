@@ -295,7 +295,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				dataType: i.dataType || "json",
 				cache: !1,
 				success: function(json) {
-					if(json.returnCode == 0){
+					if (json.returnCode == 0) {
 						a(json.bean || {});
 					}
 				},
@@ -1238,7 +1238,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				var reGroupId = l.data("id").replace("layim-", "");//获取id类型 --group + id
 				var reId = reGroupId.replace("group", "");//获取id类型 --id
 				AjaxPostUtil.request({url:reqBasePath + "companytalkgroup010", params:{groupId: reId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				//删除对应的对象群聊
 						var groupIndex = -1;
 						e.each(j.group, function(i, item){
@@ -1287,7 +1287,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 						}
 						t.closeAll("tips");
 		 	   		}else{
-	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 			},
@@ -1303,7 +1303,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				var reGroupId = l.data("id").replace("layim-", "");//获取id类型 --group + id
 				var reId = reGroupId.replace("group", "");//获取id类型 --id
 				AjaxPostUtil.request({url:reqBasePath + "companytalkgroup009", params:{groupId: reId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				//删除对应的对象群聊
 						var groupIndex = -1;
 						e.each(j.group, function(i, item){
@@ -1352,7 +1352,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 						}
 						t.closeAll("tips");
 	 	   			}else{
-	 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 			},

@@ -12,7 +12,7 @@ layui.config({
 	    
 	    //帖子信息展示
         AjaxPostUtil.request({url:reqBasePath + "forumcontent006", params: {rowId:parent.forumId}, type: 'json', callback: function(json){
-            if(json.returnCode == 0){
+            if (json.returnCode == 0) {
                 $("#content").html(json.bean.content);
                 $("#title").html(json.bean.title);
                 $("#createTime").html(json.bean.createTime);
@@ -21,7 +21,7 @@ layui.config({
                 $("#showForm").removeClass("layui-hide");
                 matchingLanguage();
             }else{
-                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }});
 	    
@@ -34,7 +34,7 @@ layui.config({
 	    	}else if(val == '3'){//审核不通过
 	    		$("#reasonHide").removeClass("layui-hide");
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
 	    
@@ -47,11 +47,11 @@ layui.config({
         			examineNopassReason: $("#examineNopassReason").val()
  	        	};
  	        	AjaxPostUtil.request({url:reqBasePath + "forumreport003", params:params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
  	        }

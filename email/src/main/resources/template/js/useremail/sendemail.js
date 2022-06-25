@@ -23,7 +23,7 @@ layui.config({
 	    if(!isNull(id)){
 	    	// 草稿箱获取数据
 			AjaxPostUtil.request({url:reqBasePath + "useremail014", params:{rowId: id}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					$("#typeName").val(json.bean.title);
 					$("#content").val(json.bean.content);
 
@@ -59,7 +59,7 @@ layui.config({
 						}
 					});
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}, async: false});
 		}
@@ -67,7 +67,7 @@ layui.config({
 		if(!isNull(forwardId)){
 			// 邮件回复获取数据
 			AjaxPostUtil.request({url:reqBasePath + "useremail017", params:{rowId: forwardId}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					$("#typeName").val(json.bean.title);
 					var emailContentHeadStr = getContentHead(json.bean.fromPeople, json.bean.sendDate, json.bean.toPeople, json.bean.toCc, json.bean.toBcc, json.bean.title);
 					$("#content").val(emailContentHeadStr + json.bean.content);
@@ -104,7 +104,7 @@ layui.config({
 						}
 					});
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}, async: false});
 		}
@@ -216,11 +216,11 @@ layui.config({
  	   	function save(data, url){
 		   	if (winui.verifyForm(data.elem)) {
 			   	if(isNull($('#toPeople').tagEditor('getTags')[0].tags)){
-				   	winui.window.msg('请填写收件人', {icon: 2,time: 2000});
+				   	winui.window.msg('请填写收件人', {icon: 2, time: 2000});
 				   	return false;
 			   	}
 			   	if(isNull(layedit.getContent(layContent))){
-				   	winui.window.msg('请填写邮件内容', {icon: 2,time: 2000});
+				   	winui.window.msg('请填写邮件内容', {icon: 2, time: 2000});
 				   	return false;
 			   	}
 			   	var typeName = "(无主题)";
@@ -240,15 +240,15 @@ layui.config({
 					emailEnclosureList: JSON.stringify(emailEnclosureList)
 			   	};
 			   	AjaxPostUtil.request({url: reqBasePath + url, params: params, type: 'json', callback: function(json){
-				   	if(json.returnCode == 0){
+				   	if (json.returnCode == 0) {
 				   		if(url == "useremail013" || url == "useremail015"){
-							winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+							winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 						}else{
-							winui.window.msg('发送成功', {icon: 1,time: 2000});
+							winui.window.msg('发送成功', {icon: 1, time: 2000});
 							location.href = "../../tpl/useremail/sendsuccess.html";
 						}
 				   	}else{
-					   	winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					   	winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				   	}
 			   	}});
 		   	}
@@ -317,7 +317,7 @@ layui.config({
 							placeholder: '填写完成后直接回车即可'
 						});
 					} else if (refreshCode == '-9999') {
-						winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+						winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 					}
 				}});
 		});

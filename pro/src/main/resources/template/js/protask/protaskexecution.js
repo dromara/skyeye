@@ -49,7 +49,7 @@ layui.config({
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 						};
 						if(isNull(ue.getContent())){
-							winui.window.msg('请填写执行结果！', {icon: 2,time: 2000});
+							winui.window.msg('请填写执行结果！', {icon: 2, time: 2000});
 							return false;
 						}
 						AjaxPostUtil.request({url: flowableBasePath + "protask013", params: params, type: 'json', callback: function(j) {

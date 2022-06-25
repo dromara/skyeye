@@ -19,7 +19,7 @@ layui.config({
 		    
 		//获取试卷详情信息以及阅卷人信息
 		AjaxPostUtil.request({url:schoolBasePath + "exam036", params: {surveyId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				$("#showForm").html(getDataUseHandlebars($("#assignmentTemplate").html(), json));
    				//回显阅卷人
    				var str = "";
@@ -44,18 +44,18 @@ layui.config({
 		        			arrayStr: JSON.stringify(array)
 			        	};
 			        	AjaxPostUtil.request({url:schoolBasePath + "exam037", params:params, type: 'json', callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 			 	   				parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
-			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
 			        }
 			        return false;
 			    });
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
    		
@@ -74,7 +74,7 @@ layui.config({
 				        });
 				        $("#markPeople").val(str);
  	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+ 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
  	                }
  				}});
  	    });

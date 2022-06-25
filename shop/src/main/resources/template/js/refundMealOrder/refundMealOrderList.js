@@ -112,7 +112,7 @@ layui.config({
         layer.confirm(msg, {icon: 3, title: '驳回'}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "approvelRefundMealOrder", params: {id: data.id, state: 2}, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg('驳回成功', {icon: 1, time: 2000});
                     loadTable();
                 }else{
@@ -128,7 +128,7 @@ layui.config({
         layer.confirm(msg, {icon: 3, title: '退款'}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "approvelRefundMealOrder", params: {id: data.id, state: 3}, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg('退款成功.', {icon: 1, time: 2000});
                     loadTable();
                 }else{

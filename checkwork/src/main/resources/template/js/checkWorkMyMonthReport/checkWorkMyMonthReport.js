@@ -103,7 +103,7 @@ layui.config({
     
     function loadThisMonthHis(callback, start){
         AjaxPostUtil.request({url: flowableBasePath + "checkwork014", params:{monthMation: start._d.format("yyyy-MM"), timeId: $("#checkTime").val()}, type: 'json', callback: function(json){
-            if(json.returnCode == 0){
+            if (json.returnCode == 0) {
                 var event = [];
                 if(!isNull(json.rows)){
                     $.each(json.rows, function(i, item) {
@@ -135,7 +135,7 @@ layui.config({
     function initIsCheck(callBack){
     	checkWorkDescShow = true;
         AjaxPostUtil.request({url: flowableBasePath + "checkwork013", params: {timeId: $("#checkTime").val()}, type: 'json', callback: function(json){
-            if(json.returnCode == 0){
+            if (json.returnCode == 0) {
             	clockOut = json.bean.clockOut;
 				dayType = json.bean.type;
             	var s = "";
@@ -152,7 +152,7 @@ layui.config({
 					callBack();
 				}
             }else{
-                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }});
     }
@@ -245,12 +245,12 @@ layui.config({
 			timeId = "-";
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "checkwork001", params:{timeId: timeId}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				$("#clockInBtn").hide();
 				calendar.fullCalendar('refetchEvents');
-				winui.window.msg("上班打卡成功", {icon: 1,time: 2000});
+				winui.window.msg("上班打卡成功", {icon: 1, time: 2000});
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	});
@@ -274,12 +274,12 @@ layui.config({
 			timeId = "-";
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "checkwork002", params:{timeId: timeId}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				$("#clockOutBtn").hide();
 				calendar.fullCalendar('refetchEvents');
-				winui.window.msg("下班打卡成功", {icon: 1,time: 2000});
+				winui.window.msg("下班打卡成功", {icon: 1, time: 2000});
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}

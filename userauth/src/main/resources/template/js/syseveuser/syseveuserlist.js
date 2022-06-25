@@ -162,7 +162,7 @@ layui.config({
 	// 锁定
 	function lock(id){
 		AjaxPostUtil.request({url: reqBasePath + "sys002", params: {rowId: id}, type: 'json', method: "PUT", callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				winui.window.msg("已成功锁定，该账号目前无法登录.", {icon: 1, time: 2000});
 			}else{
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
@@ -173,7 +173,7 @@ layui.config({
 	// 解锁
 	function unlock(id){
 		AjaxPostUtil.request({url: reqBasePath + "sys003", params: {rowId: id}, type: 'json', method: "PUT", callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				winui.window.msg("账号恢复正常.", {icon: 1, time: 2000});
 			}else{
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
@@ -191,10 +191,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -209,10 +209,10 @@ layui.config({
 			area: ['450px', '300px'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -226,10 +226,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
     });

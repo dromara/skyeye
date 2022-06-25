@@ -44,7 +44,7 @@ layui.config({
                 }
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 				AjaxPostUtil.request({url:reqBasePath + "diary023", params:params, type: 'json', callback: function(json){
-		   			if(json.returnCode == 0){
+		   			if (json.returnCode == 0) {
 		   				var jsonStr = "";//实体json对象
 		   				$.each(json.rows, function(index, bean) {
 		   					if(index == 0 && page == 1){
@@ -89,7 +89,7 @@ layui.config({
 						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
 						next(lis.join(''), (page * 12) < json.total);
 		   			}else{
-		   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});
 			}

@@ -22,7 +22,7 @@ layui.config({
 			if(num < 3){
 				num++;
 			}else{
-				winui.window.msg("最多选三个标签！", {icon: 2,time: 2000});
+				winui.window.msg("最多选三个标签！", {icon: 2, time: 2000});
 				$('input:checkbox[rowId="' + $(this).attr("rowId") + '"]').attr("checked", false);
 				form.render('checkbox');
 			}

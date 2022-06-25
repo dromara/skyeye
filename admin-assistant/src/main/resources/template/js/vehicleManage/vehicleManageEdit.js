@@ -115,7 +115,7 @@ layui.config({
 	 	 	        	};
 	 	 	        	params.vehicleImg = $("#vehicleImg").find("input[type='hidden'][name='upload']").attr("oldurl");
 	 	 	        	if(isNull(params.vehicleImg)){
-	 	 	        		winui.window.msg('请上传车辆图片', {icon: 2,time: 2000});
+	 	 	        		winui.window.msg('请上传车辆图片', {icon: 2, time: 2000});
 	 	 	        		return false;
 	 	 	        	}
 	 	 	        	if(userList.length == 0 || isNull($('#vehicleAdmin').tagEditor('getTags')[0].tags)){
@@ -124,11 +124,11 @@ layui.config({
 	 	        			params.vehicleAdmin = userList[0].id;
 	 	        		}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "vehicle009", params:params, type: 'json', callback: function(json){
-	 		 	   			if(json.returnCode == 0){
+	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
 	 		 	   			}else{
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});
 		 	        }

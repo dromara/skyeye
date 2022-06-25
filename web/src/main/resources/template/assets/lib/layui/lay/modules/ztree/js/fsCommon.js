@@ -8,11 +8,11 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 
 		/**错误msg提示 */
 		errorMsg: function(text) {
-			top.winui.window.msg(text, {icon: 2,time: 2000});
+			top.winui.window.msg(text, {icon: 2, time: 2000});
 		},
 		/**成功 msg提示 */
 		successMsg: function(text) {
-			top.winui.window.msg(text, {icon: 1,time: 2000});
+			top.winui.window.msg(text, {icon: 1, time: 2000});
 		},
 		/**警告弹出提示*/
 		warnMsg: function(text) {

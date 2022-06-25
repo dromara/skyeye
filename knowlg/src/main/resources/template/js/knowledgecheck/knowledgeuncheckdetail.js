@@ -14,7 +14,7 @@ layui.config({
     var interval = null;
 	
     AjaxPostUtil.request({url:reqBasePath + "knowledgecontent014", params: {rowId:parent.rowId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			var str = getDataUseHandlebars(beanTemplate, json);
 			$("#showForm").html(str);
 			content = json.bean.content;
@@ -30,7 +30,7 @@ layui.config({
 
 	 		matchingLanguage();
 		}else{
-			winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 	

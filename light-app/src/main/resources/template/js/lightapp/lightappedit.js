@@ -75,15 +75,15 @@ layui.config({
 		 	        	};
 		 	        	params.appLogo = $("#appLogo").find("input[name='upload']").attr("oldurl");
 		 	        	if(isNull(params.appLogo)){
-		        			winui.window.msg("请选择应用logo", {icon: 2,time: 2000});
+		        			winui.window.msg("请选择应用logo", {icon: 2, time: 2000});
 		 	        		return false;
 		        	    }
 		 	        	AjaxPostUtil.request({url:reqBasePath + "lightapp004", params:params, type: 'json', callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
-			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
 		 	        }

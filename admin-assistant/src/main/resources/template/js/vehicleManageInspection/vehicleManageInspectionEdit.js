@@ -56,7 +56,7 @@ layui.config({
 		 	        		var mobile = /^0?1[3|4|5|8][0-9]\d{8}$/, phone = /^0[\d]{2,3}-[\d]{7,8}$/;
 		 	 	        	var flag = mobile.test(params.contactInformation) || phone.test(params.contactInformation);
 		 	                if(!flag){
-		 	                	winui.window.msg('请输入正确的联系电话', {icon: 2,time: 2000});
+		 	                	winui.window.msg('请输入正确的联系电话', {icon: 2, time: 2000});
 		 	 	        		return false;
 		 	                }
 		 	        	}
@@ -64,16 +64,16 @@ layui.config({
 		 	        		var str = /^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/;
 		 	 	        	var flag = str.test(params.inspectionPrice);
 		 	                if(!flag){
-		 	                	winui.window.msg('年检费用小数点后最多两位！', {icon: 2,time: 2000});
+		 	                	winui.window.msg('年检费用小数点后最多两位！', {icon: 2, time: 2000});
 		 	 	        		return false;
 		 	                }
 		 	        	}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "inspection005", params:params, type: 'json', callback: function(json){
-	 		 	   			if(json.returnCode == 0){
+	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
 	 		 	   			}else{
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});
 		 	        }

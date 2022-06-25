@@ -79,7 +79,7 @@ layui.config({
                 state: 3
             };
             AjaxPostUtil.request({url: shopBasePath + "editStoreIntercourseState", params: params, type: 'json', method: "PUT", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg("确认成功。", {icon: 1, time: 2000});
                     loadTable();
                 }else{

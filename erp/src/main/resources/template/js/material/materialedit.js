@@ -190,7 +190,7 @@ layui.config({
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var checkNodes = materialCategoryType.getCheckedNodes(true);
 		 	        	if(checkNodes.length == 0){
-		 	        		winui.window.msg('请选择商品所属类型', {icon: 2,time: 2000});
+		 	        		winui.window.msg('请选择商品所属类型', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
 						var tableData = new Array();
@@ -277,7 +277,7 @@ layui.config({
 		 	        	//工序信息
  	        			params.procedureJsonStr = JSON.stringify(procedureMationList);
 		 	        	AjaxPostUtil.request({url: flowableBasePath + "material009", params: params, type: 'json', callback: function(json){
-		 	        		if(json.returnCode == 0){
+		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
 		 	        		}else{
@@ -308,7 +308,7 @@ layui.config({
 	                	});
 	    				$("#initialTock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">新增库存</button>' + str);
 	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 	                }
 				}});
 	    });
@@ -351,7 +351,7 @@ layui.config({
 	                	});
 	    				_this.parent().html(_this.prop("outerHTML") + str);
 	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 	                }
 				}});
 	    });
@@ -478,7 +478,7 @@ layui.config({
 	                	});
 	    				$("#procedureChoose").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="procedureChoose">工序选择</button>' + str);
 	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 	                }
 				}});
 	    });

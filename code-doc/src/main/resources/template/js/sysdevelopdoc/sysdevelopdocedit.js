@@ -11,7 +11,7 @@ layui.config({
 		    form = layui.form;
 	    
 	    AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc003", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				$("#typeName").val(json.bean.title);
 
    			    showGrid({
@@ -46,7 +46,7 @@ layui.config({
    			    	}else if(val == '2'){//二级目录
    			    		$("#parentIdBox").removeClass("layui-hide");
    			    	}else{
-   			    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+   			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
    			    	}
    		        });
    				
@@ -56,7 +56,7 @@ layui.config({
    			        	var pId = '0';
    			        	if($("input[name='docType']:checked").val() == '2'){
    			        		if(isNull($("#docFirstType").val())){
-   			        			winui.window.msg('请选择一级目录', {icon: 2,time: 2000});
+   			        			winui.window.msg('请选择一级目录', {icon: 2, time: 2000});
    			        			return false;
    			        		}else{
    			        			pId = $("#docFirstType").val();
@@ -69,18 +69,18 @@ layui.config({
    			        	};
    			        	
    			        	AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc004", params:params, type: 'json', callback: function(json){
-   			 	   			if(json.returnCode == 0){
+   			 	   			if (json.returnCode == 0) {
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';
    			 	   			}else{
-   			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			 	   			}
    			 	   		}});
    			        }
    			        return false;
    			    });
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	    

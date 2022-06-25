@@ -30,7 +30,7 @@ layui.config({
 
 	//帖子信息展示
 	AjaxPostUtil.request({url:reqBasePath + "forumcontent006", params: {rowId:rowId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			if(json.bean.createId != currentUserId){
 				// 如果不是用户自己的帖子，则显示举报按钮
 				$("#forumReport").removeClass("layui-hide");
@@ -41,7 +41,7 @@ layui.config({
 			$("#photo").html("<img userId=" + json.bean.userId + " alt='' src=" + json.bean.userPhoto + ">");
 			loadCommentList();//加载评论信息
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 	
@@ -49,14 +49,14 @@ layui.config({
 	$("body").on("click", "#commentContentAdd", function(e){
 		var content = $("#commentContent").val();
 		if(isNull(content)){
-			winui.window.msg("评论内容不能为空！", {icon: 2,time: 2000});
+			winui.window.msg("评论内容不能为空！", {icon: 2, time: 2000});
 		}else{
 			AjaxPostUtil.request({url:reqBasePath + "forumcontent008", params:{forumId:rowId, content:content}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				loadCommentList();//刷新评论信息
  	   				$("#commentContent").val("");
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
 		}
@@ -92,10 +92,10 @@ layui.config({
 	$("body").on("click", "#forumCommentAdd", function(e){
 		var replyContent = $("#replyContent").val();
 		if(isNull(replyContent)){
-			winui.window.msg("回复内容不能为空！", {icon: 2,time: 2000});
+			winui.window.msg("回复内容不能为空！", {icon: 2, time: 2000});
 		}else{
 			AjaxPostUtil.request({url:reqBasePath + "forumcontent010", params:{forumId:rowId, belongCommentId:belongCommentId, content:replyContent, replyId:commentUserId}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				$(".comment-text-textarea").empty();
  	   				$(".se-comment-text-textarea").empty();
  	   			    var commentName = "";
@@ -120,7 +120,7 @@ layui.config({
 						$("span[rowid=" + belongCommentId + "]").parents('div[class^="se-comment-text"]').eq(0).after(getDataUseHandlebars(replyTemplate, params));
 					}
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
 		}
@@ -146,9 +146,9 @@ layui.config({
 			area: ['40vw', '60vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg("举报成功", {icon: 1,time: 2000});
+                	winui.window.msg("举报成功", {icon: 1, time: 2000});
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg("举报失败", {icon: 2,time: 2000});
+                	winui.window.msg("举报失败", {icon: 2, time: 2000});
                 }
 			}});
 	});
@@ -189,7 +189,7 @@ layui.config({
 	 			 		}
 	 			 		matchingLanguage();
 	 				}else {
-	 					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 				}
 	 			}});
 		 	}

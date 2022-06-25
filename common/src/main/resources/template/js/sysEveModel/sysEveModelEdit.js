@@ -14,7 +14,7 @@ layui.config({
 	    var type;
 	    
 	    AjaxPostUtil.request({url: reqBasePath + "sysevemodel004", params:{id: parent.rowId}, type: 'json', method: "GET", callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
 				// 初始化上传
 				$("#logo").upload({
 					"action": reqBasePath + "common003",
@@ -61,19 +61,19 @@ layui.config({
 							id: parent.rowId
 						};
 						if(isNull(params.logo)){
-							winui.window.msg('请上传LOGO', {icon: 2,time: 2000});
+							winui.window.msg('请上传LOGO', {icon: 2, time: 2000});
 							return false;
 						}
 						if(isNull(params.content)){
-							winui.window.msg('请填写模板内容', {icon: 2,time: 2000});
+							winui.window.msg('请填写模板内容', {icon: 2, time: 2000});
 							return false;
 						}
 						AjaxPostUtil.request({url: reqBasePath + "sysevemodel005", params:params, type: 'json', method: "PUT", callback: function(json){
-							if(json.returnCode == 0){
+							if (json.returnCode == 0) {
 								parent.layer.close(index);
 								parent.refreshCode = '0';
 							}else{
-								winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 							}
 						}});
 					}
@@ -81,7 +81,7 @@ layui.config({
 				});
 				
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	    

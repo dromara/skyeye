@@ -282,7 +282,7 @@ layui.config({
     
     function loadTable(){
     	if(isNull($("#checkTime").val())){//一定要记得，当createTime为空时
-    		winui.window.msg("请选择时间段", {icon: 2,time: 2000});
+    		winui.window.msg("请选择时间段", {icon: 2, time: 2000});
     	}else {
     		startTime = $("#checkTime").val().split('~')[0].trim();
     		endTime = $("#checkTime").val().split('~')[1].trim();
@@ -396,7 +396,7 @@ layui.config({
     	
     	function initEcharts(){
 	    	AjaxPostUtil.request({url: flowableBasePath + "checkwork016", params: getEchartsParams(), type: 'json', method: "POST", callback: function(json){
-	    		if(json.returnCode == 0){
+	    		if (json.returnCode == 0) {
 	    			ydata = json.rows;
 	    			var pieInitialized;
 	        	    setTimeout(function () {

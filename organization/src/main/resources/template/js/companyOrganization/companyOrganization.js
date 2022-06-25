@@ -10,7 +10,7 @@ layui.config({
 		form = layui.form;
 	// 企业组织机构图
 	AjaxPostUtil.request({url:reqBasePath + "companymation009", params:{}, type: 'json', method: "GET", callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			$('#chart-container').orgchart({
 				'data' : json.rows[0],
 				'nodeTitle': 'title',
@@ -21,7 +21,7 @@ layui.config({
 			});
 			form.render();
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
     exports('companyOrganization', {});

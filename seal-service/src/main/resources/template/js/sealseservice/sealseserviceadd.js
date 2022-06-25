@@ -189,7 +189,7 @@ layui.config({
  	                if (refreshCode == '0') {
  	                	$("#serviceUserId").val(serviceUser.userName);
  	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+ 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
  	                }
  				}});
 		});
@@ -240,7 +240,7 @@ layui.config({
 	    //省级行政区划
 	    function loadChildProvinceArea(){
  	    	AjaxPostUtil.request({url:reqBasePath + "commontarea001", params:{}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -249,7 +249,7 @@ layui.config({
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
  	    }
@@ -257,7 +257,7 @@ layui.config({
 	    //市级行政区划
 	    function loadChildCityArea(){
  	    	AjaxPostUtil.request({url:reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				var str = '<dd class="layui-col-xs3"><select id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -266,7 +266,7 @@ layui.config({
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
  	    }
@@ -274,7 +274,7 @@ layui.config({
 	    //县级行政区划
 	    function loadChildArea(){
  	    	AjaxPostUtil.request({url:reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				var str = '<dd class="layui-col-xs3"><select id="areaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -283,7 +283,7 @@ layui.config({
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
  	    }
@@ -291,7 +291,7 @@ layui.config({
 	    //镇级行政区划
 	    function loadChildAreaTownShip(){
  	    	AjaxPostUtil.request({url:reqBasePath + "commontarea004", params:{rowId: $("#areaId").val()}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -300,7 +300,7 @@ layui.config({
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
  	    }
@@ -328,7 +328,7 @@ layui.config({
 						$("#email").val(customerMation.email);
 						$("#qq").val(customerMation.qq);
  	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+ 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
  	                }
  				}});
  	    });

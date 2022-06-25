@@ -34,7 +34,7 @@ var dsFormUtil = {
                         callback(dsFormUtil.dsFormChooseList);
                     }
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }});
     },
@@ -148,7 +148,7 @@ var dsFormUtil = {
                         var obj = JSON.parse(j.bean.aData);
                         item.context = getDataUseHandlebars(item.templateContent, obj);
                     }else{
-                        winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+                        winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: false});
             }
@@ -378,7 +378,7 @@ var dsFormUtil = {
                         callback(dsFormUtil.dsFormObjectRelationChoose);
                     }
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }});
     },

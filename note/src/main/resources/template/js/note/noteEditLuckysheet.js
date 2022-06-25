@@ -14,7 +14,7 @@ layui.config({
 
 	// 显示编辑器内容
 	AjaxPostUtil.request({url:reqBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			parent.$("#noteTitle").val(json.bean.title);
 			var param = {
 				container: 'luckysheet',
@@ -33,7 +33,7 @@ layui.config({
 			}
 			luckysheet.create(param);
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 

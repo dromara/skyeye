@@ -102,7 +102,7 @@ function loadUploadMethod(){
 				"chunkSize": block.end - block.start
 			};
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole008", params: params, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				//分块存在，跳过
 					deferred.reject();
     			}else{
@@ -118,9 +118,9 @@ function loadUploadMethod(){
 		afterSendFile: function (data) {
 			//如果分块上传成功，则通知后台合并分块
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole007", params: {md5: md5, folderId: parent.folderId, name: data.name, size: data.size}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		 }

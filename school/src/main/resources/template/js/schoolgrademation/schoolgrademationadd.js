@@ -52,7 +52,7 @@ layui.config({
 	    		$("#yearNBox").addClass("layui-hide");
 	    		$("#yearN").val("0");
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
 		
@@ -62,7 +62,7 @@ layui.config({
 	        	var yearN = 0;
 	        	if($("input[name='type']:checked").val() == '2'){
 	        		if(isNull($("#OverAllGrade").val())){
-	        			winui.window.msg('请选择正常年级', {icon: 2,time: 2000});
+	        			winui.window.msg('请选择正常年级', {icon: 2, time: 2000});
 	        			return false;
 	        		}else{
 	        			pId = $("#OverAllGrade").val();
@@ -79,11 +79,11 @@ layui.config({
 	        	};
 	        	
 	        	AjaxPostUtil.request({url:schoolBasePath + "grademation002", params:params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	        }

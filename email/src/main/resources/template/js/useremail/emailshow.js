@@ -13,7 +13,7 @@ layui.config({
 	var emailContentMobel = $("#emailContentMobel").html();
 	
 	AjaxPostUtil.request({url:reqBasePath + "useremail005", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			if(!isNull(json.bean.toPeople)){
 				json.bean.toPeople = json.bean.toPeople.split(',');
 			}
@@ -28,7 +28,7 @@ layui.config({
 			$("img").css({"width": "auto"});
 			matchingLanguage();
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 	

@@ -101,7 +101,7 @@ layui.config({
 			        	};
 			        	
 			        	AjaxPostUtil.request({url: reqBasePath + "companydepartment005", params: params, type: 'json', method: "PUT", callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{

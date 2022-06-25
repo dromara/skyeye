@@ -614,10 +614,10 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							wordMationList: wordMationList
 						};
 						AjaxPostUtil.request({url:reportBasePath + "reportpage007", params: {rowId: rowId, content: encodeURIComponent(JSON.stringify(params))}, type:'json', method: "POST", callback:function(json){
-							if(json.returnCode == 0){
-								winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+							if (json.returnCode == 0) {
+								winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 							}else{
-								winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 							}
 						}});
 					});

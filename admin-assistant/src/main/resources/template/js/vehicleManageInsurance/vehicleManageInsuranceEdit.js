@@ -132,22 +132,22 @@ layui.config({
 	 			 	 	            	var bf = fu.next().find("input").val();//对应的保费
 	 			 	 	            	var be = fu.next().next().find("input").val();//对应的保额
 	 			 	 	            	if(isNull(bf)){
-	 			 	 	            		winui.window.msg('请输入选中的险种对应的保费', {icon: 2,time: 2000});
+	 			 	 	            		winui.window.msg('请输入选中的险种对应的保费', {icon: 2, time: 2000});
 	 			 	            			istrue = false;
 	 			 	 	            	}else{
 	 			 	 	            		var str = /^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/;
 	 			 	    	 	        	var flag = str.test(bf);
 	 			 	    	                if(!flag){
-	 			 	    	                	winui.window.msg('保费小数点后最多两位！', {icon: 2,time: 2000});
+	 			 	    	                	winui.window.msg('保费小数点后最多两位！', {icon: 2, time: 2000});
 	 			 	    	                	istrue = false;
 	 			 	    	                }else{
 	 			 	    	                	if(isNull(be)){
-			 			 	 	            		winui.window.msg('请输入选中的险种对应的保额', {icon: 2,time: 2000});
+			 			 	 	            		winui.window.msg('请输入选中的险种对应的保额', {icon: 2, time: 2000});
 			 			 	 	            		istrue = false;
 			 			 	 	            	}else{
 			 			 	    	 	        	var flag = str.test(be);
 			 			 	    	                if(!flag){
-			 			 	    	                	winui.window.msg('保额小数点后最多两位！', {icon: 2,time: 2000});
+			 			 	    	                	winui.window.msg('保额小数点后最多两位！', {icon: 2, time: 2000});
 			 			 	    	                	istrue = false;
 			 			 	    	                }
 			 			 	 	            	}
@@ -161,23 +161,23 @@ layui.config({
 	 			 	            if(istrue){
 		 			 	            params.coverageIds = coverageIds;
 		 			 	            if(isNull(params.coverageIds)){
-		 				        		winui.window.msg('请选择险种', {icon: 2,time: 2000});
+		 				        		winui.window.msg('请选择险种', {icon: 2, time: 2000});
 		 				        		return false;
 		 				        	}
 	 				 	            if(params.insuredTelephone != ""){
 	 				 	        		var mobile = /^0?1[3|4|5|8][0-9]\d{8}$/,phone = /^0[\d]{2,3}-[\d]{7,8}$/;
 	 				 	 	        	var flag = mobile.test(params.insuredTelephone) || phone.test(params.insuredTelephone);
 	 				 	                if(!flag){
-	 				 	                	winui.window.msg('请输入正确的投保电话', {icon: 2,time: 2000});
+	 				 	                	winui.window.msg('请输入正确的投保电话', {icon: 2, time: 2000});
 	 				 	 	        		return false;
 	 				 	                }
 	 				 	        	}
 	 			 	 	        	AjaxPostUtil.request({url: flowableBasePath + "insurance005", params:params, type: 'json', callback: function(json){
-	 			 		 	   			if(json.returnCode == 0){
+	 			 		 	   			if (json.returnCode == 0) {
 	 			 			 	   			parent.layer.close(index);
 	 			 			 	        	parent.refreshCode = '0';
 	 			 		 	   			}else{
-	 			 		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 			 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 			 		 	   			}
 	 			 		 	   		}});
 	 			 	            }
@@ -185,7 +185,7 @@ layui.config({
 	 			 	        return false;
 	 			 	    });
 		    		}else {
-		    			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    		}
 				  }
 			    });

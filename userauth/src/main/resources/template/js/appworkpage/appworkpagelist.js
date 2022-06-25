@@ -42,7 +42,7 @@ layui.config({
 	//新增分类
 	$("body").on("click", "#addBean", function(){
 		AjaxPostUtil.request({url:reqBasePath + "appworkpage002", params: {}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				chooseId = json.bean.id;
    				showList();
    				$(".setting a").removeClass("selected");
@@ -54,19 +54,19 @@ layui.config({
    			    	var value = obj.find("input").val();
    			    	if(value.length > 0){
    			    		AjaxPostUtil.request({url:reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function(json){
-   		   		   			if(json.returnCode == 0){
+   		   		   			if (json.returnCode == 0) {
    		   		   				showMenu();
    		   		   			}else{
-   		   						winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   		   						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    		   					}
    		   		   		}});
    			    	}else{
    			    		showMenu();
-   			    		winui.window.msg("标题不能为空", {icon: 2,time: 2000});
+   			    		winui.window.msg("标题不能为空", {icon: 2, time: 2000});
    			    	}
    			    });
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
     });
@@ -80,13 +80,13 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	$("#setting").find("a").removeClass('selected');
                 	//根据新增页面选中的目录进行选中并展示列表
                 	$("#setting").find("a[rowid='" + chooseId + "']").addClass('selected');
     		 	    showList();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 		}});
     });
@@ -94,7 +94,7 @@ layui.config({
 	//加载目录
 	function showMenu(){
 		AjaxPostUtil.request({url:reqBasePath + "appworkpage001", params: {}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				if(json.total > 0){
 					var str = getDataUseHandlebars(appWorkPageTemplate, json);
 					$("#setting").html(str);
@@ -109,7 +109,7 @@ layui.config({
 		 		}
 				showList();
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -188,10 +188,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	showList();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -201,11 +201,11 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "appworkpage007", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				showList();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -214,11 +214,11 @@ layui.config({
 	//上移
 	function topOne(data){
 		AjaxPostUtil.request({url:reqBasePath + "appworkpage008", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
-				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+			if (json.returnCode == 0) {
+				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				showList();
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -226,11 +226,11 @@ layui.config({
 	//下移
 	function lowerOne(data){
 		AjaxPostUtil.request({url:reqBasePath + "appworkpage009", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
-				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+			if (json.returnCode == 0) {
+				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				showList();
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -241,11 +241,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "appworkpage010", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg("上线成功", {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				showList();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -257,11 +257,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "appworkpage011", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg("下线成功", {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				showList();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -278,7 +278,7 @@ layui.config({
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -304,11 +304,11 @@ layui.config({
 					layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
 						layer.close(index);
 			            AjaxPostUtil.request({url:reqBasePath + "appworkpage014", params:{rowId: chooseId}, type: 'json', callback: function(json){
-			    			if(json.returnCode == 0){
+			    			if (json.returnCode == 0) {
 			    				showMenu();
-			    				winui.window.msg("上线成功", {icon: 1,time: 2000});
+			    				winui.window.msg("上线成功", {icon: 1, time: 2000});
 			    			}else{
-			    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			    			}
 			    		}});
 					});
@@ -324,11 +324,11 @@ layui.config({
 					layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
 						layer.close(index);
 			            AjaxPostUtil.request({url:reqBasePath + "appworkpage015", params:{rowId: chooseId}, type: 'json', callback: function(json){
-			    			if(json.returnCode == 0){
+			    			if (json.returnCode == 0) {
 			    				showMenu();
-			    				winui.window.msg("下线成功", {icon: 1,time: 2000});
+			    				winui.window.msg("下线成功", {icon: 1, time: 2000});
 			    			}else{
-			    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			    			}
 			    		}});
 					});
@@ -341,11 +341,11 @@ layui.config({
 				img: "../../assets/images/up-move.png",
 				callback: function() {
 					AjaxPostUtil.request({url:reqBasePath + "appworkpage016", params:{rowId: chooseId}, type: 'json', callback: function(json){
-						if(json.returnCode == 0){
+						if (json.returnCode == 0) {
 							showMenu();
-							winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+							winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 						}else{
-							winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});
 				}
@@ -357,11 +357,11 @@ layui.config({
 				img: "../../assets/images/down-move.png",
 				callback: function() {
 					AjaxPostUtil.request({url:reqBasePath + "appworkpage017", params:{rowId: chooseId}, type: 'json', callback: function(json){
-						if(json.returnCode == 0){
+						if (json.returnCode == 0) {
 							showMenu();
-							winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+							winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 						}else{
-							winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});
 				}
@@ -375,12 +375,12 @@ layui.config({
 					layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 						layer.close(index);
 				        AjaxPostUtil.request({url:reqBasePath + "appworkpage013", params:{rowId: chooseId}, type: 'json', callback: function(json){
-							if(json.returnCode == 0){
-								winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+							if (json.returnCode == 0) {
+								winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 								chooseId = "";
 								showMenu();
 							}else{
-								winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 							}
 						}});
 					});
@@ -400,10 +400,10 @@ layui.config({
 	   			    	if(value.length > 0){
 	   			    		if(value != chooseName){
 	   			    			AjaxPostUtil.request({url:reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function(json){
-				   		   			if(json.returnCode == 0){
+				   		   			if (json.returnCode == 0) {
 				   		   				showMenu();
 				   		   			}else{
-				   						winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				   						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				   					}
 				   		   		}});
 	   			    		}else{
@@ -411,7 +411,7 @@ layui.config({
 	   			    		}
 	   			    	}else{
 	   			    		showMenu();
-	   			    		winui.window.msg("标题不能为空", {icon: 2,time: 2000});
+	   			    		winui.window.msg("标题不能为空", {icon: 2, time: 2000});
 	   			    	}
 	   			    });
 				}

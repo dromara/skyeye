@@ -15,7 +15,7 @@ layui.config({
 			executorId = parent.executorId;
 		}
 	    AjaxPostUtil.request({url:reqBasePath + "sysworkplan011", params:{planId: parent.rowId, executorId: executorId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
 				$("#showForm").html(getDataUseHandlebars($("#beanTemplate").html(), json));
    			    // 计划周期名称展示
    			    $("#nowCheckTypeBox").html(getNowCheckTypeName(json.bean.planCycle));
@@ -45,7 +45,7 @@ layui.config({
    			    matchingLanguage();
    				form.render();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 

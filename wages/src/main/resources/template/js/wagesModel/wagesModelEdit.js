@@ -160,11 +160,11 @@ layui.config({
 					});
 					params.str = JSON.stringify(object);
 					AjaxPostUtil.request({url:reqBasePath + "wagesmodel004", params: params, type: 'json', method: "PUT", callback: function(json){
-						if(json.returnCode == 0){
+						if (json.returnCode == 0) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 						}else{
-							winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});
 				}
@@ -196,7 +196,7 @@ layui.config({
 					// 重置数据
 					companyList = [].concat(systemCommonUtil.tagEditorResetData('company', companyList));
 				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 				}
 			}});
 	});
@@ -213,7 +213,7 @@ layui.config({
 					// 重置数据
 					departmentList = [].concat(systemCommonUtil.tagEditorResetData('department', departmentList));
 				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 				}
 			}});
 	});
@@ -283,7 +283,7 @@ layui.config({
 					$("#fieldId" + thisRowNum.toString()).val(fieldMation.nameCn + '(' + fieldMation.key + ')');
 					$("#fieldId" + thisRowNum.toString()).attr("rowKey", fieldMation.key);
 				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 				}
 			}});
 	});

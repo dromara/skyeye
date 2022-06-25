@@ -136,10 +136,10 @@ layui.config({
 				layer.close(index);
 	            
 				AjaxPostUtil.request({url:reqBasePath + "sysimportantsynchronization001", params:{rowId: downLoadId, url: val}, type: 'json', callback: function(json){
-	    			if(json.returnCode == 0){
-	    				winui.window.msg("同步成功", {icon: 1,time: 2000});
+	    			if (json.returnCode == 0) {
+	    				winui.window.msg("同步成功", {icon: 1, time: 2000});
 	    			}else{
-	    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	    			}
 	    		}});
 			});

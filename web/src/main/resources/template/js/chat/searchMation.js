@@ -59,7 +59,7 @@ layui.config({
 	    //查找
 	    $("body").on("click", "#reSearch", function(){
 	    	if(isNull($("#groupNameOrNum").val())){
-	    		winui.window.msg('请输入搜索内容', {icon: 2,time: 2000});
+	    		winui.window.msg('请输入搜索内容', {icon: 2, time: 2000});
 	    	}else{
 	    		refreshGrid("search-group-list", {params:{groupNameOrNum:$("#groupNameOrNum").val()}});
 	    	}
@@ -69,9 +69,9 @@ layui.config({
 	    $("body").on("click", ".inGroup", function(e){
 	    	var _this = $(this);
 	    	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup006", params:{groupId: $(this).attr("rowid")}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				_this.parent().html('<font>等待审核</font>');
- 	   				winui.window.msg('等待管理员审核', {icon: 1,time: 2000});
+ 	   				winui.window.msg('等待管理员审核', {icon: 1, time: 2000});
  	   				if(json.total == '1'){
  	   					var sendMessage = {
 							to: json.bean.inviteUserId,//收信人id
@@ -80,7 +80,7 @@ layui.config({
 						parent.etiger.socket.send(JSON.stringify(sendMessage));
  	   				}
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
 	    });

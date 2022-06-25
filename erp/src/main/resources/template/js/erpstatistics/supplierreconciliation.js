@@ -114,7 +114,7 @@ layui.config({
     //刷新
     function loadTable(){
     	if(isNull($("#operTime").val())){//一定要记得，当createTime为空时
-    		winui.window.msg("请选择日期.", {icon: 2,time: 2000});
+    		winui.window.msg("请选择日期.", {icon: 2, time: 2000});
     	}else {
     		operTime = $("#operTime").val();
 	        table.reload("messageTable", {where:{operTime: operTime, organName: $("#organName").val()}});
@@ -124,7 +124,7 @@ layui.config({
     //搜索
     function refreshTable(){
     	if(isNull($("#operTime").val())){//一定要记得，当createTime为空时
-    		winui.window.msg("请选择日期.", {icon: 2,time: 2000});
+    		winui.window.msg("请选择日期.", {icon: 2, time: 2000});
     	}else {
     		operTime = $("#operTime").val();
 	        table.reload("messageTable", {page: {curr: 1}, where:{operTime: operTime, organName: $("#organName").val()}})

@@ -104,7 +104,7 @@ var activitiUtil = {
                     $("#approvalPersonName").val(activitiUtil.chooseApprovalPersonMation.jobNumber + "_" + activitiUtil.chooseApprovalPersonMation.userName);
                     $("#approvalPersonName").attr("chooseData", JSON.stringify(activitiUtil.chooseApprovalPersonMation));
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }
         });
@@ -141,7 +141,7 @@ var activitiUtil = {
                         callback(activitiUtil.chooseApprovalPersonMation.id);
                     }
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }
         });
@@ -266,7 +266,7 @@ var activitiUtil = {
                             callback();
                         }
                     } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                     }
                 }
             });
@@ -285,7 +285,7 @@ var activitiUtil = {
                             callback();
                         }
                     } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                     }
                 }
             });
@@ -304,7 +304,7 @@ var activitiUtil = {
                             callback();
                         }
                     } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                     }
                 }
             });

@@ -122,19 +122,19 @@ layui.config({
 	    		// 否
 	    		$("#dataShowModel").hide();
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
       	
       	form.on('select(selectParent)', function(data){
       		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				htmlModelContent.setValue(json.bean.htmlContent);
     				jsModelContent.setValue(json.bean.jsContent);
     				htmlContent.setValue(json.bean.htmlContent);
     				jsContent.setValue(json.bean.jsContent);
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -155,7 +155,7 @@ layui.config({
 	        	
 	        	if(data.field.selChildData == '1'){
 	        		if(isNull($("#displayTemplateId").val())){
-	        			winui.window.msg('请选择子查询数据展示模板', {icon: 2,time: 2000});
+	        			winui.window.msg('请选择子查询数据展示模板', {icon: 2, time: 2000});
 	        			return false;
 	        		}else{
 	        			params.displayTemplateId = $("#displayTemplateId").val();
@@ -165,11 +165,11 @@ layui.config({
 	        	}
 	        	
 	        	AjaxPostUtil.request({url:reqBasePath + "rmproperty002", params:params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	        }

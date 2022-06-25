@@ -34,7 +34,7 @@ layui.config({
 				shareType: shareType
 			};
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole016", params: params, type: 'json', callback: function(json){
-	   			if(json.returnCode == 0){
+	   			if (json.returnCode == 0) {
 	   				json.bean.shareUrl = reqBasePath + json.bean.shareUrl;
 	   				var str = "链接：" + json.bean.shareUrl;
 	   				if(json.bean.shareType === '1'){//无提取码
@@ -53,13 +53,13 @@ layui.config({
 	   				//复制
 	   				clipboard = new ClipboardJS('#copyBtn');
 	   				clipboard.on('success', function(e) {
-	   					winui.window.msg("复制成功", {icon: 1,time: 2000});
+	   					winui.window.msg("复制成功", {icon: 1, time: 2000});
 	   				});
 	   				clipboard.on('error', function(e) {
-	   					winui.window.msg("浏览器不支持！", {icon: 2,time: 2000});
+	   					winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
 	   				});
 	   			}else{
-	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});
 	    });

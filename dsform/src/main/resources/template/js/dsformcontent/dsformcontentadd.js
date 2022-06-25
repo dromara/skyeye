@@ -149,7 +149,7 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	if(isNull(htmlEditor.getValue())){
-	        		winui.window.msg('请输入模板内容', {icon: 2,time: 2000});
+	        		winui.window.msg('请输入模板内容', {icon: 2, time: 2000});
 	        	}else{
 	        		var params = {
         				contentName: $("#contentName").val(),
@@ -162,7 +162,7 @@ layui.config({
 	 	        		params.linkedData = '1';
 	 	        		params.dataShowTpl = $("#dataShowTpl").val();
 	 	        		if(isNull(params.dataShowTpl)){
-	 	 	        		winui.window.msg('请选择数据展示模板', {icon: 2,time: 2000});
+	 	 	        		winui.window.msg('请选择数据展示模板', {icon: 2, time: 2000});
 	 	 	        		return false;
 	 	 	        	}
 	 	        		var defaultDataStr = $("#defaultData").val();//默认数据值

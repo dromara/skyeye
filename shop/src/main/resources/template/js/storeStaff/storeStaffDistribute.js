@@ -100,7 +100,7 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "storeStaff002", params: {id: data.id}, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     table.reload("messageTable", {page: {curr: 1}, where: {storeId: chooseStoreId}})
                 }else{
@@ -128,7 +128,7 @@ layui.config({
                 staffId: JSON.stringify(list)
             };
             AjaxPostUtil.request({url: shopBasePath + "storeStaff003", params: params, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     loadStaff(chooseStoreId);
                 }else{
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

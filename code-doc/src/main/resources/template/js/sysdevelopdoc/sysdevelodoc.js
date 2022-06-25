@@ -83,7 +83,7 @@ layui.config({
 	function initDate(){
 		if(!isNull($("#showDocList").find("dd[class='active']").find("a").attr("rowid"))){
 			AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc023", params:{rowId: $("#showDocList").find("dd[class='active']").find("a").attr("rowid")}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					$('#contentDiv').empty();
 					$('#contentDiv').append('<textarea id="content" style="display:none;" placeholder="markdown语言"></textarea>');
 					$("#content").val(json.bean.content);
@@ -96,7 +96,7 @@ layui.config({
 	                    sequenceDiagram : true  // 默认不解析
 	                });
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		}

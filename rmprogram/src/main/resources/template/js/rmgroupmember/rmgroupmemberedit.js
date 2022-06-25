@@ -117,9 +117,9 @@ layui.config({
 			    form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	if(isNull(htmlContent.getValue())){
-		        			winui.window.msg("请填写HTML内容", {icon: 2,time: 2000});
+		        			winui.window.msg("请填写HTML内容", {icon: 2, time: 2000});
 		        		}else if(isNull(wxmlContent.getValue())){
-		        			winui.window.msg("请填写WXML内容", {icon: 2,time: 2000});
+		        			winui.window.msg("请填写WXML内容", {icon: 2, time: 2000});
 		        		}else{
 			 	   			var params = {
 			 	   				htmlContent: encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
@@ -134,11 +134,11 @@ layui.config({
 			 	   			params.img = $("#printsPicUrl").find("input[type='hidden'][name='upload']").attr("oldurl");
 			 	   			
 				        	AjaxPostUtil.request({url:reqBasePath + "rmxcx021", params:params, type: 'json', callback: function(json){
-				 	   			if(json.returnCode == 0){
+				 	   			if (json.returnCode == 0) {
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';
 				 	   			}else{
-				 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				 	   			}
 				 	   		}});
 		        		}

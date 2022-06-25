@@ -134,7 +134,7 @@ layui.config({
  	        if (winui.verifyForm(data.elem)) {
  	        	var weekDay = getWeekDay();
  	        	if(isNull(weekDay) || weekDay.length == 0){
- 	        		winui.window.msg('请选择工作日', {icon: 2,time: 2000});
+ 	        		winui.window.msg('请选择工作日', {icon: 2, time: 2000});
  	        		return false;
  	        	}
  	        	var params = {
@@ -148,11 +148,11 @@ layui.config({
  	        		weekDay: JSON.stringify(weekDay)
  	        	};
  	        	AjaxPostUtil.request({url: flowableBasePath + "checkworktime002", params: params, type: 'json', callback: function(json){
- 	        		if(json.returnCode == 0){
+ 	        		if (json.returnCode == 0) {
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';
  	        		}else{
- 	        			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	        		}
  	        	}});
  	        }

@@ -19,14 +19,14 @@ layui.config({
     var interval = null;
 	
 	AjaxPostUtil.request({url:reqBasePath + "knowledgecontent006", params:{rowId: rowId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			$("#title").html(json.bean.title);
 			content = json.bean.content;
 	 		$("#knowledgecontentshowBox").attr("src", "contentshow.html");
 	 		interval = setInterval(iFrameHeight, 300);
 	 		matchingLanguage();
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 	

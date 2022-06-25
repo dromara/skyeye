@@ -37,7 +37,7 @@ layui.config({
 					// 重置数据
 					tagList = [].concat(systemCommonUtil.tagEditorResetData('tagId', tagReturnList));
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	});
@@ -68,7 +68,7 @@ layui.config({
     			forumType: data.field.forumType
         	};
         	if(tagList.length == 0 || isNull($('#tagId').tagEditor('getTags')[0].tags)){
-        		winui.window.msg("请选择标签", {icon: 2,time: 2000});
+        		winui.window.msg("请选择标签", {icon: 2, time: 2000});
         		return false;
 	        }else{
 	        	var str = "";
@@ -84,17 +84,17 @@ layui.config({
         	}
         	params.content = encodeURIComponent(ue.getContent());
         	if(isNull(params.content)){
-        		winui.window.msg("请输入内容", {icon: 2,time: 2000});
+        		winui.window.msg("请输入内容", {icon: 2, time: 2000});
         		return false;
         	}
         	params.textConent = encodeURIComponent(ue.getContentTxt());
         	AjaxPostUtil.request({url:reqBasePath + "forumcontent002", params:params, type: 'json', callback: function(json){
-	   			if(json.returnCode == 0){
+	   			if (json.returnCode == 0) {
 	   				winui.window.msg("发布成功", {icon: 1, time: 2000}, function(){
 	   					location.href = '../../tpl/forumshow/myposts.html';
 	   				});
 	   			}else{
-	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
         	}});
         }

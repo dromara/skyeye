@@ -37,7 +37,7 @@ layui.config({
 			if(saveBtn){
 				var node = ztree.getCheckedNodes();
 				if(isNull(node)){//如果节点为空
-					winui.window.msg("请选择目录。", {icon: 2,time: 2000});
+					winui.window.msg("请选择目录。", {icon: 2, time: 2000});
 				}else{
 					var jsonStr = JSON.stringify(parent.chooseSaveIds);
 					var folderId = node[0].id;
@@ -49,11 +49,11 @@ layui.config({
 					winui.window.msg("文件正在保存，期间请勿进行其他操作。", {icon: 7,time: 4000});
 					AjaxPostUtil.request({url:reqBasePath + "fileconsole023", params: params, type: 'json', callback: function(json){
 						saveBtn = true;
-						if(json.returnCode == 0){
+						if (json.returnCode == 0) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 						}else{
-							winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});
 				}

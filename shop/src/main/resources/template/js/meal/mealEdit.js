@@ -97,11 +97,11 @@ layui.config({
                             rowId: parent.rowId
                         };
                         if(isNull(params.logo)){
-                            winui.window.msg('请上传套餐LOGO', {icon: 2,time: 2000});
+                            winui.window.msg('请上传套餐LOGO', {icon: 2, time: 2000});
                             return false;
                         }
                         AjaxPostUtil.request({url: shopBasePath + "meal005", params: params, type: 'json', method: "PUT", callback: function(json){
-                            if(json.returnCode == 0){
+                            if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
                             }else{

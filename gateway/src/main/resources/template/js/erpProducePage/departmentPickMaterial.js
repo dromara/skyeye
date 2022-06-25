@@ -29,11 +29,11 @@ layui.config({
 	// 统计当前部门月度领料图
 	function initCustomDocumentaryByType(year){
 		AjaxPostUtil.request({url:reqBasePath + "erpproduce001", params: {year: year}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
  	   			renderCharts1(json.rows);
  	   			matchingLanguage();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	}

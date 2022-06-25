@@ -18,21 +18,21 @@ layui.config({
 	initFourNumList();
 	function initFourNumList(){
 		AjaxPostUtil.request({url:reqBasePath + "mainpage001", params: {}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
  	   			$("#checkOnWorkNum").html(json.bean.checkOnWorkNum);
  	   			$("#diskCloudFileNum").html(json.bean.diskCloudFileNum);
  	   			$("#forumNum").html(json.bean.forumNum);
  	   			$("#knowledgeNum").html(json.bean.knowledgeNum);
  	   			initNoticeList();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	}
 	
 	function initNoticeList(){
 		AjaxPostUtil.request({url:reqBasePath + "mainpage002", params: {}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				$.each(json.rows, function(i, item){
    					if(i == 0){
    						item.className = "layui-this";
@@ -43,31 +43,31 @@ layui.config({
  	   			$("#noticeContent").append(getDataUseHandlebars($("#noticeContentTemplate").html(), json));
  	   			initForumList();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	}
 	
 	function initForumList(){
 		AjaxPostUtil.request({url:reqBasePath + "mainpage003", params: {}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
  	   			$("#forumContent").append(getDataUseHandlebars($("#forumContentTemplate").html(), json));
  	   			initKnowledgeList();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	}
 	
 	function initKnowledgeList(){
 		AjaxPostUtil.request({url:reqBasePath + "mainpage004", params: {}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
  	   			$("#knowledgeList").html(getDataUseHandlebars($("#knowledgeContentTemplate").html(), json));
  	   			matchingLanguage();
 				initHotActModel();
  	   			form.render();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	}
@@ -154,9 +154,9 @@ layui.config({
 			area: ['100vw', '100vh'],
 			callBack: function(refreshCode){
 				if (refreshCode == '0') {
-					winui.window.msg("提交成功", {icon: 1,time: 2000});
+					winui.window.msg("提交成功", {icon: 1, time: 2000});
 				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 				}
 			}});
 	});

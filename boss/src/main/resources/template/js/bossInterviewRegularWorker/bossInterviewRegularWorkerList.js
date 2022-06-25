@@ -81,10 +81,10 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }});
     });
@@ -94,7 +94,7 @@ layui.config({
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "revokeBossInterviewRegularWorker", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg("提交成功", {icon: 1, time: 2000});
                     loadTable();
                 }else{
@@ -114,10 +114,10 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }
         });
@@ -133,7 +133,7 @@ layui.config({
                     approvalId: approvalId
                 };
                 AjaxPostUtil.request({url: flowableBasePath + "editBossInterviewRegularWorkerToSubApproval", params: params, type: 'json', method: "POST", callback: function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         winui.window.msg("提交成功", {icon: 1, time: 2000});
                         loadTable();
                     }else{
@@ -149,7 +149,7 @@ layui.config({
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "updateBossInterviewRegularWorkerToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }else{

@@ -40,7 +40,7 @@ layui.config({
         			params.assetAdmin = userList[0].id;
         		}
  	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles011", params: params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{

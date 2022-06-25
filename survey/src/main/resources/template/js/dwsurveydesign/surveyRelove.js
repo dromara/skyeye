@@ -45,10 +45,10 @@ layui.config({
 		//复制链接
 		var clipboard = new ClipboardJS('#copyUrl');
 		clipboard.on('success', function(e) {
-			winui.window.msg("复制成功", {icon: 1,time: 2000});
+			winui.window.msg("复制成功", {icon: 1, time: 2000});
 		});
 		clipboard.on('error', function(e) {
-			winui.window.msg("浏览器不支持！", {icon: 2,time: 2000});
+			winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
 		});
 		
 	});

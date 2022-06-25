@@ -107,11 +107,11 @@ layui.config({
  	    form.on('submit(formAddBean)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
  	        	if(isNull(workId)){
- 	        		winui.window.msg('请选择申诉内容', {icon: 2,time: 2000});
+ 	        		winui.window.msg('请选择申诉内容', {icon: 2, time: 2000});
  	        		return false;
  	        	}
  	        	if(isNull(appealReasonId)){
- 	        		winui.window.msg('请选择申诉原因类型', {icon: 2,time: 2000});
+ 	        		winui.window.msg('请选择申诉原因类型', {icon: 2, time: 2000});
  	        		return false;
  	        	}
  	        	var params = {
@@ -123,15 +123,15 @@ layui.config({
  	        	};
  	        	if(!isNull($("#approvalId").val()) && !isNull(ids)){
  	        		AjaxPostUtil.request({url: flowableBasePath + "checkwork005", params:params, type: 'json', callback: function(json){
- 	 	        		if(json.returnCode == 0){
+ 	 	        		if (json.returnCode == 0) {
  	 	        			parent.layer.close(index);
  	 	        			parent.refreshCode = '0';
  	 	        		}else{
- 	 	        			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	 	        		}
  	 	        	}});
         		}else{
-        			winui.window.msg("请选择审批人!", {icon: 2,time: 2000});
+        			winui.window.msg("请选择审批人!", {icon: 2, time: 2000});
         		}
  	        }
  	        return false;

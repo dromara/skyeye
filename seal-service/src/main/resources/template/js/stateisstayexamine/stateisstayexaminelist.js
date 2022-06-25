@@ -115,7 +115,7 @@ layui.config({
 			layer.close(index);
             
             AjaxPostUtil.request({url: flowableBasePath + "sealseservice038", params: {rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				winui.window.msg("审核成功", {icon: 1, time: 2000});
     				loadTable();
     			}else{

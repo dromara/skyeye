@@ -75,7 +75,7 @@ layui.config({
 	$("body").on("click", ".collection", function(){
 		var rowId = $(this).attr("rowid");
 		AjaxPostUtil.request({url: reqBasePath + "sysevemodel006", params: {id: rowId}, type: 'json', method: "GET", callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				parent.systemModelUtil.chooseSysModel = json.bean;
 				parent.layer.close(index);
 				parent.refreshCode = '0';

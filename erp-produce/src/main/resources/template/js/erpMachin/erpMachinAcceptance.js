@@ -62,11 +62,11 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	if(parseInt(isNull($("#acceptNum").val()) ? "0" : $("#acceptNum").val()) < 0){
-	        		winui.window.msg('合格数量不能小于0.', {icon: 2,time: 2000});
+	        		winui.window.msg('合格数量不能小于0.', {icon: 2, time: 2000});
 	        		return false;
 	        	}
 	        	if(parseInt(isNull($("#belowNum").val()) ? "0" : $("#belowNum").val()) < 0){
-	        		winui.window.msg('不合格数量不能小于0.', {icon: 2,time: 2000});
+	        		winui.window.msg('不合格数量不能小于0.', {icon: 2, time: 2000});
 	        		return false;
 	        	}
 	        	
@@ -77,11 +77,11 @@ layui.config({
 			    	depotId: (subType == 1) ? "" : $("#depotId").val()
 			    };
 	        	AjaxPostUtil.request({url:flowableBasePath + "erpmachin012", params: params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	        }

@@ -37,7 +37,7 @@ layui.config({
 	    var carryPeople = "";//指定人员id
 
 	    AjaxPostUtil.request({url:reqBasePath + "sysworkplan007", params:{planId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				nowCheckType = json.bean.planCycle;
    			    timeSolt = json.bean.startTime + '~' + json.bean.endTime;
    			    $("#title").val(json.bean.title);
@@ -159,7 +159,7 @@ layui.config({
    					}else if(val == '2'){//他人
    						$("#carryPeopleBox").removeClass("layui-hide");
    					}else{
-   						winui.window.msg('状态值错误', {icon: 2,time: 2000});
+   						winui.window.msg('状态值错误', {icon: 2, time: 2000});
    					}
    				});
    				
@@ -189,7 +189,7 @@ layui.config({
    			    form.on('submit(formEditBean)', function (data) {
    			        if (winui.verifyForm(data.elem)) {
    			        	if(isNull(encodeURIComponent(layedit.getContent(content)))){
-   			        		winui.window.msg('请填写内容', {icon: 2,time: 2000});
+   			        		winui.window.msg('请填写内容', {icon: 2, time: 2000});
    			        		return false;
    			        	}
    			        	var params = {
@@ -205,7 +205,7 @@ layui.config({
    			        	if(params.assignmentType === '2'){
    			        		//指定人员
    			        		if(userList.length == 0 || isNull($('#carryPeople').tagEditor('getTags')[0].tags)){
-   			        			winui.window.msg('请选择人员', {icon: 2,time: 2000});
+   			        			winui.window.msg('请选择人员', {icon: 2, time: 2000});
    			        			return false;
    			        		}else{
    			        			$.each(userList, function(i, item){
@@ -240,7 +240,7 @@ layui.config({
    		 	        	}
    			        	if(params.whetherTime === '1'){
    			        		if(isNull($("#notifyTime").val())){
-   			        			winui.window.msg('请选择通知时间', {icon: 2,time: 2000});
+   			        			winui.window.msg('请选择通知时间', {icon: 2, time: 2000});
    			        			return false;
    			        		}else{
    			        			params.notifyTime = $("#notifyTime").val();
@@ -250,11 +250,11 @@ layui.config({
    			        	}
    			        	
    			        	AjaxPostUtil.request({url:reqBasePath + "sysworkplan012", params:params, type: 'json', callback: function(json){
-   			 	   			if(json.returnCode == 0){
+   			 	   			if (json.returnCode == 0) {
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';
    			 	   			}else{
-   			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			 	   			}
    			 	   		}});
    			        }
@@ -262,7 +262,7 @@ layui.config({
    			    });
    			    
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	    

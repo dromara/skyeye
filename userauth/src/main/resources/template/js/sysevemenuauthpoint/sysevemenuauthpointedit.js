@@ -11,7 +11,7 @@ layui.config({
 		    form = layui.form;
 	    
 	    AjaxPostUtil.request({url:reqBasePath + "sysevemenuauthpoint003", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
 	   			$("#authMenuName").val(json.bean.authMenuName);
 	   			$("#authMenu").val(json.bean.authMenu);
 	   			matchingLanguage();
@@ -25,18 +25,18 @@ layui.config({
    							menuId: parent.menuId
 	   					};
 	   					AjaxPostUtil.request({url:reqBasePath + "sysevemenuauthpoint004", params:params, type: 'json', callback: function(json){
-	   						if(json.returnCode == 0){
+	   						if (json.returnCode == 0) {
 	   							parent.layer.close(index);
 	   							parent.refreshCode = '0';
 	   						}else{
-	   							winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	   							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   						}
 	   					}});
 	   				}
 	   				return false;
 	   			});
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 

@@ -56,7 +56,7 @@ layui.config({
 			    $("body").on("click", ".aggreIn", function(e){
 			    	var _this = $(this);
 			    	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup003", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
-		 	   			if(json.returnCode == 0){
+		 	   			if (json.returnCode == 0) {
 		 	   				_this.parent().html('<font>已同意</font>');
 		 	   				if(json.bean.inGroupType == '1'){//被邀请进群
 			 	   				parent.layim.addList({
@@ -75,9 +75,9 @@ layui.config({
 			 	   				};
 			 	   				parent.etiger.socket.send(JSON.stringify(sendMessage));
 		 	   				}
-		 	   				winui.window.msg('操作成功', {icon: 1,time: 2000});
+		 	   				winui.window.msg('操作成功', {icon: 1, time: 2000});
 		 	   			}else{
-		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	   			}
 		 	   		}});
 			    });
@@ -86,11 +86,11 @@ layui.config({
 			    $("body").on("click", ".refuseIn", function(e){
 			    	var _this = $(this);
 			    	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup004", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
-		 	   			if(json.returnCode == 0){
+		 	   			if (json.returnCode == 0) {
 		 	   				_this.parent().html('<font>已拒绝</font>');
-		 	   				winui.window.msg('操作成功', {icon: 1,time: 2000});
+		 	   				winui.window.msg('操作成功', {icon: 1, time: 2000});
 		 	   			}else{
-		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	   			}
 		 	   		}});
 			    });

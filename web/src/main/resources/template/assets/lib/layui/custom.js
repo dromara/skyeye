@@ -107,11 +107,11 @@ var refreshCode = "";
  */
 function _openNewWindows(mation){
 	if(isNull(mation.url)){
-		winui.window.msg("页面路径不能为空", {icon: 2,time: 2000});
+		winui.window.msg("页面路径不能为空", {icon: 2, time: 2000});
 		return;
 	}
 	if(isNull(mation.pageId)){
-		winui.window.msg("缺少页面ID", {icon: 2,time: 2000});
+		winui.window.msg("缺少页面ID", {icon: 2, time: 2000});
 		return;
 	}
 	if(isNull(mation.title)){
@@ -270,7 +270,7 @@ function auth(urlNum){
 			}
 		}
 	}else{
-		winui.window.msg('登录超时，即将返回登录页面.', {icon: 2,time: 2000}, function(){
+		winui.window.msg('登录超时，即将返回登录页面.', {icon: 2, time: 2000}, function(){
 			var win = window;
 			while (win != win.top){
 				win = win.top;
@@ -587,7 +587,7 @@ function initPasteDragImg(Editor) {
 				}
 			}
 		} else {
-			winui.window.msg("当前浏览器不支持", {icon: 2,time: 2000});
+			winui.window.msg("当前浏览器不支持", {icon: 2, time: 2000});
 			return;
 		}
 		if(!file) {
@@ -625,7 +625,7 @@ function uploadImg(file, Editor) {
 		contentType: false,
 		dataType: 'json',
 		success: function(json) {
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var url = json.bean.picUrl;
 				var type = url.substr(url.lastIndexOf(".") + 1);
 				if($.inArray(type, imageType) >= 0){
@@ -634,7 +634,7 @@ function uploadImg(file, Editor) {
 					Editor.insertValue("[下载附件](" + url + ")");
 				}
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}
 	});
@@ -723,10 +723,10 @@ function getUserStaffHtmlMationByStaffId(staffId){
 	var html = "";
 	var template = getFileContent('tpl/common/userStaff/userStaffMationShowTop.tpl');
 	AjaxPostUtil.request({url:reqBasePath + "staff005", params: {rowId: staffId}, type: 'json', method: "GET", callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			html = getDataUseHandlebars(template, json);
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}, async: false});
 	return html;

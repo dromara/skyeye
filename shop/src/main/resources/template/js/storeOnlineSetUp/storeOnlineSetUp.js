@@ -102,15 +102,15 @@ layui.config({
                         if(onlineBookAppoint == 1){
                             // 开启预约
                             if(isNull($("#onlineBookRadix").val())){
-                                winui.window.msg('请输入维修基数', {icon: 2,time: 2000});
+                                winui.window.msg('请输入维修基数', {icon: 2, time: 2000});
                                 return false;
                             }
                             if(tableData.length == 0){
-                                winui.window.msg('请计算时间段', {icon: 2,time: 2000});
+                                winui.window.msg('请计算时间段', {icon: 2, time: 2000});
                                 return false;
                             }
                             if(isNull($("input[name='onlineBookType']:checked").val())){
-                                winui.window.msg('请选择类型', {icon: 2,time: 2000});
+                                winui.window.msg('请选择类型', {icon: 2, time: 2000});
                                 return false;
                             }
                         }
@@ -126,8 +126,8 @@ layui.config({
                         };
 
                         AjaxPostUtil.request({url: shopBasePath + "store009", params: params, type: 'json', method: "POST", callback: function(json){
-                            if(json.returnCode == 0){
-                                winui.window.msg('保存成功', {icon: 1,time: 2000});
+                            if (json.returnCode == 0) {
+                                winui.window.msg('保存成功', {icon: 1, time: 2000});
                             }else{
                                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
@@ -142,17 +142,17 @@ layui.config({
     $("body").on("click", "#calc", function() {
         var startTime = $("#businessStartTime").val();
         if(isNull(startTime)){
-            winui.window.msg('请选择营业开始时间', {icon: 2,time: 2000});
+            winui.window.msg('请选择营业开始时间', {icon: 2, time: 2000});
             return false;
         }
         var endTime = $("#businessEndTime").val();
         if(isNull(endTime)){
-            winui.window.msg('请选择营业结束时间', {icon: 2,time: 2000});
+            winui.window.msg('请选择营业结束时间', {icon: 2, time: 2000});
             return false;
         }
         var onlineBookRadix = $("#onlineBookRadix").val();
         if(isNull(onlineBookRadix)){
-            winui.window.msg('请输入维修基数', {icon: 2,time: 2000});
+            winui.window.msg('请输入维修基数', {icon: 2, time: 2000});
             return false;
         }
         var time = getTimePointMinute(startTime, endTime, parseInt(onlineBookRadix));

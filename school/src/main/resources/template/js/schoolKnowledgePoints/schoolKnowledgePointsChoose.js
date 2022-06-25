@@ -171,12 +171,12 @@ layui.config({
 			gridId: 'messageTable'
 		});
 		AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints008", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				parent.schoolKnowledgeMationList = [].concat(json.rows);
  	   			parent.layer.close(index);
  	        	parent.refreshCode = '0';
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	});

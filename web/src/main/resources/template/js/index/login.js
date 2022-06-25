@@ -61,9 +61,9 @@ layui.config({
  	        	$("#loginBtn").find("i").attr("class", "fa fa-spin fa-spinner fa-fw");
  	        	if(!isLogin){
 	 	        	if(isNull($("#userCode").val())){
-	 	        		top.winui.window.msg("请输入用户名", {icon: 2,time: 2000});
+	 	        		top.winui.window.msg("请输入用户名", {icon: 2, time: 2000});
 	 	        	}else if(isNull($("#password").val())){
-	 	        		top.winui.window.msg("请输入密码", {icon: 2,time: 2000});
+	 	        		top.winui.window.msg("请输入密码", {icon: 2, time: 2000});
 	 	        	}else{
 	 	        		var params = {
 	 	        			userCode:$("#userCode").val(),
@@ -73,7 +73,7 @@ layui.config({
 	 	        		AjaxPostUtil.request({url:reqBasePath + "login001", params:params, type: 'json', callback: function(json){
 	 	        			isLogin = false;
  	        				$("#loginBtn").find("i").attr("class", "fa fa-arrow-right");
-	 		 	   			if(json.returnCode == 0){
+	 		 	   			if (json.returnCode == 0) {
 	 		 	   				if(json.rows != null){
 			 	   					localStorage.setItem("authpoints", JSON.stringify(json.rows));
 			 	   				}
@@ -86,7 +86,7 @@ layui.config({
 			 	   					}
 	 		 	   				}
 	 		 	   			}else{
-	 		 	   				top.winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 		 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});
 	 	        	}

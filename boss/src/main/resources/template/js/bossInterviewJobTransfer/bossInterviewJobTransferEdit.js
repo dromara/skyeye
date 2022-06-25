@@ -82,15 +82,15 @@ layui.config({
 
     function saveData(subType, approvalId){
         if(isNull(organizationUtil.getCompanyMation(dtree)['nodeId'])){
-            winui.window.msg('请选择企业', {icon: 2,time: 2000});
+            winui.window.msg('请选择企业', {icon: 2, time: 2000});
             return false;
         }
         if(isNull(organizationUtil.getDepartmentMation(dtree)['nodeId'])){
-            winui.window.msg('请选择部门', {icon: 2,time: 2000});
+            winui.window.msg('请选择部门', {icon: 2, time: 2000});
             return false;
         }
         if(isNull(organizationUtil.getJobMation(dtree)['nodeId'])){
-            winui.window.msg('请选择岗位', {icon: 2,time: 2000});
+            winui.window.msg('请选择岗位', {icon: 2, time: 2000});
             return false;
         }
         var params = {

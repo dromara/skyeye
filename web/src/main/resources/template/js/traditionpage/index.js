@@ -85,7 +85,7 @@ layui.config({
 				
 				// 加载菜单
 				AjaxPostUtil.request({url:reqBasePath + "login005", params:{}, type: 'json', method: "GET", callback: function(json){
-		   			if(json.returnCode == 0){
+		   			if (json.returnCode == 0) {
 		   				var menuStr;
 		   				$.each(json.rows, function(i, row){
 		   					menuStr = "";
@@ -395,7 +395,7 @@ layui.config({
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
         	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				if (etiger != null) {
 		 	   			etiger.socket.close();
 		 	   		}

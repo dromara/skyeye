@@ -93,7 +93,7 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
 	        	if(procedureMationList.length == 0){
-	        		winui.window.msg('请选择工序', {icon: 2,time: 2000});
+	        		winui.window.msg('请选择工序', {icon: 2, time: 2000});
 	        		return false;
 	        	}
  	        	//物料清单
@@ -148,11 +148,11 @@ layui.config({
 			    	procedureJsonStr: JSON.stringify(procedureMationList)
 			    };
 	        	AjaxPostUtil.request({url:flowableBasePath + "erpmachin002", params: params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	        }
@@ -174,7 +174,7 @@ layui.config({
 	                	});
 	    				$("#procedureBody").html(str);
 	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 	                }
 				}});
 	    });
@@ -349,7 +349,7 @@ layui.config({
 						//计算价格
 						calculatedTotalPrice();
  	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+ 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
  	                }
  				}});
  	    });

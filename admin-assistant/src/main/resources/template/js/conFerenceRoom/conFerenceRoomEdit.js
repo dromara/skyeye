@@ -82,7 +82,7 @@ layui.config({
 	 	 	        	};
 	 	 	        	params.roomImg = $("#roomImg").find("input[type='hidden'][name='upload']").attr("oldurl");
 	 	 	        	if(isNull(params.roomImg)){
-	 	 	        		winui.window.msg('请上传会议室图片', {icon: 2,time: 2000});
+	 	 	        		winui.window.msg('请上传会议室图片', {icon: 2, time: 2000});
 	 	 	        		return false;
 	 	 	        	}
 	 	 	        	if(userList.length == 0 || isNull($('#roomAdmin').tagEditor('getTags')[0].tags)){
@@ -91,7 +91,7 @@ layui.config({
 	 	        			params.roomAdmin = userList[0].id;
 	 	        		}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "conferenceroom009", params: params, type: 'json', callback: function(json){
-	 		 	   			if(json.returnCode == 0){
+	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
 	 		 	   			}else{

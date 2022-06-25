@@ -161,11 +161,11 @@ layui.config({
 			gridId: 'messageTable'
 		});
 		if(selectedData.length == 0){
-			winui.window.msg("请选择商品", {icon: 2,time: 2000});
+			winui.window.msg("请选择商品", {icon: 2, time: 2000});
 			return false;
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "material014", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				productMationList = json.rows;
    				$step.nextStep();
    				$("#firstTab").hide();
@@ -186,7 +186,7 @@ layui.config({
 	$("body").on("click", "#saveChoose", function(){
 		var rows = $("#tBody tr");
 		if(rows.length == 0){
-			winui.window.msg("请选择商品", {icon: 2,time: 2000});
+			winui.window.msg("请选择商品", {icon: 2, time: 2000});
 			return false;
 		}
 		var proList = new Array();

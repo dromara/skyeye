@@ -13,13 +13,13 @@ function getFilePath(treeObj) {
 // 创建Word文件
 function createWordFile(folderId, callBack){
 	AjaxPostUtil.request({url:reqBasePath + "fileconsole025", params:{folderId: folderId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
-			winui.window.msg("创建成功", {icon: 1,time: 2000});
+		if (json.returnCode == 0) {
+			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 }
@@ -27,13 +27,13 @@ function createWordFile(folderId, callBack){
 // 创建Excel文件
 function createExcelFile(folderId, callBack){
 	AjaxPostUtil.request({url:reqBasePath + "fileconsole026", params:{folderId: folderId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
-			winui.window.msg("创建成功", {icon: 1,time: 2000});
+		if (json.returnCode == 0) {
+			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 }
@@ -41,13 +41,13 @@ function createExcelFile(folderId, callBack){
 // 创建PPT文件
 function createPPTFile(folderId, callBack){
 	AjaxPostUtil.request({url:reqBasePath + "fileconsole027", params:{folderId: folderId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
-			winui.window.msg("创建成功", {icon: 1,time: 2000});
+		if (json.returnCode == 0) {
+			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 }
@@ -55,13 +55,13 @@ function createPPTFile(folderId, callBack){
 // 创建TXT文件
 function createTXTFile(folderId, callBack){
 	AjaxPostUtil.request({url:reqBasePath + "fileconsole028", params:{folderId: folderId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
-			winui.window.msg("创建成功", {icon: 1,time: 2000});
+		if (json.returnCode == 0) {
+			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 }
@@ -69,13 +69,13 @@ function createTXTFile(folderId, callBack){
 // 创建Html文件
 function createHtmlFile(folderId, callBack){
 	AjaxPostUtil.request({url:reqBasePath + "fileconsole029", params:{folderId: folderId}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
-			winui.window.msg("创建成功", {icon: 1,time: 2000});
+		if (json.returnCode == 0) {
+			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 }
@@ -83,7 +83,7 @@ function createHtmlFile(folderId, callBack){
 // 创建文件夹
 function createFolder(folderId, refreshCallBack, initDragCallBack, currentUserId){
 	AjaxPostUtil.request({url:reqBasePath + "fileconsole002", params: {parentId: folderId, catalogName: '新建文件夹'}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			initNewFolder(json.bean.id, json.bean.catalogName, json.bean.logoPath, true, currentUserId);
 			// 刷新节点
 			if(typeof(refreshCallBack) == "function") {
@@ -94,7 +94,7 @@ function createFolder(folderId, refreshCallBack, initDragCallBack, currentUserId
 				initDragCallBack();
 			}
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 }

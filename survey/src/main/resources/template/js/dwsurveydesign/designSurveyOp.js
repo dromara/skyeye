@@ -115,7 +115,7 @@ layui.config({
 			        		params.rule = '3';
 			        		params.ruleCode = $("#ruleCode").val();
 			        		if(isNull(params.ruleCode)){
-			        			winui.window.msg('请填写答卷密码', {icon: 2,time: 2000});
+			        			winui.window.msg('请填写答卷密码', {icon: 2, time: 2000});
 			        			return false;
 			        		}
 			        	}else{
@@ -133,7 +133,7 @@ layui.config({
 			        		params.ynEndNum = '1';
 			        		params.endNum = $("#endNum").val();
 			        		if(isNull(params.endNum)){
-			        			winui.window.msg('请填写答卷份数', {icon: 2,time: 2000});
+			        			winui.window.msg('请填写答卷份数', {icon: 2, time: 2000});
 			        			return false;
 			        		}
 			        	}else{
@@ -145,7 +145,7 @@ layui.config({
 			        		params.ynEndTime = '1';
 			        		params.endTime = $("#endTime").val();
 			        		if(isNull(params.endTime)){
-			        			winui.window.msg('请填写答卷结束时间', {icon: 2,time: 2000});
+			        			winui.window.msg('请填写答卷结束时间', {icon: 2, time: 2000});
 			        			return false;
 			        		}
 			        	}else{
@@ -154,11 +154,11 @@ layui.config({
 			        	}
 			        	
 			        	AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory005", params:params, type: 'json', callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
-			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
 			        }

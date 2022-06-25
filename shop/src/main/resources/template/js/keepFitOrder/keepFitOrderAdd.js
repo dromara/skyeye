@@ -49,7 +49,7 @@ layui.config({
             }else{
                 // 获取车辆用于的套餐信息
                 AjaxPostUtil.request({url: shopBasePath + "queryMealMationByCarId", params: {carId: val}, type: 'json', method: "GET", callback: function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         carHasMealList = [].concat(json.rows);
                         calcMealChoose();
                     }else{
@@ -129,23 +129,23 @@ layui.config({
                 if(userType == 1){
                     // 匿名客户
                     if(isNull(params.memberCarPlate)){
-                        winui.window.msg('请输入车牌号.', {icon: 2,time: 2000});
+                        winui.window.msg('请输入车牌号.', {icon: 2, time: 2000});
                         return false;
                     }
                 }else{
                     // 会员
                     if(isNull(params.memberId)){
-                        winui.window.msg('请选择会员.', {icon: 2,time: 2000});
+                        winui.window.msg('请选择会员.', {icon: 2, time: 2000});
                         return false;
                     }
                     if(isNull(params.memberCarId)){
-                        winui.window.msg('请选择车辆信息.', {icon: 2,time: 2000});
+                        winui.window.msg('请选择车辆信息.', {icon: 2, time: 2000});
                         return false;
                     }
                 }
 
                 AjaxPostUtil.request({url: shopBasePath + "insertKeepFitOrder", params: params, type: 'json', method: "POST", callback: function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000}, function(){
                             location.reload();
                         });
@@ -204,7 +204,7 @@ layui.config({
                 };
                 // 获取会员拥有的车辆信息(已启用)
                 AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: params, type: 'json', method: "POST", callback: function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         $.each(json.rows, function (i, item){
                             item.name = item.modelType + "(" + item.plate + ")";
                         });

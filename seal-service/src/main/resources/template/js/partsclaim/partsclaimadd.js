@@ -203,7 +203,7 @@ layui.config({
  	                if (refreshCode == '0') {
  	                	$("#serviceId").val(chooseOrderNum);
  	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+ 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
  	                }
  				}});
  	    });
@@ -265,7 +265,7 @@ layui.config({
  	                if (refreshCode == '0') {
  	                	$("#customName").val(customerMation.customName);
  	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+ 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
  	                }
  				}});
  	    });

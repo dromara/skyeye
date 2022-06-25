@@ -22,7 +22,7 @@ layui.config({
 	        	var tree = $.fn.zTree.getZTreeObj("treeDemo");
 	    	    var nodes = tree.getCheckedNodes(true);
 	    	    if(isNull(nodes)){
-	    	    	winui.window.msg('请选择菜单权限', {icon: 2,time: 2000});
+	    	    	winui.window.msg('请选择菜单权限', {icon: 2, time: 2000});
 	    			return false;
 	    	    }else{
 	    	    	var menuIds = "";//菜单
@@ -49,11 +49,11 @@ layui.config({
 		        	};
 		        	
 		        	AjaxPostUtil.request({url:reqBasePath + "sys039", params:params, type: 'json', callback: function(json){
-		 	   			if(json.returnCode == 0){
+		 	   			if (json.returnCode == 0) {
 			 	   			parent.layer.close(index);
 			 	        	parent.refreshCode = '0';
 		 	   			}else{
-		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	   			}
 		 	   		}});
 	    		}
@@ -68,7 +68,7 @@ layui.config({
 		
 		
 		AjaxPostUtil.request({url:reqBasePath + "sys038", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				$("#roleName").text(json.bean.roleName);
    				$("#roleDesc").text(json.bean.roleDesc);
    				checkeRows = json.rows;
@@ -118,7 +118,7 @@ layui.config({
    					fsCommon.buttonEvent("tree", getTree);
    				}
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 		

@@ -84,15 +84,15 @@ layui.config({
         			typeState: $("input[name='typeState']:checked").val()
  	        	};
     			if(isNull(ue.getContent())){
-    				winui.window.msg('请填写内容', {icon: 2,time: 2000});
+    				winui.window.msg('请填写内容', {icon: 2, time: 2000});
     				return false;
     			}
     			AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints002", params: params, type: 'json', callback: function(json){
-    				if(json.returnCode == 0){
+    				if (json.returnCode == 0) {
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';
     				}else{
-    					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     				}
     			}});
  	        }

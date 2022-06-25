@@ -32,7 +32,7 @@ layui.config({
 			};
 
 			AjaxPostUtil.request({url: reqBasePath + "editSysRolePCAuth", params: params, type: 'json', method: "PUT", callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 				}else{
@@ -48,7 +48,7 @@ layui.config({
 	var treeDoms = $("ul.fsTree");
 
 	AjaxPostUtil.request({url: reqBasePath + "sys016", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			$("#roleName").text(json.bean.roleName);
 			$("#roleDesc").text(json.bean.roleDesc);
 			checkeRows = json.rows;
@@ -98,7 +98,7 @@ layui.config({
 				fsCommon.buttonEvent("tree", getTree);
 			}
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 

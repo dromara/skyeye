@@ -712,7 +712,7 @@
 					}
 					bgAnDate = getFormatDate();
 					AjaxPostUtil.request({url:schoolBasePath + "exam028", params: {surveyId: getUrlParam("rowId")}, type: 'json', callback: function(json){
-		 	   			if(json.returnCode == 0){
+		 	   			if (json.returnCode == 0) {
 			 	   			showGrid({
 								id: "wrap",
 								url: schoolBasePath + "exam024",
@@ -1321,10 +1321,10 @@
 							params = $.extend({}, params, $("#surveyForm").serializeJson());
 							params.quAnswerFile = JSON.stringify(quAnswerFile);
 							AjaxPostUtil.request({url:schoolBasePath + "exam029", params: params, type: 'json', callback: function(json){
-				 	   			if(json.returnCode == 0){
+				 	   			if (json.returnCode == 0) {
 					 	   			$("#wrap").html('<span class="messageSpan">' + '答卷完成，感谢您的参与。' + '</span>');
 				 	   			}else{
-				 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				 	   			}
 				 	   		}});
 						});

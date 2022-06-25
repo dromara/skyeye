@@ -83,7 +83,7 @@ layui.config({
 			// 如果问题id不为空，则说明是编辑，加载编辑信息
 			if(!isNull(parent.rowId)){
 				AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank008", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
-					if(json.returnCode == 0){
+					if (json.returnCode == 0) {
 						$("#schoolId").val(json.bean.schoolId);
 						showGrid({
 						 	id: "gradeId",
@@ -135,7 +135,7 @@ layui.config({
 	    				// 加载上传和切换监听事件
 						pageLoadAfter();
 					}else{
-						winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
 			}else{
@@ -159,7 +159,7 @@ layui.config({
  	        		// 1-视频,2-音频,3-图片
  	        		fileUrl = quItemBody.find(".layui-tab-content").find(".layui-show").find(".upload").find("input[type='hidden'][name='upload']").attr("oldurl");
  	        		if(isNull(fileUrl)){
- 	        			winui.window.msg('请上传文件.', {icon: 2,time: 2000});
+ 	        			winui.window.msg('请上传文件.', {icon: 2, time: 2000});
 	    				return false;
  	        		}
  	        	}else{
@@ -189,11 +189,11 @@ layui.config({
         			isDefaultAnswer: quItemBody.find("input[class='quFillblankAnswerInput']").val()
 	    		};
     			AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank007", params: params, type: 'json', callback: function(json){
-    				if(json.returnCode == 0){
+    				if (json.returnCode == 0) {
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';
     				}else{
-    					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     				}
     			}});
  	        }

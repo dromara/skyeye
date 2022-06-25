@@ -16,7 +16,7 @@ layui.config({
 		
 		//获取学生信息展示用于分班
 		AjaxPostUtil.request({url:schoolBasePath + "studentmation004", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				stuSessionYear = json.bean.sessionYear;
    				$("#showForm").html(getDataUseHandlebars($("#assignmentTemplate").html(), json));
    				//加载当前选中的年级是哪一届的以及这一届的班级信息
@@ -55,18 +55,18 @@ layui.config({
 			        return false;
 			    });
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
    		
    		//保存数据
    		function saveData(params){
    			AjaxPostUtil.request({url:schoolBasePath + "studentmation005", params:params, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				parent.layer.close(index);
 	 	        	parent.refreshCode = '0';
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
    		}

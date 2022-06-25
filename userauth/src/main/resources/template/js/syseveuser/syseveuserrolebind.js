@@ -26,7 +26,7 @@ layui.config({
 		                    str += $(this).val() + ",";
 		                });
 	 	        		if(isNull(str)){
-	 	        			winui.window.msg("请选择角色", {icon: 2,time: 2000});
+	 	        			winui.window.msg("请选择角色", {icon: 2, time: 2000});
 	 	        			return false;
 	 	        		}
 		 	        	var params = {
@@ -34,7 +34,7 @@ layui.config({
 		 	        		roleIds: str,
 		 	        	};
 		 	        	AjaxPostUtil.request({url: reqBasePath + "sys020", params: params, type: 'json', method: "POST", callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{

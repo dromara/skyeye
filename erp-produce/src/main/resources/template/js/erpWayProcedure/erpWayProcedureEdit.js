@@ -77,7 +77,7 @@ layui.config({
 			    form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	if(table.cache.messageTable.length == 0){
-			        		winui.window.msg('请最少选择一条工序.', {icon: 2,time: 2000});
+			        		winui.window.msg('请最少选择一条工序.', {icon: 2, time: 2000});
 			    			return false;
 			        	}
 						var params = {
@@ -87,11 +87,11 @@ layui.config({
 		                    rowId: parent.rowId
 					    };
 			        	AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure004", params: params, type: 'json', callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
-			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
 			        }
@@ -145,7 +145,7 @@ layui.config({
 					if (refreshCode == '0') {
 	                	loadUseTableMation(trId, procedureMation);
 	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 	                }
 				}});
 	    });
@@ -172,7 +172,7 @@ layui.config({
 	    	var trId = $(this).parent().find("input").attr("id").replace("farmId", "");
 	    	var row = getProcedureMation(trId);
 	    	if(isNull(row.procedureId)){
-	    		winui.window.msg('请先选择工序', {icon: 2,time: 2000});
+	    		winui.window.msg('请先选择工序', {icon: 2, time: 2000});
 	    		return;
 	    	}
 	    	procedureId = row.procedureId;
@@ -185,7 +185,7 @@ layui.config({
 					if (refreshCode == '0') {
 	                	loadFarmUseTableMation(trId, farmMation);
 	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 	                }
 				}});
 	    });

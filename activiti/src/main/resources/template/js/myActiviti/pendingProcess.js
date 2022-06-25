@@ -77,10 +77,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg("提交成功", {icon: 1,time: 2000});
+                	winui.window.msg("提交成功", {icon: 1, time: 2000});
                 	loadMyNeedDealtTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}

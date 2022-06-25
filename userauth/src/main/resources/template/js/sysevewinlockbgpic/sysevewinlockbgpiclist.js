@@ -30,11 +30,11 @@ layui.config({
 				layer.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统锁屏桌面图片' }, function (index) {
 					layer.close(index);
 		            AjaxPostUtil.request({url:reqBasePath + "sysevewinlockbgpic003", params:{rowId: row.id}, type: 'json', callback: function(json){
-		    			if(json.returnCode == 0){
-		    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+		    			if (json.returnCode == 0) {
+		    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 		    				loadTable();
 		    			}else{
-		    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    			}
 		    		}});
 				});
@@ -59,17 +59,17 @@ layui.config({
 		data: {type: 3},
 		done: function(json) {
 			// 上传完毕回调
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				AjaxPostUtil.request({url:reqBasePath + "sysevewinlockbgpic002", params:{picUrl: json.bean.picUrl}, type: 'json', callback: function(json){
-	    			if(json.returnCode == 0){
-	    				winui.window.msg("上传成功", {icon: 1,time: 2000});
+	    			if (json.returnCode == 0) {
+	    				winui.window.msg("上传成功", {icon: 1, time: 2000});
 	    				loadTable();
 	    			}else{
-	    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	    			}
 	    		}});
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		},
 		error: function(e) {

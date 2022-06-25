@@ -232,10 +232,10 @@ layui.config({
     		$("#fileRightMenu").hide();
     		hideRMenu();
     		pastedText = e.text;
-    		winui.window.msg("复制成功", {icon: 1,time: 2000});
+    		winui.window.msg("复制成功", {icon: 1, time: 2000});
     	});
     	clipboard.on('error', function(e) {
-    		winui.window.msg("浏览器不支持！", {icon: 2,time: 2000});
+    		winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
     	});
     	
     	// 剪切
@@ -244,10 +244,10 @@ layui.config({
     		$("#fileRightMenu").hide();
     		hideRMenu();
     		pastedText = e.text;
-    		winui.window.msg("剪切成功", {icon: 1,time: 2000});
+    		winui.window.msg("剪切成功", {icon: 1, time: 2000});
     	});
     	clipboardcut.on('error', function(e) {
-    		winui.window.msg("浏览器不支持！", {icon: 2,time: 2000});
+    		winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
     	});
 	}
 	
@@ -278,7 +278,7 @@ layui.config({
 			loadThisFolderChild();
 		}else if($.inArray(fileType, vedioType) >= 0){//视频
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				fileUrl = json.bean.fileAddress;
     				fileThumbnail = json.bean.fileThumbnail;
     				_openNewWindows({
@@ -288,18 +288,18 @@ layui.config({
     					area: ['80vw', '80vh'],
     					callBack: function(refreshCode){}});
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		}else if($.inArray(fileType, officeType) >= 0){//office文件
 			var thisId = $(this).attr("rowid");
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				fileUrl = json.bean.fileAddress;
     				selFileType = json.bean.fileType;
     				window.open(reqBasePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		}else if($.inArray(fileType, aceType) >= 0){//ace文件
@@ -312,7 +312,7 @@ layui.config({
 				callBack: function(refreshCode){}});
 		}else if($.inArray(fileType, epubType) >= 0){//电子书
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				fileUrl = json.bean.fileAddress;
     				fileThumbnail = json.bean.fileThumbnail;
     				_openNewWindows({
@@ -322,12 +322,12 @@ layui.config({
     					area: ['90vw', '90vh'],
     					callBack: function(refreshCode){}});
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		}else if($.inArray(fileType, packageType) >= 0){//压缩包
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				fileUrl = json.bean.fileAddress;
     				fileThumbnail = json.bean.fileThumbnail;
     				_openNewWindows({
@@ -338,7 +338,7 @@ layui.config({
     					skin: "zip-show",
     					callBack: function(refreshCode){}});
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		}
@@ -353,7 +353,7 @@ layui.config({
 	// 文件名保存
 	$("body").on("click", ".filename-edit-save", function(e){
 		if(isNull($(this).parent().find('textarea').val())){
-			winui.window.msg('请填写文件名', {icon: 2,time: 2000});
+			winui.window.msg('请填写文件名', {icon: 2, time: 2000});
 		}else{
 			$(this).parent().parent().css({"z-index": 0});
 			editFolderById($(this).parent());
@@ -410,7 +410,7 @@ layui.config({
 			$(".select-op-more").hide();
 			//如果选中项为空
 			if(deleteArray.length == 0){
-				winui.window.msg('请选择要删除的文件或文件夹', {icon: 2,time: 2000});
+				winui.window.msg('请选择要删除的文件或文件夹', {icon: 2, time: 2000});
 				return false;
 			}
             deleteFolderAndChild(deleteArray, function(){
@@ -425,11 +425,11 @@ layui.config({
 	// 删除文件夹以及该文件夹下的所有子内容
 	function deleteFolderAndChild(deleteArray, callBack){
 		AjaxPostUtil.request({url:reqBasePath + "fileconsole004", params:{fileList: JSON.stringify(deleteArray)}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
-				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+			if (json.returnCode == 0) {
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				callBack();
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -442,8 +442,8 @@ layui.config({
 			$(".select-op-more").hide();
 			var fileType = $("#file-content div[rowid='" + operaterId + "']").attr("filetype");
             AjaxPostUtil.request({url:reqBasePath + "fileconsole013", params:{rowId: operaterId}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg("已放入回收站", {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
     				$("#file-content div[rowid='" + operaterId + "']").remove();
     				// 如果删除的对象是文件夹
     				if(fileType === 'folder'){
@@ -451,7 +451,7 @@ layui.config({
         				ztree.removeNode(selNode);
     				}
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -476,15 +476,15 @@ layui.config({
 		};
 		winui.window.msg("文件副本创建中，期间请勿进行其他操作。", {icon: 7,time: 4000});
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole030", params: params, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
-				winui.window.msg("副本创建成功", {icon: 1,time: 2000});
+			if (json.returnCode == 0) {
+				winui.window.msg("副本创建成功", {icon: 1, time: 2000});
 				if(fileType === 'folder'){//文件夹
 					//刷新节点
 	   				refreshTreePointNode();
 				}
 				loadThisFolderChild();
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	});
@@ -510,7 +510,7 @@ layui.config({
 		$(".select-op-more").hide();
 		var list = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
 		if(list.length == 0){
-			winui.window.msg("请至少选择一个文件或文件夹进行打包。", {icon: 2,time: 2000});
+			winui.window.msg("请至少选择一个文件或文件夹进行打包。", {icon: 2, time: 2000});
 			return;
 		}
 		choosePackageIds.splice(0, choosePackageIds.length);
@@ -531,11 +531,11 @@ layui.config({
 		};
 		winui.window.msg("文件打包中，期间请勿进行其他操作.", {icon: 7,time: 4000});
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole032", params: params, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
-				winui.window.msg("打包成功.", {icon: 1,time: 2000});
+			if (json.returnCode == 0) {
+				winui.window.msg("打包成功.", {icon: 1, time: 2000});
 				loadThisFolderChild();
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	});
@@ -545,12 +545,12 @@ layui.config({
 		var thisId = operaterId;
 		$(".layui-dropdown-menu").hide();
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				fileUrl = json.bean.fileAddress;
 				selFileType = json.bean.fileType;
 				window.open(reqBasePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	});
@@ -559,10 +559,10 @@ layui.config({
 	$("body").on("click", ".openByMicrosoftOffice", function(e){
 		$(".layui-dropdown-menu").hide();
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				window.open('https://view.officeapps.live.com/op/view.aspx?src=http://gzwp.free.idcfengye.com/' + json.bean.fileAddress);
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	});
@@ -572,7 +572,7 @@ layui.config({
 		$(".layui-dropdown-menu").hide();
 		var list = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
 		if(list.length == 0){
-			winui.window.msg("请至少选择一个文件或文件夹。", {icon: 2,time: 2000});
+			winui.window.msg("请至少选择一个文件或文件夹。", {icon: 2, time: 2000});
 			return;
 		}
 		//判断下载项中是否包含文件夹
@@ -602,29 +602,29 @@ layui.config({
 			};
 			winui.window.msg("文件打包中，期间请勿进行其他操作.", {icon: 7,time: 4000});
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole038", params: params, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
-					winui.window.msg("打包成功，开始下载.", {icon: 1,time: 2000});
+				if (json.returnCode == 0) {
+					winui.window.msg("打包成功，开始下载.", {icon: 1, time: 2000});
 					if(isNull(json.bean) || isNull(json.bean.fileAddress)){
-						winui.window.msg('打包失败', {icon: 2,time: 2000});
+						winui.window.msg('打包失败', {icon: 2, time: 2000});
 					}else{
 						// 下载
 						download(json.bean.fileAddress, '压缩包');
 					}
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		}else{
 			//不包含文件夹
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					if($.inArray(json.bean.fileType, imageType) >= 0){//图片
 						downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
 					}else{
 						download(json.bean.fileAddress, json.bean.fileName);
 					}
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		}
@@ -635,12 +635,12 @@ layui.config({
 		layer.confirm("确定解压该压缩包到当前文件夹吗?", { icon: 3, title: '压缩包解压' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "fileconsole033", params:{rowId: operaterId}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg("解压成功。", {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg("解压成功。", {icon: 1, time: 2000});
     				refreshTreePointNode();
     				loadThisFolderChild();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -768,8 +768,8 @@ layui.config({
 			layer.close(index);
 			var fileType = 'folder';
             AjaxPostUtil.request({url:reqBasePath + "fileconsole013", params:{rowId: folderId}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg("已放入回收站", {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
     				$("#file-content div[rowid='" + folderId + "']").remove();
     				var selNode = ztree.getNodeByParam("id", folderId, null);
     				chooseNodeSelect(folderId);
@@ -778,7 +778,7 @@ layui.config({
     				ztree.removeNode(selNode);//移除节点
     				loadThisFolderChild();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -898,7 +898,7 @@ layui.config({
 		if(newName != title){//修改前的名称和当前名称不一致，则调用后台接口进行修改
 			var id = fileFolderEdit.parent().attr("rowid");
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole005", params: {rowId: id, catalogName: newName, fileType: fileType}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					fileFolderEdit.parent().find("div[class='filename']").show();
 					fileFolderEdit.parent().find("div[class='filename']").find("span").html(newName);
 					fileFolderEdit.parent().attr("title", "名称:" + newName);
@@ -908,7 +908,7 @@ layui.config({
 						refreshTreePointNode();
 					}
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		}else{//如果一致
@@ -994,7 +994,7 @@ layui.config({
    		    	//初始化拖拽
    		    	initMenuToBox();
    			}else{
-   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
    			}
    		}, async: false});
 	}
@@ -1282,14 +1282,14 @@ layui.config({
 			//遮罩层显示
 			$(".fileconsole-mask").show();
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole035", params: params, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					refreshTreePointNode();//刷新树节点
 					loadThisFolderChild();//刷新文件列表
 					if(typeof(callback) == "function") {
 						callback();
 					}
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}, async: false});
 		}else{
@@ -1302,10 +1302,10 @@ layui.config({
 	function loadFileSizeById(){
 		loadFileSizeCS = true;
 		AjaxPostUtil.request({url:reqBasePath + "fileconsole012", params: {}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				$(".memory-num").html(json.bean.size);
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}, async: false});
 	}
@@ -1551,7 +1551,7 @@ layui.config({
 					img: "../../assets/images/paste-ban-right-icon.png",
 					callback: function(e) {
 						if(isNull(pastedText)){
-							winui.window.msg('请先进行文件或文件夹复制。', {icon: 2,time: 2000});
+							winui.window.msg('请先进行文件或文件夹复制。', {icon: 2, time: 2000});
 						}else{
 							if(isJsonFormat(pastedText.replace(/'/g, '"'))){//判断是否是json
 								var pastedJson = JSON.parse(pastedText.replace(/'/g, '"'));//粘贴板数据
@@ -1565,10 +1565,10 @@ layui.config({
 							            content: '当前剪贴板内容：<br>' + '<br>文件名：' + pastedJson.name + "<br><br>文件类型：" + pastedJson.fileType
 							        });
 								}else{
-									winui.window.msg('剪贴板数据格式不正确。', {icon: 2,time: 2000});
+									winui.window.msg('剪贴板数据格式不正确。', {icon: 2, time: 2000});
 								}
 							}else{
-								winui.window.msg('剪贴板数据格式不正确。', {icon: 2,time: 2000});
+								winui.window.msg('剪贴板数据格式不正确。', {icon: 2, time: 2000});
 							}
 						}
 					}
@@ -1602,7 +1602,7 @@ layui.config({
     
     function pasteFile(){
     	if(isNull(pastedText)){
-			winui.window.msg('请先进行文件或文件夹复制。', {icon: 2,time: 2000});
+			winui.window.msg('请先进行文件或文件夹复制。', {icon: 2, time: 2000});
 		}else{
 			if(isJsonFormat(pastedText.replace(/'/g, '"'))){//判断是否是json
 				var pastedJson = JSON.parse(pastedText.replace(/'/g, '"'));//粘贴板数据
@@ -1621,40 +1621,40 @@ layui.config({
 					winui.window.msg("文件正在粘贴中，期间请勿进行其他操作。", {icon: 7,time: 4000});
 					if(pastedJson.type === '1' || pastedJson.type == 1){
 						AjaxPostUtil.request({url:reqBasePath + "fileconsole034", params: params, type: 'json', callback: function(json){
-							if(json.returnCode == 0){
-								winui.window.msg("文件粘贴成功", {icon: 1,time: 2000});
+							if (json.returnCode == 0) {
+								winui.window.msg("文件粘贴成功", {icon: 1, time: 2000});
 								if(pastedJson.fileType === 'folder'){//文件夹
 									//刷新节点
 									refreshTreePointNode();
 								}
 								loadThisFolderChild();
 							}else{
-								winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 							}
 						}});
 					}else if(pastedJson.type === '2' || pastedJson.type == 2){
 						AjaxPostUtil.request({url:reqBasePath + "fileconsole035", params: params, type: 'json', callback: function(json){
-							if(json.returnCode == 0){
+							if (json.returnCode == 0) {
 								var selNode = ztree.getNodeByParam("id", pastedJson.id, null);
                                 if(!isNull(selNode)){
                                     ztree.removeNode(selNode);//移除节点
                                 }
-								winui.window.msg("文件粘贴成功", {icon: 1,time: 2000});
+								winui.window.msg("文件粘贴成功", {icon: 1, time: 2000});
 								if(pastedJson.fileType === 'folder'){//文件夹
 									//刷新节点
 									refreshTreePointNode();
 								}
 								loadThisFolderChild();
 							}else{
-								winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 							}
 						}});
 					}
 				}else{
-					winui.window.msg('剪贴板数据格式不正确。', {icon: 2,time: 2000});
+					winui.window.msg('剪贴板数据格式不正确。', {icon: 2, time: 2000});
 				}
 			}else{
-				winui.window.msg('剪贴板数据格式不正确。', {icon: 2,time: 2000});
+				winui.window.msg('剪贴板数据格式不正确。', {icon: 2, time: 2000});
 			}
 		}
     }
@@ -1720,7 +1720,7 @@ layui.config({
 	        // 刷新文件列表
 	        loadThisFolderChild();
 		}else{
-			winui.window.msg('上传中，无法关闭。', {icon: 2,time: 2000});
+			winui.window.msg('上传中，无法关闭。', {icon: 2, time: 2000});
 		}
 	});
 	loadFileUploadMethod();
@@ -1765,7 +1765,7 @@ layui.config({
 					"chunkSize": block.end - block.start
 				};
 				AjaxPostUtil.request({url:reqBasePath + "fileconsole008", params: params, type: 'json', callback: function(json){
-	    			if(json.returnCode == 0){
+	    			if (json.returnCode == 0) {
 	    				//分块存在，跳过
 						deferred.reject();
 	    			}else{
@@ -1781,9 +1781,9 @@ layui.config({
 			afterSendFile: function (data) {
 				//如果分块上传成功，则通知后台合并分块
 				AjaxPostUtil.request({url:reqBasePath + "fileconsole007", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function(json){
-	    			if(json.returnCode == 0){
+	    			if (json.returnCode == 0) {
 	    			}else{
-	    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	    			}
 	    		}});
 			 }

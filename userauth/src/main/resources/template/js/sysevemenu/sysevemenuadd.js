@@ -57,7 +57,7 @@ layui.config({
 	    		$("#parentIdBox").removeClass("layui-hide");
 	    		loadChildMenu();
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
  		
@@ -118,13 +118,13 @@ layui.config({
  	 	    			}
  	 	    		}
  	 	    		if(isNull(str)){//父菜单为空
- 	 	    			winui.window.msg("请至少选择一级父菜单", {icon: 2,time: 2000});
+ 	 	    			winui.window.msg("请至少选择一级父菜单", {icon: 2, time: 2000});
  	 	    			return false;
  	 	    		}else{
  	 	    			params.parentId = str;
  	 	    		}
  	 	    	}else{
- 	 	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+ 	 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
  	 	    	}
  	        	if($("#menuSysType").val() == 'true'){
  	        		params.menuSysType = '1';
@@ -151,7 +151,7 @@ layui.config({
  	    //加载同级菜单
  	    function loadChildMenu(){
  	    	AjaxPostUtil.request({url:reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
@@ -160,7 +160,7 @@ layui.config({
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
  	    }

@@ -19,7 +19,7 @@ layui.config({
 			var lis = [];
 			//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 			AjaxPostUtil.request({url: flowableBasePath + "erpstockinventory003", params: {page: page, limit: 15, normsId: parent.normsId, depotId: parent.depotId}, type: 'json', callback: function(json){
-	   			if(json.returnCode == 0){
+	   			if (json.returnCode == 0) {
 	   				var jsonStr = "";//实体json对象
 	   				$.each(json.rows, function(index, bean) {
    						bean.showClass = 'date02';

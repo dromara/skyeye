@@ -167,7 +167,7 @@ layui.config({
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 		        		};
 		        		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
-                            winui.window.msg('请选择收件人', {icon: 2,time: 2000});
+                            winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                             return false;
                         }else{
                             $.each(userList, function (i, item) {
@@ -177,14 +177,14 @@ layui.config({
                         }
 		        		if(data.field.todycompleted === 'true'){
 		        			if(isNull(layedit.getContent(completedContent))){
-		        				winui.window.msg('请填写今日已完成工作', {icon: 2,time: 2000});
+		        				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
 		        				return false;
 		        			}else{
 		        				params.completedJob = encodeURIComponent(layedit.getContent(completedContent));
 		        			}
 		        		}else{
 		        			if(isNull($("#completedtext").val())){
-		        				winui.window.msg('请填写今日已完成工作', {icon: 2,time: 2000});
+		        				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
 		        				return false;
 		        			}else{
 		        				params.completedJob = encodeURIComponent($("#completedtext").val().replace(/\n|\r\n/g, "<br>"));
@@ -202,11 +202,11 @@ layui.config({
 		        		}
 		        		
 		        		AjaxPostUtil.request({url:reqBasePath + "diary017", params:params, type: 'json', callback: function(json){
-                            if(json.returnCode == 0){
+                            if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                  parent.refreshCode = '0';
                             }else{
-                                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});
 			        }

@@ -40,7 +40,7 @@ layui.config({
 	    		$("#readonlyBox").removeClass("layui-hide");
 	    		$("#typeIdBox").addClass("layui-hide");
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
  		
@@ -75,22 +75,22 @@ layui.config({
  	        	if(data.field.category == '1'){
  	        		params.typeId = $("#typeId").val();
  	        		if(isNull(params.typeId)){
- 	        			winui.window.msg("请选择类别", {icon: 2,time: 2000});
+ 	        			winui.window.msg("请选择类别", {icon: 2, time: 2000});
  	 	        		return false;
  	        		}
  	        	}else if(data.field.category == '2'){
  	        		params.readonly = data.field.readonly;
  	        	}else{
- 	        		winui.window.msg("状态值错误。", {icon: 2,time: 2000});
+ 	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});
  	        		return false;
  	        	}
  	        	AjaxPostUtil.request({url: reqBasePath + "maillist002", params: params, type: 'json', method: "POST", callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 						winui.window.msg("提交成功", {icon: 1, time: 2000}, function(){
 							location.reload();
 						});
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
  	        }

@@ -19,7 +19,7 @@ layui.config({
 	    var interval = null;
 	    
 	    AjaxPostUtil.request({url:reqBasePath + "knowledgecontent011", params: {rowId:parent.rowId}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = getDataUseHandlebars(beanTemplate, json);
 				$("#checkDetails").html(str);
 				content = json.bean.content;
@@ -27,7 +27,7 @@ layui.config({
 		 		interval = setInterval(iFrameHeight, 300);
 		 		matchingLanguage();
 			}else{
-				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 		
@@ -52,7 +52,7 @@ layui.config({
  			}else if(val == '3'){//审核不通过
  				$("#reasonHide").removeClass("layui-hide");
  			}else{
- 				winui.window.msg('状态值错误', {icon: 2,time: 2000});
+ 				winui.window.msg('状态值错误', {icon: 2, time: 2000});
  			}
  		});
  		
@@ -66,16 +66,16 @@ layui.config({
  				};
  				if(params.examineState == '3'){
  					if(isNull(params.examineNopassReason)){
- 						winui.window.msg("请填写审核不通过原因", {icon: 2,time: 2000});
+ 						winui.window.msg("请填写审核不通过原因", {icon: 2, time: 2000});
  						return false;
  					}
  				}
  				AjaxPostUtil.request({url:reqBasePath + "knowledgecontent012", params:params, type: 'json', callback: function(json){
- 					if(json.returnCode == 0){
+ 					if (json.returnCode == 0) {
  						parent.layer.close(index);
  						parent.refreshCode = '0';
  					}else{
- 						winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  					}
  				}});
  			}

@@ -13,7 +13,7 @@ layui.config({
 		var rowId = GetUrlParam("id");
 	    
 		AjaxPostUtil.request({url:reqBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				if(isNull(json.bean)){
    					$("#showForm").hide();
    					$("#showFormNone").show();
@@ -32,17 +32,17 @@ layui.config({
    				matchingLanguage();
    				form.render();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 		
 		$("body").on("click", "#tqShareFile", function(e){
 			if(isNull($("#sharePassword").val())){
-				winui.window.msg("请输入提取码", {icon: 2,time: 2000});
+				winui.window.msg("请输入提取码", {icon: 2, time: 2000});
 				return;
 			}
 			AjaxPostUtil.request({url:reqBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: $("#sharePassword").val()}, type: 'json', callback: function(json){
-	   			if(json.returnCode == 0){
+	   			if (json.returnCode == 0) {
 	   				if(isNull(json.bean)){
 	   					$("#showForm").hide();
 	   					$("#showFormNone").show();
@@ -51,7 +51,7 @@ layui.config({
 	   					location.href = "../../tpl/shareFile/shareFileList.html?id=" + rowId;
 	   				}
 	   			}else{
-	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});
 		});

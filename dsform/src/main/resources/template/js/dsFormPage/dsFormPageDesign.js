@@ -21,7 +21,7 @@ layui.config({
 	authBtn('1567732055673');//保存控件
 	
 	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
- 		if(json.returnCode == 0){
+ 		if (json.returnCode == 0) {
  			// 加载表单控件
 			loadLeftBoxItem();
 			// 加载拖拽
@@ -29,7 +29,7 @@ layui.config({
 			// 加载页面内容
  			loadPageMation(json);
  		}else{
- 			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  		}
  	}});
  	
@@ -47,7 +47,7 @@ layui.config({
 	   				var obj = JSON.parse(j.bean.aData);
 	   				item.context = getDataUseHandlebars(item.templateContent, obj);
 	   			}else{
-	   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+	   				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}, async: false});
 		}
@@ -180,7 +180,7 @@ layui.config({
 			if(subset(tplContentVal, defaultKey)){
 				params.aData = defaultData;
 			}else{
-				winui.window.msg('json串内容有误，请重新填写!', {icon: 2,time: 2000});
+				winui.window.msg('json串内容有误，请重新填写!', {icon: 2, time: 2000});
         		return false;
 			}
     	}else if(linkedData == 2){
@@ -195,11 +195,11 @@ layui.config({
 	// 获取该控件的脚本信息
 	function getDataScript(params){
 		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: params.formContentId}, type: 'json', callback: function(json){
-    		if(json.returnCode == 0){
+    		if (json.returnCode == 0) {
     			params.htmlContent = encodeURIComponent(json.bean.htmlContent);
     			params.jsContent = encodeURIComponent(json.bean.jsContent);
     		}else{
-    			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     		}
     	}, async: false});
     	return params;
@@ -208,8 +208,8 @@ layui.config({
 	// 保存“新增控件”
     function reqSaveData(params, templateContent){
     	AjaxPostUtil.request({url: flowableBasePath + "dsformpage003", params: params, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+			if (json.returnCode == 0) {
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				var templateJson = json.bean;
 				templateJson.biaoJi = "1";
 				templateJson.templateContent = templateContent;
@@ -254,7 +254,7 @@ layui.config({
 				form.on('submit(formAddBean)', function (data) {
 					if (winui.verifyForm(data.elem)) {
 						saveNodeData(data, rowid, arr);
-						winui.window.msg("保存成功", {icon: 1,time: 2000});
+						winui.window.msg("保存成功", {icon: 1, time: 2000});
 					}
 					return false;
 				});
@@ -334,7 +334,7 @@ layui.config({
     		if(newParams.associatedDataTypes == 1){
     			var defaultDataStr = $("#JsonData").val();
     			if(isNull(defaultDataStr)){
-    				winui.window.msg("请填写Json串！", {icon: 2,time: 2000});
+    				winui.window.msg("请填写Json串！", {icon: 2, time: 2000});
 	        		return false;
     			}else{
     				if(isJSON(defaultDataStr)){
@@ -342,27 +342,27 @@ layui.config({
         				if(subset(tplContentVal, defaultKey)){
         					newParams.aData = defaultDataStr;
         				}else{
-        					winui.window.msg('json串内容有误，请重新填写!', {icon: 2,time: 2000});
+        					winui.window.msg('json串内容有误，请重新填写!', {icon: 2, time: 2000});
 	 	 	        		return false;
         				}
         			}else{
-        				winui.window.msg('json串格式不正确，请重新填写!', {icon: 2,time: 2000});
+        				winui.window.msg('json串格式不正确，请重新填写!', {icon: 2, time: 2000});
  	 	        		return false;
         			}
     			}
     		}else if(newParams.associatedDataTypes == 2){
     			var interfa = $("#nterfac").val();
     			if(interfa.length == 0){
-    				winui.window.msg("请填写接口！", {icon: 2,time: 2000});
+    				winui.window.msg("请填写接口！", {icon: 2, time: 2000});
 	        		return false;
     			}
     			if(!checkURL(interfa)){
-    				winui.window.msg("接口请填写为URL类型！", {icon: 2,time: 2000});
+    				winui.window.msg("接口请填写为URL类型！", {icon: 2, time: 2000});
 	        		return false;
     			}
     			newParams.aData = interfa;
     		}else{
-    			winui.window.msg("状态值错误。", {icon: 2,time: 2000});
+    			winui.window.msg("状态值错误。", {icon: 2, time: 2000});
         		return false;
     		}
     	}else if(newParams.linkedData == 2){
@@ -409,14 +409,14 @@ layui.config({
     		$(".TypeIsTwo").removeClass("layui-hide");
     		$(".TypeIsOne").addClass("layui-hide");
     	}else{
-    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
     	}
     }
     
     // 初始化限制条件
 	function initRequire(item){
 		AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement006", params:{}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				var contentModel = getFileContent('tpl/template/select-option.tpl');//获取html模板
    				var jsonStr = getDataUseHandlebars(contentModel, json);//模板和数据结合
 				$("#require").html(jsonStr);
@@ -425,7 +425,7 @@ layui.config({
 				}
    				form.render();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	}
@@ -438,15 +438,15 @@ layui.config({
 	$("body").on("click", "#save", function(){
 		sortDataIn();
 		if(jsonArray.length == 0){
-			winui.window.msg('保存页面不能为空！', {icon: 2,time: 2000});
+			winui.window.msg('保存页面不能为空！', {icon: 2, time: 2000});
 			return;
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "dsformpage009", params:{formedit: JSON.stringify(jsonArray)}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
-   				winui.window.msg("保存成功", {icon: 1,time: 2000});
+   			if (json.returnCode == 0) {
+   				winui.window.msg("保存成功", {icon: 1, time: 2000});
    				parent.refreshCode = '0';
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
     });

@@ -192,7 +192,7 @@ layui.config({
 		//获取内容
 		params.businessContent = encodeURIComponent(ue.getContent());
 		if(isNull(params.businessContent)){
-			winui.window.msg("请填写业务需求和目标", {icon: 2,time: 2000});
+			winui.window.msg("请填写业务需求和目标", {icon: 2, time: 2000});
 			return false;
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "proproject007", params: params, type: 'json', callback: function(json){

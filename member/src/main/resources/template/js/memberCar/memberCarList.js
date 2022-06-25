@@ -82,10 +82,10 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }});
     }
@@ -95,7 +95,7 @@ layui.config({
         layer.confirm("删除后关联套餐以及其他信息无法使用，确认删除吗？", {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "memberCar004", params: {rowId: data.id}, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 }else{
@@ -109,7 +109,7 @@ layui.config({
     function editEnabled(data){
         layer.confirm('确认要更改为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: shopBasePath + "editMemberCarEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["enable"]["type"]}, type: 'json', method: "PUT", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();
                 }else{
@@ -123,7 +123,7 @@ layui.config({
     function editNotEnabled(data){
         layer.confirm('确认要更改为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: shopBasePath + "editMemberCarEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["disable"]["type"]}, type: 'json', method: "PUT", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();
                 }else{
@@ -155,10 +155,10 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }});
     });
@@ -173,10 +173,10 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                     loadTable();
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }});
     }

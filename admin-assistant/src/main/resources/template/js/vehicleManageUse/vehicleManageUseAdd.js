@@ -43,7 +43,7 @@ layui.config({
 				initDriver();
 			}
 		}else{
-			winui.window.msg('状态值错误', {icon: 2,time: 2000});
+			winui.window.msg('状态值错误', {icon: 2, time: 2000});
 		}
 	});
 

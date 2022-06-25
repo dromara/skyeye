@@ -192,11 +192,11 @@ layui.config({
 			gridId: 'messageTable'
 		});
 		if(selectedData.length == 0){
-			winui.window.msg("请选择员工", {icon: 2,time: 2000});
+			winui.window.msg("请选择员工", {icon: 2, time: 2000});
 			return false;
 		}
 		AjaxPostUtil.request({url: reqBasePath + "staff009", params: {ids: selectedData.toString()}, type: 'json', method: "POST", callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				parent.systemCommonUtil.checkStaffMation = [].concat(json.rows);
 				parent.layer.close(index);
 				parent.refreshCode = '0';

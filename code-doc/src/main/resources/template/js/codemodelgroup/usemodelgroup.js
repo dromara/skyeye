@@ -33,22 +33,22 @@ layui.config({
         if (winui.verifyForm(data.elem)) {
         	var subData = [].concat(list);
         	if(subData.length == 0){
-        		winui.window.msg('请先生成转换结果', {icon: 2,time: 2000});
+        		winui.window.msg('请先生成转换结果', {icon: 2, time: 2000});
         	}else if($('#modelList').find('li').length > subData.length){
-        		winui.window.msg('您有模板未生成代码文件，请检查。', {icon: 2,time: 2000});
+        		winui.window.msg('您有模板未生成代码文件，请检查。', {icon: 2, time: 2000});
         	}else{
         		for(var i = 0; i < subData.length; i++){
         			subData[i].modelContent = "";
 					subData[i].modelText = "";
         		}
         		AjaxPostUtil.request({url: reqBasePath + "codemodel014", params: {jsonData: encodeURIComponent(JSON.stringify(subData))}, type: 'json', method: 'POST', callback: function(json){
-        			if(json.returnCode == 0){
-        				winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1,time: 2000}, function(){
+        			if (json.returnCode == 0) {
+        				winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1, time: 2000}, function(){
 	        				parent.layer.close(index);
 	        				parent.refreshCode = '0';
         				});
         			}else{
-        				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+        				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
         			}
         		}});
         	}
@@ -112,7 +112,7 @@ layui.config({
 	 			if(jsCreateClick){
 	 				var s = getListItem(list, row.id);
 	 				if(isNull(s)){
-	 					winui.window.msg('请先转换模板', {icon: 2,time: 2000});
+	 					winui.window.msg('请先转换模板', {icon: 2, time: 2000});
 	 				}else{
 	 					var mode = returnModel(row.modelType);
 	 					if (!isNull(mode.length)) {
@@ -121,7 +121,7 @@ layui.config({
 	 					textEditor.setValue(s.content);
 	 				}
 	 			}else{
-	 				winui.window.msg('请先选择数据库表名检索生成', {icon: 2,time: 2000});
+	 				winui.window.msg('请先选择数据库表名检索生成', {icon: 2, time: 2000});
 	 			}
 	 		}
 	 	},
@@ -172,13 +172,13 @@ layui.config({
 						$("#tableBzName").val(json.bean.tableBzName);
 
 						transformResult();
-						winui.window.msg('检索成功', {icon: 1,time: 2000});
+						winui.window.msg('检索成功', {icon: 1, time: 2000});
 					}else{
-						winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
 			}else{
-				winui.window.msg(data.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	});

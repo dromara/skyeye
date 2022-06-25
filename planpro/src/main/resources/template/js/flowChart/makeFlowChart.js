@@ -57,7 +57,7 @@ layui.config({
 			designId = treeNode.id;
 			$("#flowName").html(treeNode.title);
 			AjaxPostUtil.request({url: reqBasePath + "planprojectflow006", params: {rowId: treeNode.id}, type: 'json', method: "GET", callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					$("#zzc").removeClass("zzc");
 					net.changeData();
 					if(isNull(json.bean.jsonContent)){
@@ -116,10 +116,10 @@ layui.config({
 			pageId: "companyjobedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
     });
@@ -135,10 +135,10 @@ layui.config({
 			pageId: "companyjobedit",
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
     });
@@ -164,7 +164,7 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
 			AjaxPostUtil.request({url: reqBasePath + "planprojectflow003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					if(data.id === designId){
 						$("#flowName").html("流程图");
@@ -192,10 +192,10 @@ layui.config({
 			pageId: "rmgroupedit",
 			callBack: function(refreshCode){
 				if (refreshCode == '0') {
-					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 				}
 			}});
 	}
@@ -408,7 +408,7 @@ layui.config({
 		const saveData = net.save();
 	    const json = JSON.stringify(saveData, null, 2);
 	    AjaxPostUtil.request({url: reqBasePath + "planprojectflow007", params: {rowId: designId, jsonContent: json}, type: 'json', method: "POST", callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				winui.window.msg("保存成功", {icon: 1, time: 2000});
 			}else{
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

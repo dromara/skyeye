@@ -52,11 +52,11 @@ layui.config({
  	        	};
  	        	params.groupImg = $("#groupImg").find("input[type='hidden'][name='upload']").attr("oldurl");
  	        	if(isNull(params.groupImg)){
- 	        		winui.window.msg('请上传群组头像', {icon: 2,time: 2000});
+ 	        		winui.window.msg('请上传群组头像', {icon: 2, time: 2000});
  	        		return false;
  	        	}
  	        	if($("#chooseFriend").find('li').length == 0){
- 	        		winui.window.msg('群内至少拥有两名成员。', {icon: 2,time: 2000});
+ 	        		winui.window.msg('群内至少拥有两名成员。', {icon: 2, time: 2000});
  	        		return false;
  	        	}
  	        	$.each($("#chooseFriend").find('li'), function(i, item){
@@ -64,7 +64,7 @@ layui.config({
  	        	});
  	        	
  	        	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup001", params:params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				parent.friendChooseList = params.userIds;
 	 	   				parent.layim.addList({
 	 	   					type: 'group', //列表类型，只支持friend和group两种
@@ -75,7 +75,7 @@ layui.config({
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	        }

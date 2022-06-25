@@ -167,11 +167,11 @@ layui.config({
 			        	};
 			        	
 			        	AjaxPostUtil.request({url:reqBasePath + "companyjob005", params:params, type: 'json', callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
-			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
 			        }
@@ -190,7 +190,7 @@ layui.config({
 	    		if(!isNull(pid[0])){
 	    			var params = {pId: parentId, departmentId: $("#departmentId").val(), rowId: parent.rowId};
 		    		AjaxPostUtil.request({url:reqBasePath + "companyjob008", params: params, method: "POST", type: 'json', callback: function(json){
-		    			if(json.returnCode == 0){
+		    			if (json.returnCode == 0) {
 		    				var str = '<dd style="margin-left: ' + (leftMargin * $("#pIdBox").children("dd").length) + 'px"><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 		    				for(var i = 0; i < json.rows.length; i++){
 		    					if(json.rows[i].id != parent.rowId){
@@ -208,7 +208,7 @@ layui.config({
 		    				pid.splice(0, 1);
 		    				loadChildJobAll(pid);
 		    			}else{
-		    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    			}
 		    		}});
 	    		}else{
@@ -224,7 +224,7 @@ layui.config({
  	    function loadChildJob(){
 	    	var params = {pId: parentId, departmentId: $("#departmentId").val(), rowId: parent.rowId};
  	    	AjaxPostUtil.request({url:reqBasePath + "companyjob008", params: params, method: "POST", type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				var str = '<dd style="margin-left: ' + (leftMargin * $("#pIdBox").children("dd").length) + 'px"><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -233,7 +233,7 @@ layui.config({
 	 	   			$("#pIdBox").append(str);
 	 	   			form.render('select');
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
  	    }

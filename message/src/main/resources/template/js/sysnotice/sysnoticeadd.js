@@ -61,7 +61,7 @@ layui.config({
 	    	}else if(val == '2'){//选择性群发
 	    		$("#sendTo").show();
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
  		
@@ -73,7 +73,7 @@ layui.config({
 	    	}else if(val == '2'){//设置定时通知
 	    		$("#sendTime").show();
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
  		
@@ -116,7 +116,7 @@ layui.config({
  	        	};
  	        	if($("input[name='sendType']:checked").val() === '2'){	//选择性群发
  	        		if(userList.length == 0 && isNull($('#userName').tagEditor('getTags')[0].tags)){
- 	 	        		winui.window.msg('请选择收件人', {icon: 2,time: 2000});
+ 	 	        		winui.window.msg('请选择收件人', {icon: 2, time: 2000});
  	 	        		return false;
  	 	        	}else{
  	        			params.userInfo = JSON.stringify(userList);
@@ -126,7 +126,7 @@ layui.config({
  	        	}
  	        	if($("input[name='timeSend']:checked").val() === '2'){	//设置定时通知
  	        		if(isNull($("#delayedTime").val())){
- 	        			winui.window.msg('请选择定时通知时间', {icon: 2,time: 2000});
+ 	        			winui.window.msg('请选择定时通知时间', {icon: 2, time: 2000});
  	 	        		return false;
  	        		}else{
  	        			params.delayedTime = $("#delayedTime").val();
@@ -135,15 +135,15 @@ layui.config({
  	        		params.delayedTime = "";
  	        	}
     			if(isNull(layedit.getContent(content))){
-    				winui.window.msg('请填写公告内容', {icon: 2,time: 2000});
+    				winui.window.msg('请填写公告内容', {icon: 2, time: 2000});
     				return false;
     			}
     			AjaxPostUtil.request({url:reqBasePath + "notice002", params:params, type: 'json', callback: function(json){
-    				if(json.returnCode == 0){
+    				if (json.returnCode == 0) {
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';
     				}else{
-    					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     				}
     			}});
  	        }

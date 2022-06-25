@@ -105,16 +105,16 @@ layui.config({
 			gridId: 'messageTable'
 		});
 		if(selectedData.length == 0){
-			winui.window.msg("请选择企业", {icon: 2,time: 2000});
+			winui.window.msg("请选择企业", {icon: 2, time: 2000});
 			return false;
 		}
 		AjaxPostUtil.request({url:reqBasePath + "companymation011", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
 				parent.companyList = [].concat(json.rows);
 				parent.layer.close(index);
 				parent.refreshCode = '0';
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	});

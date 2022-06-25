@@ -79,7 +79,7 @@ layui.config({
     var myChart1, myChart2, myChart3, myChart4, myChart5;
     function resetData(){
         AjaxPostUtil.request({url: shopBasePath + "queryStatisticsShop", params: getParams(), type: 'json', method: 'POST', callback: function(json){
-            if(json.returnCode == 0){
+            if (json.returnCode == 0) {
                 $("#mealOrderMemberByNum").html(json.bean.mealOrderMemberByNum + "个");
                 $("#mealOrderNum").html(json.bean.mealOrderNum + "单");
                 $("#keepFitOrderNum").html(json.bean.keepFitOrderNum + "单");

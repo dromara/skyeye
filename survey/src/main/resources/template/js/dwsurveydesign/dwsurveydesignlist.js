@@ -78,11 +78,11 @@ layui.config({
 			layer.close(index);
             
             AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory025", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -98,10 +98,10 @@ layui.config({
 			area: ['100vw', '100vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -117,10 +117,10 @@ layui.config({
 			area: ['500px', '300px'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -137,7 +137,7 @@ layui.config({
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -153,7 +153,7 @@ layui.config({
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -165,11 +165,11 @@ layui.config({
 			layer.close(index);
             
             AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory023", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg("发布成功", {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg("发布成功", {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -182,11 +182,11 @@ layui.config({
 			layer.close(index);
             
             AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory030", params:{surveyId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg("结束成功", {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg("结束成功", {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -206,10 +206,10 @@ layui.config({
 			area: ['500px', '300px'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
     });

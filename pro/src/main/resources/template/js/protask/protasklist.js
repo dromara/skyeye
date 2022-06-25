@@ -116,11 +116,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '任务开始执行' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "protask012", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -132,11 +132,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '关闭任务' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "protask014", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -148,7 +148,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '撤销任务审批申请' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "protask007", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();
     			}else{
@@ -168,10 +168,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
     });
@@ -188,10 +188,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -206,10 +206,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -224,7 +224,7 @@ layui.config({
 					approvalId: approvalId
 				};
 				AjaxPostUtil.request({url: flowableBasePath + "protask008", params: params, type: 'json', callback: function(json){
-					if(json.returnCode == 0){
+					if (json.returnCode == 0) {
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadTable();
 					}else{
@@ -241,11 +241,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '任务作废' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "protask009", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -261,9 +261,9 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -278,10 +278,10 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}
 		});
@@ -293,8 +293,8 @@ layui.config({
 		layer.confirm(msg, {icon: 3, title: '删除任务'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "protask006", params: {rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

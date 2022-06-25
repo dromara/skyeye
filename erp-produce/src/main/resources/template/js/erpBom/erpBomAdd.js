@@ -32,7 +32,7 @@ layui.config({
         form.on('submit(formAddBean)', function (data) {
             if (winui.verifyForm(data.elem)) {
             	if(ztreeNode.length == 0){
-            		winui.window.msg('请选择子件清单。', {icon: 2,time: 2000});
+            		winui.window.msg('请选择子件清单。', {icon: 2, time: 2000});
             		return false;
             	}
             	var childObject = new Array();
@@ -44,12 +44,12 @@ layui.config({
             		item.remark = $("#remark" + item.productId).val();
             		childObject.push(item);
             		if(item.productId == erpOrderUtil.chooseProductMation.productId){
-            			winui.window.msg('子件清单中不能包含父件信息。', {icon: 2,time: 2000});
+            			winui.window.msg('子件清单中不能包含父件信息。', {icon: 2, time: 2000});
             			wheatherError = true;
             			return false;
             		}
             		if(item.needNum == 0){
-            			winui.window.msg('子件数量不能为0。', {icon: 2,time: 2000});
+            			winui.window.msg('子件数量不能为0。', {icon: 2, time: 2000});
             			wheatherError = true;
             			return false;
             		}
@@ -69,11 +69,11 @@ layui.config({
                 };
                 
                 AjaxPostUtil.request({url: flowableBasePath + "erpbom002", params:params, type: 'json', callback: function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }else{
-                        winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }});
             }
@@ -286,7 +286,7 @@ layui.config({
  	                	$.fn.zTree.init($("#treeDemo"), setting, ztreeNode);
  	                	loadTr();
  	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+ 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
  	                }
  				}});
 		});
@@ -321,11 +321,11 @@ layui.config({
 		    				$("#procedureBox" + proId).html('<img class="procedureSel" id="procedureSel' + proId + '" src="../../assets/images/forum-menu.png"/>' + str);
 		    				$("#procedureBox" + proId).attr('title', title);
 		                } else if (refreshCode == '-9999') {
-		                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+		                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 		                }
 					}});
 			}else{
-				winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+				winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 			}
 	    });
 	    

@@ -15,7 +15,7 @@ layui.config({
 	    var layContent;
 	    
 	    AjaxPostUtil.request({url:reqBasePath + "sysevewin003", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				if(!isNull(json.bean)){
    					rowId = json.bean.id;
    					//初始化上传
@@ -119,7 +119,7 @@ layui.config({
    		    	 	}
    			    });
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	    
@@ -159,15 +159,15 @@ layui.config({
         		};
         		params.sysPic = $("#sysPic").find("input[type='hidden'][name='upload']").attr("oldurl");
  	        	if(isNull(params.sysPic)){
- 	        		winui.window.msg('请上传系统图片', {icon: 2,time: 2000});
+ 	        		winui.window.msg('请上传系统图片', {icon: 2, time: 2000});
  	        		return false;
  	        	}
     			AjaxPostUtil.request({url:reqBasePath + "sysevewin004", params:params, type: 'json', callback: function(json){
-    				if(json.returnCode == 0){
+    				if (json.returnCode == 0) {
     					parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
     				}else{
-    					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     				}
     			}});
 	        }

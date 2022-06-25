@@ -121,7 +121,7 @@ layui.config({
 			    		$("#parentIdBox").removeClass("layui-hide");
 			    		loadChildMenu();
 			    	}else{
-			    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 			    	}
 		        });
 		 		
@@ -184,13 +184,13 @@ layui.config({
 		 	 	    			}
 		 	 	    		}
 		 	 	    		if(isNull(str)){//父菜单为空
-		 	 	    			winui.window.msg("请至少选择一级父菜单", {icon: 2,time: 2000});
+		 	 	    			winui.window.msg("请至少选择一级父菜单", {icon: 2, time: 2000});
 		 	 	    			return false;
 		 	 	    		}else{
 		 	 	    			params.parentId = str;
 		 	 	    		}
 		 	 	    	}else{
-		 	 	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+		 	 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 		 	 	    	}
 		 	        	if($("#menuSysType").val() == 'true'){
 		 	        		params.menuSysType = '1';
@@ -205,7 +205,7 @@ layui.config({
 		 	        	}
 		 	        	
 		 	        	AjaxPostUtil.request({url: reqBasePath + "sys010", params: params, type: 'json', method: 'PUT', callback: function(json) {
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
@@ -223,7 +223,7 @@ layui.config({
 	    	if(pid.length > 0){
 	    		if(!isNull(pid[0])){
 		    		AjaxPostUtil.request({url:reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function(json){
-		    			if(json.returnCode == 0){
+		    			if (json.returnCode == 0) {
 		    				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 		    				for(var i = 0; i < json.rows.length; i++){
 		    					if(json.rows[i].id != parent.rowId){
@@ -241,7 +241,7 @@ layui.config({
 		    				pid.splice(0, 1);
 		    				loadChildMenuAll(pid);
 		    			}else{
-		    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    			}
 		    		}});
 	    		}else{
@@ -256,7 +256,7 @@ layui.config({
  	    //加载同级菜单
  	    function loadChildMenu(){
  	    	AjaxPostUtil.request({url:reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
  	   				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
 	 	   				if(json.rows[i].id != parent.rowId){
@@ -267,7 +267,7 @@ layui.config({
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
  	    }

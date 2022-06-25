@@ -46,7 +46,7 @@ layui.config({
     form.on('submit(formAddBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
             if(table.cache.messageTable.length == 0){
-                winui.window.msg('请最少选择一条审批节点.', {icon: 2,time: 2000});
+                winui.window.msg('请最少选择一条审批节点.', {icon: 2, time: 2000});
                 return false;
             }
             var params = {
@@ -54,11 +54,11 @@ layui.config({
                 chooseUserMation: JSON.stringify(table.cache.messageTable)
             };
             AjaxPostUtil.request({url:flowableBasePath + "activitiTask003", params: params, type: 'json', callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     parent.layer.close(index);
                     parent.refreshCode = '0';
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         }

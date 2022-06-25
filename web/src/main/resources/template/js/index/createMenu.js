@@ -61,7 +61,7 @@ layui.config({
 	    		$(".menuIconTypeIsTwo").removeClass("layui-hide");
 	    		$(".menuIconTypeIsOne").addClass("layui-hide");
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
 	    
@@ -81,31 +81,31 @@ layui.config({
 	        	
 	        	if(data.field.menuIconType == '1'){
  	        		if(isNull($("#menuIcon").val())){
- 	        			winui.window.msg("请选择菜单图标", {icon: 2,time: 2000});
+ 	        			winui.window.msg("请选择菜单图标", {icon: 2, time: 2000});
  	 	        		return false;
  	        		}
  	        		params.menuIconPic = '';
  	        	}else if(data.field.menuIconType == '2'){
  	        		params.menuIconPic = $("#menuIconPic").find("input[type='hidden'][name='upload']").attr("oldurl");
  	 	        	if(isNull(params.menuIconPic)){
- 	 	        		winui.window.msg('请上传菜单logo', {icon: 2,time: 2000});
+ 	 	        		winui.window.msg('请上传菜单logo', {icon: 2, time: 2000});
  	 	        		return false;
  	 	        	}
  	 	        	params.menuIcon = '';
  	 	        	params.menuIconBg = '';
  	 	        	params.menuIconColor = '';
  	        	}else{
- 	        		winui.window.msg("状态值错误。", {icon: 2,time: 2000});
+ 	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});
  	        		return false;
  	        	}
 	        	
 	        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop002", params:params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				parent.childParams = json.bean;
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	        }

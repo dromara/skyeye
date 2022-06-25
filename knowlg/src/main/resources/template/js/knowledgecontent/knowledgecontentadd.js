@@ -52,11 +52,11 @@ layui.config({
 					label: $('#label').tagEditor('getTags')[0].tags.toString()
  	        	};
  	        	if(isNull(params.typeId)){
- 	        		winui.window.msg('请选择所属类型', {icon: 2,time: 2000});
+ 	        		winui.window.msg('请选择所属类型', {icon: 2, time: 2000});
  	        		return false;
  	        	}
     			if(isNull(ue.getContent())){
-    				winui.window.msg('请填写内容', {icon: 2,time: 2000});
+    				winui.window.msg('请填写内容', {icon: 2, time: 2000});
     				return false;
     			}else {
     				if(ue.getContentTxt().length > 200)
@@ -65,11 +65,11 @@ layui.config({
     					params.desc = encodeURI(ue.getContentTxt());
     			}
     			AjaxPostUtil.request({url:reqBasePath + "knowledgecontent002", params:params, type: 'json', callback: function(json){
-    				if(json.returnCode == 0){
+    				if (json.returnCode == 0) {
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';
     				}else{
-    					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     				}
     			}});
  	        }

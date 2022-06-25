@@ -143,10 +143,10 @@ layui.config({
 
 					matchingLanguage();
 				}else{
-					winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 				}
 			} else {
-				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 

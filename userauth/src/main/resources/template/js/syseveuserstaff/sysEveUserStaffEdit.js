@@ -173,15 +173,15 @@ layui.config({
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	if(isNull(companyId)){
-		 	        		winui.window.msg('请选择所属公司', {icon: 2,time: 2000});
+		 	        		winui.window.msg('请选择所属公司', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
 		 	        	if(isNull(departmentId)){
-		 	        		winui.window.msg('请选择所属部门', {icon: 2,time: 2000});
+		 	        		winui.window.msg('请选择所属部门', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
 		 	        	if(isNull(jobId)){
-		 	        		winui.window.msg('请选择职位信息', {icon: 2,time: 2000});
+		 	        		winui.window.msg('请选择职位信息', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
 		 	        	
@@ -190,7 +190,7 @@ layui.config({
 			        		timeIds = timeIds + $(this).attr("rowId") + ",";
 			            });
 			            if(isNull(timeIds)){
-		 	        		winui.window.msg('请选择考勤段', {icon: 2,time: 2000});
+		 	        		winui.window.msg('请选择考勤段', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
 		 	        	
@@ -216,16 +216,16 @@ layui.config({
 		 	        	};
 		 	        	params.userPhoto = $("#userPhoto").find("input[type='hidden'][name='upload']").attr("oldurl");
 		 	        	if(isNull(params.userPhoto)){
-		 	        		winui.window.msg('请上传头像', {icon: 2,time: 2000});
+		 	        		winui.window.msg('请上传头像', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
 
 		 	        	AjaxPostUtil.request({url:reqBasePath + "staff004", params:params, type: 'json', callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
-			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
 		 	        }

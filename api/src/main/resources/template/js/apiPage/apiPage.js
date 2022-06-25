@@ -83,7 +83,7 @@ layui.config({
 		 */
 		function loadListMation(appId){
 			AjaxPostUtil.request({url: reqBasePath + "queryAllSysEveReqMapping", params: {appId: appId}, type: 'json', method: "GET", callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					// 1.模块
 					model = loadModel(json);
 					$("#modelId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), {rows: model}));
@@ -221,7 +221,7 @@ layui.config({
 					rowId: $(this).attr("rowid")
 				};
 				AjaxPostUtil.request({url: reqBasePath + "queryApiDetails", params: params, type: 'json', method: "GET", callback: function(json){
-					if(json.returnCode == 0){
+					if (json.returnCode == 0) {
 		   				var str = getDataUseHandlebars(fileMationTemplate, json);
 		   				$("#contentDesc").html(str);
 						active[type] ? active[type].call(this) : '';
@@ -267,7 +267,7 @@ layui.config({
 
 		function loadDefaultMain(){
 			AjaxPostUtil.request({url: reqBasePath + "queryLimitRestrictions", params: {}, type: 'json', method: "GET", callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					var item = {};
 					item.reception = getReceptionLimitMation();
 					item.backstage = json.rows;
@@ -295,7 +295,7 @@ layui.config({
 			};
 			var fileName = $("#apiMicroservicesId").find("option:selected").text() + "-" + $(this).attr("fileName");
 			AjaxPostUtil.request({url: reqBasePath + "queryApiDetails", params: params, type: 'json', method: "GET", callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					var str = getDataUseHandlebars(getFileContent('tpl/apiPage/mdModelFile.tpl'), json);
 					sysFileUtil.saveAs(new Blob([str]), fileName);
 				}else{

@@ -11,7 +11,7 @@ layui.config({
 	    	form = layui.form;
 	    
 	    AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop006", params:{rowId: parent.parentRowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				$("#menuBoxName").val(json.bean.menuBoxName);
    				matchingLanguage();
    				form.on('submit(formEditBean)', function (data) {
@@ -22,19 +22,19 @@ layui.config({
    			        	};
    			        	
    			        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop007", params:params, type: 'json', callback: function(json){
-   			 	   			if(json.returnCode == 0){
+   			 	   			if (json.returnCode == 0) {
    			 	   				parent.childParams = params;
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';
    			 	   			}else{
-   			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			 	   			}
    			 	   		}});
    			        }
    			        return false;
    			    });
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	    

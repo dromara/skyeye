@@ -210,7 +210,7 @@ layui.config({
 		};
 		// 如果商机负责人为空
 		if(responsIdList.length == 0 || isNull($('#responsId').tagEditor('getTags')[0].tags)){
-			winui.window.msg('请选择商机负责人', {icon: 2,time: 2000});
+			winui.window.msg('请选择商机负责人', {icon: 2, time: 2000});
 			return false;
 		}else{
 			$.each(responsIdList, function (i, item) {
@@ -268,7 +268,7 @@ layui.config({
 					$("#email").val(customerMation.email);
 					$("#qq").val(customerMation.qq);
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
     });

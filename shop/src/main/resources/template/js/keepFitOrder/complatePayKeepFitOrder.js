@@ -12,7 +12,7 @@ layui.config({
         var orderNum = "";
 
         AjaxPostUtil.request({url: shopBasePath + "keepFitOrder002", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function(json){
-            if(json.returnCode == 0){
+            if (json.returnCode == 0) {
                 orderNum = json.bean.orderNum;
                 $("#payPrice").val(json.bean.unformatPayablePrice);
             }else{
@@ -30,7 +30,7 @@ layui.config({
                 };
 
                 AjaxPostUtil.request({url: shopBasePath + "keepFitOrderNotify", params: params, type: 'json', method: "POST", callback: function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }else{

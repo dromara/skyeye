@@ -26,16 +26,16 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
         		if(isNull($("#notifyTime").val())){
-        			winui.window.msg('请选择通知时间', {icon: 2,time: 2000});
+        			winui.window.msg('请选择通知时间', {icon: 2, time: 2000});
         			return false;
         		}
 	        	
 	        	AjaxPostUtil.request({url:reqBasePath + "sysworkplan010", params: {planId: parent.rowId, notifyTime: $("#notifyTime").val()}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	        }

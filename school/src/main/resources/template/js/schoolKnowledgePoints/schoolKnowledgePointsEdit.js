@@ -120,7 +120,7 @@ layui.config({
 		        			rowId: parent.rowId
 		 	        	};
 		    			if(isNull(ue.getContent())){
-		    				winui.window.msg('请填写内容', {icon: 2,time: 2000});
+		    				winui.window.msg('请填写内容', {icon: 2, time: 2000});
 		    				return false;
 		    			}
 	 					AjaxPostUtil.request({url: schoolBasePath + "knowledgepoints005", params: params, type: 'json', callback: function(json) {

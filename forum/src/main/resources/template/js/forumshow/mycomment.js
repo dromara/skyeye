@@ -85,11 +85,11 @@ layui.config({
             layer.close(index);
             
             AjaxPostUtil.request({url:reqBasePath + "forumcontent022", params:{rowId: rowId}, type: 'json', callback: function(json){
-                if(json.returnCode == 0){
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+                if (json.returnCode == 0) {
+                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadList();
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         });

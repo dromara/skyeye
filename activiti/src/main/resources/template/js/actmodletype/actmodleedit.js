@@ -99,7 +99,7 @@ layui.config({
 						$(".menuIconTypeIsTwo").removeClass("layui-hide");
 						$(".menuIconTypeIsOne").addClass("layui-hide");
 					}else{
-						winui.window.msg('状态值错误', {icon: 2,time: 2000});
+						winui.window.msg('状态值错误', {icon: 2, time: 2000});
 					}
 				});
 		 		
@@ -133,7 +133,7 @@ layui.config({
 			    		$(".TypeIsTwo").removeClass("layui-hide");
 			    		$(".TypeIsOne").addClass("layui-hide");
 			    	}else{
-			    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 			    	}
 		        });
 		 		
@@ -160,15 +160,15 @@ layui.config({
 		        			params.editPageUrl = $("#editPageUrl").val();
 		        			params.revokeMapping = $("#revokeMapping").val();
 		        			if(isNull(params.pageUrl)){
-		        				winui.window.msg("请输入新增页面地址", {icon: 2,time: 2000});
+		        				winui.window.msg("请输入新增页面地址", {icon: 2, time: 2000});
 		 	        			return false;
 		        			}
 		        			if(isNull(params.editPageUrl)){
-		        				winui.window.msg("请输入编辑页面地址", {icon: 2,time: 2000});
+		        				winui.window.msg("请输入编辑页面地址", {icon: 2, time: 2000});
 		 	        			return false;
 		        			}
 		        			if(isNull(params.revokeMapping)){
-		        				winui.window.msg("请输入撤销接口", {icon: 2,time: 2000});
+		        				winui.window.msg("请输入撤销接口", {icon: 2, time: 2000});
 		 	        			return false;
 		        			}
 		        			params.dsFormId = "";
@@ -178,35 +178,35 @@ layui.config({
 		 	        		params.revokeMapping = "";
 		 	        		params.dsFormId = $("#dsFormId").val();
 		 	        		if(isNull(params.dsFormId)){
-		        				winui.window.msg("请选择表单页面", {icon: 2,time: 2000});
+		        				winui.window.msg("请选择表单页面", {icon: 2, time: 2000});
 		 	        			return false;
 		        			}
 		 	        	}
 						if(data.field.menuIconType == '1'){
 							if(isNull($("#menuIcon").val())){
-								winui.window.msg("请选择图标", {icon: 2,time: 2000});
+								winui.window.msg("请选择图标", {icon: 2, time: 2000});
 								return false;
 							}
 							params.menuIconPic = '';
 						}else if(data.field.menuIconType == '2'){
 							params.menuIconPic = $("#menuIconPic").find("input[type='hidden'][name='upload']").attr("oldurl");
 							if(isNull(params.menuIconPic)){
-								winui.window.msg('请上传logo', {icon: 2,time: 2000});
+								winui.window.msg('请上传logo', {icon: 2, time: 2000});
 								return false;
 							}
 							params.menuIcon = '';
 							params.menuIconColor = '';
 						}else{
-							winui.window.msg("状态值错误。", {icon: 2,time: 2000});
+							winui.window.msg("状态值错误。", {icon: 2, time: 2000});
 							return false;
 						}
 
 		 	        	AjaxPostUtil.request({url:flowableBasePath + "actmodletype012", params:params, type: 'json', callback: function(json){
-		 	        		if(json.returnCode == 0){
+		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
 		 	        		}else{
-		 	        			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	        		}
 		 	        	}});
 		 	        }

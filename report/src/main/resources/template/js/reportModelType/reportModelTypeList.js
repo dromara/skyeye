@@ -54,7 +54,7 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url:reportBasePath + "reportmodeltype003", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     winui.window.msg("删除成功", {icon: 1, time: 2000});
                     loadTable();
                 }else{
@@ -74,10 +74,10 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                    winui.window.msg("操作成功", {icon: 1,time: 2000});
+                    winui.window.msg("操作成功", {icon: 1, time: 2000});
                     loadTable();
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg("操作失败", {icon: 2,time: 2000});
+                    winui.window.msg("操作失败", {icon: 2, time: 2000});
                 }
             }});
     }
@@ -91,10 +91,10 @@ layui.config({
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                    winui.window.msg("操作成功", {icon: 1,time: 2000});
+                    winui.window.msg("操作成功", {icon: 1, time: 2000});
                     loadTable();
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg("操作失败", {icon: 2,time: 2000});
+                    winui.window.msg("操作失败", {icon: 2, time: 2000});
                 }
             }});
     });

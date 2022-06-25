@@ -105,9 +105,9 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}
 		});
@@ -116,7 +116,7 @@ layui.config({
 	//撤销
 	function revoke(data){
 		if(isNull(data.revokeMapping)){//撤销接口为空
-			winui.window.msg('撤销接口调用失败', {icon: 2,time: 2000});
+			winui.window.msg('撤销接口调用失败', {icon: 2, time: 2000});
 			return false;
 		}
 		layer.confirm('确定撤销该流程吗？', { icon: 3, title: '撤销操作' }, function (index) {
@@ -137,10 +137,10 @@ layui.config({
 		layer.confirm('确认重新生成流程图吗？', { icon: 3, title: '刷新流程图操作' }, function (i) {
 			layer.close(i);
             AjaxPostUtil.request({url:flowableBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+ 	   			if (json.returnCode == 0) {
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
 		});

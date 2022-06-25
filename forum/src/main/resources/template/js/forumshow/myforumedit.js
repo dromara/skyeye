@@ -84,7 +84,7 @@ layui.config({
 	 	    			forumType: data.field.forumType
 	 	        	};
 	 	        	if(tagList.length == 0 || isNull($('#tagId').tagEditor('getTags')[0].tags)){
-	 	        		winui.window.msg("请选择标签", {icon: 2,time: 2000});
+	 	        		winui.window.msg("请选择标签", {icon: 2, time: 2000});
 	 	        		return false;
 	 		        }else{
 	 		        	var str = "";
@@ -131,7 +131,7 @@ layui.config({
 					// 重置数据
 					tagList = [].concat(systemCommonUtil.tagEditorResetData('tagId', tagReturnList));
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	});

@@ -29,11 +29,11 @@ layui.config({
 	// 获取指定年度的客户新增量，联系人新增量
 	function initNewInsertNumByYear(year){
 		AjaxPostUtil.request({url:reqBasePath + "crmpage001", params: {year: year}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
  	   			renderCharts1(json.rows);
  	   			matchingLanguage();
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	}

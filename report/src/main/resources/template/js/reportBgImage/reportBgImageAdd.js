@@ -31,15 +31,15 @@ layui.config({
                 };
                 params.imagePath = $("#imagePath").find("input[type='hidden'][name='upload']").attr("oldurl");
                 if(isNull(params.imagePath)){
-                    winui.window.msg('请上传图片', {icon: 2,time: 2000});
+                    winui.window.msg('请上传图片', {icon: 2, time: 2000});
                     return false;
                 }
                 AjaxPostUtil.request({url:reportBasePath + "reportbgimage002", params: params, type:'json', method: "POST", callback:function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }else{
-                        winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }});
             }

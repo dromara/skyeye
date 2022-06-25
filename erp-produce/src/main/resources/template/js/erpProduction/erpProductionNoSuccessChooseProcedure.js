@@ -105,7 +105,7 @@ layui.config({
 	// 下一步
 	$("body").on("click", "#nextTab", function(){
 		if(isNull(chooseMation.id)){
-			winui.window.msg("请选择生产计划单.", {icon: 2,time: 2000});
+			winui.window.msg("请选择生产计划单.", {icon: 2, time: 2000});
 			return false;
 		}
 		
@@ -153,12 +153,12 @@ layui.config({
 	//保存
 	$("body").on("click", "#saveChoose", function(){
 		if(isNull(chooseMation.id)){
-			winui.window.msg("请选择生产计划单.", {icon: 2,time: 2000});
+			winui.window.msg("请选择生产计划单.", {icon: 2, time: 2000});
 			return false;
 		}
 		var chooseProcedure = $("input[name='procedureListName']:checked").val();
 		if(isNull(chooseProcedure)){
-			winui.window.msg("请选择工序信息.", {icon: 2,time: 2000});
+			winui.window.msg("请选择工序信息.", {icon: 2, time: 2000});
 			return false;
 		}
 		//获取选择的工序

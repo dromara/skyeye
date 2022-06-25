@@ -48,7 +48,7 @@ layui.config({
 				}else if(val == '2'){//子公司
 					$("#parentIdBox").removeClass("layui-hide");
 				}else{
-					winui.window.msg('状态值错误', {icon: 2,time: 2000});
+					winui.window.msg('状态值错误', {icon: 2, time: 2000});
 				}
 			});
 
@@ -80,7 +80,7 @@ layui.config({
 					var pId = '0';
 					if($("input[name='companyType']:checked").val() == '2'){
 						if(isNull($("#OverAllCompany").val())){
-							winui.window.msg('请选择总公司', {icon: 2,time: 2000});
+							winui.window.msg('请选择总公司', {icon: 2, time: 2000});
 							return false;
 						}else{
 							pId = $("#OverAllCompany").val();
@@ -137,11 +137,11 @@ layui.config({
 					params.taxRateStr = JSON.stringify(tableData);
 
 					AjaxPostUtil.request({url:reqBasePath + "companymation005", params:params, type: 'json', callback: function(json){
-						if(json.returnCode == 0){
+						if (json.returnCode == 0) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 						}else{
-							winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});
 				}
@@ -171,7 +171,7 @@ layui.config({
 	//初始化行政区划-省
 	function initArea(bean){
 		AjaxPostUtil.request({url:reqBasePath + "commontarea001", params:{}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -184,7 +184,7 @@ layui.config({
 				}
 				form.render('select');
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -192,7 +192,7 @@ layui.config({
 	//初始化行政区划-市
 	function initAreaCity(bean){
 		AjaxPostUtil.request({url:reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = '<dd class="layui-col-xs3"><select id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -205,7 +205,7 @@ layui.config({
 				}
 				form.render('select');
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -213,7 +213,7 @@ layui.config({
 	//初始化行政区划-县
 	function initAreaChildArea(bean){
 		AjaxPostUtil.request({url:reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = '<dd class="layui-col-xs3"><select id="areaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -226,7 +226,7 @@ layui.config({
 				}
 				form.render('select');
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -234,7 +234,7 @@ layui.config({
 	//初始化行政区划-镇
 	function initAreaTownShip(bean){
 		AjaxPostUtil.request({url:reqBasePath + "commontarea004", params:{rowId: $("#areaId").val()}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -246,7 +246,7 @@ layui.config({
 				}
 				form.render('select');
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -276,7 +276,7 @@ layui.config({
 	//省级行政区划
 	function loadChildProvinceArea(){
 		AjaxPostUtil.request({url:reqBasePath + "commontarea001", params:{}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -285,7 +285,7 @@ layui.config({
 				$("#lockParentSel").append(str);
 				form.render('select');
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -293,7 +293,7 @@ layui.config({
 	//市级行政区划
 	function loadChildCityArea(){
 		AjaxPostUtil.request({url:reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = '<dd class="layui-col-xs3"><select id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -302,7 +302,7 @@ layui.config({
 				$("#lockParentSel").append(str);
 				form.render('select');
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -310,7 +310,7 @@ layui.config({
 	//县级行政区划
 	function loadChildArea(){
 		AjaxPostUtil.request({url:reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = '<dd class="layui-col-xs3"><select id="areaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -319,7 +319,7 @@ layui.config({
 				$("#lockParentSel").append(str);
 				form.render('select');
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}
@@ -327,7 +327,7 @@ layui.config({
 	//镇级行政区划
 	function loadChildAreaTownShip(){
 		AjaxPostUtil.request({url:reqBasePath + "commontarea004", params:{rowId: $("#areaId").val()}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -336,7 +336,7 @@ layui.config({
 				$("#lockParentSel").append(str);
 				form.render('select');
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
 	}

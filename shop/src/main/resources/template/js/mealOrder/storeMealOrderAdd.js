@@ -66,7 +66,7 @@ layui.config({
         };
         // 获取会员拥有的车辆信息(已启用)
         AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: params, type: 'json', method: "POST", callback: function(json){
-            if(json.returnCode == 0){
+            if (json.returnCode == 0) {
                 $.each(json.rows, function (i, item){
                     item.name = item.modelType + "(" + item.plate + ")";
                 });
@@ -93,7 +93,7 @@ layui.config({
                     tableData.push(row);
                 });
                 if(tableData.length == 0){
-                    winui.window.msg('请填写套餐信息.', {icon: 2,time: 2000});
+                    winui.window.msg('请填写套餐信息.', {icon: 2, time: 2000});
                     return false;
                 }
 
@@ -107,7 +107,7 @@ layui.config({
                 };
 
                 AjaxPostUtil.request({url: shopBasePath + "insertMealOrder", params: params, type: 'json', method: "POST", callback: function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }else{
@@ -165,7 +165,7 @@ layui.config({
             var trId = $(this).parent().parent().attr("trcusid");
             storeId = $("#storeId").val();
             if(isNull(storeId)){
-                winui.window.msg('请优先选择门店.', {icon: 2,time: 2000});
+                winui.window.msg('请优先选择门店.', {icon: 2, time: 2000});
                 return false;
             }
             _openNewWindows({
@@ -186,7 +186,7 @@ layui.config({
                         $("#mealId" + thisRowNum.toString()).attr("mealMaion", JSON.stringify(mealMation));
                         calcAllPrice();
                     } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                     }
                 }});
         });

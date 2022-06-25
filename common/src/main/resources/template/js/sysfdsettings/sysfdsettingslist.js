@@ -35,7 +35,7 @@ layui.config({
 		                    $("#synchronousTime").text("无");
 		                }
 		            }else {
-		                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		            }
 		        }});
 
@@ -313,12 +313,12 @@ layui.config({
             winui.window.msg("数据同步中...", {icon: 6,time: 2000});
             AjaxPostUtil.request({url:reqBasePath + "forumcontent020", params: {}, type: 'json', callback: function(json){
                 if(json.returnCode == 0) {
-                    winui.window.msg("数据同步成功", {icon: 1,time: 2000});
+                    winui.window.msg("数据同步成功", {icon: 1, time: 2000});
                     if(!isNull(json.bean.synchronousTime)){
                         $("#synchronousTime").text(json.bean.synchronousTime);
                     }
                 }else {
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         });

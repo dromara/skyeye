@@ -189,7 +189,7 @@ layui.config({
 		 		form.on('submit(formEditBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	if(isNull(htmlEditor.getValue())){
-			        		winui.window.msg('请输入模板内容', {icon: 2,time: 2000});
+			        		winui.window.msg('请输入模板内容', {icon: 2, time: 2000});
 			        	}else{
 			        		var params = {
 		        				contentName: $("#contentName").val(),
@@ -203,7 +203,7 @@ layui.config({
 			 	        		params.linkedData = '1';
 			 	        		params.dataShowTpl = $("#dataShowTpl").val();
 			 	        		if(isNull(params.dataShowTpl)){
-			 	 	        		winui.window.msg('请选择数据展示模板', {icon: 2,time: 2000});
+			 	 	        		winui.window.msg('请选择数据展示模板', {icon: 2, time: 2000});
 			 	 	        		return false;
 			 	 	        	}
 			 	        		var defaultDataStr = $("#defaultData").val();//默认数据值
@@ -213,15 +213,15 @@ layui.config({
 				        				if(subset(tplContentVal,defaultKey)){
 				        					params.defaultData = defaultDataStr;
 				        				}else{
-				        					winui.window.msg('默认数据内容有误，请重新填写!', {icon: 2,time: 2000});
+				        					winui.window.msg('默认数据内容有误，请重新填写!', {icon: 2, time: 2000});
 					 	 	        		return false;
 				        				}
 				        			}else{
-				        				winui.window.msg('默认数据格式不正确，请重新填写!', {icon: 2,time: 2000});
+				        				winui.window.msg('默认数据格式不正确，请重新填写!', {icon: 2, time: 2000});
 				 	 	        		return false;
 				        			}
 				        		}else{
-				        			winui.window.msg('请填写默认数据', {icon: 2,time: 2000});
+				        			winui.window.msg('请填写默认数据', {icon: 2, time: 2000});
 			 	 	        		return false;
 				        		}
 			 	        	}else{
@@ -230,11 +230,11 @@ layui.config({
 			 	        		params.defaultData = "";
 			 	        	}
 				        	AjaxPostUtil.request({url: flowableBasePath + "dsform005", params:params, type: 'json', callback: function(json){
-				 	   			if(json.returnCode == 0){
+				 	   			if (json.returnCode == 0) {
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';
 				 	   			}else{
-				 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				 	   			}
 				 	   		}});
 			        	}

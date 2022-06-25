@@ -65,7 +65,7 @@ layui.config({
 					   				tplContent = getDataUseHandlebars(formItem.templateContent, obj);
 					   				formItem.context = tplContent;
 					   			}else{
-					   				winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+					   				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 					   			}
 					   		}, async: false});
 						}
@@ -259,7 +259,7 @@ layui.config({
 			matchingLanguage();
 			form.render();
 		}else{
-			winui.window.msg(j.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 
@@ -350,11 +350,11 @@ layui.config({
 					approverId: activitiUtil.getApprovalPersonId()
 	            };
 	            AjaxPostUtil.request({url:flowableBasePath + "activitimode005", params: jStr, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
                     	parent.layer.close(index);
                     	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
     		});
@@ -372,7 +372,7 @@ layui.config({
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params:{processInstanceId: parent.processInstanceId}, type: 'json', callback: function(json){
-		   			if(json.returnCode == 0){
+		   			if (json.returnCode == 0) {
 		   				var jsonStr = "";//实体json对象
 		   				$.each(json.rows, function(index, bean) {
 	   						bean.showClass = 'date02';
@@ -385,7 +385,7 @@ layui.config({
 						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
 						next(lis.join(''), (page * 1000) < json.total);
 		   			}else{
-		   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});
 			}

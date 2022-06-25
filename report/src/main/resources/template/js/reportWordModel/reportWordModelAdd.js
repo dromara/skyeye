@@ -28,7 +28,7 @@ layui.config({
         form.on('submit(formAddBean)', function (data) {
             if (winui.verifyForm(data.elem)) {
                 if(!isPic){
-                    winui.window.msg("请先生成预览图", {icon: 2,time: 2000});
+                    winui.window.msg("请先生成预览图", {icon: 2, time: 2000});
                     return false;
                 }
                 var oCanvas = document.getElementById("thecanvas");
@@ -48,7 +48,7 @@ layui.config({
                             tableData.push(row);
                         });
                         if(tableData.length == 0){
-                            winui.window.msg('请最少选择一条属性值', {icon: 2,time: 2000});
+                            winui.window.msg('请最少选择一条属性值', {icon: 2, time: 2000});
                             return false;
                         }
 
@@ -62,15 +62,15 @@ layui.config({
                             logo: json1.bean.picUrl
                         };
                         AjaxPostUtil.request({url:reportBasePath + "reportwordmodel002", params: params, type:'json', method: "POST", callback:function(json){
-                            if(json.returnCode == 0){
+                            if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
                             }else{
-                                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});
                     }else{
-                        winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }});
             }
@@ -173,7 +173,7 @@ layui.config({
                         // 表格属性名称赋值
                         $("#propertyId" + thisRowNum.toString()).val(choosePropertyList[trId].title);
                     } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                     }
                 }});
         });

@@ -42,7 +42,7 @@ layui.config({
 	$("body").on("click", "#MoveTo", function(e){
 		nodes = ztree.getCheckedNodes(true);
 		if(nodes == undefined || nodes == ""){
-			winui.window.msg("请选择节点", {icon: 2,time: 2000});
+			winui.window.msg("请选择节点", {icon: 2, time: 2000});
 			return;
 		}
 		var chooseId = nodes[0].id;
@@ -50,20 +50,20 @@ layui.config({
 			var arrId = new Array();
 			arrId[0] = clickId;
 			AjaxPostUtil.request({url:reqBasePath + "mynote010", params: {targetId: chooseId, arrId : arrId}, type: 'json', callback: function(json){
-	   			if(json.returnCode == 0){
+	   			if (json.returnCode == 0) {
 	   				parent.layer.close(index);
 	   				parent.refreshCode = chooseId;
 	   			}else{
-	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});
 		}else{
 			AjaxPostUtil.request({url:reqBasePath + "mynote011", params: {toId: chooseId, moveId : clickId}, type: 'json', callback: function(json){
-	   			if(json.returnCode == 0){
+	   			if (json.returnCode == 0) {
 	   				parent.layer.close(index);
 	   				parent.refreshCode = '0';
 	   			}else{
-	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});
 		}

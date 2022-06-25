@@ -23,7 +23,7 @@ layui.config({
 	    	}else if(val == '1'){
 	    		$("#nextTime").removeClass('layui-hide');
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
  		
@@ -35,7 +35,7 @@ layui.config({
 	    		$("#termTime").addClass('layui-hide');
 	    		$("#termOfValidityTime").val("");
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
 
@@ -147,11 +147,11 @@ layui.config({
 	 	        			params.borrowId = borrowList[0].id;
 	 	        		}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "licence005", params:params, type: 'json', callback: function(json){
-	 		 	   			if(json.returnCode == 0){
+	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
 	 		 	   			}else{
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});
 		 	        }

@@ -104,7 +104,7 @@ layui.config({
 			gridId: 'messageTable'
 		});
 		if(selectedData.length == 0){
-			winui.window.msg("请选择表单", {icon: 2,time: 2000});
+			winui.window.msg("请选择表单", {icon: 2, time: 2000});
 			return false;
 		}
 		var result = [];

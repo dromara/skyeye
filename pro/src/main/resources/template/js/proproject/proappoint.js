@@ -110,7 +110,7 @@ layui.config({
 		 	        	var toProjectManagerIdStr = "", toProjectSponsorIdStr = "", toProjectMembersIdStr = "";
 		 	        	//获取项目经理id串
 	 	 	        	if(toProjectManager.length == 0 && isNull($('#projectManager').tagEditor('getTags')[0].tags)){
-		 	        		winui.window.msg('请选择项目经理', {icon: 2,time: 2000});
+		 	        		winui.window.msg('请选择项目经理', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}else{
 		 	        		$.each(toProjectManager, function(i, item){
@@ -123,7 +123,7 @@ layui.config({
 		 	        	});
 		 	        	//获取项目组成员id串
 		 	        	if(toProjectMembers.length == 0 && isNull($('#projectMembers').tagEditor('getTags')[0].tags)){
-		 	        		winui.window.msg('请选择项目组成员', {icon: 2,time: 2000});
+		 	        		winui.window.msg('请选择项目组成员', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}else{
 		 	        		$.each(toProjectMembers, function(i, item){
@@ -141,7 +141,7 @@ layui.config({
 	 	 	        	//获取内容
 		 	        	params.projectContent = encodeURIComponent(ue.getContent());
 		 	        	if(isNull(params.projectContent)){
-			        		winui.window.msg("请填写业务需求和目标", {icon: 2,time: 2000});
+			        		winui.window.msg("请填写业务需求和目标", {icon: 2, time: 2000});
 			        		return false;
 			        	}
 		 	        	params.planContent = encodeURIComponent(planUe.getContent());

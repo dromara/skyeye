@@ -34,12 +34,12 @@ var systemModelUtil = {
      */
     getSysEveModelTypeDataByPId: function (parentId, callback){
         AjaxPostUtil.request({url: reqBasePath + "sysevemodeltype006", params: {parentId: parentId}, type: 'json', method: "GET", callback: function(json){
-            if(json.returnCode == 0){
+            if (json.returnCode == 0) {
                 if(typeof(callback) == "function") {
                     callback(json);
                 }
             }else{
-                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }, async: false});
     },
@@ -61,7 +61,7 @@ var systemModelUtil = {
                         callback(systemModelUtil.chooseSysModel);
                     }
                 } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
             }});
     },

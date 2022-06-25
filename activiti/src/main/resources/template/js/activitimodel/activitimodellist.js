@@ -86,11 +86,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除模型' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:flowableBasePath + "activitimode006", params:{rowId: data.id}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -106,10 +106,10 @@ layui.config({
 			area: ['100vw', '100vh'],
 			callBack: function(refreshCode){
                 if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 	loadTable();
                 } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
                 }
 			}});
 	}
@@ -121,11 +121,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '发布模型' }, function (index) {
 			layer.close(index);
 			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params:{modelId: rowId}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
-					winui.window.msg("发布成功", {icon: 1,time: 2000});
+				if (json.returnCode == 0) {
+					winui.window.msg("发布成功", {icon: 1, time: 2000});
 					loadTable();
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		});
@@ -138,11 +138,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '版本升级' }, function (index) {
 			layer.close(index);
 			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params:{modelId: rowId}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
-					winui.window.msg("升级成功", {icon: 1,time: 2000});
+				if (json.returnCode == 0) {
+					winui.window.msg("升级成功", {icon: 1, time: 2000});
 					loadTable();
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		});
@@ -154,11 +154,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '取消发布' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:flowableBasePath + "activitimode007", params:{deploymentId: data.deploymentId}, type: 'json', callback: function(json){
-    			if(json.returnCode == 0){
-    				winui.window.msg("取消发布成功", {icon: 1,time: 2000});
+    			if (json.returnCode == 0) {
+    				winui.window.msg("取消发布成功", {icon: 1, time: 2000});
     				loadTable();
     			}else{
-    				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
 		});
@@ -169,11 +169,11 @@ layui.config({
 		layer.confirm('确认拷贝选中数据吗？', { icon: 3, title: '模型拷贝' }, function (index) {
 			layer.close(index);
 			AjaxPostUtil.request({url:flowableBasePath + "activitimode028", params:{modelId: data.id}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
-					winui.window.msg("拷贝成功", {icon: 1,time: 2000});
+				if (json.returnCode == 0) {
+					winui.window.msg("拷贝成功", {icon: 1, time: 2000});
 					loadTable();
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		});
@@ -187,7 +187,7 @@ layui.config({
     //新增
     $("body").on("click", "#addBean", function(){
     	AjaxPostUtil.request({url:flowableBasePath + "activitimode001", params:{}, type: 'json', callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				_openNewWindows({
 					url: "../../static/modeler.html?modelId=" + json.bean.id,
 					title: "绘制流程",
@@ -195,14 +195,14 @@ layui.config({
 					area: ['100vw', '100vh'],
 					callBack: function(refreshCode){
 		                if (refreshCode == '0') {
-		                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1,time: 2000});
+		                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 		                	loadTable();
 		                } else if (refreshCode == '-9999') {
-		                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2,time: 2000});
+		                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 		                }
 					}});
 			}else{
-				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
     });

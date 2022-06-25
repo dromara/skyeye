@@ -18,7 +18,7 @@ layui.config({
 	        		parent.layer.close(index);
 	        		parent.refreshCode = '0';
 	        	} else{
-	        		layer.msg("密码输入错误。", {icon: 2,time: 2000});
+	        		layer.msg("密码输入错误。", {icon: 2, time: 2000});
  	   			}
 	        }
 	        return false;

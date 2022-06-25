@@ -14,7 +14,7 @@ layui.config({
         var $ = layui.$;
         
         AjaxPostUtil.request({url: flowableBasePath + "erpproduction006", params: {orderId: parent.rowId}, type: 'json', callback: function(json){
-            if(json.returnCode == 0){
+            if (json.returnCode == 0) {
             	json.bean.stateName = getStateName(json.bean);
             	$.each(json.bean.procedureMationList, function(i, item){
             		if(item.state == 1){
@@ -33,7 +33,7 @@ layui.config({
                 matchingLanguage();
 				form.render();
             }else{
-                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }});
         

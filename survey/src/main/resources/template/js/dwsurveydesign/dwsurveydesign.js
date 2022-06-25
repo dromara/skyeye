@@ -207,7 +207,7 @@ layui.config({
 				var quId = quBody.find("input[name='quId']").val();
 				if(!isNull(quId)){
 					AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory015", params:{quId: quId}, type: 'json', callback: function(json){
-		 	   			if(json.returnCode == 0){
+		 	   			if (json.returnCode == 0) {
 		 	   				quBody.hide("slow", function(){
 		 	   					$(this).parent().remove();
 		 	   					//重置序号
@@ -216,7 +216,7 @@ layui.config({
 								resetQuLeftItem();
 		 	   				});
 		 	   			}else{
-		 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	   			}
 		 	   		}});
 				}else{
@@ -254,10 +254,10 @@ layui.config({
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
 				AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory016", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 			}else{
@@ -273,10 +273,10 @@ layui.config({
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
 				AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory017", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 			}else{
@@ -298,7 +298,7 @@ layui.config({
 			winui.window.msg('保存中', {icon: 1,time: 1000});
 			saveSurvey(function(){
 				isSaveProgress = false;
-				winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1,time: 2000});
+				winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			});
 	    });
 	    
@@ -401,7 +401,7 @@ layui.config({
 	    		data.logic = JSON.stringify(list);
 	    		
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory010", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -416,7 +416,7 @@ layui.config({
 						quCBNum2++;
 						exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -440,10 +440,10 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory018", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -489,7 +489,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory011", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -504,7 +504,7 @@ layui.config({
 						quCBNum2++;
 						exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -528,10 +528,10 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory019", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -621,7 +621,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory006", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -641,7 +641,7 @@ layui.config({
 						quCBNum2++;
 						exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -680,7 +680,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory007", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -695,7 +695,7 @@ layui.config({
     					quCBNum2++;
     					exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -712,10 +712,10 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory020", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -751,7 +751,7 @@ layui.config({
 	    		data.logic = JSON.stringify(list);
 	    		
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory008", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -766,7 +766,7 @@ layui.config({
 						quCBNum2++;
 						exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -785,11 +785,11 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory021", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   				rmQuOrderTableTr.remove();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -808,7 +808,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory009", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -823,7 +823,7 @@ layui.config({
 						quCBNum2++;
 						exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -841,7 +841,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory013", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -859,7 +859,7 @@ layui.config({
 						quCBNum2++;
 						exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -897,7 +897,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory012", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -912,7 +912,7 @@ layui.config({
 						quCBNum2++;
 						exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -929,10 +929,10 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory022", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {
@@ -986,7 +986,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory014", params:data, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
 		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
@@ -1024,7 +1024,7 @@ layui.config({
     					quCBNum2++;
     					exeQuCBNum();
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	    	} else {

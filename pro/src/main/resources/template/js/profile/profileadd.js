@@ -73,7 +73,7 @@ layui.config({
 			approvalId: approvalId
 		};
 		if(isNull(ue.getContent())){
-			winui.window.msg('请填写文档内容！', {icon: 2,time: 2000});
+			winui.window.msg('请填写文档内容！', {icon: 2, time: 2000});
 			return false;
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "profile002", params: params, type: 'json', callback: function(json){

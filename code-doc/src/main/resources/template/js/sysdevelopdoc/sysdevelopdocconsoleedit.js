@@ -13,7 +13,7 @@ layui.config({
 	    var layEditor;
 	    
 	    AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc013", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
-   			if(json.returnCode == 0){
+   			if (json.returnCode == 0) {
    				$("#title").val(json.bean.title);
    				
    				layEditor = editormd("content", {
@@ -51,7 +51,7 @@ layui.config({
    			    form.on('submit(formEditBean)', function (data) {
    			        if (winui.verifyForm(data.elem)) {
    			        	if(isNull(layEditor.getMarkdown())){
-   			        		winui.window.msg('请填写文档内容。', {icon: 2,time: 2000});
+   			        		winui.window.msg('请填写文档内容。', {icon: 2, time: 2000});
    			        		return false;
    			        	}
    			        	var params = {
@@ -61,18 +61,18 @@ layui.config({
    		        			rowId: parent.rowId
    			        	};
    			        	AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc014", params:params, type: 'json', callback: function(json){
-   			 	   			if(json.returnCode == 0){
+   			 	   			if (json.returnCode == 0) {
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';
    			 	   			}else{
-   			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			 	   			}
    			 	   		}});
    			        }
    			        return false;
    			    });
    			}else{
-   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
 	    

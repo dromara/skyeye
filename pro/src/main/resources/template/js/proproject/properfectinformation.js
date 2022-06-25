@@ -85,7 +85,7 @@ layui.config({
 	 	 	        	//获取内容
 		 	        	params.resultsContent = encodeURIComponent(ue.getContent());
 		 	        	if(isNull(params.resultsContent)){
-			        		winui.window.msg("请填写项目成果和总结", {icon: 2,time: 2000});
+			        		winui.window.msg("请填写项目成果和总结", {icon: 2, time: 2000});
 			        		return false;
 			        	}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject016", params: params, type: 'json', callback: function(json){
@@ -113,7 +113,7 @@ layui.config({
 	 	 	        	//获取内容
 		 	        	params.resultsContent = encodeURIComponent(ue.getContent());
 		 	        	if(isNull(params.resultsContent)){
-			        		winui.window.msg("请填写项目成果和总结", {icon: 2,time: 2000});
+			        		winui.window.msg("请填写项目成果和总结", {icon: 2, time: 2000});
 			        		return false;
 			        	}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject016", params: params, type: 'json', callback: function(json){

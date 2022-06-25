@@ -124,11 +124,11 @@ layui.config({
 			    form.on('submit(formAddBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
 			        	if(!isPic){
-			        		winui.window.msg("请先生成预览图", {icon: 2,time: 2000});
+			        		winui.window.msg("请先生成预览图", {icon: 2, time: 2000});
 			        	}else if(isNull(htmlContent.getValue())){
-		        			winui.window.msg("请填写HTML内容", {icon: 2,time: 2000});
+		        			winui.window.msg("请填写HTML内容", {icon: 2, time: 2000});
 		        		}else if(isNull(wxmlContent.getValue())){
-		        			winui.window.msg("请填写WXML内容", {icon: 2,time: 2000});
+		        			winui.window.msg("请填写WXML内容", {icon: 2, time: 2000});
 		        		}else{
 		        			var oCanvas = document.getElementById("thecanvas");
 		        			var imgData = oCanvas.toDataURL();
@@ -147,15 +147,15 @@ layui.config({
 		        					};
 		        					
 		        					AjaxPostUtil.request({url:reqBasePath + "rmxcx016", params:params, type: 'json', callback: function(json){
-		        						if(json.returnCode == 0){
+		        						if (json.returnCode == 0) {
 		        							parent.layer.close(index);
 		        							parent.refreshCode = '0';
 		        						}else{
-		        							winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		        							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		        						}
 		        					}});
 		        				}else{
-		        					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+		        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		        				}
 		        			}});
 		        		}
@@ -187,7 +187,7 @@ layui.config({
 	    // 生成图片
 	    $("body").on("click", "#createPic", function(){
 	    	if(isNull($("#printPic").html().trim())){
-	    		winui.window.msg('请填写HTML内容', {icon: 2,time: 2000});
+	    		winui.window.msg('请填写HTML内容', {icon: 2, time: 2000});
 	    	}else{
 	    		html2canvas($("#printPic"), {
 	    			onrendered: function(canvas) {

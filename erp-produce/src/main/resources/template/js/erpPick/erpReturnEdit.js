@@ -46,7 +46,7 @@ layui.config({
 
  		function loadData(){
 			AjaxPostUtil.request({url:flowableBasePath + "erppick013", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
- 	   			if(json.returnCode == 0){
+ 	   			if (json.returnCode == 0) {
 	 	   			var data = json.bean;
 	 	   			$("#depotId").val(data.depotId);
                 	$("#operTime").val(data.operTime);
@@ -72,7 +72,7 @@ layui.config({
 					//计算价格
 					calculatedTotalPrice();
  	   			}else{
- 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
 		}
@@ -154,11 +154,11 @@ layui.config({
 			    	rowId: parent.rowId
 			    };
 	        	AjaxPostUtil.request({url:flowableBasePath + "erppick014", params: params, type: 'json', callback: function(json){
-	 	   			if(json.returnCode == 0){
+	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 	 	   			}else{
-	 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
 	        }

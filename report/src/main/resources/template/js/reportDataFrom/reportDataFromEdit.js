@@ -56,23 +56,23 @@ layui.config({
                             id: parent.rowId
                         };
                         if(JSON.parse(params.analysisData).length == 0){
-                            winui.window.msg('请进行字段解析操作。', {icon: 2,time: 2000});
+                            winui.window.msg('请进行字段解析操作。', {icon: 2, time: 2000});
                             return false;
                         }
                         var otherData = getDataByType();
                         if((isNull(otherData.xmlContent) && dataFromType == 1)
                             || (isNull(otherData.jsonContent) && dataFromType == 2)
                             || (isNull(otherData.sqlContent) && dataFromType == 4)){
-                            winui.window.msg('必填项不能为空', {icon: 2,time: 2000});
+                            winui.window.msg('必填项不能为空', {icon: 2, time: 2000});
                             return false;
                         }
                         params = $.extend(true, params, otherData);
                         AjaxPostUtil.request({url:reportBasePath + "reportdatafrom004", params: params, type:'json', method: "PUT", callback:function(json){
-                            if(json.returnCode == 0){
+                            if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
                             }else{
-                                winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});
                     }
@@ -294,7 +294,7 @@ layui.config({
             } else if(dataFromType == 3){
                 // Rest接口数据源
                 if(isNull($("#restUrl").val())){
-                    winui.window.msg('请填写url', {icon: 2,time: 2000});
+                    winui.window.msg('请填写url', {icon: 2, time: 2000});
                     return null;
                 }
                 params = {
@@ -306,11 +306,11 @@ layui.config({
             } else if(dataFromType == 4){
                 // SQL数据源
                 if(isNull($("#sqlDataBase").val())){
-                    winui.window.msg('请选择数据库', {icon: 2,time: 2000});
+                    winui.window.msg('请选择数据库', {icon: 2, time: 2000});
                     return null;
                 }
                 if(isNull(sqlContent.getValue())){
-                    winui.window.msg('请填写sql语句', {icon: 2,time: 2000});
+                    winui.window.msg('请填写sql语句', {icon: 2, time: 2000});
                     return null;
                 }
                 params = {

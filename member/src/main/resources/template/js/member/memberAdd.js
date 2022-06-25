@@ -45,7 +45,7 @@ layui.config({
                     storeId: $("#storeId").val()
                 };
                 AjaxPostUtil.request({url: shopBasePath + "member002", params: params, type: 'json', method: "POST", callback: function(json){
-                    if(json.returnCode == 0){
+                    if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
                     }else{
@@ -81,7 +81,7 @@ layui.config({
         // 省级行政区划
         function loadChildProvinceArea(){
             AjaxPostUtil.request({url:reqBasePath + "commontarea001", params:{}, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
                     for(var i = 0; i < json.rows.length; i++){
                         str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -90,7 +90,7 @@ layui.config({
                     $("#lockParentSel").append(str);
                     form.render('select');
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         }
@@ -98,7 +98,7 @@ layui.config({
         // 市级行政区划
         function loadChildCityArea(){
             AjaxPostUtil.request({url:reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     var str = '<dd class="layui-col-xs3"><select id="cityId" win-verify="required" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
                     for(var i = 0; i < json.rows.length; i++){
                         str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -107,7 +107,7 @@ layui.config({
                     $("#lockParentSel").append(str);
                     form.render('select');
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         }
@@ -115,7 +115,7 @@ layui.config({
         // 县级行政区划
         function loadChildArea(){
             AjaxPostUtil.request({url:reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     var str = '<dd class="layui-col-xs3"><select id="addressAreaId" win-verify="required" lay-filter="area" lay-search=""><option value="">请选择</option>';
                     for(var i = 0; i < json.rows.length; i++){
                         str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -124,7 +124,7 @@ layui.config({
                     $("#lockParentSel").append(str);
                     form.render('select');
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         }
@@ -132,7 +132,7 @@ layui.config({
         // 镇级行政区划
         function loadChildAreaTownShip(){
             AjaxPostUtil.request({url:reqBasePath + "commontarea004", params:{rowId: $("#addressAreaId").val()}, type: 'json', method: "POST", callback: function(json){
-                if(json.returnCode == 0){
+                if (json.returnCode == 0) {
                     var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
                     for(var i = 0; i < json.rows.length; i++){
                         str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -141,7 +141,7 @@ layui.config({
                     $("#lockParentSel").append(str);
                     form.render('select');
                 }else{
-                    winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
         }

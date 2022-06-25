@@ -48,19 +48,19 @@ layui.config({
 					type: type
         		};
  	        	if(isNull(params.logo)){
- 	        		winui.window.msg('请上传LOGO', {icon: 2,time: 2000});
+ 	        		winui.window.msg('请上传LOGO', {icon: 2, time: 2000});
  	        		return false;
  	        	}
 				if(isNull(params.content)){
-					winui.window.msg('请填写模板内容', {icon: 2,time: 2000});
+					winui.window.msg('请填写模板内容', {icon: 2, time: 2000});
 					return false;
 				}
     			AjaxPostUtil.request({url: reqBasePath + "sysevemodel002", params:params, type: 'json', method: "POST", callback: function(json){
-    				if(json.returnCode == 0){
+    				if (json.returnCode == 0) {
     					parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
     				}else{
-    					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     				}
     			}});
 	        }

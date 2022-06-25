@@ -63,11 +63,11 @@ layui.config({
 		 	        	};
 		 	        	params.logo = $("#logo").find("input[name='upload']").attr("oldurl");
 		 	        	AjaxPostUtil.request({url:reqBasePath + "appworkpage006", params:params, type: 'json', callback: function(json){
-			 	   			if(json.returnCode == 0){
+			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
 			 	   			}else{
-			 	   				winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
 		 	        }

@@ -38,7 +38,7 @@ layui.config({
                             remark: $("#remark").val()
                         };
                         AjaxPostUtil.request({url: flowableBasePath + "inoutitem005", params: params, type: 'json', method: "PUT", callback: function(json){
-                            if(json.returnCode == 0){
+                            if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
                             }else{

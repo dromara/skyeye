@@ -62,11 +62,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '挂起' }, function (index) {
 			layer.close(index);
 	        AjaxPostUtil.request({url:flowableBasePath + "activitimode020", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
-					winui.window.msg("该流程已挂起", {icon: 1,time: 2000});
+				if (json.returnCode == 0) {
+					winui.window.msg("该流程已挂起", {icon: 1, time: 2000});
 					reloadAllConductTable();
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		});
@@ -78,11 +78,11 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '激活' }, function (index) {
 			layer.close(index);
 	        AjaxPostUtil.request({url:flowableBasePath + "activitimode021", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
-				if(json.returnCode == 0){
-					winui.window.msg("该流程已激活", {icon: 1,time: 2000});
+				if (json.returnCode == 0) {
+					winui.window.msg("该流程已激活", {icon: 1, time: 2000});
 					reloadAllConductTable();
 				}else{
-					winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
 		});

@@ -16,7 +16,7 @@ layui.config({
 	var jsonData = new Array();
 		
 	AjaxPostUtil.request({url:reqBasePath + "fileconsole037", params: {}, type: 'json', callback: function(json){
-		if(json.returnCode == 0){
+		if (json.returnCode == 0) {
 			jsonData = json.bean;
 			$("#layer02_01 .layer02-data").find('span').eq(0).html(jsonData.allNum.fileNum);
 			drawLayer02Label($("#layer02_01 canvas").get(0), "文件总数量", 80, 200);
@@ -44,7 +44,7 @@ layui.config({
 			renderLayer04Right();
 			matchingLanguage();
 		}else{
-			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
 	

@@ -23,7 +23,7 @@ layui.config({
 	//初始化左侧菜单用户组数据
 	function showLeft(){
 	    AjaxPostUtil.request({url: flowableBasePath + "actgroup002", params: {}, type: 'json', method: "GET", callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
 				var str = getDataUseHandlebars($('#userGroupTemplate').html(), json);
 				$("#setting").html(str);
 				if(json.rows.length > 0){
@@ -65,7 +65,7 @@ layui.config({
 			    		if(!isNull(value)){
 			    			if(html != value){
 				    			AjaxPostUtil.request({url: flowableBasePath + "actgroup004", params: {rowId: clickId, groupName: value}, type: 'json', method: "POST", callback: function(json){
-				    	   			if(json.returnCode == 0){
+				    	   			if (json.returnCode == 0) {
 				    	   				obj.find("a[rowid='" + clickId + "']").html(value);
 				    	   			}else{
 				    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
@@ -102,7 +102,7 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
 	        AjaxPostUtil.request({url: flowableBasePath + "actgroup005", params: {rowId: clickId}, type: 'json', method: "POST", callback: function(json){
-				if(json.returnCode == 0){
+				if (json.returnCode == 0) {
 					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					$("#setting").find("a[rowid='" + clickId + "']").remove();
 					var _obj = $("#setting").find("a[class='setting-a']");
@@ -150,7 +150,7 @@ layui.config({
     			value = '新增用户组';
     		}
 			AjaxPostUtil.request({url: flowableBasePath + "actgroup001", params: {groupName: value}, type: 'json', method: "POST", callback: function(json){
-	   			if(json.returnCode == 0){
+	   			if (json.returnCode == 0) {
 	   				clickId = json.bean.id;
 	   				var str = '<a rowid="' + clickId + '" rowname="' + value + '" class="setting-a">' + value + '</a>';
 	   				$("#setting").append(str);
@@ -233,7 +233,7 @@ layui.config({
 			layer.confirm(msg, { icon: 3, title: '一键移除所有用户' }, function (index) {
 				layer.close(index);
 				AjaxPostUtil.request({url: flowableBasePath + "actgroup008", params: {rowId: clickId}, type: 'json', method: "POST", callback: function(json){
-					if(json.returnCode == 0){
+					if (json.returnCode == 0) {
 						winui.window.msg("移除成功", {icon: 1, time: 2000});
 	    				loadTable();
 					}else{
@@ -255,7 +255,7 @@ layui.config({
 				rowId:  data.id
         	};
             AjaxPostUtil.request({url: flowableBasePath + "actgroup006", params: params, type: 'json', method: "POST", callback: function(json){
-    			if(json.returnCode == 0){
+    			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
     			}else{
@@ -268,7 +268,7 @@ layui.config({
 	// 同步人员数据
     $("body").on("click", "#syncData", function(){
     	AjaxPostUtil.request({url: flowableBasePath + "activitimode015", params: {}, type: 'json', method: "POST", callback: function(json){
-			if(json.returnCode == 0){
+			if (json.returnCode == 0) {
             	winui.window.msg("同步成功", {icon: 1, time: 2000});
 			}else{
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

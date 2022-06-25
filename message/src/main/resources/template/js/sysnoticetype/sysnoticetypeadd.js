@@ -20,7 +20,7 @@ layui.config({
 	    		$("#parentIdBox").removeClass("layui-hide");
 	    		initNoticeTypeId();
 	    	}else{
-	    		winui.window.msg('状态值错误', {icon: 2,time: 2000});
+	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
  		
@@ -54,7 +54,7 @@ layui.config({
  	        	};
  	        	if($("input[name='level']:checked").val() === '2'){	//该类型为二级类型
 	 	        	if(isNull(parentId)){
-	 	        		winui.window.msg('请选择一级公告类型', {icon: 2,time: 2000});
+	 	        		winui.window.msg('请选择一级公告类型', {icon: 2, time: 2000});
 	 	        		return false;
 	 	        	}else{
 	 	        		params.parentId = parentId;
@@ -63,11 +63,11 @@ layui.config({
  	        		params.parentId = '0';
  	        	}
  	        	AjaxPostUtil.request({url:reqBasePath + "noticetype002", params:params, type: 'json', callback: function(json){
- 	        		if(json.returnCode == 0){
+ 	        		if (json.returnCode == 0) {
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';
  	        		}else{
- 	        			winui.window.msg(json.returnMessage, {icon: 2,time: 2000});
+ 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	        		}
  	        	}});
  	        }
