@@ -27,7 +27,7 @@ layui.config({
 		 	}
 		});
 	    
-	    $("body").on("click", "#vehicleImg", function(){
+	    $("body").on("click", "#vehicleImg", function() {
 	    	var src = $(this).attr("src");
 	    	layer.open({
         		type:1,

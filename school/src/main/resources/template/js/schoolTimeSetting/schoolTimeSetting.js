@@ -48,7 +48,7 @@ layui.config({
     }
     
     // 保存
-    $("body").on("click", "#saveBtn", function(){
+    $("body").on("click", "#saveBtn", function() {
 		var array = new Array();
 		$('.timeRange').each(function(){
 			array.push({
@@ -73,7 +73,7 @@ layui.config({
 		}});
 	});
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		initTable();
 	});
 	

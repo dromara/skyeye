@@ -235,7 +235,7 @@ layui.config({
 		});
 
 	    //取消
-	    $("body").on("click", "#monthCancle", function(){
+	    $("body").on("click", "#monthCancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

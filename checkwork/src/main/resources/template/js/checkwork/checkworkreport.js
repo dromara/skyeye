@@ -255,7 +255,7 @@ layui.config({
 	});
 	
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		if(isTable){
 			loadTable();
 		} else {
@@ -263,7 +263,7 @@ layui.config({
 		}
 	});
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		if(isTable){
 			loadTable();
 		} else {
@@ -272,7 +272,7 @@ layui.config({
     });
 	
 	//导出
-	$("body").on("click", "#download", function(){
+	$("body").on("click", "#download", function() {
 		postDownLoadFile({
 			url : flowableBasePath + 'checkwork020',
 			params: getTableParams(),

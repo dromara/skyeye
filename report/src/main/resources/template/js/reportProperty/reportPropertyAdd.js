@@ -68,7 +68,7 @@ layui.config({
                     defaultValue: encodeURIComponent($("#defaultValue").val()),
                     options: JSON.stringify(tableData),
                 };
-                AjaxPostUtil.request({url:reportBasePath + "reportproperty002", params: params, type:'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: reportBasePath + "reportproperty002", params: params, type:'json', method: "POST", callback: function(json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
@@ -117,7 +117,7 @@ layui.config({
             }
         }
 
-        $("body").on("click", "#cancle", function(){
+        $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });
     });

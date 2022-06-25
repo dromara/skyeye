@@ -288,7 +288,7 @@ layui.config({
 		    map.setCenter(obj[obj.options.selectedIndex].center)
 		}
  	    
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

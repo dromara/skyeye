@@ -135,7 +135,7 @@ layui.config({
         });
     }
     // 添加仓库
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/storehouse/storehouseadd.html",
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],

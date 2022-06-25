@@ -104,12 +104,12 @@ layui.config({
 	    });
 		
 		// 我的输出刷新表单
-		$("body").on("click", "#refreshMyOutput", function(){
+		$("body").on("click", "#refreshMyOutput", function() {
 			table.reload("outputTable", {page: {curr: 1}, where: {bigType: 1}});
 		});
 		
 		// 我的输出下载
-		$("body").on("click", ".download", function(){
+		$("body").on("click", ".download", function() {
 			var filePath = $(this).attr("download");
 			var fileName = $(this).attr("fileName");
 			fileDownloadByCloud(fileName, filePath);
@@ -182,7 +182,7 @@ layui.config({
 	    });
 		
 		// 我的发送刷新表单
-		$("body").on("click", "#refreshMySend", function(){
+		$("body").on("click", "#refreshMySend", function() {
 			table.reload("sendTable", {page: {curr: 1}, where: {bigType: 2}});
 		});
 	}
@@ -238,13 +238,13 @@ layui.config({
 	    });
 		
 		// 我的获取刷新表单
-		$("body").on("click", "#refreshMyAccess", function(){
+		$("body").on("click", "#refreshMyAccess", function() {
 			table.reload("accessTable", {page: {curr: 1}, where: {bigType: 3}});
 		});
 	}
 	
 	// 退出
-    $("body").on("click", "#exitBtn", function(){
+    $("body").on("click", "#exitBtn", function() {
         winui.window.confirm('确认注销吗?', {id: 'exit-confim', icon: 3, title: '提示', skin: 'msg-skin-message', success: function(layero, index){
             var times = $("#exit-confim").parent().attr("times");
             var zIndex = $("#exit-confim").parent().css("z-index");
@@ -259,7 +259,7 @@ layui.config({
     });
 	
     // 控制台
-    $("body").on("click", "#consoleDesk", function(){
+    $("body").on("click", "#consoleDesk", function() {
         location.href = "../../tpl/index/index.html";
     });
 	

@@ -61,11 +61,11 @@ layui.config({
 	form.render();
 	
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
@@ -78,7 +78,7 @@ layui.config({
     }
 
 	//新增
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sealseservicefaulttype/sealseservicefaulttypeadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],

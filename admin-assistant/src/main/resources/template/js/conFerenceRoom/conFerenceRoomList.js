@@ -169,7 +169,7 @@ layui.config({
 	}
 
 	// 新增会议室
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/conFerenceRoom/conFerenceRoomAdd.html", 
 			title: "新增会议室",
@@ -204,11 +204,11 @@ layui.config({
 	}
 	
 	// 搜索表单
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

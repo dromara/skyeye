@@ -90,7 +90,7 @@ layui.config({
 	    });
 		
 		// 商机搜索表单
-		$("body").on("click", "#opportunitySearch", function(){
+		$("body").on("click", "#opportunitySearch", function() {
 			table.reload("opportunityTable", {page: {curr: 1}, where: getOpportunityParams()});
 		});
 	}
@@ -153,7 +153,7 @@ layui.config({
 	    });
 		
 		// 合同搜索表单
-		$("body").on("click", "#contractSearch", function(){
+		$("body").on("click", "#contractSearch", function() {
 			table.reload("contractTable", {page: {curr: 1}, where: getContractParams()});
 		});
 	}
@@ -215,7 +215,7 @@ layui.config({
 	    });
 		
 		// 售后服务搜索表单
-		$("body").on("click", "#serviceSearch", function(){
+		$("body").on("click", "#serviceSearch", function() {
 			table.reload("serviceTable", {page: {curr: 1}, where: getServiceParams()});
 		});
 	}
@@ -331,7 +331,7 @@ layui.config({
 		});
 		
 		// 联系人搜索表单
-		$("body").on("click", "#contactsSearch", function(){
+		$("body").on("click", "#contactsSearch", function() {
 			table.reload("contactsTable", {page: {curr: 1}, where: getContactsParams()});
 		});
 	}
@@ -382,7 +382,7 @@ layui.config({
 	    });
 		
 		// 讨论板搜索表单
-		$("body").on("click", "#discussSearch", function(){
+		$("body").on("click", "#discussSearch", function() {
 			table.reload("discussTable", {page: {curr: 1}, where: getDiscussParams()});
 		});
 	}

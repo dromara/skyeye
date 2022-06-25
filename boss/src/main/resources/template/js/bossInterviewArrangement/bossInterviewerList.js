@@ -97,7 +97,7 @@ layui.config({
     });
 
     // 刷新
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 

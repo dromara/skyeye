@@ -113,7 +113,7 @@ layui.config({
 	}
 	
 	// 新增资产采购
-	$("body").on("click", "#addCaigouBean", function(){
+	$("body").on("click", "#addCaigouBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetManagePurchase/assetManagePurchaseAdd.html", 
 			title: "资产采购申请",
@@ -194,7 +194,7 @@ layui.config({
 	});
 
 	// 刷新采购数据
-    $("body").on("click", "#reloadCaigouTable", function(){
+    $("body").on("click", "#reloadCaigouTable", function() {
     	loadCaigouTable();
     });
     

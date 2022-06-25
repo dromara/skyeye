@@ -29,12 +29,12 @@ layui.config({
 	        return false;
 	    });
 	    
-	    $("body").on("keyup paste", "#colorClass", function(){console.log(1);
+	    $("body").on("keyup paste", "#colorClass", function() {console.log(1);
 	    	$("#modelEffect").attr("class", $(this).val());
 	    });
 	    
 	    //取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

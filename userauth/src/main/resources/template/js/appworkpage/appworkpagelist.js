@@ -20,15 +20,15 @@ layui.config({
 	initRightMenu();//初始化右键
 	showMenu();//加载左侧菜单目录
 	
-	$("body").on("click", "#reloadTable", function(){//刷新目录及菜单
+	$("body").on("click", "#reloadTable", function() {//刷新目录及菜单
 		showMenu();
     });
 	
-	$("body").on("click", "#reloadTableData", function(){//刷新菜单
+	$("body").on("click", "#reloadTableData", function() {//刷新菜单
 		showList();
     });
 	
-	$("body").on("click", "#formSearch", function(){//搜索
+	$("body").on("click", "#formSearch", function() {//搜索
 		table.reload("messageTable", {page: {curr: 1}, where:{chooseId: chooseId, title: $("#title").val()}});
     });
 	
@@ -40,7 +40,7 @@ layui.config({
 	});
 	
 	//新增分类
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
 		AjaxPostUtil.request({url:reqBasePath + "appworkpage002", params: {}, type: 'json', callback: function(json){
    			if (json.returnCode == 0) {
    				chooseId = json.bean.id;
@@ -72,7 +72,7 @@ layui.config({
     });
 	
 	//新增菜单
-	$("body").on("click", "#addBeanApp", function(){
+	$("body").on("click", "#addBeanApp", function() {
 		_openNewWindows({
 			url: "../../tpl/appworkpage/appworkpageadd.html", 
 			title: "新增菜单",

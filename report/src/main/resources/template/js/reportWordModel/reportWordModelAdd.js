@@ -61,7 +61,7 @@ layui.config({
                             secondTypeId: $("#secondTypeId").val(),
                             logo: json1.bean.picUrl
                         };
-                        AjaxPostUtil.request({url:reportBasePath + "reportwordmodel002", params: params, type:'json', method: "POST", callback: function(json) {
+                        AjaxPostUtil.request({url: reportBasePath + "reportwordmodel002", params: params, type:'json', method: "POST", callback: function(json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
@@ -78,7 +78,7 @@ layui.config({
         });
 
         // 生成图片
-        $("body").on("click", "#createPic", function(){
+        $("body").on("click", "#createPic", function() {
             var styleStr = "";
             $.each(choosePropertyList, function (key, value){
                 if(!isNull(value)){
@@ -101,7 +101,7 @@ layui.config({
         });
 
         // 下载canvas图片
-        $("body").on("click", "#download", function(){
+        $("body").on("click", "#download", function() {
             var oCanvas = document.getElementById("thecanvas");
             var img_data1 = Canvas2Image.saveAsPNG(oCanvas, true).getAttribute('src');
             saveFile(img_data1, 'richer.png');
@@ -178,7 +178,7 @@ layui.config({
                 }});
         });
 
-        $("body").on("click", "#cancle", function(){
+        $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });
     });

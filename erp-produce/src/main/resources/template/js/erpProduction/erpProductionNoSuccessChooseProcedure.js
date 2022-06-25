@@ -103,7 +103,7 @@ layui.config({
 	// 自己构造的合并相同部门后的工序
 	var procedureList = new Array();
 	// 下一步
-	$("body").on("click", "#nextTab", function(){
+	$("body").on("click", "#nextTab", function() {
 		if(isNull(chooseMation.id)){
 			winui.window.msg("请选择生产计划单.", {icon: 2, time: 2000});
 			return false;
@@ -144,14 +144,14 @@ layui.config({
 	});
 	
 	//上一步
-	$("body").on("click", "#prevTab", function(){
+	$("body").on("click", "#prevTab", function() {
 		$step.prevStep();
 		$("#firstTab").show();
 		$("#secondTab").hide();
 	});
 	
 	//保存
-	$("body").on("click", "#saveChoose", function(){
+	$("body").on("click", "#saveChoose", function() {
 		if(isNull(chooseMation.id)){
 			winui.window.msg("请选择生产计划单.", {icon: 2, time: 2000});
 			return false;
@@ -186,7 +186,7 @@ layui.config({
 		}});
 	});
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

@@ -270,7 +270,7 @@ function auth(urlNum){
 			}
 		}
 	} else {
-		winui.window.msg('登录超时，即将返回登录页面.', {icon: 2, time: 2000}, function(){
+		winui.window.msg('登录超时，即将返回登录页面.', {icon: 2, time: 2000}, function() {
 			var win = window;
 			while (win != win.top){
 				win = win.top;

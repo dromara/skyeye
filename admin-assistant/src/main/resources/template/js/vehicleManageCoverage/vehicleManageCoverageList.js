@@ -67,7 +67,7 @@ layui.config({
 	}
 	
 	// 新增险种
-	$("body").on("click", "#addCoverageBean", function(){
+	$("body").on("click", "#addCoverageBean", function() {
     	_openNewWindows({
 			url: "../../tpl/vehicleManageCoverage/vehicleManageCoverageAdd.html", 
 			title: "新增险种",
@@ -102,11 +102,11 @@ layui.config({
 	}
 
 	// 搜索表单
-	$("body").on("click", "#coverageformSearch", function(){
+	$("body").on("click", "#coverageformSearch", function() {
 		table.reload("coverageTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
-    $("body").on("click", "#reloadCoverageTable", function(){
+    $("body").on("click", "#reloadCoverageTable", function() {
     	loadCoverageTable();
     });
     

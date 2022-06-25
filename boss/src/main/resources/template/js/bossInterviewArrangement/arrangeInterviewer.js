@@ -64,7 +64,7 @@ layui.config({
     });
 
     // 面试官选择
-    $("body").on("click", ".interviewerBtn", function(){
+    $("body").on("click", ".interviewerBtn", function() {
         systemCommonUtil.userReturnList = [].concat(interviewer);
         systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

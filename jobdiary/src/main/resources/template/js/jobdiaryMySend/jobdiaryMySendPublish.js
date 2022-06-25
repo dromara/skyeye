@@ -210,7 +210,7 @@ layui.config({
 	    });
 	    
 	    //取消日报发送
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 
@@ -328,7 +328,7 @@ layui.config({
 	    });
 	    
 	    //取消周报发送
-	    $("body").on("click", "#weekCancle", function(){
+	    $("body").on("click", "#weekCancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    
@@ -445,7 +445,7 @@ layui.config({
 	    });
 	    
 	    //取消月报发送
-	    $("body").on("click", "#monthCancle", function(){
+	    $("body").on("click", "#monthCancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    

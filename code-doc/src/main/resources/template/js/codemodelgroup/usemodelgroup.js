@@ -43,7 +43,7 @@ layui.config({
         		}
         		AjaxPostUtil.request({url: reqBasePath + "codemodel014", params: {jsonData: encodeURIComponent(JSON.stringify(subData))}, type: 'json', method: 'POST', callback: function(json){
         			if (json.returnCode == 0) {
-        				winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1, time: 2000}, function(){
+        				winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1, time: 2000}, function() {
 	        				parent.layer.close(index);
 	        				parent.refreshCode = '0';
         				});

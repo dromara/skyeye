@@ -239,7 +239,7 @@ layui.config({
 	}
 	
 	// 上班打卡
-	$("body").on("click", "#clockInBtn", function(){
+	$("body").on("click", "#clockInBtn", function() {
 		var timeId = $("#checkTime").val();
 		if(dayType == 2){
 			timeId = "-";

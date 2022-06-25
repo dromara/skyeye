@@ -27,7 +27,7 @@ layui.config({
 		 	}
 		});
 
-		$("body").on("click", ".photo-img", function(){
+		$("body").on("click", ".photo-img", function() {
 			var url = $(this).attr("src");
 			systemCommonUtil.showPicImg(url);
 		});

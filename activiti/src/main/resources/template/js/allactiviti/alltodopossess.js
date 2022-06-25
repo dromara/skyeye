@@ -89,7 +89,7 @@ layui.config({
 	}
 	
     //刷新所有待办流程
-	$("body").on("click", "#reloadAllConductTable", function(){
+	$("body").on("click", "#reloadAllConductTable", function() {
 		reloadAllConductTable();
 	});
 	

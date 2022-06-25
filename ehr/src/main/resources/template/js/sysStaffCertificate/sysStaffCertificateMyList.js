@@ -84,7 +84,7 @@ layui.config({
 	form.render();
 	
 	// 录入证书
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sysStaffCertificate/sysStaffCertificateAdd.html",
 			title: "录入证书",
@@ -135,7 +135,7 @@ layui.config({
     }
 
 	// 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
 

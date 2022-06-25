@@ -96,7 +96,7 @@ layui.config({
 	}
 	
 	//设置已读选中
-	$("body").on("click", "#designReadBeans", function(){
+	$("body").on("click", "#designReadBeans", function() {
 		var checkStatus = table.checkStatus('messageTable');
 		var data = checkStatus.data;
 		var idsStr = '';
@@ -120,7 +120,7 @@ layui.config({
     });
 	
 	//删除选中
-	$("body").on("click", "#delBeans", function(){
+	$("body").on("click", "#delBeans", function() {
 		var checkStatus = table.checkStatus('messageTable');
 		var data = checkStatus.data;
 		var idsStr = '';
@@ -149,7 +149,7 @@ layui.config({
     });
 	
 	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

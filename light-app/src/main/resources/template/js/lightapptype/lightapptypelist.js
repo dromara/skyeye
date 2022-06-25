@@ -92,11 +92,11 @@ layui.config({
 	form.render();
 	
 	
-	$("body").on("click", "#formSearchLightApp", function(){
+	$("body").on("click", "#formSearchLightApp", function() {
 		refreshTable();
 	});
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
@@ -109,7 +109,7 @@ layui.config({
     }
 
 	//新增
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/lightapptype/lightapptypeadd.html", 
 			title: "新增轻应用类型",

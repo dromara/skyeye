@@ -156,7 +156,7 @@ layui.config({
 	}
 	
 	// 保存
-	$("body").on("click", "#saveChoose", function(){
+	$("body").on("click", "#saveChoose", function() {
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
@@ -185,7 +185,7 @@ layui.config({
         return false;
     });
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

@@ -142,7 +142,7 @@ layui.config({
 				matchingLanguage();
 				form.render();
 			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000}, function(){
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000}, function() {
 					parent.layer.close(index);
 					parent.refreshCode = '-9999';
 				});

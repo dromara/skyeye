@@ -80,14 +80,14 @@ layui.config({
 	}
 
 	function loadPicImgClick(){
-		$("body").on("click", "img", function(){
+		$("body").on("click", "img", function() {
 			var url = $(this).attr("src");
 			systemCommonUtil.showPicImg(url);
 		});
 	}
 
     // 退出
-    $("body").on("click", "#exitBtn", function(){
+    $("body").on("click", "#exitBtn", function() {
         winui.window.confirm('确认注销吗?', {id: 'exit-confim', icon: 3, title: '提示', skin: 'msg-skin-message', success: function(layero, index){
             var times = $("#exit-confim").parent().attr("times");
             var zIndex = $("#exit-confim").parent().css("z-index");
@@ -102,7 +102,7 @@ layui.config({
     });
 	
     // 控制台
-    $("body").on("click", "#consoleDesk", function(){
+    $("body").on("click", "#consoleDesk", function() {
         location.href = "../../tpl/index/index.html";
     });
 });

@@ -109,7 +109,7 @@ layui.config({
 	}
 	
     // 新增角色
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/syseverole/syseveroleadd.html", 
 			title: "新增角色",
@@ -134,7 +134,7 @@ layui.config({
 	});
 
 	// 刷新数据
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 

@@ -57,7 +57,7 @@ layui.config({
 		refreshTable();
 	}
 	
-	$("body").on("input", "#name", function(){
+	$("body").on("input", "#name", function() {
 		searchZtree(materialCategoryType, $("#name").val());
 	});
 	//ztree查询
@@ -175,7 +175,7 @@ layui.config({
 	}
 	
 	//保存按钮-多选才有
-	$("body").on("click", "#saveCheckBox", function(){
+	$("body").on("click", "#saveCheckBox", function() {
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
@@ -191,11 +191,11 @@ layui.config({
 	});
 	
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	
-	 $("body").on("click", "#reloadTable", function(){
+	 $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

@@ -44,7 +44,7 @@ layui.config({
 				};
 				AjaxPostUtil.request({url:flowableBasePath + "activitimode022", params: jStr, type: 'json', callback: function(json){
 					if (json.returnCode == 0) {
-						winui.window.msg("申请提交成功，等待审核...", {icon: 1, time: 2000}, function(){
+						winui.window.msg("申请提交成功，等待审核...", {icon: 1, time: 2000}, function() {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 						});
@@ -58,7 +58,7 @@ layui.config({
     });
 	
 	// 取消
-    $("body").on("click", "#cancle", function(){
+    $("body").on("click", "#cancle", function() {
     	parent.layer.close(index);
     });
 });

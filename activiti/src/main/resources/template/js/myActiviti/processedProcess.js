@@ -107,7 +107,7 @@ layui.config({
 	}
 	
     //刷新我的历史任务
-	$("body").on("click", "#reloadMyHistoryTaskTable", function(){
+	$("body").on("click", "#reloadMyHistoryTaskTable", function() {
 		reloadMyHistoryTaskTable();
 	});
 	

@@ -198,7 +198,7 @@ layui.config({
 	/********* tree 处理   end *************/
 	
 	// 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
@@ -272,7 +272,7 @@ layui.config({
 	}
     
     // 新增菜单
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sysevemenu/sysevemenuadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],

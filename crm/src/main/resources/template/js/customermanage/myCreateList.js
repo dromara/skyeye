@@ -78,7 +78,7 @@ layui.config({
 	form.render();
 	
 	// 新增
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/customermanage/customeradd.html", 
 			title: "新增客户",
@@ -139,11 +139,11 @@ layui.config({
 		});
 	}
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

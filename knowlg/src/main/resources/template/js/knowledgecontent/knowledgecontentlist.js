@@ -100,7 +100,7 @@ layui.config({
 	});
 
 	// 添加
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/knowledgecontent/knowledgecontentadd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
@@ -117,7 +117,7 @@ layui.config({
     });
 	
 	// 批量上传
-	$("body").on("click", "#addAllBean", function(){
+	$("body").on("click", "#addAllBean", function() {
     	_openNewWindows({
 			url: "../../tpl/knowledgecontent/filefolderupload.html", 
 			title: "批量上传知识库",
@@ -175,7 +175,7 @@ layui.config({
 	}
 
 	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

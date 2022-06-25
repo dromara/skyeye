@@ -154,11 +154,11 @@ layui.config({
 		
 		form.render();
 		
-		$("body").on("click", "#formNoCheckSearch", function(){
+		$("body").on("click", "#formNoCheckSearch", function() {
 			refreshTable();
 		});
 		
-		$("body").on("click", "#reloadNoCheckTable", function(){
+		$("body").on("click", "#reloadNoCheckTable", function() {
 	    	loadTable();
 	    });
 	    
@@ -309,11 +309,11 @@ layui.config({
 	    });
 		
 		
-		$("body").on("click", "#formCheckedSearch", function(){
+		$("body").on("click", "#formCheckedSearch", function() {
 			refreshCheckedTable();
 		});
 		
-		$("body").on("click", "#reloadCheckedTable", function(){
+		$("body").on("click", "#reloadCheckedTable", function() {
 	    	loadCheckedTable();
 	    });
 	    

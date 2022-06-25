@@ -44,7 +44,7 @@ layui.config({
     });
     
     //添加
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/materialnormstock/materialnormstockadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
@@ -111,7 +111,7 @@ layui.config({
         return false;
     });
     
-    $("body").on("click", "#cancle", function(){
+    $("body").on("click", "#cancle", function() {
     	parent.layer.close(index);
     });
     

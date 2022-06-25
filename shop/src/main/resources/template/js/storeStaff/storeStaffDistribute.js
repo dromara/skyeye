@@ -111,7 +111,7 @@ layui.config({
     }
 
     // 添加
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         if(isNull(chooseStoreId)){
             winui.window.msg('请先选择门店信息.', {icon: 2, time: 2000});
             return false;

@@ -43,13 +43,13 @@ layui.config({
     });
 
     // 导入数据
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         $("#upfile").val("");
         $("#upfile").click();
     });
 
     // 上传
-    $("body").on("change", "#upfile", function(){
+    $("body").on("change", "#upfile", function() {
         var formData = new FormData();
         var name = $("#upfile").val();
         formData.append("file", $("#upfile")[0].files[0]);
@@ -80,7 +80,7 @@ layui.config({
     });
 
     // 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 

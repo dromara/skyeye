@@ -93,7 +93,7 @@ layui.config({
 	}
 
 	// 登记事故信息
-	$("body").on("click", "#addAccidentBean", function(){
+	$("body").on("click", "#addAccidentBean", function() {
     	_openNewWindows({
 			url: "../../tpl/vehicleManageAccident/vehicleManageAccidentAdd.html", 
 			title: "车辆事故登记单",
@@ -128,11 +128,11 @@ layui.config({
 	}
 	
 	// 搜索表单
-	$("body").on("click", "#accidentformSearch", function(){
+	$("body").on("click", "#accidentformSearch", function() {
     	table.reload("accidentTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
-    $("body").on("click", "#reloadAccidentTable", function(){
+    $("body").on("click", "#reloadAccidentTable", function() {
     	loadAccidentTable();
     });
     

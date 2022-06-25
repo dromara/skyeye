@@ -78,7 +78,7 @@ layui.config({
 	form.render();
 	
 	// 录入教育背景
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sysStaffEducation/sysStaffEducationAdd.html",
 			title: "录入教育背景",
@@ -129,7 +129,7 @@ layui.config({
     }
 
 	// 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
 

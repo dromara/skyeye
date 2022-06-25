@@ -97,7 +97,7 @@ layui.config({
 	}
 	
 	// 搜索
-    $("body").on("click", "#formSearch", function(){
+    $("body").on("click", "#formSearch", function() {
         $("#timeTreeJobDiaryList").html("");
         inboxTimeTreeJobDiary();
     });

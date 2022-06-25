@@ -93,7 +93,7 @@ layui.config({
 	}
 
 	// 登记保险
-	$("body").on("click", "#addInsuranceBean", function(){
+	$("body").on("click", "#addInsuranceBean", function() {
     	_openNewWindows({
 			url: "../../tpl/vehicleManageInsurance/vehicleManageInsuranceAdd.html", 
 			title: "车辆保险登记单",
@@ -128,11 +128,11 @@ layui.config({
 	}
 	
 	// 搜索表单
-	$("body").on("click", "#insuranceformSearch", function(){
+	$("body").on("click", "#insuranceformSearch", function() {
 		table.reload("insuranceTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
-    $("body").on("click", "#reloadInsuranceTable", function(){
+    $("body").on("click", "#reloadInsuranceTable", function() {
     	loadInsuranceTable();
     });
     

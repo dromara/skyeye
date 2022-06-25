@@ -154,7 +154,7 @@ layui.define('jquery', function(exports){
             ,top: e.pageY + 10
           })
         }
-      }).on('mouseup', function(){
+      }).on('mouseup', function() {
         var move = that.move;
         if(move.from){
           move.from.elem.children('a').removeClass(enterSkin);
@@ -180,7 +180,7 @@ layui.define('jquery', function(exports){
         othis.addClass(enterSkin);
       }
     };
-    a.on('mousedown', function(){
+    a.on('mousedown', function() {
       var move = that.move
       move.from = {
         item: item
@@ -188,7 +188,7 @@ layui.define('jquery', function(exports){
       };
     });
     a.on('mouseenter', mouseenter).on('mousemove', mouseenter)
-    .on('mouseleave', function(){
+    .on('mouseleave', function() {
       var othis = $(this), move = that.move;
       if(move.from){
         delete move.to;

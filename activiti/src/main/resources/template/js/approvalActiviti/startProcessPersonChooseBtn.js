@@ -14,7 +14,7 @@ layui.config({
 
 		pageUrl = parent.activitiUtil.pageUrl;
 
-		$("body").on("click", ".chooseApprovalPersonBtn", function(){
+		$("body").on("click", ".chooseApprovalPersonBtn", function() {
 			_openNewWindows({
 				url: "../../tpl/approvalActiviti/startProcessPersonChoose.html",
 				title: "审批人选择",
@@ -42,7 +42,7 @@ layui.config({
  	        return false;
  	    });
 
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

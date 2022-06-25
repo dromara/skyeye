@@ -148,11 +148,11 @@ layui.config({
         return true;
     }
 
-    $("body").on("click", "#addRow", function(){
+    $("body").on("click", "#addRow", function() {
         addRow();
     });
 
-    $("body").on("click", "#deleteRow", function(){
+    $("body").on("click", "#deleteRow", function() {
         deleteRow();
     });
 
@@ -191,7 +191,7 @@ layui.config({
     }
 
     // 人员选择
-    $("body").on("click", ".chooseApprovalIdBtn", function(){
+    $("body").on("click", ".chooseApprovalIdBtn", function() {
         var rowIndex = $(this).parent().find("input").attr("id").replace("approvalId", "");
         systemCommonUtil.userReturnList = [];
         systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
@@ -204,7 +204,7 @@ layui.config({
     });
 
     // 取消
-    $("body").on("click", "#cancle", function(){
+    $("body").on("click", "#cancle", function() {
         parent.layer.close(index);
     });
 

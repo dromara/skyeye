@@ -127,7 +127,7 @@ layui.config({
     }
 
     // 添加结算账户
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/account/accountAdd.html",
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],

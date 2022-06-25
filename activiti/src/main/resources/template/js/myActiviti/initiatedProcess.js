@@ -147,12 +147,12 @@ layui.config({
 	}
 	
     //刷新我启用的流程
-	$("body").on("click", "#reloadMyStartTable", function(){
+	$("body").on("click", "#reloadMyStartTable", function() {
 		reloadMyStartTable();
 	});
 	
 	//搜索
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		searchMyStartTable();
 	});
 	

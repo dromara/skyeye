@@ -210,7 +210,7 @@ layui.config({
 		}});
 	}
 
-	$("body").on("click", "#cancle", function(){
+	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
 	});
 });

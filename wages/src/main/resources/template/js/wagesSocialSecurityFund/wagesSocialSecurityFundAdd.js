@@ -106,7 +106,7 @@ layui.config({
 			companyList = [].concat(arrayUtil.removeArrayPointName(companyList, val));
 		}
 	});
-	$("body").on("click", "#companySel", function(){
+	$("body").on("click", "#companySel", function() {
 		_openNewWindows({
 			url: "../../tpl/companymation/companyChooseList.html",
 			title: "选择企业",
@@ -131,7 +131,7 @@ layui.config({
 			departmentList = [].concat(arrayUtil.removeArrayPointName(departmentList, val));
 		}
 	});
-	$("body").on("click", "#departmentSel", function(){
+	$("body").on("click", "#departmentSel", function() {
 		_openNewWindows({
 			url: "../../tpl/companydepartment/companyDepartmentChooseList.html",
 			title: "选择部门",
@@ -211,7 +211,7 @@ layui.config({
 		$("#accumulationCompanyAmount").val(company);
 	}
 
-	$("body").on("click", "#cancle", function(){
+	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
 	});
 });

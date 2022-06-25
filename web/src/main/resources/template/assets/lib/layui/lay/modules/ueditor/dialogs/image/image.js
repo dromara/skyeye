@@ -176,7 +176,7 @@
             domUtils.on($G("border"), 'keyup', updatePreview);
             domUtils.on($G("title"), 'keyup', updatePreview);
 
-            domUtils.on($G("width"), 'keyup', function(){
+            domUtils.on($G("width"), 'keyup', function() {
                 updatePreview();
                 if(locker.checked) {
                     var proportion =locker.getAttribute('data-proportion');
@@ -185,7 +185,7 @@
                     _this.updateLocker();
                 }
             });
-            domUtils.on($G("height"), 'keyup', function(){
+            domUtils.on($G("height"), 'keyup', function() {
                 updatePreview();
                 if(locker.checked) {
                     var proportion =locker.getAttribute('data-proportion');
@@ -194,7 +194,7 @@
                     _this.updateLocker();
                 }
             });
-            domUtils.on($G("lock"), 'change', function(){
+            domUtils.on($G("lock"), 'change', function() {
                 var proportion = parseInt($G("width").value) /parseInt($G("height").value);
                 locker.setAttribute('data-proportion', proportion);
             });
@@ -980,20 +980,20 @@
             var _this = this;
 
             /* 点击搜索按钮 */
-            domUtils.on($G('searchBtn'), 'click', function(){
+            domUtils.on($G('searchBtn'), 'click', function() {
                 var key = $G('searchTxt').value;
                 if(key && key != lang.searchRemind) {
                     _this.getImageData();
                 }
             });
             /* 点击清除妞 */
-            domUtils.on($G('searchReset'), 'click', function(){
+            domUtils.on($G('searchReset'), 'click', function() {
                 $G('searchTxt').value = lang.searchRemind;
                 $G('searchListUl').innerHTML = '';
                 $G('searchType').selectedIndex = 0;
             });
             /* 搜索框聚焦 */
-            domUtils.on($G('searchTxt'), 'focus', function(){
+            domUtils.on($G('searchTxt'), 'focus', function() {
                 var key = $G('searchTxt').value;
                 if(key && key == lang.searchRemind) {
                     $G('searchTxt').value = '';

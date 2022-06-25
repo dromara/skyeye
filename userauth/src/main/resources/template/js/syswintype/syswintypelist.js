@@ -155,7 +155,7 @@ layui.config({
 	}
 	
 	//添加分类
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/syswintype/syswintypeadd.html", 
 			title: "新增分类",
@@ -172,7 +172,7 @@ layui.config({
     });
 	
 	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
 	

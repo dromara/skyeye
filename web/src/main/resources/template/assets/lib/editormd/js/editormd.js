@@ -2496,7 +2496,7 @@ layui.define(["jquery"], function(exports) {
                     preview.css("background", "#fff");
                 }
                 
-                editor.find("." + this.classPrefix + "preview-close-btn").show().bind(editormd.mouseOrTouch("click", "touchend"), function(){
+                editor.find("." + this.classPrefix + "preview-close-btn").show().bind(editormd.mouseOrTouch("click", "touchend"), function() {
                     _this.previewed();
                 });
             
@@ -4194,7 +4194,7 @@ layui.define(["jquery"], function(exports) {
      */
     
     editormd.loadKaTeX = function (callback) {
-        editormd.loadCSS(editormd.katexURL.css, function(){
+        editormd.loadCSS(editormd.katexURL.css, function() {
             editormd.loadScript(editormd.katexURL.js, callback || function(){});
         });
     };
@@ -4357,7 +4357,7 @@ layui.define(["jquery"], function(exports) {
             var dialogHeader = dialog.children("." + classPrefix + "dialog-header");
 
             if (!options.mask) {
-                dialogHeader.bind(mouseOrTouch("click", "touchend"), function(){
+                dialogHeader.bind(mouseOrTouch("click", "touchend"), function() {
                     editormd.dialogZindex += 2;
                     dialog.css("z-index", editormd.dialogZindex);
                 });

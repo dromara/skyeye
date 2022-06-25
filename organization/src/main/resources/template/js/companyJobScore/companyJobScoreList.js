@@ -76,7 +76,7 @@ layui.config({
     });
 
     //添加
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/companyJobScore/companyJobScoreAdd.html",
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
@@ -170,7 +170,7 @@ layui.config({
     }
 
     // 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 

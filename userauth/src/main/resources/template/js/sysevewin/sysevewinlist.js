@@ -146,7 +146,7 @@ layui.config({
 	}
 	
 	//新增系统
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
 		_openNewWindows({
 			url: "../../tpl/sysevewin/sysevewinadd.html", 
 			title: "新增系统",
@@ -163,7 +163,7 @@ layui.config({
     });
 	
 	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

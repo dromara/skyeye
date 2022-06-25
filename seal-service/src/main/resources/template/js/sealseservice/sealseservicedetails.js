@@ -104,7 +104,7 @@ layui.config({
 		});
 	    
 		//客户详情
-		$("body").on("click", ".customerNameMation", function(){
+		$("body").on("click", ".customerNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
 				url: "../../tpl/customermanage/customerdetails.html", 
@@ -116,7 +116,7 @@ layui.config({
 	    });
 	    
 	    //产品详情
-		$("body").on("click", ".productNameMation", function(){
+		$("body").on("click", ".productNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
 				url: "../../tpl/material/materialdetails.html", 
@@ -128,7 +128,7 @@ layui.config({
 	    });
 	    
 	    //故障关键组件详情
-		$("body").on("click", ".faultKeyPartsNameMation", function(){
+		$("body").on("click", ".faultKeyPartsNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
 				url: "../../tpl/material/materialdetails.html", 
@@ -140,12 +140,12 @@ layui.config({
 	    });
 		
 		//附件下载
-	    $("body").on("click", ".enclosureItem", function(){
+	    $("body").on("click", ".enclosureItem", function() {
 	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
 	    });
 	    
 	    //图片查看
-	    $("body").on("click", ".pictureItem", function(){
+	    $("body").on("click", ".pictureItem", function() {
 	    	var src = $(this).attr("src");
 	    	layer.open({
         		type:1,
@@ -170,7 +170,7 @@ layui.config({
 		});
 	    
 	    //情况反馈详情
-	    $("body").on("click", ".details", function(){
+	    $("body").on("click", ".details", function() {
 	    	rowId = $(this).attr("rowid");
 	    	_openNewWindows({
 				url: "../../tpl/feedback/feedbackdetails.html", 

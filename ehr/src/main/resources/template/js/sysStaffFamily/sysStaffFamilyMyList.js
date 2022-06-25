@@ -87,7 +87,7 @@ layui.config({
 	form.render();
 	
 	// 录入家庭成员
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sysStaffFamily/sysStaffFamilyAdd.html",
 			title: "录入家庭成员",
@@ -138,7 +138,7 @@ layui.config({
     }
 
 	// 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
 

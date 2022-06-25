@@ -115,19 +115,19 @@ layui.config({
 	loadAllPeopleList();
 
 	//取消
-	$("body").on("click", "#cancle", function(){
+	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
 	});
 
 	//确定
-	$("body").on("click", "#confimChoose", function(){
+	$("body").on("click", "#confimChoose", function() {
 		parent.systemCommonUtil.userReturnList = [].concat(userOperatorReturnList);
 		parent.layer.close(index);
 		parent.refreshCode = '0';
 	});
 
 	//已选择人员点击定位到树所在
-	$("body").on("click", "#selPeopleList .sel-people-item", function(){
+	$("body").on("click", "#selPeopleList .sel-people-item", function() {
 		$("#selPeopleList .sel-people-item").removeClass("active");
 		$(this).addClass("active");
 		var id = $(this).attr("rowid");

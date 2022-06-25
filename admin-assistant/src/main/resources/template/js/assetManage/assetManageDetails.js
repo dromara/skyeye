@@ -31,7 +31,7 @@ layui.config({
 		 	}
 		});
 	    
-	    $("body").on("click", "#assetImg", function(){
+	    $("body").on("click", "#assetImg", function() {
 	    	var src = $(this).attr("src");
 	    	layer.open({
         		type:1,

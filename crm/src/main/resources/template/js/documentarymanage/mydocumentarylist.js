@@ -65,7 +65,7 @@ layui.config({
     });
 	
 	// 新增
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/documentarymanage/documentaryAdd.html",
 			title: "新增跟单",
@@ -134,7 +134,7 @@ layui.config({
 		return false;
 	});
 
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 

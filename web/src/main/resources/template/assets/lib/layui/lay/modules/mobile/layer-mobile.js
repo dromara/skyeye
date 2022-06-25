@@ -146,7 +146,7 @@ layui.define(function(exports){
     //点遮罩关闭
     if(config.shade && config.shadeClose){
       var shade = elem[claname]('layui-m-layershade')[0];
-      ready.touch(shade, function(){
+      ready.touch(shade, function() {
         layer.close(that.index, config.end);
       });
     }

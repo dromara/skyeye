@@ -173,7 +173,7 @@ layui.config({
 	}
 
 	// 添加证照借用
-	$("body").on("click", "#addBorrowBean", function(){
+	$("body").on("click", "#addBorrowBean", function() {
     	_openNewWindows({
 			url: "../../tpl/licenceManageBorrow/licenceManageBorrowAdd.html", 
 			title: "证照借用申请",
@@ -199,7 +199,7 @@ layui.config({
 	});
 
 	// 刷新证照借用列表
-    $("body").on("click", "#reloadBorrowTable", function(){
+    $("body").on("click", "#reloadBorrowTable", function() {
     	loadBorrowTable();
     });
     

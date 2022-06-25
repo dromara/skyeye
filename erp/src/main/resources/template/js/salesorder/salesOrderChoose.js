@@ -38,7 +38,7 @@ layui.config({
 		}
 	}
 	
-	$("body").on("input", "#name", function(){
+	$("body").on("input", "#name", function() {
 		searchZtree(materialCategoryType, $("#name").val());
 	});
 	//ztree查询
@@ -110,7 +110,7 @@ layui.config({
 		form.render();
 	}
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

@@ -84,7 +84,7 @@ layui.config({
     });
 	
 	// 添加用品领用
-	$("body").on("click", "#addUseBean", function(){
+	$("body").on("click", "#addUseBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetArticlesUse/assetArticlesUseAdd.html", 
 			title: "添加用品领用申请",
@@ -194,7 +194,7 @@ layui.config({
 	});
 
     // 刷新领用数据
-    $("body").on("click", "#reloadLingyongTable", function(){
+    $("body").on("click", "#reloadLingyongTable", function() {
     	loadLingyongTable();
     });
     

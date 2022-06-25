@@ -173,7 +173,7 @@ layui.config({
 	}
 	
 	// 添加印章归还
-	$("body").on("click", "#addRevertBean", function(){
+	$("body").on("click", "#addRevertBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sealManageRevert/sealManageRevertAdd.html", 
 			title: "印章归还申请",
@@ -199,7 +199,7 @@ layui.config({
 	});
 
 	// 刷新印章归还列表
-    $("body").on("click", "#reloadRevertTable", function(){
+    $("body").on("click", "#reloadRevertTable", function() {
     	loadRevertTable();
     });
     

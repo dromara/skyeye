@@ -45,12 +45,12 @@ layui.config({
 	    });
 		
 	    // 取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    
 	    // 预览
-	    $("body").on("click", "#yl", function(){
+	    $("body").on("click", "#yl", function() {
 	    	$("#iconyl").attr("class", "fa fa-fw " + $("#iconClass").val());
 	    });
 	});

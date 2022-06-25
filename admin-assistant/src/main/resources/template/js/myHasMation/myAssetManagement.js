@@ -41,7 +41,7 @@ layui.config({
 		});
 	}
 
-    $("body").on("click", "#reloadmessageTable", function(){
+    $("body").on("click", "#reloadmessageTable", function() {
     	loadTable();
     });
 	form.render();

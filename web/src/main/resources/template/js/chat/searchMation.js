@@ -57,7 +57,7 @@ layui.config({
 	    });
 	    
 	    //查找
-	    $("body").on("click", "#reSearch", function(){
+	    $("body").on("click", "#reSearch", function() {
 	    	if(isNull($("#groupNameOrNum").val())){
 	    		winui.window.msg('请输入搜索内容', {icon: 2, time: 2000});
 	    	} else {

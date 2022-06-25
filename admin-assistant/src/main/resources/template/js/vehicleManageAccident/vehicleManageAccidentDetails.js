@@ -34,7 +34,7 @@ layui.config({
 		 	}
 		});
 	    
-	    $("body").on("click", ".enclosureItem", function(){
+	    $("body").on("click", ".enclosureItem", function() {
 	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
 	    });
 	});

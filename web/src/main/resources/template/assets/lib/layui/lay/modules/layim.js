@@ -1149,7 +1149,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 					n = O(),
 					l = j.base[e[a]] || {};
 				i.find("input").unbind('change');
-				i.find("input").on("change", function(){
+				i.find("input").on("change", function() {
 					var formData = new FormData();
 					var name = i.find("input").val();
 					formData.append("file", i.find("input")[0].files[0]);

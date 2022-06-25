@@ -57,7 +57,7 @@ layui.define('jquery', function(exports){
     done();
     
     //不自动滚动加载
-    more.find('a').on('click', function(){
+    more.find('a').on('click', function() {
       var othis = $(this);
       if(isOver) return;
       lock || done();
@@ -73,7 +73,7 @@ layui.define('jquery', function(exports){
     
     if(!isAuto) return that;
     
-    scrollElem.on('scroll', function(){
+    scrollElem.on('scroll', function() {
       var othis = $(this), top = othis.scrollTop();
       
       if(timer) clearTimeout(timer);
@@ -119,7 +119,7 @@ layui.define('jquery', function(exports){
       if(elemTop >= start && elemTop <= end){
         if(!item.attr('src')){
           var src = item.attr('lay-src');
-          layui.img(src, function(){
+          layui.img(src, function() {
             var next = that.lazyimg.elem.eq(index);
             item.attr('src', src).removeAttr('lay-src');
             
@@ -159,7 +159,7 @@ layui.define('jquery', function(exports){
     
     if(!haveScroll){
       var timer;
-      scrollElem.on('scroll', function(){
+      scrollElem.on('scroll', function() {
         var othis = $(this);
         if(timer) clearTimeout(timer)
         timer = setTimeout(function(){

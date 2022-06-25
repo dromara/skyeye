@@ -16,7 +16,7 @@
 })(function(CodeMirror) {
   "use strict";
 
-  CodeMirror.defineMode('livescript', function(){
+  CodeMirror.defineMode('livescript', function() {
     var tokenBase = function(stream, state) {
       var next_rule = state.next || "start";
       if (next_rule) {

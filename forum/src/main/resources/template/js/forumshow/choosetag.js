@@ -12,7 +12,7 @@ layui.config({
 	
 	var tagReturnList = new Array();
 	
-	$("body").on("click", "#cancle", function(){
+	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
     });
 	
@@ -32,7 +32,7 @@ layui.config({
 	});
 	
 	//确定
-    $("body").on("click", "#confimChoose", function(){
+    $("body").on("click", "#confimChoose", function() {
     	tagReturnList = new Array();
     	$.each($('input:checkbox:checked'),function(){
     		id= $(this).attr("rowId");

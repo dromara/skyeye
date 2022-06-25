@@ -101,7 +101,7 @@ layui.config({
 	});
 
 	// 刷新我的待办
-	$("body").on("click", "#reloadMyNeedDealtTable", function(){
+	$("body").on("click", "#reloadMyNeedDealtTable", function() {
 		loadMyNeedDealtTable();
 	});
 

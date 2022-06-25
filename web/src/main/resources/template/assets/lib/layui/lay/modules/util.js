@@ -48,7 +48,7 @@ layui.define('jquery', function(exports){
       body.append(elem), scroll();
       
       //bar点击事件
-      elem.find('li').on('click', function(){
+      elem.find('li').on('click', function() {
         var othis = $(this), type = othis.attr('lay-type');
         if(type === 'top'){
           $('html,body').animate({
@@ -59,7 +59,7 @@ layui.define('jquery', function(exports){
       });
       
       //Top显示控制
-      dom.on('scroll', function(){
+      dom.on('scroll', function() {
         clearTimeout(timer);
         timer = setTimeout(function(){
           scroll();

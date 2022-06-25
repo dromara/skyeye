@@ -86,7 +86,7 @@ layui.config({
         });
 		
 	    // 工序选择
-	    $("body").on("click", "#procedureChoose", function(){
+	    $("body").on("click", "#procedureChoose", function() {
 	    	_openNewWindows({
 				url: "../../tpl/erpWorkProcedure/erpWorkProcedureChoose.html", 
 				title: "工序选择",

@@ -22,7 +22,7 @@ layui.config({
                     firstTypeId: $("#firstTypeId").val(),
                     secondTypeId: $("#secondTypeId").val(),
                 };
-                AjaxPostUtil.request({url:reportBasePath + "reportimportmodel002", params: params, type:'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: reportBasePath + "reportimportmodel002", params: params, type:'json', method: "POST", callback: function(json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
@@ -34,7 +34,7 @@ layui.config({
             return false;
         });
 
-        $("body").on("click", "#cancle", function(){
+        $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });
     });

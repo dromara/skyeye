@@ -103,7 +103,7 @@ layui.config({
         });
 
         // 生成图片
-        $("body").on("click", "#createPic", function(){
+        $("body").on("click", "#createPic", function() {
             var styleStr = "";
             $.each(choosePropertyList, function (key, value){
                 if(!isNull(value)){
@@ -127,7 +127,7 @@ layui.config({
         $("#createPic").click();
 
         // 下载canvas图片
-        $("body").on("click", "#download", function(){
+        $("body").on("click", "#download", function() {
             var oCanvas = document.getElementById("thecanvas");
             var img_data1 = Canvas2Image.saveAsPNG(oCanvas, true).getAttribute('src');
             saveFile(img_data1, 'richer.png');
@@ -204,7 +204,7 @@ layui.config({
                 }});
         });
 
-        $("body").on("click", "#cancle", function(){
+        $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });
     });

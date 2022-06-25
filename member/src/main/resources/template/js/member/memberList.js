@@ -164,7 +164,7 @@ layui.config({
     }
 
     //添加会员
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/member/memberAdd.html",
             title: "新增会员",

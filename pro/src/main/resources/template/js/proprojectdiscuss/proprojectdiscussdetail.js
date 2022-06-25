@@ -112,7 +112,7 @@ layui.config({
 				}
     			AjaxPostUtil.request({url: flowableBasePath + "prodiscuss003", params: params, type: 'json', callback: function(json){
     				if (json.returnCode == 0){
-    					winui.window.msg("提交成功", {icon: 1, time: 2000}, function(){
+    					winui.window.msg("提交成功", {icon: 1, time: 2000}, function() {
     						location.reload();
     					});
     				} else {
@@ -123,7 +123,7 @@ layui.config({
 	        return false;
 	    });
 
-		$("body").on("click", "#cancle", function(){
+		$("body").on("click", "#cancle", function() {
 			parent.layer.close(index);
 		});
 		

@@ -129,12 +129,12 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			return false;
 		});
 		
-		$("body").on("click", ".option_Set", function(){
+		$("body").on("click", ".option_Set", function() {
 			showUIDialog($(curEditObj));
 			return false;
 		});
 		
-		$("body").on("click", "input[name='quOption_isNote']", function(){
+		$("body").on("click", "input[name='quOption_isNote']", function() {
 			var optionCk = $(this).prop("checked");
 			if(optionCk){
 				$(".quOptionFillContentLi,.quOptionFillRequiredLi").show();
@@ -159,7 +159,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		});
 		
 		// 编辑按钮
-		$("body").on("click", "#dwSurveyQuContent .editAble", function(){
+		$("body").on("click", "#dwSurveyQuContent .editAble", function() {
 			editAble($(this));
 			return false;
 		});
@@ -182,7 +182,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		});
 		
 		// 上移
-		$("body").on("click", ".questionUp", function(){
+		$("body").on("click", ".questionUp", function() {
 			var nextQuBody = $(this).parents(".li_surveyQuItemBody");
 			var prevQuBody = nextQuBody.prev();
 			if(prevQuBody[0]){
@@ -193,7 +193,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				var newNextObj = nextQuBody.next();
 				newNextObj.hide();
 				newNextObj.slideDown("slow");
-				prevQuBody.slideUp("slow", function(){
+				prevQuBody.slideUp("slow", function() {
 					// 移除上一项
 					prevQuBody.remove();
 					// 重置序号
@@ -211,7 +211,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		});
 		
 		// 下移
-		$("body").on("click", ".questionDown", function(){
+		$("body").on("click", ".questionDown", function() {
 			var prevQuBody = $(this).parents(".li_surveyQuItemBody");
 			var nextQuBody = prevQuBody.next();
 			if(nextQuBody[0]){
@@ -220,7 +220,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				var newPrevObj = prevQuBody.prev();
 				newPrevObj.hide();
 				newPrevObj.slideDown("slow");
-				nextQuBody.slideUp("slow", function(){
+				nextQuBody.slideUp("slow", function() {
 					nextQuBody.remove();
 					// 重置序号
 					resetQuItem();
@@ -236,7 +236,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			}
 		});
 		
-		$("body").on("click", ".dwQuSet", function(){
+		$("body").on("click", ".dwQuSet", function() {
 			showDialog($(this));
 			var quItemBody = $(this).parents(".surveyQuItemBody");
 			resetQuItemHover(quItemBody);
@@ -245,7 +245,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		});
 		
 		// 逻辑设置 
-		$("body").on("click", ".dwQuLogic", function(){
+		$("body").on("click", ".dwQuLogic", function() {
 			showDialog($(this));
 			var quItemBody = $(this).parents(".surveyQuItemBody");
 			var quType = quItemBody.find("input[name='quType']").val();
@@ -333,7 +333,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		});
 		
 		// 批量添加事件
-		$("body").on("click", ".addMoreOption,.addMoreRowOption,.addMoreColumnOption", function(){
+		$("body").on("click", ".addMoreOption,.addMoreRowOption,.addMoreColumnOption", function() {
 			showDialog($(this));
 			var quItemBody = $(this).parents(".surveyQuItemBody");
 			resetQuItemHover(quItemBody);
@@ -341,12 +341,12 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		});
 		
 		// 填空题选项设置
-		$("body").on("click", ".quFillblankItem .dwFbMenuBtn", function(){
+		$("body").on("click", ".quFillblankItem .dwFbMenuBtn", function() {
 			showUIDialog($(this));
 			return false;
 		});
 		
-		$("body").on("click", ".dwOptionUp", function(){
+		$("body").on("click", ".dwOptionUp", function() {
 			//判断类型区别table跟ul中的排序
 			var quItemBody = $(curEditObj).parents(".surveyQuItemBody");
 			var quType = quItemBody.find("input[name='quType']").val();
@@ -420,7 +420,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			return false;
 		});
 		
-		$("body").on("click", ".dwOptionDown", function(){
+		$("body").on("click", ".dwOptionDown", function() {
 			//判断类型区别table跟ul中的排序
 			var quItemBody = $(curEditObj).parents(".surveyQuItemBody");
 			var quType = quItemBody.find("input[name='quType']").val();
@@ -494,12 +494,12 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			return false;
 		});
 		
-		$("body").on("click", ".dwOptionDel", function(){
+		$("body").on("click", ".dwOptionDel", function() {
 			deleteDwOption();
 			return false;
 		});
 		
-		$("body").on("change", ".hat_province", function(){
+		$("body").on("change", ".hat_province", function() {
 			var thVal = $(this).val();
 			$.each(addrs, function(i, item){
 				var province = item.province;
@@ -515,7 +515,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			});
 		});
 		
-		$("body").on("change", ".hat_city", function(){
+		$("body").on("change", ".hat_city", function() {
 			var thProvince = $(this).prev().val();
 			var thCity = $(this).val();
 			$.each(addrs, function(i, item){
@@ -539,12 +539,12 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		});
 		
 		// 样式编辑
-		$("body").on("click", "#surveyStyleEditToolbar", function(){
+		$("body").on("click", "#surveyStyleEditToolbar", function() {
 			console.log(1);
 		});
 		
 	    // 选项卡切换
-	    $("body").on("click", "#tabType li", function(){
+	    $("body").on("click", "#tabType li", function() {
 	    	$("#tabType li").removeClass("current");
 	    	$(this).addClass("current");
 	    	$(".tools_tab_div").css('display','none');
@@ -552,14 +552,14 @@ layui.define(["jquery", "form", "element"], function(exports) {
 	    });
 	    
 	    // 逻辑设置时添加逻辑项
-		$("body").on("click", ".dwQuDialogAddLogic", function(){
-			addQuDialogLogicTr(true, function(){}, function(){
+		$("body").on("click", ".dwQuDialogAddLogic", function() {
+			addQuDialogLogicTr(true, function() {}, function() {
 				alert("此题已经设置了任意选项!");
 			});
 			return false;
 		});
 		
-		$("body").on("change", "input[name='setAutoContacts']", function(){
+		$("body").on("change", "input[name='setAutoContacts']", function() {
 			var check = $(this).prop("checked");
 			if(check){
 				$(".contactsFieldLi").show();
@@ -568,7 +568,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			}
 		});
 		
-		$("body").on("click", "#dwDialogSaveMoreItem", function(){
+		$("body").on("click", "#dwDialogSaveMoreItem", function() {
 			var quItemBody = $(dwDialogObj).parents(".surveyQuItemBody");
 			var quType = quItemBody.find("input[name='quType']").val();
 			var areaVal = $("#dwQuMoreTextarea").val();
@@ -629,7 +629,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 	    /**
 	     * 关闭设置弹出框
 	     */
-	    $("body").on("click", "#dwCommonDialogClose", function(){
+	    $("body").on("click", "#dwCommonDialogClose", function() {
 			dwCommonDialogHide();
 			resetQuItemHover(null);
 	    });
@@ -637,13 +637,13 @@ layui.define(["jquery", "form", "element"], function(exports) {
 	    /**
 	     * 保存逻辑设置 
 	     */
-	    $("body").on("click", "#dwDialogSaveLogic", function(){
+	    $("body").on("click", "#dwDialogSaveLogic", function() {
 	    	var quItemBody = $(dwDialogObj).parents(".surveyQuItemBody");
 			var quLogicInputCase = quItemBody.find(".quLogicInputCase");
 			var quType = quItemBody.find("input[name='quType']").val();
 			var dwQuLogicTrs = $("#dwQuLogicTable tr");
 			var quLogicItemHtml = $("#quLogicItemModel").html();
-			$.each(dwQuLogicTrs, function(){
+			$.each(dwQuLogicTrs, function() {
 				var cgQuItemId = $(this).find(".logicQuOptionSel").val();
 				var skQuId = $(this).find(".logicQuSel").val();
 				var logicType = $(this).find(".logicType").val();
@@ -705,7 +705,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 	    /**
 	     * 设置窗口保存事件
 	     */
-	    $("body").on("click", "#dwDialogQuSetSave", function(){
+	    $("body").on("click", "#dwDialogQuSetSave", function() {
 	    	if (dwDialogObj != null) {
 	    		var quItemBody = $(dwDialogObj).parents(".surveyQuItemBody");
 	    		var setIsRequired = $("#dwCommonDialog input[name='setIsRequired']:checked");
@@ -1115,7 +1115,7 @@ function bindQuHoverItem(){
 			//如果是填空
 			appQuObj = $(this);
 		}
-	}, function(){
+	}, function() {
 		$(".pageBorderTop").addClass("nohover");
 		$(this).removeClass("showLine");
 		var hoverTag = $(this).find("input[name='hoverTag']").val();
@@ -1130,7 +1130,7 @@ function bindQuHoverItem(){
 		if(!isDrag){
 			$(this).addClass("hover");	
 		}
-	}, function(){
+	}, function() {
 		var thClass = $(this).attr("class");
 		if(thClass.indexOf("menuBtnClick") <= 0){
 			$(this).removeClass("hover");

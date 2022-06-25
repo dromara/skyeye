@@ -116,7 +116,7 @@ layui.config({
     }
 
     // 添加
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/mealRefundOrderReason/mealRefundOrderReasonAdd.html",
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],

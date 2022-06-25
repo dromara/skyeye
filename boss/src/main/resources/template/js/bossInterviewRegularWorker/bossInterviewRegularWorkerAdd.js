@@ -21,7 +21,7 @@ layui.config({
     });
 
     if(!systemCommonUtil.judgeCurrentUserRegularWorker()) {
-        winui.window.msg('您已提交转正申请，无法重复提交', {icon: 5, time: 2000}, function(){
+        winui.window.msg('您已提交转正申请，无法重复提交', {icon: 5, time: 2000}, function() {
             parent.layer.close(index);
             parent.refreshCode = '-9999';
         });

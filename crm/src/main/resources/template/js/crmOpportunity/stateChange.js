@@ -55,7 +55,7 @@ layui.config({
 			$(".typeLosingTable").removeClass("layui-hide");
 		}
 		//初期沟通
-		$("body").on("click", "#conmunicate", function(){
+		$("body").on("click", "#conmunicate", function() {
 			var msg = '确认【' + stateChangeData.title + '】进入初期沟通状态吗？';
 			layer.confirm(msg, { icon: 3, title: '初期沟通' }, function (i) {
 				layer.close(i);
@@ -71,7 +71,7 @@ layui.config({
 	    });
 		
 		//方案与报价
-		$("body").on("click", "#quotedPrice", function(){
+		$("body").on("click", "#quotedPrice", function() {
 			var msg = '确认【' + stateChangeData.title + '】进入方案与报价状态吗？';
 			layer.confirm(msg, { icon: 3, title: '方案与报价' }, function (i) {
 				layer.close(i);
@@ -87,7 +87,7 @@ layui.config({
 	    });
 		
 		//竞争与投标
-		$("body").on("click", "#tender", function(){
+		$("body").on("click", "#tender", function() {
 			var msg = '确认【' + stateChangeData.title + '】进入竞争与投标状态吗？';
 			layer.confirm(msg, { icon: 3, title: '竞争与投标' }, function (i) {
 				layer.close(i);
@@ -103,7 +103,7 @@ layui.config({
 	    });
 		
 		//商务谈判
-		$("body").on("click", "#negotiate", function(){
+		$("body").on("click", "#negotiate", function() {
 			var msg = '确认【' + stateChangeData.title + '】进入商务谈判状态吗？';
 			layer.confirm(msg, { icon: 3, title: '商务谈判' }, function (i) {
 				layer.close(i);
@@ -119,7 +119,7 @@ layui.config({
 	    });
 		
 		//成交
-		$("body").on("click", "#turnover", function(){
+		$("body").on("click", "#turnover", function() {
 			var msg = '确认【' + stateChangeData.title + '】进入成交状态吗？';
 			layer.confirm(msg, { icon: 3, title: '成交' }, function (i) {
 				layer.close(i);
@@ -135,7 +135,7 @@ layui.config({
 	    });
 		
 		//丢单
-		$("body").on("click", "#losingTable", function(){
+		$("body").on("click", "#losingTable", function() {
 			var msg = '确认【' + stateChangeData.title + '】进入丢单状态吗？';
 			layer.confirm(msg, { icon: 3, title: '丢单' }, function (i) {
 				layer.close(i);
@@ -151,7 +151,7 @@ layui.config({
 	    });
 		
 		//搁置
-		$("body").on("click", "#layAside", function(){
+		$("body").on("click", "#layAside", function() {
 			var msg = '确认【' + stateChangeData.title + '】进入搁置状态吗？';
 			layer.confirm(msg, { icon: 3, title: '搁置' }, function (i) {
 				layer.close(i);
@@ -166,7 +166,7 @@ layui.config({
 			});
 	    });
 	    
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

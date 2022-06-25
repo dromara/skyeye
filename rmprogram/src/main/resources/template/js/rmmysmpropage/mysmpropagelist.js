@@ -214,7 +214,7 @@ layui.config({
 	});
     
     //二级菜单点击
-    $('body').on('click', '.js_item', function(){
+    $('body').on('click', '.js_item', function() {
         var id = $(this).data('id');
         var title = $(this).data('name');
         showGrid({
@@ -251,7 +251,7 @@ layui.config({
     });
     
     //返回分组列表
-    $('body').on('click', '#returnGroupTab', function(){
+    $('body').on('click', '#returnGroupTab', function() {
     	$("#groupMemberTab").animate({  
             width : "hide",  
             opacity: "0",
@@ -271,7 +271,7 @@ layui.config({
     });
     
     //展开一级菜单
-    $('body').on('click', '.js_category', function(){
+    $('body').on('click', '.js_category', function() {
         var $this = $(this),
             $inner = $this.next('.js_categoryInner'),
             $page = $this.parents('.page'),
@@ -305,7 +305,7 @@ layui.config({
     });
     
     //图片预览
-    $('body').on('click', '.cursor', function(){
+    $('body').on('click', '.cursor', function() {
     	layer.open({
     		type:1,
     		title:false,
@@ -318,7 +318,7 @@ layui.config({
     });
     
     //页面内组件选中组件项
-    $('body').on('click', '.check-item', function(){
+    $('body').on('click', '.check-item', function() {
     	$(".check-item").removeClass("show-operation");
     	$(".check-item").removeClass("check-item-shoose");//移除之前被选中的组件
     	$(".check-item").parent().find(".check-item-operation").hide();//隐藏之前选中的组件的操作
@@ -378,12 +378,12 @@ layui.config({
     });
     
     //页面内组件移除按钮
-    $('body').on('click', 'button[rel="removeHandler"]', function(){
+    $('body').on('click', 'button[rel="removeHandler"]', function() {
     	$(this).parent().parent().remove();
     })
     
     //监听页面内容是否变化
-    $('body').on('DOMNodeInserted', '#centerText', function(){
+    $('body').on('DOMNodeInserted', '#centerText', function() {
     	if(isNull(editPageModelSelectId)){//如果没有选中页面，则不做任何操作
     		
     	} else {
@@ -392,7 +392,7 @@ layui.config({
     });
     
     //添加页面按钮
-    $('body').on('click', '#addPageBean', function(){
+    $('body').on('click', '#addPageBean', function() {
 		_openNewWindows({
 			url: "../../tpl/rmmysmpropage/addpagebeanitem.html", 
 			title: "新增页面",
@@ -409,7 +409,7 @@ layui.config({
     });
     
     //保存页面
-    $('body').on('click', '#savePageModelBean', function(){
+    $('body').on('click', '#savePageModelBean', function() {
     	if(!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
     		editPageModelSelectChange = false;
     		var list = [];//存储模板生成集合
@@ -433,7 +433,7 @@ layui.config({
     });
     
     //导出选中页为H5
-    $('body').on('click', '#exportChoosePageToH5', function(){
+    $('body').on('click', '#exportChoosePageToH5', function() {
     	if(!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
     		AjaxPostUtil.request({url:reqBasePath + "rmxcx041", params:{pageId: editPageModelSelectId}, type: 'json', callback: function(json){
     			if (json.returnCode == 0) {

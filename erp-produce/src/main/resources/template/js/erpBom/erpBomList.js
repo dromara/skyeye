@@ -103,7 +103,7 @@ layui.config({
     }
 
     // 添加
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/erpBom/erpBomAdd.html",
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],

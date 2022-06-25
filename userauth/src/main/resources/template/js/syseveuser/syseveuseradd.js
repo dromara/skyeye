@@ -69,7 +69,7 @@ layui.config({
  	    });
 
 		// 员工详情
-		$("body").on("click", ".notice-title-click", function(){
+		$("body").on("click", ".notice-title-click", function() {
 			rowId = $(this).attr("rowId");
 			_openNewWindows({
 				url: "../../tpl/syseveuserstaff/sysEveUserStaffDetails.html",
@@ -101,7 +101,7 @@ layui.config({
 			}
 			return false;
  		});
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

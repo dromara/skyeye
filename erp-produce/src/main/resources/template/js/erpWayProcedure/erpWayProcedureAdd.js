@@ -82,11 +82,11 @@ layui.config({
 	        return false;
 	    });
 	    
-		$("body").on("click", "#addRow", function(){
+		$("body").on("click", "#addRow", function() {
 			addRow();
 		});
 		
-		$("body").on("click", "#deleteRow", function(){
+		$("body").on("click", "#deleteRow", function() {
 			deleteRow();
 		});
 		
@@ -116,7 +116,7 @@ layui.config({
 		}
 	    
 	    // 工序选择
-	    $("body").on("click", ".chooseProcedureBtn", function(){
+	    $("body").on("click", ".chooseProcedureBtn", function() {
 	    	var trId = $(this).parent().find("input").attr("id").replace("procedureId", "");
 	    	_openNewWindows({
 				url: "../../tpl/erpWorkProcedure/erpWorkProcedureChoose.html", 
@@ -150,7 +150,7 @@ layui.config({
 	    }
 	    
 	    // 车间选择
-	    $("body").on("click", ".chooseFarmBtn", function(){
+	    $("body").on("click", ".chooseFarmBtn", function() {
 	    	var trId = $(this).parent().find("input").attr("id").replace("farmId", "");
 	    	var row = getProcedureMation(trId);
 	    	if(isNull(row.procedureId)){
@@ -204,7 +204,7 @@ layui.config({
 	    }
 
 	    // 取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

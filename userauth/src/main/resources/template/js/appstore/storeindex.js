@@ -26,7 +26,7 @@ layui.config({
 	initDate();
 	function initDate(){
 		var secondType = "";
-		$.each($('#sysSecondType input:checkbox:checked'), function(){
+		$.each($('#sysSecondType input:checkbox:checked'), function() {
 			secondType = secondType + $(this).val() + ",";
         });
 		//初始化数据
@@ -104,7 +104,7 @@ layui.config({
 	});
     //二级分类全选操作
     $("#sysSecondType").on('click', "a[rowid='111']", function(e){
-    	$.each($('#sysSecondType input:checkbox'), function(){
+    	$.each($('#sysSecondType input:checkbox'), function() {
     		$(this).prop("checked", true);
     	});
     	$(this).parent().addClass('active');

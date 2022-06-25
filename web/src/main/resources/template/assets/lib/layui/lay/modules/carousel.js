@@ -190,7 +190,7 @@ layui.define('jquery', function(exports){
     options.elem.append(tplArrow);
     
     //事件
-    tplArrow.on('click', function(){
+    tplArrow.on('click', function() {
       var othis = $(this)
       ,type = othis.attr('lay-type')
       that.slide(type);
@@ -227,7 +227,7 @@ layui.define('jquery', function(exports){
     }
     
     //事件
-    tplInd.find('li').on(options.trigger === 'hover' ? 'mouseover' : options.trigger, function(){
+    tplInd.find('li').on(options.trigger === 'hover' ? 'mouseover' : options.trigger, function() {
       var othis = $(this)
       ,index = othis.index();
       if(index > options.index){
@@ -293,9 +293,9 @@ layui.define('jquery', function(exports){
     if(options.elem.data('haveEvents')) return;
     
     //移入移出容器
-    options.elem.on('mouseenter', function(){
+    options.elem.on('mouseenter', function() {
       clearInterval(that.timer);
-    }).on('mouseleave', function(){
+    }).on('mouseleave', function() {
       that.autoplay();
     });
     

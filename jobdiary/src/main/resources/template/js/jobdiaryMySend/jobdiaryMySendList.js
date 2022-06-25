@@ -81,7 +81,7 @@ layui.config({
 	}
 	
 	// 发日志
-	$("body").on("click", "#publish", function(){
+	$("body").on("click", "#publish", function() {
     	_openNewWindows({
 			url: "../../tpl/jobdiaryMySend/jobdiaryMySendPublish.html", 
 			title: "发表日志",
@@ -212,12 +212,12 @@ layui.config({
 	}
 	
     // 我发出的日志刷新
-    $("body").on("click", "#reloadTable2", function(){
+    $("body").on("click", "#reloadTable2", function() {
         loadMySendTable();
     });
 	
 	// '我发出的'页面的点击搜索
-	$("body").on("click", "#searchMySend", function(){
+	$("body").on("click", "#searchMySend", function() {
     	table.reload("mysendTable", {page: {curr: 1}, where: getTableParams()});
     });
     

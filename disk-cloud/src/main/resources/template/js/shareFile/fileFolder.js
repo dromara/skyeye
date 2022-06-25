@@ -33,7 +33,7 @@ layui.config({
 		matchingLanguage();
 		var saveBtn = true;
 		//保存
-		$("body").on("click", "#saveBtn", function(){
+		$("body").on("click", "#saveBtn", function() {
 			if(saveBtn){
 				var node = ztree.getCheckedNodes();
 				if(isNull(node)){//如果节点为空

@@ -347,7 +347,7 @@ layui.config({
 			});
 		}
 		
-	    $("body").on("click", "#userPhoto", function(){
+	    $("body").on("click", "#userPhoto", function() {
 	    	var src = $(this).attr("src");
 	    	layer.open({
         		type: 1,
@@ -360,7 +360,7 @@ layui.config({
             });
 	    });
 	    
-	    $("body").on("click", ".workDay", function(){
+	    $("body").on("click", ".workDay", function() {
 	    	rowId = $(this).attr("rowId");
 	    	_openNewWindows({
 				url: "../../tpl/checkWorkTime/checkWorkTimeDetails.html", 

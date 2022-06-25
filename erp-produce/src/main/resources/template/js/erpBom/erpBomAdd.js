@@ -292,7 +292,7 @@ layui.config({
 		});
 		
 		//工序选择
-	    $("body").on("click", ".procedureSel", function(){
+	    $("body").on("click", ".procedureSel", function() {
 	    	var proId = $(this).attr("id").replace("procedureSel", "");
 	    	var selIndex = -1;
 	    	$.each(ztreeNode, function(i, item){
@@ -387,11 +387,11 @@ layui.config({
         	}
 		}
 		
-		$("body").on("click", ".diy-input", function(){
+		$("body").on("click", ".diy-input", function() {
             $(this).focus();
         });
 		
-        $("body").on("click", "#cancle", function(){
+        $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });
     });

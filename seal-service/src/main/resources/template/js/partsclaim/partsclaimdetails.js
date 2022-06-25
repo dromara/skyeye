@@ -47,7 +47,7 @@ layui.config({
 		});
 		
 		//附件下载
-	    $("body").on("click", ".enclosureItem", function(){
+	    $("body").on("click", ".enclosureItem", function() {
 	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
 	    });
 	    

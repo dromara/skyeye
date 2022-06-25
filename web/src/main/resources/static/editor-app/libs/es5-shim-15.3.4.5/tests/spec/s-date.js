@@ -75,7 +75,7 @@ describe('Date', function () {
             expect(Date.parse('1970-01-01T00:00:00')).toBe(tzOffset);             //tzOffset    0            0            0               NaN
         });
 
-        it("should be able to coerce to a number", function(){
+        it("should be able to coerce to a number", function() {
             var actual = Number(new Date(1970, 0));
             var expected = parseInt(actual, 10);
             expect(actual).toBeDefined();
@@ -85,12 +85,12 @@ describe('Date', function () {
 
     });
 
-    describe("toString", function(){
+    describe("toString", function() {
         var actual = (new Date(1970, 0)).toString();
         beforeEach(function(){
             actual = (new Date(1970, 0)).toString();
         });
-        it("should show correct date info for "+actual, function(){
+        it("should show correct date info for "+actual, function() {
             expect(actual).toMatch(/1970/);
             expect(actual).toMatch(/jan/i);
             expect(actual).toMatch(/thu/i);
@@ -98,12 +98,12 @@ describe('Date', function () {
         });
     });
 
-    describe("valueOf", function(){
+    describe("valueOf", function() {
         var actual = (new Date(1970, 0));
         beforeEach(function(){
             actual = (new Date(1970, 0)).valueOf();
         });
-        it("should give an int value", function(){
+        it("should give an int value", function() {
             expect(parseInt(actual, 10)).toBeTruthy();
         });
     });

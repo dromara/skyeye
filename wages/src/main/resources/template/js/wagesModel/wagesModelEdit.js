@@ -185,7 +185,7 @@ layui.config({
 	}
 
 	// 选择企业
-	$("body").on("click", "#companySel", function(){
+	$("body").on("click", "#companySel", function() {
 		_openNewWindows({
 			url: "../../tpl/companymation/companyChooseList.html",
 			title: "选择企业",
@@ -219,7 +219,7 @@ layui.config({
 	});
 
 	// 选择员工
-	$("body").on("click", "#userStaffSel", function(){
+	$("body").on("click", "#userStaffSel", function() {
 		systemCommonUtil.userStaffCheckType = true; // 选择类型，默认单选，true:多选，false:单选
 		systemCommonUtil.checkStaffMation = [].concat(checkStaffList); // 选择时返回的对象
 		systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
@@ -288,7 +288,7 @@ layui.config({
 			}});
 	});
 
-	$("body").on("click", "#cancle", function(){
+	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
 	});
 });

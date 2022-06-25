@@ -71,7 +71,7 @@ layui.config({
 	});
 
 	// 收藏
-	$("body").on("click", ".collection", function(){
+	$("body").on("click", ".collection", function() {
 		var rowId = $(this).attr("rowid");
 		console.log(rowId);
 	});

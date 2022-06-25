@@ -94,14 +94,14 @@ layui.config({
 	    });
 
 	    // 选择员工
-	    $("body").on("click", "#staffNameSel", function(){
+	    $("body").on("click", "#staffNameSel", function() {
 			systemCommonUtil.userStaffCheckType = false; // 选择类型，默认单选，true:多选，false:单选
 			systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
 				$("#staffName").val(checkStaffMation.jobNumber + "_" + checkStaffMation.userName);
 			});
 	    });
 	    
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

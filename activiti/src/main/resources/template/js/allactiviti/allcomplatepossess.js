@@ -47,7 +47,7 @@ layui.config({
     });
     
 	// 刷新所有已完成流程
-	$("body").on("click", "#loadAllComplateTable", function(){
+	$("body").on("click", "#loadAllComplateTable", function() {
 		reloadAllComplateTable();
 	});
 	

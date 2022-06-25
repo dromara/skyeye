@@ -392,16 +392,16 @@ layui.config({
 		});
 	}
 	
-	$("body").on("click", ".enclosureItem", function(){
+	$("body").on("click", ".enclosureItem", function() {
     	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
     });
     
-    $("body").on("click", "#processInstanceIdImg", function(){
+    $("body").on("click", "#processInstanceIdImg", function() {
 		systemCommonUtil.showPicImg($(this).attr("src"));
     });
     
     // 取消
-    $("body").on("click", "#cancle", function(){
+    $("body").on("click", "#cancle", function() {
     	parent.layer.close(index);
     });
 

@@ -94,7 +94,7 @@ layui.config({
 	
 	form.render();
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		loadTable();
 	});
 	//上线时间搜索条件

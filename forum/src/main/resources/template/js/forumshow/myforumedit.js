@@ -142,7 +142,7 @@ layui.config({
 		$(data.elem).val(data.elem.checked);
 	});
 	
-	$("body").on("click", "#cancle", function(){
+	$("body").on("click", "#cancle", function() {
 		location.href = '../../tpl/forumshow/myposts.html';
     });
 	

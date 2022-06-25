@@ -72,7 +72,7 @@ layui.config({
     });
 	
 	// 添加用品采购
-	$("body").on("click", "#addCaigouBean", function(){
+	$("body").on("click", "#addCaigouBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetArticlesPurchase/assetArticlesPurchaseAdd.html", 
 			title: "用品采购申请",
@@ -182,7 +182,7 @@ layui.config({
 	});
 
 	// 刷新采购数据
-    $("body").on("click", "#reloadCaigouTable", function(){
+    $("body").on("click", "#reloadCaigouTable", function() {
     	loadCaigouTable();
     });
     

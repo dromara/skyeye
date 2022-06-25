@@ -107,7 +107,7 @@ layui.config({
 	}
 	
 	//保存按钮-多选才有
-	$("body").on("click", "#saveCheckBox", function(){
+	$("body").on("click", "#saveCheckBox", function() {
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
@@ -132,7 +132,7 @@ layui.config({
         return false;
     });
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

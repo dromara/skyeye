@@ -381,7 +381,7 @@ layui.config({
     }
 
 	// 新增员工
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/syseveuserstaff/sysEveUserStaffAdd.html?type=1",
 			title: "新增员工",
@@ -397,7 +397,7 @@ layui.config({
 			}});
     });
     
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

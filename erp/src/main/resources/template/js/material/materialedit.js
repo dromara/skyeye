@@ -170,7 +170,7 @@ layui.config({
 					 	}
 				    });
 				});
-				$("body").on("input", "#name", function(){
+				$("body").on("input", "#name", function() {
 					searchZtree(materialCategoryType, $("#name").val());
 				});
 				
@@ -292,7 +292,7 @@ layui.config({
 		});
 	    
 		//单个单位新增库存
-	    $("body").on("click", "#initialTock", function(){
+	    $("body").on("click", "#initialTock", function() {
 	    	normsStock = [].concat(normsStockItem);
 	    	_openNewWindows({
 				url: "../../tpl/materialnormstock/materialnormstock.html", 
@@ -313,7 +313,7 @@ layui.config({
 				}});
 	    });
 	    //多单位
-	    $("body").on("click", ".initialTockMore", function(){
+	    $("body").on("click", ".initialTockMore", function() {
 	    	var _this = $(this);
 	    	//获取行号
 	    	var trRow = _this.attr("id").replace("initialTock", "");
@@ -430,11 +430,11 @@ layui.config({
  	    //扩展信息
  	    var extendTemplate = $("#extendTemplate").html();
  	    //新增
- 	    $("body").on("click", "#addExtendRow", function(){
+ 	    $("body").on("click", "#addExtendRow", function() {
  	    	$("#extendMationBox").append(extendTemplate);
  	    });
  	    //删除
- 	    $("body").on("click", "#extendMationBox .close-btn", function(){
+ 	    $("body").on("click", "#extendMationBox .close-btn", function() {
  	    	var _this = this;
 			layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 				layer.close(index);
@@ -442,7 +442,7 @@ layui.config({
 			});
  	    });
  	    //双击重命名
- 	    $("body").on("dblclick", "#extendMationBox .layui-form-label font", function(){
+ 	    $("body").on("dblclick", "#extendMationBox .layui-form-label font", function() {
  	    	var labelName = $(this).html();
  	    	$(this).hide();
  	    	$(this).parent().children("input").val(labelName);
@@ -464,7 +464,7 @@ layui.config({
  	    });
  	    
  	    //工序选择
-	    $("body").on("click", "#procedureChoose", function(){
+	    $("body").on("click", "#procedureChoose", function() {
 	    	_openNewWindows({
 				url: "../../tpl/erpWorkProcedure/erpWorkProcedureChoose.html", 
 				title: "工序选择",
@@ -483,7 +483,7 @@ layui.config({
 				}});
 	    });
  	    
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    

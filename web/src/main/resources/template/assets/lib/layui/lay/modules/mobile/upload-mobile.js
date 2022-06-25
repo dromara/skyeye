@@ -66,9 +66,9 @@ layui.define(['layer-mobile', 'zepto'] , function(exports){
         form.on('dragover', function(e){
           e.preventDefault();
           $(this).addClass(elemDragEnter);
-        }).on('dragleave', function(){
+        }).on('dragleave', function() {
           $(this).removeClass(elemDragEnter);
-        }).on('drop', function(){
+        }).on('drop', function() {
           $(this).removeClass(elemDragEnter);
         });
       }
@@ -87,7 +87,7 @@ layui.define(['layer-mobile', 'zepto'] , function(exports){
       item.wrap(form);
       
       //触发上传
-      item.off('change').on('change', function(){
+      item.off('change').on('change', function() {
         that.action(this, type);
       });
     });

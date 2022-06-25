@@ -71,7 +71,7 @@ layui.config({
         return false;
 	});
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
@@ -84,7 +84,7 @@ layui.config({
     }
 
 	//新增
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/customerGroup/customerGroupAdd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],

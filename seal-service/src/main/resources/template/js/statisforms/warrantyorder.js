@@ -85,7 +85,7 @@ layui.config({
 	
 	form.render();
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	

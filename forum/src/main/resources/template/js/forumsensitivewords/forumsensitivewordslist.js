@@ -49,12 +49,12 @@ layui.config({
 	form.render();
 	
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	
 	//添加
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/forumsensitivewords/forumsensitivewordsadd.html", 
 			title: "新增敏感词",
@@ -107,7 +107,7 @@ layui.config({
 	}
 
 	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

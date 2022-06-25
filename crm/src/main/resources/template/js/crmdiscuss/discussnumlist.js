@@ -50,7 +50,7 @@ layui.config({
     });
 	
 	//社区发帖
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/crmdiscuss/discussadd.html",
 			title: "社区发帖",
@@ -84,7 +84,7 @@ layui.config({
 	}
 
 	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
 

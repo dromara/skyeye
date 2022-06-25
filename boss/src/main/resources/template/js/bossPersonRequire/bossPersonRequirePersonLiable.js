@@ -68,7 +68,7 @@ layui.config({
         });
 
         // 人员选择
-        $("body").on("click", ".personLiableBtn", function(){
+        $("body").on("click", ".personLiableBtn", function() {
             systemCommonUtil.userReturnList = [].concat(personLiable);
             systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
             systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -79,7 +79,7 @@ layui.config({
             });
         });
 
-        $("body").on("click", ".enclosureItem", function(){
+        $("body").on("click", ".enclosureItem", function() {
             download(fileBasePath + $(this).attr("rowpath"), $(this).html());
         });
 

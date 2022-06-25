@@ -19,7 +19,7 @@ layui.config({
     var initData = {};
 
     // 获取初始化数据
-    AjaxPostUtil.request({url:reportBasePath + "reportpage006", params: {rowId: rowId}, type:'json', method: "GET", callback: function(json) {
+    AjaxPostUtil.request({url: reportBasePath + "reportpage006", params: {rowId: rowId}, type:'json', method: "GET", callback: function(json) {
         if (json.returnCode == 0) {
             initData = JSON.parse(getContentStr(json.bean.content));
             var widthScale = getScale(initData.contentWidth, content.width());
@@ -109,7 +109,7 @@ layui.config({
             fromId: fromId,
             needGetDataStr: JSON.stringify(needGetData)
         };
-        AjaxPostUtil.request({url:reportBasePath + "reportdatafrom007", params: params, type:'json', method: "POST", callback: function(json) {
+        AjaxPostUtil.request({url: reportBasePath + "reportdatafrom007", params: params, type:'json', method: "POST", callback: function(json) {
             if (json.returnCode == 0) {
                 $.each(json.bean, function(key, value){
                     $.each(attr, function(key1, value1){

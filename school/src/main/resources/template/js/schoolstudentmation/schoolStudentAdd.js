@@ -267,7 +267,7 @@ layui.config({
 	        	
 	        	AjaxPostUtil.request({url:schoolBasePath + "studentmation002", params:params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
-	 	   				winui.window.msg("录入成功", {icon: 1, time: 3000}, function(){
+	 	   				winui.window.msg("录入成功", {icon: 1, time: 3000}, function() {
 		 	   				location.reload();
 		 	   			});
 	 	   			} else {
@@ -320,7 +320,7 @@ layui.config({
 		}
 	    
 	    //取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

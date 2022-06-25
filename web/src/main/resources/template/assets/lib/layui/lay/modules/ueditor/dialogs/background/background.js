@@ -58,7 +58,7 @@
         }
         domUtils.on($G('nocolorRadio'), 'click', updateBackground);
         domUtils.on($G('coloredRadio'), 'click', updateHandler);
-        domUtils.on($G('url'), 'keyup', function(){
+        domUtils.on($G('url'), 'keyup', function() {
             if($G('url').value && $G('alignment').style.display == "none") {
                 utils.each($G('repeatType').children, function(item){
                     item.selected = ('repeat' == item.getAttribute('value') ? 'selected':false);

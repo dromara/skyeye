@@ -119,7 +119,7 @@ layui.config({
 	    form.render();
 	}
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	
@@ -154,12 +154,12 @@ layui.config({
 	}
 	
 	// 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
     // 下载模板
-    $("body").on("click", "#exportStudentModel", function(){
+    $("body").on("click", "#exportStudentModel", function() {
     	postDownLoadFile({
 			url : schoolBasePath + 'studentmation009',
 			params: getTableParams(),

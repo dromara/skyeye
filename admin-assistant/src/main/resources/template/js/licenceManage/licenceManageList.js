@@ -92,7 +92,7 @@ layui.config({
 	}
 
 	// 新增证照
-	$("body").on("click", "#licencelistaddBean", function(){
+	$("body").on("click", "#licencelistaddBean", function() {
     	_openNewWindows({
 			url: "../../tpl/licenceManage/licenceManageAdd.html", 
 			title: "新增证照",
@@ -126,12 +126,12 @@ layui.config({
 			}});
 	}
 	
-    $("body").on("click", "#reloadlicencelistTable", function(){
+    $("body").on("click", "#reloadlicencelistTable", function() {
     	loadTable();
     });
     
     // 搜索表单
-	$("body").on("click", "#licencelistformSearch", function(){
+	$("body").on("click", "#licencelistformSearch", function() {
     	table.reload("licencelistTable", {page: {curr: 1}, where: getTableParams()});
 	});
     

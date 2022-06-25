@@ -167,7 +167,7 @@ layui.config({
 	}
 
 	// 登记车辆
-	$("body").on("click", "#addVehicleBean", function(){
+	$("body").on("click", "#addVehicleBean", function() {
     	_openNewWindows({
 			url: "../../tpl/vehicleManage/vehicleManageAdd.html", 
 			title: "登记车辆",
@@ -201,11 +201,11 @@ layui.config({
 			}});
 	}
 	
-	$("body").on("click", "#reloadVehicleTable", function(){
+	$("body").on("click", "#reloadVehicleTable", function() {
     	loadVehicleTable();
     });
 	
-    $("body").on("click", "#vehicleformSearch", function(){
+    $("body").on("click", "#vehicleformSearch", function() {
     	table.reload("vehicleTable", {page: {curr: 1}, where: getTableParams()});
     });
     

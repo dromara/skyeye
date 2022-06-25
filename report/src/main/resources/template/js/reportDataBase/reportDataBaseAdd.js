@@ -92,7 +92,7 @@ layui.config({
                     comment: $("#comment").val(),
                     options: JSON.stringify(tableData),
                 };
-                AjaxPostUtil.request({url:reportBasePath + "reportdatabase002", params: params, type:'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: reportBasePath + "reportdatabase002", params: params, type:'json', method: "POST", callback: function(json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
@@ -114,7 +114,7 @@ layui.config({
                     user: $("#user").val(),
                     pass: $("#password").val()
                 };
-                AjaxPostUtil.request({url:reportBasePath + "reportcommon001", params: params, type:'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: reportBasePath + "reportcommon001", params: params, type:'json', method: "POST", callback: function(json) {
                     if (json.returnCode == 0) {
                         winui.window.msg('连接成功', {icon: 1, time: 2000});
                     } else {
@@ -162,7 +162,7 @@ layui.config({
             }
         }
 
-        $("body").on("click", "#cancle", function(){
+        $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });
     });

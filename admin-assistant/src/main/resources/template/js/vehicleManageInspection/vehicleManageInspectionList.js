@@ -93,7 +93,7 @@ layui.config({
 	}
 
 	// 登记年检信息
-	$("body").on("click", "#addInspectionBean", function(){
+	$("body").on("click", "#addInspectionBean", function() {
     	_openNewWindows({
 			url: "../../tpl/vehicleManageInspection/vehicleManageInspectionAdd.html", 
 			title: "车辆年检登记单",
@@ -128,11 +128,11 @@ layui.config({
 	}
 	
 	// 搜索表单
-	$("body").on("click", "#inspectionformSearch", function(){
+	$("body").on("click", "#inspectionformSearch", function() {
     	table.reload("inspectionTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
-    $("body").on("click", "#reloadInspectionTable", function(){
+    $("body").on("click", "#reloadInspectionTable", function() {
     	loadInspectionTable();
     });
     

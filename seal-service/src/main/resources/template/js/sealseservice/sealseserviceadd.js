@@ -167,7 +167,7 @@ layui.config({
                 }
  	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice011", params: params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0){
-		 	   			winui.window.msg("操作成功", {icon: 1, time: 3000}, function(){
+		 	   			winui.window.msg("操作成功", {icon: 1, time: 3000}, function() {
 		 	   				location.reload();
 		 	   			});
 	 	   			} else {

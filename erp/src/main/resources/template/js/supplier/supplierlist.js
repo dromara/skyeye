@@ -162,7 +162,7 @@ layui.config({
     }
 
     //添加供应商
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/supplier/supplieradd.html",
             title: "新增供应商",

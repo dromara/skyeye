@@ -76,7 +76,7 @@ layui.config({
 	});
 
 	// 刷新数据
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 	
@@ -185,7 +185,7 @@ layui.config({
     }
 	
     //新增
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
     	AjaxPostUtil.request({url:flowableBasePath + "activitimode001", params:{}, type: 'json', callback: function(json){
 			if (json.returnCode == 0) {
 				_openNewWindows({

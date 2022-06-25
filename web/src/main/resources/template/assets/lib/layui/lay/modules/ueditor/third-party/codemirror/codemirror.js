@@ -114,7 +114,7 @@ var CodeMirror = (function() {
         connect(scroller, "dragenter", e_stop);
         connect(scroller, "dragover", e_stop);
         connect(scroller, "drop", operation(onDrop));
-        connect(scroller, "paste", function(){focusInput(); fastPoll();});
+        connect(scroller, "paste", function() {focusInput(); fastPoll();});
         connect(input, "paste", fastPoll);
         connect(input, "cut", operation(function(){replaceSelection("");}));
 

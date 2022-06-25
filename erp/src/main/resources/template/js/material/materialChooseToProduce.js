@@ -46,7 +46,7 @@ layui.config({
 		refreshTable();
 	}
 	
-	$("body").on("input", "#name", function(){
+	$("body").on("input", "#name", function() {
 		searchZtree(materialCategoryType, $("#name").val());
 	});
 	//ztree查询
@@ -156,7 +156,7 @@ layui.config({
 	});
 	
 	//下一步
-	$("body").on("click", "#nextTab", function(){
+	$("body").on("click", "#nextTab", function() {
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
@@ -183,7 +183,7 @@ layui.config({
 	});
 	
 	//保存
-	$("body").on("click", "#saveChoose", function(){
+	$("body").on("click", "#saveChoose", function() {
 		var rows = $("#tBody tr");
 		if(rows.length == 0){
 			winui.window.msg("请选择商品", {icon: 2, time: 2000});
@@ -269,7 +269,7 @@ layui.config({
 	}
 	
 	//上一步
-	$("body").on("click", "#prevTab", function(){
+	$("body").on("click", "#prevTab", function() {
 		$step.prevStep();
 		$("#firstTab").show();
 		$("#secondTab").hide();
@@ -285,7 +285,7 @@ layui.config({
         return false;
     });
 	
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

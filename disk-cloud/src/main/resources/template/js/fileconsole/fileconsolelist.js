@@ -413,7 +413,7 @@ layui.config({
 				winui.window.msg('请选择要删除的文件或文件夹', {icon: 2, time: 2000});
 				return false;
 			}
-            deleteFolderAndChild(deleteArray, function(){
+            deleteFolderAndChild(deleteArray, function() {
             	// 刷新节点
    				refreshTreePointNode();
    				// 加载该目录下的文件
@@ -798,7 +798,7 @@ layui.config({
 				rowId: folderId,
 				fileType: 'folder'
 			});
-			deleteFolderAndChild(deleteArray, function(){
+			deleteFolderAndChild(deleteArray, function() {
 				$("#file-content div[rowid='" + folderId + "']").remove();
 				var selNode = ztree.getNodeByParam("id", folderId, null);
 				chooseNodeSelect(folderId);

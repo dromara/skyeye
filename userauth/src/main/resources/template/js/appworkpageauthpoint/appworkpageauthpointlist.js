@@ -93,12 +93,12 @@ layui.config({
 	}
 	
 	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
     //新增权限点
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/appworkpageauthpoint/appworkpageauthpointadd.html", 
 			title: "新增权限点",

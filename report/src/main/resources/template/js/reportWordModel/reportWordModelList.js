@@ -75,7 +75,7 @@ layui.config({
     form.render();
 
     // 添加
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/reportWordModel/reportWordModelAdd.html",
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
@@ -95,7 +95,7 @@ layui.config({
     function delet(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url:reportBasePath + "reportwordmodel003", params:{id: data.id}, type:'json', method: "DELETE", callback: function(json) {
+            AjaxPostUtil.request({url: reportBasePath + "reportwordmodel003", params:{id: data.id}, type:'json', method: "DELETE", callback: function(json) {
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
@@ -110,7 +110,7 @@ layui.config({
     function publish(data){
         layer.confirm('确定发布该模型吗？', {icon: 3, title: '发布操作'}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url:reportBasePath + "reportwordmodel008", params:{id: data.id}, type:'json', method: "PUT", callback: function(json) {
+            AjaxPostUtil.request({url: reportBasePath + "reportwordmodel008", params:{id: data.id}, type:'json', method: "PUT", callback: function(json) {
                 if (json.returnCode == 0) {
                     winui.window.msg('操作成功', {icon: 1, time: 2000});
                     loadTable();
@@ -125,7 +125,7 @@ layui.config({
     function unPublish(data){
         layer.confirm('确定取消发布该模型吗？', {icon: 3, title: '取消发布操作'}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url:reportBasePath + "reportwordmodel009", params:{id: data.id}, type:'json', method: "PUT", callback: function(json) {
+            AjaxPostUtil.request({url: reportBasePath + "reportwordmodel009", params:{id: data.id}, type:'json', method: "PUT", callback: function(json) {
                 if (json.returnCode == 0) {
                     winui.window.msg('操作成功', {icon: 1, time: 2000});
                     loadTable();
@@ -176,7 +176,7 @@ layui.config({
     });
 
     // 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 

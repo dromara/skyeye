@@ -236,7 +236,7 @@ layui.config({
 	    });
 
 		// 工序选择
-		$("body").on("click", "#procedureChoose", function(){
+		$("body").on("click", "#procedureChoose", function() {
 			_openNewWindows({
 				url: "../../tpl/erpWorkProcedure/erpWorkProcedureChoose.html",
 				title: "工序选择",
@@ -253,7 +253,7 @@ layui.config({
 		});
 
 		// 工艺选择
-		$("body").on("click", "#wayProcedureChoose", function(){
+		$("body").on("click", "#wayProcedureChoose", function() {
 			_openNewWindows({
 				url: "../../tpl/erpWayProcedure/erpWayProcedureChoose.html",
 				title: "工艺选择",
@@ -335,7 +335,7 @@ layui.config({
  	    });
 	    
 	    //取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

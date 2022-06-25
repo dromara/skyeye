@@ -9338,7 +9338,7 @@ var filterWord = UE.filterWord = function () {
          * @param { Function } fn 遍历到节点的时，传入节点作为参数，运行此函数
          * @example
          * ```javascript
-         * traversal(node, function(){
+         * traversal(node, function() {
          *     console.log(node.type);
          * });
          * ```
@@ -16373,7 +16373,7 @@ UE.plugins['list'] = function () {
 
                     setTimeout(function (){
                         sourceEditor.select();
-                        me.addListener('fullscreenchanged', function(){
+                        me.addListener('fullscreenchanged', function() {
                             try{
                                 sourceEditor.getCodeMirror().refresh()
                             }catch(e){}
@@ -17598,7 +17598,7 @@ UE.plugins['autofloat'] = function() {
         me.removeListener('keydown', defer_updateFloating);
     });
 
-    me.addListener('ready', function(){
+    me.addListener('ready', function() {
         if(checkHasUI(me)){
             //加载了ui组件，但在new时，没有加载ui，导致编辑器实例上没有ui类，所以这里做判断
             if(!me.ui){
@@ -24246,7 +24246,7 @@ UE.plugin.register('section', function (){
             /* 初始化、拖拽、粘贴、执行setcontent之后 */
             'ready': function (){
                 me.fireEvent('updateSections');
-                domUtils.on(me.body, 'drop paste', function(){
+                domUtils.on(me.body, 'drop paste', function() {
                     me.fireEvent('updateSections');
                 });
             },
@@ -24490,7 +24490,7 @@ UE.plugin.register('simpleupload', function (){
             btnIframe = document.createElement('iframe'),
             btnStyle = 'display:block;width:' + w + 'px;height:' + h + 'px;overflow:hidden;border:0;margin:0;padding:0;position:absolute;top:0;left:0;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity: 0;opacity: 0;cursor:pointer;';
 
-        domUtils.on(btnIframe, 'load', function(){
+        domUtils.on(btnIframe, 'load', function() {
 
             var timestrap = (+new Date()).toString(36),
                 wrapper,
@@ -24525,7 +24525,7 @@ UE.plugin.register('simpleupload', function (){
             var iframe = btnIframeDoc.getElementById('edui_iframe_' + timestrap);
 
             // 同域上产图片
-            // domUtils.on(input, 'change', function(){
+            // domUtils.on(input, 'change', function() {
             //     if(!input.value) return;
             //     var loadingId = 'loading_' + (+new Date()).toString(36);
             //     var params = utils.serializeParam(me.queryCommandValue('serverparam')) || '';
@@ -27294,7 +27294,7 @@ UE.ui = baidu.editor.ui = {};
 //                        domUtils.preventDefault(e);
 //                    } );
 //                } else {
-//                    me.addListener('dialogafterreset', function(){
+//                    me.addListener('dialogafterreset', function() {
 //                        window.setTimeout(function(){
 //                            var iframeWindow = document.getElementById( me.id + "_iframe").contentWindow;
 //
@@ -27823,7 +27823,7 @@ UE.ui = baidu.editor.ui = {};
         postRender: function(){
             var me = this,
                 closer = this.getDom('closer');
-            closer && domUtils.on(closer, 'click', function(){
+            closer && domUtils.on(closer, 'click', function() {
                 me.hide();
             });
         },
@@ -29585,7 +29585,7 @@ UE.registerUI('message', function(editor) {
     var _messageItems = [];
     var me = editor;
 
-    me.addListener('ready', function(){
+    me.addListener('ready', function() {
         holder = document.getElementById(me.ui.id + '_message_holder');
         updateHolderPos();
         setTimeout(function(){

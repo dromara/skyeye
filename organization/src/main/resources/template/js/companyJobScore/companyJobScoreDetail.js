@@ -53,7 +53,7 @@ layui.config({
 			rowNum++;
 		}
 
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

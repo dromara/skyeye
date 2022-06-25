@@ -106,7 +106,7 @@ var voucherUtil = {
     },
 
     initClickEvent: function (){
-        $("body").on("click", "td[data-edit]", function(){
+        $("body").on("click", "td[data-edit]", function() {
             var _this = $(this);
             _this.find(".cell_val").hide();
             switch ($(this).attr("data-edit")) {
@@ -137,7 +137,7 @@ var voucherUtil = {
             }
         });
 
-        $("body").on("click", ".col_operate .del", function(){
+        $("body").on("click", ".col_operate .del", function() {
             var tBody = $("#useTable").find("tr");
             if(tBody.length <= 2){
                 winui.window.msg("最少填写两行数据.", {icon: 2, time: 2000});

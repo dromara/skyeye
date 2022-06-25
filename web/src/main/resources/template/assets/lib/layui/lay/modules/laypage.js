@@ -210,7 +210,7 @@ layui.define(function(exports){
     //页码
     for(var i = 0, len = childs.length; i < len; i++){
       if(childs[i].nodeName.toLowerCase() === 'a'){
-        laypage.on(childs[i], 'click', function(){
+        laypage.on(childs[i], 'click', function() {
           var curr = this.getAttribute('data-page')|0;
           if(curr < 1 || curr > config.pages) return;
           config.curr = curr;
@@ -221,7 +221,7 @@ layui.define(function(exports){
     
     //条数
     if(select){
-      laypage.on(select, 'change', function(){
+      laypage.on(select, 'change', function() {
         var value = this.value;
         if(config.curr*value > config.count){
           config.curr = Math.ceil(config.count/value);
@@ -233,7 +233,7 @@ layui.define(function(exports){
     
     //确定
     if(btn){
-      laypage.on(btn, 'click', function(){
+      laypage.on(btn, 'click', function() {
         skip();
       });
     }

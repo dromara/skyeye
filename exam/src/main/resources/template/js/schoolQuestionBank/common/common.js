@@ -18,7 +18,7 @@ layui.define(["jquery", 'form'], function(exports) {
 			}
 		});
 		
-		$("body").on("click", ".dwOptionDel", function(){
+		$("body").on("click", ".dwOptionDel", function() {
 			deleteDwOption();
 			return false;
 		});
@@ -127,7 +127,7 @@ layui.define(["jquery", 'form'], function(exports) {
 		}
 		
 		//批量添加事件
-		$("body").on("click", ".addMoreOption,.addMoreRowOption,.addMoreColumnOption", function(){
+		$("body").on("click", ".addMoreOption,.addMoreRowOption,.addMoreColumnOption", function() {
 			var thDialogObj = $(this);
 			curEditCallback();
 			setShowDialogOffset(thDialogObj);
@@ -171,7 +171,7 @@ layui.define(["jquery", 'form'], function(exports) {
 		/**
 	     * 关闭设置弹出框
 	     */
-	    $("body").on("click", "#dwCommonDialogClose", function(){
+	    $("body").on("click", "#dwCommonDialogClose", function() {
 			dwCommonDialogHide();
 	    });
 		
@@ -210,7 +210,7 @@ layui.define(["jquery", 'form'], function(exports) {
 		}
 		
 		//绑定编辑
-		$("body").on("click", ".editAble", function(){
+		$("body").on("click", ".editAble", function() {
 			editAble($(this));
 			return false;
 		});
@@ -666,7 +666,7 @@ layui.define(["jquery", 'form'], function(exports) {
 		}
 	    
 	    //知识点选择
-	    $("body").on("click", "#schoolKnowledgeChoose", function(){
+	    $("body").on("click", "#schoolKnowledgeChoose", function() {
 	    	_openNewWindows({
 				url: "../../tpl/schoolKnowledgePoints/schoolKnowledgePointsChoose.html", 
 				title: "知识点选择",

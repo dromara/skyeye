@@ -116,7 +116,7 @@ layui.config({
 	}
 	
 	// 新增资产领用
-	$("body").on("click", "#addUseBean", function(){
+	$("body").on("click", "#addUseBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetManageUse/assetManageUseAdd.html", 
 			title: "资产领用申请",
@@ -197,7 +197,7 @@ layui.config({
 	});
 
 	// 刷新领用数据
-    $("body").on("click", "#reloadLingyongTable", function(){
+    $("body").on("click", "#reloadLingyongTable", function() {
     	loadLingyongTable();
     });
     

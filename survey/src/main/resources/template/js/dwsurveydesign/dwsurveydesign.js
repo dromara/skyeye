@@ -200,7 +200,7 @@ layui.config({
 	    layui.survey = survey;
 	    
 	    // 删除题目
-	    $("body").on("click", ".dwQuDelete", function(){
+	    $("body").on("click", ".dwQuDelete", function() {
 			var quBody = $(this).parents(".surveyQuItemBody");
 			layer.confirm("确认要删除此题吗？", { icon: 3, title: '删除题目' }, function (index) {
 				layer.close(index);
@@ -208,7 +208,7 @@ layui.config({
 				if(!isNull(quId)){
 					AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory015", params:{quId: quId}, type: 'json', callback: function(json){
 		 	   			if (json.returnCode == 0) {
-		 	   				quBody.hide("slow", function(){
+		 	   				quBody.hide("slow", function() {
 		 	   					$(this).parent().remove();
 		 	   					//重置序号
 								resetQuItem();
@@ -220,7 +220,7 @@ layui.config({
 		 	   			}
 		 	   		}});
 				} else {
-					quBody.hide("slow", function(){
+					quBody.hide("slow", function() {
 						$(this).parent().remove();
 						//重置序号
 						resetQuItem();
@@ -285,12 +285,12 @@ layui.config({
 		}
 		
 	    //取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    
 	    //保存
-	    $("body").on("click", "#saveBtn", function(){
+	    $("body").on("click", "#saveBtn", function() {
 	    	curEditCallback();
 			dwCommonDialogHide();
 			resetQuItemHover(null);

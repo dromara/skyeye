@@ -11770,7 +11770,7 @@ ORYX.Editor = {
 					/* Register the event */
 					ORYX.Log.debug("Register Plugin on Key Event: %0", eventName);
 					if (pluginData.toggle === true && pluginData.buttonInstance) {
-						this.registerOnEvent(eventName, function(){
+						this.registerOnEvent(eventName, function() {
 							pluginData.buttonInstance.toggle(!pluginData.buttonInstance.pressed); // Toggle 
 							pluginData.functionality.call(pluginData, pluginData.buttonInstance, pluginData.buttonInstance.pressed); // Call function
 						});
@@ -18559,8 +18559,8 @@ ORYX.Plugins.CanvasResizeButton = Clazz.extend({
 		hideButtons();
 
 		// Add the callbacks
-	    buttonGrow.addEventListener('click', function(){callback( position ); showButtons();}, true);
-	    buttonShrink.addEventListener('click', function(){callback( position, true ); showButtons();}, true);
+	    buttonGrow.addEventListener('click', function() {callback( position ); showButtons();}, true);
+	    buttonShrink.addEventListener('click', function() {callback( position, true ); showButtons();}, true);
 
 	}
 	
@@ -19469,13 +19469,13 @@ ORYX.Plugins.Save = Clazz.extend({
 		
 		// Register on event for executing commands --> store all commands in a stack		 
 		// --> Execute
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_EXECUTE, function(){ this.changeDifference++; this.updateTitle(); }.bind(this) );
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_EXECUTE_COMMANDS, function(){ this.changeDifference++; this.updateTitle(); }.bind(this) );
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_EXECUTE, function() { this.changeDifference++; this.updateTitle(); }.bind(this) );
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_EXECUTE_COMMANDS, function() { this.changeDifference++; this.updateTitle(); }.bind(this) );
 		// --> Saved from other places in the editor
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SAVED, function(){ this.changeDifference = 0; this.updateTitle(); }.bind(this) );
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_SAVED, function() { this.changeDifference = 0; this.updateTitle(); }.bind(this) );
 		
 		// --> Rollback
-		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_ROLLBACK, function(){ this.changeDifference--; this.updateTitle(); }.bind(this) );
+		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_ROLLBACK, function() { this.changeDifference--; this.updateTitle(); }.bind(this) );
 		
 		//TODO very critical for load time performance!!!
 		//this.serializedDOM = DataManager.__persistDOM(this.facade);

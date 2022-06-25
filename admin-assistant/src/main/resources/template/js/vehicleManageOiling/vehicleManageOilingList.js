@@ -100,7 +100,7 @@ layui.config({
 	}
 
 	// 登记加油信息
-	$("body").on("click", "#addOilingBean", function(){
+	$("body").on("click", "#addOilingBean", function() {
     	_openNewWindows({
 			url: "../../tpl/vehicleManageOiling/vehicleManageOilingAdd.html", 
 			title: "车辆加油登记单",
@@ -135,11 +135,11 @@ layui.config({
 	}
 	
 	// 搜索表单
-	$("body").on("click", "#oilingformSearch", function(){
+	$("body").on("click", "#oilingformSearch", function() {
     	table.reload("oilingTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
-    $("body").on("click", "#reloadOilingTable", function(){
+    $("body").on("click", "#reloadOilingTable", function() {
     	loadOilingTable();
     });
     

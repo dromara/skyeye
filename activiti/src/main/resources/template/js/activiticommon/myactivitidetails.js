@@ -184,17 +184,17 @@ layui.config({
     }
 	
     //附件下载
-	$("body").on("click", ".enclosureItem", function(){
+	$("body").on("click", ".enclosureItem", function() {
     	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
     });
     
 	//工作流图片查看
-    $("body").on("click", "#processInstanceIdImg", function(){
+    $("body").on("click", "#processInstanceIdImg", function() {
     	previewImg({src: $(this).attr("src")});
     });
     
     //图片查看
-    $("body").on("click", ".photo-img", function(){
+    $("body").on("click", ".photo-img", function() {
     	var src = $(this).attr("src");
     	layer.open({
     		type:1,

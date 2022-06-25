@@ -205,7 +205,7 @@ layui.config({
             $("#allPrice").html(allPrice + "元");
         }
 
-        $("body").on("click", "#cancle", function(){
+        $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });
     });

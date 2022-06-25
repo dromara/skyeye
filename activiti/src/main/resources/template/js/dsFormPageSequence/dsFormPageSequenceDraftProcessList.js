@@ -140,7 +140,7 @@ layui.config({
 	});
 
     // 刷新表单草稿列表
-	$("body").on("click", "#reloadMyStartTable", function(){
+	$("body").on("click", "#reloadMyStartTable", function() {
 		reloadMyStartTable();
 	});
 	

@@ -101,7 +101,7 @@ layui.config({
 		return false;
 	});
 
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 

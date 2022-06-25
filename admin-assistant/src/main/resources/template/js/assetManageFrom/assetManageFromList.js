@@ -87,7 +87,7 @@ layui.config({
 	}
 
 	// 新增资产来源
-	$("body").on("click", "#assetfromaddBean", function(){
+	$("body").on("click", "#assetfromaddBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetManageFrom/assetManageFromAdd.html", 
 			title: "新增资产来源",
@@ -178,7 +178,7 @@ layui.config({
 	}
 	
 	// 刷新来源数据
-    $("body").on("click", "#assetfromreloadTable", function(){
+    $("body").on("click", "#assetfromreloadTable", function() {
     	loadassetfromTable();
     });
     
@@ -188,7 +188,7 @@ layui.config({
     }
     
 	// 搜索来源列表表单
-	$("body").on("click", "#assetfromSearch", function(){
+	$("body").on("click", "#assetfromSearch", function() {
     	table.reload("assetfromTable", {page: {curr: 1}, where: getTableParams()});
 	});
     

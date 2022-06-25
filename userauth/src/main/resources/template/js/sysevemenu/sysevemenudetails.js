@@ -42,7 +42,7 @@ layui.config({
 	        	}
 	        	matchingLanguage();
 		 		form.render();
-		 		$("body").on("click","#menuIconPic", function(){
+		 		$("body").on("click","#menuIconPic", function() {
 		 			layer.open({
 		        		type:1,
 		        		title:false,

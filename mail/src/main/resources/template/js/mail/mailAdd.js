@@ -86,7 +86,7 @@ layui.config({
  	        	}
  	        	AjaxPostUtil.request({url: reqBasePath + "maillist002", params: params, type: 'json', method: "POST", callback: function(json){
 	 	   			if (json.returnCode == 0) {
-						winui.window.msg("提交成功", {icon: 1, time: 2000}, function(){
+						winui.window.msg("提交成功", {icon: 1, time: 2000}, function() {
 							location.reload();
 						});
 	 	   			} else {
@@ -98,7 +98,7 @@ layui.config({
  	    });
  	    
  	    // 取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    

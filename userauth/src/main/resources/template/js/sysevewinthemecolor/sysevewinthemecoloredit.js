@@ -41,12 +41,12 @@ layui.config({
 		 	}
 	    });
 		
-		$("body").on("keyup paste", "#colorClass", function(){
+		$("body").on("keyup paste", "#colorClass", function() {
 	    	$("#modelEffect").attr("class", $(this).val());
 	    });
 		
 	    //取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

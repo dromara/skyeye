@@ -45,12 +45,12 @@ layui.config({
     		}
 	    }});
 	    
-	    $("body").on("click", ".enclosureItem", function(){
+	    $("body").on("click", ".enclosureItem", function() {
 	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
 	    });
 	    
 	    //图片查看
-	    $("body").on("click", ".photo-img", function(){
+	    $("body").on("click", ".photo-img", function() {
 	    	var src = $(this).attr("src");
 	    	layer.open({
 	    		type:1,

@@ -346,7 +346,7 @@ layui.config({
 	    layui.exam = exam;
 	    
 	    // 删除题目
-	    $("body").on("click", ".dwQuDelete", function(){
+	    $("body").on("click", ".dwQuDelete", function() {
 			var quBody = $(this).parents(".surveyQuItemBody");
 			layer.confirm("确认要删除此题吗？", { icon: 3, title: '删除题目' }, function (index) {
 				layer.close(index);
@@ -354,7 +354,7 @@ layui.config({
 				if(!isNull(quId)){
 					AjaxPostUtil.request({url:schoolBasePath + "exam015", params:{quId: quId}, type: 'json', callback: function(json){
 		 	   			if (json.returnCode == 0) {
-		 	   				quBody.hide("slow", function(){
+		 	   				quBody.hide("slow", function() {
 		 	   					$(this).parent().remove();
 		 	   					// 重置序号
 								resetQuItem();
@@ -366,7 +366,7 @@ layui.config({
 		 	   			}
 		 	   		}});
 				} else {
-					quBody.hide("slow", function(){
+					quBody.hide("slow", function() {
 						$(this).parent().remove();
 						// 重置序号
 						resetQuItem();
@@ -431,7 +431,7 @@ layui.config({
 		}
 		
 		// 知识点选择
-		$("body").on("click", ".knowledgeQuLogic", function(){
+		$("body").on("click", ".knowledgeQuLogic", function() {
 			var _this = this;
 			var oldKnowIds = $(_this).attr("knowledgeIds");
 			schoolKnowledgeMationList = new Array();
@@ -465,12 +465,12 @@ layui.config({
 		});
 		
 	    // 取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    
 	    // 题库选择试题
-	    $("body").on("click", "#questionBankBtn", function(){
+	    $("body").on("click", "#questionBankBtn", function() {
 	    	questionMationList = [];
 	    	allSave();
 	    	_openNewWindows({
@@ -504,7 +504,7 @@ layui.config({
 	    });
 	    
 	    // 保存
-	    $("body").on("click", "#saveBtn", function(){
+	    $("body").on("click", "#saveBtn", function() {
 	    	allSave();
 	    });
 	    
@@ -1378,10 +1378,10 @@ layui.config({
 	    }
 
 	    //分数变化事件
-	    $("body").on("change", "#dwBodyLeftContent .exam-fraction", function(){
+	    $("body").on("change", "#dwBodyLeftContent .exam-fraction", function() {
 	    	fractionChange($(this));
 	    });
-	    $("body").on("keyup", "#dwBodyLeftContent .exam-fraction", function(){
+	    $("body").on("keyup", "#dwBodyLeftContent .exam-fraction", function() {
 	    	fractionChange($(this));
 	    });
 	    

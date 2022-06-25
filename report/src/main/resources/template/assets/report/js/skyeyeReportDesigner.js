@@ -613,7 +613,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							modelList: eachartsList,
 							wordMationList: wordMationList
 						};
-						AjaxPostUtil.request({url:reportBasePath + "reportpage007", params: {rowId: rowId, content: encodeURIComponent(JSON.stringify(params))}, type:'json', method: "POST", callback: function(json) {
+						AjaxPostUtil.request({url: reportBasePath + "reportpage007", params: {rowId: rowId, content: encodeURIComponent(JSON.stringify(params))}, type:'json', method: "POST", callback: function(json) {
 							if (json.returnCode == 0) {
 								winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 							} else {
@@ -723,14 +723,14 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						$('<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px; text-align: center;"><legend style="font-size: 12px; color: gray;">到底啦</legend></fieldset>').appendTo($("#showFormPanel").get(0));
 						form.render();
 						// 表单提示语内容展示
-						$('*[lay-tips]').on('mouseenter', function(){
+						$('*[lay-tips]').on('mouseenter', function() {
 							var content = $(this).attr('lay-tips');
 							this.index = layer.tips('<div style="font-size: 14px; color: #eee;">'+ content + '</div>', this, {
 								time: -1,
 								maxWidth: 280,
 								tips: [3, '#3A3D49']
 							});
-						}).on('mouseleave', function(){
+						}).on('mouseleave', function() {
 							layer.close(this.index);
 						});
 					}

@@ -1311,7 +1311,7 @@ vjs.findPosition = function(el) {
  *
  * Components are also event emitters.
  *
- *     button.on('click', function(){
+ *     button.on('click', function() {
  *       console.log('Button Clicked!');
  *     });
  *
@@ -2477,7 +2477,7 @@ vjs.Menu = vjs.Component.extend();
  */
 vjs.Menu.prototype.addItem = function(component){
   this.addChild(component);
-  component.on('click', vjs.bind(this, function(){
+  component.on('click', vjs.bind(this, function() {
     this.unlockShowing();
   }));
 };
@@ -2630,7 +2630,7 @@ vjs.MenuButton.prototype.onClick = function(){
   // When you click the button it adds focus, which will show the menu indefinitely.
   // So we'll remove focus when the mouse leaves the button.
   // Focus is needed for tab navigation.
-  this.one('mouseout', vjs.bind(this, function(){
+  this.one('mouseout', vjs.bind(this, function() {
     this.menu.unlockShowing();
     this.el_.blur();
   }));
@@ -3007,7 +3007,7 @@ vjs.Player.prototype.manualProgressOn = function(){
   // In HTML5, some older versions don't support the progress event
   // So we're assuming they don't, and turning off manual progress if they do.
   // As opposed to doing user agent detection
-  this.tech.one('progress', function(){
+  this.tech.one('progress', function() {
 
     // Update known progress support for this playback technology
     this.features['progressEvents'] = true;
@@ -3024,7 +3024,7 @@ vjs.Player.prototype.manualProgressOff = function(){
 
 vjs.Player.prototype.trackProgress = function(){
 
-  this.progressInterval = setInterval(vjs.bind(this, function(){
+  this.progressInterval = setInterval(vjs.bind(this, function() {
     // Don't trigger unless buffered amount is greater than last time
     // log(this.cache_.bufferEnd, this.buffered().end(0), this.duration())
     /* TODO: update for multiple buffered regions */
@@ -3047,7 +3047,7 @@ vjs.Player.prototype.manualTimeUpdatesOn = function(){
   // timeupdate is also called by .currentTime whenever current time is set
 
   // Watch for native timeupdate event
-  this.tech.one('timeupdate', function(){
+  this.tech.one('timeupdate', function() {
     // Update known progress support for this playback technology
     this.features['timeupdateEvents'] = true;
     // Turn off manual progress tracking
@@ -3064,7 +3064,7 @@ vjs.Player.prototype.manualTimeUpdatesOff = function(){
 
 vjs.Player.prototype.trackCurrentTime = function(){
   if (this.currentTimeInterval) { this.stopTrackingCurrentTime(); }
-  this.currentTimeInterval = setInterval(vjs.bind(this, function(){
+  this.currentTimeInterval = setInterval(vjs.bind(this, function() {
     this.trigger('timeupdate');
   }), 250); // 42 = 24 fps // 250 is what Webkit uses // FF uses 15
 };
@@ -3984,7 +3984,7 @@ vjs.Player.prototype.listenForUserActivity = function(){
   }), 250);
 
   // Clean up the intervals when we kill the player
-  this.on('dispose', function(){
+  this.on('dispose', function() {
     clearInterval(activityCheck);
     clearTimeout(inactivityTimeout);
   });
@@ -4521,7 +4521,7 @@ vjs.VolumeControl = vjs.Component.extend({
     if (player.tech && player.tech.features && player.tech.features['volumeControl'] === false) {
       this.addClass('vjs-hidden');
     }
-    player.on('loadstart', vjs.bind(this, function(){
+    player.on('loadstart', vjs.bind(this, function() {
       if (player.tech.features && player.tech.features['volumeControl'] === false) {
         this.addClass('vjs-hidden');
       } else {
@@ -4664,7 +4664,7 @@ vjs.MuteToggle = vjs.Button.extend({
     if (player.tech && player.tech.features && player.tech.features['volumeControl'] === false) {
       this.addClass('vjs-hidden');
     }
-    player.on('loadstart', vjs.bind(this, function(){
+    player.on('loadstart', vjs.bind(this, function() {
       if (player.tech.features && player.tech.features['volumeControl'] === false) {
         this.addClass('vjs-hidden');
       } else {
@@ -4732,7 +4732,7 @@ vjs.VolumeMenuButton = vjs.MenuButton.extend({
     if (player.tech && player.tech.features && player.tech.features.volumeControl === false) {
       this.addClass('vjs-hidden');
     }
-    player.on('loadstart', vjs.bind(this, function(){
+    player.on('loadstart', vjs.bind(this, function() {
       if (player.tech.features && player.tech.features.volumeControl === false) {
         this.addClass('vjs-hidden');
       } else {
@@ -5501,7 +5501,7 @@ vjs.Flash = vjs.MediaTechController.extend({
       // iFrm.src = "iframe.html";
 
       // Wait until iFrame has loaded to write into it.
-      vjs.on(iFrm, 'load', vjs.bind(this, function(){
+      vjs.on(iFrm, 'load', vjs.bind(this, function() {
 
         var iDoc,
             iWin = iFrm.contentWindow;
@@ -7089,7 +7089,7 @@ vjs.autoSetupTimeout = function(wait){
 if (document.readyState === 'complete') {
   vjs.windowLoaded = true;
 } else {
-  vjs.one(window, 'load', function(){
+  vjs.one(window, 'load', function() {
     vjs.windowLoaded = true;
   });
 }

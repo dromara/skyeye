@@ -47,7 +47,7 @@ layui.config({
 	        return false;
 	    });
 	    
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

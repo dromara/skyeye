@@ -93,7 +93,7 @@ layui.config({
 	}
 
 	// 登记维修保养信息
-	$("body").on("click", "#addMaintenanceBean", function(){
+	$("body").on("click", "#addMaintenanceBean", function() {
     	_openNewWindows({
 			url: "../../tpl/vehicleManageMaintenance/vehicleManageMaintenanceAdd.html", 
 			title: "车辆维修保养登记单",
@@ -128,11 +128,11 @@ layui.config({
 	}
 	
 	// 搜索表单
-	$("body").on("click", "#maintenanceformSearch", function(){
+	$("body").on("click", "#maintenanceformSearch", function() {
     	table.reload("maintenanceTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
-    $("body").on("click", "#reloadMaintenanceTable", function(){
+    $("body").on("click", "#reloadMaintenanceTable", function() {
     	loadMaintenanceTable();
     });
     

@@ -146,7 +146,7 @@ layui.config({
 
                 AjaxPostUtil.request({url: shopBasePath + "insertKeepFitOrder", params: params, type: 'json', method: "POST", callback: function(json){
                     if (json.returnCode == 0) {
-                        winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000}, function(){
+                        winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000}, function() {
                             location.reload();
                         });
                     } else {
@@ -235,7 +235,7 @@ layui.config({
             $("#allPrice").html(allPrice + "元");
         }
 
-        $("body").on("click", "#cancle", function(){
+        $("body").on("click", "#cancle", function() {
             parent.layer.close(index);
         });
     });

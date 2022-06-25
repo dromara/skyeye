@@ -123,7 +123,7 @@ layui.config({
 	}
 	
 	// 新增节假日
-	$("body").on("click", "#addSchedule", function(){
+	$("body").on("click", "#addSchedule", function() {
     	_openNewWindows({
 			url: "../../tpl/schedule/scheduleadd.html", 
 			title: "新增节假日",
@@ -140,7 +140,7 @@ layui.config({
     });
 	
 	// 清空本年度节假日日程
-	$("body").on("click", "#deleteThisYear", function(){
+	$("body").on("click", "#deleteThisYear", function() {
 		layer.confirm('确认清空本年度节假日日程吗？', { icon: 3, title: '删除节假日' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:reqBasePath + "syseveschedule012", params:{}, type: 'json', callback: function(json){
@@ -155,7 +155,7 @@ layui.config({
 	});
 	
 	// 下载模板
-	$("body").on("click", "#download", function(){
+	$("body").on("click", "#download", function() {
 		postDownLoadFile({
 			url : reqBasePath + 'syseveschedule009',
 			method : 'post'
@@ -163,11 +163,11 @@ layui.config({
     });
 	
 	// 导入数据
-	$("body").on("click", "#exploreExcel", function(){
+	$("body").on("click", "#exploreExcel", function() {
 		$("#upfile").val("");
 		$("#upfile").click();
     });
-	$("body").on("change", "#upfile", function(){
+	$("body").on("change", "#upfile", function() {
 		var formData = new FormData();
 	    var name = $("#upfile").val();
 	    formData.append("file", $("#upfile")[0].files[0]);
@@ -206,7 +206,7 @@ layui.config({
 	});
 
 	// 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

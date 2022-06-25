@@ -157,12 +157,12 @@ layui.config({
 		}});
 	}
 
-	$("body").on("click", ".enclosureItem", function(){
+	$("body").on("click", ".enclosureItem", function() {
 		download(fileBasePath + $(this).attr("rowpath"), $(this).html());
 	});
 
 	// 乘车人数进行变动
-	$("body").on("change", "#passengerNum", function(){
+	$("body").on("change", "#passengerNum", function() {
 		var passengerNum = $(this).val();
 		if(!isNull(passengerNum)){
 			initDesignatedVehicle(passengerNum);

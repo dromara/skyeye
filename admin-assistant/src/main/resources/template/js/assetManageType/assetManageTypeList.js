@@ -87,7 +87,7 @@ layui.config({
 	}
 
 	// 新增
-	$("body").on("click", "#assettypeaddBean", function(){
+	$("body").on("click", "#assettypeaddBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetManageType/assetManageTypeAdd.html", 
 			title: "新增资产类型",
@@ -177,12 +177,12 @@ layui.config({
 		}});
 	}
 	
-    $("body").on("click", "#assettypereloadTable", function(){
+    $("body").on("click", "#assettypereloadTable", function() {
     	loadassettypeTable();
     });
     
     // 搜索表单
-	$("body").on("click", "#assettypeSearch", function(){
+	$("body").on("click", "#assettypeSearch", function() {
     	table.reload("assettypeTable", {page: {curr: 1}, where: getTableParams()});
 	});
     

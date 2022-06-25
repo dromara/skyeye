@@ -81,7 +81,7 @@ layui.config({
 			placeholder: '请填写标签'
 		});
 
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

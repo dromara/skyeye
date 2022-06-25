@@ -176,7 +176,7 @@ layui.config({
 	}
 
 	// 添加会议室预定
-	$("body").on("click", "#addReserveBean", function(){
+	$("body").on("click", "#addReserveBean", function() {
     	_openNewWindows({
 			url: "../../tpl/conFerenceRoomReserve/conFerenceRoomReserveAdd.html", 
 			title: "会议室预定申请",
@@ -202,7 +202,7 @@ layui.config({
 	});
 
 	// 刷新会议室预定列表
-    $("body").on("click", "#reloadReserveTable", function(){
+    $("body").on("click", "#reloadReserveTable", function() {
     	loadReserveTable();
     });
     

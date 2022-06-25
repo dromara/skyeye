@@ -126,12 +126,12 @@ layui.config({
 	}
 	
 	//刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
     //新增
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/codemodel/codemodeladd.html", 
 			title: "新增模板",

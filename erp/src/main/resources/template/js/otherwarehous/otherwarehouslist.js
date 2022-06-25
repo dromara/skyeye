@@ -73,7 +73,7 @@ layui.config({
         }else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
         }else if (layEvent === 'revoke') { //撤销
-            erpOrderUtil.revokeOrderMation(data.processInstanceId, systemOrderType["putIsOthers"]["orderType"], function(){
+            erpOrderUtil.revokeOrderMation(data.processInstanceId, systemOrderType["putIsOthers"]["orderType"], function() {
                 loadTable();
             });
         }
@@ -81,7 +81,7 @@ layui.config({
 
     // 提交数据
 	function subExamine(data){
-        erpOrderUtil.submitOrderMation(data.id, systemOrderType["putIsOthers"]["orderType"], data.submitType, sysActivitiModel["putIsOthers"]["key"], function(){
+        erpOrderUtil.submitOrderMation(data.id, systemOrderType["putIsOthers"]["orderType"], data.submitType, sysActivitiModel["putIsOthers"]["key"], function() {
             loadTable();
         });
     }
@@ -106,7 +106,7 @@ layui.config({
 
     // 删除
     function deletemember(data){
-        erpOrderUtil.deleteOrderMation(data.id, systemOrderType["putIsOthers"]["orderType"], function(){
+        erpOrderUtil.deleteOrderMation(data.id, systemOrderType["putIsOthers"]["orderType"], function() {
             loadTable();
         });
     }
@@ -124,7 +124,7 @@ layui.config({
 	}
 
     // 添加
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/otherwarehous/otherwarehousadd.html",
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],

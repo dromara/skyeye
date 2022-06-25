@@ -160,7 +160,7 @@ layui.config({
  	    });
  	    
  	    // 自定义类型可以设置
- 	    $("body").on("click", ".weekDay", function(){
+ 	    $("body").on("click", ".weekDay", function() {
  	    	if(type == 4){
 		    	var clas = getArrIndexOfPointStr(checkWorkTimeColor, $(this).attr("class"));
 		    	$(this).removeClass(clas);
@@ -250,7 +250,7 @@ layui.config({
  	    	return result;
  	    }
  	    
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

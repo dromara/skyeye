@@ -49,7 +49,7 @@ var skyeyeEnclosure = {
      * @param callback 回调函数
      */
     initClick: function (id, btnId, callback){
-        $("body").on("click", "#" + btnId, function(){
+        $("body").on("click", "#" + btnId, function() {
             _openNewWindows({
                 url: "../../tpl/common/enclosureupload.html?boxId=" + id,
                 title: "上传附件",

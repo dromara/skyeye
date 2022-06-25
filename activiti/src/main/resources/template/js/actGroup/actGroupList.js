@@ -266,7 +266,7 @@ layui.config({
 	}
 	
 	// 同步人员数据
-    $("body").on("click", "#syncData", function(){
+    $("body").on("click", "#syncData", function() {
     	AjaxPostUtil.request({url: flowableBasePath + "activitimode015", params: {}, type: 'json', method: "POST", callback: function(json){
 			if (json.returnCode == 0) {
             	winui.window.msg("同步成功", {icon: 1, time: 2000});
@@ -278,7 +278,7 @@ layui.config({
 	
 	form.render();
 	//搜索用户
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	//搜索条件
@@ -297,11 +297,11 @@ layui.config({
 	}
 
   	//刷新用户
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 	//刷新用户组
-	$("body").on("click", "#flashGroup", function(){
+	$("body").on("click", "#flashGroup", function() {
 		showLeft();
 	});
 

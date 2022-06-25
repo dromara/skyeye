@@ -87,7 +87,7 @@
                             }
                             onready();
                         })();
-                        window.attachEvent('onload', function(){
+                        window.attachEvent('onload', function() {
                             onready()
                         });
                     } else {
@@ -95,7 +95,7 @@
                             doc.removeEventListener("DOMContentLoaded", arguments.callee, false);
                             onready();
                         }, false);
-                        window.addEventListener('load', function(){onready()}, false);
+                        window.addEventListener('load', function() {onready()}, false);
                     }
                 }
 

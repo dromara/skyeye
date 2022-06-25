@@ -91,7 +91,7 @@ layui.config({
 	}
 
 	// 新增印章
-	$("body").on("click", "#seallistaddBean", function(){
+	$("body").on("click", "#seallistaddBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sealManage/sealManageAdd.html", 
 			title: "新增印章",
@@ -125,12 +125,12 @@ layui.config({
 			}});
 	}
 	
-    $("body").on("click", "#reloadseallistTable", function(){
+    $("body").on("click", "#reloadseallistTable", function() {
     	loadTable();
     });
     
     // 搜索表单
-	$("body").on("click", "#seallistformSearch", function(){
+	$("body").on("click", "#seallistformSearch", function() {
     	table.reload("seallistTable", {page: {curr: 1}, where: getTableParams()});
 	});
     

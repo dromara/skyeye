@@ -96,7 +96,7 @@ layui.config({
     }
 
     // 人员选择
-    $("body").on("click", ".transferStaffIdBtn", function(){
+    $("body").on("click", ".transferStaffIdBtn", function() {
         systemCommonUtil.userStaffCheckType = false; // 选择类型，默认单选，true:多选，false:单选
         systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
             $("#transferStaffId").attr("staffId", checkStaffMation.id);

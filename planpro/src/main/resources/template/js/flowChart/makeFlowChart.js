@@ -106,7 +106,7 @@ layui.config({
 	}
 
     // 新增目录
-    $("body").on("click", ".treeAddFolder", function(){
+    $("body").on("click", ".treeAddFolder", function() {
     	folderId = $(this).parent().attr("nodeId");
     	type = "1";
 		$("#treeRight").hide();
@@ -125,7 +125,7 @@ layui.config({
     });
     
 	// 新增流程图
-    $("body").on("click", ".treeAddFlower", function(){
+    $("body").on("click", ".treeAddFlower", function() {
 		folderId = $(this).parent().attr("nodeId");
     	type = "2";
 		$("#treeRight").hide();
@@ -144,7 +144,7 @@ layui.config({
     });
 
     // 编辑
-	$("body").on("click", ".treeEdit", function(){
+	$("body").on("click", ".treeEdit", function() {
 		var nodeId = $(this).parent().attr("nodeId");
 		var selNode = ztree.getNodeByParam("id", nodeId, null);
 		edit(selNode);
@@ -152,7 +152,7 @@ layui.config({
 	});
 
 	// 删除
-	$("body").on("click", ".treeDeleteFolderAndChild", function(){
+	$("body").on("click", ".treeDeleteFolderAndChild", function() {
 		var nodeId = $(this).parent().attr("nodeId");
 		var selNode = ztree.getNodeByParam("id", nodeId, null);
 		del(selNode);
@@ -244,7 +244,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#delete", function(e){//删除
 		tip_index = layer.tips('删除', '#delete', {time: 0, tips: 3});
-	}).on('mouseleave', '#delete', function(){
+	}).on('mouseleave', '#delete', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#delete", function(e){//删除
@@ -256,7 +256,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#addCustom1", function(e){//添加起止节点
 		tip_index = layer.tips('起止节点', '#addCustom1', {time: 0, tips: 3});
-	}).on('mouseleave', '#addCustom1', function(){
+	}).on('mouseleave', '#addCustom1', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addCustom1", function(e){//添加起止节点
@@ -269,7 +269,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#addCustom2", function(e){//添加常规节点
 		tip_index = layer.tips('常规节点', '#addCustom2', {time: 0, tips: 3});
-	}).on('mouseleave', '#addCustom2', function(){
+	}).on('mouseleave', '#addCustom2', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addCustom2", function(e){//添加常规节点
@@ -283,7 +283,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#addCustom3", function(e){//添加条件节点
 		tip_index = layer.tips('条件节点', '#addCustom3', {time: 0, tips: 3});
-	}).on('mouseleave', '#addCustom3', function(){
+	}).on('mouseleave', '#addCustom3', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addCustom3", function(e){//添加条件节点
@@ -296,7 +296,7 @@ layui.config({
 
 	$("body").on("mouseenter", "#addLine", function(e){//添加普通直线
 		tip_index = layer.tips('添加普通直线', '#addLine', {time: 0, tips: 3});
-	}).on('mouseleave', '#addLine', function(){
+	}).on('mouseleave', '#addLine', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addLine", function(e){//添加普通直线
@@ -308,7 +308,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#addArrowLine", function(e){//添加箭头直线
 		tip_index = layer.tips('添加箭头直线', '#addArrowLine', {time: 0, tips: 3});
-	}).on('mouseleave', '#addArrowLine', function(){
+	}).on('mouseleave', '#addArrowLine', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addArrowLine", function(e){//添加箭头直线
@@ -319,7 +319,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#addSmooth", function(e){//添加曲线
 		tip_index = layer.tips('添加曲线', '#addSmooth', {time: 0, tips: 3});
-	}).on('mouseleave', '#addSmooth', function(){
+	}).on('mouseleave', '#addSmooth', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addSmooth", function(e){//添加曲线
@@ -330,7 +330,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#addArrowSmooth", function(e){//添加箭头曲线
 		tip_index = layer.tips('添加箭头曲线', '#addArrowSmooth', {time: 0, tips: 3});
-	}).on('mouseleave', '#addArrowSmooth', function(){
+	}).on('mouseleave', '#addArrowSmooth', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addArrowSmooth", function(e){//添加箭头曲线
@@ -341,7 +341,7 @@ layui.config({
 	
 	/*$("body").on("mouseenter", "#addLineFlow", function(e){//添加折线
 		tip_index = layer.tips('添加折线', '#addLineFlow', {time: 0, tips: 3});
-	}).on('mouseleave', '#addLineFlow', function(){
+	}).on('mouseleave', '#addLineFlow', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addLineFlow", function(e){//添加折线
@@ -352,7 +352,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#addPolyLineFlow", function(e){//添加箭头折线
 		tip_index = layer.tips('添加箭头折线', '#addPolyLineFlow', {time: 0, tips: 3});
-	}).on('mouseleave', '#addPolyLineFlow', function(){
+	}).on('mouseleave', '#addPolyLineFlow', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#addPolyLineFlow", function(e){//添加箭头折线
@@ -363,7 +363,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#drag", function(e){//拖拽模式
 		tip_index = layer.tips('拖拽模式', '#drag', {time: 0, tips: 3});
-	}).on('mouseleave', '#drag', function(){
+	}).on('mouseleave', '#drag', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#drag", function(e){//拖拽模式
@@ -372,7 +372,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#edit", function(e){//编辑模式
 		tip_index = layer.tips('编辑模式', '#edit', {time: 0, tips: 3});
-	}).on('mouseleave', '#edit', function(){
+	}).on('mouseleave', '#edit', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#edit", function(e){//编辑模式
@@ -381,7 +381,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#reLayout", function(e){//自动布局
 		tip_index = layer.tips('自动布局', '#reLayout', {time: 0, tips: 3});
-	}).on('mouseleave', '#reLayout', function(){
+	}).on('mouseleave', '#reLayout', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#reLayout", function(e){//自动布局
@@ -401,7 +401,7 @@ layui.config({
 	
 	$("body").on("mouseenter", "#consoleJSON", function(e){//保存
 		tip_index = layer.tips('保存', '#consoleJSON', {time: 0, tips: 3});
-	}).on('mouseleave', '#consoleJSON', function(){
+	}).on('mouseleave', '#consoleJSON', function() {
         layer.close(tip_index);
     });
 	$("body").on("click", "#consoleJSON", function(e){//保存

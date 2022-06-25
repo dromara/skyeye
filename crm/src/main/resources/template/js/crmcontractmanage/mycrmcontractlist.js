@@ -106,7 +106,7 @@ layui.config({
     });
 	
 	// 新增
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/crmcontractmanage/mycrmcontractadd.html", 
 			title: "新增合同",
@@ -277,7 +277,7 @@ layui.config({
 		return false;
 	});
 
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 

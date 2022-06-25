@@ -3644,7 +3644,7 @@
         extendTo(cur);
         var visible = visibleLines(display, doc);
         if (cur.line >= visible.to || cur.line < visible.from)
-          setTimeout(operation(cm, function(){if (counter == curCount) extend(e);}), 150);
+          setTimeout(operation(cm, function() {if (counter == curCount) extend(e);}), 150);
       } else {
         var outside = e.clientY < editorSize.top ? -20 : e.clientY > editorSize.bottom ? 20 : 0;
         if (outside) setTimeout(operation(cm, function() {

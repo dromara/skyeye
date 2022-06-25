@@ -189,12 +189,12 @@ layui.config({
 	}
 	
 	// 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
     // 新增单选题
-    $("body").on("click", "#addRadio", function(){
+    $("body").on("click", "#addRadio", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/radioAdd.html", 
@@ -212,7 +212,7 @@ layui.config({
     });
     
     // 新增多选题
-    $("body").on("click", "#addCheckBox", function(){
+    $("body").on("click", "#addCheckBox", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/checkBoxAdd.html", 
@@ -230,7 +230,7 @@ layui.config({
     });
     
     // 新增填空题
-    $("body").on("click", "#addFillblank", function(){
+    $("body").on("click", "#addFillblank", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/fillblankAdd.html", 
@@ -248,7 +248,7 @@ layui.config({
     });
     
     // 新增评分题
-    $("body").on("click", "#addScore", function(){
+    $("body").on("click", "#addScore", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/scoreAdd.html", 
@@ -266,7 +266,7 @@ layui.config({
     });
     
     // 新增排序题
-    $("body").on("click", "#addOrderby", function(){
+    $("body").on("click", "#addOrderby", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/orderbyAdd.html", 
@@ -284,7 +284,7 @@ layui.config({
     });
     
     // 新增多项填空题
-    $("body").on("click", "#addMultiFillblank", function(){
+    $("body").on("click", "#addMultiFillblank", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/multiFillblankAdd.html", 
@@ -302,7 +302,7 @@ layui.config({
     });
     
     // 新增矩阵单选题
-    $("body").on("click", "#addChenradio", function(){
+    $("body").on("click", "#addChenradio", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/chenRadioAdd.html", 
@@ -320,7 +320,7 @@ layui.config({
     });
     
     // 新增矩阵多选题
-    $("body").on("click", "#addChencheckbox", function(){
+    $("body").on("click", "#addChencheckbox", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/chenCheckBoxAdd.html", 
@@ -338,7 +338,7 @@ layui.config({
     });
     
     // 新增矩阵评分题
-    $("body").on("click", "#addChenscore", function(){
+    $("body").on("click", "#addChenscore", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/chenScoreAdd.html", 
@@ -356,7 +356,7 @@ layui.config({
     });
     
     // 新增矩阵填空题
-    $("body").on("click", "#addChenfbk", function(){
+    $("body").on("click", "#addChenfbk", function() {
     	rowId = "";
     	_openNewWindows({
 			url: "../../tpl/schoolQuestionBank/chenFbkAdd.html", 

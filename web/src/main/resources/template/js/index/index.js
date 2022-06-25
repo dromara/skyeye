@@ -460,7 +460,7 @@ layui.config({
 							localStorage.clear();
 							sessionStorage.clear();
 							deleteCookie();
-							winui.window.msg('缓存清除成功，两秒后自动刷新页面！', { shift: 1 }, function(){
+							winui.window.msg('缓存清除成功，两秒后自动刷新页面！', { shift: 1 }, function() {
 								location.href = "login.html";
 							});
 				        });
@@ -896,7 +896,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			$.each(noticeList, function(index, item){
 					 				setTimeout(function(e){
-					 					$(item).animate({'margin-left': '390px'}, 500, function(){
+					 					$(item).animate({'margin-left': '390px'}, 500, function() {
 					 						$(item).remove();
 					 					});
 					 				}, index * 200);
@@ -922,7 +922,7 @@ layui.config({
 									shade: false,
 									callBack: function(refreshCode){
 								}});
-			 	   			_this.animate({'margin-left': '390px'}, 500, function(){
+			 	   			_this.animate({'margin-left': '390px'}, 500, function() {
 			 	   				_this.remove();
 				 	   			var noticeShowListLength = $("#notice-list").find(".winui-message-item").length;
 	                            if(noticeShowListLength === '0' || noticeShowListLength == 0){
@@ -944,7 +944,7 @@ layui.config({
 		 			parentRowId = _this.attr("rowid");
 		 			AjaxPostUtil.request({url:reqBasePath + "syseveusernotice004", params:{rowId: parentRowId}, type: 'json', callback: function(json){
 		 	   			if (json.returnCode == 0) {
-			 	   			_this.animate({'margin-left': '390px'}, 500, function(){
+			 	   			_this.animate({'margin-left': '390px'}, 500, function() {
 			 	   				_this.remove();
 				 	   			var noticeShowListLength = $("#notice-list").find(".winui-message-item").length;
 	                            if(noticeShowListLength === '0' || noticeShowListLength == 0){
@@ -1229,7 +1229,7 @@ layui.config({
     //个人信息下拉框选项
     $('body').on('mouseenter', '.user-main-mation', function(e){
 		$(".win-file-switch").css({'z-index': '99999901'});
-	}).on('mouseleave', '.user-main-mation', function(){
+	}).on('mouseleave', '.user-main-mation', function() {
 		if($(".switch-menu").find(".switch-checked").attr("id") === 'win10Btn'){
 			$(".win-file-switch").css({'z-index': '0'});
 		}

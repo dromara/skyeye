@@ -86,7 +86,7 @@ layui.config({
     });
 
     // 新增加班申请
-    $("body").on("click", "#addBean", function(){
+    $("body").on("click", "#addBean", function() {
         _openNewWindows({
             url: "../../tpl/checkWorkOvertime/checkWorkOvertimeAdd.html",
             title: "加班申请",
@@ -194,7 +194,7 @@ layui.config({
     });
 
     // 刷新
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 

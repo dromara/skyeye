@@ -222,7 +222,7 @@ layui.config({
     }
     
     // 页面控件点击事件
-    $("body").on("click", ".form-group", function(){
+    $("body").on("click", ".form-group", function() {
     	$(".form-group").removeClass('ui-sortable-placeholder-choose');
     	$(this).addClass("ui-sortable-placeholder-choose");
     	var rowid = $(this).attr("rowid");
@@ -430,12 +430,12 @@ layui.config({
    		}});
 	}
 	
-	$("body").on("keyup", ".keyIdName", function(){
+	$("body").on("keyup", ".keyIdName", function() {
 		$(this).val($(this).val().replace(/[^\w\.\/]/ig,''));
 	});
     
 	//保存
-	$("body").on("click", "#save", function(){
+	$("body").on("click", "#save", function() {
 		sortDataIn();
 		if(jsonArray.length == 0){
 			winui.window.msg('保存页面不能为空！', {icon: 2, time: 2000});

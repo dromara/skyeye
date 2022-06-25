@@ -153,7 +153,7 @@ layui.config({
 	form.render();
 	
 	// 个人考勤情况导出
-    $("body").on("click", "#download", function(){
+    $("body").on("click", "#download", function() {
         postDownLoadFile({
             url : flowableBasePath + 'checkwork017',
             params: getTableParams(),
@@ -162,12 +162,12 @@ layui.config({
     });
 	
 	// 搜索我的考勤统计
-	$("body").on("click", "#searchForm", function(){
+	$("body").on("click", "#searchForm", function() {
     	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
 	// 刷新我的考勤信息
-    $("body").on("click", "#reloadMyDkTable", function(){
+    $("body").on("click", "#reloadMyDkTable", function() {
     	loadTable();
     });
     

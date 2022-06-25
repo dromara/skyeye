@@ -159,7 +159,7 @@ layui.config({
 	}
 
 	// 新增资产
-	$("body").on("click", "#assetlistaddBean", function(){
+	$("body").on("click", "#assetlistaddBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetManage/assetManageAdd.html", 
 			title: "新增资产",
@@ -193,7 +193,7 @@ layui.config({
 			}});
 	}
 	
-    $("body").on("click", "#assetlistreloadTable", function(){
+    $("body").on("click", "#assetlistreloadTable", function() {
     	loadassetTable();
     });
     
@@ -202,7 +202,7 @@ layui.config({
     }
     
     // 搜索表单
-	$("body").on("click", "#assetlistSearch", function(){
+	$("body").on("click", "#assetlistSearch", function() {
     	table.reload("assetlistTable", {page: {curr: 1}, where: getTableParams()});
 	});
     

@@ -92,12 +92,12 @@ layui.config({
 	    /********* tree 处理   end *************/
 	    
 	    //取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    
 	    //确定
-	    $("body").on("click", "#confimChoose", function(){
+	    $("body").on("click", "#confimChoose", function() {
 	    	var nodes = ztree.getCheckedNodes(true);
 	    	for(var i = 0; i < nodes.length; i++){
 	    		var node = nodes[i];

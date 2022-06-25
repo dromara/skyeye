@@ -96,7 +96,7 @@ layui.config({
 	    form.render();
     }
 	
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	
@@ -112,7 +112,7 @@ layui.config({
 			}});
 	}
 	
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

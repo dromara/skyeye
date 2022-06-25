@@ -85,7 +85,7 @@ var activitiUtil = {
      * 初始化审批人选择按钮事件
      */
     initApprovalPersonChooseBtnEvent: function (){
-        $("body").on("click", ".chooseApprovalPersonBtn", function(){
+        $("body").on("click", ".chooseApprovalPersonBtn", function() {
             activitiUtil.openApprovalPersonChoosePage();
         });
     },

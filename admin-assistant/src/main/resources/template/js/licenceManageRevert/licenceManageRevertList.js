@@ -173,7 +173,7 @@ layui.config({
 	}
 
 	// 添加证照归还
-	$("body").on("click", "#addRevertBean", function(){
+	$("body").on("click", "#addRevertBean", function() {
     	_openNewWindows({
 			url: "../../tpl/licenceManageRevert/licenceManageRevertAdd.html", 
 			title: "证照归还申请",
@@ -199,7 +199,7 @@ layui.config({
 	});
 
 	// 刷新证照归还列表
-    $("body").on("click", "#reloadRevertTable", function(){
+    $("body").on("click", "#reloadRevertTable", function() {
     	loadRevertTable();
     });
     

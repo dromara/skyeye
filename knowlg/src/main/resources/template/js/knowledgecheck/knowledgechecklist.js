@@ -145,11 +145,11 @@ layui.config({
 	form.render();
 	
 	//搜索未审核的表单
-	$("body").on("click", "#formNoCheckSearch", function(){
+	$("body").on("click", "#formNoCheckSearch", function() {
 		refreshTable();
 	});
 	
-	$("body").on("click", "#reloadNoCheckTable", function(){
+	$("body").on("click", "#reloadNoCheckTable", function() {
 		loadTable();
 	});
 	
@@ -300,11 +300,11 @@ layui.config({
 	};
     
 	// 搜索表单
-	$("body").on("click", "#formCheckedSearch", function(){
+	$("body").on("click", "#formCheckedSearch", function() {
 		refreshCheckedTable();
 	});
 	
-	$("body").on("click", "#reloadCheckedTable", function(){
+	$("body").on("click", "#reloadCheckedTable", function() {
     	loadCheckedTable();
     });
     

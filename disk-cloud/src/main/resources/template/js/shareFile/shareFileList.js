@@ -112,10 +112,10 @@ layui.config({
 		}
 		
 		//鼠标移入移出
-		$("body").on("mouseenter", ".file-list-content .file-item", function(){
+		$("body").on("mouseenter", ".file-list-content .file-item", function() {
 			$(this).find(".download").show();
 		});
-		$("body").on("mouseleave", ".file-list-content .file-item", function(){
+		$("body").on("mouseleave", ".file-list-content .file-item", function() {
 			$(this).find(".download").hide();
 		});
 		
@@ -149,7 +149,7 @@ layui.config({
 		});
 		
 		//文件夹点击
-		$("body").on("click", ".file-list-content .file-item", function(){
+		$("body").on("click", ".file-list-content .file-item", function() {
 			var fileType = $(this).attr("filetype");
 			if(fileType === 'folder'){//文件夹
 				folderId = $(this).attr("rowid");
@@ -159,7 +159,7 @@ layui.config({
 		});
 		
 		//保存
-		$("body").on("click", "#saveBtn", function(){
+		$("body").on("click", "#saveBtn", function() {
 			var checkList = $("#fileListContent :checkbox:checked");
 			if(checkList.length > 0){
 				chooseSaveIds.splice(0, chooseSaveIds.length);
@@ -189,7 +189,7 @@ layui.config({
 		});
 		
 		//全选/全不选
-		$("body").on("click", "#checkAll", function(){
+		$("body").on("click", "#checkAll", function() {
 			$("#fileListContent :checkbox").prop("checked", $(this).prop("checked"));
 		});
 		
@@ -213,12 +213,12 @@ layui.config({
 		});
 		
 		//登陆按钮
-		$("body").on("click", "#loginBtn", function(){
+		$("body").on("click", "#loginBtn", function() {
 			location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/shareFile/shareFileList.html?id=" + rowId);
 		});
 		
 		//退出
-		$("body").on("click", "#exitBtn", function(){
+		$("body").on("click", "#exitBtn", function() {
 			winui.window.confirm('确认注销吗?', {id: 'exit-confim', icon: 3, title: '提示', skin: 'msg-skin-message', success: function(layero, index){
 				var times = $("#exit-confim").parent().attr("times");
 				var zIndex = $("#exit-confim").parent().css("z-index");
@@ -234,12 +234,12 @@ layui.config({
 		});
 		
 		//控制台
-		$("body").on("click", "#consoleDesk", function(){
+		$("body").on("click", "#consoleDesk", function() {
 			location.href = "../../tpl/index/index.html";
 		});
 		
 		//全部文件
-		$("body").on("click", "#allFileList", function(){
+		$("body").on("click", "#allFileList", function() {
 			folderId = '-1';
 			$("#filePathShow").html('<a><cite>全部文件</cite></a>');
 			//清空路径数组
@@ -248,7 +248,7 @@ layui.config({
 		});
 		
 		//上一步
-		$("body").on("click", "#upFolderPath", function(){
+		$("body").on("click", "#upFolderPath", function() {
 			if(pathArray.length > 1){
 				folderId = pathArray[pathArray.length - 2].id;
 			} else {
@@ -259,7 +259,7 @@ layui.config({
 		});
 		
 		//文件目录点击
-		$("body").on("click", ".folderNamePath", function(){
+		$("body").on("click", ".folderNamePath", function() {
 			folderId = $(this).attr("rowid");
 			var pathArrayIndex = 0;
 			$.each(pathArray, function(i, item){

@@ -218,7 +218,7 @@ layui.config({
 	}
 	
 	// 添加用户
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/syseveuser/syseveuseradd.html", 
 			title: "新增用户",
@@ -246,7 +246,7 @@ layui.config({
 			}});
 	}
 	
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     

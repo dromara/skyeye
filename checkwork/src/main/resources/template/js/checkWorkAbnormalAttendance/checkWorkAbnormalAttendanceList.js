@@ -130,7 +130,7 @@ layui.config({
     });
     
     // 新增申诉
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/checkWorkAbnormalAttendance/checkWorkAbnormalAttendanceAdd.html", 
 			title: "新增申诉",
@@ -159,12 +159,12 @@ layui.config({
 	}
 	
 	// 搜索我的申诉申请
-	$("body").on("click", "#searchForm1", function(){
+	$("body").on("click", "#searchForm1", function() {
     	table.reload("myAppealTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
 	// 刷新我的申诉申请
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	reloadMyAppealTable();
     });
     

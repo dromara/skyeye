@@ -64,7 +64,7 @@ layui.config({
 	form.render();
 	
 	// 新增用品
-	$("body").on("click", "#addArticlesBean", function(){
+	$("body").on("click", "#addArticlesBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetarticles/assetarticlesadd.html", 
 			title: "新增用品",
@@ -128,7 +128,7 @@ layui.config({
 	}
 	
     // 刷新用品数据
-    $("body").on("click", "#reloadLieBiaoTable", function(){
+    $("body").on("click", "#reloadLieBiaoTable", function() {
 		loadTable();
     });
     
@@ -138,7 +138,7 @@ layui.config({
     }
     
 	// 搜索列表表单
-	$("body").on("click", "#liebiaoSearch", function(){
+	$("body").on("click", "#liebiaoSearch", function() {
     	table.reload("liebiaoTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	

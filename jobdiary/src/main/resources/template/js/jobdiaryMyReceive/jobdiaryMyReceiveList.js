@@ -164,12 +164,12 @@ layui.config({
 	}
 
     // 我收到的日志全部设置为已读
-    $("body").on("click", "#alreadyRead", function(){
+    $("body").on("click", "#alreadyRead", function() {
         alreadyRead();
     });
 	
     // 时间线查看自己收到的日志
-    $("body").on("click", "#timeLineSel", function(){
+    $("body").on("click", "#timeLineSel", function() {
         _openNewWindows({
             url: "../../tpl/jobdiaryMyReceive/jobdiaryMyReceiveTimeLine.html", 
             title: "日志时间线",
@@ -192,12 +192,12 @@ layui.config({
     };
     
     // 我收到的日志刷新
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
     
 	// 我收到的日志点击搜索
-	$("body").on("click", "#searchMyReceived", function(){
+	$("body").on("click", "#searchMyReceived", function() {
     	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	

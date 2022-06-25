@@ -175,11 +175,11 @@ layui.config({
  	        return false;
  	    });
  	    
-	    $("body").on("click", ".enclosureItem", function(){
+	    $("body").on("click", ".enclosureItem", function() {
 	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
 	    });
  	    
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});

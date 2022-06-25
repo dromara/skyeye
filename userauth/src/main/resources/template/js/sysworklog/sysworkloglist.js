@@ -34,7 +34,7 @@ layui.config({
 	    }
 	});
 	
-	$("body").on("click", "#searchForm", function(){
+	$("body").on("click", "#searchForm", function() {
 		refreshTable();
 	});
 	

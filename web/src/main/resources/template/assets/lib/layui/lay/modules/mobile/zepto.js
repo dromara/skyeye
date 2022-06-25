@@ -151,7 +151,7 @@ layui.define(function(exports){
 
       container = containers[name]
       container.innerHTML = '' + html
-      dom = $.each(slice.call(container.childNodes), function(){
+      dom = $.each(slice.call(container.childNodes), function() {
         container.removeChild(this)
       })
     }
@@ -440,7 +440,7 @@ layui.define(function(exports){
       // need to check if document.body exists for IE as that browser reports
       // document ready when it hasn't yet created the body element
       if (readyRE.test(document.readyState) && document.body) callback($)
-      else document.addEventListener('DOMContentLoaded', function(){ callback($) }, false)
+      else document.addEventListener('DOMContentLoaded', function() { callback($) }, false)
       return this
     },
     get: function(idx){

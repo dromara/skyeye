@@ -850,7 +850,7 @@ layui.define(["jquery"], function(exports) {
 		                'transition': 'all ' + parent.options.animationDuration + 's ' + parent.options.easing + ' ' + self._calcDelay() + 'ms'
 		            });
 		            //Events
-		            self.on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){
+		            self.on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function() {
 		                self._onTransitionEnd();
 		            });
 		            return self;

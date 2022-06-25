@@ -463,7 +463,7 @@ layui.config({
 	
 	form.render();
 	//搜索申请类型实体
-	$("body").on("click", "#formSearch", function(){
+	$("body").on("click", "#formSearch", function() {
 		refreshTable();
 	});
 	//搜索条件
@@ -474,11 +474,11 @@ layui.config({
     	table.reload("messageTable", {page: {curr: 1}, where:{typeId: clickId, title: $("#title").val()}});
     }
   	//刷新申请类型实体
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 	//刷新申请类型
-	$("body").on("click", "#flashGroup", function(){
+	$("body").on("click", "#flashGroup", function() {
 		showLeft();
 	});
     exports('actmodletypelist', {});

@@ -58,7 +58,7 @@ layui.config({
     });
 
 	// 新增
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/crmcustomerfrom/crmcustomerfromadd.html", 
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
@@ -148,7 +148,7 @@ layui.config({
 	});
 
 	// 刷新
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
 	});
 

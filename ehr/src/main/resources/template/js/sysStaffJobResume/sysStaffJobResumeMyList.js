@@ -77,7 +77,7 @@ layui.config({
 	form.render();
 	
 	// 录入工作履历
-	$("body").on("click", "#addBean", function(){
+	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sysStaffJobResume/sysStaffJobResumeAdd.html",
 			title: "录入工作履历",
@@ -128,7 +128,7 @@ layui.config({
     }
 
 	// 刷新数据
-    $("body").on("click", "#reloadTable", function(){
+    $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
 

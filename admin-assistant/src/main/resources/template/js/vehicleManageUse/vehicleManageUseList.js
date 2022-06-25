@@ -154,7 +154,7 @@ layui.config({
 	}
 	
 	// 新增用车申请
-	$("body").on("click", "#addUseBean", function(){
+	$("body").on("click", "#addUseBean", function() {
     	_openNewWindows({
 			url: "../../tpl/vehicleManageUse/vehicleManageUseAdd.html", 
 			title: "车辆申请",
@@ -192,7 +192,7 @@ layui.config({
 		return false;
 	});
 
-	$("body").on("click", "#reloadTable", function(){
+	$("body").on("click", "#reloadTable", function() {
 		loadTable();
     });
 

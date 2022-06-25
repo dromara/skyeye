@@ -144,7 +144,7 @@
         c(err, data);
         if (self.uses > 40) {
           self.reset();
-          analyzeAll(self, null, function(){});
+          analyzeAll(self, null, function() {});
         }
       });
     },
@@ -190,7 +190,7 @@
 
     var timeBudget = typeof doc.timeout == "number" ? [doc.timeout] : null;
     if (!query) {
-      analyzeAll(srv, timeBudget, function(){});
+      analyzeAll(srv, timeBudget, function() {});
       return;
     }
 

@@ -116,7 +116,7 @@ layui.config({
 	}
 	
 	// 新增资产归还
-	$("body").on("click", "#addReturnBean", function(){
+	$("body").on("click", "#addReturnBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetManageReturn/assetManageReturnAdd.html", 
 			title: "资产归还申请",
@@ -198,7 +198,7 @@ layui.config({
 	});
 
 	// 刷新归还数据
-    $("body").on("click", "#reloadReturnTable", function(){
+    $("body").on("click", "#reloadReturnTable", function() {
     	loadReturnTable();
     });
     

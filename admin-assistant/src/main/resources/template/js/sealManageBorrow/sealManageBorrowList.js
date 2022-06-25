@@ -172,7 +172,7 @@ layui.config({
 	}
 	
 	// 添加印章借用
-	$("body").on("click", "#addBorrowBean", function(){
+	$("body").on("click", "#addBorrowBean", function() {
     	_openNewWindows({
 			url: "../../tpl/sealManageBorrow/sealManageBorrowAdd.html", 
 			title: "印章借用申请",
@@ -198,7 +198,7 @@ layui.config({
 	});
 
 	// 刷新印章借用列表
-    $("body").on("click", "#reloadBorrowTable", function(){
+    $("body").on("click", "#reloadBorrowTable", function() {
     	loadBorrowTable();
     });
     

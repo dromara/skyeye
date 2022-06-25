@@ -178,14 +178,14 @@ layui.config({
 		});
 	    
 	    // 下载canvas图片
-	    $("body").on("click", "#download", function(){
+	    $("body").on("click", "#download", function() {
 	    	var oCanvas = document.getElementById("thecanvas");
 	    	var img_data1 = Canvas2Image.saveAsPNG(oCanvas, true).getAttribute('src');
 	    	saveFile(img_data1, 'richer.png');
 	    });
 	    
 	    // 生成图片
-	    $("body").on("click", "#createPic", function(){
+	    $("body").on("click", "#createPic", function() {
 	    	if(isNull($("#printPic").html().trim())){
 	    		winui.window.msg('请填写HTML内容', {icon: 2, time: 2000});
 	    	} else {
@@ -214,7 +214,7 @@ layui.config({
 	    };
 	    
 	    // 取消
-	    $("body").on("click", "#cancle", function(){
+	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    

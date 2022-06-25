@@ -143,7 +143,7 @@ layui.define(["jquery"], function(exports) {
 
                 var li = $(this).closest('li'), tag = li.find('.tag-editor-tag');
                 if (o.beforeTagDelete(el, ed, tag_list, tag.html()) === false) return false;
-                tag.addClass('deleted').animate({width: 0}, 175, function(){ li.remove(); set_placeholder(); });
+                tag.addClass('deleted').animate({width: 0}, 175, function() { li.remove(); set_placeholder(); });
                 update_globals();
                 return false;
             });
@@ -154,7 +154,7 @@ layui.define(["jquery"], function(exports) {
                     if (e.ctrlKey || e.which > 1) {
                         var li = $(this).closest('li'), tag = li.find('.tag-editor-tag');
                         if (o.beforeTagDelete(el, ed, tag_list, tag.html()) === false) return false;
-                        tag.addClass('deleted').animate({width: 0}, 175, function(){ li.remove(); set_placeholder(); });
+                        tag.addClass('deleted').animate({width: 0}, 175, function() { li.remove(); set_placeholder(); });
                         update_globals();
                         return false;
                     }

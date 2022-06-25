@@ -211,7 +211,7 @@ layui.config({
 		}
 		
 		//接口列表实体点击
-		$("body").on("click", "#appList .api-item", function(){
+		$("body").on("click", "#appList .api-item", function() {
 			if($(this).hasClass("active")){//当前显示项为当前点击项，不做任何操作
 			} else {
 				$("#appList .api-item").removeClass("active");
@@ -233,7 +233,7 @@ layui.config({
 		});
 		
 		// 退出
-		$("body").on("click", "#exitBtn", function(){
+		$("body").on("click", "#exitBtn", function() {
 			winui.window.confirm('确认注销吗?', {id: 'exit-confim', icon: 3, title: '提示', skin: 'msg-skin-message', success: function(layero, index){
 				var times = $("#exit-confim").parent().attr("times");
 				var zIndex = $("#exit-confim").parent().css("z-index");
@@ -256,12 +256,12 @@ layui.config({
 	    });
 		
 		// 控制台
-		$("body").on("click", "#consoleDesk", function(){
+		$("body").on("click", "#consoleDesk", function() {
 			location.href = "../../tpl/index/index.html";
 		});
 
 		// 左上角logo点击
-		$("body").on("click", ".sys-logo", function(){
+		$("body").on("click", ".sys-logo", function() {
 			loadDefaultMain();
 		});
 
@@ -288,7 +288,7 @@ layui.config({
 		}
 
 		// 导出为MD文档
-		$("body").on("click", "#exportMD", function(){
+		$("body").on("click", "#exportMD", function() {
 			var params = {
 				appId: $("#apiMicroservicesId").val(),
 				rowId: $(this).attr("apiId")
