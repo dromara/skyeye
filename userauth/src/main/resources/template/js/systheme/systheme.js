@@ -41,7 +41,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
 						        winui.resetBg(bgSrc);
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
@@ -53,7 +53,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
 						        winui.resetLockBg(bgSrc);
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
@@ -64,7 +64,7 @@ layui.config({
 				        AjaxPostUtil.request({url: reqBasePath + "sys024", params: {themeColor: color}, type: 'json', method: "PUT", callback: function(json){
 			 	   			if (json.returnCode == 0) {
 			 	   				winui.resetColor(color);
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
@@ -90,7 +90,7 @@ layui.config({
 				    if(vagueBgSrc == '1'){
 				    	$("#winBgPicVague").val(false);
 				    	$("#winBgPicVague").attr("checked", false);
-				    }else{
+				    } else {
 				    	$("#winBgPicVague").val(true);
 				    	$("#winBgPicVague").attr("checked", true);
 				    }
@@ -125,7 +125,7 @@ layui.config({
 	    		    			if (json.returnCode == 0) {
 	    		    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 	    		    				refreshGrid("cus-background-choose", {params:{}});
-	    		    			}else{
+	    		    			} else {
 	    		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	    		    			}
 	    		    		}});
@@ -136,7 +136,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
 						        winui.resetBg(bgSrc);
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
@@ -167,7 +167,7 @@ layui.config({
 	    		    			if (json.returnCode == 0) {
 	    		    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 	    		    				refreshGrid("cus-lockscreen-choose", {params:{}});
-	    		    			}else{
+	    		    			} else {
 	    		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	    		    			}
 	    		    		}});
@@ -178,7 +178,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
 						        winui.resetLockBg(bgSrc);
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
@@ -201,11 +201,11 @@ layui.config({
 		    			if (json.returnCode == 0) {
 		    				winui.window.msg("上传成功", {icon: 1, time: 2000});
 		    				refreshGrid("cus-background-choose", {params:{}});
-		    			}else{
+		    			} else {
 		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    			}
 		    		}});
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			},
@@ -227,11 +227,11 @@ layui.config({
 		    			if (json.returnCode == 0) {
 		    				winui.window.msg("上传成功", {icon: 1, time: 2000});
 		    				refreshGrid("cus-lockscreen-choose", {params:{}});
-		    			}else{
+		    			} else {
 		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    			}
 		    		}});
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			},
@@ -246,7 +246,7 @@ layui.config({
 	    	AjaxPostUtil.request({url:reqBasePath + "sys028", params:{winTaskPosition: data.value}, type: 'json', callback: function(json){
  	   			if (json.returnCode == 0) {
  	   				winui.resetTaskbar(data.value);
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -256,7 +256,7 @@ layui.config({
 	    	AjaxPostUtil.request({url:reqBasePath + "sys027", params:{winStartMenuSize: data.value}, type: 'json', callback: function(json){
  	   			if (json.returnCode == 0) {
  	   				winui.resetStartSize(data.value);
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -275,7 +275,7 @@ layui.config({
 	 	   					$(this).find(".title-icon").hide();
 	 	   					$(this).find("font").hide();
  	   					});
- 	   				}else{//图标+文字
+ 	   				} else {//图标+文字
 	 	   				winuiTaskbarTask.each(function () {
 	 	   					$(this).find("li").removeClass("task-item-icon-box");
 	 	   					$(this).find(".title-icon-big").hide();
@@ -283,7 +283,7 @@ layui.config({
 		   					$(this).find("font").show();
 	 	   				});
  	   				}
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -296,7 +296,7 @@ layui.config({
  			$(data.elem).val(data.elem.checked);
  			if(data.elem.checked){
  				winBgPicVague = '0';
- 			}else{
+ 			} else {
  				winBgPicVague = '1';
  			}
  			var params = {
@@ -306,7 +306,7 @@ layui.config({
  			AjaxPostUtil.request({url: reqBasePath + "sys029", params: params, type: 'json', method: "POST", callback: function(json){
  	   			if (json.returnCode == 0) {
  	   				winui.resetVagueBgSrc(winBgPicVague, winBgPicVagueValue);
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});

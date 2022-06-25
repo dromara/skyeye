@@ -66,7 +66,7 @@ layui.config({
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
-                            }else{
+                            } else {
                                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }, async: true});
@@ -91,7 +91,7 @@ layui.config({
                         initAreaCity(bean);
                     }
                     form.render('select');
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -112,7 +112,7 @@ layui.config({
                         initAreaChildArea(bean);
                     }
                     form.render('select');
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -133,7 +133,7 @@ layui.config({
                         initAreaTownShip(bean);
                     }
                     form.render('select');
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -153,7 +153,7 @@ layui.config({
                         $("#townshipId").val(bean.townshipId);
                     }
                     form.render('select');
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -162,21 +162,21 @@ layui.config({
         form.on('select(areaProvince)', function(data){
             layui.$(data.elem).parent('dd').nextAll().remove();
             if(isNull(data.value) || data.value == '请选择'){
-            }else{
+            } else {
                 loadChildCityArea();
             }
         });
         form.on('select(areaCity)', function(data){
             layui.$(data.elem).parent('dd').nextAll().remove();
             if(isNull(data.value) || data.value == '请选择'){
-            }else{
+            } else {
                 loadChildArea();
             }
         });
         form.on('select(area)', function(data){
             layui.$(data.elem).parent('dd').nextAll().remove();
             if(isNull(data.value) || data.value == '请选择'){
-            }else{
+            } else {
                 loadChildAreaTownShip();
             }
         });
@@ -192,7 +192,7 @@ layui.config({
                     str += '</select></dd>';
                     $("#lockParentSel").append(str);
                     form.render('select');
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -209,7 +209,7 @@ layui.config({
                     str += '</select></dd>';
                     $("#lockParentSel").append(str);
                     form.render('select');
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -226,7 +226,7 @@ layui.config({
                     str += '</select></dd>';
                     $("#lockParentSel").append(str);
                     form.render('select');
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});

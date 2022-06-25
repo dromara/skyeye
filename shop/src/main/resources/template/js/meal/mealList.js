@@ -40,7 +40,7 @@ layui.config({
             { field: 'state', title: '状态', width: 80, align: "center", templet: function(d){
                 if(d.state == 1){
                     return "下线";
-                }else{
+                } else {
                     return "上线";
                 }
             }},
@@ -98,7 +98,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});

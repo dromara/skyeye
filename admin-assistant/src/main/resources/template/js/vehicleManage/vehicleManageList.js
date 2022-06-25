@@ -39,7 +39,7 @@ layui.config({
 		        { field: 'vehicleImg', title: '图片', align: 'center', width: 60, templet: function(d){
 		        	if(isNull(d.vehicleImg)){
 		        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
-		        	}else{
+		        	} else {
 		        		return '<img src="' + fileBasePath + d.vehicleImg + '" class="photo-img" lay-event="vehicleImg">';
 		        	}
 		        }},
@@ -51,7 +51,7 @@ layui.config({
 		        		return "<span class='state-down'>维修</span>";
 		        	}else if(d.state == '3'){
 		        		return "<span class='state-down'>报废</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},
@@ -114,7 +114,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadVehicleTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -129,7 +129,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadVehicleTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -144,7 +144,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadVehicleTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -159,7 +159,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadVehicleTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

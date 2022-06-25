@@ -634,7 +634,7 @@ layui.define(["jquery", 'form'], function(exports) {
 			var curEditTdClass = curEditTd.attr("class");
 			if(curEditTdClass.indexOf("Column") >= 0){
 				deleteChenColumnOption();
-			}else{
+			} else {
 				deleteChenRowOption();
 			}
 		}
@@ -648,7 +648,7 @@ layui.define(["jquery", 'form'], function(exports) {
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
 				deleteColumnList.push(quOptionId);
-			}else{
+			} else {
 				delQuOptionCallBack(optionParent);
 			}
 		}

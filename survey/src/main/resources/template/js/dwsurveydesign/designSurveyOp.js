@@ -21,21 +21,21 @@ layui.config({
 		 		hdb.registerHelper('compare1', function(v1, v2, options) {
 		 			if(v1 == v2){
 		 				return "checked";
-		 			}else{
+		 			} else {
 		 				return "";
 		 			}
 		 		});
 		 		hdb.registerHelper('compare2', function(v1, v2, options) {
 		 			if(v1 != v2){
 		 				return "readonly";
-		 			}else{
+		 			} else {
 		 				return "";
 		 			}
 		 		});
 		 		hdb.registerHelper('compare3', function(v1, v2, v3, options) {
 		 			if(v1 == v2){
 		 				return v3;
-		 			}else{
+		 			} else {
 		 				return "";
 		 			}
 		 		});
@@ -52,7 +52,7 @@ layui.config({
 		 		
 		 		if(json.bean.ynEndTime == '1'){
 		 			$("#endTimeHide").hide();
-		 		}else{
+		 		} else {
 		 			$("#endTimeHide").show();
 		 		}
 		 		
@@ -64,7 +64,7 @@ layui.config({
 					var check = data.elem.checked;
 			    	if(check){//选中
 			    		$("#ruleCode").attr("readonly", false);
-			    	}else{
+			    	} else {
 			    		$("#ruleCode").val("");
 			    		$("#ruleCode").attr("readonly", true);
 			    	}
@@ -74,7 +74,7 @@ layui.config({
 					var check = data.elem.checked;
 			    	if(check){//选中
 			    		$("#endNum").attr("readonly", false);
-			    	}else{
+			    	} else {
 			    		$("#endNum").val("");
 			    		$("#endNum").attr("readonly", true);
 			    	}
@@ -85,7 +85,7 @@ layui.config({
 			    	if(check){//选中
 			    		$("#endTimeHide").hide();
 			    		$("#endTime").attr("readonly", false);
-			    	}else{
+			    	} else {
 			    		$("#endTimeHide").show();
 			    		$("#endTime").val("");
 			    		$("#endTime").attr("readonly", true);
@@ -101,13 +101,13 @@ layui.config({
 			        	
 			        	if($('input[name=effective]').get(0).checked){
 			        		params.effective = '4';
-			        	}else{
+			        	} else {
 			        		params.effective = '1';
 			        	}
 			        	
 			        	if($('input[name=effectiveIp]').get(0).checked){
 			        		params.effectiveIp = '1';
-			        	}else{
+			        	} else {
 			        		params.effectiveIp = '0';
 			        	}
 			        	
@@ -118,14 +118,14 @@ layui.config({
 			        			winui.window.msg('请填写答卷密码', {icon: 2, time: 2000});
 			        			return false;
 			        		}
-			        	}else{
+			        	} else {
 			        		params.rule = '1';
 			        		params.ruleCode = '';
 			        	}
 			        	
 			        	if($('input[name=refresh]').get(0).checked){
 			        		params.refresh = '1';
-			        	}else{
+			        	} else {
 			        		params.refresh = '0';
 			        	}
 			        	
@@ -136,7 +136,7 @@ layui.config({
 			        			winui.window.msg('请填写答卷份数', {icon: 2, time: 2000});
 			        			return false;
 			        		}
-			        	}else{
+			        	} else {
 			        		params.ynEndNum = '0';
 			        		params.endNum = '0';
 			        	}
@@ -148,7 +148,7 @@ layui.config({
 			        			winui.window.msg('请填写答卷结束时间', {icon: 2, time: 2000});
 			        			return false;
 			        		}
-			        	}else{
+			        	} else {
 			        		params.ynEndTime = '0';
 			        		params.endTime = '';
 			        	}
@@ -157,7 +157,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});

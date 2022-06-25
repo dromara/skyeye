@@ -55,7 +55,7 @@ layui.config({
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#schoolId").html("");
 						form.render('select');
-					}else{
+					} else {
 						//加载年级
 						initGrade();
 					}
@@ -80,7 +80,7 @@ layui.config({
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#subjectId").html("");
 						form.render('select');
-					}else{
+					} else {
 						//加载科目
 						initSubject();
 					}

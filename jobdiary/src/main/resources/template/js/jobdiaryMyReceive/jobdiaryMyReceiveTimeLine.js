@@ -49,7 +49,7 @@ layui.config({
 		   				$.each(json.rows, function(index, bean) {
 		   					if(index == 0 && page == 1){
 		   						bean.showClass = 'first';
-		   					}else{
+		   					} else {
 		   						bean.showClass = 'date02';
 		   					}
 		   					$.each(bean.dayChild, function(i, item){
@@ -88,7 +88,7 @@ layui.config({
 		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
 						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
 						next(lis.join(''), (page * 12) < json.total);
-		   			}else{
+		   			} else {
 		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});

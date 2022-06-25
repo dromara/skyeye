@@ -21,12 +21,12 @@ layui.config({
 	        	if(json.bean.menuIconType == '1'){
 		        	if(isNull(json.bean.menuIconBg)){
 		        		str += '<div class="winui-icon winui-icon-font" style="width: 20px; height: 20px;">';
-		        	}else{
+		        	} else {
 		        		str += '<div class="winui-icon winui-icon-font" style="text-align: center; padding: 7px; width: 20px; height: 20px; background-color:' + json.bean.menuIconBg + '">';
 		        	}
 		        	if(isNull(json.bean.menuIconColor)){
 		        		str += '<i class="fa fa-fw ' + json.bean.menuIcon + '" style="color: white"></i>';
-		        	}else{
+		        	} else {
 		        		str += '<i class="fa fa-fw ' + json.bean.menuIcon + '" style="color: ' + json.bean.menuIconColor + '"></i>';
 		        	}
 		        	str += '</div>';
@@ -37,7 +37,7 @@ layui.config({
 	        	
 	        	if(json.bean.parentId == '0'){
 	        		$("#menuLevel").html("创世菜单");
-	        	}else{
+	        	} else {
 	        		$("#menuLevel").html( "子菜单-->" + json.bean.menuLevel + "级子菜单");
 	        	}
 	        	matchingLanguage();

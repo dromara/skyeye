@@ -38,7 +38,7 @@ layui.config({
 			        		return "男";
 			        	}else if(d.userSex == '2'){
 			        		return "女";
-			        	}else{
+			        	} else {
 			        		return "参数错误";
 			        	}
 			        }},
@@ -126,11 +126,11 @@ layui.config({
  	 	        		if (json.returnCode == 0) {
  	 	        			parent.layer.close(index);
  	 	        			parent.refreshCode = '0';
- 	 	        		}else{
+ 	 	        		} else {
  	 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	 	        		}
  	 	        	}});
-        		}else{
+        		} else {
         			winui.window.msg("请选择审批人!", {icon: 2, time: 2000});
         		}
  	        }

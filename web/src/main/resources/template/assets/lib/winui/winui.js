@@ -340,7 +340,7 @@
             	if(vagueBgSrc == '1'){
             		$('.win-bg-img').removeClass('.win-bg-vague');
             		$('.win-bg-img').css({'opacity': 0});
-            	}else{
+            	} else {
             		this.settings.vagueBgSrcValue = vagueBgSrcValue;
             		$('.win-bg-img').addClass('win-bg-vague');//模糊化
             		$('.win-bg-img').css({'opacity': this.settings.vagueBgSrcValue / 10});

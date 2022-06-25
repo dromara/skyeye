@@ -46,7 +46,7 @@ layui.config({
 		 		hdb.registerHelper('compare2', function(v1, v2, options) {
 				 	if(isNull(v1)){
 		 				return '';
-		 			}else{
+		 			} else {
 		 				return '<button class="layui-btn layui-btn-sm aysnMenu" rowid="' + v2 + '">下载</button>';
 		 			}
 			 	});
@@ -97,7 +97,7 @@ layui.config({
     form.on('checkbox(checkboxProperty)', function(data){
     	if($('#sysSecondType input:checkbox:checked').length == $('#sysSecondType input:checkbox').length){
     		$("#sysSecondType").find("li").find('a[rowid="111"]').parent().addClass('active');
-    	}else{
+    	} else {
     		$("#sysSecondType").find("li").find('a[rowid="111"]').parent().removeClass('active');
     	}
 		initDate();
@@ -138,7 +138,7 @@ layui.config({
 				AjaxPostUtil.request({url:reqBasePath + "sysimportantsynchronization001", params:{rowId: downLoadId, url: val}, type: 'json', callback: function(json){
 	    			if (json.returnCode == 0) {
 	    				winui.window.msg("同步成功", {icon: 1, time: 2000});
-	    			}else{
+	    			} else {
 	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	    			}
 	    		}});

@@ -232,7 +232,7 @@ function loadUploadMethod(){
     			if (json.returnCode == 0) {
     				//分块存在，跳过
 					deferred.reject();
-    			}else{
+    			} else {
     				//分块不存在或不完整，重新发送该分块内容
 					deferred.resolve();
     			}
@@ -247,7 +247,7 @@ function loadUploadMethod(){
 			AjaxPostUtil.request({url:reqBasePath + "sysenclosure008", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function(json){
     			if (json.returnCode == 0) {
     				addToArray(json.bean);
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

@@ -32,7 +32,7 @@ layui.config({
    			if (json.returnCode == 0) {
  	   			renderCharts1(json.rows);
  	   			matchingLanguage();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

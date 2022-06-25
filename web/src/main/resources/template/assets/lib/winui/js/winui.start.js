@@ -39,7 +39,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
         	if(item.menuIconType === '1' || item.menuIconType == 1){//icon
         		if(!isNull(item.menuIconColor)){
         			icon = '<i class="fa ' + item.icon + ' fa-fw" style="color: ' + item.menuIconColor + '"></i>';
-        		}else{
+        		} else {
         			icon = '<i class="fa ' + item.icon + ' fa-fw"></i>';
         		}
         		winIcon = (item.icon == '' || item.icon == undefined) ? '' : 'win-icon="' + item.icon + '"';
@@ -49,13 +49,13 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
         	}
             if(index == 0){
             	var extend = item.extend ? ' layui-nav-itemed' : '';
-            }else{
+            } else {
             	var extend = '';
             }
             html += '<li class="layui-nav-item ' + isParent + ' ' + extend + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxopen + ' ' + winIcon + ' ' + menuIconBg + ' ' + menuIconColor + ' ' + menuSysWinUrl + ' ' + menuDeskTopId + '>';
             if(!isNull(item.menuIconBg)){
             	html += '<a><div class="winui-menu-icon" style="background-color: ' + item.menuIconBg + '!important;">';
-            }else{
+            } else {
             	html += '<a><div class="winui-menu-icon">';
             }
             html += icon;
@@ -82,7 +82,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                     	cWinIcon = (cItem.icon == '' || cItem.icon == undefined) ? '' : 'win-icon="' + cItem.icon + '"';
                     	if(!isNull(cItem.menuIconColor)){
                         	cicon = '<i class="fa ' + cItem.icon + ' fa-fw" style="color: ' + cItem.menuIconColor + '"></i>';
-                        }else{
+                        } else {
                         	cicon = '<i class="fa ' + cItem.icon + ' fa-fw"></i>';
                         }
                 	}else if(cItem.menuIconType === '2' || cItem.menuIconType == 2){//图片
@@ -92,7 +92,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                     html += '<dd ' + cId + ' ' + cUrl + ' ' + cTitle + ' ' + cOpentype + ' ' + cMaxopen + ' ' + cWinIcon + ' ' + cmenuIconBg + ' ' + cmenuIconColor + ' ' + cmenuSysWinUrl + ' ' + menuDeskTopId + '>';
                     if(!isNull(cItem.menuIconBg)){
                     	html += '<a><div class="winui-menu-icon" style="background-color: ' + cItem.menuIconBg + '!important;">';
-                    }else{
+                    } else {
                     	html += '<a><div class="winui-menu-icon">';
                     }
                     html += cicon;
@@ -184,7 +184,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
                 $(options.item).each(function (index, item) {
                 	if(item.text == '--'){
                 		div += '<li class="win-left-right-menu"></li>';
-                	}else{
+                	} else {
                 		var icon = item.icon ? '<i class="fa ' + item.icon + ' fa-fw"></i>' : '';
                 		div += '<li>' + icon + item.text + '</li>';
                 	}

@@ -38,7 +38,7 @@ var systemModelUtil = {
                 if(typeof(callback) == "function") {
                     callback(json);
                 }
-            }else{
+            } else {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }, async: false});

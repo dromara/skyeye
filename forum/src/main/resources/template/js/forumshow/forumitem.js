@@ -40,7 +40,7 @@ layui.config({
 			$("#createTime").html(json.bean.createTime);
 			$("#photo").html("<img userId=" + json.bean.userId + " alt='' src=" + json.bean.userPhoto + ">");
 			loadCommentList();//加载评论信息
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -50,12 +50,12 @@ layui.config({
 		var content = $("#commentContent").val();
 		if(isNull(content)){
 			winui.window.msg("评论内容不能为空！", {icon: 2, time: 2000});
-		}else{
+		} else {
 			AjaxPostUtil.request({url:reqBasePath + "forumcontent008", params:{forumId:rowId, content:content}, type: 'json', callback: function(json){
  	   			if (json.returnCode == 0) {
  	   				loadCommentList();//刷新评论信息
  	   				$("#commentContent").val("");
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -93,7 +93,7 @@ layui.config({
 		var replyContent = $("#replyContent").val();
 		if(isNull(replyContent)){
 			winui.window.msg("回复内容不能为空！", {icon: 2, time: 2000});
-		}else{
+		} else {
 			AjaxPostUtil.request({url:reqBasePath + "forumcontent010", params:{forumId:rowId, belongCommentId:belongCommentId, content:replyContent, replyId:commentUserId}, type: 'json', callback: function(json){
  	   			if (json.returnCode == 0) {
  	   				$(".comment-text-textarea").empty();
@@ -119,7 +119,7 @@ layui.config({
 					}else if(replyType == "2"){
 						$("span[rowid=" + belongCommentId + "]").parents('div[class^="se-comment-text"]').eq(0).after(getDataUseHandlebars(replyTemplate, params));
 					}
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -131,7 +131,7 @@ layui.config({
 		if($(".drop-down-menu").is(':hidden')){
 			$(".drop-down-menu").show();
 			$(".suspension-menu-icon").removeClass("rotate").addClass("rotate1");
-		}else{
+		} else {
 			$(".drop-down-menu").hide();
 			$(".suspension-menu-icon").removeClass("rotate1").addClass("rotate");
 		}

@@ -41,7 +41,7 @@ function calculatedTotalPrice(){
 				$("#unitPrice" + rowNum).val((amountOfMoney / rkNum).toFixed(2));
 				$("#taxUnitPrice" + rowNum).val((amountOfMoney / rkNum * taxRate + amountOfMoney / rkNum).toFixed(2));
 				$("#taxLastMoney" + rowNum).val((amountOfMoney * taxRate + amountOfMoney).toFixed(2));
-			}else{
+			} else {
 				$("#unitPrice" + rowNum).val('0.00');
 				$("#taxUnitPrice" + rowNum).val('0.00');
 				$("#taxLastMoney" + rowNum).val('0.00');
@@ -67,7 +67,7 @@ function calculatedTotalPrice(){
 				if(unitPrice != 0){
 					$("#taxUnitPrice" + rowNum).val((taxMoney / rkNum + unitPrice).toFixed(2));
 					$("#taxRate" + rowNum).val((taxMoney / unitPrice / rkNum * 100).toFixed(2));
-				}else{
+				} else {
 					$("#taxUnitPrice" + rowNum).val('0.00');
 					$("#taxRate" + rowNum).val('0.00');
 					$("#unitPrice" + rowNum).val('0.00');
@@ -75,10 +75,10 @@ function calculatedTotalPrice(){
 				}
 				if(amountOfMoney != 0){
 					$("#taxLastMoney" + rowNum).val((amountOfMoney + taxMoney).toFixed(2));
-				}else{
+				} else {
 					$("#taxLastMoney" + rowNum).val('0.00');
 				}
-			}else{
+			} else {
 				$("#taxUnitPrice" + rowNum).val('0.00');
 				$("#taxLastMoney" + rowNum).val('0.00');
 			}
@@ -98,14 +98,14 @@ function calculatedTotalPrice(){
 				if(rkNum != 0 ){
 					$("#taxLastMoney" + rowNum).val((taxUnitPrice * rkNum).toFixed(2));
 					$("#amountOfMoney" + rowNum).val((unitPrice * rowNum).toFixed(2));
-				}else{
+				} else {
 					$("#taxLastMoney" + rowNum).val('0.00');
 					$("#amountOfMoney" + rowNum).val('0.00');
 				}
 				$("#taxMoney" + rowNum).val((taxUnitPrice - unitPrice).toFixed(2));
 				$("#taxRate" + rowNum).val(((taxUnitPrice / unitPrice - 1) * 100).toFixed(2));
 				
-			}else{
+			} else {
 				$("#taxLastMoney" + rowNum).val('0.00');
 				$("#unitPrice" + rowNum).val('0.00');
 				$("#amountOfMoney" + rowNum).val('0.00');
@@ -130,13 +130,13 @@ function calculatedTotalPrice(){
 					$("#taxMoney" + rowNum).val((taxLastMoney / rkNum - unitPrice).toFixed(2));
 					$("#taxRate" + rowNum).val(((taxLastMoney / rkNum / unitPrice - 1 ) * 100).toFixed(2));
 					$("#amountOfMoney" + rowNum).val((unitPrice * rkNum).toFixed(2));
-				}else{
+				} else {
 					$("#amountOfMoney" + rowNum).val('0.00');
 					$("#taxMoney" + rowNum).val('0.00');
 					$("#taxUnitPrice" + rowNum).val('0.00');
 					$("#unitPrice" + rowNum).val('0.00');
 				}
-			}else{
+			} else {
 				$("#taxUnitPrice" + rowNum).val('0.00');
 				$("#unitPrice" + rowNum).val('0.00');
 				$("#amountOfMoney" + rowNum).val('0.00');

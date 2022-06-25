@@ -38,11 +38,11 @@ layui.config({
 			ue.addListener('contentChange',function(editor){
 				if(!initFirst){
 					initFirst = true;
-				}else{
+				} else {
 					parent.$("#editMyNote").addClass('select');
 				}
 			});
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});

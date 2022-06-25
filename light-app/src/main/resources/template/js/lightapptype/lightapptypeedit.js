@@ -64,7 +64,7 @@ layui.config({
 			    	}else if(val == '2'){//图片
 			    		$(".menuIconTypeIsTwo").removeClass("layui-hide");
 			    		$(".menuIconTypeIsOne").addClass("layui-hide");
-			    	}else{
+			    	} else {
 			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 			    	}
 		        });
@@ -89,7 +89,7 @@ layui.config({
 		 	        		params.iconPath = $("#iconPath").val();
 		 	        	}else if(data.field.iconType == '2'){
 		 	        		params.iconPath = $("#iconpicPath").find("input[type='hidden'][name='upload']").attr("oldurl");
-		 	        	}else{
+		 	        	} else {
 		 	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
@@ -97,7 +97,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});

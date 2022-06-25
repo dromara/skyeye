@@ -19,7 +19,7 @@ layui.config({
 				$("#fileSize").html(json.bean.fileSize);
 				matchingLanguage();
 				form.render();
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

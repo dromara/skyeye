@@ -55,7 +55,7 @@ layui.config({
 			        	str += '<span class="state-new">[转]</span>';
 				        if(d.status == 2){
 				        	str += '<span class="state-up"> [正常]</span>';
-				        }else{
+				        } else {
 				        	str += '<span class="state-down"> [预警]</span>';
 				        }
 			        }

@@ -45,7 +45,7 @@ if(isNull(localStorage.getItem("sysMainMation"))){
 		localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
 		initBaseParams();
 	});
-}else{
+} else {
 	sysMainMation = JSON.parse(unescape(localStorage.getItem("sysMainMation")));
 	initBaseParams();
 }
@@ -91,7 +91,7 @@ function setRequestHeaders(xmlhttp) {
 layui.each(customerJS, function(key, jsPath){
 	if(jsPath.lastIndexOf(".js") >=0){
 		document.write('<script type="text/javascript" src="' + jsPath + '?v=' + skyeyeVersion + '"></script>');
-	}else{
+	} else {
 		document.write('<link rel="stylesheet" type="text/css" href="' + jsPath + '?v=' + skyeyeVersion + '"/>');
 	}
 });
@@ -127,7 +127,7 @@ function _openNewWindows(mation){
 	if(isNull(mation.area)){
 		if(mation.maxmin){
 			mation.area = ['100vw', '100vh'];
-		}else{
+		} else {
 			mation.area = ['90vw', '90vh'];
 		}
 	}
@@ -269,7 +269,7 @@ function auth(urlNum){
 				return true;
 			}
 		}
-	}else{
+	} else {
 		winui.window.msg('登录超时，即将返回登录页面.', {icon: 2, time: 2000}, function(){
 			var win = window;
 			while (win != win.top){
@@ -560,7 +560,7 @@ function matchingLanguage(){
 					$.each(_json, function(key, value){
 						if(key === "html"){
 							$(item).html(systemLanguage[value][languageType]);
-						}else{
+						} else {
 							$(item).attr(key, systemLanguage[value][languageType]);
 						}
 					});
@@ -630,10 +630,10 @@ function uploadImg(file, Editor) {
 				var type = url.substr(url.lastIndexOf(".") + 1);
 				if($.inArray(type, imageType) >= 0){
 					Editor.insertValue("![图片alt](" + url + " ''图片title'')");
-				}else{
+				} else {
 					Editor.insertValue("[下载附件](" + url + ")");
 				}
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}
@@ -725,7 +725,7 @@ function getUserStaffHtmlMationByStaffId(staffId){
 	AjaxPostUtil.request({url:reqBasePath + "staff005", params: {rowId: staffId}, type: 'json', method: "GET", callback: function(json){
 		if (json.returnCode == 0) {
 			html = getDataUseHandlebars(template, json);
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}, async: false});
@@ -751,7 +751,7 @@ function resetSingleBreak(id){
 	var _box;
 	if(isNull(id)){
 		_box = $(".weekDay");
-	}else{
+	} else {
 		_box = $("#" + id + " .weekDay");
 	}
 	$.each(_box, function(i, item){
@@ -759,7 +759,7 @@ function resetSingleBreak(id){
 		$(item).removeClass(clas);
 		if(i < 6){
 			$(item).addClass('layui-bg-blue');
-		}else{
+		} else {
 			$(item).addClass('layui-bg-gray');
 		}
 	});
@@ -770,7 +770,7 @@ function resetWeekend(id){
 	var _box;
 	if(isNull(id)){
 		_box = $(".weekDay");
-	}else{
+	} else {
 		_box = $("#" + id + " .weekDay");
 	}
 	$.each(_box, function(i, item){
@@ -778,7 +778,7 @@ function resetWeekend(id){
 		$(item).removeClass(clas);
 		if(i < 5){
 			$(item).addClass('layui-bg-blue');
-		}else{
+		} else {
 			$(item).addClass('layui-bg-gray');
 		}
 	});
@@ -789,7 +789,7 @@ function resetSingleAndDoubleBreak(id){
 	var _box;
 	if(isNull(id)){
 		_box = $(".weekDay");
-	}else{
+	} else {
 		_box = $("#" + id + " .weekDay");
 	}
 	$.each(_box, function(i, item){
@@ -799,7 +799,7 @@ function resetSingleAndDoubleBreak(id){
 			$(item).addClass('layui-bg-blue');
 		}else if(i == 5){
 			$(item).addClass('layui-bg-orange');
-		}else{
+		} else {
 			$(item).addClass('layui-bg-gray');
 		}
 	});
@@ -828,7 +828,7 @@ function resetCustomize(id){
 	var _box;
 	if(isNull(id)){
 		_box = $(".weekDay");
-	}else{
+	} else {
 		_box = $("#" + id + " .weekDay");
 	}
 	$.each(_box, function(i, item){
@@ -894,7 +894,7 @@ function show(_object, url) {
 	var imgs = [];
 	if(layui.$.isPlainObject(_object)){
 		imgs = _object.find("input[type='hidden'][name='upload']").val().split(",");
-	}else{
+	} else {
 		imgs = layui.$(_object).find("input[type='hidden'][name='upload']").val().split(",");
 	}
 	showPicDisk(imgs);
@@ -1013,7 +1013,7 @@ function checkURL(URL) {
 	URL = URL.match(reg);
 	if(isNull(URL) || URL.length == 0){
 		return false;
-	}else{
+	} else {
 		return true;
 	}
 }
@@ -1135,13 +1135,13 @@ function isJSON(str) {
 			var obj = JSON.parse(str);
 			if(typeof obj == 'object' && obj ){
 				return true;
-			}else{
+			} else {
 				return false;
 			}
 		} catch(e) {
 			return false;
 		}
-	}else{
+	} else {
 		return false;
 	}
 }
@@ -1159,7 +1159,7 @@ function strMatchAllByTwo(str, startCode, endCode){
 		var firstEnd = str.indexOf(endCode);
 		arr.push(str.substr(firstStart + startCode.length, firstEnd - firstStart - endCode.length));
 		return arr.concat(strMatchAllByTwo(str.substr(firstEnd + endCode.length), startCode, endCode));
-	}else{
+	} else {
 		return [];
 	}
 }

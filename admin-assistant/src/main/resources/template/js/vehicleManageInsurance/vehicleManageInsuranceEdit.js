@@ -23,7 +23,7 @@ layui.config({
  				fu.next().find("input").removeClass('layui-disabled');
  				fu.next().next().find("input").removeClass('layui-disabled');
  				fu.next().next().next().find("input").removeClass('layui-disabled');
- 			}else{
+ 			} else {
  				fu.next().find("input").attr('disabled','disabled');
  				fu.next().next().find("input").attr('disabled','disabled');
  				fu.next().next().next().find("input").attr('disabled','disabled');
@@ -134,17 +134,17 @@ layui.config({
 	 			 	 	            	if(isNull(bf)){
 	 			 	 	            		winui.window.msg('请输入选中的险种对应的保费', {icon: 2, time: 2000});
 	 			 	            			istrue = false;
-	 			 	 	            	}else{
+	 			 	 	            	} else {
 	 			 	 	            		var str = /^0{1}([.]\d{1,2})?$|^[1-9]\d*([.]{1}[0-9]{1,2})?$/;
 	 			 	    	 	        	var flag = str.test(bf);
 	 			 	    	                if(!flag){
 	 			 	    	                	winui.window.msg('保费小数点后最多两位！', {icon: 2, time: 2000});
 	 			 	    	                	istrue = false;
-	 			 	    	                }else{
+	 			 	    	                } else {
 	 			 	    	                	if(isNull(be)){
 			 			 	 	            		winui.window.msg('请输入选中的险种对应的保额', {icon: 2, time: 2000});
 			 			 	 	            		istrue = false;
-			 			 	 	            	}else{
+			 			 	 	            	} else {
 			 			 	    	 	        	var flag = str.test(be);
 			 			 	    	                if(!flag){
 			 			 	    	                	winui.window.msg('保额小数点后最多两位！', {icon: 2, time: 2000});
@@ -176,7 +176,7 @@ layui.config({
 	 			 		 	   			if (json.returnCode == 0) {
 	 			 			 	   			parent.layer.close(index);
 	 			 			 	        	parent.refreshCode = '0';
-	 			 		 	   			}else{
+	 			 		 	   			} else {
 	 			 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 			 		 	   			}
 	 			 		 	   		}});

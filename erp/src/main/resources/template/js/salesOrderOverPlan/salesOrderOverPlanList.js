@@ -41,7 +41,7 @@ layui.config({
 	        		return "<span class='state-down'>未统筹</span>";
 	        	}else if(d.state == '2'){
 	        		return "<span class='state-up'>已统筹</span>";
-	        	}else{
+	        	} else {
 	        		return "参数错误";
 	        	}
 		    }},

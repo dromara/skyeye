@@ -84,7 +84,7 @@ layui.config({
 				$("#iconShow").attr("class", "fa fa-fw " + $("#menuIcon").val());
 				if(isNull(json.bean.menuIconColor)){
 					$("#iconShow").css({'color': 'white'});
-				}else{
+				} else {
 					$('#menuIconColorinput').val(json.bean.menuIconColor);
 					$("#iconShow").css({'color': json.bean.menuIconColor});
 				}
@@ -98,7 +98,7 @@ layui.config({
 					}else if(val == '2'){//图片
 						$(".menuIconTypeIsTwo").removeClass("layui-hide");
 						$(".menuIconTypeIsOne").addClass("layui-hide");
-					}else{
+					} else {
 						winui.window.msg('状态值错误', {icon: 2, time: 2000});
 					}
 				});
@@ -118,7 +118,7 @@ layui.config({
 		 		if(json.bean.pageTypes == 1){
 		 			$(".TypeIsTwo").addClass("layui-hide");
 		    		$(".TypeIsOne").removeClass("layui-hide");
-		 		}else{
+		 		} else {
 		 			$(".TypeIsTwo").removeClass("layui-hide");
 		    		$(".TypeIsOne").addClass("layui-hide");
 		 		}
@@ -132,7 +132,7 @@ layui.config({
 			    	}else if(val == '2'){//动态表单
 			    		$(".TypeIsTwo").removeClass("layui-hide");
 			    		$(".TypeIsOne").addClass("layui-hide");
-			    	}else{
+			    	} else {
 			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 			    	}
 		        });
@@ -196,7 +196,7 @@ layui.config({
 							}
 							params.menuIcon = '';
 							params.menuIconColor = '';
-						}else{
+						} else {
 							winui.window.msg("状态值错误。", {icon: 2, time: 2000});
 							return false;
 						}
@@ -205,7 +205,7 @@ layui.config({
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
-		 	        		}else{
+		 	        		} else {
 		 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	        		}
 		 	        	}});

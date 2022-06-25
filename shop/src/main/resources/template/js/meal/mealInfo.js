@@ -28,7 +28,7 @@ layui.config({
 
                 if(json.bean.state == 1){
                     $("#state").html("下线");
-                }else{
+                } else {
                     $("#state").html("上线");
                 }
 

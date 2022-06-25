@@ -47,7 +47,7 @@ layui.config({
 		    			if (json.returnCode == 0) {
 		    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 		    				loadTable();
-		    			}else{
+		    			} else {
 		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    			}
 		    		}});
@@ -56,7 +56,7 @@ layui.config({
 				var fileExt = sysFileUtil.getFileExt(row.voucherPath);
 				if($.inArray(fileExt[0], imageType) >= 0){
 					systemCommonUtil.showPicImg(fileBasePath + row.voucherPath);
-				}else{
+				} else {
 					sysFileUtil.download(row.voucherPath, row.fileName);
 				}
 	 		}
@@ -85,11 +85,11 @@ layui.config({
 	    			if (json.returnCode == 0) {
 	    				winui.window.msg("上传成功", {icon: 1, time: 2000});
 	    				loadTable();
-	    			}else{
+	    			} else {
 	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	    			}
 	    		}});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		},

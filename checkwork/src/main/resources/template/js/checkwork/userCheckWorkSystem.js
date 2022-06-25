@@ -18,7 +18,7 @@ layui.config({
                 $("#comLeave" + item.holidayNo).val(item.whetherComLeave);
             });
             form.render();
-        }else{
+        } else {
             winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
         }
     }});

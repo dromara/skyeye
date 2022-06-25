@@ -21,7 +21,7 @@ layui.config({
 	 		hdb.registerHelper("compare1", function(index){
 	 			if(index === 0){
 	 				return 'active';
-	 			}else{
+	 			} else {
 	 				return '';
 	 			}
 			});
@@ -43,7 +43,7 @@ layui.config({
 		 		hdb.registerHelper("compare1", function(index){
 		 			if(index === 0){
 		 				return 'active';
-		 			}else{
+		 			} else {
 		 				return '';
 		 			}
 				});
@@ -66,7 +66,7 @@ layui.config({
 		 		hdb.registerHelper("compare1", function(index){
 		 			if(index === 0){
 		 				return 'active';
-		 			}else{
+		 			} else {
 		 				return '';
 		 			}
 				});
@@ -95,7 +95,7 @@ layui.config({
 	                    flowChart       : true,  // 默认不解析
 	                    sequenceDiagram : true  // 默认不解析
 	                });
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});

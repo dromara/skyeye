@@ -123,7 +123,7 @@ CodeMirror.defineMode("erlang", function(cmCfg) {
         stream.match(/-\s*[a-zß-öø-ÿ][\wØ-ÞÀ-Öß-öø-ÿ]*/)) {
       if (is_member(stream.current(),typeWords)) {
         return rval(state,stream,"type");
-      }else{
+      } else {
         return rval(state,stream,"attribute");
       }
     }
@@ -217,7 +217,7 @@ CodeMirror.defineMode("erlang", function(cmCfg) {
           return rval(state,stream,"builtin");
         }else if (is_member(w,guardWords)) {
           return rval(state,stream,"guard");
-        }else{
+        } else {
           return rval(state,stream,"function");
         }
       }else if (is_member(w,operatorAtomWords)) {
@@ -232,7 +232,7 @@ CodeMirror.defineMode("erlang", function(cmCfg) {
         return rval(state,stream,"boolean");
       }else if (is_member(w,["true","false"])) {
         return rval(state,stream,"boolean");
-      }else{
+      } else {
         return rval(state,stream,"atom");
       }
     }
@@ -313,7 +313,7 @@ CodeMirror.defineMode("erlang", function(cmCfg) {
       while (0 < stream.current().length) {
         if (is_member(stream.current(),words)) {
           return true;
-        }else{
+        } else {
           stream.backUp(1);
         }
       }
@@ -409,7 +409,7 @@ CodeMirror.defineMode("erlang", function(cmCfg) {
 
     if (len < dep) {
       return false;
-    }else{
+    } else {
       return state.tokenStack[len-dep];
     }
   }
@@ -430,7 +430,7 @@ CodeMirror.defineMode("erlang", function(cmCfg) {
     }else if (0 < last && s[last].type === "group") {
       s.pop();
       s.push(token);
-    }else{
+    } else {
       s.push(token);
     }
     return s;
@@ -535,12 +535,12 @@ CodeMirror.defineMode("erlang", function(cmCfg) {
     }else if (currT.token == "->") {
       if (is_member(prevT.token, ["receive","case","if","try"])) {
         return prevT.column+unit+unit;
-      }else{
+      } else {
         return prevT.column+unit;
       }
     }else if (is_member(currT.token,openParenWords)) {
       return currT.column+currT.token.length;
-    }else{
+    } else {
       t = defaultToken(state);
       return truthy(t) ? t.column+unit : 0;
     }

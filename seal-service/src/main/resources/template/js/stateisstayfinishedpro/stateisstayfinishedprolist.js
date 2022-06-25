@@ -93,7 +93,7 @@ layui.config({
     	if(isNull($("#declarationTime").val())){
     		startTime = "";
     		endTime = "";
-    	}else{
+    	} else {
     		startTime = $("#declarationTime").val().split('~')[0].trim();
     		endTime = $("#declarationTime").val().split('~')[1].trim();
     	}
@@ -104,7 +104,7 @@ layui.config({
     	if(isNull($("#declarationTime").val())){
     		startTime = "";
     		endTime = "";
-    	}else{
+    	} else {
     		startTime = $("#declarationTime").val().split('~')[0].trim();
     		endTime = $("#declarationTime").val().split('~')[1].trim();
     	}

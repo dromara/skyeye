@@ -21,7 +21,7 @@ layui.config({
  	   			$("#purchaseMoney").html(json.bean.purchaseMoney);
  	   			$("#profitMoney").html(json.bean.profitMoney);
  	   			initSixMonthPurchase();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -33,7 +33,7 @@ layui.config({
    			if (json.returnCode == 0) {
  	   			renderLayer04Left(json.rows);
  	   			initSixMonthSales();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -45,7 +45,7 @@ layui.config({
    			if (json.returnCode == 0) {
  	   			renderLayer04Left2(json.rows);
  	   			initSixMonthProfit();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -57,7 +57,7 @@ layui.config({
    			if (json.returnCode == 0) {
  	   			renderLayer04Left3(json.rows);
  	   			matchingLanguage();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

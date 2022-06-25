@@ -1062,7 +1062,7 @@
                 if(inChooseDay == null){
                     // 不在指定的周几范围内，设置为不可选择
                     item.addClass(DISABLED);
-                }else{
+                } else {
                     // 第几周
                     var week = that.weekofyear(dayStr);
                     if(inChooseDay.type == 2 && week % 2 == 0){

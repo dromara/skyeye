@@ -34,7 +34,7 @@ layui.config({
 	 		'click .page-click-item':function(index, row){//选择编辑模板中的页面
 	 			if(row.id == editPageModelSelectId){//如果选中的页面正是当前编辑模板中的页面，则不做任何操作
 	 				
-	 			}else{
+	 			} else {
 	 				if(editPageModelSelectChange == true){//编辑了页面但没有保存
 	 		 			layer.confirm('当前修改页面没有保存，是否继续吗？', { icon: 3, title: '小程序页面编辑通知' }, function (i) {
 	 		 				layer.close(i);
@@ -45,12 +45,12 @@ layui.config({
 	 			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function(json){
 	 			 	   			if (json.returnCode == 0) {
 	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-	 			 	   			}else{
+	 			 	   			} else {
 	 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 			 	   			}
 	 			 	   		}});
 	 		 			});
-	 				}else{
+	 				} else {
 	 					$(".page-click-item").removeClass("check-item-shoose");
 	 					$("#pageList>li:eq(" + index + ")").addClass("check-item-shoose");
 	 					editPageModelSelectId = row.id;
@@ -58,7 +58,7 @@ layui.config({
 	 		 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0) {
 	 		 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-	 		 	   			}else{
+	 		 	   			} else {
 	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});
@@ -82,7 +82,7 @@ layui.config({
 	 			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function(json){
 	 			 	   			if (json.returnCode == 0) {
 	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-	 			 	   			}else{
+	 			 	   			} else {
 	 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 			 	   			}
 	 			 	   		}});
@@ -105,11 +105,11 @@ layui.config({
  			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function(json){
  			 	   			if (json.returnCode == 0) {
  			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
- 			 	   			}else{
+ 			 	   			} else {
  			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  			 	   			}
  			 	   		}});
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -128,11 +128,11 @@ layui.config({
  			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function(json){
  			 	   			if (json.returnCode == 0) {
  			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
- 			 	   			}else{
+ 			 	   			} else {
  			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  			 	   			}
  			 	   		}});
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -155,11 +155,11 @@ layui.config({
 	 			 			AjaxPostUtil.request({url:reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function(json){
 	 			 	   			if (json.returnCode == 0) {
 	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-	 			 	   			}else{
+	 			 	   			} else {
 	 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 			 	   			}
 	 			 	   		}});
-	 	    			}else{
+	 	    			} else {
 	 	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	    			}
 	 	    		}});
@@ -199,7 +199,7 @@ layui.config({
 			if(isNull(editPageModelSelectId)){
 				winui.window.msg('请先选择要编辑的页面', {icon: 2, time: 2000});
 				$("#centerText").empty();
-			}else{
+			} else {
 				el.className = 'layui-col-md12 import-item';
 				var content = '<div class="layui-col-md12 check-item">' + $(el).attr("htmlContent") + '</div>';//内容
 				var operationContent = '<div class="check-item-operation btn-group btn-group-xs btn-base">' +
@@ -288,7 +288,7 @@ layui.config({
 
         if($parent.hasClass('js_show')){
             $parent.removeClass('js_show');
-        }else{
+        } else {
             $parent.siblings().removeClass('js_show');
 
             $parent.addClass('js_show');
@@ -341,7 +341,7 @@ layui.config({
    						var defaultValue = "";
    						if(json.rows[i].propertyUnit == '%'){//百分号计算获取宽高百分比
    							defaultValue = Math.ceil($("div#centerText .show-operation").children().width() / $("div#centerText .show-operation").width() * 100);
-   						}else{
+   						} else {
    							defaultValue = $("div#centerText .show-operation").children().css(json.rows[i].propertyTag).replace(json.rows[i].propertyUnit, '');
    						}
    						str = str + json.rows[i].htmlContent.replace(/{{id}}/g, json.rows[i].id).replace(/{{labelContent}}/g, json.rows[i].title)
@@ -355,7 +355,7 @@ layui.config({
    					jsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + jsContent + '})(jQuery);});</script>';
    					if(isNull(str)){
    						$("#showForm").html(noMatchingBeansMation);
-   					}else{
+   					} else {
    						str = str + '<div class="layui-form-item"><div class="layui-input-block"><button class="winui-btn" lay-submit lay-filter="saveProperty">保存属性</button></div></div>';
    						$("#showForm").html(str + jsContent);
    						form.render();
@@ -368,10 +368,10 @@ layui.config({
    					        return false;
    						});
    					}
-   				}else{
+   				} else {
    					$("#showForm").html(noMatchingBeansMation);
    				}
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -386,7 +386,7 @@ layui.config({
     $('body').on('DOMNodeInserted', '#centerText', function(){
     	if(isNull(editPageModelSelectId)){//如果没有选中页面，则不做任何操作
     		
-    	}else{
+    	} else {
     		editPageModelSelectChange = true;
     	}
     });
@@ -423,11 +423,11 @@ layui.config({
     		AjaxPostUtil.request({url:reqBasePath + "rmxcx037", params:{jsonData: JSON.stringify(list), pageId: editPageModelSelectId}, type: 'json', callback: function(json){
     			if (json.returnCode == 0) {
     				winui.window.msg("保存成功", {icon: 1, time: 2000});
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
-    	}else{
+    	} else {
     		winui.window.msg('请先选择要编辑的页面', {icon: 2, time: 2000});
     	}
     });
@@ -447,11 +447,11 @@ layui.config({
 			        );
 			        document.body.appendChild(link);
 			        link.click();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
-    	}else{
+    	} else {
     		winui.window.msg('请先选择要导出的页面', {icon: 2, time: 2000});
     	}
     });

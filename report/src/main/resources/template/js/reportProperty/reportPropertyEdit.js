@@ -71,7 +71,7 @@ layui.config({
                                 winui.window.msg('请最少填写一条属性值', {icon: 2, time: 2000});
                                 return false;
                             }
-                        }else{
+                        } else {
                             if(isNull($("#defaultValue").val())){
                                 winui.window.msg('请填写默认值', {icon: 2, time: 2000});
                                 return false;
@@ -87,11 +87,11 @@ layui.config({
                             options: JSON.stringify(tableData),
                             id: parent.rowId
                         };
-                        AjaxPostUtil.request({url:reportBasePath + "reportproperty004", params: params, type:'json', method: "PUT", callback:function(json){
+                        AjaxPostUtil.request({url:reportBasePath + "reportproperty004", params: params, type:'json', method: "PUT", callback: function(json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
-                            }else{
+                            } else {
                                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});
@@ -105,7 +105,7 @@ layui.config({
             if(val == 1){
                 $("#canChoose").show();
                 $("#canNotChoose").hide();
-            }else{
+            } else {
                 $("#canChoose").hide();
                 $("#canNotChoose").show();
             }

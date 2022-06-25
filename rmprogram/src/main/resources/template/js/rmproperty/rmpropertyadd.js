@@ -121,7 +121,7 @@ layui.config({
 	    	}else if(val == '2'){
 	    		// 否
 	    		$("#dataShowModel").hide();
-	    	}else{
+	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
@@ -133,7 +133,7 @@ layui.config({
     				jsModelContent.setValue(json.bean.jsContent);
     				htmlContent.setValue(json.bean.htmlContent);
     				jsContent.setValue(json.bean.jsContent);
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -157,10 +157,10 @@ layui.config({
 	        		if(isNull($("#displayTemplateId").val())){
 	        			winui.window.msg('请选择子查询数据展示模板', {icon: 2, time: 2000});
 	        			return false;
-	        		}else{
+	        		} else {
 	        			params.displayTemplateId = $("#displayTemplateId").val();
 	        		}
-	        	}else{
+	        	} else {
 	        		params.displayTemplateId = "";
 	        	}
 	        	
@@ -168,7 +168,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

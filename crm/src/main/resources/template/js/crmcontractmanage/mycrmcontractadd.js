@@ -154,7 +154,7 @@ layui.config({
 		if(userList.length == 0 || isNull($('#relationUserId').tagEditor('getTags')[0].tags)){
 			winui.window.msg("请选择关联人员", {icon: 2, time: 2000});
 			return false;
-		}else{
+		} else {
 			var relationUserId = "";
 			$.each(userList, function (i, item) {
 				relationUserId += item.id + ',';

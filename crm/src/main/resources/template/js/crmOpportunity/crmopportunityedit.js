@@ -45,7 +45,7 @@ layui.config({
 	 		
 	 		if(json.bean.state == '1'){
 				$(".typeTwo").removeClass("layui-hide");
-			}else{
+			} else {
 				$(".typeOne").removeClass("layui-hide");
 			}
 
@@ -212,7 +212,7 @@ layui.config({
 		if(responsIdList.length == 0 || isNull($('#responsId').tagEditor('getTags')[0].tags)){
 			winui.window.msg('请选择商机负责人', {icon: 2, time: 2000});
 			return false;
-		}else{
+		} else {
 			$.each(responsIdList, function (i, item) {
 				params.responsId = item.id;
 			});
@@ -220,7 +220,7 @@ layui.config({
 		// 如果商机参与人为空
 		if(partIdList.length == 0 || isNull($('#partId').tagEditor('getTags')[0].tags)){
 			params.partId = "";
-		}else{
+		} else {
 			var partId = "";
 			$.each(partIdList, function (i, item) {
 				partId += item.id + ',';
@@ -230,7 +230,7 @@ layui.config({
 		// 如果商机关注人为空
 		if(followIdList.length == 0 || isNull($('#followId').tagEditor('getTags')[0].tags)){
 			params.followId = "";
-		}else{
+		} else {
 			var followId = "";
 			$.each(followIdList, function (i, item) {
 				followId += item.id + ',';

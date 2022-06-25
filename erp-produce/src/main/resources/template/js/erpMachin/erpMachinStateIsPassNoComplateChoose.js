@@ -47,7 +47,7 @@ layui.config({
 		        		return "<span class='state-down'>拒绝通过</span>";
 		        	}else if(d.state == '5'){
 		        		return "<span class='state-new'>已完成</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 			    }},

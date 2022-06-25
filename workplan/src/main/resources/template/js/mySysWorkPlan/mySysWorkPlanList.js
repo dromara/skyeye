@@ -154,7 +154,7 @@ layui.config({
 		if(isNull($("#executeTime").val())){
 			startTime = "";
 			endTime = "";
-		}else{
+		} else {
 			startTime = $("#executeTime").val().split('~')[0].trim() + " 00:00:00";
 			endTime = $("#executeTime").val().split('~')[1].trim() + " 23:59:59";
 		}

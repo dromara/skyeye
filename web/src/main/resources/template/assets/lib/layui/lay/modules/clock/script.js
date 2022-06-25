@@ -26,7 +26,7 @@ layui.define(["jquery", "moment"], function(exports) {
 		}
 		if(getWeekOfYear() % 2 == 0){
 			weekType.html('双周');
-		}else{
+		} else {
 			weekType.html('单周');
 		}
 			

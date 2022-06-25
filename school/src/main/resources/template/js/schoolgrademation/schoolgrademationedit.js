@@ -25,7 +25,7 @@ layui.config({
 		 	ajaxSendAfter:function(json){
 		 		if(json.bean.parentName == '0' || isNull(json.bean.parentName)){
 		 			$("#parentIdBox").addClass("layui-hide");
-		 		}else{
+		 		} else {
 		 			$("#yearNBox").addClass("layui-hide");
 		 		}
 		 		
@@ -45,7 +45,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});

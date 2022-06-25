@@ -34,7 +34,7 @@ layui.config({
 	        { field: 'stateName', title: '状态', align: 'center', width: 80, templet: function(d){
 	        	if(d.orderNumber > 0){
 	        		return '<span class="state-down">' + d.stateName + '</span>';
-	        	}else{
+	        	} else {
 	        		return '<span class="state-up">' + d.stateName + '</span>';
 	        	}
 	        }},

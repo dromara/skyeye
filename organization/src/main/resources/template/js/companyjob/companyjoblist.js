@@ -26,7 +26,7 @@ layui.config({
 		if(isNull(data.value) || data.value === '请选择'){
 			$("#departmentId").html("");
 			form.render('select');
-		}else{
+		} else {
 			initDepartment();
 		}
 	});
@@ -112,7 +112,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

@@ -53,7 +53,7 @@ layui.config({
 		if($(".drop-down-menu").is(':hidden')){
 			$(".drop-down-menu").show();
 			$(".suspension-menu-icon").removeClass("rotate").addClass("rotate1");
-		}else{
+		} else {
 			$(".drop-down-menu").hide();
 			$(".suspension-menu-icon").removeClass("rotate1").addClass("rotate");
 		}
@@ -70,7 +70,7 @@ layui.config({
         	if(tagList.length == 0 || isNull($('#tagId').tagEditor('getTags')[0].tags)){
         		winui.window.msg("请选择标签", {icon: 2, time: 2000});
         		return false;
-	        }else{
+	        } else {
 	        	var str = "";
 	        	$.each(tagList, function (i, item) {
 	        		str += item.id + ',';
@@ -79,7 +79,7 @@ layui.config({
     		}
         	if($("#anonymous").val() == 'true'){
         		params.anonymous = '2';
-        	}else{
+        	} else {
         		params.anonymous = '1';
         	}
         	params.content = encodeURIComponent(ue.getContent());
@@ -93,7 +93,7 @@ layui.config({
 	   				winui.window.msg("发布成功", {icon: 1, time: 2000}, function(){
 	   					location.href = '../../tpl/forumshow/myposts.html';
 	   				});
-	   			}else{
+	   			} else {
 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
         	}});

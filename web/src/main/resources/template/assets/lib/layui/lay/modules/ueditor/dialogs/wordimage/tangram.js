@@ -587,7 +587,7 @@ baidu.flash._Base = (function(){
     function _checkReady(target){
         if(typeof target !== 'undefined' && typeof target.flashInit !== 'undefined' && target.flashInit()){
             return true;
-        }else{
+        } else {
             return false;
         }
     };
@@ -699,7 +699,7 @@ baidu.flash._Base = (function(){
             if(isReady){
                 result = target.call(fnName, params);
                 callBack(result);
-            }else{
+            } else {
                 callQueue.push({
                     fnName: fnName,
                     params: params,
@@ -1200,7 +1200,7 @@ baidu.sio.callByServer = /**@function*/function(url, callback, opt_options) {
             try {
                 if( onTimeOut ){
                     options.onfailure && options.onfailure();
-                }else{
+                } else {
                     callback.apply(window, arguments);
                     clearTimeout(timer);
                 }

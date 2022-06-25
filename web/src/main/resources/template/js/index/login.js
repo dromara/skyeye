@@ -64,7 +64,7 @@ layui.config({
 	 	        		top.winui.window.msg("请输入用户名", {icon: 2, time: 2000});
 	 	        	}else if(isNull($("#password").val())){
 	 	        		top.winui.window.msg("请输入密码", {icon: 2, time: 2000});
-	 	        	}else{
+	 	        	} else {
 	 	        		var params = {
 	 	        			userCode:$("#userCode").val(),
 	 	        			password:$("#password").val()
@@ -81,11 +81,11 @@ layui.config({
 	 		 	   				if(!isNull(json.bean.id)){
 	 		 	   					if(checkURL(url)){
 			 	   						location.href = url;
-			 	   					}else{
+			 	   					} else {
 			 	   						location.href = "index.html";
 			 	   					}
 	 		 	   				}
-	 		 	   			}else{
+	 		 	   			} else {
 	 		 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});

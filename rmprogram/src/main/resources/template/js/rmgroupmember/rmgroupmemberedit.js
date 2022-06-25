@@ -120,7 +120,7 @@ layui.config({
 		        			winui.window.msg("请填写HTML内容", {icon: 2, time: 2000});
 		        		}else if(isNull(wxmlContent.getValue())){
 		        			winui.window.msg("请填写WXML内容", {icon: 2, time: 2000});
-		        		}else{
+		        		} else {
 			 	   			var params = {
 			 	   				htmlContent: encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
 			 	   				htmlJsContent: encodeURI(htmlJsContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
@@ -137,7 +137,7 @@ layui.config({
 				 	   			if (json.returnCode == 0) {
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';
-				 	   			}else{
+				 	   			} else {
 				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				 	   			}
 				 	   		}});

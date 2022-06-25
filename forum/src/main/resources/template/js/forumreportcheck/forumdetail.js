@@ -17,7 +17,7 @@ layui.config({
 			$("#createTime").html(json.bean.createTime);
 			$("#photo").html("<img userId=" + json.bean.userId + " alt='' src=" + json.bean.userPhoto + ">");
 			matchingLanguage();
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});

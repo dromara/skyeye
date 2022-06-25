@@ -125,7 +125,7 @@ layui.config({
 		 				$("#weekCompletedText").parent().hide();
 			    		$("#weekCompletedContent").parent().show();
 			    		layedit.setContent(weekCompletedContent, $("#weekCompletedText").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#weekCompletedText").parent().show();
 			    		$("#weekCompletedContent").parent().hide();
 			    		$("#weekCompletedText").val(layedit.getText(weekCompletedContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -138,7 +138,7 @@ layui.config({
 		 				$("#weekWorkSummaryText").parent().hide();
 			    		$("#weekWorkSummaryContent").parent().show();
 			    		layedit.setContent(weekWorkSummaryContent, $("#weekWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#weekWorkSummaryText").parent().show();
 			    		$("#weekWorkSummaryContent").parent().hide();
 			    		$("#weekWorkSummaryText").val(layedit.getText(weekWorkSummaryContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -151,7 +151,7 @@ layui.config({
 		 				$("#weekNextWorkPlanText").parent().hide();
 			    		$("#weekNextWorkPlanContent").parent().show();
 			    		layedit.setContent(weekNextWorkPlanContent, $("#weekNextWorkPlanText").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#weekNextWorkPlanText").parent().show();
 			    		$("#weekNextWorkPlanContent").parent().hide();
 			    		$("#weekNextWorkPlanText").val(layedit.getText(weekNextWorkPlanContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -164,7 +164,7 @@ layui.config({
 		 				$("#weekCoordinaJobText").parent().hide();
 			    		$("#weekCoordinaJobContent").parent().show();
 			    		layedit.setContent(weekCoordinaJobContent, $("#weekCoordinaJobText").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#weekCoordinaJobText").parent().show();
 			    		$("#weekCoordinaJobContent").parent().hide();
 			    		$("#weekCoordinaJobText").val(layedit.getText(weekCoordinaJobContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -182,7 +182,7 @@ layui.config({
 		        		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
                             winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                             return false;
-                        }else{
+                        } else {
 							var userId = "";
                             $.each(userList, function (i, item) {
                                 userId += item.id + ',';
@@ -193,30 +193,30 @@ layui.config({
 		        			if(isNull(layedit.getContent(weekCompletedContent))){
 		        				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});
 		        				return false;
-		        			}else{
+		        			} else {
 		        				params.completedJob = encodeURIComponent(layedit.getContent(weekCompletedContent));
 		        			}
-		        		}else{
+		        		} else {
 		        			if(isNull($("#weekCompletedText").val())){
 		        				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});
 		        				return false;
-		        			}else{
+		        			} else {
 		        				params.completedJob = encodeURIComponent($("#weekCompletedText").val().replace(/\n|\r\n/g, "<br>"));
 		        			}
 		        		}
 		        		if(data.field.weekCoordinaJob === 'true'){
 		        			params.coordinaJob = encodeURIComponent(layedit.getContent(weekCoordinaJobContent));
-		        		}else{
+		        		} else {
 		        			params.coordinaJob = encodeURIComponent($("#weekCoordinaJobText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		if(data.field.weekNextWorkPlan === 'true'){
 		        			params.nextWorkPlan = encodeURIComponent(layedit.getContent(weekNextWorkPlanContent));
-		        		}else{
+		        		} else {
 		        			params.nextWorkPlan = encodeURIComponent($("#weekNextWorkPlanText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		if(data.field.weekWorkSummary === 'true'){
 		        			params.thisWorkSummary = encodeURIComponent(layedit.getContent(weekWorkSummaryContent));
-		        		}else{
+		        		} else {
 		        			params.thisWorkSummary = encodeURIComponent($("#weekWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		
@@ -224,7 +224,7 @@ layui.config({
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                  parent.refreshCode = '0';
-                            }else{
+                            } else {
                                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});

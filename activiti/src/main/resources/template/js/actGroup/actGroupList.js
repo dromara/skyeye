@@ -32,7 +32,7 @@ layui.config({
 				}
 	 			showList();//展示用户组对应的用户列表
 		 	    initRightMenu();//初始化右键
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -67,14 +67,14 @@ layui.config({
 				    			AjaxPostUtil.request({url: flowableBasePath + "actgroup004", params: {rowId: clickId, groupName: value}, type: 'json', method: "POST", callback: function(json){
 				    	   			if (json.returnCode == 0) {
 				    	   				obj.find("a[rowid='" + clickId + "']").html(value);
-				    	   			}else{
+				    	   			} else {
 				    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				    				}
 				    	   		}});
-			    			}else{
+			    			} else {
 			    				obj.find("a[rowid='" + clickId + "']").html(html);
 			    			}
-			    		}else{
+			    		} else {
 							obj.find("a[rowid='" + clickId + "']").html(html);
 						}
 			    	});
@@ -108,11 +108,11 @@ layui.config({
 					var _obj = $("#setting").find("a[class='setting-a']");
 					if(_obj.length > 0){
 						_obj.eq(0).click();
-					}else{
+					} else {
 						clickId = "";
 						loadTable();
 					}
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -155,7 +155,7 @@ layui.config({
 	   				var str = '<a rowid="' + clickId + '" rowname="' + value + '" class="setting-a">' + value + '</a>';
 	   				$("#setting").append(str);
 	   				$("#setting").find("a[rowid='" + clickId + "']").click();
-	   			}else{
+	   			} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 	   		}});
@@ -236,12 +236,12 @@ layui.config({
 					if (json.returnCode == 0) {
 						winui.window.msg("移除成功", {icon: 1, time: 2000});
 	    				loadTable();
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
 			});
-		}else{
+		} else {
 			winui.window.msg("没有可移除用户的用户组！", {icon: 2, time: 2000});
 		}
 	});
@@ -258,7 +258,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -270,7 +270,7 @@ layui.config({
     	AjaxPostUtil.request({url: flowableBasePath + "activitimode015", params: {}, type: 'json', method: "POST", callback: function(json){
 			if (json.returnCode == 0) {
             	winui.window.msg("同步成功", {icon: 1, time: 2000});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

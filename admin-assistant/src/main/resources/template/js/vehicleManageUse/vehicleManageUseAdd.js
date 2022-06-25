@@ -26,7 +26,7 @@ layui.config({
 		var passengerNum = $(this).val();
 		if(!isNull(passengerNum)){
 			initDesignatedVehicle(passengerNum);
-		}else{
+		} else {
 			$("#designatedVehicleId").html("");
 			form.render("select");
 		}
@@ -42,7 +42,7 @@ layui.config({
 			if(!loadDriver){
 				initDriver();
 			}
-		}else{
+		} else {
 			winui.window.msg('状态值错误', {icon: 2, time: 2000});
 		}
 	});

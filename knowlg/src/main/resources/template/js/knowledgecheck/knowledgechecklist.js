@@ -234,7 +234,7 @@ layui.config({
 		        		return "<span class='state-up'>已通过</span>";
 		        	}else if(d.state == '3'){
 		        		return "<span class='state-down'>未通过</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},

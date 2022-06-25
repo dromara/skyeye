@@ -31,7 +31,7 @@ layui.config({
 		            if(json.returnCode == 0) {
 		                if(!isNull(json.bean.synchronousTime)){
 		                    $("#synchronousTime").text(json.bean.synchronousTime);
-		                }else{
+		                } else {
 		                    $("#synchronousTime").text("无");
 		                }
 		            }else {
@@ -128,7 +128,7 @@ layui.config({
 				$.each(erpExamineBasicDesign, function (i, item) {
 					if(item.examineSwitch){
 						$("input:radio[name='" + item.code + "'][value='1']").attr("checked", true);
-					}else{
+					} else {
 						$("input:radio[name='" + item.code + "'][value='2']").attr("checked", true);
 					}
 				});

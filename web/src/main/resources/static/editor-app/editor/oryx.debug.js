@@ -11001,7 +11001,7 @@ ORYX.Editor = {
 				return loadedPlugin.type==this.name;
 			}.bind(plugin))){
 				plugin.engaged=true;
-			}else{
+			} else {
 				plugin.engaged=false;
 			}
 			}.bind(this));
@@ -11075,7 +11075,7 @@ ORYX.Editor = {
 						}
 						this.loadScript("plugins/scripts/"+match.source, this.activatePluginByName.bind(this,match.name,callback,true));
 					}
-					}else{
+					} else {
 						callback(false,"NOTUSEINSTENCILSET");
 						ORYX.Log.info("Plugin need a stencilset which is not loaded'", match.name);
 					}
@@ -11086,7 +11086,7 @@ ORYX.Editor = {
 				}
 
 			
-			}else{
+			} else {
 				callback(false, match?"NOTFOUND":"YETACTIVATED");
 				//TODO error handling
 			}
@@ -18496,7 +18496,7 @@ ORYX.Plugins.CanvasResizeButton = Clazz.extend({
 			
 			if(event.target!=parentNode && event.target!=scrollNode&& event.target!=scrollNode.firstChild&& event.target!=svgRootNode&& event.target!=scrollNode){ return false; }
 			
-			//if(inCanvas){offSetWidth=30}else{offSetWidth=30*2}
+			//if(inCanvas){offSetWidth=30} else {offSetWidth=30*2}
 			//Safari work around
 			var X=event.offsetX !== undefined ? event.offsetX : event.layerX;
 			var Y=event.offsetY !== undefined ? event.offsetY : event.layerY;

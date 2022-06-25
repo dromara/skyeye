@@ -75,7 +75,7 @@ layui.config({
 	    	if(check){//选中
 	    		$("#quOption_checkType_div").show();
 	    		$("#quOption_isRequiredFill_div").show();
-	    	}else{
+	    	} else {
 	    		$("#quOption_checkType_div").hide();
 	    		$("#quOption_isRequiredFill_div").hide();
 	    	}

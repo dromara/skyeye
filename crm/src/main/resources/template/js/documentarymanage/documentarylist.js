@@ -92,7 +92,7 @@ layui.config({
 		if(isNull($("#documentaryTime").val())){
     		startTime = "";
     		endTime = "";
-    	}else{
+    	} else {
     		startTime = $("#documentaryTime").val().split('~')[0].trim();
     		endTime = $("#documentaryTime").val().split('~')[1].trim();
     	}

@@ -37,7 +37,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         		menuIcon = isNull(item.icon) ? '' : 'win-icon="' + item.icon + '"';
         		if(!isNull(item.menuIconColor)){
         			icon = '<i class="fa ' + item.icon + ' fa-fw" style="color: ' + item.menuIconColor + '" win-i-id="' + item.id + '"></i>';
-        		}else{
+        		} else {
         			icon = '<i class="fa ' + item.icon + ' fa-fw" win-i-id="' + item.id + '"></i>';
         		}
         		isFaIcon = "winui-icon-font";
@@ -55,11 +55,11 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
             		html += '</div>';
             		html += '<p>' + item.name + '</p>';
             		html += '</div>';
-        		}else{
+        		} else {
         			html += '<div class="winui-desktop-item sec-btn" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + ' ' + menuIconBg + ' ' + menuIconColor + ' ' + menuIcon + ' ' + menuSysWinUrl + '>';
         			if(!isNull(item.menuIconBg)){
         				html += '<div class="winui-icon ' + isFaIcon + '" style="background-color: ' + item.menuIconBg + '">';
-        			}else{
+        			} else {
         				html += '<div class="winui-icon ' + isFaIcon + '">';
         			}
         			html += icon;
@@ -67,7 +67,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         			html += '<p>' + item.name + '</p>';
         			html += '</div>';
         		}
-        	}else{//有子菜单
+        	} else {//有子菜单
         		html += '<div class="winui-desktop-item win-menu-group" id="' + item.id + '" ' + id + ' ' + url + ' ' + title + ' ' + opentype + ' ' + maxOpen + ' ' + menuIconBg + ' ' + menuIconColor + ' ' + menuSysWinUrl + '>';
         		html += '<div class="winui-icon ' + isFaIcon + '">';
         		html += '<div class="icon-drawer">';
@@ -97,15 +97,15 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         						if(!isNull(bean.menuIconBg)){
         							childsiconsmall = '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>';
         							childsicon = '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>';
-        						}else{
+        						} else {
         							childsiconsmall = '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="color: ' + bean.menuIconColor + '" win-i-id="' + bean.id + '"></i>';
         							childsicon = '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + '" win-i-id="' + bean.id + '"></i>';
         						}
-        					}else{
+        					} else {
         						if(!isNull(bean.menuIconBg)){
         							childsiconsmall = '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" style="background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>';
         							childsicon = '<i class="fa ' + bean.icon + ' fa-fw" style="background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>';
-        						}else{
+        						} else {
         							childsiconsmall = '<i class="fa ' + bean.icon + ' fa-fw icon-drawer-icon" win-i-id="' + bean.id + '"></i>';
         							childsicon = '<i class="fa ' + bean.icon + ' fa-fw" win-i-id="' + bean.id + '"></i>';
         						}
@@ -122,14 +122,14 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         				childsHtml += '<div class="winui-desktop-item sec-clsss-btn sec-btn" ' + childsid + ' ' + childsurl + ' ' + childstitle + ' ' + childsopentype + ' ' + childsmaxOpen + ' ' + childsmenuIconBg + ' ' + childsmenuIconColor + ' ' + childsmenuIcon + ' ' + childsmenuSysWinUrl + '>';
         				if(!isNull(bean.menuIconBg)){
         					childsHtml += '<div class="winui-icon ' + childsisFaIcon + '" style="background-color: ' + bean.menuIconBg + '">';
-        				}else{
+        				} else {
         					childsHtml += '<div class="winui-icon ' + childsisFaIcon + '">';
         				}
         				childsHtml += childsicon;
         				childsHtml += '</div>';
         				childsHtml += '<p>' + bean.name + '</p>';
         				childsHtml += '</div>';
-        			}else{//如果子菜单的所属桌面和父菜单的不一样
+        			} else {//如果子菜单的所属桌面和父菜单的不一样
         				var childDeskHtml = "";
         				var childsicon;
         				var childsisFaIcon = "";
@@ -138,13 +138,13 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         					if(!isNull(bean.menuIconColor)){
         						if(!isNull(bean.menuIconBg)){
         							childsicon = '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + ';background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>';
-        						}else{
+        						} else {
         							childsicon = '<i class="fa ' + bean.icon + ' fa-fw" style="color: ' + bean.menuIconColor + '" win-i-id="' + bean.id + '"></i>';
         						}
-        					}else{
+        					} else {
         						if(!isNull(bean.menuIconBg)){
         							childsicon = '<i class="fa ' + bean.icon + ' fa-fw" style="background-color: ' + bean.menuIconBg + '" win-i-id="' + bean.id + '"></i>';
-        						}else{
+        						} else {
         							childsicon = '<i class="fa ' + bean.icon + ' fa-fw" win-i-id="' + bean.id + '"></i>';
         						}
         					}
@@ -157,7 +157,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         				childDeskHtml += '<div class="winui-desktop-item sec-btn" ' + childsid + ' ' + childsurl + ' ' + childstitle + ' ' + childsopentype + ' ' + childsmaxOpen + ' ' + childsmenuIconBg + ' ' + childsmenuIconColor + ' ' + childsmenuIcon + ' ' + childsmenuSysWinUrl + '>';
             			if(!isNull(bean.menuIconBg)){
             				childDeskHtml += '<div class="winui-icon ' + childsisFaIcon + '" style="background-color: ' + bean.menuIconBg + '">';
-            			}else{
+            			} else {
             				childDeskHtml += '<div class="winui-icon ' + childsisFaIcon + '">';
             			}
             			childDeskHtml += childsicon;
@@ -166,10 +166,10 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
             			childDeskHtml += '</div>';
             			if(isNull(bean.deskTopId)){
                     		$('.winui-desktop>.fixed-page').append(childDeskHtml);
-                    	}else{
+                    	} else {
                     		if($('.winui-desktop').find("article[id='" + bean.deskTopId + "']").length > 0){
                     			$('.winui-desktop').find("article[id='" + bean.deskTopId + "']").append(childDeskHtml);
-                    		}else{
+                    		} else {
                     			$('.winui-desktop>.fixed-page').append(childDeskHtml);
                     		}
                     	}
@@ -186,10 +186,10 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
         	}
         	if(isNull(item.deskTopId)){
         		$('.winui-desktop>.fixed-page').append(html);
-        	}else{
+        	} else {
         		if($('.winui-desktop').find("article[id='" + item.deskTopId + "']").length > 0){
         			$('.winui-desktop').find("article[id='" + item.deskTopId + "']").append(html);
-        		}else{
+        		} else {
         			$('.winui-desktop>.fixed-page').append(html);
         		}
         	}
@@ -266,7 +266,7 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
                 $(options.item).each(function (index, item) {
                 	if(!isNull(item.icon)){
                 		div += '<li><i class="right-menu-icon ' + item.icon + '"></i>' + item.text + '</li>';
-                	}else{
+                	} else {
                 		div += '<li>' + item.text + '</li>';
                 	}
                 });
@@ -405,10 +405,10 @@ layui.define(['jquery', 'layer', 'winui'], function (exports) {
                 $(options.item).each(function (index, item) {
                 	if(item.text == '--'){
                 		div += '<li class="win-left-right-menu"></li>';
-                	}else{
+                	} else {
                 		if(!isNull(item.icon)){
                 			div += '<li><i class="right-menu-icon ' + item.icon + '"></i>' + item.text + '</li>';
-                		}else{
+                		} else {
                 			div += '<li>' + item.text + '</li>';
                 		}
                 	}

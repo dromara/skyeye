@@ -63,7 +63,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -79,7 +79,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("取消成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -147,7 +147,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -190,7 +190,7 @@ layui.config({
 	            if(json.returnCode == "0"){
 	            	winui.window.msg("成功导入" + json.bean.uploadNum + "条日程。", { shift: 1 });
 	                loadTable();
-	            }else{
+	            } else {
 	            	winui.window.msg("导入失败", {icon: 2, time: 2000});
 	            }
 	        }

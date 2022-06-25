@@ -118,7 +118,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                             var s='<i class="eleTree-node-verticalline" style="left: '+(16+options.indent*(floor-1))+'px;"></i>'+
                             '<i class="eleTree-node-horizontalline" style="width: '+(options.indent-4)+'px;left: '+(16+options.indent*(floor-1))+'px;"></i>';
                             return s;
-                        }else{
+                        } else {
                             var s='<i class="eleTree-node-verticalline" style="left: '+(9+options.indent*(floor-1))+'px;display: none;"></i>'+
                             '<i class="eleTree-node-horizontalline" style="width: '+(options.indent-4)+'px;left: '+(16+options.indent*(floor-1))+'px;display: none;"></i>';
                             return s;
@@ -132,7 +132,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                     var str=[
                                         '{{# if(!d[i]["'+options.request.isLeaf+'"]){ }}',
                                             'lazy-icon" ></i>',
-                                        '{{# }else{ }}',
+                                        '{{# } else { }}',
                                             'leaf-icon" style="color: transparent;" ></i>',
                                         '{{# } }}'
                                     ].join("");
@@ -154,13 +154,13 @@ layui.define(["jquery","laytpl"], function (exports) {
                                     status='"1" checked';
                                 }else if(parentStatus==="2"){
                                     status='"2"';
-                                }else{
+                                } else {
                                     status='"0"';
                                 }
                                 return [
                                     '{{# if(d[i]["'+options.request.checked+'"]) { }}',
                                         '<input type="checkbox" name="eleTree-node" lay-ignore eleTree-status="1" checked data-checked class="layui-hide eleTree-hideen ',
-                                    '{{# }else{ }}',
+                                    '{{# } else { }}',
                                         '<input type="checkbox" name="eleTree-node" lay-ignore eleTree-status='+status+' class="layui-hide eleTree-hideen ',
                                     '{{# } }}',
 
@@ -259,7 +259,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             // 判断加载方式
             if(options.data.length===0){
                 this.ajaxGetData();
-            }else{
+            } else {
                 this.renderData();
             }
         },
@@ -404,7 +404,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                             // 如果原来有数据则合并，没有则赋值
                             if(d[options.request.children]){
                                 d[options.request.children]=d[options.request.children].concat(getData);
-                            }else{
+                            } else {
                                 d[options.request.children]=getData;
                             }
                             var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
@@ -413,7 +413,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(getData, function(string){
                                     sibNode.append(string).show("fast");
                                 });
-                            }else{
+                            } else {
                                 el.css("color","transparent").addClass("leaf-icon");
                             }
                             el.removeClass("lazy-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop").addClass("layui-icon-triangle-r icon-rotate");
@@ -422,7 +422,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                             selectParentsFn();
                             _self.checkboxRender();
                         })
-                    }else{
+                    } else {
                         var eletreeStatus=eleTreeNodeContent.children("input.eleTree-hideen").attr("eletree-status");
                         if(d[options.request.children] && d[options.request.children].length>0){
                             laytpl(TPL_ELEM(options,floor,eletreeStatus)).render(d[options.request.children], function(string){
@@ -434,7 +434,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                             _self.checkboxRender();
                         }
                     }
-                }else{
+                } else {
                     // 有子节点则展开子节点
                     sibNode.show("fast");
                     el.addClass("icon-rotate");
@@ -481,7 +481,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                         childNode.prop("checked",false).attr("eleTree-status","0").removeAttr("data-checked");
                     }
                     
-                }else{
+                } else {
                     // 反选自身
                     $(inp).prop("checked",true).attr("eleTree-status","1");
                     // 点击祖父层选中子孙层
@@ -611,7 +611,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                                 el.show().siblings(".eleTree-node-content").children(".eleTree-node-content-icon").children(".ele-custom").addClass("icon-rotate");
                                 // 展开子项是否继续展开祖父项
                                 f(el.parent(".eleTree-node[data-"+options.customKey+"]"));
-                            }else{
+                            } else {
                                 // 如当前节点的子节点有展开项，则展开当前子节点的祖父层
                                 el.children(".eleTree-node").each(function(index, item) {
                                     var id=$(item).data(options.request.key);
@@ -669,7 +669,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             options.elem.find("input.eleTree-hideen[type=checkbox]").each(function(index,item){
                 if($(item).hasClass("eleTree-disabled")){
                     $(item).after('<div class="eleTree-checkbox eleTree-checkbox-disabled"><i class="ele-custom"></i></div>');
-                }else{
+                } else {
                     $(item).after('<div class="eleTree-checkbox"><i class="ele-custom"></i></div>');
                 }
 
@@ -736,7 +736,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                         if(data[obj.i][options.request.children] && data[obj.i][options.request.children].length>0){
                             fn(data[obj.i][options.request.children]);
                         }
-                    }else{
+                    } else {
                         callback(data,obj);
                     }
                 }
@@ -818,7 +818,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             this.keySearchToOpera(key,function(d,obj) {
                 if(d[obj.i][options.request.children]){
                     d[obj.i][options.request.children].push(data);
-                }else{
+                } else {
                     d[obj.i][options.request.children]=[data];
                 }
                 var arr=d[obj.i][options.request.children];
@@ -903,7 +903,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     .siblings("input.eleTree-hideen[eletree-status='1']");
             }else if(includeHalfChecked){
                 el=options.elem.find("input.eleTree-hideen[eletree-status='1'],input.eleTree-hideen[eletree-status='2']");
-            }else{
+            } else {
                 el=options.elem.find("input.eleTree-hideen[eletree-status='1']");
             }
             el.each(function(index,item) {
@@ -924,7 +924,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             if(isReset){
                 this.unCheckNodes();
                 options.defaultCheckedKeys=$.extend([],arr);
-            }else{
+            } else {
                 this.unCheckNodes(true);
                 arr.forEach(function(val) {
                     if($.inArray(val,options.defaultCheckedKeys)===-1){
@@ -1055,7 +1055,7 @@ layui.define(["jquery","laytpl"], function (exports) {
             var isExpand=parentsEl.children(".eleTree-node-content").find(".eleTree-node-content-icon>.ele-custom.layui-icon-triangle-r").hasClass("icon-rotate");
             if(isExpand){
                 this.unExpandNode(key);
-            }else{
+            } else {
                 this.expandNode(key);
             }
         },
@@ -1201,7 +1201,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                     if(isTargetOuterMost){
                         target.append(temNode);
                         floor=0;
-                    }else{
+                    } else {
                         target.children(".eleTree-node-group").append(temNode);
                         floor=Number(target.attr("eletree-floor"))+1;
                     }
@@ -1213,7 +1213,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                         // 判断目标是否是最外层，是的话隐藏线条
                         if(floor===0){
                             temNode.children(".eleTree-node-verticalline,.eleTree-node-horizontalline").hide();
-                        }else{
+                        } else {
                             temNode.children(".eleTree-node-verticalline,.eleTree-node-horizontalline").css("left",options.indent*(floor-1)+16+"px").show();
                         }
                     }
@@ -1528,7 +1528,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                         if((parentEl.length>0 && isParentOpen) || parentEl.length===0){
                             el.show();
                         }
-                    }else{
+                    } else {
                         el.hide().addClass("eleTree-search-hide");
                     }
                     // 删除子层属性
@@ -1556,7 +1556,7 @@ layui.define(["jquery","laytpl"], function (exports) {
                         options.elem.append(string);
                     });
                 }
-            }else{
+            } else {
                 isNotext.remove();
             }
         },

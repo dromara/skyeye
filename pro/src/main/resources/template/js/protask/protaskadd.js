@@ -19,7 +19,7 @@ layui.config({
 
 	if(parent.isSplitTask == true){
 		var parentId = parent.rowId;
-	}else{
+	} else {
 		var parentId = '0';
 	}
 
@@ -128,7 +128,7 @@ layui.config({
 		if(performIdList.length == 0 || isNull($('#performId').tagEditor('getTags')[0].tags)){
 			winui.window.msg('请选择执行人', {icon: 2, time: 2000});
 			return false;
-		}else{
+		} else {
 			var performId = "";
 			$.each(performIdList, function (i, item) {
 				performId += item.id + ',';

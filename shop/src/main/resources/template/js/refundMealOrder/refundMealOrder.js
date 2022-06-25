@@ -19,7 +19,7 @@ layui.config({
         if(parent.dataMation.mealNum == parent.dataMation.remainMealNum){
             // 套餐未使用
             $("#refundPrice").val(parent.dataMation.unformatPayPrice);
-        }else{
+        } else {
             var mealSinglePrice = division(parent.dataMation.unformatPayPrice, parent.dataMation.mealNum);
             var refundPrice = multiplication(mealSinglePrice, parent.dataMation.remainMealNum);
             $("#refundPrice").val(refundPrice);
@@ -39,7 +39,7 @@ layui.config({
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: true});

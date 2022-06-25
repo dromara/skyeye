@@ -32,7 +32,7 @@ layui.config({
    			if (json.returnCode == 0) {
  	   			renderCharts1(json.rows);
  	   			matchingLanguage();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -56,7 +56,7 @@ layui.config({
 		$.each(rows, function(i, item){
 			if(allNum == 0){
 				item["proportion"] = "0.00%";
-			}else{
+			} else {
 				item["proportion"] = (Math.round(item.number / allNum * 10000) / 100.00) + "%";
 			}
 		});

@@ -35,7 +35,7 @@ layui.config({
 			$('#label').html(str);
 
 	 		matchingLanguage();
-		}else{
+		} else {
 			winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 		}
 	}});

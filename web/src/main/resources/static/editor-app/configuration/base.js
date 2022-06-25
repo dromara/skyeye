@@ -166,7 +166,7 @@ function getCookie(name){
 function isNull(str){
 	if(str == null || str == "" || str == '' || str == "null" || str == "undefined"){
 		return true;
-	}else{
+	} else {
 		return false;
 	}
 }

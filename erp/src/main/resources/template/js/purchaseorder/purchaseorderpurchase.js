@@ -284,7 +284,7 @@ layui.config({
 			layer.confirm('该入库单已超出采购单数量，是否继续？', { icon: 3, title: '超标提示' }, function (i) {
 				sendRequest(params);
 			});
-		}else{
+		} else {
 			sendRequest(params);
 		}
 	}

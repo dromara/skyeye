@@ -836,7 +836,7 @@
 							
 							hdb.registerHelper("showQuestionIndex", function(v1, options) {
 								if(v1 == '16' || v1 == '17'){
-								}else{
+								} else {
 									quIndex++;
 									return quIndex;
 								}
@@ -851,7 +851,7 @@
 								for(var i = 1; i <= v1; i++) {
 									if(i <= v2){
 										str += "<td>" + i + "</td>";
-									}else{
+									} else {
 										str += "<td style='background-color: white;'>" + i + "</td>";
 									}
 								}
@@ -936,13 +936,13 @@
 									if(pageNum == '1'){
 										pageNum++;
 										return '';
-									}else{
+									} else {
 										pageNum++;
 									}
 								}
 								if(pageNum == '1'){
 									return '';
-								}else{
+								} else {
 									return 'display: none;';
 								}
 							});
@@ -954,7 +954,7 @@
 							hdb.registerHelper('compare7', function(v1, options) {
 								if(nowPageNum == '1'){
 									return options.inverse(this);
-								}else{
+								} else {
 									return options.fn(this);
 								}
 							});
@@ -1050,7 +1050,7 @@
 		 	   				// 2.加载答案附件上传插件
 		 	   				if(bean.whetherUpload == 1){
 			 	   				loadUploadPic(qBodyItem, bean);
-		 	   				}else{
+		 	   				} else {
 		 	   					qBodyItem.find("fieldset").remove();
 		 	   				}
 	 	      			});
@@ -1239,7 +1239,7 @@
 				    			if (json.returnCode == 0) {
 				    				parent.layer.close(index);
 			 	        			parent.refreshCode = '0';
-				    			}else{
+				    			} else {
 				    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				    			}
 				    		}});

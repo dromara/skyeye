@@ -112,7 +112,7 @@ layui.config({
 	 	 	        	if(toProjectManager.length == 0 && isNull($('#projectManager').tagEditor('getTags')[0].tags)){
 		 	        		winui.window.msg('请选择项目经理', {icon: 2, time: 2000});
 		 	        		return false;
-		 	        	}else{
+		 	        	} else {
 		 	        		$.each(toProjectManager, function(i, item){
 		 	        			toProjectManagerIdStr += item.id + ',';
 			 	        	});
@@ -125,7 +125,7 @@ layui.config({
 		 	        	if(toProjectMembers.length == 0 && isNull($('#projectMembers').tagEditor('getTags')[0].tags)){
 		 	        		winui.window.msg('请选择项目组成员', {icon: 2, time: 2000});
 		 	        		return false;
-		 	        	}else{
+		 	        	} else {
 		 	        		$.each(toProjectMembers, function(i, item){
 		 	        			toProjectMembersIdStr += item.id + ',';
 			 	        	});

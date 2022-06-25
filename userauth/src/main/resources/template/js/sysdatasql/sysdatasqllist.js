@@ -51,7 +51,7 @@ layui.config({
             AjaxPostUtil.request({url:reqBasePath + "sysdatasqlbackups004", params:{rowId: data.id}, type: 'json', callback: function(json){
     			if (json.returnCode == 0) {
     				winui.window.msg("还原成功", {icon: 1, time: 2000});
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

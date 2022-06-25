@@ -24,7 +24,7 @@ if(!getCookiesByUrl){//跨域获取
 	if(isNull(getCookie("userToken"))){
 		if(isNull(GetUrlParam("userToken"))){//如果url后面没有跟usertoken，返回404页面
 			location.href = '../../tpl/sysmessage/500.html';
-		}else{
+		} else {
 			setCookie('userToken', GetUrlParam("userToken"), 's1800');
 		}
 	}
@@ -87,7 +87,7 @@ if(isNull(localStorage.getItem("systemLanguage"))){
 		systemLanguage = data;
 		localStorage.setItem("systemLanguage", JSON.stringify(data));
 	});
-}else{
+} else {
 	systemLanguage = JSON.parse(unescape(localStorage.getItem("systemLanguage")));
 }
 
@@ -98,7 +98,7 @@ if(isNull(localStorage.getItem("systemOrderType"))){
 		systemOrderType = data;
 		localStorage.setItem("systemOrderType", JSON.stringify(data));
 	});
-}else{
+} else {
 	systemOrderType = JSON.parse(unescape(localStorage.getItem("systemOrderType")));
 }
 
@@ -109,7 +109,7 @@ if(isNull(localStorage.getItem("sysDsFormWithCodeType"))){
 		sysDsFormWithCodeType = data;
 		localStorage.setItem("sysDsFormWithCodeType", JSON.stringify(data));
 	});
-}else{
+} else {
 	sysDsFormWithCodeType = JSON.parse(unescape(localStorage.getItem("sysDsFormWithCodeType")));
 }
 
@@ -120,7 +120,7 @@ if(isNull(localStorage.getItem("sysActivitiModel"))){
 		sysActivitiModel = data;
 		localStorage.setItem("sysActivitiModel", JSON.stringify(data));
 	});
-}else{
+} else {
 	sysActivitiModel = JSON.parse(unescape(localStorage.getItem("sysActivitiModel")));
 }
 
@@ -192,7 +192,7 @@ var getFileContent = function(url){
 function isNull(str){
 	if(str == null || str == "" || str == '' || str == "null" || str == "undefined"){
 		return true;
-	}else{
+	} else {
 		return false;
 	}
 }

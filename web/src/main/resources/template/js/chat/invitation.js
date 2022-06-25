@@ -22,7 +22,7 @@ layui.config({
 		 		hdb.registerHelper('compareimg', function(v1, options) {
 		 			if(isNull(v1)){
 		        		return '../../assets/images/os_windows.png';
-		        	}else{
+		        	} else {
 		        		return fileBasePath + v1;
 		        	}
 		 		});
@@ -31,7 +31,7 @@ layui.config({
 		 				return "邀请您加入群聊";
 		 			}else if(v1 == '2'){
 		 				return "申请加入群聊";
-		 			}else{
+		 			} else {
 		 				return "参数错误";
 		 			}
 		 		});
@@ -43,7 +43,7 @@ layui.config({
 		 				return "<font>已同意</font>";
 		 			}else if(v1 == '2'){
 		 				return "<font>已拒绝</font>";
-		 			}else{
+		 			} else {
 		 				return "参数错误";
 		 			}
 		 		});
@@ -76,7 +76,7 @@ layui.config({
 			 	   				parent.etiger.socket.send(JSON.stringify(sendMessage));
 		 	   				}
 		 	   				winui.window.msg('操作成功', {icon: 1, time: 2000});
-		 	   			}else{
+		 	   			} else {
 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	   			}
 		 	   		}});
@@ -89,7 +89,7 @@ layui.config({
 		 	   			if (json.returnCode == 0) {
 		 	   				_this.parent().html('<font>已拒绝</font>');
 		 	   				winui.window.msg('操作成功', {icon: 1, time: 2000});
-		 	   			}else{
+		 	   			} else {
 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	   			}
 		 	   		}});

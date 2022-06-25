@@ -24,7 +24,7 @@ layui.config({
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#schoolId").html("");
 				form.render('select');
-			}else{
+			} else {
 				//加载年级
 				initGrade();
 				//加载学期
@@ -53,7 +53,7 @@ layui.config({
 				$("#sessionYear").html("");
 		 		$("#classList").html("");
 				form.render('select');
-			}else{
+			} else {
 				//加载科目
 				initSubject();
 				//加载班级
@@ -138,7 +138,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

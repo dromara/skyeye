@@ -49,7 +49,7 @@ layui.config({
 		        	var str = d.createTime.toString();
 		        	str = str.substring(0, str.length - 3);
 		        	return date('Y-m-d H:i', str);
-	        	}else{
+	        	} else {
 	        		return "";
 	        	}
 	        }},
@@ -60,14 +60,14 @@ layui.config({
 	        { field: 'suspended', title: '状态<i id="stateDesc" class="fa fa-question-circle" style="margin-left: 5px"></i>', align: 'center', width: 130, templet: function(d){
 	        	if(d.suspended){
 	        		return "<span class='state-down'>挂起</span>";
-	        	}else{
+	        	} else {
 	        		return "<span class='state-up'>正常</span>";
 	        	}
 	        }},
 	        { field: 'weatherEnd', title: '审批进度', align: 'left', width: 80, templet: function(d){
 	        	if(d.weatherEnd == 0){
 	        		return "<span class='state-down'>进行中</span>";
-	        	}else{
+	        	} else {
 	        		return "<span class='state-up'>已完成</span>";
 	        	}
 	        }},
@@ -139,7 +139,7 @@ layui.config({
             AjaxPostUtil.request({url:flowableBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
  	   			if (json.returnCode == 0) {
                 	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -160,7 +160,7 @@ layui.config({
     	if(!isNull($("#createTime").val())){//一定要记得，当createTime为空时
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-    	}else{
+    	} else {
     		startTime = "";
     		endTime = "";
     	}
@@ -171,7 +171,7 @@ layui.config({
     	if(!isNull($("#createTime").val())){//一定要记得，当createTime为空时
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
-    	}else{
+    	} else {
     		startTime = "";
     		endTime = "";
     	}

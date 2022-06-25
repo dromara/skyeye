@@ -84,7 +84,7 @@ layui.config({
 		    	});
 		    	if(isNull(myChart)){
 		    		renderChartBar(cusName, orderAllNum, orderComplateNum, percentage);
-		    	}else{
+		    	} else {
 		    		myChart.setOption({
 	   		            xAxis: [{
 		                    data: cusName
@@ -106,7 +106,7 @@ layui.config({
     	if(isNull($("#timeRange").val())){
     		startTime = "";
     		endTime = "";
-    	}else{
+    	} else {
     		startTime = $("#timeRange").val().split('~')[0].trim();
     		endTime = $("#timeRange").val().split('~')[1].trim();
     	}

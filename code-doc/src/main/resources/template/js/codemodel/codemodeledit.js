@@ -59,7 +59,7 @@ layui.config({
 			        if (winui.verifyForm(data.elem)) {
 			        	if(isNull(editor.getValue())){
 			        		winui.window.msg('请输入模板内容', {icon: 2, time: 2000});
-			        	}else{
+			        	} else {
 				        	var params = {
 			        			modelName: $("#modelName").val(),
 			        			modelContent: encodeURIComponent(editor.getValue()),
@@ -73,7 +73,7 @@ layui.config({
 				 	   			if (json.returnCode == 0) {
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';
-				 	   			}else{
+				 	   			} else {
 				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				 	   			}
 				 	   		}});

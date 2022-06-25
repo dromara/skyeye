@@ -222,7 +222,7 @@
                 input = $G("J_" + i);
             if(input["checked"]){
                 editor.queryCommandState(cmds[0])!=-1 &&editor.execCommand(cmds[0]);
-            }else{
+            } else {
                 editor.queryCommandState(cmds[1])!=-1 &&editor.execCommand(cmds[1]);
             }
         }

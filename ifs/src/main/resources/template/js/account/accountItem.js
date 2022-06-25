@@ -29,7 +29,7 @@ layui.config({
 		        	str += '<span class="state-new">[转]</span>';
 			        if(d.status == 2){
 			        	str += '<span class="state-up"> [正常]</span>';
-			        }else{
+			        } else {
 			        	str += '<span class="state-down"> [预警]</span>';
 			        }
 		        }
@@ -43,7 +43,7 @@ layui.config({
                     return "<span class='state-up'>入库</span>";
                 }else if(d.type == 3){
                     return "<span class='state-up'>其他</span>";
-                }else{
+                } else {
                     return "<span class='state-error'>参数错误</span>";
                 }
             }},
@@ -53,7 +53,7 @@ layui.config({
                     return "<span class='state-up'>现金</span>";
                 }else if(d.payType == 2){
                     return "<span class='state-down'>记账</span>";
-                }else{
+                } else {
                     return "<span class='state-error'>其他</span>";
                 }
             }},

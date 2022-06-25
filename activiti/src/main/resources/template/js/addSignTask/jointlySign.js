@@ -23,7 +23,7 @@ layui.config({
             taskBean = json.bean;
             if(json.bean.isSequential){
                 $("#jointlySignType").html("串行多实例会签");
-            }else{
+            } else {
                 $("#jointlySignType").html("并行多实例会签");
             }
             chooseUserList = [].concat(json.bean.assigneeList);
@@ -45,7 +45,7 @@ layui.config({
                 if(d.type == 1 || d.noDelete){
                     return '<input type="text" id="approvalId' + d.LAY_TABLE_INDEX + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
                         'value="' + (isNull(d.name) ? "" : d.name) + '" win-verify="required"/>';
-                }else{
+                } else {
                     return '<input type="text" id="approvalId' + d.LAY_TABLE_INDEX + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
                         'value="' + (isNull(d.name) ? "" : d.name) + '" win-verify="required"/>' +
                         '<i class="fa fa-plus-circle input-icon chooseApprovalIdBtn" style="top: 8px;"></i>';
@@ -54,7 +54,7 @@ layui.config({
             { field: 'type', title: '角色', align: 'center', width: 100, templet: function(d){
                 if(d.type == 1){
                     return "主持人";
-                }else{
+                } else {
                     return "参与人";
                 }
             }},
@@ -91,7 +91,7 @@ layui.config({
         delete tem["echo"];
         if(obj.elem.checked){
             tem["isMandatory"] = 1;
-        }else{
+        } else {
             delete tem["isMandatory"];
         }
         chooseUserList[rowIndex] = tem;
@@ -116,7 +116,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     parent.layer.close(index);
                     parent.refreshCode = '0';
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -139,7 +139,7 @@ layui.config({
                 var tem = getInPoingArr(temList, "id", item.id, null);
                 if(tem == null){
                     temList.push(item);
-                }else{
+                } else {
                     winui.window.msg("存在相同的会签人，请确认", {icon: 2, time: 2000});
                     return false;
                 }
@@ -166,7 +166,7 @@ layui.config({
             var tmp = chooseUserList[length - 1];
             chooseUserList[length - 1] = {id: rowNum};
             chooseUserList.push(tmp);
-        }else{
+        } else {
             // 并行
             chooseUserList.push({id: rowNum});
         }

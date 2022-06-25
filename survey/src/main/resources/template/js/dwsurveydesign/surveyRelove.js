@@ -15,7 +15,7 @@ layui.config({
 	    var rulYm = "";
 	    if(reqBasePath.indexOf("localhost") != -1){
 	    	rulYm = "http://127.0.0.1:8081/"
-	    }else{
+	    } else {
 	    	rulYm = reqBasePath;
 	    }
 	    

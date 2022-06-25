@@ -32,7 +32,7 @@ layui.config({
 				$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=2");
                 matchingLanguage();
 				form.render();
-            }else{
+            } else {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }});
@@ -48,7 +48,7 @@ layui.config({
         		return "<span class='state-down'>" + d.stateName + "</span>";
         	}else if(d.state == 5){
         		return "<span class='state-up'>" + d.stateName + "</span>";
-        	}else{
+        	} else {
         		return "参数错误";
         	}
         }

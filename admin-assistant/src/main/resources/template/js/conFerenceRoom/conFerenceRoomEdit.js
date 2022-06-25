@@ -24,7 +24,7 @@ layui.config({
 		 		hdb.registerHelper("compare1", function(v1, options){
 					if(isNull(v1)){
 						return path + "assets/img/uploadPic.png";
-					}else{
+					} else {
 						return basePath + v1;
 					}
 				});
@@ -87,14 +87,14 @@ layui.config({
 	 	 	        	}
 	 	 	        	if(userList.length == 0 || isNull($('#roomAdmin').tagEditor('getTags')[0].tags)){
 	 	 	        		params.roomAdmin = "";
-	 	 	        	}else{
+	 	 	        	} else {
 	 	        			params.roomAdmin = userList[0].id;
 	 	        		}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "conferenceroom009", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
-	 		 	   			}else{
+	 		 	   			} else {
 	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});

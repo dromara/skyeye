@@ -24,20 +24,20 @@ layui.config({
 	    	    if(isNull(nodes)){
 	    	    	winui.window.msg('请选择菜单权限', {icon: 2, time: 2000});
 	    			return false;
-	    	    }else{
+	    	    } else {
 	    	    	var menuIds = "";//菜单
                     var pointIds = "";//权限点
 	    	    	for(var i = 0; i < nodes.length; i++){
 	    	    		if(i == nodes.length-1){
                             if(nodes[i].type == "authpoint"){
                                 pointIds += nodes[i].id;
-                            }else{
+                            } else {
                                 menuIds += nodes[i].id;
                             }
-                        }else{
+                        } else {
                             if(nodes[i].type == "authpoint"){
                                 pointIds += nodes[i].id + ",";
-                            }else{
+                            } else {
                                 menuIds += nodes[i].id + ",";
                             }
                         }
@@ -52,7 +52,7 @@ layui.config({
 		 	   			if (json.returnCode == 0) {
 			 	   			parent.layer.close(index);
 			 	        	parent.refreshCode = '0';
-		 	   			}else{
+		 	   			} else {
 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	   			}
 		 	   		}});
@@ -117,7 +117,7 @@ layui.config({
    					//绑定按钮事件
    					fsCommon.buttonEvent("tree", getTree);
    				}
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

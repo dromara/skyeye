@@ -35,7 +35,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -97,7 +97,7 @@ layui.config({
 				//绑定按钮事件
 				fsCommon.buttonEvent("tree", getTree);
 			}
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});

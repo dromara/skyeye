@@ -226,7 +226,7 @@ layui.config({
 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 	                }
 				}});
-		}else{
+		} else {
 			winui.window.msg("参数错误", {icon: 2, time: 2000});
 		}
 	}
@@ -240,7 +240,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("已取消定时发送", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -255,7 +255,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -341,7 +341,7 @@ layui.config({
 				_this.addClass('active');
 				scoolrTo(_this);
 			}
-		}else{
+		} else {
 			var _this = $(".plan-choose").find("li").eq(0);
 			_this.addClass('active');
 			scoolrTo(_this);
@@ -384,7 +384,7 @@ layui.config({
 			}else if(nowCheckType === 'year'){//年计划
 				//无需处理
 			}
-		}else{
+		} else {
 			var _this = $(".plan-choose").find("li").eq(0);
 			_this.addClass('active');
 			scoolrTo(_this);
@@ -650,7 +650,7 @@ layui.config({
 			timeSoltStr = checkDateTypeYear$y + '-' + formatDig(sMonth - 5) + '-01~' +checkDateTypeYear$y + '-' + formatDig(sMonth) + '-' + ddate;
 		}else if(nowCheckType === 'year'){
 			timeSoltStr = checkDateTypeYear$y + '-01-01~' +checkDateTypeYear$y + '-12-31';
-		}else{
+		} else {
 			timeSoltStr = "";
 		}
 		return timeSoltStr;

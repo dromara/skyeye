@@ -109,7 +109,7 @@ layui.config({
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#departmentId").html("");
 						form.render('select');
-					}else{
+					} else {
 						initDepartment();
 					}
 				});
@@ -119,7 +119,7 @@ layui.config({
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#pIdBox").html("");
 						form.render('select');
-					}else{
+					} else {
 						parentId = "0";
 						$("#pIdBox").html('');
 						loadChildJob();
@@ -132,10 +132,10 @@ layui.config({
 							layui.$(data.elem).parent('dd').nextAll().remove();
 							if(layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]').length > 0){
 								parentId = layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]')[0].value;
-							}else{
+							} else {
 								parentId = "0";
 							}
-						}else{
+						} else {
 							layui.$(data.elem).parent('dd').nextAll().remove();
 							parentId = data.value;
 							loadChildJob();
@@ -170,7 +170,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
@@ -196,7 +196,7 @@ layui.config({
 		    					if(json.rows[i].id != parent.rowId){
 			    					if(json.rows[i].id != pid[0]){
 			    						str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
-			    					}else{
+			    					} else {
 			    						str += '<option value="' + json.rows[i].id + '" selected>' + json.rows[i].name + '</option>';
 			    					}
 		    					}
@@ -207,15 +207,15 @@ layui.config({
 	    					parentId = pid[0];
 		    				pid.splice(0, 1);
 		    				loadChildJobAll(pid);
-		    			}else{
+		    			} else {
 		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    			}
 		    		}});
-	    		}else{
+	    		} else {
 	    			pid.splice(0, 1);
     				loadChildJobAll(pid);
 	    		}
-	    	}else{
+	    	} else {
 	    		loadChildJob();
 	    	}
 	    }
@@ -232,7 +232,7 @@ layui.config({
 	 	   			str += '</select></dd>';
 	 	   			$("#pIdBox").append(str);
 	 	   			form.render('select');
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});

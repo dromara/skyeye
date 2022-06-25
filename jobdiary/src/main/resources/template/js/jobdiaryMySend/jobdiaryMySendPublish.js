@@ -120,7 +120,7 @@ layui.config({
  				$("#completedtext").parent().hide();
 	    		$("#completedcontent").parent().show();
 	    		layedit.setContent(completedContent, $("#completedtext").val(), false);
- 			}else{
+ 			} else {
  				$("#completedtext").parent().show();
 	    		$("#completedcontent").parent().hide();
 	    		$("#completedtext").val(layedit.getText(completedContent));
@@ -133,7 +133,7 @@ layui.config({
  				$("#incompletetext").parent().hide();
 	    		$("#incompletecontent").parent().show();
 	    		layedit.setContent(incompleteContent,$("#incompletetext").val(),false);
- 			}else{
+ 			} else {
  				$("#incompletetext").parent().show();
 	    		$("#incompletecontent").parent().hide();
 	    		$("#incompletetext").val(layedit.getText(incompleteContent));
@@ -146,7 +146,7 @@ layui.config({
  				$("#coordinatext").parent().hide();
 	    		$("#coordinacontent").parent().show();
 	    		layedit.setContent(coordinaContent,$("#coordinatext").val(),false);
- 			}else{
+ 			} else {
  				$("#coordinatext").parent().show();
 	    		$("#coordinacontent").parent().hide();
 	    		$("#coordinatext").val(layedit.getText(coordinaContent));
@@ -164,7 +164,7 @@ layui.config({
         		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
                     winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                     return false;
-                }else{
+                } else {
 					var userInfo = "";
                     $.each(userList, function (i, item) {
                         userInfo += item.id + ',';
@@ -175,25 +175,25 @@ layui.config({
         			if(isNull(layedit.getContent(completedContent))){
         				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
         				return false;
-        			}else{
+        			} else {
         				params.completedJob = encodeURIComponent(layedit.getContent(completedContent));
         			}
-        		}else{
+        		} else {
         			if(isNull($("#completedtext").val())){
         				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
         				return false;
-        			}else{
+        			} else {
         				params.completedJob = encodeURIComponent($("#completedtext").val());
         			}
         		}
         		if(data.field.todyincomplete === 'true'){
         			params.incompleteJob = encodeURIComponent(layedit.getContent(incompleteContent));
-        		}else{
+        		} else {
         			params.incompleteJob = encodeURIComponent($("#incompletetext").val());
         		}
         		if(data.field.todycoordina === 'true'){
         			params.coordinaJob = encodeURIComponent(layedit.getContent(coordinaContent));
-        		}else{
+        		} else {
         			params.coordinaJob = encodeURIComponent($("#coordinatext").val());
         		}
         		
@@ -201,7 +201,7 @@ layui.config({
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                          parent.refreshCode = '0';
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }});
@@ -221,7 +221,7 @@ layui.config({
  				$("#weekCompletedText").parent().hide();
 	    		$("#weekCompletedContent").parent().show();
 	    		layedit.setContent(weekCompletedContent, $("#weekCompletedText").val(), false);
- 			}else{
+ 			} else {
  				$("#weekCompletedText").parent().show();
 	    		$("#weekCompletedContent").parent().hide();
 	    		$("#weekCompletedText").val(layedit.getText(weekCompletedContent));
@@ -234,7 +234,7 @@ layui.config({
  				$("#weekWorkSummaryText").parent().hide();
 	    		$("#weekWorkSummaryContent").parent().show();
 	    		layedit.setContent(weekWorkSummaryContent, $("#weekWorkSummaryText").val(), false);
- 			}else{
+ 			} else {
  				$("#weekWorkSummaryText").parent().show();
 	    		$("#weekWorkSummaryContent").parent().hide();
 	    		$("#weekWorkSummaryText").val(layedit.getText(weekWorkSummaryContent));
@@ -247,7 +247,7 @@ layui.config({
  				$("#weekNextWorkPlanText").parent().hide();
 	    		$("#weekNextWorkPlanContent").parent().show();
 	    		layedit.setContent(weekNextWorkPlanContent, $("#weekNextWorkPlanText").val(), false);
- 			}else{
+ 			} else {
  				$("#weekNextWorkPlanText").parent().show();
 	    		$("#weekNextWorkPlanContent").parent().hide();
 	    		$("#weekNextWorkPlanText").val(layedit.getText(weekNextWorkPlanContent));
@@ -260,7 +260,7 @@ layui.config({
  				$("#weekCoordinaJobText").parent().hide();
 	    		$("#weekCoordinaJobContent").parent().show();
 	    		layedit.setContent(weekCoordinaJobContent, $("#weekCoordinaJobText").val(), false);
- 			}else{
+ 			} else {
  				$("#weekCoordinaJobText").parent().show();
 	    		$("#weekCoordinaJobContent").parent().hide();
 	    		$("#weekCoordinaJobText").val(layedit.getText(weekCoordinaJobContent));
@@ -277,7 +277,7 @@ layui.config({
         		if(userList.length == 0 || isNull($('#weekUserName').tagEditor('getTags')[0].tags)){
                     winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                     return false;
-                }else{
+                } else {
 					var weekUserInfo = "";
                     $.each(userList, function (i, item) {
                         weekUserInfo += item.id + ',';
@@ -288,30 +288,30 @@ layui.config({
         			if(isNull(layedit.getContent(weekCompletedContent))){
         				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});
         				return false;
-        			}else{
+        			} else {
         				params.completedJob = encodeURIComponent(layedit.getContent(weekCompletedContent));
         			}
-        		}else{
+        		} else {
         			if(isNull($("#weekCompletedText").val())){
         				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});
         				return false;
-        			}else{
+        			} else {
         				params.completedJob = encodeURIComponent($("#weekCompletedText").val());
         			}
         		}
         		if(data.field.weekCoordinaJob === 'true'){
         			params.coordinaJob = encodeURIComponent(layedit.getContent(weekCoordinaJobContent));
-        		}else{
+        		} else {
         			params.coordinaJob = encodeURIComponent($("#weekCoordinaJobText").val());
         		}
         		if(data.field.weekNextWorkPlan === 'true'){
         			params.nextWorkPlan = encodeURIComponent(layedit.getContent(weekNextWorkPlanContent));
-        		}else{
+        		} else {
         			params.nextWorkPlan = encodeURIComponent($("#weekNextWorkPlanText").val());
         		}
         		if(data.field.weekWorkSummary === 'true'){
         			params.thisWorkSummary = encodeURIComponent(layedit.getContent(weekWorkSummaryContent));
-        		}else{
+        		} else {
         			params.thisWorkSummary = encodeURIComponent($("#weekWorkSummaryText").val());
         		}
         		
@@ -319,7 +319,7 @@ layui.config({
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                          parent.refreshCode = '0';
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }});
@@ -339,7 +339,7 @@ layui.config({
  				$("#monthCompletedText").parent().hide();
 	    		$("#monthCompletedContent").parent().show();
 	    		layedit.setContent(monthCompletedContent, $("#monthCompletedText").val(), false);
- 			}else{
+ 			} else {
  				$("#monthCompletedText").parent().show();
 	    		$("#monthCompletedContent").parent().hide();
 	    		$("#monthCompletedText").val(layedit.getText(monthCompletedContent));
@@ -352,7 +352,7 @@ layui.config({
  				$("#monthWorkSummaryText").parent().hide();
 	    		$("#monthWorkSummaryContent").parent().show();
 	    		layedit.setContent(monthWorkSummaryContent, $("#monthWorkSummaryText").val(), false);
- 			}else{
+ 			} else {
  				$("#monthWorkSummaryText").parent().show();
 	    		$("#monthWorkSummaryContent").parent().hide();
 	    		$("#monthWorkSummaryText").val(layedit.getText(monthWorkSummaryContent));
@@ -365,7 +365,7 @@ layui.config({
  				$("#monthNextWorkPlanText").parent().hide();
 	    		$("#monthNextWorkPlanContent").parent().show();
 	    		layedit.setContent(monthNextWorkPlanContent, $("#monthNextWorkPlanText").val(), false);
- 			}else{
+ 			} else {
  				$("#monthNextWorkPlanText").parent().show();
 	    		$("#monthNextWorkPlanContent").parent().hide();
 	    		$("#monthNextWorkPlanText").val(layedit.getText(monthNextWorkPlanContent));
@@ -378,7 +378,7 @@ layui.config({
  				$("#monthCoordinaJobText").parent().hide();
 	    		$("#monthCoordinaJobContent").parent().show();
 	    		layedit.setContent(monthCoordinaJobContent, $("#monthCoordinaJobText").val(), false);
- 			}else{
+ 			} else {
  				$("#monthCoordinaJobText").parent().show();
 	    		$("#monthCoordinaJobContent").parent().hide();
 	    		$("#monthCoordinaJobText").val(layedit.getText(monthCoordinaJobContent));
@@ -394,7 +394,7 @@ layui.config({
         		if(userList.length == 0 || isNull($('#monthUserName').tagEditor('getTags')[0].tags)){
                     winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                     return false;
-                }else{
+                } else {
 					var monthUserInfo = "";
                     $.each(userList, function (i, item) {
                         monthUserInfo += item.id + ',';
@@ -405,30 +405,30 @@ layui.config({
         			if(isNull(layedit.getContent(monthCompletedContent))){
         				winui.window.msg('请填写本月已完成工作', {icon: 2, time: 2000});
         				return false;
-        			}else{
+        			} else {
         				params.completedJob = encodeURIComponent(layedit.getContent(monthCompletedContent));
         			}
-        		}else{
+        		} else {
         			if(isNull($("#monthCompletedText").val())){
         				winui.window.msg('请填写本月已完成工作', {icon: 2, time: 2000});
         				return false;
-        			}else{
+        			} else {
         				params.completedJob = encodeURIComponent($("#monthCompletedText").val());
         			}
         		}
         		if(data.field.monthCoordinaJob === 'true'){
         			params.coordinaJob = encodeURIComponent(layedit.getContent(monthCoordinaJobContent));
-        		}else{
+        		} else {
         			params.coordinaJob = encodeURIComponent($("#monthCoordinaJobText").val());
         		}
         		if(data.field.monthNextWorkPlan === 'true'){
         			params.nextWorkPlan = encodeURIComponent(layedit.getContent(monthNextWorkPlanContent));
-        		}else{
+        		} else {
         			params.nextWorkPlan = encodeURIComponent($("#monthNextWorkPlanText").val());
         		}
         		if(data.field.monthWorkSummary === 'true'){
         			params.thisWorkSummary = encodeURIComponent(layedit.getContent(monthWorkSummaryContent));
-        		}else{
+        		} else {
         			params.thisWorkSummary = encodeURIComponent($("#monthWorkSummaryText").val());
         		}
         		
@@ -436,7 +436,7 @@ layui.config({
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                          parent.refreshCode = '0';
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }});

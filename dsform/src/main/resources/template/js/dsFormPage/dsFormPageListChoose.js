@@ -29,7 +29,7 @@ layui.config({
 			filterId: 'messageTable',
 			fieldName: 'id'
 		});
-	}else{
+	} else {
 		// 单选
 		$("#saveCheckBox").hide();
 	}
@@ -75,7 +75,7 @@ layui.config({
 					gridId: 'messageTable',
 					fieldName: 'id'
 				});
-			}else{
+			} else {
 				// 单选
 				$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 					var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");

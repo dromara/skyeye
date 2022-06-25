@@ -34,7 +34,7 @@ layui.config({
  	        	});
  	        	if(inList){
  	        		winui.window.msg("该仓库初始库存已存在.", {icon: 2, time: 2000});
- 	        	}else{
+ 	        	} else {
 	 	        	normsStock.push({
 	 	        		depotId: $("#storeHouseId").val(),
 	 	        		depotName: $("#storeHouseId").find("option:selected").text(),

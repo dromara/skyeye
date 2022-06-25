@@ -63,7 +63,7 @@ var roundCorner = 0.5519;
 function roundValues(flag){
     if(flag){
         bm_rnd = Math.round;
-    }else{
+    } else {
         bm_rnd = function(val){
             return val;
         };
@@ -1358,14 +1358,14 @@ function bezFunction(){
         var lPerc = 0;
         if(initPos === len - 1 || initPos === 0 || lengthPos === lengths[initPos]){
             return percents[initPos];
-        }else{
+        } else {
             var dir = lengths[initPos] > lengthPos ? -1 : 1;
             var flag = true;
             while(flag){
                 if(lengths[initPos] <= lengthPos && lengths[initPos+1] > lengthPos){
                     lPerc = (lengthPos - lengths[initPos]) / (lengths[initPos+1] - lengths[initPos]);
                     flag = false;
-                }else{
+                } else {
                     initPos += dir;
                 }
                 if(initPos < 0 || initPos >= len - 1){
@@ -1470,7 +1470,7 @@ function dataFunctionManager(){
                 for(j=0;j<jLen;j+=1){
                     if(maskProps[j].pt.k.i){
                         convertPathsToAbsoluteValues(maskProps[j].pt.k);
-                    }else{
+                    } else {
                         kLen = maskProps[j].pt.k.length;
                         for(k=0;k<kLen;k+=1){
                             if(maskProps[j].pt.k[k].s){
@@ -1516,7 +1516,7 @@ function dataFunctionManager(){
             if(arr[i].ty == 'sh'){
                 if(arr[i].ks.k.i){
                     convertPathsToAbsoluteValues(arr[i].ks.k);
-                }else{
+                } else {
                     jLen = arr[i].ks.k.length;
                     for(j=0;j<jLen;j+=1){
                         if(arr[i].ks.k[j].s){
@@ -1713,7 +1713,7 @@ function dataFunctionManager(){
                 if(arr[i].ty == 'sh'){
                     if(arr[i].ks.k.i){
                         arr[i].ks.k.c = arr[i].closed;
-                    }else{
+                    } else {
                         jLen = arr[i].ks.k.length;
                         for(j=0;j<jLen;j+=1){
                             if(arr[i].ks.k[j].s){
@@ -1743,7 +1743,7 @@ function dataFunctionManager(){
                     for(j=0;j<jLen;j+=1){
                         if(maskProps[j].pt.k.i){
                             maskProps[j].pt.k.c = maskProps[j].cl;
-                        }else{
+                        } else {
                             kLen = maskProps[j].pt.k.length;
                             for(k=0;k<kLen;k+=1){
                                 if(maskProps[j].pt.k[k].s){
@@ -1878,7 +1878,7 @@ var FontManager = (function(){
                 if(node.offsetWidth !== w){
                     loadedCount -= 1;
                     this.fonts[i].loaded = true;
-                }else{
+                } else {
                     node = this.fonts[i].sansCase.node;
                     w = this.fonts[i].sansCase.w;
                     if(node.offsetWidth !== w){
@@ -1895,7 +1895,7 @@ var FontManager = (function(){
 
         if(loadedCount !== 0 && Date.now() - this.initTime < maxWaitingTime){
             setTimeout(this.checkLoadedFontsBinded, 20);
-        }else{
+        } else {
             setTimeout(this.setIsLoadedBinded, 10);
 
         }
@@ -2544,7 +2544,7 @@ var PropertyFactory = (function(){
             p = new ValueProperty(elem,data, mult, container);
         }else if(typeof(data.k[0]) === 'number'){
             p = new MultiDimensionalProperty(elem,data, mult, container);
-        }else{
+        } else {
             switch(type){
                 case 0:
                     p = new KeyframedValueProperty(elem,data,mult, container);
@@ -2667,7 +2667,7 @@ var TransformPropertyFactory = (function() {
                 } else {
                     this.v.translate(this.px.v, this.py.v, 0);
                 }
-            }else{
+            } else {
                 this.v.translate(this.p.v[0],this.p.v[1],-this.p.v[2]);
             }
         }
@@ -2735,7 +2735,7 @@ var TransformPropertyFactory = (function() {
             if(data.p.z){
                 this.pz = PropertyFactory.getProp(elem,data.p.z,0,0,this);
             }
-        }else{
+        } else {
             this.p = PropertyFactory.getProp(elem,data.p || {k:[0,0,0]},1,0,this);
         }
         if(data.rx) {
@@ -2892,11 +2892,11 @@ var ShapePropertyFactory = (function(){
             keyPropS = kf[kf.length - 1].s ? kf[kf.length - 1].s[0] : kf[kf.length - 2].e[0];
             /*if(kf[kf.length - 1].s){
                 keyPropS = kf[kf.length - 1].s[0];
-            }else{
+            } else {
                 keyPropS = kf[kf.length - 2].e[0];
             }*/
             isHold = true;
-        }else{
+        } else {
             var i = iterationIndex;
             var len = kf.length- 1,flag = true,keyData,nextKeyData;
             while(flag){
@@ -2907,7 +2907,7 @@ var ShapePropertyFactory = (function(){
                 }
                 if(i < len - 1){
                     i += 1;
-                }else{
+                } else {
                     flag = false;
                 }
             }
@@ -2918,11 +2918,11 @@ var ShapePropertyFactory = (function(){
                     perc = 1;
                 }else if(frameNum < keyData.t-this.offsetTime){
                     perc = 0;
-                }else{
+                } else {
                     var fnc;
                     if(keyData.__fnct){
                         fnc = keyData.__fnct;
-                    }else{
+                    } else {
                         fnc = BezierFactory.getBezierEasing(keyData.o.x,keyData.o.y,keyData.i.x,keyData.i.y).get;
                         keyData.__fnct = fnc;
                     }
@@ -3099,7 +3099,7 @@ var ShapePropertyFactory = (function(){
             this.s = PropertyFactory.getProp(elem,data.s,1,0,this);
             if(this.dynamicProperties.length){
                 this.k = true;
-            }else{
+            } else {
                 this.k = false;
                 this.convertEllToPath();
             }
@@ -3182,7 +3182,7 @@ var ShapePropertyFactory = (function(){
             this.paths = this.localShapeCollection;
             if(this.dynamicProperties.length){
                 this.k = true;
-            }else{
+            } else {
                 this.k = false;
                 this.convertToPath();
             }
@@ -3285,7 +3285,7 @@ var ShapePropertyFactory = (function(){
             this.r = PropertyFactory.getProp(elem,data.r,0,0,this);
             if(this.dynamicProperties.length){
                 this.k = true;
-            }else{
+            } else {
                 this.k = false;
                 this.convertRectToPath();
             }
@@ -3312,7 +3312,7 @@ var ShapePropertyFactory = (function(){
                         this.v.setTripleAt(p0-v0,p1+v1,p0-v0+cPoint,p1+v1,p0-v0,p1+v1,2);
                         this.v.setTripleAt(p0-v0,p1-v1,p0-v0,p1-v1+cPoint,p0-v0,p1-v1,3);
                     }
-                }else{
+                } else {
                     this.v.setTripleAt(p0+v0,p1-v1+round,p0+v0,p1-v1+cPoint,p0+v0,p1-v1+round,0, true);
                     if(round!== 0){
                         this.v.setTripleAt(p0+v0-round,p1-v1,p0+v0-round,p1-v1,p0+v0-cPoint,p1-v1,1, true);
@@ -3355,7 +3355,7 @@ var ShapePropertyFactory = (function(){
             var keys = dataProp.k;
             if(keys.length){
                 prop = new KeyframedShapeProperty(elem, data, type);
-            }else{
+            } else {
                 prop = new ShapeProperty(elem, data, type);
             }
         }else if(type === 5){
@@ -3429,7 +3429,7 @@ ShapeModifier.prototype.init = function(elem,data){
     this.k = false;
     if(this.dynamicProperties.length){
         this.k = true;
-    }else{
+    } else {
         this.getValue(true);
     }
 };
@@ -3973,7 +3973,7 @@ RepeaterModifier.prototype.init = function(elem, arr, pos, elemsData) {
     }
     if(this.dynamicProperties.length){
         this.k = true;
-    }else{
+    } else {
         this.getValue(true);
     }
 };
@@ -4180,10 +4180,10 @@ DashProperty.prototype.getValue = function(forceRender) {
             if(this.dataProps[i].n != 'o'){
                 if(this.renderer === 'svg') {
                     this.dashStr += ' ' + this.dataProps[i].p.v;
-                }else{
+                } else {
                     this.dashArray[i] = this.dataProps[i].p.v;
                 }
-            }else{
+            } else {
                 this.dashoffset[0] = this.dataProps[i].p.v;
             }
         }
@@ -4569,7 +4569,7 @@ var assetLoader = (function(){
 	            if(xhr.status == 200){
 	            	response = formatResponse(xhr);
 	            	callback(response);
-	            }else{
+	            } else {
 	                try{
 	            		response = formatResponse(xhr);
 	            		callback(response);
@@ -4800,7 +4800,7 @@ TextAnimatorProperty.prototype.getMeasures = function(documentData, lettersChang
             }
             letterO = letterSw = letterFc = letterM = '';
             letterP = this.defaultPropsArray;
-        }else{
+        } else {
             if(this._hasMaskedPath) {
                 if(currentLine !== letters[i].line){
                     switch(documentData.j){
@@ -4903,7 +4903,7 @@ TextAnimatorProperty.prototype.getMeasures = function(documentData, lettersChang
                             } else {
                                 currentLength += animatorProps.t.v*mult;
                             }
-                        }else{
+                        } else {
                             if(mult.length) {
                                 xPos += animatorProps.t.v*mult[0];
                             } else {
@@ -4920,7 +4920,7 @@ TextAnimatorProperty.prototype.getMeasures = function(documentData, lettersChang
             if(documentData.strokeColorAnim) {
                 if(documentData.sc){
                     sc = [documentData.sc[0], documentData.sc[1], documentData.sc[2]];
-                }else{
+                } else {
                     sc = [0,0,0];
                 }
             }
@@ -4974,7 +4974,7 @@ TextAnimatorProperty.prototype.getMeasures = function(documentData, lettersChang
 
                     if(mult.length) {
                         matrixHelper.rotateY(animatorProps.ry.v*mult[1]);
-                    }else{
+                    } else {
                         matrixHelper.rotateY(animatorProps.ry.v*mult);
                     }
                 }
@@ -5054,7 +5054,7 @@ TextAnimatorProperty.prototype.getMeasures = function(documentData, lettersChang
                         } else {
                             matrixHelper.translate(0, animatorProps.p.v[1] * mult, -animatorProps.p.v[2] * mult);
                         }
-                    }else{
+                    } else {
                         if(mult.length) {
                             matrixHelper.translate(animatorProps.p.v[0] * mult[0], animatorProps.p.v[1] * mult[1], -animatorProps.p.v[2] * mult[2]);
                         } else {
@@ -5092,7 +5092,7 @@ TextAnimatorProperty.prototype.getMeasures = function(documentData, lettersChang
                     currentLength += letters[i].an / 2;
                     currentLength += documentData.tr/1000*documentData.finalSize;
                 }
-            }else{
+            } else {
 
                 matrixHelper.translate(xPos,yPos,0);
 
@@ -5117,7 +5117,7 @@ TextAnimatorProperty.prototype.getMeasures = function(documentData, lettersChang
                 letterM = matrixHelper.toCSS();
             }else if(renderType === 'svg'){
                 letterM = matrixHelper.to2dCSS();
-            }else{
+            } else {
                 letterP = [matrixHelper.props[0],matrixHelper.props[1],matrixHelper.props[2],matrixHelper.props[3],matrixHelper.props[4],matrixHelper.props[5],matrixHelper.props[6],matrixHelper.props[7],matrixHelper.props[8],matrixHelper.props[9],matrixHelper.props[10],matrixHelper.props[11],matrixHelper.props[12],matrixHelper.props[13],matrixHelper.props[14],matrixHelper.props[15]];
             }
             letterO = elemOpacity;
@@ -5472,7 +5472,7 @@ TextProperty.prototype.completeTextData = function(documentData) {
                 if(fontManager.chars){
                     charData = fontManager.getCharData(finalText[i], fontData.fStyle, fontData.fFamily);
                     cLength = newLineFlag ? 0 : charData.w*documentData.finalSize/100;
-                }else{
+                } else {
                     //tCanvasHelper.font = documentData.s + 'px '+ fontData.fFamily;
                     cLength = fontManager.measureText(finalText[i], documentData.f, documentData.finalSize);
                 }
@@ -5520,13 +5520,13 @@ TextProperty.prototype.completeTextData = function(documentData) {
             val = '';
             newLineFlag = true;
             currentLine += 1;
-        }else{
+        } else {
             val = currentChar;
         }
         if(fontManager.chars){
             charData = fontManager.getCharData(currentChar, fontData.fStyle, fontManager.getFontByName(documentData.f).fFamily);
             cLength = newLineFlag ? 0 : charData.w*documentData.finalSize/100;
-        }else{
+        } else {
             //var charWidth = fontManager.measureText(val, documentData.f, documentData.finalSize);
             //tCanvasHelper.font = documentData.finalSize + 'px '+ fontManager.getFontByName(documentData.f).fFamily;
             cLength = fontManager.measureText(val, documentData.f, documentData.finalSize);
@@ -5570,7 +5570,7 @@ TextProperty.prototype.completeTextData = function(documentData) {
                 currentSize = 0;
                 index += 1;
             }
-        }else{
+        } else {
             letters[index].ind = index;
             letters[index].extra = 0;
             index += 1;
@@ -5582,7 +5582,7 @@ TextProperty.prototype.completeTextData = function(documentData) {
     if(documentData.sz){
         documentData.boxWidth = documentData.sz[0];
         documentData.justifyOffset = 0;
-    }else{
+    } else {
         documentData.boxWidth = maxLineWidth;
         switch(documentData.j){
             case 1:
@@ -5687,7 +5687,7 @@ var TextSelectorProp = (function(){
         this.s = PropertyFactory.getProp(elem,data.s || {k:0},0,0,this);
         if('e' in data){
             this.e = PropertyFactory.getProp(elem,data.e,0,0,this);
-        }else{
+        } else {
             this.e = {v:100};
         }
         this.o = PropertyFactory.getProp(elem,data.o || {k:0},0,0,this);
@@ -5737,7 +5737,7 @@ var TextSelectorProp = (function(){
             } else if(type === 3) {
                 if (e === s) {
                     mult = ind >= e ? 0 : 1;
-                }else{
+                } else {
                     mult = 1 - max(0, min(0.5 / (e - s) + (ind - s) / (e - s),1));
                 }
 
@@ -6328,7 +6328,7 @@ SVGRenderer.prototype.renderFrame = function(num){
     }
     if(num === null){
         num = this.renderedFrame;
-    }else{
+    } else {
         this.renderedFrame = num;
     }
     // console.log('-------');
@@ -6537,7 +6537,7 @@ CanvasRenderer.prototype.configAnimation = function(animData){
         if(this.renderConfig.id) {
             this.animationItem.container.setAttribute('id', this.renderConfig.id);
         }
-    }else{
+    } else {
         this.canvasContext = this.renderConfig.context;
     }
     this.data = animData;
@@ -6569,7 +6569,7 @@ CanvasRenderer.prototype.updateContainerSize = function () {
         elementHeight = this.animationItem.wrapper.offsetHeight;
         this.animationItem.container.setAttribute('width',elementWidth * this.renderConfig.dpr );
         this.animationItem.container.setAttribute('height',elementHeight * this.renderConfig.dpr);
-    }else{
+    } else {
         elementWidth = this.canvasContext.canvas.width * this.renderConfig.dpr;
         elementHeight = this.canvasContext.canvas.height * this.renderConfig.dpr;
     }
@@ -6585,7 +6585,7 @@ CanvasRenderer.prototype.updateContainerSize = function () {
         if(animationRel>elementRel && fillType === 'meet' || animationRel<elementRel && fillType === 'slice'){
             this.transformCanvas.sx = elementWidth/(this.transformCanvas.w/this.renderConfig.dpr);
             this.transformCanvas.sy = elementWidth/(this.transformCanvas.w/this.renderConfig.dpr);
-        }else{
+        } else {
             this.transformCanvas.sx = elementHeight/(this.transformCanvas.h / this.renderConfig.dpr);
             this.transformCanvas.sy = elementHeight/(this.transformCanvas.h / this.renderConfig.dpr);
         }
@@ -6610,7 +6610,7 @@ CanvasRenderer.prototype.updateContainerSize = function () {
         this.transformCanvas.sy = elementHeight/(this.transformCanvas.h/this.renderConfig.dpr);
         this.transformCanvas.tx = 0;
         this.transformCanvas.ty = 0;
-    }else{
+    } else {
         this.transformCanvas.sx = this.renderConfig.dpr;
         this.transformCanvas.sy = this.renderConfig.dpr;
         this.transformCanvas.tx = 0;
@@ -6673,7 +6673,7 @@ CanvasRenderer.prototype.renderFrame = function(num, forceRender){
     if(this.globalData._mdf) {
         if(this.renderConfig.clearCanvas === true){
             this.canvasContext.clearRect(0, 0, this.transformCanvas.w, this.transformCanvas.h);
-        }else{
+        } else {
             this.save();
         }
         for (i = len - 1; i >= 0; i-=1) {
@@ -6813,7 +6813,7 @@ function MaskElement(data,element,globalData) {
 
             currentMasks.length = 0;
             currentMasks.push(g);
-        }else{
+        } else {
             currentMasks.push(path);
         }
         if(properties[i].inv && !this.solidPath){
@@ -6876,7 +6876,7 @@ MaskElement.prototype.renderFrame = function (isFirstFrame) {
                         this.storedData[i].elem.setAttribute('filter','url(' + locationHref + '#'+this.storedData[i].filterId+')');
                     }
                     feMorph.setAttribute('radius',-this.storedData[i].x.v);
-                }else{
+                } else {
                     if(this.storedData[i].lastOperator !== 'dilate'){
                         this.storedData[i].lastOperator = 'dilate';
                         this.storedData[i].elem.setAttribute('filter',null);
@@ -7194,7 +7194,7 @@ RenderableElement.prototype = {
     getLayerSize: function(){
         if(this.data.ty === 5){
             return {w:this.data.textData.width,h:this.data.textData.height};
-        }else{
+        } else {
             return {w:this.data.width,h:this.data.height};
         }
     }
@@ -8250,7 +8250,7 @@ SVGShapeElement.prototype.searchShapes = function(arr,itemsData,prevViewData,con
                 modifier.init(this,arr,i,itemsData);
                 this.shapeModifiers.push(modifier);
                 render = false;
-            }else{
+            } else {
                 modifier = itemsData[i];
                 modifier.closed = true;
             }
@@ -8742,7 +8742,7 @@ CVShapeElement.prototype.searchShapes = function(arr,itemsData, prevViewData, sh
                 modifier.init(this,arr,i,itemsData);
                 this.shapeModifiers.push(modifier);
                 shouldRender = false;
-            }else{
+            } else {
                 modifier = itemsData[i];
                 modifier.closed = true;
             }
@@ -8823,7 +8823,7 @@ CVShapeElement.prototype.drawLayer = function() {
                     ctx.moveTo(nodes[k].p[0],nodes[k].p[1]);
                 }else if(nodes[k].t == 'c'){
                     ctx.bezierCurveTo(nodes[k].pts[0],nodes[k].pts[1],nodes[k].pts[2],nodes[k].pts[3],nodes[k].pts[4],nodes[k].pts[5]);
-                }else{
+                } else {
                     ctx.closePath();
                 }
             }
@@ -9044,7 +9044,7 @@ CVTextElement.prototype.buildNewText = function(){
     if(documentData.fc) {
         hasFill = true;
         this.values.fill = this.buildColor(documentData.fc);
-    }else{
+    } else {
         this.values.fill = 'rgba(0,0,0,0)';
     }
     this.fill = hasFill;
@@ -9559,7 +9559,7 @@ AnimationItem.prototype.setData = function (wrapper, animationData) {
         params.loop = false;
     }else if(loop === 'true'){
         params.loop = true;
-    }else{
+    } else {
         params.loop = parseInt(loop);
     }
     var autoplay = wrapperAttributes.getNamedItem('data-anim-autoplay') ? wrapperAttributes.getNamedItem('data-anim-autoplay').value :  wrapperAttributes.getNamedItem('data-bm-autoplay') ? wrapperAttributes.getNamedItem('data-bm-autoplay').value :  wrapperAttributes.getNamedItem('bm-autoplay') ? wrapperAttributes.getNamedItem('bm-autoplay').value : true;
@@ -9689,7 +9689,7 @@ AnimationItem.prototype.waitForFontsLoaded = function(){
     }
     if(this.renderer.globalData.fontManager.isLoaded){
         this.checkLoaded();
-    }else{
+    } else {
         setTimeout(this.waitForFontsLoaded.bind(this),20);
     }
 }
@@ -9776,7 +9776,7 @@ AnimationItem.prototype.togglePause = function (name) {
     }
     if(this.isPaused === true){
         this.play();
-    }else{
+    } else {
         this.pause();
     }
 };
@@ -9797,7 +9797,7 @@ AnimationItem.prototype.goToAndStop = function (value, isFrame, name) {
     }
     if(isFrame){
         this.setCurrentRawFrameValue(value);
-    }else{
+    } else {
         this.setCurrentRawFrameValue(value * this.frameModifier);
     }
     this.pause();
@@ -10204,7 +10204,7 @@ var ExpressionManager = (function(){
             while(i<lenA || i < lenB){
                 if((typeof a[i] === 'number' || a[i] instanceof Number) && (typeof b[i] === 'number' || b[i] instanceof Number)){
                     retArr[i] = a[i] + b[i];
-                }else{
+                } else {
                     retArr[i] = b[i] === undefined ? a[i] : a[i] || b[i];
                 }
                 i += 1;
@@ -10243,7 +10243,7 @@ var ExpressionManager = (function(){
             while(i<lenA || i < lenB){
                 if((typeof a[i] === 'number' || a[i] instanceof Number) && (typeof b[i] === 'number' || b[i] instanceof Number)){
                     retArr[i] = a[i] - b[i];
-                }else{
+                } else {
                     retArr[i] = b[i] === undefined ? a[i] : a[i] || b[i];
                 }
                 i += 1;
@@ -10370,7 +10370,7 @@ var ExpressionManager = (function(){
 
         if(max == min){
             h = s = 0; // achromatic
-        }else{
+        } else {
             var d = max - min;
             s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
             switch(max){
@@ -10402,7 +10402,7 @@ var ExpressionManager = (function(){
 
         if(s === 0){
             r = g = b = l; // achromatic
-        }else{
+        } else {
 
             var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
             var p = 2 * l - q;
@@ -10899,7 +10899,7 @@ var expressionHelpers = (function(){
         var lastKeyFrame = keyframes[keyframes.length - 1].t;
         if(currentFrame<=lastKeyFrame){
             return this.pv;
-        }else{
+        } else {
             var cycleDuration, firstKeyFrame;
             if(!durationFlag){
                 if(!duration || duration > keyframes.length - 1){
@@ -10962,7 +10962,7 @@ var expressionHelpers = (function(){
         var firstKeyFrame = keyframes[0].t;
         if(currentFrame>=firstKeyFrame){
             return this.pv;
-        }else{
+        } else {
             var cycleDuration, lastKeyFrame;
             if(!durationFlag){
                 if(!duration || duration > keyframes.length - 1){

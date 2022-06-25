@@ -81,7 +81,7 @@ layui.config({
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#departmentId").html("");
 				form.render('select');
-			}else{
+			} else {
 				initDepartment();
 			}
 		});
@@ -106,7 +106,7 @@ layui.config({
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#pIdBox").html("");
 				form.render('select');
-			}else{
+			} else {
 				parentId = "0";
 				$("#pIdBox").html('');
 				loadChildJob();
@@ -119,10 +119,10 @@ layui.config({
 					layui.$(data.elem).parent('dd').nextAll().remove();
 					if(layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]').length > 0){
 						parentId = layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]')[0].value;
-					}else{
+					} else {
 						parentId = "0";
 					}
-				}else{
+				} else {
 					layui.$(data.elem).parent('dd').nextAll().remove();
 					parentId = data.value;
 					loadChildJob();
@@ -144,7 +144,7 @@ layui.config({
 	 	   			str += '</select></dd>';
 	 	   			$("#pIdBox").append(str);
 	 	   			form.render('select');
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -176,7 +176,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

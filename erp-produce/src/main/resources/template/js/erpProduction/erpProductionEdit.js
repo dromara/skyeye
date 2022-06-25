@@ -109,7 +109,7 @@ layui.config({
 				
 				matchingLanguage();
 				form.render();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -131,7 +131,7 @@ layui.config({
 	 	   			if(json.rows.length > 0){
 	 	   				loadBomChildProList(json.rows[0].id);
 	 	   			}
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -152,7 +152,7 @@ layui.config({
 	 	   			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
  	   				//加载建议采购数量
  	   				loadChildProPosal();
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -227,7 +227,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -265,7 +265,7 @@ layui.config({
 							if (json.returnCode == 0) {
 								procedureMationList = [].concat(json.bean.procedureList);
 								loadProcedureMation();
-							}else{
+							} else {
 								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 							}
 						}});

@@ -25,7 +25,7 @@ layui.config({
 	var s = "商品选择规则：";
 	if(checkType == "1"){
 		s += '1.单选，双击指定行数据即可选中；';
-	}else{
+	} else {
 		s += '1.多选；';
 		//显示保存按钮
 		$("#saveCheckBox").show();
@@ -141,7 +141,7 @@ layui.config({
 						click.find("input[type='radio']").prop("checked", true);
 						form.render();
 					})
-		    	}else{
+		    	} else {
 		    		// 多选,设置选中
 		    		tableCheckBoxUtil.checkedDefault({
 						gridId: 'messageTable',
@@ -184,7 +184,7 @@ layui.config({
    				parent.erpOrderUtil.chooseProductMation = [].concat(json.rows);
  	   			parent.layer.close(index);
  	        	parent.refreshCode = '0';
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

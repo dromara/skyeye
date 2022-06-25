@@ -103,7 +103,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     table.reload("messageTable", {page: {curr: 1}, where: {storeId: chooseStoreId}})
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -130,7 +130,7 @@ layui.config({
             AjaxPostUtil.request({url: shopBasePath + "storeStaff003", params: params, type: 'json', method: "POST", callback: function(json){
                 if (json.returnCode == 0) {
                     loadStaff(chooseStoreId);
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});

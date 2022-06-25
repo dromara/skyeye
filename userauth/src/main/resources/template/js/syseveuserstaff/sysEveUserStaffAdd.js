@@ -75,7 +75,7 @@ layui.config({
  					departmentId = "";
  					if($("#demoTree2 li").length > 0){
  						$("#demoTree2 li").eq(0).children('div').click();
- 					}else{
+ 					} else {
  						jobId = "";
  						//初始化职位
  			 			dtree.render({
@@ -200,7 +200,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

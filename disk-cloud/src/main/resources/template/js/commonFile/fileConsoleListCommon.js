@@ -18,7 +18,7 @@ function createWordFile(folderId, callBack){
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -32,7 +32,7 @@ function createExcelFile(folderId, callBack){
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -46,7 +46,7 @@ function createPPTFile(folderId, callBack){
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -60,7 +60,7 @@ function createTXTFile(folderId, callBack){
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -74,7 +74,7 @@ function createHtmlFile(folderId, callBack){
 			if(typeof(callBack) == "function") {
 				callBack();
 			}
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -93,7 +93,7 @@ function createFolder(folderId, refreshCallBack, initDragCallBack, currentUserId
 			if(typeof(initDragCallBack) == "function") {
 				initDragCallBack();
 			}
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -151,7 +151,7 @@ layui.define(["jquery"], function(exports) {
 			if($(this).attr("data-type") === '1'){
 				$("#showTypeChoose").find("i").attr("class", "fa fa-th-large");
 				$("#showListStyle").html('');
-			}else{
+			} else {
 				$("#showTypeChoose").find("i").attr("class", "fa fa-th-list");
 				$("#showListStyle").html('.right-center-is-content .file{height: 30px; width: 100%; margin-bottom: 0px;}.right-center-is-content .file .ico{width: 24px; height: 24px; float: left; margin-left: 25px;}'
 											+ '.right-center-is-content .file .ico img{width: 20px; max-height: 24px}'

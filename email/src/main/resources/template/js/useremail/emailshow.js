@@ -27,7 +27,7 @@ layui.config({
 			$("#emailRightContent").html(str);
 			$("img").css({"width": "auto"});
 			matchingLanguage();
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -40,7 +40,7 @@ layui.config({
 			$("#hideOrShowMessage").html("显示信息");
 			$(".send-mation-in").hide();
 			$(".send-mation-in").removeClass("message-height");
-		}else{
+		} else {
 			$("#hideOrShowMessage").html("隐藏信息");
 			$(".send-mation-in").show();
 			$(".send-mation-in").addClass("message-height");

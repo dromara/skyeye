@@ -80,7 +80,7 @@ layui.config({
 		        { field: 'processInstanceId', title: '流程ID', align: 'center', rowspan: 2, width: 100, templet: function(d){
 		        	if(!isNull(d.processInstanceId)){
 		        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
-		        	}else{
+		        	} else {
 		        		return "";
 		        	}
 		        }},
@@ -115,7 +115,7 @@ layui.config({
 	        }else if (layEvent === 'execute') { //开始执行
 	        	if(!isNull(data.projectManager) && !isNull(data.projectMembers) && !isNull(data.projectContent)){
 		        	execute(data);
-	        	}else{
+	        	} else {
 	        		layer.confirm("该项目还未进行项目任命，是否立即任命？", {btn: ['立即任命', '取消'], icon: 3, title: '操作提醒'}, function (index) {
 						layer.close(index);
 			            proappoint(data);
@@ -141,7 +141,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -156,7 +156,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("撤销成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -171,7 +171,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("作废成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -186,7 +186,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("执行成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -295,7 +295,7 @@ layui.config({
 					if (json.returnCode == 0) {
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadTable();
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});

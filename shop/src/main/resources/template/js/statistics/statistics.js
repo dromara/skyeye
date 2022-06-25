@@ -38,7 +38,7 @@ layui.config({
             $("#storeId").html('');
             form.render('select');
             resetData();
-        }else{
+        } else {
             shopUtil.queryStoreListByAreaId(data.value, function (json){
                 $("#storeId").html(getDataUseHandlebars(selOption, json));
                 form.render('select');
@@ -89,7 +89,7 @@ layui.config({
                 myChart3 = renderEcharts2("echart3", '', '', json.bean.storeMealOrderNum);
                 myChart4 = renderEcharts2("echart4", '', '', json.bean.storeKeepFitOrderNum);
                 myChart5 = renderEcharts2("echart5", '', '', json.bean.natureMealOrderNum);
-            }else{
+            } else {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }});

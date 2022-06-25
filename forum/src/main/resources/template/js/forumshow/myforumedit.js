@@ -31,7 +31,7 @@ layui.config({
 					return 'checked';
 				}else if(v1 == '1'){
 					return '';
-				}else{
+				} else {
 					return '';
 				}
 			});
@@ -40,7 +40,7 @@ layui.config({
 					return 'true';
 				}else if(v1 == '1'){
 					return 'false';
-				}else{
+				} else {
 					return 'false';
 				}
 			});
@@ -71,7 +71,7 @@ layui.config({
 	 		$("input:radio[name=forumType][value=" + json.bean.forumType + "]").attr("checked", true);
 	 		if(json.bean.anonymous == "1"){
 	 			$("#anonymous").val("false");
-	 		}else{
+	 		} else {
 	 			$("#anonymous").val("true");
 	 		}
 	 		matchingLanguage();
@@ -86,7 +86,7 @@ layui.config({
 	 	        	if(tagList.length == 0 || isNull($('#tagId').tagEditor('getTags')[0].tags)){
 	 	        		winui.window.msg("请选择标签", {icon: 2, time: 2000});
 	 	        		return false;
-	 		        }else{
+	 		        } else {
 	 		        	var str = "";
 	 		        	$.each(tagList, function (i, item) {
 	 		        		str += item.id + ',';
@@ -95,7 +95,7 @@ layui.config({
 	 	    		}
 	 	        	if($("#anonymous").val() == 'true'){
 	 	        		params.anonymous = '2';
-	 	        	}else{
+	 	        	} else {
 	 	        		params.anonymous = '1';
 	 	        	}
 	 	        	params.content = encodeURIComponent(ue.getContent());

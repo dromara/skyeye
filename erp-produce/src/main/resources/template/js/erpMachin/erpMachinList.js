@@ -49,7 +49,7 @@ layui.config({
 	        		return "<span class='state-down'>拒绝通过</span>";
 	        	}else if(d.state == '5'){
 	        		return "<span class='state-up'>已完成</span>";
-	        	}else{
+	        	} else {
 	        		return "参数错误";
 	        	}
 		    }},
@@ -120,7 +120,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -146,7 +146,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg("提交成功。", {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});

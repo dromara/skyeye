@@ -85,7 +85,7 @@ layui.config({
 						return false;
 					}
 				});
-			}else{
+			} else {
 				$("#contractId").html("");
 				form.render('select');
 			}

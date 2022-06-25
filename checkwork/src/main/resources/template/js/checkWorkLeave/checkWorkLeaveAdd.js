@@ -106,7 +106,7 @@ layui.config({
                         leaveEndElem[thisRowNum].config.min = min;
                         leaveEndElem[thisRowNum].config.max = max;
                         $("#workTime" + thisRowNum).html(timeMation.startTime + " ~ " + timeMation.endTime);
-                    }else{
+                    } else {
                         leaveDayElem[thisRowNum].config.chooseDay = [];
                         $("#workTime" + thisRowNum).html("-");
                     }
@@ -337,12 +337,12 @@ layui.config({
                     if(compare_HHmmss(restStartTime, endTime) || compare_HHmmss(startTime, restEndTime)){
                         // 请假结束时间比作息开始时间小或者请假开始时间比作息结束时间大，说明没有与作息时间重合的时间
                         hour = division(timeDifference(startTime, endTime), 60);
-                    }else{
+                    } else {
                         var overlapTime = getOverlapTime(startTime, endTime, restStartTime, restEndTime);
                         // 时间计算为：选择的请假时间时间减去与作息时间重复的时间段
                         hour = division(subtraction(timeDifference(startTime, endTime), timeDifference(overlapTime[0], overlapTime[1])), 60);
                     }
-                }else{
+                } else {
                     hour = division(timeDifference(startTime, endTime), 60);
                 }
                 $("#leaveHour" + num).html(hour);

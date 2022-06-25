@@ -26,7 +26,7 @@ layui.config({
 		 		$("#knowledgecontentshowBox").attr("src", "knowledgecontentshow.html");
 		 		interval = setInterval(iFrameHeight, 300);
 		 		matchingLanguage();
-			}else{
+			} else {
 				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -51,7 +51,7 @@ layui.config({
  				$("#examineNopassReason").val("");
  			}else if(val == '3'){//审核不通过
  				$("#reasonHide").removeClass("layui-hide");
- 			}else{
+ 			} else {
  				winui.window.msg('状态值错误', {icon: 2, time: 2000});
  			}
  		});
@@ -74,7 +74,7 @@ layui.config({
  					if (json.returnCode == 0) {
  						parent.layer.close(index);
  						parent.refreshCode = '0';
- 					}else{
+ 					} else {
  						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  					}
  				}});

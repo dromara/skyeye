@@ -77,7 +77,7 @@ layui.config({
 		        { field: 'processInstanceId', title: '流程ID', align: 'center', rowspan: 2, width: 100, templet: function(d){
 		        	if(!isNull(d.processInstanceId)){
 		        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
-		        	}else{
+		        	} else {
 		        		return "";
 		        	}
 		        }}

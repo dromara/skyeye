@@ -68,7 +68,7 @@ layui.config({
 		if($(".drop-down-menu").is(':hidden')){
 			$(".drop-down-menu").show();
 			$(".suspension-menu-icon").removeClass("rotate").addClass("rotate1");
-		}else{
+		} else {
 			$(".drop-down-menu").hide();
 			$(".suspension-menu-icon").removeClass("rotate1").addClass("rotate");
 		}
@@ -90,7 +90,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadList();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});

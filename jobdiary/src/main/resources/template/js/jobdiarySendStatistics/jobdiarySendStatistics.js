@@ -27,7 +27,7 @@ layui.config({
 			if(isNull(value)){
 				thefirstTime = "";
 				thesecondTime = "";
-			}else{
+			} else {
 				thefirstTime = value.split("~")[0].trim() + ' 00:00:00';
 				thesecondTime = value.split("~")[1].trim() + ' 23:59:59';
 			}
@@ -104,7 +104,7 @@ layui.config({
     				}
    		        });
    		        matchingLanguage();
-    		}else{
+    		} else {
     			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     		}
     	}});

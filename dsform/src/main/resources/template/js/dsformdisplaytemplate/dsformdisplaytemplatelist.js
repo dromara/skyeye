@@ -43,7 +43,7 @@ layui.config({
 	        { field: 'id', title: '模板内容', align: 'center', width: 80, templet: function(d){
 	        	if(!isNull(d.templateContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="templateContent"></i>';
-	        	}else{
+	        	} else {
 	        		return '无';
 	        	}
 	        }},
@@ -92,7 +92,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

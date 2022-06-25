@@ -169,7 +169,7 @@ layui.config({
 					if(isNull(data.value) || data.value === '请选择'){
 				 		$("#classId").html("");
 						form.render('select');
-					}else{
+					} else {
 						//加载班级
 						loadThisGradeNowYear();
 					}
@@ -179,7 +179,7 @@ layui.config({
 				form.on('radio(preschoolEducation)', function(data){
 					if(data.value == 1){
 						$("#preschoolSchoolBox").show();
-					}else{
+					} else {
 						$("#preschoolSchoolBox").hide();
 					}
 				});
@@ -309,7 +309,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});

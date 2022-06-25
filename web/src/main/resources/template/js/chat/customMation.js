@@ -20,7 +20,7 @@ layui.config({
 		 		hdb.registerHelper("compare1", function(v1, options){
 					if(isNull(v1)){
 						return path + "assets/img/uploadPic.png";
-					}else{
+					} else {
 						return basePath + v1;
 					}
 				});
@@ -64,7 +64,7 @@ layui.config({
 		 	        	AjaxPostUtil.request({url:reqBasePath + "sys033", params:params, type: 'json', callback: function(json){
 			 	   			if (json.returnCode == 0) {
 			 	   				winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});

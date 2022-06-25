@@ -15,7 +15,7 @@ layui.config({
             if (json.returnCode == 0) {
                 orderNum = json.bean.orderNum;
                 $("#payPrice").val(json.bean.unformatPayablePrice);
-            }else{
+            } else {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }, async: false});
@@ -33,7 +33,7 @@ layui.config({
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: true});

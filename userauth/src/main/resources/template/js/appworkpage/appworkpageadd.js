@@ -50,7 +50,7 @@ layui.config({
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
 		 	        	parent.chooseId = params.parentId;//将选中的目录id传给父页面
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

@@ -31,7 +31,7 @@ layui.config({
 
 			if(json.bean.state == '1'){
 				$(".typeTwo").removeClass("layui-hide");
-			}else{
+			} else {
 				$(".typeOne").removeClass("layui-hide");
 			}
 
@@ -85,7 +85,7 @@ layui.config({
 					$("#projectNumber").html(item.projectNumber);
 					if(isNull(item.customerName)){
 						$("#title").val(item.name + "-" + getYMDFormatDate());
-					}else{
+					} else {
 						$("#title").val(item.name + "-" + item.customerName + "-" + getYMDFormatDate());
 					}
 					//获取我的任务
@@ -100,7 +100,7 @@ layui.config({
 					return false;
 				}
 			});
-		}else{
+		} else {
 			taskListHtml = "";
 			resetTableTask();
 			$("#projectNumber").html("");

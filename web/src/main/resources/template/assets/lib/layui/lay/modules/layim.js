@@ -208,7 +208,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 						 '<div class="layim-chat-right-mation-user-content">',
 						 	'<p title="{{d.data.name}}">群名称：{{d.data.name}}</p>',
 						 '</div>',
-						 "{{# }else{ }}", 
+						 "{{# } else { }}",
 						 '<div class="layim-chat-right-mation-user-title">',
 						 	'<font>用户信息</font>',
 						 '</div>',
@@ -395,7 +395,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				var	l = '<ul data-id="' + n[0].id + '" data-index="' + n.data("index") + '">';
 				if(n.data("creater") === j.mine.id){
 					l += '<li layim-event="dissolutionThisGroup">解散该群</li>';
-				}else{
+				} else {
 					l += '<li layim-event="exitThisGroup">退出该群</li>';
 				}
 				l += '</ul>';
@@ -1073,7 +1073,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 							layui.each(a.list, function(i, a) {
 								if(a.groupMaster === '1' || a.groupMaster == 1){//该账号是群主
                                     o = '<li data-uid="' + a.id + '"><a href="javascript:;"><img src="' + fileBasePath + a.avatar + '"><cite>' + a.username + "</cite></a></li>" + o;
-                                }else{
+                                } else {
                                     o += '<li data-uid="' + a.id + '"><a href="javascript:;"><img src="' + fileBasePath + a.avatar + '"><cite>' + a.username + "</cite></a></li>";
                                 }
 								r[a.id] = a
@@ -1280,13 +1280,13 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 									|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().find("li").length == 1){
 								e('li[class="layim-chatlist-group' + reId + '"]').parent().parent().parent().remove();
 								e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().parent().parent().remove();
-							}else{
+							} else {
 								e('li[class="layim-chatlist-group' + reId + '"]').find("i").click();
 								e('li[class="layim-chatlist-group' + reId + ' layim-this"]').find("i").click();
 							}
 						}
 						t.closeAll("tips");
-		 	   		}else{
+		 	   		} else {
 	 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1345,13 +1345,13 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 									|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().find("li").length == 1){
 								e('li[class="layim-chatlist-group' + reId + '"]').parent().parent().parent().remove();
 								e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().parent().parent().remove();
-							}else{
+							} else {
 								e('li[class="layim-chatlist-group' + reId + '"]').find("i").click();
 								e('li[class="layim-chatlist-group' + reId + ' layim-this"]').find("i").click();
 							}
 						}
 						t.closeAll("tips");
-	 	   			}else{
+	 	   			} else {
 	 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

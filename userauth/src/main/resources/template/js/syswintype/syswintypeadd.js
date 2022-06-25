@@ -31,7 +31,7 @@ layui.config({
 	    		$("#parentIdDiv").hide();
 	    	}else if(val == '2'){//二级分类
 	    		$("#parentIdDiv").show();
-	    	}else{
+	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
@@ -51,7 +51,7 @@ layui.config({
  	 	 	    		return false;
  	 	    		}
  	 	    		params.parentId = $("#parentId").val();
- 	 	    	}else{
+ 	 	    	} else {
  	 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
  	 	    		return false;
  	 	    	}
@@ -59,7 +59,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

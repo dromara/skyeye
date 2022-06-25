@@ -32,7 +32,7 @@ layui.config({
 			if(json.bean.pId == '0' || isNull(json.bean.pId)){
 				$("#parentIdBox").addClass("layui-hide");
 				$("input:radio[name=companyType][value=1]").attr("checked", true);
-			}else{
+			} else {
 				$("input:radio[name=companyType][value=2]").attr("checked", true);
 			}
 			// 初始化总公司
@@ -47,7 +47,7 @@ layui.config({
 					$("#parentIdBox").addClass("layui-hide");
 				}else if(val == '2'){//子公司
 					$("#parentIdBox").removeClass("layui-hide");
-				}else{
+				} else {
 					winui.window.msg('状态值错误', {icon: 2, time: 2000});
 				}
 			});
@@ -82,7 +82,7 @@ layui.config({
 						if(isNull($("#OverAllCompany").val())){
 							winui.window.msg('请选择总公司', {icon: 2, time: 2000});
 							return false;
-						}else{
+						} else {
 							pId = $("#OverAllCompany").val();
 						}
 					}
@@ -140,7 +140,7 @@ layui.config({
 						if (json.returnCode == 0) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
-						}else{
+						} else {
 							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});
@@ -183,7 +183,7 @@ layui.config({
 					initAreaCity(bean);
 				}
 				form.render('select');
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -204,7 +204,7 @@ layui.config({
 					initAreaChildArea(bean);
 				}
 				form.render('select');
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -225,7 +225,7 @@ layui.config({
 					initAreaTownShip(bean);
 				}
 				form.render('select');
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -245,7 +245,7 @@ layui.config({
 					$("#townshipId").val(bean.townshipId);
 				}
 				form.render('select');
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -254,21 +254,21 @@ layui.config({
 	form.on('select(areaProvince)', function(data){
 		layui.$(data.elem).parent('dd').nextAll().remove();
 		if(isNull(data.value) || data.value == '请选择'){
-		}else{
+		} else {
 			loadChildCityArea();
 		}
 	});
 	form.on('select(areaCity)', function(data){
 		layui.$(data.elem).parent('dd').nextAll().remove();
 		if(isNull(data.value) || data.value == '请选择'){
-		}else{
+		} else {
 			loadChildArea();
 		}
 	});
 	form.on('select(area)', function(data){
 		layui.$(data.elem).parent('dd').nextAll().remove();
 		if(isNull(data.value) || data.value == '请选择'){
-		}else{
+		} else {
 			loadChildAreaTownShip();
 		}
 	});
@@ -284,7 +284,7 @@ layui.config({
 				str += '</select></dd>';
 				$("#lockParentSel").append(str);
 				form.render('select');
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -301,7 +301,7 @@ layui.config({
 				str += '</select></dd>';
 				$("#lockParentSel").append(str);
 				form.render('select');
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -318,7 +318,7 @@ layui.config({
 				str += '</select></dd>';
 				$("#lockParentSel").append(str);
 				form.render('select');
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -335,7 +335,7 @@ layui.config({
 				str += '</select></dd>';
 				$("#lockParentSel").append(str);
 				form.render('select');
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

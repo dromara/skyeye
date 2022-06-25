@@ -69,7 +69,7 @@ layui.config({
             { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
                 if(d.type == 1){
                     return "线上下单";
-                }else{
+                } else {
                     return "线下下单";
                 }
             }},
@@ -110,7 +110,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }, async: true});
@@ -125,7 +125,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg('取消成功.', {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }, async: true});
@@ -140,7 +140,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg('取消成功.', {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }, async: true});

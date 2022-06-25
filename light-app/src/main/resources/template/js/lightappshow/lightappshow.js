@@ -57,7 +57,7 @@ layui.config({
 			if (json.returnCode == 0) {
 				var data = json.bean;
 	        	top.winui.window.msg("添加成功，请刷新页面即可看到该应用。", {icon: 1,time: 3000});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -73,7 +73,7 @@ layui.config({
                 area: ['90vw','90vh'],
                 content: url
             });
-        }else{
+        } else {
             winui.window.msg("链接格式错误", {icon: 2, time: 2000});
         }
     });

@@ -28,7 +28,7 @@ layui.config({
 			setup_draggable();
 			// 加载页面内容
  			loadPageMation(json);
- 		}else{
+ 		} else {
  			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  		}
  	}});
@@ -46,7 +46,7 @@ layui.config({
 	   			if(j.returnCode == 0){
 	   				var obj = JSON.parse(j.bean.aData);
 	   				item.context = getDataUseHandlebars(item.templateContent, obj);
-	   			}else{
+	   			} else {
 	   				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}, async: false});
@@ -68,7 +68,7 @@ layui.config({
 			if(parseInt(item.state) == 1){
 				// 加载非删除状态的数据
 				loadNewControl(item);
-			}else{
+			} else {
 				jsonArray.push(item);
 			}
 		});
@@ -179,7 +179,7 @@ layui.config({
     		var defaultKey = getOutKey(defaultData);//取出json串的键
 			if(subset(tplContentVal, defaultKey)){
 				params.aData = defaultData;
-			}else{
+			} else {
 				winui.window.msg('json串内容有误，请重新填写!', {icon: 2, time: 2000});
         		return false;
 			}
@@ -198,7 +198,7 @@ layui.config({
     		if (json.returnCode == 0) {
     			params.htmlContent = encodeURIComponent(json.bean.htmlContent);
     			params.jsContent = encodeURIComponent(json.bean.jsContent);
-    		}else{
+    		} else {
     			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     		}
     	}, async: false});
@@ -215,7 +215,7 @@ layui.config({
 				templateJson.templateContent = templateContent;
 				loadNewControl(templateJson);
 				loadFormItemDrop();
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}, async: false});
@@ -336,16 +336,16 @@ layui.config({
     			if(isNull(defaultDataStr)){
     				winui.window.msg("请填写Json串！", {icon: 2, time: 2000});
 	        		return false;
-    			}else{
+    			} else {
     				if(isJSON(defaultDataStr)){
         				var defaultKey = getOutKey(defaultDataStr);//取出json串的键
         				if(subset(tplContentVal, defaultKey)){
         					newParams.aData = defaultDataStr;
-        				}else{
+        				} else {
         					winui.window.msg('json串内容有误，请重新填写!', {icon: 2, time: 2000});
 	 	 	        		return false;
         				}
-        			}else{
+        			} else {
         				winui.window.msg('json串格式不正确，请重新填写!', {icon: 2, time: 2000});
  	 	        		return false;
         			}
@@ -361,7 +361,7 @@ layui.config({
 	        		return false;
     			}
     			newParams.aData = interfa;
-    		}else{
+    		} else {
     			winui.window.msg("状态值错误。", {icon: 2, time: 2000});
         		return false;
     		}
@@ -408,7 +408,7 @@ layui.config({
     	}else if(val == '2'){//接口
     		$(".TypeIsTwo").removeClass("layui-hide");
     		$(".TypeIsOne").addClass("layui-hide");
-    	}else{
+    	} else {
     		winui.window.msg('状态值错误', {icon: 2, time: 2000});
     	}
     }
@@ -424,7 +424,7 @@ layui.config({
 					$("#require").val(item.requireId.split(","));//给这个元素赋值
 				}
    				form.render();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -445,7 +445,7 @@ layui.config({
    			if (json.returnCode == 0) {
    				winui.window.msg("保存成功", {icon: 1, time: 2000});
    				parent.refreshCode = '0';
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

@@ -24,7 +24,7 @@ layui.config({
  	   			$("#forumNum").html(json.bean.forumNum);
  	   			$("#knowledgeNum").html(json.bean.knowledgeNum);
  	   			initNoticeList();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -42,7 +42,7 @@ layui.config({
  	   			$("#noticeTitle").append(getDataUseHandlebars($("#noticeTitleTemplate").html(), json));
  	   			$("#noticeContent").append(getDataUseHandlebars($("#noticeContentTemplate").html(), json));
  	   			initForumList();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -53,7 +53,7 @@ layui.config({
    			if (json.returnCode == 0) {
  	   			$("#forumContent").append(getDataUseHandlebars($("#forumContentTemplate").html(), json));
  	   			initKnowledgeList();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -66,7 +66,7 @@ layui.config({
  	   			matchingLanguage();
 				initHotActModel();
  	   			form.render();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -86,7 +86,7 @@ layui.config({
 					if(v1 == 1){
 						// icon
 						str = '<i class="fa fa-fw ' + v3 + '" style="font-size: 18px; line-height: 30px; width: 100%; color: ' + v4 + '"></i>';
-					}else{
+					} else {
 						str = '<img src="' + reqBasePath + v2 + '" class="photo-img" style="width: 25px; height: 25px">';
 					}
 					return str;

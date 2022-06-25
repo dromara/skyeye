@@ -49,16 +49,16 @@
         if(rangeLink === link && !link.getElementsByTagName('img').length){
             text.removeAttribute('disabled');
             orgText = text.value = link[browser.ie ? 'innerText':'textContent'];
-        }else{
+        } else {
             text.setAttribute('disabled','true');
             text.value = lang.validLink;
         }
 
-    }else{
+    } else {
         if(range.collapsed){
             text.removeAttribute('disabled');
             text.value = '';
-        }else{
+        } else {
             text.setAttribute('disabled','true');
             text.value = lang.validLink;
         }
@@ -105,7 +105,7 @@
     $G('href').onblur = function(){
         if(!hrefStartWith(this.value,["http","/","ftp://",'#'])){
             $G("msg").innerHTML = "<span style='color: red'>"+lang.httpPrompt+"</span>";
-        }else{
+        } else {
             $G("msg").innerHTML = "";
         }
     };

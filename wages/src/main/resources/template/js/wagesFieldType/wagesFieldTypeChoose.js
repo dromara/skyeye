@@ -37,7 +37,7 @@ layui.config({
 						return "是";
 					}else if(d.monthlyClearing == '2'){
 						return "否";
-					}else{
+					} else {
 						return "-";
 					}
 				}},
@@ -46,7 +46,7 @@ layui.config({
 						return "<span class='state-up'>薪资增加</span>";
 					}else if(d.wagesType == '2'){
 						return "<span class='state-down'>薪资减少</span>";
-					}else{
+					} else {
 						return "-";
 					}
 				}}

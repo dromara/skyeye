@@ -20,7 +20,7 @@ layui.config({
 		
 		if(subType == 1){
 			$("#depotIdBox").remove();
-		}else{
+		} else {
 			erpOrderUtil.getDepotList(function (json){
 				// 加载仓库数据
 				$("#depotId").html(getDataUseHandlebars(selOption, json));
@@ -51,7 +51,7 @@ layui.config({
 			if(type == 1){
 				changeNum = parseInt(isNull($("#acceptNum").val()) ? "0" : $("#acceptNum").val());
 				$("#belowNum").val(needNum - changeNum);
-			}else{
+			} else {
 				changeNum = parseInt(isNull($("#belowNum").val()) ? "0" : $("#belowNum").val());
 				$("#acceptNum").val(needNum - changeNum);
 			}
@@ -80,7 +80,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

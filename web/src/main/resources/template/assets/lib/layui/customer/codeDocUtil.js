@@ -41,7 +41,7 @@ var codeDocUtil = {
         $.each(codeDocUtil.replaceModelRelationship, function (key, value){
             if(!isNull(codeDocUtil.tableColumnData[key])){
                 str = str.replace(value, codeDocUtil.tableColumnData[key]);
-            }else{
+            } else {
                 str = str.replace(value, $("#" + key).val());
             }
         });
@@ -75,7 +75,7 @@ var codeDocUtil = {
             } else {
                 if(columnName == lowerColumnName){
                     selectColumn.push('a.' + columnName);
-                }else{
+                } else {
                     selectColumn.push('a.' + columnName + ' ' + lowerColumnName);
                 }
             }
@@ -88,7 +88,7 @@ var codeDocUtil = {
             if('NO' == item.isNullable){
                 javaBeanEntity.push('@ApiModelProperty(value = "' + item.columnComment + '", required = "required")\n\t' +
                     'private ' + codeDocUtil.getJavaAttr(item.columnType) + ' ' + lowerColumnName + '');
-            }else{
+            } else {
                 javaBeanEntity.push('@ApiModelProperty(value = "' + item.columnComment + '")\n\t' +
                     'private ' + codeDocUtil.getJavaAttr(item.columnType) + ' ' + lowerColumnName + '');
             }

@@ -24,7 +24,7 @@ layui.config({
 
                 if(json.bean.insure == 1){
                     $("#insure").html("已购买");
-                }else{
+                } else {
                     $("#insure").html("未购买");
                 }
 

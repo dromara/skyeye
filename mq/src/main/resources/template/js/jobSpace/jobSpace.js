@@ -73,7 +73,7 @@ layui.config({
 		        		return "<span class='state-up'>执行成功</span>";
 		        	}else if(d.status == '5'){
 		        		return "<span class='state-new'>部分完成</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},
@@ -160,7 +160,7 @@ layui.config({
 		        		return "<span class='state-up'>执行成功</span>";
 		        	}else if(d.status == '5'){
 		        		return "<span class='state-new'>部分完成</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},
@@ -216,7 +216,7 @@ layui.config({
 		        		return "<span class='state-up'>执行成功</span>";
 		        	}else if(d.status == '5'){
 		        		return "<span class='state-new'>部分完成</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},

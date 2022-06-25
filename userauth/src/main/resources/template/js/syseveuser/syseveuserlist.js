@@ -41,7 +41,7 @@ layui.config({
 	        		return "男";
 	        	}else if(d.sexName == '2'){
 	        		return "女";
-	        	}else{
+	        	} else {
 	        		return "参数错误";
 	        	}
 	        }},
@@ -153,7 +153,7 @@ layui.config({
 		if(obj.elem.checked){
 			// 锁定
 			lock(obj.value);
-		}else{
+		} else {
 			// 解锁
 			unlock(obj.value);
 		}
@@ -164,7 +164,7 @@ layui.config({
 		AjaxPostUtil.request({url: reqBasePath + "sys002", params: {rowId: id}, type: 'json', method: "PUT", callback: function(json){
 			if (json.returnCode == 0) {
 				winui.window.msg("已成功锁定，该账号目前无法登录.", {icon: 1, time: 2000});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -175,7 +175,7 @@ layui.config({
 		AjaxPostUtil.request({url: reqBasePath + "sys003", params: {rowId: id}, type: 'json', method: "PUT", callback: function(json){
 			if (json.returnCode == 0) {
 				winui.window.msg("账号恢复正常.", {icon: 1, time: 2000});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

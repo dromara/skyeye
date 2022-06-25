@@ -54,7 +54,7 @@ layui.config({
 		        		return "已发送";
 		        	}else if(d.state == 2){
 		        		return "未发送";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},
@@ -105,7 +105,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("撤回成功", {icon: 1, time: 2000});
     				loadMySendTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -120,7 +120,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadMySendTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

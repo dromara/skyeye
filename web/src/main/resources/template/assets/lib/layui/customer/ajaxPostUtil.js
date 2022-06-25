@@ -85,7 +85,7 @@ var AjaxPostUtil = {
                     var jsonText = xmlhttp.responseText;
                     if(requestmation == 'DOWNLOAD'){
                         returnValue = eval('(' + '{"returnMessage":"成功","returnCode":0,"total":0,"rows":"","bean":""}' + ')');
-                    }else{
+                    } else {
                         if(jsonText) {
                             returnValue = eval("(" + jsonText + ")");
                         }

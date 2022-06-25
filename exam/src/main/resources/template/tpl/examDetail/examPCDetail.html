@@ -793,7 +793,7 @@
 						ajaxSendLoadBefore: function(hdb, json) {
 							hdb.registerHelper("showQuestionIndex", function(v1, options) {
 								if(v1 == '16' || v1 == '17'){
-								}else{
+								} else {
 									quIndex++;
 									return quIndex;
 								}
@@ -889,13 +889,13 @@
 									if(pageNum == '1'){
 										pageNum++;
 										return '';
-									}else{
+									} else {
 										pageNum++;
 									}
 								}
 								if(pageNum == '1'){
 									return '';
-								}else{
+								} else {
 									return 'display: none;';
 								}
 							});
@@ -907,7 +907,7 @@
 							hdb.registerHelper('compare7', function(v1, options) {
 								if(nowPageNum == '1'){
 									return options.inverse(this);
-								}else{
+								} else {
 									return options.fn(this);
 								}
 							});
@@ -1025,7 +1025,7 @@
 		 	   		    			if(i % columuLength == 0){
 		 	   		    				xIndex++;
 		 	   		    				yIndex = 1;
-		 	   		    			}else{
+		 	   		    			} else {
 		 	   			    			yIndex++;
 		 	   		    			}
 		 	   		    			var _this = this;
@@ -1045,7 +1045,7 @@
 		 	   		    			if(i % columuLength == 0){
 		 	   		    				xIndex++;
 		 	   		    				yIndex = 1;
-		 	   		    			}else{
+		 	   		    			} else {
 		 	   			    			yIndex++;
 		 	   		    			}
 		 	   		    			var _this = this;
@@ -1065,7 +1065,7 @@
 		 	   		    			if(i % columuLength == 0){
 		 	   		    				xIndex++;
 		 	   		    				yIndex = 1;
-		 	   		    			}else{
+		 	   		    			} else {
 		 	   			    			yIndex++;
 		 	   		    			}
 		 	   		    			var _this = this;
@@ -1085,7 +1085,7 @@
 		 	   		    			if(i % columuLength == 0){
 		 	   		    				xIndex++;
 		 	   		    				yIndex = 1;
-		 	   		    			}else{
+		 	   		    			} else {
 		 	   			    			yIndex++;
 		 	   		    			}
 		 	   		    			var _this = this;
@@ -1196,7 +1196,7 @@
 				 	   	        { field: 'state', rowspan: '2', width: 80, align: 'center', title: '状态', templet: function(d){
 							        if(d.state == 1){
 							        	return '待阅卷';
-							        }else{
+							        } else {
 							        	return '已阅卷';
 							        }
 							    }},

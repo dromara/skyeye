@@ -120,7 +120,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								'<i class="icon ' + item.icon + '"></i>' +
 								'<span>' + item.title + '</span>' +
 								'</a>';
-						}else{
+						} else {
 							if(item.id == 'echartsModel'){
 								str = f.getEchartsHtml(item, str);
 							} else if(item.id == 'bgImages'){
@@ -470,7 +470,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 								left: left + "px",
 								top: top + "px"
 							});
-						}else{
+						} else {
 							f.setChooseReportItem(box);
 						}
 					}
@@ -591,7 +591,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 						$(this).parent().find('.layui-colla-content').toggleClass('layui-show');
 						if($(this).parent().find('.layui-colla-content').hasClass('layui-show')){
 							$(this).find('.f-icon').removeClass('arrow-bottom').addClass("arrow-top");
-						}else{
+						} else {
 							$(this).find('.f-icon').removeClass('arrow-top').addClass("arrow-bottom");
 						}
 					});
@@ -613,10 +613,10 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 							modelList: eachartsList,
 							wordMationList: wordMationList
 						};
-						AjaxPostUtil.request({url:reportBasePath + "reportpage007", params: {rowId: rowId, content: encodeURIComponent(JSON.stringify(params))}, type:'json', method: "POST", callback:function(json){
+						AjaxPostUtil.request({url:reportBasePath + "reportpage007", params: {rowId: rowId, content: encodeURIComponent(JSON.stringify(params))}, type:'json', method: "POST", callback: function(json) {
 							if (json.returnCode == 0) {
 								winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-							}else{
+							} else {
 								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 							}
 						}});
@@ -710,7 +710,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 											var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + js + '})(jQuery);});</script>';
 											$("#" + typeName).append(jsCon);
 										}
-									}else{
+									} else {
 										f.loadEchartsEditorISDetail(key, val, boxId, indexNumber, typeName);
 									}
 								} else {
@@ -964,7 +964,7 @@ function dataValueChange(value, _this){
 				// 动态数据
 				val.pointValue = value;
 				val.editorChooseValue = _chooseMation.attr["custom.dataBaseMation"].value.analysisData;
-			}else{
+			} else {
 				val.value = getVal(value);
 			}
 		}
@@ -1097,7 +1097,7 @@ function calcKeyHasPointToJson(echartsJson, key, parentKey, value){
 				var parentIndex = getInArrayNumIndex(val);
 				mation = echartsJson[parentKey][parentIndex];
 				funStr += '["' + parentKey + '"][' + parentIndex + ']';
-			}else{
+			} else {
 				mation = echartsJson[val];
 				funStr += '["' + val + '"]';
 			}
@@ -1108,7 +1108,7 @@ function calcKeyHasPointToJson(echartsJson, key, parentKey, value){
 		var result = {};
 		result[thisKey] = mation;
 		return result;
-	}else{
+	} else {
 		var result = {};
 		result[thisKey] = resultValue;
 		return result;

@@ -32,12 +32,12 @@ layui.config({
                     $("#propertyId" + (rowNum - 1)).html(item.code);
                     if(item.editor == 1){
                         $("#whetherEditor" + (rowNum - 1)).html('是');
-                    }else{
+                    } else {
                         $("#whetherEditor" + (rowNum - 1)).html('否');
                     }
                     if(item.showToEditor == 1){
                         $("#whetherShow" + (rowNum - 1)).html('是');
-                    }else{
+                    } else {
                         $("#whetherShow" + (rowNum - 1)).html('否');
                     }
                 });

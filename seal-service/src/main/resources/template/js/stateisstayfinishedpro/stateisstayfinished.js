@@ -266,7 +266,7 @@ layui.config({
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
-			}else{
+			} else {
 				//否则重置库存为空
 				$("#currentTock" + rowNum).html("");
 			}

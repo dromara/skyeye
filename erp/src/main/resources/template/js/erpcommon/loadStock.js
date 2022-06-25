@@ -16,7 +16,7 @@ function loadTockByDepotAndMUnit(rowNum, depotId){
             }
             $("#currentTock" + rowNum).html(currentTock);
         });
-    }else{
+    } else {
         //否则重置库存为空
         $("#currentTock" + rowNum).html("");
     }
@@ -46,7 +46,7 @@ function loadMaterialDepotStockByDepotId(depotId){
     getStockAjaxByDepotAndNormsId(normsIds.join(','), depotId, function(json){
         if(normsIds.length == 1){
             $("#currentTock" + normsIdsNum[0]).html(json.bean.currentTock);
-        }else{
+        } else {
             $.each(normsIdsNum, function(i, item) {
                 $("#currentTock" + normsIdsNum[i]).html(json.rows[i].currentTock);
             });

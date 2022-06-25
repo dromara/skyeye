@@ -95,7 +95,7 @@ layui.config({
 				layer.close(index);
 				treeOnClick(event, treeId, treeNode);
 			});
-		}else{
+		} else {
 			treeOnClick(event, treeId, treeNode);
 		}
 	}
@@ -123,7 +123,7 @@ layui.config({
 		if(folderId != '1'){
 			if(folderId === '2'){
 				showRMenu('root', event.clientX, event.clientY);
-			}else{
+			} else {
 				showRMenu('node', event.clientX, event.clientY);
 			}
 		}
@@ -173,7 +173,7 @@ layui.config({
    				winui.window.msg("保存成功", {icon: 1, time: 2000});
    				folderId = treeNode.id;
    				showListById();//获取文件夹和笔记列表
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -224,7 +224,7 @@ layui.config({
    					var selNode = ztree.getNodeByParam("id", arrId[i], null);
    					ztree.removeNode(selNode);//移除节点
    				}
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -260,7 +260,7 @@ layui.config({
 				layer.close(index);
 				loadNewDocument(_this);
 			});
-		}else{
+		} else {
 			loadNewDocument(_this);
 		}
 	});
@@ -278,7 +278,7 @@ layui.config({
 			$("#noteTitle").val(name);//给标题赋值
 			$(".note-operator").addClass("layui-hide");//隐藏保存按钮
 			noteId = "";
-		}else{
+		} else {
 			if(noteId != id){
 				noteId = id;//当前选中列表的笔记id
 				$("#noteTitle").val(name);//给标题赋值
@@ -319,7 +319,7 @@ layui.config({
 				$("#noteTitle").val(name);//给标题赋值
 				$(".note-operator").addClass("layui-hide");//隐藏保存按钮
 				noteId = "";
-			}else{
+			} else {
 				noteId = clickId;//当前选中列表的笔记id
 				$("#noteTitle").val(name);//给标题赋值
 				$(".note-operator").removeClass("layui-hide");//显示保存按钮
@@ -348,7 +348,7 @@ layui.config({
 						AjaxPostUtil.request({url:reqBasePath + "mynote014", params: {rowId: clickId, type: "2"}, type: 'json', callback: function(json){
 				   			if (json.returnCode == 0) {
 				   				layer.alert('笔记输出为PDF任务已创建，请前往 <a href="../../tpl/jobSpace/jobSpace.html" style="color: blue;" target="_blank">我的输出</a> 查看。');
-				   			}else{
+				   			} else {
 				   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				   			}
 				   		}});
@@ -387,12 +387,12 @@ layui.config({
 												chooseNodeSelect(folderId);
 							   				}
 							   				showListById();//获取文件夹和笔记列表
-							   			}else{
+							   			} else {
 							   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 							   			}
 							   		}});
 								}
-							}else{
+							} else {
 								var nowhtml = "<span>" + html + "</span>";
 								obj.find("div[class='folder-item-title-content']").html(nowhtml);
 								winui.window.msg("标题不能为空", {icon: 2, time: 2000});
@@ -437,7 +437,7 @@ layui.config({
                     callback: function() {
                         if(clickType == "folder"){
                             winui.window.msg("目前仅支持分享笔记", {icon: 2, time: 2000});
-                        }else{
+                        } else {
                             var shareUrl = homePagePath + "tpl/note/shareNote.html?id=" + clickId;
                             var json = {"bean":{"shareUrl":shareUrl}};
                             var html = getDataUseHandlebars(getFileContent('tpl/note/shareNoteTemplate.tpl'), json);
@@ -484,7 +484,7 @@ layui.config({
    			    	var selNode = ztree.getNodeByParam("id", json.bean.id, null);
    	   				ztree.editName(selNode);
    			    },1000);
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -535,7 +535,7 @@ layui.config({
 		AjaxPostUtil.request({url:reqBasePath + "mynote014", params: {rowId: folderId, type: "1"}, type: 'json', callback: function(json){
    			if (json.returnCode == 0) {
    				layer.alert('笔记输出压缩包任务已创建，请前往 <a href="../../tpl/jobSpace/jobSpace.html" style="color: #0000ff;" target="_blank">我的输出</a> 查看。');
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -565,7 +565,7 @@ layui.config({
 	function saveNoteMation(){
 		if($("#editMyNote").hasClass('select')){
 			$("#editMyNote").removeClass('select');
-		}else{
+		} else {
 			return false;
 		}
 		var tilte = $("#noteTitle").val();
@@ -581,7 +581,7 @@ layui.config({
 				var obj = $("#folderChildList").find(".folder-item[id='" + noteId + "']");
 				obj.find("div[class='folder-item-title-content']").find("span").html(tilte);
 				obj.find("div[class='folder-item-desc']").html(desc);
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -595,7 +595,7 @@ layui.config({
         	searchTitle = $("#searchTitle").val();
     		if(isNewNote) {
     			showNewNoteList();//刷新最新笔记列表
-    		}else{
+    		} else {
     			showListById();//获取文件夹和笔记列表
     		}
     		searchTitle = "";
@@ -607,7 +607,7 @@ layui.config({
 		if(isNewNote) {
 			// 刷新最新笔记列表
 			showNewNoteList();
-		}else{
+		} else {
 			// 获取文件夹和笔记列表
 			showListById();
 		}
@@ -617,7 +617,7 @@ layui.config({
     function addNote(title, type){
         if(folderId == "1"){
             thisfolderId = "2";
-        }else{
+        } else {
             thisfolderId = folderId;
         }
         hideRMenu();
@@ -625,7 +625,7 @@ layui.config({
            if (json.returnCode == 0) {
                noteId = json.bean.id;
                showListById();// 获取文件夹和笔记列表
-           }else{
+           } else {
                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
            }
        }});
@@ -644,7 +644,7 @@ layui.config({
 					ztree.removeNode(selNode);// 移除节点
 				}
 				showListById();// 获取文件夹和笔记列表
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -665,7 +665,7 @@ layui.config({
 						next(lis.join(''), (page * 15) < json.total);
 						initRightMenu();
 						showNoteContent(json.rows);
-		   			}else{
+		   			} else {
 		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});
@@ -678,13 +678,13 @@ layui.config({
 		if(folderId == "1"){
 			isNewNote = true;
 			showNewNoteList();//展示最新的笔记
-		}else{
+		} else {
 			AjaxPostUtil.request({url: reqBasePath + "mynote006", params: {parentId: folderId, search: searchTitle}, type: 'json', callback: function(json){
 				if (json.returnCode == 0) {
 			 		$("#folderChildList").html(getDataUseHandlebars(folderchildlisetTemplate, json));
 			 		initRightMenu();
 			 		showNoteContent(json.rows);
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -698,13 +698,13 @@ layui.config({
 				$(".note-operator").removeClass("layui-hide");//显示保存按钮
 				var noteItem =$("#folderChildList").find(".folder-item[id='" + noteId + "']");
 				showContentByItem(noteItem);
-			}else{//默认
+			} else {//默认
 				var thisnote = $("#folderChildList").find(".folder-item[rowtype != 'folder']").length;//获取第一个类型不是文件夹的对象
 				if(thisnote > 0){
 					$(".note-operator").removeClass("layui-hide");//显示保存按钮
 					var noteItem = $("#folderChildList").find(".folder-item[rowtype != 'folder']").eq(0);
 					showContentByItem(noteItem);
-				}else{
+				} else {
 					$('#folderChildList').children().eq(0).addClass('select');//不包含笔记文件时，默认选中第一个文件夹
 					$("#childframe").attr("src", "../../tpl/note/noteFolder.html");
 					var filename = $('#folderChildList').children().eq(0).attr("rowname");
@@ -713,7 +713,7 @@ layui.config({
 					noteId = "";
 				}
 			}
-		}else{
+		} else {
 			$("#childframe").attr("src", "../../tpl/note/noteFolder.html");
 			$("#noteTitle").val("");//给标题赋值
 			$(".note-operator").addClass("layui-hide");//隐藏保存按钮

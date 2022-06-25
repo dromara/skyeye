@@ -15,7 +15,7 @@ var ueEditorUtil = {
                 return reqBasePath + '/upload/editUploadController/uploadContentPic';
             } else if(action == 'listimage'){
                 return reqBasePath + '/upload/editUploadController/downloadContentPic';
-            }else{
+            } else {
                 return this._bkGetActionUrl.call(this, action);
             }
         };

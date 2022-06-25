@@ -71,7 +71,7 @@ var voucherUtil = {
 
             if(data[i].directionType == 1){
                 _this.find(".col_debite").find(".cell_val").html(data[i].eachAmount); // 借方金额
-            }else{
+            } else {
                 _this.find(".col_credit").find(".cell_val").html(data[i].eachAmount); // 贷方金额
             }
         }
@@ -96,7 +96,7 @@ var voucherUtil = {
 
             if(data[i].directionType == 1){
                 _this.find(".col_debite").find(".cell_val").html(data[i].eachAmount); // 借方金额
-            }else{
+            } else {
                 _this.find(".col_credit").find(".cell_val").html(data[i].eachAmount); // 贷方金额
             }
         }

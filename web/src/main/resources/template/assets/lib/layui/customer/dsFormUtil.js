@@ -147,7 +147,7 @@ var dsFormUtil = {
                     if(j.returnCode == 0){
                         var obj = JSON.parse(j.bean.aData);
                         item.context = getDataUseHandlebars(item.templateContent, obj);
-                    }else{
+                    } else {
                         winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: false});
@@ -283,7 +283,7 @@ var dsFormUtil = {
                 var layText = _this.find("input").attr('lay-text');
                 if(value == "true"){
                     text = layText.split('|')[0];
-                }else{
+                } else {
                     text = layText.split('|')[1];
                 }
                 showType = "1";

@@ -22,7 +22,7 @@ layui.config({
 	    		$("#nextAnnualReview").val("");
 	    	}else if(val == '1'){
 	    		$("#nextTime").removeClass('layui-hide');
-	    	}else{
+	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
@@ -34,7 +34,7 @@ layui.config({
 	    	}else if(val == '1'){
 	    		$("#termTime").addClass('layui-hide');
 	    		$("#termOfValidityTime").val("");
-	    	}else{
+	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
@@ -49,7 +49,7 @@ layui.config({
 		 		hdb.registerHelper("compare1", function(v1, options){
 					if(isNull(v1)){
 						return path + "assets/img/uploadPic.png";
-					}else{
+					} else {
 						return basePath + v1;
 					}
 				});
@@ -138,19 +138,19 @@ layui.config({
 	 	 	        	};
 	 	 	        	if(userList.length == 0 || isNull($('#licenceAdmin').tagEditor('getTags')[0].tags)){
 	 	 	        		params.licenceAdmin = "";
-	 	 	        	}else{
+	 	 	        	} else {
 	 	        			params.licenceAdmin = userList[0].id;
 	 	        		}
 	 	 	        	if(borrowList.length == 0 || isNull($('#borrowId').tagEditor('getTags')[0].tags)){
 	 	 	        		params.borrowId = "";
-	 	 	        	}else{
+	 	 	        	} else {
 	 	        			params.borrowId = borrowList[0].id;
 	 	        		}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "licence005", params:params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
-	 		 	   			}else{
+	 		 	   			} else {
 	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 		 	   			}
 	 		 	   		}});

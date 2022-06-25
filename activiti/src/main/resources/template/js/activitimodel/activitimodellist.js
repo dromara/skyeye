@@ -32,7 +32,7 @@ layui.config({
 	        { field: 'deploymentId', title: '发布状态', align: "center", width: 80, templet: function(d){
 	        	if(isNull(d.deploymentId)){
 	        		return "<span class='state-new'>未发布</span>";
-	        	}else{
+	        	} else {
 	        		return "<span class='state-up'>已发布</span>";
 	        	}
 	        }},
@@ -89,7 +89,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -124,7 +124,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					winui.window.msg("发布成功", {icon: 1, time: 2000});
 					loadTable();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -141,7 +141,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					winui.window.msg("升级成功", {icon: 1, time: 2000});
 					loadTable();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -157,7 +157,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("取消发布成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -172,7 +172,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					winui.window.msg("拷贝成功", {icon: 1, time: 2000});
 					loadTable();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -201,7 +201,7 @@ layui.config({
 		                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 		                }
 					}});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

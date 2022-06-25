@@ -112,7 +112,7 @@ layui.config({
  	        	var provinceId = "", cityId = "", areaId = "", townshipId = "";
 	        	if(!isNull($("#provinceId").val())){
 	        		provinceId = $("#provinceId").val();
-	        	}else{
+	        	} else {
 	        		winui.window.msg('请选择所在省.', {icon: 2, time: 2000});
 	        		return false;
 	        	}
@@ -218,21 +218,21 @@ layui.config({
 		form.on('select(areaProvince)', function(data){
 	    	layui.$(data.elem).parent('dd').nextAll().remove();
 	    	if(isNull(data.value) || data.value == '请选择'){
-	    	}else{
+	    	} else {
 	    		loadChildCityArea();
 	    	}
  		});
 	    form.on('select(areaCity)', function(data){
 	    	layui.$(data.elem).parent('dd').nextAll().remove();
 	    	if(isNull(data.value) || data.value == '请选择'){
-	    	}else{
+	    	} else {
 	    		loadChildArea();
 	    	}
  		});
 	    form.on('select(area)', function(data){
 	    	layui.$(data.elem).parent('dd').nextAll().remove();
 	    	if(isNull(data.value) || data.value == '请选择'){
-	    	}else{
+	    	} else {
 	    		loadChildAreaTownShip();
 	    	}
  		});
@@ -248,7 +248,7 @@ layui.config({
 	 	   			str += '</select></dd>';
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -265,7 +265,7 @@ layui.config({
 	 	   			str += '</select></dd>';
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -282,7 +282,7 @@ layui.config({
 	 	   			str += '</select></dd>';
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -299,7 +299,7 @@ layui.config({
 	 	   			str += '</select></dd>';
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});

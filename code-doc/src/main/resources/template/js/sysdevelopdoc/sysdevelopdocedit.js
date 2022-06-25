@@ -33,7 +33,7 @@ layui.config({
    			    if(json.bean.parentId == '0' || isNull(json.bean.parentId)){
 		 			$("#parentIdBox").addClass("layui-hide");
 		 			$("input:radio[name=docType][value=1]").attr("checked", true);
-		 		}else{
+		 		} else {
 		 			$("input:radio[name=docType][value=2]").attr("checked", true);
 		 		}
 		 		
@@ -45,7 +45,7 @@ layui.config({
    			    		$("#parentIdBox").addClass("layui-hide");
    			    	}else if(val == '2'){//二级目录
    			    		$("#parentIdBox").removeClass("layui-hide");
-   			    	}else{
+   			    	} else {
    			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
    			    	}
    		        });
@@ -58,7 +58,7 @@ layui.config({
    			        		if(isNull($("#docFirstType").val())){
    			        			winui.window.msg('请选择一级目录', {icon: 2, time: 2000});
    			        			return false;
-   			        		}else{
+   			        		} else {
    			        			pId = $("#docFirstType").val();
    			        		}
    			        	}
@@ -72,14 +72,14 @@ layui.config({
    			 	   			if (json.returnCode == 0) {
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';
-   			 	   			}else{
+   			 	   			} else {
    			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			 	   			}
    			 	   		}});
    			        }
    			        return false;
    			    });
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

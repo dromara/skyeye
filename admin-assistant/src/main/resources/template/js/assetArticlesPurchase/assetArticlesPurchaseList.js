@@ -97,7 +97,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadCaigouTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -136,7 +136,7 @@ layui.config({
 					if (json.returnCode == 0) {
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadCaigouTable();
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
@@ -153,7 +153,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadCaigouTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

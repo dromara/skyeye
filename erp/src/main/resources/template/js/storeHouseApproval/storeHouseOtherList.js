@@ -35,7 +35,7 @@ layui.config({
 				form.render();
 				if(json.rows.length > 0){
 					initTable();
-				}else{
+				} else {
 					winui.window.msg("您还未分配仓库，请联系管理员分配.", {icon: 2, time: 2000});
 				}
 			} else {
@@ -80,7 +80,7 @@ layui.config({
 		        		return "<span class='state-down'>拒绝通过</span>";
 		        	}else if(d.status == '4'){
 		        		return "<span class='state-new'>已转采购</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 			    }},

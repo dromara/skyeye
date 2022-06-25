@@ -25,7 +25,7 @@ layui.config({
 		ajaxSendAfter: function(json){
 			if(json.bean.state == 1){
 				$(".typeTwo").removeClass("layui-hide");
-			}else{
+			} else {
 				$(".typeOne").removeClass("layui-hide");
 			}
 			//计划开始时间
@@ -106,7 +106,7 @@ layui.config({
 								return false;
 							}
 						});
-					}else{
+					} else {
 						$("#contractId").html("");
 						form.render('select');
 					}

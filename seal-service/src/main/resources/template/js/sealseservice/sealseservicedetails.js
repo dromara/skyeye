@@ -94,7 +94,7 @@ layui.config({
  	        	
  	        	if(json.bean.state == 7){
  	        		$(".stateName").html('已结算');
- 	        	}else{
+ 	        	} else {
  	        		$(".stateName").html('待结算');
  	        	}
  	        	

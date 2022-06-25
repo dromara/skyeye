@@ -17,7 +17,7 @@ layui.config({
 		if(j.returnCode == 0){
 			dsFormUtil.initSequenceDataDetails("showForm", j.rows);
 			matchingLanguage();
-		}else{
+		} else {
 			winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 		}
 	}});

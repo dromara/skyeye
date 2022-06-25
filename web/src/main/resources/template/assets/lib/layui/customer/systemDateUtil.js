@@ -143,13 +143,13 @@ function getOverlapTime(startTime, endTime, restStartTime, restEndTime){
     // 开始时间以大的为准
     if(compare_HHmmss(startTime, restStartTime)){
         result.push(startTime);
-    }else{
+    } else {
         result.push(restStartTime);
     }
     // 结束时间以小的为准
     if(compare_HHmmss(restEndTime, endTime)){
         result.push(endTime);
-    }else{
+    } else {
         result.push(restEndTime);
     }
     return result;
@@ -322,7 +322,7 @@ function compare_hms(a, b){
         return true;
     }else if(i < n){
         return false;
-    }else{
+    } else {
         return true;
     }
 }
@@ -527,7 +527,7 @@ function turnTime(time, mm){
     if((minute + mm) >= 60){
         minute = minute + mm - 60;
         hour = hour + 1;
-    }else{
+    } else {
         minute = minute + mm;
     }
     return (hour < 10 ? ("0" + hour) : hour) + ":" + (minute < 10 ? (minute + "0") : minute);

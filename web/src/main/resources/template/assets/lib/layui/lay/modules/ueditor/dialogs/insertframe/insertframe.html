@@ -76,7 +76,7 @@
         if(iframe){
             iframe.parentNode.insertBefore(newIframe,iframe);
             domUtils.remove(iframe);
-        }else{
+        } else {
             div = editor.document.createElement("div");
             div.appendChild(newIframe);
             editor.execCommand("inserthtml",div.innerHTML);

@@ -31,19 +31,19 @@ layui.config({
 	var s = "人员选择规则：";
 	if(checkType == "1"){
 		s += '1.单选，双击指定行数据即可选中；';
-	}else{
+	} else {
 		s += '1.多选；';
 		//显示保存按钮
 		$("#saveCheckBox").show();
 	}
 	if(whetherIncludeMe == "1"){
 		s += '2.包含当前登录用户；';
-	}else{
+	} else {
 		s += '2.不包含当前登录用户；';
 	}
 	if(whetherHasCode == "1"){
 		s += '3.必需是已分配帐号的教师。';
-	}else{
+	} else {
 		s += '3.无需是已分配帐号的教师。';
 	}
 	s += '如没有查到要选择的人员，请检查人员信息是否满足当前规则。';
@@ -95,7 +95,7 @@ layui.config({
 		        { field: 'userPhoto', title: '头像', align: 'center', width: 60, templet: function(d){
 		        	if(isNull(d.userPhoto)){
 		        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
-		        	}else{
+		        	} else {
 		        		return '<img src="' + fileBasePath + d.userPhoto + '" class="photo-img" lay-event="userPhoto">';
 		        	}
 		        }},
@@ -103,7 +103,7 @@ layui.config({
 		        { field: 'userCodeState', title: '帐号', width: 90, align: 'center', templet: function(d){
 		        	if(d.userCodeState == '已分配帐号'){
 		        		return "<span class='state-up'>" + d.userCodeState + "</span>";
-		        	}else{
+		        	} else {
 		        		return "<span class='state-down'>" + d.userCodeState + "</span>";
 		        	}
 		        }},
@@ -132,7 +132,7 @@ layui.config({
 						click.find("input[type='radio']").prop("checked", true);
 						form.render();
 					})
-		    	}else{
+		    	} else {
 		    		//多选 设置选中
 		    		tableCheckBoxUtil.checkedDefault({
 						gridId: 'messageTable',
@@ -163,7 +163,7 @@ layui.config({
    				parent.chooseTeacherList = [].concat(json.rows);
  	   			parent.layer.close(index);
  	        	parent.refreshCode = '0';
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

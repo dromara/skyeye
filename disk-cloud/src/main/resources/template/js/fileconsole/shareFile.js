@@ -21,7 +21,7 @@ layui.config({
 			if(shareType == '2'){
 				$("#yes").show();
 				$("#no").hide();
-			}else{
+			} else {
 				$("#yes").hide();
 				$("#no").show();
 			}
@@ -40,7 +40,7 @@ layui.config({
 	   				if(json.bean.shareType === '1'){//无提取码
 	   					json.bean.shareType = "none";
 	   					json.bean.btnName = "复制链接";
-	   				}else{//有提取码
+	   				} else {//有提取码
 	   					json.bean.shareType = "block";
 	   					json.bean.btnName = "复制链接及提取码";
 	   					str += "   提取码：" + json.bean.sharePassword;
@@ -58,7 +58,7 @@ layui.config({
 	   				clipboard.on('error', function(e) {
 	   					winui.window.msg("浏览器不支持！", {icon: 2, time: 2000});
 	   				});
-	   			}else{
+	   			} else {
 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});

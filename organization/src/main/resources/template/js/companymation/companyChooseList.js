@@ -113,7 +113,7 @@ layui.config({
 				parent.companyList = [].concat(json.rows);
 				parent.layer.close(index);
 				parent.refreshCode = '0';
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

@@ -49,7 +49,7 @@ layui.config({
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
-		 	   		}else{
+		 	   		} else {
                 		winui.window.msg('地图信息获取失败.', {icon: 2, time: 2000});
                 	}
             	});
@@ -67,7 +67,7 @@ layui.config({
 				userList = [].concat(userReturnList);
 				if(userList.length > 0){
 					$("#userName").val(userList[0].name);
-				}else{
+				} else {
 					$("#userName").val("");
 				}
 			});
@@ -81,7 +81,7 @@ layui.config({
 					zoom: 11,
 					center: [latitude, longitude]
 				});
-			}else{
+			} else {
 				map = new AMap.Map('container', {
 					resizeEnable: true,
 					zoom: 5,
@@ -114,7 +114,7 @@ layui.config({
 								$("#latitude").val(result.geocodes[0].location.lat);
 							}
 			            })
-					}else{
+					} else {
 					}
 		      });
 			});
@@ -176,7 +176,7 @@ layui.config({
 		        						$("#latitude").val(result.geocodes[0].location.lat);
 		        					}
 		        	            })
-		        			}else{
+		        			} else {
 		        			}
 		              });
 		            });
@@ -234,7 +234,7 @@ layui.config({
 		            										$("#latitude").val(result.geocodes[0].location.lat);
 		            									}
 		            								})
-		            							}else{
+		            							} else {
 		            							}
 		            						});
 		            					});

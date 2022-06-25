@@ -325,7 +325,7 @@
 				}() : function() {
 					if(content == null){
 						//未作处理
-					}else{
+					} else {
 						if(!content.parents('.' + doms[0])[0]) {
 							content.data('display', content.css('display')).show().addClass('layui-layer-wrap').wrap(html[1]);
 							$('#' + doms[0] + times).find('.' + doms[5]).before(titleHTML);

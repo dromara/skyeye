@@ -50,7 +50,7 @@ layui.config({
 								name: item.fileName,
 								fileAddress: item.fileAddress
 							});
-						}else{
+						} else {
 							emailEnclosureList.push({
 								id: item.id,
 								name: item.fileName,
@@ -58,7 +58,7 @@ layui.config({
 							});
 						}
 					});
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}, async: false});
@@ -95,7 +95,7 @@ layui.config({
 								name: item.fileName,
 								fileAddress: item.fileAddress
 							});
-						}else{
+						} else {
 							emailEnclosureList.push({
 								id: item.id,
 								name: item.fileName,
@@ -103,7 +103,7 @@ layui.config({
 							});
 						}
 					});
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}, async: false});
@@ -243,11 +243,11 @@ layui.config({
 				   	if (json.returnCode == 0) {
 				   		if(url == "useremail013" || url == "useremail015"){
 							winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-						}else{
+						} else {
 							winui.window.msg('发送成功', {icon: 1, time: 2000});
 							location.href = "../../tpl/useremail/sendsuccess.html";
 						}
-				   	}else{
+				   	} else {
 					   	winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				   	}
 			   	}});

@@ -33,7 +33,7 @@ layui.config({
 							}
 						}
 						form.render('checkbox');
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
@@ -50,7 +50,7 @@ layui.config({
 	            });
 	        	if(isNull(propertyIds)){
 	        		winui.window.msg('请先选择标签属性。', {icon: 2, time: 2000});
-	        	}else{
+	        	} else {
 	        		var params = {
 	        			rowId: parent.rowId,
 	        			propertyIds: propertyIds
@@ -59,7 +59,7 @@ layui.config({
 						if (json.returnCode == 0) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
-						}else{
+						} else {
 							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});

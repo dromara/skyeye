@@ -58,7 +58,7 @@ layui.config({
 		        		return "男";
 		        	}else if(d.userSex == '2'){
 		        		return "女";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},
@@ -102,7 +102,7 @@ layui.config({
 		        		return "<span class='state-up'>申诉通过</span>";
 		        	}else if(d.state == '2'){
 		        		return "<span class='state-down'>申诉不通过</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},

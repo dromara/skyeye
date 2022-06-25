@@ -39,7 +39,7 @@ layui.config({
 	var s = "车间选择规则：";
 	if(checkType == "1"){
 		s += '1.单选，双击指定行数据即可选中；';
-	}else{
+	} else {
 		s += '1.多选；';
 		//显示保存按钮
 		$("#saveCheckBox").show();
@@ -88,7 +88,7 @@ layui.config({
 	                    return "<span class='state-up'>正常</span>";
 	                }else if(d.state == '2'){
 	                    return "<span class='state-down'>维修整改</span>";
-	                }else{
+	                } else {
 	                    return "参数错误";
 	                }
 	            }},
@@ -117,7 +117,7 @@ layui.config({
 						click.find("input[type='radio']").prop("checked", true);
 						form.render();
 					})
-		    	}else{
+		    	} else {
 		    		//多选
 		    		//设置选中
 		    		tableCheckBoxUtil.checkedDefault({
@@ -141,7 +141,7 @@ layui.config({
    				parent.procedureMationList = [].concat(json.rows);
  	   			parent.layer.close(index);
  	        	parent.refreshCode = '0';
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

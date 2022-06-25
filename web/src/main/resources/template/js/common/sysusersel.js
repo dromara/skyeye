@@ -52,17 +52,17 @@ layui.config({
 	var s = "人员选择规则：";
 	if(chooseOrNotMy == "1"){
 		s += '1.包含自己；';
-	}else{
+	} else {
 		s += '1.不包含自己；';
 	}
 	if(chooseOrNotEmail == "1"){
 		s += '2.必须绑定邮箱；';
-	}else{
+	} else {
 		s += '2.无需绑定邮箱；';
 	}
 	if(checkType == "1"){
 		s += '3.多选。';
-	}else{
+	} else {
 		s += '3.单选。';
 	}
 	s += '如没有查到要选择的人员，请检查人员信息是否满足当前规则。';
@@ -71,12 +71,12 @@ layui.config({
 	//树节点类型赋值
 	if(checkType === "1"){
 		ztreeCheckType = "checkbox";
-	}else{
+	} else {
 		ztreeCheckType = "radio";
 		ztreeRadioCheck = function(treeId, treeNode){
 			if(treeNode.folderType === 'isPeople'){//单选如果选中节点是人，则允许
 				return true;
-			}else{
+			} else {
 				winui.window.msg('此节点不是用户节点，不可选中!', {icon: 5,time: 2000});
 				return false;
 			}

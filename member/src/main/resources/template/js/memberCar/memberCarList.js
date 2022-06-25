@@ -38,7 +38,7 @@ layui.config({
                     return "已购买";
                 }else if(d.insure == '2'){
                     return "未购买";
-                }else{
+                } else {
                     return "<span class='state-error'>参数错误</span>";
                 }
             }},
@@ -98,7 +98,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -112,7 +112,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});
@@ -126,7 +126,7 @@ layui.config({
                 if (json.returnCode == 0) {
                     winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }});

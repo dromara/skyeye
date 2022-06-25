@@ -39,7 +39,7 @@ layui.config({
 	    	}else if(val == '2'){//公共通讯录
 	    		$("#readonlyBox").removeClass("layui-hide");
 	    		$("#typeIdBox").addClass("layui-hide");
-	    	}else{
+	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
@@ -80,7 +80,7 @@ layui.config({
  	        		}
  	        	}else if(data.field.category == '2'){
  	        		params.readonly = data.field.readonly;
- 	        	}else{
+ 	        	} else {
  	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});
  	        		return false;
  	        	}
@@ -89,7 +89,7 @@ layui.config({
 						winui.window.msg("提交成功", {icon: 1, time: 2000}, function(){
 							location.reload();
 						});
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

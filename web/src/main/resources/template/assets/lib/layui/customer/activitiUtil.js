@@ -326,7 +326,7 @@ var activitiUtil = {
                 return "<span class='state-new'>已完成</span>";
             }else if(state == '5'){
                 return "<span class='state-error'>撤销</span>";
-            }else{
+            } else {
                 return "参数错误";
             }
         } else if(submitType == 2){
@@ -336,7 +336,7 @@ var activitiUtil = {
                 return "<span class='state-new'>已提交</span>";
             }else if(state == '4'){
                 return "<span class='state-new'>已完成</span>";
-            }else{
+            } else {
                 return "参数错误";
             }
         }
@@ -356,7 +356,7 @@ var activitiUtil = {
                 return "<span class='state-down'>作废</span>";
             }else if(state == '5'){
                 return "<span class='state-error'>撤销</span>";
-            }else{
+            } else {
                 return "参数错误";
             }
         } else if(submitType == 2){
@@ -366,7 +366,7 @@ var activitiUtil = {
                 return "<span class='state-new'>已提交</span>";
             }else if(state == '4'){
                 return "<span class='state-new'>作废</span>";
-            }else{
+            } else {
                 return "参数错误";
             }
         }

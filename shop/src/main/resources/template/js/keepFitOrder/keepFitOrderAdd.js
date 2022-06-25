@@ -34,7 +34,7 @@ layui.config({
             if(val == 1){
                 $(".memberMation").hide();
                 $(".anonymousUserMation").show();
-            }else{
+            } else {
                 $(".memberMation").show();
                 $(".anonymousUserMation").hide();
             }
@@ -46,13 +46,13 @@ layui.config({
             var val = data.value;
             if(isNull(val)){
                 $("#mealId").html("");
-            }else{
+            } else {
                 // 获取车辆用于的套餐信息
                 AjaxPostUtil.request({url: shopBasePath + "queryMealMationByCarId", params: {carId: val}, type: 'json', method: "GET", callback: function(json){
                     if (json.returnCode == 0) {
                         carHasMealList = [].concat(json.rows);
                         calcMealChoose();
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: false});
@@ -65,7 +65,7 @@ layui.config({
             if(isNull(val)){
                 $("#mealExplain").html("");
                 $("#mealConsume").html("");
-            }else{
+            } else {
                 var item = getInPoingArr(carHasMealList, "id", val, null);
                 $("#mealExplain").html(item.mealExplain);
                 $("#mealConsume").html(item.mealConsume);
@@ -81,7 +81,7 @@ layui.config({
             $.each(tempList, function (i, item){
                 if(item.areaId != chooseStoreAreaId){
                     item.choose = "disabled";
-                }else{
+                } else {
                     item.choose = "";
                 }
             });
@@ -132,7 +132,7 @@ layui.config({
                         winui.window.msg('请输入车牌号.', {icon: 2, time: 2000});
                         return false;
                     }
-                }else{
+                } else {
                     // 会员
                     if(isNull(params.memberId)){
                         winui.window.msg('请选择会员.', {icon: 2, time: 2000});
@@ -149,7 +149,7 @@ layui.config({
                         winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000}, function(){
                             location.reload();
                         });
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: true});
@@ -210,7 +210,7 @@ layui.config({
                         });
                         $("#memberCar").html(getDataUseHandlebars(selOption, json));
                         form.render('select');
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }, async: false});

@@ -87,7 +87,7 @@
             marker = new BMap.Marker(new BMap.Point(Number(markerPos[0]), Number(markerPos[1])));
             map.addControl(new BMap.NavigationControl());
             map.centerAndZoom(point, Number(getPars(url,"zoom")));
-        }else{
+        } else {
             point = new BMap.Point(116.404, 39.915);    // 创建点坐标
             marker = new BMap.Marker(point);
             map.addControl(new BMap.NavigationControl());

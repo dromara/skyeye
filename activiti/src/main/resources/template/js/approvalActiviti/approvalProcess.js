@@ -64,7 +64,7 @@ layui.config({
 					   				var obj = JSON.parse(j.bean.aData);
 					   				tplContent = getDataUseHandlebars(formItem.templateContent, obj);
 					   				formItem.context = tplContent;
-					   			}else{
+					   			} else {
 					   				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 					   			}
 					   		}, async: false});
@@ -120,7 +120,7 @@ layui.config({
 		        	           });
 		        	         }
 		        		}
-					}else{
+					} else {
 						if(item.showType == 1){//文本展示
 							str = getDataUseHandlebars(textTemplate, jsonStr);
 						}else if(item.showType == 2){//附件展示
@@ -161,7 +161,7 @@ layui.config({
 							str = "";
 						}
 					}
-				}else{
+				} else {
 					if(item.showType == 1){//文本展示
 						str = getDataUseHandlebars(textTemplate, jsonStr);
 					}else if(item.showType == 2){//附件展示
@@ -220,7 +220,7 @@ layui.config({
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 				});
-			}else{
+			} else {
 				$("#otherMenuOperator").parent().hide();
 			}
 
@@ -244,7 +244,7 @@ layui.config({
 						// 如果已经获得会签结果，则可以进行提交到下一步
 						if(j.bean.approvalResult){
 							$("input:radio[name=flag][value='1']").attr("checked", true);
-						}else{
+						} else {
 							$("input:radio[name=flag][value='2']").attr("checked", true);
 						}
 						$("input[name='flag']").attr('disabled', true);
@@ -258,7 +258,7 @@ layui.config({
 			inboxTimeTreeApprovalHistory();
 			matchingLanguage();
 			form.render();
-		}else{
+		} else {
 			winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -327,10 +327,10 @@ layui.config({
 	        			var layText = _this.find("input").attr('lay-text');
 	        			if(value == "true"){
 	        				text = layText.split('|')[0];
-	        			}else{
+	        			} else {
 	        				text = layText.split('|')[1];
 	        			}
-	        		}else{
+	        		} else {
 	        			continue;
 	        		}
 	        		var obj = {
@@ -353,7 +353,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
                     	parent.layer.close(index);
                     	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -384,7 +384,7 @@ layui.config({
 		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
 						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
 						next(lis.join(''), (page * 1000) < json.total);
-		   			}else{
+		   			} else {
 		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});

@@ -31,7 +31,7 @@ layui.config({
 				form.render();
 				if(json.rows.length > 0){
 					initTable();
-				}else{
+				} else {
 					winui.window.msg("您还未分配仓库，请联系管理员分配.", {icon: 2, time: 2000});
 				}
 			} else {
@@ -108,7 +108,7 @@ layui.config({
 	    	var value = obj.value //得到修改后的值
 	    	if(isNull(value)){
 	    		winui.window.msg("请填写盘点数量.", {icon: 2, time: 2000});
-	    	}else{
+	    	} else {
 	    		if((/^(\+|-)?\d+$/.test(value)) && value >= 0){
 	    			var params = {
 	    				materialId: data.id,
@@ -123,7 +123,7 @@ layui.config({
 							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});
-	    		}else{
+	    		} else {
 	    			winui.window.msg("请填写盘点数量.", {icon: 2, time: 2000});
 	    		}
 	    	}

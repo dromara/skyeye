@@ -278,12 +278,12 @@ layui.config({
                     if(compare_HHmmss(restStartTime, endTime) || compare_HHmmss(startTime, restEndTime)){
                         // 销假结束时间比作息开始时间小或者销假开始时间比作息结束时间大，说明没有与作息时间重合的时间
                         hour = division(timeDifference(startTime, endTime), 60);
-                    }else{
+                    } else {
                         var overlapTime = getOverlapTime(startTime, endTime, restStartTime, restEndTime);
                         // 时间计算为：选择的销假时间时间减去与作息时间重复的时间段
                         hour = division(subtraction(timeDifference(startTime, endTime), timeDifference(overlapTime[0], overlapTime[1])), 60);
                     }
-                }else{
+                } else {
                     hour = division(timeDifference(startTime, endTime), 60);
                 }
                 $("#cancelHour" + num).html(hour);

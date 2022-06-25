@@ -39,7 +39,7 @@ layui.config({
 			filterId: 'messageTable',
 			fieldName: 'id'
 		});
-	}else{
+	} else {
 		s += '双击要选择的数据即可选中';
 		$("#saveCheckBox").hide();
 	}
@@ -66,7 +66,7 @@ layui.config({
 	        		return '普通员工';
 	        	}else if(d.staffType == 2){
 	        		return '教职工';
-	        	}else{
+	        	} else {
 	        		return '参数错误';
 	        	}
 	        }},
@@ -74,7 +74,7 @@ layui.config({
 	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function(d){
 	        	if(isNull(d.userPhoto)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
-	        	}else{
+	        	} else {
 	        		return '<img src="' + fileBasePath + d.userPhoto + '" class="photo-img" lay-event="userPhoto">';
 	        	}
 	        }},
@@ -86,7 +86,7 @@ layui.config({
 	        		return "男";
 	        	}else if(d.userSex == '2'){
 	        		return "女";
-	        	}else{
+	        	} else {
 	        		return "参数错误";
 	        	}
 	        }},
@@ -114,7 +114,7 @@ layui.config({
 					gridId: 'messageTable',
 					fieldName: 'id'
 				});
-			}else{
+			} else {
 				$('#messageTable').next().find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 					var dubClick = $('#messageTable').next().find('.layui-table-body').find("table").find("tbody").find(".layui-table-hover");
 					dubClick.find("input[type='radio']").prop("checked", true);
@@ -200,7 +200,7 @@ layui.config({
 				parent.systemCommonUtil.checkStaffMation = [].concat(json.rows);
 				parent.layer.close(index);
 				parent.refreshCode = '0';
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

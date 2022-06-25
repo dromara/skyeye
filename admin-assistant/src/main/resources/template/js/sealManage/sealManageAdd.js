@@ -36,19 +36,19 @@ layui.config({
  	        	if(userList.length == 0 || isNull($('#sealAdmin').tagEditor('getTags')[0].tags)){
  	        		winui.window.msg("请选择管理人", {icon: 2, time: 2000});
  	        		return false;
- 	        	}else{
+ 	        	} else {
         			params.sealAdmin = userList[0].id;
         		}
  	        	if(borrowuserList.length == 0 || isNull($('#borrowId').tagEditor('getTags')[0].tags)){
  	        		params.borrowId = "";
- 	        	}else{
+ 	        	} else {
         			params.borrowId = borrowuserList[0].id;
         		}
  	        	AjaxPostUtil.request({url: flowableBasePath + "seal002", params:params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

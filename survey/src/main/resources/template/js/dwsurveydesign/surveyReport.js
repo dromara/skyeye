@@ -35,7 +35,7 @@ layui.config({
 		 		hdb.registerHelper('compare1', function(v1, v2, options) {
 		 			if(v1 == v2){
 		 				return options.fn(this);
-		 			}else{
+		 			} else {
 		 				return options.inverse(this);
 		 			}
 		 		});
@@ -43,7 +43,7 @@ layui.config({
 		 		hdb.registerHelper('compare7', function(v1, options) {
 		 			if(v1 != '16' && v1 != '17'){
 		 				return options.fn(this);
-		 			}else{
+		 			} else {
 		 				return options.inverse(this);
 		 			}
 		 		});

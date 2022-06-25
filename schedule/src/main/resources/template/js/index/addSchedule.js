@@ -98,7 +98,7 @@ layui.config({
  				$("#scheduleDayTime").val(parent.childParams.start.format("yyyy-MM-dd"));
  				$("#scheduleDayStartTime").val(parent.childParams.start.format("hh:mm"));
  				$("#scheduleDayEndTime").val(parent.childParams.end.format("hh:mm"));
-	    	}else{//是全天
+	    	} else {//是全天
 	    		$("#scheduleStartTime").val(parent.childParams.start.format("yyyy-MM-dd"));
 	    		$("#scheduleEndTime").val(parent.childParams.end.format("yyyy-MM-dd"));
 	    	}
@@ -118,7 +118,7 @@ layui.config({
  			if(!data.elem.checked){//不是全天
  				$(".allDayIsTrue").hide();
  				$(".allDayIsFalse").show();
- 			}else{//是全天
+ 			} else {//是全天
  				$(".allDayIsTrue").show();
  				$(".allDayIsFalse").hide();
  			}
@@ -128,7 +128,7 @@ layui.config({
  		form.on('select(scheduleType)', function (data) {
  			if(data.value == '5'){
  				$("#scheduleTypeName").parent().parent().show();//自定义类型名称显示
- 			}else{
+ 			} else {
  				$("#scheduleTypeName").parent().parent().hide();//自定义类型名称隐藏
  			}
         });
@@ -158,7 +158,7 @@ layui.config({
 	        		params.allDay = '1';
 	        		params.scheduleStartTime = $("#scheduleStartTime").val() + " 00:00:00";
 	        		params.scheduleEndTime = $("#scheduleEndTime").val() + " 23:59:59";
-	        	}else{
+	        	} else {
 	        		if(isNull($("#scheduleDayTime").val())){
 	        			layer.msg('请填写日程日期', {icon: 5, shift: 6});
 	        			return false;
@@ -187,7 +187,7 @@ layui.config({
 	 	   				parent.childParams = json.bean;
 		        		parent.layer.close(index);
 		        		parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				layer.msg(json.returnMessage, {icon: 5, shift: 6});
 	 	   			}
 	 	   		}});

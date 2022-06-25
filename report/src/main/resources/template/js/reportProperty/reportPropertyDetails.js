@@ -41,11 +41,11 @@ layui.config({
                         $("#value" + (rowNum - 1)).html(item.value);
                         if(item.defaultChoose == 1){
                             $("#defaultChoose" + (rowNum - 1)).html('是');
-                        }else{
+                        } else {
                             $("#defaultChoose" + (rowNum - 1)).html('否');
                         }
                     });
-                }else{
+                } else {
                     $("#optional").html('不可选');
                     $("#canNotChoose").show();
                 }

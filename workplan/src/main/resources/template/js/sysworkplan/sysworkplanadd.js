@@ -38,7 +38,7 @@ layui.config({
 			timeSolt = parent.timeSolt;
 			// 计划时间段展示
 			$("#timeSlotBox").html(timeSolt);
-		}else{
+		} else {
 			$(".hand-down-time").addClass("layui-hide");
 			$(".choose-time").removeClass("layui-hide");
 			laydate.render({
@@ -51,7 +51,7 @@ layui.config({
 			nowCheckType = parent.nowCheckType;
 			// 计划周期名称展示
 			$("#nowCheckTypeBox").html(getNowCheckTypeName(nowCheckType));
-		}else{
+		} else {
 			$(".hand-down-check").addClass("layui-hide");
 			$(".choose-check").removeClass("layui-hide");
 		}
@@ -124,7 +124,7 @@ layui.config({
 				$("#carryPeopleBox").addClass("layui-hide");
 			}else if(val == '2'){//他人
 				$("#carryPeopleBox").removeClass("layui-hide");
-			}else{
+			} else {
 				winui.window.msg('状态值错误', {icon: 2, time: 2000});
 			}
 		});
@@ -147,7 +147,7 @@ layui.config({
  			$(data.elem).val(data.elem.checked);
  			if(data.elem.checked){
  				$("#notifyTimeBox").removeClass("layui-hide");
- 			}else{
+ 			} else {
  				$("#notifyTimeBox").addClass("layui-hide");
  			}
  		});
@@ -174,7 +174,7 @@ layui.config({
 	        	if(!isNull(timeSolt)){
 					params.startTime = timeSolt.split('~')[0] + " 00:00:00";
 					params.endTime = timeSolt.split('~')[1] + " 23:59:59";
-				}else{
+				} else {
 					if(isNull($("#executeTime").val())){
 						winui.window.msg('请选择执行时间', {icon: 2, time: 2000});
 						return false;
@@ -186,7 +186,7 @@ layui.config({
 	        	// 计划周期
 				if(!isNull(nowCheckType)){
 					params.nowCheckType = nowCheckType;
-				}else{
+				} else {
 					if(isNull($("#planCycle").val())){
 						winui.window.msg('请选择计划周期', {icon: 2, time: 2000});
 						return false;
@@ -200,7 +200,7 @@ layui.config({
 	        		if(userList.length == 0 || isNull($('#carryPeople').tagEditor('getTags')[0].tags)){
 	        			winui.window.msg('请选择指定人员', {icon: 2, time: 2000});
 	        			return false;
-	        		}else{
+	        		} else {
 	        			params.carryPeople = userList[0].id;
 	        		}
 	        	}
@@ -208,31 +208,31 @@ layui.config({
 	        	//是否邮件通知
 	        	if($("#whetherMail").val() == 'true'){
  	        		params.whetherMail = '1';
- 	        	}else{
+ 	        	} else {
  	        		params.whetherMail = '2';
  	        	}
 	        	
 	        	//是否内部消息通知
 	        	if($("#whetherNotice").val() == 'true'){
  	        		params.whetherNotice = '1';
- 	        	}else{
+ 	        	} else {
  	        		params.whetherNotice = '2';
  	        	}
 	        	
 	        	//是否定时通知
 	        	if($("#whetherTime").val() == 'true'){
  	        		params.whetherTime = '1';
- 	        	}else{
+ 	        	} else {
  	        		params.whetherTime = '2';
  	        	}
 	        	if(params.whetherTime === '1'){
 	        		if(isNull($("#notifyTime").val())){
 	        			winui.window.msg('请选择通知时间', {icon: 2, time: 2000});
 	        			return false;
-	        		}else{
+	        		} else {
 	        			params.notifyTime = $("#notifyTime").val();
 	        		}
-	        	}else{
+	        	} else {
 	        		params.notifyTime = null;
 	        	}
 	        	
@@ -240,7 +240,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

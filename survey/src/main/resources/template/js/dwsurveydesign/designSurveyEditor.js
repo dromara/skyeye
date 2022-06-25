@@ -38,7 +38,7 @@ layui.config({
 	        if (winui.verifyForm(data.elem)) {
 	        	if(isNull(layedit.getContent(layContent))){
 	        		winui.window.msg('请输入内容。', {icon: 2, time: 2000});
-	        	}else{
+	        	} else {
 	        		parent.ueEditObj = layedit.getContent(layContent);
 	        		parent.layer.close(index);
 	 	        	parent.refreshCode = '0';

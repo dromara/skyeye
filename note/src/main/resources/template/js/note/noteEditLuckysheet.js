@@ -32,7 +32,7 @@ layui.config({
 				param["data"] = JSON.parse(json.bean.content);
 			}
 			luckysheet.create(param);
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});

@@ -71,7 +71,7 @@ layui.config({
             { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function(d){
                 if(d.type == 1){
                     return "线上下单";
-                }else{
+                } else {
                     return "线下下单";
                 }
             }},

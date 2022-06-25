@@ -195,7 +195,7 @@ layui.config({
 						if(!hasAssembly){
 							//当前没有组合件
 							hasAssembly = true;
-						}else{
+						} else {
 							$("#materialTypeId" + rowNum).addClass("layui-form-danger");
 							$("#materialTypeId" + rowNum).focus();
 							winui.window.msg('拆分单中只能存在一个组合件.', {icon: 2, time: 2000});

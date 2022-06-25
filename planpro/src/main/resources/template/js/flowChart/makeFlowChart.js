@@ -62,12 +62,12 @@ layui.config({
 					net.changeData();
 					if(isNull(json.bean.jsonContent)){
 						net.source({});
-					}else{
+					} else {
 						var jsonData = JSON.parse(json.bean.jsonContent);
 						net.source(jsonData.source.nodes, jsonData.source.edges);
 					}
 					net.render();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -174,7 +174,7 @@ layui.config({
 						net.render();
 					}
 					loadTable();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -410,7 +410,7 @@ layui.config({
 	    AjaxPostUtil.request({url: reqBasePath + "planprojectflow007", params: {rowId: designId, jsonContent: json}, type: 'json', method: "POST", callback: function(json){
 			if (json.returnCode == 0) {
 				winui.window.msg("保存成功", {icon: 1, time: 2000});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

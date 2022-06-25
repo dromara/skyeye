@@ -58,7 +58,7 @@ layui.config({
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#subjectId").html("");
 				form.render('select');
-			}else{
+			} else {
 				// 加载科目
 				initSubject();
 			}
@@ -135,11 +135,11 @@ layui.config({
 	    				// 加载上传和切换监听事件
 						pageLoadAfter();
 	    				
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
-			}else{
+			} else {
 				// 加载年级
 		 		initGrade();
 		 		// 题目信息赋值
@@ -163,7 +163,7 @@ layui.config({
  	        			winui.window.msg('请上传文件.', {icon: 2, time: 2000});
 	    				return false;
  	        		}
- 	        	}else{
+ 	        	} else {
  	        		fileUrl = "";
  	        	}
  	        	var params = {
@@ -215,7 +215,7 @@ layui.config({
     				if (json.returnCode == 0) {
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';
-    				}else{
+    				} else {
     					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     				}
     			}});
@@ -273,7 +273,7 @@ layui.config({
 					var src = $(this).find("img").attr("src");
 					if(src.indexOf("-choose") != -1){
 						src = src.replace("-choose.png", '') + '.png';
-					}else{
+					} else {
 						src = src.replace(".png", '') + '-choose.png';
 					}
 					$(this).find("img").attr("src", src);

@@ -543,7 +543,7 @@ layui.define(['table', 'element', 'form', 'laytpl'], function (exports) {
       // if(rowspanIndex){
       //     var index=$this.parents('tr:eq(0)').index()+parseInt(rowspanIndex);
       //     $this.parents('table:eq(0)').children().children('tr:eq('+index+')').remove()
-      // }else{
+      // } else {
       //     $this.parents('tr:eq(0)').next().remove();
       // }
       $tr.next().remove()

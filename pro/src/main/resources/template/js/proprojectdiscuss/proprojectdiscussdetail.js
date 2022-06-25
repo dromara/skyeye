@@ -30,7 +30,7 @@ layui.config({
 					};
    					if(item.createId === json.bean.createId){//左侧
    						str += getDataUseHandlebars(leftTemplate, jsonStr);
-   					}else{//右侧
+   					} else {//右侧
    						str += getDataUseHandlebars(rightTemplate, jsonStr);
    					}
    				});

@@ -37,7 +37,7 @@ layui.define(["jquery"], function(exports) {
 								i += '<li class="';
 								if(!isNull(n.children)){
 									i += 'ui-context-mouse-menu-item';
-								}else{
+								} else {
 									i += 'ui-context-menu-item';
 								}
 								var id = _getRandomString(32);
@@ -63,14 +63,14 @@ layui.define(["jquery"], function(exports) {
 											i += '<li class="ui-context-menu-item';
 											i += '" id="' + id + '"><a href="javascript:void(0);">' + iconChildStr + '<span>' + item.text + '</span>';
 											i += '</a></li>';
-										}else{
+										} else {
 											i += '<li class="context-menu-line"></li>'
 										}
 									});
 									i += '</ul>';
 								}
 								i += '</li>';
-							}else{
+							} else {
 								i += '<li class="context-menu-line"></li>'
 							}
 						}), 
@@ -93,7 +93,7 @@ layui.define(["jquery"], function(exports) {
 											return true;
 										}
 									});
-								}else{
+								} else {
 									if(m.id === $(item).attr("id")){
 										$(item).on('click', function(e){
 											m.callback();
@@ -172,12 +172,12 @@ layui.define(["jquery"], function(exports) {
 						var top = "";
 						if(winHeight - tHeight < thisHeight){
 							top = t.clientY - thisHeight;
-						}else{
+						} else {
 							top = t.clientY + 2;
 						}
 						if(winWidth - tWidth < thisWidth){
 							left = t.clientX - thisWidth;
-						}else{
+						} else {
 							left = t.clientX + 2;
 						}
 						e("#uiContextMenu_" + this.random).css({

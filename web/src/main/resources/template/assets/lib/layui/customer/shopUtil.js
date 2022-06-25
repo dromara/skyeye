@@ -19,7 +19,7 @@ var shopUtil = {
             return "<span class='state-up'>启用</span>";
         }else if(enabled == 2){
             return "<span class='state-down'>禁用</span>";
-        }else{
+        } else {
             return "<span class='state-error'>参数错误</span>";
         }
     },
@@ -37,7 +37,7 @@ var shopUtil = {
             return "<span class='state-down'>禁用</span>";
         }else if(enabled == 3){
             return "<span class='state-down'>已过户</span>";
-        }else{
+        } else {
             return "<span class='state-error'>参数错误</span>";
         }
     },
@@ -137,7 +137,7 @@ var shopUtil = {
             }else if(data.state == 3){
                 return "<span class='state-up'>已核销</span>";
             }
-        }else{
+        } else {
             return '已取消';
         }
     },

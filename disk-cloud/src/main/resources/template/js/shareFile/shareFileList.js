@@ -26,22 +26,22 @@ layui.config({
    			if (json.returnCode == 0) {
    				if(isNull(json.bean)){//文件不存在
    					location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
-   				}else{
+   				} else {
    					$("#userName").html(json.bean.userName);
    					$("#userPhoto").attr("src", json.bean.userPhoto);
    					$("#userPhoto").attr("alt", json.bean.userName);
    					if(json.bean.shareType == 2){//私密分享
    						if(isNull(getCookie("file" + rowId))){//输入的提取码为空
    							location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
-   						}else{//输入的提取码不为空
+   						} else {//输入的提取码不为空
    							AjaxPostUtil.request({url:reqBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: getCookie("file" + rowId)}, type: 'json', callback: function(json){
    					   			if (json.returnCode == 0) {
    					   				if(isNull(json.bean)){//分享取消
    					   					location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
-   					   				}else{//加载列表
+   					   				} else {//加载列表
    					   					loadUserMation();
    					   				}
-   					   			}else{//提取码错误
+   					   			} else {//提取码错误
    					   				location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
    					   			}
    					   		}});
@@ -51,7 +51,7 @@ layui.config({
    					}
    				}
    				form.render();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -89,7 +89,7 @@ layui.config({
 	   				shareId = json.bean.id;
 	   				$("#filePathShow").html('<a><cite>全部文件</cite></a>');
 	   				loadFileList();
-	   			}else{//提取码错误
+	   			} else {//提取码错误
 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});
@@ -126,20 +126,20 @@ layui.config({
 					layer.close(index);
 					location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/shareFile/shareFileList.html?id=" + rowId);
 				});
-			}else{
+			} else {
 				var operaterId = $(this).parent().parent().attr("rowid");
 				var fileType = $(this).parent().parent().attr("filetype");
 				if(fileType === 'folder'){//文件夹
 					winui.window.msg('暂不提供文件夹的下载。', {icon: 2, time: 2000});
-				}else{//文件
+				} else {//文件
 					AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function(json){
 						if (json.returnCode == 0) {
 							if($.inArray(json.bean.fileType, imageType) >= 0){//图片
 								downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
-							}else{
+							} else {
 								download(fileBasePath + json.bean.fileAddress, json.bean.fileName);
 							}
-						}else{
+						} else {
 							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 						}
 					}});
@@ -183,7 +183,7 @@ layui.config({
 		                	winui.window.msg("保存成功", {icon: 1, time: 2000});
 		                }
 					}});
-			}else{
+			} else {
 				winui.window.msg('请选择需要保存的文件。', {icon: 7,time: 2000});
 			}
 		});
@@ -199,7 +199,7 @@ layui.config({
 			var checkLength = $("#fileListContent :checkbox:checked").length;
 			if(length == checkLength){
 				$("#checkAll").prop("checked", true);
-			}else{
+			} else {
 				$("#checkAll").prop("checked", false);
 			}
 			e.stopPropagation();
@@ -251,7 +251,7 @@ layui.config({
 		$("body").on("click", "#upFolderPath", function(){
 			if(pathArray.length > 1){
 				folderId = pathArray[pathArray.length - 2].id;
-			}else{
+			} else {
 				folderId = '-1';
 			}
 			reFreshAllFilePathISUp();
@@ -298,12 +298,12 @@ layui.config({
 				$.each(pathArray, function(i, item){
 					if(i == pathArray.length - 1){
 						str += '<a><cite>' + item.fileName + '</cite></a>';
-					}else{
+					} else {
 						str += '<a href="javascript:;" rowid="' + item.id + '" class="folderNamePath">' + item.fileName + '</a><span lay-separator="">></span>';
 					}
 				});
 				$("#filePathShow").html(str);
-			}else{
+			} else {
 				$("#filePathShow").html('<a><cite>全部文件</cite></a>');
 			}
 		}

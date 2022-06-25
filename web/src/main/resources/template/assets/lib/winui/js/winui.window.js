@@ -357,7 +357,7 @@ layui.define(['layer', 'winui'], function (exports) {
         		$(menuTitle[1]).css({'display': 'none'});
         		title = $(menuTitle[0]).prop("outerHTML") + $(menuTitle[1]).prop("outerHTML");
         		taskItem = $('<li win-id="' + id + '" class="winui-task-item task-item-icon-box">' + iconTitle + title + '</li>');
-        	}else{//展示图标+文字
+        	} else {//展示图标+文字
         		var menuTitle = $(iconTitle);
         		$(menuTitle[0]).css({'display': 'none'});
         		iconTitle = $(menuTitle[0]).prop("outerHTML");
@@ -432,11 +432,11 @@ layui.define(['layer', 'winui'], function (exports) {
 	            		str += '<i class="fa page-icon-title fa-fw ' + options.loadIcon + '" ';
 	            		if(!isNull(options.loadIconColor)){
 	                    	str += 'style="color: ' + options.loadIconColor + '" ';
-	                    }else{
+	                    } else {
 	                    	str += 'style="color: white" ';
 	                    }
 	            		str += '></i></div>';
-            		}else{//图片
+            		} else {//图片
             			str += '<img class="page-icon-title" src="' + options.loadIcon + '"/>';
             		}
             	}

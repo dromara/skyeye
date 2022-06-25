@@ -24,7 +24,7 @@ layui.config({
 		 		hdb.registerHelper('compare1', function(v1, v2, options) {
 		 			if(v1 === v2){
 		 				return options.inverse(this);
-		 			}else{
+		 			} else {
 		 				return options.fn(this);
 		 			}
 		 		});

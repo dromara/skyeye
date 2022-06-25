@@ -120,7 +120,7 @@ layui.config({
 			});
 			if(inListIndex >= 0){
 				procedureList[inListIndex].procedureArray.push(item);
-			}else{
+			} else {
 	    		if(item.state == 1){
 	    			item.checkBoxHtml = '<input type="radio" name="procedureListName" value="' + item.departmentId + '">';
 	    			item.stateName = "<span class='state-down'>待下达</span>";

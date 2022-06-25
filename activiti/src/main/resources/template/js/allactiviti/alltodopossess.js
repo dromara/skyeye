@@ -33,7 +33,7 @@ layui.config({
 	        { field: 'suspended', title: '状态', align: 'center', width: 130, templet: function(d){
 	        	if(d.suspended){
 	        		return "<span class='state-down'>挂起</span>";
-	        	}else{
+	        	} else {
 	        		return "<span class='state-up'>正常</span>";
 	        	}
 	        }},
@@ -65,7 +65,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					winui.window.msg("该流程已挂起", {icon: 1, time: 2000});
 					reloadAllConductTable();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -81,7 +81,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					winui.window.msg("该流程已激活", {icon: 1, time: 2000});
 					reloadAllConductTable();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});

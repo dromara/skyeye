@@ -19,7 +19,7 @@ layui.config({
 	    	}else if(val == '2'){	//该类型为二级类型
 	    		$("#parentIdBox").removeClass("layui-hide");
 	    		initNoticeTypeId();
-	    	}else{
+	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
@@ -56,7 +56,7 @@ layui.config({
 	 	        	if(isNull(parentId)){
 	 	        		winui.window.msg('请选择一级公告类型', {icon: 2, time: 2000});
 	 	        		return false;
-	 	        	}else{
+	 	        	} else {
 	 	        		params.parentId = parentId;
 	 	        	}
  	        	}else if($("input[name='level']:checked").val() === '1'){
@@ -66,7 +66,7 @@ layui.config({
  	        		if (json.returnCode == 0) {
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';
- 	        		}else{
+ 	        		} else {
  	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	        		}
  	        	}});

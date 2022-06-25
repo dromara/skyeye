@@ -49,7 +49,7 @@ layui.config({
 		if(isNull(data.value) || data.value === '请选择'){
 	 		$("#classId").html("");
 			form.render('select');
-		}else{
+		} else {
 			//加载班级
 			loadThisGradeNowYear();
 		}

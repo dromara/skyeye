@@ -47,7 +47,7 @@ layui.config({
 		if(isNull(data.value) || data.value === '请选择'){
 			$("#subjectId").html("");
 			form.render('select');
-		}else{
+		} else {
 			//加载科目
 			initSubject();
 		}
@@ -87,7 +87,7 @@ layui.config({
 		        { field: 'type', width:80, title: '类型', align: 'center', templet: function(d){
 		        	if(d.type == 1){
 		        		return '<span style="color: blue">' + d.typeName + '</span>';
-		        	}else{
+		        	} else {
 		        		return '<span style="color: goldenrod">' + d.typeName + '</span>';
 		        	}
 		        }},
@@ -131,7 +131,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

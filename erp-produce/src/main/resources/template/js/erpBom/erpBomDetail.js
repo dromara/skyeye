@@ -20,7 +20,7 @@ layui.config({
 				});
 				matchingLanguage();
 				form.render();
-            }else{
+            } else {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }});
@@ -61,7 +61,7 @@ layui.config({
 			if(rows.length == 0) {
 				$("#treeDemo").append(li_head);
 				$("#treeDemo").append('<li><div style="text-align: center;line-height: 30px;" >无符合条件数据</div></li>')
-			}else{
+			} else {
 				rows.eq(0).before(li_head)
 			}
 		}

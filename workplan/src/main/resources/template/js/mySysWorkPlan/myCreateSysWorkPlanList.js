@@ -158,7 +158,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					winui.window.msg("已取消定时发送", {icon: 1, time: 2000});
 					loadTable();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -173,7 +173,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					loadTable();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -206,7 +206,7 @@ layui.config({
 		if(isNull($("#executeTime").val())){
 			startTime = "";
 			endTime = "";
-		}else{
+		} else {
 			startTime = $("#executeTime").val().split('~')[0].trim() + " 00:00:00";
 			endTime = $("#executeTime").val().split('~')[1].trim() + " 23:59:59";
 		}

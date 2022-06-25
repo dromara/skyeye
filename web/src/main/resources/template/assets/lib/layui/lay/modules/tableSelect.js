@@ -73,7 +73,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                         for (var i=0;i<table.checkStatus(tableName).data.length;i++){
                             checkedData.push(table.checkStatus(tableName).data[i])
                         }
-                    }else{
+                    } else {
                         if(obj.type=='all'){
                             for (var j=0;j<table.cache[tableName].length;j++) {
                                 for (var i=0;i<checkedData.length;i++){
@@ -82,7 +82,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                                     }
                                 }
                             }
-                        }else{
+                        } else {
                             //因为LAYUI问题，操作到变化全选状态时获取到的obj为空，这里用函数获取未选中的项。
                             function nu (){
                                 var noCheckedKey = '';
@@ -103,7 +103,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                     }
                     checkedData = uniqueObjArray(checkedData, opt.checkedKey);
                     updataButton(checkedData.length)
-                }else{
+                } else {
                     updataButton(table.checkStatus(tableName).data.length)
                 }
             });
@@ -156,7 +156,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                 var tArr = [];
                 if(arr.length == 0){
                     return arr;
-                }else{
+                } else {
                     if(type){
                         for(var i=0;i<arr.length;i++){
                             if(!tArr[arr[i][type]]){
@@ -165,7 +165,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
                             }
                         }
                         return newArr;
-                    }else{
+                    } else {
                         for(var i=0;i<arr.length;i++){
                             if(!tArr[arr[i]]){
                                 newArr.push(arr[i]);

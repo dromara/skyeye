@@ -88,7 +88,7 @@
 		                		updateTime: getTimeForUpdate(zip.files[key].date),
 		                		fileSize: zip.files[key]._data.compressedSize
 		                	});
-		                }else{//文件夹
+		                } else {//文件夹
 		                	json.push({
 		                		id: fileName,
 		                		pId: getFileFolderUpOneName(fileName),
@@ -133,7 +133,7 @@
 				var tmp = o.substring(0, o.lastIndexOf("/"));
 				if(tmp.lastIndexOf("/") != -1){
 					return tmp.substring(0, tmp.lastIndexOf("/") + 1);
-				}else{
+				} else {
 					return "0";
 				}
 		    }

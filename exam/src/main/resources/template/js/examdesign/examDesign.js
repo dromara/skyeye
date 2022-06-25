@@ -40,10 +40,10 @@ layui.config({
 	   				loadPageJson = json;
 	   				if(typeof(callback) == "function") {
 						callback();
-					}else{
+					} else {
 		   				initPage();
 					}
-	   			}else{
+	   			} else {
 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});
@@ -68,7 +68,7 @@ layui.config({
 			 		
 			 		hdb.registerHelper("showQuestionIndex", function(v1, options) {
 						if(v1 == '16' || v1 == '17'){
-						}else{
+						} else {
 							quIndex++;
 							return quIndex;
 						}
@@ -76,7 +76,7 @@ layui.config({
 			 		
 			 		hdb.registerHelper("showQuestionLeftIndex", function(v1, options) {
 						if(v1 == '16' || v1 == '17'){
-						}else{
+						} else {
 							quLeftIndex++;
 							return quLeftIndex;
 						}
@@ -93,7 +93,7 @@ layui.config({
 			 		hdb.registerHelper('compare1', function(v1, v2, options) {
 			 			if(v1 == v2){
 			 				return options.fn(this);
-			 			}else{
+			 			} else {
 			 				return options.inverse(this);
 			 			}
 			 		});
@@ -143,7 +143,7 @@ layui.config({
 			 		hdb.registerHelper('compareShowLeft', function(v1, options) {
 			 			if(v1 != '16' && v1 != '17'){
 			 				return options.fn(this);
-			 			}else{
+			 			} else {
 			 				return options.inverse(this);
 			 			}
 			 		});
@@ -151,7 +151,7 @@ layui.config({
 			 		hdb.registerHelper('compare2', function(v1, v2, options) {
 			 			if(v1 == v2){
 			 				return 'display: none;';
-			 			}else{
+			 			} else {
 			 				return '';
 			 			}
 			 		});
@@ -251,7 +251,7 @@ layui.config({
 		    			if(i % columuLength == 0){
 		    				xIndex++;
 		    				yIndex = 1;
-		    			}else{
+		    			} else {
 			    			yIndex++;
 		    			}
 		    			var _this = this;
@@ -271,7 +271,7 @@ layui.config({
 		    			if(i % columuLength == 0){
 		    				xIndex++;
 		    				yIndex = 1;
-		    			}else{
+		    			} else {
 			    			yIndex++;
 		    			}
 		    			var _this = this;
@@ -291,7 +291,7 @@ layui.config({
 		    			if(i % columuLength == 0){
 		    				xIndex++;
 		    				yIndex = 1;
-		    			}else{
+		    			} else {
 			    			yIndex++;
 		    			}
 		    			var _this = this;
@@ -311,7 +311,7 @@ layui.config({
 		    			if(i % columuLength == 0){
 		    				xIndex++;
 		    				yIndex = 1;
-		    			}else{
+		    			} else {
 			    			yIndex++;
 		    			}
 		    			var _this = this;
@@ -361,11 +361,11 @@ layui.config({
 								// 重置左侧设计目录序号
 								resetQuLeftItem();
 		 	   				});
-		 	   			}else{
+		 	   			} else {
 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	   			}
 		 	   		}});
-				}else{
+				} else {
 					quBody.hide("slow", function(){
 						$(this).parent().remove();
 						// 重置序号
@@ -386,7 +386,7 @@ layui.config({
 			var curEditTdClass = curEditTd.attr("class");
 			if(curEditTdClass.indexOf("Column") >= 0){
 				deleteChenColumnOption();
-			}else{
+			} else {
 				deleteChenRowOption();
 			}
 		}
@@ -402,11 +402,11 @@ layui.config({
 				AjaxPostUtil.request({url:schoolBasePath + "exam016", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
-			}else{
+			} else {
 				delQuOptionCallBack(optionParent);
 			}
 		}
@@ -421,11 +421,11 @@ layui.config({
 				AjaxPostUtil.request({url:schoolBasePath + "exam017", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
-			}else{
+			} else {
 				delQuOptionCallBack(optionParent);
 			}
 		}
@@ -580,7 +580,7 @@ layui.config({
         			winui.window.msg('请上传文件.', {icon: 2, time: 2000});
         			throw err = new Error('请上传文件');
         		}
-        	}else{
+        	} else {
         		fileUrl = "";
         	}
         	if(tabIndex == -1){
@@ -664,7 +664,7 @@ layui.config({
 						//同步-更新题目排序号
 						quCBNum2++;
 						exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -691,7 +691,7 @@ layui.config({
 	    		AjaxPostUtil.request({url:schoolBasePath + "exam018", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -758,7 +758,7 @@ layui.config({
 						//同步-更新题目排序号
 						quCBNum2++;
 						exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -785,7 +785,7 @@ layui.config({
 	    		AjaxPostUtil.request({url:schoolBasePath + "exam019", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -896,7 +896,7 @@ layui.config({
 						// 同步-更新题目排序号
 						quCBNum2++;
 						exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -950,7 +950,7 @@ layui.config({
     					//同步-更新题目排序号
     					quCBNum2++;
     					exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -970,7 +970,7 @@ layui.config({
 	    		AjaxPostUtil.request({url:schoolBasePath + "exam020", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1021,7 +1021,7 @@ layui.config({
 						//同步-更新题目排序号
 						quCBNum2++;
 						exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1044,7 +1044,7 @@ layui.config({
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   				rmQuOrderTableTr.remove();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1078,7 +1078,7 @@ layui.config({
 						//同步-更新题目排序号
 						quCBNum2++;
 						exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1114,7 +1114,7 @@ layui.config({
 						//同步-更新题目排序号
 						quCBNum2++;
 						exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1168,7 +1168,7 @@ layui.config({
 						// 同步-更新题目排序号
 						quCBNum2++;
 						exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1188,7 +1188,7 @@ layui.config({
 	    		AjaxPostUtil.request({url:schoolBasePath + "exam022", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1250,7 +1250,7 @@ layui.config({
 		    			if(i % columuLength == 0){
 		    				xIndex++;
 		    				yIndex = 1;
-		    			}else{
+		    			} else {
 			    			yIndex++;
 		    			}
 		    			var s = {
@@ -1271,7 +1271,7 @@ layui.config({
 		    			if(i % columuLength == 0){
 		    				xIndex++;
 		    				yIndex = 1;
-		    			}else{
+		    			} else {
 			    			yIndex++;
 		    			}
 		    			var s = {
@@ -1292,7 +1292,7 @@ layui.config({
 		    			if(i % columuLength == 0){
 		    				xIndex++;
 		    				yIndex = 1;
-		    			}else{
+		    			} else {
 			    			yIndex++;
 		    			}
 		    			var s = {
@@ -1313,7 +1313,7 @@ layui.config({
 		    			if(i % columuLength == 0){
 		    				xIndex++;
 		    				yIndex = 1;
-		    			}else{
+		    			} else {
 			    			yIndex++;
 		    			}
 		    			var s = {
@@ -1368,7 +1368,7 @@ layui.config({
     					// 同步-更新题目排序号
     					quCBNum2++;
     					exeQuCBNum();
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -1393,7 +1393,7 @@ layui.config({
 	    		var questionCase = $("#dwSurveyQuContent").find("input[name='quId'][value='" + quId + "']").parent();
 	    		questionCase.find("input[name='fraction']").val(value);
 	    		questionCase.find("input[name='saveTag']").val("0");
-	    	}else{
+	    	} else {
 	    		notify("请输入正整数分数！", 800);
 	    	}
 	    }

@@ -28,7 +28,7 @@ layui.config({
 		 		hdb.registerHelper("compare1", function(v1, options){
 					if(isNull(v1)){
 						return path + "assets/img/uploadPic.png";
-					}else{
+					} else {
 						return basePath + v1;
 					}
 				});
@@ -89,7 +89,7 @@ layui.config({
 		 								return;
 		 							}
 		 						}
-		 					}else{
+		 					} else {
 		 						jobId = "";
 		 						//初始化职位
 		 			 			dtree.render({
@@ -224,7 +224,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});

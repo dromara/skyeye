@@ -123,7 +123,7 @@ layui.config({
 				callback(event);
                 if(!checkWorkDescShow)
             	    initIsCheck();
-            }else{
+            } else {
                 winui.window.msg(json.returnMessage, { shift: 6, skin: 'msg-skin-message'});
             }
         }});
@@ -151,7 +151,7 @@ layui.config({
                 if(typeof(callBack) == "function") {
 					callBack();
 				}
-            }else{
+            } else {
                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }});
@@ -167,7 +167,7 @@ layui.config({
 		if(!judgeInPoingArr(checkWorkTimeDays, 'day', getThisWeekDay()) && json.bean.type == 1){
 			$("#clockInBtn").hide();
 			$("#clockOutBtn").hide();
-		}else{
+		} else {
 			if(json.bean.isCheck == "1"){
 				// 显示早卡按钮
 				$("#clockInBtn").show();
@@ -249,7 +249,7 @@ layui.config({
 				$("#clockInBtn").hide();
 				calendar.fullCalendar('refetchEvents');
 				winui.window.msg("上班打卡成功", {icon: 1, time: 2000});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -278,7 +278,7 @@ layui.config({
 				$("#clockOutBtn").hide();
 				calendar.fullCalendar('refetchEvents');
 				winui.window.msg("下班打卡成功", {icon: 1, time: 2000});
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

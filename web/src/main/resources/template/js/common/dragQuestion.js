@@ -139,7 +139,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			if(optionCk){
 				$(".quOptionFillContentLi,.quOptionFillRequiredLi").show();
 				$("#modelUIDialog").dialog("option","height",230);
-			}else{
+			} else {
 				$(".quOptionFillContentLi,.quOptionFillRequiredLi").hide();
 			}
 		});
@@ -205,7 +205,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				nextQuBody.find("input[name='saveTag']").val(0);
 				newNextObj.find("input[name='saveTag']").val(0);
 				form.render();
-			}else{
+			} else {
 				winui.window.msg("已经是第一个了！", {icon: 2,time: 1000});
 			}
 		});
@@ -231,7 +231,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				prevQuBody.find("input[name='saveTag']").val(0);
 				newPrevObj.find("input[name='saveTag']").val(0);
 				form.render();
-			}else{
+			} else {
 				winui.window.msg("已经是最后一个了！", {icon: 2,time: 1000});
 			}
 		});
@@ -356,17 +356,17 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				var prevTd = nextTd.prev();
 				if(prevTd[0]){
 					dwOptionUp(prevTd, nextTd);
-				}else{
+				} else {
 					var nextTr = $(curEditObj).parents("tr");
 					var prevTr = nextTr.prev();
 					if(prevTr[0]){
 						prevTd = prevTr.find("td").last();
 						dwOptionUp_1(prevTr, nextTr);
-					}else{
+					} else {
 						alert("已经是第一个了！");
 					}
 				}
-			}else{
+			} else {
 				var nextLi = null;
 				var prevLi = null;
 				var nextLiAfterHtml = "";
@@ -391,7 +391,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 						prevLi = nextLi.prev();
 						var prevLiHtml = prevLi.html();
 						nextLiAfterHtml = "<tr class='quChenRowTr'>" + prevLiHtml + "</tr>";
-					}else{
+					} else {
 						nextLi = $(curEditObj).parents("td.quChenColumnTd");
 						prevLi = nextLi.prev();
 						var prevLiHtml = prevLi.html();
@@ -412,7 +412,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 						$(nextLi).next().find("input[name='quItemSaveTag']").val(0);
 						var quItemBody = $(curEditObj).parents(".surveyQuItemBody");
 						quItemBody.find("input[name='saveTag']").val(0);
-					}else{
+					} else {
 						alert("已经是第一个了！");
 					}
 				}
@@ -430,17 +430,17 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				var nextTd = prevTd.next();
 				if(nextTd[0]){
 					dwOptionDown(prevTd, nextTd);
-				}else{
+				} else {
 					var nextTr = $(curEditObj).parents("tr");
 					var prevTr = nextTr.prev();
 					if(prevTr[0]){
 						prevTd = prevTr.find("td").last();
 						dwOptionUp_1(prevTr, nextTr);
-					}else{
+					} else {
 						alert("已经是第一个了！");
 					}
 				}
-			}else{
+			} else {
 				var prevLi = null;
 				var nextLi = null;
 				var prevLiBeforeHtml = "";
@@ -465,7 +465,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 						nextLi = prevLi.next();
 						var nextLiHtml = nextLi.html();
 						prevLiBeforeHtml = "<tr class='quChenRowTr'>" + nextLiHtml + "</tr>";
-					}else{
+					} else {
 						prevLi = $(curEditObj).parents("td.quChenColumnTd");
 						nextLi = prevLi.next();
 						var nextLiHtml = nextLi.html();
@@ -486,7 +486,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 					$(prevLi).prev().find("input[name='quItemSaveTag']").val(0);
 					var quItemBody=$(curEditObj).parents(".surveyQuItemBody");
 					quItemBody.find("input[name='saveTag']").val(0);
-				}else{
+				} else {
 					alert("已经是最后一个了！");
 				}
 			}
@@ -563,7 +563,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			var check = $(this).prop("checked");
 			if(check){
 				$(".contactsFieldLi").show();
-			}else{
+			} else {
 				$(".contactsFieldLi").hide();
 			}
 		});
@@ -675,7 +675,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 							quLogicItem.find("input[name='logicSaveTag']").val("0");
 							quItemBody.find("input[name='saveTag']").val("0");
 						}
-					}else{
+					} else {
 						quLogicInputCase.append(quLogicItemHtml);
 						quLogicItem = quLogicInputCase.find(".quLogicItem").last();
 						quLogicItem.addClass(quLogicItemClass);
@@ -816,7 +816,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				var src = $(this).find("img").attr("src");
 				if(src.indexOf("-choose") != -1){
 					src = src.replace("-choose.png", '') + '.png';
-				}else{
+				} else {
 					src = src.replace(".png", '') + '-choose.png';
 				}
 				$(this).find("img").attr("src", src);
@@ -1108,7 +1108,7 @@ function bindQuHoverItem(){
 		//显示
 		if(isDrag){
 			appQuObj = $(this);
-		}else{
+		} else {
 			//显示
 			$(this).addClass("hover");
 			$(".pageBorderTop").removeClass("nohover");
@@ -1250,10 +1250,10 @@ function editAble(editAbleObj){
 				dwEditWidth = $(editAbleObj).parents("td").width()-52;
 			}
 			dwEditWidth > 600 ? dwEditWidth = 600:dwEditWidth;
-		}else{
+		} else {
 			dwEditWidth < 200 ? dwEditWidth = 200:dwEditWidth > 600 ? dwEditWidth = 600:dwEditWidth;
 		}
-	}else{
+	} else {
 		dwEditWidth=680;
 	}
 	
@@ -1346,7 +1346,7 @@ function showDialog(thDialogObj){
 		}
 		if(hv == 3){
 			$("#dwCommonDialog .option_range_3").show();
-		}else{
+		} else {
 			$("#dwCommonDialog .option_range_3").hide();
 		}
 		$("#dwCommonDialog select[name='setHv']").val(hv);
@@ -1409,7 +1409,7 @@ function showDialog(thDialogObj){
 		if(isNote_val == "1"){
 			quOption_isNote.prop("checked", true);
 			$(".quOptionFillContentLi,.quOptionFillRequiredLi").show();
-		}else{
+		} else {
 			quOption_isNote.prop("checked", false);
 			$(".quOptionFillContentLi,.quOptionFillRequiredLi").hide();
 		}
@@ -1419,10 +1419,10 @@ function showDialog(thDialogObj){
 		quOption_checkType.val(checkType_val);
 		if(isRequiredFill_val == "1"){
 			quOption_isRequiredFill.prop("checked",true);
-		}else{
+		} else {
 			quOption_isRequiredFill.prop("checked",false);
 		}
-	}else{
+	} else {
 		// 暂时加的
 		$("#dwCommonDialog .dwQuAddMore").show();
 	}
@@ -1441,7 +1441,7 @@ function getNameCheckIn(quItemBody){
 	}
 	if(isNull(item.find("input[name='quId']").val())){
 		return item.attr("checkNameIn");
-	}else{
+	} else {
 		return item.find("input[name='quId']").val();
 	}
 }

@@ -722,7 +722,7 @@
 								ajaxSendLoadBefore: function(hdb, json) {
 									hdb.registerHelper("showQuestionIndex", function(v1, options) {
 										if(v1 == '16' || v1 == '17'){
-										}else{
+										} else {
 											quIndex++;
 											return quIndex;
 										}
@@ -818,13 +818,13 @@
 											if(pageNum == '1'){
 												pageNum++;
 												return '';
-											}else{
+											} else {
 												pageNum++;
 											}
 										}
 										if(pageNum == '1'){
 											return '';
-										}else{
+										} else {
 											return 'display: none;';
 										}
 									});
@@ -836,7 +836,7 @@
 									hdb.registerHelper('compare7', function(v1, options) {
 										if(nowPageNum == '1'){
 											return options.inverse(this);
-										}else{
+										} else {
 											return options.fn(this);
 										}
 									});
@@ -920,7 +920,7 @@
 									loadOther(json);
 								}
 							});
-		 	   			}else{
+		 	   			} else {
 		 	   				$("#wrap").html('<span class="messageSpan">' + json.returnMessage + '</span>');
 		 	   			}
 		 	   		}});
@@ -936,7 +936,7 @@
 		 	   				// 2.加载答案附件上传插件
 		 	   				if(bean.whetherUpload == 1){
 			 	   				loadUploadPic(bean.id);
-		 	   				}else{
+		 	   				} else {
 		 	   					qBodyItem.find("fieldset").remove();
 		 	   				}
 	 	      			});
@@ -1323,7 +1323,7 @@
 							AjaxPostUtil.request({url:schoolBasePath + "exam029", params: params, type: 'json', callback: function(json){
 				 	   			if (json.returnCode == 0) {
 					 	   			$("#wrap").html('<span class="messageSpan">' + '答卷完成，感谢您的参与。' + '</span>');
-				 	   			}else{
+				 	   			} else {
 				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				 	   			}
 				 	   		}});

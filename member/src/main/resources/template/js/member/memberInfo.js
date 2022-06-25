@@ -47,7 +47,7 @@ layui.config({
                         item.stateName = shopUtil.getMemberCarEnableStateName(item.enabled);
                     });
                     $("#showForm").append(getDataUseHandlebars($("#memberCarTemplate").html(), json));
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }, async: false});
@@ -57,7 +57,7 @@ layui.config({
             AjaxPostUtil.request({url: shopBasePath + "queryMealMationByMemberId", params: {memberId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
                 if (json.returnCode == 0) {
                     $("#showForm").append(getDataUseHandlebars($("#memberMealTemplate").html(), json));
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }, async: false});
@@ -75,7 +75,7 @@ layui.config({
                         item.state = shopUtil.getMealOrderStateName(item);
                     });
                     $("#showForm").append(getDataUseHandlebars($("#memberMealOrderTemplate").html(), json));
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }, async: false});
@@ -93,7 +93,7 @@ layui.config({
                         item.state = shopUtil.getKeepFitOrderStateName(item);
                     });
                     $("#showForm").append(getDataUseHandlebars($("#memberKeepFitOrderTemplate").html(), json));
-                }else{
+                } else {
                     winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                 }
             }, async: false});

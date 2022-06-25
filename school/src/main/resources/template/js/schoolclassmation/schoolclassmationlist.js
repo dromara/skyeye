@@ -77,7 +77,7 @@ layui.config({
 	            { field: 'stateName', width: 80, align: 'center', title: '类型', templet: function(d){
 		        	if(d.state == 1){
 		        		return '<span style="color: blue">' + d.stateName + '</span>';
-		        	}else{
+		        	} else {
 		        		return '<span style="color: goldenrod">' + d.stateName + '</span>';
 		        	}
 		        }},
@@ -116,7 +116,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

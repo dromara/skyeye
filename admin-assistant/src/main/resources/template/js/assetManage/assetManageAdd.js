@@ -97,19 +97,19 @@ layui.config({
  	        	}
  	        	if(userList.length == 0 || isNull($('#assetAdmin').tagEditor('getTags')[0].tags)){
  	        		params.assetAdmin = "";
- 	        	}else{
+ 	        	} else {
         			params.assetAdmin = userList[0].id;
         		}
  	        	if(employeeuserList.length == 0 || isNull($('#employeeId').tagEditor('getTags')[0].tags)){
  	        		params.employeeId = "";
- 	        	}else{
+ 	        	} else {
         			params.employeeId = employeeuserList[0].id;
         		}
  	        	AjaxPostUtil.request({url: flowableBasePath + "asset002", params:params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

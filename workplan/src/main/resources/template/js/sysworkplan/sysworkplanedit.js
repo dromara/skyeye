@@ -157,7 +157,7 @@ layui.config({
    						$("#carryPeopleBox").addClass("layui-hide");
    					}else if(val == '2'){//他人
    						$("#carryPeopleBox").removeClass("layui-hide");
-   					}else{
+   					} else {
    						winui.window.msg('状态值错误', {icon: 2, time: 2000});
    					}
    				});
@@ -180,7 +180,7 @@ layui.config({
    		 			$(data.elem).val(data.elem.checked);
    		 			if(data.elem.checked){
    		 				$("#notifyTimeBox").removeClass("layui-hide");
-   		 			}else{
+   		 			} else {
    		 				$("#notifyTimeBox").addClass("layui-hide");
    		 			}
    		 		});
@@ -214,31 +214,31 @@ layui.config({
    			        	//是否邮件通知
    			        	if($("#whetherMail").val() == 'true'){
    		 	        		params.whetherMail = '1';
-   		 	        	}else{
+   		 	        	} else {
    		 	        		params.whetherMail = '2';
    		 	        	}
    			        	
    			        	//是否内部消息通知
    			        	if($("#whetherNotice").val() == 'true'){
    		 	        		params.whetherNotice = '1';
-   		 	        	}else{
+   		 	        	} else {
    		 	        		params.whetherNotice = '2';
    		 	        	}
    			        	
    			        	//是否定时通知
    			        	if($("#whetherTime").val() == 'true'){
    		 	        		params.whetherTime = '1';
-   		 	        	}else{
+   		 	        	} else {
    		 	        		params.whetherTime = '2';
    		 	        	}
    			        	if(params.whetherTime === '1'){
    			        		if(isNull($("#notifyTime").val())){
    			        			winui.window.msg('请选择通知时间', {icon: 2, time: 2000});
    			        			return false;
-   			        		}else{
+   			        		} else {
    			        			params.notifyTime = $("#notifyTime").val();
    			        		}
-   			        	}else{
+   			        	} else {
    			        		params.notifyTime = null;
    			        	}
    			        	
@@ -246,14 +246,14 @@ layui.config({
    			 	   			if (json.returnCode == 0) {
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';
-   			 	   			}else{
+   			 	   			} else {
    			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			 	   			}
    			 	   		}});
    			        }
    			        return false;
    			    });
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

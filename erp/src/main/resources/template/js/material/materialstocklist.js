@@ -27,7 +27,7 @@ layui.config({
 		        	str += '<span class="state-new">[转]</span>';
 			        if(d.status == 2){
 			        	str += '<span class="state-up"> [正常]</span>';
-			        }else{
+			        } else {
 			        	str += '<span class="state-down"> [预警]</span>';
 			        }
 		        }
@@ -39,19 +39,19 @@ layui.config({
 	        	if(d.subType == 12){//拆分单
 	        		if(d.mType == 2){//普通子件
 	        			return d.operNumber;
-	        		}else{
+	        		} else {
 	        			return "-" + d.operNumber;
 	        		}
 	        	}else if(d.subType == 13){//组装单
 	        		if(d.mType == 1){//普通子件
 	        			return d.operNumber;
-	        		}else{
+	        		} else {
 	        			return "-" + d.operNumber;
 	        		}
-	        	}else{
+	        	} else {
 			        if(d.type == 2){
 			        	return d.operNumber;
-			        }else{
+			        } else {
 			        	return "-" + d.operNumber;
 			        }
 	        	}

@@ -21,7 +21,7 @@ layui.config({
 		 		hdb.registerHelper('compareimg', function(v1, options) {
 		 			if(isNull(v1)){
 		        		return '../../assets/images/os_windows.png';
-		        	}else{
+		        	} else {
 		        		return fileBasePath + v1;
 		        	}
 		 		});
@@ -29,7 +29,7 @@ layui.config({
 		 		hdb.registerHelper('compare1', function(v1, options) {
 		 			if(isNull(v1)){
 		        		return '暂无简介';
-		        	}else{
+		        	} else {
 		        		return v1;
 		        	}
 		 		});
@@ -37,13 +37,13 @@ layui.config({
 		 		hdb.registerHelper('compare2', function(v1, v2, v3, v4, options) {
 		 			if(!isNull(v1)){
 		        		return '<font class="in-this-group">已在该群聊</font>';
-		        	}else{
+		        	} else {
 		        		if(v3 < v4){
 		        			return '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal inGroup" rowid="' + v2 + '">' + 
 					        			'<i class="fa fa-plus"></i>' + 
 					        			'<font>加群</font>' + 
 				        			'</button>';
-		        		}else{
+		        		} else {
 		        			return '<font class="in-this-group">群聊人数已满</font>';
 		        		}
 		        	}
@@ -60,7 +60,7 @@ layui.config({
 	    $("body").on("click", "#reSearch", function(){
 	    	if(isNull($("#groupNameOrNum").val())){
 	    		winui.window.msg('请输入搜索内容', {icon: 2, time: 2000});
-	    	}else{
+	    	} else {
 	    		refreshGrid("search-group-list", {params:{groupNameOrNum:$("#groupNameOrNum").val()}});
 	    	}
 	    });
@@ -79,7 +79,7 @@ layui.config({
 						};
 						parent.etiger.socket.send(JSON.stringify(sendMessage));
  	   				}
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});

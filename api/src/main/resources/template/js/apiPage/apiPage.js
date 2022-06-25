@@ -96,7 +96,7 @@ layui.config({
 					matchingLanguage();
 					form.render();
 					loadDefaultMain();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -134,7 +134,7 @@ layui.config({
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#departmentId").html("");
 				form.render('select');
-			}else{
+			} else {
 				$("#appList").find(".layui-nav-tree").hide();
 		    	$("#appList").find("ul[id='model" + data.value + "']").show();
 				loadPointNumApiList(data.value);
@@ -213,7 +213,7 @@ layui.config({
 		//接口列表实体点击
 		$("body").on("click", "#appList .api-item", function(){
 			if($(this).hasClass("active")){//当前显示项为当前点击项，不做任何操作
-			}else{
+			} else {
 				$("#appList .api-item").removeClass("active");
 				$(this).addClass("active");
 				var params = {
@@ -225,7 +225,7 @@ layui.config({
 		   				var str = getDataUseHandlebars(fileMationTemplate, json);
 		   				$("#contentDesc").html(str);
 						active[type] ? active[type].call(this) : '';
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
@@ -250,7 +250,7 @@ layui.config({
 		$("body").on("click", ".menu-box-none", function(e){
 	    	if($(this).parent().hasClass("layui-nav-itemed")){
 	    		$(this).parent().removeClass("layui-nav-itemed");
-	    	}else{
+	    	} else {
 	    		$(this).parent().addClass("layui-nav-itemed");
 	    	}
 	    });
@@ -281,7 +281,7 @@ layui.config({
 						'interactive': false
 					});
 					form.render();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -298,7 +298,7 @@ layui.config({
 				if (json.returnCode == 0) {
 					var str = getDataUseHandlebars(getFileContent('tpl/apiPage/mdModelFile.tpl'), json);
 					sysFileUtil.saveAs(new Blob([str]), fileName);
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});

@@ -32,7 +32,7 @@ layui.config({
 				}
 	 			showList();//展示申请类型对应的申请类型实体列表
 	 			initRightMenu();//初始化右键
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -103,14 +103,14 @@ layui.config({
 				    			AjaxPostUtil.request({url:flowableBasePath + "actmodletype004", params: {rowId: clickId, title: value}, type: 'json', callback: function(json){
 				    	   			if (json.returnCode == 0) {
 				    	   				obj.find("a[rowid='" + clickId + "']").find("span").html(value);
-				    	   			}else{
+				    	   			} else {
 				    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				    				}
 				    	   		}});
-			    			}else{
+			    			} else {
 			    				obj.find("a[rowid='" + clickId + "']").find("span").html(html);
 			    			}
-			    		}else{
+			    		} else {
 							obj.find("a[rowid='" + clickId + "']").find("span").html(html);
 						}
 			    	});
@@ -144,11 +144,11 @@ layui.config({
 					var _obj = $("#setting").find("a[class='setting-a']");
 					if(_obj.length > 0){
 						_obj.eq(0).click();
-					}else{
+					} else {
 						clickId = "";
 						loadTable();
 					}
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -165,7 +165,7 @@ layui.config({
     				$("#setting").find("a[rowid='" + clickId + "']").find("div").remove();
 					$("#setting").find("a[rowid='" + clickId + "']").find("span").after('<div class="up-state-point"></div>');
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -182,7 +182,7 @@ layui.config({
     				$("#setting").find("a[rowid='" + clickId + "']").find("div").remove();
 					$("#setting").find("a[rowid='" + clickId + "']").find("span").after('<div class="down-state-point"></div>');
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -197,7 +197,7 @@ layui.config({
 				var a = $("#setting").find("a[rowid='" + clickId + "']").prev();
 				$("#setting").find(a).remove();
 				$("#setting").find("a[rowid='" + clickId + "']").after(a);
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -211,7 +211,7 @@ layui.config({
 				var a = $("#setting").find("a[rowid='" + clickId + "']").next();
 				$("#setting").find(a).remove();
 				$("#setting").find("a[rowid='" + clickId + "']").before(a);
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -240,7 +240,7 @@ layui.config({
 		var newhtml = "<input value='新增申请类型' class='layui-input setting-a-input' style='margin-top: 5px;' maxlength='6'/>";
 		if($("#setting a").size() == 0){
 			obj.append(newhtml);
-		}else{
+		} else {
 			$(newhtml).insertBefore($("#setting a").eq(0));
 		}
 	    obj.find("input").select();
@@ -257,11 +257,11 @@ layui.config({
 	   				var str = '<a rowid="' + clickId + '" rowname="' + value + '" class="setting-a" title="' + value + '"><span>' + value + '</span><div class="new-state-point"></div></a>';
 	   				if($("#setting a").size() != 0){
 	   					$(str).insertBefore($("#setting a").eq(0));
-	   				}else{
+	   				} else {
 	   					obj.append(str);
 	   				}
 	   				$("#setting").find("a[rowid='" + clickId + "']").click();
-	   			}else{
+	   			} else {
 					obj.find("input").select();
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
@@ -305,7 +305,7 @@ layui.config({
 		        		return "<span class='state-up'>上线</span>";
 		        	}else if(d.state == '3'){
 		        		return "<span class='state-down'>下线</span>";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},
@@ -366,7 +366,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -382,7 +382,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -398,7 +398,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -443,7 +443,7 @@ layui.config({
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -455,7 +455,7 @@ layui.config({
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

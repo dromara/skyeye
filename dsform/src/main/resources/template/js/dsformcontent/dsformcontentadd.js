@@ -31,7 +31,7 @@ layui.config({
  				if(!initDatatpl){
  					initDataShowTpl();//初始化关联的数据类型
  				}
- 			}else{
+ 			} else {
  				$(".dataTpl").addClass("layui-hide");
  			}
  		});
@@ -58,7 +58,7 @@ layui.config({
 			dataShowTplValue = $('#dataShowTpl').val();
 			if(dataShowTplValue.length == 0){
 				$("#templateContent").html("");
-			}else{
+			} else {
 				$.each(jsonStr, function(i, item){
 		 			if(dataShowTplValue == item.id){
 		 				var str = '<textarea class="layui-textarea" readonly>' + item.templateContent + '</textarea>';
@@ -150,7 +150,7 @@ layui.config({
 	        if (winui.verifyForm(data.elem)) {
 	        	if(isNull(htmlEditor.getValue())){
 	        		winui.window.msg('请输入模板内容', {icon: 2, time: 2000});
-	        	}else{
+	        	} else {
 	        		var params = {
         				contentName: $("#contentName").val(),
         				htmlContent: encodeURIComponent(htmlEditor.getValue()),

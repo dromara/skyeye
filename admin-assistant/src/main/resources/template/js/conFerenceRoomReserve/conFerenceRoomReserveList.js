@@ -41,7 +41,7 @@ layui.config({
 	        { field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function(d){
 	        	if(!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
-	        	}else{
+	        	} else {
 	        		return "";
 	        	}
 	        }},
@@ -99,7 +99,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadReserveTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -138,7 +138,7 @@ layui.config({
 					if (json.returnCode == 0) {
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadReserveTable();
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
@@ -155,7 +155,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadReserveTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

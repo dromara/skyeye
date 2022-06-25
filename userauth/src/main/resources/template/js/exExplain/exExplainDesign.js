@@ -28,7 +28,7 @@ layui.config({
 					ue.setContent(json.bean.content);
 				});
    			    matchingLanguage();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -38,7 +38,7 @@ layui.config({
 	        if (winui.verifyForm(data.elem)) {
 	        	if(isNull(ue.getContent())){
 	        		winui.window.msg('请输入内容。', {icon: 2, time: 2000});
-	        	}else{
+	        	} else {
 	        		var params = {
         				title: $("#title").val(),
         				content: encodeURIComponent(ue.getContent()),
@@ -49,16 +49,16 @@ layui.config({
 	        				if (json.returnCode == 0) {
 	        					rowId = json.bean.id;
 	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-	        				}else{
+	        				} else {
 	        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	        				}
 	        			}});
-	        		}else{
+	        		} else {
 	        			params.rowId = rowId;
 	        			AjaxPostUtil.request({url: reqBasePath + "exexplain003", params: params, type: 'json', callback: function(json) {
 	        				if (json.returnCode == 0) {
 	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-	        				}else{
+	        				} else {
 	        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	        				}
 	        			}});

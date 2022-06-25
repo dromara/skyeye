@@ -91,7 +91,7 @@ layui.config({
     	if(isNull($("#declarationTime").val())){
     		startTime = "";
     		endTime = "";
-    	}else{
+    	} else {
     		startTime = $("#declarationTime").val().split('~')[0].trim();
     		endTime = $("#declarationTime").val().split('~')[1].trim();
     	}
@@ -102,7 +102,7 @@ layui.config({
     	if(isNull($("#declarationTime").val())){
     		startTime = "";
     		endTime = "";
-    	}else{
+    	} else {
     		startTime = $("#declarationTime").val().split('~')[0].trim();
     		endTime = $("#declarationTime").val().split('~')[1].trim();
     	}
@@ -118,7 +118,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("审核成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

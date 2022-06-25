@@ -42,7 +42,7 @@ layui.config({
 	endTime = getYesterdayYMDFormatDate();//结束日期为今天的前一天
 	if(day === "1" || day == 1){//如果当前为本月一号，则查询上个月的
 		startTime = getTOneYMDFormatDate();//开始日期为上个月一号
-	}else{
+	} else {
 		startTime = getOneYMDFormatDate();//开始日期为本月一号
 	}
 	
@@ -56,7 +56,7 @@ layui.config({
 			if(isNull(value)){
 				startTime = "";
 				endTime = "";
-			}else{
+			} else {
 				startTime = value.split("~")[0].trim();
 				endTime = value.split("~")[1].trim();
 			}
@@ -104,42 +104,42 @@ layui.config({
 		        { field: 'fullTime', title: '全勤（次）', align: 'center', width: 100, templet: function(d){
 		        	if(d.fullTime != '0'){
 		        		return "<a class='checkwork-a'><span class='state-up' lay-event='fullTime'>" + d.fullTime + "</span></a>";
-		        	}else{
+		        	} else {
 		        		return d.fullTime;
 		        	}
 		        }},
 		        { field: 'absenteeism', title: '缺勤（次）', align: 'center', width: 100, templet: function(d){
 		        	if(d.absenteeism != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='absenteeism'>" + d.absenteeism + "</span></a>";
-		        	}else{
+		        	} else {
 		        		return d.absenteeism;
 		        	}
 		        }},
 		        { field: 'lackTime', title: '工时不足（次）', align: 'center', width: 100, templet: function(d){
 		        	if(d.lackTime != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='lackTime'>" + d.lackTime + "</span></a>";
-		        	}else{
+		        	} else {
 		        		return d.lackTime;
 		        	}
 		        }},
 		        { field: 'late', title: '迟到（次）', align: 'center', width: 100, templet: function(d){
 		        	if(d.late != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='late'>" + d.late + "</span></a>";
-		        	}else{
+		        	} else {
 		        		return d.late;
 		        	}
 		        }},
 		        { field: 'leaveEarly', title: '早退（次）', align: 'center', width: 100, templet: function(d){
 		        	if(d.leaveEarly != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='leaveEarly'>" + d.leaveEarly + "</span></a>";
-		        	}else{
+		        	} else {
 		        		return d.leaveEarly;
 		        	}
 		        }},
 		        { field: 'missing', title: '漏签（次）', align: 'center', width: 100, templet: function(d){
 		        	if(d.missing != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='missing'>" + d.missing + "</span></a>";
-		        	}else{
+		        	} else {
 		        		return d.missing;
 		        	}
 		        }}
@@ -258,7 +258,7 @@ layui.config({
 	$("body").on("click", "#formSearch", function(){
 		if(isTable){
 			loadTable();
-		}else{
+		} else {
 			getPieData();
 		}
 	});
@@ -266,7 +266,7 @@ layui.config({
 	$("body").on("click", "#reloadTable", function(){
 		if(isTable){
 			loadTable();
-		}else{
+		} else {
 			getPieData();
 		}
     });
@@ -405,7 +405,7 @@ layui.config({
 	        	            series: getPieSeries(scatterData, myChart, ydata)
 	        	        });
 	        	    }, 10);
-	    		}else{
+	    		} else {
 	    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	    		}
 	    	}});
@@ -445,7 +445,7 @@ layui.config({
     			echartstype = 5;
     		}else if(name == "漏签"){
     			echartstype = 6;
-    		}else{
+    		} else {
     			return false;
     		}
     		echartsparams = {

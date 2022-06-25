@@ -658,7 +658,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 				if(!iconClass){iconClass = '';}
 				if(basicData) {
 					basicData = event.escape(JSON.stringify(basicData));
-				}else{
+				} else {
 					basicData = "";
 				}
 				
@@ -732,7 +732,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 				if(!iconClass){iconClass = '';}
 				if(basicData) {
 					basicData = event.escape(JSON.stringify(basicData));
-				}else{
+				} else {
 					basicData = "";
 				}
 				
@@ -772,7 +772,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 			if(!iconClass){iconClass = "";}
 			if(basicData){
 				basicData = event.escape(JSON.stringify(basicData));
-			}else{
+			} else {
 				basicData = "";
 			}
 					
@@ -1386,7 +1386,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 					basicData = returnID[_this.response.basicData];
 				if(basicData) {
 					basicData = event.escape(JSON.stringify(basicData));
-				}else{
+				} else {
 					basicData = "";
 				}
 				
@@ -2324,7 +2324,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 					var len = _this.obj.find("i[data-par][data-checked='1']").length;
 					if(len == 0){
 						layer.msg("请至少选中一个节点",{icon:2});
-					}else{
+					} else {
 						//操作前先清空
 						_this.checkbarNode = [];
 						// 选择所有复选框节点

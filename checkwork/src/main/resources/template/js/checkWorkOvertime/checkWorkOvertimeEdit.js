@@ -30,7 +30,7 @@ layui.config({
 
             if(mation.bean.state == '1'){
                 $(".typeTwo").removeClass("layui-hide");
-            }else{
+            } else {
                 $(".typeOne").removeClass("layui-hide");
             }
 

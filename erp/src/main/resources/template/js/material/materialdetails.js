@@ -32,7 +32,7 @@ layui.config({
 			    		str += '<span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span><br>';
 					});
 					$("#initialTock").html(str);
-		 		}else{//多单位
+		 		} else {//多单位
 		 			var item = new Array();
 		 			item.unitGroupName = json.bean.unitGroupName;
 		 			item.firstInUnit = json.bean.firstInUnit;

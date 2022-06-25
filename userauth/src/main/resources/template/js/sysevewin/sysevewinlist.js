@@ -38,7 +38,7 @@ layui.config({
 	        { field: 'sysPic', title: '系统图片', align: 'center', width: 100, templet: function(d){
 	        	if(isNull(d.sysPic)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
-	        	}else{
+	        	} else {
 	        		return '<img src="' + fileBasePath + d.sysPic + '" class="photo-img" lay-event="sysPic">';
 	        	}
 	        }},
@@ -88,7 +88,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -104,7 +104,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("授权成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -120,7 +120,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("取消授权成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

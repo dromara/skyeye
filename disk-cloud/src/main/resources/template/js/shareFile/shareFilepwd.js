@@ -17,7 +17,7 @@ layui.config({
    				if(isNull(json.bean)){
    					$("#showForm").hide();
    					$("#showFormNone").show();
-   				}else{
+   				} else {
    					if(json.bean.shareType == 2){//私密分享
    						$("#showFormNone").hide();
    	   					$("#showForm").show();
@@ -31,7 +31,7 @@ layui.config({
    				
    				matchingLanguage();
    				form.render();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -46,11 +46,11 @@ layui.config({
 	   				if(isNull(json.bean)){
 	   					$("#showForm").hide();
 	   					$("#showFormNone").show();
-	   				}else{//跳转列表页面
+	   				} else {//跳转列表页面
 	   					$.cookie("file" + rowId, $("#sharePassword").val(), {path: '/' });
 	   					location.href = "../../tpl/shareFile/shareFileList.html?id=" + rowId;
 	   				}
-	   			}else{
+	   			} else {
 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});

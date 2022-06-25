@@ -176,7 +176,7 @@ layui.config({
 					$("#type" + item.productId).val(item.typeId);
 				});
    				form.render();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});
@@ -238,7 +238,7 @@ layui.config({
 		});
 		if(proIndex >= 0){
 			return productMationList[proIndex].procedureMationList;
-		}else{
+		} else {
 			return new Array();
 		}
 	}
@@ -263,7 +263,7 @@ layui.config({
 		});
 		if(proIndex >= 0 && normsIndex >= 0){
 			return productMationList[proIndex].unitList[normsIndex].estimatePurchasePrice;
-		}else{
+		} else {
 			return new Array();
 		}
 	}

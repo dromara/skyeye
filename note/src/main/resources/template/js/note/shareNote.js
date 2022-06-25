@@ -73,7 +73,7 @@ layui.config({
 				}
 				loadPicImgClick();
 				matchingLanguage();
-   			}else{
+   			} else {
    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
    			}
    		}});

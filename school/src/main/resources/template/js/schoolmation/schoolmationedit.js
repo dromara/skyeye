@@ -92,7 +92,7 @@ layui.config({
 		 			$("#parentIdBox").addClass("layui-hide");
 		 			$("input:radio[name=schoolType][value=1]").attr("checked", true);
 		 			loadParentSchool("");
-		 		}else{
+		 		} else {
 		 			$("input:radio[name=schoolType][value=2]").attr("checked", true);
 		 			//初始化父学校
 		 			loadParentSchool(json.bean.pId);
@@ -117,7 +117,7 @@ layui.config({
 			    		$("#parentIdBox").addClass("layui-hide");
 			    	}else if(val == '2'){//子学校
 			    		$("#parentIdBox").removeClass("layui-hide");
-			    	}else{
+			    	} else {
 			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 			    	}
 		        });
@@ -130,7 +130,7 @@ layui.config({
 			        		if(isNull($("#OverAllSchool").val())){
 			        			winui.window.msg('请选择父学校', {icon: 2, time: 2000});
 			        			return false;
-			        		}else{
+			        		} else {
 			        			pId = $("#OverAllSchool").val();
 			        		}
 			        	}
@@ -156,11 +156,11 @@ layui.config({
 					 	   			if (json.returnCode == 0) {
 						 	   			parent.layer.close(index);
 						 	        	parent.refreshCode = '0';
-					 	   			}else{
+					 	   			} else {
 					 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					 	   			}
 					 	   		}});
-					 	   	}else{
+					 	   	} else {
 		                		winui.window.msg('地图信息获取失败.', {icon: 2, time: 2000});
 		                	}
 		            	});
@@ -195,7 +195,7 @@ layui.config({
 					zoom: 11,
 					center: [longitude, latitude]
 				});
-			}else{
+			} else {
 				map = new AMap.Map('container', {
 					resizeEnable: true,
 					zoom: 5,
@@ -228,7 +228,7 @@ layui.config({
 								$("#latitude").val(result.geocodes[0].location.lat);
 							}
 			            })
-					}else{
+					} else {
 					}
 		      });
 			});
@@ -290,7 +290,7 @@ layui.config({
 		        						$("#latitude").val(result.geocodes[0].location.lat);
 		        					}
 		        	            })
-		        			}else{
+		        			} else {
 		        			}
 		              });
 		            });
@@ -348,7 +348,7 @@ layui.config({
 		            										$("#latitude").val(result.geocodes[0].location.lat);
 		            									}
 		            								})
-		            							}else{
+		            							} else {
 		            							}
 		            						});
 		            					});

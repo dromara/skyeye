@@ -75,7 +75,7 @@ layui.config({
 	    		normsStock.splice(removeIndex, 1);
 	    		winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				table.reload("messageTable", {data: $.extend(true, [], normsStock)});
-	    	}else{
+	    	} else {
 	    		winui.window.msg("删除失败", {icon: 2, time: 2000});
 	    	}
 		});

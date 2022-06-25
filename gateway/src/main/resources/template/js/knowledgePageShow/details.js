@@ -25,7 +25,7 @@ layui.config({
 	 		$("#knowledgecontentshowBox").attr("src", "contentshow.html");
 	 		interval = setInterval(iFrameHeight, 300);
 	 		matchingLanguage();
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});

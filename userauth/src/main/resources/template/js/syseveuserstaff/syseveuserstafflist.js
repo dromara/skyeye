@@ -69,7 +69,7 @@ layui.config({
 	        		return '普通员工';
 	        	}else if(d.staffType == 2){
 	        		return '教职工';
-	        	}else{
+	        	} else {
 	        		return '参数错误';
 	        	}
 	        }},
@@ -77,14 +77,14 @@ layui.config({
 	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function(d){
 	        	if(isNull(d.userPhoto)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
-	        	}else{
+	        	} else {
 	        		return '<img src="' + systemCommonUtil.getFilePath(d.userPhoto) + '" class="photo-img" lay-event="userPhoto">';
 	        	}
 	        }},
 			{ field: 'userId', title: '系统账号', rowspan: '3', align: 'center', width: 80, templet: function(d){
 				if(!isNull(d.userId)){
 					return "<span class='state-up'>已分配</span>";
-				}else{
+				} else {
 					return "<span class='state-down'>未分配</span>";
 				}
 			}},
@@ -97,7 +97,7 @@ layui.config({
 	        		return "男";
 	        	}else if(d.userSex == '2'){
 	        		return "女";
-	        	}else{
+	        	} else {
 	        		return "参数错误";
 	        	}
 	        }},

@@ -29,7 +29,7 @@ layui.config({
 						return 'checked';
 					}else if(v1 == '2'){
 						return '';
-					}else{
+					} else {
 						return '';
 					}
 				});
@@ -38,7 +38,7 @@ layui.config({
 						return 'true';
 					}else if(v1 == '2'){
 						return 'false';
-					}else{
+					} else {
 						return 'false';
 					}
 				});
@@ -96,7 +96,7 @@ layui.config({
 		 				if(!initDatatpl){
 		 					initDataShowTpl(json.bean.dataShowTpl);//初始化关联的数据类型
 		 				}
-		 			}else{
+		 			} else {
 		 				$(".dataTpl").addClass("layui-hide");
 		 			}
 		 		});
@@ -124,7 +124,7 @@ layui.config({
 					dataShowTplValue = $('#dataShowTpl').val();
 					if(dataShowTplValue.length == 0){
 						$("#templateContent").html("");
-					}else{
+					} else {
 						$.each(jsonStr, function(i, item){
 				 			if(dataShowTplValue == item.id){
 				 				var str = '<textarea class="layui-textarea" readonly>' + item.templateContent + '</textarea>';
@@ -190,7 +190,7 @@ layui.config({
 			        if (winui.verifyForm(data.elem)) {
 			        	if(isNull(htmlEditor.getValue())){
 			        		winui.window.msg('请输入模板内容', {icon: 2, time: 2000});
-			        	}else{
+			        	} else {
 			        		var params = {
 		        				contentName: $("#contentName").val(),
 		        				htmlContent: encodeURIComponent(htmlEditor.getValue()),
@@ -212,19 +212,19 @@ layui.config({
 				        				var defaultKey = getOutKey(defaultDataStr);//从默认数据中取出json串的键
 				        				if(subset(tplContentVal,defaultKey)){
 				        					params.defaultData = defaultDataStr;
-				        				}else{
+				        				} else {
 				        					winui.window.msg('默认数据内容有误，请重新填写!', {icon: 2, time: 2000});
 					 	 	        		return false;
 				        				}
-				        			}else{
+				        			} else {
 				        				winui.window.msg('默认数据格式不正确，请重新填写!', {icon: 2, time: 2000});
 				 	 	        		return false;
 				        			}
-				        		}else{
+				        		} else {
 				        			winui.window.msg('请填写默认数据', {icon: 2, time: 2000});
 			 	 	        		return false;
 				        		}
-			 	        	}else{
+			 	        	} else {
 			 	        		params.linkedData = '2';
 			 	        		params.dataShowTpl = '';
 			 	        		params.defaultData = "";
@@ -233,7 +233,7 @@ layui.config({
 				 	   			if (json.returnCode == 0) {
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';
-				 	   			}else{
+				 	   			} else {
 				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				 	   			}
 				 	   		}});

@@ -54,14 +54,14 @@ layui.config({
 		 		hdb.registerHelper("compare2", function(v1, options){
 					if(v1 == '2' || v1 == 2){
 						return 'checked';
-					}else{
+					} else {
 						return '';
 					}
 				});
 		 		hdb.registerHelper("compare3", function(v1, options){
 					if(v1 == '2' || v1 == 2){
 						return 'true';
-					}else{
+					} else {
 						return 'false';
 					}
 				});
@@ -70,14 +70,14 @@ layui.config({
 		 		hdb.registerHelper("fromType", function(v1, options){
 					if(v1 == '1' || v1 == 1){
 						return 'checked';
-					}else{
+					} else {
 						return '';
 					}
 				});
 				hdb.registerHelper("fromTypeReturn", function(v1, options){
 					if(v1 == '1' || v1 == 1){
 						return 'true';
-					}else{
+					} else {
 						return 'false';
 					}
 				});
@@ -142,7 +142,7 @@ layui.config({
 						    		str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
         						});
 								$("#initialTock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">新增库存</button>' + str);
-					 		}else{//多单位
+					 		} else {//多单位
 					 			$(".single-term").hide();
 					 			$("#unitGroupId").val(j.bean.unitGroupId);
 						 		//加载默认值
@@ -181,7 +181,7 @@ layui.config({
 		 	    	//提交前进行制空操作，防止多余的校验
 		 	    	if($("#unit").val() === 'true'){//多单位
 		 	        	$(".single-term").find("input").val("");
-		        	}else{//单单位
+		        	} else {//单单位
 		        		$(".many-term").find("select").val("");
 		        		form.render('select');
 		        		$("#useTable").html("");
@@ -232,7 +232,7 @@ layui.config({
 							if(tableData.length < rowTr.length){
 								return false;
 							}
-		 	        	}else{//单单位
+		 	        	} else {//单单位
 		 	        		if(!subVerifyForm("safetyTock"))return false;//安全存量非空校验
 		 	        		if(!subVerifyForm("unitName"))return false;//单位非空校验
 		 	        		if(!subVerifyForm("retailPrice"))return false;//零售价非空校验
@@ -280,7 +280,7 @@ layui.config({
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
-		 	        		}else{
+		 	        		} else {
 		 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	        		}
 		 	        	}});
@@ -327,7 +327,7 @@ layui.config({
 	    	});
 	    	if(thisRowHasList >= 0){
 	    		normsStock = [].concat(normsStockList[thisRowHasList]["list"]);
-	    	}else{
+	    	} else {
 	    		normsStock = new Array();
 	    	}
 	    	_openNewWindows({
@@ -340,7 +340,7 @@ layui.config({
 	                	var str = "";
 	                	if(thisRowHasList >= 0){
 				    		normsStockList[thisRowHasList]["list"] = [].concat(normsStock);
-				    	}else{
+				    	} else {
 				    		normsStockList.push({
 				    			trRow: trRow,
 				    			list: [].concat(normsStock)
@@ -362,7 +362,7 @@ layui.config({
 	    		$("#firstInUnit").html("");
 	    		$("#firstOutUnit").html("");
 	    		form.render('select');
-	    	}else{
+	    	} else {
 		    	$.each(unitGroupList, function(i, item){
 		    		if(item.id == data.value){
 		    			var str = getDataUseHandlebars(selTemplate, {rows: item.unitList});
@@ -385,7 +385,7 @@ layui.config({
  	    		$("#" + id).addClass("layui-form-danger");
 				$("#" + id).focus();
 				winui.window.msg('必填项不能为空', {icon: 5, shift: 6});
- 	    	}else{
+ 	    	} else {
  	    		return true;
  	    	}
  	    }
@@ -397,7 +397,7 @@ layui.config({
  			if(data.elem.checked){//多单位
 				$(".many-term").show();
 				$(".single-term").hide();
- 			}else{//单单位
+ 			} else {//单单位
  				$(".many-term").hide();
 				$(".single-term").show();
  			}

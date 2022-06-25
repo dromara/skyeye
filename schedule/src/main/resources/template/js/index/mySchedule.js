@@ -102,7 +102,7 @@ layui.config({
 						end: DateAdd("d", -1, end._d),
 						allDay: allDay
 					};
-				}else{
+				} else {
 					if(new Date(start.format()) < new Date(getFormatDate().replace("-", "/").replace("-", "/"))){
 						winui.window.msg('不能创建当前时间之前的日程。', { shift: 6, skin: 'msg-skin-message'});
 						return false;
@@ -134,7 +134,7 @@ layui.config({
 						revertFunc();
 						return false;
 					}
-				}else{
+				} else {
 					if(event.start._d < new Date(getFormatDate().replace("-", "/").replace("-", "/"))){
 						winui.window.msg('即将重置的日期不能早于当前日期。', { shift: 6, skin: 'msg-skin-message'});
 						revertFunc();
@@ -152,7 +152,7 @@ layui.config({
 				AjaxPostUtil.request({url:reqBasePath + "syseveschedule005", params: params, type: 'json', callback: function(json){
 					if (json.returnCode == 0) {
 						joinTodaySchedule(params);
-					}else{
+					} else {
 						revertFunc();
 						winui.window.msg(json.returnMessage, { shift: 6, skin: 'msg-skin-message'});
 					}
@@ -169,7 +169,7 @@ layui.config({
 				AjaxPostUtil.request({url:reqBasePath + "syseveschedule002", params:{yearMonth: start._d.format("yyyy-MM"), checkWorkId: $("#checkTime").val()}, type: 'json', callback: function(json){
 					if (json.returnCode == 0) {
 						callback(json.rows);
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, { shift: 6, skin: 'msg-skin-message'});
 					}
 				}});
@@ -188,7 +188,7 @@ layui.config({
 				hdb.registerHelper('compare1', function(v1, options) {
 					if(v1 != '3'){
 						return options.inverse(this);
-					}else{
+					} else {
 						return options.fn(this);
 					}
 				});
@@ -229,7 +229,7 @@ layui.config({
 			if (json.returnCode == 0) {
 				json.bean.scheduleRemarks = stringManipulation.textAreaShow(json.bean.scheduleRemarks);
 				showDataUseHandlebars("schedule-detail", getFileContent('tpl/index/scheduleDetail.tpl'), json);
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
 			}
 		}});
@@ -248,7 +248,7 @@ layui.config({
 	   			if (json.returnCode == 0) {
 	   				$('div[rowid="' + id + '"]').parent().remove();
 	   				calendar.fullCalendar('removeEvents', [id]);
-		   		}else{
+		   		} else {
 	   				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
 	   			}
 	   		}});

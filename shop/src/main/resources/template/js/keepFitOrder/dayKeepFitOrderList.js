@@ -34,7 +34,7 @@ layui.config({
             { field: 'userType', title: '客户类型', width: 80, align: "center", templet: function(d){
                 if(d.userType == 1){
                     return "匿名客户";
-                }else{
+                } else {
                     return "会员";
                 }
             }},
@@ -62,7 +62,7 @@ layui.config({
             { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
                 if(d.type == 1){
                     return "线上下单";
-                }else{
+                } else {
                     return "线下下单";
                 }
             }},

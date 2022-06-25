@@ -37,7 +37,7 @@ layui.config({
 				var removeInputHtml = $(oldHtml).find('input').prop("outerHTML");
 				oldHtml = oldHtml.replace(removeDivHtml, '').replace(removeInputHtml, '');
 				$("#chooseFriend").append(oldHtml);
-			}else{//取消选中
+			} else {//取消选中
 				var id = $(this).parent().attr("id");
 				$("#chooseFriend").find('li[id="' + id + '"]').remove();
 			}
@@ -74,7 +74,7 @@ layui.config({
 	 	   				});
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});
@@ -87,7 +87,7 @@ layui.config({
 	    	if($(this).find("ul").hasClass("layui-show")){
 	    		$(this).find("ul").removeClass("layui-show");
 	    		$(this).find("h5").find("i").html('&#xe602;');
-	    	}else{
+	    	} else {
 	    		$(this).find("ul").addClass("layui-show");
 	    		$(this).find("h5").find("i").html('&#xe61a;');
 	    	}

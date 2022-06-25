@@ -96,7 +96,7 @@
                         }
                     }
                 });             
-            }else{ //关键字为空则显示所有节点, 此时展开根节点
+            } else { //关键字为空则显示所有节点, 此时展开根节点
                 var rootNodes = zTreeObj.getNodesByParam('level','0');//获得所有根节点
                 $.each(rootNodes,function(n,obj){
                     zTreeObj.expandNode(obj,true); //展开所有根节点

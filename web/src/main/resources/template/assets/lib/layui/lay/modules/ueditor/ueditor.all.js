@@ -126,7 +126,7 @@ var browser = UE.browser = function(){
             version = v1[1]*1;
         }else if(v2 && v2[1]){
             version = v2[1]*1;
-        }else{
+        } else {
             version = 0;
         }
 
@@ -1226,7 +1226,7 @@ var utils = UE.utils = {
         //添加样式
         if(index!== undefined){
             sheetStyle =  doc.styleSheets[index];
-        }else{
+        } else {
             sheetStyle = doc.createStyleSheet('', index = doc.styleSheets.length);
             indexList[key] = index;
         }
@@ -1254,7 +1254,7 @@ var utils = UE.utils = {
         //添加样式
         if(node){
             node.innerHTML = style;
-        }else{
+        } else {
             node = doc.createElement('style');
             node.id = key;
             node.innerHTML = style;
@@ -1551,7 +1551,7 @@ EventBase.prototype = {
      * editor.addListener('beforegetcontent aftergetcontent',function(type){
      *         if(type == 'beforegetcontent'){
      *             //do something
-     *         }else{
+     *         } else {
      *             //do something
      *         }
      *         console.log(this.getContent) // this是注册的事件的编辑器实例
@@ -3444,7 +3444,7 @@ var domUtils = dom.domUtils = {
         cls = utils.trim(cls).replace(/[ ]{2,}/g,' ');
         if(cls){
             elm.className = cls;
-        }else{
+        } else {
             domUtils.removeAttributes(elm,['class']);
         }
     },
@@ -3597,7 +3597,7 @@ var domUtils = dom.domUtils = {
                 name = '(^|;)' + name;
             }
             element.style.cssText = element.style.cssText.replace(new RegExp(name + '[^:]*:[^;]+;?','ig'),'')
-        }else{
+        } else {
             if (element.style.removeProperty) {
                 element.style.removeProperty (name);
             }else {
@@ -5795,12 +5795,12 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                         if( child && domUtils.isBr(child)){
                             this.setStartBefore(child).collapse(true);
                         }
-                    }else{
+                    } else {
                         //向后靠拢
                         while(child && domUtils.isBlockElm(child)){
                             if(child.nodeType == 1 && child.childNodes[0]){
                                 child = child.childNodes[0]
-                            }else{
+                            } else {
                                 break;
                             }
                         }
@@ -5903,11 +5903,11 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                             tmpNode = tmpNode.previousSibling;
                         }
                         firstIndex +=  (isStart ? me.startOffset : me.endOffset)// - (fillCharReg.test(node.nodeValue) ? 1 : 0 )
-                    }else{
+                    } else {
                         node =  node.childNodes[ isStart ? me.startOffset : me.endOffset];
                         if(node){
                             firstIndex = domUtils.getNodeIndex(node,ignoreTxt);
-                        }else{
+                        } else {
                             node = isStart ? me.startContainer : me.endContainer;
                             var first = node.firstChild;
                             while(first){
@@ -5920,14 +5920,14 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                                     while( first && first.nodeType == 3){
                                         first = first.nextSibling;
                                     }
-                                }else{
+                                } else {
                                     first = first.nextSibling;
                                 }
                             }
                         }
                     }
 
-                }else{
+                } else {
                     firstIndex = isStart ? domUtils.isFillChar(node) ? 0 : me.startOffset  : me.endOffset
                 }
                 if(firstIndex < 0){
@@ -5987,13 +5987,13 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 if(isStart){
                     if(tmpNode){
                         me.setStartBefore(tmpNode)
-                    }else{
+                    } else {
                         me.setStart(parentNode,offset)
                     }
-                }else{
+                } else {
                     if(tmpNode){
                         me.setEndBefore(tmpNode)
-                    }else{
+                    } else {
                         me.setEnd(parentNode,offset)
                     }
                 }
@@ -6352,7 +6352,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
 
                     var nativeRange = _getIERange(this);
                     return !!(nativeRange && this.rangeInBody(nativeRange));
-                }else{
+                } else {
                     return !!this.getNative().rangeCount;
                 }
             } catch ( e ) {
@@ -6756,7 +6756,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             UE.plugin.load(me);
             langReadied(me);
 
-        }else{
+        } else {
             utils.loadFile(document, {
                 src: me.options.langPath + me.options.lang + "/" + me.options.lang + ".js",
                 tag: "script",
@@ -6897,12 +6897,12 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             if (container) {
                 if(options.initialFrameWidth){
                     options.minFrameWidth = options.initialFrameWidth
-                }else{
+                } else {
                     options.minFrameWidth = options.initialFrameWidth = container.offsetWidth;
                 }
                 if(options.initialFrameHeight){
                     options.minFrameHeight = options.initialFrameHeight
-                }else{
+                } else {
                     options.initialFrameHeight = options.minFrameHeight = container.offsetHeight;
                 }
 
@@ -6992,7 +6992,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                         domUtils.on(me.window,'blur',function(){
                             setValue(form,me);
                         });
-                    }else{
+                    } else {
                         domUtils.on(form, 'submit', function () {
                             setValue(this, me);
                         });
@@ -7425,7 +7425,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                     if(node && node.nodeType == 1 && !dtd.$empty[node.tagName]){
                         if(domUtils.isEmptyBlock(node)){
                             rng.setStartAtFirst(node)
-                        }else{
+                        } else {
                             rng.setStartAtLast(node)
                         }
                         rng.collapse(true);
@@ -7459,7 +7459,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 nativeRng.collapse(true);
                 nativeRng.select();
                 sel.empty()
-            }else{
+            } else {
                 sel.removeAllRanges()
             }
 
@@ -8307,7 +8307,7 @@ UE.ajax = function() {
                 try {
                     if(onTimeOut){
                         options.onerror && options.onerror();
-                    }else{
+                    } else {
                         try{
                             clearTimeout(timer);
                             successhandler.apply(window, arguments);
@@ -8717,7 +8717,7 @@ var filterWord = UE.filterWord = function () {
         if(node.parentNode.tagName == 'pre'){
             //源码模式下输入html标签，不能做转换处理，直接输出
             arr.push(node.data)
-        }else{
+        } else {
             arr.push(notTransTagName[node.parentNode.tagName] ? utils.html(node.data) : node.data.replace(/[ ]{2}/g,' &nbsp;'))
         }
 
@@ -8813,7 +8813,7 @@ var filterWord = UE.filterWord = function () {
                     if(ci.parentNode) i++
                 }
             }
-        }else{
+        } else {
             fn(root)
         }
 
@@ -9432,7 +9432,7 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
             parent.appendChild(tmpNode);
             tmpNode.appendChild(uNode.createText(data));
             parent = tmpNode;
-        }else{
+        } else {
 
             parent.appendChild(uNode.createText(data));
         }
@@ -9510,7 +9510,7 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
 
                 if(dtd.$cdata[currentParent.tagName]){
                     text(currentParent, match[0]);
-                }else{
+                } else {
                     //start tag
                     currentParent = element(currentParent, match[3].toLowerCase(), match[4]);
                 }
@@ -9520,7 +9520,7 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
                 if(currentParent.type != 'root'){
                     if(dtd.$cdata[currentParent.tagName] && !dtd.$cdata[match[1]]){
                         text(currentParent, match[0]);
-                    }else{
+                    } else {
                         var tmpParent = currentParent;
                         while(currentParent.type == 'element' && currentParent.tagName != match[1].toLowerCase()){
                             currentParent = currentParent.parentNode;
@@ -9600,7 +9600,7 @@ var filterNode = UE.filterNode = function () {
                                    }
                                }
                            }
-                       }else{
+                       } else {
                            for(var i = index,ci;ci=parentNode.children[i];){
                                filterNode(ci,rules);
                                if(ci.parentNode){
@@ -9610,7 +9610,7 @@ var filterNode = UE.filterNode = function () {
                        }
 
 
-                   }else{
+                   } else {
                        var attrs = val['$'];
                        if(attrs && node.attrs){
                            var tmpAttrs = {},tmpVal;
@@ -9643,11 +9643,11 @@ var filterNode = UE.filterNode = function () {
                            }
                        }
                    }
-                }else{
+                } else {
                     //如果不在名单里扣出子节点并删除该节点,cdata除外
                     if(dtd.$cdata[node.tagName]){
                         node.parentNode.removeChild(node)
-                    }else{
+                    } else {
                         var parentNode = node.parentNode,
                             index = node.getIndex();
                         node.parentNode.removeChild(node,true);
@@ -10326,7 +10326,7 @@ UE.commands['inserthtml'] = {
                             li = li.nextSibling;
                         }
                         domUtils.remove(child)
-                    }else{
+                    } else {
                         var tmpLi;
                         next = child.nextSibling;
                         tmpLi = me.document.createElement('li');
@@ -10346,7 +10346,7 @@ UE.commands['inserthtml'] = {
 
                 range.setStartAfter(last).collapse(true).select(true)
             }
-        }else{
+        } else {
             while ( child = div.firstChild ) {
                 if(hadBreak){
                     var p = me.document.createElement('p');
@@ -10368,7 +10368,7 @@ UE.commands['inserthtml'] = {
                     if ( parent && parent.tagName.toLowerCase() != 'body' && !(dtd[parent.tagName][child.nodeName] && child.parentNode === parent)){
                         if(!dtd[parent.tagName][child.nodeName]){
                             pre = parent;
-                        }else{
+                        } else {
                             tmp = child.parentNode;
                             while (tmp !== parent){
                                 pre = tmp;
@@ -10420,7 +10420,7 @@ UE.commands['inserthtml'] = {
 
                         range.setStart(nextNode,0).collapse(true).shrinkBoundary()
                     }
-                }else{
+                } else {
 
                     try{
                         child.innerHTML = browser.ie ? domUtils.fillChar : '<br/>';
@@ -10548,7 +10548,7 @@ UE.plugins['autotypeset'] = function(){
             }
             cont = me.document.createElement('div');
             cont.innerHTML = html.html;
-        }else{
+        } else {
             cont = me.document.body;
         }
         var nodes = domUtils.getElementsByTagName(cont,'*');
@@ -10645,7 +10645,7 @@ UE.plugins['autotypeset'] = function(){
                                         }
                                         domUtils.remove(tmpNode);
                                         domUtils.remove(next);
-                                    }else{
+                                    } else {
                                         domUtils.setStyle(tmpNode,'text-align','');
                                     }
 
@@ -11495,7 +11495,7 @@ UE.plugins['font'] = function () {
                 domUtils.remove(node,true);
                 node = parent;
 
-            }else{
+            } else {
                 break;
             }
         }
@@ -11540,7 +11540,7 @@ UE.plugins['font'] = function () {
             if (/\s*border\s*:\s*none;?\s*/i.test(span.style.cssText)) {
                 if(/^\s*border\s*:\s*none;?\s*$/.test(span.style.cssText)){
                     domUtils.remove(span, true);
-                }else{
+                } else {
                     domUtils.removeStyle(span,'border');
                 }
                 return
@@ -11627,7 +11627,7 @@ UE.plugins['font'] = function () {
 //                    node.setStyle('text-decoration','line-through');
 //                    if(node.attrs['class']){
 //                        node.attrs['class'] = node.attrs['class'].replace(/fontstrikethrough/,'');
-//                    }else{
+//                    } else {
 //                        node.setAttr('class')
 //                    }
 //                }
@@ -11635,7 +11635,7 @@ UE.plugins['font'] = function () {
 //                    node.setStyle('border','1px solid #000');
 //                    if(node.attrs['class']){
 //                        node.attrs['class'] = node.attrs['class'].replace(/fontborder/,'');
-//                    }else{
+//                    } else {
 //                        node.setAttr('class')
 //                    }
 //                }
@@ -11649,7 +11649,7 @@ UE.plugins['font'] = function () {
 //                if(/line-through/.test(val)){
 //                    if(node.attrs['class']){
 //                        node.attrs['class'] += ' fontstrikethrough';
-//                    }else{
+//                    } else {
 //                        node.setAttr('class','fontstrikethrough')
 //                    }
 //                }
@@ -11661,7 +11661,7 @@ UE.plugins['font'] = function () {
 //                    if(node.attrs['class']){
 //                        node.attrs['class'] += ' fontborder';
 //
-//                    }else{
+//                    } else {
 //                        node.setAttr('class','fontborder')
 //                    }
 //                }
@@ -11941,7 +11941,7 @@ UE.plugins['link'] = function(){
 
                 text =   utils.html(opt.textValue);
                 delete opt.textValue;
-            }else{
+            } else {
                 text =   utils.html(opt.href);
 
             }
@@ -12299,7 +12299,7 @@ UE.plugins['blockquote'] = function(){
 
                     if(startBlock.tagName == 'LI' || startBlock.tagName == 'TD' || startBlock === obj || domUtils.isBody(startBlock)){
                         domUtils.remove(obj,true);
-                    }else{
+                    } else {
                         domUtils.breakParent(startBlock,obj);
                     }
 
@@ -12308,7 +12308,7 @@ UE.plugins['blockquote'] = function(){
                         if(obj){
                             if(endBlock.tagName == 'LI' || endBlock.tagName == 'TD'|| domUtils.isBody(endBlock)){
                                 obj.parentNode && domUtils.remove(obj,true);
-                            }else{
+                            } else {
                                 domUtils.breakParent(endBlock,obj);
                             }
 
@@ -12344,7 +12344,7 @@ UE.plugins['blockquote'] = function(){
                             } else {
                                 tmpRange.setStartBefore( preNode );
                             }
-                        }else{
+                        } else {
                             tmpRange.setStart(node,0);
                         }
 
@@ -12719,14 +12719,14 @@ UE.plugins['paragraph'] = function() {
                             }
                             domUtils.remove(para,true);
                             para = parent;
-                        }else{
+                        } else {
                             domUtils.remove( para.parentNode, true );
                         }
 
                     }
                     if(  utils.indexOf(notExchange,parent.tagName)!=-1){
                         current = parent;
-                    }else{
+                    } else {
                        current = para;
                     }
 
@@ -12952,7 +12952,7 @@ UE.plugins['horizontal'] = function(){
                                 range.insertNode(tmp);
                                 range.setStart(tmp,0).setCursor();
 
-                            }else{
+                            } else {
                                 tmp = me.document.createElement('br');
                                 range.insertNode(tmp);
                                 range.setStartBefore(tmp).setCursor();
@@ -12992,7 +12992,7 @@ UE.plugins['horizontal'] = function(){
 //                    rng.setStart(next,0)
 //                }else if(hr.previousSibling){
 //                    rng.setStartAtLast(hr.previousSibling)
-//                }else{
+//                } else {
 //                    var p = this.document.createElement('p');
 //                    hr.parentNode.insertBefore(p,hr);
 //                    domUtils.fillNode(this.document,p);
@@ -13247,11 +13247,11 @@ UE.plugins['insertcode'] = function() {
                 pre = domUtils.findParentByTagName(rng.startContainer,'pre',true);
             if(pre){
                 pre.className = 'brush:'+lang+';toolbar:false;';
-            }else{
+            } else {
                 var code = '';
                 if(rng.collapsed){
                     code = browser.ie && browser.ie11below ? (browser.version <= 8 ? '&nbsp;':''):'<br/>';
-                }else{
+                } else {
                     var frag = rng.extractContents();
                     var div = me.document.createElement('div');
                     div.appendChild(frag);
@@ -13270,7 +13270,7 @@ UE.plugins['insertcode'] = function() {
                                             }else if(!dtd.$empty[node.tagName]){
                                                 code += cn.innerText();
                                             }
-                                        }else{
+                                        } else {
                                             code += cn.data
                                         }
                                     })
@@ -13278,13 +13278,13 @@ UE.plugins['insertcode'] = function() {
                                         code += '\n';
                                     }
                                 }
-                            }else{
+                            } else {
                                 code += node.data + '\n'
                             }
                             if(!node.nextSibling() && /\n$/.test(code)){
                                 code = code.replace(/\n$/,'');
                             }
-                        }else{
+                        } else {
                             if(browser.ie && browser.ie11below){
 
                                 if(node.type =='element'){
@@ -13298,7 +13298,7 @@ UE.plugins['insertcode'] = function() {
                                                 }else if(!dtd.$empty[node.tagName]){
                                                     code += cn.innerText();
                                                 }
-                                            }else{
+                                            } else {
                                                 code += cn.data
                                             }
                                         });
@@ -13306,14 +13306,14 @@ UE.plugins['insertcode'] = function() {
                                             code += '<br>';
                                         }
                                     }
-                                }else{
+                                } else {
                                     code += node.data + '<br>'
                                 }
                                 if(!node.nextSibling() && /<br>$/.test(code)){
                                     code = code.replace(/<br>$/,'');
                                 }
 
-                            }else{
+                            } else {
                                 code += (node.type == 'element' ? (dtd.$empty[node.tagName] ?  '' : node.innerText()) : node.data);
                                 if(!/br\/?\s*>$/.test(code)){
                                     if(!node.nextSibling())
@@ -13339,7 +13339,7 @@ UE.plugins['insertcode'] = function() {
                 var rng = me.selection.getRange();
                 if(domUtils.isEmptyBlock(pre)){
                     rng.setStart(pre,0).setCursor(false,true)
-                }else{
+                } else {
                     rng.selectNodeContents(pre).select()
                 }
             }
@@ -13392,10 +13392,10 @@ UE.plugins['insertcode'] = function() {
                    //在ie下文本内容有可能末尾带有\n要去掉
                    //trace:3396
                    code += n.data.replace(/[ ]/g,'&nbsp;').replace(/\n$/,'');
-               }else{
+               } else {
                    if(n.tagName == 'br'){
                        code  += '\n'
-                   }else{
+                   } else {
                        code += (!dtd.$empty[n.tagName] ? '' : n.innerText());
                    }
 
@@ -13446,7 +13446,7 @@ UE.plugins['insertcode'] = function() {
                 var next = tmpNode.nextSibling;
                 if(!next && (!browser.ie || browser.version > 10)){
                     rng.insertNode(tmpNode.cloneNode(false));
-                }else{
+                } else {
                     rng.setStartAfter(tmpNode);
                 }
                 pre = tmpNode.previousSibling;
@@ -13478,7 +13478,7 @@ UE.plugins['insertcode'] = function() {
                     }
                 }
                 rng.collapse(true).select(true);
-            }else{
+            } else {
                 if(browser.version > 8){
 
                     var txt = me.document.createTextNode('\n');
@@ -13490,7 +13490,7 @@ UE.plugins['insertcode'] = function() {
                             var fillchar = me.document.createTextNode(' ');
                             rng.setStartAfter(txt).insertNode(fillchar).setStart(fillchar,0).collapse(true).select(true)
                         }
-                    }else{
+                    } else {
                         rng.insertNode(txt).setStartAfter(txt);
                         var fillchar = me.document.createTextNode(' ');
                         start = rng.startContainer.childNodes[rng.startOffset];
@@ -13500,7 +13500,7 @@ UE.plugins['insertcode'] = function() {
                         rng.insertNode(fillchar).setStart(fillchar,0).collapse(true).select(true)
                     }
 
-                }else{
+                } else {
                     var tmpNode = me.document.createElement('br');
                     rng.insertNode(tmpNode);
                     rng.insertNode(me.document.createTextNode(domUtils.fillChar));
@@ -13551,7 +13551,7 @@ UE.plugins['insertcode'] = function() {
             me.fireEvent('saveScene');
             if(evt.shiftKey){
 
-            }else{
+            } else {
                 if(!rng.collapsed){
                     var bk = rng.createBookmark();
                     var start = bk.start.previousSibling;
@@ -13586,7 +13586,7 @@ UE.plugins['insertcode'] = function() {
                         start = start.nextSibling;
                     }
                     rng.moveToBookmark(bk).select();
-                }else{
+                } else {
                     var tmpNode = me.document.createTextNode('    ');
                     rng.insertNode(tmpNode).setStartAfter(tmpNode).collapse(true).select(true);
                 }
@@ -13624,7 +13624,7 @@ UE.plugins['insertcode'] = function() {
                                     }else if(!dtd.$empty[node.tagName]){
                                         htmlstr += cn.innerText();
                                     }
-                                }else{
+                                } else {
                                     htmlstr += cn.data
                                 }
                             })
@@ -13632,7 +13632,7 @@ UE.plugins['insertcode'] = function() {
                                 htmlstr += '\n';
                             }
                         }
-                    }else{
+                    } else {
                         htmlstr += node.data + '\n'
                     }
                     if(!node.nextSibling() && /\n$/.test(htmlstr)){
@@ -13641,7 +13641,7 @@ UE.plugins['insertcode'] = function() {
                 });
                 var tmpNode = me.document.createTextNode(utils.html(htmlstr.replace(/&nbsp;/g,' ')));
                 rng.insertNode(tmpNode).selectNode(tmpNode).select();
-            }else{
+            } else {
                 var frag = me.document.createDocumentFragment();
 
                 utils.each(UE.filterNode(UE.htmlparser(html),me.options.filterTxtRules).children,function(node){
@@ -13658,7 +13658,7 @@ UE.plugins['insertcode'] = function() {
                                         frag.appendChild(me.document.createTextNode(utils.html(cn.innerText().replace(/&nbsp;/g,' '))));
 
                                     }
-                                }else{
+                                } else {
                                     frag.appendChild(me.document.createTextNode(utils.html( cn.data.replace(/&nbsp;/g,' '))));
 
                                 }
@@ -13667,7 +13667,7 @@ UE.plugins['insertcode'] = function() {
                                 frag.appendChild(me.document.createElement('br'))
                             }
                         }
-                    }else{
+                    } else {
                         frag.appendChild(me.document.createTextNode(utils.html( node.data.replace(/&nbsp;/g,' '))));
                     }
                     if(!node.nextSibling() && frag.lastChild.nodeName == 'BR'){
@@ -13746,7 +13746,7 @@ UE.commands['cleardoc'] = {
         if(enterTag == "br"){
             me.body.innerHTML = "<br/>";
             range.setStart(me.body,0).setCursor();
-        }else{
+        } else {
             me.body.innerHTML = "<p>"+(ie ? "" : "<br/>")+"</p>";
             range.setStart(me.body.firstChild,0).setCursor(false,true);
         }
@@ -14018,7 +14018,7 @@ UE.plugins['pagebreak'] = function () {
                 var pre = hr.previousSibling;
                 if(isHr(pre)){
                     domUtils.remove(pre);
-                }else{
+                } else {
                     pre && fillNode(pre);
                 }
 
@@ -14028,10 +14028,10 @@ UE.plugins['pagebreak'] = function () {
                     hr.parentNode.appendChild(p);
                     domUtils.fillNode(me.document,p);
                     range.setStart(p,0).collapse(true);
-                }else{
+                } else {
                     if(isHr(nextNode)){
                         domUtils.remove(nextNode);
-                    }else{
+                    } else {
                         fillNode(nextNode);
                     }
                     range.setEndAfter(hr).collapse(false);
@@ -14115,7 +14115,7 @@ UE.plugins['dragdrop'] = function (){
                 while(next = node.nextSibling){
                     if(next.nodeType == 1 && next.tagName == 'SPAN' && !next.firstChild){
                         domUtils.remove(next)
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -14753,7 +14753,7 @@ UE.plugins['paste'] = function () {
                     }
                     if(range.startOffset == 0){
                         range.setStartBefore(range.startContainer);
-                    }else{
+                    } else {
                         break;
                     }
 
@@ -14774,7 +14774,7 @@ UE.plugins['paste'] = function () {
                     }
                     if(range.endOffset == range.endContainer[range.endContainer.nodeType == 3 ? 'nodeValue' : 'childNodes'].length){
                         range.setEndAfter(range.endContainer);
-                    }else{
+                    } else {
                         break;
                     }
 
@@ -15018,7 +15018,7 @@ UE.plugins['list'] = function () {
             if(p == 'dash' || p == 'dot'){
                 customCss.push('li.list-' + customStyle[p] + '{background-image:url(' + liiconpath +customStyle[p]+'.gif)}');
                 customCss.push('ul.custom_'+p+'{list-style:none;}ul.custom_'+p+' li{background-position:0 3px;background-repeat:no-repeat}');
-            }else{
+            } else {
                 for(var i= 0;i<99;i++){
                     customCss.push('li.list-' + customStyle[p] + i + '{background-image:url(' + liiconpath + 'list-'+customStyle[p] + i + '.gif)}')
                 }
@@ -15079,7 +15079,7 @@ UE.plugins['list'] = function () {
                                 domUtils.remove(pn);
                                 rng.setStartAtFirst(node).collapse(true);
                                 rng.select(true);
-                            }else{
+                            } else {
                                 var tmpNode = me.document.createElement('p');
                                 domUtils.fillNode(me.document,tmpNode);
                                 pn.parentNode.insertBefore(tmpNode,pn);
@@ -15115,11 +15115,11 @@ UE.plugins['list'] = function () {
                 n.setAttr();
                 if(n.parentNode === root){
                     type = getStyle(list) || (list.tagName == 'OL' ? 'decimal' : 'disc')
-                }else{
+                } else {
                     var className = n.parentNode.getAttr('class');
                     if(className && /custom_/.test(className)){
                         type = className.match(/custom_(\w+)/)[1]
-                    }else{
+                    } else {
                         type = n.parentNode.getStyle('list-style-type');
                     }
                     if(!type){
@@ -15133,7 +15133,7 @@ UE.plugins['list'] = function () {
                 if(customStyle[currentStyle]){
                     n.setAttr('class', 'custom_' + currentStyle)
 
-                }else{
+                } else {
                     n.setStyle('list-style-type',currentStyle)
                 }
             })
@@ -15176,12 +15176,12 @@ UE.plugins['list'] = function () {
             for(var i= 0,ci;ci=li.children[i];){
                 if(ci.type == 'text' || dtd.p[ci.tagName]){
                     tmpP.appendChild(ci);
-                }else{
+                } else {
                     if(tmpP.firstChild()){
                         li.insertBefore(tmpP,ci);
                         tmpP = UE.uNode.createElement('p');
                         i = i + 2;
-                    }else{
+                    } else {
                         i++;
                     }
 
@@ -15248,10 +15248,10 @@ UE.plugins['list'] = function () {
                             if(first.type =='element' && first.tagName == 'span' && orderlisttype[type].test(first.innerText())){
                                 p.removeChild(first);
                             }
-                        }else{
+                        } else {
                             p.innerHTML(p.innerHTML().replace(orderlisttype[type],''));
                         }
-                    }else{
+                    } else {
                         p.removeChild(p.firstChild())
                     }
 
@@ -15266,7 +15266,7 @@ UE.plugins['list'] = function () {
                     var list = UE.uNode.createElement(me.options.insertorderedlist.hasOwnProperty(type) ? 'ol' : 'ul');
                     if(customStyle[type]){
                         list.setAttr('class','custom_'+type)
-                    }else{
+                    } else {
                         list.setStyle('list-style-type',type)
                     }
                     while(node && node.parentNode.tagName != 'li' && checkListType(node.innerText(),node)){
@@ -15317,7 +15317,7 @@ UE.plugins['list'] = function () {
                 if(!(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/))){
                     type = 1;
                 }
-            }else{
+            } else {
                 if(/[ou]l/i.test(parent.tagName) && domUtils.hasClass(parent,/custom_/)){
                     type = 3;
                 }
@@ -15357,10 +15357,10 @@ UE.plugins['list'] = function () {
                             }
                         }
                         li.className = 'list-'+customStyle[currentStyle]+ index + ' ' + 'list-'+currentStyle+'-paddingleft-' + paddingLeft;
-                    }else{
+                    } else {
                         li.className = 'list-'+customStyle[currentStyle]  + ' ' + 'list-'+currentStyle+'-paddingleft';
                     }
-                }else{
+                } else {
                     li.className = li.className.replace(/list-[\w\-]+/gi,'');
                 }
                 var className = li.getAttribute('class');
@@ -15680,7 +15680,7 @@ UE.plugins['list'] = function () {
                             if(domUtils.isEmptyNode(parentList)){
                                 domUtils.remove(parentList)
                             }
-                        }else{
+                        } else {
 
                             while(li.firstChild){
                                 parentList.parentNode.insertBefore(li.firstChild,parentList);
@@ -15761,7 +15761,7 @@ UE.plugins['list'] = function () {
                     range.moveToBookmark(bk).select(true);
                     return true;
                 }
-            }else{
+            } else {
                 me.fireEvent('saveScene');
                 bk = range.createBookmark();
                 for(var i= 0,closeList,parents = domUtils.findParents(li),ci;ci=parents[i++];){
@@ -15794,7 +15794,7 @@ UE.plugins['list'] = function () {
                                             break;
                                         }
                                     }
-                                }else{
+                                } else {
                                     li = domUtils.getNextDomNode(current,false,null,function(node){return node !== closeList});
                                 }
                                 break;
@@ -15966,7 +15966,7 @@ UE.plugins['list'] = function () {
 //
 //                                    });
                                     tmpFrag.appendChild(ci);
-                                }else{
+                                } else {
                                     while (ci.firstChild) {
 
                                         tmpFrag.appendChild(ci.firstChild);
@@ -16433,7 +16433,7 @@ UE.plugins['list'] = function () {
                             });
 
                         });
-                    }else{
+                    } else {
                         //ie下有可能报错，比如在代码顶头的情况
                         try{
                             me.selection.getRange().moveToAddress(bakAddress).select(true);
@@ -16550,7 +16550,7 @@ UE.plugins['enterkey'] = function() {
                 }
                 //没有站位符，会出现多行的问题
                 browser.opera &&  range.select();
-            }else{
+            } else {
                 me.fireEvent('saveScene',true,true)
             }
         }
@@ -16735,7 +16735,7 @@ UE.plugins['keystrokes'] = function() {
                 if(domUtils.isFillChar(start)){
                     rng.setStartBefore(start).shrinkBoundary(true).collapse(true);
                     domUtils.remove(start)
-                }else{
+                } else {
                     start.nodeValue = start.nodeValue.replace(new RegExp('^' + domUtils.fillChar ),'');
                     rng.startOffset--;
                     rng.collapse(true).select(true)
@@ -16847,7 +16847,7 @@ UE.plugins['keystrokes'] = function() {
                             domUtils.remove(tmpNode);
                             rng.setStartAtLast(pre).setCursor(false,true);
                             return;
-                        }else{
+                        } else {
                             var next = tmpNode.nextSibling;
                             if(next && next.nodeName != 'TABLE'){
                                 domUtils.remove(tmpNode);
@@ -16874,7 +16874,7 @@ UE.plugins['keystrokes'] = function() {
                     rng.insertNode(span).setStartBefore(span).collapse(true);
                     rng.select();
                     domUtils.remove(span)
-                }else{
+                } else {
                     rng.select()
                 }
 
@@ -17585,7 +17585,7 @@ UE.plugins['autofloat'] = function() {
         var offset=me.options.toolbarTopOffset||0;
         if (rect3.top < 0 && rect3.bottom - toolbarBox.offsetHeight > offset) {
             setFloating();
-        }else{
+        } else {
             unsetFloating();
         }
     }
@@ -18587,7 +18587,7 @@ UE.plugins['video'] = function (){
                         tableRow.insertBefore(th, cell);
                         domUtils.remove(cell)
                     }
-                }else{
+                } else {
                     if (cell.tagName == 'TH') {
                         var td = cell.ownerDocument.createElement("td");
                         td.appendChild(cell.firstChild);
@@ -18704,7 +18704,7 @@ UE.plugins['video'] = function (){
                         tableRow.insertBefore(th, cell);
                         domUtils.remove(cell)
                     }
-                }else{
+                } else {
                     if (cell.tagName == 'TH') {
                         var td = cell.ownerDocument.createElement("td");
                         td.appendChild(cell.firstChild);
@@ -19941,7 +19941,7 @@ UE.plugins['table'] = function () {
                     str += td[browser.ie?'innerText':'textContent'];
                 })
                 return str;
-            }else{
+            } else {
                 return orgGetText.call(me.selection)
             }
 
@@ -21787,7 +21787,7 @@ UE.UETable.prototype.sortTable = function (sortByCellIndex, compareFn) {
         }
         trArray.splice(0,range.beginRowIndex);
         lastRowIndex = (range.endRowIndex +1) === this.rowsNum ? 0 : range.endRowIndex +1;
-    }else{
+    } else {
         for (var i = 0,len = rows.length; i < len; i++) {
             trArray[i] = rows[i];
         }
@@ -21848,7 +21848,7 @@ UE.UETable.prototype.sortTable = function (sortByCellIndex, compareFn) {
     var tbody = table.getElementsByTagName("tbody")[0];
     if(!lastRowIndex){
         tbody.appendChild(fragment);
-    }else{
+    } else {
         tbody.insertBefore(fragment,rows[lastRowIndex- range.endRowIndex + range.beginRowIndex - 1])
     }
 };
@@ -22318,7 +22318,7 @@ UE.plugins['contextmenu'] = function () {
                             if ( subItem == '-' ) {
                                 if ( (last = subMenu[subMenu.length - 1 ] ) && last !== '-' ) {
                                     subMenu.push( '-' );
-                                }else{
+                                } else {
                                     subMenu.splice(subMenu.length-1);
                                 }
                             } else {
@@ -22766,7 +22766,7 @@ UE.plugins['formatmatch'] = function(){
             imgT.style.cssText += ';float:' + (img.style.cssFloat || img.style.styleFloat ||'none') + ';display:' + (img.style.display||'inline');
 
             img = null;
-        }else{
+        } else {
             if(!img){
                 var collapsed = range.collapsed;
                 if(collapsed){
@@ -22958,7 +22958,7 @@ UE.plugin.register('searchreplace',function(){
                     replaceText(rng,opt.replaceStr);
                     rng.select();
                     return true;
-                }else{
+                } else {
                     rng.collapse(opt.dir == -1)
                 }
 
@@ -22983,7 +22983,7 @@ UE.plugin.register('searchreplace',function(){
             }
             rng.select();
             return true;
-        }else{
+        } else {
             rng.setCursor()
         }
 
@@ -23024,7 +23024,7 @@ UE.plugin.register('searchreplace',function(){
                         if(num){
                             me.fireEvent('saveScene');
                         }
-                    }else{
+                    } else {
                         if(opt.replaceStr !== undefined){
                             me.fireEvent('saveScene');
                         }
@@ -23093,7 +23093,7 @@ UE.plugins['customstyle'] = function() {
                         domUtils.moveChild(node, fillNode);
                         node.parentNode.insertBefore(fillNode, node);
                         domUtils.remove(node);
-                    }else{
+                    } else {
                         domUtils.remove(node,true);
                     }
 
@@ -23441,7 +23441,7 @@ UE.commands['insertparagraph'] = {
             var p = me.document.createElement('p');
             if(front){
                 tmpNode.parentNode.insertBefore(p,tmpNode)
-            }else{
+            } else {
                 tmpNode.parentNode.insertBefore(p,tmpNode.nextSibling)
             }
             domUtils.fillNode(me.document,p);
@@ -25474,7 +25474,7 @@ UE.ui = baidu.editor.ui = {};
                     return this.content;
                 }
                 return this.content.renderHtml();
-            }else{
+            } else {
                 return ''
             }
 
@@ -26608,7 +26608,7 @@ UE.ui = baidu.editor.ui = {};
         add: function (item,index){
             if(index === undefined){
                 this.items.push(item);
-            }else{
+            } else {
                 this.items.splice(index,0,item)
             }
 
@@ -28831,7 +28831,7 @@ UE.ui = baidu.editor.ui = {};
                             var tmp= getDomNode(span, 'firstChild', 'previousSibling');
                             tmp && pastePop.showAnchor(tmp.nodeType == 3 ? tmp.parentNode : tmp);
                             domUtils.remove(span);
-                        }else{
+                        } else {
                             pastePop.show();
                         }
                         delete editor.ui._isTransfer;

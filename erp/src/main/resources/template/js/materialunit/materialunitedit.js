@@ -27,7 +27,7 @@ layui.config({
 		 		$.each(json.bean.unitList, function(i, item){
 		 			if(item.baseUnit.toString() === "1"){//基础数据
 		 				$("#unitName").val(item.unitNameValue);
-		 			}else{
+		 			} else {
 		 				addDataRow(item);
 		 			}
 		 		});
@@ -60,7 +60,7 @@ layui.config({
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
-		 	        		}else{
+		 	        		} else {
 		 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		 	        		}
 		 	        	}});

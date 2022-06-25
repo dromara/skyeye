@@ -31,7 +31,7 @@ layui.config({
 	 	   				parent.childParams = json.bean;
 		        		parent.layer.close(index);
 		        		parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				layer.msg(json.returnMessage, {icon: 5, shift: 6});
 	 	   			}
 	 	   		}});

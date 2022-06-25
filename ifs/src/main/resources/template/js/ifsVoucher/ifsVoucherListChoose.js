@@ -42,7 +42,7 @@ layui.config({
 				var fileExt = sysFileUtil.getFileExt(row.voucherPath);
 				if($.inArray(fileExt[0], imageType) >= 0){
 					systemCommonUtil.showPicImg(fileBasePath + row.voucherPath);
-				}else{
+				} else {
 					sysFileUtil.download(row.voucherPath, row.fileName);
 				}
 	 		},

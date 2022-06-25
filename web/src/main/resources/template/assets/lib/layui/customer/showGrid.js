@@ -122,7 +122,7 @@ dataGrid.prototype = {
             if(json.total == 0){
                 myTemplate = _op.settings.hdb.compile(noBeansMation);
                 layui.$("#" + _op.settings.id + "showFoot").hide();
-            }else{
+            } else {
                 layui.$("#" + _op.settings.id + "showFoot").show();
                 myTemplate = _op.settings.hdb.compile(_op.settings.template);
             }
@@ -132,7 +132,7 @@ dataGrid.prototype = {
             if(typeof(_op.settings.ajaxSendAfter) == "function") {
                 _op.settings.ajaxSendAfter(json);
             }
-        }else{
+        } else {
             winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             if(typeof(_op.settings.ajaxSendErrorAfter) == "function") {
                 _op.settings.ajaxSendErrorAfter(json);
@@ -166,7 +166,7 @@ dataGrid.prototype = {
             if(json.total == 0){
                 myTemplate = _op.settings.hdb.compile(noBeansMation);
                 layui.$("#" + _op.settings.id + "showFoot").hide();
-            }else{
+            } else {
                 _op.settings.total = json.total;
                 layui.$("#" + _op.settings.id + "showFoot").show();
                 myTemplate = _op.settings.hdb.compile(_op.settings.template);
@@ -177,7 +177,7 @@ dataGrid.prototype = {
             if(typeof(_op.settings.ajaxSendAfter) == "function") {
                 _op.settings.ajaxSendAfter(json);
             }
-        }else{
+        } else {
             winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             if(typeof(_op.settings.ajaxSendErrorAfter) == "function") {
                 _op.settings.ajaxSendErrorAfter(json);
@@ -190,7 +190,7 @@ dataGrid.prototype = {
         if(1 === _op.settings.pageindex){
             totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='page_btn_dis' data-go='' id='firstPage'><<</a></li>";
             totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='page_btn_dis' data-go='' id='UpPage'><</a></li>";
-        }else{
+        } else {
             totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='page_btn' data-go='' id='firstPage'><<</a></li>";
             totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='page_btn' data-go='' id='UpPage'><</a></li>";
         }
@@ -217,7 +217,7 @@ dataGrid.prototype = {
             if(start <= _op.settings.totalpage && start >= 1) {
                 if(_op.settings.pageindex == start){
                     totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='geraltTb_pager showgrid-active' data-go='' >" + start + "</a></li>";
-                }else{
+                } else {
                     totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='geraltTb_pager' data-go='' >" + start + "</a></li>";
                 }
             }
@@ -231,7 +231,7 @@ dataGrid.prototype = {
         if(_op.settings.totalpage === _op.settings.pageindex){
             totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='page_btn_dis' data-go=''>></a></li>";
             totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='page_btn_dis' data-go=''>>></a></li>";
-        }else{
+        } else {
             totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='page_btn' data-go='' id='nextPage'>></a></li>";
             totalsubpageTmep += "<li class='ali'><a href='javascript:void(0);' class='page_btn' data-go='' id='lastPage'>>></a></li>";
         }

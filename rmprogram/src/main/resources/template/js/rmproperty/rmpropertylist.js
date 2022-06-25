@@ -40,21 +40,21 @@ layui.config({
 	        { field: 'id', title: 'HTML内容', width: 100, templet: function(d){
 	        	if(!isNull(d.htmlContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
-	        	}else{
+	        	} else {
 	        		return '无';
 	        	}
 	        }},
 	        { field: 'id', title: 'JS内容', width: 80, templet: function(d){
 	        	if(!isNull(d.jsContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsContent"></i>';
-	        	}else{
+	        	} else {
 	        		return '无';
 	        	}
 	        }},
 	        { field: 'id', title: 'JS依赖文件', width: 120, templet: function(d){
 	        	if(!isNull(d.jsRelyOn)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsRelyOn"></i>';
-	        	}else{
+	        	} else {
 	        		return '无';
 	        	}
 	        }},
@@ -165,7 +165,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

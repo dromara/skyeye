@@ -72,7 +72,7 @@ layui.config({
                 if(json.returnCode == "0"){
                     winui.window.msg("成功导入", { shift: 1 });
                     loadTable();
-                }else{
+                } else {
                     winui.window.msg("导入失败", {icon: 2, time: 2000});
                 }
             }

@@ -77,7 +77,7 @@
                 centers = getPars(url,"markers").split(",");
                 marker.setPosition(new google.maps.LatLng(Number(centers[0]),Number(centers[1])));
                 imgcss = img.style.cssText;
-            }else{
+            } else {
                 setTimeout(function(){
                     doSearch();
                 },30)

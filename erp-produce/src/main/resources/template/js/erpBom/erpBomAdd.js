@@ -72,7 +72,7 @@ layui.config({
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
-                    }else{
+                    } else {
                         winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                     }
                 }});
@@ -150,7 +150,7 @@ layui.config({
 			if(rows.length == 0) {
 				$("#treeDemo").append(li_head);
 				$("#treeDemo").append('<li><div style="text-align: center;line-height: 30px;" >无符合条件数据</div></li>')
-			}else{
+			} else {
 				rows.eq(0).before(li_head)
 			}
 			//刷新节点数据重置金额
@@ -324,7 +324,7 @@ layui.config({
 		                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 		                }
 					}});
-			}else{
+			} else {
 				winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
 			}
 	    });
@@ -352,7 +352,7 @@ layui.config({
         	});
         	if(inNodeIndex >= 0){
         		return true;
-        	}else{
+        	} else {
         		return false;
         	}
 		}

@@ -68,12 +68,12 @@ layui.config({
 		        	if(d.menuIconType == '1'){
 			        	if(isNull(d.menuIconBg)){
 			        		str += '<div class="winui-icon winui-icon-font" style="text-align: center;">';
-			        	}else{
+			        	} else {
 			        		str += '<div class="winui-icon winui-icon-font" style="text-align: center; background-color:' + d.menuIconBg + '">';
 			        	}
 			        	if(isNull(d.menuIconColor)){
 			        		str += '<i class="fa fa-fw ' + d.menuIcon + '" style="color: white"></i>';
-			        	}else{
+			        	} else {
 			        		str += '<i class="fa fa-fw ' + d.menuIcon + '" style="color: ' + d.menuIconColor + '"></i>';
 			        	}
 			        	str += '</div>';
@@ -85,7 +85,7 @@ layui.config({
 		        { field: 'menuLevel', title: '菜单级别', width: 140, templet: function(d){
 		        	if(d.parentId == '0'){
 		        		return "创世菜单";
-		        	}else{
+		        	} else {
 		        		return "子菜单-->" + d.menuLevel + "级子菜单";
 		        	}
 		        }},
@@ -95,7 +95,7 @@ layui.config({
 		        		return '否';
 		        	}else if(d.isShare == 1){
 		        		return '是';
-		        	}else{
+		        	} else {
 		        		return '参数错误';
 		        	}
 		        }},
@@ -210,7 +210,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -253,7 +253,7 @@ layui.config({
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -265,7 +265,7 @@ layui.config({
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});

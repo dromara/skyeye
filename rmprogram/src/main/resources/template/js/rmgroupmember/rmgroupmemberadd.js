@@ -129,7 +129,7 @@ layui.config({
 		        			winui.window.msg("请填写HTML内容", {icon: 2, time: 2000});
 		        		}else if(isNull(wxmlContent.getValue())){
 		        			winui.window.msg("请填写WXML内容", {icon: 2, time: 2000});
-		        		}else{
+		        		} else {
 		        			var oCanvas = document.getElementById("thecanvas");
 		        			var imgData = oCanvas.toDataURL();
 		        			AjaxPostUtil.request({url:reqBasePath + "common004", params:{images:imgData, type:1}, type: 'json', callback: function(json1){
@@ -150,11 +150,11 @@ layui.config({
 		        						if (json.returnCode == 0) {
 		        							parent.layer.close(index);
 		        							parent.refreshCode = '0';
-		        						}else{
+		        						} else {
 		        							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		        						}
 		        					}});
-		        				}else{
+		        				} else {
 		        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		        				}
 		        			}});
@@ -188,7 +188,7 @@ layui.config({
 	    $("body").on("click", "#createPic", function(){
 	    	if(isNull($("#printPic").html().trim())){
 	    		winui.window.msg('请填写HTML内容', {icon: 2, time: 2000});
-	    	}else{
+	    	} else {
 	    		html2canvas($("#printPic"), {
 	    			onrendered: function(canvas) {
 	    				// 添加属性

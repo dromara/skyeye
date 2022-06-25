@@ -50,14 +50,14 @@ layui.config({
  	        	}
  	        	if(userList.length == 0 || isNull($('#roomAdmin').tagEditor('getTags')[0].tags)){
  	        		params.roomAdmin = "";
- 	        	}else{
+ 	        	} else {
         			params.roomAdmin = userList[0].id;
         		}
  	        	AjaxPostUtil.request({url: flowableBasePath + "conferenceroom002", params: params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
-	 	   			}else{
+	 	   			} else {
 	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	 	   			}
 	 	   		}});

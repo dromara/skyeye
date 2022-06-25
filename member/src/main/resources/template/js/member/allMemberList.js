@@ -34,7 +34,7 @@ layui.config({
                     return "<span class='state-up'>启用</span>";
                 }else if(d.enabled == '2'){
                     return "<span class='state-down'>禁用</span>";
-                }else{
+                } else {
                     return "<span class='state-error'>参数错误</span>";
                 }
             }},

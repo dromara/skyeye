@@ -24,7 +24,7 @@ layui.config({
 						return 'checked';
 					}else if(v1 == '1'){//不分享
 						return '';
-					}else{
+					} else {
 						return '';
 					}
 				});
@@ -33,7 +33,7 @@ layui.config({
 						return 'true';
 					}else if(v1 == '1'){//不分享
 						return 'false';
-					}else{
+					} else {
 						return 'false';
 					}
 				});
@@ -62,7 +62,7 @@ layui.config({
 			        	};
 			        	if(data.field.isShare){
 			        		params.isShare = '2';
-			        	}else{
+			        	} else {
 			        		params.isShare = '1';
 			        	}
 			        	
@@ -70,7 +70,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});

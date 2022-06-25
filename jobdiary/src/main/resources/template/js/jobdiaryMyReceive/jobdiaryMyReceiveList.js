@@ -38,7 +38,7 @@ layui.config({
 		        		return "男";
 		        	}else if(d.userSex == '2'){
 		        		return "女";
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }},
@@ -83,7 +83,7 @@ layui.config({
 	        		return "<span class='state-down'>未读</span>";
 	        	}else if(d.state == '2'){
 	        		return "<span class='state-up'>已读</span>";
-	        	}else{
+	        	} else {
 	        		return "参数错误";
 	        	}
 	        }},
@@ -156,7 +156,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

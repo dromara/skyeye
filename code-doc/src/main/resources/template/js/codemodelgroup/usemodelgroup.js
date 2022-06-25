@@ -36,7 +36,7 @@ layui.config({
         		winui.window.msg('请先生成转换结果', {icon: 2, time: 2000});
         	}else if($('#modelList').find('li').length > subData.length){
         		winui.window.msg('您有模板未生成代码文件，请检查。', {icon: 2, time: 2000});
-        	}else{
+        	} else {
         		for(var i = 0; i < subData.length; i++){
         			subData[i].modelContent = "";
 					subData[i].modelText = "";
@@ -47,7 +47,7 @@ layui.config({
 	        				parent.layer.close(index);
 	        				parent.refreshCode = '0';
         				});
-        			}else{
+        			} else {
         				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
         			}
         		}});
@@ -113,14 +113,14 @@ layui.config({
 	 				var s = getListItem(list, row.id);
 	 				if(isNull(s)){
 	 					winui.window.msg('请先转换模板', {icon: 2, time: 2000});
-	 				}else{
+	 				} else {
 	 					var mode = returnModel(row.modelType);
 	 					if (!isNull(mode.length)) {
 	 						textEditor.setOption('mode', mode);
 	 					} 
 	 					textEditor.setValue(s.content);
 	 				}
-	 			}else{
+	 			} else {
 	 				winui.window.msg('请先选择数据库表名检索生成', {icon: 2, time: 2000});
 	 			}
 	 		}
@@ -173,11 +173,11 @@ layui.config({
 
 						transformResult();
 						winui.window.msg('检索成功', {icon: 1, time: 2000});
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
-			}else{
+			} else {
 				winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -190,7 +190,7 @@ layui.config({
 			var fileName = "";
 			if(modelType == 'Java' || modelType == 'xml') {
 				fileName = $("#tableZhName").val() + row.modelName;
-			}else{
+			} else {
 				fileName = $("#tableFirstISlowerName").val() + row.modelName;
 			}
 			$("#modelList").find("li").find("label[relation='" + row.id + "']").html(fileName);

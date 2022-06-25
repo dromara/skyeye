@@ -21,7 +21,7 @@ layui.config({
 				$("#pageTypes").html('指定页面');
 				$(".TypeIsTwo").addClass("layui-hide");
 				$(".TypeIsOne").removeClass("layui-hide");
-			}else{
+			} else {
 				$("#pageTypes").html('表单页面');
 				$(".TypeIsTwo").removeClass("layui-hide");
 				$(".TypeIsOne").addClass("layui-hide");
@@ -31,7 +31,7 @@ layui.config({
 				$("#menuIconType").html('Icon');
 				$(".menuIconTypeIsTwo").addClass("layui-hide");
 				$(".menuIconTypeIsOne").removeClass("layui-hide");
-			}else{
+			} else {
 				$("#menuIconType").html('图片');
 				$(".menuIconTypeIsTwo").removeClass("layui-hide");
 				$(".menuIconTypeIsOne").addClass("layui-hide");
@@ -39,7 +39,7 @@ layui.config({
 
 			if(json.bean.commonUsed == 1){
 				$("#commonUsed").html('是');
-			}else{
+			} else {
 				$("#commonUsed").html('否');
 			}
 			matchingLanguage();

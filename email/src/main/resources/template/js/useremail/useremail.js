@@ -22,7 +22,7 @@ layui.config({
 			if(json.rows.length === 0){
 				$("#emailOperator").hide();//隐藏邮箱模块
 				$("#firstAddEmail").show();//显示首次输入邮箱模块
-			}else{
+			} else {
 				$("#emailOperator").show();//显示邮箱模块
 				$("#firstAddEmail").hide();//隐藏首次输入邮箱模块
 				$.each(json.rows, function(i, item){
@@ -35,7 +35,7 @@ layui.config({
 				inboxEmailAselFun();//加载我的收件箱
 			}
 			matchingLanguage();
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -53,7 +53,7 @@ layui.config({
 	 	   			if(json.bean.emailCheck === '1' || json.bean.emailCheck == 1){
 	 	   				resetCheckEmail(json.bean.id, json.bean.emailAddress);
 	 	   			}
-	   			}else{
+	   			} else {
 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 	   			}
 	   		}});
@@ -123,7 +123,7 @@ layui.config({
 		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
 						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
 						next(lis.join(''), (page * 12) < json.total);
-		   			}else{
+		   			} else {
 		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});
@@ -155,7 +155,7 @@ layui.config({
 		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
 						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
 						next(lis.join(''), (page * 12) < json.total);
-		   			}else{
+		   			} else {
 		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});
@@ -187,7 +187,7 @@ layui.config({
 		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
 						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
 						next(lis.join(''), (page * 12) < json.total);
-		   			}else{
+		   			} else {
 		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});
@@ -219,7 +219,7 @@ layui.config({
 		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
 						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
 						next(lis.join(''), (page * 12) < json.total);
-		   			}else{
+		   			} else {
 		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		   			}
 		   		}});
@@ -245,7 +245,7 @@ layui.config({
 			$("#emailContentIframe").attr("src", "../../tpl/useremail/emailshow.html");
 		}else if(_selId === 'deleteedEmailAsel'){//已删除邮件
 			$("#emailContentIframe").attr("src", "../../tpl/useremail/emailshow.html");
-		}else{
+		} else {
 			winui.window.msg('参数错误', {icon: 2, time: 2000});
 		}
 	});
@@ -257,7 +257,7 @@ layui.config({
 			AjaxPostUtil.request({url:reqBasePath + "useremail003", params:{emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function(json){
 				if (json.returnCode == 0) {
 					winui.window.msg("获取邮件中", {icon: 1, time: 2000});
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -265,7 +265,7 @@ layui.config({
 			AjaxPostUtil.request({url:reqBasePath + "useremail010", params:{emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function(json){
 				if (json.returnCode == 0) {
 					winui.window.msg("获取邮件中", {icon: 1, time: 2000});
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -273,7 +273,7 @@ layui.config({
 			AjaxPostUtil.request({url:reqBasePath + "useremail006", params:{emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function(json){
 				if (json.returnCode == 0) {
 					winui.window.msg("获取邮件中", {icon: 1, time: 2000});
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -281,11 +281,11 @@ layui.config({
 			AjaxPostUtil.request({url:reqBasePath + "useremail008", params:{emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function(json){
 				if (json.returnCode == 0) {
 					winui.window.msg("获取邮件中", {icon: 1, time: 2000});
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
-		}else{
+		} else {
 			winui.window.msg('参数错误', {icon: 2, time: 2000});
 		}
 	});
@@ -320,7 +320,7 @@ layui.config({
 		}else if(_selId === 'deleteedEmailAsel'){//已删除邮件
 			$("#deleteedEmail").html("");
 			deleteedEmailAselFun();
-		}else{
+		} else {
 			winui.window.msg('参数错误', {icon: 2, time: 2000});
 		}
 	});

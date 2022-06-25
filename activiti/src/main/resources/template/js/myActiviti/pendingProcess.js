@@ -44,7 +44,7 @@ layui.config({
 	        { field: 'suspended', title: '状态<i id="stateDesc" class="fa fa-question-circle" style="margin-left: 5px"></i>', align: 'center', width: 130, templet: function(d){
 	        	if(d.suspended){
 	        		return "<span class='state-down'>挂起</span>";
-	        	}else{
+	        	} else {
 	        		return "<span class='state-up'>正常</span>";
 	        	}
 	        }},

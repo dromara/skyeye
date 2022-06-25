@@ -43,7 +43,7 @@ layui.config({
 			//新增文件数（近七天）
 			renderLayer04Right();
 			matchingLanguage();
-		}else{
+		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
 	}});
@@ -283,7 +283,7 @@ layui.config({
 			});
 			if(inDataStr >= 0){
 				dataStr[inDataStr]["customData"].push({num: item.fileNum, date: item.clickDate});
-			}else{
+			} else {
 				var customData = new Array();
 				customData.push({num: item.fileNum, date: item.clickDate});
 				dataStr.push({
@@ -321,7 +321,7 @@ layui.config({
 				});
 				if(dayInStr >= 0){
 					s += entity.customData[dayInStr].num + ',';
-				}else{
+				} else {
 					s += '0,';
 				}
 			});

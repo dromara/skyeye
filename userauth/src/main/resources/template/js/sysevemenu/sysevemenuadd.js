@@ -56,7 +56,7 @@ layui.config({
 	    		$("#lockParentSel").html("");
 	    		$("#parentIdBox").removeClass("layui-hide");
 	    		loadChildMenu();
-	    	}else{
+	    	} else {
 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 	    	}
         });
@@ -79,10 +79,10 @@ layui.config({
 					layui.$(data.elem).parent('dd').nextAll().remove();
 					if(layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]').length > 0){
 						parentId = layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]')[0].value;
-					}else{
+					} else {
 						parentId = "0";
 					}
-				}else{
+				} else {
 					layui.$(data.elem).parent('dd').nextAll().remove();
 					parentId = data.value;
 					loadChildMenu();
@@ -120,20 +120,20 @@ layui.config({
  	 	    		if(isNull(str)){//父菜单为空
  	 	    			winui.window.msg("请至少选择一级父菜单", {icon: 2, time: 2000});
  	 	    			return false;
- 	 	    		}else{
+ 	 	    		} else {
  	 	    			params.parentId = str;
  	 	    		}
- 	 	    	}else{
+ 	 	    	} else {
  	 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
  	 	    	}
  	        	if($("#menuSysType").val() == 'true'){
  	        		params.menuSysType = '1';
- 	        	}else{
+ 	        	} else {
  	        		params.menuSysType = '2';
  	        	}
  	        	if($("#isShare").val() == 'true'){
  	        		params.isShare = '1';
- 	        	}else{
+ 	        	} else {
  	        		params.isShare = '0';
  	        	}
  	        	AjaxPostUtil.request({url: reqBasePath + "sys007", params: params, type: 'json', callback: function(json) {
@@ -159,7 +159,7 @@ layui.config({
 	 	   			str += '</select></dd>';
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -169,7 +169,7 @@ layui.config({
  	    function getMenuLevelName(level){
  	    	if(level == '0'){
         		return "创世菜单";
-        	}else{
+        	} else {
         		return level + "级子菜单";
         	}
  	    }

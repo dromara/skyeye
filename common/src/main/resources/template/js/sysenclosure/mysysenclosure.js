@@ -107,7 +107,7 @@ layui.config({
 		        	download(fileBasePath + data.fileAddress, data.name);
 		        }
 		    });
-		}else{
+		} else {
 			table.reload("messageTable", {where:{parentId: folderId}});
 		}
 		
@@ -122,7 +122,7 @@ layui.config({
 		var _title = "";
 		if(data.fileType === 'folder'){
 			_title = "编辑文件夹";
-		}else{
+		} else {
 			_title = "编辑文件";
 		}
 		_openNewWindows({

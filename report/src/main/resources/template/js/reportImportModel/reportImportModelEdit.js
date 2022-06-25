@@ -34,11 +34,11 @@ layui.config({
                             secondTypeId: $("#secondTypeId").val(),
                             id: parent.rowId
                         };
-                        AjaxPostUtil.request({url:reportBasePath + "reportimportmodel004", params: params, type:'json', method: "PUT", callback:function(json){
+                        AjaxPostUtil.request({url:reportBasePath + "reportimportmodel004", params: params, type:'json', method: "PUT", callback: function(json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
-                            }else{
+                            } else {
                                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});

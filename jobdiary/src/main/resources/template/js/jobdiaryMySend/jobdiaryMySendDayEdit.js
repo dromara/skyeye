@@ -125,7 +125,7 @@ layui.config({
 		 				$("#completedtext").parent().hide();
 			    		$("#completedcontent").parent().show();
 			    		layedit.setContent(completedContent, $("#completedtext").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#completedtext").parent().show();
 			    		$("#completedcontent").parent().hide();
 			    		$("#completedtext").val(layedit.getContent(completedContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -138,7 +138,7 @@ layui.config({
 		 				$("#incompletetext").parent().hide();
 			    		$("#incompletecontent").parent().show();
 			    		layedit.setContent(incompleteContent,$("#incompletetext").val().replace(/\n|\r\n/g, "<br>"),false);
-		 			}else{
+		 			} else {
 		 				$("#incompletetext").parent().show();
 			    		$("#incompletecontent").parent().hide();
 			    		$("#incompletetext").val(layedit.getText(incompleteContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -151,7 +151,7 @@ layui.config({
 		 				$("#coordinatext").parent().hide();
 			    		$("#coordinacontent").parent().show();
 			    		layedit.setContent(coordinaContent,$("#coordinatext").val().replace(/\n|\r\n/g, "<br>"),false);
-		 			}else{
+		 			} else {
 		 				$("#coordinatext").parent().show();
 			    		$("#coordinacontent").parent().hide();
 			    		$("#coordinatext").val(layedit.getText(coordinaContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -169,7 +169,7 @@ layui.config({
 		        		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
                             winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                             return false;
-                        }else{
+                        } else {
                             $.each(userList, function (i, item) {
                                 userId += item.id + ',';
                             });
@@ -179,25 +179,25 @@ layui.config({
 		        			if(isNull(layedit.getContent(completedContent))){
 		        				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
 		        				return false;
-		        			}else{
+		        			} else {
 		        				params.completedJob = encodeURIComponent(layedit.getContent(completedContent));
 		        			}
-		        		}else{
+		        		} else {
 		        			if(isNull($("#completedtext").val())){
 		        				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
 		        				return false;
-		        			}else{
+		        			} else {
 		        				params.completedJob = encodeURIComponent($("#completedtext").val().replace(/\n|\r\n/g, "<br>"));
 		        			}
 		        		}
 		        		if(data.field.todyincomplete === 'true'){
 		        			params.incompleteJob = encodeURIComponent(layedit.getContent(incompleteContent));
-		        		}else{
+		        		} else {
 		        			params.incompleteJob = encodeURIComponent($("#incompletetext").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		if(data.field.todycoordina === 'true'){
 		        			params.coordinaJob = encodeURIComponent(layedit.getContent(coordinaContent));
-		        		}else{
+		        		} else {
 		        			params.coordinaJob = encodeURIComponent($("#coordinatext").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		
@@ -205,7 +205,7 @@ layui.config({
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                  parent.refreshCode = '0';
-                            }else{
+                            } else {
                                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});

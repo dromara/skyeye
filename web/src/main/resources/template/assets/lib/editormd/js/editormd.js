@@ -3175,7 +3175,7 @@ layui.define(["jquery"], function(exports) {
         catalogue: function (){
             if($("#markdownFolder").is(':hidden')){
                 $("#markdownFolder").show();
-            }else{
+            } else {
                 $("#markdownFolder").hide();
             }
         }

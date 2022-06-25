@@ -126,7 +126,7 @@ layui.config({
 		 				$("#monthCompletedText").parent().hide();
 			    		$("#monthCompletedContent").parent().show();
 			    		layedit.setContent(monthCompletedContent, $("#monthCompletedText").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#monthCompletedText").parent().show();
 			    		$("#monthCompletedContent").parent().hide();
 			    		$("#monthCompletedText").val(layedit.getText(monthCompletedContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -139,7 +139,7 @@ layui.config({
 		 				$("#monthWorkSummaryText").parent().hide();
 			    		$("#monthWorkSummaryContent").parent().show();
 			    		layedit.setContent(monthWorkSummaryContent, $("#monthWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#monthWorkSummaryText").parent().show();
 			    		$("#monthWorkSummaryContent").parent().hide();
 			    		$("#monthWorkSummaryText").val(layedit.getText(monthWorkSummaryContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -152,7 +152,7 @@ layui.config({
 		 				$("#monthNextWorkPlanText").parent().hide();
 			    		$("#monthNextWorkPlanContent").parent().show();
 			    		layedit.setContent(monthNextWorkPlanContent, $("#monthNextWorkPlanText").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#monthNextWorkPlanText").parent().show();
 			    		$("#monthNextWorkPlanContent").parent().hide();
 			    		$("#monthNextWorkPlanText").val(layedit.getText(monthNextWorkPlanContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -165,7 +165,7 @@ layui.config({
 		 				$("#monthCoordinaJobText").parent().hide();
 			    		$("#monthCoordinaJobContent").parent().show();
 			    		layedit.setContent(monthCoordinaJobContent, $("#monthCoordinaJobText").val().replace(/\n|\r\n/g, "<br>"), false);
-		 			}else{
+		 			} else {
 		 				$("#monthCoordinaJobText").parent().show();
 			    		$("#monthCoordinaJobContent").parent().hide();
 			    		$("#monthCoordinaJobText").val(layedit.getText(monthCoordinaJobContent).replace(reg, "\n").replace(/<[^>]+>/g,""));
@@ -183,7 +183,7 @@ layui.config({
 		        		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
                             winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                             return false;
-                        }else{
+                        } else {
                             $.each(userList, function (i, item) {
                                 userId += item.id + ',';
                             });
@@ -193,30 +193,30 @@ layui.config({
 		        			if(isNull(layedit.getContent(monthCompletedContent))){
 		        				winui.window.msg('请填写本月已完成工作', {icon: 2, time: 2000});
 		        				return false;
-		        			}else{
+		        			} else {
 		        				params.completedJob = encodeURIComponent(layedit.getContent(monthCompletedContent));
 		        			}
-		        		}else{
+		        		} else {
 		        			if(isNull($("#monthCompletedText").val())){
 		        				winui.window.msg('请填写本月已完成工作', {icon: 2, time: 2000});
 		        				return false;
-		        			}else{
+		        			} else {
 		        				params.completedJob = encodeURIComponent($("#monthCompletedText").val().replace(/\n|\r\n/g, "<br>"));
 		        			}
 		        		}
 		        		if(data.field.monthCoordinaJob === 'true'){
 		        			params.coordinaJob = encodeURIComponent(layedit.getContent(monthCoordinaJobContent));
-		        		}else{
+		        		} else {
 		        			params.coordinaJob = encodeURIComponent($("#monthCoordinaJobText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		if(data.field.monthNextWorkPlan === 'true'){
 		        			params.nextWorkPlan = encodeURIComponent(layedit.getContent(monthNextWorkPlanContent));
-		        		}else{
+		        		} else {
 		        			params.nextWorkPlan = encodeURIComponent($("#monthNextWorkPlanText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		if(data.field.monthWorkSummary === 'true'){
 		        			params.thisWorkSummary = encodeURIComponent(layedit.getContent(monthWorkSummaryContent));
-		        		}else{
+		        		} else {
 		        			params.thisWorkSummary = encodeURIComponent($("#monthWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		
@@ -224,7 +224,7 @@ layui.config({
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                  parent.refreshCode = '0';
-                            }else{
+                            } else {
                                 winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
                             }
                         }});

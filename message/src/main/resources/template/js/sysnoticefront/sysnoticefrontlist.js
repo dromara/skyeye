@@ -102,7 +102,7 @@ layui.config({
     	if(isNull($("#upTime").val())){
     		startTime = "";
     		endTime = "";
-    	}else{
+    	} else {
     		startTime = $("#upTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#upTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

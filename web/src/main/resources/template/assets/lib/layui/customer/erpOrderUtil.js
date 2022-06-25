@@ -132,7 +132,7 @@ var erpOrderUtil = {
                 activitiUtil.startProcess(pageUrl, function (approvalId) {
                     erpOrderUtil.submitOrderMationToData(id, orderType, approvalId, callback);
                 });
-            }else{
+            } else {
                 erpOrderUtil.submitOrderMationToData(id, orderType, "", callback);
             }
         });

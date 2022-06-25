@@ -27,7 +27,7 @@ layui.config({
 						return 'checked';
 					}else if(v1 == '2'){
 						return '';
-					}else{
+					} else {
 						return '';
 					}
 				});
@@ -36,7 +36,7 @@ layui.config({
 						return 'true';
 					}else if(v1 == '2'){
 						return 'false';
-					}else{
+					} else {
 						return 'false';
 					}
 				});
@@ -46,7 +46,7 @@ layui.config({
 						return 'checked';
 					}else if(v1 == '0'){
 						return '';
-					}else{
+					} else {
 						return '';
 					}
 				});
@@ -55,7 +55,7 @@ layui.config({
 						return 'true';
 					}else if(v1 == '0'){
 						return 'false';
-					}else{
+					} else {
 						return 'false';
 					}
 				});
@@ -98,7 +98,7 @@ layui.config({
 		 		if(json.bean.menuLevel == '0'){
 		 			$("#parentIdBox").addClass("layui-hide");
 		 			$("input:radio[name=menuLevel][value=1]").attr("checked", true);
-		 		}else{
+		 		} else {
 		 			$("input:radio[name=menuLevel][value=2]").attr("checked", true);
 		 			//初始化父菜单
 		 			loadChildMenuAll(json.bean.parentId.split(','));
@@ -120,7 +120,7 @@ layui.config({
 			    		$("#lockParentSel").html("");
 			    		$("#parentIdBox").removeClass("layui-hide");
 			    		loadChildMenu();
-			    	}else{
+			    	} else {
 			    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 			    	}
 		        });
@@ -144,10 +144,10 @@ layui.config({
 							layui.$(data.elem).parent('dd').nextAll().remove();
 							if(layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]').length > 0){
 								parentId = layui.$(data.elem).parent('dd').prev().children('select[class=menuParent]')[0].value;
-							}else{
+							} else {
 								parentId = "0";
 							}
-						}else{
+						} else {
 							layui.$(data.elem).parent('dd').nextAll().remove();
 							parentId = data.value;
 							loadChildMenu();
@@ -186,21 +186,21 @@ layui.config({
 		 	 	    		if(isNull(str)){//父菜单为空
 		 	 	    			winui.window.msg("请至少选择一级父菜单", {icon: 2, time: 2000});
 		 	 	    			return false;
-		 	 	    		}else{
+		 	 	    		} else {
 		 	 	    			params.parentId = str;
 		 	 	    		}
-		 	 	    	}else{
+		 	 	    	} else {
 		 	 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
 		 	 	    	}
 		 	        	if($("#menuSysType").val() == 'true'){
 		 	        		params.menuSysType = '1';
-		 	        	}else{
+		 	        	} else {
 		 	        		params.menuSysType = '2';
 		 	        	}
 		 	        	
 		 	        	if($("#isShare").val() == 'true'){
 		 	        		params.isShare = '1';
-		 	        	}else{
+		 	        	} else {
 		 	        		params.isShare = '0';
 		 	        	}
 		 	        	
@@ -208,7 +208,7 @@ layui.config({
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
-			 	   			}else{
+			 	   			} else {
 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			 	   			}
 			 	   		}});
@@ -229,7 +229,7 @@ layui.config({
 		    					if(json.rows[i].id != parent.rowId){
 			    					if(json.rows[i].id != pid[0]){
 			    						str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
-			    					}else{
+			    					} else {
 			    						str += '<option value="' + json.rows[i].id + '" selected>' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
 			    					}
 		    					}
@@ -240,15 +240,15 @@ layui.config({
 	    					parentId = pid[0];
 		    				pid.splice(0, 1);
 		    				loadChildMenuAll(pid);
-		    			}else{
+		    			} else {
 		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		    			}
 		    		}});
-	    		}else{
+	    		} else {
 	    			pid.splice(0, 1);
     				loadChildMenuAll(pid);
 	    		}
-	    	}else{
+	    	} else {
 	    		loadChildMenu()
 	    	}
 	    }
@@ -266,7 +266,7 @@ layui.config({
 	 	   			str += '</select></dd>';
 	 	   			$("#lockParentSel").append(str);
 	 	   			form.render('select');
- 	   			}else{
+ 	   			} else {
  	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
  	   			}
  	   		}});
@@ -285,7 +285,7 @@ layui.config({
  	    function getMenuLevelName(level){
  	    	if(level == '0'){
         		return "创世菜单";
-        	}else{
+        	} else {
         		return level + "级子菜单";
         	}
  	    }

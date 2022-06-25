@@ -125,7 +125,7 @@ layui.config({
 		gradeId = $(this).attr("rowid");
 		if(isNull(gradeId)){
 			$("#setting1").html("");
-		}else{
+		} else {
 			initSubject();
 		}
 		refreshTable();

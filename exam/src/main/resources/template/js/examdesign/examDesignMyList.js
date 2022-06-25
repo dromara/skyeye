@@ -59,7 +59,7 @@ layui.config({
 		if(isNull(data.value) || data.value === '请选择'){
 			$("#subjectId").html("");
 			form.render('select');
-		}else{
+		} else {
 			//加载科目
 			initSubject();
 		}
@@ -99,7 +99,7 @@ layui.config({
 		        { field: 'surveyState', width:80, title: '状态', templet: function(d){
 		        	if(d.state == 1){
 			        	return d.surveyState + '<i class="fa fa-pencil-square fa-fw cursor vary-color" lay-event="pcExaming" title="点击前往考试"></i>';
-		        	}else{
+		        	} else {
 		        		return d.surveyState;
 		        	}
 		        }},
@@ -158,7 +158,7 @@ layui.config({
     			if(json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -227,7 +227,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg("发布成功", {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -243,7 +243,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});

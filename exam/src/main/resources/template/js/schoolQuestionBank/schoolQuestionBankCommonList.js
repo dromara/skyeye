@@ -82,7 +82,7 @@ layui.config({
 		        { field: 'type', width:80, title: '类型', align: 'center', templet: function(d){
 		        	if(d.type == 1){
 		        		return '<span style="color: blue">' + d.typeName + '</span>';
-		        	}else{
+		        	} else {
 		        		return '<span style="color: goldenrod">' + d.typeName + '</span>';
 		        	}
 		        }},
@@ -133,7 +133,7 @@ layui.config({
 		gradeId = $(this).attr("rowid");
 		if(isNull(gradeId)){
 			$("#setting1").html("");
-		}else{
+		} else {
 			initSubject();
 		}
 		refreshTable();

@@ -41,7 +41,7 @@ layui.config({
 					parent.$("#noteTitle").val(json.bean.title);
 					layEditor.setMarkdown(json.bean.content);
 					matchingLanguage();
-				}else{
+				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 				}
 			}});
@@ -49,7 +49,7 @@ layui.config({
         onchange : function (){
             if(loadChange == 2){
                 parent.$("#editMyNote").addClass('select');
-            }else{
+            } else {
                 loadChange++;
                 if(loadChange == 1){
                     layEditor.config({

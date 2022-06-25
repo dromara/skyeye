@@ -70,7 +70,7 @@ layui.config({
 					skin: 'msg-skin-message',
 					callBack: function(refreshCode){
 				}});
-	   		}else{
+	   		} else {
    				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
    			}
    		}});
@@ -88,7 +88,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -110,11 +110,11 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
-		}else{
+		} else {
 			winui.window.msg('选中数据中没有可操作的未读信息', {icon: 5,time: 2000});
 		}
     });
@@ -138,12 +138,12 @@ layui.config({
 					if (json.returnCode == 0) {
 						winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 						loadTable();
-					}else{
+					} else {
 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 					}
 				}});
 			});
-		}else{
+		} else {
 			winui.window.msg('请选择要删除的消息', {icon: 5,time: 2000});
 		}
     });

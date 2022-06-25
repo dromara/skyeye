@@ -48,7 +48,7 @@ layui.config({
 		        	}
 		        	if(!isNull(d.startTime) && !isNull(d.endTime)){
 						return '<a lay-event="details" class="notice-title-click">' + d.title + '[' + d.startTime + '~' + d.endTime + ']' + '</a>';
-					}else{
+					} else {
 						return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 					}
 		        }},
@@ -64,12 +64,12 @@ layui.config({
 		        	}else if(d.clockInState == '2'){
 		        		if(d.appealInState == '1' && d.appealInType == '2'){
 		        			time += "  ( <span class='state-down'>迟到</span> )" + "<span class='state-up'> ( 申诉成功 ) </span>";
-		        		}else{
+		        		} else {
 		        			time += "  ( <span class='state-down'>迟到</span> )";
 		        		}
 		        	}else if(d.clockInState == '3'){
 		        		time += "  ( <span class='state-down'>未打卡</span> )";
-		        	}else{
+		        	} else {
 		        		return "";
 		        	}
 		        	return time;
@@ -83,12 +83,12 @@ layui.config({
 		        	}else if(d.clockOutState == '2'){
 		        		if(d.appealOutState == '1' && d.appealOutType == '3'){
 		        			time += "  ( <span class='state-down'>早退</span> )" + "<span class='state-up'> ( 申诉成功 ) </span>";
-		        		}else{
+		        		} else {
 		        			time += "  ( <span class='state-down'>早退</span> )";
 		        		}
 		        	}else if(d.clockOutState == '3'){
 		        		time += "  ( <span class='state-down'>未打卡</span> )";
-		        	}else{
+		        	} else {
 		        		return "";
 		        	}
 		        	return time;
@@ -102,7 +102,7 @@ layui.config({
 		        	}else if(d.state == '2'){
 		        		if(d.appealAllState == '1' && d.appealAllType == '1'){
 		        			return "<span class='state-down'>缺勤</span>" + "<span class='state-up'> ( 申诉成功 ) </span>";
-		        		}else{
+		        		} else {
 		        			return "<span class='state-down'>缺勤</span>";
 		        		}
 		        	}else if(d.state == '3'){
@@ -110,16 +110,16 @@ layui.config({
 		        	}else if(d.state == '4'){
 		        		if(d.appealAllState == '1' && d.appealAllType == '1'){
 		        			return "<span class='state-down'>缺早卡</span>" + "<span class='state-up'> ( 申诉成功 ) </span>";
-		        		}else{
+		        		} else {
 		        			return "<span class='state-down'>缺早卡</span>";
 		        		}
 		        	}else if(d.state == '5'){
 		        		if(d.appealAllState == '1' && d.appealAllType == '1'){
 		        			return "<span class='state-down'>缺晚卡</span>" + "<span class='state-up'> ( 申诉成功 ) </span>";
-		        		}else{
+		        		} else {
 		        			return "<span class='state-down'>缺晚卡</span>";
 		        		}
-		        	}else{
+		        	} else {
 		        		return "参数错误";
 		        	}
 		        }}

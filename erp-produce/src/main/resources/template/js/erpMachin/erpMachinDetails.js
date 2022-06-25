@@ -44,13 +44,13 @@ layui.config({
 	            				loadOperatorBtn = true;
 	            				if(i == (json.bean.procedure.length - 1)){
 		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal acceptance" rowId="' + item.id + '" subType="2">生成验收单</button>';
-		            			}else{
+		            			} else {
 		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal acceptance" rowId="' + item.id + '" subType="1">工序验收</button>';
 		            			}
-	            			}else{
+	            			} else {
 	            				if(i == (json.bean.procedure.length - 1)){
 		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">生成验收单</button>';
-		            			}else{
+		            			} else {
 		            				item.operator = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal layui-btn-disabled">工序验收</button>';
 		            			}
 	            			}

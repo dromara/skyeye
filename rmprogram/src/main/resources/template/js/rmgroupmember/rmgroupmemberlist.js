@@ -82,7 +82,7 @@ layui.config({
 	        { field: 'id', title: 'HTML-JS内容', width: 150, align: 'center', templet: function(d){
 	        	if(!isNull(d.htmlJsContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlJsContent"></i>';
-	        	}else{
+	        	} else {
 	        		return '无';
 	        	}
 	        }},
@@ -92,21 +92,21 @@ layui.config({
 	        { field: 'id', title: 'WXML-JS数据内容', width: 150, align: 'center', templet: function(d){
 	        	if(!isNull(d.wxmlJsDataContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsDataContent"></i>';
-	        	}else{
+	        	} else {
 	        		return '无';
 	        	}
 	        }},
 	        { field: 'id', title: 'WXML-JS方法内容', width: 150, align: 'center', templet: function(d){
 	        	if(!isNull(d.wxmlJsMethodContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsMethodContent"></i>';
-	        	}else{
+	        	} else {
 	        		return '无';
 	        	}
 	        }},
 	        { field: 'id', title: 'WXML-JS初始化方法内容', width: 150, align: 'center', templet: function(d){
 	        	if(!isNull(d.wxmlJsMethodCreateContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsMethodCreateContent"></i>';
-	        	}else{
+	        	} else {
 	        		return '无';
 	        	}
 	        }},
@@ -232,7 +232,7 @@ layui.config({
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
-    			}else{
+    			} else {
     				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
     			}
     		}});
@@ -245,7 +245,7 @@ layui.config({
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
@@ -257,7 +257,7 @@ layui.config({
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
-			}else{
+			} else {
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
