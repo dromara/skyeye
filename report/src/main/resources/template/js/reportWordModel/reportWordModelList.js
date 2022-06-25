@@ -168,24 +168,20 @@ layui.config({
         });
     }
 
+    form.on('submit(formSearch)', function (data) {
+        if (winui.verifyForm(data.elem)) {
+            table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+        }
+        return false;
+    });
+
     // 刷新数据
     $("body").on("click", "#reloadTable", function(){
         loadTable();
     });
 
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            refreshloadTable();
-        }
-        return false;
-    });
-
     function loadTable(){
         table.reload("messageTable", {where: getTableParams()});
-    }
-
-    function refreshloadTable(){
-        table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
     function getTableParams(){
