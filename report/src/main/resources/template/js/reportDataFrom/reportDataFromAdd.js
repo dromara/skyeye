@@ -60,7 +60,7 @@ layui.config({
                     return false;
                 }
                 params = $.extend(true, params, otherData);
-                AjaxPostUtil.request({url: reportBasePath + "reportdatafrom002", params: params, type:'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: reportBasePath + "reportdatafrom002", params: params, type: 'json', method: "POST", callback: function(json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
@@ -256,7 +256,7 @@ layui.config({
                 // SQL数据源
                 url = "reportcommon004";
             }
-            AjaxPostUtil.request({url: reportBasePath + url, params: params, type:'json', method: "POST", callback: function(json) {
+            AjaxPostUtil.request({url: reportBasePath + url, params: params, type: 'json', method: "POST", callback: function(json) {
                 if (json.returnCode == 0) {
                     var data = getDataByDataFromType(dataFromType, json);
                     loadFieldResolution(dataFromType, data);

@@ -83,7 +83,7 @@ layui.config({
     function delet(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: reportBasePath + "reportdatabase003", params:{id: data.id}, type:'json', method: "DELETE", callback: function(json) {
+            AjaxPostUtil.request({url: reportBasePath + "reportdatabase003", params:{id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();

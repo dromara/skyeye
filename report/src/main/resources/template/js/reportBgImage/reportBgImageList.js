@@ -1,4 +1,6 @@
 
+var rowId = "";
+
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -71,10 +73,29 @@ layui.config({
 			}});
 	});
 
+	// 编辑
+	function edit(data) {
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/reportBgImage/reportBgImageEdit.html",
+			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
+			pageId: "reportBgImageEdit",
+			area: ['90vw', '90vh'],
+			callBack: function(refreshCode) {
+				if (refreshCode == '0') {
+					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+					loadTable();
+				} else if (refreshCode == '-9999') {
+					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+				}
+			}});
+	}
+
+	// 删除
 	function delet(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-			AjaxPostUtil.request({url: reportBasePath + "reportbgimage003", params: {rowId: data.id}, type:'json', method: "DELETE", callback: function(json) {
+			AjaxPostUtil.request({url: reportBasePath + "reportbgimage003", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
 				if (json.returnCode == 0) {
 					winui.window.msg("删除成功", {icon: 1, time: 2000});
 					loadTable();

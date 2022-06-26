@@ -11,15 +11,9 @@ layui.config({
         var $ = layui.$;
 
         // 初始化上传
-        $("#imagePath").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 18,
-            "function": function (_this, data) {
-                show("#imagePath", data);
-            }
-        });
+        $("#imagePath").upload(systemCommonUtil.uploadCommon003Config('imagePath', 18, '', 1));
+
+        reportModelTypeUtil.showModelTypeOperator(form, "typeBox", null, null);
 
         matchingLanguage();
         form.render();
@@ -27,14 +21,15 @@ layui.config({
             if (winui.verifyForm(data.elem)) {
                 var params = {
                     title: $("#title").val(),
-                    imagePath: ""
+                    imagePath: $("#imagePath").find("input[type='hidden'][name='upload']").attr("oldurl"),
+                    firstTypeId: $("#firstTypeId").val(),
+                    secondTypeId: $("#secondTypeId").val(),
                 };
-                params.imagePath = $("#imagePath").find("input[type='hidden'][name='upload']").attr("oldurl");
                 if(isNull(params.imagePath)){
                     winui.window.msg('请上传图片', {icon: 2, time: 2000});
                     return false;
                 }
-                AjaxPostUtil.request({url: reportBasePath + "reportbgimage002", params: params, type:'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: reportBasePath + "reportbgimage002", params: params, type: 'json', method: "POST", callback: function(json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';

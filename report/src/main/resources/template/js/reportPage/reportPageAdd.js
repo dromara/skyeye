@@ -18,7 +18,7 @@ layui.config({
                     nameCh: $("#nameCh").val(),
                     nameEn: $("#nameEn").val()
                 };
-                AjaxPostUtil.request({url: reportBasePath + "reportpage002", params: params, type:'json', method: "POST", callback: function(json) {
+                AjaxPostUtil.request({url: reportBasePath + "reportpage002", params: params, type: 'json', method: "POST", callback: function(json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';

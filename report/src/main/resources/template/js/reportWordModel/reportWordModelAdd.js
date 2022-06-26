@@ -33,7 +33,7 @@ layui.config({
                 }
                 var oCanvas = document.getElementById("thecanvas");
                 var imgData = oCanvas.toDataURL();
-                AjaxPostUtil.request({url:reqBasePath + "common004", params:{images: imgData, type: 19}, type:'json', callback:function(json1){
+                AjaxPostUtil.request({url:reqBasePath + "common004", params:{images: imgData, type: 19}, type: 'json', callback:function(json1){
                     if(json1.returnCode == 0){
                         var rowTr = $("#useTable tr");
                         var tableData = new Array();
@@ -61,7 +61,7 @@ layui.config({
                             secondTypeId: $("#secondTypeId").val(),
                             logo: json1.bean.picUrl
                         };
-                        AjaxPostUtil.request({url: reportBasePath + "reportwordmodel002", params: params, type:'json', method: "POST", callback: function(json) {
+                        AjaxPostUtil.request({url: reportBasePath + "reportwordmodel002", params: params, type: 'json', method: "POST", callback: function(json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';
