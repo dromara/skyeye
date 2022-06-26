@@ -1,11 +1,10 @@
 
 //计算总价
-function calculatedTotalPrice(){
-	var rowTr = $("#useTable tr");
+function calculatedTotalPrice() {
 	var allPrice = 0, taxLastMoneyPrice = 0;
-	$.each(rowTr, function(i, item) {
+	$.each(initTableChooseUtil.getDataRowIndex('productList'), function(i, item) {
 		//获取行坐标
-		var rowNum = $(item).attr("trcusid").replace("tr", "");
+		var rowNum = item;
 		//获取数量
 		var rkNum = parseInt(isNull($("#rkNum" + rowNum).val()) ? 0 : $("#rkNum" + rowNum).val());
 		//获取单价

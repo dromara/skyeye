@@ -25,7 +25,6 @@ layui.config({
 	layedit = layui.layedit,
 	form = layui.form;
 
-	var usetableTemplate = $("#usetableTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	// 已经选择的商品集合key：表格的行trId，value：商品信息
 	var allChooseProduct = {};
@@ -34,32 +33,44 @@ layui.config({
 	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["purchaseOrder"]["orderType"]);
 
 	// 单据时间
-	laydate.render({
-		elem: '#operTime',
-		type: 'datetime',
-		value: getFormatDate(),
-		trigger: 'click'
-	});
+	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
 	// 计划完成日期
-	laydate.render({
-		elem: '#planComplateTime',
-		type: 'datetime',
-		trigger: 'click'
-	});
+	laydate.render({elem: '#planComplateTime', type: 'datetime', trigger: 'click'});
 
-	textool.init({
-		eleId: 'remark',
-		maxlength: 200,
-		tools: ['count', 'copy', 'reset']
-	});
+	textool.init({eleId: 'remark', maxlength: 200});
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function(json){
 		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
-		// 初始化一行数据
-		addRow();
+	});
+
+	initTableChooseUtil.initTable({
+		id: "productList",
+		cols: [
+			{id: 'materialId', title: '商品(型号)', formType: 'chooseInput', width: '150', iconClassName: 'chooseProductBtn', verify: 'required'},
+			{id: 'unitId', title: '单位', formType: 'select', width: '50', verify: 'required', layFilter: 'selectUnitProperty', saveKey: 'mUnitId'},
+			{id: 'currentTock', title: '库存', formType: 'detail', width: '80'},
+			{id: 'rkNum', title: '数量', formType: 'input', width: '80', className: 'change-input rkNum', verify: 'required|number', value: '1', saveKey: 'rkNum'},
+			{id: 'unitPrice', title: '单价', formType: 'input', width: '80', className: 'change-input unitPrice', verify: 'required|money', saveKey: 'unitPrice'},
+			{id: 'amountOfMoney', title: '金额', formType: 'input', width: '80', className: 'change-input amountOfMoney', verify: 'required|money'},
+			{id: 'taxRate', title: '税率(%)', formType: 'input', width: '80', className: 'change-input taxRate', verify: 'required|double', value: '0.00', saveKey: 'taxRate'},
+			{id: 'taxMoney', title: '税额', formType: 'input', width: '80', className: 'change-input taxMoney', verify: 'required|money', saveKey: 'taxMoney'},
+			{id: 'taxUnitPrice', title: '含税单价', formType: 'input', width: '80', className: 'change-input taxUnitPrice', verify: 'required|money', saveKey: 'taxUnitPrice'},
+			{id: 'taxLastMoney', title: '合计价税', formType: 'input', width: '80', className: 'change-input taxLastMoney', verify: 'required|money', saveKey: 'taxLastMoney'},
+			{id: 'remark', title: '备注', formType: 'input', width: '100', saveKey: 'remark'}
+		],
+		deleteRowCallback: function (trId) {
+			allChooseProduct[trId] = undefined;
+			// 计算价格
+			calculatedTotalPrice();
+		},
+		addRowCallback: function (rowIndexStr) {
+			// 设置根据某列变化的颜色
+			$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
+		},
+		form: form
 	});
 
 	// 加载动态表单
@@ -189,58 +200,6 @@ layui.config({
 				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 			}
 		}});
-	}
-
-	//新增行
-	$("body").on("click", "#addRow", function() {
-		addRow();
-	});
-
-	//删除行
-	$("body").on("click", "#deleteRow", function() {
-		deleteRow();
-		//计算价格
-		calculatedTotalPrice();
-	});
-
-	//新增行
-	function addRow() {
-		var par = {
-			id: "row" + rowNum.toString(), //checkbox的id
-			trId: "tr" + rowNum.toString(), //行的id
-			materialId: "materialId" + rowNum.toString(), //商品id
-			unitId: "unitId" + rowNum.toString(), //规格id
-			currentTock: "currentTock" + rowNum.toString(), //库存id
-			rkNum: "rkNum" + rowNum.toString(), //数量id
-			unitPrice: "unitPrice"  + rowNum.toString(), //单价id
-			amountOfMoney: "amountOfMoney"  + rowNum.toString(), //金额id
-			taxRate: "taxRate"  + rowNum.toString(), //税率id
-			taxMoney: "taxMoney"  + rowNum.toString(), //税额id
-			taxUnitPrice: "taxUnitPrice"  + rowNum.toString(), //含税单价id
-			taxLastMoney: "taxLastMoney"  + rowNum.toString(), //含税合计id
-			remark: "remark" + rowNum.toString() //备注id
-		};
-		$("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
-		form.render();
-		rowNum++;
-		//设置根据某列变化的颜色
-		$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
-	}
-
-	//删除行
-	function deleteRow() {
-		var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']:checked");
-		if(checkRow.length > 0) {
-			$.each(checkRow, function(i, item) {
-				// 删除allChooseProduct已选择的商品信息
-				var trId = $(item).parent().parent().attr("trcusid");
-				allChooseProduct[trId] = undefined;
-				// 移除界面上的信息
-				$(item).parent().parent().remove();
-			});
-		} else {
-			winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
-		}
 	}
 
 	// 供应商选择

@@ -35,6 +35,7 @@ var customerJS = {
 	"schoolUtil": "../../assets/lib/layui/customer/schoolUtil.js", // 学校模块工具类
 	"checkWorkUtil": "../../assets/lib/layui/customer/checkWorkUtil.js", // 考勤模块工具类
 	"arrayUtil": "../../assets/lib/layui/customer/arrayUtil.js", // 集合工具类
+	"initTableChooseUtil": "../../assets/lib/layui/customer/tableUtil/initTableChooseUtil.js", // 加载表格选择的表格插件
 };
 
 //系统基础信息
