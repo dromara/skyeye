@@ -203,19 +203,12 @@ layui.config({
    			        	
    			        	//他人执行
    			        	if(params.assignmentType === '2'){
-   			        		//指定人员
-   			        		if(userList.length == 0 || isNull($('#carryPeople').tagEditor('getTags')[0].tags)){
-   			        			winui.window.msg('请选择人员', {icon: 2, time: 2000});
-   			        			return false;
-   			        		} else {
-   			        			$.each(userList, function(i, item){
-   			     	        		if(i == 0)
-   			     	        			carryPeople = item.id;
-   			     	        		else
-   			     	        			carryPeople += ',' + item.id;
-   			     	        	});
-   			        			params.carryPeople = carryPeople;
-   			        		}
+							params.carryPeople = systemCommonUtil.tagEditorGetAllData('carryPeople', userList);
+							// 指定人员
+							if(isNull(params.carryPeople)){
+								winui.window.msg('请选择人员', {icon: 2, time: 2000});
+								return false;
+							}
    			        	}
    			        	
    			        	//是否邮件通知

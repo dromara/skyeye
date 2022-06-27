@@ -30,22 +30,13 @@ layui.config({
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
 		        			rowId: parent.rowId,
-		        			serviceUserId: '',
-		        			cooperationUserId: ''
+		        			serviceUserId: isNull(serviceUser.userId) ? "" : serviceUser.userId,
+							cooperationUserId: systemCommonUtil.tagEditorGetAllData('cooperationUserId', cooperationUser),//工单协助人，可为空
 		 	        	};
-		 	        	//接收人
-		 	        	params.serviceUserId = isNull(serviceUser.userId) ? "" : serviceUser.userId;
+		 	        	// 接收人
 		 	        	if(isNull(params.serviceUserId)){
 		                	winui.window.msg('请选择工单接收人', {icon: 2, time: 2000});
 		                	return false;
-		                }
-		                //协助人
-		 	        	if(cooperationUser.length > 0 && !isNull($('#cooperationUserId').tagEditor('getTags')[0].tags)){
-		 	        		var cooperationUserId = "";
-		                    $.each(cooperationUser, function (i, item) {
-		                    	cooperationUserId += item.id + ',';
-		                    });
-		                    params.cooperationUserId = cooperationUserId;
 		                }
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice014", params: params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0){

@@ -32,13 +32,9 @@ layui.config({
         			initialNum: $("#initialNum").val(),
         			storageArea: $("#storageArea").val(),
         			roomAddDesc: $("#roomAddDesc").val(),
-					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+					assetAdmin: systemCommonUtil.tagEditorGetItemData('assetAdmin', userList)
  	        	};
- 	        	if(userList.length == 0 || isNull($('#assetAdmin').tagEditor('getTags')[0].tags)){
- 	        		params.assetAdmin = "";
- 	        	} else {
-        			params.assetAdmin = userList[0].id;
-        		}
  	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles011", params: params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);

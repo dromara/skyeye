@@ -81,17 +81,12 @@ layui.config({
 	 	        	var params = {
  	        			rowId: rowId,
 	 	    			title: $("#title").val(),
-	 	    			forumType: data.field.forumType
+	 	    			forumType: data.field.forumType,
+						tagId: systemCommonUtil.tagEditorGetAllData('tagId', tagList)
 	 	        	};
-	 	        	if(tagList.length == 0 || isNull($('#tagId').tagEditor('getTags')[0].tags)){
+	 	        	if(isNull(params.tagId)) {
 	 	        		winui.window.msg("请选择标签", {icon: 2, time: 2000});
 	 	        		return false;
-	 		        } else {
-	 		        	var str = "";
-	 		        	$.each(tagList, function (i, item) {
-	 		        		str += item.id + ',';
-	 		            })
-	 	    			params.tagId = str;
 	 	    		}
 	 	        	if($("#anonymous").val() == 'true'){
 	 	        		params.anonymous = '2';

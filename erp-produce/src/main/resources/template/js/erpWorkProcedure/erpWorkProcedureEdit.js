@@ -81,17 +81,9 @@ layui.config({
 		                    departmentId: $("#departmentId").val(),
 		                    content: $("#content").val(),
                             procedureType: $("#procedureType").val(),
-                            procedureUserId: ""
+                            procedureUserId: systemCommonUtil.tagEditorGetAllData('procedureUserId', procedureUser), // 工序操作员
                         };
-                        // 工序操作员
-                        if(procedureUser.length > 0 && !isNull($('#procedureUserId').tagEditor('getTags')[0].tags)){
-                            var procedureUserId = "";
-                            $.each(procedureUser, function (i, item) {
-                                procedureUserId += item.id + ',';
-                            });
-                            params.procedureUserId = procedureUserId;
-                        }
-                        AjaxPostUtil.request({url: flowableBasePath + "erpworkprocedure005", params:params, type: 'json', callback: function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "erpworkprocedure005", params: params, type: 'json', callback: function(json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

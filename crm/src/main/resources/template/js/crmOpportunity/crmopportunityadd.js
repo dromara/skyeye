@@ -89,13 +89,13 @@ layui.config({
             fromId: $("#fromId").val(),
             subDepartments: $("#subDepartments").val(),
             enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+            responsId: systemCommonUtil.tagEditorGetItemData('responsId', responsIdList), // 商机负责人
             partId: systemCommonUtil.tagEditorGetAllData('partId', partIdList), // 商机参与人
             followId: systemCommonUtil.tagEditorGetAllData('followId', followIdList), // 商机关注人
             subType: subType, // 表单类型 1.保存草稿  2.提交审批
             approvalId: approvalId
         };
         // 商机负责人
-        params.responsId = systemCommonUtil.tagEditorGetItemData('responsId', responsIdList);
         if (isNull(params.responsId)) {
             winui.window.msg('请选择商机负责人', {icon: 2, time: 2000});
             return false;

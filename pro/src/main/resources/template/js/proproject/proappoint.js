@@ -107,46 +107,22 @@ layui.config({
 		 		form.render();
 		 	    form.on('submit(formAppointBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
-		 	        	var toProjectManagerIdStr = "", toProjectSponsorIdStr = "", toProjectMembersIdStr = "";
-		 	        	//获取项目经理id串
-	 	 	        	if(toProjectManager.length == 0 && isNull($('#projectManager').tagEditor('getTags')[0].tags)){
-		 	        		winui.window.msg('请选择项目经理', {icon: 2, time: 2000});
-		 	        		return false;
-		 	        	} else {
-		 	        		$.each(toProjectManager, function(i, item){
-		 	        			toProjectManagerIdStr += item.id + ',';
-			 	        	});
-		 	        	}
-		 	        	//获取项目赞助人id串
-		 	        	$.each(toProjectSponsor, function(i, item){
-	 	        			toProjectSponsorIdStr += item.id + ',';
-		 	        	});
-		 	        	//获取项目组成员id串
-		 	        	if(toProjectMembers.length == 0 && isNull($('#projectMembers').tagEditor('getTags')[0].tags)){
-		 	        		winui.window.msg('请选择项目组成员', {icon: 2, time: 2000});
-		 	        		return false;
-		 	        	} else {
-		 	        		$.each(toProjectMembers, function(i, item){
-		 	        			toProjectMembersIdStr += item.id + ',';
-			 	        	});
-		 	        	}
 		 	        	var params = {
 	 	        			rowId: parent.rowId,
-	 	        			toProjectManager: toProjectManagerIdStr,
-	 	        			toProjectSponsor: toProjectSponsorIdStr,
-	 	        			toProjectMembers: toProjectMembersIdStr,
+							toProjectManager: systemCommonUtil.tagEditorGetAllData('projectManager', toProjectManager), // 项目经理
+							toProjectSponsor: systemCommonUtil.tagEditorGetAllData('projectSponsor', toProjectSponsor), // 项目赞助人
+							toProjectMembers: systemCommonUtil.tagEditorGetAllData('projectMembers', toProjectMembers), // 项目组成员
 							projectEnclosureInfoStr: skyeyeEnclosure.getEnclosureIdsByBoxId('projectEnclosureUpload'),
-							planEnclosureInfoStr: skyeyeEnclosure.getEnclosureIdsByBoxId('planEnclosureUpload')
+							planEnclosureInfoStr: skyeyeEnclosure.getEnclosureIdsByBoxId('planEnclosureUpload'),
+							projectContent: encodeURIComponent(ue.getContent()),
+							planContent: encodeURIComponent(planUe.getContent())
 	 	 	        	};
-	 	 	        	//获取内容
-		 	        	params.projectContent = encodeURIComponent(ue.getContent());
 		 	        	if(isNull(params.projectContent)){
 			        		winui.window.msg("请填写业务需求和目标", {icon: 2, time: 2000});
 			        		return false;
 			        	}
-		 	        	params.planContent = encodeURIComponent(planUe.getContent());
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject014", params: params, type: 'json', callback: function(json){
-	 		 	   			if (json.returnCode == 0){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject014", params: params, type: 'json', callback: function(json) {
+	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
 	 		 	   			} else {

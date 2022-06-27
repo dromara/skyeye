@@ -19,14 +19,14 @@ layui.config({
 	    
 	    //日报标题
 	    var today = new Date();
-	    var submitTime = today.getFullYear() + '年' + (today.getMonth() + 1) + '月' + today.getDate() + '日日报'; 
+	    var submitTime = today.getFullYear() + '年' + (today.getMonth() + 1) + '月' + today.getDate() + '日日报';
 	    $("#jobTitle").attr('value',submitTime);
 	    
 	    //周报标题
 	    var getWeekOfYear = function(){
 	    	var today = new Date();
 	    	var firstDay = new Date(today.getFullYear(), 0, 1);
-	    	var dayOfWeek = firstDay.getDay(); 
+	    	var dayOfWeek = firstDay.getDay();
 	    	var spendDay = 1;
 	    	if (dayOfWeek != 0) {
 	    		spendDay = 7 - dayOfWeek + 1;
@@ -36,11 +36,11 @@ layui.config({
 	    	var result = Math.ceil(d/7);
 	    	return result + 1;
     	};
-	    var submitWeekTime = today.getFullYear() + '年第' + getWeekOfYear() + '周周报'; 
+	    var submitWeekTime = today.getFullYear() + '年第' + getWeekOfYear() + '周周报';
 	    $("#jobWeekTitle").attr('value', submitWeekTime);
 	    
 	    //月报标题
-	    var submitMonthTime = today.getFullYear() + '年' + (today.getMonth() + 1) + '月份月报'; 
+	    var submitMonthTime = today.getFullYear() + '年' + (today.getMonth() + 1) + '月份月报';
 	    $("#jobMonthTitle").attr('value', submitMonthTime);
 	    
 	    layedit.set({
@@ -159,18 +159,13 @@ layui.config({
         		var params = {
         			jobRemark: encodeURIComponent($("#jobRemark").val()),
         			jobTitle: $("#jobTitle").val(),
-					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+					userInfo: systemCommonUtil.tagEditorGetAllData('userName', userList)
         		};
-        		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
-                    winui.window.msg('请选择收件人', {icon: 2, time: 2000});
-                    return false;
-                } else {
-					var userInfo = "";
-                    $.each(userList, function (i, item) {
-                        userInfo += item.id + ',';
-                    });
-                    params.userInfo = userInfo;
-                }
+				if (isNull(params.userInfo)) {
+					winui.window.msg('请选择收件人', {icon: 2, time: 2000});
+					return false;
+				}
         		if(data.field.todycompleted === 'true'){
         			if(isNull(layedit.getContent(completedContent))){
         				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
@@ -272,18 +267,13 @@ layui.config({
         		var params = {
         			jobRemark: encodeURIComponent($("#weekJobRemark").val()),
         			jobTitle: $("#jobWeekTitle").val(),
-					weekenclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('weekenclosureUpload')
+					weekenclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('weekenclosureUpload'),
+					weekUserInfo: systemCommonUtil.tagEditorGetAllData('weekUserName', userList)
         		};
-        		if(userList.length == 0 || isNull($('#weekUserName').tagEditor('getTags')[0].tags)){
-                    winui.window.msg('请选择收件人', {icon: 2, time: 2000});
-                    return false;
-                } else {
-					var weekUserInfo = "";
-                    $.each(userList, function (i, item) {
-                        weekUserInfo += item.id + ',';
-                    });
-                    params.weekUserInfo = weekUserInfo;
-                }
+				if (isNull(params.weekUserInfo)) {
+					winui.window.msg('请选择收件人', {icon: 2, time: 2000});
+					return false;
+				}
         		if(data.field.weekCompleted === 'true'){
         			if(isNull(layedit.getContent(weekCompletedContent))){
         				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});
@@ -389,17 +379,12 @@ layui.config({
         		var params = {
         			jobRemark: encodeURIComponent($("#monthJobRemark").val()),
         			jobTitle: $("#jobMonthTitle").val(),
-					monthenclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('monthenclosureUpload')
+					monthenclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('monthenclosureUpload'),
+					monthUserInfo: systemCommonUtil.tagEditorGetAllData('monthUserName', userList)
         		};
-        		if(userList.length == 0 || isNull($('#monthUserName').tagEditor('getTags')[0].tags)){
+        		if(isNull(params.monthUserInfo)){
                     winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                     return false;
-                } else {
-					var monthUserInfo = "";
-                    $.each(userList, function (i, item) {
-                        monthUserInfo += item.id + ',';
-                    });
-                    params.monthUserInfo = monthUserInfo;
                 }
         		if(data.field.monthCompleted === 'true'){
         			if(isNull(layedit.getContent(monthCompletedContent))){

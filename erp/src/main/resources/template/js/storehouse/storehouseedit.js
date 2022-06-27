@@ -60,19 +60,10 @@ layui.config({
                             warehousing: $("#warehousing").val(),
                             truckage: $("#truckage").val(),
                             isDefault: $("input[name='isDefault']:checked").val(),
-                            principal: "",
-                            remark: $("#remark").val()
+                            remark: $("#remark").val(),
+                            principal: systemCommonUtil.tagEditorGetAllData('principal', chooseUser) // 仓库负责人
                         };
-                        
-                        //仓库负责人
-		 	        	if(chooseUser.length > 0 && !isNull($('#principal').tagEditor('getTags')[0].tags)) {
-		 	        		var userId = "";
-		                    $.each(chooseUser, function (i, item) {
-		                    	userId += item.id + ',';
-		                    });
-		                    params.principal = userId;
-		                }
-		                
+
                         AjaxPostUtil.request({url: flowableBasePath + "storehouse005", params: params, type: 'json', callback: function(json) {
                             if(json.returnCode == 0) {
                                 parent.layer.close(index);

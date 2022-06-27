@@ -15,8 +15,7 @@ layui.config({
 	    var $ = layui.$;
 		    layedit = layui.layedit;
 		var reg = new RegExp("<br>", "g");
-	    var userId = "";            //月报接收人id
-	    
+
 	    layedit.set({
 	    	uploadImage: {
 	    		url: reqBasePath + "common003", //接口url
@@ -178,17 +177,13 @@ layui.config({
 		        			jobRemark: encodeURIComponent($("#monthJobRemark").val()),
 		        			jobTitle: $("#jobMonthTitle").val(),
 		        			id: json.bean.id,
-							monthenclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+							monthenclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+							userId: systemCommonUtil.tagEditorGetAllData('userName', userList)
 		        		};
-		        		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
-                            winui.window.msg('请选择收件人', {icon: 2, time: 2000});
-                            return false;
-                        } else {
-                            $.each(userList, function (i, item) {
-                                userId += item.id + ',';
-                            });
-                            params.userId = userId;
-                        }
+						if (isNull(params.userId)) {
+							winui.window.msg('请选择收件人', {icon: 2, time: 2000});
+							return false;
+						}
 		        		if(data.field.monthCompleted === 'true'){
 		        			if(isNull(layedit.getContent(monthCompletedContent))){
 		        				winui.window.msg('请填写本月已完成工作', {icon: 2, time: 2000});

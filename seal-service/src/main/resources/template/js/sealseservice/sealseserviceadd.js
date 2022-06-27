@@ -149,24 +149,14 @@ layui.config({
         			urgencyId: $("#urgencyId").val(),//紧急程度，不可为空
         			modeId: $("#modeId").val(),//处理方式，不可为空
         			content: $("#content").val(),//服务内容，不可为空
-        			serviceUserId: "",//工单接收人，可为空
-        			cooperationUserId: "",//工单协助人，可为空
+        			serviceUserId: isNull(serviceUser.userId) ? "" : serviceUser.userId,//工单接收人，可为空
+        			cooperationUserId: systemCommonUtil.tagEditorGetAllData('cooperationUserId', cooperationUser),//工单协助人，可为空
         			sheetPicture: isNull(picUrl) ? "" : picUrl,//相关照片，可为空
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),//附件，可为空
         			pointSubscribeTime: $("#pointSubscribeTime").val() //指定预约时间
  	        	};
- 	        	//接收人
-                params.serviceUserId = isNull(serviceUser.userId) ? "" : serviceUser.userId;
-                //协助人
- 	        	if(cooperationUser.length > 0 && !isNull($('#cooperationUserId').tagEditor('getTags')[0].tags)){
- 	        		var cooperationUserId = "";
-                    $.each(cooperationUser, function (i, item) {
-                    	cooperationUserId += item.id + ',';
-                    });
-                    params.cooperationUserId = cooperationUserId;
-                }
- 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice011", params: params, type: 'json', callback: function(json){
-	 	   			if (json.returnCode == 0){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice011", params: params, type: 'json', callback: function(json) {
+	 	   			if (json.returnCode == 0) {
 		 	   			winui.window.msg("操作成功", {icon: 1, time: 3000}, function() {
 		 	   				location.reload();
 		 	   			});

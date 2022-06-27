@@ -202,12 +202,11 @@ layui.config({
    			        	
    			        	//他人执行
 						if (params.assignmentType === '2') {
-							//指定人员
-							if (userList.length == 0 || isNull($('#carryPeople').tagEditor('getTags')[0].tags)) {
-								winui.window.msg('请选择指定人员', {icon: 2, time: 2000});
+							params.carryPeople = systemCommonUtil.tagEditorGetItemData('carryPeople', userList);
+							// 指定人员
+							if(isNull(params.carryPeople)){
+								winui.window.msg('请选择人员', {icon: 2, time: 2000});
 								return false;
-							} else {
-								params.carryPeople = userList[0].id;
 							}
 						}
    			        	

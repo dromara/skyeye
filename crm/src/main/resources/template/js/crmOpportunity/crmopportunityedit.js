@@ -207,35 +207,14 @@ layui.config({
 			enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId,
+			responsId: systemCommonUtil.tagEditorGetItemData('responsId', responsIdList), // 商机负责人
+			partId: systemCommonUtil.tagEditorGetAllData('partId', partIdList), // 商机参与人
+			followId: systemCommonUtil.tagEditorGetAllData('followId', followIdList) // 商机关注人
 		};
 		// 如果商机负责人为空
-		if(responsIdList.length == 0 || isNull($('#responsId').tagEditor('getTags')[0].tags)){
+		if (isNull(params.responsId)) {
 			winui.window.msg('请选择商机负责人', {icon: 2, time: 2000});
 			return false;
-		} else {
-			$.each(responsIdList, function (i, item) {
-				params.responsId = item.id;
-			});
-		}
-		// 如果商机参与人为空
-		if(partIdList.length == 0 || isNull($('#partId').tagEditor('getTags')[0].tags)){
-			params.partId = "";
-		} else {
-			var partId = "";
-			$.each(partIdList, function (i, item) {
-				partId += item.id + ',';
-			});
-			params.partId = partId;
-		}
-		// 如果商机关注人为空
-		if(followIdList.length == 0 || isNull($('#followId').tagEditor('getTags')[0].tags)){
-			params.followId = "";
-		} else {
-			var followId = "";
-			$.each(followIdList, function (i, item) {
-				followId += item.id + ',';
-			});
-			params.followId = followId;
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "opportunity012", params: params, type: 'json', callback: function(json) {
 			if (json.returnCode == 0) {

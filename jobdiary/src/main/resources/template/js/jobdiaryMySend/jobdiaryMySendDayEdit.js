@@ -15,8 +15,7 @@ layui.config({
 	    var $ = layui.$;
 		    layedit = layui.layedit;
 		var reg = new RegExp("<br>", "g");
-	    var userId = "";            //日报接收人id
-	    
+
 	    layedit.set({
 	    	uploadImage: {
 	    		url: reqBasePath + "common003", //接口url
@@ -164,16 +163,12 @@ layui.config({
 		        			jobRemark: encodeURIComponent($("#jobRemark").val()),
 		        			jobTitle: $("#jobTitle").val(),
 		        			id: json.bean.id,
-							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+							userId: systemCommonUtil.tagEditorGetAllData('userName', userList)
 		        		};
-		        		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
+		        		if(isNull(params.userId)){
                             winui.window.msg('请选择收件人', {icon: 2, time: 2000});
                             return false;
-                        } else {
-                            $.each(userList, function (i, item) {
-                                userId += item.id + ',';
-                            });
-                            params.userId = userId;
                         }
 		        		if(data.field.todycompleted === 'true'){
 		        			if(isNull(layedit.getContent(completedContent))){

@@ -31,23 +31,13 @@ layui.config({
 				});
 		 	},
 		 	ajaxSendAfter:function(json){
-		 		//生产日期
-		 		laydate.render({ 
-		 		  elem: '#manufacturerTime'
-		 		  ,type: 'date'
-		 	 	  ,max: getFormatDate(),// 设置最大可选的日期
-		 	 	  trigger: 'click'
-		 		});
+		 		// 生产日期
+		 		laydate.render({elem: '#manufacturerTime', type: 'date', max: getFormatDate(), trigger: 'click'});
 		 		
-		 		//采购日期
-		 		laydate.render({ 
-		 		  elem: '#purchaseTime'
-		 		  ,type: 'date'
-		 	 	  ,max: getFormatDate(),// 设置最大可选的日期
-		 	 	  trigger: 'click'
-		 		});
+		 		// 采购日期
+		 		laydate.render({elem: '#purchaseTime', type: 'date', max: getFormatDate(), trigger: 'click'});
 		 		
-		 		//资产类型
+		 		// 资产类型
 		 		showGrid({
 				 	id: "typeId",
 				 	url: flowableBasePath + "assettype006",
@@ -94,7 +84,7 @@ layui.config({
 		 		$.each(json.bean.assetAdmin, function(i, item){
 		 			userNames.push(item.name);
 		 		});
-		 		//管理人员选择
+		 		// 管理人员选择
 				$('#assetAdmin').tagEditor({
 			        initialTags: userNames,
 			        placeholder: '请选择资产管理人',
@@ -109,7 +99,7 @@ layui.config({
 		 		$.each(json.bean.employeeId, function(i, item){
 		 			employeeuserNames.push(item.name);
 		 		});
-				//领用人选择
+				// 领用人选择
 				$('#employeeId').tagEditor({
 			        initialTags: employeeuserNames,
 			        placeholder: '请选择领用人',
@@ -140,23 +130,15 @@ layui.config({
 	 	        			roomAddDesc: $("#roomAddDesc").val(),
 							typeId: $("#typeId").val(),
 							fromId: $("#fromId").val(),
-							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+							assetAdmin: systemCommonUtil.tagEditorGetItemData('assetAdmin', userList),
+							employeeId: systemCommonUtil.tagEditorGetItemData('employeeId', employeeuserList),
+							assetImg: $("#assetImg").find("input[type='hidden'][name='upload']").attr("oldurl")
 	 	 	        	};
-	 	 	        	params.assetImg = $("#assetImg").find("input[type='hidden'][name='upload']").attr("oldurl");
-	 	 	        	if(isNull(params.assetImg)){
+	 	 	        	if(isNull(params.assetImg)) {
 	 	 	        		winui.window.msg('请上传资产图片', {icon: 2, time: 2000});
 	 	 	        		return false;
 	 	 	        	}
-	 	 	        	if(userList.length == 0 || isNull($('#assetAdmin').tagEditor('getTags')[0].tags)){
-	 	 	        		params.assetAdmin = "";
-	 	 	        	} else {
-	 	        			params.assetAdmin = userList[0].id;
-	 	        		}
-	 	 	        	if(employeeuserList.length == 0 || isNull($('#employeeId').tagEditor('getTags')[0].tags)){
-	 	 	        		params.employeeId = "";
-	 	 	        	} else {
-	 	        			params.employeeId = employeeuserList[0].id;
-	 	        		}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "asset005", params:params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);

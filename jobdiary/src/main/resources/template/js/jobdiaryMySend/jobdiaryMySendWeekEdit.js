@@ -177,18 +177,13 @@ layui.config({
 		        			jobRemark: encodeURIComponent($("#weekJobRemark").val()),
 		        			jobTitle: $("#jobWeekTitle").val(),
 		        			id: json.bean.id,
-							weekenclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+							weekenclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+							userId: systemCommonUtil.tagEditorGetAllData('userName', userList)
 		        		};
-		        		if(userList.length == 0 || isNull($('#userName').tagEditor('getTags')[0].tags)){
-                            winui.window.msg('请选择收件人', {icon: 2, time: 2000});
-                            return false;
-                        } else {
-							var userId = "";
-                            $.each(userList, function (i, item) {
-                                userId += item.id + ',';
-                            });
-                            params.userId = userId;
-                        }
+						if (isNull(params.userId)) {
+							winui.window.msg('请选择收件人', {icon: 2, time: 2000});
+							return false;
+						}
 		        		if(data.field.weekCompleted === 'true'){
 		        			if(isNull(layedit.getContent(weekCompletedContent))){
 		        				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});

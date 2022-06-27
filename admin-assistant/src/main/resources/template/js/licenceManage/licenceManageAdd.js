@@ -16,25 +16,13 @@ layui.config({
 	    	laydate = layui.laydate;
 
 	    // 签发时间
- 		laydate.render({ 
- 			elem: '#issueTime',
- 			type: 'date',
- 		  	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#issueTime', type: 'date', trigger: 'click'});
  		
  		// 下次年审时间
- 		laydate.render({ 
- 		  	elem: '#nextAnnualReview',
- 		  	type: 'date',
- 		  	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#nextAnnualReview', type: 'date', trigger: 'click'});
  		
  		// 有效期至
- 		laydate.render({ 
- 		  	elem: '#termOfValidityTime',
- 		  	type: 'date',
- 		  	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#termOfValidityTime', type: 'date', trigger: 'click'});
  		
  		form.on('radio(annualReview)', function (data) {
  			var val = data.value;
@@ -75,18 +63,10 @@ layui.config({
         			termOfValidity: data.field.termOfValidity,
         			termOfValidityTime: $("#termOfValidityTime").val(),
         			roomAddDesc: $("#roomAddDesc").val(),
-					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+					licenceAdmin: systemCommonUtil.tagEditorGetItemData('licenceAdmin', userList),
+					borrowId: systemCommonUtil.tagEditorGetItemData('borrowId', borrowList)
  	        	};
- 	        	if(userList.length == 0 || isNull($('#licenceAdmin').tagEditor('getTags')[0].tags)){
- 	        		params.licenceAdmin = "";
- 	        	} else {
-        			params.licenceAdmin = userList[0].id;
-        		}
- 	        	if(borrowList.length == 0 || isNull($('#borrowId').tagEditor('getTags')[0].tags)){
- 	        		params.borrowId = "";
- 	        	} else {
-        			params.borrowId = borrowList[0].id;
-        		}
  	        	AjaxPostUtil.request({url: flowableBasePath + "licence002", params:params, type: 'json', callback: function(json){
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);

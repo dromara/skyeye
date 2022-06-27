@@ -32,11 +32,7 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function(json){
 		 		// 启用日期
-		 		laydate.render({ 
-		 			elem: '#enableTime',
-		 			type: 'date',
-		 			trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#enableTime', type: 'date', trigger: 'click'});
 		 		
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.sealAdmin);
@@ -79,18 +75,13 @@ layui.config({
 	 	        			sealName: $("#sealName").val(),
 	 	        			enableTime: $("#enableTime").val(),
 	 	        			roomAddDesc: $("#roomAddDesc").val(),
-							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
+							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+							sealAdmin: systemCommonUtil.tagEditorGetItemData('sealAdmin', userList),
+							borrowId: systemCommonUtil.tagEditorGetItemData('borrowId', borrowuserList)
 	 	 	        	};
-	 	 	        	if(userList.length == 0 || isNull($('#sealAdmin').tagEditor('getTags')[0].tags)){
+	 	 	        	if(isNull(params.sealAdmin)){
 	 	 	        		winui.window.msg("请选择管理人", {icon: 2, time: 2000});
 	 	 	        		return false;
-	 	 	        	} else {
-	 	        			params.sealAdmin = userList[0].id;
-	 	        		}
-	 	 	        	if(borrowuserList.length == 0 || isNull($('#borrowId').tagEditor('getTags')[0].tags)){
-	 	 	        		params.borrowId = "";
-	 	 	        	} else {
-	 	        			params.borrowId = borrowuserList[0].id;
 	 	        		}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "seal005", params:params, type: 'json', callback: function(json){
 	 		 	   			if (json.returnCode == 0) {

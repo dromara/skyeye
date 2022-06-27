@@ -170,22 +170,17 @@ layui.config({
 			enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
 			subType: subType, // 1：保存为草稿  2.提交到工作流  3.在工作流中编辑
 			approvalId: approvalId,
+			performId: systemCommonUtil.tagEditorGetAllData('performId', performIdList) // 执行人
 		};
 		//如果是拆分页，且预估工作量大于主任务剩余工作量
 		if(pId != 0 && $("#estimatedWorkload").val() > restWorkload){
 			winui.window.msg('预估工作量大于主任务剩余工作量，主任务剩余工作量为  <span style="color: blue; font-size:21px">'+ restWorkload + '</span>', {icon: 2, time: 2000});
 			return false;
 		}
-		//如果执行人为空
-		if(performIdList.length == 0 || isNull($('#performId').tagEditor('getTags')[0].tags)){
+		// 如果执行人为空
+		if (isNull(params.performId)) {
 			winui.window.msg('请选择执行人', {icon: 2, time: 2000});
 			return false;
-		} else {
-			var performId = "";
-			$.each(performIdList, function (i, item) {
-				performId += item.id + ',';
-			});
-			params.performId = performId;
 		}
 		if(isNull(ue.getContent())){
 			winui.window.msg('请填写任务说明！', {icon: 2, time: 2000});

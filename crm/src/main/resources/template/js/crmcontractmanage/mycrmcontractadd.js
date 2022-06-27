@@ -17,26 +17,14 @@ layui.config({
 		laydate = layui.laydate,
 		textool = layui.textool;
 
-	//签约日期
-	laydate.render({
-		elem: '#signingTime',
-		type: 'date',
-		trigger: 'click'
-	});
+	// 签约日期
+	laydate.render({elem: '#signingTime', type: 'date', trigger: 'click'});
 
-	//生效日期
-	laydate.render({
-		elem: '#effectTime',
-		type: 'date',
-		trigger: 'click'
-	});
+	// 生效日期
+	laydate.render({elem: '#effectTime', type: 'date', trigger: 'click'});
 
-	//服务结束日期
-	laydate.render({
-		elem: '#serviceEndTime',
-		type: 'date',
-		trigger: 'click'
-	});
+	// 服务结束日期
+	laydate.render({elem: '#serviceEndTime', type: 'date', trigger: 'click'});
 
 	textool.init({
 		eleId: 'technicalTerms',
@@ -145,24 +133,19 @@ layui.config({
 			businessTerms: $("#businessTerms").val(),
 			customerId: customerMation.id,
 			departmentId: $("#departmentId").val(),
+			relationUserId: systemCommonUtil.tagEditorGetAllData('relationUserId', userList),
 			enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
 
-		//加载关联人员
-		if(userList.length == 0 || isNull($('#relationUserId').tagEditor('getTags')[0].tags)){
+		// 加载关联人员
+		if(isNull(params.relationUserId)) {
 			winui.window.msg("请选择关联人员", {icon: 2, time: 2000});
 			return false;
-		} else {
-			var relationUserId = "";
-			$.each(userList, function (i, item) {
-				relationUserId += item.id + ',';
-			});
-			params.relationUserId = relationUserId;
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract002", params: params, type: 'json', callback: function(json) {
-			if (json.returnCode == 0){
+			if (json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			} else {
