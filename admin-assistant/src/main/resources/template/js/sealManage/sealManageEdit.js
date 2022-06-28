@@ -30,7 +30,7 @@ layui.config({
 					}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 启用日期
 		 		laydate.render({elem: '#enableTime', type: 'date', trigger: 'click'});
 		 		
@@ -83,7 +83,7 @@ layui.config({
 	 	 	        		winui.window.msg("请选择管理人", {icon: 2, time: 2000});
 	 	 	        		return false;
 	 	        		}
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "seal005", params:params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "seal005", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -98,7 +98,7 @@ layui.config({
 		});
 	    
 	    // 管理人员选择
-		$("body").on("click", "#userNameSelPeople", function(e){
+		$("body").on("click", "#userNameSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -110,7 +110,7 @@ layui.config({
 		});
 		
 		// 借用人选择
-		$("body").on("click", "#borrowPeople", function(e){
+		$("body").on("click", "#borrowPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(borrowuserList);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

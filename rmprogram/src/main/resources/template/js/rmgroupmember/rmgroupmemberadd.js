@@ -102,7 +102,7 @@ layui.config({
 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 		//小程序分类变化事件
@@ -115,7 +115,7 @@ layui.config({
 		 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	    	 	ajaxSendLoadBefore: function(hdb){
 		 	    	 	},
-		 	    	 	ajaxSendAfter:function(json){
+		 	    	 	ajaxSendAfter:function (json) {
 		 	    	 		form.render('select');
 		 	    	 	}
 		 	        });
@@ -132,7 +132,7 @@ layui.config({
 		        		} else {
 		        			var oCanvas = document.getElementById("thecanvas");
 		        			var imgData = oCanvas.toDataURL();
-		        			AjaxPostUtil.request({url:reqBasePath + "common004", params:{images:imgData, type:1}, type: 'json', callback: function(json1){
+		        			AjaxPostUtil.request({url: reqBasePath + "common004", params:{images:imgData, type:1}, type: 'json', callback: function(json1){
 		        				if(json1.returnCode == 0){
 		        					var params = {
 	        							rmTypeId: $("#rmTypeId").val(),
@@ -146,7 +146,7 @@ layui.config({
 	        							img: json1.bean.picUrl
 		        					};
 		        					
-		        					AjaxPostUtil.request({url:reqBasePath + "rmxcx016", params:params, type: 'json', callback: function(json){
+		        					AjaxPostUtil.request({url: reqBasePath + "rmxcx016", params: params, type: 'json', callback: function (json) {
 		        						if (json.returnCode == 0) {
 		        							parent.layer.close(index);
 		        							parent.refreshCode = '0';

@@ -11,18 +11,10 @@ layui.config({
 	    var $ = layui.$,
 		    form = layui.form,
 		    layedit = layui.layedit;
-	    
-	    //初始化上传
- 		$("#sysPic").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 8,
-            "function": function (_this, data) {
-                show("#sysPic", data);
-            }
-        });
- 		
+
+		// 初始化上传
+		$("#sysPic").upload(systemCommonUtil.uploadCommon003Config('sysPic', 8, '', 1));
+
  		layedit.set({
 	    	uploadImage: {
 	    		url: reqBasePath + "common003", //接口url
@@ -88,7 +80,7 @@ layui.config({
 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 		});
@@ -110,7 +102,7 @@ layui.config({
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){
 			 	},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
 			});
@@ -132,7 +124,7 @@ layui.config({
  	        		winui.window.msg('请上传系统图片', {icon: 2, time: 2000});
  	        		return false;
  	        	}
-    			AjaxPostUtil.request({url:reqBasePath + "sysevewin002", params:params, type: 'json', callback: function(json){
+    			AjaxPostUtil.request({url: reqBasePath + "sysevewin002", params: params, type: 'json', callback: function (json) {
     				if (json.returnCode == 0) {
     					parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

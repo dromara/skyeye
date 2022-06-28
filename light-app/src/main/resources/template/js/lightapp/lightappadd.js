@@ -20,25 +20,17 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
 		    });
 		}
-		
-		//初始化上传
- 		$("#appLogo").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 6,
-            "function": function (_this, data) {
-                show("#appLogo", data);
-            }
-        });
-	    
+
+		// 初始化上传
+		$("#appLogo").upload(systemCommonUtil.uploadCommon003Config('appLogo', 12, '', 1));
+
  		// 图标选中事件
- 	    $("body").on("focus", "#appLogo", function(e){
+ 	    $("body").on("focus", "#appLogo", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#appLogo").val(sysIconChooseClass);
 				$("#iconShow").css({'color': 'black'});
@@ -54,14 +46,14 @@ layui.config({
         			appName: $("#appName").val(),
         			appUrl: $("#appUrl").val(),
         			desc: $("#desc").val(),
-        			typeId: $("#typeId").val()
+        			typeId: $("#typeId").val(),
+					appLogo: $("#appLogo").find("input[name='upload']").attr("oldurl")
  	        	};
- 	        	params.appLogo = $("#appLogo").find("input[name='upload']").attr("oldurl");
  	        	if(isNull(params.appLogo)){
         			winui.window.msg("请选择应用logo", {icon: 2, time: 2000});
  	        		return false;
         	    }
- 	        	AjaxPostUtil.request({url:reqBasePath + "lightapp002", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "lightapp002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

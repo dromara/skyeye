@@ -17,7 +17,7 @@ layui.config({
 		 	pagination: false,
 		 	method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var type = json.bean.type;
 		 		if(type == 1){
 		    		resetSingleBreak();

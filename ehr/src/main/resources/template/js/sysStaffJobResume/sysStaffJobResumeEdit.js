@@ -20,7 +20,7 @@ layui.config({
 		 	method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 任职开始时间
 			    var insStart = laydate.render({ 
 		 			elem: '#startTime',
@@ -61,7 +61,7 @@ layui.config({
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 		 	        	};
 		 	        	
-		 	        	AjaxPostUtil.request({url:reqBasePath + "sysstaffjobresume004", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "sysstaffjobresume004", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

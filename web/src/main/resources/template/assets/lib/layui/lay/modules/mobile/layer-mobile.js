@@ -37,7 +37,7 @@ layui.define(function(exports){
 
   //点触事件
   ready.touch = function(elem, fn){
-    elem.addEventListener('click', function(e){
+    elem.addEventListener('click', function (e) {
       fn.call(this, e);
     }, false);
   };

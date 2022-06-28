@@ -9,18 +9,10 @@ layui.config({
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
-	    
- 		//初始化上传
- 		$("#iconpicPath").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 6,
-            "function": function (_this, data) {
-                show("#iconpicPath", data);
-            }
-        });
- 		
+
+		// 初始化上传
+		$("#iconpicPath").upload(systemCommonUtil.uploadCommon003Config('iconpicPath', 12, '', 1));
+
  		// 图标类型变化事件
  		form.on('radio(iconType)', function (data) {
  			var val = data.value;
@@ -36,7 +28,7 @@ layui.config({
         });
  		
  		// 图标选中事件
- 	    $("body").on("focus", "#iconPath", function(e){
+ 	    $("body").on("focus", "#iconPath", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#iconPath").val(sysIconChooseClass);
 				$("#iconShow").css({'color': 'black'});
@@ -60,7 +52,7 @@ layui.config({
  	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});
  	        		return false;
  	        	}
- 	        	AjaxPostUtil.request({url:reqBasePath + "lightapptype002", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "lightapptype002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

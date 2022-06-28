@@ -182,7 +182,7 @@ layui.config({
 	        		}
         			params.typeName = $("#scheduleTypeName").val();
 	        	}
- 	        	AjaxPostUtil.request({url:reqBasePath + "syseveschedule001", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "syseveschedule001", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				parent.childParams = json.bean;
 		        		parent.layer.close(index);

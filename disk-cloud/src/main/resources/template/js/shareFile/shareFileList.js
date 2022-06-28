@@ -22,7 +22,7 @@ layui.config({
 		$(".sys-logo").html(sysMainMation.mationTitle);
 		var rowId = GetUrlParam("id");
 	    
-		AjaxPostUtil.request({url:reqBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				if(isNull(json.bean)){//文件不存在
    					location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
@@ -34,7 +34,7 @@ layui.config({
    						if(isNull(getCookie("file" + rowId))){//输入的提取码为空
    							location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
    						} else {//输入的提取码不为空
-   							AjaxPostUtil.request({url:reqBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: getCookie("file" + rowId)}, type: 'json', callback: function(json){
+   							AjaxPostUtil.request({url: reqBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: getCookie("file" + rowId)}, type: 'json', callback: function (json) {
    					   			if (json.returnCode == 0) {
    					   				if(isNull(json.bean)){//分享取消
    					   					location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
@@ -75,7 +75,7 @@ layui.config({
 		//加载列表
 		function loadFileMation(){
 			//加载分享基础信息
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole021", params: {rowId: rowId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole021", params: {rowId: rowId}, type: 'json', callback: function (json) {
 	   			if (json.returnCode == 0) {
 	   				var str = "";
 	   				if(json.bean.fileType == 1){//文件夹
@@ -105,7 +105,7 @@ layui.config({
 			 	template: getFileContent('tpl/shareFile/shareFileItem.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
 			 	options: {},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 					matchingLanguage();
 				}
 		    });
@@ -120,7 +120,7 @@ layui.config({
 		});
 		
 		//下载按钮
-		$("body").on("click", ".file-list-content .file-item .size .download", function(e){
+		$("body").on("click", ".file-list-content .file-item .size .download", function (e) {
 			if(isNull(getCookie('userToken'))){//用户信息为空，提示登陆
 				layer.confirm("该操作需要登陆后才可继续进行。", { icon: 3, title: '系统提示', btn: ['前往登陆','稍后登陆'] }, function (index) {
 					layer.close(index);
@@ -132,7 +132,7 @@ layui.config({
 				if(fileType === 'folder'){//文件夹
 					winui.window.msg('暂不提供文件夹的下载。', {icon: 2, time: 2000});
 				} else {//文件
-					AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function(json){
+					AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function (json) {
 						if (json.returnCode == 0) {
 							if($.inArray(json.bean.fileType, imageType) >= 0){//图片
 								downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
@@ -194,7 +194,7 @@ layui.config({
 		});
 		
 		//列表选中
-		$("body").on("change", "#fileListContent :checkbox", function(e){
+		$("body").on("change", "#fileListContent :checkbox", function (e) {
 			var length = $("#fileListContent").find(".file-item").length;
 			var checkLength = $("#fileListContent :checkbox:checked").length;
 			if(length == checkLength){
@@ -205,10 +205,10 @@ layui.config({
 			e.stopPropagation();
 		});
 		//阻止冒泡
-		$("body").on("click", "#fileListContent .file-item .check_box", function(e){
+		$("body").on("click", "#fileListContent .file-item .check_box", function (e) {
 			e.stopPropagation();
 		});
-		$("body").on("click", "#fileListContent .file-item .check_box .checkLabel", function(e){
+		$("body").on("click", "#fileListContent .file-item .check_box .checkLabel", function (e) {
 			e.stopPropagation();
 		});
 		
@@ -225,7 +225,7 @@ layui.config({
 				$("#layui-layer-shade" + times).css({'z-index': zIndex});
 			}}, function (index) {
 				layer.close(index);
-	        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
 	        		$.cookie('userToken', "", {path: '/' });
 	        		$("#operatorBtn").html('<font id="loginBtn">登陆</font>');
 	        		$("#file-operator").html("");

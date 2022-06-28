@@ -149,7 +149,7 @@ layui.config({
 	}
 	
 	//新增文件夹
-	$("body").on("click", "#addFolderBean", function(e){
+	$("body").on("click", "#addFolderBean", function (e) {
 		var node = ztree.getNodeByParam("id", folderId, null);
 		folderName = getFilePath(node);
 		if(folderName.split('/').length >= 4){
@@ -173,7 +173,7 @@ layui.config({
 	});
 	
 	//上传附件
-	$("body").on("click", "#addSenclosureBean", function(e){
+	$("body").on("click", "#addSenclosureBean", function (e) {
 		_openNewWindows({
 			url: "../../tpl/sysenclosure/enclosureupload.html", 
 			title: "上传附件",
@@ -185,7 +185,7 @@ layui.config({
 	});
 	
 	//刷新数据
-	$("body").on("click", "#reloadTable", function(e){
+	$("body").on("click", "#reloadTable", function (e) {
 		refreshTreePointNode();
 		loadThisFolderChild();
 	});

@@ -48,13 +48,13 @@ layui.config({
 	});
 
 	// 初始化账户
-	systemCommonUtil.getSysAccountListByType(function(json){
+	systemCommonUtil.getSysAccountListByType(function (json) {
 		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
 
 	// 初始化支出项目
-	systemCommonUtil.getSysInoutitemListByType(2, function(json){
+	systemCommonUtil.getSysInoutitemListByType(2, function (json) {
 		// 加载支出项目
 		inoutitemHtml = getDataUseHandlebars(selOption, json);
 	});
@@ -268,14 +268,14 @@ layui.config({
 	}
 
 	// 供应商选择
-	$("body").on("click", "#supplierNameSel", function(e){
+	$("body").on("click", "#supplierNameSel", function (e) {
 		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation){
 			$("#supplierName").val(supplierMation.supplierName);
 		});
 	});
 
 	//商品选择
-	$("body").on("click", ".chooseProductBtn", function(e){
+	$("body").on("click", ".chooseProductBtn", function (e) {
 		var trId = $(this).parent().parent().attr("trcusid");
 		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 			//获取表格行号

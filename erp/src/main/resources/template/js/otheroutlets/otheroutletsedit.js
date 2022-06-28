@@ -40,7 +40,7 @@ layui.config({
 	});
 
 	// 初始化账户
-	systemCommonUtil.getSysAccountListByType(function(json){
+	systemCommonUtil.getSysAccountListByType(function (json) {
 		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
@@ -323,7 +323,7 @@ layui.config({
 	}
 
 	//客户选择
-	$("body").on("click", "#customMationSel", function(e){
+	$("body").on("click", "#customMationSel", function (e) {
 		_openNewWindows({
 			url: "../../tpl/customermanage/customerChoose.html",
 			title: "选择客户",
@@ -339,7 +339,7 @@ layui.config({
 	});
 
 	//商品选择
-	$("body").on("click", ".chooseProductBtn", function(e){
+	$("body").on("click", ".chooseProductBtn", function (e) {
 		var trId = $(this).parent().parent().attr("trcusid");
 		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 			//获取表格行号

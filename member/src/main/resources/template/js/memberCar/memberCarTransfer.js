@@ -20,7 +20,7 @@ layui.config({
                     plate: $("#plate").val(),
                 };
 
-                AjaxPostUtil.request({url: shopBasePath + "transferMemberCar", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "transferMemberCar", params: params, type: 'json', method: "POST", callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
@@ -33,7 +33,7 @@ layui.config({
         });
 
         // 会员选择
-        $("body").on("click", ".chooseMemberBtn", function(e){
+        $("body").on("click", ".chooseMemberBtn", function (e) {
             sysMemberUtil.openSysMemberChoosePage(function (memberMation){
                 $("#memberId").val(memberMation.contacts);
             });

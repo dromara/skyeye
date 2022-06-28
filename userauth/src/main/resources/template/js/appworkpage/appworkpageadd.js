@@ -18,22 +18,14 @@ layui.config({
 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 		});
-	    
-	    //初始化上传
-	    $("#logo").upload({
-           "action": reqBasePath + "common003",
-           "data-num": "1",
-           "data-type": "PNG,JPG,jpeg,gif",
-           "uploadType": 6,
-           "function": function (_this, data) {
-               show("#logo", data);
-           }
-	    });
-	    
+
+		// 初始化上传
+		$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 12, '', 1));
+
 	    matchingLanguage();
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {
@@ -45,7 +37,7 @@ layui.config({
 					urlType: data.field.urlType
  	        	};
  	        	params.logo = $("#logo").find("input[name='upload']").attr("oldurl");
- 	        	AjaxPostUtil.request({url:reqBasePath + "appworkpage004", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "appworkpage004", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

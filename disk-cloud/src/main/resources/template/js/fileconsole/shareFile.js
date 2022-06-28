@@ -33,7 +33,7 @@ layui.config({
 				rowId: parent.shareId,
 				shareType: shareType
 			};
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole016", params: params, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole016", params: params, type: 'json', callback: function (json) {
 	   			if (json.returnCode == 0) {
 	   				json.bean.shareUrl = reqBasePath + json.bean.shareUrl;
 	   				var str = "链接：" + json.bean.shareUrl;

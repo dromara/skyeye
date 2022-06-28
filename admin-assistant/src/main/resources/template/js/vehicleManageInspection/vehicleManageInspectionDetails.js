@@ -20,7 +20,7 @@ layui.config({
 		 	template: getFileContent('tpl/vehicleManageInspection/vehicleManageInspectionDetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 附件回显
 			    if(json.bean.enclosureInfo.length != 0 && json.bean.enclosureInfo != ""){
 			    	enclosureList = json.bean.enclosureInfo;

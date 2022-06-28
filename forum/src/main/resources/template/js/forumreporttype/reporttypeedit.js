@@ -21,7 +21,7 @@ layui.config({
 		 	template: getFileContent('tpl/forumreporttype/reporttypeeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditMenu)', function (data) {
@@ -30,7 +30,7 @@ layui.config({
 	 	        			typeName: $("#typeName").val(),
 	 	        			rowId: parent.rowId
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "forumreporttype004", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "forumreporttype004", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

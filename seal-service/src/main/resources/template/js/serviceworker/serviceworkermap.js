@@ -11,7 +11,7 @@ layui.config({
 	
 	var userList = new Array();
 	
-    AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker007", params: {}, type: 'json', callback: function(json){
+    AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker007", params: {}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			userList = json.rows;
 			var map = new AMap.Map('container', {
@@ -47,7 +47,7 @@ layui.config({
 		}
 	}});
 	
-	$("body").on("click", ".custom-content-marker", function(e){
+	$("body").on("click", ".custom-content-marker", function (e) {
 		var rowId = $(this).attr('rowid');
 		$.each(userList, function(i, item){
 			if(rowId === item.id){

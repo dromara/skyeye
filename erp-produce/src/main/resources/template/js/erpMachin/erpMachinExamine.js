@@ -23,7 +23,7 @@ layui.config({
 		 			return (parseFloat(v1) * parseFloat(v2)).toFixed(2);
 		 		});
 			},
-			ajaxSendAfter: function(json){
+			ajaxSendAfter: function (json) {
 				textool.init({
 			    	eleId: 'opinion',
 			    	maxlength: 200,
@@ -42,7 +42,7 @@ layui.config({
 				    			status: $("input[name='flag']:checked").val(),
 				    			rowId: parent.rowId
 				            };
-				            AjaxPostUtil.request({url:flowableBasePath + "erpmachin008", params: jStr, type: 'json', callback: function(json){
+				            AjaxPostUtil.request({url:flowableBasePath + "erpmachin008", params: jStr, type: 'json', callback: function (json) {
 				 	   			if (json.returnCode == 0) {
 			                    	parent.layer.close(index);
 			                    	parent.refreshCode = '0';
@@ -58,7 +58,7 @@ layui.config({
 		});
 		
 		//图片预览
-		$("body").on("click", ".barCode", function(e){
+		$("body").on("click", ".barCode", function (e) {
 			layer.open({
         		type:1,
         		title:false,

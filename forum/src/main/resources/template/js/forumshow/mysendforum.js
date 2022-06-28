@@ -25,7 +25,7 @@ layui.config({
 			tagList = [].concat(arrayUtil.removeArrayPointName(tagList, val));
         }
     });
-	$("body").on("click", "#chooseTag", function(e){
+	$("body").on("click", "#chooseTag", function (e) {
 		tagReturnList = [].concat(tagList);
 		_openNewWindows({
 			url: "../../tpl/forumshow/choosetag.html", 
@@ -49,7 +49,7 @@ layui.config({
 	});
 	
 	//我的操作
-	$("body").on("click", ".suspension-menu-icon", function(e){
+	$("body").on("click", ".suspension-menu-icon", function (e) {
 		if($(".drop-down-menu").is(':hidden')){
 			$(".drop-down-menu").show();
 			$(".suspension-menu-icon").removeClass("rotate").addClass("rotate1");
@@ -83,7 +83,7 @@ layui.config({
         		return false;
         	}
         	params.textConent = encodeURIComponent(ue.getContentTxt());
-        	AjaxPostUtil.request({url:reqBasePath + "forumcontent002", params:params, type: 'json', callback: function(json){
+        	AjaxPostUtil.request({url: reqBasePath + "forumcontent002", params: params, type: 'json', callback: function (json) {
 	   			if (json.returnCode == 0) {
 	   				winui.window.msg("发布成功", {icon: 1, time: 2000}, function() {
 	   					location.href = '../../tpl/forumshow/myposts.html';

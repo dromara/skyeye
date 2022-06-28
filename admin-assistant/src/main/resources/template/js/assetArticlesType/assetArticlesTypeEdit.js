@@ -16,7 +16,7 @@ layui.config({
 	 	params: {rowId: parent.rowId},
 	 	pagination: false,
 	 	template: getFileContent('tpl/assetArticlesType/assetArticlesTypeEditTemplate.tpl'),
-	 	ajaxSendAfter: function(json){
+	 	ajaxSendAfter: function (json) {
 	 		matchingLanguage();
 	 		
 	 	    form.on('submit(formEditBean)', function (data) {
@@ -25,7 +25,7 @@ layui.config({
 	 	        		rowId: parent.rowId,
 	 	        		typeName: $("#typeName").val()
 	 	        	};
-	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles007", params: params, type: 'json', callback: function(json){
+	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles007", params: params, type: 'json', callback: function (json) {
 	 	        		if (json.returnCode == 0) {
 	 	        			parent.layer.close(index);
 	 	        			parent.refreshCode = '0';

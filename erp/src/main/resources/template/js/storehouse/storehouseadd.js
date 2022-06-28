@@ -33,7 +33,7 @@ layui.config({
                     principal: systemCommonUtil.tagEditorGetAllData('principal', chooseUser) // 仓库负责人
                 };
                 
-                AjaxPostUtil.request({url: flowableBasePath + "storehouse002", params: params, type: 'json', callback: function(json){
+                AjaxPostUtil.request({url: flowableBasePath + "storehouse002", params: params, type: 'json', callback: function (json) {
                     if(json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';

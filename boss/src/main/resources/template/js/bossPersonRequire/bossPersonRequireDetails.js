@@ -20,7 +20,7 @@ layui.config({
                 json.bean.jobRequire = stringManipulation.textAreaShow(json.bean.jobRequire);
                 json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
             },
-            ajaxSendAfter: function(json){
+            ajaxSendAfter: function (json) {
                 // 附件回显
                 skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.enclosureInfo});
 

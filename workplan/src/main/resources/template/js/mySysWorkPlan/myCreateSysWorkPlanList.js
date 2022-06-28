@@ -154,7 +154,7 @@ layui.config({
 	function cancleTiming(data){
 		layer.confirm("确定取消定时发送吗？", { icon: 3, title: '取消定时发送' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url:reqBasePath + "sysworkplan005", params:{planId: data.id}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "sysworkplan005", params:{planId: data.id}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg("已取消定时发送", {icon: 1, time: 2000});
 					loadTable();
@@ -169,7 +169,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-			AjaxPostUtil.request({url:reqBasePath + "sysworkplan006", params:{planId: data.id}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "sysworkplan006", params:{planId: data.id}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					loadTable();

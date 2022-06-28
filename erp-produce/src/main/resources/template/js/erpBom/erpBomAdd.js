@@ -68,7 +68,7 @@ layui.config({
                     childStr: JSON.stringify(childObject)
                 };
                 
-                AjaxPostUtil.request({url: flowableBasePath + "erpbom002", params:params, type: 'json', callback: function(json){
+                AjaxPostUtil.request({url: flowableBasePath + "erpbom002", params: params, type: 'json', callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
@@ -269,7 +269,7 @@ layui.config({
 		/********* tree 处理   end *************/
         
 		//新增子件
-		$("body").on("click", "#addRow", function(e){
+		$("body").on("click", "#addRow", function (e) {
 			productMationList = [];
 			_openNewWindows({
  				url: "../../tpl/material/materialChooseToProduce.html", 
@@ -330,7 +330,7 @@ layui.config({
 	    });
 	    
 	    // 商品选择
- 	    $("body").on("click", "#productNameSel", function(e){
+ 	    $("body").on("click", "#productNameSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				$("#productName").val(chooseProductMation.productName);
 				$("#productModel").val(chooseProductMation.productModel);

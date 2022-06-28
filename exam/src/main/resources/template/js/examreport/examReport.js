@@ -49,7 +49,7 @@ layui.config({
 		 		});
 		 		
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		if(json.bean.surveyState == '2'){
 		 			$("#surveyState").html("结束");

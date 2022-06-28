@@ -12,7 +12,7 @@ layui.config({
 	// 邮件内容模板
 	var emailContentMobel = $("#emailContentMobel").html();
 	
-	AjaxPostUtil.request({url:reqBasePath + "useremail005", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "useremail005", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			if(!isNull(json.bean.toPeople)){
 				json.bean.toPeople = json.bean.toPeople.split(',');
@@ -35,7 +35,7 @@ layui.config({
 	form.render();
 	
 	//信息隐藏和显示
-	$("body").on("click", "#hideOrShowMessage", function(e){
+	$("body").on("click", "#hideOrShowMessage", function (e) {
 		if($(".send-mation-in").hasClass('message-height')){
 			$("#hideOrShowMessage").html("显示信息");
 			$(".send-mation-in").hide();
@@ -48,14 +48,14 @@ layui.config({
 	});
 	
 	// 下载
-	$("body").on("click", ".enclosureItem", function(e){
+	$("body").on("click", ".enclosureItem", function (e) {
 		var rowName = $(this).html();
 		var rowPath = $(this).attr('rowpath');
 		downloadImage(fileBasePath + rowPath, rowName);
 	});
 	
 	// 转发邮件
-    $("body").on("click", "#forwardEmail", function(e){
+    $("body").on("click", "#forwardEmail", function (e) {
         location.href = "../../tpl/useremail/sendemail.html?forwardId=" + $(this).attr("rowid");
     });
 	

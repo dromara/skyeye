@@ -34,28 +34,15 @@ layui.config({
 				});
 		 	},
 		 	
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 				// 参加工作时间
-				laydate.render({
-					elem: '#workTime',
-					range: false
-				});
+				laydate.render({elem: '#workTime', range: false});
 
 		 		// 设置性别
 		 		$("input:radio[name=userSex][value=" + json.bean.userSex + "]").attr("checked", true);
-		 		// 初始化上传
-		 		$("#userPhoto").upload({
-		            "action": reqBasePath + "common003",
-		            "data-num": "1",
-		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 6,
-		            "data-value": json.bean.userPhoto,
-		            //该函数为点击放大镜的回调函数，如没有该函数，则不显示放大镜
-		            "function": function (_this, data) {
-		                show("#userPhoto", data);
-		            }
-		        });
-		 		
+				// 初始化上传
+				$("#userPhoto").upload(systemCommonUtil.uploadCommon003Config('userPhoto', 6, json.bean.userPhoto, 1));
+
 		 		// 初始化公司
 		 		dtree.render({
 		 			elem: "#demoTree1",  // 绑定元素
@@ -220,7 +207,7 @@ layui.config({
 		 	        		return false;
 		 	        	}
 
-		 	        	AjaxPostUtil.request({url:reqBasePath + "staff004", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "staff004", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

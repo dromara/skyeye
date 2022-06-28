@@ -18,7 +18,7 @@ layui.config({
 		 	template: getFileContent('tpl/sysevewinthemecolor/sysevewinthemecoloreditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 		form.on('submit(formEditBean)', function (data) {
@@ -27,7 +27,7 @@ layui.config({
 		        			colorClass:$("#colorClass").val(),
 		        			rowId:parent.rowId
 			        	};
-			        	AjaxPostUtil.request({url:reqBasePath + "sysevewinthemecolor005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url: reqBasePath + "sysevewinthemecolor005", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

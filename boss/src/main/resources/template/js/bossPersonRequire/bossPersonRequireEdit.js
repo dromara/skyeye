@@ -18,7 +18,7 @@ layui.config({
         pagination: false,
         method: "GET",
         template: $("#beanTemplate").html(),
-        ajaxSendAfter: function(json){
+        ajaxSendAfter: function (json) {
             // 附件回显
             skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 

@@ -1299,7 +1299,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 			,filter = options.elem.attr('lay-filter');
 
 		//工具栏操作事件
-		that.layTool.on('click', '*[lay-event]', function(e){
+		that.layTool.on('click', '*[lay-event]', function (e) {
 			var othis = $(this)
 				,events = othis.attr('lay-event')
 				,openPanel = function(sets){
@@ -1317,7 +1317,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 				othis.find('.layui-table-tool-panel')[0] || othis.append(panel);
 				that.renderForm();
 
-				panel.on('click', function(e){
+				panel.on('click', function (e) {
 					layui.stope(e);
 				});
 
@@ -1424,7 +1424,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 		});
 
 		//拖拽调整宽度
-		th.on('mousemove', function(e){
+		th.on('mousemove', function (e) {
 			var othis = $(this)
 				,oLeft = othis.offset().left
 				,pLeft = e.clientX - oLeft;
@@ -1437,7 +1437,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 			var othis = $(this);
 			if(dict.resizeStart) return;
 			_BODY.css('cursor', '');
-		}).on('mousedown', function(e){
+		}).on('mousedown', function (e) {
 			var othis = $(this);
 			if(dict.allowResize){
 				var key = othis.data('key');
@@ -1455,7 +1455,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 		});
 
 		//拖拽中
-		_DOC.on('mousemove', function(e){
+		_DOC.on('mousemove', function (e) {
 			if(dict.resizeStart){
 				e.preventDefault();
 				if(dict.rule){
@@ -1466,7 +1466,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 				}
 				resizing = 1
 			}
-		}).on('mouseup', function(e){
+		}).on('mouseup', function (e) {
 			if(dict.resizeStart){
 				dict = {};
 				_BODY.css('cursor', '');
@@ -1478,7 +1478,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 		});
 
 		//排序
-		th.on('click', function(e){
+		th.on('click', function (e) {
 			var othis = $(this)
 				,elemSort = othis.find(ELEM_SORT)
 				,nowType = elemSort.attr('lay-sort')
@@ -1494,7 +1494,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 				type = 'asc';
 			}
 			that.sort(othis, type, null, true);
-		}).find(ELEM_SORT+' .layui-edge ').on('click', function(e){
+		}).find(ELEM_SORT+' .layui-edge ').on('click', function (e) {
 			var othis = $(this)
 				,index = othis.index()
 				,field = othis.parents('th').eq(0).data('field')
@@ -1657,7 +1657,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 		});
 
 		//单元格单击事件
-		that.layBody.on('click', 'td', function(e){
+		that.layBody.on('click', 'td', function (e) {
 			var othis = $(this)
 				,field = othis.data('field')
 				,editType = othis.data('edit')
@@ -1697,7 +1697,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 		};
 
 		//单元格展开事件
-		that.layBody.on('click', '.'+ ELEM_GRID_DOWN, function(e){
+		that.layBody.on('click', '.'+ ELEM_GRID_DOWN, function (e) {
 			var othis = $(this)
 				,td = othis.parent()
 				,elemCell = td.children(ELEM_CELL);

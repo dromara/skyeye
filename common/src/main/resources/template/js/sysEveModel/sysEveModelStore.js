@@ -32,7 +32,7 @@ layui.config({
 				});
 		 	},
 		 	options: {},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$(".collection").hide();
 		 		
 		 		//遮罩层移入移出事件
@@ -50,7 +50,7 @@ layui.config({
 	}
     
     // 一级分类点击事件
-    $("#firstType").on('click', "a", function(e){
+    $("#firstType").on('click', "a", function (e) {
     	$("#firstType").find("li").removeClass("active");
     	$(this).parent().addClass("active");
 		firstType = $(this).attr("rowid");
@@ -63,7 +63,7 @@ layui.config({
     });
     
     // 二级分类点击事件
-	$("#secondType").on('click', "a", function(e){
+	$("#secondType").on('click', "a", function (e) {
 		$("#secondType").find("li").removeClass("active");
 		$(this).parent().addClass("active");
 		secondType = $(this).attr("rowid");

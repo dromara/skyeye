@@ -22,7 +22,7 @@ layui.config({
 		 	template: getFileContent('tpl/customermanage/customereditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		// 获取客户类型状态为上线的所有记录
 				sysCustomerUtil.queryCustomerTypeIsUpList(function (data){
 					$("#typeId").html(getDataUseHandlebars(selectMust, data));
@@ -118,7 +118,7 @@ layui.config({
 	 	        			params.chargeUser = userList[0].id;
 		                }
 	 	        		
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customer004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customer004", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -133,7 +133,7 @@ layui.config({
 		});
 		
 		// 负责人选择
-		$("body").on("click", "#userNameSelPeople", function(e){
+		$("body").on("click", "#userNameSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

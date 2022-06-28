@@ -22,7 +22,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/materialunit/materialuniteditTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		
 		 		$.each(json.bean.unitList, function(i, item){
 		 			if(item.baseUnit.toString() === "1"){//基础数据
@@ -56,7 +56,7 @@ layui.config({
 			 	        	unitNameStr: JSON.stringify(tableData),
 			 	        	rowId: parent.rowId
 		 	        	};
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "materialunit005", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "materialunit005", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

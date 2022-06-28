@@ -95,7 +95,7 @@ layui.config({
 			firstTime: thefirstTime, 
 			lastTime: thesecondTime
     	};
-    	AjaxPostUtil.request({url:reqBasePath + "diary022", params: params, type: 'json', callback: function(json){
+    	AjaxPostUtil.request({url: reqBasePath + "diary022", params: params, type: 'json', callback: function (json) {
     		if (json.returnCode == 0) {
     			ydata = json.rows;
     			echartsPie.setOption({ 

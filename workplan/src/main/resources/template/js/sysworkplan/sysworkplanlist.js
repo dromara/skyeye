@@ -63,7 +63,7 @@ layui.config({
 	});
 	
 	//对左侧菜单项的点击事件
-	$("body").on("click", "#setting a", function(e){
+	$("body").on("click", "#setting a", function (e) {
 		$(".setting a").removeClass("selected");
 		$(this).addClass("selected");
 		checkPlan = $(this).data("check");
@@ -71,7 +71,7 @@ layui.config({
 	});
 	
 	//计划类型按钮点击
-	$("body").on("click", ".plan-type-btn", function(e){
+	$("body").on("click", ".plan-type-btn", function (e) {
 		var dataType = $(this).data("type");
 		if(dataType != nowCheckType){
 			$(".plan-type-btn").removeClass("plan-select");
@@ -91,7 +91,7 @@ layui.config({
 	});
 	
 	//日期选择
-	$("body").on("click", ".plan-choose li", function(e){
+	$("body").on("click", ".plan-choose li", function (e) {
 		if(!$(this).hasClass('active')){
 			$(".plan-choose li").removeClass("active");
 			$(this).addClass("active");
@@ -236,7 +236,7 @@ layui.config({
 		var msg = "确定取消定时发送吗？";
 		layer.confirm(msg, { icon: 3, title: '取消定时发送' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sysworkplan005", params:{planId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "sysworkplan005", params:{planId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("已取消定时发送", {icon: 1, time: 2000});
     				loadTable();
@@ -251,7 +251,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sysworkplan006", params:{planId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "sysworkplan006", params:{planId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -557,7 +557,7 @@ layui.config({
 	form.render();
 	
 	//新增个人计划
-	$("body").on("click", "#addPeoplePlan", function(e){
+	$("body").on("click", "#addPeoplePlan", function (e) {
 		timeSolt = getTimeSoltStr();
 		_openNewWindows({
 			url: "../../tpl/sysworkplan/sysworkplanadd.html", 
@@ -575,7 +575,7 @@ layui.config({
 	});
 	
 	//新增部门计划
-	$("body").on("click", "#addDepartmentPlan", function(e){
+	$("body").on("click", "#addDepartmentPlan", function (e) {
 		timeSolt = getTimeSoltStr();
 		_openNewWindows({
 			url: "../../tpl/sysworkplan/sysworkplandepadd.html", 
@@ -593,7 +593,7 @@ layui.config({
 	});
 	
 	//新增公司计划
-	$("body").on("click", "#addCompanyPlan", function(e){
+	$("body").on("click", "#addCompanyPlan", function (e) {
 		timeSolt = getTimeSoltStr();
 		if(isNull(timeSolt)){
 			winui.window.msg("时间维度错误。", {icon: 2, time: 2000});
@@ -672,7 +672,7 @@ layui.config({
 	});
 	
 	//刷新数据
-	$("body").on("click", "#reloadTable", function(e){
+	$("body").on("click", "#reloadTable", function (e) {
 		loadTable();
 	});
 	

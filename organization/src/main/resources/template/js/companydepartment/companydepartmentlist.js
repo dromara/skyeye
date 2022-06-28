@@ -15,7 +15,7 @@ layui.config({
 	
 	authBtn('1552961771842');
 	
-	systemCommonUtil.getSysCompanyList(function(json){
+	systemCommonUtil.getSysCompanyList(function (json) {
 		// 加载企业数据
 		$("#companyId").html(getDataUseHandlebars(selTemplate, json));
 		// 初始化加载表格
@@ -82,7 +82,7 @@ layui.config({
 	function del(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "companydepartment003", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "companydepartment003", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();

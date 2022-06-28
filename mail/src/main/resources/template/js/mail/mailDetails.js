@@ -18,7 +18,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.category == 1){
 		 			// 个人通讯录
 		 			$("#typeIdBox").removeClass('layui-hide');

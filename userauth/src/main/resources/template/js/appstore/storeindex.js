@@ -19,7 +19,7 @@ layui.config({
 	 	template: getFileContent('tpl/appstore/firsttypeTemplate.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 	}
 	});
 	
@@ -52,7 +52,7 @@ layui.config({
 			 	});
 		 	},
 		 	options: {},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$(".sysExperience").hide();
 		 		$(".aysnMenu").hide();
 		 		
@@ -73,7 +73,7 @@ layui.config({
 	}
     
     //一级分类点击事件
-    $("#sysFirstType").on('click', "a", function(e){
+    $("#sysFirstType").on('click', "a", function (e) {
     	$("#sysFirstType").find("li").removeClass("active");
     	$(this).parent().addClass("active");
     	var rowId = $(this).attr("rowid");
@@ -86,7 +86,7 @@ layui.config({
 		 	template: getFileContent('tpl/appstore/secondtypeTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('checkbox');
 		 		initDate();
 		 	}
@@ -103,7 +103,7 @@ layui.config({
 		initDate();
 	});
     //二级分类全选操作
-    $("#sysSecondType").on('click', "a[rowid='111']", function(e){
+    $("#sysSecondType").on('click', "a[rowid='111']", function (e) {
     	$.each($('#sysSecondType input:checkbox'), function() {
     		$(this).prop("checked", true);
     	});
@@ -113,18 +113,18 @@ layui.config({
     });
     
     //体验
-    $("body").on('click', ".sysExperience", function(e){
+    $("body").on('click', ".sysExperience", function (e) {
     	var sysurl = $(this).attr('sysurl');
     	window.open(sysurl, '_blank', '');
     });
     
     //详情
-    $("body").on('click', ".sysDetails", function(e){
+    $("body").on('click', ".sysDetails", function (e) {
     	
     });
     
     //同步
-    $("body").on('click', ".aysnMenu", function(e){
+    $("body").on('click', ".aysnMenu", function (e) {
     	var downLoadId = $(this).attr("rowid");
     	layer.prompt({
 			formType: 0,
@@ -135,7 +135,7 @@ layui.config({
 			layer.confirm('确定从该地址：[' + val + ']进行数据同步吗？', { icon: 3, title: '数据同步' }, function (index) {
 				layer.close(index);
 	            
-				AjaxPostUtil.request({url:reqBasePath + "sysimportantsynchronization001", params:{rowId: downLoadId, url: val}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "sysimportantsynchronization001", params:{rowId: downLoadId, url: val}, type: 'json', callback: function (json) {
 	    			if (json.returnCode == 0) {
 	    				winui.window.msg("同步成功", {icon: 1, time: 2000});
 	    			} else {

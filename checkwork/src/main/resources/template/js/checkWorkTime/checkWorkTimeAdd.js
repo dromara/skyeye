@@ -147,7 +147,7 @@ layui.config({
  	        		state: $("input[name='state']:checked").val(),
  	        		weekDay: JSON.stringify(weekDay)
  	        	};
- 	        	AjaxPostUtil.request({url: flowableBasePath + "checkworktime002", params: params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "checkworktime002", params: params, type: 'json', callback: function (json) {
  	        		if (json.returnCode == 0) {
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';

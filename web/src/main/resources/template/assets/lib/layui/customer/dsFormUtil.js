@@ -48,7 +48,7 @@ var dsFormUtil = {
         var btnId = id + 'Btn';
         $("#" + id).attr(dsFormUtil.dsFormDataKey, JSON.stringify(initData));
         dsFormUtil.initData(id, btnId);
-        $("body").on("click", "#" + btnId, function(e){
+        $("body").on("click", "#" + btnId, function (e) {
             dsFormUtil.dsFormChooseList = [].concat(JSON.parse($("#" + id).attr("initData")));
             dsFormUtil.openDsFormPageChoosePage(function (){
                 $("#" + id).attr(dsFormUtil.dsFormDataKey, JSON.stringify(dsFormUtil.dsFormChooseList));
@@ -100,7 +100,7 @@ var dsFormUtil = {
             template: getFileContent('tpl/template/select-option.tpl'),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter: function(json){
+            ajaxSendAfter: function (json) {
             }
         });
     },

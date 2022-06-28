@@ -151,21 +151,14 @@ layui.config({
 			remark: "remark" + rowNum.toString() //备注id
 		};
 		$("#purchaseTable").append(getDataUseHandlebars(purchasetableTemplate, par));
-		//赋值给资产类别
+		// 赋值给资产类别
 		$("#" + "typeId" + rowNum.toString()).html(typeHtml);
-		//赋值给资产来源
+		// 赋值给资产来源
 		$("#" + "fromId" + rowNum.toString()).html(fromHtml);
-		//构造上传
-		//初始化上传
-		$("#" + "managementImg" + rowNum.toString()).upload({
-			"action": reqBasePath + "common003",
-			"data-num": "1",
-			"data-type": "PNG,JPG,jpeg,gif",
-			"uploadType": 6,
-			"function": function (_this, data) {
-				show("#" + "managementImg" + rowNum.toString(), data);
-			}
-		});
+
+		// 初始化上传
+		$("#" + "managementImg" + rowNum.toString()).upload(systemCommonUtil.uploadCommon003Config("managementImg" + rowNum.toString(), 6, '', 1));
+
 		form.render('select');
 		form.render('checkbox');
 		rowNum++;

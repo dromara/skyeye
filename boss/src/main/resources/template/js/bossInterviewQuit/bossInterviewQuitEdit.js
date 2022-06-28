@@ -19,7 +19,7 @@ layui.config({
         pagination: false,
         method: "GET",
         template: $("#beanTemplate").html(),
-        ajaxSendAfter: function(json){
+        ajaxSendAfter: function (json) {
             // 离职类型
             $("#leaveType").html(getDataUseHandlebars(selOption, {rows: bossUtil.getLeaveTypeList()}));
             $("#leaveType").val(json.bean.leaveType);

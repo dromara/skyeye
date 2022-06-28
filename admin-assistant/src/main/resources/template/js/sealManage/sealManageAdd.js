@@ -35,7 +35,7 @@ layui.config({
  	        		winui.window.msg("请选择管理人", {icon: 2, time: 2000});
  	        		return false;
         		}
- 	        	AjaxPostUtil.request({url: flowableBasePath + "seal002", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "seal002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

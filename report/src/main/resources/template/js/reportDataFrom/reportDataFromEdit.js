@@ -208,7 +208,7 @@ layui.config({
                     method: "GET",
                     ajaxSendLoadBefore: function(hdb){
                     },
-                    ajaxSendAfter:function(json){
+                    ajaxSendAfter:function (json) {
                         $("#sqlDataBase").val(bean.sqlDataBaseId);
                     }
                 });

@@ -14,7 +14,7 @@ layui.config({
 	    if(!isNull(parent.executorId)){
 			executorId = parent.executorId;
 		}
-	    AjaxPostUtil.request({url:reqBasePath + "sysworkplan011", params:{planId: parent.rowId, executorId: executorId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "sysworkplan011", params:{planId: parent.rowId, executorId: executorId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
 				$("#showForm").html(getDataUseHandlebars($("#beanTemplate").html(), json));
    			    // 计划周期名称展示

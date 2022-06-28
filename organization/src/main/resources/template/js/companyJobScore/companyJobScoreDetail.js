@@ -21,7 +21,7 @@ layui.config({
 		 	template: $("#showBaseTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 
 				// 加载列表项
 				$.each(json.bean.modelField, function(i, item){

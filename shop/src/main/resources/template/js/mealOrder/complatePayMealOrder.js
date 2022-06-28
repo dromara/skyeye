@@ -11,7 +11,7 @@ layui.config({
         var $ = layui.$;
         var orderNum = "";
 
-        AjaxPostUtil.request({url: shopBasePath + "mealOrder002", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function(json){
+        AjaxPostUtil.request({url: shopBasePath + "mealOrder002", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
             if (json.returnCode == 0) {
                 orderNum = json.bean.orderNum;
                 $("#payPrice").val(json.bean.unformatPayablePrice);
@@ -29,7 +29,7 @@ layui.config({
                     total_fee: parseFloat($("#payPrice").val()).toFixed(2) * 100,
                 };
 
-                AjaxPostUtil.request({url: shopBasePath + "mealOrderNotify", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "mealOrderNotify", params: params, type: 'json', method: "POST", callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';

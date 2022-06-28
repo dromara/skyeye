@@ -59,7 +59,7 @@ layui.config({
 	}
 	
 	//对左侧菜单项的点击事件
-	$("body").on("click", "#setting a", function(e){
+	$("body").on("click", "#setting a", function (e) {
 		$(".setting a").removeClass("selected");
 		$(this).addClass("selected");
 		clickId = $(this).attr("rowid");
@@ -88,7 +88,7 @@ layui.config({
 	 	template: getFileContent('tpl/template/select-option.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		$("#reportType").append("<option value='other'>其他</option>")
 	 		form.render('select');
 	 	}
@@ -237,7 +237,7 @@ layui.config({
 	 	template: getFileContent('tpl/template/select-option.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		$("#checkedReportType").append("<option value='other'>其他</option>")
 	 		form.render('select');
 	 	}

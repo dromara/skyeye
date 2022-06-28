@@ -90,7 +90,7 @@ layui.config({
 	// 初始化公司
 	function initCompany(){
 		loadCompany = true;
-		systemCommonUtil.getSysCompanyList(function(json){
+		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据
 			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
 		});
@@ -105,7 +105,7 @@ layui.config({
 		 	pagination: false,
 		 	template: selTemplate,
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -161,7 +161,7 @@ layui.config({
 	
 	// 锁定
 	function lock(id){
-		AjaxPostUtil.request({url: reqBasePath + "sys002", params: {rowId: id}, type: 'json', method: "PUT", callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "sys002", params: {rowId: id}, type: 'json', method: "PUT", callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg("已成功锁定，该账号目前无法登录.", {icon: 1, time: 2000});
 			} else {
@@ -172,7 +172,7 @@ layui.config({
 	
 	// 解锁
 	function unlock(id){
-		AjaxPostUtil.request({url: reqBasePath + "sys003", params: {rowId: id}, type: 'json', method: "PUT", callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "sys003", params: {rowId: id}, type: 'json', method: "PUT", callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg("账号恢复正常.", {icon: 1, time: 2000});
 			} else {

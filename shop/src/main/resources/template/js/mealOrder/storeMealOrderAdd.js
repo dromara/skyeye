@@ -65,7 +65,7 @@ layui.config({
             enabled: 1
         };
         // 获取会员拥有的车辆信息(已启用)
-        AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: params, type: 'json', method: "POST", callback: function(json){
+        AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: params, type: 'json', method: "POST", callback: function (json) {
             if (json.returnCode == 0) {
                 $.each(json.rows, function (i, item){
                     item.name = item.modelType + "(" + item.plate + ")";
@@ -106,7 +106,7 @@ layui.config({
                     mealList: JSON.stringify(tableData)
                 };
 
-                AjaxPostUtil.request({url: shopBasePath + "insertMealOrder", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "insertMealOrder", params: params, type: 'json', method: "POST", callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
@@ -161,7 +161,7 @@ layui.config({
         }
 
         // 套餐选择
-        $("body").on("click", ".chooseMealBtn", function(e){
+        $("body").on("click", ".chooseMealBtn", function (e) {
             var trId = $(this).parent().parent().attr("trcusid");
             storeId = $("#storeId").val();
             if(isNull(storeId)){

@@ -21,7 +21,7 @@ layui.config({
 		 	template: getFileContent('tpl/documentarymanage/documentaryeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		textool.init({
 			    	eleId: 'detail',
 			    	maxlength: 200,
@@ -74,7 +74,7 @@ layui.config({
 							opportunityId: $("#opportunityId").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "documentary004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "documentary004", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

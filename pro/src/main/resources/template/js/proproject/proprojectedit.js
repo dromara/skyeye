@@ -22,7 +22,7 @@ layui.config({
 		template: getFileContent('tpl/proproject/proprojecteditTemplate.tpl'),
 		ajaxSendLoadBefore: function(hdb){
 		},
-		ajaxSendAfter: function(json){
+		ajaxSendAfter: function (json) {
 			if(json.bean.state == 1){
 				$(".typeTwo").removeClass("layui-hide");
 			} else {
@@ -195,7 +195,7 @@ layui.config({
 			winui.window.msg("请填写业务需求和目标", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "proproject007", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "proproject007", params: params, type: 'json', callback: function (json) {
 			if (json.returnCode == 0){
 				parent.layer.close(index);
 				parent.refreshCode = '0';

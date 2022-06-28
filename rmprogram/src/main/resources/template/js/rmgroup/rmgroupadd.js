@@ -19,7 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 		form.on('select(selectParent)', function(data){
@@ -34,7 +34,7 @@ layui.config({
 		        			icon: $("#rmGroupIcon").val(),
 			        	};
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "rmxcx009", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url: reqBasePath + "rmxcx009", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
@@ -49,7 +49,7 @@ layui.config({
 	    });
 	    
 	    // 菜单图标选中事件
- 	    $("body").on("focus", "#rmGroupIcon", function(e){
+ 	    $("body").on("focus", "#rmGroupIcon", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#rmGroupIcon").val(sysIconChooseClass);
 			});

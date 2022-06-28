@@ -43,7 +43,7 @@ layui.config({
 	 	options: {'click .del':function(index, row){
 				layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 					layer.close(index);
-		            AjaxPostUtil.request({url: flowableBasePath + "ifsVoucher003", params: {rowId: row.id}, type: 'json', method: "DELETE", callback: function(json){
+		            AjaxPostUtil.request({url: flowableBasePath + "ifsVoucher003", params: {rowId: row.id}, type: 'json', method: "DELETE", callback: function (json) {
 		    			if (json.returnCode == 0) {
 		    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 		    				loadTable();
@@ -61,7 +61,7 @@ layui.config({
 				}
 	 		}
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		authBtn('1641208155066');
 	 		matchingLanguage();
 	 	}
@@ -81,7 +81,7 @@ layui.config({
 					voucherPath: json.bean.picUrl,
 					fileName: json.bean.fileName
 				}
-				AjaxPostUtil.request({url: flowableBasePath + "ifsVoucher002", params: param, type: 'json', method: "POST", callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "ifsVoucher002", params: param, type: 'json', method: "POST", callback: function (json) {
 	    			if (json.returnCode == 0) {
 	    				winui.window.msg("上传成功", {icon: 1, time: 2000});
 	    				loadTable();

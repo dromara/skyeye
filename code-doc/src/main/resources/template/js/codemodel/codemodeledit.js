@@ -22,9 +22,9 @@ layui.config({
 		 	template: getFileContent('tpl/codemodel/codemodeleditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 				// 根据类型获取部分功能的使用说明
-				systemCommonUtil.queryExplainMationByType(1, function(json){
+				systemCommonUtil.queryExplainMationByType(1, function (json) {
 					$(".layui-colla-title").html(json.bean.title);
 					$(".layui-colla-content").html(json.bean.content);
 				});
@@ -69,7 +69,7 @@ layui.config({
 			        			rowId: parent.rowId
 				        	};
 				        	
-				        	AjaxPostUtil.request({url:reqBasePath + "codemodel010", params:params, type: 'json', callback: function(json){
+				        	AjaxPostUtil.request({url: reqBasePath + "codemodel010", params: params, type: 'json', callback: function (json) {
 				 	   			if (json.returnCode == 0) {
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';

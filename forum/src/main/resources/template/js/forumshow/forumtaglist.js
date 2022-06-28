@@ -18,7 +18,7 @@ layui.config({
 	$("body").append(getFileContent("tpl/forumshow/commonmenu.tpl"));
 	
 	//标签切换
-	$("body").on("click", "#taglist li", function(e){
+	$("body").on("click", "#taglist li", function (e) {
 		tagId = $(this).attr("rowid");
 		$("#taglist").find("li").removeClass('layui-this');
 		$(this).addClass('layui-this');
@@ -38,7 +38,7 @@ layui.config({
 		 	template: taglistTemplate,
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 	}
 	    });
 	}
@@ -63,7 +63,7 @@ layui.config({
 		 	template: addListTemplate,
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var row = json.rows;
 		 		for(var i = 0;i < row.length; i++){
 		 			var id = row[i].id;
@@ -88,7 +88,7 @@ layui.config({
 	}
 	
 	//我的操作
-	$("body").on("click", ".suspension-menu-icon", function(e){
+	$("body").on("click", ".suspension-menu-icon", function (e) {
 		if($(".drop-down-menu").is(':hidden')){
 			$(".drop-down-menu").show();
 			$(".suspension-menu-icon").removeClass("rotate").addClass("rotate1");
@@ -99,7 +99,7 @@ layui.config({
 	});
 	
 	//详情
-	$("body").on("click", "#addList .forum-main .forum-desc, .forum-main em", function(e){
+	$("body").on("click", "#addList .forum-main .forum-desc, .forum-main em", function (e) {
 		rowId = $(this).parents('div[class^="forum-main"]').eq(0).attr("rowId");
 		location.href = '../../tpl/forumshow/forumitem.html?id=' + rowId;
 	});

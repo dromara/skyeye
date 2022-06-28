@@ -55,7 +55,7 @@ layui.config({
 	        { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 100 },
 	        { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 100}
 	    ]],
-	    done: function(json){
+	    done: function (json) {
 	    	matchingLanguage();
 	    	var str = "超过" + json.bean. noDocumentaryDayNum + "天未跟单";
 	    	if(parseInt(json.bean.noChargeId) == 1){

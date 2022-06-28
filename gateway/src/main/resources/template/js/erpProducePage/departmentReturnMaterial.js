@@ -28,7 +28,7 @@ layui.config({
 	initCustomDocumentaryByType(year);
 	// 统计当前部门月度退料图
 	function initCustomDocumentaryByType(year){
-		AjaxPostUtil.request({url:reqBasePath + "erpproduce003", params: {year: year}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "erpproduce003", params: {year: year}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			renderCharts1(json.rows);
  	   			matchingLanguage();

@@ -17,7 +17,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/schoolsubjectmation/schoolsubjectmationeditTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		
 		 		textool.init({
 			    	eleId: 'desc',
@@ -43,7 +43,7 @@ layui.config({
 		 	        		schoolId: $("#schoolId").val()
 		 	        	};
 
-		 	        	AjaxPostUtil.request({url:schoolBasePath + "schoolsubjectmation004", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url:schoolBasePath + "schoolsubjectmation004", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

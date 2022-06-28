@@ -40,7 +40,7 @@ layui.config({
 		 			}
 		 		});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		
 		 		laydate.render({
 		 			elem: '#endTime', //指定元素
@@ -153,7 +153,7 @@ layui.config({
 			        		params.endTime = '';
 			        	}
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory005", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

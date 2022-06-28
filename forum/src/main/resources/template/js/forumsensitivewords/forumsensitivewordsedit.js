@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/forumsensitivewords/forumsensitivewordseditTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
@@ -24,7 +24,7 @@ layui.config({
 		 	        		rowId: parent.rowId,
 		 	        		sensitiveWord: $("#sensitiveWord").val(),
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "sensitiveword005", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "sensitiveword005", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

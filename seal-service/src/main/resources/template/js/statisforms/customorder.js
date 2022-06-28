@@ -46,7 +46,7 @@ layui.config({
 	 	template: getFileContent('tpl/template/select-option.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		initTable();
 	 	}
 	});
@@ -113,7 +113,7 @@ layui.config({
     	table.reload("messageTable", {page: {curr: 1}, where: {customName: $("#customName").val(), serviceType: $("#serviceType").val(), startTime: startTime, endTime: endTime}});
     }
     
-    $("body").on("click", ".plan-type-btn", function(e){
+    $("body").on("click", ".plan-type-btn", function (e) {
     	$(".plan-type-btn").removeClass("plan-select");
 		$(this).addClass("plan-select");
 		loadCheckType($(this).data("type"));

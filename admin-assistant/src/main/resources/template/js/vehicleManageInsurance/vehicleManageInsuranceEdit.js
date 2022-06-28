@@ -65,7 +65,7 @@ layui.config({
 		 	template: getFileContent('tpl/vehicleManageInsurance/vehicleManageInsuranceEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 投保有效期时间
 				laydate.render({
 					elem: '#validityTime',
@@ -172,7 +172,7 @@ layui.config({
 	 				 	 	        		return false;
 	 				 	                }
 	 				 	        	}
-	 			 	 	        	AjaxPostUtil.request({url: flowableBasePath + "insurance005", params:params, type: 'json', callback: function(json){
+	 			 	 	        	AjaxPostUtil.request({url: flowableBasePath + "insurance005", params: params, type: 'json', callback: function (json) {
 	 			 		 	   			if (json.returnCode == 0) {
 	 			 			 	   			parent.layer.close(index);
 	 			 			 	        	parent.refreshCode = '0';

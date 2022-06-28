@@ -56,7 +56,7 @@ layui.config({
 		if(!isNull(treeNode) && treeNode.type == 2) {
 			designId = treeNode.id;
 			$("#flowName").html(treeNode.title);
-			AjaxPostUtil.request({url: reqBasePath + "planprojectflow006", params: {rowId: treeNode.id}, type: 'json', method: "GET", callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "planprojectflow006", params: {rowId: treeNode.id}, type: 'json', method: "GET", callback: function (json) {
 				if (json.returnCode == 0) {
 					$("#zzc").removeClass("zzc");
 					net.changeData();
@@ -163,7 +163,7 @@ layui.config({
 	function del(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-			AjaxPostUtil.request({url: reqBasePath + "planprojectflow003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "planprojectflow003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					if(data.id === designId){
@@ -238,28 +238,28 @@ layui.config({
     net.edge().tooltip(['label']);
 	
 	//设置点击选中项
-	net.on("itemactived", function(e){
+	net.on("itemactived", function (e) {
 		sel = e.item;
 	});
 	
-	$("body").on("mouseenter", "#delete", function(e){//删除
+	$("body").on("mouseenter", "#delete", function (e) {//删除
 		tip_index = layer.tips('删除', '#delete', {time: 0, tips: 3});
 	}).on('mouseleave', '#delete', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#delete", function(e){//删除
+	$("body").on("click", "#delete", function (e) {//删除
 		if(sel){
 			net.remove(sel);
 		}
 		sel = null;
 	});
 	
-	$("body").on("mouseenter", "#addCustom1", function(e){//添加起止节点
+	$("body").on("mouseenter", "#addCustom1", function (e) {//添加起止节点
 		tip_index = layer.tips('起止节点', '#addCustom1', {time: 0, tips: 3});
 	}).on('mouseleave', '#addCustom1', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addCustom1", function(e){//添加起止节点
+	$("body").on("click", "#addCustom1", function (e) {//添加起止节点
 		net.beginAdd('node', {
 	        label: '[起止节点]',
 	        shape: 'circle',
@@ -267,12 +267,12 @@ layui.config({
 	    });
 	});
 	
-	$("body").on("mouseenter", "#addCustom2", function(e){//添加常规节点
+	$("body").on("mouseenter", "#addCustom2", function (e) {//添加常规节点
 		tip_index = layer.tips('常规节点', '#addCustom2', {time: 0, tips: 3});
 	}).on('mouseleave', '#addCustom2', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addCustom2", function(e){//添加常规节点
+	$("body").on("click", "#addCustom2", function (e) {//添加常规节点
 		net.beginAdd('node', {
 			label: '[常规节点]',
 			shape: 'rect',
@@ -281,12 +281,12 @@ layui.config({
 	    net.refresh();
 	});
 	
-	$("body").on("mouseenter", "#addCustom3", function(e){//添加条件节点
+	$("body").on("mouseenter", "#addCustom3", function (e) {//添加条件节点
 		tip_index = layer.tips('条件节点', '#addCustom3', {time: 0, tips: 3});
 	}).on('mouseleave', '#addCustom3', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addCustom3", function(e){//添加条件节点
+	$("body").on("click", "#addCustom3", function (e) {//添加条件节点
 		net.beginAdd('node', {
 	        label: '[条件节点]',
 	        shape: 'rhombus',
@@ -294,97 +294,97 @@ layui.config({
 	    });
 	});
 
-	$("body").on("mouseenter", "#addLine", function(e){//添加普通直线
+	$("body").on("mouseenter", "#addLine", function (e) {//添加普通直线
 		tip_index = layer.tips('添加普通直线', '#addLine', {time: 0, tips: 3});
 	}).on('mouseleave', '#addLine', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addLine", function(e){//添加普通直线
+	$("body").on("click", "#addLine", function (e) {//添加普通直线
 		net.beginAdd('edge', {
 	        shape: 'line',
 	        color: 'red',
 	    });
 	});
 	
-	$("body").on("mouseenter", "#addArrowLine", function(e){//添加箭头直线
+	$("body").on("mouseenter", "#addArrowLine", function (e) {//添加箭头直线
 		tip_index = layer.tips('添加箭头直线', '#addArrowLine', {time: 0, tips: 3});
 	}).on('mouseleave', '#addArrowLine', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addArrowLine", function(e){//添加箭头直线
+	$("body").on("click", "#addArrowLine", function (e) {//添加箭头直线
 		net.beginAdd('edge', {
 	        shape: 'arrow',
 	    });
 	});
 	
-	$("body").on("mouseenter", "#addSmooth", function(e){//添加曲线
+	$("body").on("mouseenter", "#addSmooth", function (e) {//添加曲线
 		tip_index = layer.tips('添加曲线', '#addSmooth', {time: 0, tips: 3});
 	}).on('mouseleave', '#addSmooth', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addSmooth", function(e){//添加曲线
+	$("body").on("click", "#addSmooth", function (e) {//添加曲线
 		net.beginAdd('edge', {
 	        shape: 'smooth'
 	    });
 	});
 	
-	$("body").on("mouseenter", "#addArrowSmooth", function(e){//添加箭头曲线
+	$("body").on("mouseenter", "#addArrowSmooth", function (e) {//添加箭头曲线
 		tip_index = layer.tips('添加箭头曲线', '#addArrowSmooth', {time: 0, tips: 3});
 	}).on('mouseleave', '#addArrowSmooth', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addArrowSmooth", function(e){//添加箭头曲线
+	$("body").on("click", "#addArrowSmooth", function (e) {//添加箭头曲线
 		net.beginAdd('edge', {
 	        shape: 'smoothArrow'
 	    });
 	});
 	
-	/*$("body").on("mouseenter", "#addLineFlow", function(e){//添加折线
+	/*$("body").on("mouseenter", "#addLineFlow", function (e) {//添加折线
 		tip_index = layer.tips('添加折线', '#addLineFlow', {time: 0, tips: 3});
 	}).on('mouseleave', '#addLineFlow', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addLineFlow", function(e){//添加折线
+	$("body").on("click", "#addLineFlow", function (e) {//添加折线
 		net.beginAdd('edge', {
 	        shape: 'polyLine'
 	    });
 	});*/
 	
-	$("body").on("mouseenter", "#addPolyLineFlow", function(e){//添加箭头折线
+	$("body").on("mouseenter", "#addPolyLineFlow", function (e) {//添加箭头折线
 		tip_index = layer.tips('添加箭头折线', '#addPolyLineFlow', {time: 0, tips: 3});
 	}).on('mouseleave', '#addPolyLineFlow', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#addPolyLineFlow", function(e){//添加箭头折线
+	$("body").on("click", "#addPolyLineFlow", function (e) {//添加箭头折线
 		net.beginAdd('edge', {
 	        shape: 'polyLineFlow'
 	    });
 	});
 	
-	$("body").on("mouseenter", "#drag", function(e){//拖拽模式
+	$("body").on("mouseenter", "#drag", function (e) {//拖拽模式
 		tip_index = layer.tips('拖拽模式', '#drag', {time: 0, tips: 3});
 	}).on('mouseleave', '#drag', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#drag", function(e){//拖拽模式
+	$("body").on("click", "#drag", function (e) {//拖拽模式
 		net.changeMode('drag');
 	});
 	
-	$("body").on("mouseenter", "#edit", function(e){//编辑模式
+	$("body").on("mouseenter", "#edit", function (e) {//编辑模式
 		tip_index = layer.tips('编辑模式', '#edit', {time: 0, tips: 3});
 	}).on('mouseleave', '#edit', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#edit", function(e){//编辑模式
+	$("body").on("click", "#edit", function (e) {//编辑模式
 		net.changeMode('edit');
 	});
 	
-	$("body").on("mouseenter", "#reLayout", function(e){//自动布局
+	$("body").on("mouseenter", "#reLayout", function (e) {//自动布局
 		tip_index = layer.tips('自动布局', '#reLayout', {time: 0, tips: 3});
 	}).on('mouseleave', '#reLayout', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#reLayout", function(e){//自动布局
+	$("body").on("click", "#reLayout", function (e) {//自动布局
 		var a = net.save();
 		net.changeData();
 		$.each(a.source.edges, function(index, item){
@@ -399,15 +399,15 @@ layui.config({
         net.render();
 	});
 	
-	$("body").on("mouseenter", "#consoleJSON", function(e){//保存
+	$("body").on("mouseenter", "#consoleJSON", function (e) {//保存
 		tip_index = layer.tips('保存', '#consoleJSON', {time: 0, tips: 3});
 	}).on('mouseleave', '#consoleJSON', function() {
         layer.close(tip_index);
     });
-	$("body").on("click", "#consoleJSON", function(e){//保存
+	$("body").on("click", "#consoleJSON", function (e) {//保存
 		const saveData = net.save();
 	    const json = JSON.stringify(saveData, null, 2);
-	    AjaxPostUtil.request({url: reqBasePath + "planprojectflow007", params: {rowId: designId, jsonContent: json}, type: 'json', method: "POST", callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "planprojectflow007", params: {rowId: designId, jsonContent: json}, type: 'json', method: "POST", callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg("保存成功", {icon: 1, time: 2000});
 			} else {

@@ -149,7 +149,7 @@ layui.config({
 					id: event.id,
 					rowId: event.id
 				};
-				AjaxPostUtil.request({url:reqBasePath + "syseveschedule005", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "syseveschedule005", params: params, type: 'json', callback: function (json) {
 					if (json.returnCode == 0) {
 						joinTodaySchedule(params);
 					} else {
@@ -166,7 +166,7 @@ layui.config({
 			eventMouseover: function(event, jsEvent, view){//鼠标移入事件
 			},
 			events: function(start, end, timezone, callback){
-				AjaxPostUtil.request({url:reqBasePath + "syseveschedule002", params:{yearMonth: start._d.format("yyyy-MM"), checkWorkId: $("#checkTime").val()}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "syseveschedule002", params:{yearMonth: start._d.format("yyyy-MM"), checkWorkId: $("#checkTime").val()}, type: 'json', callback: function (json) {
 					if (json.returnCode == 0) {
 						callback(json.rows);
 					} else {
@@ -194,7 +194,7 @@ layui.config({
 				});
 			},
 			options: {},
-			ajaxSendAfter:function(json){
+			ajaxSendAfter:function (json) {
 			}
 		});
 		matchingLanguage();
@@ -219,13 +219,13 @@ layui.config({
 	});
 	
 	// 日程点击事件查看详情
-	$("#schedule-list").on("click", ".layui-timeline-content", function(e){
+	$("#schedule-list").on("click", ".layui-timeline-content", function (e) {
 		loadScheduleDetails($(this).attr("rowid"));
 	});
 
 	// 加载日程详情
 	function loadScheduleDetails(id){
-		AjaxPostUtil.request({url:reqBasePath + "syseveschedule006", params:{rowId: id}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "syseveschedule006", params:{rowId: id}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				json.bean.scheduleRemarks = stringManipulation.textAreaShow(json.bean.scheduleRemarks);
 				showDataUseHandlebars("schedule-detail", getFileContent('tpl/index/scheduleDetail.tpl'), json);
@@ -236,7 +236,7 @@ layui.config({
 	}
 
 	//删除日程
-	$("#schedule-list").on("click", ".schrdule-del", function(e){
+	$("#schedule-list").on("click", ".schrdule-del", function (e) {
 		var id = $(this).parent().parent().attr("rowid");
 		layer.confirm('确认删除该日程吗？', {id: 'schrdule-del-confim', icon: 3, title: '删除日程', skin: 'msg-skin-message', success: function(layero, index){
 			var times = $("#schrdule-del-confim").parent().attr("times");
@@ -244,7 +244,7 @@ layui.config({
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url:reqBasePath + "syseveschedule007", params:{rowId: id}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "syseveschedule007", params:{rowId: id}, type: 'json', callback: function (json) {
 	   			if (json.returnCode == 0) {
 	   				$('div[rowid="' + id + '"]').parent().remove();
 	   				calendar.fullCalendar('removeEvents', [id]);

@@ -40,7 +40,7 @@ layui.config({
 		template: getFileContent('tpl/template/select-option.tpl'),
 		ajaxSendLoadBefore: function(hdb){
 		},
-		ajaxSendAfter:function(json){
+		ajaxSendAfter:function (json) {
 			form.render('select');
 			departmentId();
 		}
@@ -66,7 +66,7 @@ layui.config({
 			template: getFileContent('tpl/template/select-option.tpl'),
 			ajaxSendLoadBefore: function(hdb){
 			},
-			ajaxSendAfter:function(json){
+			ajaxSendAfter:function (json) {
 				customerList = json.rows;
 				form.render('select');
 			}
@@ -102,7 +102,7 @@ layui.config({
 			template: getFileContent('tpl/template/select-option.tpl'),
 			ajaxSendLoadBefore: function(hdb){
 			},
-			ajaxSendAfter:function(json){
+			ajaxSendAfter:function (json) {
 				form.render('select');
 			}
 		});
@@ -157,7 +157,7 @@ layui.config({
 			winui.window.msg("请填写业务需求和目标", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "proproject003", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "proproject003", params: params, type: 'json', callback: function (json) {
 			if (json.returnCode == 0){
 				parent.layer.close(index);
 				parent.refreshCode = '0';

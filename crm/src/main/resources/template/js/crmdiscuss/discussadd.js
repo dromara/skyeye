@@ -84,7 +84,7 @@ layui.config({
 				} else {
 					params.content = encodeURIComponent(layedit.getContent(completedContent));
 				}
-    			AjaxPostUtil.request({url: flowableBasePath + "opportunity009", params: params, type: 'json', callback: function(json){
+    			AjaxPostUtil.request({url: flowableBasePath + "opportunity009", params: params, type: 'json', callback: function (json) {
     				if (json.returnCode == 0){
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';

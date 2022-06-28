@@ -17,7 +17,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: simpleTemplate,
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 matchingLanguage();
                 form.render();
             }

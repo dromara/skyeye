@@ -77,7 +77,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除问卷' }, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory025", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory025", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -164,7 +164,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '问卷发布' }, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory023", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory023", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("发布成功", {icon: 1, time: 2000});
     				loadTable();
@@ -181,7 +181,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '结束调查' }, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory030", params:{surveyId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory030", params:{surveyId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("结束成功", {icon: 1, time: 2000});
     				loadTable();

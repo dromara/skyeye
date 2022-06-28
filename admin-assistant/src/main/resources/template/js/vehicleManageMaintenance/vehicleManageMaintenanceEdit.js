@@ -20,7 +20,7 @@ layui.config({
 		 	template: getFileContent('tpl/vehicleManageMaintenance/vehicleManageMaintenanceEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 维修保养时间段选择
 				laydate.render({
 					elem: '#maintenanceTime',
@@ -48,7 +48,7 @@ layui.config({
 	 	 	        		maintenanceType: $("input[name='maintenanceType']:checked").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "maintenance005", params:params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "maintenance005", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

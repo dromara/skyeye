@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysnoticetype/sysnoticetypeeditTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.pId === '二级类型'){	//该类型为二级类型
 		 			$("#parentIdBox").removeClass("layui-hide");
  	        	}
@@ -29,7 +29,7 @@ layui.config({
 		 	        		rowId: parent.rowId,
 		 	        		typeName: $("#typeName").val(),
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "noticetype007", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "noticetype007", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

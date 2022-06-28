@@ -592,7 +592,7 @@
             var _this = this;
 
             /* 滚动拉取图片 */
-            domUtils.on($G('fileList'), 'scroll', function(e){
+            domUtils.on($G('fileList'), 'scroll', function (e) {
                 var panel = this;
                 if (panel.scrollHeight - (panel.offsetHeight + panel.scrollTop) < 10) {
                     _this.getFileData();

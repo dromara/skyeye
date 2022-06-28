@@ -32,7 +32,7 @@ layui.config({
 		table.reload("messageTable", {page: {curr: 1}, where:{chooseId: chooseId, title: $("#title").val()}});
     });
 	
-	$("body").on("click", ".setting a", function(e){//左侧目录列表点击事件
+	$("body").on("click", ".setting a", function (e) {//左侧目录列表点击事件
 		$(".setting a").removeClass("selected");
 		$(this).addClass("selected");
 		chooseId = $(this).attr("rowid");
@@ -41,7 +41,7 @@ layui.config({
 	
 	//新增分类
 	$("body").on("click", "#addBean", function() {
-		AjaxPostUtil.request({url:reqBasePath + "appworkpage002", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "appworkpage002", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				chooseId = json.bean.id;
    				showList();
@@ -53,7 +53,7 @@ layui.config({
    			    obj.find("input").blur(function(){
    			    	var value = obj.find("input").val();
    			    	if(value.length > 0){
-   			    		AjaxPostUtil.request({url:reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function(json){
+   			    		AjaxPostUtil.request({url: reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function (json) {
    		   		   			if (json.returnCode == 0) {
    		   		   				showMenu();
    		   		   			} else {
@@ -93,7 +93,7 @@ layui.config({
 	
 	//加载目录
 	function showMenu(){
-		AjaxPostUtil.request({url:reqBasePath + "appworkpage001", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "appworkpage001", params: {}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				if(json.total > 0){
 					var str = getDataUseHandlebars(appWorkPageTemplate, json);
@@ -200,7 +200,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "appworkpage007", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "appworkpage007", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				showList();
@@ -213,7 +213,7 @@ layui.config({
 	
 	//上移
 	function topOne(data){
-		AjaxPostUtil.request({url:reqBasePath + "appworkpage008", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "appworkpage008", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				showList();
@@ -225,7 +225,7 @@ layui.config({
 	
 	//下移
 	function lowerOne(data){
-		AjaxPostUtil.request({url:reqBasePath + "appworkpage009", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "appworkpage009", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				showList();
@@ -240,7 +240,7 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.title + '】上线吗？' : '确认将选中数据上线吗？';
 		layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "appworkpage010", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "appworkpage010", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				showList();
@@ -256,7 +256,7 @@ layui.config({
 		var msg = obj ? '确认将【' + obj.data.title + '】下线吗？' : '确认将选中数据下线吗？';
 		layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "appworkpage011", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "appworkpage011", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				showList();
@@ -284,7 +284,7 @@ layui.config({
 	}
     
 	//右键
-	$("body").on("contextmenu", "#setting a", function(e){
+	$("body").on("contextmenu", "#setting a", function (e) {
 		chooseId = $(this).attr("rowid");
 		chooseName = $(this).attr("rowname");
 		$("#setting").find("a").removeClass("selected");
@@ -303,7 +303,7 @@ layui.config({
 					var msg = '确认将【' + chooseName + '】上线吗？';
 					layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
 						layer.close(index);
-			            AjaxPostUtil.request({url:reqBasePath + "appworkpage014", params:{rowId: chooseId}, type: 'json', callback: function(json){
+			            AjaxPostUtil.request({url: reqBasePath + "appworkpage014", params:{rowId: chooseId}, type: 'json', callback: function (json) {
 			    			if (json.returnCode == 0) {
 			    				showMenu();
 			    				winui.window.msg("上线成功", {icon: 1, time: 2000});
@@ -323,7 +323,7 @@ layui.config({
 					var msg = '确认将【' + chooseName + '】下线吗？';
 					layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
 						layer.close(index);
-			            AjaxPostUtil.request({url:reqBasePath + "appworkpage015", params:{rowId: chooseId}, type: 'json', callback: function(json){
+			            AjaxPostUtil.request({url: reqBasePath + "appworkpage015", params:{rowId: chooseId}, type: 'json', callback: function (json) {
 			    			if (json.returnCode == 0) {
 			    				showMenu();
 			    				winui.window.msg("下线成功", {icon: 1, time: 2000});
@@ -340,7 +340,7 @@ layui.config({
 				text: "上移",
 				img: "../../assets/images/up-move.png",
 				callback: function() {
-					AjaxPostUtil.request({url:reqBasePath + "appworkpage016", params:{rowId: chooseId}, type: 'json', callback: function(json){
+					AjaxPostUtil.request({url: reqBasePath + "appworkpage016", params:{rowId: chooseId}, type: 'json', callback: function (json) {
 						if (json.returnCode == 0) {
 							showMenu();
 							winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -356,7 +356,7 @@ layui.config({
 				text: "下移",
 				img: "../../assets/images/down-move.png",
 				callback: function() {
-					AjaxPostUtil.request({url:reqBasePath + "appworkpage017", params:{rowId: chooseId}, type: 'json', callback: function(json){
+					AjaxPostUtil.request({url: reqBasePath + "appworkpage017", params:{rowId: chooseId}, type: 'json', callback: function (json) {
 						if (json.returnCode == 0) {
 							showMenu();
 							winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -374,7 +374,7 @@ layui.config({
 				callback: function() {
 					layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 						layer.close(index);
-				        AjaxPostUtil.request({url:reqBasePath + "appworkpage013", params:{rowId: chooseId}, type: 'json', callback: function(json){
+				        AjaxPostUtil.request({url: reqBasePath + "appworkpage013", params:{rowId: chooseId}, type: 'json', callback: function (json) {
 							if (json.returnCode == 0) {
 								winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 								chooseId = "";
@@ -399,7 +399,7 @@ layui.config({
 	   			    	var value = obj.find("input").val();
 	   			    	if(value.length > 0){
 	   			    		if(value != chooseName){
-	   			    			AjaxPostUtil.request({url:reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function(json){
+	   			    			AjaxPostUtil.request({url: reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function (json) {
 				   		   			if (json.returnCode == 0) {
 				   		   				showMenu();
 				   		   			} else {

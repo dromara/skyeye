@@ -12,15 +12,8 @@ layui.config({
 	    var colorpicker = layui.colorpicker,
 	    	textool = layui.textool;
 
-		$("#menuIconPic").upload({
-			"action": reqBasePath + "common003",
-			"data-num": "1",
-			"data-type": "PNG,JPG,jpeg,gif",
-			"uploadType": 17,
-			"function": function (_this, data) {
-				show("#menuIconPic", data);
-			}
-		});
+		// 初始化上传
+		$("#menuIconPic").upload(systemCommonUtil.uploadCommon003Config('menuIconPic', 17, '', 1));
 
 	    //初始化动态表单
 	    initDsForm();
@@ -71,7 +64,7 @@ layui.config({
             template: getFileContent('tpl/template/select-option.tpl'),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 form.render('select');
             }
         });
@@ -98,7 +91,7 @@ layui.config({
  				params: {},
  				pagination: false,
  				template: getFileContent('tpl/template/select-option-must.tpl'),
- 				ajaxSendAfter: function(json){
+ 				ajaxSendAfter: function (json) {
  					form.render('select');
  				}
  			})
@@ -168,7 +161,7 @@ layui.config({
 					return false;
 				}
 
- 	        	AjaxPostUtil.request({url:flowableBasePath + "actmodletype003", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url:flowableBasePath + "actmodletype003", params: params, type: 'json', callback: function (json) {
  	        		if (json.returnCode == 0) {
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';
@@ -181,7 +174,7 @@ layui.config({
  	    });
 
 		// 图标选中事件
-		$("body").on("focus", "#menuIcon", function(e){
+		$("body").on("focus", "#menuIcon", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#menuIcon").val(sysIconChooseClass);
 				$("#iconShow").css({'color': 'white'});

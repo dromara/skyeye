@@ -88,7 +88,7 @@ layui.config({
 		}
 
 		//获取桌面消息
-		AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
+		AjaxPostUtil.request({url: reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
 			if(l.returnCode == 0) {
 				var deskTopName = new Array();
 				var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
@@ -112,7 +112,7 @@ layui.config({
 				});
 				$("#desktop-sel").html(desktopSel);
 				$("#winui-desktop").find(".desktop-item-page").html("");
-				$("body").on('change', '#desktop-sel', function(e){
+				$("body").on('change', '#desktop-sel', function (e) {
 					var val = $("#desktop-sel").prop('selectedIndex');
 					$.fn.fullpage.moveTo(++val);
 				});
@@ -153,7 +153,7 @@ layui.config({
 									$(_this).parent().prev().remove();
 									$(_this).remove();
 								} else {
-									AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function(json){
+									AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function (json) {
 										if(json.returnCode == 0) {
 											$(_this).parent().prev().remove();
 											$(_this).remove();
@@ -164,7 +164,7 @@ layui.config({
 								}
 							} else {
 								if(isNull(id)){
-									AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function(json){
+									AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function (json) {
 										if(json.returnCode == 0) {
 											$(_this).attr("rowid", json.bean.id);
 										} else {
@@ -172,7 +172,7 @@ layui.config({
 										}
 									}});
 								} else {
-									AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function(json){
+									AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function (json) {
 										if(json.returnCode == 0) {
 										} else {
 											winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
@@ -191,7 +191,7 @@ layui.config({
 				}]);
 
 				// 读取本地便签
-				AjaxPostUtil.request({url: reqBasePath + "stickynotes002", params: {}, type: 'json', method: "GET", callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "stickynotes002", params: {}, type: 'json', method: "GET", callback: function (json) {
 					if(json.returnCode == 0) {
 						var tags = json.rows;
 						$.each(tags, function(index, item) {
@@ -207,7 +207,7 @@ layui.config({
 										$(_this).parent().prev().remove();
 										$(_this).remove();
 									} else {
-										AjaxPostUtil.request({url:reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function(json){
+										AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function (json) {
 											if(json.returnCode == 0) {
 												$(_this).parent().prev().remove();
 												$(_this).remove();
@@ -218,7 +218,7 @@ layui.config({
 									}
 								} else {
 									if(isNull(id)){
-										AjaxPostUtil.request({url:reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function(json){
+										AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function (json) {
 											if(json.returnCode == 0) {
 												$(_this).attr("rowid", json.bean.id);
 											} else {
@@ -226,7 +226,7 @@ layui.config({
 											}
 										}});
 									} else {
-										AjaxPostUtil.request({url:reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function(json){
+										AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function (json) {
 											if(json.returnCode == 0) {
 											} else {
 												winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
@@ -425,7 +425,7 @@ layui.config({
 						winui.lockScreen(function (password) {
 	   		            	if(!isNull(password)){
 		   		         		var pJudge = false;
-		   		         		AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function(json){
+		   		         		AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function (json) {
 		   		      	   			if (json.returnCode == 0) {
 		   		      	   				pJudge = true;
 		   		      	   			} else {
@@ -477,7 +477,7 @@ layui.config({
 							var zIndex = $("#exit-confim").parent().css("z-index");
 							$("#layui-layer-shade" + times).css({'z-index': zIndex});
 						}}, function (index) {
-				        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function(json){
+				        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
 				 	   			if (json.returnCode == 0) {
 					 	   			if (etiger != null) {
 						 	   			etiger.socket.close();
@@ -607,7 +607,7 @@ layui.config({
 		
 		//监听签名修改
 		layim.on('sign', function(value) {
-			AjaxPostUtil.request({url:reqBasePath + "companychat002", params:{userSign: value}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "companychat002", params:{userSign: value}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				winui.window.msg('保存成功', {icon: 1, skin: 'msg-skin-message'});
  		   		} else {
@@ -674,7 +674,7 @@ layui.config({
     //初始化配置信息
     function initWinConfig(currentUserMation){
     	//设置窗口点击事件
-    	$("body").on("click", ".sec-clsss-btn", function(e){
+    	$("body").on("click", ".sec-clsss-btn", function (e) {
     		winui.window.close($('#childWindow').parent());
     		OpenWindow($(this).prop("outerHTML"));
     	});
@@ -734,7 +734,7 @@ layui.config({
                         	icon: ' fa-copy', 
                         	text: '发送到桌面',
                         	callBack: function (id, elem) {
-                        		AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop010", params:{rowId: id}, type: 'json', callback: function(json){
+                        		AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop010", params:{rowId: id}, type: 'json', callback: function (json) {
         			 	   			if (json.returnCode == 0) {
         			 	   				top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 	        			 	   			var thisMenuIcon = json.bean.icon;
@@ -875,7 +875,7 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	options: {},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		if(json.total == 0){
                     $("#showMyNoticeNum").hide();
                 } else {
@@ -883,7 +883,7 @@ layui.config({
                     $("#showMyNoticeNum").html(json.total);
                 }
 		 		//移除全部消息
-		 		$(".notice-remove").on("click", function(e){
+		 		$(".notice-remove").on("click", function (e) {
 		 			var noticeList = $("#notice-list").find(".winui-message-item");
 		 			var idsStr = "";
 		 			$.each(noticeList, function(index, item){
@@ -892,10 +892,10 @@ layui.config({
 		 			$("#showMyNoticeNum").hide();
                     $("#showMyNoticeNum").html("0");
 		 			if(!isNull(idsStr)){
-		 				AjaxPostUtil.request({url:reqBasePath + "syseveusernotice006", params:{rowIds: idsStr}, type: 'json', callback: function(json){
+		 				AjaxPostUtil.request({url: reqBasePath + "syseveusernotice006", params:{rowIds: idsStr}, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			$.each(noticeList, function(index, item){
-					 				setTimeout(function(e){
+					 				setTimeout(function (e) {
 					 					$(item).animate({'margin-left': '390px'}, 500, function() {
 					 						$(item).remove();
 					 					});
@@ -909,10 +909,10 @@ layui.config({
 		 		});
 		 		
 		 		//查看详细信息
-		 		$(".winui-message-item").on("click", function(e){
+		 		$(".winui-message-item").on("click", function (e) {
 		 			var _this = $(this);
 		 			parentRowId = _this.attr("rowid");
-		 			AjaxPostUtil.request({url:reqBasePath + "syseveusernotice003", params:{rowId: parentRowId}, type: 'json', callback: function(json){
+		 			AjaxPostUtil.request({url: reqBasePath + "syseveusernotice003", params:{rowId: parentRowId}, type: 'json', callback: function (json) {
 		 	   			if (json.returnCode == 0) {
 			 	   			_openNewWindows({
 									url: "../../tpl/index/noticeDetail.html", 
@@ -939,10 +939,10 @@ layui.config({
 		 		});
 		 		
 		 		//删除
-		 		$(".notice-item-remove").on("click", function(e){
+		 		$(".notice-item-remove").on("click", function (e) {
 		 			var _this = $(this).parent().parent();
 		 			parentRowId = _this.attr("rowid");
-		 			AjaxPostUtil.request({url:reqBasePath + "syseveusernotice004", params:{rowId: parentRowId}, type: 'json', callback: function(json){
+		 			AjaxPostUtil.request({url: reqBasePath + "syseveusernotice004", params:{rowId: parentRowId}, type: 'json', callback: function (json) {
 		 	   			if (json.returnCode == 0) {
 			 	   			_this.animate({'margin-left': '390px'}, 500, function() {
 			 	   				_this.remove();
@@ -1135,7 +1135,7 @@ layui.config({
         					OpenWindow(elem);
         				}
         			});
-        			AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: ""}, type: 'json', callback: function(json){
+        			AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: ""}, type: 'json', callback: function (json) {
     					if (json.returnCode == 0) {
     					} else {
     						winui.window.msg(json.returnMessage, { shift: 6 });
@@ -1155,24 +1155,24 @@ layui.config({
     }
     
     //盒子标题双击
-    $("body").on('dblclick', '#childWindowtext', function(e){
+    $("body").on('dblclick', '#childWindowtext', function (e) {
     	$(this).hide();
     	$(".childWindow-title-input-box").show();
     	$("#childWindowInput").val($('#childWindowtext').html());
     });
     //盒子标题取消
-    $("body").on('click', '#cancleChildWindow', function(e){
+    $("body").on('click', '#cancleChildWindow', function (e) {
     	$('#childWindowtext').show();
     	$(".childWindow-title-input-box").hide();
     });
     //盒子标题保存
-    $("body").on('click', '#saveChildWindow', function(e){
+    $("body").on('click', '#saveChildWindow', function (e) {
     	if(isNull($("#childWindowInput").val())){
     		winui.window.msg('请输入盒子标题', {shift: 6, skin: 'msg-skin-message'});
     	} else {
     		var rowId = $(this).attr("rowid");
     		var menuName = $("#childWindowInput").val();
-    		AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop005", params: {rowId: rowId}, type: 'json', method: "POST", callback: function(json){
+    		AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop005", params: {rowId: rowId}, type: 'json', method: "POST", callback: function (json) {
 				if (json.returnCode == 0) {
 					var menuType = json.bean.menuType;
 					if(menuType == '1'){//系统菜单
@@ -1182,7 +1182,7 @@ layui.config({
    		        			menuBoxName: menuName,
    		        			rowId: rowId
    			        	};
-   			        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop007", params:params, type: 'json', callback: function(json){
+   			        	AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop007", params: params, type: 'json', callback: function (json) {
    			 	   			if (json.returnCode == 0) {
    			 	   				// 此处不需要去获取当前滚动展示的模块
 	   			 	   			$("#winui-desktop").find('div[id="' + rowId + '"]').attr("win-title", menuName);
@@ -1210,7 +1210,7 @@ layui.config({
 			var zIndex = $("#exit-confim").parent().css("z-index");
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
-        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function(json){
+        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
  	   			if (json.returnCode == 0) {
 	 	   			if (etiger != null) {
 		 	   			etiger.socket.close();
@@ -1227,7 +1227,7 @@ layui.config({
     });
 
     //个人信息下拉框选项
-    $('body').on('mouseenter', '.user-main-mation', function(e){
+    $('body').on('mouseenter', '.user-main-mation', function (e) {
 		$(".win-file-switch").css({'z-index': '99999901'});
 	}).on('mouseleave', '.user-main-mation', function() {
 		if($(".switch-menu").find(".switch-checked").attr("id") === 'win10Btn'){
@@ -1301,7 +1301,7 @@ layui.config({
                                 OpenWindow(elem);
                             }
                         });
-                        AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: boxId}, type: 'json', callback: function(json){
+                        AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: boxId}, type: 'json', callback: function (json) {
                             if (json.returnCode == 0) {
                             } else {
                                 winui.window.msg(json.returnMessage, { shift: 6 });
@@ -1385,7 +1385,7 @@ layui.config({
             	icon: 'fa fa-tags',
         		text: "重命名/配置",
         		callBack: function (id, elem, events) {
-        			AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop005", params: {rowId: id}, type: 'json', method: "POST", callback: function(json){
+        			AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop005", params: {rowId: id}, type: 'json', method: "POST", callback: function (json) {
 						if (json.returnCode == 0) {
 							var menuType = json.bean.menuType;
 							if(menuType == '1'){//系统菜单
@@ -1474,7 +1474,7 @@ layui.config({
             			$("#layui-layer-shade" + times).css({'z-index': zIndex});
             		}}, function (index) {
     					layer.close(index);
-    					AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop003", params: {rowId: id}, type: 'json', method: "POST", callback: function(json){
+    					AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop003", params: {rowId: id}, type: 'json', method: "POST", callback: function (json) {
     						if (json.returnCode == 0) {
     							$(elem).remove();
     							$("i[win-i-id=" + $(elem).attr('win-id') + "]").remove();
@@ -1502,7 +1502,7 @@ layui.config({
         $("#switchLanguage").find("a").html('<svg t="1598752407969" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6614" width="16" height="16"><path d="M884.394667 52.053333c76.202667 0 138.581333 61.269333 139.093333 136.021334v476.16c0 74.666667-62.378667 136.106667-138.581333 136.106666h-32.768v41.386667c0 74.666667-62.378667 136.106667-138.581334 136.106667H138.581333C62.378667 977.834667 0 916.394667 0 841.728V353.792c0-73.216 59.306667-133.034667 132.949333-136.106667v-29.610666c0-74.752 62.464-136.106667 138.666667-136.106667h612.693333z m61.44 673.024a83.541333 83.541333 0 0 0 25.514666-60.842666v-476.16a85.333333 85.333333 0 0 0-25.6-60.416 88.490667 88.490667 0 0 0-61.44-25.002667h-612.693333a86.186667 86.186667 0 0 0-87.04 85.333333v29.696h528.469333c76.202667 0 138.581333 61.44 138.581334 136.106667V750.08h32.768c23.04 0 44.970667-8.704 61.44-25.088zM398.933333 484.181333v42.496H254.634667V651.093333h-57.856v49.664h169.472c-3.584 6.144-7.68 11.776-12.288 17.92-27.136 31.744-79.872 58.88-157.696 80.384l29.184 46.592c77.824-21.504 134.144-51.712 168.96-91.136 12.8-15.872 23.552-33.792 32.768-53.76h1.024c27.136 60.416 94.72 108.544 202.752 145.408l29.696-48.128c-90.624-24.576-150.016-56.832-177.664-97.28h172.544V651.093333h-58.88V526.677333h-143.36v-42.496h-54.272zM306.858667 651.093333v-74.752h92.16v7.68c-1.536 23.552-5.12 46.08-11.264 67.072h-80.896z m137.216 0c4.608-20.48 7.68-42.496 9.216-67.072v-7.68H544.426667v74.752H444.074667zM199.338667 407.381333v49.152h113.152v43.008h54.272V456.533333H485.546667v43.008h54.272V456.533333h113.152v-49.152H539.818667V366.933333H485.546667v40.448H366.762667V366.933333h-54.272v40.448H199.338667z" fill="#ddd" p-id="6615"></path></svg>');
     }
     // 切换语言
-    $("body").on("click", "#switchLanguage", function(e){
+    $("body").on("click", "#switchLanguage", function (e) {
         var nowType = isNull(getCookie("languageType")) ? "zh" : getCookie("languageType");
         if(nowType == "zh"){
         	// 中文，设置为英文
@@ -1515,19 +1515,19 @@ layui.config({
     });
 	
 	//切换风格
-	$('body').on('click', '.winui-switching-style', function(e){
+	$('body').on('click', '.winui-switching-style', function (e) {
 		location.href = "../../tpl/traditionpage/index.html";
 	});
 	
 	//顶部滚动事件
-	$('body').on('click', '#left-scoolor', function(e){
+	$('body').on('click', '#left-scoolor', function (e) {
 		var scoolor = $('.switch-menu').scrollLeft();
 		if(scoolor > 0){
 			scoolor = scoolor - ($('.switch-menu').width() - 200) / 2;
 			$('.switch-menu').scrollLeft(scoolor);
 		}
 	});
-	$('body').on('click', '#right-scoolor', function(e){
+	$('body').on('click', '#right-scoolor', function (e) {
 		var scoolor = $('.switch-menu').scrollLeft();
 		if(scoolor < ($('.switch-menu').width() - 200)){
 			scoolor = ($('.switch-menu').width() - 200) / 2 + scoolor;

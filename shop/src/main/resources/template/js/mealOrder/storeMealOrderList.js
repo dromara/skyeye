@@ -106,7 +106,7 @@ layui.config({
     function delet(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "deleteMealOrder", params: {id: data.id}, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "deleteMealOrder", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
@@ -121,7 +121,7 @@ layui.config({
     function cancleOrder(data){
         layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "cancleMealOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "cancleMealOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 if (json.returnCode == 0) {
                     winui.window.msg('取消成功.', {icon: 1, time: 2000});
                     loadTable();
@@ -136,7 +136,7 @@ layui.config({
     function cancleRefundMealOrder(data){
         layer.confirm('确认取消退款申请吗？', {icon: 3, title: '取消退款'}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "approvelRefundMealOrder", params: {id: data.refundOrderId, state: 4}, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "approvelRefundMealOrder", params: {id: data.refundOrderId, state: 4}, type: 'json', method: "POST", callback: function (json) {
                 if (json.returnCode == 0) {
                     winui.window.msg('取消成功.', {icon: 1, time: 2000});
                     loadTable();

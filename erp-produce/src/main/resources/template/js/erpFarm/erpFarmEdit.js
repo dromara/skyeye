@@ -29,7 +29,7 @@ layui.config({
             template: $("#beanTemplate").html(),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter: function(json){
+            ajaxSendAfter: function (json) {
                 procedureMationList = [].concat(json.bean.procedureList);
 
                 // 获取当前登录用户所属企业的所有部门信息
@@ -71,7 +71,7 @@ layui.config({
                             farmProcedure: JSON.stringify(procedureMationList),
                             rowId: parent.rowId
                         };
-                        AjaxPostUtil.request({url:flowableBasePath + "erpfarm004", params: params, type: 'json', callback: function(json){
+                        AjaxPostUtil.request({url:flowableBasePath + "erpfarm004", params: params, type: 'json', callback: function (json) {
                                 if (json.returnCode == 0) {
                                     parent.layer.close(index);
                                     parent.refreshCode = '0';

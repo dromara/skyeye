@@ -192,7 +192,7 @@ layui.config({
         			params.coordinaJob = encodeURIComponent($("#coordinatext").val());
         		}
         		
-        		AjaxPostUtil.request({url:reqBasePath + "diary002", params:params, type: 'json', callback: function(json){
+        		AjaxPostUtil.request({url: reqBasePath + "diary002", params: params, type: 'json', callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                          parent.refreshCode = '0';
@@ -305,7 +305,7 @@ layui.config({
         			params.thisWorkSummary = encodeURIComponent($("#weekWorkSummaryText").val());
         		}
         		
-        		AjaxPostUtil.request({url:reqBasePath + "diary009", params:params, type: 'json', callback: function(json){
+        		AjaxPostUtil.request({url: reqBasePath + "diary009", params: params, type: 'json', callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                          parent.refreshCode = '0';
@@ -417,7 +417,7 @@ layui.config({
         			params.thisWorkSummary = encodeURIComponent($("#monthWorkSummaryText").val());
         		}
         		
-        		AjaxPostUtil.request({url:reqBasePath + "diary012", params:params, type: 'json', callback: function(json){
+        		AjaxPostUtil.request({url: reqBasePath + "diary012", params: params, type: 'json', callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                          parent.refreshCode = '0';
@@ -444,7 +444,7 @@ layui.config({
             }
         });
         //日报人员选择
-        $("body").on("click", "#userNameSelPeople", function(e){
+        $("body").on("click", "#userNameSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -464,7 +464,7 @@ layui.config({
             }
         });
         //周报人员选择
-        $("body").on("click", "#weekUserNameSelPeople", function(e){
+        $("body").on("click", "#weekUserNameSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -484,7 +484,7 @@ layui.config({
             }
         });
         //月报人员选择
-        $("body").on("click", "#monthUserNameSelPeople", function(e){
+        $("body").on("click", "#monthUserNameSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

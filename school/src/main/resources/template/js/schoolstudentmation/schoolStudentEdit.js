@@ -24,33 +24,17 @@ layui.config({
 		 	template: $("#editTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		schoolId = json.bean.schoolId;
-		 		//哪一届
-				laydate.render({
-					elem: '#sessionYear', //指定元素
-					type: 'year',
-					max: 'date'
-				});
+		 		// 哪一届
+				laydate.render({elem: '#sessionYear', type: 'year', max: 'date' });
 				
-				//入校时间
-				laydate.render({
-					elem: '#joinTime', //指定元素
-					type: 'date'
-				});
-				
-				//初始化上传
-		 		$("#userPhoto").upload({
-		            "action": reqBasePath + "common003",
-		            "data-num": "1",
-		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 15,//学生照类型
-		            "data-value": json.bean.userPhoto,
-		            "function": function (_this, data) {
-		                show("#userPhoto", data);
-		            }
-		        });
-		        
+				// 入校时间
+				laydate.render({elem: '#joinTime', type: 'date'});
+
+				// 初始化上传
+				$("#userPhoto").upload(systemCommonUtil.uploadCommon003Config('userPhoto', 15, json.bean.userPhoto, 1));
+
 		        $("input:radio[name=userSex][value=" + json.bean.userSex + "]").attr("checked", true);
 		        $("input:radio[name=idcardType][value=" + json.bean.idcardType + "]").attr("checked", true);
 		        $("input:radio[name=state][value=" + json.bean.state + "]").attr("checked", true);
@@ -197,7 +181,7 @@ layui.config({
 					 		$("#classId").val(json.bean.classId);
 					 		form.render('select');
 					 	},
-					 	ajaxSendErrorAfter: function(json){
+					 	ajaxSendErrorAfter: function (json) {
 					 		$("#classId").html("");
 					 		form.render('select');
 					 	}
@@ -305,7 +289,7 @@ layui.config({
 			            });
 			            params.bodyMind = bodyMindIds;
 			        	
-			        	AjaxPostUtil.request({url:schoolBasePath + "studentmation007", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url:schoolBasePath + "studentmation007", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

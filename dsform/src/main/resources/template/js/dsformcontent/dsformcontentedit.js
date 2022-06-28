@@ -45,7 +45,7 @@ layui.config({
 		 	},
 		 	ajaxSendAfter: function(json) {
 				// 根据类型获取部分功能的使用说明
-				systemCommonUtil.queryExplainMationByType(2, function(json){
+				systemCommonUtil.queryExplainMationByType(2, function (json) {
 					$(".layui-colla-title").html(json.bean.title);
 					$(".layui-colla-content").html(json.bean.content);
 				});
@@ -112,7 +112,7 @@ layui.config({
 						 	pagination: false,
 						 	template: getFileContent('tpl/template/select-option.tpl'),
 						 	ajaxSendLoadBefore: function(hdb){},
-						 	ajaxSendAfter:function(json){
+						 	ajaxSendAfter:function (json) {
 						 		$("#dataShowTpl").val(id);
 						 		form.render('select');
 						 		jsonStr = json.rows;
@@ -229,7 +229,7 @@ layui.config({
 			 	        		params.dataShowTpl = '';
 			 	        		params.defaultData = "";
 			 	        	}
-				        	AjaxPostUtil.request({url: flowableBasePath + "dsform005", params:params, type: 'json', callback: function(json){
+				        	AjaxPostUtil.request({url: flowableBasePath + "dsform005", params: params, type: 'json', callback: function (json) {
 				 	   			if (json.returnCode == 0) {
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';

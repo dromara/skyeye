@@ -487,16 +487,8 @@ var systemCommonUtil = {
         systemCommonUtil.initIconEvent(form, colorpicker, uploadType, params.iconPic, params.iconBg, params.iconColor);
     },
     initIconEvent: function (form, colorpicker, uploadType, uploadDefaultValue, iconBg, iconColor) {
-        $("#iconPic").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": uploadType,
-            "data-value": uploadDefaultValue,
-            "function": function (_this, data) {
-                show("#iconPic", data);
-            }
-        });
+        // 初始化上传
+        $("#iconPic").upload(systemCommonUtil.uploadCommon003Config('iconPic', uploadType, uploadDefaultValue, 1));
 
         // 菜单图标类型变化事件
         form.on('radio(iconType)', function (data) {

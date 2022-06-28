@@ -225,7 +225,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
             }
             
             //点击其他区域关闭
-            $(document).mouseup(function(e){
+            $(document).mouseup(function (e) {
                 var userSet_con = $(''+opt.elem+',.tableSelect');
                 if(!userSet_con.is(e.target) && userSet_con.has(e.target).length === 0){
                     tableBox.remove();

@@ -164,7 +164,7 @@ layui.config({
 			winui.window.msg("请选择商品", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "material014", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "material014", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				productMationList = json.rows;
    				$step.nextStep();

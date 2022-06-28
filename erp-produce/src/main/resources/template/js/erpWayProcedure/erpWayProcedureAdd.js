@@ -70,7 +70,7 @@ layui.config({
                     wayName: $("#wayName").val(),
                     procedureMation: JSON.stringify(table.cache.messageTable)
 			    };
-	        	AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure002", params: params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

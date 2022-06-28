@@ -19,7 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/rmgroup/rmgroupeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		showGrid({
 				 	id: "rmTypeId",
 				 	url: reqBasePath + "common001",
@@ -45,7 +45,7 @@ layui.config({
 				        			icon: $("#rmGroupIcon").val(),
 				        			rowId: parent.rowId
 					        	};
-					        	AjaxPostUtil.request({url:reqBasePath + "rmxcx012", params:params, type: 'json', callback: function(json){
+					        	AjaxPostUtil.request({url: reqBasePath + "rmxcx012", params: params, type: 'json', callback: function (json) {
 					 	   			if (json.returnCode == 0) {
 						 	   			parent.layer.close(index);
 						 	        	parent.refreshCode = '0';
@@ -62,7 +62,7 @@ layui.config({
 	    });
 	    
 	    // 菜单图标选中事件
- 	    $("body").on("focus", "#rmGroupIcon", function(e){
+ 	    $("body").on("focus", "#rmGroupIcon", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#rmGroupIcon").val(sysIconChooseClass);
 			});

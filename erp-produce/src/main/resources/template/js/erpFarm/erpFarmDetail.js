@@ -19,7 +19,7 @@ layui.config({
             template: $("#beanTemplate").html(),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter: function(json){
+            ajaxSendAfter: function (json) {
             	matchingLanguage();
                 form.render();
             }

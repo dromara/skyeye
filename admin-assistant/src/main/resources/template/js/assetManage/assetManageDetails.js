@@ -23,7 +23,7 @@ layui.config({
 					return v1.replace(reg, "\n");
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$("#assetImg").attr("src", fileBasePath + json.bean.assetImg);
 		 		// 附件回显
 				skyeyeEnclosure.showDetails({"enclosureUpload": json.bean.enclosureInfo});

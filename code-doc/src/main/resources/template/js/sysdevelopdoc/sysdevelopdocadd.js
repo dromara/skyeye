@@ -20,7 +20,7 @@ layui.config({
     	 	template: getFileContent('tpl/template/select-option.tpl'),
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
-    	 	ajaxSendAfter:function(json){
+    	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
     	 	}
         });
@@ -56,7 +56,7 @@ layui.config({
         			parentId: pId,
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

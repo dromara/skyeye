@@ -28,7 +28,7 @@ layui.config({
 		 	template: addListTemplate,
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var row = json.rows;
 		 		for(var i = 0;i < row.length; i++){
 		 			var id = row[i].forumId;
@@ -53,13 +53,13 @@ layui.config({
 	}
 	
 	//详情
-	$("body").on("click", "#addList .forum-main .forum-desc, .forum-main em", function(e){
+	$("body").on("click", "#addList .forum-main .forum-desc, .forum-main em", function (e) {
 		rowId = $(this).parents('div[class^="forum-main"]').eq(0).attr("rowId");
 		location.href = '../../tpl/forumshow/forumitem.html?id=' + rowId;
 	});
 	
 	//我的操作
-	$("body").on("click", ".suspension-menu-icon", function(e){
+	$("body").on("click", ".suspension-menu-icon", function (e) {
 		if($(".drop-down-menu").is(':hidden')){
 			$(".drop-down-menu").show();
 			$(".suspension-menu-icon").removeClass("rotate").addClass("rotate1");
@@ -70,7 +70,7 @@ layui.config({
 	});
 	
 	//标签点击事件
-	$("body").on("click", "#addList .forum-main strong", function(e){
+	$("body").on("click", "#addList .forum-main strong", function (e) {
 		rowId = $(this).attr("rowId");
 		location.href = "../../tpl/forumshow/forumtaglist.html?id=" + rowId;
 	});

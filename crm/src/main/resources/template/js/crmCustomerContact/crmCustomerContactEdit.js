@@ -21,7 +21,7 @@ layui.config({
 		 	template: getFileContent('tpl/crmCustomerContact/crmCustomerContactEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		// 客户信息赋值
 		 		customerMation = {
 		 			id: json.bean.customerId,
@@ -50,7 +50,7 @@ layui.config({
 		 	        		wechat: $("#wechat").val(),
 		 	        		isDefault: $("input[name='isDefault']:checked").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customercontact004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customercontact004", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -65,7 +65,7 @@ layui.config({
 		});
 		
 		// 客户选择
- 	    $("body").on("click", "#customMationSel", function(e){
+ 	    $("body").on("click", "#customMationSel", function (e) {
  	    	_openNewWindows({
  				url: "../../tpl/customermanage/customerChoose.html", 
  				title: "选择客户",

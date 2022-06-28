@@ -19,7 +19,7 @@ layui.config({
 		 	template: $("#showTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 
 				$('#toPeople').tagEditor({
 					initialTags: json.bean.toPeople.split(','),
@@ -51,7 +51,7 @@ layui.config({
 							toBcc: $('#toBcc').tagEditor('getTags')[0].tags,
 							id: parent.rowId
 						};
-						AjaxPostUtil.request({url: reqBasePath + "emailsendmodel005", params: params, type: 'json', method: "PUT", callback: function(json){
+						AjaxPostUtil.request({url: reqBasePath + "emailsendmodel005", params: params, type: 'json', method: "PUT", callback: function (json) {
 							if (json.returnCode == 0) {
 								parent.layer.close(index);
 								parent.refreshCode = '0';
@@ -64,7 +64,7 @@ layui.config({
 		 	    });
 
 				// 人员选择
-				$("body").on("click", "#toPeopleSelPeople, #toCcSelPeople, #toBccSelPeople", function(e){
+				$("body").on("click", "#toPeopleSelPeople, #toCcSelPeople, #toBccSelPeople", function (e) {
 					userReturnList = [];
 					var clickId = $(this).attr("id");
 					systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
@@ -81,7 +81,7 @@ layui.config({
 					});
 				});
 
-				$("body").on("click", "#toPeopleSelMail, #toCcSelMail, #toBccSelMail", function(e){
+				$("body").on("click", "#toPeopleSelMail, #toCcSelMail, #toBccSelMail", function (e) {
 					var clickId = $(this).attr("id");
 					mailUtil.openMailChoosePage(function (mailChooseList){
 						$.each(mailChooseList, function(i, item){

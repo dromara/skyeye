@@ -16,16 +16,8 @@ layui.config({
 		// 模板类型  1.系统模板  2.个人模板
 	    var type = GetUrlParam("type");
 
-	    // 初始化上传
- 		$("#logo").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 20,
-            "function": function (_this, data) {
-                show("#logo", data);
-            }
-        });
+		// 初始化上传
+		$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 20, '', 1));
 
 		systemModelUtil.loadSysEveModelTypeByPId("firstTypeId", "0");
 
@@ -55,7 +47,7 @@ layui.config({
 					winui.window.msg('请填写模板内容', {icon: 2, time: 2000});
 					return false;
 				}
-    			AjaxPostUtil.request({url: reqBasePath + "sysevemodel002", params:params, type: 'json', method: "POST", callback: function(json){
+    			AjaxPostUtil.request({url: reqBasePath + "sysevemodel002", params: params, type: 'json', method: "POST", callback: function (json) {
     				if (json.returnCode == 0) {
     					parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

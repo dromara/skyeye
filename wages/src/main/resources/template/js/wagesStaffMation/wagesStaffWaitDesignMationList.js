@@ -108,7 +108,7 @@ layui.config({
 	// 初始化公司
 	function initCompany(){
 		loadCompany = true;
-		systemCommonUtil.getSysCompanyList(function(json){
+		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据
 			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
 		});
@@ -123,7 +123,7 @@ layui.config({
 			pagination: false,
 			template: selTemplate,
 			ajaxSendLoadBefore: function(hdb){},
-			ajaxSendAfter:function(json){
+			ajaxSendAfter:function (json) {
 				form.render('select');
 			}
 		});

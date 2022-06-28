@@ -20,7 +20,7 @@ layui.config({
  				params: {},
  				pagination: false,
  				template: getFileContent('tpl/template/select-option-must.tpl'),
- 				ajaxSendAfter: function(json){
+ 				ajaxSendAfter: function (json) {
  					form.render('select');
  					$("#dsFormId").val(id);
  				}
@@ -33,7 +33,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/actmodletype/actmodleeditTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 				$("input:radio[name=commonUsed][value=" + json.bean.commonUsed + "]").attr("checked", true);
 
 		 		colorpicker.render({
@@ -58,27 +58,12 @@ layui.config({
 
 				$("input:radio[name=menuIconType][value=" + json.bean.menuIconType + "]").attr("checked", true);
 				if(json.bean.menuIconType == '1'){//icon
-					$("#menuIconPic").upload({
-						"action": reqBasePath + "common003",
-						"data-num": "1",
-						"data-type": "PNG,JPG,jpeg,gif",
-						"uploadType": 17,
-						"function": function (_this, data) {
-							show("#menuIconPic", data);
-						}
-					});
+					// 初始化上传
+					$("#menuIconPic").upload(systemCommonUtil.uploadCommon003Config('menuIconPic', 17, '', 1));
 					$(".menuIconTypeIsTwo").addClass("layui-hide");
 				}else if(json.bean.menuIconType == '2'){//图片
-					$("#menuIconPic").upload({
-						"action": reqBasePath + "common003",
-						"data-num": "1",
-						"data-type": "PNG,JPG,jpeg,gif",
-						"uploadType": 17,
-						"data-value": json.bean.menuIconPic,
-						"function": function (_this, data) {
-							show("#menuIconPic", data);
-						}
-					});
+					// 初始化上传
+					$("#menuIconPic").upload(systemCommonUtil.uploadCommon003Config('menuIconPic', 17, json.bean.menuIconPic, 1));
 					$(".menuIconTypeIsOne").addClass("layui-hide");
 				}
 				$("#iconShow").attr("class", "fa fa-fw " + $("#menuIcon").val());
@@ -201,7 +186,7 @@ layui.config({
 							return false;
 						}
 
-		 	        	AjaxPostUtil.request({url:flowableBasePath + "actmodletype012", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url:flowableBasePath + "actmodletype012", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
@@ -216,7 +201,7 @@ layui.config({
 		});
 
 		// 图标选中事件
-		$("body").on("focus", "#menuIcon", function(e){
+		$("body").on("focus", "#menuIcon", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#menuIcon").val(sysIconChooseClass);
 				$("#iconShow").css({'color': 'white'});

@@ -21,7 +21,7 @@ layui.config({
 			ajaxSendLoadBefore: function(hdb, json){
 				json.bean.logo = fileBasePath + json.bean.logo;
 			},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 	}

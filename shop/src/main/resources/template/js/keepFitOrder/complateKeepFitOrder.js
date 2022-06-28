@@ -27,7 +27,7 @@ layui.config({
                     nextServiceTime: $("#nextServiceTime").val()
                 };
 
-                AjaxPostUtil.request({url: shopBasePath + "complateKeepFitOrder", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "complateKeepFitOrder", params: params, type: 'json', method: "POST", callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';
@@ -40,7 +40,7 @@ layui.config({
         });
 
         // 维修技师选择
-        $("body").on("click", ".chooseServiceTechnicianBtn", function(e){
+        $("body").on("click", ".chooseServiceTechnicianBtn", function (e) {
             shopUtil.openStoreStaffChoosePage(function (staffMation){
                 $("#serviceTechnician").val(staffMation.userName);
             });

@@ -13,7 +13,7 @@ layui.config({
 	form = layui.form;
 	
 	// 获取动态表单内容用于编辑申请类型实体
-	AjaxPostUtil.request({url:flowableBasePath + "activitimode023", params:{rowId: parent.sequenceId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url:flowableBasePath + "activitimode023", params:{rowId: parent.sequenceId}, type: 'json', callback: function (json) {
  		if (json.returnCode == 0) {
 			dsFormUtil.loadDsFormItemToEdit("showForm", json.rows);
  			$("#showForm").append('<div class="layui-form-item layui-col-xs12"><div class="layui-input-block">' +
@@ -33,7 +33,7 @@ layui.config({
 				taskId: parent.taskId,
 				processInstanceId: parent.processInstanceId
 			};
-        	AjaxPostUtil.request({url:flowableBasePath + "activitimode024", params: jStr, type: 'json', callback: function(json){
+        	AjaxPostUtil.request({url:flowableBasePath + "activitimode024", params: jStr, type: 'json', callback: function (json) {
         		if (json.returnCode == 0) {
                 	parent.layer.close(index);
                 	parent.refreshCode = '0';

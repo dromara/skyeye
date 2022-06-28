@@ -41,7 +41,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
 		    });
@@ -70,7 +70,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
 		    });
@@ -85,7 +85,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
 		    });
@@ -104,7 +104,7 @@ layui.config({
 			 		$("#sessionYear").html(data.bean.year + '届学生');
 			 		form.render('checkbox');
 			 	},
-			 	ajaxSendErrorAfter: function(json){
+			 	ajaxSendErrorAfter: function (json) {
 			 		$("#sessionYear").html("");
 			 		$("#classList").html("");
 			 	}
@@ -134,7 +134,7 @@ layui.config({
         			viewAnswer: $("input[name='viewAnswer']:checked").val(),
         			propertyIds: propertyIds
 	        	};
-	        	AjaxPostUtil.request({url:schoolBasePath + "exam002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:schoolBasePath + "exam002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

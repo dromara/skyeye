@@ -18,7 +18,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    
-	    AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker004", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker004", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0){
  	   			longitude = json.bean.longitude;
  	   			latitude = json.bean.latitude;
@@ -48,7 +48,7 @@ layui.config({
 							areaName: result.regeocode.addressComponent.district,
 							addressDetail: $("#userAddressInput").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker005", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker005", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
@@ -91,7 +91,7 @@ layui.config({
 			});
 			//通过地址获取经纬度
 			var input = document.getElementById('userAddressInput');
-			map.on('click', function(e){
+			map.on('click', function (e) {
 		      geocoder.getAddress(e.lnglat, function(status,result){
 					if(status=='complete'){
 						input.value = result.regeocode.formattedAddress;
@@ -108,7 +108,7 @@ layui.config({
 					}
 		      });
 			});
-			input.onchange = function(e){
+			input.onchange = function (e) {
 				var address = input.value;
 				geocoder.getLocation(address, function(status, result){
 					if(status == 'complete' && result.geocodes.length){

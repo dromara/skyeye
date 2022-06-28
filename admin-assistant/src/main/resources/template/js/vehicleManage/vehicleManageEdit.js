@@ -22,7 +22,7 @@ layui.config({
 		 	template: getFileContent('tpl/vehicleManage/vehicleManageEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 生产日期
 		 		laydate.render({elem: '#manufactureTime', type: 'date', max: getYMDFormatDate(), trigger: 'click'});
 		 		
@@ -37,18 +37,10 @@ layui.config({
 		 		
 		 		// 上次保养日期
 		 		laydate.render({elem: '#prevMaintainTime', type: 'date', trigger: 'click'});
-		 		
-		 		// 初始化上传
-		 		$("#vehicleImg").upload({
-		            "action": reqBasePath + "common003",
-		            "data-num": "1",
-		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 6,
-		            "data-value": json.bean.vehicleImg,
-		            "function": function (_this, data) {
-		                show("#vehicleImg", data);
-		            }
-		        });
+
+				// 初始化上传
+				$("#vehicleImg").upload(systemCommonUtil.uploadCommon003Config('vehicleImg', 6, json.bean.vehicleImg, 1));
+
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.vehicleAdmin);
 		 		$.each(json.bean.vehicleAdmin, function(i, item){
@@ -97,7 +89,7 @@ layui.config({
 	 	 	        		winui.window.msg('请上传车辆图片', {icon: 2, time: 2000});
 	 	 	        		return false;
 	 	 	        	}
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "vehicle009", params:params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "vehicle009", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -112,7 +104,7 @@ layui.config({
 		});
 	    
 	    // 管理人员选择
-		$("body").on("click", "#userNameSelPeople", function(e){
+		$("body").on("click", "#userNameSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

@@ -18,7 +18,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/knowledgecontent/knowledgecontentdetailsTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		content = json.bean.content;
 		 		$("#knowledgecontentshowBox").attr("src", "knowledgecontentshow.html");
 

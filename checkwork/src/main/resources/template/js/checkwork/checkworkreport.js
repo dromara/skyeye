@@ -75,7 +75,7 @@ layui.config({
 	 			item.name = item.title + ' [' + item.startTime + ' ~ ' + item.endTime + ']';
 	 		});
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		initCompany();
 	 	}
     });*/
@@ -227,7 +227,7 @@ layui.config({
 		 	pagination: false,
 		 	template: selTemplate,
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -395,7 +395,7 @@ layui.config({
     	initEcharts();
     	
     	function initEcharts(){
-	    	AjaxPostUtil.request({url: flowableBasePath + "checkwork016", params: getEchartsParams(), type: 'json', method: "POST", callback: function(json){
+	    	AjaxPostUtil.request({url: flowableBasePath + "checkwork016", params: getEchartsParams(), type: 'json', method: "POST", callback: function (json) {
 	    		if (json.returnCode == 0) {
 	    			ydata = json.rows;
 	    			var pieInitialized;

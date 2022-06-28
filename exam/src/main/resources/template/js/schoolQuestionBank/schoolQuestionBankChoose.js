@@ -46,7 +46,7 @@ layui.config({
     	 	template: getFileContent('tpl/template/select-option.tpl'),
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
-    	 	ajaxSendAfter:function(json){
+    	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
     	 	}
         });
@@ -71,7 +71,7 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -164,7 +164,7 @@ layui.config({
 			winui.window.msg("请选择试题", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank018", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank018", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				parent.questionMationList = [].concat(json.rows);
    				parent.layer.close(index);

@@ -6844,7 +6844,7 @@ var Rendition = function () {
   			this.hooks.show.trigger(view, this);
   			this.trigger("rendered", view.section);
   			}.bind(this))
-  		.catch(function(e){
+  		.catch(function (e) {
   			this.trigger("loaderror", e);
   		}.bind(this));
   	}

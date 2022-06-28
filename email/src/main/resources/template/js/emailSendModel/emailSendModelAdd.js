@@ -29,7 +29,7 @@ layui.config({
 				   	toCc: $('#toCc').tagEditor('getTags')[0].tags,
 				   	toBcc: $('#toBcc').tagEditor('getTags')[0].tags
 			   	};
-			   	AjaxPostUtil.request({url: reqBasePath + "emailsendmodel002", params: params, type: 'json', method: "POST", callback: function(json){
+			   	AjaxPostUtil.request({url: reqBasePath + "emailsendmodel002", params: params, type: 'json', method: "POST", callback: function (json) {
 				   	if (json.returnCode == 0) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
@@ -56,7 +56,7 @@ layui.config({
 	    });
 	    
 	    // 人员选择
-		$("body").on("click", "#toPeopleSelPeople, #toCcSelPeople, #toBccSelPeople", function(e){
+		$("body").on("click", "#toPeopleSelPeople, #toCcSelPeople, #toBccSelPeople", function (e) {
 			var clickId = $(this).attr("id");
 			systemCommonUtil.userReturnList = [];
 			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
@@ -76,7 +76,7 @@ layui.config({
 			});
 		});
 
-		$("body").on("click", "#toPeopleSelMail, #toCcSelMail, #toBccSelMail", function(e){
+		$("body").on("click", "#toPeopleSelMail, #toCcSelMail, #toBccSelMail", function (e) {
 			var clickId = $(this).attr("id");
 			mailUtil.openMailChoosePage(function (mailChooseList){
 				$.each(mailChooseList, function(i, item){

@@ -32,7 +32,7 @@ layui.config({
 	    
 	    initPageJson();
 	    function initPageJson(callback){
-		    AjaxPostUtil.request({url:schoolBasePath + "exam003", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
+		    AjaxPostUtil.request({url:schoolBasePath + "exam003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
 	   			if (json.returnCode == 0) {
 	   				$.each(json.rows, function(i, item){
 	   					item.saveTag = 1;
@@ -194,7 +194,7 @@ layui.config({
 			 			return str;
 			 		});
 			 	},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		// 初始化地址区域
 				    loadAddr();
 				    
@@ -352,7 +352,7 @@ layui.config({
 				layer.close(index);
 				var quId = quBody.find("input[name='quId']").val();
 				if(!isNull(quId)){
-					AjaxPostUtil.request({url:schoolBasePath + "exam015", params:{quId: quId}, type: 'json', callback: function(json){
+					AjaxPostUtil.request({url:schoolBasePath + "exam015", params:{quId: quId}, type: 'json', callback: function (json) {
 		 	   			if (json.returnCode == 0) {
 		 	   				quBody.hide("slow", function() {
 		 	   					$(this).parent().remove();
@@ -399,7 +399,7 @@ layui.config({
 			optionParent = $(curEditObj).parents("td.quChenColumnTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
-				AjaxPostUtil.request({url:schoolBasePath + "exam016", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url:schoolBasePath + "exam016", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			} else {
@@ -418,7 +418,7 @@ layui.config({
 			optionParent = $(curEditObj).parents("td.quChenRowTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
-				AjaxPostUtil.request({url:schoolBasePath + "exam017", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url:schoolBasePath + "exam017", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			} else {
@@ -649,7 +649,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam010", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam010", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -688,7 +688,7 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam018", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam018", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			} else {
@@ -743,7 +743,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam011", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam011", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -782,7 +782,7 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam019", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam019", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			} else {
@@ -876,7 +876,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam006", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam006", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -935,7 +935,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam007", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam007", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -967,7 +967,7 @@ layui.config({
 	    	optionParent = $(curEditObj).parents("tr.quScoreOptionTr");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam020", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam020", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			} else {
@@ -1006,7 +1006,7 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam008", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam008", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -1040,7 +1040,7 @@ layui.config({
 	    	var rmQuOrderTableTr = quItemBody.find(".quOrderByRight table.quOrderByTable tr:last");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam021", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam021", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   				rmQuOrderTableTr.remove();
@@ -1063,7 +1063,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam009", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam009", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -1096,7 +1096,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam013", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam013", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -1153,7 +1153,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam012", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam012", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);
@@ -1185,7 +1185,7 @@ layui.config({
 	    	optionParent = $(curEditObj).parents("tr.mFillblankTableTr");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam022", params:{quItemId: quOptionId}, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam022", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				delQuOptionCallBack(optionParent);
 	 	   			} else {
@@ -1330,7 +1330,7 @@ layui.config({
 	    		// 逻辑选项
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam014", params:data, type: 'json', callback: function(json){
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam014", params:data, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			var quId = json.bean.quId;
 		 	   			quItemBody.find("input[name='saveTag']").val(1);

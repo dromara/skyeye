@@ -48,7 +48,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
 		    });
@@ -73,7 +73,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
 		    });
@@ -82,7 +82,7 @@ layui.config({
 		function loadData(){
 			// 如果问题id不为空，则说明是编辑，加载编辑信息
 			if(!isNull(parent.rowId)){
-				AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank004", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank004", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 					if (json.returnCode == 0) {
 						$("#schoolId").val(json.bean.schoolId);
 						showGrid({
@@ -211,7 +211,7 @@ layui.config({
 	    		});
 	    		params.radioTd = JSON.stringify(radioTd);
 	    		
-    			AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank002", params: params, type: 'json', callback: function(json){
+    			AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank002", params: params, type: 'json', callback: function (json) {
     				if (json.returnCode == 0) {
     					parent.layer.close(index);
     	 	        	parent.refreshCode = '0';

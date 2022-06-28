@@ -43,7 +43,7 @@ layui.config({
 	});
 
 	// 初始化账户
-	systemCommonUtil.getSysAccountListByType(function(json){
+	systemCommonUtil.getSysAccountListByType(function (json) {
 		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
@@ -303,7 +303,7 @@ layui.config({
 	}
 
 	// 商品选择
-	$("body").on("click", ".chooseProductBtn", function(e){
+	$("body").on("click", ".chooseProductBtn", function (e) {
 		var trId = $(this).parent().parent().attr("trcusid");
 		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 			//获取表格行号
@@ -321,7 +321,7 @@ layui.config({
 	});
 
 	// 会员选择
-	$("body").on("click", ".chooseMemberBtn", function(e){
+	$("body").on("click", ".chooseMemberBtn", function (e) {
 		sysMemberUtil.openSysMemberChoosePage(function (memberMation){
 			$("#memberId").val(memberMation.contacts);
 		});

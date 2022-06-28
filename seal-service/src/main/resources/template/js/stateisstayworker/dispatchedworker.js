@@ -23,7 +23,7 @@ layui.config({
 		 	template: getFileContent('tpl/stateisstayworker/dispatchedworkerTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(dispatchedWorker)', function (data) {
@@ -38,7 +38,7 @@ layui.config({
 		                	winui.window.msg('请选择工单接收人', {icon: 2, time: 2000});
 		                	return false;
 		                }
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice014", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice014", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -53,7 +53,7 @@ layui.config({
 		});
 	    
 		//工单接收人选择
-	    $("body").on("click", "#serviceUserIdSelPeople", function(e){
+	    $("body").on("click", "#serviceUserIdSelPeople", function (e) {
 			_openNewWindows({
  				url: "../../tpl/serviceworker/serviceworkershowlist.html", 
  				title: "选择接收人",
@@ -77,7 +77,7 @@ layui.config({
 	        }
 	    });
 		//工单协助人选择
-		$("body").on("click", "#cooperationUserIdSelPeople", function(e){
+		$("body").on("click", "#cooperationUserIdSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(cooperationUser);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

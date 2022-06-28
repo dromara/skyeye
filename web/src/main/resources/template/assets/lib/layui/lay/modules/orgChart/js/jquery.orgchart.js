@@ -142,7 +142,7 @@ layui.define(["jquery"], function(exports) {
 
     if (opts.pan) {
       $chartContainer.css('overflow', 'hidden');
-      $chart.on('mousedown',function(e){
+      $chart.on('mousedown',function (e) {
         var $this = $(this);
         if ($(e.target).closest('.node').length) {
           $this.data('panning', false);

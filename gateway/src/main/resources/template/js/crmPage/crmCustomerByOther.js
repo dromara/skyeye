@@ -15,7 +15,7 @@ layui.config({
 	initCustomNumByOtherType();
 	// 根据客户分类，客户来源，所属行业，客户分组统计客户数量
 	function initCustomNumByOtherType(){
-		AjaxPostUtil.request({url:reqBasePath + "crmpage002", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "crmpage002", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			renderCharts(json.bean);
  	   			matchingLanguage();

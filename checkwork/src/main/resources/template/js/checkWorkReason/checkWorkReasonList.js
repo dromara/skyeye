@@ -84,7 +84,7 @@ layui.config({
 	function delet(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "checkworkreason003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "checkworkreason003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -100,7 +100,7 @@ layui.config({
 		var msg = '确认上线该条申诉原因吗？';
 		layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "checkworkreason004", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "checkworkreason004", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -116,7 +116,7 @@ layui.config({
 		var msg = '确认下线该条申诉原因吗？';
 		layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "checkworkreason005", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "checkworkreason005", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -148,7 +148,7 @@ layui.config({
 	
 	// 上移
 	function upMove(data){
-        AjaxPostUtil.request({url: flowableBasePath + "checkworkreason008", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function(json){
+        AjaxPostUtil.request({url: flowableBasePath + "checkworkreason008", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
@@ -160,7 +160,7 @@ layui.config({
 	
 	// 下移
 	function downMove(data){
-        AjaxPostUtil.request({url: flowableBasePath + "checkworkreason009", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function(json){
+        AjaxPostUtil.request({url: flowableBasePath + "checkworkreason009", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();

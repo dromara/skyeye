@@ -18,7 +18,7 @@ layui.config({
 		 	template: getFileContent('tpl/sealseservicemode/sealseservicemodeeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {
@@ -27,7 +27,7 @@ layui.config({
 	 	        			rowId: parent.rowId,
 	 	        			typeName: $("#typeName").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservicemode004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservicemode004", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

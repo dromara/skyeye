@@ -42,7 +42,7 @@ layui.config({
     	 	template: $("#gradeTemplate").html(),
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
-    	 	ajaxSendAfter:function(json){
+    	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
     	 	}
         });
@@ -57,7 +57,7 @@ layui.config({
 		 	pagination: false,
 		 	template: $("#subjectTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -119,7 +119,7 @@ layui.config({
 	}
 	
     // 对左侧菜单项的点击事件--年级
-	$("body").on("click", "#setting a", function(e){
+	$("body").on("click", "#setting a", function (e) {
 		$("#setting a").removeClass("selected");
 		$(this).addClass("selected");
 		gradeId = $(this).attr("rowid");
@@ -132,7 +132,7 @@ layui.config({
 	});
 	
 	// 对左侧菜单项的点击事件--科目
-	$("body").on("click", "#setting1 a", function(e){
+	$("body").on("click", "#setting1 a", function (e) {
 		$("#setting1 a").removeClass("selected");
 		$(this).addClass("selected");
 		subjectId = $(this).attr("rowid");

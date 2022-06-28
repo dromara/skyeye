@@ -22,39 +22,23 @@ layui.config({
 	    var cooperationUser = new Array();//工单协助人集合
 
  		//报单时间
- 		laydate.render({ 
-			elem: '#declarationTime',
-			type: 'datetime',
-			trigger: 'click'
- 		});
+ 		laydate.render({elem: '#declarationTime', type: 'datetime', trigger: 'click'});
  		
  		//指定预约时间
- 		laydate.render({ 
-			elem: '#pointSubscribeTime',
-			type: 'datetime',
-			trigger: 'click'
- 		});
+ 		laydate.render({elem: '#pointSubscribeTime', type: 'datetime', trigger: 'click'});
  		
  		textool.init({
 	    	eleId: 'content',
 	    	maxlength: 200,
 	    	tools: ['count', 'copy', 'reset']
 	    });
- 		
- 		//初始化工单照片上传
- 		$("#sheetPicture").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "10",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 14,
-            "function": function (_this, data) {
-                show("#sheetPicture", data);
-            }
-        });
-	    
+
+		// 初始化上传
+		$("#sheetPicture").upload(systemCommonUtil.uploadCommon003Config('sheetPicture', 14, '', 10));
+
  		typeId();
  		
-		//服务类型
+		// 服务类型
  		function typeId(){
  	 		showGrid({
  			 	id: "typeId",
@@ -64,7 +48,7 @@ layui.config({
  			 	template: getFileContent('tpl/template/select-option.tpl'),
  			 	ajaxSendLoadBefore: function(hdb){
  			 	},
- 			 	ajaxSendAfter:function(json){
+ 			 	ajaxSendAfter:function (json) {
  			 		urgencyId();
  			 	}
  			});
@@ -80,7 +64,7 @@ layui.config({
  			 	template: getFileContent('tpl/template/select-option.tpl'),
  			 	ajaxSendLoadBefore: function(hdb){
  			 	},
- 			 	ajaxSendAfter:function(json){
+ 			 	ajaxSendAfter:function (json) {
  			 		modeId();
  			 	}
  			});
@@ -96,7 +80,7 @@ layui.config({
  			 	template: getFileContent('tpl/template/select-option.tpl'),
  			 	ajaxSendLoadBefore: function(hdb){
  			 	},
- 			 	ajaxSendAfter:function(json){
+ 			 	ajaxSendAfter:function (json) {
  			 		form.render('select');
  			 		//加载行政区划-省
 	    			loadChildProvinceArea();
@@ -169,7 +153,7 @@ layui.config({
  	    });
  	    
 	    //工单接收人选择
-		$("body").on("click", "#serviceUserIdSelPeople", function(e){
+		$("body").on("click", "#serviceUserIdSelPeople", function (e) {
 			_openNewWindows({
  				url: "../../tpl/serviceworker/serviceworkershowlist.html", 
  				title: "选择接收人",
@@ -194,7 +178,7 @@ layui.config({
 	        }
 	    });
 	    //工单协助人选择
-		$("body").on("click", "#cooperationUserIdSelPeople", function(e){
+		$("body").on("click", "#cooperationUserIdSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(cooperationUser);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -229,7 +213,7 @@ layui.config({
 	    
 	    //省级行政区划
 	    function loadChildProvinceArea(){
- 	    	AjaxPostUtil.request({url:reqBasePath + "commontarea001", params:{}, type: 'json', callback: function(json){
+ 	    	AjaxPostUtil.request({url: reqBasePath + "commontarea001", params:{}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
@@ -246,7 +230,7 @@ layui.config({
 	    
 	    //市级行政区划
 	    function loadChildCityArea(){
- 	    	AjaxPostUtil.request({url:reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type: 'json', callback: function(json){
+ 	    	AjaxPostUtil.request({url: reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				var str = '<dd class="layui-col-xs3"><select id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
@@ -263,7 +247,7 @@ layui.config({
 	    
 	    //县级行政区划
 	    function loadChildArea(){
- 	    	AjaxPostUtil.request({url:reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type: 'json', callback: function(json){
+ 	    	AjaxPostUtil.request({url: reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				var str = '<dd class="layui-col-xs3"><select id="areaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
@@ -280,7 +264,7 @@ layui.config({
 	    
 	    //镇级行政区划
 	    function loadChildAreaTownShip(){
- 	    	AjaxPostUtil.request({url:reqBasePath + "commontarea004", params:{rowId: $("#areaId").val()}, type: 'json', callback: function(json){
+ 	    	AjaxPostUtil.request({url: reqBasePath + "commontarea004", params:{rowId: $("#areaId").val()}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
@@ -296,7 +280,7 @@ layui.config({
  	    }
  	    
  	    //产品选择
- 	    $("body").on("click", "#productNameSel", function(e){
+ 	    $("body").on("click", "#productNameSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				$("#productName").val(chooseProductMation.productName);
 				$("#productNorms").val(chooseProductMation.productModel);
@@ -304,7 +288,7 @@ layui.config({
  	    });
  	    
  	    //客户选择
- 	    $("body").on("click", "#customMationSel", function(e){
+ 	    $("body").on("click", "#customMationSel", function (e) {
  	    	_openNewWindows({
  				url: "../../tpl/customermanage/customerChoose.html", 
  				title: "选择客户",

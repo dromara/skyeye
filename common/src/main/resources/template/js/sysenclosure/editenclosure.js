@@ -12,7 +12,7 @@ layui.config({
 	    
 	    var fileType = parent.fileType;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "sysenclosure005", params:{rowId: parent.fileId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "sysenclosure005", params:{rowId: parent.fileId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				if(isNull(json.bean)){
    					winui.window.msg("该数据不存在", {icon: 5,time: 2000});
@@ -36,7 +36,7 @@ layui.config({
         			fileType: fileType,
         			rowId: parent.fileId
  	        	};
- 	        	AjaxPostUtil.request({url:reqBasePath + "sysenclosure006", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "sysenclosure006", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

@@ -815,7 +815,7 @@ var wrkr = function (fns, init, id, cb) {
         ch[id] = wcln(fns[m], fnStr, td_1);
     }
     var td = mrg({}, ch[id][1]);
-    return wk(ch[id][0] + ';onmessage=function(e){for(var k in e.data)self[k]=e.data[k];onmessage=' + init.toString() + '}', id, td, cbfs(td), cb);
+    return wk(ch[id][0] + ';onmessage=function (e) {for(var k in e.data)self[k]=e.data[k];onmessage=' + init.toString() + '}', id, td, cbfs(td), cb);
 };
 // base async inflate fn
 var bInflt = function () { return [u8, u16, u32, fleb, fdeb, clim, fl, fd, flrm, fdrm, rev, hMap, max, bits, bits16, shft, slc, inflt, inflateSync, pbf, gu8]; };

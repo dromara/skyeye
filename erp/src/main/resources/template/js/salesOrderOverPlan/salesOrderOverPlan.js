@@ -19,7 +19,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: beanTemplate,
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 				// 销售订单状态
 		 		$("#statusName").html(activitiUtil.showStateName(json.bean.state, json.bean.submitType));
 

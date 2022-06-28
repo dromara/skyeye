@@ -112,7 +112,7 @@ layui.config({
                 taskId: taskId,
                 chooseUserMation: JSON.stringify(table.cache.messageTable)
             };
-            AjaxPostUtil.request({url: flowableBasePath + "activitiTask005", params: params, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "activitiTask005", params: params, type: 'json', method: "POST", callback: function (json) {
                 if (json.returnCode == 0) {
                     parent.layer.close(index);
                     parent.refreshCode = '0';

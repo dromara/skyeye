@@ -39,7 +39,7 @@ layui.config({
 	/** ******* tree 处理 end ************ */
 	
 	//保存
-	$("body").on("click", "#MoveTo", function(e){
+	$("body").on("click", "#MoveTo", function (e) {
 		nodes = ztree.getCheckedNodes(true);
 		if(nodes == undefined || nodes == ""){
 			winui.window.msg("请选择节点", {icon: 2, time: 2000});
@@ -49,7 +49,7 @@ layui.config({
 		if(clickType == "folder"){
 			var arrId = new Array();
 			arrId[0] = clickId;
-			AjaxPostUtil.request({url:reqBasePath + "mynote010", params: {targetId: chooseId, arrId : arrId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "mynote010", params: {targetId: chooseId, arrId : arrId}, type: 'json', callback: function (json) {
 	   			if (json.returnCode == 0) {
 	   				parent.layer.close(index);
 	   				parent.refreshCode = chooseId;
@@ -58,7 +58,7 @@ layui.config({
 	   			}
 	   		}});
 		} else {
-			AjaxPostUtil.request({url:reqBasePath + "mynote011", params: {toId: chooseId, moveId : clickId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "mynote011", params: {toId: chooseId, moveId : clickId}, type: 'json', callback: function (json) {
 	   			if (json.returnCode == 0) {
 	   				parent.layer.close(index);
 	   				parent.refreshCode = '0';

@@ -23,7 +23,7 @@ layui.config({
 		 	method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		laydate.render({ 
 		 			elem: '#archivesTime',
 		 	 		trigger: 'click'
@@ -76,7 +76,7 @@ layui.config({
 			 	        	rowId: parent.rowId,
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "sysstaffarchives007", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "sysstaffarchives007", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

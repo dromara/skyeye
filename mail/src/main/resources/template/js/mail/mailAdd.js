@@ -18,7 +18,7 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -84,7 +84,7 @@ layui.config({
  	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});
  	        		return false;
  	        	}
- 	        	AjaxPostUtil.request({url: reqBasePath + "maillist002", params: params, type: 'json', method: "POST", callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "maillist002", params: params, type: 'json', method: "POST", callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 						winui.window.msg("提交成功", {icon: 1, time: 2000}, function() {
 							location.reload();

@@ -26,7 +26,7 @@ layui.config({
 	 			}
 			});
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		initSecond();
 	 	}
 	});
@@ -48,7 +48,7 @@ layui.config({
 		 			}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		initDocList();
 		 	}
 		});
@@ -71,7 +71,7 @@ layui.config({
 		 			}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		initDate();
 		 	}
 		});
@@ -82,7 +82,7 @@ layui.config({
 	//初始化文档内容
 	function initDate(){
 		if(!isNull($("#showDocList").find("dd[class='active']").find("a").attr("rowid"))){
-			AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc023", params:{rowId: $("#showDocList").find("dd[class='active']").find("a").attr("rowid")}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc023", params:{rowId: $("#showDocList").find("dd[class='active']").find("a").attr("rowid")}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					$('#contentDiv').empty();
 					$('#contentDiv').append('<textarea id="content" style="display:none;" placeholder="markdown语言"></textarea>');
@@ -103,7 +103,7 @@ layui.config({
 	}
     
     //一级分类点击事件
-    $("#sysFirstType").on('click', "a", function(e){
+    $("#sysFirstType").on('click', "a", function (e) {
     	if(!$(this).parent().hasClass("active")){
 	    	$('#contentDiv').empty();
 	    	$("#sysFirstType").find("li").removeClass("active");
@@ -113,7 +113,7 @@ layui.config({
     });
     
     //二级分类点击事件
-    $("#sysSecondType").on('click', "a", function(e){
+    $("#sysSecondType").on('click', "a", function (e) {
     	if(!$(this).parent().hasClass("active")){
 	    	$('#contentDiv').empty();
 	    	$("#sysSecondType").find("li").removeClass("active");
@@ -123,7 +123,7 @@ layui.config({
     });
     
     //文档点击
-    $("#showDocList").on('click', "a", function(e){
+    $("#showDocList").on('click', "a", function (e) {
     	if(!$(this).parent().hasClass("active")){
 	    	$("#showDocList").find("dd").removeClass("active");
 	    	$(this).parent().addClass("active");

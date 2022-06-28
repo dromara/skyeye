@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/checkWorkAbnormalAttendance/checkWorkAbnormalAttendanceDetailsTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.state == "申诉中"){
 		 			$("#approvalTime").hide();
 		 			$("#appealRemark").hide();

@@ -18,7 +18,7 @@ layui.config({
             template: getFileContent('tpl/erpWorkProcedure/erpWorkProcedureDetailTemplate.tpl'),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
             	matchingLanguage();
             }
         });

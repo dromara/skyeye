@@ -28,7 +28,7 @@ layui.config({
 	initCustomDocumentaryByType(year);
 	// 客户跟单方式分析
 	function initCustomDocumentaryByType(year){
-		AjaxPostUtil.request({url:reqBasePath + "crmpage003", params: {year: year}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "crmpage003", params: {year: year}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			renderCharts1(json.rows);
  	   			matchingLanguage();

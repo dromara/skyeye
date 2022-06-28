@@ -30,7 +30,7 @@ layui.config({
     });
 
     // 初始化账户
-    systemCommonUtil.getSysAccountListByType(function(json){
+    systemCommonUtil.getSysAccountListByType(function (json) {
         // 加载账户数据
         $("#accountId").html(getDataUseHandlebars(selOption, json));
     });
@@ -122,7 +122,7 @@ layui.config({
     });
 
     // 人员选择
-    $("body").on("click", "#toHandsPersonSelPeople", function(e){
+    $("body").on("click", "#toHandsPersonSelPeople", function (e) {
         systemCommonUtil.userReturnList = [].concat(handsPersonList);
         systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -139,7 +139,7 @@ layui.config({
     });
 
     // 往来单位选择
-    $("body").on("click", "#customMationSel", function(e){
+    $("body").on("click", "#customMationSel", function (e) {
         var correspondentUnitType = $("#correspondentUnitType").val();
         if(correspondentUnitType == 1){
             // 供应商
@@ -156,7 +156,7 @@ layui.config({
     });
 
     // 选择账套
-    $("body").on("click", "#chooseSetOfBooksBtn", function(e){
+    $("body").on("click", "#chooseSetOfBooksBtn", function (e) {
         var _this = $(this);
         sysIfsUtil.openIfsSetOfBooksListChoosePage(function (ifsSetOfBooksMation){
             _this.parent().find("input").val(ifsSetOfBooksMation.name);
@@ -164,7 +164,7 @@ layui.config({
     });
 
     // 选择单据类型
-    $("body").on("click", "#chooseOrderTypeBtn", function(e){
+    $("body").on("click", "#chooseOrderTypeBtn", function (e) {
         var _this = $(this);
         dsFormUtil.openDsFormObjectRelationChooseByFirstTypeCodeChoosePage("IFS", function (dsFormObjectRelationChoose){
             _this.parent().find("input").val(dsFormObjectRelationChoose.name);

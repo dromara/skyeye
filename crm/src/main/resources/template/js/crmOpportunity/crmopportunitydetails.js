@@ -19,7 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/crmOpportunity/crmopportunitydetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		// 附件回显
 		 		var str = "暂无附件";
 			    if(json.bean.enclosureInfo.length != 0 && json.bean.enclosureInfo != ""){

@@ -20,7 +20,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb, json){
                 json.bean.mealExplain = stringManipulation.textAreaShow(json.bean.mealExplain);
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 $("#logo").attr("src", fileBasePath + json.bean.logo);
                 if(json.bean.type == 1){
                     $("#type").html("保养套餐");

@@ -35,7 +35,7 @@ layui.config({
 		method: "GET",
 		template: $("#beanTemplate").html(),
 		ajaxSendLoadBefore: function(hdb){},
-		ajaxSendAfter:function(json){
+		ajaxSendAfter:function (json) {
 			laydate.render({
 				elem: '#executeMonth',
 				type: 'month',
@@ -159,7 +159,7 @@ layui.config({
 						});
 					});
 					params.str = JSON.stringify(object);
-					AjaxPostUtil.request({url:reqBasePath + "wagesmodel004", params: params, type: 'json', method: "PUT", callback: function(json){
+					AjaxPostUtil.request({url: reqBasePath + "wagesmodel004", params: params, type: 'json', method: "PUT", callback: function (json) {
 						if (json.returnCode == 0) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
@@ -268,7 +268,7 @@ layui.config({
 	}
 
 	// 字段选择
-	$("body").on("click", ".chooseFieldBtn", function(e){
+	$("body").on("click", ".chooseFieldBtn", function (e) {
 		var trId = $(this).parent().parent().attr("trcusid");
 		_openNewWindows({
 			url: "../../tpl/wagesFieldType/wagesFieldTypeChoose.html",

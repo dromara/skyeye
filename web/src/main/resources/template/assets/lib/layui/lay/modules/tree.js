@@ -95,7 +95,7 @@ layui.define('jquery', function(exports){
   //点击节点回调
   Tree.prototype.click = function(elem, item){
     var that = this, options = that.options;
-    elem.children('a').on('click', function(e){
+    elem.children('a').on('click', function (e) {
       layui.stope(e);
       options.click(item)
     });
@@ -135,13 +135,13 @@ layui.define('jquery', function(exports){
     var dragStr = 'layui-tree-drag';
     
     //屏蔽选中文字
-    elem.find('i').on('selectstart', function(e){
+    elem.find('i').on('selectstart', function (e) {
       return false
     });
     
     //拖拽
     if(options.drag){
-      $(document).on('mousemove', function(e){
+      $(document).on('mousemove', function (e) {
         var move = that.move;
         if(move.from){
           var to = move.to, treeMove = $('<div class="layui-box '+ dragStr +'"></div>');

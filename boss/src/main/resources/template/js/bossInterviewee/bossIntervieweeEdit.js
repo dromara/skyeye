@@ -65,7 +65,7 @@ layui.config({
                         enclosureResume: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
                         id: parent.rowId
                     };
-                    AjaxPostUtil.request({url: flowableBasePath + "bossInterviewee005", params: params, type: 'json', method: "PUT", callback: function(json){
+                    AjaxPostUtil.request({url: flowableBasePath + "bossInterviewee005", params: params, type: 'json', method: "PUT", callback: function (json) {
                         if (json.returnCode == 0) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
@@ -80,7 +80,7 @@ layui.config({
     });
 
     // 人员选择
-    $("body").on("click", "#toHandsPersonSelPeople", function(e){
+    $("body").on("click", "#toHandsPersonSelPeople", function (e) {
         systemCommonUtil.userReturnList = [].concat(chargePerson);
         systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -92,7 +92,7 @@ layui.config({
     });
 
     // 选择来源
-    $("body").on("click", "#toChooseFromId", function(e){
+    $("body").on("click", "#toChooseFromId", function (e) {
         var _this = $(this);
         bossUtil.openBossIntervieweeFromChoosePage(function (bossIntervieweeFromMation){
             _this.parent().find("input").val(bossIntervieweeFromMation.title);

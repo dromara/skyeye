@@ -82,7 +82,7 @@ layui.config({
 	function delet(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "knowledgetype003", params:{rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "knowledgetype003", params:{rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -98,7 +98,7 @@ layui.config({
 		var msg = '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '上线知识库类型' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "knowledgetype004", params: {rowId: data.id}, type: 'json', method: 'POST', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "knowledgetype004", params: {rowId: data.id}, type: 'json', method: 'POST', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -114,7 +114,7 @@ layui.config({
 		var msg = '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '下线知识库类型' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "knowledgetype005", params: {rowId: data.id}, type: 'json', method: 'POST', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "knowledgetype005", params: {rowId: data.id}, type: 'json', method: 'POST', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				loadTable();

@@ -19,7 +19,7 @@ layui.config({
                 json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
                 json.bean.stateName = activitiUtil.showStateName2(json.bean.state, 1);
             },
-            ajaxSendAfter: function(json){
+            ajaxSendAfter: function (json) {
                 // 附件回显
                 skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.enclosureInfo});
 

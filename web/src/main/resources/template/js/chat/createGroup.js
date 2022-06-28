@@ -15,21 +15,12 @@ layui.config({
 	    $(".friend-list-box").find(".layim-tab-content").show();
 	    $(".friend-list-box").find(".layui-layim-list").find("li").find("img").before('<input type="checkbox" name="friendCheckBox" class="friendCheckBox" lay-filter="friendCheckBox">');
 	    $(".friend-list-box").find(".layui-layim-list").find("li").removeClass('layim-list-gray');
-	    
-	    //初始化上传
- 		$("#groupImg").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 7,
-            "function": function (_this, data) {
-                show("#groupImg", data);
-            }
-        });
-	    
+
+		// 初始化上传
+		$("#groupImg").upload(systemCommonUtil.uploadCommon003Config('groupImg', 7, '', 1));
+
         matchingLanguage();
 		form.render();
-		
 		form.on('checkbox(friendCheckBox)', function (data) {
 			if(this.checked){//选中
 				var oldHtml = $(this).parent().prop("outerHTML");
@@ -63,7 +54,7 @@ layui.config({
  	        		params.userIds = params.userIds + $(item).attr("id").replace('layim-friend', '') + ",";
  	        	});
  	        	
- 	        	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup001", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "companytalkgroup001", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				parent.friendChooseList = params.userIds;
 	 	   				parent.layim.addList({
@@ -83,7 +74,7 @@ layui.config({
 	    });
 	    
 	    
-	    $("body").on("click", ".layim-list-friend li", function(e){
+	    $("body").on("click", ".layim-list-friend li", function (e) {
 	    	if($(this).find("ul").hasClass("layui-show")){
 	    		$(this).find("ul").removeClass("layui-show");
 	    		$(this).find("h5").find("i").html('&#xe602;');
@@ -93,7 +84,7 @@ layui.config({
 	    	}
 	    });
 	    
-	    $("body").on("click", ".layim-list-friend ul", function(e){
+	    $("body").on("click", ".layim-list-friend ul", function (e) {
 	    	e.stopPropagation();
 	    });
 	    

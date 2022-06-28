@@ -224,7 +224,7 @@ layui.config({
 	        		params.notifyTime = null;
 	        	}
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "sysworkplan003", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "sysworkplan003", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

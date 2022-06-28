@@ -158,11 +158,11 @@ layui.config({
 	}
 	
 	// 树的动画效果
-	$("body").on("mouseover", "#treeDemo a", function(e){
+	$("body").on("mouseover", "#treeDemo a", function (e) {
 		$("#treeDemo").find("a").removeClass('mouseOver');
 		$(this).addClass('mouseOver');
 	});
-	$("body").on("mouseleave", "#treeDemo", function(e){
+	$("body").on("mouseleave", "#treeDemo", function (e) {
 		$("#treeDemo").find("a").removeClass('mouseOver');
 	});
 	
@@ -173,7 +173,7 @@ layui.config({
 	}
 	
 	// 右侧内容右键操作
-	$("body").on("contextmenu", "#file-content .file", function(e){
+	$("body").on("contextmenu", "#file-content .file", function (e) {
 		var _this = $(this);
 		operaterId = _this.attr("rowid");
 		// 1.加载右侧右键内容
@@ -266,7 +266,7 @@ layui.config({
 	};
 	
 	// 双击文件
-	$("body").on("dblclick", "#file-content .file", function(e){
+	$("body").on("dblclick", "#file-content .file", function (e) {
 		var _this = $(this);
 		var fileType = _this.attr("filetype");
 		if(fileType === 'folder'){//文件夹
@@ -277,7 +277,7 @@ layui.config({
 			// 加载目录下的文件
 			loadThisFolderChild();
 		}else if($.inArray(fileType, vedioType) >= 0){//视频
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				fileUrl = json.bean.fileAddress;
     				fileThumbnail = json.bean.fileThumbnail;
@@ -293,7 +293,7 @@ layui.config({
     		}});
 		}else if($.inArray(fileType, officeType) >= 0){//office文件
 			var thisId = $(this).attr("rowid");
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				fileUrl = json.bean.fileAddress;
     				selFileType = json.bean.fileType;
@@ -311,7 +311,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){}});
 		}else if($.inArray(fileType, epubType) >= 0){//电子书
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				fileUrl = json.bean.fileAddress;
     				fileThumbnail = json.bean.fileThumbnail;
@@ -326,7 +326,7 @@ layui.config({
     			}
     		}});
 		}else if($.inArray(fileType, packageType) >= 0){//压缩包
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				fileUrl = json.bean.fileAddress;
     				fileThumbnail = json.bean.fileThumbnail;
@@ -345,13 +345,13 @@ layui.config({
 	});
 	
 	// 文件夹或者文件重命名
-	$("body").on("click", ".fileReName", function(e){
+	$("body").on("click", ".fileReName", function (e) {
 		reNameSpecially();
 		$(".layui-dropdown-menu").hide();
 	});
 	
 	// 文件名保存
-	$("body").on("click", ".filename-edit-save", function(e){
+	$("body").on("click", ".filename-edit-save", function (e) {
 		if(isNull($(this).parent().find('textarea').val())){
 			winui.window.msg('请填写文件名', {icon: 2, time: 2000});
 		} else {
@@ -361,14 +361,14 @@ layui.config({
 	});
 	
 	// 文件名取消修改
-	$("body").on("click", ".filename-edit-cancle", function(e){
+	$("body").on("click", ".filename-edit-cancle", function (e) {
 		$(this).parent().parent().css({"z-index": 0});
 		$(this).parent().parent().find("div[class='filename']").show();
 		$(this).parent().hide();
 	});
 
 	// 路径目录点击
-	$("body").on("click", ".yarnball .folderName", function(e){
+	$("body").on("click", ".yarnball .folderName", function (e) {
 		folderId = $(this).attr("rowid");
 		// 加载目录
 		initFolderName(folderId);
@@ -394,7 +394,7 @@ layui.config({
 	}
 	
 	// 文件夹或者文件删除
-	$("body").on("click", ".deleteFolderAndChild", function(e){
+	$("body").on("click", ".deleteFolderAndChild", function (e) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
 			var checkItems = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
@@ -424,7 +424,7 @@ layui.config({
 	
 	// 删除文件夹以及该文件夹下的所有子内容
 	function deleteFolderAndChild(deleteArray, callBack){
-		AjaxPostUtil.request({url:reqBasePath + "fileconsole004", params:{fileList: JSON.stringify(deleteArray)}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole004", params:{fileList: JSON.stringify(deleteArray)}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				callBack();
@@ -435,13 +435,13 @@ layui.config({
 	}
 	
 	// 放入回收站
-	$("body").on("click", ".deleteFolderAndChildToRecycle", function(e){
+	$("body").on("click", ".deleteFolderAndChildToRecycle", function (e) {
 		layer.confirm("确定将该文件夹及其子文件放入回收站吗?", { icon: 3, title: '回收站' }, function (index) {
 			layer.close(index);
 			$(".layui-dropdown-menu").hide();
 			$(".select-op-more").hide();
 			var fileType = $("#file-content div[rowid='" + operaterId + "']").attr("filetype");
-            AjaxPostUtil.request({url:reqBasePath + "fileconsole013", params:{rowId: operaterId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "fileconsole013", params:{rowId: operaterId}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
     				$("#file-content div[rowid='" + operaterId + "']").remove();
@@ -459,7 +459,7 @@ layui.config({
 	
 	var chooseSaveIds = new Array();//选择的要保存呢的文件或者文件夹id
 	// 创建副本
-	$("body").on("click", ".createDuplicate", function(e){
+	$("body").on("click", ".createDuplicate", function (e) {
 		$(".layui-dropdown-menu").hide();
 		$(".select-op-more").hide();
 		var fileType = $("#file-content div[rowid='" + operaterId + "']").attr("filetype");
@@ -475,7 +475,7 @@ layui.config({
 			jsonStr: jsonStr
 		};
 		winui.window.msg("文件副本创建中，期间请勿进行其他操作。", {icon: 7,time: 4000});
-		AjaxPostUtil.request({url: reqBasePath + "fileconsole030", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole030", params: params, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg("副本创建成功", {icon: 1, time: 2000});
 				if(fileType === 'folder'){//文件夹
@@ -490,7 +490,7 @@ layui.config({
 	});
 	
 	// 属性
-	$("body").on("click", ".filePropertyMation", function(e){
+	$("body").on("click", ".filePropertyMation", function (e) {
 		$(".layui-dropdown-menu").hide();
 		shareId = operaterId;
 		_openNewWindows({
@@ -505,7 +505,7 @@ layui.config({
 	
 	var choosePackageIds = new Array();//选择的要保存呢的文件或者文件夹id
 	// 打包压缩包
-	$("body").on("click", ".createComPackage", function(e){
+	$("body").on("click", ".createComPackage", function (e) {
 		$(".layui-dropdown-menu").hide();
 		$(".select-op-more").hide();
 		var list = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
@@ -530,7 +530,7 @@ layui.config({
 			jsonStr: jsonStr
 		};
 		winui.window.msg("文件打包中，期间请勿进行其他操作.", {icon: 7,time: 4000});
-		AjaxPostUtil.request({url: reqBasePath + "fileconsole032", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole032", params: params, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg("打包成功.", {icon: 1, time: 2000});
 				loadThisFolderChild();
@@ -541,10 +541,10 @@ layui.config({
 	});
 	
 	// 通过onlyoffice打开office文件
-	$("body").on("click", ".openByOnlyOffice", function(e){
+	$("body").on("click", ".openByOnlyOffice", function (e) {
 		var thisId = operaterId;
 		$(".layui-dropdown-menu").hide();
-		AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				fileUrl = json.bean.fileAddress;
 				selFileType = json.bean.fileType;
@@ -556,9 +556,9 @@ layui.config({
 	});
 	
 	// 通过微软office打开office文件
-	$("body").on("click", ".openByMicrosoftOffice", function(e){
+	$("body").on("click", ".openByMicrosoftOffice", function (e) {
 		$(".layui-dropdown-menu").hide();
-		AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				window.open('https://view.officeapps.live.com/op/view.aspx?src=http://gzwp.free.idcfengye.com/' + json.bean.fileAddress);
 			} else {
@@ -568,7 +568,7 @@ layui.config({
 	});
 	
 	// 文件或者文件夹下载
-	$("body").on("click", ".fileDownLoad", function(e){
+	$("body").on("click", ".fileDownLoad", function (e) {
 		$(".layui-dropdown-menu").hide();
 		var list = $("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked");
 		if(list.length == 0){
@@ -601,7 +601,7 @@ layui.config({
 				jsonStr: jsonStr
 			};
 			winui.window.msg("文件打包中，期间请勿进行其他操作.", {icon: 7,time: 4000});
-			AjaxPostUtil.request({url: reqBasePath + "fileconsole038", params: params, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole038", params: params, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg("打包成功，开始下载.", {icon: 1, time: 2000});
 					if(isNull(json.bean) || isNull(json.bean.fileAddress)){
@@ -616,7 +616,7 @@ layui.config({
 			}});
 		} else {
 			//不包含文件夹
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					if($.inArray(json.bean.fileType, imageType) >= 0){//图片
 						downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
@@ -631,10 +631,10 @@ layui.config({
 	});
 	
 	// 压缩包解压到当前
-	$("body").on("click", ".unzipToTheCurrent", function(e){
+	$("body").on("click", ".unzipToTheCurrent", function (e) {
 		layer.confirm("确定解压该压缩包到当前文件夹吗?", { icon: 3, title: '压缩包解压' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "fileconsole033", params:{rowId: operaterId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "fileconsole033", params:{rowId: operaterId}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("解压成功。", {icon: 1, time: 2000});
     				refreshTreePointNode();
@@ -647,7 +647,7 @@ layui.config({
 	});
 	
 	// 文件夹或者文件取消选中
-	$("body").on("click", ".cancleChoose", function(e){
+	$("body").on("click", ".cancleChoose", function (e) {
 		$(".select-op-more").hide();
 		$("#file-content div").removeClass("active");
 		$(".layui-dropdown-menu").hide();
@@ -657,12 +657,12 @@ layui.config({
 	});
 	
 	// 刷新文件夹内容
-	$("body").on("click", ".refreshContent", function(e){
+	$("body").on("click", ".refreshContent", function (e) {
 		loadThisFolderChild();
 	});
 	
 	// 上传文件
-	$("body").on("click", ".uploadFileBtn", function(e){
+	$("body").on("click", ".uploadFileBtn", function (e) {
 		_openNewWindows({
 			url: "../../tpl/fileconsole/fileconsoleupload.html", 
 			title: "文件上传",
@@ -676,7 +676,7 @@ layui.config({
 	});
 	
 	// 上传文件夹
-	$("body").on("click", ".uploadFileFolderBtn", function(e){
+	$("body").on("click", ".uploadFileFolderBtn", function (e) {
 		_openNewWindows({
 			url: "../../tpl/fileconsole/filefolderupload.html", 
 			title: "文件夹上传",
@@ -690,7 +690,7 @@ layui.config({
 	});
 	
 	// 回收站
-	$("body").on("click", "#recycleBinList", function(e){
+	$("body").on("click", "#recycleBinList", function (e) {
 		_openNewWindows({
 			url: "../../tpl/fileconsole/recycleBinList.html", 
 			title: "回收站",
@@ -708,7 +708,7 @@ layui.config({
 	});
 	
 	// 我的分享
-	$("body").on("click", "#shareFileList", function(e){
+	$("body").on("click", "#shareFileList", function (e) {
 		_openNewWindows({
 			url: "../../tpl/fileconsole/shareFileList.html", 
 			title: "我的分享",
@@ -719,7 +719,7 @@ layui.config({
 	});
 	
 	// 分享
-	$("body").on("click", ".shareFileBtn", function(e){
+	$("body").on("click", ".shareFileBtn", function (e) {
 		shareId = operaterId;
 		_openNewWindows({
 			url: "../../tpl/fileconsole/shareFile.html", 
@@ -733,7 +733,7 @@ layui.config({
 	});
 	
 	// 在线预览类型
-	$("body").on("click", "#showFileInLine", function(e){
+	$("body").on("click", "#showFileInLine", function (e) {
 		_openNewWindows({
 			url: "../../tpl/fileconsole/showFileInLine.html", 
 			title: "可支持的在线预览类型",
@@ -744,30 +744,30 @@ layui.config({
 	});
 	
 	// 新建文件夹
-	$("body").on("click", "#createNewFolder", function(e){
+	$("body").on("click", "#createNewFolder", function (e) {
 		hideRMenu();
 		createFolder(folderId, refreshTreePointNode, initMenuToBox, currentUserId);
 	});
 	
 	// 树操作--新建文件夹
-	$("body").on("click", ".treecreateNewFolder", function(e){
+	$("body").on("click", ".treecreateNewFolder", function (e) {
 		hideRMenu();
 		loadThisFolderChild();
 		createFolder(folderId, refreshTreePointNode, initMenuToBox, currentUserId);
 	});
 	
 	// 树操作--刷新
-	$("body").on("click", ".treerefreshContent", function(e){
+	$("body").on("click", ".treerefreshContent", function (e) {
 		refreshTreePointNode();
 		loadThisFolderChild();
 	});
 	
 	// 树操作--放入回收站
-	$("body").on("click", ".treedeleteFolderAndChildToRecycle", function(e){
+	$("body").on("click", ".treedeleteFolderAndChildToRecycle", function (e) {
 		layer.confirm("确定将该文件夹及其子文件放入回收站吗?", { icon: 3, title: '回收站' }, function (index) {
 			layer.close(index);
 			var fileType = 'folder';
-            AjaxPostUtil.request({url:reqBasePath + "fileconsole013", params:{rowId: folderId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "fileconsole013", params:{rowId: folderId}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
     				$("#file-content div[rowid='" + folderId + "']").remove();
@@ -785,12 +785,12 @@ layui.config({
 	});
 	
 	// 树操作--粘贴
-	$("body").on("click", ".treePaste", function(e){
+	$("body").on("click", ".treePaste", function (e) {
 		pasteFile();
 	});
 	
 	// 树操作--文件夹或者文件删除
-	$("body").on("click", ".treedeleteFolderAndChild", function(e){
+	$("body").on("click", ".treedeleteFolderAndChild", function (e) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
 			var deleteArray = new Array();
@@ -811,7 +811,7 @@ layui.config({
 	});
 	
 	// 树操作--文件夹或者文件分享
-	$("body").on("click", ".treeShareFolderAndChild", function(e){
+	$("body").on("click", ".treeShareFolderAndChild", function (e) {
 		shareId = folderId;
 		hideRMenu();
 		_openNewWindows({
@@ -826,7 +826,7 @@ layui.config({
 	});
 	
 	//树操作--属性
-	$("body").on("click", ".treeFilePropertyMation", function(e){
+	$("body").on("click", ".treeFilePropertyMation", function (e) {
 		$(".layui-dropdown-menu").hide();
 		shareId = folderId;
 		_openNewWindows({
@@ -840,7 +840,7 @@ layui.config({
 	
 	var orderBy = '3';
 	//排序方式
-	$("body").on("click", ".orderBy", function(e){
+	$("body").on("click", ".orderBy", function (e) {
 		if($(this).attr("data-type") != orderBy){
 			orderBy = $(this).attr("data-type");
 			$(".orderBy").find("img").attr("src", "");
@@ -861,27 +861,27 @@ layui.config({
 	});
 	
 	// 创建word空文件
-	$("body").on("click", "#createWordFile", function(e){
+	$("body").on("click", "#createWordFile", function (e) {
 		createWordFile(folderId, loadThisFolderChild());
 	});
 	
 	// 创建excel空文件
-	$("body").on("click", "#createExcelFile", function(e){
+	$("body").on("click", "#createExcelFile", function (e) {
 		createExcelFile(folderId, loadThisFolderChild());
 	});
 	
 	// 创建ppt空文件
-	$("body").on("click", "#createPPTFile", function(e){
+	$("body").on("click", "#createPPTFile", function (e) {
 		createPPTFile(folderId, loadThisFolderChild());
 	});
 	
 	// 创建txt空文件
-	$("body").on("click", "#createTXTFile", function(e){
+	$("body").on("click", "#createTXTFile", function (e) {
 		createTXTFile(folderId, loadThisFolderChild());
 	});
 	
 	// 创建html空文件
-	$("body").on("click", "#createHtmlFile", function(e){
+	$("body").on("click", "#createHtmlFile", function (e) {
 		createHtmlFile(folderId, loadThisFolderChild());
 	});
 	
@@ -897,7 +897,7 @@ layui.config({
 		}
 		if(newName != title){//修改前的名称和当前名称不一致，则调用后台接口进行修改
 			var id = fileFolderEdit.parent().attr("rowid");
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole005", params: {rowId: id, catalogName: newName, fileType: fileType}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole005", params: {rowId: id, catalogName: newName, fileType: fileType}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					fileFolderEdit.parent().find("div[class='filename']").show();
 					fileFolderEdit.parent().find("div[class='filename']").find("span").html(newName);
@@ -936,7 +936,7 @@ layui.config({
 	}
 	
 	function loadThisFolderChildList(){
-		AjaxPostUtil.request({url:reqBasePath + "fileconsole003", params: {folderId: folderId, orderBy: orderBy}, type: 'json', callback: function(j){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole003", params: {folderId: folderId, orderBy: orderBy}, type: 'json', callback: function(j){
 			// 遮罩层隐藏
 			$(".fileconsole-mask").hide();
    			if(j.returnCode == 0){
@@ -1281,7 +1281,7 @@ layui.config({
 			};
 			//遮罩层显示
 			$(".fileconsole-mask").show();
-			AjaxPostUtil.request({url:reqBasePath + "fileconsole035", params: params, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "fileconsole035", params: params, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					refreshTreePointNode();//刷新树节点
 					loadThisFolderChild();//刷新文件列表
@@ -1301,7 +1301,7 @@ layui.config({
 	//加载总文件大小
 	function loadFileSizeById(){
 		loadFileSizeCS = true;
-		AjaxPostUtil.request({url:reqBasePath + "fileconsole012", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole012", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				$(".memory-num").html(json.bean.size);
    			} else {
@@ -1341,7 +1341,7 @@ layui.config({
 	}
 	
 	//列表选中
-	$("body").on("change", "#file-content .menu-folder .item-select .item-check", function(e){
+	$("body").on("change", "#file-content .menu-folder .item-select .item-check", function (e) {
 		var length = $("#file-content").find(".item-check").length;
 		var checkLength = $("#file-content :checkbox:checked").length;
 		if(length == checkLength){
@@ -1354,7 +1354,7 @@ layui.config({
 	
 	// 点击logo,文件名进行文件选中
 	$("body").on("click", "#file-content .file .ico, " +
-			"#file-content .file .filename", function(e){
+			"#file-content .file .filename", function (e) {
 		$(".select-op-more").find("button[class*='btn-custom']").show();
 		$(".select-op-more").find("li[class*='is-file']").show();
 		$(".select-op-more").show();
@@ -1384,7 +1384,7 @@ layui.config({
 	});
 	
 	// 文件或文件夹选中事件，同时阻止冒泡
-	$("body").on("click", "#file-content .menu-folder .item-select .item-check", function(e){
+	$("body").on("click", "#file-content .menu-folder .item-select .item-check", function (e) {
 		var checked = $(this).find("input[type='checkbox']").prop("checked");
 		if(checked){//选中
 			$(this).parent().parent().addClass("active");
@@ -1620,7 +1620,7 @@ layui.config({
 					};
 					winui.window.msg("文件正在粘贴中，期间请勿进行其他操作。", {icon: 7,time: 4000});
 					if(pastedJson.type === '1' || pastedJson.type == 1){
-						AjaxPostUtil.request({url:reqBasePath + "fileconsole034", params: params, type: 'json', callback: function(json){
+						AjaxPostUtil.request({url: reqBasePath + "fileconsole034", params: params, type: 'json', callback: function (json) {
 							if (json.returnCode == 0) {
 								winui.window.msg("文件粘贴成功", {icon: 1, time: 2000});
 								if(pastedJson.fileType === 'folder'){//文件夹
@@ -1633,7 +1633,7 @@ layui.config({
 							}
 						}});
 					}else if(pastedJson.type === '2' || pastedJson.type == 2){
-						AjaxPostUtil.request({url:reqBasePath + "fileconsole035", params: params, type: 'json', callback: function(json){
+						AjaxPostUtil.request({url: reqBasePath + "fileconsole035", params: params, type: 'json', callback: function (json) {
 							if (json.returnCode == 0) {
 								var selNode = ztree.getNodeByParam("id", pastedJson.id, null);
                                 if(!isNull(selNode)){
@@ -1696,7 +1696,7 @@ layui.config({
 	    })(),
     	uploader;
     //关闭按钮
-    $("body").on("click", ".closeBtn", function(e){
+    $("body").on("click", ".closeBtn", function (e) {
 		if(state === 'pedding' || state === 'ready'){
 	    	// 移除所有缩略图并将上传文件移出上传序列
 	        $.each(uploader.getFiles(), function(i, item){
@@ -1764,7 +1764,7 @@ layui.config({
 					//当前分块大小
 					"chunkSize": block.end - block.start
 				};
-				AjaxPostUtil.request({url:reqBasePath + "fileconsole008", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "fileconsole008", params: params, type: 'json', callback: function (json) {
 	    			if (json.returnCode == 0) {
 	    				//分块存在，跳过
 						deferred.reject();
@@ -1780,7 +1780,7 @@ layui.config({
 			//时间点3：所有分块上传成功后调用此函数
 			afterSendFile: function (data) {
 				//如果分块上传成功，则通知后台合并分块
-				AjaxPostUtil.request({url:reqBasePath + "fileconsole007", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "fileconsole007", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function (json) {
 	    			if (json.returnCode == 0) {
 	    			} else {
 	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});

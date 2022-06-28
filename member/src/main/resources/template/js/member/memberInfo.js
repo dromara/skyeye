@@ -18,7 +18,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: simpleTemplate,
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 $("#enabled").html(json.bean.enabled == "1" ? "<span class='state-up'>启用</span>" : "<span class='state-down'>禁用</span>");
 
                 // 加载车辆信息
@@ -36,7 +36,7 @@ layui.config({
         });
 
         function loadCarMation(){
-            AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: parent.rowId}, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: {memberId: parent.rowId}, type: 'json', method: "POST", callback: function (json) {
                 if (json.returnCode == 0) {
                     $.each(json.rows, function (i, item){
                         if(item.insure == '1'){
@@ -54,7 +54,7 @@ layui.config({
         }
 
         function loadMealMation(){
-            AjaxPostUtil.request({url: shopBasePath + "queryMealMationByMemberId", params: {memberId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "queryMealMationByMemberId", params: {memberId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
                 if (json.returnCode == 0) {
                     $("#showForm").append(getDataUseHandlebars($("#memberMealTemplate").html(), json));
                 } else {
@@ -69,7 +69,7 @@ layui.config({
                 limit: 500,
                 page: 1
             };
-            AjaxPostUtil.request({url: shopBasePath + "mealOrder001", params: params, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "mealOrder001", params: params, type: 'json', method: "POST", callback: function (json) {
                 if (json.returnCode == 0) {
                     $.each(json.rows, function (i, item){
                         item.state = shopUtil.getMealOrderStateName(item);
@@ -87,7 +87,7 @@ layui.config({
                 limit: 500,
                 page: 1
             };
-            AjaxPostUtil.request({url: shopBasePath + "keepFitOrder001", params: params, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "keepFitOrder001", params: params, type: 'json', method: "POST", callback: function (json) {
                 if (json.returnCode == 0) {
                     $.each(json.rows, function (i, item){
                         item.state = shopUtil.getKeepFitOrderStateName(item);

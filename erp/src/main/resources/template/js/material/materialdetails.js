@@ -22,7 +22,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/material/materialdetailsTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.unit == '1'){//非多单位
 		 			var item = json.bean.norms[0];
 		 			item.unitName = json.bean.unitName;
@@ -57,7 +57,7 @@ layui.config({
 		 	}
 		});
 		
-		$("body").on("click", ".notice-title-click", function(e){
+		$("body").on("click", ".notice-title-click", function (e) {
 			mUnitId = $(this).attr("rowid");
 			_openNewWindows({
 				url: "../../tpl/material/materialstocklist.html", 

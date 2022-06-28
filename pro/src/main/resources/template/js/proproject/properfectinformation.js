@@ -21,7 +21,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		// 业务需求和目标的附件回显
 			    if(json.bean.businessEnclosureInfoList.length != 0 && json.bean.businessEnclosureInfoList != ""){
 			    	var str = "";
@@ -88,7 +88,7 @@ layui.config({
 			        		winui.window.msg("请填写项目成果和总结", {icon: 2, time: 2000});
 			        		return false;
 			        	}
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject016", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject016", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -116,7 +116,7 @@ layui.config({
 			        		winui.window.msg("请填写项目成果和总结", {icon: 2, time: 2000});
 			        		return false;
 			        	}
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject016", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject016", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

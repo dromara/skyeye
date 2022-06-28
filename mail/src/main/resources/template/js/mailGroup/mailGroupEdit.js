@@ -10,7 +10,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "mailGroup004", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "mailGroup004", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				$("#name").val(json.bean.name);
     			$("#desc").val(json.bean.desc);
@@ -24,7 +24,7 @@ layui.config({
     	        			desc: $("#desc").val(),
     	        			rowId: parent.rowId
     	 	        	};
-    	 	        	AjaxPostUtil.request({url:reqBasePath + "mailGroup005", params:params, type: 'json', callback: function(json){
+    	 	        	AjaxPostUtil.request({url: reqBasePath + "mailGroup005", params: params, type: 'json', callback: function (json) {
     		 	   			if (json.returnCode == 0) {
     			 	   			parent.layer.close(index);
     			 	        	parent.refreshCode = '0';

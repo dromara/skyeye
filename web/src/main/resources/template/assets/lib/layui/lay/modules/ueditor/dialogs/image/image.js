@@ -114,7 +114,7 @@
     /* 初始化对其方式的点击事件 */
     function initAlign(){
         /* 点击align图标 */
-        domUtils.on($G("alignIcon"), 'click', function(e){
+        domUtils.on($G("alignIcon"), 'click', function (e) {
             var target = e.target || e.srcElement;
             if(target.className && target.className.indexOf('-align') != -1) {
                 setAlign(target.getAttribute('data-align'));
@@ -816,7 +816,7 @@
             var _this = this;
 
             /* 滚动拉取图片 */
-            domUtils.on($G('imageList'), 'scroll', function(e){
+            domUtils.on($G('imageList'), 'scroll', function (e) {
                 var panel = this;
                 if (panel.scrollHeight - (panel.offsetHeight + panel.scrollTop) < 10) {
                     _this.getImageData();
@@ -1000,7 +1000,7 @@
                 }
             });
             /* 搜索框回车键搜索 */
-            domUtils.on($G('searchTxt'), 'keydown', function(e){
+            domUtils.on($G('searchTxt'), 'keydown', function (e) {
                 var keyCode = e.keyCode || e.which;
                 if (keyCode == 13) {
                     $G('searchBtn').click();
@@ -1008,7 +1008,7 @@
             });
 
             /* 选中图片 */
-            domUtils.on($G('searchList'), 'click', function(e){
+            domUtils.on($G('searchList'), 'click', function (e) {
                 var target = e.target || e.srcElement,
                     li = target.parentNode.parentNode;
 
@@ -1065,7 +1065,7 @@
             ajax.request(url, {
                 'dataType': 'jsonp',
                 'charset': 'GB18030',
-                'onsuccess':function(json){
+                'onsuccess':function (json) {
                     var list = [];
                     if(json && json.data) {
                         for(var i = 0; i < json.data.length; i++) {

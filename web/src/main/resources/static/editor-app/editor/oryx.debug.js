@@ -7103,13 +7103,13 @@ ORYX.Core.StencilSet.Rules = {
 						layoutRules[layoutKey]["in"] = getDirections(rules["in"]);
 					}
 					if (rules["ins"]){
-						layoutRules[layoutKey]["ins"] = (rules["ins"]||[]).map(function(e){ return getDirections(e) })
+						layoutRules[layoutKey]["ins"] = (rules["ins"]||[]).map(function (e) { return getDirections(e) })
 					}
 					if (rules["out"]) {
 						layoutRules[layoutKey]["out"] = getDirections(rules["out"]);
 					}
 					if (rules["outs"]){
-						layoutRules[layoutKey]["outs"] = (rules["outs"]||[]).map(function(e){ return getDirections(e) })
+						layoutRules[layoutKey]["outs"] = (rules["outs"]||[]).map(function (e) { return getDirections(e) })
 					}
 				}.bind(this));
 			}			
@@ -7905,10 +7905,10 @@ ORYX.Core.StencilSet.Rules = {
 			}
 			if (o && o[v+"s"] instanceof Array){
 				["t","r","b","l"].each(function(d){
-					var defaultRule = o[v+"s"].find(function(e){ return !e.edgeRole });
+					var defaultRule = o[v+"s"].find(function (e) { return !e.edgeRole });
 					var edgeRule;
 					if (edgeShape instanceof ORYX.Core.Edge) {
-						edgeRule = o[v + "s"].find(function(e){return this._hasRole(edgeShape, e.edgeRole) }.bind(this));
+						edgeRule = o[v + "s"].find(function (e) {return this._hasRole(edgeShape, e.edgeRole) }.bind(this));
 					}
 					layout[v][d]=Math.max(edgeRule?edgeRule[d]:defaultRule[d],layout[v][d]||0);
 				}.bind(this));
@@ -12084,7 +12084,7 @@ ORYX.Editor = {
 		return false;
 	},
 
-	isValidEvent: function(e){
+	isValidEvent: function (e) {
 		try {
 			var isInput = ["INPUT", "TEXTAREA"].include(e.target.tagName.toUpperCase());
 			var gridHasFocus = e.target.className.include("x-grid3-focus") && !e.target.className.include("x-grid3-focus-canvas");
@@ -18818,7 +18818,7 @@ ORYX.Plugins.RenameShapes = Clazz.extend({
 		return center;			
 	},
 	
-	hide: function(e){
+	hide: function (e) {
 		if (this.shownTextField && (!e || e.target !== this.shownTextField)) {
 			var newValue = this.shownTextField.value;
 			if (newValue !== this.oldValueText)
@@ -18829,13 +18829,13 @@ ORYX.Plugins.RenameShapes = Clazz.extend({
 		}
 	},
 	
-	hideField: function(e){
+	hideField: function (e) {
 		if (this.shownTextField) {
 			this.destroy();
 		}
 	},
 	
-	destroy: function(e){
+	destroy: function (e) {
 		var textInputComp = jQuery("#shapeTextInput");
 		if( textInputComp ){
 			textInputComp.remove(); 
@@ -19457,7 +19457,7 @@ ORYX.Plugins.Save = Clazz.extend({
     construct: function(facade){
 		this.facade = facade;
 		
-		document.addEventListener("keydown", function(e){
+		document.addEventListener("keydown", function (e) {
 			if (e.ctrlKey&&e.keyCode === 83){
 				Event.stop(e);
 			}
@@ -22427,7 +22427,7 @@ ORYX.Plugins.Overlay = Clazz.extend({
 		
 		// Add all Attributes which have relation to another node in this document and concate the pure id out of it
 		// This is for example important for the markers of a edge
-		childs.each(function(e){ ids.push( $A(e.attributes).findAll(function(attr){ return attr.nodeValue.startsWith('url(#')}) )})
+		childs.each(function (e) { ids.push( $A(e.attributes).findAll(function(attr){ return attr.nodeValue.startsWith('url(#')}) )})
 		ids = ids.flatten().compact();
 		ids = ids.collect(function(s){return s.nodeValue}).uniq();
 		ids = ids.collect(function(s){return s.slice(5, s.length-1)})
@@ -22466,7 +22466,7 @@ ORYX.Plugins.Overlay = Clazz.extend({
 				
 		// Get all children which contains the node id		
 		var delEl = $A(this.styleNode.childNodes)
-					 .findAll(function(e){ return e.textContent.include( '#' + node.id ) });
+					 .findAll(function (e) { return e.textContent.include( '#' + node.id ) });
 		
 		// Remove all of them
 		delEl.each(function(el){
@@ -22613,7 +22613,7 @@ ORYX.Plugins.KeysMove = ORYX.Plugins.AbstractPlugin.extend({
 	 * Select all shapes in the editor
 	 *
 	 */
-	selectAll: function(e){
+	selectAll: function (e) {
     	Event.stop(e.event);
 		this.facade.setSelection(this.facade.getCanvas().getChildShapes(true))
 	},
@@ -23034,7 +23034,7 @@ new function(){
 			var sameIncomingFrom = from
 								.getIncomingShapes()
 								.findAll(function(a){ return a instanceof ORYX.Core.Edge})
-								.any(function(e){ 
+								.any(function (e) { 
 									return sameDirection(d1, e.dockers[e.dockers.length-2].bounds.center(), e.dockers.last().bounds.center());
 								});
 
@@ -23042,7 +23042,7 @@ new function(){
 			var sameOutgoingTo = to
 								.getOutgoingShapes()
 								.findAll(function(a){ return a instanceof ORYX.Core.Edge})
-								.any(function(e){ 
+								.any(function (e) { 
 									return sameDirection(d2, e.dockers[1].bounds.center(), e.dockers.first().bounds.center());
 								});
 			

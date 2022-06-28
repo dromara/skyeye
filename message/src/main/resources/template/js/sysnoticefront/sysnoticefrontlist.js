@@ -76,13 +76,13 @@ layui.config({
 	 	template: getFileContent('tpl/sysnoticefront/sysnoticefrontTemplate.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		//初始化所有上线列表数据
 	 	    showList();
 	 	}	
     });
     
-	$("body").on("click", ".setting a", function(e){
+	$("body").on("click", ".setting a", function (e) {
 		$(".setting a").removeClass("selected");
 		$(this).addClass("selected");
 		

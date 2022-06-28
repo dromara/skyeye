@@ -83,7 +83,7 @@ layui.config({
 					return v1.replace(reg, "\n");
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var userNames = "";
                 userList = json.bean.userInfo;
                 $.each(userList, function (i, item) {
@@ -104,7 +104,7 @@ layui.config({
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
                 //人员选择
-                $("body").on("click", "#userNameSelPeople", function(e){
+                $("body").on("click", "#userNameSelPeople", function (e) {
 					systemCommonUtil.userReturnList = [].concat(userList);
 					systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 					systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -196,7 +196,7 @@ layui.config({
 		        			params.coordinaJob = encodeURIComponent($("#coordinatext").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		
-		        		AjaxPostUtil.request({url:reqBasePath + "diary017", params:params, type: 'json', callback: function(json){
+		        		AjaxPostUtil.request({url: reqBasePath + "diary017", params: params, type: 'json', callback: function (json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                  parent.refreshCode = '0';

@@ -37,20 +37,12 @@ layui.config({
  		    	$("#iconShow").css({'color': color});
  		    }
  		});
- 		
- 		$("#menuIconPic").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 12,
-            "function": function (_this, data) {
-                show("#menuIconPic", data);
-            }
-        });
- 		
+
+		// 初始化上传
+		$("#menuIconPic").upload(systemCommonUtil.uploadCommon003Config('menuIconPic', 12, '', 1));
+
         matchingLanguage();
  		form.render();
- 		
  		//菜单图标类型变化事件
  		form.on('radio(menuIconType)', function (data) {
  			var val = data.value;
@@ -66,7 +58,6 @@ layui.config({
         });
 	    
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
         			menuName: $("#menuName").val(),
@@ -99,7 +90,7 @@ layui.config({
  	        		return false;
  	        	}
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				parent.childParams = json.bean;
 		 	   			parent.layer.close(index);
@@ -113,7 +104,7 @@ layui.config({
 	    });
 	    
 	    // 菜单图标选中事件
- 	    $("body").on("focus", "#menuIcon", function(e){
+ 	    $("body").on("focus", "#menuIcon", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#menuIcon").val(sysIconChooseClass);
 				$("#iconShow").css({'color': 'white'});

@@ -21,7 +21,7 @@ layui.config({
         method: "GET",
         ajaxSendLoadBefore: function(hdb){
         },
-        ajaxSendAfter:function(json){
+        ajaxSendAfter:function (json) {
             initTable();
         }
     });

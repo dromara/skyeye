@@ -30,7 +30,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		
 		 		// 实际开工时间
 		 		laydate.render({ 
@@ -101,18 +101,9 @@ layui.config({
 					//计算价格
 					calculatedTotalPrice();
 				});
-				
-		 		//初始化完工拍照上传
-		 		$("#comPic").upload({
-		            "action": reqBasePath + "common003",
-		            "data-num": "10",
-		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 14,
-		            "data-value": isNull(json.bean.comPic) ? "" : json.bean.comPic,
-		            "function": function (_this, data) {
-		                show("#comPic", data);
-		            }
-		        });
+
+				// 初始化上传
+				$("#comPic").upload(systemCommonUtil.uploadCommon003Config('comPic', 14, isNull(json.bean.comPic) ? "" : json.bean.comPic, 10));
 
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
@@ -195,7 +186,7 @@ layui.config({
 					useStr: JSON.stringify(tableData),
 					subType: subType
 				};
-				AjaxPostUtil.request({url: flowableBasePath + "sealseservice035", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "sealseservice035", params: params, type: 'json', callback: function (json) {
 					if (json.returnCode == 0){
 						parent.layer.close(index);
 						parent.refreshCode = '0';
@@ -342,7 +333,7 @@ layui.config({
 		}
 		
 		// 故障组件选择
- 	    $("body").on("click", "#faultKeyPartsIdSel", function(e){
+ 	    $("body").on("click", "#faultKeyPartsIdSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				faultKeyParts = chooseProductMation;
 				// 重置故障组件信息
@@ -353,7 +344,7 @@ layui.config({
  	    });
 		
 		// 商品选择
- 	    $("body").on("click", ".chooseProductBtn", function(e){
+ 	    $("body").on("click", ".chooseProductBtn", function (e) {
  	    	var trId = $(this).parent().parent().attr("trcusid");
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				// 获取表格行号

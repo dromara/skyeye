@@ -20,7 +20,7 @@ layui.config({
 		 	template: getFileContent('tpl/vehicleManageInsurance/vehicleManageInsuranceDetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var coveragestr = "";
 		 		var arr = json.bean.coverageId.split(",");
 					for(var i = 0; i < arr.length; i++){

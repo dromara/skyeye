@@ -27,7 +27,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: beanTemplate,
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		//单据时间
 		 		laydate.render({ 
 		 			elem: '#operTime',
@@ -314,7 +314,7 @@ layui.config({
 		}
 		
 		//商品选择
- 	    $("body").on("click", ".chooseProductBtn", function(e){
+ 	    $("body").on("click", ".chooseProductBtn", function (e) {
  	    	var trId = $(this).parent().parent().attr("trcusid");
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				//获取表格行号

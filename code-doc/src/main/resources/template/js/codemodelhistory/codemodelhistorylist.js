@@ -56,7 +56,7 @@ layui.config({
 	//同步文件
 	function creatFile(data){
 		filePath = data.filePath;
-		AjaxPostUtil.request({url:reqBasePath + "codemodel016", params:{filePath:filePath}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "codemodel016", params:{filePath:filePath}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg('生成完成，请下载。', {icon: 1, time: 2000});
 				loadTable();

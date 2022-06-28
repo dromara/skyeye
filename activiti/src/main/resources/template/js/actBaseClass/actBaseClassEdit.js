@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: $('#beanTemplate').html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
@@ -26,7 +26,7 @@ layui.config({
 		 	        		classUrl: $("#classUrl").val(),
 		 	        		desc: $("#desc").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "actbaseclass005", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "actbaseclass005", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

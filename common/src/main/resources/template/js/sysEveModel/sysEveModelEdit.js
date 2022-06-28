@@ -13,20 +13,11 @@ layui.config({
 	    
 	    var type;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysevemodel004", params:{id: parent.rowId}, type: 'json', method: "GET", callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "sysevemodel004", params:{id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
    			if (json.returnCode == 0) {
 				// 初始化上传
-				$("#logo").upload({
-					"action": reqBasePath + "common003",
-					"data-num": "1",
-					"data-type": "PNG,JPG,jpeg,gif",
-					"uploadType": 20,
-					"data-value": json.bean.logo,
-					// 该函数为点击放大镜的回调函数，如没有该函数，则不显示放大镜
-					"function": function (_this, data) {
-						show("#logo", data);
-					}
-				});
+				$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 20, json.bean.logo, 1));
+
 				$("#title").val(json.bean.title);
 				type = json.bean.type;
 
@@ -68,7 +59,7 @@ layui.config({
 							winui.window.msg('请填写模板内容', {icon: 2, time: 2000});
 							return false;
 						}
-						AjaxPostUtil.request({url: reqBasePath + "sysevemodel005", params:params, type: 'json', method: "PUT", callback: function(json){
+						AjaxPostUtil.request({url: reqBasePath + "sysevemodel005", params: params, type: 'json', method: "PUT", callback: function (json) {
 							if (json.returnCode == 0) {
 								parent.layer.close(index);
 								parent.refreshCode = '0';

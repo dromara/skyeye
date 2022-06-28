@@ -19,7 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/vehicleManage/vehicleManageDetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$("#vehicleImg").attr("src", fileBasePath + json.bean.vehicleImg);
 		 		// 附件回显
 				skyeyeEnclosure.showDetails({"enclosureUpload": json.bean.enclosureInfo});

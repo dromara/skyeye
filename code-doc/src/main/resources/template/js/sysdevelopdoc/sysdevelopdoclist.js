@@ -70,7 +70,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc005", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc005", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -86,7 +86,7 @@ layui.config({
 		var msg = obj ? '确认上线目录【' + obj.data.title + '】吗？' : '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '目录上线' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc007", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc007", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("上线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -102,7 +102,7 @@ layui.config({
 		var msg = obj ? '确认下线目录【' + obj.data.title + '】吗？' : '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '目录下线' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc008", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc008", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("下线成功", {icon: 1, time: 2000});
     				loadTable();
@@ -115,7 +115,7 @@ layui.config({
 	
 	//上移
 	function upmove(data){
-        AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc009", params:{rowId: data.id}, type: 'json', callback: function(json){
+        AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc009", params:{rowId: data.id}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
@@ -127,7 +127,7 @@ layui.config({
 	
 	//下移
 	function downmove(data){
-        AjaxPostUtil.request({url:reqBasePath + "sysdevelopdoc010", params:{rowId: data.id}, type: 'json', callback: function(json){
+        AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc010", params:{rowId: data.id}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();

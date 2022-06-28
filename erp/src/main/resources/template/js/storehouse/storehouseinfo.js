@@ -15,7 +15,7 @@ layui.config({
             params: {rowId: parent.rowId},
             pagination: false,
             template: simpleTemplate,
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 $("#isDefault").html(json.bean.isDefault == "1" ? "<span class='state-up'>是</span>" : "<span class='state-down'>否</span>");
                 matchingLanguage();
                 form.render();

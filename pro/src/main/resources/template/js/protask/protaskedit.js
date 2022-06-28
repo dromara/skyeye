@@ -24,7 +24,7 @@ layui.config({
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: getFileContent('tpl/protask/protaskeditTemplate.tpl'),
-		ajaxSendAfter:function(json){
+		ajaxSendAfter:function (json) {
 			pId = json.bean.pId;
 			restWorkload = json.bean.restWorkload;
 

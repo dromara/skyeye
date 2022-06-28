@@ -41,7 +41,7 @@ layui.config({
 							areaName: result.regeocode.addressComponent.district,
 							addressDetail: $("#userAddressInput").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker002", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker002", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0){
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
@@ -58,7 +58,7 @@ layui.config({
  	    });
  	    
 	    //人员选择
-		$("body").on("click", "#userIdSelPeople", function(e){
+		$("body").on("click", "#userIdSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -101,7 +101,7 @@ layui.config({
 			});
 			//通过地址获取经纬度
 			var input = document.getElementById('userAddressInput');
-			map.on('click', function(e){
+			map.on('click', function (e) {
 		      geocoder.getAddress(e.lnglat, function(status,result){
 					if(status=='complete'){
 						input.value = result.regeocode.formattedAddress;
@@ -118,7 +118,7 @@ layui.config({
 					}
 		      });
 			});
-			input.onchange = function(e){
+			input.onchange = function (e) {
 				var address = input.value;
 				geocoder.getLocation(address, function(status, result){
 					if(status == 'complete' && result.geocodes.length){

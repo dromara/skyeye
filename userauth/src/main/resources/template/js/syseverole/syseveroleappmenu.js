@@ -48,7 +48,7 @@ layui.config({
 	        			rowId: parent.rowId
 		        	};
 		        	
-		        	AjaxPostUtil.request({url:reqBasePath + "sys039", params:params, type: 'json', callback: function(json){
+		        	AjaxPostUtil.request({url: reqBasePath + "sys039", params: params, type: 'json', callback: function (json) {
 		 	   			if (json.returnCode == 0) {
 			 	   			parent.layer.close(index);
 			 	        	parent.refreshCode = '0';
@@ -67,7 +67,7 @@ layui.config({
 		var treeDoms = $("ul.fsTree");
 		
 		
-		AjaxPostUtil.request({url:reqBasePath + "sys038", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "sys038", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				$("#roleName").text(json.bean.roleName);
    				$("#roleDesc").text(json.bean.roleDesc);

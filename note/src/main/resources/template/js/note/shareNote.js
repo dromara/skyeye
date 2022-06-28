@@ -34,7 +34,7 @@ layui.config({
 	}
 	
 	function loadNote(){
-		AjaxPostUtil.request({url:reqBasePath + "mynote013", params: {rowId: rowId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "mynote013", params: {rowId: rowId}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				$("#noteTile").html(json.bean.title);
 				$("#createName").html(json.bean.createName);
@@ -94,7 +94,7 @@ layui.config({
             $("#layui-layer-shade" + times).css({'z-index': zIndex});
         }}, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
                 $.cookie('userToken', "", {path: '/' });
                 location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/note/shareNote.html?id=" + rowId);
             }});

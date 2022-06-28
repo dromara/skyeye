@@ -38,7 +38,7 @@ layui.config({
 					}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 				var ue = ueEditorUtil.initEditor('content');
 				ue.addListener("ready", function () {
 					ue.setContent(json.bean.projectDesc);
@@ -66,7 +66,7 @@ layui.config({
 			        		params.isShare = '1';
 			        	}
 			        	
-			        	AjaxPostUtil.request({url: reqBasePath + "planproject005", params: params, type: 'json', method: "PUT", callback: function(json){
+			        	AjaxPostUtil.request({url: reqBasePath + "planproject005", params: params, type: 'json', method: "PUT", callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

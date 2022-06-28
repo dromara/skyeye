@@ -18,7 +18,7 @@ layui.config({
 		 	template: getFileContent('tpl/licenceManage/licenceManageDetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.annualReview == "否"){
 		 			$("#nextTime").addClass('layui-hide');
 		 		}

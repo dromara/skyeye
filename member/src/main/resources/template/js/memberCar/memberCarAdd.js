@@ -28,7 +28,7 @@ layui.config({
                     remark: $("#remark").val(),
                     memberId: parent.memberId
                 };
-                AjaxPostUtil.request({url: shopBasePath + "memberCar002", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "memberCar002", params: params, type: 'json', method: "POST", callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';

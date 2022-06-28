@@ -23,7 +23,7 @@ layui.config({
 		 	template: getFileContent('tpl/sealseservice/sealseservicedetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 				// 获取当前登录员工信息
 				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
 					$("#orderDetailTitle").html(data.bean.companyName + '售后工单');
@@ -159,7 +159,7 @@ layui.config({
 	    });
 
 		//打印
-		$("body").on("click", "#jprint", function(e){
+		$("body").on("click", "#jprint", function (e) {
 			$("#showForm").jqprint({
 				title: '售后工单',
 				debug: false, //如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false

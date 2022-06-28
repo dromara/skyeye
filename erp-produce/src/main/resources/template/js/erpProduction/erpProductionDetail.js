@@ -13,7 +13,7 @@ layui.config({
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
         
-        AjaxPostUtil.request({url: flowableBasePath + "erpproduction006", params: {orderId: parent.rowId}, type: 'json', callback: function(json){
+        AjaxPostUtil.request({url: flowableBasePath + "erpproduction006", params: {orderId: parent.rowId}, type: 'json', callback: function (json) {
             if (json.returnCode == 0) {
             	json.bean.stateName = getStateName(json.bean);
             	$.each(json.bean.procedureMationList, function(i, item){
@@ -54,7 +54,7 @@ layui.config({
         }
         
         // 打印
-		$("body").on("click", "#jprint", function(e){
+		$("body").on("click", "#jprint", function (e) {
 			$("#showForm").jqprint({
 				title: sysMainMation.mationTitle,
 				debug: false, // 如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false
@@ -65,7 +65,7 @@ layui.config({
 		});
 		
 		// 详情
-		$("body").on("click", ".machinDetails", function(e){
+		$("body").on("click", ".machinDetails", function (e) {
 			rowId = $(this).attr("rowId");
 			_openNewWindows({
 				url: "../../tpl/erpMachin/erpMachinDetails.html", 

@@ -57,7 +57,7 @@ layui.config({
 	 	template: getFileContent('tpl/template/select-option.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		form.render('select');
 	 	}
 	});
@@ -78,7 +78,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除标签属性值' }, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url:reqBasePath + "rmpropertyvalue003", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "rmpropertyvalue003", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();

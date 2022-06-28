@@ -27,7 +27,7 @@ layui.config({
 		template: getFileContent('tpl/crmcontractmanage/mycrmcontracteditTemplate.tpl'),
 		ajaxSendLoadBefore: function(hdb){
 		},
-		ajaxSendAfter: function(json){
+		ajaxSendAfter: function (json) {
 			if(json.bean.editRow == "1"){
 				$(".typeTwo").addClass("layui-hide");
 			}else if(json.bean.editRow == "2"){
@@ -91,7 +91,7 @@ layui.config({
 	});
 
 	// 关联人员选择
-	$("body").on("click", "#userNameSelPeople", function(e){
+	$("body").on("click", "#userNameSelPeople", function (e) {
 		systemCommonUtil.userReturnList = [].concat(userList);
 		systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 		systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -103,7 +103,7 @@ layui.config({
 	});
 
 	// 客户选择
-	$("body").on("click", "#customMationSel", function(e){
+	$("body").on("click", "#customMationSel", function (e) {
 		_openNewWindows({
 			url: "../../tpl/customermanage/customerChoose.html",
 			title: "选择客户",
@@ -187,7 +187,7 @@ layui.config({
 			winui.window.msg("请选择关联人员", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract003", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract003", params: params, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';

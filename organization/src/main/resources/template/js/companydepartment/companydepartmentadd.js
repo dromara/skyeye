@@ -70,7 +70,7 @@ layui.config({
 	    // 加载公司数据
 	    initCompany();
 	    function initCompany(){
-			systemCommonUtil.getSysCompanyList(function(json){
+			systemCommonUtil.getSysCompanyList(function (json) {
 				// 加载企业数据
 				$("#companyId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
 			});
@@ -87,7 +87,7 @@ layui.config({
 					overtimeSettlementType: $("#overtimeSettlementType").val()
 	        	};
 	        	
-	        	AjaxPostUtil.request({url: reqBasePath + "companydepartment002", params: params, type: 'json', method: "POST", callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "companydepartment002", params: params, type: 'json', method: "POST", callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

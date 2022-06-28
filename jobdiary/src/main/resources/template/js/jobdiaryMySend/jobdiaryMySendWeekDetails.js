@@ -15,7 +15,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/jobdiaryMySend/jobdiaryMySendWeekDetailsTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
                 // 附件回显
                if(json.bean.enclosureInfo.length != 0 && json.bean.enclosureInfo != ""){
                    var str = "";

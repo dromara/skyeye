@@ -20,7 +20,7 @@ layui.config({
         			deskTopId: deskTopId
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop001", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop001", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				parent.childParams = json.bean;
 		 	   			parent.layer.close(index);

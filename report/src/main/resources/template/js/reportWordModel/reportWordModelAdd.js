@@ -33,7 +33,7 @@ layui.config({
                 }
                 var oCanvas = document.getElementById("thecanvas");
                 var imgData = oCanvas.toDataURL();
-                AjaxPostUtil.request({url:reqBasePath + "common004", params:{images: imgData, type: 19}, type: 'json', callback:function(json1){
+                AjaxPostUtil.request({url: reqBasePath + "common004", params:{images: imgData, type: 19}, type: 'json', callback:function(json1){
                     if(json1.returnCode == 0){
                         var rowTr = $("#useTable tr");
                         var tableData = new Array();
@@ -157,7 +157,7 @@ layui.config({
         }
 
         // 属性选择
-        $("body").on("click", ".choosePropertyBtn", function(e){
+        $("body").on("click", ".choosePropertyBtn", function (e) {
             var trId = $(this).parent().parent().attr("trcusid");
             _openNewWindows({
                 url: "../../tpl/reportProperty/reportPropertyChoose.html",

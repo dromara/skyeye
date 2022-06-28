@@ -17,7 +17,7 @@ layui.config({
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#showTemplate").html(),
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 
 				systemModelUtil.loadSysEveModelTypeByPId('parentId', '0');
 				$("#parentId").val(json.bean.parentId);
@@ -30,7 +30,7 @@ layui.config({
 							typeName: $("#typeName").val(),
 							parentId: isNull($("#parentId").val()) ? "0" : $("#parentId").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "sysevemodeltype005", params:params, type: 'json', method: "PUT", callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "sysevemodeltype005", params: params, type: 'json', method: "PUT", callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

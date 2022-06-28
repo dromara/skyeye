@@ -145,7 +145,7 @@ layui.config({
 	// 初始化公司
 	function initCompany(){
 		loadCompany = true;
-		systemCommonUtil.getSysCompanyList(function(json){
+		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据
 			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
 			form.render('select');
@@ -161,7 +161,7 @@ layui.config({
 		 	pagination: false,
 		 	template: selTemplate,
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -195,7 +195,7 @@ layui.config({
 			winui.window.msg("请选择员工", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: reqBasePath + "staff009", params: {ids: selectedData.toString()}, type: 'json', method: "POST", callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "staff009", params: {ids: selectedData.toString()}, type: 'json', method: "POST", callback: function (json) {
 			if (json.returnCode == 0) {
 				parent.systemCommonUtil.checkStaffMation = [].concat(json.rows);
 				parent.layer.close(index);

@@ -13,7 +13,7 @@ layui.config({
 	form = layui.form;
 	
 	// 编辑动态表单时进行回显
-	AjaxPostUtil.request({url: flowableBasePath + "pagesequence003", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: flowableBasePath + "pagesequence003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
  		if (json.returnCode == 0) {
 			dsFormUtil.loadDsFormItemToEdit("showForm", json.rows);
  			$("#showForm").append('<div class="layui-form-item layui-col-xs12"><div class="layui-input-block">' +
@@ -29,7 +29,7 @@ layui.config({
 	form.on('submit(formAddBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
 			var params = dsFormUtil.getPageData($("#showForm"));
-        	AjaxPostUtil.request({url: flowableBasePath + "pagesequence004", params: {jsonStr: JSON.stringify(params)}, type: 'json', callback: function(json){
+        	AjaxPostUtil.request({url: flowableBasePath + "pagesequence004", params: {jsonStr: JSON.stringify(params)}, type: 'json', callback: function (json) {
         		if (json.returnCode == 0) {
                 	parent.layer.close(index);
                 	parent.refreshCode = '0';

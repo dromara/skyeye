@@ -16,7 +16,7 @@ layui.config({
 		params: {rowId:parent.rowId},
 		pagination: false,
 		template: $("#beanTemplate").html(),
-		ajaxSendAfter:function(json){
+		ajaxSendAfter:function (json) {
 			if(json.bean.pageTypes == 1){
 				$("#pageTypes").html('指定页面');
 				$(".TypeIsTwo").addClass("layui-hide");

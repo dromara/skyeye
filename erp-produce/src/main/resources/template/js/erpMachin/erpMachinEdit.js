@@ -62,7 +62,7 @@ layui.config({
 		loadData();
 		
 		function loadData(){
-			AjaxPostUtil.request({url:flowableBasePath + "erpmachin003", params: {rowId: parent.rowId}, type: 'json', method: 'POST', callback: function(json){
+			AjaxPostUtil.request({url:flowableBasePath + "erpmachin003", params: {rowId: parent.rowId}, type: 'json', method: 'POST', callback: function (json) {
  	   			if (json.returnCode == 0) {
 	 	   			var data = json.bean;
 	 	   			if(!isNull(data.productionId)){
@@ -219,7 +219,7 @@ layui.config({
 			    	procedureJsonStr: JSON.stringify(procedureMationList),
 			    	rowId: parent.rowId
 			    };
-	        	AjaxPostUtil.request({url:flowableBasePath + "erpmachin004", params: params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:flowableBasePath + "erpmachin004", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
@@ -252,7 +252,7 @@ layui.config({
 	    });
 	    
 	    //加工成品选择
- 	    $("body").on("click", "#productNameSel", function(e){
+ 	    $("body").on("click", "#productNameSel", function (e) {
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				machinPro = chooseProductMation;
 				//工序重置
@@ -353,7 +353,7 @@ layui.config({
 		});
  	    
  	    //计划加工单选择
- 	    $("body").on("click", "#productionOrderSel", function(e){
+ 	    $("body").on("click", "#productionOrderSel", function (e) {
  	    	_openNewWindows({
  				url: "../../tpl/erpProduction/erpProductionNoSuccessChooseProcedure.html", 
  				title: "选择生产计划单",

@@ -36,7 +36,7 @@ layui.config({
 	 	template: getFileContent('tpl/template/select-option.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		form.render();
 	 		form.on('select(selectParent)', function(data){
 	 			showGrid({
@@ -47,7 +47,7 @@ layui.config({
 	 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
 	 	    	 	ajaxSendLoadBefore: function(hdb){
 	 	    	 	},
-	 	    	 	ajaxSendAfter:function(json){
+	 	    	 	ajaxSendAfter:function (json) {
 	 	    	 		form.render('select');
 	 	    	 	}
 	 	        });
@@ -228,7 +228,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "rmxcx019", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "rmxcx019", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -241,7 +241,7 @@ layui.config({
 	
 	// 上移
 	function topOne(data){
-		AjaxPostUtil.request({url:reqBasePath + "rmxcx017", params:{rowId: data.id}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "rmxcx017", params:{rowId: data.id}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
@@ -253,7 +253,7 @@ layui.config({
 	
 	// 下移
 	function lowerOne(data){
-		AjaxPostUtil.request({url:reqBasePath + "rmxcx018", params:{rowId: data.id}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "rmxcx018", params:{rowId: data.id}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();

@@ -112,7 +112,7 @@ layui.config({
     function verification(data){
         layer.confirm("确认对该单据进行核销吗？", {icon: 3, title: "核销操作"}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "verificationKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "verificationKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 if (json.returnCode == 0) {
                     winui.window.msg('核销成功', {icon: 1, time: 2000});
                     loadTable();
@@ -127,7 +127,7 @@ layui.config({
     function cancleOrder(data){
         layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "cancleKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "cancleKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 if (json.returnCode == 0) {
                     winui.window.msg('取消成功.', {icon: 1, time: 2000});
                     loadTable();

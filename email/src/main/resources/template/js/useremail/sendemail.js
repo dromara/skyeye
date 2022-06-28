@@ -22,7 +22,7 @@ layui.config({
 
 	    if(!isNull(id)){
 	    	// 草稿箱获取数据
-			AjaxPostUtil.request({url:reqBasePath + "useremail014", params:{rowId: id}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "useremail014", params:{rowId: id}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					$("#typeName").val(json.bean.title);
 					$("#content").val(json.bean.content);
@@ -66,7 +66,7 @@ layui.config({
 
 		if(!isNull(forwardId)){
 			// 邮件回复获取数据
-			AjaxPostUtil.request({url:reqBasePath + "useremail017", params:{rowId: forwardId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "useremail017", params:{rowId: forwardId}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					$("#typeName").val(json.bean.title);
 					var emailContentHeadStr = getContentHead(json.bean.fromPeople, json.bean.sendDate, json.bean.toPeople, json.bean.toCc, json.bean.toBcc, json.bean.title);
@@ -239,7 +239,7 @@ layui.config({
 					rowId: id,
 					emailEnclosureList: JSON.stringify(emailEnclosureList)
 			   	};
-			   	AjaxPostUtil.request({url: reqBasePath + url, params: params, type: 'json', callback: function(json){
+			   	AjaxPostUtil.request({url: reqBasePath + url, params: params, type: 'json', callback: function (json) {
 				   	if (json.returnCode == 0) {
 				   		if(url == "useremail013" || url == "useremail015"){
 							winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -255,7 +255,7 @@ layui.config({
 	   	}
  	    
 	    // 人员选择
-		$("body").on("click", "#toPeopleSelPeople, #toCcSelPeople, #toBccSelPeople", function(e){
+		$("body").on("click", "#toPeopleSelPeople, #toCcSelPeople, #toBccSelPeople", function (e) {
 			var clickId = $(this).attr("id");
 			systemCommonUtil.userReturnList = [];
 			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
@@ -275,7 +275,7 @@ layui.config({
 			});
 		});
 
-		$("body").on("click", "#toPeopleSelMail, #toCcSelMail, #toBccSelMail", function(e){
+		$("body").on("click", "#toPeopleSelMail, #toCcSelMail, #toBccSelMail", function (e) {
 			var clickId = $(this).attr("id");
 			mailUtil.openMailChoosePage(function (mailChooseList){
 				$.each(mailChooseList, function(i, item){
@@ -290,7 +290,7 @@ layui.config({
 			});
 		});
 
-		$("body").on("click", "#chooseEmailModel", function(e){
+		$("body").on("click", "#chooseEmailModel", function (e) {
 			_openNewWindows({
 				url: "../../tpl/emailSendModel/emailSendModelListChoose.html",
 				title: "选择邮件模板",

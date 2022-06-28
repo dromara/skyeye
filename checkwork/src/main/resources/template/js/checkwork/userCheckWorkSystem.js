@@ -9,7 +9,7 @@ layui.config({
     var $ = layui.$,
         form = layui.form;
 
-    AjaxPostUtil.request({url:reqBasePath + "sysfdsettings001", params:{}, type: 'json', method: "GET", callback: function(json){
+    AjaxPostUtil.request({url: reqBasePath + "sysfdsettings001", params:{}, type: 'json', method: "GET", callback: function (json) {
         if (json.returnCode == 0) {
             json.bean.holidaysTypeJson = JSON.parse(json.bean.holidaysTypeJson);
             $("#showBox").append(getDataUseHandlebars($("#showTemplate").html(), json));

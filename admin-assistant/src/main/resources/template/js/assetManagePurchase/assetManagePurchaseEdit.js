@@ -195,29 +195,22 @@ layui.config({
 		};
 		$("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
 
-		//赋值给资产类别
+		// 赋值给资产类别
 		$("#" + "typeId" + thisRowNum).html(typeHtml);
-		//赋值给资产来源
+		// 赋值给资产来源
 		$("#" + "fromId" + thisRowNum).html(fromHtml);
 
-		//数据回显
+		// 数据回显
 		$("#typeId" + thisRowNum).val(item.typeId);
 		$("#fromId" + thisRowNum).val(item.fromId);
 		$("#managementName" + thisRowNum).val(item.managementName);
 		$("#assetNum" + thisRowNum).val(item.assetNum);
 		$("#unitPrice" + thisRowNum).val(item.unitPrice);
 		$("#remark" + thisRowNum).val(item.remark);
-		//初始化上传
-		$("#" + "managementImg" + thisRowNum).upload({
-			"action": reqBasePath + "common003",
-			"data-num": "1",
-			"data-type": "PNG,JPG,jpeg,gif",
-			"uploadType": 6,
-			"data-value": item.managementImg,
-			"function": function (_this, data) {
-				show("#" + "managementImg" + rowNum.toString(), data);
-			}
-		});
+
+		// 初始化上传
+		$("#" + "managementImg" + thisRowNum).upload(systemCommonUtil.uploadCommon003Config("managementImg" + rowNum.toString(), 6, item.managementImg, 1));
+
 		form.render('select');
 		form.render('checkbox');
 		rowNum++;
@@ -237,21 +230,14 @@ layui.config({
 			remark: "remark" + rowNum.toString() //备注id
 		};
 		$("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
-		//赋值给资产类别
+		// 赋值给资产类别
 		$("#" + "typeId" + rowNum.toString()).html(typeHtml);
-		//赋值给资产来源
+		// 赋值给资产来源
 		$("#" + "fromId" + rowNum.toString()).html(fromHtml);
-		//构造上传
-		//初始化上传
-		$("#" + "managementImg" + rowNum.toString()).upload({
-			"action": reqBasePath + "common003",
-			"data-num": "1",
-			"data-type": "PNG,JPG,jpeg,gif",
-			"uploadType": 6,
-			"function": function (_this, data) {
-				show("#" + "managementImg" + rowNum.toString(), data);
-			}
-		});
+
+		// 初始化上传
+		$("#" + "managementImg" + rowNum.toString()).upload(systemCommonUtil.uploadCommon003Config("managementImg" + rowNum.toString(), 6, '', 1));
+
 		form.render('select');
 		form.render('checkbox');
 		rowNum++;

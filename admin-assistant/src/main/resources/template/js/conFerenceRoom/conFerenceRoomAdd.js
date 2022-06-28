@@ -14,17 +14,9 @@ layui.config({
 	    var $ = layui.$,
 	    	textool = layui.textool;
 
- 		// 初始化上传
- 		$("#roomImg").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 6,
-            "function": function (_this, data) {
-                show("#roomImg", data);
-            }
-        });
-        
+		// 初始化上传
+		$("#roomImg").upload(systemCommonUtil.uploadCommon003Config('roomImg', 6, '', 1));
+
         textool.init({
 	    	eleId: 'roomAddDesc',
 	    	maxlength: 200,
@@ -49,7 +41,7 @@ layui.config({
  	        		winui.window.msg('请上传会议室图片', {icon: 2, time: 2000});
  	        		return false;
  	        	}
- 	        	AjaxPostUtil.request({url: flowableBasePath + "conferenceroom002", params: params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "conferenceroom002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
@@ -72,7 +64,7 @@ layui.config({
 	    });
 	    
 	    // 会议室管理人选择
-		$("body").on("click", "#userNameSelPeople", function(e){
+		$("body").on("click", "#userNameSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

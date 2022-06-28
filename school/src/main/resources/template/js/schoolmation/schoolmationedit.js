@@ -30,7 +30,7 @@ layui.config({
 		 	template: getFileContent('tpl/schoolmation/schoolmationeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		
 		 		layedit.set({
 			    	uploadImage: {
@@ -152,7 +152,7 @@ layui.config({
 				        			rowId: parent.rowId
 					        	};
 					        	
-					        	AjaxPostUtil.request({url:schoolBasePath + "schoolmation005", params:params, type: 'json', callback: function(json){
+					        	AjaxPostUtil.request({url:schoolBasePath + "schoolmation005", params: params, type: 'json', callback: function (json) {
 					 	   			if (json.returnCode == 0) {
 						 	   			parent.layer.close(index);
 						 	        	parent.refreshCode = '0';
@@ -181,7 +181,7 @@ layui.config({
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb){
 	    	 	},
-	    	 	ajaxSendAfter:function(json){
+	    	 	ajaxSendAfter:function (json) {
 	    	 		$("#OverAllSchool").val(id);
 	    	 		form.render('select');
 	    	 	}
@@ -215,7 +215,7 @@ layui.config({
 			});
 			//通过地址获取经纬度
 			var input = document.getElementById('userAddressInput');
-			map.on('click', function(e){
+			map.on('click', function (e) {
 		      geocoder.getAddress(e.lnglat, function(status,result){
 					if(status=='complete'){
 						input.value = result.regeocode.formattedAddress;
@@ -232,7 +232,7 @@ layui.config({
 					}
 		      });
 			});
-			input.onchange = function(e){
+			input.onchange = function (e) {
 				var address = input.value;
 				geocoder.getLocation(address, function(status, result){
 					if(status == 'complete' && result.geocodes.length){

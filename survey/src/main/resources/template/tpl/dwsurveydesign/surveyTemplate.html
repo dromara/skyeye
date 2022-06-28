@@ -618,7 +618,7 @@
 					var $ = layui.$,
 						form = layui.form;
 					bgAnDate = getFormatDate();
-					AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory028", params: {surveyId: getUrlParam("rowId")}, type: 'json', callback: function(json){
+					AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory028", params: {surveyId: getUrlParam("rowId")}, type: 'json', callback: function (json) {
 		 	   			if (json.returnCode == 0) {
 			 	   			showGrid({
 								id: "wrap",
@@ -1124,7 +1124,7 @@
 								bgAnDate: bgAnDate
 							};
 							params = $.extend({}, params, $("#surveyForm").serializeJson());
-							AjaxPostUtil.request({url:reqBasePath + "dwsurveydirectory029", params: params, type: 'json', callback: function(json){
+							AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory029", params: params, type: 'json', callback: function (json) {
 				 	   			if (json.returnCode == 0) {
 					 	   			$("#wrap").html('<span class="messageSpan">' + '答题完成，感谢您的参与。' + '</span>');
 				 	   			} else {

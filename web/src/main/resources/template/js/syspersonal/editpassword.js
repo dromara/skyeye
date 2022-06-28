@@ -36,7 +36,7 @@ layui.config({
         			newPassword: $("#newPassword").val(),
         			oldPassword: $("#oldPassword").val()
 	        	};
-	        	AjaxPostUtil.request({url: reqBasePath + "login007", params:params, type: 'json', method: "POST", callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "login007", params: params, type: 'json', method: "POST", callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

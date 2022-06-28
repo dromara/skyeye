@@ -20,7 +20,7 @@ layui.config({
         pagination: false,
         method: "GET",
         template: $("#beanTemplate").html(),
-        ajaxSendAfter: function(json){
+        ajaxSendAfter: function (json) {
             // 调岗类型
             $("#transferType").html(getDataUseHandlebars(selOption, {rows: bossUtil.getTransferTypeList()}));
             $("#transferType").val(json.bean.transferType);

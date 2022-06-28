@@ -85,7 +85,7 @@ layui.config({
 		var msg = obj ? '确认删除模型【' + obj.data.name + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除模型' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:flowableBasePath + "activitimode006", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "activitimode006", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -120,7 +120,7 @@ layui.config({
 		var msg = data ? '确认发布模型【' + data.name + '】吗？' : '确认发布选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '发布模型' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params:{modelId: rowId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params:{modelId: rowId}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg("发布成功", {icon: 1, time: 2000});
 					loadTable();
@@ -137,7 +137,7 @@ layui.config({
 		var msg = data ? '确认升级模型【' + data.name + '】版本吗？' : '确认升级选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '版本升级' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params:{modelId: rowId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params:{modelId: rowId}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg("升级成功", {icon: 1, time: 2000});
 					loadTable();
@@ -153,7 +153,7 @@ layui.config({
 		var msg = obj ? '确认取消发布【' + obj.data.name + '】吗？' : '确认取消发布选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '取消发布' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:flowableBasePath + "activitimode007", params:{deploymentId: data.deploymentId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:flowableBasePath + "activitimode007", params:{deploymentId: data.deploymentId}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("取消发布成功", {icon: 1, time: 2000});
     				loadTable();
@@ -168,7 +168,7 @@ layui.config({
 	function copyModel(data){
 		layer.confirm('确认拷贝选中数据吗？', { icon: 3, title: '模型拷贝' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url:flowableBasePath + "activitimode028", params:{modelId: data.id}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url:flowableBasePath + "activitimode028", params:{modelId: data.id}, type: 'json', callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg("拷贝成功", {icon: 1, time: 2000});
 					loadTable();
@@ -186,7 +186,7 @@ layui.config({
 	
     //新增
     $("body").on("click", "#addBean", function() {
-    	AjaxPostUtil.request({url:flowableBasePath + "activitimode001", params:{}, type: 'json', callback: function(json){
+    	AjaxPostUtil.request({url:flowableBasePath + "activitimode001", params:{}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				_openNewWindows({
 					url: "../../static/modeler.html?modelId=" + json.bean.id,

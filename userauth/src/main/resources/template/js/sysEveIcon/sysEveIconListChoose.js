@@ -24,7 +24,7 @@ layui.config({
  	        	parent.refreshCode = '0';
 	 		}
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		matchingLanguage();
 	 	}
     });

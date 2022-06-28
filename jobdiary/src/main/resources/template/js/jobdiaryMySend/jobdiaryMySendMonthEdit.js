@@ -83,7 +83,7 @@ layui.config({
 					return v1.replace(reg, "\n");
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var userNames = "";
                 userList = json.bean.userInfo;
                 $.each(userList, function (i, item) {
@@ -215,7 +215,7 @@ layui.config({
 		        			params.thisWorkSummary = encodeURIComponent($("#monthWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		
-		        		AjaxPostUtil.request({url:reqBasePath + "diary021", params:params, type: 'json', callback: function(json){
+		        		AjaxPostUtil.request({url: reqBasePath + "diary021", params: params, type: 'json', callback: function (json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                  parent.refreshCode = '0';

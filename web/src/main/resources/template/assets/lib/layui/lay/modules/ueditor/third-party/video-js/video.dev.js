@@ -2748,7 +2748,7 @@ vjs.Player = vjs.Component.extend({
 
     // Firstplay event implimentation. Not sold on the event yet.
     // Could probably just check currentTime==0?
-    this.one('play', function(e){
+    this.one('play', function (e) {
       var fpEvent = { type: 'firstplay', target: this.el_ };
       // Using vjs.trigger so we can check if default was prevented
       var keepGoing = vjs.trigger(this.el_, fpEvent);
@@ -3503,7 +3503,7 @@ vjs.Player.prototype.requestFullScreen = function(){
     // when cancelling fullscreen. Otherwise if there's multiple
     // players on a page, they would all be reacting to the same fullscreen
     // events
-    vjs.on(document, requestFullScreen.eventName, vjs.bind(this, function(e){
+    vjs.on(document, requestFullScreen.eventName, vjs.bind(this, function (e) {
       this.isFullScreen = document[requestFullScreen.isFullScreen];
 
       // If cancelling fullscreen, remove event listener.
@@ -3897,7 +3897,7 @@ vjs.Player.prototype.userActive = function(bool){
         //
         // When this gets resolved in ALL browsers it can be removed
         // https://code.google.com/p/chromium/issues/detail?id=103041
-        this.tech.one('mousemove', function(e){
+        this.tech.one('mousemove', function (e) {
           e.stopPropagation();
           e.preventDefault();
         });
@@ -5179,7 +5179,7 @@ vjs.Html5.prototype.setupTriggers = function(){
 };
 // Triggers removed using this.off when disposed
 
-vjs.Html5.prototype.eventHandler = function(e){
+vjs.Html5.prototype.eventHandler = function (e) {
   this.trigger(e);
 
   // No need for media events to bubble up.

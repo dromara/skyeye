@@ -41,7 +41,7 @@ layui.config({
         			subData[i].modelContent = "";
 					subData[i].modelText = "";
         		}
-        		AjaxPostUtil.request({url: reqBasePath + "codemodel014", params: {jsonData: encodeURIComponent(JSON.stringify(subData))}, type: 'json', method: 'POST', callback: function(json){
+        		AjaxPostUtil.request({url: reqBasePath + "codemodel014", params: {jsonData: encodeURIComponent(JSON.stringify(subData))}, type: 'json', method: 'POST', callback: function (json) {
         			if (json.returnCode == 0) {
         				winui.window.msg('保存成功，请前往生成历史下载。', {icon: 1, time: 2000}, function() {
 	        				parent.layer.close(index);
@@ -125,7 +125,7 @@ layui.config({
 	 			}
 	 		}
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 			list = [].concat(json.rows);
 			$.each(list, function (i, item){
 				item.modelId = item.id;
@@ -143,22 +143,22 @@ layui.config({
 	 	template: getFileContent('tpl/template/select-option.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		form.render('select');
 	 	}
 	});
 	
 	// txtcenter DIV内的输入框内容变化事件
-	$("body").on("keyup", ".txtcenter input", function(e){
+	$("body").on("keyup", ".txtcenter input", function (e) {
 		transformResult();
 	});
 	
 	// 检索数据
-	$("body").on("click", "#jsCreate", function(e){
+	$("body").on("click", "#jsCreate", function (e) {
 		AjaxPostUtil.request({url: reqBasePath + "codemodel011", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(data){
 			if(data.returnCode == 0) {
 				codeDocUtil.setTableColumnData(data.rows);
-				AjaxPostUtil.request({url: reqBasePath + "codemodel012", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "codemodel012", params: {tableName: $("#tableName").val()}, type: 'json', callback: function (json) {
 					if(json.returnCode == 0) {
 						jsCreateClick = true;
 						textEditor.setValue('');

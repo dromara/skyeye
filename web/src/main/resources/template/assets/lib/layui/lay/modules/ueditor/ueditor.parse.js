@@ -415,7 +415,7 @@ UE.parse.register('table', function (utils) {
         var tables = root.getElementsByTagName('table');
         utils.each(tables, function (table) {
             if (/\bsortEnabled\b/.test(table.className)) {
-                utils.on(table, 'click', function(e){
+                utils.on(table, 'click', function (e) {
                     var target = e.target || e.srcElement,
                         cell = findParentByTagName(target, ['td', 'th']);
                     var table = findParentByTagName(target, 'table'),

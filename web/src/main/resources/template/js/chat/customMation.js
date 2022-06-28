@@ -25,27 +25,16 @@ layui.config({
 					}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		//设置性别
 		 		$("input:radio[name=userSex][value=" + json.bean.userSex + "]").attr("checked", true);
-		 		//初始化上传
-		 		$("#userPhoto").upload({
-		            "action": reqBasePath + "common003",
-		            "data-num": "1",
-		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 6,
-		            "data-value": json.bean.userPhoto,
-		            //该函数为点击放大镜的回调函数，如没有该函数，则不显示放大镜
-		            "function": function (_this, data) {
-		                show("#userPhoto", data);
-		            }
-		        });
-		 		
+				// 初始化上传
+				$("#userPhoto").upload(systemCommonUtil.uploadCommon003Config('userPhoto', 6, json.bean.userPhoto, 1));
+
 		        matchingLanguage();
 		 		form.render();
 				
 			    form.on('submit(formAddBean)', function (data) {
-			    	
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
 		        			userIdCard: $("#userIdCard").val(),
@@ -61,7 +50,7 @@ layui.config({
 		 	        		winui.window.msg('请上传个人头像', {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
-		 	        	AjaxPostUtil.request({url:reqBasePath + "sys033", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "sys033", params: params, type: 'json', callback: function(json) {
 			 	   			if (json.returnCode == 0) {
 			 	   				winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			 	   			} else {

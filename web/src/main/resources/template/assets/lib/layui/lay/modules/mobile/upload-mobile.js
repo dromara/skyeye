@@ -63,7 +63,7 @@ layui.define(['layer-mobile', 'zepto'] , function(exports){
       
       //拖拽支持
       if(!options.unwrap){
-        form.on('dragover', function(e){
+        form.on('dragover', function (e) {
           e.preventDefault();
           $(this).addClass(elemDragEnter);
         }).on('dragleave', function() {

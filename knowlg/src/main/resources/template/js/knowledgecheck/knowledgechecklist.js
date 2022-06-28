@@ -53,7 +53,7 @@ layui.config({
 	}
 	
 	//对左侧菜单项的点击事件
-	$("body").on("click", "#setting a", function(e){
+	$("body").on("click", "#setting a", function (e) {
 		$(".setting a").removeClass("selected");
 		$(this).addClass("selected");
 		clickId = $(this).attr("rowid");

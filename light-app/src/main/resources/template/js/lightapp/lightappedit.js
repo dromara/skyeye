@@ -19,7 +19,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		$("#typeId").val(id);
 			 		form.render('select');
 			 	}
@@ -27,7 +27,7 @@ layui.config({
 		}
 		
 		// 图标选中事件
- 	    $("body").on("focus", "#appLogo", function(e){
+ 	    $("body").on("focus", "#appLogo", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#appLogo").val(sysIconChooseClass);
 				$("#iconShow").css({'color': 'black'});
@@ -44,7 +44,7 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$("#iconShow").attr("class", "fa fa-fw " + $("#appLogo").val());
 	 			$("#iconShow").css({'color': 'black'});
 	 			
@@ -52,18 +52,9 @@ layui.config({
 		 		form.render();
 		 		
 		 		initAppType(json.bean.typeId);
-		 		//初始化上传
-		 		$("#appLogo").upload({
-		            "action": reqBasePath + "common003",
-		            "data-num": "1",
-		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 12,
-		            "data-value": json.bean.appLogo,
-		            "function": function (_this, data) {
-		                show("#appLogo", data);
-		            }
-		        });
-		 		
+				// 初始化上传
+				$("#appLogo").upload(systemCommonUtil.uploadCommon003Config('appLogo', 12, json.bean.appLogo, 1));
+
 		 	    form.on('submit(formEditMenu)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
@@ -78,7 +69,7 @@ layui.config({
 		        			winui.window.msg("请选择应用logo", {icon: 2, time: 2000});
 		 	        		return false;
 		        	    }
-		 	        	AjaxPostUtil.request({url:reqBasePath + "lightapp004", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "lightapp004", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

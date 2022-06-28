@@ -15,7 +15,7 @@ layui.config({
 		var gradePointYear = "";//年级当前属于哪一年上学的学生
 		
 		//获取学生信息展示用于分班
-		AjaxPostUtil.request({url:schoolBasePath + "studentmation004", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url:schoolBasePath + "studentmation004", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				stuSessionYear = json.bean.sessionYear;
    				$("#showForm").html(getDataUseHandlebars($("#assignmentTemplate").html(), json));
@@ -61,7 +61,7 @@ layui.config({
    		
    		//保存数据
    		function saveData(params){
-   			AjaxPostUtil.request({url:schoolBasePath + "studentmation005", params:params, type: 'json', callback: function(json){
+   			AjaxPostUtil.request({url:schoolBasePath + "studentmation005", params: params, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				parent.layer.close(index);
 	 	        	parent.refreshCode = '0';

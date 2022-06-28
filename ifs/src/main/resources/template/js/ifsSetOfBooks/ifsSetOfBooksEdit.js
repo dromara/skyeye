@@ -21,7 +21,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb){
 
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
             	textool.init({
 			    	eleId: 'remark',
 			    	maxlength: 200,
@@ -47,7 +47,7 @@ layui.config({
                             endTime: $("#dateScope").val().split('~')[1].trim(),
                             remark: $("#remark").val()
                         };
-                        AjaxPostUtil.request({url: flowableBasePath + "ifssetofbooks004", params: params, type: 'json', method: "PUT", callback: function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "ifssetofbooks004", params: params, type: 'json', method: "PUT", callback: function (json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

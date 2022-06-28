@@ -46,7 +46,7 @@ layui.config({
 		 	pagination: false,
 		 	template: selTemplate,
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -59,12 +59,12 @@ layui.config({
 		 	pagination: false,
 		 	template: selTemplate,
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
 
-		systemCommonUtil.getSysCompanyList(function(json){
+		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据
 			$("#companyId").html(getDataUseHandlebars(selTemplate, json));
 		});
@@ -84,7 +84,7 @@ layui.config({
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
 					companyId: $("#companyId").val()
  	        	};
- 	        	AjaxPostUtil.request({url:reqBasePath + "sysstaffcontract002", params: params, type: 'json', method: "POST", callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "sysstaffcontract002", params: params, type: 'json', method: "POST", callback: function (json) {
  	        		if (json.returnCode == 0) {
  	        			parent.layer.close(index);
  	        			parent.refreshCode = '0';

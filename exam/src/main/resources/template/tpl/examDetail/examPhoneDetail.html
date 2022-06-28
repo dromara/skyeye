@@ -1035,7 +1035,7 @@
 	 	   			}
 	 	   			
 	 	   			// 试题相关视频点击
-	 	   			$("body").on("click", ".questionShowVedio", function(e){
+	 	   			$("body").on("click", ".questionShowVedio", function (e) {
 	 	   				var url = $(this).attr("fileUrl");
 	 	   				var loadstr = '<video width="100%" height="99%" controls="controls" autobuffer="autobuffer" autoplay="autoplay" loop="loop">' 
 	 	   								+ '<source src="' + url + '" type="video/mp4"></source></video>';
@@ -1049,7 +1049,7 @@
 	 	   			});
 	 	   			
 	 	   			// 试题相关音频点击
-	 	   			$("body").on("click", ".questionShowAudio", function(e){
+	 	   			$("body").on("click", ".questionShowAudio", function (e) {
 	 	   				var url = $(this).attr("fileUrl");
 	 	   				var quTitle = $(this).attr("quTitle");
 	 	   				var loadstr = '<p class="weixinAudio">'
@@ -1085,7 +1085,7 @@
 	 	   			});
 	 	   			
 	 	   			// 试题相关图片点击
-	 	   			$("body").on("click", ".questionShowImg, .pictureItem", function(e){
+	 	   			$("body").on("click", ".questionShowImg, .pictureItem", function (e) {
 	 	   				var url = $(this).attr("src");
 	 	   				showPicDisk([url]);
 	 	   			});

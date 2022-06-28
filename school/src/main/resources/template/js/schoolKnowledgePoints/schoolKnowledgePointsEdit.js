@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#editTemplate").html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$("input:radio[name=typeState][value=" + json.bean.type + "]").attr("checked", true);
 				// 获取当前登陆用户所属的学校列表
 				schoolUtil.queryMyBelongSchoolList(function (data) {

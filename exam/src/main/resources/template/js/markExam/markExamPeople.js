@@ -18,7 +18,7 @@ layui.config({
 		    form = layui.form;
 		    
 		//获取试卷详情信息以及阅卷人信息
-		AjaxPostUtil.request({url:schoolBasePath + "exam036", params: {surveyId: parent.rowId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url:schoolBasePath + "exam036", params: {surveyId: parent.rowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				$("#showForm").html(getDataUseHandlebars($("#assignmentTemplate").html(), json));
    				//回显阅卷人
@@ -43,7 +43,7 @@ layui.config({
 		        			surveyId: parent.rowId,
 		        			arrayStr: JSON.stringify(array)
 			        	};
-			        	AjaxPostUtil.request({url:schoolBasePath + "exam037", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url:schoolBasePath + "exam037", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 			 	   				parent.layer.close(index);
 				 	        	parent.refreshCode = '0';
@@ -60,7 +60,7 @@ layui.config({
    		}});
    		
    		//阅卷人选择
- 	    $("body").on("click", "#markPeopleNameSel", function(e){
+ 	    $("body").on("click", "#markPeopleNameSel", function (e) {
  	    	_openNewWindows({
  				url: "../../tpl/schoolteacher/teacherChoose.html", 
  				title: "选择阅卷人",

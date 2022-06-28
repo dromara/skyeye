@@ -53,7 +53,7 @@ layui.config({
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb){
 	    	 	},
-	    	 	ajaxSendAfter:function(json){
+	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('select');
 	    	 	}
 	        });
@@ -69,7 +69,7 @@ layui.config({
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb){
 	    	 	},
-	    	 	ajaxSendAfter:function(json){
+	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('select');
 	    	 	}
 	        });
@@ -94,7 +94,7 @@ layui.config({
 	        		params.masterStaffId = teacherMation.staffId;
 	        	}
 	        	
-	        	AjaxPostUtil.request({url:schoolBasePath + "classmation002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:schoolBasePath + "classmation002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
@@ -107,7 +107,7 @@ layui.config({
 	    });
 	    
 	    //教师选择
- 	    $("body").on("click", "#masterStaffNameSel", function(e){
+ 	    $("body").on("click", "#masterStaffNameSel", function (e) {
  	    	_openNewWindows({
  				url: "../../tpl/schoolteacher/teacherChoose.html", 
  				title: "选择教师",

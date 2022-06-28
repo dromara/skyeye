@@ -18,7 +18,7 @@ layui.config({
 		 	template: $("#detailTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		
 		 		if(!isNull(json.bean.userPhoto)){
 			 		$("#userPhoto").attr("src", fileBasePath + json.bean.userPhoto);

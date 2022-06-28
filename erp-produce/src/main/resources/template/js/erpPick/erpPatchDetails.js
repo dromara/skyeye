@@ -22,14 +22,14 @@ layui.config({
 		 			return (parseFloat(v1) * parseFloat(v2)).toFixed(2);
 		 		});
 			},
-			ajaxSendAfter: function(json){
+			ajaxSendAfter: function (json) {
 				matchingLanguage();
 				form.render();
 			}
 		});
 		
 		//打印
-		$("body").on("click", "#jprint", function(e){
+		$("body").on("click", "#jprint", function (e) {
 			$("#showForm").jqprint({
 				title: sysMainMation.mationTitle,
 				debug: false, //如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false
@@ -40,7 +40,7 @@ layui.config({
 		});
 		
 		//图片预览
-		$("body").on("click", ".barCode", function(e){
+		$("body").on("click", ".barCode", function (e) {
 			layer.open({
         		type:1,
         		title:false,

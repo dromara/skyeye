@@ -12,7 +12,7 @@ function getFilePath(treeObj) {
 
 // 创建Word文件
 function createWordFile(folderId, callBack){
-	AjaxPostUtil.request({url:reqBasePath + "fileconsole025", params:{folderId: folderId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "fileconsole025", params:{folderId: folderId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
@@ -26,7 +26,7 @@ function createWordFile(folderId, callBack){
 
 // 创建Excel文件
 function createExcelFile(folderId, callBack){
-	AjaxPostUtil.request({url:reqBasePath + "fileconsole026", params:{folderId: folderId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "fileconsole026", params:{folderId: folderId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
@@ -40,7 +40,7 @@ function createExcelFile(folderId, callBack){
 
 // 创建PPT文件
 function createPPTFile(folderId, callBack){
-	AjaxPostUtil.request({url:reqBasePath + "fileconsole027", params:{folderId: folderId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "fileconsole027", params:{folderId: folderId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
@@ -54,7 +54,7 @@ function createPPTFile(folderId, callBack){
 
 // 创建TXT文件
 function createTXTFile(folderId, callBack){
-	AjaxPostUtil.request({url:reqBasePath + "fileconsole028", params:{folderId: folderId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "fileconsole028", params:{folderId: folderId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
@@ -68,7 +68,7 @@ function createTXTFile(folderId, callBack){
 
 // 创建Html文件
 function createHtmlFile(folderId, callBack){
-	AjaxPostUtil.request({url:reqBasePath + "fileconsole029", params:{folderId: folderId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "fileconsole029", params:{folderId: folderId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			winui.window.msg("创建成功", {icon: 1, time: 2000});
 			if(typeof(callBack) == "function") {
@@ -82,7 +82,7 @@ function createHtmlFile(folderId, callBack){
 
 // 创建文件夹
 function createFolder(folderId, refreshCallBack, initDragCallBack, currentUserId){
-	AjaxPostUtil.request({url:reqBasePath + "fileconsole002", params: {parentId: folderId, catalogName: '新建文件夹'}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "fileconsole002", params: {parentId: folderId, catalogName: '新建文件夹'}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			initNewFolder(json.bean.id, json.bean.catalogName, json.bean.logoPath, true, currentUserId);
 			// 刷新节点
@@ -131,21 +131,21 @@ layui.define(["jquery"], function(exports) {
 	var jQuery = layui.jquery;
 	(function($) {
 		// 阻止冒泡的点击事件
-		$("body").on("click", "#file-content .menu-folder .item-select .item-check .checkLabel", function(e){
+		$("body").on("click", "#file-content .menu-folder .item-select .item-check .checkLabel", function (e) {
 			e.stopPropagation();
 		});
 		$("body").on("dblclick", "#file-content .menu-folder .item-select .item-check," +
-				"#file-content .menu-folder .item-select .item-check .checkLabel", function(e){
+				"#file-content .menu-folder .item-select .item-check .checkLabel", function (e) {
 			e.stopPropagation();
 		});
 		
 		// 鼠标移出选项
-		$("body").on("mouseleave", ".layui-dropdown-menu", function(e){
+		$("body").on("mouseleave", ".layui-dropdown-menu", function (e) {
 			$(this).hide();
 		});
 		
 		// 展示方式
-		$("body").on("click", ".showFileType", function(e){
+		$("body").on("click", ".showFileType", function (e) {
 			$(".showFileType").find("img").attr("src", "");
 			$(this).find("img").attr("src", "../../assets/images/icon_choose.png");
 			if($(this).attr("data-type") === '1'){
@@ -169,7 +169,7 @@ layui.define(["jquery"], function(exports) {
 		});
 		
 		// 桌面点击时，取消所有选中
-		$("body").on("click", "#file-content", function(e){
+		$("body").on("click", "#file-content", function (e) {
 			$("#file-content .menu-folder .item-select .item-check").find("input:checkbox[name='checkFile']:checked").prop("checked", false);
 			$("#file-content .menu-folder").removeClass("active");
 			$(".select-op-more").hide();

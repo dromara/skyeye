@@ -100,7 +100,7 @@ layui.config({
     	table.reload("messageTable", {page: {curr: 1}, where: {startTime: startTime, endTime: endTime}});
     }
     
-    $("body").on("click", ".plan-type-btn", function(e){
+    $("body").on("click", ".plan-type-btn", function (e) {
     	$(".plan-type-btn").removeClass("plan-select");
 		$(this).addClass("plan-select");
 		loadCheckType($(this).data("type"));

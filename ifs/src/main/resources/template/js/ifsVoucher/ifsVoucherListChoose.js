@@ -52,7 +52,7 @@ layui.config({
 				parent.layer.close(index);
 			}
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		matchingLanguage();
 	 	}
     });

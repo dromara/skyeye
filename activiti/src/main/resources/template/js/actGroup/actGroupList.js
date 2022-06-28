@@ -22,7 +22,7 @@ layui.config({
 	
 	//初始化左侧菜单用户组数据
 	function showLeft(){
-	    AjaxPostUtil.request({url: flowableBasePath + "actgroup002", params: {}, type: 'json', method: "GET", callback: function(json){
+	    AjaxPostUtil.request({url: flowableBasePath + "actgroup002", params: {}, type: 'json', method: "GET", callback: function (json) {
 			if (json.returnCode == 0) {
 				var str = getDataUseHandlebars($('#userGroupTemplate').html(), json);
 				$("#setting").html(str);
@@ -64,7 +64,7 @@ layui.config({
 			    		var value = obj.find("input").val();
 			    		if(!isNull(value)){
 			    			if(html != value){
-				    			AjaxPostUtil.request({url: flowableBasePath + "actgroup004", params: {rowId: clickId, groupName: value}, type: 'json', method: "POST", callback: function(json){
+				    			AjaxPostUtil.request({url: flowableBasePath + "actgroup004", params: {rowId: clickId, groupName: value}, type: 'json', method: "POST", callback: function (json) {
 				    	   			if (json.returnCode == 0) {
 				    	   				obj.find("a[rowid='" + clickId + "']").html(value);
 				    	   			} else {
@@ -101,7 +101,7 @@ layui.config({
 	function deleteUserGroup(){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-	        AjaxPostUtil.request({url: flowableBasePath + "actgroup005", params: {rowId: clickId}, type: 'json', method: "POST", callback: function(json){
+	        AjaxPostUtil.request({url: flowableBasePath + "actgroup005", params: {rowId: clickId}, type: 'json', method: "POST", callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					$("#setting").find("a[rowid='" + clickId + "']").remove();
@@ -120,15 +120,15 @@ layui.config({
 	};
 	
 	//用户组点击事件
-	$("body").on("click", ".setting-a-input", function(e){
+	$("body").on("click", ".setting-a-input", function (e) {
 		e.stopPropagation();//阻止冒泡
 	});
-	$("body").on("contextmenu", ".setting-a-input", function(e){
+	$("body").on("contextmenu", ".setting-a-input", function (e) {
 		e.stopPropagation();//阻止冒泡
 	});
 	
 	//用户组名右键效果
-	$("body").on("contextmenu", "#setting a", function(e){
+	$("body").on("contextmenu", "#setting a", function (e) {
 		clickId = $(this).attr("rowid");
 		name = $(this).attr("rowname");
 		$("#setting").find("a").removeClass("selected");
@@ -138,7 +138,7 @@ layui.config({
 	});
 	
 	//新增用户组
-	$("body").on("click", "#addBean", function(e){
+	$("body").on("click", "#addBean", function (e) {
 		var obj = $("#setting");
 		var newhtml = "<input value='新增用户组' class='layui-input setting-a-input' style='margin-top: 5px;'/>";
 	    obj.append(newhtml);
@@ -149,7 +149,7 @@ layui.config({
     		if(isNull(value)){
     			value = '新增用户组';
     		}
-			AjaxPostUtil.request({url: flowableBasePath + "actgroup001", params: {groupName: value}, type: 'json', method: "POST", callback: function(json){
+			AjaxPostUtil.request({url: flowableBasePath + "actgroup001", params: {groupName: value}, type: 'json', method: "POST", callback: function (json) {
 	   			if (json.returnCode == 0) {
 	   				clickId = json.bean.id;
 	   				var str = '<a rowid="' + clickId + '" rowname="' + value + '" class="setting-a">' + value + '</a>';
@@ -163,7 +163,7 @@ layui.config({
 	});
 	
     //对左侧菜单项的点击事件
-	$("body").on("click", "#setting a", function(e){
+	$("body").on("click", "#setting a", function (e) {
 		$(".setting a").removeClass("selected");
 		$(this).addClass("selected");
 		clickId = $(this).attr("rowid");
@@ -206,7 +206,7 @@ layui.config({
     }
 	
 	// 新增用户
-	$("body").on("click", "#addUser", function(e){
+	$("body").on("click", "#addUser", function (e) {
 		systemCommonUtil.userReturnList = [];
 		systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 		systemCommonUtil.chooseOrNotEmail = "1"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -227,12 +227,12 @@ layui.config({
 	});
 	
 	//一键移除指定用户组下的所有用户
-	$("body").on("click", "#delUser", function(e){
+	$("body").on("click", "#delUser", function (e) {
 		if(!isNull(clickId)){
 			var msg = '确认一键移除该用户组下的所有用户吗？';
 			layer.confirm(msg, { icon: 3, title: '一键移除所有用户' }, function (index) {
 				layer.close(index);
-				AjaxPostUtil.request({url: flowableBasePath + "actgroup008", params: {rowId: clickId}, type: 'json', method: "POST", callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "actgroup008", params: {rowId: clickId}, type: 'json', method: "POST", callback: function (json) {
 					if (json.returnCode == 0) {
 						winui.window.msg("移除成功", {icon: 1, time: 2000});
 	    				loadTable();
@@ -254,7 +254,7 @@ layui.config({
 			var params = {
 				rowId:  data.id
         	};
-            AjaxPostUtil.request({url: flowableBasePath + "actgroup006", params: params, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "actgroup006", params: params, type: 'json', method: "POST", callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -267,7 +267,7 @@ layui.config({
 	
 	// 同步人员数据
     $("body").on("click", "#syncData", function() {
-    	AjaxPostUtil.request({url: flowableBasePath + "activitimode015", params: {}, type: 'json', method: "POST", callback: function(json){
+    	AjaxPostUtil.request({url: flowableBasePath + "activitimode015", params: {}, type: 'json', method: "POST", callback: function (json) {
 			if (json.returnCode == 0) {
             	winui.window.msg("同步成功", {icon: 1, time: 2000});
 			} else {

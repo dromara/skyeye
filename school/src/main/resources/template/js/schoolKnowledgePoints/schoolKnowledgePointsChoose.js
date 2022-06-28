@@ -53,7 +53,7 @@ layui.config({
     	 	template: getFileContent('tpl/template/select-option.tpl'),
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
-    	 	ajaxSendAfter:function(json){
+    	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
     	 	}
         });
@@ -78,7 +78,7 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -170,7 +170,7 @@ layui.config({
 		var selectedData = tableCheckBoxUtil.getValue({
 			gridId: 'messageTable'
 		});
-		AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints008", params: {ids: selectedData.toString()}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints008", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				parent.schoolKnowledgeMationList = [].concat(json.rows);
  	   			parent.layer.close(index);

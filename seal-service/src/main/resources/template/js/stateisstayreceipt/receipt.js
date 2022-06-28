@@ -19,7 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/stateisstayreceipt/receiptTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		
 		 		//预约开始时间
 		 		laydate.render({ 
@@ -37,7 +37,7 @@ layui.config({
 		        			subscribeTime: $("#subscribeTime").val(),
 		        			remark: $("#remark").val()
 		 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice017", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice017", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

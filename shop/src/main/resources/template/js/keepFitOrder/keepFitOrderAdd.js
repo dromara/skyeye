@@ -48,7 +48,7 @@ layui.config({
                 $("#mealId").html("");
             } else {
                 // 获取车辆用于的套餐信息
-                AjaxPostUtil.request({url: shopBasePath + "queryMealMationByCarId", params: {carId: val}, type: 'json', method: "GET", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "queryMealMationByCarId", params: {carId: val}, type: 'json', method: "GET", callback: function (json) {
                     if (json.returnCode == 0) {
                         carHasMealList = [].concat(json.rows);
                         calcMealChoose();
@@ -144,7 +144,7 @@ layui.config({
                     }
                 }
 
-                AjaxPostUtil.request({url: shopBasePath + "insertKeepFitOrder", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "insertKeepFitOrder", params: params, type: 'json', method: "POST", callback: function (json) {
                     if (json.returnCode == 0) {
                         winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000}, function() {
                             location.reload();
@@ -195,7 +195,7 @@ layui.config({
         }
 
         // 会员选择
-        $("body").on("click", ".chooseMemberBtn", function(e){
+        $("body").on("click", ".chooseMemberBtn", function (e) {
             sysMemberUtil.openSysMemberChoosePage(function (memberMation){
                 $("#memberId").val(memberMation.contacts);
                 var params = {
@@ -203,7 +203,7 @@ layui.config({
                     enabled: 1
                 };
                 // 获取会员拥有的车辆信息(已启用)
-                AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "memberCar001", params: params, type: 'json', method: "POST", callback: function (json) {
                     if (json.returnCode == 0) {
                         $.each(json.rows, function (i, item){
                             item.name = item.modelType + "(" + item.plate + ")";

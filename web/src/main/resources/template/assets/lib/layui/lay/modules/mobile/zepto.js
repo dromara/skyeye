@@ -988,14 +988,14 @@ layui.define(function(exports){
       handler.fn    = fn
       handler.sel   = selector
       // emulate mouseenter, mouseleave
-      if (handler.e in hover) fn = function(e){
+      if (handler.e in hover) fn = function (e) {
         var related = e.relatedTarget
         if (!related || (related !== this && !$.contains(this, related)))
           return handler.fn.apply(this, arguments)
       }
       handler.del   = delegator
       var callback  = delegator || fn
-      handler.proxy = function(e){
+      handler.proxy = function (e) {
         e = compatible(e)
         if (e.isImmediatePropagationStopped()) return
         e.data = data
@@ -1123,12 +1123,12 @@ layui.define(function(exports){
     if (callback === false) callback = returnFalse
 
     return $this.each(function(_, element){
-      if (one) autoRemove = function(e){
+      if (one) autoRemove = function (e) {
         remove(element, e.type, callback)
         return callback.apply(this, arguments)
       }
 
-      if (selector) delegator = function(e){
+      if (selector) delegator = function (e) {
         var evt, match = $(e.target).closest(selector, element).get(0)
         if (match && match !== element) {
           evt = $.extend(createProxy(e), {currentTarget: match, liveFired: element})

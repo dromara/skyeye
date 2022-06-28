@@ -53,7 +53,7 @@ layui.config({
     //加载菜单数据
     function loadMenuListToShow(){
     	//获取桌面消息
-        AjaxPostUtil.request({url:reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
+        AjaxPostUtil.request({url: reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
             if(l.returnCode == 0) {
             	var str = "";//顶部桌面字符串
             	var menuBoxStr = "";//多个菜单的字符串
@@ -84,7 +84,7 @@ layui.config({
 				initDeskTopMenuBox();
 				
 				// 加载菜单
-				AjaxPostUtil.request({url:reqBasePath + "login005", params:{}, type: 'json', method: "GET", callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "login005", params:{}, type: 'json', method: "GET", callback: function (json) {
 		   			if (json.returnCode == 0) {
 		   				var menuStr;
 		   				$.each(json.rows, function(i, row){
@@ -202,7 +202,7 @@ layui.config({
     };
 
     // 当点击有page-item-click属性的标签时，即左侧菜单栏中内容 ，触发点击事件
-    $("body").on("click", ".page-item-click", function(e){
+    $("body").on("click", ".page-item-click", function (e) {
     	var dataMenu = $(this);
     	if("win" === dataMenu.attr("data-type")){
     		window.open(dataMenu.attr("data-url"));
@@ -242,7 +242,7 @@ layui.config({
     }
     
     //菜单点击
-    $("body").on("click", ".menu-box-none", function(e){
+    $("body").on("click", ".menu-box-none", function (e) {
     	if($(this).parent().hasClass("layui-nav-itemed")){
     		$(this).parent().removeClass("layui-nav-itemed");
     	} else {
@@ -251,7 +251,7 @@ layui.config({
     });
 
     //关闭操作
-    $("body").on("click", ".rightmenu li, .right-close-operator dd a", function(e){
+    $("body").on("click", ".rightmenu li, .right-close-operator dd a", function (e) {
     	//右键菜单中的选项被点击之后，判断type的类型，决定关闭所有还是关闭当前。
     	if($(this).attr("data-type") == "closethis") {
     		var choosePage = $("#LAY_app_tabsheader li[class='layui-this']").attr('lay-id');
@@ -296,7 +296,7 @@ layui.config({
     
     // 全屏操作
     var isFullScreen = false;// 全屏参数
-    $("body").on("click", "#isFullScreen", function(e){
+    $("body").on("click", "#isFullScreen", function (e) {
     	if(!isFullScreen){// 非全屏状态
     		isFullScreen = true;
     		fullScreen();
@@ -307,7 +307,7 @@ layui.config({
     });
 
     // 个人中心
-    $("body").on("click", ".winui-start-syspersonal", function(e){
+    $("body").on("click", ".winui-start-syspersonal", function (e) {
     	// 否则判断该tab项是否以及存在
 		var isData = false; // 初始化一个标志，为false说明未打开该tab项 为true则说明已有
 		$.each($("#LAY_app_tabsheader li[lay-id]"), function() {
@@ -324,12 +324,12 @@ layui.config({
     });
     
     // 任务空间
-    $("body").on("click", ".winui-start-job-space", function(e){
+    $("body").on("click", ".winui-start-job-space", function (e) {
 		window.open("../../tpl/jobSpace/jobSpace.html");
     });
     
     // 配色方案
-    $("body").on("click", ".winui-start-color-scheme", function(e){
+    $("body").on("click", ".winui-start-color-scheme", function (e) {
 		layer.open({
 			type: 2,
 			title: '配色方案',
@@ -343,7 +343,7 @@ layui.config({
     });
     
     // 切换风格
-    $("body").on("click", ".winui-switching-style", function(e){
+    $("body").on("click", ".winui-switching-style", function (e) {
     	location.href = "../../tpl/index/index.html";
     });
 
@@ -358,7 +358,7 @@ layui.config({
         $("#switchLanguage").find("a").html('<svg t="1598752407969" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6614" width="16" height="16"><path d="M884.394667 52.053333c76.202667 0 138.581333 61.269333 139.093333 136.021334v476.16c0 74.666667-62.378667 136.106667-138.581333 136.106666h-32.768v41.386667c0 74.666667-62.378667 136.106667-138.581334 136.106667H138.581333C62.378667 977.834667 0 916.394667 0 841.728V353.792c0-73.216 59.306667-133.034667 132.949333-136.106667v-29.610666c0-74.752 62.464-136.106667 138.666667-136.106667h612.693333z m61.44 673.024a83.541333 83.541333 0 0 0 25.514666-60.842666v-476.16a85.333333 85.333333 0 0 0-25.6-60.416 88.490667 88.490667 0 0 0-61.44-25.002667h-612.693333a86.186667 86.186667 0 0 0-87.04 85.333333v29.696h528.469333c76.202667 0 138.581333 61.44 138.581334 136.106667V750.08h32.768c23.04 0 44.970667-8.704 61.44-25.088zM398.933333 484.181333v42.496H254.634667V651.093333h-57.856v49.664h169.472c-3.584 6.144-7.68 11.776-12.288 17.92-27.136 31.744-79.872 58.88-157.696 80.384l29.184 46.592c77.824-21.504 134.144-51.712 168.96-91.136 12.8-15.872 23.552-33.792 32.768-53.76h1.024c27.136 60.416 94.72 108.544 202.752 145.408l29.696-48.128c-90.624-24.576-150.016-56.832-177.664-97.28h172.544V651.093333h-58.88V526.677333h-143.36v-42.496h-54.272zM306.858667 651.093333v-74.752h92.16v7.68c-1.536 23.552-5.12 46.08-11.264 67.072h-80.896z m137.216 0c4.608-20.48 7.68-42.496 9.216-67.072v-7.68H544.426667v74.752H444.074667zM199.338667 407.381333v49.152h113.152v43.008h54.272V456.533333H485.546667v43.008h54.272V456.533333h113.152v-49.152H539.818667V366.933333H485.546667v40.448H366.762667V366.933333h-54.272v40.448H199.338667z" fill="#666666" p-id="6615"></path></svg>');
     }
     // 切换语言
-    $("body").on("click", "#switchLanguage", function(e){
+    $("body").on("click", "#switchLanguage", function (e) {
         var nowType = isNull(getCookie("languageType")) ? "zh" : getCookie("languageType");
         if(nowType == "zh"){
         	// 中文，设置为英文
@@ -372,7 +372,7 @@ layui.config({
     
     // 菜单收缩按钮
     var notOrContraction = false;// 菜单收缩参数
-    $("body").on("click", "#notOrContraction", function(e){
+    $("body").on("click", "#notOrContraction", function (e) {
     	if(!notOrContraction){// 展开状态
     		notOrContraction = true;
     		$(".tradition-left").animate({width: "0px"});
@@ -388,13 +388,13 @@ layui.config({
     });
     
     // 退出
-    $("body").on("click", ".logout", function(e){
+    $("body").on("click", ".logout", function (e) {
     	winui.window.confirm('确认注销吗?', {id: 'exit-confim', icon: 3, title: '提示', skin: 'msg-skin-message', success: function(layero, index){
 			var times = $("#exit-confim").parent().attr("times");
 			var zIndex = $("#exit-confim").parent().css("z-index");
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
-        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function(json){
+        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				if (etiger != null) {
 		 	   			etiger.socket.close();
@@ -408,7 +408,7 @@ layui.config({
     });
     
     // 头部桌面列表滚动事件
-    $("body").on("wheel", ".desktop-menu-box", function(e){
+    $("body").on("wheel", ".desktop-menu-box", function (e) {
     	var _this = $(this);
     	var right = _this.find("ul").width() - _this[0].offsetWidth;
     	if (_this.scrollLeft() < right && e.originalEvent.deltaY > 0) {
@@ -424,7 +424,7 @@ layui.config({
     });
     
     // 头部桌面列表点击事件
-    $("body").on("click", ".desktop-menu-box ul .layui-nav-item", function(e){
+    $("body").on("click", ".desktop-menu-box ul .layui-nav-item", function (e) {
     	$("#sysMenuListBox").find(".layui-nav-tree").hide();
     	$(".desktop-menu-box ul .layui-nav-item").removeClass('select');
     	$(this).addClass('select');
@@ -433,12 +433,12 @@ layui.config({
     });
     
     // 消息中心
-    $("body").on("click", "#messageCenter", function(e){
+    $("body").on("click", "#messageCenter", function (e) {
 		indexMenu.loadTraditionPage($(this));
     });
     
     // 左侧底部功能
-    $("body").on("click", ".tradition-left-bottom .other-item", function(e){
+    $("body").on("click", ".tradition-left-bottom .other-item", function (e) {
     	var dataMenu = $(this);
     	var icon = dataMenu.find(".other-item-img").html();
 		indexMenu.loadTraditionPage(dataMenu, icon);

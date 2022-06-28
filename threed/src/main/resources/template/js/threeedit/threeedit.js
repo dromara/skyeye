@@ -12,7 +12,7 @@ layui.config({
 	threeUtil.initDirectionalLight();
 
 	// 加入模型到场景
-	$("body").on("click", "#modeList .item", function(e){
+	$("body").on("click", "#modeList .item", function (e) {
 		var url = $(this).attr("src");
 		sysFileUtil.getFileByUrl(url, function(file) {
 			var manager = new THREE.LoadingManager();
@@ -23,7 +23,7 @@ layui.config({
 	matchingLanguage();
 	
 	// 加入地板到场景
-	$("body").on("click", "#floorList .item", function(e){
+	$("body").on("click", "#floorList .item", function (e) {
 		var url = $(this).attr("src");
 		threeUtil.initFloor(url);
 	});

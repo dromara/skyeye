@@ -78,7 +78,7 @@ layui.config({
 			params: {passengerNum: num},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendAfter: function(json){
+			ajaxSendAfter: function (json) {
 				$("#designatedVehicleId").val(id);
 				form.render('select');
 			}
@@ -94,7 +94,7 @@ layui.config({
 			params: {},
 			pagination: false,
 			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendAfter: function(json){
+			ajaxSendAfter: function (json) {
 				$("#driverId").val(id);
 				form.render('select');
 			}

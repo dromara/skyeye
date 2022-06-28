@@ -18,7 +18,7 @@ layui.config({
 		 	template: getFileContent('tpl/forumreportcheck/reportcheckdetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.examineState == "未审核"){
 		 			$(".examine").addClass("layui-hide");
 		 		}else if(json.bean.examineState == "审核通过"){

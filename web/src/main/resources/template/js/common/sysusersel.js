@@ -539,7 +539,7 @@ layui.config({
 	}
 
 	//所有人员监听
-	$("body").on("keyup", "#allUserName, #companyUserName, #departmentUserName, #jobUserName, #simpleDepartmentUserName, #groupUserName", function(e){
+	$("body").on("keyup", "#allUserName, #companyUserName, #departmentUserName, #jobUserName, #simpleDepartmentUserName, #groupUserName", function (e) {
 		var val = $(this).val();
 		screenTree(val);
 		changeUserNameInput(val);

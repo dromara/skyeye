@@ -54,7 +54,7 @@ layui.config({
 					}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 签发时间
 		 		laydate.render({elem: '#issueTime', type: 'date', trigger: 'click'});
 		 		
@@ -126,7 +126,7 @@ layui.config({
 							licenceAdmin: systemCommonUtil.tagEditorGetItemData('licenceAdmin', userList),
 							borrowId: systemCommonUtil.tagEditorGetItemData('borrowId', borrowList)
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "licence005", params:params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "licence005", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

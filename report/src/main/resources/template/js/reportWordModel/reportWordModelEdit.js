@@ -183,7 +183,7 @@ layui.config({
         }
 
         // 属性选择
-        $("body").on("click", ".choosePropertyBtn", function(e){
+        $("body").on("click", ".choosePropertyBtn", function (e) {
             var trId = $(this).parent().parent().attr("trcusid");
             _openNewWindows({
                 url: "../../tpl/reportProperty/reportPropertyChoose.html",

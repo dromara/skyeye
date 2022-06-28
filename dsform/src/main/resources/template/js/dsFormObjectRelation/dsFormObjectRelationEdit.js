@@ -64,7 +64,7 @@ layui.config({
                         dsFormPageIds: formPageId.join(","),
                         id: parent.rowId
                     };
-                    AjaxPostUtil.request({url: flowableBasePath + "dsFormObjectRelation005", params: params, type: 'json', method: "PUT", callback: function(json){
+                    AjaxPostUtil.request({url: flowableBasePath + "dsFormObjectRelation005", params: params, type: 'json', method: "PUT", callback: function (json) {
                         if (json.returnCode == 0) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
@@ -102,7 +102,7 @@ layui.config({
 
         // 加载动添表单选择按钮的点击事件
         var btnId = par.dsFormChooseList + "Btn";
-        $("body").on("click", "#" + btnId, function(e){
+        $("body").on("click", "#" + btnId, function (e) {
             dsFormUtil.chooseType = false; // 单选
             dsFormUtil.openDsFormPageChoosePage(function (){
                 $("#" + par.dsFormChooseList).val(dsFormUtil.dsFormChooseMation.pageNum);

@@ -21,7 +21,7 @@ var systemModelUtil = {
             template: getFileContent('tpl/template/select-option.tpl'),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter: function(json){
+            ajaxSendAfter: function (json) {
             }
         });
     },
@@ -33,7 +33,7 @@ var systemModelUtil = {
      * @param parentId 父id
      */
     getSysEveModelTypeDataByPId: function (parentId, callback){
-        AjaxPostUtil.request({url: reqBasePath + "sysevemodeltype006", params: {parentId: parentId}, type: 'json', method: "GET", callback: function(json){
+        AjaxPostUtil.request({url: reqBasePath + "sysevemodeltype006", params: {parentId: parentId}, type: 'json', method: "GET", callback: function (json) {
             if (json.returnCode == 0) {
                 if(typeof(callback) == "function") {
                     callback(json);

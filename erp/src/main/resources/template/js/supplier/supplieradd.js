@@ -39,7 +39,7 @@ layui.config({
                     accountNumber: $("#accountNumber").val(),
                     taxRate: isNull($("#taxRate").val()) ? '0' : $("#taxRate").val()
                 };
-                AjaxPostUtil.request({url: flowableBasePath + "supplier002", params: params, type: 'json', callback: function(json){
+                AjaxPostUtil.request({url: flowableBasePath + "supplier002", params: params, type: 'json', callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';

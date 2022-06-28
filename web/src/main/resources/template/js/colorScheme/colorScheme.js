@@ -10,7 +10,7 @@ layui.config({
 	
 	matchingLanguage();
 	
-	$("body").on("click", ".layadmin-setTheme-color-scheme", function(e){
+	$("body").on("click", ".layadmin-setTheme-color-scheme", function (e) {
 		var className = $(this).attr("className");
 		parent.$("body").attr("class", className);
 	});

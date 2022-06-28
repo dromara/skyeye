@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
@@ -25,7 +25,7 @@ layui.config({
 		 	        		desktopName: $("#desktopName").val(),
 		 	        		desktopCnName: $("#desktopCnName").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "desktop007", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "desktop007", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

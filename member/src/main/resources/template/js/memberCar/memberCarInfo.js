@@ -20,7 +20,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb, json){
                 json.bean.remark = stringManipulation.textAreaShow(json.bean.remark);
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
 
                 if(json.bean.insure == 1){
                     $("#insure").html("已购买");

@@ -18,7 +18,7 @@ layui.config({
         template: $("#showTemplate").html(),
         ajaxSendLoadBefore: function(hdb, json){
         },
-        ajaxSendAfter:function(json){
+        ajaxSendAfter:function (json) {
         }
     });
 

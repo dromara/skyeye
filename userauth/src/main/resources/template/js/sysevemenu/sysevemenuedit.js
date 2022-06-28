@@ -60,7 +60,7 @@ layui.config({
 					}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 
 				// 加载图标信息
 				systemCommonUtil.initEditIconChooseHtml('iconMation', form, colorpicker, 12, json.bean);
@@ -222,7 +222,7 @@ layui.config({
 	    function loadChildMenuAll(pid){
 	    	if(pid.length > 0){
 	    		if(!isNull(pid[0])){
-		    		AjaxPostUtil.request({url:reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function(json){
+		    		AjaxPostUtil.request({url: reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function (json) {
 		    			if (json.returnCode == 0) {
 		    				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 		    				for(var i = 0; i < json.rows.length; i++){
@@ -255,7 +255,7 @@ layui.config({
 	    
  	    //加载同级菜单
  	    function loadChildMenu(){
- 	    	AjaxPostUtil.request({url:reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function(json){
+ 	    	AjaxPostUtil.request({url: reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
@@ -273,7 +273,7 @@ layui.config({
  	    }
  	    
  	    // 菜单图标选中事件
- 	    $("body").on("focus", "#menuIcon", function(e){
+ 	    $("body").on("focus", "#menuIcon", function (e) {
 			systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 				$("#menuIcon").val(sysIconChooseClass);
 				$("#iconShow").css({'color': 'white'});

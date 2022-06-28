@@ -33,13 +33,13 @@ var dataGrid = function(ele, opt) {
         // 点击分页之后的回调函数
         pageClickAfter: function(index){},
         // ajax请求之前的回调函数
-        ajaxSendBefore:function(json){},
+        ajaxSendBefore:function (json) {},
         // ajax请求之后的加载数据之前的回调函数
         ajaxSendLoadBefore:function(hdb, json){},
         // ajax请求之后的回调函数
-        ajaxSendAfter:function(json){},
+        ajaxSendAfter:function (json) {},
         // ajax请求之后加载错误的回调函数
-        ajaxSendErrorAfter:function(json){},
+        ajaxSendErrorAfter:function (json) {},
         // 按钮监听事件
         options:null,
         // handlber对象
@@ -252,7 +252,7 @@ dataGrid.prototype = {
         //添加全选全不选事件
     },
     //自定义按钮事件
-    customClickPage: function(json){
+    customClickPage: function (json) {
         var options = _op.settings.options;
         for(var _option in options){
             if(typeof(options[_option]) == "function") {

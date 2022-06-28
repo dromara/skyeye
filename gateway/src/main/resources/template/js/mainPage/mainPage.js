@@ -17,7 +17,7 @@ layui.config({
 	
 	initFourNumList();
 	function initFourNumList(){
-		AjaxPostUtil.request({url:reqBasePath + "mainpage001", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "mainpage001", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			$("#checkOnWorkNum").html(json.bean.checkOnWorkNum);
  	   			$("#diskCloudFileNum").html(json.bean.diskCloudFileNum);
@@ -31,7 +31,7 @@ layui.config({
 	}
 	
 	function initNoticeList(){
-		AjaxPostUtil.request({url:reqBasePath + "mainpage002", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "mainpage002", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				$.each(json.rows, function(i, item){
    					if(i == 0){
@@ -49,7 +49,7 @@ layui.config({
 	}
 	
 	function initForumList(){
-		AjaxPostUtil.request({url:reqBasePath + "mainpage003", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "mainpage003", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			$("#forumContent").append(getDataUseHandlebars($("#forumContentTemplate").html(), json));
  	   			initKnowledgeList();
@@ -60,7 +60,7 @@ layui.config({
 	}
 	
 	function initKnowledgeList(){
-		AjaxPostUtil.request({url:reqBasePath + "mainpage004", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "mainpage004", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			$("#knowledgeList").html(getDataUseHandlebars($("#knowledgeContentTemplate").html(), json));
  	   			matchingLanguage();
@@ -92,14 +92,14 @@ layui.config({
 					return str;
 				});
 			},
-			ajaxSendAfter:function(json){
+			ajaxSendAfter:function (json) {
 				matchingLanguage();
 			}
 		});
 	}
 	
 	// 公告详情
-	$("body").on("click", ".notice", function(e){
+	$("body").on("click", ".notice", function (e) {
 		rowId = $(this).attr("id");
 		_openNewWindows({
 			url: "../../tpl/sysnoticefront/sysnoticefrontdetails.html", 
@@ -111,7 +111,7 @@ layui.config({
 	});
 	
 	// 知识库详情
-	$("body").on("click", ".knowledge", function(e){
+	$("body").on("click", ".knowledge", function (e) {
 		rowId = $(this).attr("id");
 		_openNewWindows({
 			url: "../../tpl/knowledgePageShow/details.html", 
@@ -123,7 +123,7 @@ layui.config({
 	});
 	
 	// 论坛帖详情
-	$("body").on("click", "#forumContent li h3, #forumContent li p", function(e){
+	$("body").on("click", "#forumContent li h3, #forumContent li p", function (e) {
 		// 否则判断该tab项是否以及存在
 		var isData = false; // 初始化一个标志，为false说明未打开该tab项 为true则说明已有
 		$.each(parent.$("#LAY_app_tabsheader li[lay-id]"), function() {
@@ -142,7 +142,7 @@ layui.config({
 	});
 
 	// 流程任务配置点击
-	$("body").on("click", ".act-model-li", function(e){
+	$("body").on("click", ".act-model-li", function (e) {
 		var title = $(this).attr("showTitle");
 		var url = $(this).attr("pageUrl");
 		dsFormId = $(this).attr("dsFormId");

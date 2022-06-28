@@ -34,7 +34,7 @@ layui.config({
 			}
 		});
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "sysworkplan007", params:{planId: parent.rowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "sysworkplan007", params:{planId: parent.rowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				nowCheckType = json.bean.planCycle;
    			    timeSolt = json.bean.startTime + '~' + json.bean.endTime;
@@ -241,7 +241,7 @@ layui.config({
    			        		params.notifyTime = null;
    			        	}
    			        	
-   			        	AjaxPostUtil.request({url:reqBasePath + "sysworkplan008", params:params, type: 'json', callback: function(json){
+   			        	AjaxPostUtil.request({url: reqBasePath + "sysworkplan008", params: params, type: 'json', callback: function (json) {
    			 	   			if (json.returnCode == 0) {
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';
@@ -258,7 +258,7 @@ layui.config({
    		}});
 	    
         //计划指定他人-人员选择
-        $("body").on("click", "#carryPeopleSelPeople", function(e){
+        $("body").on("click", "#carryPeopleSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "2"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

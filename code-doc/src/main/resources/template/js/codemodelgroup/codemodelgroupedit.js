@@ -20,7 +20,7 @@ layui.config({
 		 	template: getFileContent('tpl/codemodelgroup/codemodelgroupeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var layContent = layedit.build('groupDesc', {
 			    	tool: [
 			    	       'strong' //加粗
@@ -47,7 +47,7 @@ layui.config({
 		        			rowId: parent.rowId
 			        	};
 			        	
-			        	AjaxPostUtil.request({url:reqBasePath + "codemodel005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url: reqBasePath + "codemodel005", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

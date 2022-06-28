@@ -29,7 +29,7 @@ layui.config({
 		method: "GET",
 		template: $("#beanTemplate").html(),
 		ajaxSendLoadBefore: function(hdb){},
-		ajaxSendAfter:function(json){
+		ajaxSendAfter:function (json) {
 			laydate.render({
 				elem: '#executeMonth',
 				type: 'month',
@@ -133,7 +133,7 @@ layui.config({
 						});
 					});
 					params.str = JSON.stringify(object);
-					AjaxPostUtil.request({url:reqBasePath + "wagessocialsecurityfund004", params: params, type: 'json', method: "PUT", callback: function(json){
+					AjaxPostUtil.request({url: reqBasePath + "wagessocialsecurityfund004", params: params, type: 'json', method: "PUT", callback: function (json) {
 						if (json.returnCode == 0) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';

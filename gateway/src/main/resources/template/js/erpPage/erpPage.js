@@ -14,7 +14,7 @@ layui.config({
 	
 	initFourNumList();
 	function initFourNumList(){
-		AjaxPostUtil.request({url:reqBasePath + "erppage001", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "erppage001", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			$("#salesMoney").html(json.bean.salesMoney);
  	   			$("#retailMoney").html(json.bean.retailMoney);
@@ -29,7 +29,7 @@ layui.config({
 	
 	// 近六个月审核通过的采购订单
 	function initSixMonthPurchase(){
-		AjaxPostUtil.request({url:reqBasePath + "erppage002", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "erppage002", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			renderLayer04Left(json.rows);
  	   			initSixMonthSales();
@@ -41,7 +41,7 @@ layui.config({
 	
 	// 近六个月审核通过的销售订单
 	function initSixMonthSales(){
-		AjaxPostUtil.request({url:reqBasePath + "erppage003", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "erppage003", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			renderLayer04Left2(json.rows);
  	   			initSixMonthProfit();
@@ -53,7 +53,7 @@ layui.config({
 	
 	// 近12个月审核通过的利润订单
 	function initSixMonthProfit(){
-		AjaxPostUtil.request({url:reqBasePath + "erppage004", params: {}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "erppage004", params: {}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
  	   			renderLayer04Left3(json.rows);
  	   			matchingLanguage();

@@ -36,7 +36,7 @@ layui.config({
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb){
 	    	 	},
-	    	 	ajaxSendAfter:function(json){
+	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('select');
 	    	 	}
 	        });
@@ -78,7 +78,7 @@ layui.config({
         			type: $("input[name='type']:checked").val()
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:schoolBasePath + "grademation002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:schoolBasePath + "grademation002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

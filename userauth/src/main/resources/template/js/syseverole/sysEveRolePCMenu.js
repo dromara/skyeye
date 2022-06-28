@@ -31,7 +31,7 @@ layui.config({
 				rowId: parent.rowId
 			};
 
-			AjaxPostUtil.request({url: reqBasePath + "editSysRolePCAuth", params: params, type: 'json', method: "PUT", callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "editSysRolePCAuth", params: params, type: 'json', method: "PUT", callback: function (json) {
 				if (json.returnCode == 0) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
@@ -47,7 +47,7 @@ layui.config({
 	var trees = {};
 	var treeDoms = $("ul.fsTree");
 
-	AjaxPostUtil.request({url: reqBasePath + "sys016", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "sys016", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
 		if (json.returnCode == 0) {
 			$("#roleName").text(json.bean.roleName);
 			$("#roleDesc").text(json.bean.roleDesc);

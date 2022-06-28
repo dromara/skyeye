@@ -121,7 +121,7 @@ layui.config({
 					 	pagination: false,
 					 	template: selTemplate,
 					 	ajaxSendLoadBefore: function(hdb){},
-					 	ajaxSendAfter:function(json){
+					 	ajaxSendAfter:function (json) {
 					 		unitGroupList = json.rows;
 
 							// 附件回显
@@ -276,7 +276,7 @@ layui.config({
 		 	        	params.extendData = JSON.stringify(extendData);
 		 	        	//工序信息
  	        			params.procedureJsonStr = JSON.stringify(procedureMationList);
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "material009", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "material009", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
@@ -448,7 +448,7 @@ layui.config({
  	    	$(this).parent().children("input").val(labelName);
  	    	$(this).parent().children("input").show();
  	    });
- 	    $(document).click(function(e){
+ 	    $(document).click(function (e) {
  	    	var _con = $('.label-edit');// 设置目标区域
  	    	if(!_con.is(e.target) && _con.has(e.target).length === 0){
  	    		$.each($('.label-edit'), function(i, item){

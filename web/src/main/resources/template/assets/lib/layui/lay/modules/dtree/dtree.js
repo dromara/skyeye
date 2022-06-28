@@ -2134,7 +2134,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 		});
 		
 		//绑定所有子节点div的右键点击事件，用于显示toolbar
-		_this.obj.on("contextmenu", "div[d-click='"+eventName.itemNodeClick+"'][d-contextmenu]", function(e){
+		_this.obj.on("contextmenu", "div[d-click='"+eventName.itemNodeClick+"'][d-contextmenu]", function (e) {
 			var $div = $(this),
 				contextmenu = $div.attr("d-contextmenu");
 			if(_this.toolbar){

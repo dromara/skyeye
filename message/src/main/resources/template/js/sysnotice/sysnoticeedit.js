@@ -24,7 +24,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		$("#noticeTypeId").val(id);
 			 		form.render('select');
 			 	}
@@ -39,7 +39,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		$("#secondTypeId").val(id);
 			 		form.render('select');
 			 	}
@@ -52,7 +52,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysnotice/sysnoticeeditTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		initNoticeType(json.bean.typeId);
 		 		initSecondNoticeType(json.bean.secondTypeId);
 		 		
@@ -143,7 +143,7 @@ layui.config({
 		    	     ]
 			    });
 		 		//人员选择
-				$("body").on("click", "#userNameSelPeople", function(e){
+				$("body").on("click", "#userNameSelPeople", function (e) {
 					systemCommonUtil.userReturnList = [].concat(userList);
 					systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 					systemCommonUtil.chooseOrNotEmail = "1"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -192,7 +192,7 @@ layui.config({
 		    				winui.window.msg('请填写公告内容', {icon: 2, time: 2000});
 		    				return false;
 		    			}
-		    			AjaxPostUtil.request({url:reqBasePath + "notice007", params:params, type: 'json', callback: function(json){
+		    			AjaxPostUtil.request({url: reqBasePath + "notice007", params: params, type: 'json', callback: function (json) {
 		    				if (json.returnCode == 0) {
 		    					parent.layer.close(index);
 		    	 	        	parent.refreshCode = '0';

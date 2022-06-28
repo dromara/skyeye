@@ -25,7 +25,7 @@ layui.config({
 					return '';
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 加载员工信息
 				$("#staffMation").html(getUserStaffHtmlMationByStaffId(parent.rowId));
 				matchingLanguage();
@@ -52,7 +52,7 @@ layui.config({
 							staffId: parent.rowId,
 							actMoney: actMoney
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "wagesstaff003", params: params, type: 'json', method: "POST", callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "wagesstaff003", params: params, type: 'json', method: "POST", callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

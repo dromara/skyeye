@@ -20,20 +20,10 @@ layui.config({
 		 	template: getFileContent('tpl/rmgroupmember/rmgroupmembereditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
-		 		//初始化上传
-		 		$("#printsPicUrl").upload({
-		            "action": reqBasePath + "common003",
-		            "data-num": "1",
-		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 1,
-		            "data-value": json.bean.printsPicUrl,
-		            //该函数为点击放大镜的回调函数，如没有该函数，则不显示放大镜
-		            "function": function (_this, data) {
-		                show("#printsPicUrl", data);
-		            }
-		        });
-		 		
+		 	ajaxSendAfter:function (json) {
+				// 初始化上传
+				$("#printsPicUrl").upload(systemCommonUtil.uploadCommon003Config('printsPicUrl', 1, json.bean.printsPicUrl, 1));
+
 		 		htmlContent = CodeMirror.fromTextArea(document.getElementById("htmlContent"), {
 		            mode : "xml",  // 模式
 		            theme : "eclipse",  // CSS样式选择
@@ -133,7 +123,7 @@ layui.config({
 			 	   			
 			 	   			params.img = $("#printsPicUrl").find("input[type='hidden'][name='upload']").attr("oldurl");
 			 	   			
-				        	AjaxPostUtil.request({url:reqBasePath + "rmxcx021", params:params, type: 'json', callback: function(json){
+				        	AjaxPostUtil.request({url: reqBasePath + "rmxcx021", params: params, type: 'json', callback: function (json) {
 				 	   			if (json.returnCode == 0) {
 					 	   			parent.layer.close(index);
 					 	        	parent.refreshCode = '0';

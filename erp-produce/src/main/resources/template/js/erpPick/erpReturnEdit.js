@@ -45,7 +45,7 @@ layui.config({
 		});
 
  		function loadData(){
-			AjaxPostUtil.request({url:flowableBasePath + "erppick013", params: {rowId: parent.rowId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url:flowableBasePath + "erppick013", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
 	 	   			var data = json.bean;
 	 	   			$("#depotId").val(data.depotId);
@@ -153,7 +153,7 @@ layui.config({
 			    	depotId: $("#depotId").val(),
 			    	rowId: parent.rowId
 			    };
-	        	AjaxPostUtil.request({url:flowableBasePath + "erppick014", params: params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:flowableBasePath + "erppick014", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';
@@ -213,7 +213,7 @@ layui.config({
 		}
 		
 		//商品选择
- 	    $("body").on("click", ".chooseProductBtn", function(e){
+ 	    $("body").on("click", ".chooseProductBtn", function (e) {
  	    	var trId = $(this).parent().parent().attr("trcusid");
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				//获取表格行号

@@ -30,7 +30,7 @@ layui.config({
 					}
 				});
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 生产日期
 		 		laydate.render({elem: '#manufacturerTime', type: 'date', max: getFormatDate(), trigger: 'click'});
 		 		
@@ -66,19 +66,10 @@ layui.config({
 				 		form.render('select');
 				 	}
 				});
-		 		
-		 		//初始化上传
-		 		$("#assetImg").upload({
-		            "action": reqBasePath + "common003",
-		            "data-num": "1",
-		            "data-type": "PNG,JPG,jpeg,gif",
-		            "uploadType": 6,
-		            "data-value": json.bean.assetImg,
-		            //该函数为点击放大镜的回调函数，如没有该函数，则不显示放大镜
-		            "function": function (_this, data) {
-		                show("#assetImg", data);
-		            }
-		        });
+
+				// 初始化上传
+				$("#assetImg").upload(systemCommonUtil.uploadCommon003Config('assetImg', 6, json.bean.assetImg, 1));
+
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.assetAdmin);
 		 		$.each(json.bean.assetAdmin, function(i, item){
@@ -139,7 +130,7 @@ layui.config({
 	 	 	        		winui.window.msg('请上传资产图片', {icon: 2, time: 2000});
 	 	 	        		return false;
 	 	 	        	}
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "asset005", params:params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "asset005", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

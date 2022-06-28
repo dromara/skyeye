@@ -15,7 +15,7 @@ layui.config({
 	var actKey = parent.actKey;
 	
 	// 加载动态表单页
-	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params:{rowId: parent.dsFormId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params:{rowId: parent.dsFormId}, type: 'json', callback: function (json) {
  		if (json.returnCode == 0) {
 			dsFormUtil.loadDsFormItemToEdit("showForm", json.rows);
  			$("#showForm").append('<div class="layui-form-item layui-col-xs12"><div class="layui-input-block">' +
@@ -42,7 +42,7 @@ layui.config({
 					pageId: parent.dsFormId,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url:flowableBasePath + "activitimode022", params: jStr, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url:flowableBasePath + "activitimode022", params: jStr, type: 'json', callback: function (json) {
 					if (json.returnCode == 0) {
 						winui.window.msg("申请提交成功，等待审核...", {icon: 1, time: 2000}, function() {
 							parent.layer.close(index);

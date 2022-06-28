@@ -87,7 +87,7 @@ layui.define(["jquery"], function(exports) {
 									//遍历子菜单
 									e.each(m.children, function(childIndex, child) {
 										if(child.id === $(item).attr("id")){
-											$(item).on('click', function(e){
+											$(item).on('click', function (e) {
 												child.callback();
 											});
 											return true;
@@ -95,7 +95,7 @@ layui.define(["jquery"], function(exports) {
 									});
 								} else {
 									if(m.id === $(item).attr("id")){
-										$(item).on('click', function(e){
+										$(item).on('click', function (e) {
 											m.callback();
 										});
 										return true;

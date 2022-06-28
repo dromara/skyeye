@@ -36,7 +36,7 @@ layui.config({
 	    
 	    var carryPeople = "";//指定人员id
 
-	    AjaxPostUtil.request({url:reqBasePath + "sysworkplan007", params:{planId: parent.rowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "sysworkplan007", params:{planId: parent.rowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				nowCheckType = json.bean.planCycle;
    			    timeSolt = json.bean.startTime + '~' + json.bean.endTime;
@@ -242,7 +242,7 @@ layui.config({
    			        		params.notifyTime = null;
    			        	}
    			        	
-   			        	AjaxPostUtil.request({url:reqBasePath + "sysworkplan012", params:params, type: 'json', callback: function(json){
+   			        	AjaxPostUtil.request({url: reqBasePath + "sysworkplan012", params: params, type: 'json', callback: function (json) {
    			 	   			if (json.returnCode == 0) {
    				 	   			parent.layer.close(index);
    				 	        	parent.refreshCode = '0';

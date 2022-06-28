@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysevemenu/sysevemenudetailsTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var str = '';
 	        	if(json.bean.menuIconType == '1'){
 		        	if(isNull(json.bean.menuIconBg)){

@@ -108,7 +108,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 		    _varioustemplatesSchool = getFileContent('tpl/common/schoolExam/examcommon/examCommonEditRoot.tpl');
 		}
 		
-		$("body").on("click", ".SeniorEdit", function(e){
+		$("body").on("click", ".SeniorEdit", function (e) {
 			ueEditObj = $(curEditObj).html();
 			_openNewWindows({
 				url: "../../tpl/dwsurveydesign/designSurveyEditor.html", 
@@ -144,7 +144,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 			}
 		});
 		
-		$("body").on("click", "#dwSurveyQuContent .surveyQuItemBody", function(e){
+		$("body").on("click", "#dwSurveyQuContent .surveyQuItemBody", function (e) {
 			curEditCallback();
 			dwCommonDialogHide();
 			$(".surveyQuItemBody").removeClass("hover");
@@ -787,7 +787,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 	    /**
 	     * 问卷设置
 	     */
-	    $("body").on("click", "#surveyAttrSetToolbar", function(e){
+	    $("body").on("click", "#surveyAttrSetToolbar", function (e) {
 	    	_openNewWindows({
 				url: "../../tpl/dwsurveydesign/designSurveyOp.html", 
 				title: "问卷设置",
@@ -830,7 +830,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 	    $("body").on("click", ".layui-elem-field .layui-form-radio," +
 	    		".surveyQuItem .quCoItem ul," +
 	    		".surveyQuItem .quCoItem table," +
-	    		".layui-tab", function(e){
+	    		".layui-tab", function (e) {
 	    	// 设置为保存
 	    	$(this).parents(".surveyQuItemBody").find("input[name='saveTag']").val(0);
 	    	$(this).parents(".surveyQuItemBody").find(".quItemInputCase input[name='quItemSaveTag']").val(0);

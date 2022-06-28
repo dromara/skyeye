@@ -444,8 +444,8 @@ layui.define(['layer', 'winui'], function (exports) {
             	str += '<font>加载中</font></div></div>';
                 //页面加载项
 //            	body.append(str);
-//                $(window).ready(function(e){
-//                	setTimeout(function(e){
+//                $(window).ready(function (e) {
+//                	setTimeout(function (e) {
 //                		body.find(".page-load").remove();
 //                	}, 1500);
 //                });

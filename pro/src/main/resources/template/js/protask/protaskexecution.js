@@ -18,7 +18,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/protask/protaskexecutionTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		//任务说明附件回显
     			var str = "暂无附件";
                 if(json.bean.enclosureInfo.length != 0 && !isNull(json.bean.enclosureInfo)){

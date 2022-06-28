@@ -47,13 +47,13 @@ layui.config({
 	});
 
 	// 初始化账户
-	systemCommonUtil.getSysAccountListByType(function(json){
+	systemCommonUtil.getSysAccountListByType(function (json) {
 		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
 
 	// 初始化支出项目
-	systemCommonUtil.getSysInoutitemListByType(2, function(json){
+	systemCommonUtil.getSysInoutitemListByType(2, function (json) {
 		// 加载支出项目
 		inoutitemHtml = getDataUseHandlebars(selOption, json);
 		// 渲染数据到页面
@@ -310,7 +310,7 @@ layui.config({
 	}
 
 	//人员选择
-	$("body").on("click", "#toSalesManSelPeople", function(e){
+	$("body").on("click", "#toSalesManSelPeople", function (e) {
 		systemCommonUtil.userReturnList = [].concat(salesManList);
 		systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 		systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -374,7 +374,7 @@ layui.config({
 	}
 
 	// 客户选择
-	$("body").on("click", "#customMationSel", function(e){
+	$("body").on("click", "#customMationSel", function (e) {
 		_openNewWindows({
 			url: "../../tpl/customermanage/customerChoose.html",
 			title: "选择客户",
@@ -390,7 +390,7 @@ layui.config({
 	});
 
 	//商品选择
-	$("body").on("click", ".chooseProductBtn", function(e){
+	$("body").on("click", ".chooseProductBtn", function (e) {
 		var trId = $(this).parent().parent().attr("trcusid");
 		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 			//获取表格行号

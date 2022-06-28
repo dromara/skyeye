@@ -16,7 +16,7 @@ layui.config({
 		$("#dataShowModel").hide();
 
 		// 根据类型获取部分功能的使用说明
-		systemCommonUtil.queryExplainMationByType(4, function(json){
+		systemCommonUtil.queryExplainMationByType(4, function (json) {
 			$("#exexplaintormpropertyTitle").html(json.bean.title);
 			$("#exexplaintormpropertyContent").html(json.bean.content);
 		});
@@ -95,7 +95,7 @@ layui.config({
     	 	template: getFileContent('tpl/template/select-option.tpl'),
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
-    	 	ajaxSendAfter:function(json){
+    	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
     	 	}
         });
@@ -114,7 +114,7 @@ layui.config({
 	    		 	template: getFileContent('tpl/template/select-option.tpl'),
 	    		 	ajaxSendLoadBefore: function(hdb){
 	    		 	},
-	    		 	ajaxSendAfter:function(json){
+	    		 	ajaxSendAfter:function (json) {
 	    		 		form.render('select');
 	    		 	}
 	    		});
@@ -127,7 +127,7 @@ layui.config({
         });
       	
       	form.on('select(selectParent)', function(data){
-      		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function(json){
+      		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				htmlModelContent.setValue(json.bean.htmlContent);
     				jsModelContent.setValue(json.bean.jsContent);
@@ -164,7 +164,7 @@ layui.config({
 	        		params.displayTemplateId = "";
 	        	}
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "rmproperty002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "rmproperty002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

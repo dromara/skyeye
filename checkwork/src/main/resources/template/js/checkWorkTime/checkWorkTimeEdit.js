@@ -20,7 +20,7 @@ layui.config({
 		 	pagination: false,
 		 	method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		type = json.bean.type;
 		 		if(type == 1){
 		    		resetSingleBreak();
@@ -148,7 +148,7 @@ layui.config({
 		 	        		state: $("input[name='state']:checked").val(),
 		 	        		weekDay: JSON.stringify(weekDay)
 		 	        	};
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "checkworktime004", params: params, type: 'json', method: "PUT", callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "checkworktime004", params: params, type: 'json', method: "PUT", callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

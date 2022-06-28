@@ -65,7 +65,7 @@ layui.config({
 
 					$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=3");
 				},
-				ajaxSendAfter: function(json){
+				ajaxSendAfter: function (json) {
 					matchingLanguage();
 					form.render();
 				}
@@ -73,7 +73,7 @@ layui.config({
 		}
 		
 		// 打印
-		$("body").on("click", "#jprint", function(e){
+		$("body").on("click", "#jprint", function (e) {
 			$("#showForm").jqprint({
 				title: sysMainMation.mationTitle,
 				debug: false, //如果是true则可以显示iframe查看效果（iframe默认高和宽都很小，可以再源码中调大），默认是false
@@ -84,7 +84,7 @@ layui.config({
 		});
 		
 		// 图片预览
-		$("body").on("click", ".barCode", function(e){
+		$("body").on("click", ".barCode", function (e) {
 			var src = $(this).attr("src");
 			layer.open({
         		type: 1,
@@ -98,7 +98,7 @@ layui.config({
 		});
 		
 		// 验收
-		$("body").on("click", ".acceptance", function(e){
+		$("body").on("click", ".acceptance", function (e) {
 			childId = $(this).attr("rowId");
 			subType = $(this).attr("subType");
 			_openNewWindows({

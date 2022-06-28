@@ -24,7 +24,7 @@ layui.config({
                 json.bean.whetherGive = shopUtil.getMealOrderWhetherGiveName(json.bean);
                 json.bean.type = json.bean.type == 1 ? '线上下单' : '线下下单';
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 matchingLanguage();
                 form.render();
             }

@@ -17,7 +17,7 @@ layui.config({
 	var noteId = parent.noteId;
 	
 	// 显示编辑器内容
-	AjaxPostUtil.request({url:reqBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			ue = ueEditorUtil.initEditor('container');
 
@@ -27,7 +27,7 @@ layui.config({
 		    	var height = $(".file-console").height() - $(".edui-editor-toolbarbox").height() - $(".edui-editor-bottomContainer").height() - 15;
 				$(".edui-editor-iframeholder").css({'height': height});
 				// ctrl+s保存事件
-				UE.dom.domUtils.on(ue.body, "keydown", function(e){
+				UE.dom.domUtils.on(ue.body, "keydown", function (e) {
 					if (e.ctrlKey && (e.which == 83)) {
 						e.preventDefault();
 						parent.$("#editMyNote").click();

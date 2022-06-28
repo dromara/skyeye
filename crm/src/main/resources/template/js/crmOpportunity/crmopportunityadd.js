@@ -120,7 +120,7 @@ layui.config({
         }
     });
     // 商机负责人选择
-    $("body").on("click", "#responsIdSelPeople", function(e){
+    $("body").on("click", "#responsIdSelPeople", function (e) {
         systemCommonUtil.userReturnList = [].concat(responsIdList);
         systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -141,7 +141,7 @@ layui.config({
         }
     });
     // 商机参与人选择
-    $("body").on("click", "#partIdSelPeople", function(e){
+    $("body").on("click", "#partIdSelPeople", function (e) {
         systemCommonUtil.userReturnList = [].concat(partIdList);
         systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -162,7 +162,7 @@ layui.config({
         }
     });
     // 商机关注人选择
-    $("body").on("click", "#followIdSelPeople", function(e){
+    $("body").on("click", "#followIdSelPeople", function (e) {
         systemCommonUtil.userReturnList = [].concat(followIdList);
         systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
         systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -174,7 +174,7 @@ layui.config({
     });
     
     // 客户选择
-    $("body").on("click", "#customMationSel", function(e){
+    $("body").on("click", "#customMationSel", function (e) {
     	_openNewWindows({
 			url: "../../tpl/customermanage/customerChoose.html", 
 			title: "选择客户",

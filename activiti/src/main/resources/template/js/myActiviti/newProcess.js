@@ -44,7 +44,7 @@ layui.config({
 				return str;
 			});
 		},
-        ajaxSendAfter:function(json){
+        ajaxSendAfter:function (json) {
         	$('.task-launch-item').hover(function() {
 				var obj = $(this);
 				bkIn(obj);
@@ -56,7 +56,7 @@ layui.config({
         }
     });
 
-    $("body").on("click", ".launchTask", function(e){
+    $("body").on("click", ".launchTask", function (e) {
         var title = $(this).attr("showTitle");
         var url = $(this).attr("pageUrl");
         dsFormId = $(this).attr("dsFormId");

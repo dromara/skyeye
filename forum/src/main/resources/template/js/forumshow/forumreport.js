@@ -20,7 +20,7 @@ layui.config({
 		 	template: getFileContent('tpl/template/select-option-must.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$("#reportType").append("<option value='other'>其他</option>")
 		 		form.render('select');
 		 	}
@@ -46,7 +46,7 @@ layui.config({
  	        		reportDesc: $("#reportDesc").val()
  	        	};
  	        	params.reportType = data.field.reportType;
- 	        	AjaxPostUtil.request({url:reqBasePath + "forumreport001", params:params, type: 'json', callback: function(json){
+ 	        	AjaxPostUtil.request({url: reqBasePath + "forumreport001", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

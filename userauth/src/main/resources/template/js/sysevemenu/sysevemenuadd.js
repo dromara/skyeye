@@ -28,7 +28,7 @@ layui.config({
             template: getFileContent('tpl/template/select-option-must.tpl'),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 form.render('select');
                 //所属系统
                 showGrid({
@@ -39,7 +39,7 @@ layui.config({
                 	template: getFileContent('tpl/template/select-option.tpl'),
                 	ajaxSendLoadBefore: function(hdb){
                 	},
-                	ajaxSendAfter:function(json){
+                	ajaxSendAfter:function (json) {
                 		form.render('select');
                 	}
                 });
@@ -150,7 +150,7 @@ layui.config({
  	    
  	    //加载同级菜单
  	    function loadChildMenu(){
- 	    	AjaxPostUtil.request({url:reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function(json){
+ 	    	AjaxPostUtil.request({url: reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){

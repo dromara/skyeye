@@ -18,7 +18,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: beanTemplate,
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		//相关附件回显
 			    if(!isNull(json.bean.enclosureInfo) && json.bean.enclosureInfo.length > 0){
 			    	var str = "";
@@ -39,7 +39,7 @@ layui.config({
 				    			isAgree: $("input[name='flag']:checked").val(),
 				    			rowId: parent.rowId
 				            };
-				            AjaxPostUtil.request({url:flowableBasePath + "sealseservice030", params: jStr, type: 'json', callback: function(json){
+				            AjaxPostUtil.request({url:flowableBasePath + "sealseservice030", params: jStr, type: 'json', callback: function (json) {
 				 	   			if (json.returnCode == 0) {
 			                    	parent.layer.close(index);
 			                    	parent.refreshCode = '0';

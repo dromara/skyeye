@@ -38,7 +38,7 @@ layui.config({
     	 	template: getFileContent('tpl/template/select-option.tpl'),
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
-    	 	ajaxSendAfter:function(json){
+    	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
     	 	}
         });
@@ -67,7 +67,7 @@ layui.config({
 		 	ajaxSendAfter:function(data){
 		 		form.render('select');
 		 	},
-		 	ajaxSendErrorAfter: function(json){
+		 	ajaxSendErrorAfter: function (json) {
 		 		$("#classId").html("");
 		 		form.render('select');
 		 	}

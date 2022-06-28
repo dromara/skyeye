@@ -75,7 +75,7 @@ layui.config({
 		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
 			currentUserMation = data.bean;
 		});
-		AjaxPostUtil.request({url:reqBasePath + "fileconsole036", params:{rowId: thisId}, type: 'json', callback: function(j){
+		AjaxPostUtil.request({url: reqBasePath + "fileconsole036", params:{rowId: thisId}, type: 'json', callback: function(j){
 			if(j.returnCode == 0) {
 				if(!isNull(j.bean)){
 					window.docEditor = new DocsAPI.DocEditor("placeholder", {

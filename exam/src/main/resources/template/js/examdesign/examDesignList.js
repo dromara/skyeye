@@ -47,7 +47,7 @@ layui.config({
     	 	template: getFileContent('tpl/template/select-option.tpl'),
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
-    	 	ajaxSendAfter:function(json){
+    	 	ajaxSendAfter:function (json) {
     	 		form.render('select');
     	 	}
         });
@@ -72,7 +72,7 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		form.render('select');
 		 	}
 	    });
@@ -151,7 +151,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除试卷' }, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url:schoolBasePath + "exam025", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:schoolBasePath + "exam025", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -220,7 +220,7 @@ layui.config({
 		var msg = obj ? '确认发布试卷【' + obj.data.surveyName + '】吗？' : '确认发布选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '试卷发布' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:schoolBasePath + "exam023", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:schoolBasePath + "exam023", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("发布成功", {icon: 1, time: 2000});
     				loadTable();
@@ -236,7 +236,7 @@ layui.config({
 		var msg = obj ? '确认结束试卷【' + obj.data.surveyName + '】的考试吗？' : '确认结束选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '结束考试' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:schoolBasePath + "exam030", params:{surveyId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url:schoolBasePath + "exam030", params:{surveyId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadTable();

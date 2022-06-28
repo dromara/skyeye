@@ -29,7 +29,7 @@ layui.config({
 				}
 
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 	}

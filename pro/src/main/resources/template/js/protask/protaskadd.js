@@ -62,7 +62,7 @@ layui.config({
 			template: getFileContent('tpl/template/select-option.tpl'),
 			ajaxSendLoadBefore: function(hdb){
 			},
-			ajaxSendAfter: function(json){
+			ajaxSendAfter: function (json) {
 				form.render('select');
 				proIdSelect();
 			}
@@ -77,7 +77,7 @@ layui.config({
 		});
 
 		// 获取当前登录用户所属企业的所有部门信息
-		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(json){
+		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function (json) {
 			$("#departments").html(getDataUseHandlebars(selOption, json));
 			form.render('select');
 		});
@@ -134,7 +134,7 @@ layui.config({
 			winui.window.msg('请填写任务说明！', {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "protask002", params: params, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "protask002", params: params, type: 'json', callback: function (json) {
 			if (json.returnCode == 0){
 				parent.layer.close(index);
 				parent.refreshCode = '0';

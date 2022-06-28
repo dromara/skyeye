@@ -63,7 +63,7 @@ layui.config({
 		var msg = obj ? '确认删除项目【' + obj.data.proName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除项目' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "rmxcx024", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "rmxcx024", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();

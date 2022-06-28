@@ -1095,7 +1095,7 @@ https://github.com/nodeca/pako/blob/master/LICENSE
 Note: since JSZip 3 removed critical functionality, this version assigns to the
 `JSZipSync` variable.  Another JSZip version can be loaded in parallel.
 */
-(function(e){
+(function (e) {
   if("object"==typeof exports&&"undefined"!=typeof module&&"undefined"==typeof DO_NOT_EXPORT_JSZIP)module.exports=e();
   else if("function"==typeof define&&define.amd&&"undefined"==typeof DO_NOT_EXPORT_JSZIP){JSZipSync=e();define([],e);}
   else{
@@ -1105,7 +1105,7 @@ Note: since JSZip 3 removed critical functionality, this version assigns to the
         "undefined"!=typeof $ && $.global?f=$.global:
           "undefined"!=typeof self&&(f=self),f.JSZipSync=e()
   }
-}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function (e) {var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
     'use strict';
 // private property
     var _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";

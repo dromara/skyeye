@@ -38,7 +38,7 @@ layui.config({
 		document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000);
 		
 		//打开链接
-		$("body").on("click", "#openUrl", function(e){
+		$("body").on("click", "#openUrl", function (e) {
 			window.open(url);
 		});
 		

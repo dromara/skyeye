@@ -19,7 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/customerGroup/customerGroupEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		textool.init({
 			    	eleId: 'desc',
 			    	maxlength: 200,
@@ -34,7 +34,7 @@ layui.config({
 	 	        			groupName: $("#groupName").val(),
  	        				desc: $("#desc").val()
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customergroup004", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "customergroup004", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

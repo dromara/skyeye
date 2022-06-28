@@ -18,34 +18,18 @@ layui.config({
 		 	template: getFileContent('tpl/lightapptype/lightapptypeeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		//类型
 		 		$("input:radio[name=iconType][value=" + json.bean.iconType + "]").attr("checked", true);
 		 		if(json.bean.iconType == '1'){//icon
 		 			$(".menuIconTypeIsTwo").addClass("layui-hide");
 		 			$(".menuIconTypeIsOne").removeClass("layui-hide");
-		 			//初始化上传
-		     		$("#iconpicPath").upload({
-		                "action": reqBasePath + "common003",
-		                "data-num": "1",
-		                "data-type": "PNG,JPG,jpeg,gif",
-		                "uploadType": 6,
-		                "function": function (_this, data) {
-		                    show("#iconpicPath", data);
-		                }
-		            });
+					// 初始化上传
+					$("#iconpicPath").upload(systemCommonUtil.uploadCommon003Config('iconpicPath', 12, '', 1));
 		 		}else if(json.bean.iconType == '2'){//图片
 		 			$(".menuIconTypeIsTwo").removeClass("layui-hide");
-		 			$("#iconpicPath").upload({
-			            "action": reqBasePath + "common003",
-			            "data-num": "1",
-			            "data-type": "PNG,JPG,jpeg,gif",
-			            "uploadType": 12,
-			            "data-value": json.bean.iconPath,
-			            "function": function (_this, data) {
-			                show("#iconpicPath", data);
-			            }
-			        });
+					// 初始化上传
+					$("#iconpicPath").upload(systemCommonUtil.uploadCommon003Config('iconpicPath', 12, json.bean.iconPath, 1));
 		 			$(".menuIconTypeIsOne").addClass("layui-hide");
 		 		}
 		 		
@@ -70,7 +54,7 @@ layui.config({
 		        });
 		 		
 		 		// 图标选中事件
-		 	    $("body").on("focus", "#iconPath", function(e){
+		 	    $("body").on("focus", "#iconPath", function (e) {
 					systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 						$("#iconPath").val(sysIconChooseClass);
 						$("#iconShow").css({'color': 'black'});
@@ -93,7 +77,7 @@ layui.config({
 		 	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});
 		 	        		return false;
 		 	        	}
-		 	        	AjaxPostUtil.request({url:reqBasePath + "lightapptype004", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "lightapptype004", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

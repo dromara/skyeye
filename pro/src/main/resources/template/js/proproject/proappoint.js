@@ -25,7 +25,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({
 					'projectEnclosureUpload': json.bean.projectEnclosureInfoList,// 项目组织和分工的附件回显
@@ -136,7 +136,7 @@ layui.config({
 		});
 		
 		//项目经理选择
-		$("body").on("click", "#toProjectManager", function(e){
+		$("body").on("click", "#toProjectManager", function (e) {
 			systemCommonUtil.userReturnList = [].concat(toProjectManager);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -148,7 +148,7 @@ layui.config({
 		});
 		
 		//项目赞助人选择
-		$("body").on("click", "#toProjectSponsor", function(e){
+		$("body").on("click", "#toProjectSponsor", function (e) {
 			systemCommonUtil.userReturnList = [].concat(toProjectSponsor);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
@@ -160,7 +160,7 @@ layui.config({
 		});
 		
 		//项目组成员选择
-		$("body").on("click", "#toProjectMembers", function(e){
+		$("body").on("click", "#toProjectMembers", function (e) {
 			systemCommonUtil.userReturnList = [].concat(toProjectMembers);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

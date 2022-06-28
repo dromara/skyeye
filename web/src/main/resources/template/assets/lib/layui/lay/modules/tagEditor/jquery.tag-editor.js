@@ -13,7 +13,7 @@ layui.define(["jquery"], function(exports) {
 
     // code.accursoft.com/caret/overview
     // used to set cursor position in input fields
-    !function(e){e.fn.caret=function(e){var t=this[0],n="true"===t.contentEditable;if(0==arguments.length){if(window.getSelection){if(n){t.focus();var o=window.getSelection().getRangeAt(0),r=o.cloneRange();return r.selectNodeContents(t),r.setEnd(o.endContainer,o.endOffset),r.toString().length}return t.selectionStart}if(document.selection){if(t.focus(),n){var o=document.selection.createRange(),r=document.body.createTextRange();return r.moveToElementText(t),r.setEndPoint("EndToEnd",o),r.text.length}var e=0,c=t.createTextRange(),r=document.selection.createRange().duplicate(),a=r.getBookmark();for(c.moveToBookmark(a);0!==c.moveStart("character",-1);)e++;return e}return 0}if(-1==e&&(e=this[n?"text":"val"]().length),window.getSelection)n?(t.focus(),window.getSelection().collapse(t.firstChild,e)):t.setSelectionRange(e,e);else if(document.body.createTextRange)if(n){var c=document.body.createTextRange();c.moveToElementText(t),c.moveStart("character",e),c.collapse(!0),c.select()} else {var c=t.createTextRange();c.move("character",e),c.select()}return n||t.focus(),e}}(jQuery);
+    !function (e) {e.fn.caret=function (e) {var t=this[0],n="true"===t.contentEditable;if(0==arguments.length){if(window.getSelection){if(n){t.focus();var o=window.getSelection().getRangeAt(0),r=o.cloneRange();return r.selectNodeContents(t),r.setEnd(o.endContainer,o.endOffset),r.toString().length}return t.selectionStart}if(document.selection){if(t.focus(),n){var o=document.selection.createRange(),r=document.body.createTextRange();return r.moveToElementText(t),r.setEndPoint("EndToEnd",o),r.text.length}var e=0,c=t.createTextRange(),r=document.selection.createRange().duplicate(),a=r.getBookmark();for(c.moveToBookmark(a);0!==c.moveStart("character",-1);)e++;return e}return 0}if(-1==e&&(e=this[n?"text":"val"]().length),window.getSelection)n?(t.focus(),window.getSelection().collapse(t.firstChild,e)):t.setSelectionRange(e,e);else if(document.body.createTextRange)if(n){var c=document.body.createTextRange();c.moveToElementText(t),c.moveStart("character",e),c.collapse(!0),c.select()} else {var c=t.createTextRange();c.move("character",e),c.select()}return n||t.focus(),e}}(jQuery);
 
     // plugin with val as parameter for public methods
     $.fn.tagEditor = function(options, val, next){
@@ -102,7 +102,7 @@ layui.define(["jquery"], function(exports) {
                 set_placeholder();
             }
 
-            ed.click(function(e){
+            ed.click(function (e) {
                 // do not create tag when user selects tags by text selection
                 if (window.getSelection && getSelection() != '') return;
 
@@ -137,7 +137,7 @@ layui.define(["jquery"], function(exports) {
                 return false;
             });
 
-            ed.on('click', '.tag-editor-delete', function(e){
+            ed.on('click', '.tag-editor-delete', function (e) {
                 // delete icon is hidden when input is visible; place cursor near invisible delete icon on click
                 if ($(this).prev().hasClass('active')) { $(this).closest('li').find('input').caret(-1); return false; }
 
@@ -150,7 +150,7 @@ layui.define(["jquery"], function(exports) {
 
             // delete on right mouse click or ctrl+click
             if (o.clickDelete)
-                ed.on('mousedown', '.tag-editor-tag', function(e){
+                ed.on('mousedown', '.tag-editor-tag', function (e) {
                     if (e.ctrlKey || e.which > 1) {
                         var li = $(this).closest('li'), tag = li.find('.tag-editor-tag');
                         if (o.beforeTagDelete(el, ed, tag_list, tag.html()) === false) return false;
@@ -160,7 +160,7 @@ layui.define(["jquery"], function(exports) {
                     }
                 });
 
-            ed.on('click', '.tag-editor-tag', function(e){
+            ed.on('click', '.tag-editor-tag', function (e) {
                 // delete on right click or ctrl+click -> exit
                 if (o.clickDelete && (e.ctrlKey || e.which > 1)) return false;
 
@@ -205,7 +205,7 @@ layui.define(["jquery"], function(exports) {
                 update_globals();
             }
 
-            ed.on('blur', 'input', function(e){
+            ed.on('blur', 'input', function (e) {
                 var input = $(this), old_tag = input.data('old_tag'), tag = $.trim(input.val().replace(/ +/, ' ').replace(o.dregex, o.delimiter[0]));
                 if (!tag) {
                     if (old_tag && o.beforeTagDelete(el, ed, tag_list, old_tag) === false) {
@@ -229,7 +229,7 @@ layui.define(["jquery"], function(exports) {
             });
 
             var pasted_content;
-            ed.on('paste', 'input', function(e){
+            ed.on('paste', 'input', function (e) {
                 $(this).removeAttr('maxlength');
                 pasted_content = $(this);
                 setTimeout(function(){ split_cleanup(pasted_content); }, 30);
@@ -237,14 +237,14 @@ layui.define(["jquery"], function(exports) {
 
             // keypress delimiter
             var inp;
-            ed.on('keypress', 'input', function(e){
+            ed.on('keypress', 'input', function (e) {
                 if (o.delimiter.indexOf(String.fromCharCode(e.which))>=0) {
                     inp = $(this);
                     setTimeout(function(){ split_cleanup(inp); }, 20);
                 }
             });
 
-            ed.on('keydown', 'input', function(e){
+            ed.on('keydown', 'input', function (e) {
                 var $t = $(this);
                 // left/up key + backspace key on empty field
                 if ((e.which == 37 || !o.autocomplete && e.which == 38) && !$t.caret() || e.which == 8 && !$t.val()) {

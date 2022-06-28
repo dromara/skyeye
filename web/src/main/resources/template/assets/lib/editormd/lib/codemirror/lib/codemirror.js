@@ -3370,8 +3370,8 @@
     });
 
     // Listen to wheel events in order to try and update the viewport on time.
-    on(d.scroller, "mousewheel", function(e){onScrollWheel(cm, e);});
-    on(d.scroller, "DOMMouseScroll", function(e){onScrollWheel(cm, e);});
+    on(d.scroller, "mousewheel", function (e) {onScrollWheel(cm, e);});
+    on(d.scroller, "DOMMouseScroll", function (e) {onScrollWheel(cm, e);});
 
     // Prevent wrapper from ever scrolling
     on(d.wrapper, "scroll", function() { d.wrapper.scrollTop = d.wrapper.scrollLeft = 0; });
@@ -3380,7 +3380,7 @@
       if (!signalDOMEvent(cm, e)) e_stop(e);
     }
     if (cm.options.dragDrop) {
-      on(d.scroller, "dragstart", function(e){onDragStart(cm, e);});
+      on(d.scroller, "dragstart", function (e) {onDragStart(cm, e);});
       on(d.scroller, "dragenter", drag_);
       on(d.scroller, "dragover", drag_);
       on(d.scroller, "drop", operation(cm, onDrop));

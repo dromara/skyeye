@@ -24,7 +24,7 @@ layui.config({
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		if(json.bean.state == systemCommonUtil.sysUserStaffState["quit"]["id"]){
 		 			$("#leaveTime").show();
 		 			$("#leaveReason").show();

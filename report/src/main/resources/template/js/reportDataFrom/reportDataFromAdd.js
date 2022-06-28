@@ -27,7 +27,7 @@ layui.config({
             method: "GET",
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 dataFromTypeList = [].concat(json.rows);
                 $.each(dataFromTypeList, function (i, item){
                     if(item.checked){
@@ -201,7 +201,7 @@ layui.config({
                     method: "GET",
                     ajaxSendLoadBefore: function(hdb){
                     },
-                    ajaxSendAfter:function(json){
+                    ajaxSendAfter:function (json) {
                     }
                 });
                 sqlContent = CodeMirror.fromTextArea(document.getElementById("sqlData"), $.extend(true, commonOptions, {

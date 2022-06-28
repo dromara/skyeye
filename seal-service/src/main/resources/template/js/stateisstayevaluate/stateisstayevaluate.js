@@ -18,7 +18,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter: function(json){
+		 	ajaxSendAfter: function (json) {
 		 		
 		 		showGrid({
 				 	id: "evaluateType",
@@ -42,7 +42,7 @@ layui.config({
 		        			evaluateType: $("#evaluateType").val(),
 		        			content: $("#content").val()
 		 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice037", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice037", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0){
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

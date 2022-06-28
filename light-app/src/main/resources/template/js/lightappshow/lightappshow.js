@@ -19,7 +19,7 @@ layui.config({
     	 	template: getFileContent('tpl/lightappshow/lightappshowlistTemplate.tpl'),
     	 	ajaxSendLoadBefore: function(hdb){
     	 	},
-    	 	ajaxSendAfter:function(json){
+    	 	ajaxSendAfter:function (json) {
     	 	}	
         });
     }
@@ -33,14 +33,14 @@ layui.config({
 	 	template: getFileContent('tpl/lightappshow/lightappshowaTemplate.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
-	 	ajaxSendAfter:function(json){
+	 	ajaxSendAfter:function (json) {
 	 		//初始化所有上线列表数据
 	 	    showList("");
 	 	    matchingLanguage();
 	 	}	
     });
     
-	$("body").on("click", ".setting a", function(e){
+	$("body").on("click", ".setting a", function (e) {
 		$(".setting a").removeClass("selected");
 		$(this).addClass("selected");
 		$("#appList").empty();
@@ -51,9 +51,9 @@ layui.config({
 	    showList(clickId);
 	});
 	
-	$("body").on("click", ".app-list button", function(e){
+	$("body").on("click", ".app-list button", function (e) {
 		var id = $(this).attr("rowid");
-		AjaxPostUtil.request({url:reqBasePath + "lightapp009", params:{id:id}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: reqBasePath + "lightapp009", params:{id:id}, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				var data = json.bean;
 	        	top.winui.window.msg("添加成功，请刷新页面即可看到该应用。", {icon: 1,time: 3000});
@@ -63,7 +63,7 @@ layui.config({
 		}});
 	});
 	
-	$("body").on("click", ".app-list img", function(e){
+	$("body").on("click", ".app-list img", function (e) {
         var url = $(this).attr("rowurl");
         var title = $(this).attr("rowtitle");
         if(url.substr(0, 7).toLowerCase() == "http://" || url.substr(0, 8).toLowerCase() == "https://"){

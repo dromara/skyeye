@@ -34,17 +34,8 @@ layui.config({
                     tools: ['count', 'copy', 'reset']
                 });
 
-                $("#logo").upload({
-                    "action": reqBasePath + "common003",
-                    "data-num": "1",
-                    "data-type": "PNG,JPG,jpeg,gif",
-                    "uploadType": 22,
-                    "data-value": data.bean.logo,
-                    //该函数为点击放大镜的回调函数，如没有该函数，则不显示放大镜
-                    "function": function (_this, d) {
-                        show("#logo", d);
-                    }
-                });
+                // 初始化上传
+                $("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 22, data.bean.logo, 1));
 
                 if(!isNull(data.bean.mealConsumeMationList)){
                     $.each(data.bean.mealConsumeMationList, function(i, item) {
@@ -100,7 +91,7 @@ layui.config({
                             winui.window.msg('请上传套餐LOGO', {icon: 2, time: 2000});
                             return false;
                         }
-                        AjaxPostUtil.request({url: shopBasePath + "meal005", params: params, type: 'json', method: "PUT", callback: function(json){
+                        AjaxPostUtil.request({url: shopBasePath + "meal005", params: params, type: 'json', method: "PUT", callback: function (json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

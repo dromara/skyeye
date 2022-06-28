@@ -16,7 +16,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: $("#simpleTemplate").html(),
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 $("#inoutitemType").html((json.bean.inoutitemType == "1") ? '<span class="state-up">收入</span>' : '<span class="state-down">支出</span>');
                 matchingLanguage();
                 form.render();

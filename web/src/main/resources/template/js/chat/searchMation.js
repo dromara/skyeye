@@ -50,7 +50,7 @@ layui.config({
 		 		});
 		 	},
 		 	options: {},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 	}
@@ -66,9 +66,9 @@ layui.config({
 	    });
 	    
 	    //加入群聊
-	    $("body").on("click", ".inGroup", function(e){
+	    $("body").on("click", ".inGroup", function (e) {
 	    	var _this = $(this);
-	    	AjaxPostUtil.request({url:reqBasePath + "companytalkgroup006", params:{groupId: $(this).attr("rowid")}, type: 'json', callback: function(json){
+	    	AjaxPostUtil.request({url: reqBasePath + "companytalkgroup006", params:{groupId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				_this.parent().html('<font>等待审核</font>');
  	   				winui.window.msg('等待管理员审核', {icon: 1, time: 2000});

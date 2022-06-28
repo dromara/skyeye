@@ -76,7 +76,7 @@ layui.config({
     function delet(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: shopBasePath + "deleteMealRefundOrderReasonById", params: {id: data.id}, type: 'json', method: "POST", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "deleteMealRefundOrderReasonById", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
                 if (json.returnCode == 0) {
                     winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                     loadTable();
@@ -90,7 +90,7 @@ layui.config({
     // 设置启用状态
     function editEnabled(data){
         layer.confirm('确认要更改为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
-            AjaxPostUtil.request({url: shopBasePath + "editMealRefundOrderReasonEnabledState", params: {id: data.id, enabled: shopUtil.enableState["enable"]["type"]}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "editMealRefundOrderReasonEnabledState", params: {id: data.id, enabled: shopUtil.enableState["enable"]["type"]}, type: 'json', method: "PUT", callback: function (json) {
                 if (json.returnCode == 0) {
                     winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();
@@ -104,7 +104,7 @@ layui.config({
     // 设置禁用状态
     function editNotEnabled(data){
         layer.confirm('确认要更改为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
-            AjaxPostUtil.request({url: shopBasePath + "editMealRefundOrderReasonEnabledState", params: {id: data.id, enabled: shopUtil.enableState["disable"]["type"]}, type: 'json', method: "PUT", callback: function(json){
+            AjaxPostUtil.request({url: shopBasePath + "editMealRefundOrderReasonEnabledState", params: {id: data.id, enabled: shopUtil.enableState["disable"]["type"]}, type: 'json', method: "PUT", callback: function (json) {
                 if (json.returnCode == 0) {
                     winui.window.msg("设置成功。", {icon: 1, time: 2000});
                     loadTable();

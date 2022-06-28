@@ -22,7 +22,7 @@ layui.config({
 		 	method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$("input:radio[name=userSex][value=" + json.bean.sex + "]").attr("checked", true);
 			    $("#emergencyContact").val(json.bean.emergencyContact);
 			    
@@ -85,7 +85,7 @@ layui.config({
 			 	        	rowId: parent.rowId
 		 	        	};
 		 	        	
-		 	        	AjaxPostUtil.request({url:reqBasePath + "sysstafffamily004", params: params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "sysstafffamily004", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

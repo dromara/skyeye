@@ -12,7 +12,7 @@ layui.config({
 	    	form = layui.form;
 	    var colorpicker = layui.colorpicker;
 	    
-	    AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop008", params:{rowId: parent.parentRowId}, type: 'json', callback: function(json){
+	    AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop008", params:{rowId: parent.parentRowId}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				$("#menuName").val(json.bean.menuName);
    				$("#menuNameEn").val(json.bean.menuNameEn);
@@ -51,27 +51,12 @@ layui.config({
    		 		//菜单类型
 		 		$("input:radio[name=menuIconType][value=" + json.bean.menuIconType + "]").attr("checked", true);
 		 		if(json.bean.menuIconType == '1'){//icon
-		 			$("#menuIconPic").upload({
-			            "action": reqBasePath + "common003",
-			            "data-num": "1",
-			            "data-type": "PNG,JPG,jpeg,gif",
-			            "uploadType": 12,
-			            "function": function (_this, data) {
-			                show("#menuIconPic", data);
-			            }
-			        });
+					// 初始化上传
+					$("#menuIconPic").upload(systemCommonUtil.uploadCommon003Config('menuIconPic', 12, '', 1));
 		 			$(".menuIconTypeIsTwo").addClass("layui-hide");
 		 		}else if(json.bean.menuIconType == '2'){//图片
-		 			$("#menuIconPic").upload({
-			            "action": reqBasePath + "common003",
-			            "data-num": "1",
-			            "data-type": "PNG,JPG,jpeg,gif",
-			            "uploadType": 12,
-			            "data-value": json.bean.menuIconPic,
-			            "function": function (_this, data) {
-			                show("#menuIconPic", data);
-			            }
-			        });
+					// 初始化上传
+					$("#menuIconPic").upload(systemCommonUtil.uploadCommon003Config('menuIconPic', 12, json.bean.menuIconPic, 1));
 		 			$(".menuIconTypeIsOne").addClass("layui-hide");
 		 		}
    			    
@@ -93,7 +78,6 @@ layui.config({
 		        });
    			    
    			    form.on('submit(formAddBean)', function (data) {
-   			    	
    			        if (winui.verifyForm(data.elem)) {
    			        	var params = {
    		        			menuName: $("#menuName").val(),
@@ -126,7 +110,7 @@ layui.config({
 		 	        		return false;
 		 	        	}
    			        	
-   			        	AjaxPostUtil.request({url:reqBasePath + "sysevewindragdrop009", params:params, type: 'json', callback: function(json){
+   			        	AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop009", params: params, type: 'json', callback: function (json) {
    			 	   			if (json.returnCode == 0) {
    			 	   				parent.childParams = params;
    				 	   			parent.layer.close(index);
@@ -140,7 +124,7 @@ layui.config({
    			    });
    			    
    			    // 菜单图标选中事件
-   		 	    $("body").on("focus", "#menuIcon", function(e){
+   		 	    $("body").on("focus", "#menuIcon", function (e) {
 					systemCommonUtil.openSysEveIconChoosePage(function(sysIconChooseClass){
 						$("#menuIcon").val(sysIconChooseClass);
 						$("#iconShow").css({'color': 'white'});

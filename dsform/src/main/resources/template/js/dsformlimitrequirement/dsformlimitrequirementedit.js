@@ -19,7 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/dsformlimitrequirement/dsformlimitrequirementeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 		form.on('submit(formEditBean)', function (data) {
@@ -30,7 +30,7 @@ layui.config({
 	        				afterRequirement: $("#afterRequirement").val(),
 	        				rowId: parent.rowId
 		        		};
-			        	AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement005", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

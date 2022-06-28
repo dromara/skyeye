@@ -16,7 +16,7 @@ layui.config({
             pagination: false,
             method: "GET",
             template: $("#simpleTemplate").html(),
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 $("#isDefault").html(json.bean.isDefault == "0" ? "<span class='state-down'>否</span>" : "<span class='state-up'>是</span>");
                 
                 matchingLanguage();

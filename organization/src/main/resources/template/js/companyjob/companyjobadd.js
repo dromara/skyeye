@@ -71,7 +71,7 @@ layui.config({
     	 	}
 	    });
 	    
-		systemCommonUtil.getSysCompanyList(function(json){
+		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据
 			$("#companyId").html(getDataUseHandlebars(selTemplate, json));
 		});
@@ -95,7 +95,7 @@ layui.config({
 			 	pagination: false,
 			 	template: selTemplate,
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		form.render('select');
 			 	}
 		    });
@@ -135,7 +135,7 @@ layui.config({
 		//加载同级菜单
  	    function loadChildJob(){
  	    	var params = {pId: parentId, departmentId: $("#departmentId").val(), rowId: ""};
- 	    	AjaxPostUtil.request({url:reqBasePath + "companyjob008", params: params, method: "POST", type: 'json', callback: function(json){
+ 	    	AjaxPostUtil.request({url: reqBasePath + "companyjob008", params: params, method: "POST", type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				var str = '<dd style="margin-left: ' + (leftMargin * $("#pIdBox").children("dd").length) + 'px"><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 	 	   			for(var i = 0; i < json.rows.length; i++){
@@ -172,7 +172,7 @@ layui.config({
         			pId: str
 	        	};
 	        	
-	        	AjaxPostUtil.request({url:reqBasePath + "companyjob002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "companyjob002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

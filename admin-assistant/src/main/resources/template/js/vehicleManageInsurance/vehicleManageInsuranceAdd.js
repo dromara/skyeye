@@ -19,7 +19,7 @@ layui.config({
 			$("#insuranceTitle").html("车辆保险登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random()*100);
 		});
 		
-		AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function (json) {
 			if(json.returnCode == 0) {
 				var row = json.rows;
 				for(var i = 0;i < json.total; i++){
@@ -162,7 +162,7 @@ layui.config({
  	 	 	        		return false;
  	 	                }
  	 	        	}
- 	 	        	AjaxPostUtil.request({url: flowableBasePath + "insurance002", params:params, type: 'json', callback: function(json){
+ 	 	        	AjaxPostUtil.request({url: flowableBasePath + "insurance002", params: params, type: 'json', callback: function (json) {
  		 	   			if (json.returnCode == 0) {
  			 	   			parent.layer.close(index);
  			 	        	parent.refreshCode = '0';

@@ -244,7 +244,7 @@ layui.define(function(exports){
     if(!elem) return;
     var that = this, input = elem[tag]('input')[0];
     if(!input) return;
-    laypage.on(input, 'keyup', function(e){
+    laypage.on(input, 'keyup', function (e) {
       var value = this.value
       ,keyCode = e.keyCode;
       if(/^(37|38|39|40)$/.test(keyCode)) return;
@@ -295,7 +295,7 @@ layui.define(function(exports){
     }
     ,index: layui.laypage ? (layui.laypage.index + 10000) : 0
     ,on: function(elem, even, fn){
-      elem.attachEvent ? elem.attachEvent('on'+ even, function(e){ //for ie
+      elem.attachEvent ? elem.attachEvent('on'+ even, function (e) { //for ie
         e.target = e.srcElement;
         fn.call(elem, e);
       }) : elem.addEventListener(even, fn, false);

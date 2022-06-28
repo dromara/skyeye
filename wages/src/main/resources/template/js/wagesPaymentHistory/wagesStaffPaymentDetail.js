@@ -19,7 +19,7 @@ layui.config({
             template: $("#showBaseTemplate").html(),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
                 // 加载员工信息
                 $("#staffMation").html(getUserStaffHtmlMationByStaffId(parent.rowId));
 

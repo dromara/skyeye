@@ -29,7 +29,7 @@ layui.config({
 	});
 
 	//帖子信息展示
-	AjaxPostUtil.request({url:reqBasePath + "forumcontent006", params: {rowId:rowId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "forumcontent006", params: {rowId:rowId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			if(json.bean.createId != currentUserId){
 				// 如果不是用户自己的帖子，则显示举报按钮
@@ -46,12 +46,12 @@ layui.config({
 	}});
 	
 	//发表评论
-	$("body").on("click", "#commentContentAdd", function(e){
+	$("body").on("click", "#commentContentAdd", function (e) {
 		var content = $("#commentContent").val();
 		if(isNull(content)){
 			winui.window.msg("评论内容不能为空！", {icon: 2, time: 2000});
 		} else {
-			AjaxPostUtil.request({url:reqBasePath + "forumcontent008", params:{forumId:rowId, content:content}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "forumcontent008", params:{forumId:rowId, content:content}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				loadCommentList();//刷新评论信息
  	   				$("#commentContent").val("");
@@ -63,7 +63,7 @@ layui.config({
 	});
 	
 	//评论下的回复按钮
-	$("body").on("click", ".operator-btn span", function(e){
+	$("body").on("click", ".operator-btn span", function (e) {
 		$(".comment-text-textarea").empty();
 		$(".se-comment-text-textarea").empty();
 		belongCommentId = $(this).attr("rowid");
@@ -76,7 +76,7 @@ layui.config({
 	});
 	
 	//回复信息下的回复按钮
-	$("body").on("click", ".se-operator-btn span", function(e){
+	$("body").on("click", ".se-operator-btn span", function (e) {
 		$(".comment-text-textarea").empty();
 		$(".se-comment-text-textarea").empty();
 		belongCommentId = $(this).attr("rowid");
@@ -89,12 +89,12 @@ layui.config({
 	});
 	
 	//点击发表回复评论
-	$("body").on("click", "#forumCommentAdd", function(e){
+	$("body").on("click", "#forumCommentAdd", function (e) {
 		var replyContent = $("#replyContent").val();
 		if(isNull(replyContent)){
 			winui.window.msg("回复内容不能为空！", {icon: 2, time: 2000});
 		} else {
-			AjaxPostUtil.request({url:reqBasePath + "forumcontent010", params:{forumId:rowId, belongCommentId:belongCommentId, content:replyContent, replyId:commentUserId}, type: 'json', callback: function(json){
+			AjaxPostUtil.request({url: reqBasePath + "forumcontent010", params:{forumId:rowId, belongCommentId:belongCommentId, content:replyContent, replyId:commentUserId}, type: 'json', callback: function (json) {
  	   			if (json.returnCode == 0) {
  	   				$(".comment-text-textarea").empty();
  	   				$(".se-comment-text-textarea").empty();
@@ -127,7 +127,7 @@ layui.config({
 	});
 	
 	//我的操作
-	$("body").on("click", ".suspension-menu-icon", function(e){
+	$("body").on("click", ".suspension-menu-icon", function (e) {
 		if($(".drop-down-menu").is(':hidden')){
 			$(".drop-down-menu").show();
 			$(".suspension-menu-icon").removeClass("rotate").addClass("rotate1");
@@ -138,7 +138,7 @@ layui.config({
 	});
 	
 	//举报
-	$("body").on("click", "#forumReport", function(e){
+	$("body").on("click", "#forumReport", function (e) {
 		_openNewWindows({
 			url: "../../tpl/forumshow/forumreport.html", 
 			title: "帖子举报",
@@ -166,7 +166,7 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function(j){
-		 		AjaxPostUtil.request({url:reqBasePath + "forumcontent011", params:{forumId:rowId}, type: 'json', callback: function(json){
+		 		AjaxPostUtil.request({url: reqBasePath + "forumcontent011", params:{forumId:rowId}, type: 'json', callback: function (json) {
 	 				if(json.returnCode == 0) {
 	 					var row = json.rows;
 	 			 		for(var i = 0;i < row.length; i++){

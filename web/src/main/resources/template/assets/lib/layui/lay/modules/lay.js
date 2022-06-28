@@ -379,7 +379,7 @@
   //事件绑定
   LAY.prototype.on = function(eventName, fn){
     return this.each(function(index, item){
-      item.attachEvent ? item.attachEvent('on' + eventName, function(e){
+      item.attachEvent ? item.attachEvent('on' + eventName, function (e) {
         e.target = e.srcElement;
         fn.call(item, e);
       }) : item.addEventListener(eventName, fn, false);

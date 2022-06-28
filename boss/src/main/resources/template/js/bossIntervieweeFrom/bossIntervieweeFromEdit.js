@@ -18,7 +18,7 @@ layui.config({
 		 	pagination: false,
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		textool.init({
 			    	eleId: 'desc',
 			    	maxlength: 500,
@@ -35,7 +35,7 @@ layui.config({
 							desc: $("#desc").val()
 		 	        	};
 
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "bossIntervieweeFrom005", params: params, type: 'json', method: "PUT", callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "bossIntervieweeFrom005", params: params, type: 'json', method: "PUT", callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';

@@ -13,7 +13,7 @@ layui.config({
 	form.render();
 
 	// 显示编辑器内容
-	AjaxPostUtil.request({url:reqBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: reqBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
 		if (json.returnCode == 0) {
 			parent.$("#noteTitle").val(json.bean.title);
 			var param = {

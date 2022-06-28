@@ -349,7 +349,7 @@ layui.config({
 	    			pageTypes: pageTypes,
 					approverId: activitiUtil.getApprovalPersonId()
 	            };
-	            AjaxPostUtil.request({url:flowableBasePath + "activitimode005", params: jStr, type: 'json', callback: function(json){
+	            AjaxPostUtil.request({url:flowableBasePath + "activitimode005", params: jStr, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
                     	parent.layer.close(index);
                     	parent.refreshCode = '0';
@@ -371,7 +371,7 @@ layui.config({
 			done: function(page, next) { //到达临界点（默认滚动触发），触发下一页
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params:{processInstanceId: parent.processInstanceId}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params:{processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
 		   			if (json.returnCode == 0) {
 		   				var jsonStr = "";//实体json对象
 		   				$.each(json.rows, function(index, bean) {

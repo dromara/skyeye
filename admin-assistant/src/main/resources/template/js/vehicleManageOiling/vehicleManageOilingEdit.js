@@ -20,7 +20,7 @@ layui.config({
 		 	template: getFileContent('tpl/vehicleManageOiling/vehicleManageOilingEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 加油日期
 		 		laydate.render({ 
 		 		  elem: '#oilTime',
@@ -43,7 +43,7 @@ layui.config({
 	 	 	        		roomAddDesc: $("#roomAddDesc").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "oiling005", params:params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "oiling005", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';

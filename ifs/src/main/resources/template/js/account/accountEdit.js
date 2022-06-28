@@ -19,7 +19,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb){
 
             },
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
             	textool.init({
 			    	eleId: 'remark',
 			    	maxlength: 200,
@@ -41,7 +41,7 @@ layui.config({
                             isDefault: $("input[name='isDefault']:checked").val(),
                             remark: $("#remark").val()
                         };
-                        AjaxPostUtil.request({url: flowableBasePath + "account005", params: params, type: 'json', method: "PUT", callback: function(json){
+                        AjaxPostUtil.request({url: flowableBasePath + "account005", params: params, type: 'json', method: "PUT", callback: function (json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

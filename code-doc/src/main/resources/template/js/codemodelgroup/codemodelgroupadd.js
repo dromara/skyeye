@@ -36,7 +36,7 @@ layui.config({
         			groupName: $("#groupName").val(),
         			groupDesc: encodeURIComponent(layedit.getContent(layContent)),
 	        	};
-	        	AjaxPostUtil.request({url:reqBasePath + "codemodel002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url: reqBasePath + "codemodel002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 		 	   			parent.layer.close(index);
 		 	        	parent.refreshCode = '0';

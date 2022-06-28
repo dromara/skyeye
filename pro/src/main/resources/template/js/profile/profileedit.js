@@ -19,7 +19,7 @@ layui.config({
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: getFileContent('tpl/profile/profileeditTemplate.tpl'),
-		ajaxSendAfter:function(json){
+		ajaxSendAfter:function (json) {
 			// 附件回显
 			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 

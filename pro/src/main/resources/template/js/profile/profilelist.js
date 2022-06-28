@@ -85,7 +85,7 @@ layui.config({
 		var msg = '确认从工作流中撤销选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销申请' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "profile007", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "profile007", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("提交成功", {icon: 1, time: 2000});
     				loadTable();
@@ -122,7 +122,7 @@ layui.config({
 					rowId: data.id,
 					approvalId: approvalId
 				};
-				AjaxPostUtil.request({url: flowableBasePath + "profile006", params: params, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: flowableBasePath + "profile006", params: params, type: 'json', callback: function (json) {
 					if (json.returnCode == 0) {
 						winui.window.msg("提交成功", {icon: 1, time: 2000});
 						loadTable();
@@ -139,7 +139,7 @@ layui.config({
 		var msg = obj ? '确认作废【' + obj.data.title + '】吗？' : '确认作废该任务信息吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "profile010", params:{rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "profile010", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -184,7 +184,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "profile009", params: {rowId: data.id}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: flowableBasePath + "profile009", params: {rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();

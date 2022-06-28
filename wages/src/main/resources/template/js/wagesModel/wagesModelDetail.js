@@ -21,7 +21,7 @@ layui.config({
 		method: "GET",
 		template: $("#beanTemplate").html(),
 		ajaxSendLoadBefore: function(hdb){},
-		ajaxSendAfter:function(json){
+		ajaxSendAfter:function (json) {
 			laydate.render({
 				elem: '#executeMonth',
 				type: 'month',

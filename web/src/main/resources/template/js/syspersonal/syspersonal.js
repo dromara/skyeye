@@ -46,7 +46,7 @@ layui.config({
 			scrollElem: "#myForum",
 			done: function(page, next) {
 				var lis = [];
-				AjaxPostUtil.request({url:reqBasePath + "forumcontent001", params:{page: page, limit: 15}, type: 'json', callback: function(json){
+				AjaxPostUtil.request({url: reqBasePath + "forumcontent001", params:{page: page, limit: 15}, type: 'json', callback: function (json) {
 		   			if (json.returnCode == 0) {
 						lis.push(getDataUseHandlebars(forumTemplate, json));
 						next(lis.join(''), (page * 15) < json.total);
@@ -83,7 +83,7 @@ layui.config({
 	}
 	
 	// 论坛点击
-	$("body").on("click", "#myForum .my-operator-list a", function(e){
+	$("body").on("click", "#myForum .my-operator-list a", function (e) {
 		var rowId = $(this).parents('div[class^="my-forum-main"]').eq(0).attr("rowId");
 		var type = $(this).attr("type");
 		if(type == "edit"){
@@ -102,7 +102,7 @@ layui.config({
 	function del(rowId){
 		layer.confirm('确认删除该帖子吗？', { icon: 3, title: '删除帖子' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:reqBasePath + "forumcontent003", params:{rowId: rowId}, type: 'json', callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "forumcontent003", params:{rowId: rowId}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadMyForum();
@@ -114,19 +114,19 @@ layui.config({
 	}
 	
 	// 论坛详情
-	$("body").on("click", "#myForum .my-forum-main .forum-desc, .my-forum-main em", function(e){
+	$("body").on("click", "#myForum .my-forum-main .forum-desc, .my-forum-main em", function (e) {
 		var rowId = $(this).parents('div[class^="my-forum-main"]').eq(0).attr("rowId");
 		openOtherPage('forumBtn', '../../tpl/forumshow/forumitem.html?id=' + rowId, '<i class="fa fa-calendar"></i>论坛');
 	});
 	
 	// 论坛标签点击事件
-	$("body").on("click", "#myForum .my-forum-main-span strong", function(e){
+	$("body").on("click", "#myForum .my-forum-main-span strong", function (e) {
 		var rowId = $(this).attr("rowId");
 		openOtherPage('forumBtn', "../../tpl/forumshow/forumtaglist.html?id=" + rowId, '<i class="fa fa-calendar"></i>论坛');
 	});
 	
 	//修改密码
-	$("body").on("click", "#updatePassword", function(e){
+	$("body").on("click", "#updatePassword", function (e) {
 		_openNewWindows({
 			url: "../../tpl/syspersonal/editpassword.html", 
 			title: "修改密码",

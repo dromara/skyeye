@@ -9,7 +9,7 @@ function loadTockByDepotAndMUnit(rowNum, depotId){
     //当规格不为空时
     if(!isNull(chooseUnitId)){
         // 获取库存
-        getStockAjaxByDepotAndNormsId(chooseUnitId, depotId, function(json){
+        getStockAjaxByDepotAndNormsId(chooseUnitId, depotId, function (json) {
             var currentTock = 0;
             if(!isNull(json.bean)){
                 currentTock = json.bean.currentTock;
@@ -43,7 +43,7 @@ function loadMaterialDepotStockByDepotId(depotId){
         return;
     }
     // 获取库存
-    getStockAjaxByDepotAndNormsId(normsIds.join(','), depotId, function(json){
+    getStockAjaxByDepotAndNormsId(normsIds.join(','), depotId, function (json) {
         if(normsIds.length == 1){
             $("#currentTock" + normsIdsNum[0]).html(json.bean.currentTock);
         } else {

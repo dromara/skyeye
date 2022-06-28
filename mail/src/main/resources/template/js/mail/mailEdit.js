@@ -20,7 +20,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		// 类型
 		 		$("input:radio[name=category][value=" + json.bean.category + "]").attr("checked", true);
 		 		
@@ -108,7 +108,7 @@ layui.config({
 		 					winui.window.msg("状态值错误。", {icon: 2, time: 2000});
 		 					return false;
 		 				}
-		 				AjaxPostUtil.request({url: reqBasePath + "maillist011", params: params, type: 'json', method: "PUT", callback: function(json){
+		 				AjaxPostUtil.request({url: reqBasePath + "maillist011", params: params, type: 'json', method: "PUT", callback: function (json) {
 		 					if (json.returnCode == 0) {
 		 						parent.layer.close(index);
 		 						parent.refreshCode = '0';

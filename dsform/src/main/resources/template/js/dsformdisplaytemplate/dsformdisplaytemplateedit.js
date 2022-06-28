@@ -18,7 +18,7 @@ layui.config({
 		 	template: getFileContent('tpl/dsformdisplaytemplate/dsformdisplaytemplateeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		
 		 		var templateContent = CodeMirror.fromTextArea(document.getElementById("templateContent"), {
 		            mode : "xml",  // 模式
@@ -36,7 +36,7 @@ layui.config({
 		        matchingLanguage();
 		 		form.render();
 				// 根据类型获取部分功能的使用说明
-				systemCommonUtil.queryExplainMationByType(3, function(json){
+				systemCommonUtil.queryExplainMationByType(3, function (json) {
 					$("#exexplaintodsformdisplaytemplateTitle").html(json.bean.title);
 					$("#exexplaintodsformdisplaytemplateContent").html(json.bean.content);
 				});
@@ -48,7 +48,7 @@ layui.config({
 		        			templateContent:encodeURI(templateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
 		        			rowId:parent.rowId
 			        	};
-			        	AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate005", params:params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate005", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

@@ -69,7 +69,7 @@ layui.config({
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
 							assetAdmin: systemCommonUtil.tagEditorGetItemData('assetAdmin', userList)
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles016", params: params, type: 'json', callback: function(json){
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles016", params: params, type: 'json', callback: function (json) {
 	 		 	   			if (json.returnCode == 0) {
 	 			 	   			parent.layer.close(index);
 	 			 	        	parent.refreshCode = '0';
@@ -84,7 +84,7 @@ layui.config({
 		});
  		
  		// 管理人员选择
-		$("body").on("click", "#userNameSelPeople", function(e){
+		$("body").on("click", "#userNameSelPeople", function (e) {
 			systemCommonUtil.userReturnList = [].concat(userList);
 			systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
 			systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要

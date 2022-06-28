@@ -83,7 +83,7 @@ layui.config({
 	function del(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "maillist009", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json){
+            AjaxPostUtil.request({url: reqBasePath + "maillist009", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
     				loadTable();
@@ -103,7 +103,7 @@ layui.config({
 	});
 	
 	// 刷新数据
-	$("body").on("click", "#reloadTable", function(e){
+	$("body").on("click", "#reloadTable", function (e) {
 		loadTable();
 	});
 

@@ -193,7 +193,7 @@ layui.config({
 		}
 		
 		// 选取工单
-		$("body").on("focus", "#serviceId", function(e){
+		$("body").on("focus", "#serviceId", function (e) {
  	    	_openNewWindows({
  				url: "../../tpl/partsclaim/mytocompletedlist.html", 
  				title: "选取工单",
@@ -255,7 +255,7 @@ layui.config({
 		}
 
 	    // 客户选择
- 	    $("body").on("click", "#customMationSel", function(e){
+ 	    $("body").on("click", "#customMationSel", function (e) {
  	    	_openNewWindows({
  				url: "../../tpl/customermanage/customerChoose.html", 
  				title: "选择客户",
@@ -271,7 +271,7 @@ layui.config({
  	    });
 
 		// 商品选择
- 	    $("body").on("click", ".chooseProductBtn", function(e){
+ 	    $("body").on("click", ".chooseProductBtn", function (e) {
  	    	var trId = $(this).parent().parent().attr("trcusid");
 			erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 				//获取表格行号

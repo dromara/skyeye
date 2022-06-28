@@ -23,15 +23,7 @@ layui.config({
 	    });
 
         // 初始化上传
-        $("#logo").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 22,
-            "function": function (_this, data) {
-                show("#logo", data);
-            }
-        });
+        $("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 22, '', 1));
 
         // 加载当前登陆用户所属的区域列表
         shopUtil.queryStaffBelongAreaList(function (json){
@@ -77,7 +69,7 @@ layui.config({
                     return false;
                 }
 
-                AjaxPostUtil.request({url: shopBasePath + "meal002", params: params, type: 'json', method: "POST", callback: function(json){
+                AjaxPostUtil.request({url: shopBasePath + "meal002", params: params, type: 'json', method: "POST", callback: function (json) {
                     if (json.returnCode == 0) {
                         parent.layer.close(index);
                         parent.refreshCode = '0';

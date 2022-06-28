@@ -125,7 +125,7 @@ layui.config({
                             onlineBookJson: JSON.stringify(tableData)
                         };
 
-                        AjaxPostUtil.request({url: shopBasePath + "store009", params: params, type: 'json', method: "POST", callback: function(json){
+                        AjaxPostUtil.request({url: shopBasePath + "store009", params: params, type: 'json', method: "POST", callback: function (json) {
                             if (json.returnCode == 0) {
                                 winui.window.msg('保存成功', {icon: 1, time: 2000});
                             } else {

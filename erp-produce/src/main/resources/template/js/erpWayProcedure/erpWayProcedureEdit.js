@@ -33,7 +33,7 @@ layui.config({
             template: $("#usetableTemplate").html(),
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter: function(json){
+            ajaxSendAfter: function (json) {
             	$.each(json.bean.procedureList, function(j, item){
             		item.id = rowNum;
 					procedureList.push(item);
@@ -86,7 +86,7 @@ layui.config({
 		                    procedureMation: JSON.stringify(table.cache.messageTable),
 		                    rowId: parent.rowId
 					    };
-			        	AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure004", params: params, type: 'json', callback: function(json){
+			        	AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure004", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

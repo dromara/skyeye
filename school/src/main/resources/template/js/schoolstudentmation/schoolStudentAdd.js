@@ -14,30 +14,15 @@ layui.config({
 		var rowNum = 1; //表格的序号
 		var usetableTemplate = $("#usetableTemplate").html();
 	    
-		//哪一届
-		laydate.render({
-			elem: '#sessionYear', //指定元素
-			type: 'year',
-			max: 'date'
-		});
+		// 哪一届
+		laydate.render({elem: '#sessionYear', type: 'year', max: 'date'});
 		
-		//入校时间
-		laydate.render({
-			elem: '#joinTime', //指定元素
-			type: 'date'
-		});
-		
-		//初始化上传
- 		$("#userPhoto").upload({
-            "action": reqBasePath + "common003",
-            "data-num": "1",
-            "data-type": "PNG,JPG,jpeg,gif",
-            "uploadType": 15,//学生照类型
-            "function": function (_this, data) {
-                show("#userPhoto", data);
-            }
-        });
-	    
+		// 入校时间
+		laydate.render({elem: '#joinTime', type: 'date'});
+
+		// 初始化上传
+		$("#userPhoto").upload(systemCommonUtil.uploadCommon003Config('userPhoto', 15, '', 1));
+
         matchingLanguage();
 	    form.render();
 
@@ -76,7 +61,7 @@ layui.config({
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb){
 	    	 	},
-	    	 	ajaxSendAfter:function(json){
+	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('select');
 	    	 	}
 	        });
@@ -92,7 +77,7 @@ layui.config({
 	    	 	template: getFileContent('tpl/template/select-option.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb){
 	    	 	},
-	    	 	ajaxSendAfter:function(json){
+	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('select');
 	    	 	}
 	        });
@@ -108,7 +93,7 @@ layui.config({
 	    	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb){
 	    	 	},
-	    	 	ajaxSendAfter:function(json){
+	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('checkbox');
 	    	 	}
 	        });
@@ -124,7 +109,7 @@ layui.config({
 	    	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
 	    	 	ajaxSendLoadBefore: function(hdb){
 	    	 	},
-	    	 	ajaxSendAfter:function(json){
+	    	 	ajaxSendAfter:function (json) {
 	    	 		form.render('checkbox');
 	    	 	}
 	        });
@@ -162,7 +147,7 @@ layui.config({
 			 	ajaxSendAfter:function(data){
 			 		form.render('select');
 			 	},
-			 	ajaxSendErrorAfter: function(json){
+			 	ajaxSendErrorAfter: function (json) {
 			 		$("#classId").html("");
 			 		form.render('select');
 			 	}
@@ -265,7 +250,7 @@ layui.config({
 	            });
 	            params.bodyMind = bodyMindIds;
 	        	
-	        	AjaxPostUtil.request({url:schoolBasePath + "studentmation002", params:params, type: 'json', callback: function(json){
+	        	AjaxPostUtil.request({url:schoolBasePath + "studentmation002", params: params, type: 'json', callback: function (json) {
 	 	   			if (json.returnCode == 0) {
 	 	   				winui.window.msg("录入成功", {icon: 1, time: 3000}, function() {
 		 	   				location.reload();

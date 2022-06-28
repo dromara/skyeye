@@ -19,7 +19,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(json){
+			 	ajaxSendAfter:function (json) {
 			 		$("#parentId").val(id);
 			 		form.render('select');
 			 	}
@@ -35,19 +35,11 @@ layui.config({
 		 	template: getFileContent('tpl/appworkpage/appworkpageeditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 				$("input:radio[name=urlType][value=" + json.bean.urlType + "]").attr("checked", true);
-		 		$("#logo").upload({
-                    "action": reqBasePath + "common003",
-                    "data-num": "1",
-                    "data-type": "PNG,JPG,jpeg,gif",
-                    "uploadType": 12,
-                    "data-value": json.bean.logo,
-                    "function": function (_this, data) {
-                        show("#logo", data);
-                    }
-                });
-	 			
+				// 初始化上传
+				$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 12, json.bean.logo, 1));
+
                 matchingLanguage();
 		 		form.render();
 		 		
@@ -62,7 +54,7 @@ layui.config({
 							urlType: data.field.urlType
 		 	        	};
 		 	        	params.logo = $("#logo").find("input[name='upload']").attr("oldurl");
-		 	        	AjaxPostUtil.request({url:reqBasePath + "appworkpage006", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "appworkpage006", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

@@ -3485,8 +3485,8 @@
     });
 
     // Listen to wheel events in order to try and update the viewport on time.
-    on(d.scroller, "mousewheel", function(e){onScrollWheel(cm, e);});
-    on(d.scroller, "DOMMouseScroll", function(e){onScrollWheel(cm, e);});
+    on(d.scroller, "mousewheel", function (e) {onScrollWheel(cm, e);});
+    on(d.scroller, "DOMMouseScroll", function (e) {onScrollWheel(cm, e);});
 
     // Prevent wrapper from ever scrolling
     on(d.wrapper, "scroll", function() { d.wrapper.scrollTop = d.wrapper.scrollLeft = 0; });
@@ -3494,7 +3494,7 @@
     d.dragFunctions = {
       enter: function(e) {if (!signalDOMEvent(cm, e)) e_stop(e);},
       over: function(e) {if (!signalDOMEvent(cm, e)) { onDragOver(cm, e); e_stop(e); }},
-      start: function(e){onDragStart(cm, e);},
+      start: function (e) {onDragStart(cm, e);},
       drop: operation(cm, onDrop),
       leave: function(e) {if (!signalDOMEvent(cm, e)) { clearDragCursor(cm); }}
     };

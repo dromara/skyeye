@@ -19,7 +19,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/schedule/editscheduleTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		//编辑节假日选取时间段
 				laydate.render({
 					elem: '#holidayTime', //指定元素
@@ -38,7 +38,7 @@ layui.config({
 		 	        		startTime: theStartTime,
 		 	        		endTime: theEndTime
 		 	        	};
-		 	        	AjaxPostUtil.request({url:reqBasePath + "syseveschedule016", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: reqBasePath + "syseveschedule016", params: params, type: 'json', callback: function (json) {
 			 	   			if (json.returnCode == 0) {
 				 	   			parent.layer.close(index);
 				 	        	parent.refreshCode = '0';

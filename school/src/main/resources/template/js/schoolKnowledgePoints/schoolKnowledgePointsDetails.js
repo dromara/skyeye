@@ -18,7 +18,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: $("#detailTemplate").html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		content = json.bean.content;
 		 		$("#knowledgecontentshowBox").attr("src", "schoolKnowledgePointsShow.html");
 		 		matchingLanguage();

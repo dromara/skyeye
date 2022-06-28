@@ -2562,7 +2562,7 @@ var domUtils = dom.domUtils = {
      * @param { Function } handler 事件处理器
      * @example
      * ```javascript
-     * UE.dom.domUtils.on(document.body,"click",function(e){
+     * UE.dom.domUtils.on(document.body,"click",function (e) {
      *     //e为事件对象，this为被点击元素对戏那个
      * });
      * ```
@@ -7477,7 +7477,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
             me._proxyDomEvent = utils.bind(me._proxyDomEvent, me);
             domUtils.on(doc, ['click', 'contextmenu', 'mousedown', 'keydown', 'keyup', 'keypress', 'mouseup', 'mouseover', 'mouseout', 'selectstart'], me._proxyDomEvent);
             domUtils.on(win, ['focus', 'blur'], me._proxyDomEvent);
-            domUtils.on(me.body,'drop',function(e){
+            domUtils.on(me.body,'drop',function (e) {
                 //阻止ff下默认的弹出新页面打开图片
                 if(browser.gecko && e.stopPropagation) { e.stopPropagation(); }
                 me.fireEvent('contentchange')
@@ -23880,10 +23880,10 @@ UE.plugin.register('autoupload', function (){
         },
         bindEvents:{
             //插入粘贴板的图片，拖放插入图片
-            'ready':function(e){
+            'ready':function (e) {
                 var me = this;
                 if(window.FormData && window.FileReader) {
-                    domUtils.on(me.body, 'paste drop', function(e){
+                    domUtils.on(me.body, 'paste drop', function (e) {
                         var hasImg = false,
                             items;
                         //获取粘贴板文件列表或者拖放文件列表
@@ -25511,7 +25511,7 @@ UE.ui = baidu.editor.ui = {};
                 //阻止在combox上的鼠标滚轮事件, 防止用户的正常操作被误解
                 if( window.XMLHttpRequest ) {
 
-                    domUtils.on( content, ( 'onmousewheel' in document.body ) ? 'mousewheel' :'DOMMouseScroll' , function(e){
+                    domUtils.on( content, ( 'onmousewheel' in document.body ) ? 'mousewheel' :'DOMMouseScroll' , function (e) {
 
                         if(e.preventDefault) {
                             e.preventDefault();
@@ -25534,7 +25534,7 @@ UE.ui = baidu.editor.ui = {};
                 } else {
 
                     //ie6
-                    domUtils.on( this.getDom(), 'mousewheel' , function(e){
+                    domUtils.on( this.getDom(), 'mousewheel' , function (e) {
 
                         e.returnValue = false;
 
@@ -27290,7 +27290,7 @@ UE.ui = baidu.editor.ui = {};
 //            if( this.holdScroll ) {
 //
 //                if( !me.iframeUrl ) {
-//                    domUtils.on( document.getElementById( me.id + "_iframe"), !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+//                    domUtils.on( document.getElementById( me.id + "_iframe"), !browser.gecko ? "mousewheel" : "DOMMouseScroll", function (e) {
 //                        domUtils.preventDefault(e);
 //                    } );
 //                } else {
@@ -27305,7 +27305,7 @@ UE.ui = baidu.editor.ui = {};
 //                                    if( iframeWindow.document && iframeWindow.document.body ) {
 //                                        window.clearInterval( timer );
 //                                        timer = null;
-//                                        domUtils.on( iframeWindow.document.body, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+//                                        domUtils.on( iframeWindow.document.body, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function (e) {
 //                                            domUtils.preventDefault(e);
 //                                        } );
 //                                    }
@@ -27313,7 +27313,7 @@ UE.ui = baidu.editor.ui = {};
 //                                }, 100);
 //
 //                            } else {
-//                                domUtils.on( iframeWindow, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function(e){
+//                                domUtils.on( iframeWindow, !browser.gecko ? "mousewheel" : "DOMMouseScroll", function (e) {
 //                                    domUtils.preventDefault(e);
 //                                } );
 //                            }

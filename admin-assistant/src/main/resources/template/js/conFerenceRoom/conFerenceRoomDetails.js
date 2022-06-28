@@ -19,7 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/conFerenceRoom/conFerenceRoomDetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$("#roomImg").attr("src", fileBasePath + json.bean.roomImg);
 		 		//附件回显
 			    if(json.bean.enclosureInfo.length != 0 && json.bean.enclosureInfo != ""){

@@ -17,7 +17,7 @@ layui.config({
             method: "GET",
             template: $("#beanTemplate").html(),
             ajaxSendLoadBefore: function(hdb){},
-            ajaxSendAfter:function(json){
+            ajaxSendAfter:function (json) {
             	
             	textool.init({
 			    	eleId: 'remark',
@@ -34,7 +34,7 @@ layui.config({
                             name: $("#name").val(),
                             remark: $("#remark").val()
                         };
-                        AjaxPostUtil.request({url: shopBasePath + "area005", params: params, type: 'json', method: "PUT", callback: function(json){
+                        AjaxPostUtil.request({url: shopBasePath + "area005", params: params, type: 'json', method: "PUT", callback: function (json) {
                             if (json.returnCode == 0) {
                                 parent.layer.close(index);
                                 parent.refreshCode = '0';

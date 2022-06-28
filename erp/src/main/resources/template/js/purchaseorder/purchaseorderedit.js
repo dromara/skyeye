@@ -49,7 +49,7 @@ layui.config({
 	});
 
 	// 初始化账户
-	systemCommonUtil.getSysAccountListByType(function(json){
+	systemCommonUtil.getSysAccountListByType(function (json) {
 		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 		// 渲染数据
@@ -317,14 +317,14 @@ layui.config({
 	}
 
 	// 供应商选择
-	$("body").on("click", "#supplierNameSel", function(e){
+	$("body").on("click", "#supplierNameSel", function (e) {
 		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation){
 			$("#supplierName").val(supplierMation.supplierName);
 		});
 	});
 
 	//商品选择
-	$("body").on("click", ".chooseProductBtn", function(e){
+	$("body").on("click", ".chooseProductBtn", function (e) {
 		var trId = $(this).parent().parent().attr("trcusid");
 		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
 			//获取表格行号
@@ -342,7 +342,7 @@ layui.config({
 	});
 
 	//生产计划单选择
-	$("body").on("click", "#productionOrderSel", function(e){
+	$("body").on("click", "#productionOrderSel", function (e) {
 		_openNewWindows({
 			url: "../../tpl/erpProduction/erpProductionNoSuccessChoose.html",
 			title: "选择生产计划单",

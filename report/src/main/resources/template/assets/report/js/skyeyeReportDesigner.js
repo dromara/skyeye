@@ -140,12 +140,12 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					skyeyeHeader.find(".separate").css({
 						"background-color": params.headerBgColor
 					});
-					$(".def-nav").hover(function(e){
+					$(".def-nav").hover(function (e) {
 						$(this).find(".pulldown-nav").addClass("hover");
 						$(this).find(".pulldown-nav").find(".f-icon").removeClass("arrow-bottom");
 						$(this).find(".pulldown-nav").find(".f-icon").addClass("arrow-top");
 						$(this).find(".pulldown").show();
-					}, function(e){
+					}, function (e) {
 						$(this).find(".pulldown").hide();
 						$(this).find(".pulldown-nav").removeClass("hover");
 						$(this).find(".pulldown-nav").find(".f-icon").addClass("arrow-bottom");
@@ -568,13 +568,13 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					// 不触发‘移除所有图表的编辑信息’的事件的对象的class--颜色选择器
 					var notTriggerRemove = ["layui-colorpicker-main"];
 					// 图表点击事件
-					$("body").on('click', ".echarts-box, .word-box", function(e){
+					$("body").on('click', ".echarts-box, .word-box", function (e) {
 						f.setChooseReportItem($(this));
 						e.stopPropagation();
 					});
 
 					// 内容点击
-					$("body").on('click', skyeyeReportContent, function(e){
+					$("body").on('click', skyeyeReportContent, function (e) {
 						var pass = true;
 						$.each(notTriggerRemove, function (i, item){
 							if($(e.target).parents("." + item).length > 0 || $(e.target).attr('class').indexOf(item) != -1){
@@ -587,7 +587,7 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					});
 
 					// 面板切换
-					$("body").on('click', '.layui-colla-title', function(e){
+					$("body").on('click', '.layui-colla-title', function (e) {
 						$(this).parent().find('.layui-colla-content').toggleClass('layui-show');
 						if($(this).parent().find('.layui-colla-content').hasClass('layui-show')){
 							$(this).find('.f-icon').removeClass('arrow-bottom').addClass("arrow-top");
@@ -597,12 +597,12 @@ layui.define(["jquery", 'form', 'element'], function(exports) {
 					});
 
 					// 编辑器点击防止触发父内容事件
-					$("body").on('click', ".form-box", function(e){
+					$("body").on('click', ".form-box", function (e) {
 						e.stopPropagation();
 					});
 
 					// 保存
-					$("body").on('click', "#save", function(e){
+					$("body").on('click', "#save", function (e) {
 						var eachartsList = f.getEchartsListToSave();
 						var wordMationList = f.getWordMationListToSave();
 

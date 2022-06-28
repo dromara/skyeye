@@ -44,12 +44,12 @@ layui.config({
 	}
 	
 	//全部热门
-	$("body").on("click", "#allHot", function(e){
+	$("body").on("click", "#allHot", function (e) {
 		location.href = "../../tpl/forumshow/forumtaglist.html?id=hot";
 	});
 	
 	//帖子搜索
-	$("body").on("click", "#forumSearch", function(e){
+	$("body").on("click", "#forumSearch", function (e) {
 		var searchValue = $("#iconClass").val();
 		if(!isNull(searchValue)){
 			$(".main-content-two").addClass("layui-hide");
@@ -73,7 +73,7 @@ layui.config({
 		 	template: searchForumListTemplate,
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var row = json.rows;
 		 		for(var i = 0;i < json.total; i++){
 		 			var id = row[i].id;
@@ -90,31 +90,31 @@ layui.config({
 	}
 	
 	//搜索帖子详情
-    $("body").on("click", "#searchForumList .my-forum-main em", function(e){
+    $("body").on("click", "#searchForumList .my-forum-main em", function (e) {
         var rowId = $(this).parents('div[class^="my-forum-main"]').eq(0).attr("rowid");
         location.href = '../../tpl/forumshow/forumitem.html?id=' + rowId;
     });
 	
 	//话题详情
-	$("body").on("click", ".forum-invitation, .layui-text-center", function(e){
+	$("body").on("click", ".forum-invitation, .layui-text-center", function (e) {
 		var rowId = $(this).parents('div[class^="layuiadmin-card-text"]').eq(0).attr("rowid");
 		location.href = '../../tpl/forumshow/forumitem.html?id=' + rowId;
 	});
 	
 	//话题详情
-	$("body").on("click", ".layuiadmin-card-status p", function(e){
+	$("body").on("click", ".layuiadmin-card-status p", function (e) {
 		var rowId = $(this).attr("rowid");
 		location.href = '../../tpl/forumshow/forumitem.html?id=' + rowId;
 	});
 	
 	//标签点击事件
-	$("body").on("click", "#hotTagList a", function(e){
+	$("body").on("click", "#hotTagList a", function (e) {
 		rowId = $(this).attr("rowid");
 		location.href = "../../tpl/forumshow/forumtaglist.html?id=" + rowId;
 	});
 	
 	//我的操作
-	$("body").on("click", ".suspension-menu-icon", function(e){
+	$("body").on("click", ".suspension-menu-icon", function (e) {
 		if($(".drop-down-menu").is(':hidden')){
 			$(".drop-down-menu").show();
 			$(".suspension-menu-icon").removeClass("rotate").addClass("rotate1");
@@ -139,7 +139,7 @@ layui.config({
 					json.rows[i].userPhoto = fileBasePath + json.rows[i].userPhoto;
 				}
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 	}
 	    });
 	}
@@ -159,7 +159,7 @@ layui.config({
 					json.rows[i].userPhoto = fileBasePath + json.rows[i].userPhoto;
 				}
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 	}
 	    });
 	}
@@ -176,7 +176,7 @@ layui.config({
 		 	template: hotTagListTemplate,
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		$("#hotTagList").find("a[rowid='']").remove();
 		 	}
 	    });
@@ -197,7 +197,7 @@ layui.config({
 					json.rows[i].userPhoto = fileBasePath + json.rows[i].userPhoto;
 				}
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 	}
 	    });
 	}
@@ -217,7 +217,7 @@ layui.config({
 					json.rows[i].userPhoto = fileBasePath + json.rows[i].userPhoto;
 				}
 		 	},
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		var row = json.rows;
                 for(var i = 0;i < row.length; i++){
                     var id = row[i].id;
@@ -243,7 +243,7 @@ layui.config({
 	matchingLanguage();
 	
 	//标签点击事件
-    $("body").on("click", "#hotForumList .layui-text-bottom-a a", function(e){
+    $("body").on("click", "#hotForumList .layui-text-bottom-a a", function (e) {
         rowId = $(this).attr("rowId");
         location.href = "../../tpl/forumshow/forumtaglist.html?id=" + rowId;
     });

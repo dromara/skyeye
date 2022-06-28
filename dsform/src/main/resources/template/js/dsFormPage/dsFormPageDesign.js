@@ -20,7 +20,7 @@ layui.config({
 	
 	authBtn('1567732055673');//保存控件
 	
-	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params:{rowId: parent.rowId}, type: 'json', callback: function(json){
+	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
  		if (json.returnCode == 0) {
  			// 加载表单控件
 			loadLeftBoxItem();
@@ -102,7 +102,7 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#leftBoxItem").html(),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		formPageControl = [].concat(json.rows);
 		 		form.render();
 		 	}
@@ -194,7 +194,7 @@ layui.config({
 	
 	// 获取该控件的脚本信息
 	function getDataScript(params){
-		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: params.formContentId}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: params.formContentId}, type: 'json', callback: function (json) {
     		if (json.returnCode == 0) {
     			params.htmlContent = encodeURIComponent(json.bean.htmlContent);
     			params.jsContent = encodeURIComponent(json.bean.jsContent);
@@ -207,7 +207,7 @@ layui.config({
 	
 	// 保存“新增控件”
     function reqSaveData(params, templateContent){
-    	AjaxPostUtil.request({url: flowableBasePath + "dsformpage003", params: params, type: 'json', callback: function(json){
+    	AjaxPostUtil.request({url: flowableBasePath + "dsformpage003", params: params, type: 'json', callback: function (json) {
 			if (json.returnCode == 0) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				var templateJson = json.bean;
@@ -281,7 +281,7 @@ layui.config({
     });
     
     // 删除操作
-    $("body").on("click", "#deleteBtn", function(e){
+    $("body").on("click", "#deleteBtn", function (e) {
 		var rowid = $(this).attr("rowid");
 		$("#showForm div[rowid='" + rowid + "']").remove();
 		$.each(jsonArray, function(i, item){
@@ -415,7 +415,7 @@ layui.config({
     
     // 初始化限制条件
 	function initRequire(item){
-		AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement006", params:{}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement006", params:{}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				var contentModel = getFileContent('tpl/template/select-option.tpl');//获取html模板
    				var jsonStr = getDataUseHandlebars(contentModel, json);//模板和数据结合
@@ -441,7 +441,7 @@ layui.config({
 			winui.window.msg('保存页面不能为空！', {icon: 2, time: 2000});
 			return;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "dsformpage009", params:{formedit: JSON.stringify(jsonArray)}, type: 'json', callback: function(json){
+		AjaxPostUtil.request({url: flowableBasePath + "dsformpage009", params:{formedit: JSON.stringify(jsonArray)}, type: 'json', callback: function (json) {
    			if (json.returnCode == 0) {
    				winui.window.msg("保存成功", {icon: 1, time: 2000});
    				parent.refreshCode = '0';

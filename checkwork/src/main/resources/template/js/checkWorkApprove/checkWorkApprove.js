@@ -16,7 +16,7 @@ layui.config({
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/checkWorkApprove/checkWorkApproveTemplate.tpl'),
-		 	ajaxSendAfter:function(json){
+		 	ajaxSendAfter:function (json) {
 		 		matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {
@@ -27,7 +27,7 @@ layui.config({
 		 	        		appealRemark: $("#appealRemark").val()
 		 	        	};
 
-		 	        	AjaxPostUtil.request({url: flowableBasePath + "checkwork011", params:params, type: 'json', callback: function(json){
+		 	        	AjaxPostUtil.request({url: flowableBasePath + "checkwork011", params: params, type: 'json', callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
