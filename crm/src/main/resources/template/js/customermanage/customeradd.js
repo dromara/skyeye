@@ -50,11 +50,7 @@ layui.config({
  			});
  		}
  		
- 		textool.init({
-	    	eleId: 'addDesc',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+ 		textool.init({eleId: 'addDesc', maxlength: 200});
 
 		skyeyeEnclosure.init('enclosureUpload');
  		

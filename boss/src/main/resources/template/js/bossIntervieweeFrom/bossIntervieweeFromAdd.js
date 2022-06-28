@@ -11,11 +11,7 @@ layui.config({
 	    var $ = layui.$,
 	    	textool = layui.textool;
 	    
-	    textool.init({
-	    	eleId: 'desc',
-	    	maxlength: 400,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+	    textool.init({eleId: 'desc', maxlength: 400});
 	    
 	    matchingLanguage();
  		form.render();

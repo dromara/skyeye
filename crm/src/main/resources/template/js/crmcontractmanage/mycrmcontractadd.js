@@ -26,17 +26,9 @@ layui.config({
 	// 服务结束日期
 	laydate.render({elem: '#serviceEndTime', type: 'date', trigger: 'click'});
 
-	textool.init({
-		eleId: 'technicalTerms',
-		maxlength: 200,
-		tools: ['count', 'copy', 'reset']
-	});
+	textool.init({eleId: 'technicalTerms', maxlength: 200});
 
-	textool.init({
-		eleId: 'businessTerms',
-		maxlength: 200,
-		tools: ['count', 'copy', 'reset']
-	});
+	textool.init({eleId: 'businessTerms', maxlength: 200});
 
 	// 获取当前登录用户所属企业的所有部门信息
 	systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){

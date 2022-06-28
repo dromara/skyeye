@@ -20,11 +20,7 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter: function (json) {
-		 		textool.init({
-			    	eleId: 'desc',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'desc', maxlength: 200});
 			    matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {

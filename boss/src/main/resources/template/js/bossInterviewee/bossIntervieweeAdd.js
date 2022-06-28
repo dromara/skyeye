@@ -11,11 +11,7 @@ layui.config({
         textool = layui.textool,
         form = layui.form;
 
-    textool.init({
-        eleId: 'basicResume',
-        maxlength: 1000,
-        tools: ['count', 'copy', 'reset']
-    });
+    textool.init({eleId: 'basicResume', maxlength: 1000});
 
     skyeyeEnclosure.init('enclosureUpload');
     matchingLanguage();

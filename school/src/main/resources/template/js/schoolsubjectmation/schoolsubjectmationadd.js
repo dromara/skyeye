@@ -17,11 +17,7 @@ layui.config({
 			form.render("select");
 		});
 
-	    textool.init({
-	    	eleId: 'desc',
-	    	maxlength: 500,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+	    textool.init({eleId: 'desc', maxlength: 500});
 	    
 	    matchingLanguage();
  		form.render();

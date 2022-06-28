@@ -89,11 +89,7 @@ layui.config({
             form.render('select');
         }
 
-        textool.init({
-            eleId: 'remark',
-            maxlength: 400,
-            tools: ['count', 'copy', 'reset']
-        });
+        textool.init({eleId: 'remark', maxlength: 400});
 
         matchingLanguage();
         form.render();

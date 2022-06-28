@@ -20,11 +20,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb){},
             ajaxSendAfter:function(data){
                 memberId = data.bean.memberId;
-            	textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 400,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'remark', maxlength: 400});
                 $("input:radio[name=insure][value=" + data.bean.insure + "]").attr("checked", true);
 
 			    matchingLanguage();

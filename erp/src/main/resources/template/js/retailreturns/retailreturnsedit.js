@@ -38,12 +38,8 @@ layui.config({
 		template: beanTemplate,
 		method: "GET",
 		ajaxSendAfter:function (json) {
-			//单据时间
-			laydate.render({
-				elem: '#operTime',
-				type: 'datetime',
-				trigger: 'click'
-			});
+			// 单据时间
+			laydate.render({elem: '#operTime', type: 'datetime', trigger: 'click'});
 			orderObject = json;
 			initOtherMation();
 		}
@@ -96,11 +92,7 @@ layui.config({
 
 		erpOrderUtil.orderEditPageSetBtnBySubmitType(submitType, orderObject.bean.state);
 
-		textool.init({
-			eleId: 'remark',
-			maxlength: 200,
-			tools: ['count', 'copy', 'reset']
-		});
+		textool.init({eleId: 'remark', maxlength: 200});
 
 		// 加载动态表单
 		dsFormUtil.loadPageToEditByObjectId("dsFormShow", orderObject.bean.id);

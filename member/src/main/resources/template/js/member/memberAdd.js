@@ -10,11 +10,7 @@ layui.config({
         var $ = layui.$,
         	textool = layui.textool;
         
-        textool.init({
-	    	eleId: 'description',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+        textool.init({eleId: 'description', maxlength: 200});
 
         // 加载我所在的门店
         shopUtil.queryStaffBelongStoreList(function (json){

@@ -33,19 +33,10 @@ layui.config({
 			form.render();
 		});
 
- 		textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+ 		textool.init({eleId: 'remark', maxlength: 200});
 		
-		//单据时间
- 		laydate.render({ 
-			elem: '#operTime',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+		// 单据时间
+ 		laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 		
 		//商品规格加载变化事件
 		form.on('select(selectUnitProperty)', function(data) {

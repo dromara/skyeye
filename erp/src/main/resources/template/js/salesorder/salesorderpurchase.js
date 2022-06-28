@@ -39,13 +39,8 @@ layui.config({
 	// 获取单据提交类型
 	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["outIsSalesOutlet"]["orderType"]);
 
-	//事故时间
-	laydate.render({
-		elem: '#operTime',
-		type: 'datetime',
-		value: getFormatDate(),
-		trigger: 'click'
-	});
+	// 事故时间
+	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {
@@ -144,11 +139,7 @@ layui.config({
 					}
 				});
 
-				textool.init({
-					eleId: 'remark',
-					maxlength: 200,
-					tools: ['count', 'copy', 'reset']
-				});
+				textool.init({eleId: 'remark', maxlength: 200});
 
 				matchingLanguage();
 				form.render();

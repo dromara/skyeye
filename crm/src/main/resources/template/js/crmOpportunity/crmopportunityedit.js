@@ -37,11 +37,7 @@ layui.config({
 	 		};
 	 		$("#customName").val(customerMation.customName);
 	 		
-	 		textool.init({
-		    	eleId: 'businessNeed',
-		    	maxlength: 1000,
-		    	tools: ['count', 'copy', 'reset']
-		    });
+	 		textool.init({eleId: 'businessNeed', maxlength: 1000});
 	 		
 	 		if(json.bean.state == '1'){
 				$(".typeTwo").removeClass("layui-hide");

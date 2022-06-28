@@ -34,13 +34,8 @@ layui.config({
 	// 获取单据提交类型
 	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["putIsPurchase"]["orderType"]);
 
-	//单据时间
-	laydate.render({
-		elem: '#operTime',
-		type: 'datetime',
-		value: getFormatDate(),
-		trigger: 'click'
-	});
+	// 单据时间
+	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
 	// 加载动态表单
 	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsPurchase"]["code"], null);
@@ -127,11 +122,7 @@ layui.config({
 					$("#otherPrice" + (priceNum - 1)).val(parseFloat(item.otherPrice).toFixed(2));
 				});
 
-				textool.init({
-					eleId: 'remark',
-					maxlength: 200,
-					tools: ['count', 'copy', 'reset']
-				});
+				textool.init({eleId: 'remark', maxlength: 200});
 
 				matchingLanguage();
 				form.render();

@@ -15,16 +15,9 @@ layui.config({
 	    // 下拉框模板
 	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
 	    
-	    laydate.render({ 
- 			elem: '#archivesTime',
- 	 		trigger: 'click'
- 		});
+	    laydate.render({elem: '#archivesTime', trigger: 'click'});
 	    
-	    textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+	    textool.init({eleId: 'remark', maxlength: 200});
 	    
 		showGrid({
 		 	id: "educationId",

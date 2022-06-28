@@ -11,16 +11,9 @@ layui.config({
         	textool = layui.textool,
             laydate = layui.laydate;
         
-        textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+        textool.init({eleId: 'remark', maxlength: 200});
 
-        laydate.render({
-            elem: '#dateScope',
-            range: '~'
-        });
+        laydate.render({elem: '#dateScope', range: '~'});
         
 	    matchingLanguage();
         form.render();

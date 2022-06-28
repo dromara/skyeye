@@ -43,17 +43,9 @@ layui.config({
 			// 服务结束日期
 			laydate.render({elem: '#serviceEndTime', type: 'date'});
 
-			textool.init({
-				eleId: 'technicalTerms',
-				maxlength: 200,
-				tools: ['count', 'copy', 'reset']
-			});
+			textool.init({eleId: 'technicalTerms', maxlength: 200});
 
-			textool.init({
-				eleId: 'businessTerms',
-				maxlength: 200,
-				tools: ['count', 'copy', 'reset']
-			});
+			textool.init({eleId: 'businessTerms', maxlength: 200});
 
 			var userNames = [];
 			userList = [].concat(json.bean.relationUserId);

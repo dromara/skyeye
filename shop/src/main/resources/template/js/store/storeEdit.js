@@ -19,11 +19,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb){},
             ajaxSendAfter:function(data){
             	
-            	textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 400,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'remark', maxlength: 400});
 
                 // 加载区域
                 shopUtil.getShopAreaMation(function (json){

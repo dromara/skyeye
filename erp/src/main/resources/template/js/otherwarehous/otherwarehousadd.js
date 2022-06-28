@@ -30,19 +30,10 @@ layui.config({
 	// 获取单据提交类型
 	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["putIsOthers"]["orderType"]);
 
-	//单据时间
-	laydate.render({
-		elem: '#operTime',
-		type: 'datetime',
-		value: getFormatDate(),
-		trigger: 'click'
-	});
+	// 单据时间
+	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
-	textool.init({
-		eleId: 'remark',
-		maxlength: 200,
-		tools: ['count', 'copy', 'reset']
-	});
+	textool.init({eleId: 'remark', maxlength: 200});
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {

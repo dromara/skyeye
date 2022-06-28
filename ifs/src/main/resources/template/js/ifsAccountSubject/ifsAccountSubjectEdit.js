@@ -23,11 +23,7 @@ layui.config({
 
             },
             ajaxSendAfter:function (json) {
-            	textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'remark', maxlength: 200});
 
                 $("#type").html(getDataUseHandlebars(selTemplate, {rows: accountSubjectUtil.accountSubjectType}));
                 $("#type").val(json.bean.type);

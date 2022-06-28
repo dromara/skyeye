@@ -25,11 +25,7 @@ layui.config({
             // 转正日期
             laydate.render({elem: '#regularTime', type: 'date'});
 
-            textool.init({
-                eleId: 'remark',
-                maxlength: 200,
-                tools: ['count', 'copy', 'reset']
-            });
+            textool.init({eleId: 'remark', maxlength: 200});
 
             if(json.bean.state == '1'){
                 $(".typeTwo").removeClass("layui-hide");

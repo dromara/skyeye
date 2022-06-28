@@ -42,11 +42,7 @@ layui.config({
 	    //默认隐藏多单位选项内容
 	    $(".many-term").hide();
 	    
-	    textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+	    textool.init({eleId: 'remark', maxlength: 200});
 	    
 		//初始商品分类类型
 	    var materialCategoryType;

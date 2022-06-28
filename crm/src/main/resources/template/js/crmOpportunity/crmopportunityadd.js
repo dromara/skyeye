@@ -21,11 +21,7 @@ layui.config({
     	textool = layui.textool;
     var selOption = getFileContent('tpl/template/select-option.tpl');
     
-    textool.init({
-    	eleId: 'businessNeed',
-    	maxlength: 1000,
-    	tools: ['count', 'copy', 'reset']
-    });
+    textool.init({eleId: 'businessNeed', maxlength: 1000});
 
 	// 选择入职时间
 	laydate.render({

@@ -25,11 +25,7 @@ layui.config({
             $("#transferType").html(getDataUseHandlebars(selOption, {rows: bossUtil.getTransferTypeList()}));
             $("#transferType").val(json.bean.transferType);
 
-            textool.init({
-                eleId: 'remark',
-                maxlength: 200,
-                tools: ['count', 'copy', 'reset']
-            });
+            textool.init({eleId: 'remark', maxlength: 200});
 
             var organization = {
                 companyId: json.bean.currentCompanyId,

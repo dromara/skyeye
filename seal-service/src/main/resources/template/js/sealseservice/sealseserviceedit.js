@@ -32,11 +32,7 @@ layui.config({
 		 	ajaxSendAfter: function (json) {
 				erpOrderUtil.chooseProductMation.productId = json.bean.productId;
 		 		
-		 		textool.init({
-			    	eleId: 'content',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'content', maxlength: 200});
 		 		// 报单时间
 		 		laydate.render({elem: '#declarationTime', type: 'datetime', trigger: 'click'});
 		 		

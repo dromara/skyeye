@@ -24,11 +24,7 @@ layui.config({
 		 		});
 			},
 			ajaxSendAfter: function (json) {
-				textool.init({
-			    	eleId: 'opinion',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+				textool.init({eleId: 'opinion', maxlength: 200});
 			    
 			    matchingLanguage();
 				form.render();

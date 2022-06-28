@@ -27,11 +27,7 @@ layui.config({
             // 离职日期
             laydate.render({elem: '#leaveTime', type: 'date'});
 
-            textool.init({
-                eleId: 'remark',
-                maxlength: 200,
-                tools: ['count', 'copy', 'reset']
-            });
+            textool.init({eleId: 'remark', maxlength: 200});
 
             // 附件回显
             skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});

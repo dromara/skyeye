@@ -11,11 +11,7 @@ layui.config({
 		form = layui.form,
 		textool = layui.textool;
 
-	textool.init({
-		eleId: 'roleDesc',
-		maxlength: 250,
-		tools: ['count', 'copy', 'reset']
-	});
+	textool.init({eleId: 'roleDesc', maxlength: 250});
 
 	matchingLanguage();
 	form.render();

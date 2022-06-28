@@ -16,11 +16,7 @@ layui.config({
         	textool = layui.textool;
         var usetableTemplate = $("#usetableTemplate").html();
 
-        textool.init({
-	    	eleId: 'mealExplain',
-	    	maxlength: 500,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+        textool.init({eleId: 'mealExplain', maxlength: 500});
 
         // 初始化上传
         $("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 22, '', 1));

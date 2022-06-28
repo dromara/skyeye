@@ -19,11 +19,7 @@ layui.config({
 		 	template: getFileContent('tpl/schoolsubjectmation/schoolsubjectmationeditTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
 		 		
-		 		textool.init({
-			    	eleId: 'desc',
-			    	maxlength: 500,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'desc', maxlength: 500});
 
 				// 获取当前登陆用户所属的学校列表
 				schoolUtil.queryMyBelongSchoolList(function (data) {

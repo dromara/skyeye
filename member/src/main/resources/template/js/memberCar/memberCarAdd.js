@@ -10,11 +10,7 @@ layui.config({
         var $ = layui.$,
         	textool = layui.textool;
         
-        textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 400,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+        textool.init({eleId: 'remark', maxlength: 400});
         
 	    matchingLanguage();
         form.render();

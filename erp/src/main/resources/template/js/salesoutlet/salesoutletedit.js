@@ -39,12 +39,8 @@ layui.config({
 	// 获取单据提交类型
 	var submitType = "";
 
-	//单据时间
-	laydate.render({
-		elem: '#operTime',
-		type: 'datetime',
-		trigger: 'click'
-	});
+	// 单据时间
+	laydate.render({elem: '#operTime', type: 'datetime', trigger: 'click'});
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {
@@ -137,11 +133,7 @@ layui.config({
 				});
 				erpOrderUtil.orderEditPageSetBtnBySubmitType(submitType, json.bean.state);
 
-				textool.init({
-					eleId: 'remark',
-					maxlength: 200,
-					tools: ['count', 'copy', 'reset']
-				});
+				textool.init({eleId: 'remark', maxlength: 200});
 
 				// 加载动态表单
 				dsFormUtil.loadPageToEditByObjectId("dsFormShow", json.bean.id);

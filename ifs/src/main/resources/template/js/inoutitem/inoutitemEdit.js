@@ -21,11 +21,7 @@ layui.config({
             ajaxSendAfter:function (json) {
             	$("#inoutitemType").val(json.bean.inoutitemType);
             	
-            	textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'remark', maxlength: 200});
             	
 			    matchingLanguage();
                 form.render();

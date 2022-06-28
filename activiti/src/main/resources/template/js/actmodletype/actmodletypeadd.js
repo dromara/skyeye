@@ -18,11 +18,7 @@ layui.config({
 	    //初始化动态表单
 	    initDsForm();
 	    
-	    textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+	    textool.init({eleId: 'remark', maxlength: 200});
 
 		colorpicker.render({
 			elem: '#menuIconColor',

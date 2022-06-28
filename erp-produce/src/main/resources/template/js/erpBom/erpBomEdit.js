@@ -26,11 +26,7 @@ layui.config({
 	    AjaxPostUtil.request({url: flowableBasePath + "erpbom005", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
             if (json.returnCode == 0) {
                 $("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
-            	textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'remark', maxlength: 200});
 			    
 			    //初始化父件商品信息
 				erpOrderUtil.chooseProductMation = {

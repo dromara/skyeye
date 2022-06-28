@@ -88,11 +88,7 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function(j){
 		 		
-		 		textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'remark', maxlength: 200});
 		 		
 		 		fsTree.render({
 					id: "materialCategoryType",

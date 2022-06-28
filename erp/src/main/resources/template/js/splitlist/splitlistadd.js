@@ -19,19 +19,10 @@ layui.config({
 		//已经选择的商品集合key：表格的行trId，value：商品信息
 		var allChooseProduct = {};
 		
-		//单据时间
- 		laydate.render({ 
- 			elem: '#operTime',
- 			type: 'datetime',
- 			value: getFormatDate(),
- 	 		trigger: 'click'
- 		});
+		// 单据时间
+ 		laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
  		
- 		textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+ 		textool.init({eleId: 'remark', maxlength: 200});
 		
 		// 初始化仓库
 		erpOrderUtil.getDepotList(function (json){

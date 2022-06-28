@@ -17,11 +17,7 @@ layui.config({
         // 余额方向
         $("#amountDirectionBox").html(getDataUseHandlebars(radioTemplate, {rows: sysIfsUtil.amountDirection}));
 
-        textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+        textool.init({eleId: 'remark', maxlength: 200});
 
 	    matchingLanguage();
         form.render();

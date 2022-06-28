@@ -17,11 +17,7 @@ layui.config({
 		// 初始化上传
 		$("#roomImg").upload(systemCommonUtil.uploadCommon003Config('roomImg', 6, '', 1));
 
-        textool.init({
-	    	eleId: 'roomAddDesc',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+        textool.init({eleId: 'roomAddDesc', maxlength: 200});
  		
 	    matchingLanguage();
  		form.render();

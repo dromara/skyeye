@@ -22,18 +22,10 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter: function (json) {
-		 		textool.init({
-			    	eleId: 'detail',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'detail', maxlength: 200});
 		 		
-		 		//跟单时间
-				laydate.render({
-					elem : '#documentaryTime',
-					type : 'datetime',
-					trigger : 'click'
-				});
+		 		// 跟单时间
+				laydate.render({elem : '#documentaryTime', type : 'datetime', trigger : 'click'});
 
 				// 获取已上线的跟单分类列表
 				sysCustomerUtil.queryCrmDocumentaryTypeIsUpList(function (data){

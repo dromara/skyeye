@@ -27,11 +27,7 @@ layui.config({
  		//指定预约时间
  		laydate.render({elem: '#pointSubscribeTime', type: 'datetime', trigger: 'click'});
  		
- 		textool.init({
-	    	eleId: 'content',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+ 		textool.init({eleId: 'content', maxlength: 200});
 
 		// 初始化上传
 		$("#sheetPicture").upload(systemCommonUtil.uploadCommon003Config('sheetPicture', 14, '', 10));

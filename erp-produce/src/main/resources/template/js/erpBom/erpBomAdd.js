@@ -18,11 +18,7 @@ layui.config({
         var $ = layui.$,
         	textool = layui.textool;
         
-        textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+        textool.init({eleId: 'remark', maxlength: 200});
 	    
 	    //下拉框模板
 	    var selTemplate = getFileContent('tpl/template/select-option-must.tpl');

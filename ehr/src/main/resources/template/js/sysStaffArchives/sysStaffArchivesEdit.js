@@ -24,16 +24,9 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){},
 		 	ajaxSendAfter:function (json) {
-		 		laydate.render({ 
-		 			elem: '#archivesTime',
-		 	 		trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#archivesTime', trigger: 'click'});
 		 		
-		 		textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'remark', maxlength: 200});
 			    
 			    $("#whetherArchives").val(json.bean.whetherArchives);
 			    $("#archivesState").val(json.bean.archivesState);

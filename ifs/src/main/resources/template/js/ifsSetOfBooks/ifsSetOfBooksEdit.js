@@ -22,16 +22,9 @@ layui.config({
 
             },
             ajaxSendAfter:function (json) {
-            	textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'remark', maxlength: 200});
 
-                laydate.render({
-                    elem: '#dateScope',
-                    range: '~'
-                });
+                laydate.render({elem: '#dateScope', range: '~'});
             	
                 $("input:radio[name=state][value=" + json.bean.state + "]").attr("checked", true);
                 

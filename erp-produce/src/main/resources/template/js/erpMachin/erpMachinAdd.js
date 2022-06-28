@@ -33,27 +33,13 @@ layui.config({
 		//已经选择的商品集合key：表格的行trId，value：商品信息
 		var allChooseProduct = {};
 	    
- 		textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+ 		textool.init({eleId: 'remark', maxlength: 200});
 		
-		//计划开始时间
- 		laydate.render({ 
-			elem: '#starTime',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+		// 计划开始时间
+ 		laydate.render({elem: '#starTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
  		
  		//计划结束时间
- 		laydate.render({ 
-			elem: '#endTime',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+ 		laydate.render({elem: '#endTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
 		// 获取当前登录用户所属企业的所有部门信息
 		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){

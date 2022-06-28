@@ -13,11 +13,7 @@ layui.config({
 	    var $ = layui.$,
 	    	textool = layui.textool;
 	    
-	    textool.init({
-	    	eleId: 'opinion',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+	    textool.init({eleId: 'opinion', maxlength: 200});
 	    
 	    rowId = parent.rowId;
 	    var type = parent.type;

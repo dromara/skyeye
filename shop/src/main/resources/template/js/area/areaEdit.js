@@ -19,11 +19,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb){},
             ajaxSendAfter:function (json) {
             	
-            	textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 400,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'remark', maxlength: 400});
             	
 			    matchingLanguage();
                 form.render();

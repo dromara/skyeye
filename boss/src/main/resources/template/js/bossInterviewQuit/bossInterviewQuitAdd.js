@@ -18,11 +18,7 @@ layui.config({
     // 离职日期
     laydate.render({elem: '#leaveTime', type: 'date'});
 
-    textool.init({
-        eleId: 'remark',
-        maxlength: 200,
-        tools: ['count', 'copy', 'reset']
-    });
+    textool.init({eleId: 'remark', maxlength: 200});
 
     if(!systemCommonUtil.judgeCurrentUserQuit()) {
         winui.window.msg('您已提交离职申请，无法重复提交', {icon: 5, time: 2000}, function() {

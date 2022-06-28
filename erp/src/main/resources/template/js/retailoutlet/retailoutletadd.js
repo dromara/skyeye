@@ -29,18 +29,9 @@ layui.config({
 	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["outIsRetail"]["orderType"]);
 
 	// 单据时间
-	laydate.render({
-		elem: '#operTime',
-		type: 'datetime',
-		value: getFormatDate(),
-		trigger: 'click'
-	});
+	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
-	textool.init({
-		eleId: 'remark',
-		maxlength: 200,
-		tools: ['count', 'copy', 'reset']
-	});
+	textool.init({eleId: 'remark', maxlength: 200});
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {

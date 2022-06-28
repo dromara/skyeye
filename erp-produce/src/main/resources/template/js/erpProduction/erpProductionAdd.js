@@ -29,40 +29,21 @@ layui.config({
 		//下拉框模板
 	    var selTemplate = getFileContent('tpl/template/select-option-must.tpl');
 	    
-	    //单据时间
- 		laydate.render({ 
-			elem: '#operTime',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+	    // 单据时间
+ 		laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
  		
- 		//计划开始时间
- 		laydate.render({ 
-			elem: '#planStartDate',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+ 		// 计划开始时间
+ 		laydate.render({elem: '#planStartDate', type: 'datetime', value: getFormatDate(), trigger: 'click'});
  		
- 		//计划结束时间
- 		laydate.render({ 
-			elem: '#planComplateDate',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+ 		// 计划结束时间
+ 		laydate.render({elem: '#planComplateDate', type: 'datetime', value: getFormatDate(), trigger: 'click'});
  		
- 		textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+ 		textool.init({eleId: 'remark', maxlength: 200});
 		
-	    //规格变化事件
+	    // 规格变化事件
 	    form.on('select(unitList)', function(data) {
 			var thisRowValue = data.value;
-			//加载bom方案列表
+			// 加载bom方案列表
 			loadBomList(thisRowValue);
 	    });
 	    

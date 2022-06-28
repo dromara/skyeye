@@ -16,11 +16,7 @@ layui.config({
     // 调岗类型
     $("#transferType").html(getDataUseHandlebars(selOption, {rows: bossUtil.getTransferTypeList()}));
 
-    textool.init({
-        eleId: 'remark',
-        maxlength: 200,
-        tools: ['count', 'copy', 'reset']
-    });
+    textool.init({eleId: 'remark', maxlength: 200});
 
     // 加载组织结构
     organizationUtil.initAddOrganization(dtree);

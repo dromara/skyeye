@@ -15,22 +15,11 @@ layui.config({
 	    // 下拉框模板
 	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
 	    
-	    laydate.render({ 
- 			elem: '#rewardPunishTime',
- 	 		trigger: 'click'
- 		});
+	    laydate.render({elem: '#rewardPunishTime', trigger: 'click'});
  		
- 		textool.init({
-	    	eleId: 'content',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+ 		textool.init({eleId: 'content', maxlength: 200});
 	    
-	    textool.init({
-	    	eleId: 'desc',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+	    textool.init({eleId: 'desc', maxlength: 200});
 	    
 	    // 奖惩分类
 	    showGrid({

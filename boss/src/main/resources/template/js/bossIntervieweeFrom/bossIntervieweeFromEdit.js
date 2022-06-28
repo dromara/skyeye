@@ -19,11 +19,7 @@ layui.config({
 			method: "GET",
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
-		 		textool.init({
-			    	eleId: 'desc',
-			    	maxlength: 500,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'desc', maxlength: 500});
 
 			    matchingLanguage();
 		 	    form.on('submit(formEditBean)', function (data) {

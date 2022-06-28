@@ -28,11 +28,7 @@ layui.config({
                 $("input:radio[name=type][value=" + data.bean.type + "]").attr("checked", true);
                 $("input:radio[name=state][value=" + data.bean.state + "]").attr("checked", true);
 
-                textool.init({
-                    eleId: 'mealExplain',
-                    maxlength: 500,
-                    tools: ['count', 'copy', 'reset']
-                });
+                textool.init({eleId: 'mealExplain', maxlength: 500});
 
                 // 初始化上传
                 $("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 22, data.bean.logo, 1));

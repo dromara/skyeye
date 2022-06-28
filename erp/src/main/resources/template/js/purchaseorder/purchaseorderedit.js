@@ -34,19 +34,11 @@ layui.config({
 	// 获取单据提交类型
 	var submitType = "";
 
-		// 单据时间
-	laydate.render({
-		elem: '#operTime',
-		type: 'datetime',
-		trigger: 'click'
-	});
+	// 单据时间
+	laydate.render({elem: '#operTime', type: 'datetime', trigger: 'click'});
 
 	// 计划完成日期
-	laydate.render({
-		elem: '#planComplateTime',
-		type: 'datetime',
-		trigger: 'click'
-	});
+	laydate.render({elem: '#planComplateTime', type: 'datetime', trigger: 'click'});
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {
@@ -109,11 +101,7 @@ layui.config({
 					$("#remark" + (rowNum - 1)).val(item.remark);
 				});
 
-				textool.init({
-					eleId: 'remark',
-					maxlength: 200,
-					tools: ['count', 'copy', 'reset']
-				});
+				textool.init({eleId: 'remark', maxlength: 200});
 				erpOrderUtil.orderEditPageSetBtnBySubmitType(submitType, json.bean.state);
 
 				// 加载动态表单

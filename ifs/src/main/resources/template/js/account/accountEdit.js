@@ -20,11 +20,7 @@ layui.config({
 
             },
             ajaxSendAfter:function (json) {
-            	textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'remark', maxlength: 200});
             	
                 //设置是否默认
                 $("input:radio[name=isDefault][value=" + json.bean.isDefault + "]").attr("checked", true);

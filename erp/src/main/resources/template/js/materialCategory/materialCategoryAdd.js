@@ -15,11 +15,7 @@ layui.config({
 	    
 		var materialCategoryType;
 		
-		textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+		textool.init({eleId: 'remark', maxlength: 200});
 		
 		//加载树信息
 	    fsTree.render({

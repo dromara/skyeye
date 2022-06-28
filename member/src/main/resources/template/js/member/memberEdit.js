@@ -19,11 +19,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb){},
             ajaxSendAfter:function (json) {
             	
-            	textool.init({
-			    	eleId: 'description',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+            	textool.init({eleId: 'description', maxlength: 200});
 
                 // 家庭地址
                 initArea(json.bean);//加载省级行政区划

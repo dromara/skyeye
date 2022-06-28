@@ -26,38 +26,19 @@ layui.config({
 		//子件清单列表集合
 		var childProList = new Array();
 	    
-		//下拉框模板
+		// 下拉框模板
 	    var selTemplate = getFileContent('tpl/template/select-option-must.tpl');
 	    
-	    //单据时间
- 		laydate.render({ 
-			elem: '#operTime',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+	    // 单据时间
+ 		laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
  		
- 		//计划开始时间
- 		laydate.render({ 
-			elem: '#planStartDate',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+ 		// 计划开始时间
+ 		laydate.render({elem: '#planStartDate', type: 'datetime', value: getFormatDate(), trigger: 'click'});
  		
- 		//计划结束时间
- 		laydate.render({ 
-			elem: '#planComplateDate',
-			type: 'datetime',
-			value: getFormatDate(),
-			trigger: 'click'
- 		});
+ 		// 计划结束时间
+ 		laydate.render({elem: '#planComplateDate', type: 'datetime', value: getFormatDate(), trigger: 'click'});
  		
- 		textool.init({
-	    	eleId: 'remark',
-	    	maxlength: 200,
-	    	tools: ['count', 'copy', 'reset']
-	    });
+ 		textool.init({eleId: 'remark', maxlength: 200});
  		
  		//回显数据
  		AjaxPostUtil.request({url: flowableBasePath + "erpproduction003", params: {orderId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {

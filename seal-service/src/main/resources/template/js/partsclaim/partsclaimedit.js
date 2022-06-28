@@ -37,19 +37,10 @@ layui.config({
 		 	pagination: false,
 		 	template: beanTemplate,
 		 	ajaxSendAfter:function (json) {
-		 		//单据时间
-		 		laydate.render({ 
-		 			elem: '#operTime',
-		 			type: 'datetime',
-		 			value: json.bean.applyTime,
-		 	 		trigger: 'click'
-		 		});
+		 		// 单据时间
+		 		laydate.render({elem: '#operTime', type: 'datetime', value: json.bean.applyTime, trigger: 'click'});
 		 		
-		 		textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'remark', maxlength: 200});
 		 		
 		 		orderObject = json;
 		 		// 初始化仓库

@@ -20,11 +20,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
 		 		
-		 		textool.init({
-			    	eleId: 'remark',
-			    	maxlength: 200,
-			    	tools: ['count', 'copy', 'reset']
-			    });
+		 		textool.init({eleId: 'remark', maxlength: 200});
 		 		
 			    matchingLanguage();
 				form.render();

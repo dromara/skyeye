@@ -14,11 +14,7 @@ layui.config({
     // 转正日期
     laydate.render({elem: '#regularTime', type: 'date'});
 
-    textool.init({
-        eleId: 'remark',
-        maxlength: 200,
-        tools: ['count', 'copy', 'reset']
-    });
+    textool.init({eleId: 'remark', maxlength: 200});
 
     if(!systemCommonUtil.judgeCurrentUserRegularWorker()) {
         winui.window.msg('您已提交转正申请，无法重复提交', {icon: 5, time: 2000}, function() {

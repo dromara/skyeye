@@ -29,12 +29,8 @@ layui.config({
 		 	pagination: false,
 		 	template: beanTemplate,
 		 	ajaxSendAfter:function (json) {
-		 		//单据时间
-		 		laydate.render({ 
-		 			elem: '#operTime',
-		 			type: 'datetime',
-		 	 		trigger: 'click'
-		 		});
+		 		// 单据时间
+		 		laydate.render({elem: '#operTime', type: 'datetime', trigger: 'click'});
 		 		orderObject = json;
 		 		initDepotHtml();
 		 	}
@@ -77,11 +73,7 @@ layui.config({
 				$("tr[trcusid='tr" + (rowNum - 1) + "']").attr("thisid", item.id);
 			});
 			
-			textool.init({
-		    	eleId: 'remark',
-		    	maxlength: 200,
-		    	tools: ['count', 'copy', 'reset']
-		    });
+			textool.init({eleId: 'remark', maxlength: 200});
 			
 			matchingLanguage();
  			form.render();

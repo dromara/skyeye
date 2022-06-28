@@ -15,11 +15,7 @@ layui.config({
 		if (json.returnCode == 0) {
 			$("#roleName").val(json.bean.roleName);
 			$("#roleDesc").val(json.bean.roleDesc);
-			textool.init({
-				eleId: 'roleDesc',
-				maxlength: 250,
-				tools: ['count', 'copy', 'reset']
-			});
+			textool.init({eleId: 'roleDesc', maxlength: 250});
 		} else {
 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
 		}
