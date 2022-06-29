@@ -128,7 +128,7 @@ layui.config({
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 		        { field: 'title', title: '页面名称', align: 'left', width: 120 },
-		        { field: 'logo', title: 'logo', width: 60, templet: function(d){
+		        { field: 'logo', title: 'logo', width: 60, templet: function (d) {
 		        	var str = '';
 		        	if(isNull(d.logo)){
 		        	} else {
@@ -137,7 +137,7 @@ layui.config({
 		        	return str;
 		        }},
 		        { field: 'url', title: '页面路径', align: 'left', width: 300},
-		        { field: 'state', title: '状态', width: 80, align: 'center', templet: function(d){
+		        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 		        	if(d.state == '1'){
 		        		return "<span class='state-new'>新建</span>";
 		        	}else if(d.state == '2'){

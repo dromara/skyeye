@@ -60,18 +60,18 @@ layui.config({
 	        limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
-		        { field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function(d){
+		        { field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
 			        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
 			    }},
 		        { field: 'model', title: '型号', rowspan: '2', align: 'left', width: 150 },
 		        { field: 'categoryName', title: '所属类型', rowspan: '2', align: 'center', width: 100 },
 		        { field: 'typeName', title: '商品来源', rowspan: '2', align: 'left', width: 100 },
 		        { title: '库存', colspan: '3', align: 'center', width: 80},
-		        { field: 'id', title: '盘点历史', rowspan: '2', align: 'center', width: 80, templet: function(d){
+		        { field: 'id', title: '盘点历史', rowspan: '2', align: 'center', width: 80, templet: function (d) {
 			        	return '<a lay-event="historyDetails" class="notice-title-click">盘点历史</a>';
 			    }},
 		        { field: 'unitName', title: '单位', rowspan: '2', align: 'center', width: 80},
-		        { field: 'enabled', title: '状态', rowspan: '2', align: 'center', width: 60, templet: function(d){
+		        { field: 'enabled', title: '状态', rowspan: '2', align: 'center', width: 60, templet: function (d) {
 		        	if(d.enabled == '0'){
 		        		return "<span class='state-down'>禁用</span>";
 		        	}else if(d.enabled == '1'){

@@ -24,10 +24,7 @@ layui.config({
     textool.init({eleId: 'businessNeed', maxlength: 1000});
 
 	// 选择入职时间
-	laydate.render({
-		elem: '#estimateEndTime',
-		range: false
-	});
+	laydate.render({elem: '#estimateEndTime', range: false});
 
     // 获取已经上线的商机来源信息
     sysCustomerUtil.queryCustomerOpportunityFromIsUpList(function(data){

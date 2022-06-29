@@ -30,7 +30,7 @@ layui.config({
         limit: 8,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'supplierName', title: '供应商名称', align: 'left', width: 140,templet: function(d){
+            { field: 'supplierName', title: '供应商名称', align: 'left', width: 140,templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.supplierName + '</a>';
             }},
             { field: 'contacts', title: '联系人', align: 'left', width: 100},
@@ -44,7 +44,7 @@ layui.config({
             { field: 'allNeedGet', title: '累计应收', align: 'left', width: 100},
             { field: 'allNeedPay', title: '累计应付', align: 'left', width: 100},
             { field: 'taxRate', title: '税率(%)',  align: 'left',width: 100},
-            { field: 'enabled', title: '状态', align: 'center',width: 80, templet: function(d){
+            { field: 'enabled', title: '状态', align: 'center',width: 80, templet: function (d) {
                     if(d.enabled == '1'){
                         return "<span class='state-up'>启用</span>";
                     }else if(d.enabled == '2'){

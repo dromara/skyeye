@@ -61,10 +61,10 @@ layui.config({
         },
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers'},
-	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, fixed: 'left', templet: function(d){
+	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, fixed: 'left', templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.jobNumber + ' ' + d.userName + '</a>';
 	        }},
-	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function(d){
+	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
 	        	if(d.staffType == 1){
 	        		return '普通员工';
 	        	}else if(d.staffType == 2){
@@ -74,14 +74,14 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'email', title: '邮箱', rowspan: '3', align: 'left', width: 170 },
-	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function(d){
+	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function (d) {
 	        	if(isNull(d.userPhoto)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 	        	} else {
 	        		return '<img src="' + systemCommonUtil.getFilePath(d.userPhoto) + '" class="photo-img" lay-event="userPhoto">';
 	        	}
 	        }},
-			{ field: 'userId', title: '系统账号', rowspan: '3', align: 'center', width: 80, templet: function(d){
+			{ field: 'userId', title: '系统账号', rowspan: '3', align: 'center', width: 80, templet: function (d) {
 				if(!isNull(d.userId)){
 					return "<span class='state-up'>已分配</span>";
 				} else {
@@ -90,7 +90,7 @@ layui.config({
 			}},
 	        { field: 'userIdCard', title: '身份证', rowspan: '3', align: 'center', width: 160 },
 			{ field: 'workTimeNum', title: '考勤班次', rowspan: '3', align: 'center', width: 80 },
-	        { field: 'userSex', title: '性别', width: 60, rowspan: '3', align: 'center', templet: function(d){
+	        { field: 'userSex', title: '性别', width: 60, rowspan: '3', align: 'center', templet: function (d) {
 	        	if(d.userSex == '0'){
 	        		return "保密";
 	        	}else if(d.userSex == '1'){
@@ -101,7 +101,7 @@ layui.config({
 	        		return "参数错误";
 	        	}
 	        }},
-	        { field: 'state', title: '状态', rowspan: '3', width: 60, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', rowspan: '3', width: 60, align: 'center', templet: function (d) {
 				return getStaffStateName(d);
 	        }},
 	        { title: '公司信息', align: 'center', colspan: '3'},
@@ -176,14 +176,6 @@ layui.config({
 			form.render('select');
 		});
 	}
-	
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	refreshTable();
-        }
-        return false;
-	});
 	
 	// 公司监听事件
 	form.on('select(companyList)', function(data){
@@ -396,7 +388,15 @@ layui.config({
                 }
 			}});
     });
-    
+
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
+	});
+
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
@@ -404,11 +404,7 @@ layui.config({
     function loadTable(){
     	table.reload("messageTable", {where: getTableParams()});
     }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-    
+
     function getTableParams(){
     	return {
     		userName:$("#userName").val(),

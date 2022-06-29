@@ -28,7 +28,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
             { field: 'nameCn', title: '名称（中文）', align: 'left', width: 150},
             { field: 'nameEn', title: '名称（英文）', align: 'left', width: 150 },
-            { field: 'state', title: '状态', align: 'center', width: 60, templet: function(d){
+            { field: 'state', title: '状态', align: 'center', width: 60, templet: function (d) {
                 if(d.state == '2'){
                     return "<span class='state-down'>禁用</span>";
                 }else if(d.state == '1'){

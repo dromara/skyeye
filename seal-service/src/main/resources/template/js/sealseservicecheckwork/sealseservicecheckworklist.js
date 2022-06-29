@@ -28,7 +28,7 @@ layui.config({
 	        { field: 'createTime', title: '签到时间', align: 'center', width: 140 },
 	        { field: 'userName', title: '签到人', width: 80, align: 'left'},
 	        { field: 'departmentName', title: '签到部门', align: 'left', width: 100},
-	        { field: 'orderNum', title: '所属工单', align: 'center', width: 220, templet: function(d){
+	        { field: 'orderNum', title: '所属工单', align: 'center', width: 220, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 	        }},
 	        { field: 'address', title: '签到地址', align: 'left', width: 160},

@@ -32,10 +32,10 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 90, templet: function(d){
+		        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 90, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.userName + '</a>';
 		        }},
-		        { field: 'userPhoto', title: '头像', align: 'center', width: 60, templet: function(d){
+		        { field: 'userPhoto', title: '头像', align: 'center', width: 60, templet: function (d) {
 		        	if(isNull(d.userPhoto)){
 		        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 		        	} else {
@@ -44,7 +44,7 @@ layui.config({
 		        }},
 		        { field: 'subjectNum', title: '科目技能数', align: 'center', width: 100 },
 		        { field: 'userIdCard', title: '身份证', align: 'center', width: 160 },
-		        { field: 'userSex', title: '性别', width: 60, align: 'center', templet: function(d){
+		        { field: 'userSex', title: '性别', width: 60, align: 'center', templet: function (d) {
 		        	if(d.userSex == '0'){
 		        		return "保密";
 		        	}else if(d.userSex == '1'){

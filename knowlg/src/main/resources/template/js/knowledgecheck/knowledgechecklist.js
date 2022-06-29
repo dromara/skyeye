@@ -87,7 +87,7 @@ layui.config({
 			limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '标题', width: 250, templet: function(d){
+		        { field: 'title', title: '标题', width: 250, templet: function (d) {
 		        	return '<a lay-event="detail" class="notice-title-click">' + d.title + '</a>';
 		    	}},
 		        { field: 'typeName', title: '所属分类', width: 120 },
@@ -225,11 +225,11 @@ layui.config({
 			limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '标题', width: 250, templet: function(d){
+		        { field: 'title', title: '标题', width: 250, templet: function (d) {
 		        	return '<a lay-event="checkeddetail" class="notice-title-click">' + d.title + '</a>';
 		    	}},
 				{ field: 'typeName', title: '所属分类', width: 120 },
-		        { field: 'state', title: '状态', width: 80, templet: function(d){
+		        { field: 'state', title: '状态', width: 80, templet: function (d) {
 		        	if(d.state == '2'){
 		        		return "<span class='state-up'>已通过</span>";
 		        	}else if(d.state == '3'){

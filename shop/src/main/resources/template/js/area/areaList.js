@@ -24,7 +24,7 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
-            { field: 'name', title: '区域', align: 'left', width: 140, fixed: 'left', templet: function(d){
+            { field: 'name', title: '区域', align: 'left', width: 140, fixed: 'left', templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
             }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },

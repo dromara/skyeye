@@ -28,12 +28,12 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
-            { field: 'plate', title: '车牌号', align: 'left', width: 100, fixed: 'left', templet: function(d){
+            { field: 'plate', title: '车牌号', align: 'left', width: 100, fixed: 'left', templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.plate + '</a>';
             }},
             { field: 'vinCode', title: 'VIN码', align: 'center', width: 180},
             { field: 'modelType', title: '车型', align: 'left', width: 120},
-            { field: 'insure', title: '是否购买保险', align: 'center', width: 140, templet: function(d){
+            { field: 'insure', title: '是否购买保险', align: 'center', width: 140, templet: function (d) {
                 if(d.insure == '1'){
                     return "已购买";
                 }else if(d.insure == '2'){
@@ -42,7 +42,7 @@ layui.config({
                     return "<span class='state-error'>参数错误</span>";
                 }
             }},
-            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function(d){
+            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function (d) {
                 return shopUtil.getMemberCarEnableStateName(d.enabled);
             }},
             { field: 'createName', title: '录入人', align: 'left', width: 120 },

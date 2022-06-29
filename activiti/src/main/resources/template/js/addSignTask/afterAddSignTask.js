@@ -29,7 +29,7 @@ layui.config({
         },
         cols: [[
             { type: 'checkbox', align: 'center' },
-            { field: 'name', title: '审批人', align: 'left', width: 180, templet: function(d){
+            { field: 'name', title: '审批人', align: 'left', width: 180, templet: function (d) {
                 return '<input type="text" id="approvalId' + d.LAY_TABLE_INDEX + '" placeholder="请选择审批人" class="layui-input" readonly="readonly" ' +
                     'value="' + (isNull(d.name) ? "" : d.name) + '" win-verify="required"/>' +
                     '<i class="fa fa-plus-circle input-icon chooseApprovalIdBtn" style="top: 8px;"></i>';

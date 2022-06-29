@@ -33,7 +33,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '主题', align: 'left', width: 400, templet: function(d){
+		        { field: 'title', title: '主题', align: 'left', width: 400, templet: function (d) {
 		        	return '<a lay-event="titleName" class="notice-title-click">' + d.title + '</a>';
 		        }},
 		        { field: 'typeName', title: '类别', align: 'left', width: 120 },

@@ -32,11 +32,7 @@ layui.config({
         ajaxSendAfter:function (json) {
             submitType = json.bean.submitType;
             // 单据时间
-            laydate.render({
-                elem: '#operTime',
-                type: 'datetime',
-                trigger: 'click'
-            });
+            laydate.render({elem: '#operTime', type: 'datetime', trigger: 'click' });
 
             // 往来单位
             $("#correspondentUnitType").val(json.bean.organType);

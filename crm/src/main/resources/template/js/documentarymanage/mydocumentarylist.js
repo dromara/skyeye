@@ -20,11 +20,8 @@ layui.config({
 		form.render('select');
 	});
 
-	//跟单时间
-	laydate.render({
-		elem: '#documentaryTime',
-		range: '~'
-	});
+	// 跟单时间
+	laydate.render({elem: '#documentaryTime', range: '~'});
 	
 	table.render({
 	    id: 'messageTable',
@@ -38,7 +35,7 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'opportunityName', title: '商机', align: 'left', width: 300, templet: function(d){
+	        { field: 'opportunityName', title: '商机', align: 'left', width: 300, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.opportunityName + '</a>';
 	        }},
 	        { field: 'typeName', title: '类型', align: 'center', width: 120 },

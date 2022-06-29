@@ -44,7 +44,7 @@ layui.config({
 	        { field: 'processInstanceId', title: '流程ID', width: 100 },
 	        { field: 'taskType', title: '类型', width: 100 },
 	        { field: 'createName', title: '申请人', width: 100},
-	        { field: 'createTime', title: '申请时间', align: 'center', width: 140, templet: function(d){
+	        { field: 'createTime', title: '申请时间', align: 'center', width: 140, templet: function (d) {
 	        	if(!isNull(d.createTime)){
 		        	var str = d.createTime.toString();
 		        	str = str.substring(0, str.length - 3);
@@ -53,18 +53,18 @@ layui.config({
 	        		return "";
 	        	}
 	        }},
-	        { field: 'name', title: '当前节点', width: 130, templet: function(d){
+	        { field: 'name', title: '当前节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},
 	        { field: 'agencyName', title: '审批人', width: 120},
-	        { field: 'suspended', title: '状态<i id="stateDesc" class="fa fa-question-circle" style="margin-left: 5px"></i>', align: 'center', width: 130, templet: function(d){
+	        { field: 'suspended', title: '状态<i id="stateDesc" class="fa fa-question-circle" style="margin-left: 5px"></i>', align: 'center', width: 130, templet: function (d) {
 	        	if(d.suspended){
 	        		return "<span class='state-down'>挂起</span>";
 	        	} else {
 	        		return "<span class='state-up'>正常</span>";
 	        	}
 	        }},
-	        { field: 'weatherEnd', title: '审批进度', align: 'left', width: 80, templet: function(d){
+	        { field: 'weatherEnd', title: '审批进度', align: 'left', width: 80, templet: function (d) {
 	        	if(d.weatherEnd == 0){
 	        		return "<span class='state-down'>进行中</span>";
 	        	} else {

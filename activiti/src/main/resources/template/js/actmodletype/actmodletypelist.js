@@ -291,14 +291,14 @@ layui.config({
 			limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '实体名称', align: 'left', width: 120, templet: function(d){
+		        { field: 'title', title: '实体名称', align: 'left', width: 120, templet: function (d) {
 					return '<a lay-event="dedails" class="notice-title-click">' + d.title + '</a>';
 				}},
 		        { field: 'actId', title: '工作流模型', align: 'left', width: 120},
 		        { field: 'pageUrl', title: '新增页面', align: 'left', width: 200 },
 		        { field: 'editPageUrl', title: '编辑页面', align: 'left', width: 200 },
 		        { field: 'backgroundColor', title: '背景', align: 'center', width: 80 },
-		        { field: 'state', title: '状态', align: 'center', width: 100 , templet: function(d){
+		        { field: 'state', title: '状态', align: 'center', width: 100 , templet: function (d) {
 		        	if(d.state == '1'){
 		        		return "<span class='state-new'>新建</span>";
 		        	}else if(d.state == '2'){

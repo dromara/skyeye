@@ -154,7 +154,7 @@ layui.config({
  			 	template: getFileContent('tpl/template/select-option.tpl'),
  			 	ajaxSendLoadBefore: function(hdb){
  			 	},
- 			 	ajaxSendAfter:function(d){
+ 			 	ajaxSendAfter:function (d) {
  			 		$("#typeId").val(json.bean.typeId);
  			 		urgencyId(json);
  			 	}
@@ -171,7 +171,7 @@ layui.config({
  			 	template: getFileContent('tpl/template/select-option.tpl'),
  			 	ajaxSendLoadBefore: function(hdb){
  			 	},
- 			 	ajaxSendAfter:function(d){
+ 			 	ajaxSendAfter:function (d) {
  			 		$("#urgencyId").val(json.bean.urgencyId);
  			 		modeId(json);
  			 	}
@@ -188,7 +188,7 @@ layui.config({
  			 	template: getFileContent('tpl/template/select-option.tpl'),
  			 	ajaxSendLoadBefore: function(hdb){
  			 	},
- 			 	ajaxSendAfter:function(d){
+ 			 	ajaxSendAfter:function (d) {
  			 		$("#modeId").val(json.bean.modeId);
  			 		form.render('select');
  			 		//加载省级行政区划

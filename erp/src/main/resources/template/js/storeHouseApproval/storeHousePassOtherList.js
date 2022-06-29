@@ -20,10 +20,7 @@ layui.config({
         
     var selOption = getFileContent('tpl/template/select-option-must.tpl');
         
-    laydate.render({
-		elem: '#operTime', //指定元素
-		range: '~'
-	});
+    laydate.render({elem: '#operTime', range: '~'});
 	
 	initDepotHtml();
 	//初始化仓库
@@ -63,13 +60,13 @@ layui.config({
 	        limit: 8,
 	        cols: [[
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 220, templet: function(d){
+	            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 220, templet: function (d) {
 			        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 			        return str;
 			    }},
 			    { field: 'subTypeName', title: '单据类型', align: 'left', width: 100},
 	            { field: 'materialNames', title: '关联产品', align: 'left', width: 300},
-	            { field: 'status', title: '状态', align: 'left', width: 80, templet: function(d){
+	            { field: 'status', title: '状态', align: 'left', width: 80, templet: function (d) {
 			        if(d.status == '0'){
 		        		return "<span class='state-down'>未审核</span>";
 		        	}else if(d.status == '1'){

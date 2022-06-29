@@ -15,10 +15,7 @@ layui.config({
 	    // 下拉框模板
 	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
 	    
-	    laydate.render({ 
- 			elem: '#getTime',
- 	 		trigger: 'click'
- 		});
+	    laydate.render({elem: '#getTime', trigger: 'click'});
  		
  		// 语种
 		showGrid({

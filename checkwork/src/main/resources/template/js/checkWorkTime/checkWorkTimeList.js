@@ -25,16 +25,16 @@ layui.config({
     	limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'title', title: '标题', align: 'left', width: 150, templet: function(d){
+	        { field: 'title', title: '标题', align: 'left', width: 150, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 	        }},
-	        { field: 'startTime', title: '工作时间段', align: 'center', width: 120, templet: function(d){
+	        { field: 'startTime', title: '工作时间段', align: 'center', width: 120, templet: function (d) {
         		return d.startTime + ' ~ ' + d.endTime;
 	        }},
-			{ field: 'restStartTime', title: '作息时间段', align: 'center', width: 120, templet: function(d){
+			{ field: 'restStartTime', title: '作息时间段', align: 'center', width: 120, templet: function (d) {
 				return d.restStartTime + ' ~ ' + d.restEndTime;
 			}},
-	        { field: 'type', title: '类型', width: 80, align: 'center', templet: function(d){
+	        { field: 'type', title: '类型', width: 80, align: 'center', templet: function (d) {
 	        	if(d.type == '1'){
 	        		return "单休";
 	        	}else if(d.type == '2'){
@@ -45,7 +45,7 @@ layui.config({
 	        		return "自定义";
 	        	}
 	        }},
-	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-up'>启用</span>";
 	        	}else if(d.state == '2'){

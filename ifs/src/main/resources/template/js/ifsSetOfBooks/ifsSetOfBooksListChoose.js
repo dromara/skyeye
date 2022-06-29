@@ -39,12 +39,12 @@ layui.config({
         cols: [[
             { type: 'radio'},
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'name', title: '名称', align: 'left', width: 200, templet: function(d){
+            { field: 'name', title: '名称', align: 'left', width: 200, templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
             }},
             { field: 'startTime', title: '开始日期', align: 'center', width: 100},
             { field: 'endTime', title: '截至日期', align: 'center', width: 100},
-            { field: 'haveAccess', title: '状态', align: 'center', width: 80, templet: function(d){
+            { field: 'haveAccess', title: '状态', align: 'center', width: 80, templet: function (d) {
                 if(d.haveAccess){
                     return "<span class='state-up'>可用</span>";
                 }else {

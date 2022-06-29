@@ -101,42 +101,42 @@ layui.config({
 		        { field: 'jobName', title: '职位', align: 'left', width: 120 },
 		        { field: 'userName', title: '姓名', align: 'left', width: 80 },
 		        { field: 'shouldTime', title: '应出勤（次）', align: 'center', width: 100 },
-		        { field: 'fullTime', title: '全勤（次）', align: 'center', width: 100, templet: function(d){
+		        { field: 'fullTime', title: '全勤（次）', align: 'center', width: 100, templet: function (d) {
 		        	if(d.fullTime != '0'){
 		        		return "<a class='checkwork-a'><span class='state-up' lay-event='fullTime'>" + d.fullTime + "</span></a>";
 		        	} else {
 		        		return d.fullTime;
 		        	}
 		        }},
-		        { field: 'absenteeism', title: '缺勤（次）', align: 'center', width: 100, templet: function(d){
+		        { field: 'absenteeism', title: '缺勤（次）', align: 'center', width: 100, templet: function (d) {
 		        	if(d.absenteeism != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='absenteeism'>" + d.absenteeism + "</span></a>";
 		        	} else {
 		        		return d.absenteeism;
 		        	}
 		        }},
-		        { field: 'lackTime', title: '工时不足（次）', align: 'center', width: 100, templet: function(d){
+		        { field: 'lackTime', title: '工时不足（次）', align: 'center', width: 100, templet: function (d) {
 		        	if(d.lackTime != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='lackTime'>" + d.lackTime + "</span></a>";
 		        	} else {
 		        		return d.lackTime;
 		        	}
 		        }},
-		        { field: 'late', title: '迟到（次）', align: 'center', width: 100, templet: function(d){
+		        { field: 'late', title: '迟到（次）', align: 'center', width: 100, templet: function (d) {
 		        	if(d.late != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='late'>" + d.late + "</span></a>";
 		        	} else {
 		        		return d.late;
 		        	}
 		        }},
-		        { field: 'leaveEarly', title: '早退（次）', align: 'center', width: 100, templet: function(d){
+		        { field: 'leaveEarly', title: '早退（次）', align: 'center', width: 100, templet: function (d) {
 		        	if(d.leaveEarly != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='leaveEarly'>" + d.leaveEarly + "</span></a>";
 		        	} else {
 		        		return d.leaveEarly;
 		        	}
 		        }},
-		        { field: 'missing', title: '漏签（次）', align: 'center', width: 100, templet: function(d){
+		        { field: 'missing', title: '漏签（次）', align: 'center', width: 100, templet: function (d) {
 		        	if(d.missing != '0'){
 		        		return "<a class='checkwork-a'><span class='state-down' lay-event='missing'>" + d.missing + "</span></a>";
 		        	} else {

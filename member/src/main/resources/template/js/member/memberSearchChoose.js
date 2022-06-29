@@ -32,13 +32,13 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio', fixed: 'left'},
 				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
-				{ field: 'contacts', title: '会员称呼', align: 'left', width: 140, fixed: 'left', templet: function(d){
+				{ field: 'contacts', title: '会员称呼', align: 'left', width: 140, fixed: 'left', templet: function (d) {
 					return '<a lay-event="select" class="notice-title-click">' + d.contacts + '</a>';
 				}},
 				{ field: 'phone', title: '联系电话', align: 'center', width: 100},
 				{ field: 'email', title: '电子邮箱', align: 'left', width: 120},
 				{ field: 'address', title: '地址', align: 'left', width: 100},
-				{ field: 'enabled', title: '状态', align: 'center', width: 80, templet: function(d){
+				{ field: 'enabled', title: '状态', align: 'center', width: 80, templet: function (d) {
 					if(d.enabled == '1'){
 						return "<span class='state-up'>启用</span>";
 					}else if(d.enabled == '2'){

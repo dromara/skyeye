@@ -31,7 +31,7 @@ layui.config({
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 		        { field: 'typeName', title: '类别名称', width: 120 },
-		        { field: 'state', title: '状态', width: 80, templet: function(d){
+		        { field: 'state', title: '状态', width: 80, templet: function (d) {
 		        	if(d.state == '2'){
 		        		return "<span class='state-down'>下线</span>";
 		        	}else if(d.state == '1'){

@@ -31,13 +31,13 @@ layui.config({
 		cols: [[
 			{ type: 'radio'},
 			{ field: 'num', title: '编号', align: 'left', width: 180},
-			{ field: 'name', title: '会计科目名称', align: 'left', width: 200, templet: function(d){
+			{ field: 'name', title: '会计科目名称', align: 'left', width: 200, templet: function (d) {
 				return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
 			}},
-			{ field: 'type', title: '类型', align: 'center', width: 120, templet: function(d){
+			{ field: 'type', title: '类型', align: 'center', width: 120, templet: function (d) {
 				return getInPoingArr(accountSubjectUtil.accountSubjectType, "id", d.type, "name");
 			}},
-			{ field: 'amountDirection', title: '余额方向', align: 'center', width: 80, templet: function(d){
+			{ field: 'amountDirection', title: '余额方向', align: 'center', width: 80, templet: function (d) {
 				return sysIfsUtil.getAmountDirectionById(d.amountDirection);
 			}},
 			{ field: 'remark', title: '备注', align: 'left', width: 200}

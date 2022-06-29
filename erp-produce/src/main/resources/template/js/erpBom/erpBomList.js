@@ -27,7 +27,7 @@ layui.config({
         limit: 8,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'title', title: 'bom方案名称', align: 'left',width: 150, templet: function(d){
+            { field: 'title', title: 'bom方案名称', align: 'left',width: 150, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		    }},
 		    { field: 'materialName', title: '商品名称', align: 'left',width: 150},

@@ -13,10 +13,7 @@ layui.config({
         laydate = layui.laydate,
         table = layui.table;
 
-    laydate.render({
-		elem: '#operTime',
-		range: '~'
-	});
+    laydate.render({elem: '#operTime', range: '~'});
     
     table.render({
         id: 'messageTable',
@@ -30,13 +27,13 @@ layui.config({
 	    limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 200, templet: function(d){
+            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		    }},
             { field: 'totalPrice', title: '合计金额', align: 'left', width: 120},
             { field: 'operTime', title: '单据日期', align: 'center', width: 140 },
             { field: 'createTime', title: '单据录入日期', align: 'center', width: 140 },
-            { field: 'status', title: '统筹状态', align: 'center', width: 80, templet: function(d){
+            { field: 'status', title: '统筹状态', align: 'center', width: 80, templet: function (d) {
 		        if(d.state == '1'){
 	        		return "<span class='state-down'>未统筹</span>";
 	        	}else if(d.state == '2'){

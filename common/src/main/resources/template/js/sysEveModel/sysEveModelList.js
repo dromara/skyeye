@@ -34,10 +34,10 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'title', title: '标题', width: 300, templet: function(d){
+	        { field: 'title', title: '标题', width: 300, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			}},
-	        { field: 'logo', title: 'LOGO', align: 'center', width: 100, templet: function(d){
+	        { field: 'logo', title: 'LOGO', align: 'center', width: 100, templet: function (d) {
 				return '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="sysPic">';
 	        }},
 	        { field: 'firstTypeName', title: '一级分类', width: 120 },

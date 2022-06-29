@@ -32,7 +32,7 @@ layui.config({
             { field: 'recruitDepartmentName', title: '需求部门', width: 140 },
             { field: 'wages', title: '薪资', width: 120 },
             { field: 'recruitNum', title: '需求人数', width: 100 },
-            { field: 'stateName', title: '状态', width: 90, templet: function(d){
+            { field: 'stateName', title: '状态', width: 90, templet: function (d) {
                 if(d.state == 6){
                     return '<span class="state-new">招聘中</span>';
                 } else if(d.state == 7){

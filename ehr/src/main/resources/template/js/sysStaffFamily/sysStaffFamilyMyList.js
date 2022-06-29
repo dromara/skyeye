@@ -36,7 +36,7 @@ layui.config({
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 		        { field: 'name', title: '名称', align: 'left', width: 100 },
 		        { field: 'relationshipName', title: '与本人关系', width: 100},
-		        { field: 'sex', title: '性别', width: 80, templet: function(d){
+		        { field: 'sex', title: '性别', width: 80, templet: function (d) {
                     if(d.sex == '0'){
                         return "保密";
                     }else if(d.sex == '1'){
@@ -52,7 +52,7 @@ layui.config({
                 { field: 'job', title: '职务', width: 120},
                 { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
                 { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
                     if(d.state == '1'){
                         return "在职";
                     }else if(d.state == '2'){

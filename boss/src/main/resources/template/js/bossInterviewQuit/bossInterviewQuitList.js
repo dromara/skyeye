@@ -34,14 +34,14 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
             { field: 'createName', title: '申请人', width: 120},
-            { field: 'leaveType', title: '离职类型', width: 100, templet: function(d){
+            { field: 'leaveType', title: '离职类型', width: 100, templet: function (d) {
                 return bossUtil.getLeaveTypeNameById(d.leaveType);
             }},
             { field: 'leaveTime', title: '离职日期', width: 100},
-            { field: 'processInstanceId', title: '流程ID', width: 100, templet: function(d){
+            { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
-            { field: 'stateName', title: '状态', width: 90, templet: function(d){
+            { field: 'stateName', title: '状态', width: 90, templet: function (d) {
                 return activitiUtil.showStateName2(d.state, 1);
             }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },

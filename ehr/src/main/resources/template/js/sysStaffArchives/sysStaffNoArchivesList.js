@@ -36,7 +36,7 @@ layui.config({
                 { field: 'companyName', title: '所属企业', align: 'left', width: 150 },
                 { field: 'departmentName', title: '所属部门', align: 'left', width: 150 },
                 { field: 'jobName', title: '所属岗位', align: 'left', width: 150 },
-                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
                     if(d.state == '1'){
                         return "在职";
                     }else if(d.state == '2'){

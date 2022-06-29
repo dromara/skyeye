@@ -60,10 +60,7 @@ layui.config({
 			});
 
 			// 选择入职时间
-			laydate.render({
-				elem: '#estimateEndTime',
-				range: false
-			});
+			laydate.render({elem: '#estimateEndTime', range: false});
 
 			// 附件回显
 			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});

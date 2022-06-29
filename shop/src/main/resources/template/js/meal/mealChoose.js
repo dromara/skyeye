@@ -32,14 +32,14 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-				{ field: 'title', title: '套餐名称', align: 'left', width: 200, templet: function(d){
+				{ field: 'title', title: '套餐名称', align: 'left', width: 200, templet: function (d) {
 						return '<a lay-event="select" class="notice-title-click">' + d.title + '</a>';
 					}},
-				{ field: 'logo', title: 'LOGO', align: 'center', width: 60, templet: function(d){
+				{ field: 'logo', title: 'LOGO', align: 'center', width: 60, templet: function (d) {
 						return '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="logo">';
 					}},
 				{ field: 'mealNum', title: '可使用次数', width: 120 },
-				{ field: 'type', title: '套餐分类', width: 100, align: "center", templet: function(d){
+				{ field: 'type', title: '套餐分类', width: 100, align: "center", templet: function (d) {
 					if(d.type == 1){
 						return "保养套餐";
 					}

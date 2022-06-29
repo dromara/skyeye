@@ -46,10 +46,10 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
-            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function(d){
+            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
             }},
-            { field: 'userType', title: '客户类型', width: 80, align: "center", templet: function(d){
+            { field: 'userType', title: '客户类型', width: 80, align: "center", templet: function (d) {
                 if(d.userType == 1){
                     return "匿名客户";
                 } else {
@@ -73,17 +73,17 @@ layui.config({
             { field: 'servicePrice', title: '服务费', width: 100, align: "left"},*/
             /*{ field: 'payPrice', title: '实付金额', width: 100, align: "left"},
             { field: 'payTime', title: '实付日期', align: 'center', width: 150 },*/
-            { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
+            { field: 'type', title: '订单来源', width: 80, align: "center", templet: function (d) {
                 if(d.type == 1){
                     return "线上下单";
                 } else {
                     return "线下下单";
                 }
             }},
-            { field: 'state', title: '订单状态', width: 100, align: "center", templet: function(d){
+            { field: 'state', title: '订单状态', width: 100, align: "center", templet: function (d) {
                 return shopUtil.getKeepFitOrderStateName(d);
             }},
-            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function(d){
+            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function (d) {
                 return shopUtil.getMealOrderWhetherGiveName(d);
             }},
             { field: 'createTime', title: '操作时间', align: 'center', width: 150 },

@@ -25,7 +25,7 @@ layui.config({
         cols: [[
             { type: 'radio'},
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'name', title: '姓名', align: 'left', width: 100, templet: function(d){
+            { field: 'name', title: '姓名', align: 'left', width: 100, templet: function (d) {
                 return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
             }},
             { field: 'phone', title: '联系方式', align: 'left', width: 120 },

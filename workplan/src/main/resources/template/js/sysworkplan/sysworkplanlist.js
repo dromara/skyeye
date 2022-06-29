@@ -119,7 +119,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '计划主题', width: 300, templet: function(d){
+		        { field: 'title', title: '计划主题', width: 300, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 	        	}},
 		        { field: 'whetherMail', title: '邮件通知', align: 'center', width: 100 },

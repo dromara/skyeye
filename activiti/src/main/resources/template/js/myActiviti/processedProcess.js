@@ -31,11 +31,11 @@ layui.config({
 	        { field: 'taskType', title: '类型', width: 100 },
 	        { field: 'createName', title: '申请人', width: 120},
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
-	        { field: 'name', title: '我处理的节点', width: 130, templet: function(d){
+	        { field: 'name', title: '我处理的节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},
 	        { field: 'agencyName', title: '受理人', width: 80},
-	        { field: 'endTime', title: '受理时间', align: 'center', width: 140, templet: function(d){
+	        { field: 'endTime', title: '受理时间', align: 'center', width: 140, templet: function (d) {
 	        	if(!isNull(d.endTime)){
 		        	var str = d.endTime.toString();
 		        	str = str.substring(0, str.length - 3);
@@ -44,7 +44,7 @@ layui.config({
 	        		return "";
 	        	}
 	        }},
-	        { field: 'weatherEnd', title: '审批进度', align: 'left', width: 80, templet: function(d){
+	        { field: 'weatherEnd', title: '审批进度', align: 'left', width: 80, templet: function (d) {
 	        	if(d.weatherEnd == 0){
 	        		return "<span class='state-down'>进行中</span>";
 	        	} else {

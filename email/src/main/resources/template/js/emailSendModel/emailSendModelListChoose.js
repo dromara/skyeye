@@ -27,7 +27,7 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ type: 'radio'},
-			{ field: 'title', title: '主题', width: 180, templet: function(d){
+			{ field: 'title', title: '主题', width: 180, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },

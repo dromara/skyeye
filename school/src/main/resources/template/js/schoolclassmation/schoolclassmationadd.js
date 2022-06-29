@@ -18,11 +18,7 @@ layui.config({
 		    form = layui.form,
 			laydate = layui.laydate;
 	    
-		laydate.render({
-			elem: '#year', //指定元素
-			type: 'year',
-			max: 'date'
-		});
+		laydate.render({elem: '#year', type: 'year', max: 'date'});
 	    
 		matchingLanguage();
 	    form.render();

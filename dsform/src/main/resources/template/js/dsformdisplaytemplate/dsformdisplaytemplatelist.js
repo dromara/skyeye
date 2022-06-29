@@ -40,7 +40,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'templateName', title: '模板标题', width: 180 },
-	        { field: 'id', title: '模板内容', align: 'center', width: 80, templet: function(d){
+	        { field: 'id', title: '模板内容', align: 'center', width: 80, templet: function (d) {
 	        	if(!isNull(d.templateContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="templateContent"></i>';
 	        	} else {

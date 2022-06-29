@@ -39,21 +39,21 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'title', title: '合同名称', align: 'left', width: 300, templet: function(d){
+	        { field: 'title', title: '合同名称', align: 'left', width: 300, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 	        }},
 	        { field: 'num', title: '合同编号', align: 'left', width: 120 },
 	        { field: 'price', title: '合同金额（元）', align: 'left', width: 120 },
 	        { field: 'signingTime', title: '签约日期', align: 'center', width: 100 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
-	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function(d){
+	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
 	        	if(!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        	} else {
 	        		return "";
 	        	}
 	        }},
-	        { field: 'stateName', title: '状态', width: 90, templet: function(d){
+	        { field: 'stateName', title: '状态', width: 90, templet: function (d) {
 	        	if(d.state == '0'){
 	        		return "<span>" + d.stateName + "</span>";
 	        	}else if(d.state == '1'){

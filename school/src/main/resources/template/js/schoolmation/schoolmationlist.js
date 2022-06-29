@@ -29,7 +29,7 @@ layui.config({
         treeShowName: 'schoolName',//以树形式显示的字段
         cols: [[
             { field: 'schoolName', width: 300, title: '学校名称'},
-            { field: 'schoolDesc', width: 80, title: '学校简介', align: 'center', templet: function(d){
+            { field: 'schoolDesc', width: 80, title: '学校简介', align: 'center', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="schoolDesc"></i>';
 	        }},
             { field:'addressDetailed', width: 400, title: '学校地址'},

@@ -31,12 +31,12 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio', rowspan: '2'},
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
-	            { field: 'orderNum', rowspan: '2', title: '单据编号', align: 'center', width: 180, templet: function(d){
+	            { field: 'orderNum', rowspan: '2', title: '单据编号', align: 'center', width: 180, templet: function (d) {
 			        return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 			    }},
 	            { field: 'productionNumber', rowspan: '2', title: '生产计划单', align: 'center', width: 200},
 	            { colspan: '3', title: '加工成品信息', align: 'center'},
-	            { field: 'state', rowspan: '2', title: '状态', align: 'left', width: 80, templet: function(d){
+	            { field: 'state', rowspan: '2', title: '状态', align: 'left', width: 80, templet: function (d) {
 			        if(d.state == '1'){
 		        		return "<span class='state-down'>未审核</span>";
 		        	}else if(d.state == '2'){

@@ -27,12 +27,12 @@ layui.config({
         treeShowName: 'companyName',//以树形式显示的字段
         cols: [[
             { field: 'companyName', width: 300, title: '公司名称'},
-            { field: 'companyDesc', width: 80, title: '公司简介', align: 'center', templet: function(d){
+            { field: 'companyDesc', width: 80, title: '公司简介', align: 'center', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="companyDesc"></i>';
 	        }},
 	        { field: 'departmentNum', title: '部门数', width: 100 },
 	        { field: 'userNum', title: '员工数', width: 100 },
-            { field:'id', width:400, title: '公司地址', templet: function(d){
+            { field:'id', width:400, title: '公司地址', templet: function (d) {
             	var str = d.provinceName + " ";
             	if(!isNull(d.cityName)){
             		str += d.cityName + " ";

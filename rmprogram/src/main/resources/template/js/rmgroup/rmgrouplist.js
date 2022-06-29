@@ -50,7 +50,7 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'rmGroupName', title: '分组名称', width: 120 },
 	        { field: 'icon', title: '图标码', width: 520 },
-	        { field: 'icon', title: '图标', width: 120, templet: function(d){
+	        { field: 'icon', title: '图标', width: 120, templet: function (d) {
 	        	return '<i class="fa fa-fw ' + d.icon + '"></i>';
 	        }},
 	        { field: 'typeName', title: '所属分类', width: 120 },

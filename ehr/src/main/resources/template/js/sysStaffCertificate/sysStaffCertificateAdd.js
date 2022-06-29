@@ -15,15 +15,9 @@ layui.config({
 	    // 下拉框模板
 	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
 	    
-	    laydate.render({ 
- 			elem: '#issueTime',
- 	 		trigger: 'click'
- 		});
+	    laydate.render({elem: '#issueTime', trigger: 'click'});
  		
- 		laydate.render({ 
- 			elem: '#validityTime',
- 	 		trigger: 'click'
- 		});
+ 		laydate.render({elem: '#validityTime', trigger: 'click'});
 	    
 		showGrid({
 		 	id: "typeId",

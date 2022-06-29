@@ -70,7 +70,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '商机名称', align: 'left', width: 300, templet: function(d){
+		        { field: 'title', title: '商机名称', align: 'left', width: 300, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
 		        { field: 'responsId', title: '商机负责人', align: 'left', width: 120 },
@@ -133,7 +133,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '合同名称', align: 'left', width: 300, templet: function(d){
+		        { field: 'title', title: '合同名称', align: 'left', width: 300, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
 		        { field: 'num', title: '合同编号', align: 'left', width: 120 },
@@ -196,7 +196,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'orderNum', title: '单号', align: 'center', width: 220, templet: function(d){
+		        { field: 'orderNum', title: '单号', align: 'center', width: 220, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 		        }},
 		        { field: 'typeName', title: '服务类型', align: 'left', width: 120 },
@@ -258,7 +258,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'detail', title: '详细内容', align: 'center', width: 220, templet: function(d){
+		        { field: 'detail', title: '详细内容', align: 'center', width: 220, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.detail + '</a>';
 		        }},
 		        { field: 'opportunityName', title: '商机', align: 'left', width: 300},
@@ -362,7 +362,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '主题', align: 'left', width: 300, templet: function(d){
+		        { field: 'title', title: '主题', align: 'left', width: 300, templet: function (d) {
 		        	return '<a lay-event="discussDetails" class="notice-title-click">' + d.title + '</a>';
 		        }},
 		        { field: 'opportunityName', title: '所属商机', align: 'left', width: 200 },

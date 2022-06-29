@@ -36,7 +36,7 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'maintenanceTitle', title: '主题', align: 'left', width: 300, templet: function(d){
+		        { field: 'maintenanceTitle', title: '主题', align: 'left', width: 300, templet: function (d) {
 		        	return '<a lay-event="maintenancedetails" class="notice-title-click">' + d.maintenanceTitle + '</a>';
 		        }},
 		        { field: 'licensePlate', title: '车牌号', align: 'center', width: 120 },

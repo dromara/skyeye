@@ -25,7 +25,7 @@ layui.config({
 	    cols: [[
 	    	{ type: 'radio'},
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'supplierName', title: '供应商名称', align: 'left', width: 140,templet: function(d){
+	        { field: 'supplierName', title: '供应商名称', align: 'left', width: 140,templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.supplierName + '</a>';
             }},
             { field: 'contacts', title: '联系人', align: 'left', width: 100},

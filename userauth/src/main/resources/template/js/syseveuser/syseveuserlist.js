@@ -30,11 +30,11 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'userCode', title: '账号', width: 120 },
-	        { field: 'userName', title: '员工姓名', width: 150, templet: function(d){
+	        { field: 'userName', title: '员工姓名', width: 150, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.jobNumber + ' ' + d.userName + '</a>';
 	        }},
 	        { field: 'email', title: '邮箱', width: 100 },
-	        { field: 'sexName', title: '性别', width: 60, templet: function(d){
+	        { field: 'sexName', title: '性别', width: 60, templet: function (d) {
 	        	if(d.sexName == '0'){
 	        		return "保密";
 	        	}else if(d.sexName == '1'){

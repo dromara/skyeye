@@ -15,11 +15,7 @@ layui.config({
 	
 	authBtn('1586519721272');
 	
-	laydate.render({
-		elem: '#year', //指定元素
-		type: 'year',
-		max: 'date'
-	});
+	laydate.render({elem: '#year', type: 'year', max: 'date'});
 
 	// 获取当前登陆用户所属的学校列表
 	schoolUtil.queryMyBelongSchoolList(function (json) {
@@ -51,13 +47,12 @@ layui.config({
     }
 
 	function initTable(){
-		
 		table.render({
 	        id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
 	        url: schoolBasePath + 'classmation001',
-	        where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val(), className: $("#className").val(), year: $("#year").val()},
+	        where: getTableParams(),
 	        even: true,
 		    page: true,
 		    limits: getLimits(),
@@ -65,16 +60,16 @@ layui.config({
 	        cols: [[
 	        	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	            { field: 'schoolName', width: 200, title: '所属学校'},
-	            { field: 'className', width: 150, title: '班级', align: 'center', templet: function(d){
+	            { field: 'className', width: 150, title: '班级', align: 'center', templet: function (d) {
 	        		return d.year + '届' + d.gradeName + d.className;
 		        }},
-	            { field: 'limitNumber', width: 80, align: 'center', title: '限制人数', templet: function(d){
+	            { field: 'limitNumber', width: 80, align: 'center', title: '限制人数', templet: function (d) {
 	        		return d.limitNumber + '人';
 		        }},
-		        { field: 'actualNumber', width: 80, align: 'center', title: '实际人数', templet: function(d){
+		        { field: 'actualNumber', width: 80, align: 'center', title: '实际人数', templet: function (d) {
 	        		return d.actualNumber + '人';
 		        }},
-	            { field: 'stateName', width: 80, align: 'center', title: '类型', templet: function(d){
+	            { field: 'stateName', width: 80, align: 'center', title: '类型', templet: function (d) {
 		        	if(d.state == 1){
 		        		return '<span style="color: blue">' + d.stateName + '</span>';
 		        	} else {
@@ -93,25 +88,19 @@ layui.config({
 		table.on('tool(messageTable)', function (obj) {
 	        var data = obj.data;
 	        var layEvent = obj.event;
-	        if (layEvent === 'del') { //删除
+	        if (layEvent === 'del') { // 删除
 	        	del(data, obj);
-	        }else if (layEvent === 'edit') { //编辑
+	        } else if (layEvent === 'edit') { // 编辑
 	        	edit(data);
 	        }
 	    });
 	    form.render();
 	}
 	
-	
-	$("body").on("click", "#formSearch", function() {
-		refreshTable();
-	});
-	
-	//删除
+	// 删除
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            
             AjaxPostUtil.request({url:schoolBasePath + "classmation003", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -123,7 +112,7 @@ layui.config({
 		});
 	}
 	
-	//编辑
+	// 编辑
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -162,14 +151,31 @@ layui.config({
                 }
 			}});
     });
-    
-    function loadTable(){
-    	table.reload("messageTable", {where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val(), className: $("#className").val(), year: $("#year").val()}});
-    }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val(), className:$("#className").val(), year: $("#year").val()}});
-    }
+
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
+	});
+
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+
+	function loadTable(){
+		table.reload("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams () {
+		return {
+			gradeId: $("#gradeId").val(),
+			schoolId: $("#schoolId").val(),
+			className: $("#className").val(),
+			year: $("#year").val()
+		};
+	}
     
     exports('schoolclassmationlist', {});
 });

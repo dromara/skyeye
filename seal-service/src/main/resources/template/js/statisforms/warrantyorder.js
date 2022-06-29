@@ -55,7 +55,7 @@ layui.config({
 		        { field: 'warrantyName', title: '质保类型', align: 'left', width: 240 },
 		        { field: 'allNum', title: '派工数量', align: 'center', width: 120},
 		        { field: 'complateNum', title: '完工数量', align: 'center', width: 120},
-		        { field: 'complateNum', title: '完工率', align: 'center', width: 120, templet: function(d){
+		        { field: 'complateNum', title: '完工率', align: 'center', width: 120, templet: function (d) {
 		        	return (parseFloat(d.complateNum) / parseFloat(d.allNum) * 100).toFixed(2) + '%';
 		        }}
 		    ]],

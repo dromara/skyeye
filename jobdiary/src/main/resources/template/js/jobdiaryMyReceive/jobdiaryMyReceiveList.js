@@ -31,7 +31,7 @@ layui.config({
     		    { type: 'radio'},
 				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 				{ field: 'userName', title: '发件人', width: 100 },
-				{ field: 'userSex', title: '性别', width: 60, templet: function(d){
+				{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
 		        	if(d.userSex == '0'){
 		        		return "保密";
 		        	}else if(d.userSex == '1'){
@@ -74,11 +74,11 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'jobTitle', title: '主题', width: 250, templet: function(d){
+	        { field: 'jobTitle', title: '主题', width: 250, templet: function (d) {
 		        	return '<a lay-event="read" class="notice-title-click">' + d.jobTitle + '</a>';
 	        }},
 	        { field: 'typeName', title: '日志类型', align: 'center', width: 110 },
-	        { field: 'state', title: '阅读状态', align: 'center', width: 110, templet: function(d){
+	        { field: 'state', title: '阅读状态', align: 'center', width: 110, templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-down'>未读</span>";
 	        	}else if(d.state == '2'){
@@ -88,7 +88,7 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'createTime', title: '发件时间', align: 'center', width: 130 },
-	        { title: '星期几', align: 'center', width: 100, templet: function(d){
+	        { title: '星期几', align: 'center', width: 100, templet: function (d) {
 	        	return getMyDay(new Date(d.createTime));
 	        }},
 	        { field: 'userName', title: '发件人', align: 'center', width: 110 },

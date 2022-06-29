@@ -23,7 +23,7 @@ layui.config({
         limit: 8,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function(d){
+            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function (d) {
 		        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		        if(!isNull(d.linkNumber)){
 		        	str += '<span class="state-new">[转]</span>';

@@ -28,10 +28,10 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'projectName', width:300, title: '项目名称'},
-            { field: 'id', width:100, title: '项目简介', templet: function(d){
+            { field: 'id', width:100, title: '项目简介', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="projectDesc"></i>';
 	        }},
-	        { field: 'id', width:100, title: '是否共享', templet: function(d){
+	        { field: 'id', width:100, title: '是否共享', templet: function (d) {
 				if (d.isShare == '1') {
 					return '私人';
 				} else if (d.isShare == '2') {

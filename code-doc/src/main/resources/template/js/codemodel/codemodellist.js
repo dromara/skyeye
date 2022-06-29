@@ -29,7 +29,7 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'modelName', title: '模板后缀', width: 120 },
 	        { field: 'modelType', title: '模板类型', width: 120 },
-	        { field: 'id', title: '模板内容', width: 120, templet: function(d){
+	        { field: 'id', title: '模板内容', width: 120, templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="modelContent"></i>';
 	        }},
 	        { field: 'useNum', title: '调用次数', width: 120 },

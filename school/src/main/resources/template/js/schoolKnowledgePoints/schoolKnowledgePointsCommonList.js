@@ -76,7 +76,7 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', width:250, title: '标题', templet: function(d){
+		        { field: 'title', width:250, title: '标题', templet: function (d) {
 			        return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			    }},
 		        { field: 'schoolName', width: 200, title: '学校'},

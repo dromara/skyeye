@@ -37,11 +37,11 @@ layui.config({
             { field: 'departmentName', title: '部门', align: 'left', width: 150 },
             { field: 'jobName', title: '职位', align: 'left', width: 120 },
             { field: 'userName', title: '员工', align: 'left', width: 100},
-            { field: 'payMonth', title: '月份', align: 'center', width: 80, templet: function(d){
+            { field: 'payMonth', title: '月份', align: 'center', width: 80, templet: function (d) {
                 return '<a  lay-event="details" class="notice-title-click">' + d.payMonth + '</p>';
             }},
             { field: 'actWages', title: '实发工资', align: 'left', width: 100 },
-            { field: 'type', title: '核算方式', align: 'center', width: 80, templet: function(d){
+            { field: 'type', title: '核算方式', align: 'center', width: 80, templet: function (d) {
                 if(d.type == '1'){
                     return "人工核算";
                 }else if(d.type == '2'){

@@ -15,10 +15,7 @@ layui.config({
     authBtn('1571811821848');//新增
     authBtn('1572245017123');//导出
     
-    laydate.render({
-		elem: '#operTime',
-		range: '~'
-	});
+    laydate.render({elem: '#operTime', range: '~'});
         
     table.render({
         id: 'messageTable',
@@ -32,11 +29,11 @@ layui.config({
 	    limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 200, templet: function(d){
+            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		    }},
             { field: 'materialNames', title: '产品信息', align: 'left', width: 300},
-            { field: 'status', title: '状态', align: 'left', width: 80, templet: function(d){
+            { field: 'status', title: '状态', align: 'left', width: 80, templet: function (d) {
 		        if(d.status == '0'){
 	        		return "<span class='state-down'>未审核</span>";
 	        	}else if(d.status == '1'){

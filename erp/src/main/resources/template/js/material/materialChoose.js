@@ -113,7 +113,7 @@ layui.config({
 		    cols: [[
 		    	{ type: checkType == '1' ? 'radio' : 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'productName', title: '商品名称', align: 'left', width: 150, templet: function(d){
+		        { field: 'productName', title: '商品名称', align: 'left', width: 150, templet: function (d) {
 			        	return '<a lay-event="details" class="notice-title-click">' + d.productName + '</a>';
 			    }},
 		        { field: 'productModel', title: '型号', align: 'left', width: 150 },

@@ -37,13 +37,13 @@ layui.config({
         treeShowName: 'taskName',//以树形式显示的字段
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2},
-	        { field: 'taskName', title: '名称', rowspan: 2, width: 200, templet: function(d){
+	        { field: 'taskName', title: '名称', rowspan: 2, width: 200, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.taskName + '</a>';
 	        }},
-	        { field: 'processInstanceId', title: '流程ID', rowspan: 2, width: 70 , templet: function(d){
+	        { field: 'processInstanceId', title: '流程ID', rowspan: 2, width: 70 , templet: function (d) {
 	        	return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        }},
-	        { field: 'state', title: '审批状态', rowspan: 2, width: 80, templet: function(d){
+	        { field: 'state', title: '审批状态', rowspan: 2, width: 80, templet: function (d) {
 	        	if (d.state == '0'){
 	        		return "草稿";
 	        	} else if (d.state == '1'){

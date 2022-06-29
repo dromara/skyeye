@@ -39,7 +39,7 @@ layui.config({
             { field: 'transferType', title: '调岗类型', rowspan: '2', width: 90, templet: function(d) {
                 return bossUtil.getTransferTypeNameById(d.transferType);
             }},
-            { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function(d){
+            { field: 'processInstanceId', title: '流程ID', rowspan: '2', width: 100, templet: function (d) {
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
             { field: 'stateName', title: '状态', rowspan: '2', width: 90, templet: function(d) {

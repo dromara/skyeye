@@ -42,20 +42,20 @@ layui.config({
 	        limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'name', title: '商品名称', align: 'left', width: 150, templet: function(d){
+		        { field: 'name', title: '商品名称', align: 'left', width: 150, templet: function (d) {
 			        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
 			    }},
 		        { field: 'model', title: '型号', align: 'left', width: 150 },
 		        { field: 'categoryName', title: '所属类型', align: 'center', width: 100 },
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
-		        { field: 'norms', title: '库存', align: 'center', width: 100, templet: function(d){
+		        { field: 'norms', title: '库存', align: 'center', width: 100, templet: function (d) {
 		        	var str = "";
 		        	$.each(d.norms, function(i, item){
 		        		str += '<span class="layui-badge layui-bg-blue">' + item.allTock + '</span>' + item.unitName + '<br>';
 		        	});
 		        	return str;
 		        }},
-		        { field: 'enabled', title: '状态', align: 'center', width: 60, templet: function(d){
+		        { field: 'enabled', title: '状态', align: 'center', width: 60, templet: function (d) {
 		        	if(d.enabled == '0'){
 		        		return "<span class='state-down'>禁用</span>";
 		        	}else if(d.enabled == '1'){

@@ -49,7 +49,7 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', rowspan: '2', type: 'numbers'},
-            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', rowspan: '2', templet: function(d){
+            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', rowspan: '2', templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
             }},
             { field: 'contacts', title: '会员名称', width: 100, rowspan: '2' },
@@ -62,20 +62,20 @@ layui.config({
             { field: 'payPrice', title: '实付金额', width: 100, align: "left", rowspan: '2'},
             { field: 'mealNum', title: '总保养次数', width: 100, align: "left", rowspan: '2'},
             { field: 'remainMealNum', title: '剩余保养次数', width: 100, align: "left", rowspan: '2'},
-            { field: 'state', title: '订单状态', width: 80, align: "center", rowspan: '2', templet: function(d){
+            { field: 'state', title: '订单状态', width: 80, align: "center", rowspan: '2', templet: function (d) {
                 return shopUtil.getMealOrderStateName(d);
             }},
             { field: 'natureName', title: '订单性质', width: 80, rowspan: '2', align: "center"},
             { field: 'createName', title: '专属顾问', width: 120, rowspan: '2' },
             { field: 'payTime', title: '支付时间', align: 'center', rowspan: '2', width: 150 },
-            { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function(d){
+            { field: 'type', title: '订单来源', width: 80, align: "center", rowspan: '2', templet: function (d) {
                 if(d.type == 1){
                     return "线上下单";
                 } else {
                     return "线下下单";
                 }
             }},
-            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", rowspan: '2', templet: function(d){
+            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", rowspan: '2', templet: function (d) {
                 return shopUtil.getMealOrderWhetherGiveName(d);
             }},
             { field: 'createTime', title: '创建时间', align: 'center', width: 150, rowspan: '2' },

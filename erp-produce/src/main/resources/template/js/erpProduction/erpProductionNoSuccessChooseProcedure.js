@@ -33,7 +33,7 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'defaultNumber', title: '生产单号', align: 'center', width: 200, templet: function(d){
+		        { field: 'defaultNumber', title: '生产单号', align: 'center', width: 200, templet: function (d) {
 			        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 			    }},
 	            { field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center'},

@@ -26,10 +26,10 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'orderNum', title: '工单号', align: 'center', width: 220, templet: function(d){
+	        { field: 'orderNum', title: '工单号', align: 'center', width: 220, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 	        }},
-	        { field: 'applyNum', title: '申领单号', align: 'center', width: 220, templet: function(d){
+	        { field: 'applyNum', title: '申领单号', align: 'center', width: 220, templet: function (d) {
 	        	return '<a lay-event="appDetails" class="notice-title-click">' + d.applyNum + '</a>';
 	        }},
 	        { field: 'customerName', title: '客户名称', align: 'left', width: 150 },

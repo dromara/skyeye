@@ -100,13 +100,13 @@ layui.config({
 		    cols: [[
 		    	{ type: 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'productName', title: '商品名称', align: 'left', width: 150, templet: function(d){
+		        { field: 'productName', title: '商品名称', align: 'left', width: 150, templet: function (d) {
 			        	return '<a lay-event="details" class="notice-title-click">' + d.productName + '</a>';
 			    }},
 		        { field: 'productModel', title: '型号', align: 'left', width: 150 },
 		        { field: 'categoryName', title: '所属类型', align: 'left', width: 100 },
 		        { field: 'typeName', title: '商品来源', align: 'left', width: 100 },
-		        { field: 'procedureMationList', title: '工序', align: 'left', width: 100, templet: function(d){
+		        { field: 'procedureMationList', title: '工序', align: 'left', width: 100, templet: function (d) {
 		        	var str = ""
 		        	$.each(d.procedureMationList, function(i, item){
 		        		str += '<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '<br>';

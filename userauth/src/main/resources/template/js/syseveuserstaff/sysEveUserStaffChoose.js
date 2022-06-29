@@ -58,10 +58,10 @@ layui.config({
 	    cols: [[
 	    	{ type: userStaffCheckType ? 'checkbox' : 'radio', rowspan: '3', fixed: 'left'},
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers'},
-	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, fixed: 'left', templet: function(d){
+	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, fixed: 'left', templet: function (d) {
 	        	return d.jobNumber + ' ' + d.userName;
 	        }},
-	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function(d){
+	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
 	        	if(d.staffType == 1){
 	        		return '普通员工';
 	        	}else if(d.staffType == 2){
@@ -71,7 +71,7 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'email', title: '邮箱', rowspan: '3', align: 'left', width: 170 },
-	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function(d){
+	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function (d) {
 	        	if(isNull(d.userPhoto)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 	        	} else {
@@ -79,7 +79,7 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'userIdCard', title: '身份证', rowspan: '3', align: 'center', width: 160 },
-	        { field: 'userSex', title: '性别', width: 60, rowspan: '3', align: 'center', templet: function(d){
+	        { field: 'userSex', title: '性别', width: 60, rowspan: '3', align: 'center', templet: function (d) {
 	        	if(d.userSex == '0'){
 	        		return "保密";
 	        	}else if(d.userSex == '1'){
@@ -90,7 +90,7 @@ layui.config({
 	        		return "参数错误";
 	        	}
 	        }},
-	        { field: 'state', title: '状态', rowspan: '3', width: 60, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', rowspan: '3', width: 60, align: 'center', templet: function (d) {
 				return getStaffStateName(d);
 	        }},
 	        { title: '公司信息', align: 'center', colspan: '3'},

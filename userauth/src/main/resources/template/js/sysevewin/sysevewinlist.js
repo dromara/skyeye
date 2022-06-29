@@ -35,7 +35,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'sysName', title: '系统名称', width: 180 },
-	        { field: 'sysPic', title: '系统图片', align: 'center', width: 100, templet: function(d){
+	        { field: 'sysPic', title: '系统图片', align: 'center', width: 100, templet: function (d) {
 	        	if(isNull(d.sysPic)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 	        	} else {

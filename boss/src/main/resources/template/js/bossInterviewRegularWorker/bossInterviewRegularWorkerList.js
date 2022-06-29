@@ -37,7 +37,7 @@ layui.config({
             { field: 'departmentName', title: '转正部门', width: 140},
             { field: 'jobName', title: '转正岗位', width: 150 },
             { field: 'regularTime', title: '转正日期', align: 'center', width: 100 },
-            { field: 'processInstanceId', title: '流程ID', width: 100, templet: function(d){
+            { field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
                 return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
             }},
             { field: 'stateName', title: '状态', width: 90, templet: function(d) {

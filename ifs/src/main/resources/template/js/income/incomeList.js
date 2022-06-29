@@ -35,11 +35,11 @@ layui.config({
             limit: getLimit(),
             cols: [[
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
-                { field: 'billNo', title: '单据编号', align: 'left', rowspan: '2', width: 200, templet: function(d){
+                { field: 'billNo', title: '单据编号', align: 'left', rowspan: '2', width: 200, templet: function (d) {
                     return '<a lay-event="details" class="notice-title-click">' + d.billNo + '</a>';
                 }},
                 { title: '审批模式', align: 'center', colspan: '2'},
-                { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function(d){
+                { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function (d) {
                     return activitiUtil.showStateName2(d.state, d.submitType);
                 }},
                 { field: 'typeName', title: '类型', rowspan: '2', align: 'left', width: 80},
@@ -52,10 +52,10 @@ layui.config({
                 { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: '2', align: 'center', width: 150 },
                 { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
             ],[
-                { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function(d){
+                { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function (d) {
                     return erpOrderUtil.getSubmitTypeName(d);
                 }},
-                { field: 'processInstanceId', title: '流程实例id', align: 'left', width: 120, templet: function(d){
+                { field: 'processInstanceId', title: '流程实例id', align: 'left', width: 120, templet: function (d) {
                     return erpOrderUtil.getProcessInstanceIdBySubmitType(d);
                 }}
             ]],

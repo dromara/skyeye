@@ -73,37 +73,37 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'printsPicUrl', title: '效果图', width: 200, align: 'center', templet: function(d){
+	        { field: 'printsPicUrl', title: '效果图', width: 200, align: 'center', templet: function (d) {
 	        	return '<img src="' + fileBasePath + d.printsPicUrl + '" style="width:100%;height:auto" class="cursor" lay-event="printsPicUrl">';
 	        }},
-	        { field: 'id', title: 'HTML内容', width: 150, align: 'center', templet: function(d){
+	        { field: 'id', title: 'HTML内容', width: 150, align: 'center', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        }},
-	        { field: 'id', title: 'HTML-JS内容', width: 150, align: 'center', templet: function(d){
+	        { field: 'id', title: 'HTML-JS内容', width: 150, align: 'center', templet: function (d) {
 	        	if(!isNull(d.htmlJsContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlJsContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
-	        { field: 'id', title: 'WXML内容', width: 150, align: 'center', templet: function(d){
+	        { field: 'id', title: 'WXML内容', width: 150, align: 'center', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlContent"></i>';
 	        }},
-	        { field: 'id', title: 'WXML-JS数据内容', width: 150, align: 'center', templet: function(d){
+	        { field: 'id', title: 'WXML-JS数据内容', width: 150, align: 'center', templet: function (d) {
 	        	if(!isNull(d.wxmlJsDataContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsDataContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
-	        { field: 'id', title: 'WXML-JS方法内容', width: 150, align: 'center', templet: function(d){
+	        { field: 'id', title: 'WXML-JS方法内容', width: 150, align: 'center', templet: function (d) {
 	        	if(!isNull(d.wxmlJsMethodContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsMethodContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
-	        { field: 'id', title: 'WXML-JS初始化方法内容', width: 150, align: 'center', templet: function(d){
+	        { field: 'id', title: 'WXML-JS初始化方法内容', width: 150, align: 'center', templet: function (d) {
 	        	if(!isNull(d.wxmlJsMethodCreateContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsMethodCreateContent"></i>';
 	        	} else {

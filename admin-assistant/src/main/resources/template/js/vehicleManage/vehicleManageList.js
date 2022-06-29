@@ -32,11 +32,11 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'vehicleName', title: '名称', width: 170, templet: function(d){
+		        { field: 'vehicleName', title: '名称', width: 170, templet: function (d) {
 		        	return '<a lay-event="vehicledetails" class="notice-title-click">' + d.vehicleName + '</a>';
 		        }},
 		        { field: 'vehicleCompany', title: '所属公司', align: 'left', width: 170 },
-		        { field: 'vehicleImg', title: '图片', align: 'center', width: 60, templet: function(d){
+		        { field: 'vehicleImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 		        	if(isNull(d.vehicleImg)){
 		        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 		        	} else {
@@ -44,7 +44,7 @@ layui.config({
 		        	}
 		        }},
 		        { field: 'licensePlate', title: '车牌', align: 'center', width: 120 },
-		        { field: 'state', title: '状态', width: 80, align: 'center', templet: function(d){
+		        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 		        	if(d.state == '1'){
 		        		return "<span class='state-up'>正常</span>";
 		        	}else if(d.state == '2'){

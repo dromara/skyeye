@@ -116,10 +116,10 @@ layui.config({
 		    cols: [[
 		    	{ type: checkType == '1' ? 'radio' : 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', width:250, title: '标题', templet: function(d){
+		        { field: 'title', width:250, title: '标题', templet: function (d) {
 			        return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			    }},
-		        { field: 'type', width:80, title: '类型', align: 'center', templet: function(d){
+		        { field: 'type', width:80, title: '类型', align: 'center', templet: function (d) {
 		        	if(d.type == 1){
 		        		return '<span style="color: blue">' + d.typeName + '</span>';
 		        	} else {

@@ -76,10 +76,10 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'quTitle', width:250, title: '题目', templet: function(d){
+		        { field: 'quTitle', width:250, title: '题目', templet: function (d) {
 			        return d.quTitle;
 			    }},
-		        { field: 'type', width:80, title: '类型', align: 'center', templet: function(d){
+		        { field: 'type', width:80, title: '类型', align: 'center', templet: function (d) {
 		        	if(d.type == 1){
 		        		return '<span style="color: blue">' + d.typeName + '</span>';
 		        	} else {

@@ -33,7 +33,7 @@ layui.config({
 	    cols: [[
 	    	{ type: 'checkbox', fixed: 'left'},
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'userName', title: '姓名', width: 100, templet: function(d){
+			{ field: 'userName', title: '姓名', width: 100, templet: function (d) {
 					return '<a lay-event="details" class="notice-title-click">' + d.userName + '</a>';
 				}},
 			{ field: 'phone', title: '手机', width: 100 },

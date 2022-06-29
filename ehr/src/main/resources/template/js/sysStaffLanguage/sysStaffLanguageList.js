@@ -31,7 +31,7 @@ layui.config({
 		        { field: 'getTime', title: '获取时间', align: 'center', width: 100},
                 { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
                 { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
                     if(d.state == '1'){
                         return "在职";
                     }else if(d.state == '2'){

@@ -40,10 +40,10 @@ layui.config({
         },
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'title', title: '公告标题', align: 'left', width: 180, templet: function(d){
+	        { field: 'title', title: '公告标题', align: 'left', width: 180, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		    }},
-	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 	        	if(d.state == '3'){
 	        		return "<span class='state-down'>下线</span>";
 	        	}else if(d.state == '2'){
@@ -54,14 +54,14 @@ layui.config({
 	        }},
 	        { field: 'typeName', title: '一级分类', align: 'center', width: 120 },
 	        { field: 'secondTypeName', title: '二级分类', align: 'center', width: 120 },
-	        { field: 'whetherEmail', title: '邮件通知', width: 80, align: 'center', templet: function(d){
+	        { field: 'whetherEmail', title: '邮件通知', width: 80, align: 'center', templet: function (d) {
 	        	if(d.whetherEmail == '1'){
 	        		return "否";
 	        	}else if(d.whetherEmail == '2'){
 	        		return "是";
 	        	}
 	        }},
-	        { field: 'timeSend', title: '定时任务', width: 80, align: 'center', templet: function(d){
+	        { field: 'timeSend', title: '定时任务', width: 80, align: 'center', templet: function (d) {
 	        	if(d.timeSend == '1'){
 	        		return "-";
 	        	}else if(d.timeSend == '2'){
@@ -72,14 +72,14 @@ layui.config({
 	        		return "已执行";
 	        	}
 	        }},
-	        { field: 'sendType', title: '群发类型', width: 80, align: 'center', templet: function(d){
+	        { field: 'sendType', title: '群发类型', width: 80, align: 'center', templet: function (d) {
 	        	if(d.sendType == '1'){
 	        		return "群发所有人";
 	        	}else if(d.sendType == '2'){
 	        		return "选择性群发";
 	        	}
 	        }},
-	        { field: 'realLinesType', title: '上线类型', width: 80, align: 'center', templet: function(d){
+	        { field: 'realLinesType', title: '上线类型', width: 80, align: 'center', templet: function (d) {
 	        	if(d.realLinesType == '1'){
 	        		return "手动上线";
 	        	}else if(d.realLinesType == '2'){

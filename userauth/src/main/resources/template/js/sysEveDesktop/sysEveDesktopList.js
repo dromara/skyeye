@@ -28,7 +28,7 @@ layui.config({
 	        { field: 'desktopName', title: '桌面名称', align: 'left', width: 120 },
 	        { field: 'desktopCnName', title: '英文名称', align: 'left', width: 120 },
 	        { field: 'allNum', title: '菜单数量', align: 'center', width: 120 },
-	        { field: 'state', title: '状态', width: 120, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', width: 120, align: 'center', templet: function (d) {
 	        	if(d.state == '3'){
 	        		return "<span class='state-down'>下线</span>";
 	        	}else if(d.state == '2'){

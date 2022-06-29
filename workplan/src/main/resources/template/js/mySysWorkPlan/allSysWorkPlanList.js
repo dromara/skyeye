@@ -30,10 +30,10 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'title', title: '计划标题', width: 300, templet: function(d){
+			{ field: 'title', title: '计划标题', width: 300, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			}},
-			{ field: 'planType', title: '计划类型', align: 'center', width: 100, templet: function(d){
+			{ field: 'planType', title: '计划类型', align: 'center', width: 100, templet: function (d) {
 				if(d.planType == 1){
 					return '个人计划';
 				}else if(d.planType == 2){
@@ -43,7 +43,7 @@ layui.config({
 				}
 				return '';
 			}},
-			{ field: 'planCycle', title: '计划周期', align: 'center', width: 100, templet: function(d){
+			{ field: 'planCycle', title: '计划周期', align: 'center', width: 100, templet: function (d) {
 				if(d.planCycle == 1){
 					return '日计划';
 				}else if(d.planCycle == 2){

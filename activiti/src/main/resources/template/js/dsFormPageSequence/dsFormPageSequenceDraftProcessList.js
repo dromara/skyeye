@@ -35,7 +35,7 @@ layui.config({
 	        { field: 'title', title: '流程名称', width: 100 },
 	        { field: 'typeTitle', title: '流程类型', width: 100 },
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 140},
-	        { field: 'state', title: '状态', align: 'center', width: 80, templet: function(d){
+	        { field: 'state', title: '状态', align: 'center', width: 80, templet: function (d) {
 	        	if(d.state == 1){
 	        		return "<span class='state-down'>草稿</span>";
 	        	} else {

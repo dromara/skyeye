@@ -36,14 +36,14 @@ layui.config({
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 		        { field: 'companyName', title: '所属公司', align: 'center', width: 170 },
-		        { field: 'assetName', title: '名称', width: 120, templet: function(d){
+		        { field: 'assetName', title: '名称', width: 120, templet: function (d) {
 		        	return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.assetName + '</a>';
 		        }},
 		        { field: 'typeId', title: '资产所属类型', align: 'center', width: 100 },
 		        { field: 'assetNum', title: '资产编号', width: 100 },
 		        { field: 'unitPrice', title: '资产单价', align: 'center', width: 80 },
 		        { field: 'employeeId', title: '领用人', align: 'center', width: 80 },
-		        { field: 'state', title: '状态', width: 80, align: 'center', templet: function(d){
+		        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 		        	if(d.state == '1'){
 		        		return "<span class='state-up'>正常</span>";
 		        	}else if(d.state == '2'){

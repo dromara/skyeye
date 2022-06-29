@@ -34,11 +34,7 @@ layui.config({
 					}
 				});
 				$('.timeRange').each(function(){
-					laydate.render({ 
-	  					elem: this,
-	  					format: 'yyyy年MM月dd日', //可任意组合
-	  					range: '~'
-					});
+					laydate.render({elem: this, format: 'yyyy年MM月dd日', range: '~'});
 				});
 				matchingLanguage();
 			}

@@ -34,11 +34,11 @@ layui.config({
         limit: 8,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'defaultNumber', title: '单据编号', align: 'center', width: 200, templet: function(d){
+            { field: 'defaultNumber', title: '单据编号', align: 'center', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		    }},
             { field: 'machinNum', title: '加工单', align: 'center', width: 200},
-            { field: 'status', title: '状态', align: 'left', width: 80, templet: function(d){
+            { field: 'status', title: '状态', align: 'left', width: 80, templet: function (d) {
 		        if(d.status == '0'){
 	        		return "<span class='state-down'>未审核</span>";
 	        	}else if(d.status == '1'){

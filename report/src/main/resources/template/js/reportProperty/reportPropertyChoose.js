@@ -35,11 +35,11 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-				{ field: 'title', title: '标题', align: 'left', width: 150, templet: function(d){
+				{ field: 'title', title: '标题', align: 'left', width: 150, templet: function (d) {
 					return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 				}},
 				{ field: 'code', title: '属性', align: 'left', width: 150 },
-				{ field: 'optional', title: '属性值是否可选', align: 'center', width: 150, templet: function(d){
+				{ field: 'optional', title: '属性值是否可选', align: 'center', width: 150, templet: function (d) {
 					if(d.optional == 1){
 						return '可选';
 					} else if(d.optional == 2){

@@ -11,7 +11,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
     winui.renderColor();
-
     var $ = layui.$,
         form = layui.form,
         laydate = layui.laydate,
@@ -29,11 +28,7 @@ layui.config({
 		 return year.toString() + "-" + month.toString();
 	}
 	
-    laydate.render({
-		elem: '#operTime', //指定元素
-		type: 'month',
-		value: operTime
-	});
+    laydate.render({elem: '#operTime', type: 'month', value: operTime});
 	
 	initTable();
 	function initTable(){

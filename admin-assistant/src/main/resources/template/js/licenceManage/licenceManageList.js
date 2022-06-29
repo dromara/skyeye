@@ -32,7 +32,7 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'licenceName', title: '证照名称', width: 170, templet: function(d){
+		        { field: 'licenceName', title: '证照名称', width: 170, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.licenceName + '</a>';
 		        }},
 		        { field: 'companyName', title: '所属公司', align: 'left', width: 150 },

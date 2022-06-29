@@ -25,7 +25,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'typeName', title: '类型名称', align: 'center', width: 120 },
-	        { field: 'iconPath', title: 'logo', width: 60, templet: function(d){
+	        { field: 'iconPath', title: 'logo', width: 60, templet: function (d) {
 	        	if(isNull(d.iconPath)){
 	        		return '';
 	        	} else {
@@ -41,7 +41,7 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'useNum', title: '轻应用数量', align: 'center', width: 120},
-	        { field: 'state', title: '状态', width: 100, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', width: 100, align: 'center', templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-new'>新建</span>";
 	        	}else if(d.state == '2'){

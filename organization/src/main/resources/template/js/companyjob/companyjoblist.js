@@ -59,7 +59,7 @@ layui.config({
         	treeShowName: 'jobName',//以树形式显示的字段
 		    cols: [[
 		        { field: 'jobName', title: '职位名称', width: 180 },
-		        { field: 'id', title: '职位简介', width: 80, align: 'center', templet: function(d){
+		        { field: 'id', title: '职位简介', width: 80, align: 'center', templet: function (d) {
 		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="jobDesc"></i>';
 		        }},
 		        { field: 'userNum', title: '员工数', width: 100 },

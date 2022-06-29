@@ -25,13 +25,13 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'title', title: '商机全称', width: 200, templet: function(d){
+	        { field: 'title', title: '商机全称', width: 200, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 	        }},
-	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 80 , templet: function(d){
+	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 80 , templet: function (d) {
 	        	return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        }},
-	        { field: 'state', title: '商机阶段', width: 85, templet: function(d){
+	        { field: 'state', title: '商机阶段', width: 85, templet: function (d) {
 	        	if (d.state == '0'){
 	        		return "草稿";
 	        	} else if (d.state == '1'){
@@ -63,7 +63,7 @@ layui.config({
 	        { field: 'createId', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { field: 'documentaryTime', title: '最后跟单时间', align: 'center', width: 130 },
-	        { field: 'discussNum', title: '讨论版', align: 'center', width: 70, templet: function(d){
+	        { field: 'discussNum', title: '讨论版', align: 'center', width: 70, templet: function (d) {
 	        	return '<a lay-event="discussDetails" class="notice-title-click">' + d.discussNum + '</a>';
 	        }},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 230, toolbar: '#tableBar'}

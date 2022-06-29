@@ -51,7 +51,7 @@ layui.config({
     		    { type: 'radio'},
 				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 				{ field: 'userName', title: '申诉人', width: 100 },
-				{ field: 'userSex', title: '性别', width: 60, templet: function(d){
+				{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
 		        	if(d.userSex == '0'){
 		        		return "保密";
 		        	}else if(d.userSex == '1'){
@@ -88,14 +88,14 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'checkDate', title: '申诉内容', align: 'left', width: 160, templet: function(d){
+		        { field: 'checkDate', title: '申诉内容', align: 'left', width: 160, templet: function (d) {
 		        	var text = d.checkDate;
 		        	return text += d.situation;
 		        }},
 		        { field: 'appealName', title: '申诉原因', align: 'center', width: 100 },
 		        { field: 'appealReason', title: '申诉具体原因', align: 'left', width: 170 },
 		        { field: 'createTime', title: '申诉时间', align: 'center', width: 150 },
-		        { field: 'state', title: '申诉状态', align: 'left', width: 100, templet: function(d){
+		        { field: 'state', title: '申诉状态', align: 'left', width: 100, templet: function (d) {
 		        	if(d.state == '0'){
 		        		return "<span class='state-new'>申诉中</span>";
 		        	}else if(d.state == '1'){

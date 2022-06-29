@@ -28,7 +28,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'colorClass', title: '颜色属性', width: 180 },
-	        { field: 'id', title: '主题颜色', width: 180, templet: function(d){
+	        { field: 'id', title: '主题颜色', width: 180, templet: function (d) {
 	        	return '<div class="color-choose" style="width: auto"><div class="' + d.colorClass + '"></div></div>';
 	        }},
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 180 },

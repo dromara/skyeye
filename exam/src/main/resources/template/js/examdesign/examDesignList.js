@@ -17,11 +17,7 @@ layui.config({
 	
 	authBtn('1586066201570');
 	
-	laydate.render({
-		elem: '#year', //指定元素
-		type: 'year',
-		max: 'date'
-	});
+	laydate.render({elem: '#year', type: 'year', max: 'date'});
 
 	// 获取当前登陆用户所属的学校列表
 	schoolUtil.queryMyBelongSchoolList(function (json) {
@@ -91,10 +87,10 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'surveyName', width:250, title: '试卷名称', templet: function(d){
+		        { field: 'surveyName', width:250, title: '试卷名称', templet: function (d) {
 			        return '<a lay-event="details" class="notice-title-click">' + d.surveyName + '</a>';
 			    }},
-		        { field: 'surveyState', width:80, title: '状态', templet: function(d){
+		        { field: 'surveyState', width:80, title: '状态', templet: function (d) {
 		        	if(d.state == 1){
 			        	return d.surveyState + '<i class="fa fa-pencil-square fa-fw cursor vary-color" lay-event="pcExaming" title="点击前往考试"></i>';
 		        	} else {

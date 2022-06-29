@@ -68,7 +68,7 @@ layui.config({
 		        { field: 'typeName', title: '服务类型', width: 150, align: 'left'},
 		        { field: 'allNum', title: '派工数量', align: 'center', width: 120},
 		        { field: 'complateNum', title: '完工数量', align: 'center', width: 120},
-		        { field: 'complateNum', title: '完工率', align: 'center', width: 120, templet: function(d){
+		        { field: 'complateNum', title: '完工率', align: 'center', width: 120, templet: function (d) {
 		        	return (parseFloat(d.complateNum) / parseFloat(d.allNum) * 100).toFixed(2) + '%';
 		        }}
 		    ]],

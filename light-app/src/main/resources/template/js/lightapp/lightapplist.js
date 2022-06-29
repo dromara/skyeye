@@ -25,7 +25,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'appName', title: '应用名称', align: 'center', width: 120 },
-	        { field: 'appLogo', title: 'logo', width: 60, templet: function(d){
+	        { field: 'appLogo', title: 'logo', width: 60, templet: function (d) {
 	        	if(isNull(d.appLogo)){
 	        		return '';
 	        	} else {
@@ -35,7 +35,7 @@ layui.config({
 	        }},
 	        { field: 'appUrl', title: '应用链接', align: 'center', width: 220},
 	        { field: 'typeName', title: '所属类型', align: 'center', width: 120},
-	        { field: 'state', title: '状态', width: 100, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', width: 100, align: 'center', templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-new'>新建</span>";
 	        	}else if(d.state == '2'){

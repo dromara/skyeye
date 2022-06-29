@@ -26,14 +26,14 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'accountName', title: '名称', align: 'left', width: 200, templet: function(d){
+            { field: 'accountName', title: '名称', align: 'left', width: 200, templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.accountName + '</a>';
             }},
             { field: 'serialNo', title: '编号', align: 'left', width: 120},
             { field: 'initialAmount', title: '期初金额', align: 'left', width: 100},
             { field: 'currentAmount', title: '当前余额', align: 'left', width: 100},
             { field: 'remark', title: '备注', align: 'left', width: 200},
-            { field: 'isDefault', title: '默认', align: 'center', width: 60, templet: function(d){
+            { field: 'isDefault', title: '默认', align: 'center', width: 60, templet: function (d) {
                     if(d.isDefault == '1'){
                         return "<span class='state-up'>是</span>";
                     }else if(d.isDefault == '0'){

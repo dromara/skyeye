@@ -40,7 +40,7 @@ layui.config({
             limit: getLimit(),
             cols: [[
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
-                { field: 'name', title: '门店', align: 'left', width: 150, templet: function(d){
+                { field: 'name', title: '门店', align: 'left', width: 150, templet: function (d) {
                     return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
                 }}
             ]],

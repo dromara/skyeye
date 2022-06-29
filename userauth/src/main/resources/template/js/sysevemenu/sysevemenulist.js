@@ -59,11 +59,11 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'menuName', title: '菜单名称', width: 120, templet: function(d){
+		        { field: 'menuName', title: '菜单名称', width: 120, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.menuName + '</a>';
 		        }},
 		        { field: 'menuNameEn', title: '英文名称', width: 150},
-		        { field: 'id', title: '图标', align: 'center', width: 60, templet: function(d){
+		        { field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
 		        	var str = '';
 		        	if(d.menuIconType == '1'){
 			        	if(isNull(d.menuIconBg)){
@@ -82,7 +82,7 @@ layui.config({
 		        	}
 		        	return str;
 		        }},
-		        { field: 'menuLevel', title: '菜单级别', width: 140, templet: function(d){
+		        { field: 'menuLevel', title: '菜单级别', width: 140, templet: function (d) {
 		        	if(d.parentId == '0'){
 		        		return "创世菜单";
 		        	} else {
@@ -90,7 +90,7 @@ layui.config({
 		        	}
 		        }},
 		        { field: 'desktopName', title: '所属桌面', width: 140},
-		        { field: 'isShare', title: '共享', align: 'center', width: 80, templet: function(d){
+		        { field: 'isShare', title: '共享', align: 'center', width: 80, templet: function (d) {
 		        	if(d.isShare == 0){
 		        		return '否';
 		        	}else if(d.isShare == 1){

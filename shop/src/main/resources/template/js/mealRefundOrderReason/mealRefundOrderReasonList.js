@@ -26,7 +26,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
             { field: 'titleCn', title: '中文名称', width: 160 },
             { field: 'titleEn', title: '英文名称', width: 160 },
-            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function(d){
+            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function (d) {
                 return shopUtil.getEnableStateName(d.enabled);
             }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },

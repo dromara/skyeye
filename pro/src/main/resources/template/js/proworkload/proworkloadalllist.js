@@ -24,16 +24,16 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'title', title: '名称',  width: 250, templet: function(d){
+	        { field: 'title', title: '名称',  width: 250, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 	        }},
 	        { field: 'projectName', title: '所属项目',  width: 120 },
 	        { field: 'projectNumber', title: '项目编号',  width: 120 },
 	        { field: 'allWorkLoad', title: '合计工作量', width: 100 },
-	        { field: 'processInstanceId', title: '流程ID',  width: 70 , templet: function(d){
+	        { field: 'processInstanceId', title: '流程ID',  width: 70 , templet: function (d) {
 	        	return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        }},
-	        { field: 'state', title: '审批状态',  width: 80, templet: function(d){
+	        { field: 'state', title: '审批状态',  width: 80, templet: function (d) {
 	        	if (d.state == '0'){
 	        		return "草稿";
 	        	} else if (d.state == '1'){

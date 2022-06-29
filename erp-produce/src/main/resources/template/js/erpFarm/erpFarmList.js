@@ -33,11 +33,11 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'farmNumber', title: '车间编号', align: 'left', width: 100, templet: function(d){
+            { field: 'farmNumber', title: '车间编号', align: 'left', width: 100, templet: function (d) {
                     return '<a lay-event="details" class="notice-title-click">' + d.farmNumber + '</a>';
                 }},
             { field: 'farmName', title: '车间名称', align: 'left', width: 250},
-            { field: 'state', title: '状态', align: 'left', width: 80, templet: function(d){
+            { field: 'state', title: '状态', align: 'left', width: 80, templet: function (d) {
                 if(d.state == '1'){
                     return "<span class='state-up'>正常</span>";
                 }else if(d.state == '2'){

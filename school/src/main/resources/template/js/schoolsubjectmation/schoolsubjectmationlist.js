@@ -35,7 +35,7 @@ layui.config({
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 		        { field: 'subjectName', title: '科目', align: 'left', width: 160 },
 		        { field: 'subjectNo', title: '编号', align: 'left', width: 140 },
-		        { field: 'desc', title: '简介', align: 'left', width: 80, templet: function(d){
+		        { field: 'desc', title: '简介', align: 'left', width: 80, templet: function (d) {
 		        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="descSel"></i>';
 		        }},
 		        { field: 'schoolName', title: '所属学校', align: 'left', width: 150 },

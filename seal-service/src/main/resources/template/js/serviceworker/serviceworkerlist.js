@@ -31,7 +31,7 @@ layui.config({
 	        { field: 'cityName', title: '所在市', align: 'left', width: 80 },
 	        { field: 'areaName', title: '所在区', align: 'left', width: 80 },
 	        { field: 'orderNumber', title: '工单数', align: 'left', width: 60 },
-	        { field: 'stateName', title: '状态', align: 'center', width: 80, templet: function(d){
+	        { field: 'stateName', title: '状态', align: 'center', width: 80, templet: function (d) {
 	        	if(d.orderNumber > 0){
 	        		return '<span class="state-down">' + d.stateName + '</span>';
 	        	} else {

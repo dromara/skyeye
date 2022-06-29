@@ -88,11 +88,11 @@ layui.config({
 		    cols: [[
 		    	{ type: checkType == '1' ? 'radio' : 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, templet: function(d){
+		        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, templet: function (d) {
 		        	return d.jobNumber + ' ' + d.userName;
 		        }},
 		        { field: 'email', title: '邮箱', align: 'left', width: 170 },
-		        { field: 'userPhoto', title: '头像', align: 'center', width: 60, templet: function(d){
+		        { field: 'userPhoto', title: '头像', align: 'center', width: 60, templet: function (d) {
 		        	if(isNull(d.userPhoto)){
 		        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 		        	} else {
@@ -100,7 +100,7 @@ layui.config({
 		        	}
 		        }},
 		        { field: 'userSex', title: '性别', width: 60, align: 'center'},
-		        { field: 'userCodeState', title: '帐号', width: 90, align: 'center', templet: function(d){
+		        { field: 'userCodeState', title: '帐号', width: 90, align: 'center', templet: function (d) {
 		        	if(d.userCodeState == '已分配帐号'){
 		        		return "<span class='state-up'>" + d.userCodeState + "</span>";
 		        	} else {

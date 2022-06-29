@@ -51,7 +51,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'orderNum', title: '工单号', align: 'center', width: 220, templet: function(d){
+		        { field: 'orderNum', title: '工单号', align: 'center', width: 220, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 		        }},
 		        { field: 'serviceTypeName', title: '服务类型', align: 'left', width: 100 },

@@ -32,7 +32,7 @@ layui.config({
 				{ field: 'nameCn', title: '名称（中文）', align: 'left', width: 150},
 				{ field: 'nameEn', title: '名称（英文）', align: 'left', width: 150 },
 				{ field: 'key', title: '字段key', align: 'left', width: 120 },
-				{ field: 'monthlyClearing', title: '月度清零', align: 'center', width: 80, templet: function(d){
+				{ field: 'monthlyClearing', title: '月度清零', align: 'center', width: 80, templet: function (d) {
 					if(d.monthlyClearing == '1'){
 						return "是";
 					}else if(d.monthlyClearing == '2'){
@@ -41,7 +41,7 @@ layui.config({
 						return "-";
 					}
 				}},
-				{ field: 'wagesType', title: '字段类型', align: 'center', width: 80, templet: function(d){
+				{ field: 'wagesType', title: '字段类型', align: 'center', width: 80, templet: function (d) {
 					if(d.wagesType == '1'){
 						return "<span class='state-up'>薪资增加</span>";
 					}else if(d.wagesType == '2'){

@@ -29,7 +29,7 @@ layui.config({
 	        { field: 'name', title: '类型名称', align: 'center', width: 120 },
 	        { field: 'allNum', title: '总公告数量', align: 'center', width: 120 },
 	        { field: 'upStateNum', title: '上线公告数量', align: 'center', width: 120 },
-	        { field: 'state', title: '当前状态', width: 120, align: 'center', templet: function(d){
+	        { field: 'state', title: '当前状态', width: 120, align: 'center', templet: function (d) {
 	        	if(d.state == '3'){
 	        		return "<span class='state-down'>下线</span>";
 	        	}else if(d.state == '2'){
@@ -38,7 +38,7 @@ layui.config({
 	        		return "<span class='state-new'>新建</span>";
 	        	}
 	        }},
-	        { field: 'pId', title: '类型级别', align: 'center', width: 120 , templet: function(d){
+	        { field: 'pId', title: '类型级别', align: 'center', width: 120 , templet: function (d) {
 	        	if(d.pId == '0'){
 	        		return "一级类型";
 	        	} else {

@@ -7899,12 +7899,12 @@ ORYX.Core.StencilSet.Rules = {
 		
 		var parseValues = function(o, v){
 			if (o && o[v]){
-				["t","r","b","l"].each(function(d){
+				["t","r","b","l"].each(function (d) {
 					layout[v][d]=Math.max(o[v][d],layout[v][d]||0);
 				});
 			}
 			if (o && o[v+"s"] instanceof Array){
-				["t","r","b","l"].each(function(d){
+				["t","r","b","l"].each(function (d) {
 					var defaultRule = o[v+"s"].find(function (e) { return !e.edgeRole });
 					var edgeRule;
 					if (edgeShape instanceof ORYX.Core.Edge) {
@@ -7928,7 +7928,7 @@ ORYX.Core.StencilSet.Rules = {
 		// Make sure, that every attribute has an value,
 		// otherwise set 1
 		["in","out"].each(function(v){
-			["t","r","b","l"].each(function(d){
+			["t","r","b","l"].each(function (d) {
 					layout[v][d]=layout[v][d]!==undefined?layout[v][d]:1;
 				});
 		})
@@ -20919,7 +20919,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 			
 			if (value instanceof ORYX.Core.Node) {
 				
-				(value.dockers||[]).each(function(d){
+				(value.dockers||[]).each(function (d) {
 					d.bounds.moveBy(offset);
 				})
 				
@@ -20942,7 +20942,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 				var allEdges = [].concat(value.getIncomingShapes())
 					.concat(value.getOutgoingShapes())
 					// Remove all edges which are included in the selection from the list
-					.findAll(function(r){ return	r instanceof ORYX.Core.Edge && !this.moveShapes.any(function(d){ return d == r || (d instanceof ORYX.Core.Controls.Docker && d.parent == r)}) }.bind(this))
+					.findAll(function(r){ return	r instanceof ORYX.Core.Edge && !this.moveShapes.any(function (d) { return d == r || (d instanceof ORYX.Core.Controls.Docker && d.parent == r)}) }.bind(this))
 					// Remove all edges which are between the node and a node contained in the selection from the list
 					.findAll(function(r){ return 	(r.dockers.first().getDockedShape() == value || !this.moveShapes.include(r.dockers.first().getDockedShape())) &&  
 													(r.dockers.last().getDockedShape() == value || !this.moveShapes.include(r.dockers.last().getDockedShape()))}.bind(this))
@@ -20954,7 +20954,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 				var allSameEdges = [].concat(value.getIncomingShapes())
 					.concat(value.getOutgoingShapes())
 					// Remove all edges which are included in the selection from the list
-					.findAll(function(r){ return r instanceof ORYX.Core.Edge && r.dockers.first().isDocked() && r.dockers.last().isDocked() && !this.moveShapes.include(r) && !this.moveShapes.any(function(d){ return d == r || (d instanceof ORYX.Core.Controls.Docker && d.parent == r)}) }.bind(this))
+					.findAll(function(r){ return r instanceof ORYX.Core.Edge && r.dockers.first().isDocked() && r.dockers.last().isDocked() && !this.moveShapes.include(r) && !this.moveShapes.any(function (d) { return d == r || (d instanceof ORYX.Core.Controls.Docker && d.parent == r)}) }.bind(this))
 					// Remove all edges which are included in the selection from the list
 					.findAll(function(r){ return this.moveShapes.indexOf(r.dockers.first().getDockedShape()) > i ||  this.moveShapes.indexOf(r.dockers.last().getDockedShape()) > i}.bind(this))
 
@@ -20974,7 +20974,7 @@ ORYX.Core.Command.Move = ORYX.Core.Command.extend({
 					var edges = [].concat(nodes[i].getIncomingShapes())
 						.concat(nodes[i].getOutgoingShapes())
 						// Remove all edges which are included in the selection from the list
-						.findAll(function(r){ return r instanceof ORYX.Core.Edge && !allEdges.include(r) && r.dockers.any(function(d){ return !value.bounds.isIncluded(d.bounds.center)})})
+						.findAll(function(r){ return r instanceof ORYX.Core.Edge && !allEdges.include(r) && r.dockers.any(function (d) { return !value.bounds.isIncluded(d.bounds.center)})})
 					allEdges = allEdges.concat(edges);
 					if (edges.length <= 0){ continue }
 					//this.plugin.layoutEdges(nodes[i], edges, offset);
@@ -21506,7 +21506,7 @@ ORYX.Plugins.DragDocker = Clazz.extend({
 				},
 				rollback: function(){
 					this.dock( this.oldDockedShape, this.oldPosition );
-					(this.removedDockers||$H({})).each(function(d){
+					(this.removedDockers||$H({})).each(function (d) {
 						this.shape.add(d.value, Number(d.key));
 						this.shape._update(true);
 					}.bind(this));

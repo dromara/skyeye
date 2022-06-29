@@ -26,10 +26,10 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'checkDate', title: '考勤日期', align: 'center', width: 120},
-	        { title: '星期几', align: 'center', width: 100, templet: function(d){
+	        { title: '星期几', align: 'center', width: 100, templet: function (d) {
 	        	return getMyDay(new Date(d.checkDate));
 	        }},
-	        { field: 'clockIn', title: '上班打卡时间', align: 'center', width: 220, templet: function(d){
+	        { field: 'clockIn', title: '上班打卡时间', align: 'center', width: 220, templet: function (d) {
 	        	var time = d.clockIn;
 	        	if(d.clockInState == '0'){
 	        		time += "  ( <span class='state-down'>系统填充</span> )";
@@ -48,7 +48,7 @@ layui.config({
 	        	}
 	        	return time;
 	        }},
-	        { field: 'clockOut', title: '下班打卡时间', align: 'center', width: 220, templet: function(d){
+	        { field: 'clockOut', title: '下班打卡时间', align: 'center', width: 220, templet: function (d) {
 	        	var time = d.clockOut;
 	        	if(d.clockOutState == '0'){
 	        		time += "  ( <span class='state-down'>系统填充</span> )";
@@ -68,7 +68,7 @@ layui.config({
 	        	return time;
 	        }},
 	        { field: 'workHours', title: '工时', align: 'center', width: 110},
-	        { field: 'state', title: '考勤状态', align: 'center', width: 160, templet: function(d){
+	        { field: 'state', title: '考勤状态', align: 'center', width: 160, templet: function (d) {
 	        	if(d.state == '0'){
 	        		return "<span class='state-up'>早卡</span>";
 	        	}else if(d.state == '1'){

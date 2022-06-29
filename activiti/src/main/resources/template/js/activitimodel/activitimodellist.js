@@ -29,7 +29,7 @@ layui.config({
 	        { field: 'key', title: '编码', width: 120 },
 			{ field: 'processKey', title: 'key', width: 250 },
 	        { field: 'version', title: '版本', width: 80},
-	        { field: 'deploymentId', title: '发布状态', align: "center", width: 80, templet: function(d){
+	        { field: 'deploymentId', title: '发布状态', align: "center", width: 80, templet: function (d) {
 	        	if(isNull(d.deploymentId)){
 	        		return "<span class='state-new'>未发布</span>";
 	        	} else {

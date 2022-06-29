@@ -13,11 +13,7 @@ layui.config({
 		table = layui.table,
 		laydate = layui.laydate;
 	
-	laydate.render({
-		elem: '#year', //指定元素
-		type: 'year',
-		max: 'date'
-	});
+	laydate.render({elem: '#year', type: 'year', max: 'date'});
 
 	// 获取当前登陆用户所属的学校列表
 	schoolUtil.queryMyBelongSchoolList(function (json) {
@@ -66,7 +62,7 @@ layui.config({
 		        { field: 'sessionYear', rowspan: '2', width: 80, align: 'center', title: '所属届'},
 	            { field: 'schoolName', rowspan: '2', width: 150, title: '学校'},
 	            { field: 'gradeName', rowspan: '2', width: 80, align: 'center', title: '年级'},
-	            { field: 'surveyName', rowspan: '2', width: 200, title: '试卷名称', templet: function(d){
+	            { field: 'surveyName', rowspan: '2', width: 200, title: '试卷名称', templet: function (d) {
 			        return '<a lay-event="details" class="notice-title-click">' + d.surveyName + '</a>';
 			    }},
             	{ title: '阅卷信息', align: 'center', colspan: '3'},

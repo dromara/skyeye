@@ -44,7 +44,7 @@ layui.config({
 	        },
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
-		        { field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function(d){
+		        { field: 'name', title: '商品名称', rowspan: '2', align: 'left', width: 150, templet: function (d) {
 			        	return '<a lay-event="details" class="notice-title-click">' + d.name + '</a>';
 			    }},
 		        { field: 'model', title: '型号', rowspan: '2', align: 'left', width: 150 },

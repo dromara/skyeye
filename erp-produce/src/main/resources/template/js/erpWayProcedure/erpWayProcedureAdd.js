@@ -38,7 +38,7 @@ layui.config({
 	        },
 	        cols: [[
 	            { type: 'checkbox', align: 'center' },
-	            { field: 'number', title: '工序编号', align: 'left', width: 120, templet: function(d){
+	            { field: 'number', title: '工序编号', align: 'left', width: 120, templet: function (d) {
 			        return '<input type="text" id="procedureId' + d.id + '" placeholder="请选择工序" class="layui-input" readonly="readonly" ' +
 			        		'value="' + (isNull(d.number) ? "" : d.number) + '"/>' + 
 		        			'<i class="fa fa-plus-circle input-icon chooseProcedureBtn" style="top: 8px;"></i>';
@@ -46,7 +46,7 @@ layui.config({
 	            { field: 'procedureName', title: '工序名称', align: 'left', width: 120},
 	            { field: 'unitPrice', title: '加工单价', align: 'left', width: 120},
 	            { field: 'departmentName', title: '加工部门', align: 'left', width: 120},
-	            { field: 'farmId', title: '加工车间', align: 'left', width: 120, templet: function(d){
+	            { field: 'farmId', title: '加工车间', align: 'left', width: 120, templet: function (d) {
 			        return '<input type="text" id="farmId' + d.id + '" placeholder="请选择车间" class="layui-input" readonly="readonly" ' + 
 			        		'value="' + (isNull(d.farmName) ? "" : d.farmName) + '"/>' + 
 		        			'<i class="fa fa-plus-circle input-icon chooseFarmBtn" style="top: 8px;"></i>';

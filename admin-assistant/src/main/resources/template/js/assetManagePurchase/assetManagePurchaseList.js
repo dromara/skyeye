@@ -34,14 +34,14 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'title', title: '标题', width: 300, templet: function(d){
+			{ field: 'title', title: '标题', width: 300, templet: function (d) {
 				return '<a lay-event="caigouDedails" class="notice-title-click">' + d.title + '</a>';
 			}},
 			{ field: 'oddNum', title: '单号', width: 200 },
-			{ field: 'processInstanceId', title: '流程ID', width: 100, templet: function(d){
+			{ field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
 				return '<a lay-event="caigouProcessDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
-			{ field: 'stateName', title: '状态', width: 90, templet: function(d){
+			{ field: 'stateName', title: '状态', width: 90, templet: function (d) {
 				if(d.state == '0'){
 					return "<span>" + d.stateName + "</span>";
 				}else if(d.state == '1'){

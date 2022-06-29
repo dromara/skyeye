@@ -31,7 +31,7 @@ layui.config({
 	    		    { type: 'radio'},
 					{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 					{ field: 'userName', title: '审批人', width: 100 },
-					{ field: 'userSex', title: '性别', width: 60, templet: function(d){
+					{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
 			        	if(d.userSex == '0'){
 			        		return "保密";
 			        	}else if(d.userSex == '1'){

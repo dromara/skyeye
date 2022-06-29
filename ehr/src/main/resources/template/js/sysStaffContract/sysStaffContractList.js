@@ -30,7 +30,7 @@ layui.config({
             { field: 'endTime', title: '结束日期', align: 'center', width: 100},
             { field: 'typeName', title: '合同类别', width: 120},
             { field: 'moldName', title: '合同类型', width: 120},
-            { field: 'contractState', title: '状态', align: 'left', width: 80, templet: function(d){
+            { field: 'contractState', title: '状态', align: 'left', width: 80, templet: function (d) {
                 if(d.contractState == '1'){
                     return "待签约";
                 }else if(d.contractState == '2'){
@@ -41,7 +41,7 @@ layui.config({
             }},
             { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
             { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-            { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+            { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
                 if(d.state == '1'){
                     return "在职";
                 }else if(d.state == '2'){

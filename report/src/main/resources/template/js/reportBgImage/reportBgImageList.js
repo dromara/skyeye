@@ -28,7 +28,7 @@ layui.config({
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 			{ field: 'title', title: '标题', align: 'left', width: 150 },
-			{ field: 'logo', title: '背景图', align: 'center', width: 120, templet: function(d){
+			{ field: 'logo', title: '背景图', align: 'center', width: 120, templet: function (d) {
 				return '<img src="' + fileBasePath + d.imagePath + '" class="cursor" lay-event="printsPicUrl">';
 			}},
 			{ field: 'firstTypeName', title: '一级分类', align: 'left', width: 120 },

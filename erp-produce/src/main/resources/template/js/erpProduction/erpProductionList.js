@@ -28,14 +28,14 @@ layui.config({
         limit: getLimit(),
         cols: [[
         	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'defaultNumber', title: '生产单号', align: 'center', width: 200, templet: function(d){
+            { field: 'defaultNumber', title: '生产单号', align: 'center', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		    }},
             { field: 'salesOrderNum', width: 200, title: '关联销售单', align: 'center'},
             { field: 'materialName', width: 150, title: '商品名称'},
             { field: 'materialModel', width: 150, title: '商品型号'},
             { field: 'number', width: 80, title: '计划数量'},
-	        { field: 'stateName', width: 80, align: 'center', title: '状态', templet: function(d){
+	        { field: 'stateName', width: 80, align: 'center', title: '状态', templet: function (d) {
 		        if(d.state == 1){
 	        		return "<span class='state-new'>" + d.stateName + "</span>";
 	        	}else if(d.state == 2){

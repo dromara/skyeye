@@ -32,7 +32,7 @@ layui.config({
 		        { field: 'custodyPlace', title: '档案保管地', width: 150},
 		        { field: 'archivesCenter', title: '档案室', width: 150},
 		        { field: 'educationName', title: '档案学历', width: 120},
-                { field: 'archivesState', title: '状态', width: 60, align: 'center', templet: function(d){
+                { field: 'archivesState', title: '状态', width: 60, align: 'center', templet: function (d) {
                     if(d.archivesState == '1'){
                         return "<span class='state-new'>有效</span>";
                     }else if(d.archivesState == '2'){
@@ -41,7 +41,7 @@ layui.config({
                 }},
                 { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
                 { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
                     if(d.state == '1'){
                         return "在职";
                     }else if(d.state == '2'){

@@ -26,10 +26,10 @@ layui.config({
 	    limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'inoutitemName', title: '名称', align: 'left', width: 200,templet: function(d){
+            { field: 'inoutitemName', title: '名称', align: 'left', width: 200,templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.inoutitemName + '</a>';
             }},
-            { field: 'inoutitemType', title: '类型', align: 'center', width: 100, templet: function(d){
+            { field: 'inoutitemType', title: '类型', align: 'center', width: 100, templet: function (d) {
                 if(d.inoutitemType == '1'){
                     return "<span class='state-up'>收入</span>";
                 }else if(d.inoutitemType == '2'){

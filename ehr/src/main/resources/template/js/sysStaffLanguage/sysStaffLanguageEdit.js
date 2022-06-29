@@ -24,10 +24,7 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){},
 		 	ajaxSendAfter:function (json) {
-		 		laydate.render({ 
-		 			elem: '#getTime',
-		 	 		trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#getTime', trigger: 'click'});
 		 		
 		 		// 语种
 				showGrid({

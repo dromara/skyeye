@@ -11,7 +11,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
     winui.renderColor();
-
     var $ = layui.$,
         form = layui.form,
         laydate = layui.laydate,
@@ -40,11 +39,7 @@ layui.config({
 	    return lastY + "-" + (lastM < 10 ? "0" + lastM : lastM) + "-" + (lastD < 10 ? "0" + lastD : lastD);
 	}
         
-    laydate.render({
-		elem: '#operTime', //指定元素
-		range: '~',
-		value: startTime + " ~ " + endTime//初始化统计日期
-	});
+    laydate.render({elem: '#operTime', range: '~', value: startTime + " ~ " + endTime});
 	
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	
@@ -76,7 +71,7 @@ layui.config({
 	        limit: 8,
 	        cols: [[
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function(d){
+	            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function (d) {
 			        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 			        if(!isNull(d.linkNumber)){
 			        	str += '<span class="state-new">[转]</span>';

@@ -47,10 +47,10 @@ layui.config({
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 		        { field: 'name', title: '名称', align: 'left', width: 160 },
-		        { field: 'typeId', title: '字典类型', rowspan: 2, width: 150, templet: function(d){
+		        { field: 'typeId', title: '字典类型', rowspan: 2, width: 150, templet: function (d) {
                     return typeList[d.typeId];
                 }},
-                { field: 'state', title: '状态', rowspan: 2, width: 90, templet: function(d){
+                { field: 'state', title: '状态', rowspan: 2, width: 90, templet: function (d) {
                     if(d.state == '1'){
                         return "<span class='state-new'>启用</span>";
                     }else if(d.state == '2'){

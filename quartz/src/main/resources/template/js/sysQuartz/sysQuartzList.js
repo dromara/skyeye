@@ -27,7 +27,7 @@ layui.config({
                 { field: 'groups', title: '任务分组', align: 'left', width: 120 },
                 { field: 'cron', title: 'CRON表达式', width: 180 },
                 { field: 'quartzKey', title: '任务Key', width: 160 },
-                { field: 'runHistoryBtn', title: '执行历史', align: "center", width: 120, templet: function(d){
+                { field: 'runHistoryBtn', title: '执行历史', align: "center", width: 120, templet: function (d) {
                     return '<a lay-event="runHistoryBtnDetail" class="notice-title-click">执行历史</a>';
                 } },
                 { field: 'remark', title: '备注', align: 'left', width: 200 },

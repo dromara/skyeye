@@ -45,7 +45,7 @@ layui.config({
             { field: 'keepfiStoreName', title: '保养门店', width: 150 },
             { field: 'mealAllSinglePrice', title: '往来费用', align: 'center', width: 100},
             { field: 'intercourseTime', title: '往来时间', width: 120 },
-            { field: 'state', title: '状态', align: 'center', width: 80, templet: function(d){
+            { field: 'state', title: '状态', align: 'center', width: 80, templet: function (d) {
                 if(d.state == 1){
                     return "<span class='state-down'>待支付</span>";
                 } else {

@@ -26,7 +26,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'groupName', title: '分组名称', align: 'left', width: 120 },
-	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-new'>新建</span>";
 	        	}else if(d.state == '2'){

@@ -26,12 +26,12 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'title', title: '主题', align: 'left', width: 250, templet: function(d){
+	        { field: 'title', title: '主题', align: 'left', width: 250, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 	        }},
 	        { field: 'projectName', title: '所属项目', align: 'left', width: 120},
 	        { field: 'userName', title: '报销人', align: 'left', width: 80},
-	        { field: 'stateName', title: '状态', width: 90, templet: function(d){
+	        { field: 'stateName', title: '状态', width: 90, templet: function (d) {
 	        	if(d.state == 0){
 	        		return "<span>草稿</span>";
 	        	}else if(d.state == 1){
@@ -48,7 +48,7 @@ layui.config({
 	        }},
 	        { field: 'allPrice', title: '报销费用', align: 'left', width: 100},
 	        { field: 'reimbursementTime', title: '填报时间', align: 'left', width: 100},
-	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function(d){
+	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
 	        	if(!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        	} else {

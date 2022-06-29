@@ -50,7 +50,7 @@ layui.config({
 		    	{ type: 'checkbox'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 				{ field: 'departmentName', title: '部门名称', width: 300 },
-				{ field: 'id', title: '部门简介', width: 80, align: 'center', templet: function(d){
+				{ field: 'id', title: '部门简介', width: 80, align: 'center', templet: function (d) {
 					return '<i class="fa fa-fw fa-html5 cursor" lay-event="departmentDesc"></i>';
 				}},
 				{ field: 'jobNum', title: '职位数', width: 120 },

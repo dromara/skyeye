@@ -27,7 +27,7 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'appealName', title: '名称', align: 'left', width: 120 },
-	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 	        	if(d.state == '2'){
 	        		return "<span class='state-down'>线下</span>";
 	        	}else if(d.state == '1'){

@@ -37,21 +37,21 @@ layui.config({
 	        { field: 'contentName', title: '展现形式', width: 120 },
 	        { field: 'propertyValueNum', title: '属性值数量', width: 100 },
 	        { field: 'useNum', title: '使用数量', width: 100 },
-	        { field: 'id', title: 'HTML内容', width: 100, templet: function(d){
+	        { field: 'id', title: 'HTML内容', width: 100, templet: function (d) {
 	        	if(!isNull(d.htmlContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
-	        { field: 'id', title: 'JS内容', width: 80, templet: function(d){
+	        { field: 'id', title: 'JS内容', width: 80, templet: function (d) {
 	        	if(!isNull(d.jsContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
-	        { field: 'id', title: 'JS依赖文件', width: 120, templet: function(d){
+	        { field: 'id', title: 'JS依赖文件', width: 120, templet: function (d) {
 	        	if(!isNull(d.jsRelyOn)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsRelyOn"></i>';
 	        	} else {

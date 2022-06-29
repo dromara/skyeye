@@ -25,10 +25,10 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'title', title: '标题', width: 350, templet: function(d){
+			{ field: 'title', title: '标题', width: 350, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			}},
-			{ field: 'lavel', title: '标签', align: 'left', width: 250, templet: function(d){
+			{ field: 'lavel', title: '标签', align: 'left', width: 250, templet: function (d) {
 				var lavel = isNull(d.label) ? [] : d.label.split(',');
 				var str = "";
 				$.each(lavel, function(i, item){

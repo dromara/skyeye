@@ -52,7 +52,7 @@ layui.config({
 			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 			        { field: 'name', title: '名称', align: 'left', width: 100 },
 			        { field: 'relationshipName', title: '与本人关系', width: 100},
-			        { field: 'sex', title: '性别', width: 80, templet: function(d){
+			        { field: 'sex', title: '性别', width: 80, templet: function (d) {
 	                    if(d.sex == '0'){
 	                        return "保密";
 	                    }else if(d.sex == '1'){
@@ -68,7 +68,7 @@ layui.config({
 	                { field: 'job', title: '职务', width: 120},
 	                { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
 	                { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
 	                    }else if(d.state == '2'){
@@ -108,7 +108,7 @@ layui.config({
 	                { field: 'educationName', title: '学历', align: 'left', width: 120 },
 	                { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
 	                { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
 	                    }else if(d.state == '2'){
@@ -151,7 +151,7 @@ layui.config({
 	                { field: 'endTime', title: '任职结束时间', align: 'center', width: 100 },
 	                { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
 	                { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-	            	{ field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+	            	{ field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
 	                    }else if(d.state == '2'){
@@ -189,7 +189,7 @@ layui.config({
 			        { field: 'getTime', title: '获取时间', align: 'center', width: 100},
 	                { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
 	                { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
 	                    }else if(d.state == '2'){
@@ -228,7 +228,7 @@ layui.config({
 	                { field: 'issueOrgan', title: '签发机构', width: 120},
 	                { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
 	                { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
 	                    }else if(d.state == '2'){
@@ -241,7 +241,7 @@ layui.config({
 	                        return "退休";
 	                    }
 	                }},
-	                { field: 'validityType', title: '有效期类型', align: 'left', width: 100, templet: function(d){
+	                { field: 'validityType', title: '有效期类型', align: 'left', width: 100, templet: function (d) {
 	                    if(d.validityType == '1'){
 	                        return "永久有效";
 	                    }else if(d.validityType == '2'){
@@ -279,7 +279,7 @@ layui.config({
 	                { field: 'desc', title: '备注', align: 'left', width: 160 },
 	                { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
 	                { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
 	                    }else if(d.state == '2'){
@@ -318,7 +318,7 @@ layui.config({
 			        { field: 'endTime', title: '结束日期', align: 'center', width: 100},
 	                { field: 'typeName', title: '合同类别', width: 120},
 	                { field: 'moldName', title: '合同类型', width: 120},
-	                { field: 'contractState', title: '状态', align: 'left', width: 80, templet: function(d){
+	                { field: 'contractState', title: '状态', align: 'left', width: 80, templet: function (d) {
 	                    if(d.contractState == '1'){
 	                        return "待签约";
 	                    }else if(d.contractState == '2'){
@@ -329,7 +329,7 @@ layui.config({
 	                }},
 	                { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
 	                { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
-	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function(d){
+	                { field: 'state', title: '员工状态', align: 'center', width: 80, templet: function (d) {
 	                    if(d.state == '1'){
 	                        return "在职";
 	                    }else if(d.state == '2'){

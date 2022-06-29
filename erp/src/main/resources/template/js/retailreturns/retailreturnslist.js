@@ -15,10 +15,7 @@ layui.config({
     authBtn('1571814098548');//新增
     authBtn('1572242758657');//导出
         
-    laydate.render({
-		elem: '#operTime', //指定元素
-		range: '~'
-	});
+    laydate.render({elem: '#operTime', range: '~'});
         
     table.render({
         id: 'messageTable',
@@ -32,12 +29,12 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
-            { field: 'defaultNumber', title: '单据编号', align: 'left', rowspan: '2', width: 200, templet: function(d){
+            { field: 'defaultNumber', title: '单据编号', align: 'left', rowspan: '2', width: 200, templet: function (d) {
 		        return '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		    }},
             { field: 'supplierName', title: '会员', align: 'left', rowspan: '2', width: 150},
             { title: '审批模式', align: 'center', colspan: '2'},
-            { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function(d){
+            { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function (d) {
                 return activitiUtil.showStateName(d.state, d.submitType);
             }},
             { field: 'totalPrice', title: '合计金额', align: 'left', rowspan: '2', width: 120},
@@ -46,10 +43,10 @@ layui.config({
             { field: 'operTime', title: '单据日期', align: 'center', rowspan: '2', width: 140 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', rowspan: '2', align: 'center', width: 200, toolbar: '#tableBar'}
         ],[
-            { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function(d){
+            { field: 'submitType', title: '提交模式', align: 'left', width: 120, templet: function (d) {
                 return erpOrderUtil.getSubmitTypeName(d);
             }},
-            { field: 'processInstanceId', title: '流程实例id', align: 'left', width: 120, templet: function(d){
+            { field: 'processInstanceId', title: '流程实例id', align: 'left', width: 120, templet: function (d) {
                 return erpOrderUtil.getProcessInstanceIdBySubmitType(d);
             }}
         ]],

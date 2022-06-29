@@ -28,11 +28,7 @@ layui.config({
 		 return year.toString() + "-" + month.toString();
 	}
 	
-    laydate.render({
-		elem: '#operTime', //指定元素
-		type: 'month',
-		value: operTime
-	});
+    laydate.render({elem: '#operTime', type: 'month', value: operTime});
 	
 	//初始化数据
 	initTable();
@@ -49,7 +45,7 @@ layui.config({
 	        limit: 8,
 	        cols: [[
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function(d){
+	            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function (d) {
 			        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 			        if(!isNull(d.linkNumber)){
 			        	str += '<span class="state-new">[转]</span>';

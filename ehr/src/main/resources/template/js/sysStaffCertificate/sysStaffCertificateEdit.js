@@ -24,15 +24,9 @@ layui.config({
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){},
 		 	ajaxSendAfter:function (json) {
-		 		laydate.render({ 
-		 			elem: '#issueTime',
-		 	 		trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#issueTime', trigger: 'click'});
 		 		
-		 		laydate.render({ 
-		 			elem: '#validityTime',
-		 	 		trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#validityTime', trigger: 'click'});
 			    
 			    $("#validityType").val(json.bean.validityType);
 				// 附件回显

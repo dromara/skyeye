@@ -13,12 +13,8 @@ layui.config({
 	    	laydate = layui.laydate,
 	    	textool = layui.textool;
 
-	    //跟单时间
-		laydate.render({
-			elem : '#documentaryTime',
-			type : 'datetime',
-			trigger : 'click'
-		});
+	    // 跟单时间
+		laydate.render({elem : '#documentaryTime', type : 'datetime', trigger : 'click'});
 		
 		textool.init({eleId: 'detail', maxlength: 200});
 

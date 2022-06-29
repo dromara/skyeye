@@ -21,7 +21,7 @@ layui.config({
         limit: 8,
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function(d){
+	        { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function (d) {
 		        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		        if(!isNull(d.linkNumber)){
 		        	str += '<span class="state-new">[转]</span>';
@@ -35,7 +35,7 @@ layui.config({
 		    }},
 		    { field: 'subTypeName', title: '单据类型', align: 'left', width: 100},
 	        { field: 'unitPrice', title: '单价(元)', align: 'left', width: 100 },
-	        { field: 'operNumber', title: '数量', align: 'left', width: 80, templet: function(d){
+	        { field: 'operNumber', title: '数量', align: 'left', width: 80, templet: function (d) {
 	        	if(d.subType == 12){//拆分单
 	        		if(d.mType == 2){//普通子件
 	        			return d.operNumber;

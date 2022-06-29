@@ -41,15 +41,15 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'jobTitle', title: '主题', width: 250, templet: function(d){
+		        { field: 'jobTitle', title: '主题', width: 250, templet: function (d) {
 		        	return '<a lay-event="reading" class="notice-title-click">' + d.jobTitle + '</a>';
 	       		}},
 		        { field: 'typeName', title: '日志类型', align: 'center', width: 110},
 		        { field: 'createTime', title: '发件时间', align: 'center', width: 130 },
-		        { title: '星期几', align: 'center', width: 100, templet: function(d){
+		        { title: '星期几', align: 'center', width: 100, templet: function (d) {
 		        	return getMyDay(new Date(d.createTime));
 		        }},
-		        { field: 'state', title: '发件状态', align: 'center', width: 130, templet: function(d){
+		        { field: 'state', title: '发件状态', align: 'center', width: 130, templet: function (d) {
 		        	if(d.state == 1){
 		        		return "已发送";
 		        	}else if(d.state == 2){

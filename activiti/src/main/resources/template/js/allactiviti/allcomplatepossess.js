@@ -27,7 +27,7 @@ layui.config({
 	        { field: 'taskType', title: '类型', width: 100 },
 	        { field: 'createName', title: '申请人', width: 120},
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
-	        { field: 'name', title: '当前节点', width: 130, templet: function(d){
+	        { field: 'name', title: '当前节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},
 	        { field: 'agencyName', title: '审批人', width: 120},

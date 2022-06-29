@@ -24,20 +24,20 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
-            { field: 'title', title: '套餐名称', align: 'left', width: 200, fixed: 'left', templet: function(d){
+            { field: 'title', title: '套餐名称', align: 'left', width: 200, fixed: 'left', templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.title + '</a>';
             }},
-            { field: 'logo', title: 'LOGO', align: 'center', width: 60, templet: function(d){
+            { field: 'logo', title: 'LOGO', align: 'center', width: 60, templet: function (d) {
                 return '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="logo">';
             }},
             { field: 'mealNum', title: '可使用次数', width: 120 },
-            { field: 'type', title: '套餐分类', width: 100, align: "center", templet: function(d){
+            { field: 'type', title: '套餐分类', width: 100, align: "center", templet: function (d) {
                 if(d.type == 1){
                     return "保养套餐";
                 }
                 return "-";
             }},
-            { field: 'state', title: '状态', width: 80, align: "center", templet: function(d){
+            { field: 'state', title: '状态', width: 80, align: "center", templet: function (d) {
                 if(d.state == 1){
                     return "下线";
                 } else {

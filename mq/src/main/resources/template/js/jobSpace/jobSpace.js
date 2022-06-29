@@ -58,11 +58,11 @@ layui.config({
 		    limit: 15,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function(d){
+		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
 		        { field: 'jobTypeName', title: '任务类型', align: 'left', width: 120 },
-		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function(d){
+		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function (d) {
 		        	if(d.status == '1'){
 		        		return "等待处理";
 		        	}else if(d.status == '2'){
@@ -77,7 +77,7 @@ layui.config({
 		        		return "参数错误";
 		        	}
 		        }},
-		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function(d){
+		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function (d) {
 		        	if(d.status == '4'){
 		        		var js = JSON.parse(d.responseBody);
 		        		var point = js.filePath.lastIndexOf(".");
@@ -145,11 +145,11 @@ layui.config({
 		    limit: 15,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function(d){
+		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
 		        { field: 'jobTypeName', title: '任务类型', align: 'left', width: 120 },
-		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function(d){
+		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function (d) {
 		        	if(d.status == '1'){
 		        		return "等待处理";
 		        	}else if(d.status == '2'){
@@ -164,7 +164,7 @@ layui.config({
 		        		return "参数错误";
 		        	}
 		        }},
-		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function(d){
+		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function (d) {
 		        	return '';
 		        }},
 		        { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },
@@ -201,11 +201,11 @@ layui.config({
 		    limit: 15,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function(d){
+		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
 		        { field: 'jobTypeName', title: '任务类型', align: 'left', width: 120 },
-		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function(d){
+		        { field: 'status', title: '状态', align: 'left', width: 100, templet: function (d) {
 		        	if(d.status == '1'){
 		        		return "等待处理";
 		        	}else if(d.status == '2'){
@@ -220,7 +220,7 @@ layui.config({
 		        		return "参数错误";
 		        	}
 		        }},
-		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function(d){
+		        { field: 'test', title: '备注', align: 'left', width: 200, templet: function (d) {
 		        	return '';
 		        }},
 		        { field: 'userName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },

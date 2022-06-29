@@ -30,10 +30,10 @@ layui.config({
     	limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'roomName', title: '名称', align: 'left', width: 170, templet: function(d){
+	        { field: 'roomName', title: '名称', align: 'left', width: 170, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.roomName + '</a>';
 	        }},
-	        { field: 'roomImg', title: '图片', align: 'center', width: 60, templet: function(d){
+	        { field: 'roomImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 	        	if(isNull(d.roomImg)){
 	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
 	        	} else {
@@ -41,7 +41,7 @@ layui.config({
 	        	}
 	        }},
 	        { field: 'roomNum', title: '会议室编号', align: 'center', width: 170 },
-	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function(d){
+	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 	        	if(d.state == '1'){
 	        		return "<span class='state-up'>正常</span>";
 	        	}else if(d.state == '2'){

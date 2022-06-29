@@ -26,15 +26,15 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'title', title: '标题', align: 'left', width: 150, templet: function(d){
+            { field: 'title', title: '标题', align: 'left', width: 150, templet: function (d) {
                 return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
             }},
-            { field: 'logo', title: 'LOGO', align: 'center', width: 180, height: 60, templet: function(d){
+            { field: 'logo', title: 'LOGO', align: 'center', width: 180, height: 60, templet: function (d) {
                 return '<img src="' + fileBasePath + d.logo + '" style="height:60px" class="cursor" lay-event="printsPicUrl">';
             }},
             { field: 'defaultWidth', title: '默认宽度', align: 'center', width: 120 },
             { field: 'defaultHeight', title: '默认高度', align: 'center', width: 120 },
-            { field: 'state', title: '状态', align: 'center', width: 120, templet: function(d){
+            { field: 'state', title: '状态', align: 'center', width: 120, templet: function (d) {
                 if(d.state == 1){
                     return '未发布';
                 } else {

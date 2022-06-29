@@ -23,30 +23,10 @@ layui.config({
 				// 销售订单状态
 		 		$("#statusName").html(activitiUtil.showStateName(json.bean.state, json.bean.submitType));
 
-				laydate.render({
-					elem: '#lateDesignTime',
-					type: 'datetime',
-					min: json.bean.operTime,
-					trigger: 'click'
-				});
-				laydate.render({
-					elem: '#latePurchaseTime',
-					type: 'datetime',
-					min: json.bean.operTime,
-					trigger: 'click'
-				});
-				laydate.render({
-					elem: '#lateProduceTime',
-					type: 'datetime',
-					min: json.bean.operTime,
-					trigger: 'click'
-				});
-				laydate.render({
-					elem: '#lateQualityTime',
-					type: 'datetime',
-					min: json.bean.operTime,
-					trigger: 'click'
-				});
+				laydate.render({elem: '#lateDesignTime', type: 'datetime', min: json.bean.operTime, trigger: 'click'});
+				laydate.render({elem: '#latePurchaseTime', type: 'datetime', min: json.bean.operTime, trigger: 'click'});
+				laydate.render({elem: '#lateProduceTime', type: 'datetime', min: json.bean.operTime, trigger: 'click'});
+				laydate.render({elem: '#lateQualityTime', type: 'datetime',min: json.bean.operTime, trigger: 'click'});
 		 		matchingLanguage();
 		 		form.render();
 				form.on('submit(formAddBean)', function(data) {

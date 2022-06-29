@@ -33,13 +33,8 @@ layui.config({
 	// 获取单据提交类型
 	var submitType = erpOrderUtil.getSubmitTypeByOrderType(systemOrderType["putIsPurchase"]["orderType"]);
 
-	//单据时间
-	laydate.render({
-		elem: '#operTime',
-		type: 'datetime',
-		value: getFormatDate(),
-		trigger: 'click'
-	});
+	// 单据时间
+	laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
 	textool.init({eleId: 'remark', maxlength: 200});
 

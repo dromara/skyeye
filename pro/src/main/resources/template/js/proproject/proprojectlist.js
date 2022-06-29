@@ -37,12 +37,12 @@ layui.config({
 			limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2},
-		        { field: 'projectName', title: '项目名称', align: 'left', width: 200, rowspan: 2, templet: function(d){
+		        { field: 'projectName', title: '项目名称', align: 'left', width: 200, rowspan: 2, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.projectName + '</a>';
 		        }},
 		        { field: 'typeName', title: '项目分类', align: 'left', rowspan: '2', width: 100},
 		        { title: '完成时间', align: 'center', colspan: '2'},
-		        { field: 'stateName', title: '状态', rowspan: 2, width: 90, templet: function(d){
+		        { field: 'stateName', title: '状态', rowspan: 2, width: 90, templet: function (d) {
 		        	if(d.state == '0'){
 		        		return "<span>" + d.stateName + "</span>";
 		        	}else if(d.state == '1'){
@@ -68,13 +68,13 @@ layui.config({
 		        { field: 'taskNum', title: '任务', align: 'left', rowspan: 2, width: 80 },
 		        { field: 'estimatedWorkload', title: '工作量', align: 'left', rowspan: 2, width: 80 },
 		        { field: 'estimatedCost', title: '成本费用', align: 'left', rowspan: 2, width: 80 },
-		        { field: 'fileNum', title: '文档', align: 'left', rowspan: 2, width: 80, templet: function(d){
+		        { field: 'fileNum', title: '文档', align: 'left', rowspan: 2, width: 80, templet: function (d) {
 	        		return '<a lay-event="fileNumList" class="notice-title-click">' + d.fileNum + '</a>';
 		        }},
-	        	{ field: 'discussNum', title: '讨论板', align: 'left', rowspan: 2, width: 80, templet: function(d){
+	        	{ field: 'discussNum', title: '讨论板', align: 'left', rowspan: 2, width: 80, templet: function (d) {
 	        		return '<a lay-event="discussList" class="notice-title-click">' + d.discussNum + '</a>';
 		        }},
-		        { field: 'processInstanceId', title: '流程ID', align: 'center', rowspan: 2, width: 100, templet: function(d){
+		        { field: 'processInstanceId', title: '流程ID', align: 'center', rowspan: 2, width: 100, templet: function (d) {
 		        	if(!isNull(d.processInstanceId)){
 		        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 		        	} else {

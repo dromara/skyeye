@@ -116,11 +116,11 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '帖子标题', align: 'center', width: 250, templet: function(d){
+		        { field: 'title', title: '帖子标题', align: 'center', width: 250, templet: function (d) {
                     return '<a lay-event="forumdetails" class="notice-title-click">' + d.title + '</a>';
                 }},
 		        { field: 'reportType', title: '举报类型', align: 'center', width: 120 },
-		        { field: 'examineState', title: '状态', width: 100, align: 'center', templet: function(d){
+		        { field: 'examineState', title: '状态', width: 100, align: 'center', templet: function (d) {
 		        	if(d.examineState == '1'){
 		        		return "<span class='state-new'>未审核</span>";
 		        	}else if(d.examineState == '2'){
@@ -272,13 +272,13 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'title', title: '帖子标题', align: 'center', width: 250, templet: function(d){
+		        { field: 'title', title: '帖子标题', align: 'center', width: 250, templet: function (d) {
                     return '<a lay-event="forumdetails" class="notice-title-click">' + d.title + '</a>';
                 }},
 		        { field: 'reportType', title: '举报类型', align: 'center', width: 120 },
 		        { field: 'reportUser', title: '举报人', align: 'center', width: 120},
 		        { field: 'reportTime', title: '举报时间', align: 'center', width: 200},
-		        { field: 'examineState', title: '状态', width: 100, align: 'center', templet: function(d){
+		        { field: 'examineState', title: '状态', width: 100, align: 'center', templet: function (d) {
 		        	if(d.examineState == '1'){
 		        		return "<span class='state-new'>未审核</span>";
 		        	}else if(d.examineState == '2'){

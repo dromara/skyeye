@@ -58,13 +58,13 @@ layui.config({
 	        cols: [[
 	        	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	            { field: 'schoolName', width: 200, title: '学校'},
-	            { field: 'className', width: 150, title: '班级', align: 'center', templet: function(d){
+	            { field: 'className', width: 150, title: '班级', align: 'center', templet: function (d) {
 	        		return d.sessionYear + '届' + d.gradeName + d.className;
 		        }},
-	            { field: 'limitNumber', width: 80, align: 'center', title: '限制人数', templet: function(d){
+	            { field: 'limitNumber', width: 80, align: 'center', title: '限制人数', templet: function (d) {
 	        		return d.limitNumber + '人';
 		        }},
-		        { field: 'actualNumber', width: 80, align: 'center', title: '实际人数', templet: function(d){
+		        { field: 'actualNumber', width: 80, align: 'center', title: '实际人数', templet: function (d) {
 	        		return d.actualNumber + '人';
 		        }},
 	            { field: 'floorName', width: 120, title: '教学楼'}

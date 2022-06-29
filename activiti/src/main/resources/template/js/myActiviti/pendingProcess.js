@@ -32,16 +32,16 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'processInstanceId', title: '流程ID', width: 280, templet: function(d){
+	        { field: 'processInstanceId', title: '流程ID', width: 280, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
 	        { field: 'taskType', title: '类型', width: 150 },
 	        { field: 'createName', title: '申请人', width: 120},
 	        { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
-	        { field: 'name', title: '当前节点', width: 130, templet: function(d){
+	        { field: 'name', title: '当前节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},
-	        { field: 'suspended', title: '状态<i id="stateDesc" class="fa fa-question-circle" style="margin-left: 5px"></i>', align: 'center', width: 130, templet: function(d){
+	        { field: 'suspended', title: '状态<i id="stateDesc" class="fa fa-question-circle" style="margin-left: 5px"></i>', align: 'center', width: 130, templet: function (d) {
 	        	if(d.suspended){
 	        		return "<span class='state-down'>挂起</span>";
 	        	} else {

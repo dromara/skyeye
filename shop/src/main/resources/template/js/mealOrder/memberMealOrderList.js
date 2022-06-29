@@ -28,26 +28,26 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
-            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function(d){
+            { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
             }},
             { field: 'contacts', title: '会员名称', width: 100 },
             { field: 'phone', title: '会员手机号', width: 100, align: "center"},
             { field: 'payablePrice', title: '应付金额', width: 100, align: "left"},
             { field: 'payPrice', title: '实付金额', width: 100, align: "left"},
-            { field: 'state', title: '订单状态', width: 80, align: "center", templet: function(d){
+            { field: 'state', title: '订单状态', width: 80, align: "center", templet: function (d) {
                 return shopUtil.getMealOrderStateName(d);
             }},
             { field: 'natureName', title: '订单性质', width: 80, align: "center"},
             { field: 'payTime', title: '支付时间', align: 'center', width: 150 },
-            { field: 'type', title: '订单来源', width: 80, align: "center", templet: function(d){
+            { field: 'type', title: '订单来源', width: 80, align: "center", templet: function (d) {
                 if(d.type == 1){
                     return "线上下单";
                 } else {
                     return "线下下单";
                 }
             }},
-            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function(d){
+            { field: 'whetherGive', title: '是否赠送', width: 100, align: "center", templet: function (d) {
                 return shopUtil.getMealOrderWhetherGiveName(d);
             }},
             { field: 'createName', title: '专属顾问', width: 120 },

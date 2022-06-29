@@ -38,7 +38,7 @@ layui.config({
             { field: 'jobName', title: '面试岗位', width: 150 },
             { field: 'interviewTime', title: '面试时间', width: 140, align: 'center' },
             { field: 'interviewer', title: '面试官', width: 140 },
-            { field: 'state', title: '面试状态', width: 160, templet: function(d){
+            { field: 'state', title: '面试状态', width: 160, templet: function (d) {
                 return bossUtil.showStateName(d.state);
             }},
             { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 150},

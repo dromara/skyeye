@@ -29,11 +29,11 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
-            { field: 'name', title: '门店', align: 'left', width: 270, fixed: 'left', templet: function(d){
+            { field: 'name', title: '门店', align: 'left', width: 270, fixed: 'left', templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
             }},
             { field: 'areaName', title: '所属区域', width: 120 },
-            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function(d){
+            { field: 'enabled', title: '状态', align: 'center', width: 80, templet: function (d) {
                 return shopUtil.getEnableStateName(d.enabled);
             }},
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },

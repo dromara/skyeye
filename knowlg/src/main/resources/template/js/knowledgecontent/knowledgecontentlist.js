@@ -28,10 +28,10 @@ layui.config({
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'title', title: '标题', width: 350, templet: function(d){
+			{ field: 'title', title: '标题', width: 350, templet: function (d) {
 				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			}},
-	        { field: 'state', title: '状态', width: 120, templet: function(d){
+	        { field: 'state', title: '状态', width: 120, templet: function (d) {
 	        	if(d.state == '3'){
 	        		return "<span class='state-down'>审核不通过</span>";
 	        	}else if(d.state == '2'){

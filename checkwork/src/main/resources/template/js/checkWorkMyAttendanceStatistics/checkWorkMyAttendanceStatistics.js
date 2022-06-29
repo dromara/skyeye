@@ -42,7 +42,7 @@ layui.config({
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 		        { field: 'userName', title: '姓名', align: 'left', width: 100},
 		        { field: 'checkDate', title: '考勤日期', align: 'center', width: 100},
-		        { field: 'title', title: '班次', align: 'left', width: 270, templet: function(d){
+		        { field: 'title', title: '班次', align: 'left', width: 270, templet: function (d) {
 		        	if(isNull(d.timeId)){
 		        		return "";
 		        	}
@@ -52,10 +52,10 @@ layui.config({
 						return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 					}
 		        }},
-		        { title: '星期几', align: 'center', width: 80, templet: function(d){
+		        { title: '星期几', align: 'center', width: 80, templet: function (d) {
 		        	return getMyDay(new Date(d.checkDate));
 		        }},
-		        { field: 'clockIn', title: '上班打卡时间', align: 'center', width: 120, templet: function(d){
+		        { field: 'clockIn', title: '上班打卡时间', align: 'center', width: 120, templet: function (d) {
 		        	var time = d.clockIn;
 		        	if(d.clockInState == '0'){
 		        		time += "  ( <span class='state-down'>系统填充</span> )";
@@ -74,7 +74,7 @@ layui.config({
 		        	}
 		        	return time;
 		        }},
-		        { field: 'clockOut', title: '下班打卡时间', align: 'center', width: 120, templet: function(d){
+		        { field: 'clockOut', title: '下班打卡时间', align: 'center', width: 120, templet: function (d) {
 		        	var time = d.clockOut;
 		        	if(d.clockOutState == '0'){
 		        		time += "  ( <span class='state-down'>系统填充</span> )";
@@ -94,7 +94,7 @@ layui.config({
 		        	return time;
 		        }},
 		        { field: 'workHours', title: '工时', align: 'left', width: 80},
-		        { field: 'state', title: '考勤状态', align: 'left', width: 100, templet: function(d){
+		        { field: 'state', title: '考勤状态', align: 'left', width: 100, templet: function (d) {
 		        	if(d.state == '0'){
 		        		return "<span class='state-up'>早卡</span>";
 		        	}else if(d.state == '1'){

@@ -24,7 +24,7 @@ layui.config({
 	    cols: [[
 	    	{ type: 'radio'},
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'wayNumber', title: '工艺编号', align: 'left', width: 100, templet: function(d){
+			{ field: 'wayNumber', title: '工艺编号', align: 'left', width: 100, templet: function (d) {
 					return '<a lay-event="details" class="notice-title-click">' + d.wayNumber + '</a>';
 				}},
 			{ field: 'wayName', title: '工艺名称', align: 'left', width: 250},

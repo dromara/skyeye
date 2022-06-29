@@ -34,7 +34,7 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'sealName', title: '印章名称', width: 170, templet: function(d){
+		        { field: 'sealName', title: '印章名称', width: 170, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.sealName + '</a>';
 		        }},
 		        { field: 'companyName', title: '所属公司', align: 'left', width: 150 },
