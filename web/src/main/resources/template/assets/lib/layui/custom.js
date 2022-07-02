@@ -36,6 +36,7 @@ var customerJS = {
 	"checkWorkUtil": "../../assets/lib/layui/customer/checkWorkUtil.js", // 考勤模块工具类
 	"arrayUtil": "../../assets/lib/layui/customer/arrayUtil.js", // 集合工具类
 	"initTableChooseUtil": "../../assets/lib/layui/customer/tableUtil/initTableChooseUtil.js", // 加载表格选择的表格插件
+	"sysDictDataUtil": "../../assets/lib/layui/customer/sysDictDataUtil.js", // 数据字典插件
 };
 
 //系统基础信息

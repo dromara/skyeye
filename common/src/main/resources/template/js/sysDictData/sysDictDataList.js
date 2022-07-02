@@ -11,14 +11,21 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
+	var selOption = getFileContent('tpl/template/select-option.tpl');
 
-	authBtn('1656731571539');
+	// 加载数据字典分类
+	sysDictDataUtil.queryDictTypeListByStatus(0, function (json) {
+		$("#dictTypeId").html(getDataUseHandlebars(selOption, json));
+		form.render('select');
+	});
+
+	authBtn('1656776769966');
 
 	table.render({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: reqBasePath + 'queryDictTypeList',
+		url: reqBasePath + 'queryDictDataList',
 		where: getTableParams(),
 		even: true,
 		page: true,
@@ -27,22 +34,23 @@ layui.config({
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 			{ field: 'dictName', title: '标题', width: 240 },
-			{ field: 'dictCode', title: 'Code', width: 150 },
-			{ field: 'dictType', title: '字典类型', align: 'center', width: 100, templet: function (d) {
-				if (d.dictType == 1) {
-					return '一级分类';
+			{ field: 'dictTypeName', title: '所属分类', width: 240 },
+			{ field: 'dictSort', title: '排序', width: 60 },
+			{ field: 'isDefault', title: '默认值', align: 'center', width: 80, templet: function (d) {
+				if (d.isDefault == 'Y') {
+					return '是';
 				} else {
-					return '多级分类';
+					return '否';
 				}
 			}},
-			{ field: 'status', title: '状态', align: 'center', width: 100, templet: function (d) {
+			{ field: 'status', title: '状态', align: 'center', width: 80, templet: function (d) {
 				if (d.status == 0) {
 					return "<span class='state-new'>启用</span>";
 				} else if (d.status == 1) {
 					return "<span class='state-down'>禁用</span>";
 				}
 			}},
-			{ field: 'remark', title: '备注', width: 300 },
+			{ field: 'remark', title: '备注', width: 200 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -68,7 +76,7 @@ layui.config({
 	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-			AjaxPostUtil.request({url: reqBasePath + "deleteDictTypeMationById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "deleteDictDataMationById", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				if (json.returnCode == 0) {
 					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					loadTable();
@@ -83,9 +91,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/sysDictType/sysDictTypeEdit.html",
+			url: "../../tpl/sysDictData/sysDictDataEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
-			pageId: "sysDictTypeEdit",
+			pageId: "sysDictDataEdit",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				if (refreshCode == '0') {
@@ -100,9 +108,9 @@ layui.config({
 	// 新增
 	$("body").on("click", "#addBean", function() {
 		_openNewWindows({
-			url: "../../tpl/sysDictType/sysDictTypeAdd.html",
+			url: "../../tpl/sysDictData/sysDictDataAdd.html",
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
-			pageId: "sysDictTypeAdd",
+			pageId: "sysDictDataAdd",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				if (refreshCode == '0') {
@@ -134,9 +142,9 @@ layui.config({
 	function getTableParams(){
 		return {
 			dictName: $("#dictName").val(),
-			dictCode: $("#dictCode").val(),
+			dictTypeId: $("#dictTypeId").val(),
 		};
 	}
 
-	exports('sysDictTypeList', {});
+	exports('sysDictDataList', {});
 });

@@ -10,10 +10,11 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 			textool = layui.textool;
+		var selOption = getFileContent('tpl/template/select-option.tpl');
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "queryDictTypeMationById",
+		 	url: reqBasePath + "queryDictDataMationById",
 		 	params: {id: parent.rowId},
 		 	pagination: false,
 			method: "GET",
@@ -23,6 +24,14 @@ layui.config({
 			},
 		 	ajaxSendAfter: function (json) {
 
+				// 加载数据字典分类
+				sysDictDataUtil.queryDictTypeListByStatus(0, function (data) {
+					$("#dictTypeId").html(getDataUseHandlebars(selOption, data));
+					$("#dictTypeId").val(json.bean.dictTypeId);
+					form.render('select');
+				});
+
+				$("input:radio[name=isDefault][value=" + json.bean.isDefault + "]").attr("checked", true);
 				$("input:radio[name=status][value=" + json.bean.status + "]").attr("checked", true);
 
 				textool.init({eleId: 'remark', maxlength: 200});
@@ -34,12 +43,13 @@ layui.config({
 		 	        	var params = {
 							id: parent.rowId,
 							dictName: $("#dictName").val(),
-							dictCode: $("#dictCode").val(),
+							dictTypeId: $("#dictTypeId").val(),
+							dictSort: $("#dictSort").val(),
+							isDefault: $("input[name='isDefault']:checked").val(),
 							status: $("input[name='status']:checked").val(),
-							dictType: 1,
 							remark: $("#remark").val(),
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "writeDictTypeMation", params: params, type: 'json', method: "POST", callback: function (json) {
+		 	        	AjaxPostUtil.request({url: reqBasePath + "writeDictDataMation", params: params, type: 'json', method: "POST", callback: function (json) {
 		 	        		if (json.returnCode == 0) {
 		 	        			parent.layer.close(index);
 		 	        			parent.refreshCode = '0';
