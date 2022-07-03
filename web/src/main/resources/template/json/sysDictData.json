@@ -1,0 +1,17 @@
+{
+    "employeesPoliticalOutlook": {"name": "员工-政治面貌", "key": "EMPLOYEES_POLITICAL_OUTLOOK"},
+    "employeeEducation": {"name": "员工-学历", "key": "EMPLOYEE_EDUCATION"},
+    "employeeBgAndLearningForm": {"name": "员工-教育背景学习形式", "key": "EMPLOYEE_BG_AND_LEARNING_FORM"},
+    "employeeBgSchoolNature": {"name": "员工-教育背景学校性质", "key": "EMPLOYEE_BG_SCHOOL_NATURE"},
+    "employeeRewardsAndPunishments": {"name": "员工-奖惩分类", "key": "EMPLOYEE_REWARDS_AND_PUNISHMENTS"},
+    "employeeLanguages": {"name": "员工-语种", "key": "EMPLOYEE_LANGUAGES"},
+    "employeeFamilySituation": {"name": "员工-家庭情况", "key": "EMPLOYEE_FAMILY_SITUATION"},
+    "employeeDocumentType": {"name": "员工-证件类型", "key": "EMPLOYEE_DOCUMENT_TYPE"},
+    "employeeContractCategory": {"name": "员工-合同类别", "key": "EMPLOYEE_CONTRACT_CATEGORY"},
+    "employeeContractType": {"name": "员工-合同类型", "key": "EMPLOYEE_CONTRACT_TYPE"},
+    "employeeCertificateType": {"name": "员工-证书类型", "key": "EMPLOYEE_CERTIFICATE_TYPE"},
+
+    "crmDocumentaryType": {"name": "CRM-跟单分类", "key": "CRM_DOCUMENTARY_TYPE"},
+    "crmCustomerType": {"name": "CRM-客户类型", "key": "CRM_CUSTOMER_TYPE"}
+
+}

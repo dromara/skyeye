@@ -9,35 +9,41 @@ layui.config({
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var $ = layui.$;
-		form.render();
 
+		// 系统配置文件
 		jsGetJsonFile("../../configRation.json", function(data){
 			sysMainMation = data;
 			localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
 		});
 
-		// 主动发起多语言文件加载
+		// 多语言文件加载
         jsGetJsonFile("../../json/language.json", function(data) {
             systemLanguage = data;
             localStorage.setItem("systemLanguage", JSON.stringify(data));
         });
 
-		// 主动发起系统单据类型文件加载
+		// 系统单据类型文件加载
 		jsGetJsonFile("../../json/sysOrderType.json", function(data) {
 			systemOrderType = data;
 			localStorage.setItem("systemOrderType", JSON.stringify(data));
 		});
 
-		// 主动发起动态表单关联json文件加载
+		// 动态表单关联json文件加载
 		jsGetJsonFile("../../json/sysDsFormWithCodeType.json", function(data) {
 			sysDsFormWithCodeType = data;
 			localStorage.setItem("sysDsFormWithCodeType", JSON.stringify(data));
 		});
 
-		// 主动发起工作流流程模型关联json文件加载
+		// 工作流流程模型关联json文件加载
 		jsGetJsonFile("../../json/activitiNameKey.json", function(data) {
 			sysActivitiModel = data;
 			localStorage.setItem("sysActivitiModel", JSON.stringify(data));
+		});
+
+		// 数据字典关联json文件加载
+		jsGetJsonFile("../../json/sysDictData.json", function(data) {
+			sysDictData = data;
+			localStorage.setItem("sysDictData", JSON.stringify(data));
 		});
 		
 		// 是否登陆中，默认否
@@ -56,6 +62,7 @@ layui.config({
 		$.cookie('userToken', "", {path: '/' });
 
 		matchingLanguage();
+		form.render();
 		form.on('submit(login)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
  	        	$("#loginBtn").find("i").attr("class", "fa fa-spin fa-spinner fa-fw");

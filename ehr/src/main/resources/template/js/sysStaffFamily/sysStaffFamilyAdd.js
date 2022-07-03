@@ -41,18 +41,8 @@ layui.config({
 	    });
 	    
 	    // 政治面貌
-		showGrid({
-		 	id: "politicId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 1},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	    
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeesPoliticalOutlook"]["key"], 'select', "politicId", form);
+
 	    matchingLanguage();
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {

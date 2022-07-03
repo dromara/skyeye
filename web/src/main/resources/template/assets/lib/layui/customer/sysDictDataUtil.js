@@ -23,4 +23,29 @@ var sysDictDataUtil = {
         }, async: false});
     },
 
+    /**
+     * 获取指定分类下的的数据字典
+     *
+     * @param dictTypeCode 数据字典所属分类的Code
+     * @param callback 回执函数
+     */
+    showDictDataListByDictTypeCode: function (dictTypeCode, showType, showBoxId, form, callback) {
+        var params = {
+            dictTypeCode: dictTypeCode
+        };
+        AjaxPostUtil.request({url: reqBasePath + "queryDictDataListByDictTypeCode", params: params, type: 'json', method: "GET", callback: function(json) {
+            if (json.returnCode == 0) {
+                if (showType == 'select') {
+                    $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+                    form.render('select');
+                }
+                if (typeof (callback) == "function") {
+                    callback(json);
+                }
+            } else {
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            }
+        }, async: false});
+    },
+
 };

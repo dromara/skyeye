@@ -2,6 +2,8 @@
 ## 历史更新资讯
 
 - 2022年
+  - [2022-07-03 云办公系统 skyeye v3.7.18发布](https://mp.weixin.qq.com/s/v9NY_y1xo3QAXcw7JPKe_w)
+  - [2022-06-26 云办公系统 skyeye v3.7.17 前后台框架整改](https://mp.weixin.qq.com/s/uLnAIHF7KZuNsezb7V2yGw)
   - [2022-06-18 云办公系统 skyeye v3.7.16 部分企业版开源](https://mp.weixin.qq.com/s/3-0FZTkcv7xmi9bwpPftcQ)
   - [2022-06-06 云办公系统 skyeye v3.7.15 报表模块更新，新增体验地址](https://mp.weixin.qq.com/s/y46WM-Pj44fdc_HRAHmd5g)
   - [2022-05-26 云办公系统 skyeye v3.7.14 CRM，ERP更新](https://mp.weixin.qq.com/s/MsJ1HmFnlfFHRzh5nDfN3A)

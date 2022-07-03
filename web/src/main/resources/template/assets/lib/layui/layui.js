@@ -78,50 +78,38 @@ MiniSite.JsLoader={
 	}
 };
 
+var lacolMap = {
+	"systemLanguage": "../../json/language.json",
+	"systemOrderType": "../../json/sysOrderType.json",
+	"sysDsFormWithCodeType": "../../json/sysDsFormWithCodeType.json",
+	"sysActivitiModel": "../../json/activitiNameKey.json",
+	"sysDictData": "../../json/sysDictData.json",
+};
+
 // 用户中英文类型
 var languageType = isNull(getCookie("languageType")) ? "zh" : getCookie("languageType");
+
 // 系统中英文
-var systemLanguage;
-if(isNull(localStorage.getItem("systemLanguage"))){
-	jsGetJsonFile("../../json/language.json", function(data) {
-		systemLanguage = data;
-		localStorage.setItem("systemLanguage", JSON.stringify(data));
-	});
-} else {
-	systemLanguage = JSON.parse(unescape(localStorage.getItem("systemLanguage")));
-}
-
+var systemLanguage = getAndWriteLocal('systemLanguage');
 // 系统单据类型
-var systemOrderType;
-if(isNull(localStorage.getItem("systemOrderType"))){
-	jsGetJsonFile("../../json/sysOrderType.json", function(data) {
-		systemOrderType = data;
-		localStorage.setItem("systemOrderType", JSON.stringify(data));
-	});
-} else {
-	systemOrderType = JSON.parse(unescape(localStorage.getItem("systemOrderType")));
-}
-
+var systemOrderType = getAndWriteLocal('systemLanguage');
 // 动态表单关联json文件
-var sysDsFormWithCodeType;
-if(isNull(localStorage.getItem("sysDsFormWithCodeType"))){
-	jsGetJsonFile("../../json/sysDsFormWithCodeType.json", function(data) {
-		sysDsFormWithCodeType = data;
-		localStorage.setItem("sysDsFormWithCodeType", JSON.stringify(data));
-	});
-} else {
-	sysDsFormWithCodeType = JSON.parse(unescape(localStorage.getItem("sysDsFormWithCodeType")));
-}
-
+var sysDsFormWithCodeType = getAndWriteLocal('sysDsFormWithCodeType');
 // 工作流流程模型关联json文件
-var sysActivitiModel;
-if(isNull(localStorage.getItem("sysActivitiModel"))){
-	jsGetJsonFile("../../json/activitiNameKey.json", function(data) {
-		sysActivitiModel = data;
-		localStorage.setItem("sysActivitiModel", JSON.stringify(data));
-	});
-} else {
-	sysActivitiModel = JSON.parse(unescape(localStorage.getItem("sysActivitiModel")));
+var sysActivitiModel = getAndWriteLocal('sysActivitiModel');
+// 数据字典关联json文件
+var sysDictData = getAndWriteLocal('sysDictData');
+
+function getAndWriteLocal(key) {
+	if(isNull(localStorage.getItem(key))){
+		var url = lacolMap[key];
+		jsGetJsonFile(url, function(data) {
+			localStorage.setItem(key, JSON.stringify(data));
+			return data;
+		});
+	} else {
+		return JSON.parse(unescape(localStorage.getItem(key)));
+	}
 }
 
 /**
