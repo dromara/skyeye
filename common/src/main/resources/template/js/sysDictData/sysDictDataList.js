@@ -33,8 +33,8 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'dictName', title: '标题', width: 240 },
-			{ field: 'dictTypeName', title: '所属分类', width: 240 },
+			{ field: 'dictName', title: '标题', width: 200 },
+			{ field: 'dictTypeName', title: '所属分类', width: 200 },
 			{ field: 'dictSort', title: '排序', width: 60 },
 			{ field: 'isDefault', title: '默认值', align: 'center', width: 80, templet: function (d) {
 				if (d.isDefault == 'Y') {

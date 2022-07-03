@@ -26,8 +26,8 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'dictName', title: '标题', width: 240 },
-			{ field: 'dictCode', title: 'Code', width: 150 },
+			{ field: 'dictName', title: '标题', width: 200 },
+			{ field: 'dictCode', title: 'Code', width: 200 },
 			{ field: 'dictType', title: '字典类型', align: 'center', width: 100, templet: function (d) {
 				if (d.dictType == 1) {
 					return '一级分类';
