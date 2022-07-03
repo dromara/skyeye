@@ -56,14 +56,10 @@ var skyeyeEnclosure = {
                 pageId: "enclosureuploadpage",
                 area: ['420px', '420px'],
                 callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        // 重新加载dom对象
-                        skyeyeEnclosure.loadEnclosureHTML(id, btnId, 1);
-                        if(typeof(callback) == "function") {
-                            callback(skyeyeEnclosure.getJSONEnclosureListByBoxId(id));
-                        }
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                    // 重新加载dom对象
+                    skyeyeEnclosure.loadEnclosureHTML(id, btnId, 1);
+                    if(typeof(callback) == "function") {
+                        callback(skyeyeEnclosure.getJSONEnclosureListByBoxId(id));
                     }
                 }});
         });

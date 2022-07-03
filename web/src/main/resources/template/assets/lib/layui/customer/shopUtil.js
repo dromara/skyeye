@@ -49,12 +49,8 @@ var shopUtil = {
      */
     queryMealOrderNatureList: function (callback){
         AjaxPostUtil.request({url: shopBasePath + "queryMealOrderNatureList", params: {enabled: 1}, type: 'json', method: "POST", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -66,12 +62,8 @@ var shopUtil = {
      */
     queryRefundMealOrderReasonList: function (callback){
         AjaxPostUtil.request({url: shopBasePath + "queryUseingMealRefundOrderReasonList", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -149,12 +141,8 @@ var shopUtil = {
      */
     getShopAreaMation: function (callback){
         AjaxPostUtil.request({url: shopBasePath + "queryAreaList", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -166,12 +154,8 @@ var shopUtil = {
      */
     queryStaffBelongAreaList: function (callback){
         AjaxPostUtil.request({url: shopBasePath + "storeStaff004", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -183,12 +167,8 @@ var shopUtil = {
      */
     queryStaffBelongStoreList: function (callback){
         AjaxPostUtil.request({url: shopBasePath + "storeStaff005", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -204,12 +184,8 @@ var shopUtil = {
             return [];
         }
         AjaxPostUtil.request({url: shopBasePath + "queryStoreList", params: {areaId: areaId}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -225,12 +201,8 @@ var shopUtil = {
             page: 1
         };
         AjaxPostUtil.request({url: shopBasePath + "store001", params: params, type: 'json', method: "POST", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -248,12 +220,8 @@ var shopUtil = {
             pageId: "storeStaffChoose",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(shopUtil.staffMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(shopUtil.staffMation);
                 }
             }});
     },

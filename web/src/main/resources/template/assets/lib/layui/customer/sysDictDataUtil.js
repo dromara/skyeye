@@ -13,12 +13,8 @@ var sysDictDataUtil = {
             status: status
         };
         AjaxPostUtil.request({url: reqBasePath + "queryDictTypeListByStatus", params: params, type: 'json', method: "GET", callback: function(json) {
-            if (json.returnCode == 0) {
-                if (typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if (typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -34,19 +30,15 @@ var sysDictDataUtil = {
             dictTypeCode: dictTypeCode
         };
         AjaxPostUtil.request({url: reqBasePath + "queryDictDataListByDictTypeCode", params: params, type: 'json', method: "GET", callback: function(json) {
-            if (json.returnCode == 0) {
-                if (showType == 'select') {
-                    $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
-                    if (!isNull(defaultId)) {
-                        $("#" + showBoxId).val(defaultId);
-                    }
-                    form.render('select');
+            if (showType == 'select') {
+                $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+                if (!isNull(defaultId)) {
+                    $("#" + showBoxId).val(defaultId);
                 }
-                if (typeof (callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                form.render('select');
+            }
+            if (typeof (callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },

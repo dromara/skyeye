@@ -29,12 +29,8 @@ var dsFormUtil = {
             pageId: "dsFormPageListChoose",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(dsFormUtil.dsFormChooseList);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(dsFormUtil.dsFormChooseList);
                 }
             }});
     },
@@ -117,11 +113,7 @@ var dsFormUtil = {
             dsFormObjectRelationId: isNull(dsFormObjectRelationId) ? "" : dsFormObjectRelationId
         };
         AjaxPostUtil.request({url: flowableBasePath + "dsFormObjectRelation006", params: params, method: "GET", type: 'json', callback: function(json) {
-            if(json.returnCode == 0) {
-                dsFormUtil.loadDsFormItem(showBoxId, json);
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            dsFormUtil.loadDsFormItem(showBoxId, json);
         }, async: false});
     },
 
@@ -144,12 +136,8 @@ var dsFormUtil = {
                 item.context = getDataUseHandlebars(item.templateContent, obj);
             }else if(item.associatedDataTypes == 2){//接口
                 AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params:{interfa: item.aData}, type: 'json', callback: function(j){
-                    if(j.returnCode == 0){
-                        var obj = JSON.parse(j.bean.aData);
-                        item.context = getDataUseHandlebars(item.templateContent, obj);
-                    } else {
-                        winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
-                    }
+                    var obj = JSON.parse(j.bean.aData);
+                    item.context = getDataUseHandlebars(item.templateContent, obj);
                 }, async: false});
             }
             var jsonStr = {bean: item};
@@ -211,11 +199,6 @@ var dsFormUtil = {
             objectId: objectId
         }
         AjaxPostUtil.request({url: flowableBasePath + "dsformpage014", params: params, type: 'json', method: "POST", callback: function(json) {
-            if(json.returnCode == 0) {
-
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
         }, async: false});
     },
 
@@ -307,15 +290,11 @@ var dsFormUtil = {
      */
     loadPageShowDetailsByObjectId: function(showBoxId, objectId){
         AjaxPostUtil.request({url: flowableBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function(json) {
-            if(json.returnCode == 0) {
-                $.each(json.rows, function(j, bean) {
-                    var customBoxId = bean.id;
-                    $("#" + showBoxId).append(getDataUseHandlebars(dsFormUtil.customDsFormBox, bean));
-                    dsFormUtil.initSequenceDataDetails(customBoxId, bean.content);
-                });
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            $.each(json.rows, function(j, bean) {
+                var customBoxId = bean.id;
+                $("#" + showBoxId).append(getDataUseHandlebars(dsFormUtil.customDsFormBox, bean));
+                dsFormUtil.initSequenceDataDetails(customBoxId, bean.content);
+            });
         }, async: false});
     },
 
@@ -351,11 +330,7 @@ var dsFormUtil = {
      */
     loadPageToEditByObjectId: function(showBoxId, objectId) {
         AjaxPostUtil.request({url: flowableBasePath + "dsformpage015", params: {objectId: objectId}, method: "GET", type: 'json', callback: function (json) {
-            if (json.returnCode == 0) {
-                dsFormUtil.loadDsFormItem(showBoxId, json);
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            dsFormUtil.loadDsFormItem(showBoxId, json);
         }, async: false});
     },
 
@@ -373,12 +348,8 @@ var dsFormUtil = {
             pageId: "dsFormObjectRelationChooseByFirstTypeCodePage",
             area: ['480px', '500px'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(dsFormUtil.dsFormObjectRelationChoose);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(dsFormUtil.dsFormObjectRelationChoose);
                 }
             }});
     },

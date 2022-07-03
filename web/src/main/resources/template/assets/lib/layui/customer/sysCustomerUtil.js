@@ -19,12 +19,8 @@ var sysCustomerUtil = {
             pageId: "customerChoose",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode) {
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(sysCustomerUtil.customerMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(sysCustomerUtil.customerMation);
                 }
             }});
     },
@@ -36,12 +32,8 @@ var sysCustomerUtil = {
      */
     queryCustomerOpportunityFromIsUpList: function (callback){
         AjaxPostUtil.request({url: flowableBasePath + "crmopportunityfrom008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -53,12 +45,8 @@ var sysCustomerUtil = {
      */
     queryCustomerTypeIsUpList: function (callback){
         AjaxPostUtil.request({url: flowableBasePath + "customertype008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -70,12 +58,8 @@ var sysCustomerUtil = {
      */
     queryCustomerFromIsUpList: function (callback){
         AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -87,12 +71,8 @@ var sysCustomerUtil = {
      */
     queryCrmDocumentaryTypeIsUpList: function (callback){
         AjaxPostUtil.request({url: flowableBasePath + "crmdocumentarytype008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -104,12 +84,8 @@ var sysCustomerUtil = {
      */
     queryCrmCustomerIndustryIsUpList: function (callback){
         AjaxPostUtil.request({url: flowableBasePath + "crmcustomerindustry008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },

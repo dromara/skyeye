@@ -63,20 +63,16 @@ var activitiUtil = {
         };
         // 优先请求一次获取下个用户节点的信息，如果没有审批节点信息，则不加载审批人选项
         AjaxPostUtil.request({url: flowableBasePath + "activitiProcess001", params: params, type: 'json', callback: function(json) {
-            if (json.returnCode == 0) {
-                if(!isNull(json.bean)){
-                    var approvalPersonChooseDom = '<div class="layui-form-item layui-col-xs12">' +
-                        '<label class="layui-form-label">下一个审批人<i class="red">*</i></label>' +
-                        '<div class="layui-input-block">' +
-                        '<input type="text" id="approvalPersonName" name="approvalPersonName" placeholder="请选择下一个审批人" win-verify="required" class="layui-input" readonly="readonly"/>' +
-                        '<i class="fa fa-plus-circle input-icon chooseApprovalPersonBtn" style="top: 12px;"></i>' +
-                        '</div>' +
-                        '</div>';
-                    $("#" + appendDomId).append(approvalPersonChooseDom);
-                    activitiUtil.initApprovalPersonChooseBtnEvent();
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(!isNull(json.bean)){
+                var approvalPersonChooseDom = '<div class="layui-form-item layui-col-xs12">' +
+                    '<label class="layui-form-label">下一个审批人<i class="red">*</i></label>' +
+                    '<div class="layui-input-block">' +
+                    '<input type="text" id="approvalPersonName" name="approvalPersonName" placeholder="请选择下一个审批人" win-verify="required" class="layui-input" readonly="readonly"/>' +
+                    '<i class="fa fa-plus-circle input-icon chooseApprovalPersonBtn" style="top: 12px;"></i>' +
+                    '</div>' +
+                    '</div>';
+                $("#" + appendDomId).append(approvalPersonChooseDom);
+                activitiUtil.initApprovalPersonChooseBtnEvent();
             }
         }, async: false});
     },
@@ -100,12 +96,8 @@ var activitiUtil = {
             pageId: "approvalPersonChoose",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    $("#approvalPersonName").val(activitiUtil.chooseApprovalPersonMation.jobNumber + "_" + activitiUtil.chooseApprovalPersonMation.userName);
-                    $("#approvalPersonName").attr("chooseData", JSON.stringify(activitiUtil.chooseApprovalPersonMation));
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+                $("#approvalPersonName").val(activitiUtil.chooseApprovalPersonMation.jobNumber + "_" + activitiUtil.chooseApprovalPersonMation.userName);
+                $("#approvalPersonName").attr("chooseData", JSON.stringify(activitiUtil.chooseApprovalPersonMation));
             }
         });
     },
@@ -136,12 +128,8 @@ var activitiUtil = {
             pageId: "startProcessPersonChooseBtn",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if (typeof callback === 'function') {
-                        callback(activitiUtil.chooseApprovalPersonMation.id);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if (typeof callback === 'function') {
+                    callback(activitiUtil.chooseApprovalPersonMation.id);
                 }
             }
         });
@@ -162,12 +150,8 @@ var activitiUtil = {
             userIds: JSON.stringify(["300b878c5c6744f2b48e6bc40beefd11", "0f17e3da88bc4e22841156388964e12e"])
         };
         AjaxPostUtil.request({url: flowableBasePath + "activitiProcess003", params: params, method: "POST", type: 'json', callback: function(json) {
-            if(json.returnCode == 0) {
-                if (typeof callback === 'function') {
-                    callback();
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if (typeof callback === 'function') {
+                callback();
             }
         }, async: false});
     },
@@ -219,12 +203,8 @@ var activitiUtil = {
                     principalUserId: userReturnList[0].id
                 };
                 AjaxPostUtil.request({url: flowableBasePath + "activitiTask001", params: params, method: "POST", type: 'json', callback: function(json) {
-                    if(json.returnCode == 0) {
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                    if (typeof callback === 'function') {
+                        callback();
                     }
                 }, async: false});
             });
@@ -242,12 +222,8 @@ var activitiUtil = {
                     transferredPersonId: userReturnList[0].id
                 };
                 AjaxPostUtil.request({url: flowableBasePath + "activitiTask002", params: params, method: "POST", type: 'json', callback: function(json) {
-                    if(json.returnCode == 0) {
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                    if (typeof callback === 'function') {
+                        callback();
                     }
                 }, async: false});
             });
@@ -261,12 +237,8 @@ var activitiUtil = {
                 pageId: "beforeAddSignTaskPage",
                 area: ['90vw', '90vh'],
                 callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                    if (typeof callback === 'function') {
+                        callback();
                     }
                 }
             });
@@ -280,12 +252,8 @@ var activitiUtil = {
                 pageId: "afterAddSignTaskPage",
                 area: ['90vw', '90vh'],
                 callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                    if (typeof callback === 'function') {
+                        callback();
                     }
                 }
             });
@@ -299,12 +267,8 @@ var activitiUtil = {
                 pageId: "jointlySignPage",
                 area: ['90vw', '90vh'],
                 callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                    if (typeof callback === 'function') {
+                        callback();
                     }
                 }
             });

@@ -162,9 +162,13 @@ function _openNewWindows(mation){
 		zIndex: mation.zIndex,
 		scrollbar: false,
 		closeBtn: mation.closeBtn,
-		end: function(){
+		end: function() {
 			if(typeof(mation.callBack) == "function") {
-				mation.callBack(refreshCode);
+				if (refreshCode == '0') {
+					mation.callBack(refreshCode);
+				} else if (refreshCode == '-9999') {
+					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+				}
 			}
 		},
 		success: function(){

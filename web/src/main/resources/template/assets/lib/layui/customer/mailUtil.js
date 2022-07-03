@@ -15,12 +15,8 @@ var mailUtil = {
             pageId: "mailListChoose",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(mailUtil.mailChooseList);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(mailUtil.mailChooseList);
                 }
             }});
     }

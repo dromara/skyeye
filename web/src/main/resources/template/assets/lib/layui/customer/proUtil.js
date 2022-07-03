@@ -9,12 +9,8 @@ var proUtil = {
      */
     queryMyProjectsList: function (callback){
         AjaxPostUtil.request({url: flowableBasePath + "queryMyProjectsList", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },

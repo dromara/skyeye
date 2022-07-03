@@ -24,13 +24,13 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'roleName', title: '角色名称', width: 120 },
 	        { field: 'roleDesc', title: '角色描述', width: 520 },
 	        { field: 'userNum', title: '使用用户数量', width: 150 },
 	        { field: 'parentName', title: '父角色', width: 150 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar' }
 	    ]],
 	    done: function(){
 	    	matchingLanguage();
@@ -56,12 +56,8 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], { icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType] }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sys018", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -75,12 +71,8 @@ layui.config({
 			pageId: "syseveroleedit",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
 	}
 	
@@ -92,8 +84,7 @@ layui.config({
             title: "手机端菜单授权",
             pageId: "syseveroleappmenu",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
-            }});
+            callBack: function(refreshCode){}});
     }
 
 	// PC端菜单授权
@@ -104,8 +95,7 @@ layui.config({
 			title: "PC端菜单授权",
 			pageId: "sysEveRolePCMenu",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
-			}});
+			callBack: function(refreshCode){}});
 	}
 	
     // 新增角色
@@ -116,19 +106,15 @@ layui.config({
 			pageId: "syseveroleadd",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
     });
 
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			refreshTable();
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -140,10 +126,6 @@ layui.config({
 
     function loadTable(){
     	table.reload("messageTable", {where: getTableParams()});
-    }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
     function getTableParams() {

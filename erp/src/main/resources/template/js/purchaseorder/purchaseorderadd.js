@@ -192,13 +192,9 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "purchaseorder002", params: params, type: 'json', method: "POST", callback: function(json) {
-			if(json.returnCode == 0) {
-				dsFormUtil.savePageData("dsFormShow", json.bean.id);
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			dsFormUtil.savePageData("dsFormShow", json.bean.id);
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 
@@ -235,43 +231,39 @@ layui.config({
 			pageId: "erpProductionNoSuccessChoose",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					$("#productionOrder").val(productionMation.defaultNumber);
-					//移除之前填写的所有行
-					var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']");
-					$.each(checkRow, function(i, item) {
-						//删除allChooseProduct已选择的商品信息
-						var trId = $(item).parent().parent().attr("trcusid");
-						allChooseProduct[trId] = undefined;
-						//移除界面上的信息
-						$(item).parent().parent().remove();
-					});
-					$.each(productionMation.norms, function(i, item){
-						addRow();
-						//将规格所属的商品信息加入到对象中存储
-						allChooseProduct["tr" + (rowNum - 1)] = item.product;
-						//单位回显
-						$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
-						$("#unitId" + (rowNum - 1)).val(item.normsId);
-						//商品回显
-						$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
-						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
-						$("#rkNum" + (rowNum - 1)).val(item.needNum);
-						$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
-						$("#amountOfMoney" + (rowNum - 1)).val(item.allPrice.toFixed(2));
-						$("#taxRate" + (rowNum - 1)).val(item.taxRate.toFixed(2));
-						$("#taxMoney" + (rowNum - 1)).val(item.taxMoney.toFixed(2));
-						$("#taxUnitPrice" + (rowNum - 1)).val(item.taxUnitPrice.toFixed(2));
-						$("#taxLastMoney" + (rowNum - 1)).val(item.taxLastMoney.toFixed(2));
-					});
-					//渲染
-					form.render();
+				$("#productionOrder").val(productionMation.defaultNumber);
+				//移除之前填写的所有行
+				var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']");
+				$.each(checkRow, function(i, item) {
+					//删除allChooseProduct已选择的商品信息
+					var trId = $(item).parent().parent().attr("trcusid");
+					allChooseProduct[trId] = undefined;
+					//移除界面上的信息
+					$(item).parent().parent().remove();
+				});
+				$.each(productionMation.norms, function(i, item){
+					addRow();
+					//将规格所属的商品信息加入到对象中存储
+					allChooseProduct["tr" + (rowNum - 1)] = item.product;
+					//单位回显
+					$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
+					$("#unitId" + (rowNum - 1)).val(item.normsId);
+					//商品回显
+					$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
+					$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
+					$("#rkNum" + (rowNum - 1)).val(item.needNum);
+					$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
+					$("#amountOfMoney" + (rowNum - 1)).val(item.allPrice.toFixed(2));
+					$("#taxRate" + (rowNum - 1)).val(item.taxRate.toFixed(2));
+					$("#taxMoney" + (rowNum - 1)).val(item.taxMoney.toFixed(2));
+					$("#taxUnitPrice" + (rowNum - 1)).val(item.taxUnitPrice.toFixed(2));
+					$("#taxLastMoney" + (rowNum - 1)).val(item.taxLastMoney.toFixed(2));
+				});
+				//渲染
+				form.render();
 
-					//计算价格
-					calculatedTotalPrice();
-				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-				}
+				//计算价格
+				calculatedTotalPrice();
 			}});
 	});
 

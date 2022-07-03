@@ -15,12 +15,8 @@ var bossUtil = {
             pageId: "bossIntervieweeFromListChoosePage",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(bossUtil.bossIntervieweeFromChooseMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(bossUtil.bossIntervieweeFromChooseMation);
                 }
             }});
     },
@@ -97,12 +93,8 @@ var bossUtil = {
             pageId: "myChargeBossIntervieweeListChoose",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(bossUtil.bossIntervieweeChooseMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(bossUtil.bossIntervieweeChooseMation);
                 }
             }});
     },
@@ -120,12 +112,8 @@ var bossUtil = {
             pageId: "bossPersonRequireMyChargeListChoose",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(bossUtil.bossPersonRequireChooseMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(bossUtil.bossPersonRequireChooseMation);
                 }
             }});
     },

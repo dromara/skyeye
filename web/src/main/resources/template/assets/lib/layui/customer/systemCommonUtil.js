@@ -8,12 +8,8 @@ var systemCommonUtil = {
      */
     getSysAccountListByType: function (callback){
         AjaxPostUtil.request({url: flowableBasePath + "account009", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -24,11 +20,7 @@ var systemCommonUtil = {
     judgeCurrentUserRegularWorker: function () {
         var result = false;
         AjaxPostUtil.request({url: flowableBasePath + "judgeCurrentUserRegularWorker", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                result = json.bean.canApply;
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            result = json.bean.canApply;
         }, async: false});
         return result;
     },
@@ -39,11 +31,7 @@ var systemCommonUtil = {
     judgeCurrentUserQuit: function () {
         var result = false;
         AjaxPostUtil.request({url: flowableBasePath + "judgeCurrentUserQuit", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                result = json.bean.canApply;
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            result = json.bean.canApply;
         }, async: false});
         return result;
     },
@@ -55,12 +43,8 @@ var systemCommonUtil = {
      */
     queryDepartmentListByCurrentUserBelong: function (callback){
         AjaxPostUtil.request({url: reqBasePath + "queryDepartmentListByCurrentUserBelong", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -72,12 +56,8 @@ var systemCommonUtil = {
      */
     queryJobListByDepartmentId: function (departmentId, callback){
         AjaxPostUtil.request({url: reqBasePath + "companyjob007", params: {departmentId: departmentId}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -90,16 +70,14 @@ var systemCommonUtil = {
      */
     getSysCurrentLoginUserMation: function (callback, errorCallback){
         AjaxPostUtil.request({url: reqBasePath + "login002", params: {}, type: 'json', method: "POST", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
+            if(typeof(callback) == "function") {
+                callback(json);
+            }
+        }, errorCallback: function (json) {
+            if(typeof(errorCallback) == "function") {
+                errorCallback();
             } else {
-                if(typeof(errorCallback) == "function") {
-                    errorCallback();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
             }
         }, async: false});
     },
@@ -111,12 +89,8 @@ var systemCommonUtil = {
      */
     getSysCompanyList: function (callback){
         AjaxPostUtil.request({url: reqBasePath + "companymation008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -129,12 +103,8 @@ var systemCommonUtil = {
      */
     getSysInoutitemListByType: function (type, callback){
         AjaxPostUtil.request({url: flowableBasePath + "inoutitem007", params: {type: type}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -216,12 +186,8 @@ var systemCommonUtil = {
             pageId: "sysuserselpage",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                if (refreshCode == '0') {
-                    if (typeof (callback) == "function") {
-                        callback(systemCommonUtil.userReturnList);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if (typeof (callback) == "function") {
+                    callback(systemCommonUtil.userReturnList);
                 }
             }
         });
@@ -241,12 +207,8 @@ var systemCommonUtil = {
             pageId: "sysuserselpage",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                if (refreshCode == '0') {
-                    if (typeof (callback) == "function") {
-                        callback(systemCommonUtil.checkStaffMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if (typeof (callback) == "function") {
+                    callback(systemCommonUtil.checkStaffMation);
                 }
             }
         });
@@ -265,12 +227,8 @@ var systemCommonUtil = {
             pageId: "sysEveIconListChoose",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    if(typeof(callback) == "function") {
-                        callback(systemCommonUtil.sysIconChooseClass);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback(systemCommonUtil.sysIconChooseClass);
                 }
             }});
     },
@@ -402,12 +360,8 @@ var systemCommonUtil = {
      */
     queryExplainMationByType: function (type, callback) {
         AjaxPostUtil.request({url: reqBasePath + "queryExExplainMationToShow", params: {type: type}, type: 'json', method: "GET", callback: function(json) {
-            if (json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },

@@ -58,11 +58,7 @@ var erpOrderUtil = {
         // 1需要审核；2不需要审核
         var submitType = "";
         AjaxPostUtil.request({url: flowableBasePath + "erpcommon004", params: {orderType: orderType}, method: "GET", type: 'json', callback: function(json) {
-            if(json.returnCode == 0) {
-                submitType = json.bean.needExamine;
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            submitType = json.bean.needExamine;
         }, async: false});
 
         if(submitType == 1){
@@ -104,15 +100,11 @@ var erpOrderUtil = {
      * @param orderType 单据类型
      */
     deleteOrderMation: function (id, orderType, callback){
-        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
+        layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index) {
             AjaxPostUtil.request({url: flowableBasePath + "erpcommon005", params: {rowId: id, orderType: orderType}, method: "DELETE", type: 'json', callback: function(json) {
-                if(json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    if(typeof(callback) == "function") {
-                        callback();
-                    }
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback();
                 }
             }});
         });
@@ -145,13 +137,9 @@ var erpOrderUtil = {
             approvalId: approvalId
         };
         AjaxPostUtil.request({url: flowableBasePath + "erpcommon006", params: params, method: "PUT", type: 'json', callback: function(json) {
-            if(json.returnCode == 0) {
-                winui.window.msg("提交成功。", {icon: 1, time: 2000});
-                if(typeof(callback) == "function") {
-                    callback();
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            winui.window.msg("提交成功。", {icon: 1, time: 2000});
+            if(typeof(callback) == "function") {
+                callback();
             }
         }});
     },
@@ -169,13 +157,9 @@ var erpOrderUtil = {
                 orderType: orderType
             };
             AjaxPostUtil.request({url: flowableBasePath + "erpcommon003", params: params, type: 'json', method: "PUT", callback: function(json) {
-                if(json.returnCode == 0) {
-                    winui.window.msg("撤销成功。", {icon: 1, time: 2000});
-                    if(typeof(callback) == "function") {
-                        callback();
-                    }
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                winui.window.msg("撤销成功。", {icon: 1, time: 2000});
+                if(typeof(callback) == "function") {
+                    callback();
                 }
             }});
         });
@@ -212,12 +196,8 @@ var erpOrderUtil = {
      */
     getDepotList: function (callback){
         AjaxPostUtil.request({url: flowableBasePath + "storehouse008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(json.returnCode == 0) {
-                if(typeof(callback) == "function") {
-                    callback(json);
-                }
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            if(typeof(callback) == "function") {
+                callback(json);
             }
         }, async: false});
     },
@@ -234,12 +214,8 @@ var erpOrderUtil = {
             pageId: "productlist",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                if (refreshCode == '0') {
-                    if (typeof (callback) == "function") {
-                        callback(erpOrderUtil.chooseProductMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if (typeof (callback) == "function") {
+                    callback(erpOrderUtil.chooseProductMation);
                 }
             }
         });

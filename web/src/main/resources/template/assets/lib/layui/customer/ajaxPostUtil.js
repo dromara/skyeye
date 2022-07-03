@@ -12,8 +12,10 @@ var AjaxPostUtil = {
         async: true,
         // 返回的内容的类型,text,xml,json
         type: 'text',
-        // 回调函数 required
-        callback: function() {}
+        // 接口调用成功时的回调函数 required
+        callback: function() {},
+        // 接口调用失败时的回调函数
+        errorCallback: undefined
     },
 
     // 创建XMLHttpRequest对象
@@ -63,6 +65,7 @@ var AjaxPostUtil = {
     readystatechange: function(xmlhttp) {
         // 获取返回值
         var returnValue;
+        var ajaxObj = this;
         if(xmlhttp.readyState == 4 && (xmlhttp.status == 200 || xmlhttp.status == 0)) {
             //移除请求遮罩层
             layui.$("body").find(".mask-req-str").remove();
@@ -95,19 +98,28 @@ var AjaxPostUtil = {
                     returnValue = xmlhttp.responseText;
                     break;
             }
-            if(returnValue) {
-                this.options.callback.call(this, returnValue);
-            } else {
-                this.options.callback.call(this);
-            }
+            ajaxObj.checkAndCallback(returnValue);
         }else if(xmlhttp.readyState == 4 && (xmlhttp.status == 404)) {
             // 移除请求遮罩层
             layui.$("body").find(".mask-req-str").remove();
             returnValue = eval('(' + '{"returnMessage":"接口请求：404","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
-            if(returnValue) {
+            ajaxObj.checkAndCallback(returnValue);
+        }
+    },
+
+    checkAndCallback: function (returnValue) {
+        if (returnValue.returnCode == 0) {
+            if (returnValue) {
                 this.options.callback.call(this, returnValue);
             } else {
                 this.options.callback.call(this);
+            }
+        } else {
+            // 如果失败的回调函数为空，则默认给出失败的提示，不为空，则回调errorCallback函数
+            if (typeof (this.options.errorCallback) == "function") {
+                this.options.errorCallback(returnValue);
+            } else {
+                winui.window.msg(returnValue.returnMessage, {icon: 2, time: 2000});
             }
         }
     },

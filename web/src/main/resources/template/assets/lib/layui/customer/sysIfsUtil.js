@@ -14,12 +14,8 @@ var sysIfsUtil = {
             pageId: "ifsAccountSubjectListChoose",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                if (refreshCode == '0') {
-                    if (typeof (callback) == "function") {
-                        callback(sysIfsUtil.chooseAccountSubjectMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if (typeof (callback) == "function") {
+                    callback(sysIfsUtil.chooseAccountSubjectMation);
                 }
             }
         });
@@ -38,12 +34,8 @@ var sysIfsUtil = {
             pageId: "ifsVoucherListChoose",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                if (refreshCode == '0') {
-                    if (typeof (callback) == "function") {
-                        callback(sysIfsUtil.chooseVoucherMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if (typeof (callback) == "function") {
+                    callback(sysIfsUtil.chooseVoucherMation);
                 }
             }
         });
@@ -62,12 +54,8 @@ var sysIfsUtil = {
             pageId: "ifsSetOfBooksListChoose",
             area: ['90vw', '90vh'],
             callBack: function (refreshCode) {
-                if (refreshCode == '0') {
-                    if (typeof (callback) == "function") {
-                        callback(sysIfsUtil.ifsSetOfBooksMation);
-                    }
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
+                if (typeof (callback) == "function") {
+                    callback(sysIfsUtil.ifsSetOfBooksMation);
                 }
             }
         });
