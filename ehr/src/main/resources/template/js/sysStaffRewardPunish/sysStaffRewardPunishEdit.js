@@ -12,9 +12,7 @@ layui.config({
 	    var $ = layui.$,
 	    	laydate = layui.laydate,
 			textool = layui.textool;
-	    // 下拉框模板
-	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	    
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "sysstaffrewardpunish003",
@@ -33,20 +31,9 @@ layui.config({
 		 		textool.init({eleId: 'content', maxlength: 200 });
 			    
 			    textool.init({eleId: 'desc', maxlength: 200});
-			    
-			    // 奖惩分类
-			    showGrid({
-				 	id: "typeId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 5},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#typeId").val(json.bean.typeId),
-				 		form.render('select');
-				 	}
-			    });
+
+				// 奖惩分类
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeRewardsAndPunishments"]["key"], 'select', "typeId", json.bean.typeId, form);
 
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});

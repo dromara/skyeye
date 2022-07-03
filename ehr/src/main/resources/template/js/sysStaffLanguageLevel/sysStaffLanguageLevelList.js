@@ -13,20 +13,11 @@ layui.config({
 		table = layui.table;
 	
 	authBtn('1599994176696');
-	
-	showGrid({
-    	id: "typeId",
-    	url: reqBasePath + "sysstaffdatadictionary008",
-    	params: {typeId: 6},
-    	pagination: false,
-    	template: getFileContent('tpl/template/select-option.tpl'),
-    	ajaxSendLoadBefore: function(hdb){
-    	},
-    	ajaxSendAfter:function (json) {
-    		initTable();
-    	}
-    });
 
+    // 语种
+    sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeLanguages"]["key"], 'select', "typeId", '', form);
+
+    initTable();
     function initTable(){
 		table.render({
 		    id: 'messageTable',

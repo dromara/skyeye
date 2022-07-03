@@ -18,18 +18,8 @@ layui.config({
 	    laydate.render({elem: '#getTime', trigger: 'click'});
  		
  		// 语种
-		showGrid({
-		 	id: "languageId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 6},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	    
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeLanguages"]["key"], 'select', "languageId", '', form);
+
 	    form.on('select(languageId)', function(data){
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#levelId").html("");

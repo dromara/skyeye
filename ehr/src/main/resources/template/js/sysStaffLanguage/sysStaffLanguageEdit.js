@@ -25,34 +25,23 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){},
 		 	ajaxSendAfter:function (json) {
 		 		laydate.render({elem: '#getTime', trigger: 'click'});
-		 		
-		 		// 语种
+
+				// 语种
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeLanguages"]["key"], 'select', "typeId", json.bean.languageId, form);
+				// 语种等级
 				showGrid({
-				 	id: "languageId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 6},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#languageId").val(json.bean.languageId);
-				 		// 语种等级
-						showGrid({
-						 	id: "levelId",
-						 	url: reqBasePath + "sysstafflanguagelevel008",
-						 	params: {typeId: $("#languageId").val()},
-						 	pagination: false,
-						 	template: selTemplate,
-						 	ajaxSendLoadBefore: function(hdb){},
-						 	ajaxSendAfter:function(data){
-						 		$("#levelId").val(json.bean.levelId);
-						 		form.render('select');
-						 	}
-					    });
-				 		form.render('select');
-				 	}
-			    });
-			    
+					id: "levelId",
+					url: reqBasePath + "sysstafflanguagelevel008",
+					params: {typeId: $("#languageId").val()},
+					pagination: false,
+					template: selTemplate,
+					ajaxSendLoadBefore: function(hdb){},
+					ajaxSendAfter:function(data){
+						$("#levelId").val(json.bean.levelId);
+						form.render('select');
+					}
+				});
+
 			    form.on('select(languageId)', function(data){
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#levelId").html("");

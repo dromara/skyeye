@@ -13,7 +13,7 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "sysstafflanguagelevel003",
-		 	params: {rowId:parent.rowId},
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysStaffLanguageLevel/sysStaffLanguageLevelEditTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {

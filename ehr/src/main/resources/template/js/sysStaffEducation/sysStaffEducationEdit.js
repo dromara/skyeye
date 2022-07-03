@@ -12,10 +12,7 @@ layui.config({
 	    var $ = layui.$,
 	    	laydate = layui.laydate,
 			textool = layui.textool;
-	    
-	    // 下拉框模板
-	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	    
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "sysstaffeducation003",
@@ -52,47 +49,14 @@ layui.config({
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
 				// 学历
-				showGrid({
-				 	id: "educationId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 2},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#educationId").val(json.bean.educationId),
-				 		form.render('select');
-				 	}
-			    });
-			    
-			    // 学习形式
-			    showGrid({
-				 	id: "learningModalityId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 3},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#learningModalityId").val(json.bean.learningModalityId),
-				 		form.render('select');
-				 	}
-			    });
-			    
-			    // 学校性质
-			    showGrid({
-				 	id: "schoolNature",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 4},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#schoolNature").val(json.bean.schoolNature),
-				 		form.render('select');
-				 	}
-			    });
-			    
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeEducation"]["key"], 'select', "educationId", json.bean.educationId, form);
+
+				// 学习形式
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeBgAndLearningForm"]["key"], 'select', "learningModalityId", json.bean.learningModalityId, form);
+
+				// 学校性质
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeBgSchoolNature"]["key"], 'select', "schoolNature", json.bean.schoolNature, form);
+
 			    matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {

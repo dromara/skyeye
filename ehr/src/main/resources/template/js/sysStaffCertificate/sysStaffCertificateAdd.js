@@ -1,7 +1,7 @@
 
 // 员工证书
 layui.config({
-	base: basePath, 
+	base: basePath,
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
@@ -12,24 +12,13 @@ layui.config({
 	    var $ = layui.$,
 	    	laydate = layui.laydate,
 			textool = layui.textool;
-	    // 下拉框模板
-	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	    
+
 	    laydate.render({elem: '#issueTime', trigger: 'click'});
- 		
- 		laydate.render({elem: '#validityTime', trigger: 'click'});
-	    
-		showGrid({
-		 	id: "typeId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 11},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
+
+        laydate.render({elem: '#validityTime', trigger: 'click'});
+
+        // 证书类型
+        sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeCertificateType"]["key"], 'select', "typeId", '', form);
 
 		skyeyeEnclosure.init('enclosureUpload');
 	    matchingLanguage();
@@ -62,6 +51,6 @@ layui.config({
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
-	    
+
 	});
 });

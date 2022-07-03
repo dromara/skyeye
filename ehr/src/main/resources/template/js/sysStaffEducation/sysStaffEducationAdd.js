@@ -13,9 +13,6 @@ layui.config({
 	    	laydate = layui.laydate,
 			textool = layui.textool;
 	    
-	    // 下拉框模板
-	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	    
 	    // 入校时间
 	    var insStart = laydate.render({ 
  			elem: '#admissionTime',
@@ -40,43 +37,13 @@ layui.config({
  		});
 	    
  		// 学历
-		showGrid({
-		 	id: "educationId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 2},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	    
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeEducation"]["key"], 'select', "educationId", '', form);
+
 	    // 学习形式
-	    showGrid({
-		 	id: "learningModalityId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 3},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	    
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeBgAndLearningForm"]["key"], 'select', "learningModalityId", '', form);
+
 	    // 学校性质
-	    showGrid({
-		 	id: "schoolNature",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 4},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeBgSchoolNature"]["key"], 'select', "schoolNature", '', form);
 
 		skyeyeEnclosure.init('enclosureUpload');
 	    matchingLanguage();

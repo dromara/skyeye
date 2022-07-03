@@ -5,7 +5,7 @@
     "employeeBgSchoolNature": {"name": "员工-教育背景学校性质", "key": "EMPLOYEE_BG_SCHOOL_NATURE"},
     "employeeRewardsAndPunishments": {"name": "员工-奖惩分类", "key": "EMPLOYEE_REWARDS_AND_PUNISHMENTS"},
     "employeeLanguages": {"name": "员工-语种", "key": "EMPLOYEE_LANGUAGES"},
-    "employeeFamilySituation": {"name": "员工-家庭情况", "key": "EMPLOYEE_FAMILY_SITUATION"},
+    "employeeFamilySituation": {"name": "员工-家庭成员关系", "key": "EMPLOYEE_FAMILY_SITUATION"},
     "employeeDocumentType": {"name": "员工-证件类型", "key": "EMPLOYEE_DOCUMENT_TYPE"},
     "employeeContractCategory": {"name": "员工-合同类别", "key": "EMPLOYEE_CONTRACT_CATEGORY"},
     "employeeContractType": {"name": "员工-合同类型", "key": "EMPLOYEE_CONTRACT_TYPE"},

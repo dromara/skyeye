@@ -12,27 +12,15 @@ layui.config({
 	    var $ = layui.$,
 	    	laydate = layui.laydate,
 			textool = layui.textool;
-	    // 下拉框模板
-	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	    
+
 	    laydate.render({elem: '#rewardPunishTime', trigger: 'click'});
  		
  		textool.init({eleId: 'content', maxlength: 200});
 	    
 	    textool.init({eleId: 'desc', maxlength: 200});
-	    
-	    // 奖惩分类
-	    showGrid({
-		 	id: "typeId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 5},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
+
+		// 奖惩分类
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeRewardsAndPunishments"]["key"], 'select', "typeId", '', form);
 
 		skyeyeEnclosure.init('enclosureUpload');
 	    matchingLanguage();

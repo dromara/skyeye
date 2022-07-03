@@ -11,37 +11,14 @@ layui.config({
 	    var $ = layui.$,
 			textool = layui.textool;
 	    
-	    // 下拉框模板
-	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	    
-	    // 与本人关系
-		showGrid({
-		 	id: "relationshipId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 7},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	    
-	    // 证件类型
-		showGrid({
-		 	id: "cardType",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 8},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	    
-	    // 政治面貌
-		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeesPoliticalOutlook"]["key"], 'select', "politicId", form);
+	    // 家庭成员关系
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeFamilySituation"]["key"], 'select', "relationshipId", '', form);
+
+		// 证件类型
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeDocumentType"]["key"], 'select', "cardType", '', form);
+
+		// 政治面貌
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeesPoliticalOutlook"]["key"], 'select', "politicId", '', form);
 
 	    matchingLanguage();
  		form.render();

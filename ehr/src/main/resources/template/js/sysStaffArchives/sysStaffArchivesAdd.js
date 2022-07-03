@@ -18,18 +18,9 @@ layui.config({
 	    laydate.render({elem: '#archivesTime', trigger: 'click'});
 	    
 	    textool.init({eleId: 'remark', maxlength: 200});
-	    
-		showGrid({
-		 	id: "educationId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 2},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
+
+		// 学历
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeEducation"]["key"], 'select', "educationId", '', form);
 
 		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据

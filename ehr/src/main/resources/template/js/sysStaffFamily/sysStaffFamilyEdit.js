@@ -11,9 +11,6 @@ layui.config({
 	    var $ = layui.$,
 			textool = layui.textool;
 	    
-	    // 下拉框模板
-	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	    
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "sysstafffamily003",
@@ -25,49 +22,16 @@ layui.config({
 		 	ajaxSendAfter:function (json) {
 		 		$("input:radio[name=userSex][value=" + json.bean.sex + "]").attr("checked", true);
 			    $("#emergencyContact").val(json.bean.emergencyContact);
-			    
-			    // 与本人关系
-				showGrid({
-				 	id: "relationshipId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 7},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#relationshipId").val(json.bean.relationshipId);
-				 		form.render('select');
-				 	}
-			    });
-			    
+
+				// 家庭成员关系
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeFamilySituation"]["key"], 'select', "relationshipId", json.bean.relationshipId, form);
+
 			    // 证件类型
-				showGrid({
-				 	id: "cardType",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 8},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#cardType").val(json.bean.cardType);
-				 		form.render('select');
-				 	}
-			    });
-			    
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeDocumentType"]["key"], 'select', "cardType", json.bean.cardType, form);
+
 			    // 政治面貌
-				showGrid({
-				 	id: "politicId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 1},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#politicId").val(json.bean.politicId);
-				 		form.render('select');
-				 	}
-			    });
-			    
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeesPoliticalOutlook"]["key"], 'select', "politicId", json.bean.politicId, form);
+
 			    matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {

@@ -29,7 +29,7 @@ var sysDictDataUtil = {
      * @param dictTypeCode 数据字典所属分类的Code
      * @param callback 回执函数
      */
-    showDictDataListByDictTypeCode: function (dictTypeCode, showType, showBoxId, form, callback) {
+    showDictDataListByDictTypeCode: function (dictTypeCode, showType, showBoxId, defaultId, form, callback) {
         var params = {
             dictTypeCode: dictTypeCode
         };
@@ -37,6 +37,9 @@ var sysDictDataUtil = {
             if (json.returnCode == 0) {
                 if (showType == 'select') {
                     $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+                    if (!isNull(defaultId)) {
+                        $("#" + showBoxId).val(defaultId);
+                    }
                     form.render('select');
                 }
                 if (typeof (callback) == "function") {

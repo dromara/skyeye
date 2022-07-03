@@ -37,32 +37,12 @@ layui.config({
  	 			});
  	 		}
  		});
-	    
- 		// 合同类别
-		showGrid({
-		 	id: "typeId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 9},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	    
-	    // 合同类型
-		showGrid({
-		 	id: "moldId",
-		 	url: reqBasePath + "sysstaffdatadictionary008",
-		 	params: {typeId: 10},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
+
+		// 合同类别
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeContractCategory"]["key"], 'select', "typeId", '', form);
+
+		// 合同类型
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeContractType"]["key"], 'select', "moldId", '', form);
 
 		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据

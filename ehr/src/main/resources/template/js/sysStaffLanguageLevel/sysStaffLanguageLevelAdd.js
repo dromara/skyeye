@@ -9,20 +9,10 @@ layui.config({
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
-	    
-	    showGrid({
-        	id: "typeId",
-        	url: reqBasePath + "sysstaffdatadictionary008",
-        	params: {typeId: 6},
-        	pagination: false,
-        	template: getFileContent('tpl/template/select-option.tpl'),
-        	ajaxSendLoadBefore: function(hdb){
-        	},
-        	ajaxSendAfter:function (json) {
-        		form.render('select');
-        	}
-        });
-	    
+
+		// 语种
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeLanguages"]["key"], 'select', "typeId", '', form);
+
         matchingLanguage();
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {

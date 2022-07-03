@@ -57,32 +57,11 @@ layui.config({
 				});
 
 				// 合同类别
-				showGrid({
-				 	id: "typeId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 9},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#typeId").val(json.bean.typeId);
-				 		// 合同类型
-						showGrid({
-						 	id: "moldId",
-						 	url: reqBasePath + "sysstaffdatadictionary008",
-						 	params: {typeId: 10},
-						 	pagination: false,
-						 	template: selTemplate,
-						 	ajaxSendLoadBefore: function(hdb){},
-						 	ajaxSendAfter:function(data){
-						 		$("#moldId").val(json.bean.moldId);
-						 		form.render('select');
-						 	}
-					    });
-				 		form.render('select');
-				 	}
-			    });
-			    
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeContractCategory"]["key"], 'select', "typeId", json.bean.typeId, form);
+
+				// 合同类型
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeContractType"]["key"], 'select', "moldId", json.bean.moldId, form);
+
 			    matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {

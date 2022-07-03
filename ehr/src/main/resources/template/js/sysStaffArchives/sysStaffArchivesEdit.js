@@ -34,24 +34,15 @@ layui.config({
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-				showGrid({
-				 	id: "educationId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 2},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#educationId").val(json.bean.educationId);
+				// 学历
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeEducation"]["key"], 'select', "educationId", json.bean.educationId, form);
 
-						systemCommonUtil.getSysCompanyList(function(companyList){
-							// 加载企业数据
-							$("#managementUnit").html(getDataUseHandlebars(selTemplate, companyList));
-							$("#managementUnit").val(json.bean.managementUnit);
-						});
-				 	}
-			    });
-			    
+				systemCommonUtil.getSysCompanyList(function(companyList){
+					// 加载企业数据
+					$("#managementUnit").html(getDataUseHandlebars(selTemplate, companyList));
+					$("#managementUnit").val(json.bean.managementUnit);
+				});
+
 			    matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {

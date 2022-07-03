@@ -12,9 +12,7 @@ layui.config({
 	    var $ = layui.$,
 	    	laydate = layui.laydate,
 			textool = layui.textool;
-	    // 下拉框模板
-	    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-	    
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "sysstaffcertificate003",
@@ -32,19 +30,9 @@ layui.config({
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-				showGrid({
-				 	id: "typeId",
-				 	url: reqBasePath + "sysstaffdatadictionary008",
-				 	params: {typeId: 11},
-				 	pagination: false,
-				 	template: selTemplate,
-				 	ajaxSendLoadBefore: function(hdb){},
-				 	ajaxSendAfter:function(data){
-				 		$("#typeId").val(json.bean.typeId);
-				 		form.render('select');
-				 	}
-			    });
-			    
+				// 证书类型
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeCertificateType"]["key"], 'select', "typeId", json.bean.typeId, form);
+
 			    matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(formEditBean)', function (data) {
