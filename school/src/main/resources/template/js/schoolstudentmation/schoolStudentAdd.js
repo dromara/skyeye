@@ -251,13 +251,9 @@ layui.config({
 	            params.bodyMind = bodyMindIds;
 	        	
 	        	AjaxPostUtil.request({url:schoolBasePath + "studentmation002", params: params, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				winui.window.msg("录入成功", {icon: 1, time: 3000}, function() {
-		 	   				location.reload();
-		 	   			});
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					winui.window.msg("录入成功", {icon: 1, time: 3000}, function() {
+						location.reload();
+					});
 	 	   		}});
 	        }
 	        return false;

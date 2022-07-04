@@ -55,19 +55,15 @@ layui.config({
  	        	});
  	        	
  	        	AjaxPostUtil.request({url: reqBasePath + "companytalkgroup001", params: params, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				parent.friendChooseList = params.userIds;
-	 	   				parent.layim.addList({
-	 	   					type: 'group', //列表类型，只支持friend和group两种
-	 	   					avatar: json.bean.groupImg, //群组头像
-	 	   					groupname: json.bean.groupName, //群组名称
-	 	   					id: json.bean.id, //群组id
-	 	   				});
-		 	   			parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					parent.friendChooseList = params.userIds;
+					parent.layim.addList({
+						type: 'group', //列表类型，只支持friend和group两种
+						avatar: json.bean.groupImg, //群组头像
+						groupname: json.bean.groupName, //群组名称
+						id: json.bean.id, //群组id
+					});
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	 	   		}});
 	        }
 	        return false;

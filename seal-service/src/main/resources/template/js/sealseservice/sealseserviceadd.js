@@ -136,13 +136,9 @@ layui.config({
         			pointSubscribeTime: $("#pointSubscribeTime").val() //指定预约时间
  	        	};
  	        	AjaxPostUtil.request({url: flowableBasePath + "sealseservice011", params: params, type: 'json', callback: function(json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			winui.window.msg("操作成功", {icon: 1, time: 3000}, function() {
-		 	   				location.reload();
-		 	   			});
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					winui.window.msg("操作成功", {icon: 1, time: 3000}, function() {
+						location.reload();
+					});
 	 	   		}});
  	        }
  	        return false;

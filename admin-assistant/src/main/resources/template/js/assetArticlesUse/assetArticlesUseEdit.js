@@ -21,24 +21,20 @@ layui.config({
 	var sTableData = "";
 
 	AjaxPostUtil.request({url: flowableBasePath + "assetarticles021", params: {rowId: parent.rowId}, type: 'json', method: "POST", callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html(json.bean.title);
-			$("#useName").html(json.bean.userName);
-			$("#remark").val(json.bean.remark);
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		$("#useTitle").html(json.bean.title);
+		$("#useName").html(json.bean.userName);
+		$("#remark").val(json.bean.remark);
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-			sTableData = json.bean.goods;
-			initTypeHtml();
-			matchingLanguage();
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+		sTableData = json.bean.goods;
+		initTypeHtml();
+		matchingLanguage();
 	}});
 
 	//初始化用品类别
@@ -60,15 +56,11 @@ layui.config({
 				} else {
 					//类型对应的用品不存在js对象中
 					AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
-						if(json.returnCode == 0) {
-							assetArticles.push({
-								id: thisRowValue,
-								list: json.rows
-							});
-							resetAssetList(thisRowNum, json.rows); //重置选择行的用品列表
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						assetArticles.push({
+							id: thisRowValue,
+							list: json.rows
+						});
+						resetAssetList(thisRowNum, json.rows); //重置选择行的用品列表
 					}});
 				}
 			}
@@ -182,12 +174,8 @@ layui.config({
 			approvalId: approvalId,
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "assetarticles022", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

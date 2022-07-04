@@ -254,11 +254,7 @@ layui.config({
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
 				AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory016", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				delQuOptionCallBack(optionParent);
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					delQuOptionCallBack(optionParent);
 	 	   		}});
 			} else {
 				delQuOptionCallBack(optionParent);
@@ -273,11 +269,7 @@ layui.config({
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 			if(!isNull(quOptionId) && quOptionId != "0" ){
 				AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory017", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				delQuOptionCallBack(optionParent);
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					delQuOptionCallBack(optionParent);
 	 	   		}});
 			} else {
 				delQuOptionCallBack(optionParent);
@@ -401,23 +393,19 @@ layui.config({
 	    		data.logic = JSON.stringify(list);
 	    		
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory010", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-			 	   		quItemBody.find("input[name='quId']").val(quId);
-			 	   		
-			 	   		//重置问题选项和业务逻辑
-			 	   		resetLogicAndItem(quItemBody, json);
-	
-						//执行保存下一题
-						saveQus(quItemBody.next(), callback);
-						//同步-更新题目排序号
-						quCBNum2++;
-						exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+
+					//重置问题选项和业务逻辑
+					resetLogicAndItem(quItemBody, json);
+
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
@@ -440,11 +428,7 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory018", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				delQuOptionCallBack(optionParent);
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					delQuOptionCallBack(optionParent);
 	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
@@ -489,23 +473,19 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory011", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-			 	   		quItemBody.find("input[name='quId']").val(quId);
-						
-			 	   		//重置问题选项和业务逻辑
-			 	   		resetLogicAndItem(quItemBody, json);
-			 	   		
-						//执行保存下一题
-						saveQus(quItemBody.next(), callback);
-						//同步-更新题目排序号
-						quCBNum2++;
-						exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+
+					//重置问题选项和业务逻辑
+					resetLogicAndItem(quItemBody, json);
+
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
@@ -528,11 +508,7 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory019", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				delQuOptionCallBack(optionParent);
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					delQuOptionCallBack(optionParent);
 	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
@@ -621,28 +597,24 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory006", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-						quItemBody.find("input[name='quId']").val(quId);
-						//同步logic Id信息
-						var quLogics = json.bean.quLogics;
-						if(!isNull(quLogics)){
-							$.each(quLogics, function(i, item) {
-								var logicItem = quItemBody.find(".quLogicItem_" + item.title);
-								logicItem.find("input[name='quLogicId']").val(item.id);
-								logicItem.find("input[name='logicSaveTag']").val(1);
-							});
-						}
-						//执行保存下一题
-						saveQus(quItemBody.next(), callback);
-						//同步-更新题目排序号
-						quCBNum2++;
-						exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+					//同步logic Id信息
+					var quLogics = json.bean.quLogics;
+					if(!isNull(quLogics)){
+						$.each(quLogics, function(i, item) {
+							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
+							logicItem.find("input[name='quLogicId']").val(item.id);
+							logicItem.find("input[name='logicSaveTag']").val(1);
+						});
+					}
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
@@ -680,23 +652,19 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory007", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-						quItemBody.find("input[name='quId']").val(quId);
-						
-						//重置问题选项和业务逻辑
-			 	   		resetLogicAndItem(quItemBody, json);
-						
-    					//执行保存下一题
-    					saveQus(quItemBody.next(), callback);
-    					//同步-更新题目排序号
-    					quCBNum2++;
-    					exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+
+					//重置问题选项和业务逻辑
+					resetLogicAndItem(quItemBody, json);
+
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
@@ -712,11 +680,7 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory020", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				delQuOptionCallBack(optionParent);
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					delQuOptionCallBack(optionParent);
 	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
@@ -751,23 +715,19 @@ layui.config({
 	    		data.logic = JSON.stringify(list);
 	    		
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory008", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-			 	   		quItemBody.find("input[name='quId']").val(quId);
-						
-						//重置问题选项和业务逻辑
-			 	   		resetLogicAndItem(quItemBody, json);
-			 	   		
-						//执行保存下一题
-						saveQus(quItemBody.next(), callback);
-						//同步-更新题目排序号
-						quCBNum2++;
-						exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+
+					//重置问题选项和业务逻辑
+					resetLogicAndItem(quItemBody, json);
+
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
@@ -785,12 +745,8 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory021", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				delQuOptionCallBack(optionParent);
-	 	   				rmQuOrderTableTr.remove();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					delQuOptionCallBack(optionParent);
+					rmQuOrderTableTr.remove();
 	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
@@ -808,23 +764,19 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory009", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-			 	   		quItemBody.find("input[name='quId']").val(quId);
-			 	   		
-			 	   		//重置问题选项和业务逻辑
-			 	   		resetLogicAndItem(quItemBody, json);
-			 	   		
-						//执行保存下一题
-						saveQus(quItemBody.next(), callback);
-						//同步-更新题目排序号
-						quCBNum2++;
-						exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+
+					//重置问题选项和业务逻辑
+					resetLogicAndItem(quItemBody, json);
+
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
@@ -841,26 +793,22 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory013", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-			 	   		quItemBody.find("input[name='quId']").val(quId);
-						//同步logic Id信息
-						var quLogics = json.bean.quLogics;
-						$.each(quLogics, function(i, item) {
-							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
-							logicItem.find("input[name='quLogicId']").val(item.id);
-							logicItem.find("input[name='logicSaveTag']").val(1);
-						});
-						//执行保存下一题
-						saveQus(quItemBody.next(), callback);
-						//同步-更新题目排序号
-						quCBNum2++;
-						exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+					//同步logic Id信息
+					var quLogics = json.bean.quLogics;
+					$.each(quLogics, function(i, item) {
+						var logicItem = quItemBody.find(".quLogicItem_" + item.title);
+						logicItem.find("input[name='quLogicId']").val(item.id);
+						logicItem.find("input[name='logicSaveTag']").val(1);
+					});
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
@@ -897,23 +845,19 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory012", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-			 	   		quItemBody.find("input[name='quId']").val(quId);
-			 	   		
-			 	   		//重置问题选项和业务逻辑
-			 	   		resetLogicAndItem(quItemBody, json);
-			 	   		
-						//执行保存下一题
-						saveQus(quItemBody.next(), callback);
-						//同步-更新题目排序号
-						quCBNum2++;
-						exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+
+					//重置问题选项和业务逻辑
+					resetLogicAndItem(quItemBody, json);
+
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);
@@ -929,11 +873,7 @@ layui.config({
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory022", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				delQuOptionCallBack(optionParent);
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					delQuOptionCallBack(optionParent);
 	 	   		}});
 	    	} else {
 	    		delQuOptionCallBack(optionParent);
@@ -986,46 +926,42 @@ layui.config({
 	    		var list = [].concat(getLogic(quItemBody));
 	    		data.logic = JSON.stringify(list);
 	    		AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory014", params:data, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			var quId = json.bean.quId;
-		 	   			quItemBody.find("input[name='saveTag']").val(1);
-		 	   			quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
-			 	   		quItemBody.find("input[name='quId']").val(quId);
-			 	   		//列选项
-    					var quColumnItems = json.bean.quColumnItems;
-    					if(!isNull(quColumnItems)){
-    						$.each(quColumnItems, function(i, item) {
-    							var quItemOption = quItemBody.find(".quColumnOption_" + item.title);
-    							quItemOption.find("input[name='quItemId']").val(item.id);
-    							quItemOption.find(".quItemInputCase input[name='quItemSaveTag']").val(1);
-    						});
-    					}
-    					//行选项
-    					var quRowItems = json.bean.quRowItems;
-    					if(!isNull(quRowItems)){
-	    					$.each(quRowItems, function(i, item) {
-	    						var quItemOption = quItemBody.find(".quRowOption_" + item.title);
-	    						quItemOption.find("input[name='quItemId']").val(item.id);
-	    						quItemOption.find(".quItemInputCase input[name='quItemSaveTag']").val(1);
-	    					});
-    					}
-    					//同步logic Id信息
-    					var quLogics = json.bean.quLogics;
-    					if(!isNull(quLogics)){
-    						$.each(quLogics, function(i, item) {
-    							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
-    							logicItem.find("input[name='quLogicId']").val(item.id);
-    							logicItem.find("input[name='logicSaveTag']").val(1);
-    						});
-    					}
-    					//执行保存下一题
-    					saveQus(quItemBody.next(), callback);
-    					//同步-更新题目排序号
-    					quCBNum2++;
-    					exeQuCBNum();
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					var quId = json.bean.quId;
+					quItemBody.find("input[name='saveTag']").val(1);
+					quItemBody.find(".quCoTitle input[name='quTitleSaveTag']").val(1);
+					quItemBody.find("input[name='quId']").val(quId);
+					//列选项
+					var quColumnItems = json.bean.quColumnItems;
+					if(!isNull(quColumnItems)){
+						$.each(quColumnItems, function(i, item) {
+							var quItemOption = quItemBody.find(".quColumnOption_" + item.title);
+							quItemOption.find("input[name='quItemId']").val(item.id);
+							quItemOption.find(".quItemInputCase input[name='quItemSaveTag']").val(1);
+						});
+					}
+					//行选项
+					var quRowItems = json.bean.quRowItems;
+					if(!isNull(quRowItems)){
+						$.each(quRowItems, function(i, item) {
+							var quItemOption = quItemBody.find(".quRowOption_" + item.title);
+							quItemOption.find("input[name='quItemId']").val(item.id);
+							quItemOption.find(".quItemInputCase input[name='quItemSaveTag']").val(1);
+						});
+					}
+					//同步logic Id信息
+					var quLogics = json.bean.quLogics;
+					if(!isNull(quLogics)){
+						$.each(quLogics, function(i, item) {
+							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
+							logicItem.find("input[name='quLogicId']").val(item.id);
+							logicItem.find("input[name='logicSaveTag']").val(1);
+						});
+					}
+					//执行保存下一题
+					saveQus(quItemBody.next(), callback);
+					//同步-更新题目排序号
+					quCBNum2++;
+					exeQuCBNum();
 	 	   		}});
 	    	} else {
 	    		saveQus(quItemBody.next(), callback);

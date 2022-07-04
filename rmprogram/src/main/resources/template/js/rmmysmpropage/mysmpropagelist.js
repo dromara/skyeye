@@ -93,21 +93,13 @@ layui.config({
         			rowId: row.id
 	        	};
 	        	AjaxPostUtil.request({url: reqBasePath + "rmxcx031", params: params, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				refreshGrid("pageList", {params:{rowId: proId}});
-	 	   				//重置中间模块
- 	    				editPageModelSelectId = "";
- 			 			editPageModelSelectChange = false;
- 			 			AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
- 			 	   			if (json.returnCode == 0) {
- 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
- 			 	   			} else {
- 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 			 	   			}
- 			 	   		}});
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					refreshGrid("pageList", {params:{rowId: proId}});
+					//重置中间模块
+					editPageModelSelectId = "";
+					editPageModelSelectChange = false;
+					AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+						showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+					}});
 	 	   		}});
 	 		},
 	 		'click .toDown':function(index, row){//下移
@@ -116,21 +108,17 @@ layui.config({
         			rowId: row.id
 	        	};
 	        	AjaxPostUtil.request({url: reqBasePath + "rmxcx032", params: params, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				refreshGrid("pageList", {params:{rowId: proId}});
-	 	   				//重置中间模块
- 	    				editPageModelSelectId = "";
- 			 			editPageModelSelectChange = false;
- 			 			AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
- 			 	   			if (json.returnCode == 0) {
- 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
- 			 	   			} else {
- 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 			 	   			}
- 			 	   		}});
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					refreshGrid("pageList", {params:{rowId: proId}});
+					//重置中间模块
+					editPageModelSelectId = "";
+					editPageModelSelectChange = false;
+					AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+						if (json.returnCode == 0) {
+							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+						} else {
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+						}
+					}});
 	 	   		}});
 	 		},
 	 		'click .copyPage':function(index, row){//复制

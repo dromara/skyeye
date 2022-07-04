@@ -70,12 +70,8 @@ layui.config({
 							assetAdmin: systemCommonUtil.tagEditorGetItemData('assetAdmin', userList)
 	 	 	        	};
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles016", params: params, type: 'json', callback: function (json) {
-	 		 	   			if (json.returnCode == 0) {
-	 			 	   			parent.layer.close(index);
-	 			 	        	parent.refreshCode = '0';
-	 		 	   			} else {
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 		 	   			}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 	 		 	   		}});
 		 	        }
 		 	        return false;
