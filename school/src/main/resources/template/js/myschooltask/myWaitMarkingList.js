@@ -46,7 +46,6 @@ layui.config({
     }
 
 	function initTable(){
-		
 		table.render({
 	        id: 'messageTable',
 	        elem: '#messageTable',
@@ -93,7 +92,7 @@ layui.config({
 	    form.render();
 	}
 	
-	//阅卷
+	// 阅卷
 	function examMarkingDetail(data){
 		rowId = data.answerId;
 		_openNewWindows({
@@ -102,25 +101,12 @@ layui.config({
 			pageId: "examMarkingDetail",
 			area: ['100vw', '100vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
 	}
 	
-	
-	form.on('submit(formSearch)', function (data) {
-        
-        if (winui.verifyForm(data.elem)) {
-        	refreshTable();
-        }
-        return false;
-    });
-    
-    //详情
+    // 详情
 	function details(data){
 		rowId = data.surveyId;
 		_openNewWindows({
@@ -131,8 +117,15 @@ layui.config({
 			callBack: function(refreshCode){
 			}});
 	}
+
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
+	});
 	
-	//刷新数据
+	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
@@ -140,11 +133,7 @@ layui.config({
     function loadTable(){
     	table.reload("messageTable", {where: getTableParams()});
     }
-    
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-    
+
     function getTableParams(){
     	return {
     		gradeId: $("#gradeId").val(), 

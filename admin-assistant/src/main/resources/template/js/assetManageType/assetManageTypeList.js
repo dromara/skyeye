@@ -94,12 +94,8 @@ layui.config({
 			pageId: "assetManageTypeAdd",
 			area: ['60vw', '30vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadassettypeTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadassettypeTable();
 			}});
     });
 	
@@ -112,12 +108,8 @@ layui.config({
 			pageId: "assetManageTypeEdit",
 			area: ['60vw', '30vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadassettypeTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadassettypeTable();
 			}});
 	}
 	

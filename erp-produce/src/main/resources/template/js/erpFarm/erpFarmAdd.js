@@ -69,15 +69,11 @@ layui.config({
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	var str = "";
-	                	$.each(procedureMationList, function(i, item){
-	                		str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
-	                	});
-	    				$("#procedureBody").html(str);
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					var str = "";
+					$.each(procedureMationList, function(i, item){
+						str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
+					});
+					$("#procedureBody").html(str);
 				}});
 	    });
 

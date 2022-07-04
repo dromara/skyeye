@@ -73,22 +73,18 @@ layui.config({
 	 				pageId: "editpagebeanitem",
 	 				area: ['700px', '60vh'],
 	 				callBack: function(refreshCode){
-	 	                if (refreshCode == '0') {
-	 	                	refreshGrid("pageList", {params:{rowId: proId}});
-	 	                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-	 	                	//重置中间模块
-	 	    				editPageModelSelectId = "";
-	 			 			editPageModelSelectChange = false;
-	 			 			AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
-	 			 	   			if (json.returnCode == 0) {
-	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-	 			 	   			} else {
-	 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 			 	   			}
-	 			 	   		}});
-	 	                } else if (refreshCode == '-9999') {
-	 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	 	                }
+						refreshGrid("pageList", {params:{rowId: proId}});
+						winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+						//重置中间模块
+						editPageModelSelectId = "";
+						editPageModelSelectChange = false;
+						AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+							if (json.returnCode == 0) {
+								showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+							} else {
+								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+							}
+						}});
 	 				}});
 	 		},
 	 		'click .toUp':function(index, row){//上移
@@ -399,12 +395,8 @@ layui.config({
 			pageId: "addpagebeanitem",
 			area: ['700px', '60vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	refreshGrid("pageList", {params:{rowId: proId}});
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				refreshGrid("pageList", {params:{rowId: proId}});
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
     });
     

@@ -224,16 +224,12 @@ layui.config({
 				pageId: "materialnormstock",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	var str = "";
-	                	normsStockItem = [].concat(normsStock);
-	                	$.each(normsStockItem, function(i, item){
-	                		str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
-	                	});
-	    				$("#initialTock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">新增库存</button>' + str);
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					var str = "";
+					normsStockItem = [].concat(normsStock);
+					$.each(normsStockItem, function(i, item){
+						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
+					});
+					$("#initialTock").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="initialTock">新增库存</button>' + str);
 				}});
 	    });
 	    //多单位
@@ -260,23 +256,19 @@ layui.config({
 				pageId: "materialnormstock",
 				area: ['70vw', '70vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	var str = "";
-	                	if(thisRowHasList >= 0){
-				    		normsStockList[thisRowHasList]["list"] = [].concat(normsStock);
-				    	} else {
-				    		normsStockList.push({
-				    			trRow: trRow,
-				    			list: [].concat(normsStock)
-				    		});
-				    	}
-	                	$.each(normsStock, function(i, item){
-	                		str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
-	                	});
-	    				_this.parent().html(_this.prop("outerHTML") + str);
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					var str = "";
+					if(thisRowHasList >= 0){
+						normsStockList[thisRowHasList]["list"] = [].concat(normsStock);
+					} else {
+						normsStockList.push({
+							trRow: trRow,
+							list: [].concat(normsStock)
+						});
+					}
+					$.each(normsStock, function(i, item){
+						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.depotName + '<span class="layui-badge layui-bg-gray">' + item.initialTock + '</span></span>';
+					});
+					_this.parent().html(_this.prop("outerHTML") + str);
 				}});
 	    });
  	    
@@ -372,15 +364,11 @@ layui.config({
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	var str = "";
-	                	$.each(procedureMationList, function(i, item){
-	                		str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.procedureName + '<span class="layui-badge layui-bg-gray">' + item.number + '</span></span>';
-	                	});
-	    				$("#procedureChoose").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="procedureChoose">工序选择</button>' + str);
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					var str = "";
+					$.each(procedureMationList, function(i, item){
+						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.procedureName + '<span class="layui-badge layui-bg-gray">' + item.number + '</span></span>';
+					});
+					$("#procedureChoose").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="procedureChoose">工序选择</button>' + str);
 				}});
 	    });
  	    

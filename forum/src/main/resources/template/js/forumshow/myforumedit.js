@@ -122,12 +122,8 @@ layui.config({
 			pageId: "choosetagpage",
 			area: ['600px', '500px'],
 			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					// 重置数据
-					tagList = [].concat(systemCommonUtil.tagEditorResetData('tagId', tagReturnList));
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				// 重置数据
+				tagList = [].concat(systemCommonUtil.tagEditorResetData('tagId', tagReturnList));
 			}});
 	});
 	

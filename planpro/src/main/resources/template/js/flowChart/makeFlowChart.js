@@ -115,12 +115,8 @@ layui.config({
 			title: "新增目录",
 			pageId: "companyjobedit",
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
     });
     
@@ -134,12 +130,8 @@ layui.config({
 			title: "新增流程图",
 			pageId: "companyjobedit",
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
     });
 
@@ -191,12 +183,8 @@ layui.config({
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "rmgroupedit",
 			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-					loadTable();
-				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-				}
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
 	}
     

@@ -273,17 +273,13 @@ layui.config({
  				pageId: "materialChooseToProduce",
  				area: ['90vw', '90vh'],
  				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	$.each(productMationList, function(i, item){
- 	                		if(!inZtreeNode(item.productId)){
- 	                			ztreeNode.push(item);
- 	                		}
- 	                	});
- 	                	$.fn.zTree.init($("#treeDemo"), setting, ztreeNode);
- 	                	loadTr();
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
- 	                }
+					$.each(productMationList, function(i, item){
+						if(!inZtreeNode(item.productId)){
+							ztreeNode.push(item);
+						}
+					});
+					$.fn.zTree.init($("#treeDemo"), setting, ztreeNode);
+					loadTr();
  				}});
 		});
 		
@@ -305,20 +301,16 @@ layui.config({
 					pageId: "erpWorkProcedureChoose",
 					area: ['90vw', '90vh'],
 					callBack: function(refreshCode){
-						if (refreshCode == '0') {
-							ztreeNode[selIndex].procedureMationList = [].concat(procedureMationList);
-		                	var str = "";
-		                	var title = "";
-		                	$.each(procedureMationList, function(i, item){
-		                		str += '' +
-		                				'<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '，';
-                				title += item.number + '、' + item.procedureName + '\n';
-		                	});
-		    				$("#procedureBox" + proId).html('<img class="procedureSel" id="procedureSel' + proId + '" src="../../assets/images/forum-menu.png"/>' + str);
-		    				$("#procedureBox" + proId).attr('title', title);
-		                } else if (refreshCode == '-9999') {
-		                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-		                }
+						ztreeNode[selIndex].procedureMationList = [].concat(procedureMationList);
+						var str = "";
+						var title = "";
+						$.each(procedureMationList, function(i, item){
+							str += '' +
+									'<span class="layui-badge layui-bg-gray">' + item.number + '</span>' + item.procedureName + '，';
+							title += item.number + '、' + item.procedureName + '\n';
+						});
+						$("#procedureBox" + proId).html('<img class="procedureSel" id="procedureSel' + proId + '" src="../../assets/images/forum-menu.png"/>' + str);
+						$("#procedureBox" + proId).attr('title', title);
 					}});
 			} else {
 				winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});

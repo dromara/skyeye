@@ -179,9 +179,7 @@ layui.config({
 					area: ['300px', '400px'],
 					skin: 'add-schedule-mation',
 					callBack: function(refreshCode){
-						if (refreshCode == '0') {
-		                	winui.window.msg("保存成功", {icon: 1, time: 2000});
-		                }
+						winui.window.msg("保存成功", {icon: 1, time: 2000});
 					}});
 			} else {
 				winui.window.msg('请选择需要保存的文件。', {icon: 7,time: 2000});

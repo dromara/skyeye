@@ -170,20 +170,16 @@ layui.config({
                 pageId: "mealChoose",
                 area: ['90vw', '90vh'],
                 callBack: function(refreshCode){
-                    if (refreshCode == '0') {
-                        // 获取表格行号
-                        var thisRowNum = trId.replace("tr", "");
+                    // 获取表格行号
+                    var thisRowNum = trId.replace("tr", "");
 
-                        $("#mealId" + thisRowNum.toString()).val(mealMation.title);
-                        $("#mealExplain" + thisRowNum.toString()).html(mealMation.mealExplain);
-                        $("#mealConsume" + thisRowNum.toString()).html(mealMation.oilDes);
-                        $("#num" + thisRowNum.toString()).html(mealMation.mealNum);
-                        $("#price" + thisRowNum.toString()).html(mealMation.showPrice);
-                        $("#mealId" + thisRowNum.toString()).attr("mealMaion", JSON.stringify(mealMation));
-                        calcAllPrice();
-                    } else if (refreshCode == '-9999') {
-                        winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                    }
+                    $("#mealId" + thisRowNum.toString()).val(mealMation.title);
+                    $("#mealExplain" + thisRowNum.toString()).html(mealMation.mealExplain);
+                    $("#mealConsume" + thisRowNum.toString()).html(mealMation.oilDes);
+                    $("#num" + thisRowNum.toString()).html(mealMation.mealNum);
+                    $("#price" + thisRowNum.toString()).html(mealMation.showPrice);
+                    $("#mealId" + thisRowNum.toString()).attr("mealMaion", JSON.stringify(mealMation));
+                    calcAllPrice();
                 }});
         });
 

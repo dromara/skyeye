@@ -51,12 +51,8 @@ layui.config({
 			pageId: "materialnormstockadd",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	table.reload("messageTable", {data: $.extend(true, [], normsStock)});
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				table.reload("messageTable", {data: $.extend(true, [], normsStock)});
 			}});
     });
 	
@@ -90,12 +86,8 @@ layui.config({
 			pageId: "materialnormstockedit",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	table.reload("messageTable", {data: $.extend(true, [], normsStock)});
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				table.reload("messageTable", {data: $.extend(true, [], normsStock)});
 			}
 		});
 	}

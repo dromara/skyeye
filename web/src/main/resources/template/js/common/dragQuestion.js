@@ -116,15 +116,11 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				area: ['500px', '500px'],
 				pageId: "designSurveyEditor",
 				callBack: function(refreshCode){
-	                if (refreshCode == '0') {
-	                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-	                	setCurEditContent(ueEditObj);
-	            		curEditCallback();
-	            		ueEditObj = null;
-	            		curEditObj = null;
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+					setCurEditContent(ueEditObj);
+					curEditCallback();
+					ueEditObj = null;
+					curEditObj = null;
 				}});
 			return false;
 		});
@@ -794,11 +790,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				area: ['500px', '500px'],
 				pageId: "designSurveyOp",
 				callBack: function(refreshCode){
-	                if (refreshCode == '0') {
-	                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				}});
 	    });
 	    
@@ -1294,11 +1286,7 @@ function showUIDialog(thDialogObj) {
 		area: ['500px', '500px'],
 		pageId: "modelUIDialog",
 		callBack: function(refreshCode){
-            if (refreshCode == '0') {
-            	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-            } else if (refreshCode == '-9999') {
-            	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-            }
+			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 		}});
 }
 

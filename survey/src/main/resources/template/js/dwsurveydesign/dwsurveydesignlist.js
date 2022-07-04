@@ -97,12 +97,8 @@ layui.config({
 			pageId: "dwsurveydesign",
 			area: ['100vw', '100vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
 	}
 	
@@ -116,12 +112,8 @@ layui.config({
 			pageId: "dwsurveydesigncopy",
 			area: ['500px', '300px'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
 	}
 	
@@ -135,10 +127,6 @@ layui.config({
 			pageId: "surveyRelove",
 			area: ['500px', '300px'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
 			}});
 	}
 	
@@ -151,10 +139,6 @@ layui.config({
 			pageId: "surveyReport",
 			maxmin: true,
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
 			}});
 	}
 	
@@ -163,7 +147,6 @@ layui.config({
 		var msg = obj ? '确认发布问卷【' + obj.data.surveyName + '】吗？' : '确认发布选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '问卷发布' }, function (index) {
 			layer.close(index);
-            
             AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory023", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("发布成功", {icon: 1, time: 2000});
@@ -180,7 +163,6 @@ layui.config({
 		var msg = obj ? '确认结束问卷【' + obj.data.surveyName + '】的调查吗？' : '确认结束选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '结束调查' }, function (index) {
 			layer.close(index);
-            
             AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory030", params:{surveyId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg("结束成功", {icon: 1, time: 2000});
@@ -205,12 +187,8 @@ layui.config({
 			pageId: "dwsurveydesignadd",
 			area: ['500px', '300px'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
     });
     

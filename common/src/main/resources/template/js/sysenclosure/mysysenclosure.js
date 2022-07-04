@@ -131,13 +131,9 @@ layui.config({
 			pageId: "editenclosurepage",
 			area: ['400px', '200px'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	refreshTreePointNode();
-        			loadThisFolderChild();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				refreshTreePointNode();
+				loadThisFolderChild();
 			}});
 	}
 	
@@ -162,13 +158,9 @@ layui.config({
 			pageId: "addenclosurepage",
 			area: ['400px', '200px'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	refreshTreePointNode();
-        			loadThisFolderChild();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				refreshTreePointNode();
+				loadThisFolderChild();
 			}});
 	});
 	

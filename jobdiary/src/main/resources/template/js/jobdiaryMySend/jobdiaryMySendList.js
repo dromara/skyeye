@@ -88,12 +88,8 @@ layui.config({
 			pageId: "jobdiaryMySendPublish",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadMySendTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadMySendTable();
 			}});
     });
 	
@@ -171,12 +167,8 @@ layui.config({
 				pageId: "jobdiaryMySendDayEdit",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	winui.window.msg("发送成功", {icon: 1, time: 2000});
-	                	loadMySendTable();
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					winui.window.msg("发送成功", {icon: 1, time: 2000});
+					loadMySendTable();
 				}});
 		}else if(data.diaryType == 2){
 			// 周报
@@ -186,12 +178,8 @@ layui.config({
 				pageId: "jobdiaryMySendWeekEdit",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	winui.window.msg("发送成功", {icon: 1, time: 2000});
-	                	loadMySendTable();
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					winui.window.msg("发送成功", {icon: 1, time: 2000});
+					loadMySendTable();
 				}});
 		}else if(data.diaryType == 3){
 			// 月报
@@ -201,12 +189,8 @@ layui.config({
 				pageId: "jobdiaryMySendMonthEdit",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	winui.window.msg("发送成功", {icon: 1, time: 2000});
-	                	loadMySendTable();
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					winui.window.msg("发送成功", {icon: 1, time: 2000});
+					loadMySendTable();
 				}});
 		}
 	}

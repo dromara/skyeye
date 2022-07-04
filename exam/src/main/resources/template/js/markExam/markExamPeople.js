@@ -67,15 +67,11 @@ layui.config({
  				pageId: "teacherChoose",
  				area: ['90vw', '90vh'],
  				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	var str = "";
- 	                	$.each(chooseTeacherList, function(i, row){
-				        	str += row.userName + '(' + row.userSex + ')，';
-				        });
-				        $("#markPeople").val(str);
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
- 	                }
+					var str = "";
+					$.each(chooseTeacherList, function(i, row){
+						str += row.userName + '(' + row.userSex + ')，';
+					});
+					$("#markPeople").val(str);
  				}});
  	    });
    		

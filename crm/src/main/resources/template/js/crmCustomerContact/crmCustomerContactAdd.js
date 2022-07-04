@@ -34,12 +34,8 @@ layui.config({
  	        		isDefault: $("input[name='isDefault']:checked").val()
  	        	};
  	        	AjaxPostUtil.request({url: flowableBasePath + "customercontact002", params: params, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0){
-		 	   			parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	 	   		}});
  	        }
  	        return false;
@@ -53,11 +49,7 @@ layui.config({
  				pageId: "customerchooselist",
  				area: ['90vw', '90vh'],
  				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	$("#customName").val(customerMation.customName);
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
- 	                }
+					$("#customName").val(customerMation.customName);
  				}});
  	    });
  	    

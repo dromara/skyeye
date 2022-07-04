@@ -166,12 +166,8 @@ layui.config({
 			pageId: "companyChooseList",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					// 重置数据
-					companyList = [].concat(systemCommonUtil.tagEditorResetData('company', companyList));
-				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-				}
+				// 重置数据
+				companyList = [].concat(systemCommonUtil.tagEditorResetData('company', companyList));
 			}});
 	});
 
@@ -183,12 +179,8 @@ layui.config({
 			pageId: "companyDepartmentChooseList",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					// 重置数据
-					departmentList = [].concat(systemCommonUtil.tagEditorResetData('department', departmentList));
-				} else if (refreshCode == '-9999') {
-					winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-				}
+				// 重置数据
+				departmentList = [].concat(systemCommonUtil.tagEditorResetData('department', departmentList));
 			}});
 	});
 

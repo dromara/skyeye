@@ -698,11 +698,9 @@ layui.config({
 			area: ['650px', '480px'],
 			skin: 'add-schedule-mation',
 			callBack: function(refreshCode){
-				if (refreshCode == '0') {
-					if(folderId === '2'){
-						refreshTreePointNode();
-						loadThisFolderChild();
-					}
+				if(folderId === '2'){
+					refreshTreePointNode();
+					loadThisFolderChild();
 				}
 			}});
 	});

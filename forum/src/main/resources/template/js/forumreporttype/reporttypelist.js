@@ -90,12 +90,8 @@ layui.config({
 			pageId: "forumreporttypeadd",
 			area: ['40vw', '60vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
     });
 	
@@ -108,12 +104,8 @@ layui.config({
 			pageId: "forumreporttypeedit",
 			area: ['40vw', '60vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
 	}
 	
@@ -122,7 +114,6 @@ layui.config({
 		var msg = obj ? '确认删除【' + obj.data.typeName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除举报类型' }, function (index) {
 			layer.close(index);
-            
             AjaxPostUtil.request({url: reqBasePath + "forumreporttype007", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});

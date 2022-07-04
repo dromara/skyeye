@@ -322,33 +322,29 @@ layui.config({
 								area: ['600px', '200px'],
 								skin: 'top-message-mation',
 								callBack: function(refreshCode){
-					                if (refreshCode == '0') {
-					                	var boxStr = '<div class="winui-desktop-item win-menu-group" id="' + childParams.id + '" win-id="' + childParams.id + '" win-url="--" win-title="' + childParams.menuBoxName + '" win-opentype="2" win-maxopen="-1" win-menuiconbg="#44adb1">'
-														+ '<div class="winui-icon winui-icon-font">'
-															+ '<div class="icon-drawer"></div>'
-															+ '<div class="icon-child">'
-															+ '</div>'
+									var boxStr = '<div class="winui-desktop-item win-menu-group" id="' + childParams.id + '" win-id="' + childParams.id + '" win-url="--" win-title="' + childParams.menuBoxName + '" win-opentype="2" win-maxopen="-1" win-menuiconbg="#44adb1">'
+													+ '<div class="winui-icon winui-icon-font">'
+														+ '<div class="icon-drawer"></div>'
+														+ '<div class="icon-child">'
 														+ '</div>'
-														+ '<p>' + childParams.menuBoxName + '</p>'
-													+ '</div>';
-					                	var obj = getActiveArticle();
-                                        obj.html(obj.html() + boxStr);
-					                	//重新排列桌面
-					    				winui.util.locaApp();
-					    				//重新初始化拖拽事件
-					    				initMenuToBox();
-					    				winui.util.reloadOnClick(function (id, elem) {
-					                    	var item = $(elem);
-					                    	if(item.find(".icon-drawer").length > 0){
-					                    		showBigWin(elem);
-					                    	} else {
-					                    		OpenWindow(elem);
-					                    	}
-					                    });
-					                	top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-					                } else if (refreshCode == '-9999') {
-					                	top.winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-					                }
+													+ '</div>'
+													+ '<p>' + childParams.menuBoxName + '</p>'
+												+ '</div>';
+									var obj = getActiveArticle();
+									obj.html(obj.html() + boxStr);
+									//重新排列桌面
+									winui.util.locaApp();
+									//重新初始化拖拽事件
+									initMenuToBox();
+									winui.util.reloadOnClick(function (id, elem) {
+										var item = $(elem);
+										if(item.find(".icon-drawer").length > 0){
+											showBigWin(elem);
+										} else {
+											OpenWindow(elem);
+										}
+									});
+									top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 								}});
 						}
 					}, {
@@ -362,43 +358,39 @@ layui.config({
 								area: ['700px', '450px'],
 								skin: 'top-message-mation',
 								callBack: function(refreshCode){
-					                if (refreshCode == '0') {
-					                	var str = '';
-					                	var iconTypeI = '';
-					                	var menuIcon = '';
-					                	if(childParams.menuIconType === '1' || childParams.menuIconType == 1){
-					                		str = '<i class="fa ' + childParams.menuIcon + ' fa-fw" win-i-id="' + childParams.id + '"></i>';
-					                		iconTypeI = 'winui-icon-font';
-					                		menuIcon = childParams.menuIcon;
-					                	}else if(childParams.menuIconType === '2' || childParams.menuIconType == 2){
-					                		str = '<img src="' + fileBasePath + childParams.menuIconPic + '"/>';
-					                		iconTypeI = 'winui-icon-img';
-					                		menuIcon = childParams.menuIconPic;
-					                	}
-					                	var boxStr = '<div class="winui-desktop-item sec-btn winui-this" win-id="' + childParams.id + '" win-url="' + childParams.menuUrl + '" win-title="' + childParams.titleName + '" win-opentype="' + childParams.openType + '" win-maxopen="-1" win-menuiconbg="' + childParams.menuIconBg + '" win-menuiconcolor="' + childParams.menuIconColor + '" win-icon="' + menuIcon + '">'
-								                		+ '<div class="winui-icon ' + iconTypeI + '" style="background-color: ' + childParams.menuIconBg + '; color:' + childParams.menuIconColor + '">' + str + '</div>'
-								                		+ '<p>' + childParams.menuName + '</p>'
-								                	'</div>';
-					                	var obj = getActiveArticle();
-                                        obj.html(obj.html() + boxStr);
-					                	//重新排列桌面
-					    				winui.util.locaApp();
-					    				//重新初始化拖拽事件
-					    				initMenuToBox();
-					    				winui.util.reloadOnClick(function (id, elem) {
-					                    	var item = $(elem);
-					                    	if(item.find(".icon-drawer").length > 0){
-					                    		showBigWin(elem);
-					                    	} else {
-					                    		OpenWindow(elem);
-					                    	}
-					                    });
-					    				//重置右键事件
-					                    initDeskTopMenuRightClick();
-					                	top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-					                } else if (refreshCode == '-9999') {
-					                	top.winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-					                }
+									var str = '';
+									var iconTypeI = '';
+									var menuIcon = '';
+									if(childParams.menuIconType === '1' || childParams.menuIconType == 1){
+										str = '<i class="fa ' + childParams.menuIcon + ' fa-fw" win-i-id="' + childParams.id + '"></i>';
+										iconTypeI = 'winui-icon-font';
+										menuIcon = childParams.menuIcon;
+									}else if(childParams.menuIconType === '2' || childParams.menuIconType == 2){
+										str = '<img src="' + fileBasePath + childParams.menuIconPic + '"/>';
+										iconTypeI = 'winui-icon-img';
+										menuIcon = childParams.menuIconPic;
+									}
+									var boxStr = '<div class="winui-desktop-item sec-btn winui-this" win-id="' + childParams.id + '" win-url="' + childParams.menuUrl + '" win-title="' + childParams.titleName + '" win-opentype="' + childParams.openType + '" win-maxopen="-1" win-menuiconbg="' + childParams.menuIconBg + '" win-menuiconcolor="' + childParams.menuIconColor + '" win-icon="' + menuIcon + '">'
+													+ '<div class="winui-icon ' + iconTypeI + '" style="background-color: ' + childParams.menuIconBg + '; color:' + childParams.menuIconColor + '">' + str + '</div>'
+													+ '<p>' + childParams.menuName + '</p>'
+												'</div>';
+									var obj = getActiveArticle();
+									obj.html(obj.html() + boxStr);
+									//重新排列桌面
+									winui.util.locaApp();
+									//重新初始化拖拽事件
+									initMenuToBox();
+									winui.util.reloadOnClick(function (id, elem) {
+										var item = $(elem);
+										if(item.find(".icon-drawer").length > 0){
+											showBigWin(elem);
+										} else {
+											OpenWindow(elem);
+										}
+									});
+									//重置右键事件
+									initDeskTopMenuRightClick();
+									top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 								}});
 						}
 					}]
@@ -1400,44 +1392,40 @@ layui.config({
 									area: ['700px', '450px'],
 									skin: 'top-message-mation',
 									callBack: function(refreshCode){
-						                if (refreshCode == '0') {
-						                	//此处不需要去获取当前滚动展示的模块
-						                	$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-title", childParams.titleName);
-						                	$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-url", childParams.menuUrl);
-						                	$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-menuiconbg", childParams.menuIconBg);
-						                	$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-menuiconcolor", childParams.menuIconColor);
-						                	if(childParams.menuIconType === '1' || childParams.menuIconType == 1){//icon
-						                		$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').attr('class', 'winui-icon winui-icon-font');
-						                		$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-icon", childParams.menuIcon);
-						                		if($("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').length == 0){
-						                			var str = '<i class="" win-i-id="' + childParams.rowId + '"></i>';
-						                			$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').html(str);
-						                		}
-						                		$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').attr("class", "fa " + childParams.menuIcon + " fa-fw");
-						                		$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').css({'color': childParams.menuIconColor});
-						                		$("#winui-desktop").find('i[win-i-id="' + childParams.rowId + '"]').css({'background-color': childParams.menuIconBg, 'color': childParams.menuIconColor});
-						                		var iconITag = $("#winui-desktop").find('i[win-i-id="' + childParams.rowId + '"]');
-							                	$.each(iconITag, function(i, item){
-							                		if($(item).hasClass("icon-drawer-icon")){
-								                		$(item).attr("class", "fa " + childParams.menuIcon + " fa-fw icon-drawer-icon");
-								                	} else {
-								                		$(item).attr("class", "fa " + childParams.menuIcon + " fa-fw");
-								                	}
-							                	});
-						                	}else if(childParams.menuIconType === '2' || childParams.menuIconType == 2){//图片
-						                		$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').attr('class', 'winui-icon winui-icon-img');
-						                		$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-icon", childParams.menuIconPic);
-						                		if($("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').length > 0){
-						                			var str = '<img src="' + fileBasePath + childParams.menuIconPic + '">';
-						                			$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').html(str);
-						                		}
-						                	}
-						                	$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').css({'background-color': childParams.menuIconBg, 'color': childParams.menuIconColor});
-						                	$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('p').html(childParams.menuName);
-						                	top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-						                } else if (refreshCode == '-9999') {
-						                	top.winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-						                }
+										//此处不需要去获取当前滚动展示的模块
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-title", childParams.titleName);
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-url", childParams.menuUrl);
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-menuiconbg", childParams.menuIconBg);
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-menuiconcolor", childParams.menuIconColor);
+										if(childParams.menuIconType === '1' || childParams.menuIconType == 1){//icon
+											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').attr('class', 'winui-icon winui-icon-font');
+											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-icon", childParams.menuIcon);
+											if($("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').length == 0){
+												var str = '<i class="" win-i-id="' + childParams.rowId + '"></i>';
+												$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').html(str);
+											}
+											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').attr("class", "fa " + childParams.menuIcon + " fa-fw");
+											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').css({'color': childParams.menuIconColor});
+											$("#winui-desktop").find('i[win-i-id="' + childParams.rowId + '"]').css({'background-color': childParams.menuIconBg, 'color': childParams.menuIconColor});
+											var iconITag = $("#winui-desktop").find('i[win-i-id="' + childParams.rowId + '"]');
+											$.each(iconITag, function(i, item){
+												if($(item).hasClass("icon-drawer-icon")){
+													$(item).attr("class", "fa " + childParams.menuIcon + " fa-fw icon-drawer-icon");
+												} else {
+													$(item).attr("class", "fa " + childParams.menuIcon + " fa-fw");
+												}
+											});
+										}else if(childParams.menuIconType === '2' || childParams.menuIconType == 2){//图片
+											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').attr('class', 'winui-icon winui-icon-img');
+											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-icon", childParams.menuIconPic);
+											if($("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').length > 0){
+												var str = '<img src="' + fileBasePath + childParams.menuIconPic + '">';
+												$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').html(str);
+											}
+										}
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').css({'background-color': childParams.menuIconBg, 'color': childParams.menuIconColor});
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('p').html(childParams.menuName);
+										top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 									}});
 							}else if(menuType == '3'){//自定义菜单盒子
 								parentRowId = id;
@@ -1448,13 +1436,9 @@ layui.config({
 									area: ['600px', '200px'],
 									skin: 'top-message-mation',
 									callBack: function(refreshCode){
-						                if (refreshCode == '0') {
-						                	$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').attr("win-title", childParams.menuBoxName);
-						                	$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').find('p').html(childParams.menuBoxName);
-						                	top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-						                } else if (refreshCode == '-9999') {
-						                	top.winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-						                }
+										$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').attr("win-title", childParams.menuBoxName);
+										$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').find('p').html(childParams.menuBoxName);
+										top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 									}});
 							}
 						} else {

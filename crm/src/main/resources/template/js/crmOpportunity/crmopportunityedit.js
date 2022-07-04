@@ -227,21 +227,17 @@ layui.config({
 			pageId: "customerchooselist",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	$("#customName").val(customerMation.customName);
-                	$("#industryName").html(customerMation.industryName);
-					$("#city").val(customerMation.city);
-					$("#detailAddress").val(customerMation.detailAddress);
-					$("#contacts").val(customerMation.contacts);
-					$("#department").val(customerMation.department);
-					$("#job").val(customerMation.job);
-					$("#workPhone").val(customerMation.workPhone);
-					$("#mobilePhone").val(customerMation.mobilePhone);
-					$("#email").val(customerMation.email);
-					$("#qq").val(customerMation.qq);
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				$("#customName").val(customerMation.customName);
+				$("#industryName").html(customerMation.industryName);
+				$("#city").val(customerMation.city);
+				$("#detailAddress").val(customerMation.detailAddress);
+				$("#contacts").val(customerMation.contacts);
+				$("#department").val(customerMation.department);
+				$("#job").val(customerMation.job);
+				$("#workPhone").val(customerMation.workPhone);
+				$("#mobilePhone").val(customerMation.mobilePhone);
+				$("#email").val(customerMation.email);
+				$("#qq").val(customerMation.qq);
 			}});
     });
 

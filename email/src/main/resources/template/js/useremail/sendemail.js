@@ -297,28 +297,24 @@ layui.config({
 				pageId: "emailSendModelListChoose",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						$("#typeName").val(emailSendModel.title);
-						$('#toPeople').tagEditor('destroy')
-						$('#toPeople').tagEditor({
-							initialTags: emailSendModel.toPeople.split(','),
-							placeholder: '填写完成后直接回车即可'
-						});
+					$("#typeName").val(emailSendModel.title);
+					$('#toPeople').tagEditor('destroy')
+					$('#toPeople').tagEditor({
+						initialTags: emailSendModel.toPeople.split(','),
+						placeholder: '填写完成后直接回车即可'
+					});
 
-						$('#toCc').tagEditor('destroy')
-						$('#toCc').tagEditor({
-							initialTags: emailSendModel.toCc.split(','),
-							placeholder: '填写完成后直接回车即可'
-						});
+					$('#toCc').tagEditor('destroy')
+					$('#toCc').tagEditor({
+						initialTags: emailSendModel.toCc.split(','),
+						placeholder: '填写完成后直接回车即可'
+					});
 
-						$('#toBcc').tagEditor('destroy')
-						$('#toBcc').tagEditor({
-							initialTags: emailSendModel.toBcc.split(','),
-							placeholder: '填写完成后直接回车即可'
-						});
-					} else if (refreshCode == '-9999') {
-						winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-					}
+					$('#toBcc').tagEditor('destroy')
+					$('#toBcc').tagEditor({
+						initialTags: emailSendModel.toBcc.split(','),
+						placeholder: '填写完成后直接回车即可'
+					});
 				}});
 		});
 

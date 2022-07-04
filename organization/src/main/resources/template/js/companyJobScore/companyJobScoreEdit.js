@@ -120,15 +120,11 @@ layui.config({
 				pageId: "productlist",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						// 获取表格行号
-						var thisRowNum = trId.replace("tr", "");
-						// 表格名称赋值
-						$("#fieldId" + thisRowNum.toString()).val(fieldMation.nameCn + '(' + fieldMation.key + ')');
-						$("#fieldId" + thisRowNum.toString()).attr("rowKey", fieldMation.key);
-					} else if (refreshCode == '-9999') {
-						winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-					}
+					// 获取表格行号
+					var thisRowNum = trId.replace("tr", "");
+					// 表格名称赋值
+					$("#fieldId" + thisRowNum.toString()).val(fieldMation.nameCn + '(' + fieldMation.key + ')');
+					$("#fieldId" + thisRowNum.toString()).attr("rowKey", fieldMation.key);
 				}});
 		});
 

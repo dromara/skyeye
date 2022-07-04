@@ -65,12 +65,8 @@ layui.config({
 			pageId: "crmcustomerfromadd",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
     });
 	
@@ -83,12 +79,8 @@ layui.config({
 			pageId: "crmcustomerfromedit",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
 	}
 	
@@ -97,12 +89,8 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom005", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -113,12 +101,8 @@ layui.config({
 		layer.confirm(msg, {icon: 3, title: '客户来源上线'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom006", params: {rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("上线成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("上线成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -129,12 +113,8 @@ layui.config({
 		layer.confirm(msg, {icon: 3, title: '客户来源下线'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom007", params: {rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("下线成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("下线成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}

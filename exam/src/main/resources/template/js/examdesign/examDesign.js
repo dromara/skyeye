@@ -448,19 +448,15 @@ layui.config({
 				pageId: "schoolKnowledgePointsChoose",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						var strIds = new Array();
-						$.each(schoolKnowledgeMationList, function(i, item){
-							strIds.push(item.id);
-						});
-						$(_this).attr("knowledgeIds", strIds.toString());
-						$(_this).find(".quKnowledgeInfo").html(schoolKnowledgeMationList.length);
-						// 设置题目为编辑，可以进行保存
-						var quItemBody = $(_this).parents(".surveyQuItemBody");
-						quItemBody.find("input[name='saveTag']").val(0);
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					var strIds = new Array();
+					$.each(schoolKnowledgeMationList, function(i, item){
+						strIds.push(item.id);
+					});
+					$(_this).attr("knowledgeIds", strIds.toString());
+					$(_this).find(".quKnowledgeInfo").html(schoolKnowledgeMationList.length);
+					// 设置题目为编辑，可以进行保存
+					var quItemBody = $(_this).parents(".surveyQuItemBody");
+					quItemBody.find("input[name='saveTag']").val(0);
 				}});
 		});
 		
@@ -479,27 +475,23 @@ layui.config({
 				pageId: "schoolQuestionBankChoose",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	initPageJson(function(){
-	                		quIndex = 0, quLeftIndex = 0;
-	                		$.each(questionMationList, function(i, item){
-	                			// 加载试题数据
-	                			item.saveTag = 0;
-	                			item.orderById = (loadPageJson.rows.length + 1);
-	                			loadPageJson.rows.push(item);
-	                			// 加载右侧列表数据
-	                			loadPageJson.bean.questionLeftList.push({
-	                				quType: item.quType,
-	                				quTitle: item.quTitle,
-	                				fraction: item.fraction
-	                			});
-	                		});
-	                		initPage();
-	                	});
-	    				form.render();
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					initPageJson(function(){
+						quIndex = 0, quLeftIndex = 0;
+						$.each(questionMationList, function(i, item){
+							// 加载试题数据
+							item.saveTag = 0;
+							item.orderById = (loadPageJson.rows.length + 1);
+							loadPageJson.rows.push(item);
+							// 加载右侧列表数据
+							loadPageJson.bean.questionLeftList.push({
+								quType: item.quType,
+								quTitle: item.quTitle,
+								fraction: item.fraction
+							});
+						});
+						initPage();
+					});
+					form.render();
 				}});
 	    });
 	    

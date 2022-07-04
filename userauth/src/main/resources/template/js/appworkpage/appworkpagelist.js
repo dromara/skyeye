@@ -79,15 +79,11 @@ layui.config({
 			pageId: "appworkpageadd",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	$("#setting").find("a").removeClass('selected');
-                	//根据新增页面选中的目录进行选中并展示列表
-                	$("#setting").find("a[rowid='" + chooseId + "']").addClass('selected');
-    		 	    showList();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				$("#setting").find("a").removeClass('selected');
+				//根据新增页面选中的目录进行选中并展示列表
+				$("#setting").find("a[rowid='" + chooseId + "']").addClass('selected');
+				showList();
 		}});
     });
 	
@@ -187,12 +183,8 @@ layui.config({
 			pageId: "appworkpageedit",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	showList();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				showList();
 			}});
 	}
 	
@@ -276,10 +268,6 @@ layui.config({
 			pageId: "appworkpageauthpoint",
 			maxmin: true,
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
 			}});
 	}
     

@@ -72,7 +72,6 @@ layui.config({
         }
 	    
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	var pId = '0';
 	        	var params = {
@@ -90,13 +89,9 @@ layui.config({
 	        		params.masterStaffId = teacherMation.staffId;
 	        	}
 	        	
-	        	AjaxPostUtil.request({url:schoolBasePath + "classmation002", params: params, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-		 	   			parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	 	   			} else {
-	 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+	        	AjaxPostUtil.request({url: schoolBasePath + "classmation002", params: params, type: 'json', callback: function (json) {
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	 	   		}});
 	        }
 	        return false;
@@ -110,11 +105,7 @@ layui.config({
  				pageId: "teacherChoose",
  				area: ['90vw', '90vh'],
  				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	$("#masterStaffName").val(teacherMation.userName);
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
- 	                }
+					$("#masterStaffName").val(teacherMation.userName);
  				}});
  	    });
 	    

@@ -170,12 +170,8 @@ layui.config({
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						wayProcedureMation = {};
-						loadProcedureMation();
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					wayProcedureMation = {};
+					loadProcedureMation();
 				}});
 	    });
 
@@ -187,18 +183,14 @@ layui.config({
 				pageId: "erpWayProcedureChoose",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-						AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function (json) {
-							if (json.returnCode == 0) {
-								procedureMationList = [].concat(json.bean.procedureList);
-								loadProcedureMation();
-							} else {
-								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-							}
-						}});
-					} else if (refreshCode == '-9999') {
-						winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-					}
+					AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function (json) {
+						if (json.returnCode == 0) {
+							procedureMationList = [].concat(json.bean.procedureList);
+							loadProcedureMation();
+						} else {
+							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+						}
+					}});
 				}});
 		});
 
@@ -234,30 +226,26 @@ layui.config({
  				pageId: "salesOrderChoose",
  				area: ['90vw', '90vh'],
  				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
-						erpOrderUtil.chooseProductMation = {
- 	                		productName: salesOrder.materialName,
- 	                		productModel: salesOrder.materialModel,
- 	                		productId: salesOrder.materialId
- 	                	};
- 	                	$("#productName").val(erpOrderUtil.chooseProductMation.productName);
- 	                	$("#productModel").val(erpOrderUtil.chooseProductMation.productModel);
- 	                	//加载数量
- 	                	$("#number").val(salesOrder.operNum);
- 	                	//单号
- 	                	$("#salesOrder").val(salesOrder.orderNumber);
- 	                	//单位
- 	                	var unitList = [{
- 	                		id: salesOrder.mUnitId,
- 	                		name: salesOrder.materialUnitName
- 	                	}];
- 	                	$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: unitList}));
- 	                	//加载bom方案列表
- 	                	loadBomList(unitList[0].id);
- 	                	form.render("select");
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
- 	                }
+					erpOrderUtil.chooseProductMation = {
+						productName: salesOrder.materialName,
+						productModel: salesOrder.materialModel,
+						productId: salesOrder.materialId
+					};
+					$("#productName").val(erpOrderUtil.chooseProductMation.productName);
+					$("#productModel").val(erpOrderUtil.chooseProductMation.productModel);
+					//加载数量
+					$("#number").val(salesOrder.operNum);
+					//单号
+					$("#salesOrder").val(salesOrder.orderNumber);
+					//单位
+					var unitList = [{
+						id: salesOrder.mUnitId,
+						name: salesOrder.materialUnitName
+					}];
+					$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: unitList}));
+					//加载bom方案列表
+					loadBomList(unitList[0].id);
+					form.render("select");
  				}});
  	    });
 	    

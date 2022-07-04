@@ -112,12 +112,8 @@ layui.config({
 			pageId: "sysnoticetypeadd",
 			area: ['500px', '40vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
     });
 	
@@ -126,7 +122,6 @@ layui.config({
 		var msg = '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除公告类型' }, function (index) {
 			layer.close(index);
-            
             AjaxPostUtil.request({url: reqBasePath + "noticetype003", params:{rowId: data.id}, type: 'json', callback: function (json) {
     			if (json.returnCode == 0) {
     				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -179,12 +174,8 @@ layui.config({
 			pageId: "sysnoticetypeedit",
 			area: ['500px', '40vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}
 		});
 	}

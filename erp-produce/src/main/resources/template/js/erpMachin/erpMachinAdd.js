@@ -153,15 +153,11 @@ layui.config({
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-					if (refreshCode == '0') {
-	                	var str = "";
-	                	$.each(procedureMationList, function(i, item){
-	                		str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
-	                	});
-	    				$("#procedureBody").html(str);
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					var str = "";
+					$.each(procedureMationList, function(i, item){
+						str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
+					});
+					$("#procedureBody").html(str);
 				}});
 	    });
 	    
@@ -274,69 +270,65 @@ layui.config({
  				pageId: "erpProductionNoSuccessChooseProcedure",
  				area: ['90vw', '90vh'],
  				callBack: function(refreshCode){
- 	                if (refreshCode == '0') {
- 	                	$("#productionOrder").val(productionMation.defaultNumber);
- 	                	//加工产品信息
- 	                	machinPro = {
- 	                		productId: productionMation.materialId,
- 	                		productName: productionMation.materialName,
- 	                		productModel: productionMation.materialModel,
- 	                		unitList: productionMation.unitList
- 	                	};
- 	                	$("#productName").val(machinPro.productName);
- 	                	$("#productModel").val(machinPro.productModel);
- 	                	$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
- 	                	$("#unitList").val(productionMation.normsId);
- 	                	$("#number").val(productionMation.number);
- 	                	
- 	                	//工序
- 	                	$("#procedureChoose").hide();
- 	                	procedureMationList = [].concat(productionMation.procedureList);
- 	                	var str = "";
-	                	$.each(procedureMationList, function(i, item){
-	                		str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
-	                	});
-	    				$("#procedureBody").html(str);
-	    				
-	    				//部门
-	    				$("#departmentId").val(procedureMationList[0].departmentId);
- 	                	
- 	                	//移除之前填写的所有行
- 	                	var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']");
-						$.each(checkRow, function(i, item) {
-							//删除allChooseProduct已选择的商品信息
-							var trId = $(item).parent().parent().attr("trcusid");
-							allChooseProduct[trId] = undefined;
-							//移除界面上的信息
-							$(item).parent().parent().remove();
-						});
- 	                	$.each(productionMation.norms, function(i, item){
-                			addRow();
-							//将规格所属的商品信息加入到对象中存储
-							allChooseProduct["tr" + (rowNum - 1)] = item.product;
-							//单位回显
-							$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
-							$("#unitId" + (rowNum - 1)).val(item.normsId);
-							//商品回显
-							$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
-							$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
-							//所需总数量
-							$("#productionNum" + (rowNum - 1)).html(item.productionNum);
-							//待分配数量
-							$("#machinNum" + (rowNum - 1)).html(item.machinNum);
-							//建议数量
-							$("#rkNum" + (rowNum - 1)).val(item.machinNum);
-							$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
-							$("#amountOfMoney" + (rowNum - 1)).val(item.allPrice.toFixed(2));
-						});
-						//渲染
-						form.render();
-						
-						//计算价格
-						calculatedTotalPrice();
- 	                } else if (refreshCode == '-9999') {
- 	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
- 	                }
+					$("#productionOrder").val(productionMation.defaultNumber);
+					//加工产品信息
+					machinPro = {
+						productId: productionMation.materialId,
+						productName: productionMation.materialName,
+						productModel: productionMation.materialModel,
+						unitList: productionMation.unitList
+					};
+					$("#productName").val(machinPro.productName);
+					$("#productModel").val(machinPro.productModel);
+					$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
+					$("#unitList").val(productionMation.normsId);
+					$("#number").val(productionMation.number);
+
+					//工序
+					$("#procedureChoose").hide();
+					procedureMationList = [].concat(productionMation.procedureList);
+					var str = "";
+					$.each(procedureMationList, function(i, item){
+						str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
+					});
+					$("#procedureBody").html(str);
+
+					//部门
+					$("#departmentId").val(procedureMationList[0].departmentId);
+
+					//移除之前填写的所有行
+					var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']");
+					$.each(checkRow, function(i, item) {
+						//删除allChooseProduct已选择的商品信息
+						var trId = $(item).parent().parent().attr("trcusid");
+						allChooseProduct[trId] = undefined;
+						//移除界面上的信息
+						$(item).parent().parent().remove();
+					});
+					$.each(productionMation.norms, function(i, item){
+						addRow();
+						//将规格所属的商品信息加入到对象中存储
+						allChooseProduct["tr" + (rowNum - 1)] = item.product;
+						//单位回显
+						$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
+						$("#unitId" + (rowNum - 1)).val(item.normsId);
+						//商品回显
+						$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
+						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
+						//所需总数量
+						$("#productionNum" + (rowNum - 1)).html(item.productionNum);
+						//待分配数量
+						$("#machinNum" + (rowNum - 1)).html(item.machinNum);
+						//建议数量
+						$("#rkNum" + (rowNum - 1)).val(item.machinNum);
+						$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
+						$("#amountOfMoney" + (rowNum - 1)).val(item.allPrice.toFixed(2));
+					});
+					//渲染
+					form.render();
+
+					//计算价格
+					calculatedTotalPrice();
  				}});
  	    });
 	    

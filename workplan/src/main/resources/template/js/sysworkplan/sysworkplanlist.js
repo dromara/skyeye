@@ -160,12 +160,8 @@ layui.config({
 			pageId: "sysworkplantiming",
 			area: ['40vw', '60vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	loadTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
 			}});
 	}
 	
@@ -191,12 +187,8 @@ layui.config({
 				pageId: "sysworkplanedit",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-	                if (refreshCode == '0') {
-	                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-	                	loadTable();
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+					loadTable();
 				}});
 		}else if(data.planType === '2' || data.planType == 2){//部门计划
 			_openNewWindows({
@@ -205,12 +197,8 @@ layui.config({
 				pageId: "sysworkplandepedit",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-	                if (refreshCode == '0') {
-	                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-	                	loadTable();
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+					loadTable();
 				}});
 		}else if(data.planType === '3' || data.planType == 3){//公司计划
 			_openNewWindows({
@@ -219,12 +207,8 @@ layui.config({
 				pageId: "sysworkplancomedit",
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
-	                if (refreshCode == '0') {
-	                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-	                	loadTable();
-	                } else if (refreshCode == '-9999') {
-	                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-	                }
+					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+					loadTable();
 				}});
 		} else {
 			winui.window.msg("参数错误", {icon: 2, time: 2000});
@@ -565,12 +549,8 @@ layui.config({
 			pageId: "sysworkplanaddpage",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	refreshTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				refreshTable();
 			}});
 	});
 	
@@ -583,12 +563,8 @@ layui.config({
 			pageId: "sysworkplandepaddpage",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	refreshTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				refreshTable();
 			}});
 	});
 	
@@ -605,12 +581,8 @@ layui.config({
 			pageId: "sysworkplancomaddpage",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                	winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                	refreshTable();
-                } else if (refreshCode == '-9999') {
-                	winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				refreshTable();
 			}});
 	});
 	

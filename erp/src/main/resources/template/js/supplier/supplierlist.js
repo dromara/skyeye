@@ -7,13 +7,12 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
-    
-    authBtn('1569132999722');
-    
     var $ = layui.$,
         form = layui.form,
         table = layui.table;
-        
+
+    authBtn('1569132999722');
+
     table.render({
         id: 'messageTable',
         elem: '#messageTable',
@@ -77,10 +76,8 @@ layui.config({
         }
     });
 
-    
     form.render();
     form.on('submit(formSearch)', function (data) {
-        
         if (winui.verifyForm(data.elem)) {
             loadTable();
         }
@@ -96,12 +93,8 @@ layui.config({
             pageId: "supplieredit",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
     }
 
@@ -169,12 +162,8 @@ layui.config({
             pageId: "supplieradd",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){
-                if (refreshCode == '0') {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else if (refreshCode == '-9999') {
-                    winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
     });
 
