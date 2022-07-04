@@ -19,11 +19,8 @@ layui.config({
 		laydate = layui.laydate,
 		form = layui.form;
 	
-	//'申请时间'页面的选取时间段表格
-	laydate.render({
-		elem: '#createTime', //指定元素
-		range: '~'
-	});
+	// '申请时间'页面的选取时间段表格
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	//申请时间
 	var startTime = "", endTime = "";
@@ -44,15 +41,7 @@ layui.config({
 	        { field: 'processInstanceId', title: '流程ID', width: 100 },
 	        { field: 'taskType', title: '类型', width: 100 },
 	        { field: 'createName', title: '申请人', width: 100},
-	        { field: 'createTime', title: '申请时间', align: 'center', width: 140, templet: function (d) {
-	        	if(!isNull(d.createTime)){
-		        	var str = d.createTime.toString();
-		        	str = str.substring(0, str.length - 3);
-		        	return date('Y-m-d H:i', str);
-	        	} else {
-	        		return "";
-	        	}
-	        }},
+	        { field: 'createTime', title: '申请时间', align: 'center', width: 150},
 	        { field: 'name', title: '当前节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},
