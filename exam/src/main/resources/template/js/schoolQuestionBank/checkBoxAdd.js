@@ -83,61 +83,56 @@ layui.config({
 			// 如果问题id不为空，则说明是编辑，加载编辑信息
 			if(!isNull(parent.rowId)){
 				AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank006", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
-					if (json.returnCode == 0) {
-						$("#schoolId").val(json.bean.schoolId);
-						showGrid({
-						 	id: "gradeId",
-						 	url: schoolBasePath + "grademation006",
-						 	params: {schoolId: $("#schoolId").val()},
-						 	pagination: false,
-						 	template: getFileContent('tpl/template/select-option.tpl'),
-						 	ajaxSendLoadBefore: function(hdb){},
-						 	ajaxSendAfter:function(data){
-						 		$("#gradeId").val(json.bean.gradeId);
-						 		showGrid({
-								 	id: "subjectId",
-								 	url: schoolBasePath + "schoolsubjectmation007",
-								 	params: {gradeId: $("#gradeId").val()},
-								 	pagination: false,
-								 	template: getFileContent('tpl/template/select-option.tpl'),
-								 	ajaxSendLoadBefore: function(hdb){},
-								 	ajaxSendAfter:function(data){
-								 		$("#subjectId").val(json.bean.subjectId);
-								 		form.render();
-								 	}
-							    });
-						 	}
-					    });
-					    $("input:radio[name=type][value=" + json.bean.type + "]").attr("checked", true);
-					    $("#fraction").val(json.bean.fraction);
-					    // 知识点赋值
-					    schoolKnowledgeMationList = [].concat(json.bean.knowledgeList);
-					    var str = "";
-					    $.each(schoolKnowledgeMationList, function(i, item){
-	                		str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.title + '</span>';
-	                	});
-	    				$("#schoolKnowledgeChoose").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="schoolKnowledgeChoose">知识点选择</button>' + str);
-					    
-	    				// 题目信息赋值
-	    				$(".surveyQuItemBody").html(getDataUseHandlebars($("#template").html(), json));
-	    				
-	    				// 设置tab
-	    				tabIndex = json.bean.fileType;
-	    				fileUrl = json.bean.fileUrl;
-	    				$('.layui-tab-title li').eq(tabIndex).addClass('layui-this').siblings().removeClass('layui-this');
-						$('.layui-tab-item').eq(tabIndex).addClass('layui-show').siblings().removeClass('layui-show');
-						
-	    				// 设置是否允许拍照/上传图片选中
-			 			$("input:radio[name=whetherUpload][value=" + json.bean.whetherUpload + "]").attr("checked", true);
-	    				
-	    				form.render();
-	    				
-	    				// 加载上传和切换监听事件
-						pageLoadAfter();
-	    				
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					$("#schoolId").val(json.bean.schoolId);
+					showGrid({
+						id: "gradeId",
+						url: schoolBasePath + "grademation006",
+						params: {schoolId: $("#schoolId").val()},
+						pagination: false,
+						template: getFileContent('tpl/template/select-option.tpl'),
+						ajaxSendLoadBefore: function(hdb){},
+						ajaxSendAfter:function(data){
+							$("#gradeId").val(json.bean.gradeId);
+							showGrid({
+								id: "subjectId",
+								url: schoolBasePath + "schoolsubjectmation007",
+								params: {gradeId: $("#gradeId").val()},
+								pagination: false,
+								template: getFileContent('tpl/template/select-option.tpl'),
+								ajaxSendLoadBefore: function(hdb){},
+								ajaxSendAfter:function(data){
+									$("#subjectId").val(json.bean.subjectId);
+									form.render();
+								}
+							});
+						}
+					});
+					$("input:radio[name=type][value=" + json.bean.type + "]").attr("checked", true);
+					$("#fraction").val(json.bean.fraction);
+					// 知识点赋值
+					schoolKnowledgeMationList = [].concat(json.bean.knowledgeList);
+					var str = "";
+					$.each(schoolKnowledgeMationList, function(i, item){
+						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.title + '</span>';
+					});
+					$("#schoolKnowledgeChoose").parent().html('<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="schoolKnowledgeChoose">知识点选择</button>' + str);
+
+					// 题目信息赋值
+					$(".surveyQuItemBody").html(getDataUseHandlebars($("#template").html(), json));
+
+					// 设置tab
+					tabIndex = json.bean.fileType;
+					fileUrl = json.bean.fileUrl;
+					$('.layui-tab-title li').eq(tabIndex).addClass('layui-this').siblings().removeClass('layui-this');
+					$('.layui-tab-item').eq(tabIndex).addClass('layui-show').siblings().removeClass('layui-show');
+
+					// 设置是否允许拍照/上传图片选中
+					$("input:radio[name=whetherUpload][value=" + json.bean.whetherUpload + "]").attr("checked", true);
+
+					form.render();
+
+					// 加载上传和切换监听事件
+					pageLoadAfter();
 				}});
 			} else {
 				// 加载年级
@@ -212,12 +207,8 @@ layui.config({
 	    		params.checkboxTd = JSON.stringify(checkboxTd);
 	    		
     			AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank005", params: params, type: 'json', callback: function (json) {
-    				if (json.returnCode == 0) {
-    					parent.layer.close(index);
-    	 	        	parent.refreshCode = '0';
-    				} else {
-    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    				}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
     			}});
  	        }
  	        return false;

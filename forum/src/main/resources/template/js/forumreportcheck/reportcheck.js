@@ -12,17 +12,13 @@ layui.config({
 	    
 	    //帖子信息展示
         AjaxPostUtil.request({url: reqBasePath + "forumcontent006", params: {rowId:parent.forumId}, type: 'json', callback: function (json) {
-            if (json.returnCode == 0) {
-                $("#content").html(json.bean.content);
-                $("#title").html(json.bean.title);
-                $("#createTime").html(json.bean.createTime);
-                $("#photo").html("<img userId=" + json.bean.userId + " alt='' src=" + json.bean.userPhoto + ">");
-                $("#content").removeClass("layui-hide");
-                $("#showForm").removeClass("layui-hide");
-                matchingLanguage();
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+			$("#content").html(json.bean.content);
+			$("#title").html(json.bean.title);
+			$("#createTime").html(json.bean.createTime);
+			$("#photo").html("<img userId=" + json.bean.userId + " alt='' src=" + json.bean.userPhoto + ">");
+			$("#content").removeClass("layui-hide");
+			$("#showForm").removeClass("layui-hide");
+			matchingLanguage();
         }});
 	    
 	    //单选框变化事件

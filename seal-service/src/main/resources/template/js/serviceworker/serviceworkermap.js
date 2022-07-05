@@ -6,45 +6,40 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$;
 	
 	var userList = new Array();
 	
     AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker007", params: {}, type: 'json', callback: function (json) {
-		if (json.returnCode == 0) {
-			userList = json.rows;
-			var map = new AMap.Map('container', {
-				resizeEnable: true,
-				center: [json.rows.length > 0 ? json.rows[0].longitude : '116.397428', json.rows.length > 0 ? json.rows[0].latitude : '39.90923'],
-				zoom: 13
+		userList = json.rows;
+		var map = new AMap.Map('container', {
+			resizeEnable: true,
+			center: [json.rows.length > 0 ? json.rows[0].longitude : '116.397428', json.rows.length > 0 ? json.rows[0].latitude : '39.90923'],
+			zoom: 13
+		});
+
+		map.clearMap(); // 清除地图覆盖物
+
+		$.each(json.rows, function(i, item){
+			new AMap.Marker({
+				map: map,
+				content: getIconContent(item.id, item.userName, item.userPhoto),
+				position: [item.longitude, item.latitude],
+				offset: new AMap.Pixel(-13, -30)
 			});
-			
-			map.clearMap(); // 清除地图覆盖物
-			
-			$.each(json.rows, function(i, item){
-				new AMap.Marker({
-					map: map,
-					content: getIconContent(item.id, item.userName, item.userPhoto),
-					position: [item.longitude, item.latitude],
-					offset: new AMap.Pixel(-13, -30)
-				});
-			});
-			
-			var center = map.getCenter();
-			
-			var centerText = '工人总数量：' + json.rows.length;
-			document.getElementById('centerCoord').innerHTML = centerText;
-			
-			// 添加事件监听, 使地图自适应显示到合适的范围
-			AMap.event.addDomListener(document.getElementById('setFitView'), 'click', function() {
-				var newCenter = map.setFitView();
-			});
-			
-			matchingLanguage();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		}
+		});
+
+		var center = map.getCenter();
+
+		var centerText = '工人总数量：' + json.rows.length;
+		document.getElementById('centerCoord').innerHTML = centerText;
+
+		// 添加事件监听, 使地图自适应显示到合适的范围
+		AMap.event.addDomListener(document.getElementById('setFitView'), 'click', function() {
+			var newCenter = map.setFitView();
+		});
+
+		matchingLanguage();
 	}});
 	
 	$("body").on("click", ".custom-content-marker", function (e) {

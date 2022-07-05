@@ -107,7 +107,6 @@ layui.config({
         });
 		
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	var pId = '0';
 	        	if($("input[name='schoolType']:checked").val() == '2'){
@@ -136,12 +135,8 @@ layui.config({
 			        	};
 			        	
 			        	AjaxPostUtil.request({url:schoolBasePath + "schoolmation002", params: params, type: 'json', callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			parent.layer.close(index);
-				 	        	parent.refreshCode = '0';
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 			 	   		}});
 			 	   	} else {
                 		winui.window.msg('地图信息获取失败.', {icon: 2, time: 2000});

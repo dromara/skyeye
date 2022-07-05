@@ -20,35 +20,31 @@ layui.config({
     var beanTemplate = $("#beanTemplate").html();
 
     AjaxPostUtil.request({url: flowableBasePath + "checkworkovertime004", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(mation) {
-        if(mation.returnCode == 0) {
-            $("#useTitle").html(mation.bean.title);
-            $("#useName").html(mation.bean.userName);
-            $("#content").html(mation.bean.content);
-            $("#remark").val(mation.bean.remark);
-            // 附件回显
-            skyeyeEnclosure.initTypeISData({'enclosureUpload': mation.bean.enclosureInfo});
+        $("#useTitle").html(mation.bean.title);
+        $("#useName").html(mation.bean.userName);
+        $("#content").html(mation.bean.content);
+        $("#remark").val(mation.bean.remark);
+        // 附件回显
+        skyeyeEnclosure.initTypeISData({'enclosureUpload': mation.bean.enclosureInfo});
 
-            if(mation.bean.state == '1'){
-                $(".typeTwo").removeClass("layui-hide");
-            } else {
-                $(".typeOne").removeClass("layui-hide");
-            }
-
-            form.render();
-            matchingLanguage();
-            $.each(mation.bean.overtimeDay, function(i, item) {
-                addRow();
-                $("#overtimeDay" + (rowNum - 1).toString()).val(item.overtimeDay);
-                $("#overtimeStartTime" + (rowNum - 1).toString()).val(item.overtimeStartTime);
-                $("#overtimeEndTime" + (rowNum - 1).toString()).val(item.overtimeEndTime);
-                $("#overtimeHour" + (rowNum - 1).toString()).html(item.overtimeHour);
-                $("#remark" + (rowNum - 1).toString()).val(item.remark);
-                form.render('select');
-                form.render('checkbox');
-            });
+        if(mation.bean.state == '1'){
+            $(".typeTwo").removeClass("layui-hide");
         } else {
-            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            $(".typeOne").removeClass("layui-hide");
         }
+
+        form.render();
+        matchingLanguage();
+        $.each(mation.bean.overtimeDay, function(i, item) {
+            addRow();
+            $("#overtimeDay" + (rowNum - 1).toString()).val(item.overtimeDay);
+            $("#overtimeStartTime" + (rowNum - 1).toString()).val(item.overtimeStartTime);
+            $("#overtimeEndTime" + (rowNum - 1).toString()).val(item.overtimeEndTime);
+            $("#overtimeHour" + (rowNum - 1).toString()).html(item.overtimeHour);
+            $("#remark" + (rowNum - 1).toString()).val(item.remark);
+            form.render('select');
+            form.render('checkbox');
+        });
     }});
 
     // 保存为草稿
@@ -116,12 +112,8 @@ layui.config({
             approvalId: approvalId,
         };
         AjaxPostUtil.request({url: flowableBasePath + "checkworkovertime005", params: params, type: 'json', method: 'PUT', callback: function(json) {
-            if(json.returnCode == 0) {
-                parent.layer.close(index);
-                parent.refreshCode = '0';
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            parent.layer.close(index);
+            parent.refreshCode = '0';
         }});
     }
 

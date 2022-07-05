@@ -103,12 +103,8 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "supplier004", params: {rowId: data.id}, type: 'json', callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -117,12 +113,8 @@ layui.config({
     function editEnabled(data){
         layer.confirm('确认要更改该供应商为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "supplier006", params: {rowId: data.id}, type: 'json', callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg("设置成功。", {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg("设置成功。", {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -131,12 +123,8 @@ layui.config({
     function editNotEnabled(data){
         layer.confirm('确认要更改该供应商为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "supplier007", params: {rowId: data.id}, type: 'json', callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg("设置成功。", {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg("设置成功。", {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }

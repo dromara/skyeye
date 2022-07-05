@@ -187,12 +187,8 @@ layui.config({
 					subType: subType
 				};
 				AjaxPostUtil.request({url: flowableBasePath + "sealseservice035", params: params, type: 'json', callback: function (json) {
-					if (json.returnCode == 0){
-						parent.layer.close(index);
-						parent.refreshCode = '0';
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 				}});
 			}
 		}
@@ -247,15 +243,11 @@ layui.config({
 			if(!isNull(chooseUnitId)){
 				//获取库存
 				AjaxPostUtil.request({url: flowableBasePath + "sealseservice034", params: {mUnitId: chooseUnitId}, type: 'json', callback: function(json) {
-					if(json.returnCode == 0) {
-						var currentTock = 0;
-						if(!isNull(json.bean)){
-							currentTock = json.bean.stockNum;
-						}
-						$("#currentTock" + rowNum).html(currentTock);
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+					var currentTock = 0;
+					if(!isNull(json.bean)){
+						currentTock = json.bean.stockNum;
 					}
+					$("#currentTock" + rowNum).html(currentTock);
 				}});
 			} else {
 				//否则重置库存为空

@@ -39,41 +39,37 @@ layui.config({
 
  		function loadData(){
 			AjaxPostUtil.request({url:flowableBasePath + "erppick010", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
-	 	   			var data = json.bean;
-	 	   			if(!isNull(data.machinId)){
-		 	   			$("#machinOrder").val(data.machinNum);
-		 	   			machinMation = {
-		 	   				id: data.machinId,
-		 	   				productionId: data.productionId
-		 	   			};
-	 	   			}
-	 	   			$("#depotId").val(data.depotId);
-                	$("#operTime").val(data.operTime);
-                	$("#remark").val(data.remark);
-                	
-                	$.each(data.items, function(i, item){
-            			addRow();
-						//将规格所属的商品信息加入到对象中存储
-						allChooseProduct["tr" + (rowNum - 1)] = item;
-						//单位回显
-						$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.unitList}));
-						$("#unitId" + (rowNum - 1)).val(item.normsId);
-						//商品回显
-						$("#materialId" + (rowNum - 1)).val(item.productName + "(" + item.productModel + ")");
-						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
-						//补充数量
-						$("#rkNum" + (rowNum - 1)).val(item.needNumber);
-						$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
-					});
-					matchingLanguage();
-					form.render();
-					
-					//计算价格
-					calculatedTotalPrice();
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				var data = json.bean;
+				if(!isNull(data.machinId)){
+					$("#machinOrder").val(data.machinNum);
+					machinMation = {
+						id: data.machinId,
+						productionId: data.productionId
+					};
+				}
+				$("#depotId").val(data.depotId);
+				$("#operTime").val(data.operTime);
+				$("#remark").val(data.remark);
+
+				$.each(data.items, function(i, item){
+					addRow();
+					//将规格所属的商品信息加入到对象中存储
+					allChooseProduct["tr" + (rowNum - 1)] = item;
+					//单位回显
+					$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.unitList}));
+					$("#unitId" + (rowNum - 1)).val(item.normsId);
+					//商品回显
+					$("#materialId" + (rowNum - 1)).val(item.productName + "(" + item.productModel + ")");
+					$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
+					//补充数量
+					$("#rkNum" + (rowNum - 1)).val(item.needNumber);
+					$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
+				});
+				matchingLanguage();
+				form.render();
+
+				//计算价格
+				calculatedTotalPrice();
  	   		}});
 		}
 		

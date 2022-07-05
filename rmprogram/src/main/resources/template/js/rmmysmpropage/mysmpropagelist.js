@@ -43,11 +43,7 @@ layui.config({
 	 		 				editPageModelSelectId = row.id;
 	 		 				editPageModelSelectChange = false;
 	 			 			AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
-	 			 	   			if (json.returnCode == 0) {
-	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-	 			 	   			} else {
-	 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 			 	   			}
+								showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 	 			 	   		}});
 	 		 			});
 	 				} else {
@@ -56,11 +52,7 @@ layui.config({
 	 					editPageModelSelectId = row.id;
 	 					editPageModelSelectChange = false;
 	 		 			AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
-	 		 	   			if (json.returnCode == 0) {
-	 		 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-	 		 	   			} else {
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 		 	   			}
+							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 	 		 	   		}});
 	 				}
 	 			}
@@ -79,11 +71,7 @@ layui.config({
 						editPageModelSelectId = "";
 						editPageModelSelectChange = false;
 						AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
-							if (json.returnCode == 0) {
-								showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-							} else {
-								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-							}
+							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 						}});
 	 				}});
 	 		},
@@ -113,11 +101,7 @@ layui.config({
 					editPageModelSelectId = "";
 					editPageModelSelectChange = false;
 					AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
-						if (json.returnCode == 0) {
-							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 					}});
 	 	   		}});
 	 		},
@@ -130,22 +114,14 @@ layui.config({
 	 				layer.close(index);
 	 	            
 	 	            AjaxPostUtil.request({url: reqBasePath + "rmxcx035", params:{rowId: row.id}, type: 'json', callback: function (json) {
-	 	    			if (json.returnCode == 0) {
-	 	    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-	 	    				refreshGrid("pageList", {params:{rowId: proId}});
-	 	    				//重置中间模块
-	 	    				editPageModelSelectId = "";
-	 			 			editPageModelSelectChange = false;
-	 			 			AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
-	 			 	   			if (json.returnCode == 0) {
-	 			 	   				showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
-	 			 	   			} else {
-	 			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 			 	   			}
-	 			 	   		}});
-	 	    			} else {
-	 	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	    			}
+						winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+						refreshGrid("pageList", {params:{rowId: proId}});
+						//重置中间模块
+						editPageModelSelectId = "";
+						editPageModelSelectChange = false;
+						AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
+						}});
 	 	    		}});
 	 			});
 	 		}
@@ -312,52 +288,47 @@ layui.config({
     	var memberId = $(this).parent().attr("rowId");
     	//获取组件的标签属性
     	AjaxPostUtil.request({url: reqBasePath + "rmxcx040", params:{rowId: memberId}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				if(json.total != 0){
-   					var str = "";
-   					var jsRelyOn = "";
-   					var jsContent = "";
-   					for(var i = 0; i < json.rows.length; i++){
-   						if(json.rows[i].selChildData == '1'){
-   							var modeContent = getDataUseHandlebars(json.rows[i].templateContent, json.rows[i].propertyValue);
-   							json.rows[i].htmlContent = json.rows[i].htmlContent.replace(/{{content}}/g, modeContent);
-   						}
-   						var defaultValue = "";
-   						if(json.rows[i].propertyUnit == '%'){//百分号计算获取宽高百分比
-   							defaultValue = Math.ceil($("div#centerText .show-operation").children().width() / $("div#centerText .show-operation").width() * 100);
-   						} else {
-   							defaultValue = $("div#centerText .show-operation").children().css(json.rows[i].propertyTag).replace(json.rows[i].propertyUnit, '');
-   						}
-   						str = str + json.rows[i].htmlContent.replace(/{{id}}/g, json.rows[i].id).replace(/{{labelContent}}/g, json.rows[i].title)
-   									.replace(/{{placeholder}}/g, json.rows[i].title).replace(/{{tag}}/g, json.rows[i].propertyTag)
-   									.replace(/{{unit}}/g, json.rows[i].propertyUnit).replace(/{{out}}/g, json.rows[i].propertyOut)
-   									.replace(/{{defaultValue}}/g, defaultValue);
-   						jsRelyOn = jsRelyOn + json.rows[i].jsRelyOn;
-   						jsContent = jsContent + json.rows[i].jsContent.replace(/{{id}}/g, json.rows[i].id).replace(/%2B/g, '\+').replace(/%26/g, "\&")
-   															.replace(/{{defaultValue}}/g, defaultValue);
-   					}
-   					jsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + jsContent + '})(jQuery);});</script>';
-   					if(isNull(str)){
-   						$("#showForm").html(noMatchingBeansMation);
-   					} else {
-   						str = str + '<div class="layui-form-item"><div class="layui-input-block"><button class="winui-btn" lay-submit lay-filter="saveProperty">保存属性</button></div></div>';
-   						$("#showForm").html(str + jsContent);
-   						form.render();
-   						form.on('submit(saveProperty)', function (data) {
-   					    	
-   							console.log(data);
-   					        if (winui.verifyForm(data.elem)) {
-   					        	
-   					        }
-   					        return false;
-   						});
-   					}
-   				} else {
-   					$("#showForm").html(noMatchingBeansMation);
-   				}
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			if(json.total != 0){
+				var str = "";
+				var jsRelyOn = "";
+				var jsContent = "";
+				for(var i = 0; i < json.rows.length; i++){
+					if(json.rows[i].selChildData == '1'){
+						var modeContent = getDataUseHandlebars(json.rows[i].templateContent, json.rows[i].propertyValue);
+						json.rows[i].htmlContent = json.rows[i].htmlContent.replace(/{{content}}/g, modeContent);
+					}
+					var defaultValue = "";
+					if(json.rows[i].propertyUnit == '%'){//百分号计算获取宽高百分比
+						defaultValue = Math.ceil($("div#centerText .show-operation").children().width() / $("div#centerText .show-operation").width() * 100);
+					} else {
+						defaultValue = $("div#centerText .show-operation").children().css(json.rows[i].propertyTag).replace(json.rows[i].propertyUnit, '');
+					}
+					str = str + json.rows[i].htmlContent.replace(/{{id}}/g, json.rows[i].id).replace(/{{labelContent}}/g, json.rows[i].title)
+								.replace(/{{placeholder}}/g, json.rows[i].title).replace(/{{tag}}/g, json.rows[i].propertyTag)
+								.replace(/{{unit}}/g, json.rows[i].propertyUnit).replace(/{{out}}/g, json.rows[i].propertyOut)
+								.replace(/{{defaultValue}}/g, defaultValue);
+					jsRelyOn = jsRelyOn + json.rows[i].jsRelyOn;
+					jsContent = jsContent + json.rows[i].jsContent.replace(/{{id}}/g, json.rows[i].id).replace(/%2B/g, '\+').replace(/%26/g, "\&")
+														.replace(/{{defaultValue}}/g, defaultValue);
+				}
+				jsContent = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + jsContent + '})(jQuery);});</script>';
+				if(isNull(str)){
+					$("#showForm").html(noMatchingBeansMation);
+				} else {
+					str = str + '<div class="layui-form-item"><div class="layui-input-block"><button class="winui-btn" lay-submit lay-filter="saveProperty">保存属性</button></div></div>';
+					$("#showForm").html(str + jsContent);
+					form.render();
+					form.on('submit(saveProperty)', function (data) {
+						console.log(data);
+						if (winui.verifyForm(data.elem)) {
+
+						}
+						return false;
+					});
+				}
+			} else {
+				$("#showForm").html(noMatchingBeansMation);
+			}
    		}});
     });
     

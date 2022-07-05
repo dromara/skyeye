@@ -103,29 +103,25 @@ layui.config({
     
     function loadThisMonthHis(callback, start){
         AjaxPostUtil.request({url: flowableBasePath + "checkwork014", params:{monthMation: start._d.format("yyyy-MM"), timeId: $("#checkTime").val()}, type: 'json', callback: function (json) {
-            if (json.returnCode == 0) {
-                var event = [];
-                if(!isNull(json.rows)){
-                    $.each(json.rows, function(i, item) {
-						event.push({
-							title: ($.inArray(item.type.toString(), topLeftDayType) > -1) ? item.title : item.title + ":" + item.clockIn,
-							start: item.start,
-							end: item.end,
-							backgroundColor: item.backgroundColor,
-							allday: item.allday,
-							showBg: item.showBg,
-							editable: item.editable,
-							id: item.id,
-							className: item.className
-						});
-                   });
-                }
-				callback(event);
-                if(!checkWorkDescShow)
-            	    initIsCheck();
-            } else {
-                winui.window.msg(json.returnMessage, { shift: 6, skin: 'msg-skin-message'});
-            }
+			var event = [];
+			if(!isNull(json.rows)){
+				$.each(json.rows, function(i, item) {
+					event.push({
+						title: ($.inArray(item.type.toString(), topLeftDayType) > -1) ? item.title : item.title + ":" + item.clockIn,
+						start: item.start,
+						end: item.end,
+						backgroundColor: item.backgroundColor,
+						allday: item.allday,
+						showBg: item.showBg,
+						editable: item.editable,
+						id: item.id,
+						className: item.className
+					});
+			   });
+			}
+			callback(event);
+			if(!checkWorkDescShow)
+				initIsCheck();
         }});
     }
     
@@ -135,25 +131,21 @@ layui.config({
     function initIsCheck(callBack){
     	checkWorkDescShow = true;
         AjaxPostUtil.request({url: flowableBasePath + "checkwork013", params: {timeId: $("#checkTime").val()}, type: 'json', callback: function (json) {
-            if (json.returnCode == 0) {
-            	clockOut = json.bean.clockOut;
-				dayType = json.bean.type;
-            	var s = "";
-            	if(json.bean.type == 1){
-            		s = getTipStrByTimeId(json);
-				}else if(json.bean.type == 2){
-					s = getTipStrByOverTime(json);
-				}
+			clockOut = json.bean.clockOut;
+			dayType = json.bean.type;
+			var s = "";
+			if(json.bean.type == 1){
+				s = getTipStrByTimeId(json);
+			}else if(json.bean.type == 2){
+				s = getTipStrByOverTime(json);
+			}
 
-                $("#checkWorkDescShow").html(s);
-                // 控制打卡按钮的显示和隐藏
-				showOrHideBtn(json);
-                if(typeof(callBack) == "function") {
-					callBack();
-				}
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+			$("#checkWorkDescShow").html(s);
+			// 控制打卡按钮的显示和隐藏
+			showOrHideBtn(json);
+			if(typeof(callBack) == "function") {
+				callBack();
+			}
         }});
     }
 
@@ -245,13 +237,9 @@ layui.config({
 			timeId = "-";
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "checkwork001", params:{timeId: timeId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				$("#clockInBtn").hide();
-				calendar.fullCalendar('refetchEvents');
-				winui.window.msg("上班打卡成功", {icon: 1, time: 2000});
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			$("#clockInBtn").hide();
+			calendar.fullCalendar('refetchEvents');
+			winui.window.msg("上班打卡成功", {icon: 1, time: 2000});
 		}});
 	});
 	
@@ -274,13 +262,9 @@ layui.config({
 			timeId = "-";
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "checkwork002", params:{timeId: timeId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				$("#clockOutBtn").hide();
-				calendar.fullCalendar('refetchEvents');
-				winui.window.msg("下班打卡成功", {icon: 1, time: 2000});
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			$("#clockOutBtn").hide();
+			calendar.fullCalendar('refetchEvents');
+			winui.window.msg("下班打卡成功", {icon: 1, time: 2000});
 		}});
 	}
 

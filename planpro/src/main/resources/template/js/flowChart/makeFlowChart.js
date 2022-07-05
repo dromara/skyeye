@@ -57,19 +57,15 @@ layui.config({
 			designId = treeNode.id;
 			$("#flowName").html(treeNode.title);
 			AjaxPostUtil.request({url: reqBasePath + "planprojectflow006", params: {rowId: treeNode.id}, type: 'json', method: "GET", callback: function (json) {
-				if (json.returnCode == 0) {
-					$("#zzc").removeClass("zzc");
-					net.changeData();
-					if(isNull(json.bean.jsonContent)){
-						net.source({});
-					} else {
-						var jsonData = JSON.parse(json.bean.jsonContent);
-						net.source(jsonData.source.nodes, jsonData.source.edges);
-					}
-					net.render();
+				$("#zzc").removeClass("zzc");
+				net.changeData();
+				if(isNull(json.bean.jsonContent)){
+					net.source({});
 				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+					var jsonData = JSON.parse(json.bean.jsonContent);
+					net.source(jsonData.source.nodes, jsonData.source.edges);
 				}
+				net.render();
 			}});
 		}
 	}
@@ -156,19 +152,15 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
 			AjaxPostUtil.request({url: reqBasePath + "planprojectflow003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
-				if (json.returnCode == 0) {
-					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-					if(data.id === designId){
-						$("#flowName").html("流程图");
-						$("#zzc").addClass("zzc");
-						net.changeData();
-						net.source({});
-						net.render();
-					}
-					loadTable();
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				if(data.id === designId){
+					$("#flowName").html("流程图");
+					$("#zzc").addClass("zzc");
+					net.changeData();
+					net.source({});
+					net.render();
 				}
+				loadTable();
 			}});
 		});
 	}
@@ -396,11 +388,7 @@ layui.config({
 		const saveData = net.save();
 	    const json = JSON.stringify(saveData, null, 2);
 	    AjaxPostUtil.request({url: reqBasePath + "planprojectflow007", params: {rowId: designId, jsonContent: json}, type: 'json', method: "POST", callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg("保存成功", {icon: 1, time: 2000});
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg("保存成功", {icon: 1, time: 2000});
 		}});
 	});
 	

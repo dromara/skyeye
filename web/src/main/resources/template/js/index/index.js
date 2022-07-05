@@ -89,194 +89,158 @@ layui.config({
 
 		//获取桌面消息
 		AjaxPostUtil.request({url: reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
-			if(l.returnCode == 0) {
-				var deskTopName = new Array();
-				var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
-				deskTopName.push(defaultName);
-				var desktopSel = '<option value="winfixedpage00000000">' + defaultName + '</option>';
-				//初始化桌面
-				$.each(l.rows, function(i, item){
-					deskTopName.push(item.name);
-					desktopSel += '<option value="' + item.id + '">' + item.name + '</option>';
-					$("#winui-desktop").append('<article class="desktop-item-page section" id="' + item.id + '" art-title="' + item.name + '"></article>');
-				});
-				$('#winui-desktop').fullpage({
-					'navigation': true,
-					scrollingSpeed: 500,
-					navigationTooltips: deskTopName,
-					resize: true,
-					afterLoad: function(anchorLink, index){
-						var id = $("#winui-desktop").find(".desktop-item-page").eq(index - 1).attr("id");
-						$("#desktop-sel").val(id);
-					}
-				});
-				$("#desktop-sel").html(desktopSel);
-				$("#winui-desktop").find(".desktop-item-page").html("");
-				$("body").on('change', '#desktop-sel', function (e) {
-					var val = $("#desktop-sel").prop('selectedIndex');
-					$.fn.fullpage.moveTo(++val);
-				});
+			var deskTopName = new Array();
+			var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
+			deskTopName.push(defaultName);
+			var desktopSel = '<option value="winfixedpage00000000">' + defaultName + '</option>';
+			//初始化桌面
+			$.each(l.rows, function(i, item){
+				deskTopName.push(item.name);
+				desktopSel += '<option value="' + item.id + '">' + item.name + '</option>';
+				$("#winui-desktop").append('<article class="desktop-item-page section" id="' + item.id + '" art-title="' + item.name + '"></article>');
+			});
+			$('#winui-desktop').fullpage({
+				'navigation': true,
+				scrollingSpeed: 500,
+				navigationTooltips: deskTopName,
+				resize: true,
+				afterLoad: function(anchorLink, index){
+					var id = $("#winui-desktop").find(".desktop-item-page").eq(index - 1).attr("id");
+					$("#desktop-sel").val(id);
+				}
+			});
+			$("#desktop-sel").html(desktopSel);
+			$("#winui-desktop").find(".desktop-item-page").html("");
+			$("body").on('change', '#desktop-sel', function (e) {
+				var val = $("#desktop-sel").prop('selectedIndex');
+				$.fn.fullpage.moveTo(++val);
+			});
 
-				//加载win系统内容
-				initWinConfig(currentUserMation);
-				//加载聊天
-				initTalk();
-				//加载右键
-				initRightMenu();
-				//扩展桌面助手工具
-				winui.helper.addTool([{
-					tips: '主题设置',
-					icon: 'fa-paw',
-					click: function (e) {
-						winui.window.openTheme(loadBottomMenuIcon);
+			//加载win系统内容
+			initWinConfig(currentUserMation);
+			//加载聊天
+			initTalk();
+			//加载右键
+			initRightMenu();
+			//扩展桌面助手工具
+			winui.helper.addTool([{
+				tips: '主题设置',
+				icon: 'fa-paw',
+				click: function (e) {
+					winui.window.openTheme(loadBottomMenuIcon);
+				}
+			}, {
+				tips: '添加便签',
+				icon: 'fa-pencil-square-o',
+				click: function(e) {
+					var tagsCount = $('.winui-helper-content').children('.tags-content').length;
+					if(tagsCount >= 5) {
+						layer.msg('最多只能存五条便签', {
+							zIndex: layer.zIndex
+						});
+						return;
 					}
-				}, {
-					tips: '添加便签',
-					icon: 'fa-pencil-square-o',
-					click: function(e) {
-						var tagsCount = $('.winui-helper-content').children('.tags-content').length;
-						if(tagsCount >= 5) {
-							layer.msg('最多只能存五条便签', {
-								zIndex: layer.zIndex
-							});
-							return;
-						}
-						$('.winui-helper-content').append('<hr /><div class="tags-content"><textarea placeholder="请输入便签"></textarea></div>');
-						var $currTextarea = $('.winui-helper-content').children('.tags-content').eq(tagsCount).children('textarea');
-						$currTextarea.focus();
-						$currTextarea.on('blur', function() {
-							var _this = this;
-							var content = $(_this).val();
-							var id = $(_this).attr("rowid");
-							if($.trim(content) === '') {
-								if(isNull(id)){
+					$('.winui-helper-content').append('<hr /><div class="tags-content"><textarea placeholder="请输入便签"></textarea></div>');
+					var $currTextarea = $('.winui-helper-content').children('.tags-content').eq(tagsCount).children('textarea');
+					$currTextarea.focus();
+					$currTextarea.on('blur', function() {
+						var _this = this;
+						var content = $(_this).val();
+						var id = $(_this).attr("rowid");
+						if($.trim(content) === '') {
+							if(isNull(id)){
+								$(_this).parent().prev().remove();
+								$(_this).remove();
+							} else {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function (json) {
 									$(_this).parent().prev().remove();
 									$(_this).remove();
-								} else {
-									AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function (json) {
-										if(json.returnCode == 0) {
-											$(_this).parent().prev().remove();
-											$(_this).remove();
-										} else {
-											winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-										}
-									}});
-								}
-							} else {
-								if(isNull(id)){
-									AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function (json) {
-										if(json.returnCode == 0) {
-											$(_this).attr("rowid", json.bean.id);
-										} else {
-											winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-										}
-									}});
-								} else {
-									AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function (json) {
-										if(json.returnCode == 0) {
-										} else {
-											winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-										}
-									}});
-								}
+								}});
 							}
-						});
-					}
-				}, {
-					tips: '消息中心',
-					icon: 'fa-list-ul',
-					click: function(e) {
-						winui.window.openSysNotice(loadBottomMenuIcon);
-					}
-				}]);
-
-				// 读取本地便签
-				AjaxPostUtil.request({url: reqBasePath + "stickynotes002", params: {}, type: 'json', method: "GET", callback: function (json) {
-					if(json.returnCode == 0) {
-						var tags = json.rows;
-						$.each(tags, function(index, item) {
-							if(index >= 5)
-								return;
-							$('.winui-helper-content').append('<hr /><div class="tags-content"><textarea placeholder="请输入便签" rowid="' + item.id + '">' + item.content + '</textarea></div>');
-							$('.winui-helper-content').children('.tags-content').eq(index).children('textarea').on('blur', function() {
-								var _this = this;
-								var content = $(_this).val();
-								var id = $(_this).attr("rowid");
-								if($.trim(content) === '') {
-									if(isNull(id)){
-										$(_this).parent().prev().remove();
-										$(_this).remove();
-									} else {
-										AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function (json) {
-											if(json.returnCode == 0) {
-												$(_this).parent().prev().remove();
-												$(_this).remove();
-											} else {
-												winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-											}
-										}});
-									}
-								} else {
-									if(isNull(id)){
-										AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function (json) {
-											if(json.returnCode == 0) {
-												$(_this).attr("rowid", json.bean.id);
-											} else {
-												winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-											}
-										}});
-									} else {
-										AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function (json) {
-											if(json.returnCode == 0) {
-											} else {
-												winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-											}
-										}});
-									}
-								}
-							});
-						});
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
-				}});
-
-				//加载消息通知
-				initNoticeList();
-
-				//进度条加载到100
-				if(loadIndex != 100) {
-					clearInterval(loadInterval);
-					winuiLoad.animate(100);
-				}
-
-				// 判断是否显示锁屏（这个要放在最后执行）
-				if(window.localStorage.getItem("lockscreen") == "true") {
-					winui.lockScreen(function(password) {
-						if(!isNull(password)) {
-							var pJudge = false;
-							AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function(json) {
-								if(json.returnCode == 0) {
-									pJudge = true;
-								} else {
-									pJudge = false;
-									winui.window.msg(json.returnMessage, {shift: 6});
-								}
-							}, async: false});
-							return pJudge;
 						} else {
-							winui.window.msg('请输入密码', {
-								shift: 6
-							});
-							return false;
+							if(isNull(id)){
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function (json) {
+									$(_this).attr("rowid", json.bean.id);
+								}});
+							} else {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function (json) {
+								}});
+							}
 						}
 					});
 				}
+			}, {
+				tips: '消息中心',
+				icon: 'fa-list-ul',
+				click: function(e) {
+					winui.window.openSysNotice(loadBottomMenuIcon);
+				}
+			}]);
 
-				matchingLanguage();
-			} else {
-				winui.window.msg(l.returnMessage, {shift: 6});
+			// 读取本地便签
+			AjaxPostUtil.request({url: reqBasePath + "stickynotes002", params: {}, type: 'json', method: "GET", callback: function (json) {
+				var tags = json.rows;
+				$.each(tags, function(index, item) {
+					if(index >= 5)
+						return;
+					$('.winui-helper-content').append('<hr /><div class="tags-content"><textarea placeholder="请输入便签" rowid="' + item.id + '">' + item.content + '</textarea></div>');
+					$('.winui-helper-content').children('.tags-content').eq(index).children('textarea').on('blur', function() {
+						var _this = this;
+						var content = $(_this).val();
+						var id = $(_this).attr("rowid");
+						if($.trim(content) === '') {
+							if(isNull(id)){
+								$(_this).parent().prev().remove();
+								$(_this).remove();
+							} else {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function (json) {
+									$(_this).parent().prev().remove();
+									$(_this).remove();
+								}});
+							}
+						} else {
+							if(isNull(id)){
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function (json) {
+									$(_this).attr("rowid", json.bean.id);
+								}});
+							} else {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function (json) {
+								}});
+							}
+						}
+					});
+				});
+			}});
+
+			//加载消息通知
+			initNoticeList();
+
+			//进度条加载到100
+			if(loadIndex != 100) {
+				clearInterval(loadInterval);
+				winuiLoad.animate(100);
 			}
+
+			// 判断是否显示锁屏（这个要放在最后执行）
+			if(window.localStorage.getItem("lockscreen") == "true") {
+				winui.lockScreen(function(password) {
+					if(!isNull(password)) {
+						var pJudge = false;
+						AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function(json) {
+							pJudge = true;
+						}, errorCallback: function (json) {
+							pJudge = false;
+							winui.window.msg(json.returnMessage, {shift: 6});
+						}, async: false});
+						return pJudge;
+					} else {
+						winui.window.msg('请输入密码', {shift: 6});
+						return false;
+					}
+				});
+			}
+
+			matchingLanguage();
 		}});
     });
     
@@ -418,13 +382,11 @@ layui.config({
 	   		            	if(!isNull(password)){
 		   		         		var pJudge = false;
 		   		         		AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function (json) {
-		   		      	   			if (json.returnCode == 0) {
-		   		      	   				pJudge = true;
-		   		      	   			} else {
-		   		      	   				pJudge = false;
-		   		      	   				winui.window.msg(json.returnMessage, {shift: 6});
-		   		      	   			}
-		   		      	   		}, async: false});
+									pJudge = true;
+		   		      	   		}, errorCallback: function (json) {
+									pJudge = false;
+									winui.window.msg(json.returnMessage, {shift: 6});
+								}, async: false});
 		   		         		return pJudge;
 		   		         	} else {
 		   		         		winui.window.msg('请输入密码', {shift: 6});
@@ -470,18 +432,16 @@ layui.config({
 							$("#layui-layer-shade" + times).css({'z-index': zIndex});
 						}}, function (index) {
 				        	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
-				 	   			if (json.returnCode == 0) {
-					 	   			if (etiger != null) {
-						 	   			etiger.socket.close();
-						 	   		}
-					 	   			location.href = "login.html";
-				 	   			} else {
-					 	   			if (etiger != null) {
-						 	   			etiger.socket.close();
-						 	   		}
-				 	   				location.href = "login.html";
-				 	   			}
-				 	   		}});
+								if (etiger != null) {
+									etiger.socket.close();
+								}
+								location.href = "login.html";
+				 	   		}, errorCallback: function (json) {
+								if (etiger != null) {
+									etiger.socket.close();
+								}
+								location.href = "login.html";
+							}});
 				        });
 					}
 				}, {
@@ -600,11 +560,7 @@ layui.config({
 		//监听签名修改
 		layim.on('sign', function(value) {
 			AjaxPostUtil.request({url: reqBasePath + "companychat002", params:{userSign: value}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				winui.window.msg('保存成功', {icon: 1, skin: 'msg-skin-message'});
- 		   		} else {
- 	   				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
- 	   			}
+				winui.window.msg('保存成功', {icon: 1, skin: 'msg-skin-message'});
  	   		}});
 		});
 		
@@ -727,108 +683,104 @@ layui.config({
                         	text: '发送到桌面',
                         	callBack: function (id, elem) {
                         		AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop010", params:{rowId: id}, type: 'json', callback: function (json) {
-        			 	   			if (json.returnCode == 0) {
-        			 	   				top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-	        			 	   			var thisMenuIcon = json.bean.icon;
-	        		        			var thisMenuBg = json.bean.menuIconBg;
-	        		        			var thisMenuIconColor = json.bean.menuIconColor;
-	        		        			var thisMenuId = json.bean.id;
-	        		        			var thisMenuUrl = json.bean.pageURL;
-	        		        			var thisMenuTitle = json.bean.title;
-	        		        			var thisMenuOpenType = json.bean.openType;
-	        		        			var thisMenuMaxOpen = json.bean.maxOpen;
-	        		        			var menuIconType = json.bean.menuIconType;
-	        		        			var thisDeskTopId = json.bean.deskTopId;
-        			 	   				
-                                        if(isNull(thisDeskTopId)){
-                                            $.fn.fullpage.moveTo(1);
-                                        } else {
-                                            if($("#winui-desktop").find('article[id="' + thisDeskTopId + '"]').length > 0){
-                                                var topIndex = $("#winui-desktop").find('article[id="' + thisDeskTopId + '"]').index();
-                                                $.fn.fullpage.moveTo(++topIndex);
-                                            } else {
-                                                $.fn.fullpage.moveTo(1);
-                                            }
-                                        }
-                                        
-        			 	   				var str = "";
-        			 	   				var iconTypeI = ""
-        			 	   				if(menuIconType === '1' || menuIconType == 1){
-        			 	   					iconTypeI = "winui-icon-font";
-        			 	   					str = '<i class="fa ' + thisMenuIcon + ' fa-fw" win-i-id="' + thisMenuId + '"></i>';
-        			 	   					thisMenuIcon = json.bean.icon;
-        			 	   				}else if(menuIconType === '2' || menuIconType == 2){
-        			 	   					iconTypeI = "winui-icon-img";
-        			 	   					str = '<img src="' + fileBasePath + json.bean.menuIconPic + '" />';
-        			 	   					thisMenuIcon = json.bean.menuIconPic;
-        			 	   				}
-	        			 	   			if(json.bean.parentId != '0'){//二级菜单
-	    			 	   					var parentId = json.bean.parentId.split(',')[0];
-	    			 	   					if($("#winui-desktop").find('div[id="' + parentId + '"]').length == 0){//二级菜单的父菜单没有在桌面,此处不需要去获取当前滚动展示的模块
-	    			 	   						var boxStr = '<div class="winui-desktop-item sec-btn winui-this" win-id="' + thisMenuId + '" win-url="' + thisMenuUrl + '" win-title="' + thisMenuTitle + '" win-opentype="' + thisMenuOpenType + '" win-maxopen="-1" win-menuiconbg="' + thisMenuBg + '" win-menuiconcolor="' + thisMenuIconColor + '" win-icon="' + thisMenuIcon + '">'
-	    			 	   						+ '<div class="winui-icon ' + iconTypeI + '" style="background-color: ' + thisMenuBg + '; color:' + thisMenuIconColor + '">' + str + '</div>'
-	    			 	   						+ '<p>' + thisMenuTitle + '</p>'
-	    			 	   						'</div>';
-		    			 	   					var obj = getActiveArticle();
-	                                            obj.html(obj.html() + boxStr);
-	    			 	   						//重新排列桌面
-	    			 	   						winui.util.locaApp();
-	    			 	   						//重新初始化拖拽事件
-	    			 	   						initMenuToBox();
-	    			 	   						winui.util.reloadOnClick(function (id, elem) {
-	    			 	   							var item = $(elem);
-	    			 	   							if(item.find(".icon-drawer").length > 0){
-	    			 	   								showBigWin(elem);
-	    			 	   							} else {
-	    			 	   								OpenWindow(elem);
-	    			 	   							}
-	    			 	   						});
-	    			 	   						//重置右键事件
-	    			 	   						initDeskTopMenuRightClick();
-	    			 	   					} else {//二级菜单的父菜单在桌面上
-	    			 	   						var iTag = '<i class="fa icon-drawer-icon" win-i-id="' + thisMenuId + '">' + str + '</i>';
-	    			 	   						//此处不需要去获取当前滚动展示的模块
-	    			 	   						$("#winui-desktop").find('div[id="' + parentId + '"]').find('div[class="icon-drawer"]').append(iTag);
-	    			 	   						var menuStr = '<div class="winui-desktop-item sec-clsss-btn sec-btn" win-id="' + thisMenuId + '" win-url="' + thisMenuUrl + '" win-title="' + thisMenuTitle + '" win-opentype="' + thisMenuOpenType + '" win-maxopen="' + thisMenuMaxOpen + '" win-menuiconbg="' + thisMenuBg + '" win-menuiconcolor="' + thisMenuIconColor + '" win-icon="' + thisMenuIcon + '">'
-	    			 	   						+ '<div class="winui-icon ' + iconTypeI + '" style="background-color: ' + thisMenuBg + '">' + str + '</div>'
-	    			 	   						+ '<p>' + thisMenuTitle + '</p></div>';
-	    			 	   						$("#winui-desktop").find('div[id="' + parentId + '"]').find('div[class="icon-child"]').append(menuStr);
-	    			 	   						//重新排列桌面
-	    			 	   						winui.util.locaApp();
-	    			 	   						winui.util.reloadOnClick(function (id, elem) {
-	    			 	   							var item = $(elem);
-	    			 	   							if(item.find(".icon-drawer").length > 0){
-	    			 	   								showBigWin(elem);
-	    			 	   							} else {
-	    			 	   								OpenWindow(elem);
-	    			 	   							}
-	    			 	   						});
-	    			 	   					}
-	    			 	   				} else {//一级菜单
-	    			 	   					var boxStr = '<div class="winui-desktop-item sec-btn winui-this" win-id="' + thisMenuId + '" win-url="' + thisMenuUrl + '" win-title="' + thisMenuTitle + '" win-opentype="' + thisMenuOpenType + '" win-maxopen="-1" win-menuiconbg="' + thisMenuBg + '" win-menuiconcolor="' + thisMenuIconColor + '" win-icon="' + thisMenuIcon + '">'
-	    			 	   					+ '<div class="winui-icon ' + iconTypeI + '" style="background-color: ' + thisMenuBg + '; color:' + thisMenuIconColor + '">' + str + '</div>'
-	    			 	   					+ '<p>' + thisMenuTitle + '</p>'
-	    			 	   					'</div>';
-		    			 	   				var obj = getActiveArticle();
-	                                        obj.html(obj.html() + boxStr);
-	    			 	   					//重新排列桌面
-	    			 	   					winui.util.locaApp();
-	    			 	   					//重新初始化拖拽事件
-	    			 	   					initMenuToBox();
-	    			 	   					winui.util.reloadOnClick(function (id, elem) {
-	    			 	   						var item = $(elem);
-	    			 	   						if(item.find(".icon-drawer").length > 0){
-	    			 	   							showBigWin(elem);
-	    			 	   						} else {
-	    			 	   							OpenWindow(elem);
-	    			 	   						}
-	    			 	   					});
-	    			 	   					//重置右键事件
-	    			 	   					initDeskTopMenuRightClick();
-	    			 	   				}
-        			 		   		} else {
-        			 	   				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
-        			 	   			}
+									top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+									var thisMenuIcon = json.bean.icon;
+									var thisMenuBg = json.bean.menuIconBg;
+									var thisMenuIconColor = json.bean.menuIconColor;
+									var thisMenuId = json.bean.id;
+									var thisMenuUrl = json.bean.pageURL;
+									var thisMenuTitle = json.bean.title;
+									var thisMenuOpenType = json.bean.openType;
+									var thisMenuMaxOpen = json.bean.maxOpen;
+									var menuIconType = json.bean.menuIconType;
+									var thisDeskTopId = json.bean.deskTopId;
+
+									if(isNull(thisDeskTopId)){
+										$.fn.fullpage.moveTo(1);
+									} else {
+										if($("#winui-desktop").find('article[id="' + thisDeskTopId + '"]').length > 0){
+											var topIndex = $("#winui-desktop").find('article[id="' + thisDeskTopId + '"]').index();
+											$.fn.fullpage.moveTo(++topIndex);
+										} else {
+											$.fn.fullpage.moveTo(1);
+										}
+									}
+
+									var str = "";
+									var iconTypeI = ""
+									if(menuIconType === '1' || menuIconType == 1){
+										iconTypeI = "winui-icon-font";
+										str = '<i class="fa ' + thisMenuIcon + ' fa-fw" win-i-id="' + thisMenuId + '"></i>';
+										thisMenuIcon = json.bean.icon;
+									}else if(menuIconType === '2' || menuIconType == 2){
+										iconTypeI = "winui-icon-img";
+										str = '<img src="' + fileBasePath + json.bean.menuIconPic + '" />';
+										thisMenuIcon = json.bean.menuIconPic;
+									}
+									if(json.bean.parentId != '0'){//二级菜单
+										var parentId = json.bean.parentId.split(',')[0];
+										if($("#winui-desktop").find('div[id="' + parentId + '"]').length == 0){//二级菜单的父菜单没有在桌面,此处不需要去获取当前滚动展示的模块
+											var boxStr = '<div class="winui-desktop-item sec-btn winui-this" win-id="' + thisMenuId + '" win-url="' + thisMenuUrl + '" win-title="' + thisMenuTitle + '" win-opentype="' + thisMenuOpenType + '" win-maxopen="-1" win-menuiconbg="' + thisMenuBg + '" win-menuiconcolor="' + thisMenuIconColor + '" win-icon="' + thisMenuIcon + '">'
+											+ '<div class="winui-icon ' + iconTypeI + '" style="background-color: ' + thisMenuBg + '; color:' + thisMenuIconColor + '">' + str + '</div>'
+											+ '<p>' + thisMenuTitle + '</p>'
+											'</div>';
+											var obj = getActiveArticle();
+											obj.html(obj.html() + boxStr);
+											//重新排列桌面
+											winui.util.locaApp();
+											//重新初始化拖拽事件
+											initMenuToBox();
+											winui.util.reloadOnClick(function (id, elem) {
+												var item = $(elem);
+												if(item.find(".icon-drawer").length > 0){
+													showBigWin(elem);
+												} else {
+													OpenWindow(elem);
+												}
+											});
+											//重置右键事件
+											initDeskTopMenuRightClick();
+										} else {//二级菜单的父菜单在桌面上
+											var iTag = '<i class="fa icon-drawer-icon" win-i-id="' + thisMenuId + '">' + str + '</i>';
+											//此处不需要去获取当前滚动展示的模块
+											$("#winui-desktop").find('div[id="' + parentId + '"]').find('div[class="icon-drawer"]').append(iTag);
+											var menuStr = '<div class="winui-desktop-item sec-clsss-btn sec-btn" win-id="' + thisMenuId + '" win-url="' + thisMenuUrl + '" win-title="' + thisMenuTitle + '" win-opentype="' + thisMenuOpenType + '" win-maxopen="' + thisMenuMaxOpen + '" win-menuiconbg="' + thisMenuBg + '" win-menuiconcolor="' + thisMenuIconColor + '" win-icon="' + thisMenuIcon + '">'
+											+ '<div class="winui-icon ' + iconTypeI + '" style="background-color: ' + thisMenuBg + '">' + str + '</div>'
+											+ '<p>' + thisMenuTitle + '</p></div>';
+											$("#winui-desktop").find('div[id="' + parentId + '"]').find('div[class="icon-child"]').append(menuStr);
+											//重新排列桌面
+											winui.util.locaApp();
+											winui.util.reloadOnClick(function (id, elem) {
+												var item = $(elem);
+												if(item.find(".icon-drawer").length > 0){
+													showBigWin(elem);
+												} else {
+													OpenWindow(elem);
+												}
+											});
+										}
+									} else {//一级菜单
+										var boxStr = '<div class="winui-desktop-item sec-btn winui-this" win-id="' + thisMenuId + '" win-url="' + thisMenuUrl + '" win-title="' + thisMenuTitle + '" win-opentype="' + thisMenuOpenType + '" win-maxopen="-1" win-menuiconbg="' + thisMenuBg + '" win-menuiconcolor="' + thisMenuIconColor + '" win-icon="' + thisMenuIcon + '">'
+										+ '<div class="winui-icon ' + iconTypeI + '" style="background-color: ' + thisMenuBg + '; color:' + thisMenuIconColor + '">' + str + '</div>'
+										+ '<p>' + thisMenuTitle + '</p>'
+										'</div>';
+										var obj = getActiveArticle();
+										obj.html(obj.html() + boxStr);
+										//重新排列桌面
+										winui.util.locaApp();
+										//重新初始化拖拽事件
+										initMenuToBox();
+										winui.util.reloadOnClick(function (id, elem) {
+											var item = $(elem);
+											if(item.find(".icon-drawer").length > 0){
+												showBigWin(elem);
+											} else {
+												OpenWindow(elem);
+											}
+										});
+										//重置右键事件
+										initDeskTopMenuRightClick();
+									}
         			 	   		}});
                         	}
                         }, {
@@ -885,17 +837,13 @@ layui.config({
                     $("#showMyNoticeNum").html("0");
 		 			if(!isNull(idsStr)){
 		 				AjaxPostUtil.request({url: reqBasePath + "syseveusernotice006", params:{rowIds: idsStr}, type: 'json', callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			$.each(noticeList, function(index, item){
-					 				setTimeout(function (e) {
-					 					$(item).animate({'margin-left': '390px'}, 500, function() {
-					 						$(item).remove();
-					 					});
-					 				}, index * 200);
-					 			});
-			 		   		} else {
-			 	   				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
-			 	   			}
+							$.each(noticeList, function(index, item){
+								setTimeout(function (e) {
+									$(item).animate({'margin-left': '390px'}, 500, function() {
+										$(item).remove();
+									});
+								}, index * 200);
+							});
 			 	   		}});
 		 			}
 		 		});
@@ -905,28 +853,24 @@ layui.config({
 		 			var _this = $(this);
 		 			parentRowId = _this.attr("rowid");
 		 			AjaxPostUtil.request({url: reqBasePath + "syseveusernotice003", params:{rowId: parentRowId}, type: 'json', callback: function (json) {
-		 	   			if (json.returnCode == 0) {
-			 	   			_openNewWindows({
-									url: "../../tpl/index/noticeDetail.html", 
-									title: "消息详情",
-									pageId: "noticeDetail" + (new Date()).valueOf(),
-									area: ['600px', '400px'],
-									shade: false,
-									callBack: function(refreshCode){
-								}});
-			 	   			_this.animate({'margin-left': '390px'}, 500, function() {
-			 	   				_this.remove();
-				 	   			var noticeShowListLength = $("#notice-list").find(".winui-message-item").length;
-	                            if(noticeShowListLength === '0' || noticeShowListLength == 0){
-	                                $("#showMyNoticeNum").hide();
-	                                $("#showMyNoticeNum").html("0");
-	                            } else {
-	                                $("#showMyNoticeNum").html(noticeShowListLength);
-	                            }
-				 			});
-		 		   		} else {
-		 	   				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
-		 	   			}
+						_openNewWindows({
+							url: "../../tpl/index/noticeDetail.html",
+							title: "消息详情",
+							pageId: "noticeDetail" + (new Date()).valueOf(),
+							area: ['600px', '400px'],
+							shade: false,
+							callBack: function(refreshCode){
+						}});
+						_this.animate({'margin-left': '390px'}, 500, function() {
+							_this.remove();
+							var noticeShowListLength = $("#notice-list").find(".winui-message-item").length;
+							if(noticeShowListLength === '0' || noticeShowListLength == 0){
+								$("#showMyNoticeNum").hide();
+								$("#showMyNoticeNum").html("0");
+							} else {
+								$("#showMyNoticeNum").html(noticeShowListLength);
+							}
+						});
 		 	   		}});
 		 		});
 		 		
@@ -935,20 +879,16 @@ layui.config({
 		 			var _this = $(this).parent().parent();
 		 			parentRowId = _this.attr("rowid");
 		 			AjaxPostUtil.request({url: reqBasePath + "syseveusernotice004", params:{rowId: parentRowId}, type: 'json', callback: function (json) {
-		 	   			if (json.returnCode == 0) {
-			 	   			_this.animate({'margin-left': '390px'}, 500, function() {
-			 	   				_this.remove();
-				 	   			var noticeShowListLength = $("#notice-list").find(".winui-message-item").length;
-	                            if(noticeShowListLength === '0' || noticeShowListLength == 0){
-	                                $("#showMyNoticeNum").hide();
-	                                $("#showMyNoticeNum").html("0");
-	                            } else {
-	                                $("#showMyNoticeNum").html(noticeShowListLength);
-	                            }
-				 			});
-		 		   		} else {
-		 	   				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
-		 	   			}
+						_this.animate({'margin-left': '390px'}, 500, function() {
+							_this.remove();
+							var noticeShowListLength = $("#notice-list").find(".winui-message-item").length;
+							if(noticeShowListLength === '0' || noticeShowListLength == 0){
+								$("#showMyNoticeNum").hide();
+								$("#showMyNoticeNum").html("0");
+							} else {
+								$("#showMyNoticeNum").html(noticeShowListLength);
+							}
+						});
 		 	   		}});
 		 			return false;
 		 		});
@@ -1128,10 +1068,6 @@ layui.config({
         				}
         			});
         			AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: ""}, type: 'json', callback: function (json) {
-    					if (json.returnCode == 0) {
-    					} else {
-    						winui.window.msg(json.returnMessage, { shift: 6 });
-    					}
     				}});
         			
             	}).on('cancel', function (el, container) {//拖拽取消
@@ -1165,30 +1101,22 @@ layui.config({
     		var rowId = $(this).attr("rowid");
     		var menuName = $("#childWindowInput").val();
     		AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop005", params: {rowId: rowId}, type: 'json', method: "POST", callback: function (json) {
-				if (json.returnCode == 0) {
-					var menuType = json.bean.menuType;
-					if(menuType == '1'){//系统菜单
-						winui.window.msg('无法编辑系统菜单。', {shift: 6, skin: 'msg-skin-message'});
-					}else if(menuType == '3'){//自定义菜单盒子
-						var params = {
-   		        			menuBoxName: menuName,
-   		        			rowId: rowId
-   			        	};
-   			        	AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop007", params: params, type: 'json', callback: function (json) {
-   			 	   			if (json.returnCode == 0) {
-   			 	   				// 此处不需要去获取当前滚动展示的模块
-	   			 	   			$("#winui-desktop").find('div[id="' + rowId + '"]').attr("win-title", menuName);
-			                	$("#winui-desktop").find('div[id="' + rowId + '"]').find('p').html(menuName);
-			                	$('#childWindowtext').show();
-			            		$(".childWindow-title-input-box").show();
-			            		$('#childWindowtext').html(menuName);
-   			 	   			} else {
-   			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			 	   			}
-   			 	   		}});
-					}
-				} else {
-					winui.window.msg(json.returnMessage, { shift: 6 });
+				var menuType = json.bean.menuType;
+				if(menuType == '1'){//系统菜单
+					winui.window.msg('无法编辑系统菜单。', {shift: 6, skin: 'msg-skin-message'});
+				}else if(menuType == '3'){//自定义菜单盒子
+					var params = {
+						menuBoxName: menuName,
+						rowId: rowId
+					};
+					AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop007", params: params, type: 'json', callback: function (json) {
+						// 此处不需要去获取当前滚动展示的模块
+						$("#winui-desktop").find('div[id="' + rowId + '"]').attr("win-title", menuName);
+						$("#winui-desktop").find('div[id="' + rowId + '"]').find('p').html(menuName);
+						$('#childWindowtext').show();
+						$(".childWindow-title-input-box").show();
+						$('#childWindowtext').html(menuName);
+					}});
 				}
 			}});
     	}
@@ -1203,18 +1131,16 @@ layui.config({
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
         	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
- 	   			if (json.returnCode == 0) {
-	 	   			if (etiger != null) {
-		 	   			etiger.socket.close();
-		 	   		}
-	 	   			location.href = "login.html";
- 	   			} else {
-	 	   			if (etiger != null) {
-		 	   			etiger.socket.close();
-		 	   		}
- 	   				location.href = "login.html";
- 	   			}
- 	   		}});
+				if (etiger != null) {
+					etiger.socket.close();
+				}
+				location.href = "login.html";
+ 	   		}, errorCallback: function (json) {
+				if (etiger != null) {
+					etiger.socket.close();
+				}
+				location.href = "login.html";
+			}});
         });
     });
 
@@ -1294,10 +1220,6 @@ layui.config({
                             }
                         });
                         AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: boxId}, type: 'json', callback: function (json) {
-                            if (json.returnCode == 0) {
-                            } else {
-                                winui.window.msg(json.returnMessage, { shift: 6 });
-                            }
                         }});
                     }
 					
@@ -1378,71 +1300,67 @@ layui.config({
         		text: "重命名/配置",
         		callBack: function (id, elem, events) {
         			AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop005", params: {rowId: id}, type: 'json', method: "POST", callback: function (json) {
-						if (json.returnCode == 0) {
-							var menuType = json.bean.menuType;
-							if(menuType == '1'){//系统菜单
-								winui.window.msg('无法编辑系统菜单。', {shift: 6, skin: 'msg-skin-message'});
-							}else if(menuType == '2'){//自定义快捷方式
-								winui.window.close($('#childWindow').parent());
-								parentRowId = id;
-								_openNewWindows({
-									url: "../../tpl/index/editMenu.html", 
-									title: "重置快捷方式",
-									pageId: "editMenuDialog",
-									area: ['700px', '450px'],
-									skin: 'top-message-mation',
-									callBack: function(refreshCode){
-										//此处不需要去获取当前滚动展示的模块
-										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-title", childParams.titleName);
-										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-url", childParams.menuUrl);
-										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-menuiconbg", childParams.menuIconBg);
-										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-menuiconcolor", childParams.menuIconColor);
-										if(childParams.menuIconType === '1' || childParams.menuIconType == 1){//icon
-											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').attr('class', 'winui-icon winui-icon-font');
-											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-icon", childParams.menuIcon);
-											if($("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').length == 0){
-												var str = '<i class="" win-i-id="' + childParams.rowId + '"></i>';
-												$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').html(str);
-											}
-											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').attr("class", "fa " + childParams.menuIcon + " fa-fw");
-											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').css({'color': childParams.menuIconColor});
-											$("#winui-desktop").find('i[win-i-id="' + childParams.rowId + '"]').css({'background-color': childParams.menuIconBg, 'color': childParams.menuIconColor});
-											var iconITag = $("#winui-desktop").find('i[win-i-id="' + childParams.rowId + '"]');
-											$.each(iconITag, function(i, item){
-												if($(item).hasClass("icon-drawer-icon")){
-													$(item).attr("class", "fa " + childParams.menuIcon + " fa-fw icon-drawer-icon");
-												} else {
-													$(item).attr("class", "fa " + childParams.menuIcon + " fa-fw");
-												}
-											});
-										}else if(childParams.menuIconType === '2' || childParams.menuIconType == 2){//图片
-											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').attr('class', 'winui-icon winui-icon-img');
-											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-icon", childParams.menuIconPic);
-											if($("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').length > 0){
-												var str = '<img src="' + fileBasePath + childParams.menuIconPic + '">';
-												$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').html(str);
-											}
+						var menuType = json.bean.menuType;
+						if(menuType == '1'){//系统菜单
+							winui.window.msg('无法编辑系统菜单。', {shift: 6, skin: 'msg-skin-message'});
+						}else if(menuType == '2'){//自定义快捷方式
+							winui.window.close($('#childWindow').parent());
+							parentRowId = id;
+							_openNewWindows({
+								url: "../../tpl/index/editMenu.html",
+								title: "重置快捷方式",
+								pageId: "editMenuDialog",
+								area: ['700px', '450px'],
+								skin: 'top-message-mation',
+								callBack: function(refreshCode){
+									//此处不需要去获取当前滚动展示的模块
+									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-title", childParams.titleName);
+									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-url", childParams.menuUrl);
+									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-menuiconbg", childParams.menuIconBg);
+									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-menuiconcolor", childParams.menuIconColor);
+									if(childParams.menuIconType === '1' || childParams.menuIconType == 1){//icon
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').attr('class', 'winui-icon winui-icon-font');
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-icon", childParams.menuIcon);
+										if($("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').length == 0){
+											var str = '<i class="" win-i-id="' + childParams.rowId + '"></i>';
+											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').html(str);
 										}
-										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').css({'background-color': childParams.menuIconBg, 'color': childParams.menuIconColor});
-										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('p').html(childParams.menuName);
-										top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-									}});
-							}else if(menuType == '3'){//自定义菜单盒子
-								parentRowId = id;
-								_openNewWindows({
-									url: "../../tpl/index/editMenuBox.html", 
-									title: "重命名盒子",
-									pageId: "editMenuBoxDialog",
-									area: ['600px', '200px'],
-									skin: 'top-message-mation',
-									callBack: function(refreshCode){
-										$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').attr("win-title", childParams.menuBoxName);
-										$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').find('p').html(childParams.menuBoxName);
-										top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-									}});
-							}
-						} else {
-							winui.window.msg(json.returnMessage, { shift: 6 });
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').attr("class", "fa " + childParams.menuIcon + " fa-fw");
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').css({'color': childParams.menuIconColor});
+										$("#winui-desktop").find('i[win-i-id="' + childParams.rowId + '"]').css({'background-color': childParams.menuIconBg, 'color': childParams.menuIconColor});
+										var iconITag = $("#winui-desktop").find('i[win-i-id="' + childParams.rowId + '"]');
+										$.each(iconITag, function(i, item){
+											if($(item).hasClass("icon-drawer-icon")){
+												$(item).attr("class", "fa " + childParams.menuIcon + " fa-fw icon-drawer-icon");
+											} else {
+												$(item).attr("class", "fa " + childParams.menuIcon + " fa-fw");
+											}
+										});
+									}else if(childParams.menuIconType === '2' || childParams.menuIconType == 2){//图片
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').attr('class', 'winui-icon winui-icon-img');
+										$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-icon", childParams.menuIconPic);
+										if($("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').find('i').length > 0){
+											var str = '<img src="' + fileBasePath + childParams.menuIconPic + '">';
+											$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').html(str);
+										}
+									}
+									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('div').css({'background-color': childParams.menuIconBg, 'color': childParams.menuIconColor});
+									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').find('p').html(childParams.menuName);
+									top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+								}});
+						}else if(menuType == '3'){//自定义菜单盒子
+							parentRowId = id;
+							_openNewWindows({
+								url: "../../tpl/index/editMenuBox.html",
+								title: "重命名盒子",
+								pageId: "editMenuBoxDialog",
+								area: ['600px', '200px'],
+								skin: 'top-message-mation',
+								callBack: function(refreshCode){
+									$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').attr("win-title", childParams.menuBoxName);
+									$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').find('p').html(childParams.menuBoxName);
+									top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+								}});
 						}
 					}});
                 }
@@ -1459,15 +1377,11 @@ layui.config({
             		}}, function (index) {
     					layer.close(index);
     					AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop003", params: {rowId: id}, type: 'json', method: "POST", callback: function (json) {
-    						if (json.returnCode == 0) {
-    							$(elem).remove();
-    							$("i[win-i-id=" + $(elem).attr('win-id') + "]").remove();
-    							$("div[win-id=" + $(elem).attr('win-id') + "]").remove();
-    							//从新排列桌面app
-    							events.reLocaApp();
-    						} else {
-    							winui.window.msg(json.returnMessage, { shift: 6 });
-    						}
+							$(elem).remove();
+							$("i[win-i-id=" + $(elem).attr('win-id') + "]").remove();
+							$("div[win-id=" + $(elem).attr('win-id') + "]").remove();
+							//从新排列桌面app
+							events.reLocaApp();
     					}});
     				});
                 }

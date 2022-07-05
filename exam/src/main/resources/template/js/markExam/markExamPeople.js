@@ -19,44 +19,36 @@ layui.config({
 		    
 		//获取试卷详情信息以及阅卷人信息
 		AjaxPostUtil.request({url:schoolBasePath + "exam036", params: {surveyId: parent.rowId}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				$("#showForm").html(getDataUseHandlebars($("#assignmentTemplate").html(), json));
-   				//回显阅卷人
-   				var str = "";
-   				chooseTeacherList = [].concat(json.rows);
-		        $.each(json.rows, function(i, row){
-		        	str += row.userName + '(' + row.userSex + ')，';
-		        });
-		        $("#markPeople").val(str);
-		        
-		        matchingLanguage();
-			    form.on('submit(formAddBean)', function (data) {
-			        if (winui.verifyForm(data.elem)) {
-			        	var array = new Array();
-				    	$.each(chooseTeacherList, function(i, item){
-				    		array.push({
-				    			userId: item.userId,
-				    			surveyId: parent.rowId
-				    		});
-				    	});
-			        	var params = {
-		        			surveyId: parent.rowId,
-		        			arrayStr: JSON.stringify(array)
-			        	};
-			        	AjaxPostUtil.request({url:schoolBasePath + "exam037", params: params, type: 'json', callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-			 	   				parent.layer.close(index);
-				 	        	parent.refreshCode = '0';
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
-			 	   		}});
-			        }
-			        return false;
-			    });
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			$("#showForm").html(getDataUseHandlebars($("#assignmentTemplate").html(), json));
+			//回显阅卷人
+			var str = "";
+			chooseTeacherList = [].concat(json.rows);
+			$.each(json.rows, function(i, row){
+				str += row.userName + '(' + row.userSex + ')，';
+			});
+			$("#markPeople").val(str);
+
+			matchingLanguage();
+			form.on('submit(formAddBean)', function (data) {
+				if (winui.verifyForm(data.elem)) {
+					var array = new Array();
+					$.each(chooseTeacherList, function(i, item){
+						array.push({
+							userId: item.userId,
+							surveyId: parent.rowId
+						});
+					});
+					var params = {
+						surveyId: parent.rowId,
+						arrayStr: JSON.stringify(array)
+					};
+					AjaxPostUtil.request({url:schoolBasePath + "exam037", params: params, type: 'json', callback: function (json) {
+						parent.layer.close(index);
+						parent.refreshCode = '0';
+					}});
+				}
+				return false;
+			});
    		}});
    		
    		//阅卷人选择

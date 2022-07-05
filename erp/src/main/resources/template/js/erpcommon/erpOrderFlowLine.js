@@ -15,41 +15,37 @@ layui.config({
 	var type = GetUrlParam("type");
 	// 加载订单流水线信息
 	AjaxPostUtil.request({url: flowableBasePath + "erpcommon002", params: {rowId: orderId, type: type}, type: 'json', method: 'GET', callback: function(data) {
-		if(data.returnCode == 0) {
-			var newData = dealWithData(data.bean);
-			$('#chart-container').orgchart({
-				'data': newData,
-				'nodeTitle': 'title',
-				'nodeContent': 'name',
-				'pan': true,
-				'zoom': true,
-				'parentNodeSymbol': 'fa-receipt',
-				'interactive': false
-			});
-			form.render();
+		var newData = dealWithData(data.bean);
+		$('#chart-container').orgchart({
+			'data': newData,
+			'nodeTitle': 'title',
+			'nodeContent': 'name',
+			'pan': true,
+			'zoom': true,
+			'parentNodeSymbol': 'fa-receipt',
+			'interactive': false
+		});
+		form.render();
 
-			$("#chart-container").on("click", ".node", function() {
-				rowId = $(this).attr("id");
-				if(isNull(rowId)){
-					parent.$("#orderMationLi").click();
-					return false;
-				}
-				var type = $(this).find(".customName").attr("type");
-				var url = erpOrderUtil.getErpDetailUrl({subType: type});
-				if(isNull(url)){
-					return false;
-				}
-				_openNewWindows({
-					url: url,
-					title: "单据详情",
-					pageId: "orderDetails",
-					area: ['100vw', '100vh'],
-					callBack: function(refreshCode){
-					}});
-			});
-		} else {
-			winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-		}
+		$("#chart-container").on("click", ".node", function() {
+			rowId = $(this).attr("id");
+			if(isNull(rowId)){
+				parent.$("#orderMationLi").click();
+				return false;
+			}
+			var type = $(this).find(".customName").attr("type");
+			var url = erpOrderUtil.getErpDetailUrl({subType: type});
+			if(isNull(url)){
+				return false;
+			}
+			_openNewWindows({
+				url: url,
+				title: "单据详情",
+				pageId: "orderDetails",
+				area: ['100vw', '100vh'],
+				callBack: function(refreshCode){
+				}});
+		});
 	}});
 
 	function dealWithData(bean){

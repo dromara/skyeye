@@ -96,17 +96,13 @@ layui.config({
 			lastTime: thesecondTime
     	};
     	AjaxPostUtil.request({url: reqBasePath + "diary022", params: params, type: 'json', callback: function (json) {
-    		if (json.returnCode == 0) {
-    			ydata = json.rows;
-    			echartsPie.setOption({ 
-    				series: {
-    					data:ydata
-    				}
-   		        });
-   		        matchingLanguage();
-    		} else {
-    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    		}
+			ydata = json.rows;
+			echartsPie.setOption({
+				series: {
+					data:ydata
+				}
+			});
+			matchingLanguage();
     	}});
     }
     	

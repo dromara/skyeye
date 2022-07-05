@@ -47,7 +47,6 @@ layui.config({
 		 		
 		 		//是否共享
 		 		form.on('switch(isShare)', function (data) {
-		 			//同步开关值
 		 			$(data.elem).val(data.elem.checked);
 		 		});
 		 		
@@ -65,12 +64,8 @@ layui.config({
 			        	}
 			        	
 			        	AjaxPostUtil.request({url: reqBasePath + "planprojectflow005", params: params, type: 'json', method: "PUT", callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			parent.layer.close(index);
-				 	        	parent.refreshCode = '0';
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 			 	   		}});
 			        }
 			        return false;

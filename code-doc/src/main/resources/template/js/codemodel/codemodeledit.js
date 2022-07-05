@@ -55,7 +55,6 @@ layui.config({
 		 		});
 		 		
 		 		form.on('submit(formEditBean)', function (data) {
-			    	
 			        if (winui.verifyForm(data.elem)) {
 			        	if(isNull(editor.getValue())){
 			        		winui.window.msg('请输入模板内容', {icon: 2, time: 2000});
@@ -70,12 +69,8 @@ layui.config({
 				        	};
 				        	
 				        	AjaxPostUtil.request({url: reqBasePath + "codemodel010", params: params, type: 'json', callback: function (json) {
-				 	   			if (json.returnCode == 0) {
-					 	   			parent.layer.close(index);
-					 	        	parent.refreshCode = '0';
-				 	   			} else {
-				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				 	   			}
+								parent.layer.close(index);
+								parent.refreshCode = '0';
 				 	   		}});
 			        	}
 			        }

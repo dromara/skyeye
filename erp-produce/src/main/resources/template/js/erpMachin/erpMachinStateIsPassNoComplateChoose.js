@@ -6,10 +6,8 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
-	
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -73,15 +71,11 @@ layui.config({
 					
 					//根据加工单id获取该单据下的所有单据中商品以及剩余领料数量
 					AjaxPostUtil.request({url: flowableBasePath + "erpmachin011", params: {rowId: obj.id}, type: 'json', callback: function(json) {
-						if(json.returnCode == 0) {
-							obj.norms = [].concat(json.rows);
-							parent.machinMation = obj;
-							
-							parent.refreshCode = '0';
-							parent.layer.close(index);
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						obj.norms = [].concat(json.rows);
+						parent.machinMation = obj;
+
+						parent.refreshCode = '0';
+						parent.layer.close(index);
 					}});
 				});
 				

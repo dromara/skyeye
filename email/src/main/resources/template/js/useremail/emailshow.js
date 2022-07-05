@@ -13,23 +13,19 @@ layui.config({
 	var emailContentMobel = $("#emailContentMobel").html();
 	
 	AjaxPostUtil.request({url: reqBasePath + "useremail005", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
-		if (json.returnCode == 0) {
-			if(!isNull(json.bean.toPeople)){
-				json.bean.toPeople = json.bean.toPeople.split(',');
-			}
-			if(!isNull(json.bean.toCc)){
-				json.bean.toCc = json.bean.toCc.split(',');
-			}
-			if(!isNull(json.bean.toBcc)){
-				json.bean.toBcc = json.bean.toBcc.split(',');
-			}
-			var str = getDataUseHandlebars(emailContentMobel, json);
-			$("#emailRightContent").html(str);
-			$("img").css({"width": "auto"});
-			matchingLanguage();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+		if(!isNull(json.bean.toPeople)){
+			json.bean.toPeople = json.bean.toPeople.split(',');
 		}
+		if(!isNull(json.bean.toCc)){
+			json.bean.toCc = json.bean.toCc.split(',');
+		}
+		if(!isNull(json.bean.toBcc)){
+			json.bean.toBcc = json.bean.toBcc.split(',');
+		}
+		var str = getDataUseHandlebars(emailContentMobel, json);
+		$("#emailRightContent").html(str);
+		$("img").css({"width": "auto"});
+		matchingLanguage();
 	}});
 	
 	form.render();

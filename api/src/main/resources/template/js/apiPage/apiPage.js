@@ -83,22 +83,18 @@ layui.config({
 		 */
 		function loadListMation(appId){
 			AjaxPostUtil.request({url: reqBasePath + "queryAllSysEveReqMapping", params: {appId: appId}, type: 'json', method: "GET", callback: function (json) {
-				if (json.returnCode == 0) {
-					// 1.模块
-					model = loadModel(json);
-					$("#modelId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), {rows: model}));
-					$("#appList").html(getDataUseHandlebars(modelTemplate, {rows: model}));
-					// 2.分组
-					groupList = loadBox(json);
-					jsonList = json.rows;
-	   				// 默认加载第一个模块的接口数据
-					loadPointNumApiList(model[0].id);
-					matchingLanguage();
-					form.render();
-					loadDefaultMain();
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				// 1.模块
+				model = loadModel(json);
+				$("#modelId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), {rows: model}));
+				$("#appList").html(getDataUseHandlebars(modelTemplate, {rows: model}));
+				// 2.分组
+				groupList = loadBox(json);
+				jsonList = json.rows;
+				// 默认加载第一个模块的接口数据
+				loadPointNumApiList(model[0].id);
+				matchingLanguage();
+				form.render();
+				loadDefaultMain();
 			}});
 		}
 
@@ -221,13 +217,9 @@ layui.config({
 					rowId: $(this).attr("rowid")
 				};
 				AjaxPostUtil.request({url: reqBasePath + "queryApiDetails", params: params, type: 'json', method: "GET", callback: function (json) {
-					if (json.returnCode == 0) {
-		   				var str = getDataUseHandlebars(fileMationTemplate, json);
-		   				$("#contentDesc").html(str);
-						active[type] ? active[type].call(this) : '';
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					var str = getDataUseHandlebars(fileMationTemplate, json);
+					$("#contentDesc").html(str);
+					active[type] ? active[type].call(this) : '';
 				}});
 			}
 		});
@@ -267,23 +259,19 @@ layui.config({
 
 		function loadDefaultMain(){
 			AjaxPostUtil.request({url: reqBasePath + "queryLimitRestrictions", params: {}, type: 'json', method: "GET", callback: function (json) {
-				if (json.returnCode == 0) {
-					var item = {};
-					item.reception = getReceptionLimitMation();
-					item.backstage = json.rows;
-					$("#contentDesc").html(getDataUseHandlebars(defaultTemplate, {bean: item}));
-					$('#chart-container').orgchart({
-						'data' : getXMLAttribute(),
-						'nodeTitle': 'title',
-						'nodeContent': 'name',
-						'pan': true,
-						'zoom': true,
-						'interactive': false
-					});
-					form.render();
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				var item = {};
+				item.reception = getReceptionLimitMation();
+				item.backstage = json.rows;
+				$("#contentDesc").html(getDataUseHandlebars(defaultTemplate, {bean: item}));
+				$('#chart-container').orgchart({
+					'data' : getXMLAttribute(),
+					'nodeTitle': 'title',
+					'nodeContent': 'name',
+					'pan': true,
+					'zoom': true,
+					'interactive': false
+				});
+				form.render();
 			}});
 		}
 
@@ -295,12 +283,8 @@ layui.config({
 			};
 			var fileName = $("#apiMicroservicesId").find("option:selected").text() + "-" + $(this).attr("fileName");
 			AjaxPostUtil.request({url: reqBasePath + "queryApiDetails", params: params, type: 'json', method: "GET", callback: function (json) {
-				if (json.returnCode == 0) {
-					var str = getDataUseHandlebars(getFileContent('tpl/apiPage/mdModelFile.tpl'), json);
-					sysFileUtil.saveAs(new Blob([str]), fileName);
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				var str = getDataUseHandlebars(getFileContent('tpl/apiPage/mdModelFile.tpl'), json);
+				sysFileUtil.saveAs(new Blob([str]), fileName);
 			}});
 		});
 

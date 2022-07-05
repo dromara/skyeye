@@ -131,12 +131,8 @@ layui.config({
     function deleteIncome(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             AjaxPostUtil.request({url: flowableBasePath + "income005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -158,12 +154,8 @@ layui.config({
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "income009", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg("提交成功", {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg("提交成功", {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -193,12 +185,8 @@ layui.config({
     }
     function subToData(params){
         AjaxPostUtil.request({url: flowableBasePath + "income008", params: params, type: 'json', callback: function (json) {
-            if (json.returnCode == 0) {
-                winui.window.msg("提交成功", {icon: 1, time: 2000});
-                loadTable();
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            winui.window.msg("提交成功", {icon: 1, time: 2000});
+            loadTable();
         }});
     }
 

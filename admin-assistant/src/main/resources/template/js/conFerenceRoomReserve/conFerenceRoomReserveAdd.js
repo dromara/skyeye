@@ -26,16 +26,11 @@ layui.config({
 		}
 	});
 
-	//预定时间
-	laydate.render({
-		elem : '#reserveTime',
-		type : 'datetime',
-		trigger : 'click',
-		range : true
-	});
+	// 预定时间
+	laydate.render({elem : '#reserveTime', type : 'datetime', trigger : 'click', range : true});
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$("#title").html("会议室预定申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
 		$("#name").html(data.bean.userName);
 	});
@@ -73,12 +68,8 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve002", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

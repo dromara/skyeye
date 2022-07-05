@@ -60,19 +60,15 @@ layui.config({
 		rowId = data.id;
 		parentRowId = data.id;
 		AjaxPostUtil.request({url: reqBasePath + "syseveusernotice003", params:{rowId: data.id}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				_openNewWindows({
-					url: "../../tpl/index/noticeDetail.html", 
-					title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-					pageId: "noticeDetail" + (new Date()).valueOf(),
-					area: ['600px', '400px'],
-					shade: false,
-					skin: 'msg-skin-message',
-					callBack: function(refreshCode){
-				}});
-	   		} else {
-   				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
-   			}
+			_openNewWindows({
+				url: "../../tpl/index/noticeDetail.html",
+				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
+				pageId: "noticeDetail" + (new Date()).valueOf(),
+				area: ['600px', '400px'],
+				shade: false,
+				skin: 'msg-skin-message',
+				callBack: function(refreshCode){
+			}});
    		}});
 	}
 	

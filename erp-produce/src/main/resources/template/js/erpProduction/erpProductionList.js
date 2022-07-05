@@ -124,12 +124,8 @@ layui.config({
 	function subExamine(data){
         layer.confirm('确认要提交审核吗？', { icon: 3, title: '提交审核操作' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "erpproduction007", params: {orderId: data.id}, type: 'json', callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg("提交成功。", {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+				winui.window.msg("提交成功。", {icon: 1, time: 2000});
+				loadTable();
             }});
         });
     }

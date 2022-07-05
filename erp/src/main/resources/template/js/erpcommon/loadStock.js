@@ -62,12 +62,8 @@ function loadMaterialDepotStockByDepotId(depotId){
  */
 function getStockAjaxByDepotAndNormsId(normsIds, depotId, callBack){
     AjaxPostUtil.request({url: flowableBasePath + "material011", params: {depotId: depotId, normsIds: normsIds}, type: 'json', method: "POST", callback: function(json) {
-        if(json.returnCode == 0) {console.log(typeof(callBack))
-            if(typeof(callBack) == "function") {
-                callBack(json);
-            }
-        } else {
-            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+        if(typeof(callBack) == "function") {
+            callBack(json);
         }
     }});
 }

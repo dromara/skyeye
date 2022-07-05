@@ -7,7 +7,6 @@ layui.config({
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'tableCheckBoxUtil'], function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -22,17 +21,13 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	
 	AjaxPostUtil.request({url: flowableBasePath + "erpworkprocedure009", params: {}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			// 加载工序数据
-			$("#procedureId").html(getDataUseHandlebars(selOption, json));
-			if(!isNull(parent.procedureId)){
-				$("#procedureId").val(parent.procedureId);
-			}
-			// 初始化表格
-			initTable();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+		// 加载工序数据
+		$("#procedureId").html(getDataUseHandlebars(selOption, json));
+		if(!isNull(parent.procedureId)){
+			$("#procedureId").val(parent.procedureId);
 		}
+		// 初始化表格
+		initTable();
 	}});
 	
 	//设置提示信息
@@ -137,13 +132,9 @@ layui.config({
 			gridId: 'messageTable'
 		});
 		AjaxPostUtil.request({url:flowableBasePath + "erpfarm011", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				parent.procedureMationList = [].concat(json.rows);
- 	   			parent.layer.close(index);
- 	        	parent.refreshCode = '0';
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			parent.procedureMationList = [].concat(json.rows);
+			parent.layer.close(index);
+			parent.refreshCode = '0';
    		}});
 	});
 	

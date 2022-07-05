@@ -133,30 +133,22 @@ layui.config({
 		        			var oCanvas = document.getElementById("thecanvas");
 		        			var imgData = oCanvas.toDataURL();
 		        			AjaxPostUtil.request({url: reqBasePath + "common004", params:{images:imgData, type:1}, type: 'json', callback: function(json1){
-		        				if(json1.returnCode == 0){
-		        					var params = {
-	        							rmTypeId: $("#rmTypeId").val(),
-	        							rmGroupId: $("#rmGroupId").val(),
-	        							htmlContent: encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-	        							htmlJsContent: encodeURI(htmlJsContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-	        							wxmlContent: encodeURI(wxmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-	        							wxmlJsDataContent: encodeURI(wxmlJsDataContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-	        							wxmlJsMethodContent: encodeURI(wxmlJsMethodContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-	        							wxmlJsMethodCreateContent: encodeURI(wxmlJsMethodCreateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
-	        							img: json1.bean.picUrl
-		        					};
-		        					
-		        					AjaxPostUtil.request({url: reqBasePath + "rmxcx016", params: params, type: 'json', callback: function (json) {
-		        						if (json.returnCode == 0) {
-		        							parent.layer.close(index);
-		        							parent.refreshCode = '0';
-		        						} else {
-		        							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		        						}
-		        					}});
-		        				} else {
-		        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		        				}
+								var params = {
+									rmTypeId: $("#rmTypeId").val(),
+									rmGroupId: $("#rmGroupId").val(),
+									htmlContent: encodeURI(htmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+									htmlJsContent: encodeURI(htmlJsContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+									wxmlContent: encodeURI(wxmlContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+									wxmlJsDataContent: encodeURI(wxmlJsDataContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+									wxmlJsMethodContent: encodeURI(wxmlJsMethodContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+									wxmlJsMethodCreateContent: encodeURI(wxmlJsMethodCreateContent.getValue().replace(/\+/g, "%2B").replace(/\&/g, "%26")),
+									img: json1.bean.picUrl
+								};
+
+								AjaxPostUtil.request({url: reqBasePath + "rmxcx016", params: params, type: 'json', callback: function (json) {
+									parent.layer.close(index);
+									parent.refreshCode = '0';
+								}});
 		        			}});
 		        		}
 			        }

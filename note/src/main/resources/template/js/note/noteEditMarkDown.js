@@ -37,13 +37,9 @@ layui.config({
             // 加载后富文本编辑器成功后的回调
 		    // 显示编辑器内容
 			AjaxPostUtil.request({url: reqBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					parent.$("#noteTitle").val(json.bean.title);
-					layEditor.setMarkdown(json.bean.content);
-					matchingLanguage();
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+                parent.$("#noteTitle").val(json.bean.title);
+                layEditor.setMarkdown(json.bean.content);
+                matchingLanguage();
 			}});
         },
         onchange : function (){

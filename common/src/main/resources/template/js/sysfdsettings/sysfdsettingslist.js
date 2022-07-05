@@ -28,15 +28,11 @@ layui.config({
 		 		
 		 		// 获取上一次solr数据同步的时间
 		        AjaxPostUtil.request({url: reqBasePath + "forumcontent019", params: {}, type: 'json', callback: function (json) {
-		            if(json.returnCode == 0) {
-		                if(!isNull(json.bean.synchronousTime)){
-		                    $("#synchronousTime").text(json.bean.synchronousTime);
-		                } else {
-		                    $("#synchronousTime").text("无");
-		                }
-		            }else {
-		                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		            }
+					if(!isNull(json.bean.synchronousTime)){
+						$("#synchronousTime").text(json.bean.synchronousTime);
+					} else {
+						$("#synchronousTime").text("无");
+					}
 		        }});
 
 		        // 加载假期类型
@@ -229,11 +225,7 @@ layui.config({
 					params.erpExamineBasicDesign = getErpExamineBasicDesign();
 
 					AjaxPostUtil.request({url: reqBasePath + "sysfdsettings002", params: params, type: 'json', method: "PUT", callback: function (json) {
-						if (json.returnCode == 0) {
-							winui.window.msg("更改成功！", {icon: 1, time: 2000});
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						winui.window.msg("更改成功！", {icon: 1, time: 2000});
 					}});
 				}
 				return false;
@@ -312,14 +304,10 @@ layui.config({
         $("body").on("click", "#formAddBean", function (e) {
             winui.window.msg("数据同步中...", {icon: 6,time: 2000});
             AjaxPostUtil.request({url: reqBasePath + "forumcontent020", params: {}, type: 'json', callback: function (json) {
-                if(json.returnCode == 0) {
-                    winui.window.msg("数据同步成功", {icon: 1, time: 2000});
-                    if(!isNull(json.bean.synchronousTime)){
-                        $("#synchronousTime").text(json.bean.synchronousTime);
-                    }
-                }else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+				winui.window.msg("数据同步成功", {icon: 1, time: 2000});
+				if(!isNull(json.bean.synchronousTime)){
+					$("#synchronousTime").text(json.bean.synchronousTime);
+				}
             }});
         });
 

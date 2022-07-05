@@ -54,112 +54,104 @@ layui.config({
     function loadMenuListToShow(){
     	//获取桌面消息
         AjaxPostUtil.request({url: reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
-            if(l.returnCode == 0) {
-            	var str = "";//顶部桌面字符串
-            	var menuBoxStr = "";//多个菜单的字符串
-            	var jsonStr = {};
-            	var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
-            	jsonStr = {
-        			bean: {
-        				id: 'winfixedpage00000000',
-        				name: defaultName,
-        				show: 'block',
-        				chooseDeskTop: ' select'
-        			}
-        		};
-            	str += getDataUseHandlebars(desktopTemplate, jsonStr);
-            	menuBoxStr += getDataUseHandlebars(menuBoxTemplate, jsonStr);
-            	$.each(l.rows, function(i, row){
-            		row.show = 'none';
-            		jsonStr = {
-            			bean: row
-            		};
-            		str += getDataUseHandlebars(desktopTemplate, jsonStr);
-            		menuBoxStr += getDataUseHandlebars(menuBoxTemplate, jsonStr);
-            	});
-            	$(".desktop-menu-box").find("ul").html(str);
-            	$("#sysMenuListBox").html(menuBoxStr);
-            	
-            	//重新计算头部宽度
-				initDeskTopMenuBox();
-				
-				// 加载菜单
-				AjaxPostUtil.request({url: reqBasePath + "login005", params:{}, type: 'json', method: "GET", callback: function (json) {
-		   			if (json.returnCode == 0) {
-		   				var menuStr;
-		   				$.each(json.rows, function(i, row){
-		   					menuStr = "";
-		   					if(row.menuIconType === 1){//icon
-		   						row.icon = '<i class="fa ' + row.icon + ' fa-fw"></i>';
-		   					}else if(row.menuIconType === 2){//图片
-		   						row.icon = '<img src="' + fileBasePath + row.menuIconPic + '" />';
-		   					}
-	   						if(languageType == 'cn'){
-	   							row.name = row.menuNameEn;
-	   						}
-		   					if(row.pageURL != '--'){
-		   						//一级菜单
-		   						menuStr = getDataUseHandlebars(menuTemplate, {bean: row});
-		   						if(isNull(row.deskTopId)){
-		   							$("ul[menurowid='winfixedpage00000000']").append(menuStr);
-		   						} else {
-		   							$("ul[menurowid='" + row.deskTopId + "']").append(menuStr);
-		   						}
-		   						data.push({id: row.id, name: row.name, pageURL: row.pageURL, winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()});
-		   					} else {
-		   						//二级菜单
-		   						if(!isNull(row.childs)){
-			   						$.each(row.childs, function(j, child){
-			   							if(child.menuIconType === 1){//icon
-			   								child.icon = '<i class="fa ' + child.icon + ' fa-fw"></i>';
-					   					}else if(child.menuIconType === 2){//图片
-					   						child.icon = '<img src="' + fileBasePath + child.menuIconPic + '" />';
-					   					}
-					   					if(languageType == 'cn'){
-				   							child.name = child.menuNameEn;
-				   						}
-					   					data.push({id: child.id, name: child.name, pageURL: child.pageURL, winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()});
-			   						});
-		   						}
-		   						menuStr = getDataUseHandlebars(menuMoreTemplate, {bean: row});
-		   						if(isNull(row.deskTopId)){
-		   							$("ul[menurowid='winfixedpage00000000']").append(menuStr);
-		   						} else {
-		   							$("ul[menurowid='" + row.deskTopId + "']").append(menuStr);
-		   						}
-		   					}
-		   				});
-		   				
-		   				var text2 = $("#Text2").tautocomplete({
-							width: "500px",
-							placeholder: $("#Text2").attr("placeholder"),
-							columns: [{field: 'name', title: '菜单名称'}, {field: 'winName', title: '所属桌面'}],
-							data: function() {
-								var filterData = [];
-								var searchData = eval("/" + text2.searchdata() + "/gi");
-								$.each(data, function(i, v) {
-									if(v.name.search(new RegExp(searchData)) != -1) {
-										filterData.push(v);
-									}
-								});
-								return filterData;
-							},
-							onchange: function() {
-								if(!isNull(text2.id())){
-									var dataMenu = $("#sysMenuListBox").find("a[data-id='" + text2.id() + "']");
-									indexMenu.loadTraditionPage(dataMenu);
+			var str = "";//顶部桌面字符串
+			var menuBoxStr = "";//多个菜单的字符串
+			var jsonStr = {};
+			var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
+			jsonStr = {
+				bean: {
+					id: 'winfixedpage00000000',
+					name: defaultName,
+					show: 'block',
+					chooseDeskTop: ' select'
+				}
+			};
+			str += getDataUseHandlebars(desktopTemplate, jsonStr);
+			menuBoxStr += getDataUseHandlebars(menuBoxTemplate, jsonStr);
+			$.each(l.rows, function(i, row){
+				row.show = 'none';
+				jsonStr = {
+					bean: row
+				};
+				str += getDataUseHandlebars(desktopTemplate, jsonStr);
+				menuBoxStr += getDataUseHandlebars(menuBoxTemplate, jsonStr);
+			});
+			$(".desktop-menu-box").find("ul").html(str);
+			$("#sysMenuListBox").html(menuBoxStr);
+
+			//重新计算头部宽度
+			initDeskTopMenuBox();
+
+			// 加载菜单
+			AjaxPostUtil.request({url: reqBasePath + "login005", params:{}, type: 'json', method: "GET", callback: function (json) {
+				var menuStr;
+				$.each(json.rows, function(i, row){
+					menuStr = "";
+					if(row.menuIconType === 1){//icon
+						row.icon = '<i class="fa ' + row.icon + ' fa-fw"></i>';
+					}else if(row.menuIconType === 2){//图片
+						row.icon = '<img src="' + fileBasePath + row.menuIconPic + '" />';
+					}
+					if(languageType == 'cn'){
+						row.name = row.menuNameEn;
+					}
+					if(row.pageURL != '--'){
+						//一级菜单
+						menuStr = getDataUseHandlebars(menuTemplate, {bean: row});
+						if(isNull(row.deskTopId)){
+							$("ul[menurowid='winfixedpage00000000']").append(menuStr);
+						} else {
+							$("ul[menurowid='" + row.deskTopId + "']").append(menuStr);
+						}
+						data.push({id: row.id, name: row.name, pageURL: row.pageURL, winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()});
+					} else {
+						//二级菜单
+						if(!isNull(row.childs)){
+							$.each(row.childs, function(j, child){
+								if(child.menuIconType === 1){//icon
+									child.icon = '<i class="fa ' + child.icon + ' fa-fw"></i>';
+								}else if(child.menuIconType === 2){//图片
+									child.icon = '<img src="' + fileBasePath + child.menuIconPic + '" />';
 								}
+								if(languageType == 'cn'){
+									child.name = child.menuNameEn;
+								}
+								data.push({id: child.id, name: child.name, pageURL: child.pageURL, winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()});
+							});
+						}
+						menuStr = getDataUseHandlebars(menuMoreTemplate, {bean: row});
+						if(isNull(row.deskTopId)){
+							$("ul[menurowid='winfixedpage00000000']").append(menuStr);
+						} else {
+							$("ul[menurowid='" + row.deskTopId + "']").append(menuStr);
+						}
+					}
+				});
+
+				var text2 = $("#Text2").tautocomplete({
+					width: "500px",
+					placeholder: $("#Text2").attr("placeholder"),
+					columns: [{field: 'name', title: '菜单名称'}, {field: 'winName', title: '所属桌面'}],
+					data: function() {
+						var filterData = [];
+						var searchData = eval("/" + text2.searchdata() + "/gi");
+						$.each(data, function(i, v) {
+							if(v.name.search(new RegExp(searchData)) != -1) {
+								filterData.push(v);
 							}
 						});
-						
-						matchingLanguage();
-		    		} else {
-		    			winui.window.msg(json.returnMessage, {shift: 6});
-		    		}
-		   		}});
-            } else {
-            	winui.window.msg(l.returnMessage, {shift: 6});
-    		}
+						return filterData;
+					},
+					onchange: function() {
+						if(!isNull(text2.id())){
+							var dataMenu = $("#sysMenuListBox").find("a[data-id='" + text2.id() + "']");
+							indexMenu.loadTraditionPage(dataMenu);
+						}
+					}
+				});
+
+				matchingLanguage();
+			}});
    		}});
     }
     
@@ -395,15 +387,13 @@ layui.config({
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
         	AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				if (etiger != null) {
-		 	   			etiger.socket.close();
-		 	   		}
-	 	   			location.href = "../../tpl/index/login.html";
- 	   			} else {
- 	   				location.href = "../../tpl/index/login.html";
- 	   			}
- 	   		}});
+				if (etiger != null) {
+					etiger.socket.close();
+				}
+				location.href = "../../tpl/index/login.html";
+ 	   		}, errorCallback: function (json) {
+				location.href = "../../tpl/index/login.html";
+			}});
         });
     });
     

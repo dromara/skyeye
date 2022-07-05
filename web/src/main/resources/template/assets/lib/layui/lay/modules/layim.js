@@ -1238,57 +1238,53 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				var reGroupId = l.data("id").replace("layim-", "");//获取id类型 --group + id
 				var reId = reGroupId.replace("group", "");//获取id类型 --id
 				AjaxPostUtil.request({url: reqBasePath + "companytalkgroup010", params:{groupId: reId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				//删除对应的对象群聊
-						var groupIndex = -1;
-						e.each(j.group, function(i, item){
-							if(item.id == reId){
-								groupIndex = i;
-								return false;
-							}
-						});
-						j.group.splice(groupIndex, 1);
-	 	   				var sendMessage = {
-	 						userId: j.mine.id,//发送人id
-	 						userName: j.mine.username,
-	 						to: reId,//接收消息的群聊
-	 						type: 13,
-	 					};
-	 					etiger.socket.send(JSON.stringify(sendMessage));//通知群员
-						if(!isNull(d)){
-							delete d[reGroupId];//删除群聊消息
-							n.chatlog = d;
+					//删除对应的对象群聊
+					var groupIndex = -1;
+					e.each(j.group, function(i, item){
+						if(item.id == reId){
+							groupIndex = i;
+							return false;
 						}
-						if(!isNull(dHistory)){
-							delete dHistory[reGroupId];//删除群聊历史信息
-							n.history = dHistory;
+					});
+					j.group.splice(groupIndex, 1);
+					var sendMessage = {
+						userId: j.mine.id,//发送人id
+						userName: j.mine.username,
+						to: reId,//接收消息的群聊
+						type: 13,
+					};
+					etiger.socket.send(JSON.stringify(sendMessage));//通知群员
+					if(!isNull(d)){
+						delete d[reGroupId];//删除群聊消息
+						n.chatlog = d;
+					}
+					if(!isNull(dHistory)){
+						delete dHistory[reGroupId];//删除群聊历史信息
+						n.history = dHistory;
+					}
+					layui.data("layim", {
+						key: j.mine.id,
+						value: n
+					}),
+					//移除内容
+					e("#layim-group" + reId).remove(),
+					e("#layim-history" + reId).remove(),
+					//判断展示的内容
+					0 === o.find("li").length && o.html(r);
+					0 === oHistory.find("li").length && oHistory.html(rHistory);
+					//找到聊天面板中的内容并删除
+					if(e('li[class="layim-chatlist-group' + reId + '"]').length > 0
+							|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').length > 0){
+						if(e('li[class="layim-chatlist-group' + reId + '"]').parent().find("li").length == 1
+								|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().find("li").length == 1){
+							e('li[class="layim-chatlist-group' + reId + '"]').parent().parent().parent().remove();
+							e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().parent().parent().remove();
+						} else {
+							e('li[class="layim-chatlist-group' + reId + '"]').find("i").click();
+							e('li[class="layim-chatlist-group' + reId + ' layim-this"]').find("i").click();
 						}
-						layui.data("layim", {
-							key: j.mine.id,
-							value: n
-						}), 
-						//移除内容
-						e("#layim-group" + reId).remove(),
-						e("#layim-history" + reId).remove(),
-						//判断展示的内容
-						0 === o.find("li").length && o.html(r);
-						0 === oHistory.find("li").length && oHistory.html(rHistory);
-						//找到聊天面板中的内容并删除
-						if(e('li[class="layim-chatlist-group' + reId + '"]').length > 0
-								|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').length > 0){
-							if(e('li[class="layim-chatlist-group' + reId + '"]').parent().find("li").length == 1
-									|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().find("li").length == 1){
-								e('li[class="layim-chatlist-group' + reId + '"]').parent().parent().parent().remove();
-								e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().parent().parent().remove();
-							} else {
-								e('li[class="layim-chatlist-group' + reId + '"]').find("i").click();
-								e('li[class="layim-chatlist-group' + reId + ' layim-this"]').find("i").click();
-							}
-						}
-						t.closeAll("tips");
-		 	   		} else {
-	 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					}
+					t.closeAll("tips");
 	 	   		}});
 			},
 			exitThisGroup: function(i, a) {//退出群组-删除聊天信息
@@ -1303,57 +1299,53 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 				var reGroupId = l.data("id").replace("layim-", "");//获取id类型 --group + id
 				var reId = reGroupId.replace("group", "");//获取id类型 --id
 				AjaxPostUtil.request({url: reqBasePath + "companytalkgroup009", params:{groupId: reId}, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				//删除对应的对象群聊
-						var groupIndex = -1;
-						e.each(j.group, function(i, item){
-							if(item.id == reId){
-								groupIndex = i;
-								return false;
-							}
-						});
-						j.group.splice(groupIndex, 1);
-	 	   				var sendMessage = {
-	 						userId: j.mine.id,//发送人id
-	 						userName: j.mine.username,
-	 						to: reId,//接收消息的群聊
-	 						type: 12,
-	 					};
-	 					etiger.socket.send(JSON.stringify(sendMessage));//通知群主
-		 	   			if(!isNull(d)){
-							delete d[reGroupId];//删除群聊消息
-							n.chatlog = d;
+					//删除对应的对象群聊
+					var groupIndex = -1;
+					e.each(j.group, function(i, item){
+						if(item.id == reId){
+							groupIndex = i;
+							return false;
 						}
-						if(!isNull(dHistory)){
-							delete dHistory[reGroupId];//删除群聊历史信息
-							n.history = dHistory;
+					});
+					j.group.splice(groupIndex, 1);
+					var sendMessage = {
+						userId: j.mine.id,//发送人id
+						userName: j.mine.username,
+						to: reId,//接收消息的群聊
+						type: 12,
+					};
+					etiger.socket.send(JSON.stringify(sendMessage));//通知群主
+					if(!isNull(d)){
+						delete d[reGroupId];//删除群聊消息
+						n.chatlog = d;
+					}
+					if(!isNull(dHistory)){
+						delete dHistory[reGroupId];//删除群聊历史信息
+						n.history = dHistory;
+					}
+					layui.data("layim", {
+						key: j.mine.id,
+						value: n
+					}),
+					//移除内容
+					e("#layim-group" + reId).remove(),
+					e("#layim-history" + reId).remove(),
+					//判断展示的内容
+					0 === o.find("li").length && o.html(r);
+					0 === oHistory.find("li").length && oHistory.html(rHistory);
+					//找到聊天面板中的内容并删除
+					if(e('li[class="layim-chatlist-group' + reId + '"]').length > 0
+							|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').length > 0){
+						if(e('li[class="layim-chatlist-group' + reId + '"]').parent().find("li").length == 1
+								|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().find("li").length == 1){
+							e('li[class="layim-chatlist-group' + reId + '"]').parent().parent().parent().remove();
+							e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().parent().parent().remove();
+						} else {
+							e('li[class="layim-chatlist-group' + reId + '"]').find("i").click();
+							e('li[class="layim-chatlist-group' + reId + ' layim-this"]').find("i").click();
 						}
-						layui.data("layim", {
-							key: j.mine.id,
-							value: n
-						}), 
-						//移除内容
-						e("#layim-group" + reId).remove(),
-						e("#layim-history" + reId).remove(),
-						//判断展示的内容
-						0 === o.find("li").length && o.html(r);
-						0 === oHistory.find("li").length && oHistory.html(rHistory);
-						//找到聊天面板中的内容并删除
-						if(e('li[class="layim-chatlist-group' + reId + '"]').length > 0
-								|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').length > 0){
-							if(e('li[class="layim-chatlist-group' + reId + '"]').parent().find("li").length == 1
-									|| e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().find("li").length == 1){
-								e('li[class="layim-chatlist-group' + reId + '"]').parent().parent().parent().remove();
-								e('li[class="layim-chatlist-group' + reId + ' layim-this"]').parent().parent().parent().remove();
-							} else {
-								e('li[class="layim-chatlist-group' + reId + '"]').find("i").click();
-								e('li[class="layim-chatlist-group' + reId + ' layim-this"]').find("i").click();
-							}
-						}
-						t.closeAll("tips");
-	 	   			} else {
-	 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 	   			}
+					}
+					t.closeAll("tips");
 	 	   		}});
 			},
 			customMation: function(i, a){

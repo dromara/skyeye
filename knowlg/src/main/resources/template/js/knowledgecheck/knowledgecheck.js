@@ -19,16 +19,12 @@ layui.config({
 	    var interval = null;
 	    
 	    AjaxPostUtil.request({url: reqBasePath + "knowledgecontent011", params: {rowId:parent.rowId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				var str = getDataUseHandlebars(beanTemplate, json);
-				$("#checkDetails").html(str);
-				content = json.bean.content;
-		 		$("#knowledgecontentshowBox").attr("src", "knowledgecontentshow.html");
-		 		interval = setInterval(iFrameHeight, 300);
-		 		matchingLanguage();
-			} else {
-				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
-			}
+			var str = getDataUseHandlebars(beanTemplate, json);
+			$("#checkDetails").html(str);
+			content = json.bean.content;
+			$("#knowledgecontentshowBox").attr("src", "knowledgecontentshow.html");
+			interval = setInterval(iFrameHeight, 300);
+			matchingLanguage();
 		}});
 		
 		function iFrameHeight() {
@@ -71,12 +67,8 @@ layui.config({
  					}
  				}
  				AjaxPostUtil.request({url: reqBasePath + "knowledgecontent012", params: params, type: 'json', callback: function (json) {
- 					if (json.returnCode == 0) {
- 						parent.layer.close(index);
- 						parent.refreshCode = '0';
- 					} else {
- 						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 					}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
  				}});
  			}
  			return false;

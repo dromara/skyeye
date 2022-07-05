@@ -42,15 +42,11 @@ layui.config({
 				} else {
 					//类型对应的用品不存在js对象中
 					AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
-						if(json.returnCode == 0) {
-							assetArticles.push({
-								id: thisRowValue,
-								list: json.rows
-							});
-							resetAssetList(thisRowNum, json.rows); //重置选择行的用品列表
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						assetArticles.push({
+							id: thisRowValue,
+							list: json.rows
+						});
+						resetAssetList(thisRowNum, json.rows); //重置选择行的用品列表
 					}});
 				}
 			}
@@ -144,12 +140,8 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "assetarticles024", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

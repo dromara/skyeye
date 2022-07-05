@@ -80,13 +80,9 @@ layui.config({
         	}
         	params.textConent = encodeURIComponent(ue.getContentTxt());
         	AjaxPostUtil.request({url: reqBasePath + "forumcontent002", params: params, type: 'json', callback: function (json) {
-	   			if (json.returnCode == 0) {
-	   				winui.window.msg("发布成功", {icon: 1, time: 2000}, function() {
-	   					location.href = '../../tpl/forumshow/myposts.html';
-	   				});
-	   			} else {
-	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	   			}
+				winui.window.msg("发布成功", {icon: 1, time: 2000}, function() {
+					location.href = '../../tpl/forumshow/myposts.html';
+				});
         	}});
         }
         return false;

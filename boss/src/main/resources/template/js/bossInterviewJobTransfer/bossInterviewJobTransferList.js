@@ -16,10 +16,7 @@ layui.config({
     // 新增
     authBtn('1651308552871');
 
-    laydate.render({
-        elem: '#createTime',
-        range: '~'
-    });
+    laydate.render({elem: '#createTime', range: '~'});
 
     table.render({
         id: 'messageTable',
@@ -103,12 +100,8 @@ layui.config({
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "revokeBossInterviewJobTransfer", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg("提交成功", {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg("提交成功", {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -138,12 +131,8 @@ layui.config({
                     approvalId: approvalId
                 };
                 AjaxPostUtil.request({url: flowableBasePath + "editBossInterviewJobTransferToSubApproval", params: params, type: 'json', method: "POST", callback: function (json) {
-                    if (json.returnCode == 0) {
-                        winui.window.msg("提交成功", {icon: 1, time: 2000});
-                        loadTable();
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
+                    winui.window.msg("提交成功", {icon: 1, time: 2000});
+                    loadTable();
                 }});
             });
         });
@@ -154,12 +143,8 @@ layui.config({
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "updateBossInterviewJobTransferToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }

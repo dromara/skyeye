@@ -79,19 +79,15 @@ layui.config({
     var myChart1, myChart2, myChart3, myChart4, myChart5;
     function resetData(){
         AjaxPostUtil.request({url: shopBasePath + "queryStatisticsShop", params: getParams(), type: 'json', method: 'POST', callback: function (json) {
-            if (json.returnCode == 0) {
-                $("#mealOrderMemberByNum").html(json.bean.mealOrderMemberByNum + "个");
-                $("#mealOrderNum").html(json.bean.mealOrderNum + "单");
-                $("#keepFitOrderNum").html(json.bean.keepFitOrderNum + "单");
-                $("#keepFitOrderPrice").html(json.bean.keepFitOrderPrice + "元");
-                myChart1 = renderEcharts("echart1", '', '', '', json.bean.monthMealOrderNum);
-                myChart2 = renderEcharts("echart2", '', '', '', json.bean.monthKeepFitOrderNum);
-                myChart3 = renderEcharts2("echart3", '', '', json.bean.storeMealOrderNum);
-                myChart4 = renderEcharts2("echart4", '', '', json.bean.storeKeepFitOrderNum);
-                myChart5 = renderEcharts2("echart5", '', '', json.bean.natureMealOrderNum);
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            $("#mealOrderMemberByNum").html(json.bean.mealOrderMemberByNum + "个");
+            $("#mealOrderNum").html(json.bean.mealOrderNum + "单");
+            $("#keepFitOrderNum").html(json.bean.keepFitOrderNum + "单");
+            $("#keepFitOrderPrice").html(json.bean.keepFitOrderPrice + "元");
+            myChart1 = renderEcharts("echart1", '', '', '', json.bean.monthMealOrderNum);
+            myChart2 = renderEcharts("echart2", '', '', '', json.bean.monthKeepFitOrderNum);
+            myChart3 = renderEcharts2("echart3", '', '', json.bean.storeMealOrderNum);
+            myChart4 = renderEcharts2("echart4", '', '', json.bean.storeKeepFitOrderNum);
+            myChart5 = renderEcharts2("echart5", '', '', json.bean.natureMealOrderNum);
         }});
     }
 

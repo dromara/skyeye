@@ -13,16 +13,13 @@ layui.config({
 	layui.use(['form', 'layedit'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
-	    form = layui.form,
-	    tableSelect = layui.tableSelect,
-    	laydate = layui.laydate;
+			form = layui.form,
+			tableSelect = layui.tableSelect,
+			laydate = layui.laydate;
 	    layedit = layui.layedit;
 	
- 		//定时通知时间选择器
- 		laydate.render({
- 		  elem: '#delayedTime'
- 		  ,type: 'datetime'
- 		});
+ 		// 定时通知时间选择器
+ 		laydate.render({elem: '#delayedTime', type: 'datetime'});
  	
  		matchingLanguage();
  		form.render();
@@ -38,12 +35,8 @@ layui.config({
  	        		return false;
         		}
     			AjaxPostUtil.request({url: reqBasePath + "notice011", params: params, type: 'json', callback: function (json) {
-    				if (json.returnCode == 0) {
-    					parent.layer.close(index);
-    	 	        	parent.refreshCode = '0';
-    				} else {
-    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    				}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
     			}});
  	        }
  	        return false;

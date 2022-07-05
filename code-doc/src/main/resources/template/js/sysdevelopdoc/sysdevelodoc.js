@@ -83,21 +83,17 @@ layui.config({
 	function initDate(){
 		if(!isNull($("#showDocList").find("dd[class='active']").find("a").attr("rowid"))){
 			AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc023", params:{rowId: $("#showDocList").find("dd[class='active']").find("a").attr("rowid")}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					$('#contentDiv').empty();
-					$('#contentDiv').append('<textarea id="content" style="display:none;" placeholder="markdown语言"></textarea>');
-					$("#content").val(json.bean.content);
-					editormd.markdownToHTML("contentDiv", {
-	                    htmlDecode      : "style,script,iframe",
-	                    emoji           : true,  // 解析表情
-	                    taskList        : true,  // 解析列表
-	                    tex             : true,  // 默认不解析
-	                    flowChart       : true,  // 默认不解析
-	                    sequenceDiagram : true  // 默认不解析
-	                });
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				$('#contentDiv').empty();
+				$('#contentDiv').append('<textarea id="content" style="display:none;" placeholder="markdown语言"></textarea>');
+				$("#content").val(json.bean.content);
+				editormd.markdownToHTML("contentDiv", {
+					htmlDecode      : "style,script,iframe",
+					emoji           : true,  // 解析表情
+					taskList        : true,  // 解析列表
+					tex             : true,  // 默认不解析
+					flowChart       : true,  // 默认不解析
+					sequenceDiagram : true  // 默认不解析
+				});
 			}});
 		}
 	}

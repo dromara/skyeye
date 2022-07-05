@@ -44,53 +44,49 @@ layui.config({
                 }
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 				AjaxPostUtil.request({url: reqBasePath + "diary023", params: params, type: 'json', callback: function (json) {
-		   			if (json.returnCode == 0) {
-		   				var jsonStr = "";//实体json对象
-		   				$.each(json.rows, function(index, bean) {
-		   					if(index == 0 && page == 1){
-		   						bean.showClass = 'first';
-		   					} else {
-		   						bean.showClass = 'date02';
-		   					}
-		   					$.each(bean.dayChild, function(i, item){
-		   						var content = "已完成工作：" + item.completedJob + "<br>";
-		   						if(!isNull(item.incompleteJob)){//未完成工作
-		   							content += "未完成工作：" + item.incompleteJob + "<br>";
-		   						}
-		   						if(!isNull(item.workSummary)){//工作总结
-		   							if(item.jobType === '2'){//周报
-		   								content += "本周工作总结：" + item.workSummary + "<br>";
-		   							}else if(item.jobType === '3'){//月报
-		   								content += "本月工作总结：" + item.workSummary + "<br>";
-		   							}
-		   						}
-		   						if(!isNull(item.nextPlan)){//工作计划
-		   							if(item.jobType === '2'){//周报
-		   								content += "下周工作计划：" + item.nextPlan + "<br>";
-		   							}else if(item.jobType === '3'){//月报
-		   								content += "下月工作计划：" + item.nextPlan + "<br>";
-		   							}
-		   						}
-		   						if(!isNull(item.coordinaJob)){//需协调工作
-		   							content += "需协调工作：" + item.coordinaJob + "<br>";
-		   						}
-		   						if(!isNull(item.jobRemark)){//备注
-		   							content += "备注：" + item.jobRemark + "<br>";
-		   						}
-		   						item.content = content;
-		   					});
-		   					jsonStr = {
-	   							bean: bean
-	   						};
-							lis.push(getDataUseHandlebars(timeTreeJobDiary, jsonStr));
+					var jsonStr = "";//实体json对象
+					$.each(json.rows, function(index, bean) {
+						if(index == 0 && page == 1){
+							bean.showClass = 'first';
+						} else {
+							bean.showClass = 'date02';
+						}
+						$.each(bean.dayChild, function(i, item){
+							var content = "已完成工作：" + item.completedJob + "<br>";
+							if(!isNull(item.incompleteJob)){//未完成工作
+								content += "未完成工作：" + item.incompleteJob + "<br>";
+							}
+							if(!isNull(item.workSummary)){//工作总结
+								if(item.jobType === '2'){//周报
+									content += "本周工作总结：" + item.workSummary + "<br>";
+								}else if(item.jobType === '3'){//月报
+									content += "本月工作总结：" + item.workSummary + "<br>";
+								}
+							}
+							if(!isNull(item.nextPlan)){//工作计划
+								if(item.jobType === '2'){//周报
+									content += "下周工作计划：" + item.nextPlan + "<br>";
+								}else if(item.jobType === '3'){//月报
+									content += "下月工作计划：" + item.nextPlan + "<br>";
+								}
+							}
+							if(!isNull(item.coordinaJob)){//需协调工作
+								content += "需协调工作：" + item.coordinaJob + "<br>";
+							}
+							if(!isNull(item.jobRemark)){//备注
+								content += "备注：" + item.jobRemark + "<br>";
+							}
+							item.content = content;
 						});
-						matchingLanguage();
-		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-						next(lis.join(''), (page * 12) < json.total);
-		   			} else {
-		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		   			}
+						jsonStr = {
+							bean: bean
+						};
+						lis.push(getDataUseHandlebars(timeTreeJobDiary, jsonStr));
+					});
+					matchingLanguage();
+					//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+					//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+					next(lis.join(''), (page * 12) < json.total);
 		   		}});
 			}
 		});

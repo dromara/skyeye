@@ -178,12 +178,8 @@ layui.config({
     // 我收到的日志全部设置为已读
     function alreadyRead(){
         AjaxPostUtil.request({url: reqBasePath + "diary024", type: 'json', callback: function (json) {
-            if (json.returnCode == 0) {
-                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                loadTable();
-            } else {
-                winui.window.msg(systemLanguage["com.skyeye.operationFailed"][languageType], {icon: 2, time: 2000});
-            }
+			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+			loadTable();
         }});
     };
     

@@ -14,27 +14,23 @@ layui.config({
 
 	// 显示编辑器内容
 	AjaxPostUtil.request({url: reqBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
-		if (json.returnCode == 0) {
-			parent.$("#noteTitle").val(json.bean.title);
-			var param = {
-				container: 'luckysheet',
-				showtoolbar: true,
-				showConfigWindowResize: true, // 图表和数据透视表的配置会在右侧弹出，设置弹出后表格是否会自动缩进
-				showinfobar: false, // 是否显示顶部名称栏
-				lang: 'zh',
-				hook: {
-					updated: function (){
-						parent.$("#editMyNote").addClass('select');
-					}
+		parent.$("#noteTitle").val(json.bean.title);
+		var param = {
+			container: 'luckysheet',
+			showtoolbar: true,
+			showConfigWindowResize: true, // 图表和数据透视表的配置会在右侧弹出，设置弹出后表格是否会自动缩进
+			showinfobar: false, // 是否显示顶部名称栏
+			lang: 'zh',
+			hook: {
+				updated: function (){
+					parent.$("#editMyNote").addClass('select');
 				}
-			};
-			if(!isNull(json.bean.content)){
-				param["data"] = JSON.parse(json.bean.content);
 			}
-			luckysheet.create(param);
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+		};
+		if(!isNull(json.bean.content)){
+			param["data"] = JSON.parse(json.bean.content);
 		}
+		luckysheet.create(param);
 	}});
 
 	$(document).bind("keydown", function(e) {

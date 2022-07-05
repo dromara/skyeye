@@ -396,18 +396,14 @@ layui.config({
     	
     	function initEcharts(){
 	    	AjaxPostUtil.request({url: flowableBasePath + "checkwork016", params: getEchartsParams(), type: 'json', method: "POST", callback: function (json) {
-	    		if (json.returnCode == 0) {
-	    			ydata = json.rows;
-	    			var pieInitialized;
-	        	    setTimeout(function () {
-	        	        pieInitialized = true;
-	        	        myChart.setOption({
-	        	            series: getPieSeries(scatterData, myChart, ydata)
-	        	        });
-	        	    }, 10);
-	    		} else {
-	    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    		}
+				ydata = json.rows;
+				var pieInitialized;
+				setTimeout(function () {
+					pieInitialized = true;
+					myChart.setOption({
+						series: getPieSeries(scatterData, myChart, ydata)
+					});
+				}, 10);
 	    	}});
     	}
     	

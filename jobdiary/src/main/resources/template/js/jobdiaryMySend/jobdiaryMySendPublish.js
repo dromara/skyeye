@@ -193,12 +193,8 @@ layui.config({
         		}
         		
         		AjaxPostUtil.request({url: reqBasePath + "diary002", params: params, type: 'json', callback: function (json) {
-                    if (json.returnCode == 0) {
-                        parent.layer.close(index);
-                         parent.refreshCode = '0';
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
+					parent.layer.close(index);
+					parent.refreshCode = '0';
                 }});
 	        }
 	        return false;
@@ -306,12 +302,8 @@ layui.config({
         		}
         		
         		AjaxPostUtil.request({url: reqBasePath + "diary009", params: params, type: 'json', callback: function (json) {
-                    if (json.returnCode == 0) {
-                        parent.layer.close(index);
-                         parent.refreshCode = '0';
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
+					parent.layer.close(index);
+					parent.refreshCode = '0';
                 }});
 	        }
 	        return false;
@@ -418,12 +410,8 @@ layui.config({
         		}
         		
         		AjaxPostUtil.request({url: reqBasePath + "diary012", params: params, type: 'json', callback: function (json) {
-                    if (json.returnCode == 0) {
-                        parent.layer.close(index);
-                         parent.refreshCode = '0';
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
+					parent.layer.close(index);
+					parent.refreshCode = '0';
                 }});
 	        }
 	        return false;

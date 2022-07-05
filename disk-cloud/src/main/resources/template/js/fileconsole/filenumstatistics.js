@@ -8,7 +8,6 @@ layui.config({
     echartsTheme: '../echarts/echartsTheme'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate', 'echarts'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate;
@@ -16,36 +15,32 @@ layui.config({
 	var jsonData = new Array();
 		
 	AjaxPostUtil.request({url: reqBasePath + "fileconsole037", params: {}, type: 'json', callback: function (json) {
-		if (json.returnCode == 0) {
-			jsonData = json.bean;
-			$("#layer02_01 .layer02-data").find('span').eq(0).html(jsonData.allNum.fileNum);
-			drawLayer02Label($("#layer02_01 canvas").get(0), "文件总数量", 80, 200);
-			$("#layer02_02 .layer02-data").find('span').eq(0).html(jsonData.allNumToday.fileNum);
-			drawLayer02Label($("#layer02_02 canvas").get(0), "今日新增文件数量", 80, 200);
-			$("#layer02_03 .layer02-data").find('span').eq(0).html(jsonData.allNumThisWeek.fileNum);
-			drawLayer02Label($("#layer02_03 canvas").get(0), "本周新增文件数量", 80, 200);
-			$("#layer02_04 .layer02-data").find('span').eq(0).html(jsonData.allNum.fileSizeZh);
-			drawLayer02Label($("#layer02_04 canvas").get(0), "文件总存储", 80, 200);
-			$("#layer02_05 .layer02-data").find('span').eq(0).html(jsonData.allNumToday.fileSizeZh);
-			drawLayer02Label($("#layer02_05 canvas").get(0), "今日新增文件存储", 80, 200);
-			$("#layer02_06 .layer02-data").find('span').eq(0).html(jsonData.allNumThisWeek.fileSizeZh);
-			drawLayer02Label($("#layer02_06 canvas").get(0), "本周新增文件存储", 80, 200);
-		
-			//文件类型占比饼状图
-			renderChartBar01();
-		
-			//文件存储
-			renderLayer03Right();
-		
-			//本年度月均线流量趋势
-			renderLayer04Left();
-		
-			//新增文件数（近七天）
-			renderLayer04Right();
-			matchingLanguage();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		}
+		jsonData = json.bean;
+		$("#layer02_01 .layer02-data").find('span').eq(0).html(jsonData.allNum.fileNum);
+		drawLayer02Label($("#layer02_01 canvas").get(0), "文件总数量", 80, 200);
+		$("#layer02_02 .layer02-data").find('span').eq(0).html(jsonData.allNumToday.fileNum);
+		drawLayer02Label($("#layer02_02 canvas").get(0), "今日新增文件数量", 80, 200);
+		$("#layer02_03 .layer02-data").find('span').eq(0).html(jsonData.allNumThisWeek.fileNum);
+		drawLayer02Label($("#layer02_03 canvas").get(0), "本周新增文件数量", 80, 200);
+		$("#layer02_04 .layer02-data").find('span').eq(0).html(jsonData.allNum.fileSizeZh);
+		drawLayer02Label($("#layer02_04 canvas").get(0), "文件总存储", 80, 200);
+		$("#layer02_05 .layer02-data").find('span').eq(0).html(jsonData.allNumToday.fileSizeZh);
+		drawLayer02Label($("#layer02_05 canvas").get(0), "今日新增文件存储", 80, 200);
+		$("#layer02_06 .layer02-data").find('span').eq(0).html(jsonData.allNumThisWeek.fileSizeZh);
+		drawLayer02Label($("#layer02_06 canvas").get(0), "本周新增文件存储", 80, 200);
+
+		//文件类型占比饼状图
+		renderChartBar01();
+
+		//文件存储
+		renderLayer03Right();
+
+		//本年度月均线流量趋势
+		renderLayer04Left();
+
+		//新增文件数（近七天）
+		renderLayer04Right();
+		matchingLanguage();
 	}});
 	
 	function drawLayer02Label(canvasObj, text, textBeginX, lineEndX) {

@@ -17,20 +17,16 @@ layui.config({
 
 		var ue
 	    AjaxPostUtil.request({url: reqBasePath + "exexplain002", params: {type: type}, type: 'json', callback: function(json) {
-   			if (json.returnCode == 0) {
-   				if(!isNull(json.bean)){
-   					rowId = json.bean.id;
-   					$("#title").val(json.bean.title);
-   					$("#content").val(json.bean.content);
-   				}
-				ue = ueEditorUtil.initEditor('container');
-				ue.addListener("ready", function () {
-					ue.setContent(json.bean.content);
-				});
-   			    matchingLanguage();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			if(!isNull(json.bean)){
+				rowId = json.bean.id;
+				$("#title").val(json.bean.title);
+				$("#content").val(json.bean.content);
+			}
+			ue = ueEditorUtil.initEditor('container');
+			ue.addListener("ready", function () {
+				ue.setContent(json.bean.content);
+			});
+			matchingLanguage();
    		}});
 	    
 		form.render();
@@ -46,21 +42,13 @@ layui.config({
 	        		};
 	        		if(isNull(rowId)){
 	        			AjaxPostUtil.request({url: reqBasePath + "exexplain001", params: params, type: 'json', callback: function(json) {
-	        				if (json.returnCode == 0) {
-	        					rowId = json.bean.id;
-	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-	        				} else {
-	        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	        				}
+							rowId = json.bean.id;
+							winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 	        			}});
 	        		} else {
 	        			params.rowId = rowId;
 	        			AjaxPostUtil.request({url: reqBasePath + "exexplain003", params: params, type: 'json', callback: function(json) {
-	        				if (json.returnCode == 0) {
-	        					winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-	        				} else {
-	        					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	        				}
+							winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 	        			}});
 	        		}
 	        	}

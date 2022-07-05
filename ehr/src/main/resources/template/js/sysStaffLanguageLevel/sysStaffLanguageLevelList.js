@@ -101,12 +101,8 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysstafflanguagelevel007", params:{rowId: data.id}, type: 'json', callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -116,12 +112,8 @@ layui.config({
         layer.confirm('确认启用选中数据吗？', { icon: 3, title: '启用操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysstafflanguagelevel006", params:{rowId: data.id}, type: 'json', callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -131,12 +123,8 @@ layui.config({
         layer.confirm('确认禁用选中数据吗？', { icon: 3, title: '禁用操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysstafflanguagelevel005", params:{rowId: data.id}, type: 'json', callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }

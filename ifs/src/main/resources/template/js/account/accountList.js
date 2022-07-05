@@ -86,12 +86,8 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({ url: flowableBasePath + "account004", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -100,12 +96,8 @@ layui.config({
     function defaultAccount(data){
         layer.confirm('确认要设置该结算账户为默认状态吗？', { icon: 3, title: '设置结算账户状态' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "account006", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg("设置成功。", {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg("设置成功。", {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }

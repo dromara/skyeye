@@ -42,12 +42,8 @@ layui.config({
 							addressDetail: $("#userAddressInput").val()
 		 	        	};
 		 	        	AjaxPostUtil.request({url: flowableBasePath + "sealseserviceworker002", params: params, type: 'json', callback: function (json) {
-			 	   			if (json.returnCode == 0){
-				 	   			parent.layer.close(index);
-				 	        	parent.refreshCode = '0';
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 			 	   		}});
 		 	   		} else {
                 		winui.window.msg('地图信息获取失败.', {icon: 2, time: 2000});

@@ -13,11 +13,8 @@ layui.config({
 		laydate = layui.laydate,
 		form = layui.form;
 	
-	//'申请时间'页面的选取时间段表格
-	laydate.render({
-		elem: '#createTime', //指定元素
-		range: '~'
-	});
+	// '申请时间'页面的选取时间段表格
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	// 我启动的流程
 	table.render({
@@ -101,12 +98,8 @@ layui.config({
 					approvalId: approvalId
 				};
 				AjaxPostUtil.request({url: flowableBasePath + "pagesequence005", params: params, type: 'json', callback: function (json) {
-					if (json.returnCode == 0) {
-						winui.window.msg("申请提交成功，等待审核...", {icon: 1, time: 2000});
-						reloadMyStartTable();
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					winui.window.msg("申请提交成功，等待审核...", {icon: 1, time: 2000});
+					reloadMyStartTable();
 				}});
 			});
 		});
@@ -117,12 +110,8 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "pagesequence002", params: {rowId: data.id}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
-                	winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                	reloadMyStartTable();
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				reloadMyStartTable();
  	   		}});
 		});
 	}

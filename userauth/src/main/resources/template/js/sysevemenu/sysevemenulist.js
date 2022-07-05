@@ -242,24 +242,16 @@ layui.config({
 	// 上移
 	function topOne(data){
 		AjaxPostUtil.request({url: reqBasePath + "sys022", params:{rowId: data.id}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			loadTable();
 		}});
 	}
 	
 	// 下移
 	function lowerOne(data){
 		AjaxPostUtil.request({url: reqBasePath + "sys023", params:{rowId: data.id}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			loadTable();
 		}});
 	}
     

@@ -15,28 +15,24 @@ layui.config({
 			productId = "";//产品id
 		
 		AjaxPostUtil.request({url: flowableBasePath + "feedback002", params: {serviceId: parent.serviceId}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				$("#orderNum").html(json.bean.orderNum);
-				$("#customerName").html(json.bean.customerName);
-				$("#productName").html(json.bean.productName);
-				productId = json.bean.productId;
-				customerId = json.bean.customerId;
-				showGrid({
-				 	id: "typeId",
-				 	url: flowableBasePath + "crmservicefeedbacktype008",
-				 	params: {},
-				 	pagination: false,
-				 	template: getFileContent('tpl/template/select-option.tpl'),
-				 	ajaxSendLoadBefore: function(hdb){
-				 	},
-				 	ajaxSendAfter:function(data){
-				 		form.render("select");
-				 	}
-				});
-				matchingLanguage();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			$("#orderNum").html(json.bean.orderNum);
+			$("#customerName").html(json.bean.customerName);
+			$("#productName").html(json.bean.productName);
+			productId = json.bean.productId;
+			customerId = json.bean.customerId;
+			showGrid({
+				id: "typeId",
+				url: flowableBasePath + "crmservicefeedbacktype008",
+				params: {},
+				pagination: false,
+				template: getFileContent('tpl/template/select-option.tpl'),
+				ajaxSendLoadBefore: function(hdb){
+				},
+				ajaxSendAfter:function(data){
+					form.render("select");
+				}
+			});
+			matchingLanguage();
 		}});
 
 		skyeyeEnclosure.init('enclosureUpload');
@@ -51,12 +47,8 @@ layui.config({
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 				};
 				AjaxPostUtil.request({url: flowableBasePath + "feedback003", params: params, type: 'json', callback: function(json) {
-					if(json.returnCode == 0) {
-						parent.layer.close(index);
-						parent.refreshCode = '0';
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 				}});
 			}
 			return false;

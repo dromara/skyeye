@@ -68,87 +68,80 @@ layui.config({
 	//初始化回显数据
 	function initDataShow(){
 		AjaxPostUtil.request({url: flowableBasePath + "salesorder008", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
-			if(json.returnCode == 0) {
-				if(isNull(json.bean)){
-					$("#showForm").html("");
-					winui.window.msg('数据不存在~', {icon: 2, time: 2000});
-					return;
-				}
-				//客户信息赋值
-				customerMation = {
-					id: json.bean.organId,
-					customName: json.bean.customName
-				}
-
-				xsddOrderNum = json.bean.defaultNumber;
-				$("#customName").val(json.bean.customName);
-				$("#xsddOrderNum").html(xsddOrderNum);
-				$("#accountId").val(json.bean.accountId);
-				$("#payType").val(json.bean.payType);
-				$("#allPrice").html(json.bean.totalPrice.toFixed(2));
-				$("#taxLastMoneyPrice").html(json.bean.taxLastMoneyPrice.toFixed(2));
-				$("#remark").val(json.bean.remark);
-				$("#discount").val(json.bean.discount.toFixed(2));
-				$("#discountMoney").val(json.bean.discountMoney.toFixed(2));
-				$("#discountLastMoney").html(json.bean.discountLastMoney.toFixed(2));
-				$("#changeAmount").val(json.bean.changeAmount.toFixed(2));
-				$("#arrears").html(json.bean.arrears.toFixed(2));
-				$("#otherPriceTotal").html("费用合计：" + json.bean.otherMoney.toFixed(2));
-
-				//加载列表项
-				$.each(json.bean.items, function(i, item){
-					addRow();
-					//将规格所属的商品信息加入到对象中存储
-					allChooseProduct["tr" + (rowNum - 1)] = item.product;
-					//单位回显
-					$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
-					$("#unitId" + (rowNum - 1)).val(item.mUnitId);
-					//商品回显
-					$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
-					$("#currentTock" + (rowNum - 1)).html(item.currentTock);
-					//订单剩余数量
-					$("#nowNum" + (rowNum - 1)).html(isNull(item.nowNumber) ? 0 : item.nowNumber);
-					$("#rkNum" + (rowNum - 1)).val(isNull(item.nowNumber) ? 0 : item.nowNumber);
-					$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
-					$("#amountOfMoney" + (rowNum - 1)).val(item.allPrice.toFixed(2));
-					$("#taxRate" + (rowNum - 1)).val(item.taxRate.toFixed(2));
-					$("#taxMoney" + (rowNum - 1)).val(item.taxMoney.toFixed(2));
-					$("#taxUnitPrice" + (rowNum - 1)).val(item.taxUnitPrice.toFixed(2));
-					$("#taxLastMoney" + (rowNum - 1)).val(item.taxLastMoney.toFixed(2));
-					$("#remark" + (rowNum - 1)).val(item.remark);
-				});
-
-				//加载其他费用
-				$.each(json.bean.otherMoneyList, function(i, item){
-					addPriceRow();
-					$("#inoutitemId" + (priceNum - 1)).val(item.inoutitemId);
-					$("#otherPrice" + (priceNum - 1)).val(parseFloat(item.otherPrice).toFixed(2));
-				});
-
-				var userNames = "";
-				salesManList = json.bean.userInfo;
-				$.each(salesManList, function (i, item) {
-					userNames += item.name + ',';
-				});
-				//人员选择
-				$('#salesMan').tagEditor({
-					initialTags: userNames.split(','),
-					placeholder: '请选择销售人员',
-					beforeTagDelete: function(field, editor, tags, val) {
-						salesManList = [].concat(arrayUtil.removeArrayPointName(salesManList, val));
-					}
-				});
-
-				textool.init({eleId: 'remark', maxlength: 200});
-
-				matchingLanguage();
-				form.render();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000}, function() {
-					parent.layer.close(index);
-					parent.refreshCode = '-9999';
-				});
+			if(isNull(json.bean)){
+				$("#showForm").html("");
+				winui.window.msg('数据不存在~', {icon: 2, time: 2000});
+				return;
 			}
+			//客户信息赋值
+			customerMation = {
+				id: json.bean.organId,
+				customName: json.bean.customName
+			}
+
+			xsddOrderNum = json.bean.defaultNumber;
+			$("#customName").val(json.bean.customName);
+			$("#xsddOrderNum").html(xsddOrderNum);
+			$("#accountId").val(json.bean.accountId);
+			$("#payType").val(json.bean.payType);
+			$("#allPrice").html(json.bean.totalPrice.toFixed(2));
+			$("#taxLastMoneyPrice").html(json.bean.taxLastMoneyPrice.toFixed(2));
+			$("#remark").val(json.bean.remark);
+			$("#discount").val(json.bean.discount.toFixed(2));
+			$("#discountMoney").val(json.bean.discountMoney.toFixed(2));
+			$("#discountLastMoney").html(json.bean.discountLastMoney.toFixed(2));
+			$("#changeAmount").val(json.bean.changeAmount.toFixed(2));
+			$("#arrears").html(json.bean.arrears.toFixed(2));
+			$("#otherPriceTotal").html("费用合计：" + json.bean.otherMoney.toFixed(2));
+
+			//加载列表项
+			$.each(json.bean.items, function(i, item){
+				addRow();
+				//将规格所属的商品信息加入到对象中存储
+				allChooseProduct["tr" + (rowNum - 1)] = item.product;
+				//单位回显
+				$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
+				$("#unitId" + (rowNum - 1)).val(item.mUnitId);
+				//商品回显
+				$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
+				$("#currentTock" + (rowNum - 1)).html(item.currentTock);
+				//订单剩余数量
+				$("#nowNum" + (rowNum - 1)).html(isNull(item.nowNumber) ? 0 : item.nowNumber);
+				$("#rkNum" + (rowNum - 1)).val(isNull(item.nowNumber) ? 0 : item.nowNumber);
+				$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
+				$("#amountOfMoney" + (rowNum - 1)).val(item.allPrice.toFixed(2));
+				$("#taxRate" + (rowNum - 1)).val(item.taxRate.toFixed(2));
+				$("#taxMoney" + (rowNum - 1)).val(item.taxMoney.toFixed(2));
+				$("#taxUnitPrice" + (rowNum - 1)).val(item.taxUnitPrice.toFixed(2));
+				$("#taxLastMoney" + (rowNum - 1)).val(item.taxLastMoney.toFixed(2));
+				$("#remark" + (rowNum - 1)).val(item.remark);
+			});
+
+			//加载其他费用
+			$.each(json.bean.otherMoneyList, function(i, item){
+				addPriceRow();
+				$("#inoutitemId" + (priceNum - 1)).val(item.inoutitemId);
+				$("#otherPrice" + (priceNum - 1)).val(parseFloat(item.otherPrice).toFixed(2));
+			});
+
+			var userNames = "";
+			salesManList = json.bean.userInfo;
+			$.each(salesManList, function (i, item) {
+				userNames += item.name + ',';
+			});
+			//人员选择
+			$('#salesMan').tagEditor({
+				initialTags: userNames.split(','),
+				placeholder: '请选择销售人员',
+				beforeTagDelete: function(field, editor, tags, val) {
+					salesManList = [].concat(arrayUtil.removeArrayPointName(salesManList, val));
+				}
+			});
+
+			textool.init({eleId: 'remark', maxlength: 200});
+
+			matchingLanguage();
+			form.render();
 		}});
 	}
 
@@ -309,13 +302,9 @@ layui.config({
 
 	function sendRequest(params){
 		AjaxPostUtil.request({url: flowableBasePath + "salesorder009", params: params, type: 'json', method: "PUT", callback: function(json) {
-			if(json.returnCode == 0) {
-				dsFormUtil.savePageData("dsFormShow", json.bean.id);
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			dsFormUtil.savePageData("dsFormShow", json.bean.id);
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

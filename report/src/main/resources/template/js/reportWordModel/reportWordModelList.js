@@ -92,12 +92,8 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: reportBasePath + "reportwordmodel003", params:{id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -107,12 +103,8 @@ layui.config({
         layer.confirm('确定发布该模型吗？', {icon: 3, title: '发布操作'}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: reportBasePath + "reportwordmodel008", params:{id: data.id}, type: 'json', method: "PUT", callback: function(json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg('操作成功', {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg('操作成功', {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -122,12 +114,8 @@ layui.config({
         layer.confirm('确定取消发布该模型吗？', {icon: 3, title: '取消发布操作'}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: reportBasePath + "reportwordmodel009", params:{id: data.id}, type: 'json', method: "PUT", callback: function(json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg('操作成功', {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg('操作成功', {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }

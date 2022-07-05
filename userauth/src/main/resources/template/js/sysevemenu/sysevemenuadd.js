@@ -137,12 +137,8 @@ layui.config({
  	        		params.isShare = '0';
  	        	}
  	        	AjaxPostUtil.request({url: reqBasePath + "sys007", params: params, type: 'json', callback: function(json) {
-					if (json.returnCode == 0) {
-						parent.layer.close(index);
-						parent.refreshCode = '0';
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	 	   		}});
  	        }
  	        return false;
@@ -151,17 +147,13 @@ layui.config({
  	    //加载同级菜单
  	    function loadChildMenu(){
  	    	AjaxPostUtil.request({url: reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
-	 	   			for(var i = 0; i < json.rows.length; i++){
-	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
-	 	   			}
-	 	   			str += '</select></dd>';
-	 	   			$("#lockParentSel").append(str);
-	 	   			form.render('select');
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
+				for(var i = 0; i < json.rows.length; i++){
+					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
+				}
+				str += '</select></dd>';
+				$("#lockParentSel").append(str);
+				form.render('select');
  	   		}});
  	    }
  	    

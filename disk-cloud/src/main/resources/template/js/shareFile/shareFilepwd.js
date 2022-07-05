@@ -13,27 +13,23 @@ layui.config({
 		var rowId = GetUrlParam("id");
 	    
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				if(isNull(json.bean)){
-   					$("#showForm").hide();
-   					$("#showFormNone").show();
-   				} else {
-   					if(json.bean.shareType == 2){//私密分享
-   						$("#showFormNone").hide();
-   	   					$("#showForm").show();
-   	   					$("#userName").html(json.bean.userName);
-   	   					$("#userPhoto").attr("src", json.bean.userPhoto);
-   	   					$("#userPhoto").attr("alt", json.bean.userName);
-   					}else if(json.bean.shareType == 1){//公开分享--跳转列表页面
-   						location.href = "../../tpl/shareFile/shareFileList.html?id=" + rowId;
-   					}
-   				}
-   				
-   				matchingLanguage();
-   				form.render();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			if(isNull(json.bean)){
+				$("#showForm").hide();
+				$("#showFormNone").show();
+			} else {
+				if(json.bean.shareType == 2){//私密分享
+					$("#showFormNone").hide();
+					$("#showForm").show();
+					$("#userName").html(json.bean.userName);
+					$("#userPhoto").attr("src", json.bean.userPhoto);
+					$("#userPhoto").attr("alt", json.bean.userName);
+				}else if(json.bean.shareType == 1){//公开分享--跳转列表页面
+					location.href = "../../tpl/shareFile/shareFileList.html?id=" + rowId;
+				}
+			}
+
+			matchingLanguage();
+			form.render();
    		}});
 		
 		$("body").on("click", "#tqShareFile", function (e) {
@@ -42,17 +38,13 @@ layui.config({
 				return;
 			}
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: $("#sharePassword").val()}, type: 'json', callback: function (json) {
-	   			if (json.returnCode == 0) {
-	   				if(isNull(json.bean)){
-	   					$("#showForm").hide();
-	   					$("#showFormNone").show();
-	   				} else {//跳转列表页面
-	   					$.cookie("file" + rowId, $("#sharePassword").val(), {path: '/' });
-	   					location.href = "../../tpl/shareFile/shareFileList.html?id=" + rowId;
-	   				}
-	   			} else {
-	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	   			}
+				if(isNull(json.bean)){
+					$("#showForm").hide();
+					$("#showFormNone").show();
+				} else {//跳转列表页面
+					$.cookie("file" + rowId, $("#sharePassword").val(), {path: '/' });
+					location.href = "../../tpl/shareFile/shareFileList.html?id=" + rowId;
+				}
 	   		}});
 		});
 		

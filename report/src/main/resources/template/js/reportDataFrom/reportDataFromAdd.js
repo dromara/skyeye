@@ -61,12 +61,8 @@ layui.config({
                 }
                 params = $.extend(true, params, otherData);
                 AjaxPostUtil.request({url: reportBasePath + "reportdatafrom002", params: params, type: 'json', method: "POST", callback: function(json) {
-                    if (json.returnCode == 0) {
-                        parent.layer.close(index);
-                        parent.refreshCode = '0';
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
                 }});
             }
             return false;
@@ -257,12 +253,8 @@ layui.config({
                 url = "reportcommon004";
             }
             AjaxPostUtil.request({url: reportBasePath + url, params: params, type: 'json', method: "POST", callback: function(json) {
-                if (json.returnCode == 0) {
-                    var data = getDataByDataFromType(dataFromType, json);
-                    loadFieldResolution(dataFromType, data);
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                var data = getDataByDataFromType(dataFromType, json);
+                loadFieldResolution(dataFromType, data);
             }});
         });
 

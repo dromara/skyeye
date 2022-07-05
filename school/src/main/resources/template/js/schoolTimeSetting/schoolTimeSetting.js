@@ -61,11 +61,7 @@ layui.config({
     	};
         
         AjaxPostUtil.request({url: schoolBasePath + "schooltimesetting002", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				winui.window.msg("修改成功", {icon: 1, time: 2000});
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg("修改成功", {icon: 1, time: 2000});
 		}});
 	});
 	

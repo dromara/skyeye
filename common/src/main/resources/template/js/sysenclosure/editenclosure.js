@@ -13,18 +13,14 @@ layui.config({
 	    var fileType = parent.fileType;
 	    
 	    AjaxPostUtil.request({url: reqBasePath + "sysenclosure005", params:{rowId: parent.fileId}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				if(isNull(json.bean)){
-   					winui.window.msg("该数据不存在", {icon: 5,time: 2000});
-   					parent.layer.close(index);
-   					parent.refreshCode = '0';
-   				} else {
-   					$("#parentFolderName").html(parent.folderName);
-   					$("#typeName").val(json.bean.typeName);
-   				}
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			if(isNull(json.bean)){
+				winui.window.msg("该数据不存在", {icon: 5,time: 2000});
+				parent.layer.close(index);
+				parent.refreshCode = '0';
+			} else {
+				$("#parentFolderName").html(parent.folderName);
+				$("#typeName").val(json.bean.typeName);
+			}
    		}});
 	    
    		matchingLanguage();

@@ -22,18 +22,10 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		// 本次年检时间
-		 		laydate.render({ 
-		 		  	elem: '#thisInspectionTime',
-		 		  	type: 'date',
-		 		  	trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#thisInspectionTime', type: 'date', trigger: 'click'});
 		 		
 		 		// 下次年检时间
-		 		laydate.render({ 
-		 		  	elem: '#nextInspectionTime',
-		 		  	type: 'date',
-		 		  	trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#nextInspectionTime', type: 'date', trigger: 'click'});
 
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
@@ -69,12 +61,8 @@ layui.config({
 		 	                }
 		 	        	}
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "inspection005", params: params, type: 'json', callback: function (json) {
-	 		 	   			if (json.returnCode == 0) {
-	 			 	   			parent.layer.close(index);
-	 			 	        	parent.refreshCode = '0';
-	 		 	   			} else {
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 		 	   			}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 	 		 	   		}});
 		 	        }
 		 	        return false;

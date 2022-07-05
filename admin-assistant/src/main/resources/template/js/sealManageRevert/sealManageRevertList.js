@@ -16,10 +16,7 @@ layui.config({
 	// 印章归还
 	authBtn('1596962824460');
 	
-	laydate.render({
-		elem: '#revertTime',
-		range: '~'
-	});
+	laydate.render({elem: '#revertTime', range: '~'});
 	
 	// 印章归还列表
 	table.render({
@@ -124,12 +121,8 @@ layui.config({
 					approvalId: approvalId
 				};
 				AjaxPostUtil.request({url: flowableBasePath + "sealrevert006", params: params, type: 'json', callback: function (json) {
-					if (json.returnCode == 0) {
-						winui.window.msg("提交成功", {icon: 1, time: 2000});
-						loadRevertTable();
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					winui.window.msg("提交成功", {icon: 1, time: 2000});
+					loadRevertTable();
 				}});
 			});
 		});

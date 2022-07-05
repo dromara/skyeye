@@ -42,32 +42,24 @@ layui.config({
 	//新增分类
 	$("body").on("click", "#addBean", function() {
 		AjaxPostUtil.request({url: reqBasePath + "appworkpage002", params: {}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				chooseId = json.bean.id;
-   				showList();
-   				$(".setting a").removeClass("selected");
-   				$("#setting").find("a[rowid='" + chooseId + "']").remove();
-   				var obj = $("#setting");
-   			    obj.append("<input value='新增分类' class='layui-input setting-a-input' style='margin-top: 5px;'/>");
-   			    obj.find("input").select();
-   			    obj.find("input").blur(function(){
-   			    	var value = obj.find("input").val();
-   			    	if(value.length > 0){
-   			    		AjaxPostUtil.request({url: reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function (json) {
-   		   		   			if (json.returnCode == 0) {
-   		   		   				showMenu();
-   		   		   			} else {
-   		   						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   		   					}
-   		   		   		}});
-   			    	} else {
-   			    		showMenu();
-   			    		winui.window.msg("标题不能为空", {icon: 2, time: 2000});
-   			    	}
-   			    });
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			chooseId = json.bean.id;
+			showList();
+			$(".setting a").removeClass("selected");
+			$("#setting").find("a[rowid='" + chooseId + "']").remove();
+			var obj = $("#setting");
+			obj.append("<input value='新增分类' class='layui-input setting-a-input' style='margin-top: 5px;'/>");
+			obj.find("input").select();
+			obj.find("input").blur(function(){
+				var value = obj.find("input").val();
+				if(value.length > 0){
+					AjaxPostUtil.request({url: reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function (json) {
+						showMenu();
+					}});
+				} else {
+					showMenu();
+					winui.window.msg("标题不能为空", {icon: 2, time: 2000});
+				}
+			});
    		}});
     });
 	
@@ -90,23 +82,19 @@ layui.config({
 	//加载目录
 	function showMenu(){
 		AjaxPostUtil.request({url: reqBasePath + "appworkpage001", params: {}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				if(json.total > 0){
-					var str = getDataUseHandlebars(appWorkPageTemplate, json);
-					$("#setting").html(str);
-		 			var noteItem = "";
-			 		if(!isNull(chooseId)){
-			 			noteItem =$("#setting").find("a[rowid='" + chooseId + "']");
-			 		} else {
-			 			noteItem = $("#setting").find("a").eq(0);
-			 			chooseId = noteItem.attr("rowid");
-			 		}
-			 		noteItem.addClass('selected');
-		 		}
-				showList();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			if(json.total > 0){
+				var str = getDataUseHandlebars(appWorkPageTemplate, json);
+				$("#setting").html(str);
+				var noteItem = "";
+				if(!isNull(chooseId)){
+					noteItem =$("#setting").find("a[rowid='" + chooseId + "']");
+				} else {
+					noteItem = $("#setting").find("a").eq(0);
+					chooseId = noteItem.attr("rowid");
+				}
+				noteItem.addClass('selected');
 			}
+			showList();
 		}});
 	}
 	

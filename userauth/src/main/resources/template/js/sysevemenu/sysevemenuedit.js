@@ -205,12 +205,8 @@ layui.config({
 		 	        	}
 		 	        	
 		 	        	AjaxPostUtil.request({url: reqBasePath + "sys010", params: params, type: 'json', method: 'PUT', callback: function(json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			parent.layer.close(index);
-				 	        	parent.refreshCode = '0';
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 			 	   		}});
 		 	        }
 		 	        return false;
@@ -223,26 +219,22 @@ layui.config({
 	    	if(pid.length > 0){
 	    		if(!isNull(pid[0])){
 		    		AjaxPostUtil.request({url: reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function (json) {
-		    			if (json.returnCode == 0) {
-		    				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
-		    				for(var i = 0; i < json.rows.length; i++){
-		    					if(json.rows[i].id != parent.rowId){
-			    					if(json.rows[i].id != pid[0]){
-			    						str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
-			    					} else {
-			    						str += '<option value="' + json.rows[i].id + '" selected>' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
-			    					}
-		    					}
-		    				}
-		    				str += '</select></dd>';
-		    				$("#lockParentSel").append(str);
-		    				form.render('select');
-	    					parentId = pid[0];
-		    				pid.splice(0, 1);
-		    				loadChildMenuAll(pid);
-		    			} else {
-		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		    			}
+						var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
+						for(var i = 0; i < json.rows.length; i++){
+							if(json.rows[i].id != parent.rowId){
+								if(json.rows[i].id != pid[0]){
+									str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
+								} else {
+									str += '<option value="' + json.rows[i].id + '" selected>' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
+								}
+							}
+						}
+						str += '</select></dd>';
+						$("#lockParentSel").append(str);
+						form.render('select');
+						parentId = pid[0];
+						pid.splice(0, 1);
+						loadChildMenuAll(pid);
 		    		}});
 	    		} else {
 	    			pid.splice(0, 1);
@@ -256,19 +248,15 @@ layui.config({
  	    //加载同级菜单
  	    function loadChildMenu(){
  	    	AjaxPostUtil.request({url: reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
-	 	   			for(var i = 0; i < json.rows.length; i++){
-	 	   				if(json.rows[i].id != parent.rowId){
-	 	   					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
-	 	   				}
-	 	   			}
-	 	   			str += '</select></dd>';
-	 	   			$("#lockParentSel").append(str);
-	 	   			form.render('select');
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
+				for(var i = 0; i < json.rows.length; i++){
+					if(json.rows[i].id != parent.rowId){
+						str += '<option value="' + json.rows[i].id + '">' + json.rows[i].desktopName + '---------' + json.rows[i].menuName + '---------' + getMenuLevelName(json.rows[i].menuLevel) + '</option>';
+					}
+				}
+				str += '</select></dd>';
+				$("#lockParentSel").append(str);
+				form.render('select');
  	   		}});
  	    }
  	    

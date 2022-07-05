@@ -150,12 +150,10 @@ layui.config({
 					rowId: event.id
 				};
 				AjaxPostUtil.request({url: reqBasePath + "syseveschedule005", params: params, type: 'json', callback: function (json) {
-					if (json.returnCode == 0) {
-						joinTodaySchedule(params);
-					} else {
-						revertFunc();
-						winui.window.msg(json.returnMessage, { shift: 6, skin: 'msg-skin-message'});
-					}
+					joinTodaySchedule(params);
+				}, errorCallback: function () {
+					revertFunc();
+					winui.window.msg(json.returnMessage, { shift: 6, skin: 'msg-skin-message'});
 				}});
 			},
 			dayClick: function(date, jsEvent, view) {//点击日历某天时候触发
@@ -167,11 +165,7 @@ layui.config({
 			},
 			events: function(start, end, timezone, callback){
 				AjaxPostUtil.request({url: reqBasePath + "syseveschedule002", params:{yearMonth: start._d.format("yyyy-MM"), checkWorkId: $("#checkTime").val()}, type: 'json', callback: function (json) {
-					if (json.returnCode == 0) {
-						callback(json.rows);
-					} else {
-						winui.window.msg(json.returnMessage, { shift: 6, skin: 'msg-skin-message'});
-					}
+					callback(json.rows);
 				}});
 			}
 			});
@@ -226,12 +220,8 @@ layui.config({
 	// 加载日程详情
 	function loadScheduleDetails(id){
 		AjaxPostUtil.request({url: reqBasePath + "syseveschedule006", params:{rowId: id}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				json.bean.scheduleRemarks = stringManipulation.textAreaShow(json.bean.scheduleRemarks);
-				showDataUseHandlebars("schedule-detail", getFileContent('tpl/index/scheduleDetail.tpl'), json);
-			} else {
-				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
-			}
+			json.bean.scheduleRemarks = stringManipulation.textAreaShow(json.bean.scheduleRemarks);
+			showDataUseHandlebars("schedule-detail", getFileContent('tpl/index/scheduleDetail.tpl'), json);
 		}});
 	}
 
@@ -245,12 +235,8 @@ layui.config({
 		}}, function (index) {
 			layer.close(index);
 			AjaxPostUtil.request({url: reqBasePath + "syseveschedule007", params:{rowId: id}, type: 'json', callback: function (json) {
-	   			if (json.returnCode == 0) {
-	   				$('div[rowid="' + id + '"]').parent().remove();
-	   				calendar.fullCalendar('removeEvents', [id]);
-		   		} else {
-	   				winui.window.msg(json.returnMessage, {shift: 6, skin: 'msg-skin-message'});
-	   			}
+				$('div[rowid="' + id + '"]').parent().remove();
+				calendar.fullCalendar('removeEvents', [id]);
 	   		}});
 		});
 	});

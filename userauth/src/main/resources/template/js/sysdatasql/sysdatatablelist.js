@@ -35,11 +35,7 @@ layui.config({
 	$("body").on("click", "#addBean", function() {
 		winui.window.msg("开始备份", {icon: 1, time: 2000});
 		AjaxPostUtil.request({url: reqBasePath + "sysdatasqlbackups003", params:{}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				winui.window.msg("备份成功", {icon: 1, time: 2000});
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			winui.window.msg("备份成功", {icon: 1, time: 2000});
    		}});
     });
 

@@ -14,43 +14,34 @@ layui.config({
 	var reserveTemplate = $("#reserveTemplate").html();
 
 	AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#showForm").append(getDataUseHandlebars(reserveTemplate, json));
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		$("#showForm").append(getDataUseHandlebars(reserveTemplate, json));
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-			// 预定时间
-			laydate.render({
-				elem : '#reserveTime',
-				type : 'datetime',
-				trigger : 'click',
-				range : true
-			});
+		// 预定时间
+		laydate.render({elem : '#reserveTime', type : 'datetime', trigger : 'click', range : true});
 
-			// 会议室
-			showGrid({
-				id: "conferenceRoom",
-				url: flowableBasePath + "conferenceroomreserve008",
-				params: {},
-				pagination: false,
-				template: getFileContent('tpl/template/select-option-must.tpl'),
-				ajaxSendLoadBefore: function(hdb){
-				},
-				ajaxSendAfter:function(j){
-					$("#conferenceRoom").val(json.bean.conferenceRoom);
-					form.render('select');
-				}
-			});
-
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
+		// 会议室
+		showGrid({
+			id: "conferenceRoom",
+			url: flowableBasePath + "conferenceroomreserve008",
+			params: {},
+			pagination: false,
+			template: getFileContent('tpl/template/select-option-must.tpl'),
+			ajaxSendLoadBefore: function(hdb){
+			},
+			ajaxSendAfter:function(j){
+				$("#conferenceRoom").val(json.bean.conferenceRoom);
+				form.render('select');
 			}
-			matchingLanguage();
+		});
+
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+		matchingLanguage();
 	}});
 
 	// 保存为草稿
@@ -92,12 +83,8 @@ layui.config({
 			approvalId: approvalId,
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve005", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

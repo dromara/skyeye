@@ -14,30 +14,26 @@ layui.config({
     var interval = null;
     
     AjaxPostUtil.request({url: reqBasePath + "knowledgecontent015", params: {rowId:parent.rowId}, type: 'json', callback: function (json) {
-		if (json.returnCode == 0) {
-			var str = getDataUseHandlebars(beanTemplate, json);
-			$("#showForm").html(str);
-			if(json.bean.state == 2){
-				// 审核通过
-				$(".twoState").removeClass("layui-hide");
-			}else {
-				$(".threeState").removeClass("layui-hide");
-			}
-			content = json.bean.content;
-	 		$("#knowledgecontentshowBox").attr("src", "knowledgecontentshow.html");
-	 		interval = setInterval(iFrameHeight, 300);
-
-			var lavel = isNull(json.bean.label) ? [] : json.bean.label.split(',');
-			var str = "";
-			$.each(lavel, function(i, item){
-				str += '<span class="layui-badge layui-bg-blue">' + item + '</span>';
-			});
-			$('#label').html(str);
-
-	 		matchingLanguage();
-		} else {
-			winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
+		var str = getDataUseHandlebars(beanTemplate, json);
+		$("#showForm").html(str);
+		if(json.bean.state == 2){
+			// 审核通过
+			$(".twoState").removeClass("layui-hide");
+		}else {
+			$(".threeState").removeClass("layui-hide");
 		}
+		content = json.bean.content;
+		$("#knowledgecontentshowBox").attr("src", "knowledgecontentshow.html");
+		interval = setInterval(iFrameHeight, 300);
+
+		var lavel = isNull(json.bean.label) ? [] : json.bean.label.split(',');
+		var str = "";
+		$.each(lavel, function(i, item){
+			str += '<span class="layui-badge layui-bg-blue">' + item + '</span>';
+		});
+		$('#label').html(str);
+
+		matchingLanguage();
 	}});
 	
 	function iFrameHeight() {

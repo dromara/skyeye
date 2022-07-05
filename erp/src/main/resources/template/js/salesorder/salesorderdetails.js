@@ -37,11 +37,7 @@ layui.config({
 	    // 加载统筹信息
 	    function loadOverPlan(){
 			AjaxPostUtil.request({url: flowableBasePath + "erpordersaleoverplan003", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(data) {
-				if(data.returnCode == 0) {
-					$("#showForm").append(getDataUseHandlebars($("#overPlanTemplate").html(), data));
-				} else {
-					winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-				}
+				$("#showForm").append(getDataUseHandlebars($("#overPlanTemplate").html(), data));
 			}, async: false});
 		}
 

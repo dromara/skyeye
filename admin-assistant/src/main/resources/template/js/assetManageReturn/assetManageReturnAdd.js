@@ -28,61 +28,53 @@ layui.config({
 	// 初始化资产类别
 	function initTypeHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-				// 渲染
-				form.render();
-				//类型加载变化事件
-				form.on('select(selectTypeProperty)', function(data) {
-					var thisRowNum = data.elem.id.replace("typeId", "");
-					var thisRowValue = data.value;
-					if(!isNull(thisRowValue) && thisRowValue != '请选择') {
-						if(inPointArray(thisRowValue, assetList)) {
-							//类型对应的资产存在js对象中
-							var list = getListPointArray(thisRowValue, assetList);
-							resetAssetList(thisRowNum, list); //重置选择行的资产列表
-						} else {
-							//类型对应的资产不存在js对象中
-							AjaxPostUtil.request({url: flowableBasePath + "asset026", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
-								if(json.returnCode == 0) {
-									assetList.push({
-										id: thisRowValue,
-										list: json.rows
-									});
-									resetAssetList(thisRowNum, json.rows); //重置选择行的资产列表
-								} else {
-									winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-								}
-							}});
-						}
-					}
-				});
-
-				//商品加载变化事件
-				form.on('select(selectAssetarProperty)', function(data) {
-					var thisRowNum = data.elem.id.replace("assetId", "");
-					var thisRowValue = data.value;
-					var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
-					if(!isNull(thisRowValue) && thisRowValue != '请选择') {
-						var list = getListPointArray(thisRowTypeChooseId, assetList);
-						$.each(list, function(i, item) {
-							if(item.id === thisRowValue) {
-								$("#specificationsName" + thisRowNum).html(item.specificationsName);
-								$("#assetNum" + thisRowNum).html(item.assetNum);
-								return false;
-							}
-						});
+			typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
+			// 渲染
+			form.render();
+			//类型加载变化事件
+			form.on('select(selectTypeProperty)', function(data) {
+				var thisRowNum = data.elem.id.replace("typeId", "");
+				var thisRowValue = data.value;
+				if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+					if(inPointArray(thisRowValue, assetList)) {
+						//类型对应的资产存在js对象中
+						var list = getListPointArray(thisRowValue, assetList);
+						resetAssetList(thisRowNum, list); //重置选择行的资产列表
 					} else {
-						$("#specificationsName" + thisRowNum).html(""); //重置规格为空
-						$("#assetNum" + thisRowNum).html(""); //重置编号为空
+						//类型对应的资产不存在js对象中
+						AjaxPostUtil.request({url: flowableBasePath + "asset026", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
+							assetList.push({
+								id: thisRowValue,
+								list: json.rows
+							});
+							resetAssetList(thisRowNum, json.rows); //重置选择行的资产列表
+						}});
 					}
-				});
-				//初始化一行数据
-				addRow();
-				matchingLanguage();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+				}
+			});
+
+			//商品加载变化事件
+			form.on('select(selectAssetarProperty)', function(data) {
+				var thisRowNum = data.elem.id.replace("assetId", "");
+				var thisRowValue = data.value;
+				var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
+				if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+					var list = getListPointArray(thisRowTypeChooseId, assetList);
+					$.each(list, function(i, item) {
+						if(item.id === thisRowValue) {
+							$("#specificationsName" + thisRowNum).html(item.specificationsName);
+							$("#assetNum" + thisRowNum).html(item.assetNum);
+							return false;
+						}
+					});
+				} else {
+					$("#specificationsName" + thisRowNum).html(""); //重置规格为空
+					$("#assetNum" + thisRowNum).html(""); //重置编号为空
+				}
+			});
+			//初始化一行数据
+			addRow();
+			matchingLanguage();
 		}});
 	}
 
@@ -141,12 +133,8 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "asset027", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

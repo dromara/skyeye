@@ -28,15 +28,11 @@ layui.config({
 	// 初始化印章名称
 	function initSealNameHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "seal007", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				nameHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-				matchingLanguage();
-				form.render();
-				// 初始化一行数据
-				addRow();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			nameHtml = getDataUseHandlebars(selOption, json); //加载类别数据
+			matchingLanguage();
+			form.render();
+			// 初始化一行数据
+			addRow();
 		}});
 	}
 
@@ -90,12 +86,8 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "sealborrow002", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

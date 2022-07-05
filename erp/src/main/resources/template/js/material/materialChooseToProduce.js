@@ -165,20 +165,16 @@ layui.config({
 			return false;
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "material014", params: {ids: selectedData.toString()}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				productMationList = json.rows;
-   				$step.nextStep();
-   				$("#firstTab").hide();
-   				$("#secondTab").show();
-   				$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: productMationList}));
-   				//设置商品来源选中
-   				$.each(productMationList, function(i, item){
-					$("#type" + item.productId).val(item.typeId);
-				});
-   				form.render();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			productMationList = json.rows;
+			$step.nextStep();
+			$("#firstTab").hide();
+			$("#secondTab").show();
+			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: productMationList}));
+			//设置商品来源选中
+			$.each(productMationList, function(i, item){
+				$("#type" + item.productId).val(item.typeId);
+			});
+			form.render();
    		}});
 	});
 	
@@ -215,13 +211,9 @@ layui.config({
 			proList: JSON.stringify(proList)
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "material015", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.productMationList = [].concat(json.rows);
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.productMationList = [].concat(json.rows);
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	});
 	

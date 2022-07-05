@@ -53,15 +53,11 @@ layui.config({
 					//根据生产计划单id获取该单据下的所有外购商品以及剩余数量
 					//chooseType：根据生产计划单选择工序时，采购订单需要回显外购一种类型的商品
 					AjaxPostUtil.request({url: flowableBasePath + "erpproduction010", params: {orderId: obj.id, chooseType: "1"}, type: 'json', callback: function(json) {
-						if(json.returnCode == 0) {
-							obj.norms = [].concat(json.rows);
-							parent.productionMation = obj;
-							
-							parent.refreshCode = '0';
-							parent.layer.close(index);
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						obj.norms = [].concat(json.rows);
+						parent.productionMation = obj;
+
+						parent.refreshCode = '0';
+						parent.layer.close(index);
 					}});
 				});
 				

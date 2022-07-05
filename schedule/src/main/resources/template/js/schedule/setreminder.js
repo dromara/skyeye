@@ -19,21 +19,15 @@ layui.config({
 		
         matchingLanguage();
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
 	        	var params = {
         			rowId: parent.rowId,
         			remindType: $("#remindType").val()
  	        	};
-	        	
  	        	AjaxPostUtil.request({url: reqBasePath + "syseveschedule013", params: params, type: 'json', callback: function (json) {
-	 	   			if (json.returnCode == 0) {
-	 	   				parent.childParams = json.bean;
-		        		parent.layer.close(index);
-		        		parent.refreshCode = '0';
-	 	   			} else {
-	 	   				layer.msg(json.returnMessage, {icon: 5, shift: 6});
-	 	   			}
+					parent.childParams = json.bean;
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	 	   		}});
 	        }
 	        return false;

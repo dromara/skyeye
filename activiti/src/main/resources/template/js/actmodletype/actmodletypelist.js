@@ -390,24 +390,16 @@ layui.config({
 	//上移申请类型实体
 	function upMove(data){
         AjaxPostUtil.request({url:flowableBasePath + "actmodletype013", params:{rowId: data.id, typeId: data.typeId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			loadTable();
 		}});
 	}
 	
 	//下移申请类型实体
 	function downMove(data){
         AjaxPostUtil.request({url:flowableBasePath + "actmodletype014", params:{rowId: data.id, typeId: data.typeId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				loadTable();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			loadTable();
 		}});
 	}
 	

@@ -20,18 +20,14 @@ layui.config({
 		});
 		
 		AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function (json) {
-			if(json.returnCode == 0) {
-				var row = json.rows;
-				for(var i = 0;i < json.total; i++){
-					var params = {
-						id: row[i].id,
-						name: row[i].name
-					};
-					$("#addTable").append(getDataUseHandlebars(insuranceaddtableTemplate, params));
-					form.render('checkbox');
-				}
-			}else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			var row = json.rows;
+			for(var i = 0;i < json.total; i++){
+				var params = {
+					id: row[i].id,
+					name: row[i].name
+				};
+				$("#addTable").append(getDataUseHandlebars(insuranceaddtableTemplate, params));
+				form.render('checkbox');
 			}
 		}});
 
@@ -41,13 +37,8 @@ layui.config({
 			form.render('select');
 		});
 
- 		//投保有效期时间
-		laydate.render({
-			elem: '#validityTime',
-			type: 'date',
-			range: true,
-			trigger: 'click'
-		});
+ 		// 投保有效期时间
+		laydate.render({elem: '#validityTime', type: 'date', range: true, trigger: 'click'});
 
 		skyeyeEnclosure.init('enclosureUpload');
 		matchingLanguage();
@@ -163,12 +154,8 @@ layui.config({
  	 	                }
  	 	        	}
  	 	        	AjaxPostUtil.request({url: flowableBasePath + "insurance002", params: params, type: 'json', callback: function (json) {
- 		 	   			if (json.returnCode == 0) {
- 			 	   			parent.layer.close(index);
- 			 	        	parent.refreshCode = '0';
- 		 	   			} else {
- 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 		 	   			}
+						parent.layer.close(index);
+						parent.refreshCode = '0';
  		 	   		}});
  	            }
  	        }

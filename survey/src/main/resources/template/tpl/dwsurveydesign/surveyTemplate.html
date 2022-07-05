@@ -619,226 +619,222 @@
 						form = layui.form;
 					bgAnDate = getFormatDate();
 					AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory028", params: {surveyId: getUrlParam("rowId")}, type: 'json', callback: function (json) {
-		 	   			if (json.returnCode == 0) {
-			 	   			showGrid({
-								id: "wrap",
-								url: reqBasePath + "dwsurveydirectory024",
-								params: {rowId: getUrlParam("rowId")},
-								pagination: false,
-								template: getFileContent('tpl/dwsurveydesign/surveyTemplate.tpl'),
-								ajaxSendLoadBefore: function(hdb, json) {
-									hdb.registerHelper("showQuestionIndex", function(v1, options) {
-										if(v1 == '16' || v1 == '17'){
-										} else {
-											quIndex++;
-											return quIndex;
-										}
-									});
-									
-									hdb.registerHelper("showIndex", function(v1, options) {
-										return parseInt(v1) + 1;
-									});
-	
-									hdb.registerHelper("showParamInt02", function(v1, options) {
-										var str = "";
-										for(var i = 1; i <= v1; i++) {
-											str += "<td style='background-color: white;'>" + i + "</td>";
-										}
-										return str;
-									});
-	
-									hdb.registerHelper('compare1', function(v1, v2, options) {
-										if(v1 == v2) {
-											return options.fn(this);
-										} else {
-											return options.inverse(this);
-										}
-									});
-									
-									hdb.registerHelper('showQuestion', function(v1, i, options) {
-							 			switch (v1) {
-							 				case 1://1单选题radio
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#radioTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 2://2多选题checkbox
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#checkBoxTemplate").html(), json.rows[i]));
-					      						break;
-					  						case 3://3填空题fillblank
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#fillblankTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 4://4多项填空题multi-fillblank
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#multiFillblankTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 8://8评分题score
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#scoreTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 9://9排序题orderby
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#orderbyTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 11://11矩阵单选题chen-radio
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#chenRadioTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 12://12矩阵填空题chen-fbk
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#chenFbkTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 13://13矩阵多选题chen-checkbox
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#chenCheckboxTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 16://16分页pagetag
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#pagetagTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 17://17段落paragraph
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#paragraphTemplate").html(), json.rows[i]));
-					      						break;
-					      					case 18://18矩阵评分题chen-score
-							 					return new Handlebars.SafeString(getDataUseHandlebars($("#chenScoreTemplate").html(), json.rows[i]));
-					      						break;
-							 			}
-							 		});
-	
-									hdb.registerHelper('compare2', function(v1, v2, options) {
-										if(v1 == v2) {
-											return 'display: none;';
-										} else {
-											return '';
-										}
-									});
-	
-									hdb.registerHelper('compare3', function(v1, v2, options) {
-										if(v1 > v2) {
-											return options.fn(this);
-										} else {
-											return options.inverse(this);
-										}
-									});
-									
-									hdb.registerHelper('compare4', function(v1, options) {
-										if(v1 == nowPageNum) {
-											return '';
-										} else {
-											return 'display: none;';
-										}
-									});
-									
-									hdb.registerHelper('compare5', function(v1, options) {
-										if(v1 == '16'){
-											if(pageNum == '1'){
-												pageNum++;
-												return '';
-											} else {
-												pageNum++;
-											}
-										}
+						showGrid({
+							id: "wrap",
+							url: reqBasePath + "dwsurveydirectory024",
+							params: {rowId: getUrlParam("rowId")},
+							pagination: false,
+							template: getFileContent('tpl/dwsurveydesign/surveyTemplate.tpl'),
+							ajaxSendLoadBefore: function(hdb, json) {
+								hdb.registerHelper("showQuestionIndex", function(v1, options) {
+									if(v1 == '16' || v1 == '17'){
+									} else {
+										quIndex++;
+										return quIndex;
+									}
+								});
+
+								hdb.registerHelper("showIndex", function(v1, options) {
+									return parseInt(v1) + 1;
+								});
+
+								hdb.registerHelper("showParamInt02", function(v1, options) {
+									var str = "";
+									for(var i = 1; i <= v1; i++) {
+										str += "<td style='background-color: white;'>" + i + "</td>";
+									}
+									return str;
+								});
+
+								hdb.registerHelper('compare1', function(v1, v2, options) {
+									if(v1 == v2) {
+										return options.fn(this);
+									} else {
+										return options.inverse(this);
+									}
+								});
+
+								hdb.registerHelper('showQuestion', function(v1, i, options) {
+									switch (v1) {
+										case 1://1单选题radio
+											return new Handlebars.SafeString(getDataUseHandlebars($("#radioTemplate").html(), json.rows[i]));
+											break;
+										case 2://2多选题checkbox
+											return new Handlebars.SafeString(getDataUseHandlebars($("#checkBoxTemplate").html(), json.rows[i]));
+											break;
+										case 3://3填空题fillblank
+											return new Handlebars.SafeString(getDataUseHandlebars($("#fillblankTemplate").html(), json.rows[i]));
+											break;
+										case 4://4多项填空题multi-fillblank
+											return new Handlebars.SafeString(getDataUseHandlebars($("#multiFillblankTemplate").html(), json.rows[i]));
+											break;
+										case 8://8评分题score
+											return new Handlebars.SafeString(getDataUseHandlebars($("#scoreTemplate").html(), json.rows[i]));
+											break;
+										case 9://9排序题orderby
+											return new Handlebars.SafeString(getDataUseHandlebars($("#orderbyTemplate").html(), json.rows[i]));
+											break;
+										case 11://11矩阵单选题chen-radio
+											return new Handlebars.SafeString(getDataUseHandlebars($("#chenRadioTemplate").html(), json.rows[i]));
+											break;
+										case 12://12矩阵填空题chen-fbk
+											return new Handlebars.SafeString(getDataUseHandlebars($("#chenFbkTemplate").html(), json.rows[i]));
+											break;
+										case 13://13矩阵多选题chen-checkbox
+											return new Handlebars.SafeString(getDataUseHandlebars($("#chenCheckboxTemplate").html(), json.rows[i]));
+											break;
+										case 16://16分页pagetag
+											return new Handlebars.SafeString(getDataUseHandlebars($("#pagetagTemplate").html(), json.rows[i]));
+											break;
+										case 17://17段落paragraph
+											return new Handlebars.SafeString(getDataUseHandlebars($("#paragraphTemplate").html(), json.rows[i]));
+											break;
+										case 18://18矩阵评分题chen-score
+											return new Handlebars.SafeString(getDataUseHandlebars($("#chenScoreTemplate").html(), json.rows[i]));
+											break;
+									}
+								});
+
+								hdb.registerHelper('compare2', function(v1, v2, options) {
+									if(v1 == v2) {
+										return 'display: none;';
+									} else {
+										return '';
+									}
+								});
+
+								hdb.registerHelper('compare3', function(v1, v2, options) {
+									if(v1 > v2) {
+										return options.fn(this);
+									} else {
+										return options.inverse(this);
+									}
+								});
+
+								hdb.registerHelper('compare4', function(v1, options) {
+									if(v1 == nowPageNum) {
+										return '';
+									} else {
+										return 'display: none;';
+									}
+								});
+
+								hdb.registerHelper('compare5', function(v1, options) {
+									if(v1 == '16'){
 										if(pageNum == '1'){
+											pageNum++;
 											return '';
 										} else {
-											return 'display: none;';
+											pageNum++;
 										}
-									});
-									
-									hdb.registerHelper('compare6', function(v1, options) {
-										return pageNum;
-									});
-									
-									hdb.registerHelper('compare7', function(v1, options) {
-										if(nowPageNum == '1'){
-											return options.inverse(this);
-										} else {
-											return options.fn(this);
-										}
-									});
-									
-									hdb.registerHelper('compare8', function(v1, v2) {
-										if(v1 == 3){
-											//填空题
-											return '<input type="hidden" class="checkType" value="' + v2 + '">';
-										}
-										return "";
-									});
-									
-									hdb.registerHelper('compare9', function(v1, v2, v3) {
-										if(v1 == 8){
-											//评分题
-											return '<input type="hidden" class="geLe" value="' + v2 + '">'
-													+ '<input type="hidden" class="scoreNum" value="' + v3 + '">';
-										}
-										return "";
-									});
-									
-									hdb.registerHelper('compare10', function(v1, v2) {
-										if(v1 == 2){
-											//多选题
-											return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="tag_qu_' + v1 + '_' + v2 + '_" />';
-										}else if(v1 == 9 || v1 == 11 || v1 == 13 || v1 == 12 || v1 == 18 || v1 == 8){
-											//排序题，矩阵单选题，矩阵多选题，矩阵填空题，矩阵评分题，评分题
-											return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="item_qu_' + v1 + '_' + v2 + '_" />';
-										}else if(v1 == 4){
-											//多项填空题
-											return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="text_qu_' + v1 + '_' + v2 + '_" />';
-										}
-										return "";
-									});
-	
-									hdb.registerHelper("cellCount001", function(v1, options) {
-										var str = "";
-										var width = 600 / v1;
-										for(var i = 1; i <= v1; i++) {
-											str += '<td width="' + width + 'px">' +
-												'<div class="dwQuOptionItemContent">' +
-												'<label class="dwRedioStyle dwQuInputLabel" ></label>' +
-												'<input type="radio" name="qu_{{quType}}_{{quId}}" value="{{id}}" >' +
-												'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' +
-												'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_qu_{{quType}}_{{quId}}_{{id}}" />' +
-												'</div>' +
-												'</td>';
-										}
-										str += '<div class="emptyTd"></div>';
-										return str;
-									});
-	
-									hdb.registerHelper("cellCount002", function(v1, options) {
-										var str = "";
-										var width = 600 / v1;
-										for(var i = 1; i <= v1; i++) {
-											str += '<td width="' + width + 'px">' +
-												'<div class="dwQuOptionItemContent">' +
-												'<label class="dwCheckboxStyle dwQuInputLabel" ></label>' +
-												'<input type="checkbox" name="tag_qu_{{quType}}_{{quId}}" value="{{id}}" >' +
-												'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' +
-												'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_tag_qu_{{quType}}_{{quId}}_{{id}}" />' +
-												'</div>' +
-												'</td>';
-										}
-										str += '<div class="emptyTd"></div>';
-										return str;
-									});
-	
-									hdb.registerHelper("scoreNum001", function(v1, options) {
-										var str = "";
-										for(var i = 1; i <= v1; i++) {
-											str += '<option value="' + i + '">' + i + '分</option>';
-										}
-										return str;
-									});
-								},
-								ajaxSendAfter: function(json) {
-									loadModel();
-								}
-							});
-		 	   				ruleCode = json.bean.ruleCode;
-		 	   				if(json.bean.rule == '3'){
-		 	   					_openNewWindows({
-				 	   				url: "../../tpl/dwsurveydesign/dwsurveydesignrulecode.html", 
-				 	   				title: "问卷密钥",
-				 	   				area: ['300px', '200px'],
-				 	   				closeBtn: 0,
-				 	   				pageId: "dwsurveydesignrulecode",
-				 	   				callBack: function(refreshCode){
-				 	   				}});
-		 	   				}
-		 	   			} else {
-		 	   				$("#wrap").html('<span class="messageSpan">' + json.returnMessage + '</span>');
-		 	   			}
+									}
+									if(pageNum == '1'){
+										return '';
+									} else {
+										return 'display: none;';
+									}
+								});
+
+								hdb.registerHelper('compare6', function(v1, options) {
+									return pageNum;
+								});
+
+								hdb.registerHelper('compare7', function(v1, options) {
+									if(nowPageNum == '1'){
+										return options.inverse(this);
+									} else {
+										return options.fn(this);
+									}
+								});
+
+								hdb.registerHelper('compare8', function(v1, v2) {
+									if(v1 == 3){
+										//填空题
+										return '<input type="hidden" class="checkType" value="' + v2 + '">';
+									}
+									return "";
+								});
+
+								hdb.registerHelper('compare9', function(v1, v2, v3) {
+									if(v1 == 8){
+										//评分题
+										return '<input type="hidden" class="geLe" value="' + v2 + '">'
+												+ '<input type="hidden" class="scoreNum" value="' + v3 + '">';
+									}
+									return "";
+								});
+
+								hdb.registerHelper('compare10', function(v1, v2) {
+									if(v1 == 2){
+										//多选题
+										return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="tag_qu_' + v1 + '_' + v2 + '_" />';
+									}else if(v1 == 9 || v1 == 11 || v1 == 13 || v1 == 12 || v1 == 18 || v1 == 8){
+										//排序题，矩阵单选题，矩阵多选题，矩阵填空题，矩阵评分题，评分题
+										return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="item_qu_' + v1 + '_' + v2 + '_" />';
+									}else if(v1 == 4){
+										//多项填空题
+										return '<input type="hidden" name="qu_' + v1 + '_' + v2 + '" value="text_qu_' + v1 + '_' + v2 + '_" />';
+									}
+									return "";
+								});
+
+								hdb.registerHelper("cellCount001", function(v1, options) {
+									var str = "";
+									var width = 600 / v1;
+									for(var i = 1; i <= v1; i++) {
+										str += '<td width="' + width + 'px">' +
+											'<div class="dwQuOptionItemContent">' +
+											'<label class="dwRedioStyle dwQuInputLabel" ></label>' +
+											'<input type="radio" name="qu_{{quType}}_{{quId}}" value="{{id}}" >' +
+											'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' +
+											'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_qu_{{quType}}_{{quId}}_{{id}}" />' +
+											'</div>' +
+											'</td>';
+									}
+									str += '<div class="emptyTd"></div>';
+									return str;
+								});
+
+								hdb.registerHelper("cellCount002", function(v1, options) {
+									var str = "";
+									var width = 600 / v1;
+									for(var i = 1; i <= v1; i++) {
+										str += '<td width="' + width + 'px">' +
+											'<div class="dwQuOptionItemContent">' +
+											'<label class="dwCheckboxStyle dwQuInputLabel" ></label>' +
+											'<input type="checkbox" name="tag_qu_{{quType}}_{{quId}}" value="{{id}}" >' +
+											'<label style="width:' + (width - 10) + 'px;" class="editAble quCoOptionEdit quCoOptionPadding">{{optionName}}</label>' +
+											'<input type="text" class="inputSytle_1" style="width:200px;padding:5px;{{#compare2 isNote 0}}{{/compare2}}" name="text_tag_qu_{{quType}}_{{quId}}_{{id}}" />' +
+											'</div>' +
+											'</td>';
+									}
+									str += '<div class="emptyTd"></div>';
+									return str;
+								});
+
+								hdb.registerHelper("scoreNum001", function(v1, options) {
+									var str = "";
+									for(var i = 1; i <= v1; i++) {
+										str += '<option value="' + i + '">' + i + '分</option>';
+									}
+									return str;
+								});
+							},
+							ajaxSendAfter: function(json) {
+								loadModel();
+							}
+						});
+						ruleCode = json.bean.ruleCode;
+						if(json.bean.rule == '3'){
+							_openNewWindows({
+								url: "../../tpl/dwsurveydesign/dwsurveydesignrulecode.html",
+								title: "问卷密钥",
+								area: ['300px', '200px'],
+								closeBtn: 0,
+								pageId: "dwsurveydesignrulecode",
+								callBack: function(refreshCode){
+								}});
+						}
 		 	   		}});
 
 					//获取url中的参数
@@ -1121,11 +1117,7 @@
 							};
 							params = $.extend({}, params, $("#surveyForm").serializeJson());
 							AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory029", params: params, type: 'json', callback: function (json) {
-				 	   			if (json.returnCode == 0) {
-					 	   			$("#wrap").html('<span class="messageSpan">' + '答题完成，感谢您的参与。' + '</span>');
-				 	   			} else {
-				 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				 	   			}
+								$("#wrap").html('<span class="messageSpan">' + '答题完成，感谢您的参与。' + '</span>');
 				 	   		}});
 						}
 						return false;

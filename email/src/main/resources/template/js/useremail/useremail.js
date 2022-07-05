@@ -18,26 +18,22 @@ layui.config({
 	var emailContentMobel = $("#emailContentMobel").html();
 	
 	AjaxPostUtil.request({url: reqBasePath + "useremail001", params:{}, type: 'json', callback: function (json) {
-		if (json.returnCode == 0) {
-			if(json.rows.length === 0){
-				$("#emailOperator").hide();//隐藏邮箱模块
-				$("#firstAddEmail").show();//显示首次输入邮箱模块
-			} else {
-				$("#emailOperator").show();//显示邮箱模块
-				$("#firstAddEmail").hide();//隐藏首次输入邮箱模块
-				$.each(json.rows, function(i, item){
-					addEmail(item.id, item.emailAddress);
-					if(item.emailCheck == 1 || item.emailCheck === '1'){
-						resetCheckEmail(item.id, item.emailAddress);
-					}
-				});
-				$("#inboxEmail").show();//显示收件箱模块
-				inboxEmailAselFun();//加载我的收件箱
-			}
-			matchingLanguage();
+		if(json.rows.length === 0){
+			$("#emailOperator").hide();//隐藏邮箱模块
+			$("#firstAddEmail").show();//显示首次输入邮箱模块
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$("#emailOperator").show();//显示邮箱模块
+			$("#firstAddEmail").hide();//隐藏首次输入邮箱模块
+			$.each(json.rows, function(i, item){
+				addEmail(item.id, item.emailAddress);
+				if(item.emailCheck == 1 || item.emailCheck === '1'){
+					resetCheckEmail(item.id, item.emailAddress);
+				}
+			});
+			$("#inboxEmail").show();//显示收件箱模块
+			inboxEmailAselFun();//加载我的收件箱
 		}
+		matchingLanguage();
 	}});
 	
 	form.render();
@@ -45,17 +41,13 @@ layui.config({
     form.on('submit(formAddBean)', function (data) {
         if (winui.verifyForm(data.elem)) {
         	AjaxPostUtil.request({url: reqBasePath + "useremail002", params:{emailAddress: $("#emailAddress").val(), emailPassword: $("#emailPassword").val()}, type: 'json', callback: function (json) {
-	   			if (json.returnCode == 0) {
-	   				winui.window.msg('新增成功', {icon: 1, time: 2000});
-	 	   			$("#firstAddEmail").fadeOut(1000);
-	 	   			$("#emailOperator").show();
-	 	   			addEmail(json.bean.id, json.bean.emailAddress);
-	 	   			if(json.bean.emailCheck === '1' || json.bean.emailCheck == 1){
-	 	   				resetCheckEmail(json.bean.id, json.bean.emailAddress);
-	 	   			}
-	   			} else {
-	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	   			}
+				winui.window.msg('新增成功', {icon: 1, time: 2000});
+				$("#firstAddEmail").fadeOut(1000);
+				$("#emailOperator").show();
+				addEmail(json.bean.id, json.bean.emailAddress);
+				if(json.bean.emailCheck === '1' || json.bean.emailCheck == 1){
+					resetCheckEmail(json.bean.id, json.bean.emailAddress);
+				}
 	   		}});
         }
         return false;
@@ -112,20 +104,16 @@ layui.config({
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 				AjaxPostUtil.request({url: reqBasePath + "useremail004", params:{page: page, limit: 12, emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
-		   			if (json.returnCode == 0) {
-		   				var jsonStr = "";//实体json对象
-		   				$.each(json.rows, function(index, item) {
-		   					jsonStr = {
-	   							bean: item
-	   						};
-							lis.push(getDataUseHandlebars(inboxEmailMobel, jsonStr));
-						});
-		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-						next(lis.join(''), (page * 12) < json.total);
-		   			} else {
-		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		   			}
+					var jsonStr = "";//实体json对象
+					$.each(json.rows, function(index, item) {
+						jsonStr = {
+							bean: item
+						};
+						lis.push(getDataUseHandlebars(inboxEmailMobel, jsonStr));
+					});
+					//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+					//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+					next(lis.join(''), (page * 12) < json.total);
 		   		}});
 			}
 		});
@@ -144,20 +132,16 @@ layui.config({
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 				AjaxPostUtil.request({url: reqBasePath + "useremail011", params:{page: page, limit: 12, emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
-		   			if (json.returnCode == 0) {
-		   				var jsonStr = "";//实体json对象
-		   				$.each(json.rows, function(index, item) {
-		   					jsonStr = {
-	   							bean: item
-	   						};
-							lis.push(getDataUseHandlebars(inboxEmailMobel, jsonStr));
-						});
-		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-						next(lis.join(''), (page * 12) < json.total);
-		   			} else {
-		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		   			}
+					var jsonStr = "";//实体json对象
+					$.each(json.rows, function(index, item) {
+						jsonStr = {
+							bean: item
+						};
+						lis.push(getDataUseHandlebars(inboxEmailMobel, jsonStr));
+					});
+					//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+					//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+					next(lis.join(''), (page * 12) < json.total);
 		   		}});
 			}
 		});
@@ -176,20 +160,16 @@ layui.config({
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 				AjaxPostUtil.request({url: reqBasePath + "useremail007", params:{page: page, limit: 12, emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
-		   			if (json.returnCode == 0) {
-		   				var jsonStr = "";//实体json对象
-		   				$.each(json.rows, function(index, item) {
-		   					jsonStr = {
-	   							bean: item
-	   						};
-							lis.push(getDataUseHandlebars(inboxEmailMobel, jsonStr));
-						});
-		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-						next(lis.join(''), (page * 12) < json.total);
-		   			} else {
-		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		   			}
+					var jsonStr = "";//实体json对象
+					$.each(json.rows, function(index, item) {
+						jsonStr = {
+							bean: item
+						};
+						lis.push(getDataUseHandlebars(inboxEmailMobel, jsonStr));
+					});
+					//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+					//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+					next(lis.join(''), (page * 12) < json.total);
 		   		}});
 			}
 		});
@@ -208,20 +188,16 @@ layui.config({
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 				AjaxPostUtil.request({url: reqBasePath + "useremail009", params:{page: page, limit: 12, emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
-		   			if (json.returnCode == 0) {
-		   				var jsonStr = "";//实体json对象
-		   				$.each(json.rows, function(index, item) {
-		   					jsonStr = {
-	   							bean: item
-	   						};
-							lis.push(getDataUseHandlebars(inboxEmailMobel, jsonStr));
-						});
-		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-						next(lis.join(''), (page * 12) < json.total);
-		   			} else {
-		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		   			}
+					var jsonStr = "";//实体json对象
+					$.each(json.rows, function(index, item) {
+						jsonStr = {
+							bean: item
+						};
+						lis.push(getDataUseHandlebars(inboxEmailMobel, jsonStr));
+					});
+					//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+					//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+					next(lis.join(''), (page * 12) < json.total);
 		   		}});
 			}
 		});
@@ -255,35 +231,19 @@ layui.config({
 		var _selId = $("#emailSetting").find("a[class='selected']").attr("id");
 		if(_selId === 'inboxEmailAsel'){//收件箱
 			AjaxPostUtil.request({url: reqBasePath + "useremail003", params:{emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					winui.window.msg("获取邮件中", {icon: 1, time: 2000});
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				winui.window.msg("获取邮件中", {icon: 1, time: 2000});
 			}});
 		}else if(_selId === 'draftsEmailAsel'){//草稿箱
 			AjaxPostUtil.request({url: reqBasePath + "useremail010", params:{emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					winui.window.msg("获取邮件中", {icon: 1, time: 2000});
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				winui.window.msg("获取邮件中", {icon: 1, time: 2000});
 			}});
 		}else if(_selId === 'sendedEmailAsel'){//已发送邮件
 			AjaxPostUtil.request({url: reqBasePath + "useremail006", params:{emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					winui.window.msg("获取邮件中", {icon: 1, time: 2000});
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				winui.window.msg("获取邮件中", {icon: 1, time: 2000});
 			}});
 		}else if(_selId === 'deleteedEmailAsel'){//已删除邮件
 			AjaxPostUtil.request({url: reqBasePath + "useremail008", params:{emailId: $("#checkEmail").attr('rowid')}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					winui.window.msg("获取邮件中", {icon: 1, time: 2000});
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				winui.window.msg("获取邮件中", {icon: 1, time: 2000});
 			}});
 		} else {
 			winui.window.msg('参数错误', {icon: 2, time: 2000});

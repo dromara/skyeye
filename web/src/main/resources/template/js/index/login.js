@@ -80,21 +80,17 @@ layui.config({
 	 	        		AjaxPostUtil.request({url: reqBasePath + "login001", params: params, type: 'json', callback: function (json) {
 	 	        			isLogin = false;
  	        				$("#loginBtn").find("i").attr("class", "fa fa-arrow-right");
-	 		 	   			if (json.returnCode == 0) {
-	 		 	   				if(json.rows != null){
-			 	   					localStorage.setItem("authpoints", JSON.stringify(json.rows));
-			 	   				}
-	 		 	   				$.cookie('userToken', json.bean.userToken, {path: '/' });
-	 		 	   				if(!isNull(json.bean.id)){
-	 		 	   					if(checkURL(url)){
-			 	   						location.href = url;
-			 	   					} else {
-			 	   						location.href = "index.html";
-			 	   					}
-	 		 	   				}
-	 		 	   			} else {
-	 		 	   				top.winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 		 	   			}
+							if(json.rows != null){
+								localStorage.setItem("authpoints", JSON.stringify(json.rows));
+							}
+							$.cookie('userToken', json.bean.userToken, {path: '/' });
+							if(!isNull(json.bean.id)){
+								if(checkURL(url)){
+									location.href = url;
+								} else {
+									location.href = "index.html";
+								}
+							}
 	 		 	   		}});
 	 	        	}
  	        	}

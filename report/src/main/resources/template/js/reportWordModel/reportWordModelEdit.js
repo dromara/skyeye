@@ -56,45 +56,37 @@ layui.config({
                         var oCanvas = document.getElementById("thecanvas");
                         var imgData = oCanvas.toDataURL();
                         AjaxPostUtil.request({url: reqBasePath + "common004", params: {images: imgData, type: 19}, type: 'json', callback: function (json1) {
-                            if (json1.returnCode == 0) {
-                                var rowTr = $("#useTable tr");
-                                var tableData = new Array();
-                                $.each(rowTr, function (i, item) {
-                                    var rowNum = $(item).attr("trcusid").replace("tr", "");
-                                    var trId = $(item).attr("trcusid");
-                                    var row = {
-                                        propertyId: choosePropertyList[trId].id,
-                                        editor: $("input[name='whetherEditor" + rowNum + "']:checked").val(),
-                                        showToEditor: $("input[name='whetherShow" + rowNum + "']:checked").val()
-                                    };
-                                    tableData.push(row);
-                                });
-                                if (tableData.length == 0) {
-                                    winui.window.msg('请最少选择一条属性值', {icon: 2, time: 2000});
-                                    return false;
-                                }
-
-                                var params = {
-                                    title: $("#title").val(),
-                                    defaultWidth: $("#defaultWidth").val(),
-                                    defaultHeight: $("#defaultHeight").val(),
-                                    options: JSON.stringify(tableData),
-                                    logo: json1.bean.picUrl,
-                                    firstTypeId: $("#firstTypeId").val(),
-                                    secondTypeId: $("#secondTypeId").val(),
-                                    id: parent.rowId
+                            var rowTr = $("#useTable tr");
+                            var tableData = new Array();
+                            $.each(rowTr, function (i, item) {
+                                var rowNum = $(item).attr("trcusid").replace("tr", "");
+                                var trId = $(item).attr("trcusid");
+                                var row = {
+                                    propertyId: choosePropertyList[trId].id,
+                                    editor: $("input[name='whetherEditor" + rowNum + "']:checked").val(),
+                                    showToEditor: $("input[name='whetherShow" + rowNum + "']:checked").val()
                                 };
-                                AjaxPostUtil.request({url: reportBasePath + "reportwordmodel004", params: params, type: 'json', method: "PUT", callback: function (json) {
-                                    if (json.returnCode == 0) {
-                                        parent.layer.close(index);
-                                        parent.refreshCode = '0';
-                                    } else {
-                                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                                    }
-                                }});
-                            } else {
-                                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+                                tableData.push(row);
+                            });
+                            if (tableData.length == 0) {
+                                winui.window.msg('请最少选择一条属性值', {icon: 2, time: 2000});
+                                return false;
                             }
+
+                            var params = {
+                                title: $("#title").val(),
+                                defaultWidth: $("#defaultWidth").val(),
+                                defaultHeight: $("#defaultHeight").val(),
+                                options: JSON.stringify(tableData),
+                                logo: json1.bean.picUrl,
+                                firstTypeId: $("#firstTypeId").val(),
+                                secondTypeId: $("#secondTypeId").val(),
+                                id: parent.rowId
+                            };
+                            AjaxPostUtil.request({url: reportBasePath + "reportwordmodel004", params: params, type: 'json', method: "PUT", callback: function (json) {
+                                parent.layer.close(index);
+                                parent.refreshCode = '0';
+                            }});
                         }});
                     }
                     return false;

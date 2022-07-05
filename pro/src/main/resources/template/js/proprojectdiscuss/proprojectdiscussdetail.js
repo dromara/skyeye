@@ -18,27 +18,23 @@ layui.config({
 	    var rightTemplate = $("#rightTemplate").html();
 	    
 	    AjaxPostUtil.request({url: flowableBasePath + "prodiscuss005", params: {rowId: rowId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0){
-				$(".disheader").html(json.bean.title);
-				$(".disdesc").html('由 ' + json.bean.createName + ' 于 ' + json.bean.createTime + '发布');
-				$(".discontent").html(json.bean.content);
-				var jsonStr;
-				var str = "";
-				$.each(json.bean.replyString, function(i, item){
-   					jsonStr = {
-						bean: item
-					};
-   					if(item.createId === json.bean.createId){//左侧
-   						str += getDataUseHandlebars(leftTemplate, jsonStr);
-   					} else {//右侧
-   						str += getDataUseHandlebars(rightTemplate, jsonStr);
-   					}
-   				});
-   				$(".disreplay").html(str);
-   				matchingLanguage();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			$(".disheader").html(json.bean.title);
+			$(".disdesc").html('由 ' + json.bean.createName + ' 于 ' + json.bean.createTime + '发布');
+			$(".discontent").html(json.bean.content);
+			var jsonStr;
+			var str = "";
+			$.each(json.bean.replyString, function(i, item){
+				jsonStr = {
+					bean: item
+				};
+				if(item.createId === json.bean.createId){//左侧
+					str += getDataUseHandlebars(leftTemplate, jsonStr);
+				} else {//右侧
+					str += getDataUseHandlebars(rightTemplate, jsonStr);
+				}
+			});
+			$(".disreplay").html(str);
+			matchingLanguage();
 		}});
 	    
 	    layedit.set({
@@ -98,7 +94,6 @@ layui.config({
 	    var completedContent = layedit.build('content', layEditParams);
 	    
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
         			discussId: rowId,//讨论板id
@@ -111,13 +106,9 @@ layui.config({
 					params.content = encodeURIComponent(layedit.getContent(completedContent));
 				}
     			AjaxPostUtil.request({url: flowableBasePath + "prodiscuss003", params: params, type: 'json', callback: function (json) {
-    				if (json.returnCode == 0){
-    					winui.window.msg("提交成功", {icon: 1, time: 2000}, function() {
-    						location.reload();
-    					});
-    				} else {
-    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    				}
+					winui.window.msg("提交成功", {icon: 1, time: 2000}, function() {
+						location.reload();
+					});
     			}});
 	        }
 	        return false;

@@ -21,49 +21,41 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	AjaxPostUtil.request({url: flowableBasePath + "procostexpense004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#title").val(json.bean.title);
-			$("#writePeople").html(json.bean.userName);
-			$("#reimbursementTime").val(json.bean.reimbursementTime);
-			$("#thisRowLoad").html(json.bean.allPrice);
+		$("#title").val(json.bean.title);
+		$("#writePeople").html(json.bean.userName);
+		$("#reimbursementTime").val(json.bean.reimbursementTime);
+		$("#thisRowLoad").html(json.bean.allPrice);
 
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-
-			start = laydate.render({
-				elem: '#reimbursementTime', //指定元素
-				range: false,
-				btns: ['now', 'confirm']
-			});
-
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
-			// 获取我参与的项目列表
-			proUtil.queryMyProjectsList(function (data){
-				$("#proId").html(getDataUseHandlebars(selOption, data));
-				$("#proId").val(json.bean.proId);
-			});
-			form.render('select');
-			// 支出分类
-			AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', method: "POST", callback: function(data) {
-				if(data.returnCode == 0) {
-					departmentsSelect(json);
-					costTypeList = getDataUseHandlebars(selOption, data);
-					$.each(json.bean.purposes, function(i, item){
-						showRow(item);
-					});
-				} else {
-					winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-				}
-			}});
-			matchingLanguage();
-			form.render();
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+
+		start = laydate.render({
+			elem: '#reimbursementTime', //指定元素
+			range: false,
+			btns: ['now', 'confirm']
+		});
+
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		// 获取我参与的项目列表
+		proUtil.queryMyProjectsList(function (data){
+			$("#proId").html(getDataUseHandlebars(selOption, data));
+			$("#proId").val(json.bean.proId);
+		});
+		form.render('select');
+		// 支出分类
+		AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', method: "POST", callback: function(data) {
+			departmentsSelect(json);
+			costTypeList = getDataUseHandlebars(selOption, data);
+			$.each(json.bean.purposes, function(i, item){
+				showRow(item);
+			});
+		}});
+		matchingLanguage();
+		form.render();
 	}});
 
 	function departmentsSelect(j){
@@ -150,12 +142,8 @@ layui.config({
 			approvalId: approvalId,
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "procostexpense005", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

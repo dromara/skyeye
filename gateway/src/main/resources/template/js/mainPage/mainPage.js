@@ -18,57 +18,41 @@ layui.config({
 	initFourNumList();
 	function initFourNumList(){
 		AjaxPostUtil.request({url: reqBasePath + "mainpage001", params: {}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
- 	   			$("#checkOnWorkNum").html(json.bean.checkOnWorkNum);
- 	   			$("#diskCloudFileNum").html(json.bean.diskCloudFileNum);
- 	   			$("#forumNum").html(json.bean.forumNum);
- 	   			$("#knowledgeNum").html(json.bean.knowledgeNum);
- 	   			initNoticeList();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			$("#checkOnWorkNum").html(json.bean.checkOnWorkNum);
+			$("#diskCloudFileNum").html(json.bean.diskCloudFileNum);
+			$("#forumNum").html(json.bean.forumNum);
+			$("#knowledgeNum").html(json.bean.knowledgeNum);
+			initNoticeList();
    		}});
 	}
 	
 	function initNoticeList(){
 		AjaxPostUtil.request({url: reqBasePath + "mainpage002", params: {}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				$.each(json.rows, function(i, item){
-   					if(i == 0){
-   						item.className = "layui-this";
-   						item.contentClassName = "layui-show";
-   					}
-   				});
- 	   			$("#noticeTitle").append(getDataUseHandlebars($("#noticeTitleTemplate").html(), json));
- 	   			$("#noticeContent").append(getDataUseHandlebars($("#noticeContentTemplate").html(), json));
- 	   			initForumList();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			$.each(json.rows, function(i, item){
+				if(i == 0){
+					item.className = "layui-this";
+					item.contentClassName = "layui-show";
+				}
+			});
+			$("#noticeTitle").append(getDataUseHandlebars($("#noticeTitleTemplate").html(), json));
+			$("#noticeContent").append(getDataUseHandlebars($("#noticeContentTemplate").html(), json));
+			initForumList();
    		}});
 	}
 	
 	function initForumList(){
 		AjaxPostUtil.request({url: reqBasePath + "mainpage003", params: {}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
- 	   			$("#forumContent").append(getDataUseHandlebars($("#forumContentTemplate").html(), json));
- 	   			initKnowledgeList();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			$("#forumContent").append(getDataUseHandlebars($("#forumContentTemplate").html(), json));
+			initKnowledgeList();
    		}});
 	}
 	
 	function initKnowledgeList(){
 		AjaxPostUtil.request({url: reqBasePath + "mainpage004", params: {}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
- 	   			$("#knowledgeList").html(getDataUseHandlebars($("#knowledgeContentTemplate").html(), json));
- 	   			matchingLanguage();
-				initHotActModel();
- 	   			form.render();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			$("#knowledgeList").html(getDataUseHandlebars($("#knowledgeContentTemplate").html(), json));
+			matchingLanguage();
+			initHotActModel();
+			form.render();
    		}});
 	}
 

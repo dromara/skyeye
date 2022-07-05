@@ -21,38 +21,30 @@ layui.config({
 	var sTableData = ""
 
 	AjaxPostUtil.request({url: flowableBasePath + "sealborrow004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html(json.bean.title);
-			$("#useName").html(json.bean.userName);
-			$("#remark").val(json.bean.remark);
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		$("#useTitle").html(json.bean.title);
+		$("#useName").html(json.bean.userName);
+		$("#remark").val(json.bean.remark);
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-
-			sTableData = json.bean.goods;
-			initSealNameHtml();
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+
+		sTableData = json.bean.goods;
+		initSealNameHtml();
 	}});
 
 	//初始化印章名称
 	function initSealNameHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "seal007", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				nameHtml = getDataUseHandlebars(selOption, json); //加载名称数据
-				matchingLanguage();
-				form.render();
-				// 加载表格数据
-				initTableAssetList();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			nameHtml = getDataUseHandlebars(selOption, json); //加载名称数据
+			matchingLanguage();
+			form.render();
+			// 加载表格数据
+			initTableAssetList();
 		}});
 	}
 
@@ -119,12 +111,8 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "sealborrow005", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

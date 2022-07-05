@@ -20,22 +20,18 @@ layui.config({
 
     // 获取初始化数据
     AjaxPostUtil.request({url: reportBasePath + "reportpage006", params: {rowId: rowId}, type: 'json', method: "GET", callback: function(json) {
-        if (json.returnCode == 0) {
-            initData = JSON.parse(getContentStr(json.bean.content));
-            var widthScale = getScale(initData.contentWidth, content.width());
-            var heightScale = getScale(initData.contentHeight, content.height());
+        initData = JSON.parse(getContentStr(json.bean.content));
+        var widthScale = getScale(initData.contentWidth, content.width());
+        var heightScale = getScale(initData.contentHeight, content.height());
 
-            initEchartsData(widthScale, heightScale);
-            initWordMationData(widthScale, heightScale);
+        initEchartsData(widthScale, heightScale);
+        initWordMationData(widthScale, heightScale);
 
-            if(!isNull(initData.bgImage)){
-                content.css({
-                    "background-image": "url(" + initData.bgImage + ")",
-                    "background-size": content.width() + "px " + content.height() + "px"
-                });
-            }
-        } else {
-            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+        if(!isNull(initData.bgImage)){
+            content.css({
+                "background-image": "url(" + initData.bgImage + ")",
+                "background-size": content.width() + "px " + content.height() + "px"
+            });
         }
     }});
 
@@ -110,20 +106,16 @@ layui.config({
             needGetDataStr: JSON.stringify(needGetData)
         };
         AjaxPostUtil.request({url: reportBasePath + "reportdatafrom007", params: params, type: 'json', method: "POST", callback: function(json) {
-            if (json.returnCode == 0) {
-                $.each(json.bean, function(key, value){
-                    $.each(attr, function(key1, value1){
-                        if(value1.editor == 9){
-                            var pointValue = attr[key1].pointValue;
-                            if(!isNull(pointValue) && key == pointValue){
-                                attr[key1].value = value;
-                            }
+            $.each(json.bean, function(key, value){
+                $.each(attr, function(key1, value1){
+                    if(value1.editor == 9){
+                        var pointValue = attr[key1].pointValue;
+                        if(!isNull(pointValue) && key == pointValue){
+                            attr[key1].value = value;
                         }
-                    });
+                    }
                 });
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            });
         }, async: false});
         return attr;
     }

@@ -229,14 +229,12 @@ function loadUploadMethod(){
 				"chunkSize": block.end - block.start
 			};
 			AjaxPostUtil.request({url: reqBasePath + "sysenclosure009", params: params, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				//分块存在，跳过
-					deferred.reject();
-    			} else {
-    				//分块不存在或不完整，重新发送该分块内容
-					deferred.resolve();
-    			}
-    		}, async: false});
+				//分块存在，跳过
+				deferred.reject();
+    		}, errorCallback: function () {
+				//分块不存在或不完整，重新发送该分块内容
+				deferred.resolve();
+			},async: false});
 			this.owner.options.formData.md5 = md5;
 			deferred.resolve();
 			return deferred.promise();

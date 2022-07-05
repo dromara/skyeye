@@ -19,17 +19,13 @@ layui.config({
 
     // 获取会签节点信息
     AjaxPostUtil.request({url: flowableBasePath + "activitiTask006", params: {taskId: taskId}, method: "GET", type: 'json', callback: function(json) {
-        if(json.returnCode == 0) {
-            taskBean = json.bean;
-            if(json.bean.isSequential){
-                $("#jointlySignType").html("串行多实例会签");
-            } else {
-                $("#jointlySignType").html("并行多实例会签");
-            }
-            chooseUserList = [].concat(json.bean.assigneeList);
+        taskBean = json.bean;
+        if(json.bean.isSequential){
+            $("#jointlySignType").html("串行多实例会签");
         } else {
-            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            $("#jointlySignType").html("并行多实例会签");
         }
+        chooseUserList = [].concat(json.bean.assigneeList);
     }, async: false});
 
     table.render({
@@ -113,12 +109,8 @@ layui.config({
                 chooseUserMation: JSON.stringify(table.cache.messageTable)
             };
             AjaxPostUtil.request({url: flowableBasePath + "activitiTask005", params: params, type: 'json', method: "POST", callback: function (json) {
-                if (json.returnCode == 0) {
-                    parent.layer.close(index);
-                    parent.refreshCode = '0';
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                parent.layer.close(index);
+                parent.refreshCode = '0';
             }});
         }
         return false;

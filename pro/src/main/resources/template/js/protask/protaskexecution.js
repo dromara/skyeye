@@ -53,12 +53,8 @@ layui.config({
 							return false;
 						}
 						AjaxPostUtil.request({url: flowableBasePath + "protask013", params: params, type: 'json', callback: function(j) {
-							if(j.returnCode == 0) {
-								parent.layer.close(index);
-								parent.refreshCode = '0';
-							} else {
-								winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
-							}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 						}});
 					}
 					return false;

@@ -37,87 +37,79 @@ layui.config({
     });
     // 获取当前员工的年假
     AjaxPostUtil.request({url: reqBasePath + "staff010", params: {}, type: 'json', method: 'GET', callback: function(json) {
-        if(json.returnCode == 0) {
-            staffYearHoliday = json.bean.annualLeave;
-            holidayNumber = json.bean.holidayNumber;
-            $("#messageTips").html("截至当前剩余年假：" + staffYearHoliday + "小时，剩余补休为：" + holidayNumber + "小时");
-            // 获取当前登陆人的考勤班次
-            checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
-                $.each(json.rows, function (i, item) {
-                    checkWorkTime.push({
-                        id: item.timeId,
-                        name: item.title,
-                        days: item.days,
-                        startTime: item.startTime,
-                        endTime: item.endTime,
-                        restStartTime: item.restStartTime,
-                        restEndTime: item.restEndTime,
-                        type: item.type
-                    });
+        staffYearHoliday = json.bean.annualLeave;
+        holidayNumber = json.bean.holidayNumber;
+        $("#messageTips").html("截至当前剩余年假：" + staffYearHoliday + "小时，剩余补休为：" + holidayNumber + "小时");
+        // 获取当前登陆人的考勤班次
+        checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
+            $.each(json.rows, function (i, item) {
+                checkWorkTime.push({
+                    id: item.timeId,
+                    name: item.title,
+                    days: item.days,
+                    startTime: item.startTime,
+                    endTime: item.endTime,
+                    restStartTime: item.restStartTime,
+                    restEndTime: item.restEndTime,
+                    type: item.type
                 });
-                initTypeHtml();
             });
-        } else {
-            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-        }
+            initTypeHtml();
+        });
     }});
 
     // 初始化请假类型
     function initTypeHtml() {
         AjaxPostUtil.request({url: reqBasePath + "sysfdsettings001", params: {}, type: 'json', method: 'GET', callback: function(json) {
-            if(json.returnCode == 0) {
-                $.each(JSON.parse(json.bean.holidaysTypeJson), function (i, item){
-                    leaveType.push({
-                        id: item.holidayNo,
-                        name: item.holidayName,
-                        whetherYearHour: item.whetherYearHour,
-                        whetherComLeave: item.whetherComLeave
-                    });
+            $.each(JSON.parse(json.bean.holidaysTypeJson), function (i, item){
+                leaveType.push({
+                    id: item.holidayNo,
+                    name: item.holidayName,
+                    whetherYearHour: item.whetherYearHour,
+                    whetherComLeave: item.whetherComLeave
                 });
-                // 考勤班次变化
-                form.on('select(timeId)', function(data) {
-                    var thisRowNum = data.elem.id.replace("timeId", "");
-                    var thisRowValue = data.value;
-                    $("#leaveDay" + thisRowNum).val("");
-                    $("#leaveStartTime" + thisRowNum).val("");
-                    $("#leaveEndTime" + thisRowNum).val("");
-                    $("#leaveHour" + thisRowNum).html("0");
-                    var timeMation = getInPoingArr(checkWorkTime, "id", thisRowValue);
-                    if(timeMation != null){
-                        leaveDayElem[thisRowNum].config.chooseDay = timeMation.days;
-                        var min = {
-                            year: getYMDFormatDate().split('-')[0],
-                            month: getYMDFormatDate().split('-')[1] - 1,//关键
-                            date: getYMDFormatDate().split('-')[2],
-                            hours: timeMation.startTime.split(':')[0],
-                            minutes: timeMation.startTime.split(':')[1] - 1,
-                            seconds: '00'
-                        };
-                        var max = {
-                            year: getYMDFormatDate().split('-')[0],
-                            month: getYMDFormatDate().split('-')[1] - 1,//关键
-                            date: getYMDFormatDate().split('-')[2],
-                            hours: timeMation.endTime.split(':')[0],
-                            minutes: timeMation.endTime.split(':')[1] + 1,
-                            seconds: '00'
-                        };
-                        leaveStartElem[thisRowNum].config.min = min;
-                        leaveStartElem[thisRowNum].config.max = max;
-                        leaveEndElem[thisRowNum].config.min = min;
-                        leaveEndElem[thisRowNum].config.max = max;
-                        $("#workTime" + thisRowNum).html(timeMation.startTime + " ~ " + timeMation.endTime);
-                    } else {
-                        leaveDayElem[thisRowNum].config.chooseDay = [];
-                        $("#workTime" + thisRowNum).html("-");
-                    }
-                });
-                form.render();
-                matchingLanguage();
-                // 初始化一行数据
-                addRow();
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            });
+            // 考勤班次变化
+            form.on('select(timeId)', function(data) {
+                var thisRowNum = data.elem.id.replace("timeId", "");
+                var thisRowValue = data.value;
+                $("#leaveDay" + thisRowNum).val("");
+                $("#leaveStartTime" + thisRowNum).val("");
+                $("#leaveEndTime" + thisRowNum).val("");
+                $("#leaveHour" + thisRowNum).html("0");
+                var timeMation = getInPoingArr(checkWorkTime, "id", thisRowValue);
+                if(timeMation != null){
+                    leaveDayElem[thisRowNum].config.chooseDay = timeMation.days;
+                    var min = {
+                        year: getYMDFormatDate().split('-')[0],
+                        month: getYMDFormatDate().split('-')[1] - 1,//关键
+                        date: getYMDFormatDate().split('-')[2],
+                        hours: timeMation.startTime.split(':')[0],
+                        minutes: timeMation.startTime.split(':')[1] - 1,
+                        seconds: '00'
+                    };
+                    var max = {
+                        year: getYMDFormatDate().split('-')[0],
+                        month: getYMDFormatDate().split('-')[1] - 1,//关键
+                        date: getYMDFormatDate().split('-')[2],
+                        hours: timeMation.endTime.split(':')[0],
+                        minutes: timeMation.endTime.split(':')[1] + 1,
+                        seconds: '00'
+                    };
+                    leaveStartElem[thisRowNum].config.min = min;
+                    leaveStartElem[thisRowNum].config.max = max;
+                    leaveEndElem[thisRowNum].config.min = min;
+                    leaveEndElem[thisRowNum].config.max = max;
+                    $("#workTime" + thisRowNum).html(timeMation.startTime + " ~ " + timeMation.endTime);
+                } else {
+                    leaveDayElem[thisRowNum].config.chooseDay = [];
+                    $("#workTime" + thisRowNum).html("-");
+                }
+            });
+            form.render();
+            matchingLanguage();
+            // 初始化一行数据
+            addRow();
         }});
     }
 
@@ -202,12 +194,8 @@ layui.config({
             approvalId: approvalId
         };
         AjaxPostUtil.request({url: flowableBasePath + "checkworkleave002", params: params, type: 'json', method: 'POST',  callback: function(json) {
-            if(json.returnCode == 0) {
-                parent.layer.close(index);
-                parent.refreshCode = '0';
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            parent.layer.close(index);
+            parent.refreshCode = '0';
         }});
     }
 

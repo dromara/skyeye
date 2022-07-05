@@ -17,41 +17,37 @@ layui.config({
 	var useEditTemplate = $("#useEditTemplate").html();
 
 	AjaxPostUtil.request({url: flowableBasePath + "vehicle019", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html(json.bean.title);
-			$("#useName").html(json.bean.userName);
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		$("#useTitle").html(json.bean.title);
+		$("#useName").html(json.bean.userName);
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-			$(".vehicleEdit").html(getDataUseHandlebars(useEditTemplate, json));
-			$("input:radio[name=isSelfDrive][value=" + json.bean.isSelfDrive + "]").attr("checked", true);
-			$("#departureTime").val(json.bean.departureTime);
-			// 时间段
-			laydate.render({
-				elem: '#departureTime',
-				type:'datetime',
-				range: '~',
-				format: 'yyyy-MM-dd HH:mm:ss',
-				done: function(value, date){
-					$("#departureTime").val(value);
-				}
-			});
-			initDesignatedVehicle(json.bean.passengerNum, json.bean.designatedVehicleId);
-			if(json.bean.isSelfDrive == '2'){
-				$("#ishasDriver").removeClass("layui-hide");
-				initDriver(json.bean.driverId);
+		$(".vehicleEdit").html(getDataUseHandlebars(useEditTemplate, json));
+		$("input:radio[name=isSelfDrive][value=" + json.bean.isSelfDrive + "]").attr("checked", true);
+		$("#departureTime").val(json.bean.departureTime);
+		// 时间段
+		laydate.render({
+			elem: '#departureTime',
+			type:'datetime',
+			range: '~',
+			format: 'yyyy-MM-dd HH:mm:ss',
+			done: function(value, date){
+				$("#departureTime").val(value);
 			}
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-
-			matchingLanguage();
-			form.render();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+		});
+		initDesignatedVehicle(json.bean.passengerNum, json.bean.designatedVehicleId);
+		if(json.bean.isSelfDrive == '2'){
+			$("#ishasDriver").removeClass("layui-hide");
+			initDriver(json.bean.driverId);
 		}
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
+		} else {
+			$(".typeOne").removeClass("layui-hide");
+		}
+
+		matchingLanguage();
+		form.render();
 	}});
 
 	//是否自驾进行变动
@@ -148,12 +144,8 @@ layui.config({
 			params.driverId = "";
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "vehicle020", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

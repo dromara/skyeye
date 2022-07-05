@@ -21,16 +21,12 @@ layui.config({
 	authBtn('1567732055673');//保存控件
 	
 	AjaxPostUtil.request({url: flowableBasePath + "dsformpage004", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
- 		if (json.returnCode == 0) {
- 			// 加载表单控件
-			loadLeftBoxItem();
-			// 加载拖拽
-			setup_draggable();
-			// 加载页面内容
- 			loadPageMation(json);
- 		} else {
- 			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 		}
+		// 加载表单控件
+		loadLeftBoxItem();
+		// 加载拖拽
+		setup_draggable();
+		// 加载页面内容
+		loadPageMation(json);
  	}});
  	
  	// 加载新增加的控件信息
@@ -43,12 +39,8 @@ layui.config({
 			item.context = getDataUseHandlebars(item.templateContent, obj);
 		}else if(item.associatedDataTypes == 2){//接口
 			AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params:{interfa: item.aData}, type: 'json', callback: function(j){
-	   			if(j.returnCode == 0){
-	   				var obj = JSON.parse(j.bean.aData);
-	   				item.context = getDataUseHandlebars(item.templateContent, obj);
-	   			} else {
-	   				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
-	   			}
+				var obj = JSON.parse(j.bean.aData);
+				item.context = getDataUseHandlebars(item.templateContent, obj);
 	   		}, async: false});
 		}
 		jsonStr = {
@@ -195,12 +187,8 @@ layui.config({
 	// 获取该控件的脚本信息
 	function getDataScript(params){
 		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: params.formContentId}, type: 'json', callback: function (json) {
-    		if (json.returnCode == 0) {
-    			params.htmlContent = encodeURIComponent(json.bean.htmlContent);
-    			params.jsContent = encodeURIComponent(json.bean.jsContent);
-    		} else {
-    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    		}
+			params.htmlContent = encodeURIComponent(json.bean.htmlContent);
+			params.jsContent = encodeURIComponent(json.bean.jsContent);
     	}, async: false});
     	return params;
 	}
@@ -208,16 +196,12 @@ layui.config({
 	// 保存“新增控件”
     function reqSaveData(params, templateContent){
     	AjaxPostUtil.request({url: flowableBasePath + "dsformpage003", params: params, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				var templateJson = json.bean;
-				templateJson.biaoJi = "1";
-				templateJson.templateContent = templateContent;
-				loadNewControl(templateJson);
-				loadFormItemDrop();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+			var templateJson = json.bean;
+			templateJson.biaoJi = "1";
+			templateJson.templateContent = templateContent;
+			loadNewControl(templateJson);
+			loadFormItemDrop();
 		}, async: false});
     }
     
@@ -416,17 +400,13 @@ layui.config({
     // 初始化限制条件
 	function initRequire(item){
 		AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement006", params:{}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				var contentModel = getFileContent('tpl/template/select-option.tpl');//获取html模板
-   				var jsonStr = getDataUseHandlebars(contentModel, json);//模板和数据结合
-				$("#require").html(jsonStr);
-				if(!isNull(item.requireId)){
-					$("#require").val(item.requireId.split(","));//给这个元素赋值
-				}
-   				form.render();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			var contentModel = getFileContent('tpl/template/select-option.tpl');//获取html模板
+			var jsonStr = getDataUseHandlebars(contentModel, json);//模板和数据结合
+			$("#require").html(jsonStr);
+			if(!isNull(item.requireId)){
+				$("#require").val(item.requireId.split(","));//给这个元素赋值
+			}
+			form.render();
    		}});
 	}
 	
@@ -442,12 +422,8 @@ layui.config({
 			return;
 		}
 		AjaxPostUtil.request({url: flowableBasePath + "dsformpage009", params:{formedit: JSON.stringify(jsonArray)}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				winui.window.msg("保存成功", {icon: 1, time: 2000});
-   				parent.refreshCode = '0';
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			winui.window.msg("保存成功", {icon: 1, time: 2000});
+			parent.refreshCode = '0';
    		}});
     });
 });

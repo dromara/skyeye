@@ -28,70 +28,66 @@ layui.config({
 		voucherTemplate = $("#voucherTemplate").html();//凭证展示
 
     AjaxPostUtil.request({url:flowableBasePath + "activitimode025", params: {processInstanceId: processInstanceId}, type: 'json', callback: function(j){
-		if(j.returnCode == 0){
-			var jsonStr = "";//实体json对象
-			var str = "";
-			$.each(j.rows, function(i, item){
-				//如果展示文本不为空，则展示展示文本
-				if(!isNull(item.text))
-					item.value = item.text;
-				jsonStr = {
-					bean: item
-				};
-				if(item.showType == 1){//文本展示
-					str = getDataUseHandlebars(textTemplate, jsonStr);
-				}else if(item.showType == 2){//附件展示
-					str = getDataUseHandlebars(enclosureTemplate, jsonStr);
-				}else if(item.showType == 3){//富文本展示
-					str = getDataUseHandlebars(eichTextTemplate, jsonStr);
-				}else if(item.showType == 4){//图片展示
-					var photoValue = [];
-					if(!isNull(jsonStr.bean.value)){
-						photoValue = item.value.split(",");
-					}
-					var rows = [];
-					$.each(photoValue, function(j, row){
-						rows.push({photoValue: row});
-					});
-					jsonStr.bean.photo = rows;
-					str = getDataUseHandlebars(picTemplate, jsonStr);
-				}else if(item.showType == 5){//表格展示
-					str = getDataUseHandlebars(tableTemplate, jsonStr);
-					var tableId = "messageTable" + item.orderBy;//表格id
-					var tableBoxId = "showTable" + item.orderBy;//表格外部div盒子id
-					$("#showForm").append(str);
-					$("#" + tableBoxId).html('<table id="' + tableId + '" lay-filter="' + tableId + '"></table>');
-					if(typeof item.headerTitle == 'object'){
-						item.headerTitle = JSON.stringify(item.headerTitle);
-					}
-					table.render({
-					    id: tableId,
-					    elem: "#" + tableId,
-					    data: $.extend(true, [], getValJson(item.value, '', '')),
-					    page: false,
-					    cols: getValJson(item.headerTitle, '[', ']')
-					});
-					str = "";
-				}else if(item.showType == 6){//凭证展示
-					str = getDataUseHandlebars(voucherTemplate, jsonStr);
-					$("#showForm").append(str);
-					var boxId = "showVoucher" + item.orderBy;
-					// 初始化凭证
-					voucherUtil.initDataDetails(boxId, item.value);
-					str = "";
-				}else {
-					str = "";
+		var jsonStr = "";//实体json对象
+		var str = "";
+		$.each(j.rows, function(i, item){
+			//如果展示文本不为空，则展示展示文本
+			if(!isNull(item.text))
+				item.value = item.text;
+			jsonStr = {
+				bean: item
+			};
+			if(item.showType == 1){//文本展示
+				str = getDataUseHandlebars(textTemplate, jsonStr);
+			}else if(item.showType == 2){//附件展示
+				str = getDataUseHandlebars(enclosureTemplate, jsonStr);
+			}else if(item.showType == 3){//富文本展示
+				str = getDataUseHandlebars(eichTextTemplate, jsonStr);
+			}else if(item.showType == 4){//图片展示
+				var photoValue = [];
+				if(!isNull(jsonStr.bean.value)){
+					photoValue = item.value.split(",");
 				}
+				var rows = [];
+				$.each(photoValue, function(j, row){
+					rows.push({photoValue: row});
+				});
+				jsonStr.bean.photo = rows;
+				str = getDataUseHandlebars(picTemplate, jsonStr);
+			}else if(item.showType == 5){//表格展示
+				str = getDataUseHandlebars(tableTemplate, jsonStr);
+				var tableId = "messageTable" + item.orderBy;//表格id
+				var tableBoxId = "showTable" + item.orderBy;//表格外部div盒子id
 				$("#showForm").append(str);
-			});
-			//加载流程图片
-			$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date()/3600000));
-			//加载审批历史
-			inboxTimeTreeApprovalHistory();
-			matchingLanguage();
-		} else {
-			winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
-		}
+				$("#" + tableBoxId).html('<table id="' + tableId + '" lay-filter="' + tableId + '"></table>');
+				if(typeof item.headerTitle == 'object'){
+					item.headerTitle = JSON.stringify(item.headerTitle);
+				}
+				table.render({
+					id: tableId,
+					elem: "#" + tableId,
+					data: $.extend(true, [], getValJson(item.value, '', '')),
+					page: false,
+					cols: getValJson(item.headerTitle, '[', ']')
+				});
+				str = "";
+			}else if(item.showType == 6){//凭证展示
+				str = getDataUseHandlebars(voucherTemplate, jsonStr);
+				$("#showForm").append(str);
+				var boxId = "showVoucher" + item.orderBy;
+				// 初始化凭证
+				voucherUtil.initDataDetails(boxId, item.value);
+				str = "";
+			}else {
+				str = "";
+			}
+			$("#showForm").append(str);
+		});
+		//加载流程图片
+		$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date()/3600000));
+		//加载审批历史
+		inboxTimeTreeApprovalHistory();
+		matchingLanguage();
 	}});
 
     function getValJson(val, startPrefix, endPrefix){

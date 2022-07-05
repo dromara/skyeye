@@ -61,61 +61,56 @@ layui.config({
 	
 		var trees = {};
 		var treeDoms = $("ul.fsTree");
-		
-		
+
 		AjaxPostUtil.request({url: reqBasePath + "sys038", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				$("#roleName").text(json.bean.roleName);
-   				$("#roleDesc").text(json.bean.roleDesc);
-   				checkeRows = json.rows;
-   				if(treeDoms.length > 0) {
-   					$(treeDoms).each(function(i) {
-   						var treeId = $(this).attr("id");
-   						var funcNo = $(this).attr("funcNo");
-   						var url = $(this).attr("url");
-   						var tree = fsTree.render({
-   							id: treeId,
-   							funcNo: funcNo,
-   							url: reqBasePath + url,
-   							getTree: getTree,
-   							checkEnable: true,
-   							loadEnable: false,
-   							showLine: false,
-   							showIcon: false,
-   							addDiyDom: addDiyDom,
-   							fontCss: setFontCss
-   						}, function(id){
-   							var zTreeObj = $.fn.zTree.getZTreeObj(id);
-   						    var zTree = zTreeObj.getCheckedNodes(false);  
-   						    for (var i = 0; i < zTree.length; i++) {
-   						    	for(var j = 0; j < checkeRows.length; j++){
-   						    		if(zTree[i].id == checkeRows[j].menuId){
-   						    			zTreeObj.checkNode(zTree[i], true);
-   						    		}
-   						    	}
-   						    }  
-	   						var li_head = ' <li class="head"><a><div class="diy">所属系统</div><div class="diy">菜单权限</div><div class="diy">菜单类型</div></a></li>';
-	 	   					var rows = $("#" + treeId).find('li');
-	 	   					if(rows.length > 0) {
-	 	   						rows.eq(0).before(li_head)
-	 	   					} else {
-	 	   						$("#" + treeId).append(li_head);
-	 	   						$("#" + treeId).append('<li ><div style="text-align: center;line-height: 30px;" >无符合条件数据</div></li>')
-	 	   					}
-   						});
-   						if(treeDoms.length == 1) {
-   							trees[treeId] = tree;
-   						} else {
-   							//深度拷贝对象
-   							trees[treeId] = $.extend(true, {}, tree);
-   						}
-   					});
-   					//绑定按钮事件
-   					fsCommon.buttonEvent("tree", getTree);
-   				}
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			$("#roleName").text(json.bean.roleName);
+			$("#roleDesc").text(json.bean.roleDesc);
+			checkeRows = json.rows;
+			if(treeDoms.length > 0) {
+				$(treeDoms).each(function(i) {
+					var treeId = $(this).attr("id");
+					var funcNo = $(this).attr("funcNo");
+					var url = $(this).attr("url");
+					var tree = fsTree.render({
+						id: treeId,
+						funcNo: funcNo,
+						url: reqBasePath + url,
+						getTree: getTree,
+						checkEnable: true,
+						loadEnable: false,
+						showLine: false,
+						showIcon: false,
+						addDiyDom: addDiyDom,
+						fontCss: setFontCss
+					}, function(id){
+						var zTreeObj = $.fn.zTree.getZTreeObj(id);
+						var zTree = zTreeObj.getCheckedNodes(false);
+						for (var i = 0; i < zTree.length; i++) {
+							for(var j = 0; j < checkeRows.length; j++){
+								if(zTree[i].id == checkeRows[j].menuId){
+									zTreeObj.checkNode(zTree[i], true);
+								}
+							}
+						}
+						var li_head = ' <li class="head"><a><div class="diy">所属系统</div><div class="diy">菜单权限</div><div class="diy">菜单类型</div></a></li>';
+						var rows = $("#" + treeId).find('li');
+						if(rows.length > 0) {
+							rows.eq(0).before(li_head)
+						} else {
+							$("#" + treeId).append(li_head);
+							$("#" + treeId).append('<li ><div style="text-align: center;line-height: 30px;" >无符合条件数据</div></li>')
+						}
+					});
+					if(treeDoms.length == 1) {
+						trees[treeId] = tree;
+					} else {
+						//深度拷贝对象
+						trees[treeId] = $.extend(true, {}, tree);
+					}
+				});
+				//绑定按钮事件
+				fsCommon.buttonEvent("tree", getTree);
+			}
    		}});
 		
 		function getTree(treeId) {

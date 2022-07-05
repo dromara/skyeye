@@ -729,11 +729,7 @@ function getUserStaffHtmlMationByStaffId(staffId){
 	var html = "";
 	var template = getFileContent('tpl/common/userStaff/userStaffMationShowTop.tpl');
 	AjaxPostUtil.request({url: reqBasePath + "staff005", params: {rowId: staffId}, type: 'json', method: "GET", callback: function (json) {
-		if (json.returnCode == 0) {
-			html = getDataUseHandlebars(template, json);
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		}
+		html = getDataUseHandlebars(template, json);
 	}, async: false});
 	return html;
 }

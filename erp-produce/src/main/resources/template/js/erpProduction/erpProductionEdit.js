@@ -42,57 +42,53 @@ layui.config({
  		
  		//回显数据
  		AjaxPostUtil.request({url: flowableBasePath + "erpproduction003", params: {orderId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
-   			if (json.returnCode == 0) {
-   				//商品信息
-				erpOrderUtil.chooseProductMation = {
-   					productId: json.bean.productId,
-   					productName: json.bean.materialName,
-   					productModel: json.bean.materialModel
-   				};
- 	   			$("#productName").val(json.bean.materialName);
- 	   			$("#productModel").val(json.bean.materialModel);
- 	   			//订单信息
- 	   			if(!isNull(json.bean.orderId)){
- 	   				salesOrder = {
- 	   					orderHeaderId: json.bean.orderId
- 	   				};
- 	   				$("#salesOrder").val(json.bean.defaultNumber);
- 	   			}
- 	   			//规格
- 	   			$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: json.bean.unitList}));
- 	   			$("#unitList").val(json.bean.normsId);
- 	   			$("#number").val(json.bean.number);
- 	   			$("#planStartDate").val(json.bean.planStartDate);
- 	   			$("#planComplateDate").val(json.bean.planComplateDate);
- 	   			$("#operTime").val(json.bean.operTime);
- 	   			$("#remark").val(json.bean.remark);
- 	   			//生产方案
- 	   			$("#bomList").html(getDataUseHandlebars(selTemplate, {rows: json.bean.bomList}));
- 	   			$("#bomList").val(json.bean.bomId);
- 	   			//工序
- 	   			//初始化工序
-				procedureMationList = [].concat(json.bean.procedureMationList);
-				var str = "";
-            	$.each(procedureMationList, function(i, item){
-            		str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.departmentName + '</td></tr>';
-            	});
-				$("#procedureBody").html(str);
-   				//子件清单
-				childProList = [].concat(json.bean.childList);
- 	   			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
- 	   			$.each(childProList, function(i, item){
-					$("#proposal" + item.productId).val(item.number);
-					//需求数量=生产数量*单位所需数量
-					$("#needNum" + item.productId).html(parseInt(json.bean.number) * parseInt(item.needNum));
-				});
- 	   			// 工艺路线赋值
-				wayProcedureMation.id = json.bean.wayProcedureId;
-				
-				matchingLanguage();
-				form.render();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			//商品信息
+			erpOrderUtil.chooseProductMation = {
+				productId: json.bean.productId,
+				productName: json.bean.materialName,
+				productModel: json.bean.materialModel
+			};
+			$("#productName").val(json.bean.materialName);
+			$("#productModel").val(json.bean.materialModel);
+			//订单信息
+			if(!isNull(json.bean.orderId)){
+				salesOrder = {
+					orderHeaderId: json.bean.orderId
+				};
+				$("#salesOrder").val(json.bean.defaultNumber);
+			}
+			//规格
+			$("#unitList").html(getDataUseHandlebars(selTemplate, {rows: json.bean.unitList}));
+			$("#unitList").val(json.bean.normsId);
+			$("#number").val(json.bean.number);
+			$("#planStartDate").val(json.bean.planStartDate);
+			$("#planComplateDate").val(json.bean.planComplateDate);
+			$("#operTime").val(json.bean.operTime);
+			$("#remark").val(json.bean.remark);
+			//生产方案
+			$("#bomList").html(getDataUseHandlebars(selTemplate, {rows: json.bean.bomList}));
+			$("#bomList").val(json.bean.bomId);
+			//工序
+			//初始化工序
+			procedureMationList = [].concat(json.bean.procedureMationList);
+			var str = "";
+			$.each(procedureMationList, function(i, item){
+				str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.departmentName + '</td></tr>';
+			});
+			$("#procedureBody").html(str);
+			//子件清单
+			childProList = [].concat(json.bean.childList);
+			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
+			$.each(childProList, function(i, item){
+				$("#proposal" + item.productId).val(item.number);
+				//需求数量=生产数量*单位所需数量
+				$("#needNum" + item.productId).html(parseInt(json.bean.number) * parseInt(item.needNum));
+			});
+			// 工艺路线赋值
+			wayProcedureMation.id = json.bean.wayProcedureId;
+
+			matchingLanguage();
+			form.render();
    		}});
 		
 	    //规格变化事件
@@ -105,16 +101,12 @@ layui.config({
 	    //加载bom方案列表
 	    function loadBomList(normsId){
 	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom007", params: {normsId: normsId}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
-	 	   			$("#bomList").html(getDataUseHandlebars(selTemplate, json));
-	 	   			form.render("select");
-	 	   			//加载bom方案下的子件列表
-	 	   			if(json.rows.length > 0){
-	 	   				loadBomChildProList(json.rows[0].id);
-	 	   			}
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				$("#bomList").html(getDataUseHandlebars(selTemplate, json));
+				form.render("select");
+				//加载bom方案下的子件列表
+				if(json.rows.length > 0){
+					loadBomChildProList(json.rows[0].id);
+				}
  	   		}});
 	    }
 	    
@@ -128,14 +120,10 @@ layui.config({
 	    //加载bom方案下的子件列表
 	    function loadBomChildProList(bomId){
 	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {bomId: bomId}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
-	 	   			childProList = [].concat(json.rows);
-	 	   			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
- 	   				//加载建议采购数量
- 	   				loadChildProPosal();
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				childProList = [].concat(json.rows);
+				$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
+				//加载建议采购数量
+				loadChildProPosal();
  	   		}});
 	    }
 	    
@@ -234,12 +222,8 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
 					AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function (json) {
-						if (json.returnCode == 0) {
-							procedureMationList = [].concat(json.bean.procedureList);
-							loadProcedureMation();
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						procedureMationList = [].concat(json.bean.procedureList);
+						loadProcedureMation();
 					}});
 				}});
 		});

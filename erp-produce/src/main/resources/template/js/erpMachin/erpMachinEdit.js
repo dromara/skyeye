@@ -49,73 +49,69 @@ layui.config({
 		
 		function loadData(){
 			AjaxPostUtil.request({url:flowableBasePath + "erpmachin003", params: {rowId: parent.rowId}, type: 'json', method: 'POST', callback: function (json) {
- 	   			if (json.returnCode == 0) {
-	 	   			var data = json.bean;
-	 	   			if(!isNull(data.productionId)){
-		 	   			$("#productionOrder").val(data.productionNumber);
-		 	   			$("#procedureChoose").hide();
-		 	   			productionMation = {
-		 	   				id: data.productionId
-		 	   			};
-	 	   			}
-                	//加工产品信息
-                	machinPro = {
-                		productId: data.materialId,
-                		productName: data.materialName,
-                		productModel: data.productModel,
-                		unitList: data.unitList
-                	};
-                	$("#productName").val(machinPro.productName);
-                	$("#productModel").val(machinPro.productModel);
-                	$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
-                	$("#unitList").val(data.normsId);
-                	$("#number").val(data.needNum);
-                	
-                	//工序
-                	procedureMationList = [].concat(data.procedure);
-                	var str = "";
-                	$.each(procedureMationList, function(i, item){
-                		str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
-                	});
-    				$("#procedureBody").html(str);
-    				
-    				//部门
-    				$("#departmentId").val(data.departmentId);
-    				$("#starTime").val(data.startTime);
-    				$("#endTime").val(data.endTime);
-    				$("#remark").val(data.remark);
-                	
-                	$.each(data.materiel, function(i, item){
-            			addRow();
-						//将规格所属的商品信息加入到对象中存储
-						allChooseProduct["tr" + (rowNum - 1)] = item;
-						//单位回显
-						$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.unitList}));
-						$("#unitId" + (rowNum - 1)).val(item.normsId);
-						//商品回显
-						$("#materialId" + (rowNum - 1)).val(item.productName + "(" + item.productModel + ")");
-						$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
-						$.each(data.referToMation, function(j, bean){
-							if(bean.normsId == item.normsId){
-								//所需总数量
-								$("#productionNum" + (rowNum - 1)).html(bean.productionNum);
-								//待分配数量
-								$("#machinNum" + (rowNum - 1)).html(bean.machinNum);
-								return false;
-							}
-						});
-						//建议数量
-						$("#rkNum" + (rowNum - 1)).val(item.needNumber);
-						$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
+				var data = json.bean;
+				if(!isNull(data.productionId)){
+					$("#productionOrder").val(data.productionNumber);
+					$("#procedureChoose").hide();
+					productionMation = {
+						id: data.productionId
+					};
+				}
+				//加工产品信息
+				machinPro = {
+					productId: data.materialId,
+					productName: data.materialName,
+					productModel: data.productModel,
+					unitList: data.unitList
+				};
+				$("#productName").val(machinPro.productName);
+				$("#productModel").val(machinPro.productModel);
+				$("#unitList").html(getDataUseHandlebars(selOption, {rows: machinPro.unitList}));
+				$("#unitList").val(data.normsId);
+				$("#number").val(data.needNum);
+
+				//工序
+				procedureMationList = [].concat(data.procedure);
+				var str = "";
+				$.each(procedureMationList, function(i, item){
+					str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
+				});
+				$("#procedureBody").html(str);
+
+				//部门
+				$("#departmentId").val(data.departmentId);
+				$("#starTime").val(data.startTime);
+				$("#endTime").val(data.endTime);
+				$("#remark").val(data.remark);
+
+				$.each(data.materiel, function(i, item){
+					addRow();
+					//将规格所属的商品信息加入到对象中存储
+					allChooseProduct["tr" + (rowNum - 1)] = item;
+					//单位回显
+					$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.unitList}));
+					$("#unitId" + (rowNum - 1)).val(item.normsId);
+					//商品回显
+					$("#materialId" + (rowNum - 1)).val(item.productName + "(" + item.productModel + ")");
+					$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
+					$.each(data.referToMation, function(j, bean){
+						if(bean.normsId == item.normsId){
+							//所需总数量
+							$("#productionNum" + (rowNum - 1)).html(bean.productionNum);
+							//待分配数量
+							$("#machinNum" + (rowNum - 1)).html(bean.machinNum);
+							return false;
+						}
 					});
-					matchingLanguage();
-					form.render();
-					
-					//计算价格
-					calculatedTotalPrice();
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+					//建议数量
+					$("#rkNum" + (rowNum - 1)).val(item.needNumber);
+					$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
+				});
+				matchingLanguage();
+				form.render();
+
+				//计算价格
+				calculatedTotalPrice();
  	   		}});
 		}
 		

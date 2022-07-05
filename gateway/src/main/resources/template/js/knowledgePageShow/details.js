@@ -7,9 +7,7 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'jquery', 'winui', 'form'], function (exports) {
-	
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form;
 	var rowId = parent.rowId;
@@ -19,15 +17,11 @@ layui.config({
     var interval = null;
 	
 	AjaxPostUtil.request({url: reqBasePath + "knowledgecontent006", params:{rowId: rowId}, type: 'json', callback: function (json) {
-		if (json.returnCode == 0) {
-			$("#title").html(json.bean.title);
-			content = json.bean.content;
-	 		$("#knowledgecontentshowBox").attr("src", "contentshow.html");
-	 		interval = setInterval(iFrameHeight, 300);
-	 		matchingLanguage();
-		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		}
+		$("#title").html(json.bean.title);
+		content = json.bean.content;
+		$("#knowledgecontentshowBox").attr("src", "contentshow.html");
+		interval = setInterval(iFrameHeight, 300);
+		matchingLanguage();
 	}});
 	
     function iFrameHeight() {

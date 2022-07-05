@@ -59,40 +59,36 @@ layui.config({
 		        }
 		        matchingLanguage();
 			    AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function(thisjson){
-		    		if(thisjson.returnCode == 0) {
-		    			var row = thisjson.rows;
-		    			var coveragearr = coveragestr.split(",");
-		 		 		for(var i = 0;i < thisjson.total; i++){
-		 		 			var params = {
-	 		 	        		id: row[i].id,
-	 		 	        		name: row[i].name
-	 		 	        	};
-		 		 			var f = false;
-		 		 			for(var m = 0;m < coveragearr.length; m++){
-		 		 				if(row[i].id == coveragearr[m]){
-		 		 					f = true;
-		 		 				}
-		 		 			}
-		 		 			if(f){
-		 		 				$("#addTable").append(getDataUseHandlebars(insuranceaddtableTemplate, params));
-		 		 			}
-		 		 			form.render('checkbox');
-		 		 		}
-	 			 		var arr = json.bean.coverageId.split(",");
-	 					for(var i = 0; i < arr.length; i++){
-	 						var str = arr[i].split("-");
-	 						for(var j = 0; j < str.length; j++){
-	 							var fu = $("#addTable").find("span[rowId="+str[0]+"]").parent();
-	 		 	            	fu.next().find("span").html(str[1]);//对应的保费
-	 		 	            	fu.next().next().find("span").html(str[2]);//对应的保额
-	 		 	            	if(str.length > 3){
-	 		 	            		fu.next().next().next().find("span").html(str[3]);//对应的备注
-	 		 	            	}
-	 						}
-	 					}
-		    		}else {
-		    			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		    		}
+					var row = thisjson.rows;
+					var coveragearr = coveragestr.split(",");
+					for(var i = 0;i < thisjson.total; i++){
+						var params = {
+							id: row[i].id,
+							name: row[i].name
+						};
+						var f = false;
+						for(var m = 0;m < coveragearr.length; m++){
+							if(row[i].id == coveragearr[m]){
+								f = true;
+							}
+						}
+						if(f){
+							$("#addTable").append(getDataUseHandlebars(insuranceaddtableTemplate, params));
+						}
+						form.render('checkbox');
+					}
+					var arr = json.bean.coverageId.split(",");
+					for(var i = 0; i < arr.length; i++){
+						var str = arr[i].split("-");
+						for(var j = 0; j < str.length; j++){
+							var fu = $("#addTable").find("span[rowId="+str[0]+"]").parent();
+							fu.next().find("span").html(str[1]);//对应的保费
+							fu.next().next().find("span").html(str[2]);//对应的保额
+							if(str.length > 3){
+								fu.next().next().next().find("span").html(str[3]);//对应的备注
+							}
+						}
+					}
 			     }
 		      });
 		 	}

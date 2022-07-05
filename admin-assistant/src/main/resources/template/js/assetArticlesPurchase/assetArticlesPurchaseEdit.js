@@ -20,25 +20,21 @@ layui.config({
 	var sTableData = "";
 
 	AjaxPostUtil.request({url: flowableBasePath + "assetarticles028", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html(json.bean.title);
-			$("#useName").html(json.bean.userName);
-			$("#remark").val(json.bean.remark);
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		$("#useTitle").html(json.bean.title);
+		$("#useName").html(json.bean.userName);
+		$("#remark").val(json.bean.remark);
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-			sTableData = json.bean.goods;
-			initTypeHtml();
-
-			matchingLanguage();
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+		sTableData = json.bean.goods;
+		initTypeHtml();
+
+		matchingLanguage();
 	}});
 
 	//初始化用品类别

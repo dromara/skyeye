@@ -14,66 +14,57 @@ layui.config({
 	    var type;
 	    
 	    AjaxPostUtil.request({url: reqBasePath + "sysevemodel004", params:{id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
-   			if (json.returnCode == 0) {
-				// 初始化上传
-				$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 20, json.bean.logo, 1));
+			// 初始化上传
+			$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 20, json.bean.logo, 1));
 
-				$("#title").val(json.bean.title);
-				type = json.bean.type;
+			$("#title").val(json.bean.title);
+			type = json.bean.type;
 
-				systemModelUtil.loadSysEveModelTypeByPId("firstTypeId", "0");
-				$("#firstTypeId").val(json.bean.firstTypeId);
+			systemModelUtil.loadSysEveModelTypeByPId("firstTypeId", "0");
+			$("#firstTypeId").val(json.bean.firstTypeId);
 
-				systemModelUtil.loadSysEveModelTypeByPId("secondTypeId", json.bean.firstTypeId);
-				$("#secondTypeId").val(json.bean.secondTypeId);
+			systemModelUtil.loadSysEveModelTypeByPId("secondTypeId", json.bean.firstTypeId);
+			$("#secondTypeId").val(json.bean.secondTypeId);
 
-				form.on('select(firstTypeId)', function(data) {
-					var thisRowValue = data.value;
-					systemModelUtil.loadSysEveModelTypeByPId("secondTypeId", isNull(thisRowValue) ? "-" : thisRowValue);
-					form.render('select');
-				});
+			form.on('select(firstTypeId)', function(data) {
+				var thisRowValue = data.value;
+				systemModelUtil.loadSysEveModelTypeByPId("secondTypeId", isNull(thisRowValue) ? "-" : thisRowValue);
+				form.render('select');
+			});
 
-				var ue = ueEditorUtil.initEditor('container');
-				ue.addListener("ready", function () {
-					ue.setContent(json.bean.content);
-				});
+			var ue = ueEditorUtil.initEditor('container');
+			ue.addListener("ready", function () {
+				ue.setContent(json.bean.content);
+			});
 
-				matchingLanguage();
-				form.render();
-				form.on('submit(formEditBean)', function (data) {
-					if (winui.verifyForm(data.elem)) {
-						var params = {
-							title: $("#title").val(),
-							firstTypeId: $("#firstTypeId").val(),
-							secondTypeId: $("#secondTypeId").val(),
-							content: encodeURIComponent(ue.getContent()),
-							logo: $("#logo").find("input[type='hidden'][name='upload']").attr("oldurl"),
-							type: type,
-							id: parent.rowId
-						};
-						if(isNull(params.logo)){
-							winui.window.msg('请上传LOGO', {icon: 2, time: 2000});
-							return false;
-						}
-						if(isNull(params.content)){
-							winui.window.msg('请填写模板内容', {icon: 2, time: 2000});
-							return false;
-						}
-						AjaxPostUtil.request({url: reqBasePath + "sysevemodel005", params: params, type: 'json', method: "PUT", callback: function (json) {
-							if (json.returnCode == 0) {
-								parent.layer.close(index);
-								parent.refreshCode = '0';
-							} else {
-								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-							}
-						}});
+			matchingLanguage();
+			form.render();
+			form.on('submit(formEditBean)', function (data) {
+				if (winui.verifyForm(data.elem)) {
+					var params = {
+						title: $("#title").val(),
+						firstTypeId: $("#firstTypeId").val(),
+						secondTypeId: $("#secondTypeId").val(),
+						content: encodeURIComponent(ue.getContent()),
+						logo: $("#logo").find("input[type='hidden'][name='upload']").attr("oldurl"),
+						type: type,
+						id: parent.rowId
+					};
+					if(isNull(params.logo)){
+						winui.window.msg('请上传LOGO', {icon: 2, time: 2000});
+						return false;
 					}
-					return false;
-				});
-				
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+					if(isNull(params.content)){
+						winui.window.msg('请填写模板内容', {icon: 2, time: 2000});
+						return false;
+					}
+					AjaxPostUtil.request({url: reqBasePath + "sysevemodel005", params: params, type: 'json', method: "PUT", callback: function (json) {
+						parent.layer.close(index);
+						parent.refreshCode = '0';
+					}});
+				}
+				return false;
+			});
    		}});
 	    
 	    // 取消

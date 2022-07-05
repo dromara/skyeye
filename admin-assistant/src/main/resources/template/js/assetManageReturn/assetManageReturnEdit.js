@@ -21,84 +21,72 @@ layui.config({
 	var sTableData = "";
 
 	AjaxPostUtil.request({url: flowableBasePath + "asset031", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html(json.bean.title);
-			$("#useName").html(json.bean.userName);
-			$("#remark").val(json.bean.remark);
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		$("#useTitle").html(json.bean.title);
+		$("#useName").html(json.bean.userName);
+		$("#remark").val(json.bean.remark);
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-			sTableData = json.bean.goods;
-			initTypeHtml();
-			matchingLanguage();
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+		sTableData = json.bean.goods;
+		initTypeHtml();
+		matchingLanguage();
 	}});
 
 	//初始化资产类别
 	function initTypeHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-				//渲染
-				form.render();
-				//类型加载变化事件
-				form.on('select(selectTypeProperty)', function(data) {
-					var thisRowNum = data.elem.id.replace("typeId", "");
-					var thisRowValue = data.value;
-					if(!isNull(thisRowValue) && thisRowValue != '请选择') {
-						if(inPointArray(thisRowValue, assetList)) {
-							//类型对应的资产存在js对象中
-							var list = getListPointArray(thisRowValue, assetList);
-							resetAssetList(thisRowNum, list); //重置选择行的资产列表
-						} else {
-							//类型对应的资产不存在js对象中
-							AjaxPostUtil.request({url: flowableBasePath + "asset026", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
-								if(json.returnCode == 0) {
-									assetList.push({
-										id: thisRowValue,
-										list: json.rows
-									});
-									resetAssetList(thisRowNum, json.rows); //重置选择行的资产列表
-								} else {
-									winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-								}
-							}});
-						}
-					}
-				});
-
-				//商品加载变化事件
-				form.on('select(selectAssetarProperty)', function(data) {
-					var thisRowNum = data.elem.id.replace("assetId", "");
-					var thisRowValue = data.value;
-					var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
-					if(!isNull(thisRowValue) && thisRowValue != '请选择') {
-						var list = getListPointArray(thisRowTypeChooseId, assetList);
-						$.each(list, function(i, item) {
-							if(item.id === thisRowValue) {
-								$("#specificationsName" + thisRowNum).html(item.specificationsName);
-								$("#assetNum" + thisRowNum).html(item.assetNum);
-								return false;
-							}
-						});
+			typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
+			//渲染
+			form.render();
+			//类型加载变化事件
+			form.on('select(selectTypeProperty)', function(data) {
+				var thisRowNum = data.elem.id.replace("typeId", "");
+				var thisRowValue = data.value;
+				if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+					if(inPointArray(thisRowValue, assetList)) {
+						//类型对应的资产存在js对象中
+						var list = getListPointArray(thisRowValue, assetList);
+						resetAssetList(thisRowNum, list); //重置选择行的资产列表
 					} else {
-						$("#specificationsName" + thisRowNum).html(""); //重置规格为空
-						$("#assetNum" + thisRowNum).html(""); //重置库存为空
+						//类型对应的资产不存在js对象中
+						AjaxPostUtil.request({url: flowableBasePath + "asset026", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
+							assetList.push({
+								id: thisRowValue,
+								list: json.rows
+							});
+							resetAssetList(thisRowNum, json.rows); //重置选择行的资产列表
+						}});
 					}
-				});
-				//加载表格数据
-				initTableAssetList();
+				}
+			});
 
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			//商品加载变化事件
+			form.on('select(selectAssetarProperty)', function(data) {
+				var thisRowNum = data.elem.id.replace("assetId", "");
+				var thisRowValue = data.value;
+				var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
+				if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+					var list = getListPointArray(thisRowTypeChooseId, assetList);
+					$.each(list, function(i, item) {
+						if(item.id === thisRowValue) {
+							$("#specificationsName" + thisRowNum).html(item.specificationsName);
+							$("#assetNum" + thisRowNum).html(item.assetNum);
+							return false;
+						}
+					});
+				} else {
+					$("#specificationsName" + thisRowNum).html(""); //重置规格为空
+					$("#assetNum" + thisRowNum).html(""); //重置库存为空
+				}
+			});
+			//加载表格数据
+			initTableAssetList();
+
 		}});
 	}
 
@@ -172,12 +160,8 @@ layui.config({
 			approvalId: approvalId,
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "asset032", params: params, type: 'json', method: "PUT", callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 
@@ -238,19 +222,15 @@ layui.config({
 			} else {
 				//类型对应的资产不存在js对象中
 				AjaxPostUtil.request({url: flowableBasePath + "asset026", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
-					if(json.returnCode == 0) {
-						assetList.push({
-							id: thisRowValue,
-							list: json.rows
-						});
-						//重置选择行的资产列表
-						var sHtml = getDataUseHandlebars(selOption, json);
-						$("#assetId" + thisRowNum).html(sHtml); //重置商品列表下拉框
-						$("#assetId" + thisRowNum).val(item.assetId);
-						form.render('select');
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					assetList.push({
+						id: thisRowValue,
+						list: json.rows
+					});
+					//重置选择行的资产列表
+					var sHtml = getDataUseHandlebars(selOption, json);
+					$("#assetId" + thisRowNum).html(sHtml); //重置商品列表下拉框
+					$("#assetId" + thisRowNum).val(item.assetId);
+					form.render('select');
 				}, async: false});
 			}
 		}

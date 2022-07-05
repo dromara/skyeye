@@ -1234,14 +1234,9 @@
 				    	var msg = '确认提交考试结果吗？';
 						layer.confirm(msg, { icon: 3, title: '提交操作' }, function (i) {
 							layer.close(i);
-				            
 				            AjaxPostUtil.request({url:schoolBasePath + "exam033", params: params, type: 'json', callback: function (json) {
-				    			if (json.returnCode == 0) {
-				    				parent.layer.close(index);
-			 	        			parent.refreshCode = '0';
-				    			} else {
-				    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				    			}
+								parent.layer.close(index);
+								parent.refreshCode = '0';
 				    		}});
 						});
 				    })

@@ -14,12 +14,8 @@ layui.config({
     // 动态表单草稿状态下的详情
     var rowId = parent.rowId;
     AjaxPostUtil.request({url: flowableBasePath + "pagesequence006", params: {rowId: rowId}, type: 'json', callback: function(j){
-		if(j.returnCode == 0){
-			dsFormUtil.initSequenceDataDetails("showForm", j.rows);
-			matchingLanguage();
-		} else {
-			winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
-		}
+        dsFormUtil.initSequenceDataDetails("showForm", j.rows);
+        matchingLanguage();
 	}});
 	
     exports('dsFormPageSequenceDraftProcessDetail', {});

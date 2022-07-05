@@ -21,59 +21,51 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	AjaxPostUtil.request({url: flowableBasePath + "proworkload007", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#title").val(json.bean.title);
-			$("#desc").val(json.bean.desc);
-			$("#writePeople").html(json.bean.writePeople);
-			$("#thisRowLoad").html(json.bean.allworkload);
-			$("#projectNumber").html(json.bean.projectNumber);
-			$("input:radio[name=workLoadType][value=" + json.bean.type + "]").attr("checked", true);
+		$("#title").val(json.bean.title);
+		$("#desc").val(json.bean.desc);
+		$("#writePeople").html(json.bean.writePeople);
+		$("#thisRowLoad").html(json.bean.allworkload);
+		$("#projectNumber").html(json.bean.projectNumber);
+		$("input:radio[name=workLoadType][value=" + json.bean.type + "]").attr("checked", true);
 
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-
-			var dateArray = new Array();
-			dateArray.push(json.bean.tasks[0].monTime);
-			dateArray.push(json.bean.tasks[0].tuesTime);
-			dateArray.push(json.bean.tasks[0].wedTime);
-			dateArray.push(json.bean.tasks[0].thurTime);
-			dateArray.push(json.bean.tasks[0].friTime);
-			dateArray.push(json.bean.tasks[0].satuTime);
-			dateArray.push(json.bean.tasks[0].sunTime);
-			//设置日期
-			var cells = document.getElementById('dataTr').getElementsByTagName('th');
-			for(var i = 0; i < 7; i++) {
-				cells[i].innerHTML = dateArray[i];
-			}
-
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
-			// 获取我参与的项目列表
-			proUtil.queryMyProjectsList(function (data){
-				$("#proId").html(getDataUseHandlebars(selOption, data));
-				$("#proId").val(json.bean.proId);
-				proList = data.rows;
-				form.render('select');
-			});
-			// 获取我的任务
-			AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: json.bean.proId}, type: 'json', callback: function(data) {
-				if(data.returnCode == 0) {
-					taskListHtml = getDataUseHandlebars(selOption, data);
-					$.each(json.bean.tasks, function(i, item){
-						showRow(item);
-					});
-				} else {
-					winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-				}
-			}});
-			matchingLanguage();
-			form.render();
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+
+		var dateArray = new Array();
+		dateArray.push(json.bean.tasks[0].monTime);
+		dateArray.push(json.bean.tasks[0].tuesTime);
+		dateArray.push(json.bean.tasks[0].wedTime);
+		dateArray.push(json.bean.tasks[0].thurTime);
+		dateArray.push(json.bean.tasks[0].friTime);
+		dateArray.push(json.bean.tasks[0].satuTime);
+		dateArray.push(json.bean.tasks[0].sunTime);
+		//设置日期
+		var cells = document.getElementById('dataTr').getElementsByTagName('th');
+		for(var i = 0; i < 7; i++) {
+			cells[i].innerHTML = dateArray[i];
+		}
+
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		// 获取我参与的项目列表
+		proUtil.queryMyProjectsList(function (data){
+			$("#proId").html(getDataUseHandlebars(selOption, data));
+			$("#proId").val(json.bean.proId);
+			proList = data.rows;
+			form.render('select');
+		});
+		// 获取我的任务
+		AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: json.bean.proId}, type: 'json', callback: function(data) {
+			taskListHtml = getDataUseHandlebars(selOption, data);
+			$.each(json.bean.tasks, function(i, item){
+				showRow(item);
+			});
+		}});
+		matchingLanguage();
+		form.render();
 	}});
 
 	//所属项目变化事件
@@ -90,12 +82,8 @@ layui.config({
 					}
 					//获取我的任务
 					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: item.id}, type: 'json', method: "POST", callback: function(json) {
-						if(json.returnCode == 0) {
-							taskListHtml = getDataUseHandlebars(selOption, json);
-							resetTableTask();
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						taskListHtml = getDataUseHandlebars(selOption, json);
+						resetTableTask();
 					}});
 					return false;
 				}
@@ -251,12 +239,8 @@ layui.config({
 			approvalId: approvalId,
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "proworkload008", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

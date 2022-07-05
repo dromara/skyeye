@@ -57,14 +57,10 @@ layui.config({
 	//初始化指定用车
 	function initDesignatedVehicle(num) {
 		AjaxPostUtil.request({url: flowableBasePath + "vehicle011", params: {passengerNum: num}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				var designatedVehicleHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-				$("#designatedVehicleId").html(designatedVehicleHtml);
-				//渲染
-				form.render("select");
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			var designatedVehicleHtml = getDataUseHandlebars(selOption, json); //加载类别数据
+			$("#designatedVehicleId").html(designatedVehicleHtml);
+			//渲染
+			form.render("select");
 		}});
 	}
 
@@ -72,14 +68,10 @@ layui.config({
 	function initDriver() {
 		loadDriver = true;
 		AjaxPostUtil.request({url: flowableBasePath + "vehicle012", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				var driverHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-				$("#driverId").html(driverHtml);
-				//渲染
-				form.render("select");
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			var driverHtml = getDataUseHandlebars(selOption, json); //加载类别数据
+			$("#driverId").html(driverHtml);
+			//渲染
+			form.render("select");
 		}});
 	}
 
@@ -120,12 +112,8 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "vehicle013", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

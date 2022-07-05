@@ -60,12 +60,8 @@ layui.config({
 			layer.confirm(msg, { icon: 3, title: '初期沟通' }, function (i) {
 				layer.close(i);
 	            AjaxPostUtil.request({url: flowableBasePath + "opportunity019", params:{rowId: stateChangeData.id}, type: 'json', callback: function (json) {
-	    			if (json.returnCode == 0) {
-	    				parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	    			} else {
-	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    			}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	    		}});
 			});
 	    });
@@ -76,12 +72,8 @@ layui.config({
 			layer.confirm(msg, { icon: 3, title: '方案与报价' }, function (i) {
 				layer.close(i);
 	            AjaxPostUtil.request({url: flowableBasePath + "opportunity020", params:{rowId: stateChangeData.id}, type: 'json', callback: function (json) {
-	    			if (json.returnCode == 0) {
-	    				parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	    			} else {
-	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    			}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	    		}});
 			});
 	    });
@@ -92,12 +84,8 @@ layui.config({
 			layer.confirm(msg, { icon: 3, title: '竞争与投标' }, function (i) {
 				layer.close(i);
 	            AjaxPostUtil.request({url: flowableBasePath + "opportunity021", params:{rowId: stateChangeData.id}, type: 'json', callback: function (json) {
-	    			if (json.returnCode == 0) {
-	    				parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	    			} else {
-	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    			}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	    		}});
 			});
 	    });
@@ -108,12 +96,8 @@ layui.config({
 			layer.confirm(msg, { icon: 3, title: '商务谈判' }, function (i) {
 				layer.close(i);
 	            AjaxPostUtil.request({url: flowableBasePath + "opportunity022", params:{rowId: stateChangeData.id}, type: 'json', callback: function (json) {
-	    			if (json.returnCode == 0) {
-	    				parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	    			} else {
-	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    			}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	    		}});
 			});
 	    });
@@ -124,12 +108,8 @@ layui.config({
 			layer.confirm(msg, { icon: 3, title: '成交' }, function (i) {
 				layer.close(i);
 	            AjaxPostUtil.request({url: flowableBasePath + "opportunity023", params:{rowId: stateChangeData.id}, type: 'json', callback: function (json) {
-	    			if (json.returnCode == 0) {
-	    				parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	    			} else {
-	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    			}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	    		}});
 			});
 	    });
@@ -140,12 +120,8 @@ layui.config({
 			layer.confirm(msg, { icon: 3, title: '丢单' }, function (i) {
 				layer.close(i);
 	            AjaxPostUtil.request({url: flowableBasePath + "opportunity024", params:{rowId: stateChangeData.id}, type: 'json', callback: function (json) {
-	    			if (json.returnCode == 0) {
-	    				parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	    			} else {
-	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    			}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	    		}});
 			});
 	    });
@@ -156,12 +132,8 @@ layui.config({
 			layer.confirm(msg, { icon: 3, title: '搁置' }, function (i) {
 				layer.close(i);
 	            AjaxPostUtil.request({url: flowableBasePath + "opportunity025", params:{rowId: stateChangeData.id}, type: 'json', callback: function (json) {
-	    			if (json.returnCode == 0) {
-	    				parent.layer.close(index);
-		 	        	parent.refreshCode = '0';
-	    			} else {
-	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    			}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
 	    		}});
 			});
 	    });

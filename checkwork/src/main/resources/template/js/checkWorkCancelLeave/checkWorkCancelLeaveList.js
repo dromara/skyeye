@@ -19,10 +19,7 @@ layui.config({
     authBtn('1618112042591');
 
     // 申请时间
-    laydate.render({
-        elem: '#applyTime',
-        range: '~'
-    });
+    laydate.render({elem: '#applyTime', range: '~'});
 
     // 我的销假申请列表
     table.render({
@@ -103,12 +100,8 @@ layui.config({
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "checkworkcancelleave009", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg("提交成功", {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg("提交成功", {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }
@@ -138,12 +131,8 @@ layui.config({
                     approvalId: approvalId
                 };
                 AjaxPostUtil.request({url: flowableBasePath + "checkworkcancelleave006", params: params, type: 'json', callback: function (json) {
-                    if (json.returnCode == 0) {
-                        winui.window.msg("提交成功", {icon: 1, time: 2000});
-                        loadTable();
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
+                    winui.window.msg("提交成功", {icon: 1, time: 2000});
+                    loadTable();
                 }});
             });
         });
@@ -154,12 +143,8 @@ layui.config({
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "checkworkcancelleave007", params:{rowId: data.id}, type: 'json', callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }

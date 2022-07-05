@@ -56,29 +56,25 @@ layui.config({
 			    $("body").on("click", ".aggreIn", function (e) {
 			    	var _this = $(this);
 			    	AjaxPostUtil.request({url: reqBasePath + "companytalkgroup003", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
-		 	   			if (json.returnCode == 0) {
-		 	   				_this.parent().html('<font>已同意</font>');
-		 	   				if(json.bean.inGroupType == '1'){//被邀请进群
-			 	   				parent.layim.addList({
-			 	   					type: 'group', //列表类型，只支持friend和group两种
-			 	   					avatar: fileBasePath + json.bean.groupImg, //群组头像
-			 	   					groupname: json.bean.groupName, //群组名称
-			 	   					id: json.bean.id, //群组id
-			 	   				});
-		 	   				}else if(json.bean.inGroupType == '2'){//搜索账号进群
-			 	   				var sendMessage = {
-			 	   					to: json.bean.userId,//发送人id
-			 	   					type: 10,
-				 	   				avatar: fileBasePath + json.bean.groupImg, //群组头像
-			 	   					groupname: json.bean.groupName, //群组名称
-			 	   					id: json.bean.id, //群组id
-			 	   				};
-			 	   				parent.etiger.socket.send(JSON.stringify(sendMessage));
-		 	   				}
-		 	   				winui.window.msg('操作成功', {icon: 1, time: 2000});
-		 	   			} else {
-		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		 	   			}
+						_this.parent().html('<font>已同意</font>');
+						if(json.bean.inGroupType == '1'){//被邀请进群
+							parent.layim.addList({
+								type: 'group', //列表类型，只支持friend和group两种
+								avatar: fileBasePath + json.bean.groupImg, //群组头像
+								groupname: json.bean.groupName, //群组名称
+								id: json.bean.id, //群组id
+							});
+						}else if(json.bean.inGroupType == '2'){//搜索账号进群
+							var sendMessage = {
+								to: json.bean.userId,//发送人id
+								type: 10,
+								avatar: fileBasePath + json.bean.groupImg, //群组头像
+								groupname: json.bean.groupName, //群组名称
+								id: json.bean.id, //群组id
+							};
+							parent.etiger.socket.send(JSON.stringify(sendMessage));
+						}
+						winui.window.msg('操作成功', {icon: 1, time: 2000});
 		 	   		}});
 			    });
 			    
@@ -86,12 +82,8 @@ layui.config({
 			    $("body").on("click", ".refuseIn", function (e) {
 			    	var _this = $(this);
 			    	AjaxPostUtil.request({url: reqBasePath + "companytalkgroup004", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
-		 	   			if (json.returnCode == 0) {
-		 	   				_this.parent().html('<font>已拒绝</font>');
-		 	   				winui.window.msg('操作成功', {icon: 1, time: 2000});
-		 	   			} else {
-		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		 	   			}
+						_this.parent().html('<font>已拒绝</font>');
+						winui.window.msg('操作成功', {icon: 1, time: 2000});
 		 	   		}});
 			    });
 		 	}

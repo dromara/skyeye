@@ -33,17 +33,13 @@ layui.config({
 	matchingLanguage();
 	//支出分类
 	AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
-		if(data.returnCode == 0) {
-			costTypeList = getDataUseHandlebars(selOption, data);
-			addRow();
-			proUtil.queryMyProjectsList(function (data){
-				$("#proId").html(getDataUseHandlebars(selOption, data));
-				form.render('select');
-			});
-			departmentsSelect();
-		} else {
-			winui.window.msg(data.returnMessage, {icon: 2, time: 2000});
-		}
+		costTypeList = getDataUseHandlebars(selOption, data);
+		addRow();
+		proUtil.queryMyProjectsList(function (data){
+			$("#proId").html(getDataUseHandlebars(selOption, data));
+			form.render('select');
+		});
+		departmentsSelect();
 	}});
 
 	function departmentsSelect(){
@@ -121,12 +117,8 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "procostexpense002", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

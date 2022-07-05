@@ -20,43 +20,35 @@ layui.config({
 		var sTableData = ""
 
 		AjaxPostUtil.request({url: flowableBasePath + "sealrevert004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				$("#revertTitle").html(json.bean.title);
-				$("#revertName").html(json.bean.userName);
-				$("#remark").val(json.bean.remark);
-				// 附件回显
-				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+			$("#revertTitle").html(json.bean.title);
+			$("#revertName").html(json.bean.userName);
+			$("#remark").val(json.bean.remark);
+			// 附件回显
+			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-				if(json.bean.state == '1'){
-					$(".typeTwo").removeClass("layui-hide");
-				} else {
-					$(".typeOne").removeClass("layui-hide");
-				}
-
-				sTableData = json.bean.goods;
-				initSealNameHtml();
+			if(json.bean.state == '1'){
+				$(".typeTwo").removeClass("layui-hide");
 			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				$(".typeOne").removeClass("layui-hide");
 			}
+
+			sTableData = json.bean.goods;
+			initSealNameHtml();
 		}});
 
 		//初始化印章名称
 		function initSealNameHtml() {
 			AjaxPostUtil.request({url: flowableBasePath + "sealrevert008", params: {}, type: 'json', callback: function(json) {
-				if(json.returnCode == 0) {
-					nameHtml = getDataUseHandlebars(selOption, json); //加载名称数据
-					matchingLanguage();
-					form.render();
-					//名称选择事件
-					form.on('select(selectSealIdProperty)', function(data) {
-						var thisRowNum = data.elem.id.replace("sealId", "");
-						var thisRowValue = data.value;
-					});
-					//加载表格数据
-					initTableAssetList();
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				nameHtml = getDataUseHandlebars(selOption, json); //加载名称数据
+				matchingLanguage();
+				form.render();
+				//名称选择事件
+				form.on('select(selectSealIdProperty)', function(data) {
+					var thisRowNum = data.elem.id.replace("sealId", "");
+					var thisRowValue = data.value;
+				});
+				//加载表格数据
+				initTableAssetList();
 			}});
 		}
 
@@ -123,12 +115,8 @@ layui.config({
 				approvalId: approvalId,
 			};
 			AjaxPostUtil.request({url: flowableBasePath + "sealrevert005", params: params, type: 'json', callback: function(json) {
-				if(json.returnCode == 0) {
-					parent.layer.close(index);
-					parent.refreshCode = '0';
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				parent.layer.close(index);
+				parent.refreshCode = '0';
 			}});
 		}
 		

@@ -158,19 +158,14 @@ layui.config({
 
               	form.on('select(selectParent)', function(data){
               		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function (json) {
-            			if (json.returnCode == 0) {
-            				htmlModelContent.setValue(json.bean.htmlContent);
-            				jsModelContent.setValue(json.bean.jsContent);
-            				htmlContent.setValue(json.bean.htmlContent);
-            				jsContent.setValue(json.bean.jsContent);
-            			} else {
-            				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            			}
+						htmlModelContent.setValue(json.bean.htmlContent);
+						jsModelContent.setValue(json.bean.jsContent);
+						htmlContent.setValue(json.bean.htmlContent);
+						jsContent.setValue(json.bean.jsContent);
             		}});
 				});
 		 		
 		 		form.on('submit(formEditBean)', function (data) {
-			    	
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
 		        			title:$("#title").val(),
@@ -196,12 +191,8 @@ layui.config({
 			        	}
 			        	
 			        	AjaxPostUtil.request({url: reqBasePath + "rmproperty005", params: params, type: 'json', callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			parent.layer.close(index);
-				 	        	parent.refreshCode = '0';
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 			 	   		}});
 			        }
 			        return false;

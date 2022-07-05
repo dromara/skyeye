@@ -11,18 +11,14 @@ layui.config({
         var $ = layui.$;
         
         AjaxPostUtil.request({url: flowableBasePath + "erpbom003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
-            if (json.returnCode == 0) {
-                $("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
-            	$.fn.zTree.init($("#treeDemo"), setting, json.bean.bomMaterialList);
-				loadTr();
-				$.each(json.bean.bomMaterialList, function(i, item){
-					$("#allPrice" + item.productId).html(parseInt(item.needNum) * parseFloat(item.unitPrice));
-				});
-				matchingLanguage();
-				form.render();
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+			$("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
+			$.fn.zTree.init($("#treeDemo"), setting, json.bean.bomMaterialList);
+			loadTr();
+			$.each(json.bean.bomMaterialList, function(i, item){
+				$("#allPrice" + item.productId).html(parseInt(item.needNum) * parseFloat(item.unitPrice));
+			});
+			matchingLanguage();
+			form.render();
         }});
         
         /********* tree 处理   start *************/

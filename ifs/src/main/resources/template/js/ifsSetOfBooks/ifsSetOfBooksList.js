@@ -13,15 +13,9 @@ layui.config({
         laydate = layui.laydate,
         table = layui.table;
 
-    laydate.render({
-        elem: '#startTime',
-        range: '~'
-    });
+    laydate.render({elem: '#startTime', range: '~'});
 
-    laydate.render({
-        elem: '#endTime',
-        range: '~'
-    });
+    laydate.render({elem: '#endTime', range: '~'});
 
     authBtn('1637982972958');
 
@@ -93,12 +87,8 @@ layui.config({
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "ifssetofbooks005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
-                if (json.returnCode == 0) {
-                    winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                    loadTable();
-                } else {
-                    winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                }
+                winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+                loadTable();
             }});
         });
     }

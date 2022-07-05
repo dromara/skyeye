@@ -136,17 +136,13 @@ layui.config({
  	    function loadChildJob(){
  	    	var params = {pId: parentId, departmentId: $("#departmentId").val(), rowId: ""};
  	    	AjaxPostUtil.request({url: reqBasePath + "companyjob008", params: params, method: "POST", type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				var str = '<dd style="margin-left: ' + (leftMargin * $("#pIdBox").children("dd").length) + 'px"><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
-	 	   			for(var i = 0; i < json.rows.length; i++){
-	 	   				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
-	 	   			}
-	 	   			str += '</select></dd>';
-	 	   			$("#pIdBox").append(str);
-	 	   			form.render('select');
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				var str = '<dd style="margin-left: ' + (leftMargin * $("#pIdBox").children("dd").length) + 'px"><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
+				for(var i = 0; i < json.rows.length; i++){
+					str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
+				}
+				str += '</select></dd>';
+				$("#pIdBox").append(str);
+				form.render('select');
  	   		}});
  	    }
 	    

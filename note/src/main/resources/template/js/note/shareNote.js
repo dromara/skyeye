@@ -35,47 +35,43 @@ layui.config({
 	
 	function loadNote(){
 		AjaxPostUtil.request({url: reqBasePath + "mynote013", params: {rowId: rowId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				$("#noteTile").html(json.bean.title);
-				$("#createName").html(json.bean.createName);
-				$("#createTime").html(json.bean.createTime);
-				var type = json.bean.type;
-				if(type == 1){
-					// 如果是富文本编辑器类型，则加载富文本编辑器
-					$("#content").html(json.bean.content);
-				} else if(type == 2){
-					// MarkDown编辑器类型
-					editormd.markdownToHTML("content",{markdown: json.bean.content});
-				} else if(type == 3){
-					
-				} else if(type == 4){
-					$(".share-file-content").css({
-						'width': '98%',
-						'margin-left': '1%'
-					});
-					$("#content").html('<div id="luckysheet" style="margin:0px;padding:0px;position:absolute;width:100%;height:100%;left: 0px;top: 0px;"></div>');
-					// excel编辑器类型
-					var param = {
-						container: 'luckysheet',
-						showtoolbar: false,
-						allowEdit: false,
-						showConfigWindowResize: false, // 图表和数据透视表的配置会在右侧弹出，设置弹出后表格是否会自动缩进
-						showinfobar: false, // 是否显示顶部名称栏
-						enableAddRow: false,
-						enableAddCol: false,
-						lang: 'zh'
-					};
-					if(!isNull(json.bean.content)){
-						param["data"] = JSON.parse(json.bean.content);
-					}
-					luckysheet.create(param);
-					$("#luckysheet-sheets-add").remove();
+			$("#noteTile").html(json.bean.title);
+			$("#createName").html(json.bean.createName);
+			$("#createTime").html(json.bean.createTime);
+			var type = json.bean.type;
+			if(type == 1){
+				// 如果是富文本编辑器类型，则加载富文本编辑器
+				$("#content").html(json.bean.content);
+			} else if(type == 2){
+				// MarkDown编辑器类型
+				editormd.markdownToHTML("content",{markdown: json.bean.content});
+			} else if(type == 3){
+
+			} else if(type == 4){
+				$(".share-file-content").css({
+					'width': '98%',
+					'margin-left': '1%'
+				});
+				$("#content").html('<div id="luckysheet" style="margin:0px;padding:0px;position:absolute;width:100%;height:100%;left: 0px;top: 0px;"></div>');
+				// excel编辑器类型
+				var param = {
+					container: 'luckysheet',
+					showtoolbar: false,
+					allowEdit: false,
+					showConfigWindowResize: false, // 图表和数据透视表的配置会在右侧弹出，设置弹出后表格是否会自动缩进
+					showinfobar: false, // 是否显示顶部名称栏
+					enableAddRow: false,
+					enableAddCol: false,
+					lang: 'zh'
+				};
+				if(!isNull(json.bean.content)){
+					param["data"] = JSON.parse(json.bean.content);
 				}
-				loadPicImgClick();
-				matchingLanguage();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+				luckysheet.create(param);
+				$("#luckysheet-sheets-add").remove();
+			}
+			loadPicImgClick();
+			matchingLanguage();
    		}});
 	}
 

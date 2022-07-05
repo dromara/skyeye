@@ -38,35 +38,23 @@ layui.config({
 				    $('.bgPicItem').on('click', function () {
 				    	var bgSrc = $(this).attr('picUrl');
 				        AjaxPostUtil.request({url: reqBasePath + "sys025", params: {winBgPicUrl: bgSrc}, type: 'json', method: "PUT", callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
-						        winui.resetBg(bgSrc);
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
+							winui.resetBg(bgSrc);
 			 	   		}});
 				    });
 				    // 桌面锁屏背景选择
 				    $('.lockBgPicItem').on('click', function () {
 				    	var bgSrc = $(this).attr('picUrl');
 				        AjaxPostUtil.request({url: reqBasePath + "sys026", params: {winLockBgPicUrl: bgSrc}, type: 'json', method: "PUT", callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
-						        winui.resetLockBg(bgSrc);
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
+							winui.resetLockBg(bgSrc);
 			 	   		}});
 				    });
 			 		// 颜色选择
 				    $('.color-choose>div').on('click', function () {
 				        var color = Number($(this)[0].classList[0].replace('theme-color-', ''));
 				        AjaxPostUtil.request({url: reqBasePath + "sys024", params: {themeColor: color}, type: 'json', method: "PUT", callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-			 	   				winui.resetColor(color);
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							winui.resetColor(color);
 			 	   		}});
 				    });
 				    
@@ -122,23 +110,15 @@ layui.config({
 		    	 		winui.window.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
 		    	 			winui.window.close(index);
 	    		            AjaxPostUtil.request({url: reqBasePath + "sysevewinbgpic007", params:{rowId: row.id}, type: 'json', callback: function (json) {
-	    		    			if (json.returnCode == 0) {
-	    		    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-	    		    				refreshGrid("cus-background-choose", {params:{}});
-	    		    			} else {
-	    		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    		    			}
+								winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+								refreshGrid("cus-background-choose", {params:{}});
 	    		    		}});
 	    				});
 	    	 		}, 'click .bgPicItem1':function(index, row){
 				        var bgSrc = row.picUrl;
 				        AjaxPostUtil.request({url: reqBasePath + "sys025", params: {winBgPicUrl: bgSrc}, type: 'json', method: "PUT", callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
-						        winui.resetBg(bgSrc);
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							$('.background-preview').css('background-image', 'url(' + bgSrc + ')');
+							winui.resetBg(bgSrc);
 			 	   		}});
 			 		}
 	    	 	},
@@ -164,23 +144,15 @@ layui.config({
 		    	 		winui.window.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
 		    	 			winui.window.close(index);
 	    		            AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic007", params:{rowId: row.id}, type: 'json', callback: function (json) {
-	    		    			if (json.returnCode == 0) {
-	    		    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-	    		    				refreshGrid("cus-lockscreen-choose", {params:{}});
-	    		    			} else {
-	    		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    		    			}
+								winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+								refreshGrid("cus-lockscreen-choose", {params:{}});
 	    		    		}});
 	    				});
 	    	 		}, 'click .lockBgPicItem1':function(index, row){
 	    	 			var bgSrc = row.picUrl;
 	    	 			AjaxPostUtil.request({url: reqBasePath + "sys026", params:{winLockBgPicUrl: bgSrc}, type: 'json', callback: function (json) {
-			 	   			if (json.returnCode == 0) {
-				 	   			$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
-						        winui.resetLockBg(bgSrc);
-			 	   			} else {
-			 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			 	   			}
+							$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
+							winui.resetLockBg(bgSrc);
 			 	   		}});
 			 		}
 	    	 	},
@@ -198,12 +170,8 @@ layui.config({
 				// 上传完毕回调
 				if (json.returnCode == 0) {
 					AjaxPostUtil.request({url: reqBasePath + "sysevewinbgpic005", params:{picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
-		    			if (json.returnCode == 0) {
-		    				winui.window.msg("上传成功", {icon: 1, time: 2000});
-		    				refreshGrid("cus-background-choose", {params:{}});
-		    			} else {
-		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		    			}
+						winui.window.msg("上传成功", {icon: 1, time: 2000});
+						refreshGrid("cus-background-choose", {params:{}});
 		    		}});
 				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
@@ -224,12 +192,8 @@ layui.config({
 				// 上传完毕回调
 				if (json.returnCode == 0) {
 					AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic005", params:{picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
-		    			if (json.returnCode == 0) {
-		    				winui.window.msg("上传成功", {icon: 1, time: 2000});
-		    				refreshGrid("cus-lockscreen-choose", {params:{}});
-		    			} else {
-		    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		    			}
+						winui.window.msg("上传成功", {icon: 1, time: 2000});
+						refreshGrid("cus-lockscreen-choose", {params:{}});
 		    		}});
 				} else {
 					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
@@ -244,21 +208,13 @@ layui.config({
 	    //任务栏位置
 	    form.on('radio(taskPosition)', function (data) {
 	    	AjaxPostUtil.request({url: reqBasePath + "sys028", params:{winTaskPosition: data.value}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				winui.resetTaskbar(data.value);
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				winui.resetTaskbar(data.value);
  	   		}});
 	    });
 	    //开始菜单尺寸
 	    form.on('radio(startSize)', function (data) {
 	    	AjaxPostUtil.request({url: reqBasePath + "sys027", params:{winStartMenuSize: data.value}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				winui.resetStartSize(data.value);
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				winui.resetStartSize(data.value);
  	   		}});
 	    });
 	    //窗口栏显示
@@ -266,26 +222,22 @@ layui.config({
 	    	var parent$ = window.parent.layui.jquery;
 	    	winuiTaskbarTask = parent$(".winui-taskbar-task");
 	    	AjaxPostUtil.request({url: reqBasePath + "sys030", params:{loadBottomMenuIcon: data.value}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				parent.loadBottomMenuIcon = data.value;
- 	   				if(data.value === '1'){//只显示图标
- 	   					winuiTaskbarTask.each(function () {
-	 	   					$(this).find("li").addClass("task-item-icon-box");
-	 	   					$(this).find(".title-icon-big").show();
-	 	   					$(this).find(".title-icon").hide();
-	 	   					$(this).find("font").hide();
- 	   					});
- 	   				} else {//图标+文字
-	 	   				winuiTaskbarTask.each(function () {
-	 	   					$(this).find("li").removeClass("task-item-icon-box");
-	 	   					$(this).find(".title-icon-big").hide();
-		   					$(this).find(".title-icon").show();
-		   					$(this).find("font").show();
-	 	   				});
- 	   				}
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				parent.loadBottomMenuIcon = data.value;
+				if(data.value === '1'){//只显示图标
+					winuiTaskbarTask.each(function () {
+						$(this).find("li").addClass("task-item-icon-box");
+						$(this).find(".title-icon-big").show();
+						$(this).find(".title-icon").hide();
+						$(this).find("font").hide();
+					});
+				} else {//图标+文字
+					winuiTaskbarTask.each(function () {
+						$(this).find("li").removeClass("task-item-icon-box");
+						$(this).find(".title-icon-big").hide();
+						$(this).find(".title-icon").show();
+						$(this).find("font").show();
+					});
+				}
  	   		}});
 	    });
 	    //雾化开关
@@ -304,11 +256,7 @@ layui.config({
 				winBgPicVagueValue: winBgPicVagueValue
 			};
  			AjaxPostUtil.request({url: reqBasePath + "sys029", params: params, type: 'json', method: "POST", callback: function (json) {
- 	   			if (json.returnCode == 0) {
- 	   				winui.resetVagueBgSrc(winBgPicVague, winBgPicVagueValue);
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				winui.resetVagueBgSrc(winBgPicVague, winBgPicVagueValue);
  	   		}});
  		});
 	});

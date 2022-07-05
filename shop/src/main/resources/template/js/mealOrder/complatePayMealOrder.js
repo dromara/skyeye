@@ -12,12 +12,8 @@ layui.config({
         var orderNum = "";
 
         AjaxPostUtil.request({url: shopBasePath + "mealOrder002", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
-            if (json.returnCode == 0) {
-                orderNum = json.bean.orderNum;
-                $("#payPrice").val(json.bean.unformatPayablePrice);
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            orderNum = json.bean.orderNum;
+            $("#payPrice").val(json.bean.unformatPayablePrice);
         }, async: false});
 
         matchingLanguage();
@@ -30,12 +26,8 @@ layui.config({
                 };
 
                 AjaxPostUtil.request({url: shopBasePath + "mealOrderNotify", params: params, type: 'json', method: "POST", callback: function (json) {
-                    if (json.returnCode == 0) {
-                        parent.layer.close(index);
-                        parent.refreshCode = '0';
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
+                    parent.layer.close(index);
+                    parent.refreshCode = '0';
                 }, async: true});
             }
             return false;

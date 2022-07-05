@@ -24,87 +24,83 @@ layui.config({
     var selOption = getFileContent('tpl/template/select-option.tpl');
 
     AjaxPostUtil.request({url: flowableBasePath + "checkworkcancelleave004", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(mation) {
-        if(mation.returnCode == 0) {
-            $("#useTitle").html(mation.bean.title);
-            $("#useName").html(mation.bean.userName);
-            $("#remark").val(mation.bean.remark);
-            // 附件回显
-            skyeyeEnclosure.initTypeISData({'enclosureUpload': mation.bean.enclosureInfo});
+        $("#useTitle").html(mation.bean.title);
+        $("#useName").html(mation.bean.userName);
+        $("#remark").val(mation.bean.remark);
+        // 附件回显
+        skyeyeEnclosure.initTypeISData({'enclosureUpload': mation.bean.enclosureInfo});
 
-            if(mation.bean.state == '1'){
-                $(".typeTwo").removeClass("layui-hide");
-            } else {
-                $(".typeOne").removeClass("layui-hide");
-            }
-            // 获取当前登陆人的考勤班次
-            checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
-                $.each(json.rows, function (i, item) {
-                    checkWorkTime.push({
-                        id: item.timeId,
-                        name: item.title,
-                        days: item.days,
-                        startTime: item.startTime,
-                        endTime: item.endTime,
-                        restStartTime: item.restStartTime,
-                        restEndTime: item.restEndTime,
-                        type: item.type
-                    });
-                });
-                // 考勤班次变化
-                form.on('select(timeId)', function (data) {
-                    var thisRowNum = data.elem.id.replace("timeId", "");
-                    var thisRowValue = data.value;
-                    $("#cancelDay" + thisRowNum).val("");
-                    $("#cancelStartTime" + thisRowNum).val("");
-                    $("#cancelEndTime" + thisRowNum).val("");
-                    $("#cancelHour" + thisRowNum).html("0");
-                    var timeMation = getInPoingArr(checkWorkTime, "id", thisRowValue);
-                    if (timeMation != null) {
-                        cancelDayElem[thisRowNum].config.chooseDay = timeMation.days;
-                        var min = {
-                            year: getYMDFormatDate().split('-')[0],
-                            month: getYMDFormatDate().split('-')[1] - 1,//关键
-                            date: getYMDFormatDate().split('-')[2],
-                            hours: timeMation.startTime.split(':')[0],
-                            minutes: timeMation.startTime.split(':')[1] - 1,
-                            seconds: '00'
-                        };
-                        var max = {
-                            year: getYMDFormatDate().split('-')[0],
-                            month: getYMDFormatDate().split('-')[1] - 1,//关键
-                            date: getYMDFormatDate().split('-')[2],
-                            hours: timeMation.endTime.split(':')[0],
-                            minutes: timeMation.endTime.split(':')[1] + 1,
-                            seconds: '00'
-                        };
-                        cancelStartElem[thisRowNum].config.min = min;
-                        cancelStartElem[thisRowNum].config.max = max;
-                        cancelEndElem[thisRowNum].config.min = min;
-                        cancelEndElem[thisRowNum].config.max = max;
-                        $("#workTime" + thisRowNum).html(timeMation.startTime + " ~ " + timeMation.endTime);
-                    } else {
-                        cancelDayElem[thisRowNum].config.chooseDay = [];
-                        $("#workTime" + thisRowNum).html("-");
-                    }
-                });
-                $.each(mation.bean.cancelLeaveDay, function(i, item) {
-                    addRow();
-                    $("#timeId" + (rowNum - 1).toString()).val(item.timeId);
-                    $("#workTime" + (rowNum - 1).toString()).html(item.timeStartTime + " ~ " + item.timeEndTime);
-                    $("#cancelDay" + (rowNum - 1).toString()).val(item.cancelDay);
-                    $("#cancelStartTime" + (rowNum - 1).toString()).val(item.cancelStartTime);
-                    $("#cancelEndTime" + (rowNum - 1).toString()).val(item.cancelEndTime);
-                    $("#cancelHour" + (rowNum - 1).toString()).html(item.cancelHour);
-                    $("#remark" + (rowNum - 1).toString()).val(item.remark);
-                    form.render('select');
-                    form.render('checkbox');
-                });
-                form.render();
-                matchingLanguage();
-            });
+        if(mation.bean.state == '1'){
+            $(".typeTwo").removeClass("layui-hide");
         } else {
-            winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+            $(".typeOne").removeClass("layui-hide");
         }
+        // 获取当前登陆人的考勤班次
+        checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {
+            $.each(json.rows, function (i, item) {
+                checkWorkTime.push({
+                    id: item.timeId,
+                    name: item.title,
+                    days: item.days,
+                    startTime: item.startTime,
+                    endTime: item.endTime,
+                    restStartTime: item.restStartTime,
+                    restEndTime: item.restEndTime,
+                    type: item.type
+                });
+            });
+            // 考勤班次变化
+            form.on('select(timeId)', function (data) {
+                var thisRowNum = data.elem.id.replace("timeId", "");
+                var thisRowValue = data.value;
+                $("#cancelDay" + thisRowNum).val("");
+                $("#cancelStartTime" + thisRowNum).val("");
+                $("#cancelEndTime" + thisRowNum).val("");
+                $("#cancelHour" + thisRowNum).html("0");
+                var timeMation = getInPoingArr(checkWorkTime, "id", thisRowValue);
+                if (timeMation != null) {
+                    cancelDayElem[thisRowNum].config.chooseDay = timeMation.days;
+                    var min = {
+                        year: getYMDFormatDate().split('-')[0],
+                        month: getYMDFormatDate().split('-')[1] - 1,//关键
+                        date: getYMDFormatDate().split('-')[2],
+                        hours: timeMation.startTime.split(':')[0],
+                        minutes: timeMation.startTime.split(':')[1] - 1,
+                        seconds: '00'
+                    };
+                    var max = {
+                        year: getYMDFormatDate().split('-')[0],
+                        month: getYMDFormatDate().split('-')[1] - 1,//关键
+                        date: getYMDFormatDate().split('-')[2],
+                        hours: timeMation.endTime.split(':')[0],
+                        minutes: timeMation.endTime.split(':')[1] + 1,
+                        seconds: '00'
+                    };
+                    cancelStartElem[thisRowNum].config.min = min;
+                    cancelStartElem[thisRowNum].config.max = max;
+                    cancelEndElem[thisRowNum].config.min = min;
+                    cancelEndElem[thisRowNum].config.max = max;
+                    $("#workTime" + thisRowNum).html(timeMation.startTime + " ~ " + timeMation.endTime);
+                } else {
+                    cancelDayElem[thisRowNum].config.chooseDay = [];
+                    $("#workTime" + thisRowNum).html("-");
+                }
+            });
+            $.each(mation.bean.cancelLeaveDay, function(i, item) {
+                addRow();
+                $("#timeId" + (rowNum - 1).toString()).val(item.timeId);
+                $("#workTime" + (rowNum - 1).toString()).html(item.timeStartTime + " ~ " + item.timeEndTime);
+                $("#cancelDay" + (rowNum - 1).toString()).val(item.cancelDay);
+                $("#cancelStartTime" + (rowNum - 1).toString()).val(item.cancelStartTime);
+                $("#cancelEndTime" + (rowNum - 1).toString()).val(item.cancelEndTime);
+                $("#cancelHour" + (rowNum - 1).toString()).html(item.cancelHour);
+                $("#remark" + (rowNum - 1).toString()).val(item.remark);
+                form.render('select');
+                form.render('checkbox');
+            });
+            form.render();
+            matchingLanguage();
+        });
     }});
 
     // 保存为草稿
@@ -174,12 +170,8 @@ layui.config({
             approvalId: approvalId,
         };
         AjaxPostUtil.request({url: flowableBasePath + "checkworkcancelleave005", params: params, type: 'json', method: 'PUT',  callback: function(json) {
-            if(json.returnCode == 0) {
-                parent.layer.close(index);
-                parent.refreshCode = '0';
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+            parent.layer.close(index);
+            parent.refreshCode = '0';
         }});
     }
 

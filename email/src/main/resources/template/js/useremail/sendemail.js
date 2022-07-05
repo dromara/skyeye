@@ -23,89 +23,81 @@ layui.config({
 	    if(!isNull(id)){
 	    	// 草稿箱获取数据
 			AjaxPostUtil.request({url: reqBasePath + "useremail014", params:{rowId: id}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					$("#typeName").val(json.bean.title);
-					$("#content").val(json.bean.content);
+				$("#typeName").val(json.bean.title);
+				$("#content").val(json.bean.content);
 
-					// 初始化收件人对象
-					$.each(json.bean.toPeopleList, function(i, item){
-						toPeopleList.push(item.email);
-					});
+				// 初始化收件人对象
+				$.each(json.bean.toPeopleList, function(i, item){
+					toPeopleList.push(item.email);
+				});
 
-					// 初始化抄送人对象
-					$.each(json.bean.toCcList, function(i, item){
-						toCcList.push(item.email);
-					});
+				// 初始化抄送人对象
+				$.each(json.bean.toCcList, function(i, item){
+					toCcList.push(item.email);
+				});
 
-					// 初始化暗送人对象
-					$.each(json.bean.toBccList, function(i, item){
-						toBccList.push(item.email);
-					});
+				// 初始化暗送人对象
+				$.each(json.bean.toBccList, function(i, item){
+					toBccList.push(item.email);
+				});
 
 
-					$.each(json.bean.emailEnclosureList, function(i, item){
-						if(!isNull(item.sysEnclosureId)){
-							enclosureList.push({
-								id: item.sysEnclosureId,
-								name: item.fileName,
-								fileAddress: item.fileAddress
-							});
-						} else {
-							emailEnclosureList.push({
-								id: item.id,
-								name: item.fileName,
-								fileAddress: item.fileAddress
-							});
-						}
-					});
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				$.each(json.bean.emailEnclosureList, function(i, item){
+					if(!isNull(item.sysEnclosureId)){
+						enclosureList.push({
+							id: item.sysEnclosureId,
+							name: item.fileName,
+							fileAddress: item.fileAddress
+						});
+					} else {
+						emailEnclosureList.push({
+							id: item.id,
+							name: item.fileName,
+							fileAddress: item.fileAddress
+						});
+					}
+				});
 			}, async: false});
 		}
 
 		if(!isNull(forwardId)){
 			// 邮件回复获取数据
 			AjaxPostUtil.request({url: reqBasePath + "useremail017", params:{rowId: forwardId}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					$("#typeName").val(json.bean.title);
-					var emailContentHeadStr = getContentHead(json.bean.fromPeople, json.bean.sendDate, json.bean.toPeople, json.bean.toCc, json.bean.toBcc, json.bean.title);
-					$("#content").val(emailContentHeadStr + json.bean.content);
+				$("#typeName").val(json.bean.title);
+				var emailContentHeadStr = getContentHead(json.bean.fromPeople, json.bean.sendDate, json.bean.toPeople, json.bean.toCc, json.bean.toBcc, json.bean.title);
+				$("#content").val(emailContentHeadStr + json.bean.content);
 
-					// 初始化收件人对象
-					$.each(json.bean.toPeopleList, function(i, item){
-						toPeopleList.push(item.email);
-					});
+				// 初始化收件人对象
+				$.each(json.bean.toPeopleList, function(i, item){
+					toPeopleList.push(item.email);
+				});
 
-					// 初始化抄送人对象
-					$.each(json.bean.toCcList, function(i, item){
-						toCcList.push(item.email);
-					});
+				// 初始化抄送人对象
+				$.each(json.bean.toCcList, function(i, item){
+					toCcList.push(item.email);
+				});
 
-					// 初始化暗送人对象
-					$.each(json.bean.toBccList, function(i, item){
-						toBccList.push(item.email);
-					});
+				// 初始化暗送人对象
+				$.each(json.bean.toBccList, function(i, item){
+					toBccList.push(item.email);
+				});
 
 
-					$.each(json.bean.emailEnclosureList, function(i, item){
-						if(!isNull(item.sysEnclosureId)){
-							enclosureList.push({
-								id: item.sysEnclosureId,
-								name: item.fileName,
-								fileAddress: item.fileAddress
-							});
-						} else {
-							emailEnclosureList.push({
-								id: item.id,
-								name: item.fileName,
-								fileAddress: item.fileAddress
-							});
-						}
-					});
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				}
+				$.each(json.bean.emailEnclosureList, function(i, item){
+					if(!isNull(item.sysEnclosureId)){
+						enclosureList.push({
+							id: item.sysEnclosureId,
+							name: item.fileName,
+							fileAddress: item.fileAddress
+						});
+					} else {
+						emailEnclosureList.push({
+							id: item.id,
+							name: item.fileName,
+							fileAddress: item.fileAddress
+						});
+					}
+				});
 			}, async: false});
 		}
 	    
@@ -240,16 +232,12 @@ layui.config({
 					emailEnclosureList: JSON.stringify(emailEnclosureList)
 			   	};
 			   	AjaxPostUtil.request({url: reqBasePath + url, params: params, type: 'json', callback: function (json) {
-				   	if (json.returnCode == 0) {
-				   		if(url == "useremail013" || url == "useremail015"){
-							winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-						} else {
-							winui.window.msg('发送成功', {icon: 1, time: 2000});
-							location.href = "../../tpl/useremail/sendsuccess.html";
-						}
-				   	} else {
-					   	winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				   	}
+					if(url == "useremail013" || url == "useremail015"){
+						winui.window.msg(systemLanguage["com.skyeye.addOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+					} else {
+						winui.window.msg('发送成功', {icon: 1, time: 2000});
+						location.href = "../../tpl/useremail/sendsuccess.html";
+					}
 			   	}});
 		   	}
 	   	}

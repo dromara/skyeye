@@ -14,27 +14,23 @@ layui.config({
         var $ = layui.$;
         
         AjaxPostUtil.request({url: flowableBasePath + "erpproduction006", params: {orderId: parent.rowId}, type: 'json', callback: function (json) {
-            if (json.returnCode == 0) {
-            	json.bean.stateName = getStateName(json.bean);
-            	$.each(json.bean.procedureMationList, function(i, item){
-            		if(item.state == 1){
-            			item.stateName = "<span class='state-down'>待下达</span>";
-            		}else if(item.state == 2){
-            			item.stateName = "<span class='state-up'>已下达</span>"
-            		}
-            	});
-            	
-            	$.each(json.bean.childList, function(i, item){
-            		item.needsNum = parseInt(item.needNum) * parseInt(json.bean.number);
-            	});
-                $("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
+			json.bean.stateName = getStateName(json.bean);
+			$.each(json.bean.procedureMationList, function(i, item){
+				if(item.state == 1){
+					item.stateName = "<span class='state-down'>待下达</span>";
+				}else if(item.state == 2){
+					item.stateName = "<span class='state-up'>已下达</span>"
+				}
+			});
 
-				$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=2");
-                matchingLanguage();
-				form.render();
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+			$.each(json.bean.childList, function(i, item){
+				item.needsNum = parseInt(item.needNum) * parseInt(json.bean.number);
+			});
+			$("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
+
+			$("#contentIframe").attr("src", "../../tpl/erpcommon/erpOrderFlowLine.html?rowId=" + json.bean.id + "&type=2");
+			matchingLanguage();
+			form.render();
         }});
         
         function getStateName(d){

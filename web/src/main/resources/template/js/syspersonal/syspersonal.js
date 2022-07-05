@@ -27,13 +27,9 @@ layui.config({
 	// 加载我的其他信息
 	function loadMyOtherMation(){
 		AjaxPostUtil.request({url: reqBasePath + "sys032", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				$(".layadmin-homepage-pad-hor").find("mdall").html(json.bean.userSign);
-				// 加载我的论坛
-				loadMyForum();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			$(".layadmin-homepage-pad-hor").find("mdall").html(json.bean.userSign);
+			// 加载我的论坛
+			loadMyForum();
 		}});
 	}
 	
@@ -47,14 +43,10 @@ layui.config({
 			done: function(page, next) {
 				var lis = [];
 				AjaxPostUtil.request({url: reqBasePath + "forumcontent001", params:{page: page, limit: 15}, type: 'json', callback: function (json) {
-		   			if (json.returnCode == 0) {
-						lis.push(getDataUseHandlebars(forumTemplate, json));
-						next(lis.join(''), (page * 15) < json.total);
-						matchingLanguage();
-						loadMyForumTag(json);
-		   			} else {
-		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		   			}
+					lis.push(getDataUseHandlebars(forumTemplate, json));
+					next(lis.join(''), (page * 15) < json.total);
+					matchingLanguage();
+					loadMyForumTag(json);
 		   		}});
 			}
 		});

@@ -22,20 +22,10 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		// 事故时间
-		 		laydate.render({ 
-		 		  elem: '#accidentTime',
-		 		  type: 'date',
-		 		  max: getYMDFormatDate(),// 设置最大可选的日期
-		 	 	  trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#accidentTime', type: 'date', max: getYMDFormatDate(), trigger: 'click'});
 		 		
 		 		// 送修时间段选择
-				laydate.render({
-					elem: '#repairTime',
-					type: 'date',
-					range: true,
-					trigger: 'click'
-				});
+				laydate.render({elem: '#repairTime', type: 'date', range: true, trigger: 'click'});
 
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
@@ -69,12 +59,8 @@ layui.config({
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	 	 	        	};
 	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "accident005", params: params, type: 'json', callback: function (json) {
-	 		 	   			if (json.returnCode == 0) {
-	 			 	   			parent.layer.close(index);
-	 			 	        	parent.refreshCode = '0';
-	 		 	   			} else {
-	 		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	 		 	   			}
+							parent.layer.close(index);
+							parent.refreshCode = '0';
 	 		 	   		}});
 		 	        }
 		 	        return false;

@@ -12,7 +12,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'eleTree', 'soulTable'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -25,23 +24,18 @@ layui.config({
 	//初始化仓库
 	function initDepotHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "storehouse009", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				//加载仓库数据
-				$("#depotId").html(getDataUseHandlebars(selOption, json)); 
-				form.render();
-				if(json.rows.length > 0){
-					initTable();
-				} else {
-					winui.window.msg("您还未分配仓库，请联系管理员分配.", {icon: 2, time: 2000});
-				}
+			//加载仓库数据
+			$("#depotId").html(getDataUseHandlebars(selOption, json));
+			form.render();
+			if(json.rows.length > 0){
+				initTable();
 			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				winui.window.msg("您还未分配仓库，请联系管理员分配.", {icon: 2, time: 2000});
 			}
 		}});
 	}
 	
 	function initTable(){
-		
 		table.render({
 		    id: 'messageTable',
 	        elem: '#messageTable',
@@ -117,11 +111,7 @@ layui.config({
 	    				depotId: data.depotId
 	    			};
 	    			AjaxPostUtil.request({url: flowableBasePath + "erpstockinventory001", params: params, type: 'json', callback: function(json) {
-						if(json.returnCode == 0) {
-							winui.window.msg("盘点成功", {icon: 1, time: 2000});
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						winui.window.msg("盘点成功", {icon: 1, time: 2000});
 					}});
 	    		} else {
 	    			winui.window.msg("请填写盘点数量.", {icon: 2, time: 2000});

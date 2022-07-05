@@ -173,16 +173,12 @@ layui.config({
 		//根据生产计划单id获取该单据下的所有外购商品以及剩余数量
 		//chooseType：根据生产计划单选择工序时，加工单需要回显自产和外购两种类型的商品
 		AjaxPostUtil.request({url: flowableBasePath + "erpproduction010", params: {orderId: chooseMation.id, chooseType: "2"}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				chooseMation.norms = [].concat(json.rows);
-				chooseMation.procedureList = procedureList[chooseIndex].procedureArray;
-				parent.productionMation = chooseMation;
-				
-				parent.refreshCode = '0';
-				parent.layer.close(index);
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			chooseMation.norms = [].concat(json.rows);
+			chooseMation.procedureList = procedureList[chooseIndex].procedureArray;
+			parent.productionMation = chooseMation;
+
+			parent.refreshCode = '0';
+			parent.layer.close(index);
 		}});
 	});
 	

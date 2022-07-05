@@ -207,17 +207,13 @@ layui.config({
 				var quId = quBody.find("input[name='quId']").val();
 				if(!isNull(quId)){
 					AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory015", params:{quId: quId}, type: 'json', callback: function (json) {
-		 	   			if (json.returnCode == 0) {
-		 	   				quBody.hide("slow", function() {
-		 	   					$(this).parent().remove();
-		 	   					//重置序号
-								resetQuItem();
-								//重置左侧设计目录序号
-								resetQuLeftItem();
-		 	   				});
-		 	   			} else {
-		 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		 	   			}
+						quBody.hide("slow", function() {
+							$(this).parent().remove();
+							//重置序号
+							resetQuItem();
+							//重置左侧设计目录序号
+							resetQuLeftItem();
+						});
 		 	   		}});
 				} else {
 					quBody.hide("slow", function() {

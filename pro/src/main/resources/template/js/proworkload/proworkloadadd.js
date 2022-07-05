@@ -47,12 +47,8 @@ layui.config({
 					}
 					//获取我的任务
 					AjaxPostUtil.request({url: flowableBasePath + "protask015", params: {proId: item.id}, type: 'json', method: "POST", callback: function(json) {
-						if(json.returnCode == 0) {
-							taskListHtml = getDataUseHandlebars(selOption, json);
-							resetTableTask();
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						taskListHtml = getDataUseHandlebars(selOption, json);
+						resetTableTask();
 					}});
 					return false;
 				}
@@ -203,12 +199,8 @@ layui.config({
 			approvalId: approvalId
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "proworkload002", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

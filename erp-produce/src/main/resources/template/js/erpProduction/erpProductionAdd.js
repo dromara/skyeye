@@ -50,16 +50,12 @@ layui.config({
 	    //加载bom方案列表
 	    function loadBomList(normsId){
 	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom007", params: {normsId: normsId}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
-	 	   			$("#bomList").html(getDataUseHandlebars(selTemplate, json));
-	 	   			form.render("select");
-	 	   			//加载bom方案下的子件列表
-	 	   			if(json.rows.length > 0){
-	 	   				loadBomChildProList(json.rows[0].id);
-	 	   			}
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				$("#bomList").html(getDataUseHandlebars(selTemplate, json));
+				form.render("select");
+				//加载bom方案下的子件列表
+				if(json.rows.length > 0){
+					loadBomChildProList(json.rows[0].id);
+				}
  	   		}});
 	    }
 	    
@@ -73,14 +69,10 @@ layui.config({
 	    //加载bom方案下的子件列表
 	    function loadBomChildProList(bomId){
 	    	AjaxPostUtil.request({url: flowableBasePath + "erpbom008", params: {bomId: bomId}, type: 'json', callback: function (json) {
- 	   			if (json.returnCode == 0) {
-	 	   			childProList = [].concat(json.rows);
-	 	   			$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
- 	   				//加载建议采购数量
- 	   				loadChildProPosal();
- 	   			} else {
- 	   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	   			}
+				childProList = [].concat(json.rows);
+				$("#tBody").html(getDataUseHandlebars($("#tableBody").html(), {rows: childProList}));
+				//加载建议采购数量
+				loadChildProPosal();
  	   		}});
 	    }
 	    
@@ -180,12 +172,8 @@ layui.config({
 				area: ['90vw', '90vh'],
 				callBack: function(refreshCode){
 					AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function (json) {
-						if (json.returnCode == 0) {
-							procedureMationList = [].concat(json.bean.procedureList);
-							loadProcedureMation();
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						procedureMationList = [].concat(json.bean.procedureList);
+						loadProcedureMation();
 					}});
 				}});
 		});

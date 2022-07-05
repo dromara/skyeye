@@ -15,38 +15,34 @@ layui.config({
 			executorId = parent.executorId;
 		}
 	    AjaxPostUtil.request({url: reqBasePath + "sysworkplan011", params:{planId: parent.rowId, executorId: executorId}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-				$("#showForm").html(getDataUseHandlebars($("#beanTemplate").html(), json));
-   			    // 计划周期名称展示
-   			    $("#nowCheckTypeBox").html(getNowCheckTypeName(json.bean.planCycle));
-   			    // 定时通知
-   			    if(json.bean.whetherTime === '是'){//是
-		        	$("#notifyTimeBox").removeClass("layui-hide");
-		        	$("#notifyTime").html(json.bean.notifyTime);
-		        }
-   			    // 计划执行人
-   			    var carryPeopleName = [];
-   			    $.each(json.bean.executors, function(i, item){
-			    	carryPeopleName.push(item.userName);
-			    });
-   			    $("#carryPeople").html(carryPeopleName.toString());
-   		        
-   		        var str = "";
-   		        $.each([].concat(json.bean.enclosures), function(i, item){
-   		        	str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-   		        });
-   		        $("#enclosureUploadBtn").html(str);
+			$("#showForm").html(getDataUseHandlebars($("#beanTemplate").html(), json));
+			// 计划周期名称展示
+			$("#nowCheckTypeBox").html(getNowCheckTypeName(json.bean.planCycle));
+			// 定时通知
+			if(json.bean.whetherTime === '是'){//是
+				$("#notifyTimeBox").removeClass("layui-hide");
+				$("#notifyTime").html(json.bean.notifyTime);
+			}
+			// 计划执行人
+			var carryPeopleName = [];
+			$.each(json.bean.executors, function(i, item){
+				carryPeopleName.push(item.userName);
+			});
+			$("#carryPeople").html(carryPeopleName.toString());
 
-   		        // 执行情况
-				if(!isNull(executorId)){
-					$(".myExecutor").removeClass("layui-hide");
-					$("#state").html(getWorkPlanStateNameExecutor(json.bean));
-				}
-   			    matchingLanguage();
-   				form.render();
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			var str = "";
+			$.each([].concat(json.bean.enclosures), function(i, item){
+				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
+			});
+			$("#enclosureUploadBtn").html(str);
+
+			// 执行情况
+			if(!isNull(executorId)){
+				$(".myExecutor").removeClass("layui-hide");
+				$("#state").html(getWorkPlanStateNameExecutor(json.bean));
+			}
+			matchingLanguage();
+			form.render();
    		}});
 
 	    function getWorkPlanStateNameExecutor(d){

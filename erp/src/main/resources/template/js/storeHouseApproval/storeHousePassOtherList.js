@@ -26,17 +26,13 @@ layui.config({
 	//初始化仓库
 	function initDepotHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "storehouse009", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				//加载仓库数据
-				$("#depotId").html(getDataUseHandlebars(selOption, json)); 
-				form.render();
-				if(json.rows.length > 0){
-					initTable();
-				} else {
-					winui.window.msg("您还未分配仓库，请联系管理员分配.", {icon: 2, time: 2000});
-				}
+			//加载仓库数据
+			$("#depotId").html(getDataUseHandlebars(selOption, json));
+			form.render();
+			if(json.rows.length > 0){
+				initTable();
 			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				winui.window.msg("您还未分配仓库，请联系管理员分配.", {icon: 2, time: 2000});
 			}
 		}});
 	}

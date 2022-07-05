@@ -24,31 +24,27 @@ layui.config({
 	    var selTemplate = getFileContent('tpl/template/select-option-must.tpl');
 	    
 	    AjaxPostUtil.request({url: flowableBasePath + "erpbom005", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
-            if (json.returnCode == 0) {
-                $("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
-            	textool.init({eleId: 'remark', maxlength: 200});
-			    
-			    //初始化父件商品信息
-				erpOrderUtil.chooseProductMation = {
-			    	productId: json.bean.productId,
-			    	productName: json.bean.productName,
-			    	productModel: json.bean.productModel,
-			    	unitList: json.bean.unitList
-			    };
-			    
-			    //初始化规格单位
-			    $("#unitList").val(json.bean.normsId);
-			    
-			    //加载树表格信息
-                ztreeNode = json.bean.bomMaterialList;
-            	$.fn.zTree.init($("#treeDemo"), setting, ztreeNode);
-				loadTr();
-				
-				matchingLanguage();
-				form.render();
-            } else {
-                winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-            }
+			$("#showForm").html(getDataUseHandlebars($("#mainHtml").html(), json));
+			textool.init({eleId: 'remark', maxlength: 200});
+
+			//初始化父件商品信息
+			erpOrderUtil.chooseProductMation = {
+				productId: json.bean.productId,
+				productName: json.bean.productName,
+				productModel: json.bean.productModel,
+				unitList: json.bean.unitList
+			};
+
+			//初始化规格单位
+			$("#unitList").val(json.bean.normsId);
+
+			//加载树表格信息
+			ztreeNode = json.bean.bomMaterialList;
+			$.fn.zTree.init($("#treeDemo"), setting, ztreeNode);
+			loadTr();
+
+			matchingLanguage();
+			form.render();
         }});
 	    
         form.on('submit(formEditBean)', function (data) {
@@ -92,12 +88,8 @@ layui.config({
                 };
                 
                 AjaxPostUtil.request({url: flowableBasePath + "erpbom006", params: params, type: 'json', method: "PUT", callback: function (json) {
-                    if (json.returnCode == 0) {
-                        parent.layer.close(index);
-                        parent.refreshCode = '0';
-                    } else {
-                        winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-                    }
+					parent.layer.close(index);
+					parent.refreshCode = '0';
                 }});
             }
             return false;
