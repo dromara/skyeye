@@ -54,12 +54,8 @@ layui.config({
 		layer.confirm("取消分享链接将失效，确定不分享了吗？", { icon: 3, title: '系统提示', btn: ['取消分享','我再想想'] }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "fileconsole018", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("取消外链分享成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("取消外链分享成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}

@@ -128,14 +128,10 @@ layui.config({
       	
       	form.on('select(selectParent)', function(data){
       		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				htmlModelContent.setValue(json.bean.htmlContent);
-    				jsModelContent.setValue(json.bean.jsContent);
-    				htmlContent.setValue(json.bean.htmlContent);
-    				jsContent.setValue(json.bean.jsContent);
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				htmlModelContent.setValue(json.bean.htmlContent);
+				jsModelContent.setValue(json.bean.jsContent);
+				htmlContent.setValue(json.bean.htmlContent);
+				jsContent.setValue(json.bean.jsContent);
     		}});
 		});
 		

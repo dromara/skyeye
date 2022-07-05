@@ -20,7 +20,6 @@ layui.config({
 	    matchingLanguage();
  		form.render();
  	    form.on('submit(formAddBean)', function (data) {
- 	    	
  	        if (winui.verifyForm(data.elem)) {
  	        	//获取填写副单位
 				var rowTr = $("#useTable tr");
@@ -40,12 +39,8 @@ layui.config({
 	 	        	unitNameStr: JSON.stringify(tableData)
  	        	};
  	        	AjaxPostUtil.request({url: flowableBasePath + "materialunit002", params: params, type: 'json', callback: function (json) {
- 	        		if (json.returnCode == 0) {
- 	        			parent.layer.close(index);
- 	        			parent.refreshCode = '0';
- 	        		} else {
- 	        			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
- 	        		}
+					parent.layer.close(index);
+					parent.refreshCode = '0';
  	        	}});
  	        }
  	        return false;

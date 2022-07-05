@@ -112,21 +112,13 @@ layui.config({
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
 				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params:{processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
-		   			if (json.returnCode == 0) {
-		   				var jsonStr = "";//实体json对象
-		   				$.each(json.rows, function(index, bean) {
-	   						bean.showClass = 'date02';
-		   					jsonStr = {
-	   							bean: bean
-	   						};
-							lis.push(getDataUseHandlebars(timeTreeApprovalHistory, jsonStr));
-						});
-		   				//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-						//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-						next(lis.join(''), (page * 1000) < json.total);
-		   			} else {
-		   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-		   			}
+					$.each(json.rows, function(index, bean) {
+						bean.showClass = 'date02';
+						lis.push(getDataUseHandlebars(timeTreeApprovalHistory, {bean: bean}));
+					});
+					//执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
+					//pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
+					next(lis.join(''), (page * 1000) < json.total);
 		   		}});
 			}
 		});

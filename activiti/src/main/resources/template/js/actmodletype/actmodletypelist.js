@@ -23,18 +23,14 @@ layui.config({
 	function showLeft(){
 		var modleTypeTemplate = $('#modleTypeTemplate').html();
 	    AjaxPostUtil.request({url:flowableBasePath + "actmodletype002", params: {}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				var str = getDataUseHandlebars(modleTypeTemplate, json);
-				$("#setting").html(str);
-				if(json.rows.length > 0){
-					clickId = json.rows[0].id;
-					$("#setting").find("a[rowid='" + clickId + "']").addClass('selected');
-				}
-	 			showList();//展示申请类型对应的申请类型实体列表
-	 			initRightMenu();//初始化右键
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			var str = getDataUseHandlebars(modleTypeTemplate, json);
+			$("#setting").html(str);
+			if(json.rows.length > 0){
+				clickId = json.rows[0].id;
+				$("#setting").find("a[rowid='" + clickId + "']").addClass('selected');
 			}
+			showList();//展示申请类型对应的申请类型实体列表
+			initRightMenu();//初始化右键
 		}});
 	}
 	
@@ -101,11 +97,7 @@ layui.config({
 			    		if(!isNull(value)){
 			    			if(html != value){
 				    			AjaxPostUtil.request({url:flowableBasePath + "actmodletype004", params: {rowId: clickId, title: value}, type: 'json', callback: function (json) {
-				    	   			if (json.returnCode == 0) {
-				    	   				obj.find("a[rowid='" + clickId + "']").find("span").html(value);
-				    	   			} else {
-				    					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				    				}
+									obj.find("a[rowid='" + clickId + "']").find("span").html(value);
 				    	   		}});
 			    			} else {
 			    				obj.find("a[rowid='" + clickId + "']").find("span").html(html);
@@ -138,18 +130,14 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
 	        AjaxPostUtil.request({url:flowableBasePath + "actmodletype005", params:{rowId: clickId}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-					$("#setting").find("a[rowid='" + clickId + "']").remove();
-					var _obj = $("#setting").find("a[class='setting-a']");
-					if(_obj.length > 0){
-						_obj.eq(0).click();
-					} else {
-						clickId = "";
-						loadTable();
-					}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				$("#setting").find("a[rowid='" + clickId + "']").remove();
+				var _obj = $("#setting").find("a[class='setting-a']");
+				if(_obj.length > 0){
+					_obj.eq(0).click();
 				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+					clickId = "";
+					loadTable();
 				}
 			}});
 		});
@@ -161,13 +149,9 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '上线申请类型实体' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:flowableBasePath + "actmodletype015", params:{rowId: clickId}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				$("#setting").find("a[rowid='" + clickId + "']").find("div").remove();
-					$("#setting").find("a[rowid='" + clickId + "']").find("span").after('<div class="up-state-point"></div>');
-    				winui.window.msg("上线成功", {icon: 1, time: 2000});
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				$("#setting").find("a[rowid='" + clickId + "']").find("div").remove();
+				$("#setting").find("a[rowid='" + clickId + "']").find("span").after('<div class="up-state-point"></div>');
+				winui.window.msg("上线成功", {icon: 1, time: 2000});
     		}});
 		});
 	}
@@ -178,13 +162,9 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '下线申请类型实体' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:flowableBasePath + "actmodletype016", params:{rowId: clickId}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				$("#setting").find("a[rowid='" + clickId + "']").find("div").remove();
-					$("#setting").find("a[rowid='" + clickId + "']").find("span").after('<div class="down-state-point"></div>');
-    				winui.window.msg("下线成功", {icon: 1, time: 2000});
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				$("#setting").find("a[rowid='" + clickId + "']").find("div").remove();
+				$("#setting").find("a[rowid='" + clickId + "']").find("span").after('<div class="down-state-point"></div>');
+				winui.window.msg("下线成功", {icon: 1, time: 2000});
     		}});
 		});
 	}
@@ -192,28 +172,20 @@ layui.config({
 	//上移申请类型
 	function upMoveModleType(){
         AjaxPostUtil.request({url:flowableBasePath + "actmodletype017", params:{rowId: clickId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				var a = $("#setting").find("a[rowid='" + clickId + "']").prev();
-				$("#setting").find(a).remove();
-				$("#setting").find("a[rowid='" + clickId + "']").after(a);
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			var a = $("#setting").find("a[rowid='" + clickId + "']").prev();
+			$("#setting").find(a).remove();
+			$("#setting").find("a[rowid='" + clickId + "']").after(a);
 		}});
 	}
 	
 	//下移申请类型
 	function downMoveModleType(){
         AjaxPostUtil.request({url:flowableBasePath + "actmodletype018", params:{rowId: clickId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				var a = $("#setting").find("a[rowid='" + clickId + "']").next();
-				$("#setting").find(a).remove();
-				$("#setting").find("a[rowid='" + clickId + "']").before(a);
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			var a = $("#setting").find("a[rowid='" + clickId + "']").next();
+			$("#setting").find(a).remove();
+			$("#setting").find("a[rowid='" + clickId + "']").before(a);
 		}});
 	}
 	
@@ -251,21 +223,19 @@ layui.config({
     			return;
     		}
 			AjaxPostUtil.request({url:flowableBasePath + "actmodletype001", params: {title: value}, type: 'json', callback: function (json) {
-	   			if (json.returnCode == 0) {
-	   				obj.find("input").remove();
-	   				clickId = json.bean.id;
-	   				var str = '<a rowid="' + clickId + '" rowname="' + value + '" class="setting-a" title="' + value + '"><span>' + value + '</span><div class="new-state-point"></div></a>';
-	   				if($("#setting a").size() != 0){
-	   					$(str).insertBefore($("#setting a").eq(0));
-	   				} else {
-	   					obj.append(str);
-	   				}
-	   				$("#setting").find("a[rowid='" + clickId + "']").click();
-	   			} else {
-					obj.find("input").select();
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				obj.find("input").remove();
+				clickId = json.bean.id;
+				var str = '<a rowid="' + clickId + '" rowname="' + value + '" class="setting-a" title="' + value + '"><span>' + value + '</span><div class="new-state-point"></div></a>';
+				if($("#setting a").size() != 0){
+					$(str).insertBefore($("#setting a").eq(0));
+				} else {
+					obj.append(str);
 				}
-	   		}});
+				$("#setting").find("a[rowid='" + clickId + "']").click();
+	   		}, errorCallback: function (json) {
+				obj.find("input").select();
+				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			}});
     	});
 	});
 	
@@ -359,12 +329,8 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url:flowableBasePath + "actmodletype006", params: {rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -375,12 +341,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '上线申请类型实体' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:flowableBasePath + "actmodletype009", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("上线成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("上线成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -391,12 +353,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '下线申请类型实体' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:flowableBasePath + "actmodletype010", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("下线成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("下线成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}

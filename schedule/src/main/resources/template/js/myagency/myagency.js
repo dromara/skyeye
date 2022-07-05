@@ -68,12 +68,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '取消代办' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "myagency002", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("取消成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("取消成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}

@@ -193,12 +193,8 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "appworkpage007", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				showList();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				showList();
     		}});
 		});
 	}
@@ -206,24 +202,16 @@ layui.config({
 	//上移
 	function topOne(data){
 		AjaxPostUtil.request({url: reqBasePath + "appworkpage008", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				showList();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			showList();
 		}});
 	}
 	
 	//下移
 	function lowerOne(data){
 		AjaxPostUtil.request({url: reqBasePath + "appworkpage009", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				showList();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			showList();
 		}});
 	}
 	
@@ -233,12 +221,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "appworkpage010", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("上线成功", {icon: 1, time: 2000});
-    				showList();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("上线成功", {icon: 1, time: 2000});
+				showList();
     		}});
 		});
 	}
@@ -249,12 +233,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "appworkpage011", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("下线成功", {icon: 1, time: 2000});
-    				showList();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("下线成功", {icon: 1, time: 2000});
+				showList();
     		}});
 		});
 	}
@@ -292,12 +272,8 @@ layui.config({
 					layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
 						layer.close(index);
 			            AjaxPostUtil.request({url: reqBasePath + "appworkpage014", params:{rowId: chooseId}, type: 'json', callback: function (json) {
-			    			if (json.returnCode == 0) {
-			    				showMenu();
-			    				winui.window.msg("上线成功", {icon: 1, time: 2000});
-			    			} else {
-			    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			    			}
+							showMenu();
+							winui.window.msg("上线成功", {icon: 1, time: 2000});
 			    		}});
 					});
 				}
@@ -312,12 +288,8 @@ layui.config({
 					layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
 						layer.close(index);
 			            AjaxPostUtil.request({url: reqBasePath + "appworkpage015", params:{rowId: chooseId}, type: 'json', callback: function (json) {
-			    			if (json.returnCode == 0) {
-			    				showMenu();
-			    				winui.window.msg("下线成功", {icon: 1, time: 2000});
-			    			} else {
-			    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			    			}
+							showMenu();
+							winui.window.msg("下线成功", {icon: 1, time: 2000});
 			    		}});
 					});
 				}
@@ -329,12 +301,8 @@ layui.config({
 				img: "../../assets/images/up-move.png",
 				callback: function() {
 					AjaxPostUtil.request({url: reqBasePath + "appworkpage016", params:{rowId: chooseId}, type: 'json', callback: function (json) {
-						if (json.returnCode == 0) {
-							showMenu();
-							winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						showMenu();
+						winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					}});
 				}
 			})
@@ -345,12 +313,8 @@ layui.config({
 				img: "../../assets/images/down-move.png",
 				callback: function() {
 					AjaxPostUtil.request({url: reqBasePath + "appworkpage017", params:{rowId: chooseId}, type: 'json', callback: function (json) {
-						if (json.returnCode == 0) {
-							showMenu();
-							winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-						} else {
-							winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-						}
+						showMenu();
+						winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 					}});
 				}
 			})
@@ -363,13 +327,9 @@ layui.config({
 					layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 						layer.close(index);
 				        AjaxPostUtil.request({url: reqBasePath + "appworkpage013", params:{rowId: chooseId}, type: 'json', callback: function (json) {
-							if (json.returnCode == 0) {
-								winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-								chooseId = "";
-								showMenu();
-							} else {
-								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-							}
+							winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+							chooseId = "";
+							showMenu();
 						}});
 					});
 				}
@@ -388,11 +348,7 @@ layui.config({
 	   			    	if(value.length > 0){
 	   			    		if(value != chooseName){
 	   			    			AjaxPostUtil.request({url: reqBasePath + "appworkpage012", params: {rowId: chooseId, title: value}, type: 'json', callback: function (json) {
-				   		   			if (json.returnCode == 0) {
-				   		   				showMenu();
-				   		   			} else {
-				   						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-				   					}
+									showMenu();
 				   		   		}});
 	   			    		} else {
 	   			    			showMenu();

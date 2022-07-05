@@ -147,12 +147,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除试卷' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:schoolBasePath + "exam025", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -204,12 +200,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '试卷发布' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:schoolBasePath + "exam023", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("发布成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("发布成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -220,12 +212,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '结束考试' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url:schoolBasePath + "exam030", params:{surveyId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}

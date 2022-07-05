@@ -10,7 +10,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -60,11 +59,9 @@ layui.config({
         	endSurvey(data, obj);
         }
     });
-	
-	
+
 	form.render();
 	form.on('submit(formSearch)', function (data) {
-    	
         if (winui.verifyForm(data.elem)) {
         	refreshTable();
         }
@@ -76,14 +73,9 @@ layui.config({
 		var msg = obj ? '确认删除问卷【' + obj.data.surveyName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除问卷' }, function (index) {
 			layer.close(index);
-            
             AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory025", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -148,12 +140,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '问卷发布' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory023", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("发布成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("发布成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -164,12 +152,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '结束调查' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory030", params:{surveyId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("结束成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("结束成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}

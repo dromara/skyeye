@@ -245,11 +245,7 @@ function loadUploadMethod(){
 		afterSendFile: function (data) {
 			//如果分块上传成功，则通知后台合并分块
 			AjaxPostUtil.request({url: reqBasePath + "sysenclosure008", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				addToArray(json.bean);
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				addToArray(json.bean);
     		}});
 		 }
 	});

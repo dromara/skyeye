@@ -278,29 +278,21 @@ layui.config({
 			loadThisFolderChild();
 		}else if($.inArray(fileType, vedioType) >= 0){//视频
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				fileUrl = json.bean.fileAddress;
-    				fileThumbnail = json.bean.fileThumbnail;
-    				_openNewWindows({
-    					url: "../../tpl/fileconsole/vedioshow.html", 
-    					title: json.bean.fileName,
-    					pageId: "vedioShow",
-    					area: ['80vw', '80vh'],
-    					callBack: function(refreshCode){}});
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				fileUrl = json.bean.fileAddress;
+				fileThumbnail = json.bean.fileThumbnail;
+				_openNewWindows({
+					url: "../../tpl/fileconsole/vedioshow.html",
+					title: json.bean.fileName,
+					pageId: "vedioShow",
+					area: ['80vw', '80vh'],
+					callBack: function(refreshCode){}});
     		}});
 		}else if($.inArray(fileType, officeType) >= 0){//office文件
 			var thisId = $(this).attr("rowid");
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				fileUrl = json.bean.fileAddress;
-    				selFileType = json.bean.fileType;
-    				window.open(reqBasePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				fileUrl = json.bean.fileAddress;
+				selFileType = json.bean.fileType;
+				window.open(reqBasePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
     		}});
 		}else if($.inArray(fileType, aceType) >= 0){//ace文件
 			var thisId = $(this).attr("rowid");
@@ -312,34 +304,26 @@ layui.config({
 				callBack: function(refreshCode){}});
 		}else if($.inArray(fileType, epubType) >= 0){//电子书
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				fileUrl = json.bean.fileAddress;
-    				fileThumbnail = json.bean.fileThumbnail;
-    				_openNewWindows({
-    					url: "../../tpl/fileconsole/epubShow.html", 
-    					title: json.bean.fileName,
-    					pageId: "epubShow",
-    					area: ['90vw', '90vh'],
-    					callBack: function(refreshCode){}});
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				fileUrl = json.bean.fileAddress;
+				fileThumbnail = json.bean.fileThumbnail;
+				_openNewWindows({
+					url: "../../tpl/fileconsole/epubShow.html",
+					title: json.bean.fileName,
+					pageId: "epubShow",
+					area: ['90vw', '90vh'],
+					callBack: function(refreshCode){}});
     		}});
 		}else if($.inArray(fileType, packageType) >= 0){//压缩包
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				fileUrl = json.bean.fileAddress;
-    				fileThumbnail = json.bean.fileThumbnail;
-    				_openNewWindows({
-    					url: "../../tpl/fileconsole/zipShow.html", 
-    					title: '<img src="../../assets/images/rar.png" class="fly-img"/>' + json.bean.fileName,
-    					pageId: "epubShow",
-    					area: ['630px', '450px'],
-    					skin: "zip-show",
-    					callBack: function(refreshCode){}});
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				fileUrl = json.bean.fileAddress;
+				fileThumbnail = json.bean.fileThumbnail;
+				_openNewWindows({
+					url: "../../tpl/fileconsole/zipShow.html",
+					title: '<img src="../../assets/images/rar.png" class="fly-img"/>' + json.bean.fileName,
+					pageId: "epubShow",
+					area: ['630px', '450px'],
+					skin: "zip-show",
+					callBack: function(refreshCode){}});
     		}});
 		}
 	});
@@ -425,12 +409,8 @@ layui.config({
 	// 删除文件夹以及该文件夹下的所有子内容
 	function deleteFolderAndChild(deleteArray, callBack){
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole004", params:{fileList: JSON.stringify(deleteArray)}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				callBack();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+			callBack();
 		}});
 	}
 	
@@ -442,17 +422,13 @@ layui.config({
 			$(".select-op-more").hide();
 			var fileType = $("#file-content div[rowid='" + operaterId + "']").attr("filetype");
             AjaxPostUtil.request({url: reqBasePath + "fileconsole013", params:{rowId: operaterId}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
-    				$("#file-content div[rowid='" + operaterId + "']").remove();
-    				// 如果删除的对象是文件夹
-    				if(fileType === 'folder'){
-    					var selNode = ztree.getNodeByParam("id", operaterId, null);
-        				ztree.removeNode(selNode);
-    				}
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
+				$("#file-content div[rowid='" + operaterId + "']").remove();
+				// 如果删除的对象是文件夹
+				if(fileType === 'folder'){
+					var selNode = ztree.getNodeByParam("id", operaterId, null);
+					ztree.removeNode(selNode);
+				}
     		}});
 		});
 	});
@@ -476,16 +452,12 @@ layui.config({
 		};
 		winui.window.msg("文件副本创建中，期间请勿进行其他操作。", {icon: 7,time: 4000});
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole030", params: params, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg("副本创建成功", {icon: 1, time: 2000});
-				if(fileType === 'folder'){//文件夹
-					//刷新节点
-	   				refreshTreePointNode();
-				}
-				loadThisFolderChild();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			winui.window.msg("副本创建成功", {icon: 1, time: 2000});
+			if(fileType === 'folder'){//文件夹
+				//刷新节点
+				refreshTreePointNode();
 			}
+			loadThisFolderChild();
 		}});
 	});
 	
@@ -531,12 +503,8 @@ layui.config({
 		};
 		winui.window.msg("文件打包中，期间请勿进行其他操作.", {icon: 7,time: 4000});
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole032", params: params, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				winui.window.msg("打包成功.", {icon: 1, time: 2000});
-				loadThisFolderChild();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			winui.window.msg("打包成功.", {icon: 1, time: 2000});
+			loadThisFolderChild();
 		}});
 	});
 	
@@ -545,13 +513,9 @@ layui.config({
 		var thisId = operaterId;
 		$(".layui-dropdown-menu").hide();
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				fileUrl = json.bean.fileAddress;
-				selFileType = json.bean.fileType;
-				window.open(reqBasePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			fileUrl = json.bean.fileAddress;
+			selFileType = json.bean.fileType;
+			window.open(reqBasePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
 		}});
 	});
 	
@@ -559,11 +523,7 @@ layui.config({
 	$("body").on("click", ".openByMicrosoftOffice", function (e) {
 		$(".layui-dropdown-menu").hide();
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function (json) {
-			if (json.returnCode == 0) {
-				window.open('https://view.officeapps.live.com/op/view.aspx?src=http://gzwp.free.idcfengye.com/' + json.bean.fileAddress);
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			window.open('https://view.officeapps.live.com/op/view.aspx?src=http://gzwp.free.idcfengye.com/' + json.bean.fileAddress);
 		}});
 	});
 	
@@ -602,29 +562,21 @@ layui.config({
 			};
 			winui.window.msg("文件打包中，期间请勿进行其他操作.", {icon: 7,time: 4000});
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole038", params: params, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					winui.window.msg("打包成功，开始下载.", {icon: 1, time: 2000});
-					if(isNull(json.bean) || isNull(json.bean.fileAddress)){
-						winui.window.msg('打包失败', {icon: 2, time: 2000});
-					} else {
-						// 下载
-						download(json.bean.fileAddress, '压缩包');
-					}
+				winui.window.msg("打包成功，开始下载.", {icon: 1, time: 2000});
+				if(isNull(json.bean) || isNull(json.bean.fileAddress)){
+					winui.window.msg('打包失败', {icon: 2, time: 2000});
 				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+					// 下载
+					download(json.bean.fileAddress, '压缩包');
 				}
 			}});
 		} else {
 			//不包含文件夹
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					if($.inArray(json.bean.fileType, imageType) >= 0){//图片
-						downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
-					} else {
-						download(json.bean.fileAddress, json.bean.fileName);
-					}
+				if($.inArray(json.bean.fileType, imageType) >= 0){//图片
+					downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
 				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+					download(json.bean.fileAddress, json.bean.fileName);
 				}
 			}});
 		}
@@ -635,13 +587,9 @@ layui.config({
 		layer.confirm("确定解压该压缩包到当前文件夹吗?", { icon: 3, title: '压缩包解压' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "fileconsole033", params:{rowId: operaterId}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("解压成功。", {icon: 1, time: 2000});
-    				refreshTreePointNode();
-    				loadThisFolderChild();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("解压成功。", {icon: 1, time: 2000});
+				refreshTreePointNode();
+				loadThisFolderChild();
     		}});
 		});
 	});
@@ -766,18 +714,14 @@ layui.config({
 			layer.close(index);
 			var fileType = 'folder';
             AjaxPostUtil.request({url: reqBasePath + "fileconsole013", params:{rowId: folderId}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
-    				$("#file-content div[rowid='" + folderId + "']").remove();
-    				var selNode = ztree.getNodeByParam("id", folderId, null);
-    				chooseNodeSelect(folderId);
-    				//重置folderid
-    				folderId = selNode.getParentNode().id;
-    				ztree.removeNode(selNode);//移除节点
-    				loadThisFolderChild();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("已放入回收站", {icon: 1, time: 2000});
+				$("#file-content div[rowid='" + folderId + "']").remove();
+				var selNode = ztree.getNodeByParam("id", folderId, null);
+				chooseNodeSelect(folderId);
+				//重置folderid
+				folderId = selNode.getParentNode().id;
+				ztree.removeNode(selNode);//移除节点
+				loadThisFolderChild();
     		}});
 		});
 	});
@@ -896,17 +840,13 @@ layui.config({
 		if(newName != title){//修改前的名称和当前名称不一致，则调用后台接口进行修改
 			var id = fileFolderEdit.parent().attr("rowid");
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole005", params: {rowId: id, catalogName: newName, fileType: fileType}, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					fileFolderEdit.parent().find("div[class='filename']").show();
-					fileFolderEdit.parent().find("div[class='filename']").find("span").html(newName);
-					fileFolderEdit.parent().attr("title", "名称:" + newName);
-					fileFolderEdit.hide();
-					if(fileType === 'folder'){//如果是文件夹
-						//刷新树节点
-						refreshTreePointNode();
-					}
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				fileFolderEdit.parent().find("div[class='filename']").show();
+				fileFolderEdit.parent().find("div[class='filename']").find("span").html(newName);
+				fileFolderEdit.parent().attr("title", "名称:" + newName);
+				fileFolderEdit.hide();
+				if(fileType === 'folder'){//如果是文件夹
+					//刷新树节点
+					refreshTreePointNode();
 				}
 			}});
 		} else {//如果一致
@@ -937,63 +877,59 @@ layui.config({
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole003", params: {folderId: folderId, orderBy: orderBy}, type: 'json', callback: function(j){
 			// 遮罩层隐藏
 			$(".fileconsole-mask").hide();
-   			if(j.returnCode == 0){
-   				var jsonStr = "";//实体json对象
-   				var str = "";
-   				$.each(j.rows, function(i, item){
-					item["fileBasePath"] = fileBasePath;
-   					jsonStr = {
-						bean: item
-					};
-   					if(item.fileType === 'folder'){//文件夹
-   						str += getDataUseHandlebars(folderTemplate, jsonStr);
-   					}else if($.inArray(item.fileType, imageType) >= 0){//图片
-   						str += getDataUseHandlebars(imagesTemplate, jsonStr);
-   					}else if($.inArray(item.fileType, officeType) >= 0){//office
-   						str += getDataUseHandlebars(officeTemplate, jsonStr);
-   					}else if($.inArray(item.fileType, vedioType) >= 0){//视频
-   						str += getDataUseHandlebars(vedioTemplate, jsonStr);
-   					}else if($.inArray(item.fileType, packageType) >= 0){//压缩包
-   						str += getDataUseHandlebars(packageTemplate, jsonStr);
-   					}else if($.inArray(item.fileType, aceType) >= 0){//ace文件
-   						str += getDataUseHandlebars(aceTemplate, jsonStr);
-   					}else if($.inArray(item.fileType, epubType) >= 0){//电子书
-   						str += getDataUseHandlebars(epubTemplate, jsonStr);
-   					} else {//其他文件
-   						str += getDataUseHandlebars(otherTemplate, jsonStr);
-   					}
-   				});
-   				if(j.rows.length == 0){
-   					str = '<p style="width: 100%; color: gray;">此文件夹为空。</p>';
-   				}
-   				$("#file-content").html(str);
-   				$(".item-num").html(j.total + "个项目");
-   				//图片展示初始化
-   				if(isNull(photoShowObj)){
-   					photoShowObj = initPhotoShow();
-   				} else {
-   					photoShowObj.update();
-   				}
-   				
-   				if(!loadFileSizeCS){
-   					//加载当前文件大小
-   					loadFileSizeById();
-   				}
-   				
-   				if(!initTreeSel){
-   					initTreeSel = true;
-   					ztree.expandNode(ztree.getNodeByParam("id", folderId, null));//展开指定节点-我的文档
-   					chooseNodeSelect(folderId);
-   				}
-   				
-   				//初始化赋值剪切功能
-				initClipEvent();
-   		    	
-   		    	//初始化拖拽
-   		    	initMenuToBox();
-   			} else {
-   				winui.window.msg(j.returnMessage, {icon: 2, time: 2000});
-   			}
+			var jsonStr = "";//实体json对象
+			var str = "";
+			$.each(j.rows, function(i, item){
+				item["fileBasePath"] = fileBasePath;
+				jsonStr = {
+					bean: item
+				};
+				if(item.fileType === 'folder'){//文件夹
+					str += getDataUseHandlebars(folderTemplate, jsonStr);
+				}else if($.inArray(item.fileType, imageType) >= 0){//图片
+					str += getDataUseHandlebars(imagesTemplate, jsonStr);
+				}else if($.inArray(item.fileType, officeType) >= 0){//office
+					str += getDataUseHandlebars(officeTemplate, jsonStr);
+				}else if($.inArray(item.fileType, vedioType) >= 0){//视频
+					str += getDataUseHandlebars(vedioTemplate, jsonStr);
+				}else if($.inArray(item.fileType, packageType) >= 0){//压缩包
+					str += getDataUseHandlebars(packageTemplate, jsonStr);
+				}else if($.inArray(item.fileType, aceType) >= 0){//ace文件
+					str += getDataUseHandlebars(aceTemplate, jsonStr);
+				}else if($.inArray(item.fileType, epubType) >= 0){//电子书
+					str += getDataUseHandlebars(epubTemplate, jsonStr);
+				} else {//其他文件
+					str += getDataUseHandlebars(otherTemplate, jsonStr);
+				}
+			});
+			if(j.rows.length == 0){
+				str = '<p style="width: 100%; color: gray;">此文件夹为空。</p>';
+			}
+			$("#file-content").html(str);
+			$(".item-num").html(j.total + "个项目");
+			//图片展示初始化
+			if(isNull(photoShowObj)){
+				photoShowObj = initPhotoShow();
+			} else {
+				photoShowObj.update();
+			}
+
+			if(!loadFileSizeCS){
+				//加载当前文件大小
+				loadFileSizeById();
+			}
+
+			if(!initTreeSel){
+				initTreeSel = true;
+				ztree.expandNode(ztree.getNodeByParam("id", folderId, null));//展开指定节点-我的文档
+				chooseNodeSelect(folderId);
+			}
+
+			//初始化赋值剪切功能
+			initClipEvent();
+
+			//初始化拖拽
+			initMenuToBox();
    		}, async: false});
 	}
 	
@@ -1280,14 +1216,10 @@ layui.config({
 			//遮罩层显示
 			$(".fileconsole-mask").show();
 			AjaxPostUtil.request({url: reqBasePath + "fileconsole035", params: params, type: 'json', callback: function (json) {
-				if (json.returnCode == 0) {
-					refreshTreePointNode();//刷新树节点
-					loadThisFolderChild();//刷新文件列表
-					if(typeof(callback) == "function") {
-						callback();
-					}
-				} else {
-					winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+				refreshTreePointNode();//刷新树节点
+				loadThisFolderChild();//刷新文件列表
+				if(typeof(callback) == "function") {
+					callback();
 				}
 			}, async: false});
 		} else {
@@ -1300,11 +1232,7 @@ layui.config({
 	function loadFileSizeById(){
 		loadFileSizeCS = true;
 		AjaxPostUtil.request({url: reqBasePath + "fileconsole012", params: {}, type: 'json', callback: function (json) {
-   			if (json.returnCode == 0) {
-   				$(".memory-num").html(json.bean.size);
-   			} else {
-   				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-   			}
+			$(".memory-num").html(json.bean.size);
    		}, async: false});
 	}
     
@@ -1619,33 +1547,25 @@ layui.config({
 					winui.window.msg("文件正在粘贴中，期间请勿进行其他操作。", {icon: 7,time: 4000});
 					if(pastedJson.type === '1' || pastedJson.type == 1){
 						AjaxPostUtil.request({url: reqBasePath + "fileconsole034", params: params, type: 'json', callback: function (json) {
-							if (json.returnCode == 0) {
-								winui.window.msg("文件粘贴成功", {icon: 1, time: 2000});
-								if(pastedJson.fileType === 'folder'){//文件夹
-									//刷新节点
-									refreshTreePointNode();
-								}
-								loadThisFolderChild();
-							} else {
-								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+							winui.window.msg("文件粘贴成功", {icon: 1, time: 2000});
+							if(pastedJson.fileType === 'folder'){//文件夹
+								//刷新节点
+								refreshTreePointNode();
 							}
+							loadThisFolderChild();
 						}});
 					}else if(pastedJson.type === '2' || pastedJson.type == 2){
 						AjaxPostUtil.request({url: reqBasePath + "fileconsole035", params: params, type: 'json', callback: function (json) {
-							if (json.returnCode == 0) {
-								var selNode = ztree.getNodeByParam("id", pastedJson.id, null);
-                                if(!isNull(selNode)){
-                                    ztree.removeNode(selNode);//移除节点
-                                }
-								winui.window.msg("文件粘贴成功", {icon: 1, time: 2000});
-								if(pastedJson.fileType === 'folder'){//文件夹
-									//刷新节点
-									refreshTreePointNode();
-								}
-								loadThisFolderChild();
-							} else {
-								winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+							var selNode = ztree.getNodeByParam("id", pastedJson.id, null);
+							if(!isNull(selNode)){
+								ztree.removeNode(selNode);//移除节点
 							}
+							winui.window.msg("文件粘贴成功", {icon: 1, time: 2000});
+							if(pastedJson.fileType === 'folder'){//文件夹
+								//刷新节点
+								refreshTreePointNode();
+							}
+							loadThisFolderChild();
 						}});
 					}
 				} else {
@@ -1779,10 +1699,6 @@ layui.config({
 			afterSendFile: function (data) {
 				//如果分块上传成功，则通知后台合并分块
 				AjaxPostUtil.request({url: reqBasePath + "fileconsole007", params: {md5: md5, folderId: folderId, name: data.name, size: data.size}, type: 'json', callback: function (json) {
-	    			if (json.returnCode == 0) {
-	    			} else {
-	    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-	    			}
 	    		}});
 			 }
 		});

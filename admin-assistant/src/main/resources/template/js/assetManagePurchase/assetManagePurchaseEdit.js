@@ -21,51 +21,39 @@ layui.config({
 	var sTableData = "";
 
 	AjaxPostUtil.request({url: flowableBasePath + "asset023", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html(json.bean.title);
-			$("#useName").html(json.bean.userName);
-			$("#remark").val(json.bean.remark);
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		$("#useTitle").html(json.bean.title);
+		$("#useName").html(json.bean.userName);
+		$("#remark").val(json.bean.remark);
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-			sTableData = json.bean.goods;
-			initTypeHtml();
-			matchingLanguage();
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+		sTableData = json.bean.goods;
+		initTypeHtml();
+		matchingLanguage();
 	}});
 
 	//初始化资产类别
 	function initTypeHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				initFromHtml();
-				typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-				//渲染
-				form.render();
-				//加载表格数据
-				initTableAssetList();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			initFromHtml();
+			typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
+			//渲染
+			form.render();
+			//加载表格数据
+			initTableAssetList();
 		}});
 	}
 
 	//初始化资产来源
 	function initFromHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "assetfrom006", params: {}, type: 'json', async:false, callback: function(json) {
-			if(json.returnCode == 0) {
-				fromHtml = getDataUseHandlebars(selOption, json); //加载资产来源数据
-				form.render();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			fromHtml = getDataUseHandlebars(selOption, json); //加载资产来源数据
+			form.render();
 		}});
 	}
 
@@ -148,12 +136,8 @@ layui.config({
 			approvalId: approvalId,
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "asset024", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

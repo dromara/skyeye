@@ -85,12 +85,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除系统' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysevewin005", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -101,12 +97,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '系统授权' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysevewin006", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("授权成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("授权成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}
@@ -117,12 +109,8 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '取消授权' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysevewin007", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("取消授权成功", {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("取消授权成功", {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}

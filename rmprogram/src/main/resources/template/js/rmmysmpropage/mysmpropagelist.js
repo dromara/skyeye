@@ -401,11 +401,7 @@ layui.config({
     			list.push(s);
     		});
     		AjaxPostUtil.request({url: reqBasePath + "rmxcx037", params:{jsonData: JSON.stringify(list), pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("保存成功", {icon: 1, time: 2000});
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("保存成功", {icon: 1, time: 2000});
     		}});
     	} else {
     		winui.window.msg('请先选择要编辑的页面', {icon: 2, time: 2000});
@@ -416,20 +412,16 @@ layui.config({
     $('body').on('click', '#exportChoosePageToH5', function() {
     	if(!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
     		AjaxPostUtil.request({url: reqBasePath + "rmxcx041", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("导出成功", {icon: 1, time: 2000});
-    				const link = document.createElement('a');
-			        link.style.display = 'none';
-			        link.href = fileBasePath + json.bean.url;
-			        link.setAttribute(
-			          'download',
-			          json.bean.fileName
-			        );
-			        document.body.appendChild(link);
-			        link.click();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("导出成功", {icon: 1, time: 2000});
+				const link = document.createElement('a');
+				link.style.display = 'none';
+				link.href = fileBasePath + json.bean.url;
+				link.setAttribute(
+				  'download',
+				  json.bean.fileName
+				);
+				document.body.appendChild(link);
+				link.click();
     		}});
     	} else {
     		winui.window.msg('请先选择要导出的页面', {icon: 2, time: 2000});

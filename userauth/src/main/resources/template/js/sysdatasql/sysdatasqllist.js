@@ -6,7 +6,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		table = layui.table;
 	
@@ -49,11 +48,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '数据库还原' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysdatasqlbackups004", params:{rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("还原成功", {icon: 1, time: 2000});
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("还原成功", {icon: 1, time: 2000});
     		}});
 		});
 	}

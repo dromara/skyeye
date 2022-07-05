@@ -238,19 +238,15 @@ layui.config({
 			} else {
 				//类型对应的用品不存在js对象中
 				AjaxPostUtil.request({url: flowableBasePath + "assetarticles018", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
-					if(json.returnCode == 0) {
-						assetArticles.push({
-							id: thisRowValue,
-							list: json.rows
-						});
-						//重置选择行的用品列表
-						var sHtml = getDataUseHandlebars(selOption, json);
-						$("#assetarId" + thisRowNum).html(sHtml); //重置商品列表下拉框
-						$("#assetarId" + thisRowNum).val(item.articleId);
-						form.render('select');
-					} else {
-						winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-					}
+					assetArticles.push({
+						id: thisRowValue,
+						list: json.rows
+					});
+					//重置选择行的用品列表
+					var sHtml = getDataUseHandlebars(selOption, json);
+					$("#assetarId" + thisRowNum).html(sHtml); //重置商品列表下拉框
+					$("#assetarId" + thisRowNum).val(item.articleId);
+					form.render('select');
 				}, async: false});
 			}
 		}

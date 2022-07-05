@@ -20,39 +20,31 @@ layui.config({
 	var sTableData = ""
 
 	AjaxPostUtil.request({url: flowableBasePath + "licenceborrow004", params: {rowId: parent.rowId}, type: 'json', callback: function(json) {
-		if(json.returnCode == 0) {
-			$("#useTitle").html(json.bean.title);
-			$("#useName").html(json.bean.userName);
-			$("#remark").val(json.bean.remark);
-			// 附件回显
-			skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
+		$("#useTitle").html(json.bean.title);
+		$("#useName").html(json.bean.userName);
+		$("#remark").val(json.bean.remark);
+		// 附件回显
+		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-			if(json.bean.state == '1'){
-				$(".typeTwo").removeClass("layui-hide");
-			} else {
-				$(".typeOne").removeClass("layui-hide");
-			}
-
-			sTableData = json.bean.goods;
-			initLincenceNameHtml();
+		if(json.bean.state == '1'){
+			$(".typeTwo").removeClass("layui-hide");
 		} else {
-			winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
+			$(".typeOne").removeClass("layui-hide");
 		}
+
+		sTableData = json.bean.goods;
+		initLincenceNameHtml();
 	}});
 
 	//初始化证照名称
 	function initLincenceNameHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "licenceborrow008", params: {}, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				nameHtml = getDataUseHandlebars(selOption, json); //加载名称数据
-				matchingLanguage();
-				//渲染
-				form.render();
-				//加载表格数据
-				initTableAssetList();
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			nameHtml = getDataUseHandlebars(selOption, json); //加载名称数据
+			matchingLanguage();
+			//渲染
+			form.render();
+			//加载表格数据
+			initTableAssetList();
 		}});
 	}
 
@@ -120,12 +112,8 @@ layui.config({
 			approvalId: approvalId,
 		};
 		AjaxPostUtil.request({url: flowableBasePath + "licenceborrow005", params: params, type: 'json', callback: function(json) {
-			if(json.returnCode == 0) {
-				parent.layer.close(index);
-				parent.refreshCode = '0';
-			} else {
-				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-			}
+			parent.layer.close(index);
+			parent.refreshCode = '0';
 		}});
 	}
 

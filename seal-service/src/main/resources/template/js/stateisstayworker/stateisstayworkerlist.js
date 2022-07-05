@@ -10,7 +10,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate,
@@ -31,13 +30,10 @@ layui.config({
 	 	}
 	});
 	
-	//跟单时间
-	laydate.render({
-		elem: '#declarationTime',
-		range: '~'
-	});
+	// 跟单时间
+	laydate.render({elem: '#declarationTime', range: '~'});
 		
-	//待派工表格渲染
+	// 待派工表格渲染
 	function initTable(){
 		table.render({
 		    id: 'messageTable',
@@ -157,12 +153,8 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "sealseservice020", params: {rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				loadTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadTable();
     		}});
 		});
 	}

@@ -31,10 +31,7 @@ layui.config({
         form.render('select');
     });
 
-    laydate.render({
-        elem: '#createTime',
-        range: '~'
-    });
+    laydate.render({elem: '#createTime', range: '~'});
 
     table.render({
         id: 'messageTable',

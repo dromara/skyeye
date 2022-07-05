@@ -7,9 +7,7 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'laydate', 'form'], function (exports) {
-	
 	winui.renderColor();
-	
 	var $ = layui.$,
 		table = layui.table,
 		form = layui.form,
@@ -98,12 +96,8 @@ layui.config({
 		layer.confirm('确认撤回选中数据吗？', { icon: 3, title: '撤回操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "diary006", params: {rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg("撤回成功", {icon: 1, time: 2000});
-    				loadMySendTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg("撤回成功", {icon: 1, time: 2000});
+				loadMySendTable();
     		}});
 		});
 	}
@@ -113,12 +107,8 @@ layui.config({
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "diary015", params: {rowId: data.id}, type: 'json', callback: function (json) {
-    			if (json.returnCode == 0) {
-    				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-    				loadMySendTable();
-    			} else {
-    				winui.window.msg(json.returnMessage, {icon: 2, time: 2000});
-    			}
+				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
+				loadMySendTable();
     		}});
 		});
 	}
