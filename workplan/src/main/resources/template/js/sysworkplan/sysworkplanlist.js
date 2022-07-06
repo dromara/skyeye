@@ -26,6 +26,15 @@ layui.config({
 	authBtn('1567561566241');//新增个人计划
 	authBtn('1567561577490');//新增部门计划
 	authBtn('1567561587761');//新增公司计划
+
+	var planCycle = {
+		"day": 1,
+		"week": 2,
+		"month": 3,
+		"quarter": 4,
+		"halfyear": 5,
+		"year": 6,
+	};
 	
 	//获取当前日期信息
 	var initDate = new Date();
@@ -104,15 +113,12 @@ layui.config({
 	var wetherLoadTable = false;
 	function initList(){
 		wetherLoadTable = true;
-		var timeStr = getTimeSoltStr();
-		var startTime = timeStr.split('~')[0] + " 00:00:00";
-		var endTime = timeStr.split('~')[1] + " 23:59:59";
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: reqBasePath + 'sysworkplan001',
-		    where:{checkPlan: checkPlan, nowCheckType: nowCheckType, title: $("#title").val(), startTime: startTime, endTime: endTime},
+		    where: getTableParams(),
 		    even:true,
 		    page: true,
 		    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -515,24 +521,7 @@ layui.config({
 		return num > 9 ? '' + num : '0' + num;
 	}
 	
-	//刷新表格
-	function refreshTable(){
-		var timeStr = getTimeSoltStr();
-		var startTime = timeStr.split('~')[0] + " 00:00:00";
-		var endTime = timeStr.split('~')[1] + " 23:59:59";
-		table.reload("messageTable", {page: {curr: 1}, where:{checkPlan: checkPlan, nowCheckType: nowCheckType, title: $("#title").val(), startTime: startTime, endTime: endTime}});
-	}
-	
-	function loadTable(){
-		var timeStr = getTimeSoltStr();
-		var startTime = timeStr.split('~')[0] + " 00:00:00";
-		var endTime = timeStr.split('~')[1] + " 23:59:59";
-		table.reload("messageTable", {where:{checkPlan: checkPlan, nowCheckType: nowCheckType, title: $("#title").val(), startTime: startTime, endTime: endTime}});
-	}
-	
-	form.render();
-	
-	//新增个人计划
+	// 新增个人计划
 	$("body").on("click", "#addPeoplePlan", function (e) {
 		timeSolt = getTimeSoltStr();
 		_openNewWindows({
@@ -546,7 +535,7 @@ layui.config({
 			}});
 	});
 	
-	//新增部门计划
+	// 新增部门计划
 	$("body").on("click", "#addDepartmentPlan", function (e) {
 		timeSolt = getTimeSoltStr();
 		_openNewWindows({
@@ -560,7 +549,7 @@ layui.config({
 			}});
 	});
 	
-	//新增公司计划
+	// 新增公司计划
 	$("body").on("click", "#addCompanyPlan", function (e) {
 		timeSolt = getTimeSoltStr();
 		if(isNull(timeSolt)){
@@ -627,7 +616,8 @@ layui.config({
 		var temp = new Date(year, month, 0);
 		return temp.getDate();
 	}
-	
+
+	form.render();
 	form.on('submit(formSearch)', function (data) {
         if (winui.verifyForm(data.elem)) {
         	refreshTable();
@@ -635,10 +625,32 @@ layui.config({
         return false;
 	});
 	
-	//刷新数据
+	// 刷新数据
 	$("body").on("click", "#reloadTable", function (e) {
 		loadTable();
 	});
+
+	// 刷新表格
+	function refreshTable(){
+		table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+	}
+
+	function loadTable(){
+		table.reload("messageTable", {where: getTableParams()});
+	}
+
+	function getTableParams() {
+		var timeStr = getTimeSoltStr();
+		var startTime = timeStr.split('~')[0] + " 00:00:00";
+		var endTime = timeStr.split('~')[1] + " 23:59:59";
+		return {
+			planType: checkPlan,
+			planCycle: planCycle[nowCheckType],
+			title: $("#title").val(),
+			startTime: startTime,
+			endTime: endTime
+		};
+	}
 	
     exports('sysworkplanlist', {});
 });
