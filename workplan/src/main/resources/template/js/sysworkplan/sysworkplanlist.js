@@ -382,17 +382,17 @@ layui.config({
 	}
 	
 	//获取当前时间属于第几周
-	function getWeekOfYear() { 
-		var today = new Date(); 
-		var firstDay = new Date(today.getFullYear(), 0, 1); 
-		var dayOfWeek = firstDay.getDay();  
-		var spendDay = 1; 
-		if(dayOfWeek != 0) {  
-			spendDay = 7 - dayOfWeek + 1; 
-		} 
-		firstDay = new Date(today.getFullYear(), 0, 1 + spendDay); 
-		var d = Math.ceil((today.valueOf() - firstDay.valueOf()) / 86400000); 
-		var result = Math.ceil(d / 7); 
+	function getWeekOfYear() {
+		var today = new Date();
+		var firstDay = new Date(today.getFullYear(), 0, 1);
+		var dayOfWeek = firstDay.getDay();
+		var spendDay = 1;
+		if(dayOfWeek != 0) {
+			spendDay = 7 - dayOfWeek + 1;
+		}
+		firstDay = new Date(today.getFullYear(), 0, 1 + spendDay);
+		var d = Math.ceil((today.valueOf() - firstDay.valueOf()) / 86400000);
+		var result = Math.ceil(d / 7);
 		return result + 1;
 	}
 	
@@ -508,12 +508,6 @@ layui.config({
 		return String.raw({
 			raw: raws
 		}, ...format);
-	}
-	
-	//根据数字返回周几
-	function returnWeekDayCh(i){
-		var arr = ['一', '二', '三', '四', '五', '六', '日'];
-		return arr[i - 1];
 	}
 	
 	//格式化数字
