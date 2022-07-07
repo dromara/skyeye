@@ -9,7 +9,7 @@
 - [软件更新资讯](https://gitee.com/doc_wei01/skyeye/blob/company_server/HISTORY_UPDATE.md)
 - 开源版请下载`master`分支
 - [项目功能结构](https://docs.qq.com/flowchart/DYUFQQnlCUm9Ua2FI)
-- [企业版信息](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
+- [企业版信息以及价格表](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
 - [开源版项目文档](https://gitee.com/doc_wei01/skyeye/blob/master/%E9%A1%B9%E7%9B%AE%E6%96%87%E6%A1%A3.md)
 - `企业版所有功能部署包`以及`设计思路`获取方式：扫码进入知识星球
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
