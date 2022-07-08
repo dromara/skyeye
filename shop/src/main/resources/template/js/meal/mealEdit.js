@@ -81,7 +81,7 @@ layui.config({
                             state: $("input[name='state']:checked").val(),
                             mealAreaMationList: JSON.stringify(mealAreaMationList),
                             mealConsumeMationList: JSON.stringify(tableData),
-                            rowId: parent.rowId
+                            id: parent.rowId
                         };
                         if(isNull(params.logo)){
                             winui.window.msg('请上传套餐LOGO', {icon: 2, time: 2000});
