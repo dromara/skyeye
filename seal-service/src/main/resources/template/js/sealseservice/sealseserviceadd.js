@@ -61,28 +61,15 @@ layui.config({
  			 	ajaxSendLoadBefore: function(hdb){
  			 	},
  			 	ajaxSendAfter:function (json) {
- 			 		modeId();
  			 	}
  			});
  		}
- 		
-		//服务处理方式
- 		function modeId(){
- 	 		showGrid({
- 			 	id: "modeId",
- 			 	url: flowableBasePath + "sealseservicemode008",
- 			 	params: {},
- 			 	pagination: false,
- 			 	template: getFileContent('tpl/template/select-option.tpl'),
- 			 	ajaxSendLoadBefore: function(hdb){
- 			 	},
- 			 	ajaxSendAfter:function (json) {
- 			 		form.render('select');
- 			 		//加载行政区划-省
-	    			loadChildProvinceArea();
- 			 	}
- 			});
- 		}
+
+		// 售后服务方式
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceMode"]["key"], 'select', "modeId", '', form);
+
+		// 加载行政区划-省
+		loadChildProvinceArea();
 
 		skyeyeEnclosure.init('enclosureUpload');
  		matchingLanguage();

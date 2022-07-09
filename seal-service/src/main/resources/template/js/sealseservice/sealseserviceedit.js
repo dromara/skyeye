@@ -174,23 +174,12 @@ layui.config({
  			});
  		}
  		
-		//服务处理方式
+		// 服务处理方式
  		function modeId(json){
- 	 		showGrid({
- 			 	id: "modeId",
- 			 	url: flowableBasePath + "sealseservicemode008",
- 			 	params: {},
- 			 	pagination: false,
- 			 	template: getFileContent('tpl/template/select-option.tpl'),
- 			 	ajaxSendLoadBefore: function(hdb){
- 			 	},
- 			 	ajaxSendAfter:function (d) {
- 			 		$("#modeId").val(json.bean.modeId);
- 			 		form.render('select');
- 			 		//加载省级行政区划
- 			 		initArea(json.bean);
- 			 	}
- 			});
+			// 售后服务方式
+			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceMode"]["key"], 'select', "modeId", json.bean.modeId, form);
+			// 加载省级行政区划
+			initArea(json.bean);
  		}
 
 	    //工单接收人选择
