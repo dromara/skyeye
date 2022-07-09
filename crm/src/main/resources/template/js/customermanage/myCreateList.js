@@ -15,11 +15,8 @@ layui.config({
 	
 	authBtn('1586179447152');
 
-	// 获取客户类型状态为上线的所有记录
-	sysCustomerUtil.queryCustomerTypeIsUpList(function (data){
-		$("#typeId").html(getDataUseHandlebars(selectOption, data));
-		form.render('select');
-	});
+	// 客户分类
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerType"]["key"], 'select', "typeId", '', form);
 
 	// 获取已上线的客户来源类型
 	sysCustomerUtil.queryCustomerFromIsUpList(function (data){

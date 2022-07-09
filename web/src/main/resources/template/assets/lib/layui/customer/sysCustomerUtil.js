@@ -39,19 +39,6 @@ var sysCustomerUtil = {
     },
 
     /**
-     * 获取客户类型状态为上线的所有记录
-     *
-     * @param callback 回执函数
-     */
-    queryCustomerTypeIsUpList: function (callback){
-        AjaxPostUtil.request({url: flowableBasePath + "customertype008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
-                callback(json);
-            }
-        }, async: false});
-    },
-
-    /**
      * 获取已上线的客户来源类型
      *
      * @param callback 回执函数
