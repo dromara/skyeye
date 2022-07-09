@@ -13,7 +13,6 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 	    	textool = layui.textool;
-	    var selectMust = getFileContent('tpl/template/select-option-must.tpl');
 
 		// 客户分类
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerType"]["key"], 'select', "typeId", '', form);
@@ -24,23 +23,9 @@ layui.config({
 		// 客户所属行业
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerIndustry"]["key"], 'select', "industryId", '', form);
 
-		customerGroup();
- 		// 客户分组
- 		function customerGroup(){
- 			showGrid({
- 			 	id: "groupId",
- 			 	url: flowableBasePath + "customergroup008",
- 			 	params: {},
- 			 	pagination: false,
- 			 	template: selectMust,
- 			 	ajaxSendLoadBefore: function(hdb){
- 			 	},
- 			 	ajaxSendAfter:function (json) {
- 			 		form.render('select');
- 			 	}
- 			});
- 		}
- 		
+		// 客户分组
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerGroup"]["key"], 'select', "groupId", '', form);
+
  		textool.init({eleId: 'addDesc', maxlength: 200});
 
 		skyeyeEnclosure.init('enclosureUpload');

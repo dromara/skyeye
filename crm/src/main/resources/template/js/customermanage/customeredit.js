@@ -32,27 +32,11 @@ layui.config({
 				// 客户所属行业
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerIndustry"]["key"], 'select', "industryId", json.bean.industryId, form);
 
-				customerGroup();
-		 		// 客户分组
-		 		function customerGroup(){
-		 			showGrid({
-		 			 	id: "groupId",
-		 			 	url: flowableBasePath + "customergroup008",
-		 			 	params: {},
-		 			 	pagination: false,
-		 			 	template: selectMust,
-		 			 	ajaxSendLoadBefore: function(hdb){
-		 			 	},
-		 			 	ajaxSendAfter:function(data){
-		 			 		$("#groupId").val(json.bean.groupId);
-		 			 		form.render('select');
-		 			 	}
-		 			});
-		 		}
-		 		
+				// 客户分组
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerGroup"]["key"], 'select', "groupId", json.bean.groupId, form);
+
 		 		textool.init({eleId: 'addDesc', maxlength: 200});
 		 		
-		 		var userNames = [];
 		 		userList = [].concat(json.bean.chargeUser);
 		 		$.each(json.bean.chargeUser, function(i, item){
 		 			$("#relationUserId").val(item.name);
