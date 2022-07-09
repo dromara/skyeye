@@ -26,11 +26,8 @@ layui.config({
 	// 选择入职时间
 	laydate.render({elem: '#estimateEndTime', range: false});
 
-    // 获取已经上线的商机来源信息
-    sysCustomerUtil.queryCustomerOpportunityFromIsUpList(function(data){
-        $("#fromId").html(getDataUseHandlebars(selOption, data));
-        form.render('select');
-    });
+    // 商机来源
+    sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmOpportunityFrom"]["key"], 'select', "fromId", '', form);
 
     // 获取当前登录用户所属企业的所有部门信息
     systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){

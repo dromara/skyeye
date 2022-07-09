@@ -26,19 +26,6 @@ var sysCustomerUtil = {
     },
 
     /**
-     * 获取已经上线的商机来源信息
-     *
-     * @param callback 回执函数
-     */
-    queryCustomerOpportunityFromIsUpList: function (callback){
-        AjaxPostUtil.request({url: flowableBasePath + "crmopportunityfrom008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
-                callback(json);
-            }
-        }, async: false});
-    },
-
-    /**
      * 获取已上线的客户所属行业列表
      *
      * @param callback 回执函数

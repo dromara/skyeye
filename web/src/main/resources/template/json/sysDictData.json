@@ -13,6 +13,7 @@
 
     "crmCustomerType": {"name": "CRM-客户分类", "key": "CRM_CUSTOMER_TYPE"},
     "crmCustomerFrom": {"name": "CRM-客户来源", "key": "CRM_CUSTOMER_FROM"},
-    "crmDocumentaryType": {"name": "CRM-跟单分类", "key": "CRM_DOCUMENTARY_TYPE"}
+    "crmDocumentaryType": {"name": "CRM-跟单分类", "key": "CRM_DOCUMENTARY_TYPE"},
+    "crmOpportunityFrom": {"name": "CRM-商机来源", "key": "CRM_OPPORTUNITY_FROM"}
 
 }

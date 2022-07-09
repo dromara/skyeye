@@ -45,12 +45,8 @@ layui.config({
 				$(".typeOne").removeClass("layui-hide");
 			}
 
-	 		// 获取已经上线的商机来源信息
-			sysCustomerUtil.queryCustomerOpportunityFromIsUpList(function(data){
-				$("#fromId").html(getDataUseHandlebars(selOption, data));
-				$("#fromId").val(json.bean.fromId);
-				form.render('select');
-			});
+			// 商机来源
+			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmOpportunityFrom"]["key"], 'select', "fromId", json.bean.fromId, form);
 
 			// 获取当前登录用户所属企业的所有部门信息
 			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
