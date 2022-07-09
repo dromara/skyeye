@@ -17,11 +17,8 @@ layui.config({
 	// 客户分类
 	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerType"]["key"], 'select', "typeId", '', form);
 
-	// 获取已上线的客户来源类型
-	sysCustomerUtil.queryCustomerFromIsUpList(function (data){
-		$("#fromId").html(getDataUseHandlebars(selOption, data));
-		form.render('select');
-	});
+	// 客户来源
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerFrom"]["key"], 'select', "fromId", '', form);
 
 	// 获取已上线的客户所属行业列表
 	sysCustomerUtil.queryCrmCustomerIndustryIsUpList(function (data){

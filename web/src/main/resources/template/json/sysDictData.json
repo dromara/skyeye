@@ -11,7 +11,8 @@
     "employeeContractType": {"name": "员工-合同类型", "key": "EMPLOYEE_CONTRACT_TYPE"},
     "employeeCertificateType": {"name": "员工-证书类型", "key": "EMPLOYEE_CERTIFICATE_TYPE"},
 
-    "crmCustomerType": {"name": "CRM-客户类型", "key": "CRM_CUSTOMER_TYPE"},
+    "crmCustomerType": {"name": "CRM-客户分类", "key": "CRM_CUSTOMER_TYPE"},
+    "crmCustomerFrom": {"name": "CRM-客户来源", "key": "CRM_CUSTOMER_FROM"},
     "crmDocumentaryType": {"name": "CRM-跟单分类", "key": "CRM_DOCUMENTARY_TYPE"}
 
 }

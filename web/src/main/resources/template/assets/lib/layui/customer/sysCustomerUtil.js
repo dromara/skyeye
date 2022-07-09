@@ -39,19 +39,6 @@ var sysCustomerUtil = {
     },
 
     /**
-     * 获取已上线的客户来源类型
-     *
-     * @param callback 回执函数
-     */
-    queryCustomerFromIsUpList: function (callback){
-        AjaxPostUtil.request({url: flowableBasePath + "crmcustomerfrom008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
-                callback(json);
-            }
-        }, async: false});
-    },
-
-    /**
      * 获取已上线的客户所属行业列表
      *
      * @param callback 回执函数
