@@ -29,14 +29,10 @@ layui.config({
 				// 客户来源
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerFrom"]["key"], 'select', "fromId", json.bean.fromId, form);
 
-				// 获取已上线的客户所属行业列表
-				sysCustomerUtil.queryCrmCustomerIndustryIsUpList(function (data){
-					$("#industryId").html(getDataUseHandlebars(selectMust, data));
-					$("#industryId").val(json.bean.industryId);
-					form.render('select');
-					customerGroup();
-				});
+				// 客户所属行业
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerIndustry"]["key"], 'select', "industryId", json.bean.industryId, form);
 
+				customerGroup();
 		 		// 客户分组
 		 		function customerGroup(){
 		 			showGrid({

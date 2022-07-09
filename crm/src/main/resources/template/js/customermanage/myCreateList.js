@@ -11,8 +11,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	var selectOption = getFileContent('tpl/template/select-option.tpl');
-	
+
 	authBtn('1586179447152');
 
 	// 客户分类
@@ -21,11 +20,8 @@ layui.config({
 	// 客户来源
 	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerFrom"]["key"], 'select', "fromId", '', form);
 
-	// 获取已上线的客户所属行业列表
-	sysCustomerUtil.queryCrmCustomerIndustryIsUpList(function (data){
-		$("#industryId").html(getDataUseHandlebars(selectOption, data));
-		form.render('select');
-	});
+	// 客户所属行业
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerIndustry"]["key"], 'select', "industryId", '', form);
 
 	// 获取我创建的客户管理列表
 	table.render({
