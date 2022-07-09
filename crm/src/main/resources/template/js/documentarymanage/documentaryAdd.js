@@ -18,13 +18,10 @@ layui.config({
 		
 		textool.init({eleId: 'detail', maxlength: 200});
 
-		// 获取已上线的跟单分类列表
-		sysCustomerUtil.queryCrmDocumentaryTypeIsUpList(function (data){
-			$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
-			form.render('select');
-			opportunityFrom();
-		});
+		// 跟单分类
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmDocumentaryType"]["key"], 'select', "typeId", '', form);
 
+		opportunityFrom();
 		//商机
 		function opportunityFrom(){
 			showGrid({

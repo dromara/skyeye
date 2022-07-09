@@ -52,19 +52,6 @@ var sysCustomerUtil = {
     },
 
     /**
-     * 获取已上线的跟单分类列表
-     *
-     * @param callback 回执函数
-     */
-    queryCrmDocumentaryTypeIsUpList: function (callback){
-        AjaxPostUtil.request({url: flowableBasePath + "crmdocumentarytype008", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
-                callback(json);
-            }
-        }, async: false});
-    },
-
-    /**
      * 获取已上线的客户所属行业列表
      *
      * @param callback 回执函数

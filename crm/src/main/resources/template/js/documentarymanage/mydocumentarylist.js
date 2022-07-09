@@ -14,11 +14,8 @@ layui.config({
 	
 	authBtn('1572595572098');
 
-	// 获取已上线的跟单分类列表
-	sysCustomerUtil.queryCrmDocumentaryTypeIsUpList(function (data){
-		$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
-		form.render('select');
-	});
+	// 跟单分类
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmDocumentaryType"]["key"], 'select', "typeId", '', form);
 
 	// 跟单时间
 	laydate.render({elem: '#documentaryTime', range: '~'});

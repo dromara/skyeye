@@ -27,14 +27,10 @@ layui.config({
 		 		// 跟单时间
 				laydate.render({elem : '#documentaryTime', type : 'datetime', trigger : 'click'});
 
-				// 获取已上线的跟单分类列表
-				sysCustomerUtil.queryCrmDocumentaryTypeIsUpList(function (data){
-					$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
-					$("#typeId").val(json.bean.typeId);
-					form.render('select');
-					opportunityFrom();
-				});
+				// 跟单分类
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmDocumentaryType"]["key"], 'select', "typeId", json.bean.typeId, form);
 
+				opportunityFrom();
 				//商机
 				function opportunityFrom(){
 					showGrid({
