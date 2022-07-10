@@ -11,7 +11,6 @@ layui.config({
     echartsTheme: '../echarts/echartsTheme'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate', 'echarts'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
@@ -27,32 +26,13 @@ layui.config({
 	var nowYear = now.getYear(); //当前年 
 	nowYear += (nowYear < 2000) ? 1900 : 0; //
 	
-	var lastMonthDate = new Date(); //上月日期
-	lastMonthDate.setDate(1);
-	lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-	var lastYear = lastMonthDate.getYear();
-	var lastMonth = lastMonthDate.getMonth();
-		
-	laydate.render({
-		elem: '#timeRange',
-		range: '~'
-	});
-	
-	showGrid({
-	 	id: "serviceType",
-	 	url: flowableBasePath + "sealseservicetype008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function (json) {
-	 		initTable();
-	 	}
-	});
-	
+	laydate.render({elem: '#timeRange', range: '~'});
+
+	// 售后服务类型
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "serviceType", '', form);
+
+	initTable();
 	function initTable(){
-		
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',

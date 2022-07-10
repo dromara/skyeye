@@ -32,24 +32,10 @@ layui.config({
 		// 初始化上传
 		$("#sheetPicture").upload(systemCommonUtil.uploadCommon003Config('sheetPicture', 14, '', 10));
 
- 		typeId();
- 		
-		// 服务类型
- 		function typeId(){
- 	 		showGrid({
- 			 	id: "typeId",
- 			 	url: flowableBasePath + "sealseservicetype008",
- 			 	params: {},
- 			 	pagination: false,
- 			 	template: getFileContent('tpl/template/select-option.tpl'),
- 			 	ajaxSendLoadBefore: function(hdb){
- 			 	},
- 			 	ajaxSendAfter:function (json) {
- 			 		urgencyId();
- 			 	}
- 			});
- 		}
- 		
+		// 售后服务类型
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "typeId", '', form);
+
+		urgencyId();
  		//紧急程度
  		function urgencyId(){
  	 		showGrid({

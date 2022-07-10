@@ -140,21 +140,11 @@ layui.config({
 		 	}
 		});
 	    
-		//服务类型
+		// 服务类型
  		function typeId(json){
- 	 		showGrid({
- 			 	id: "typeId",
- 			 	url: flowableBasePath + "sealseservicetype008",
- 			 	params: {},
- 			 	pagination: false,
- 			 	template: getFileContent('tpl/template/select-option.tpl'),
- 			 	ajaxSendLoadBefore: function(hdb){
- 			 	},
- 			 	ajaxSendAfter:function (d) {
- 			 		$("#typeId").val(json.bean.typeId);
- 			 		urgencyId(json);
- 			 	}
- 			});
+			// 售后服务类型
+			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "typeId", json.bean.typeId, form);
+			urgencyId(json);
  		}
  		
  		//紧急程度

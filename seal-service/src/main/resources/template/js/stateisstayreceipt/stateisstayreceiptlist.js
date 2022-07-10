@@ -1,7 +1,5 @@
 
 var rowId = "";
-var startTime = "";
-var endTime = "";
 
 layui.config({
 	base: basePath, 
@@ -10,33 +8,18 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate,
 		table = layui.table;
-	
-	//分类
-	showGrid({
-	 	id: "typeId",
-	 	url: flowableBasePath + "sealseservicetype008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function(j){
-	 		form.render('select');
-	 		initTable();
-	 	}
-	});
-	
-	//跟单时间
-	laydate.render({
-		elem: '#declarationTime',
-		range: '~'
-	});
-		
+
+	// 售后服务类型
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "typeId", '', form);
+
+	// 跟单时间
+	laydate.render({elem: '#declarationTime', range: '~'});
+
+	initTable();
 	//待接单表格渲染
 	function initTable(){
 		table.render({
@@ -44,7 +27,7 @@ layui.config({
 		    elem: '#messageTable',
 		    method: 'post',
 		    url: flowableBasePath + 'sealseservice003',
-		    where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: '', lastTime: ''},
+		    where: getTableParams(),
 		    even: true,
 		    page: true,
 		    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -87,28 +70,14 @@ layui.config({
     });
     
     function loadTable(){
-    	if(isNull($("#declarationTime").val())){
-    		startTime = "";
-    		endTime = "";
-    	} else {
-    		startTime = $("#declarationTime").val().split('~')[0].trim();
-    		endTime = $("#declarationTime").val().split('~')[1].trim();
-    	}
-    	table.reload("messageTable", {where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: startTime, lastTime: endTime}});
+    	table.reload("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	if(isNull($("#declarationTime").val())){
-    		startTime = "";
-    		endTime = "";
-    	} else {
-    		startTime = $("#declarationTime").val().split('~')[0].trim();
-    		endTime = $("#declarationTime").val().split('~')[1].trim();
-    	}
-    	table.reload("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: startTime, lastTime: endTime}});
+    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	//接单
+	// 接单
 	function stayReceipt(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -122,7 +91,7 @@ layui.config({
 			}});
 	}
 	
-	//详情
+	// 详情
 	function details(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -132,6 +101,22 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 			}});
+	}
+
+	function getTableParams() {
+		var startTime = "";
+		var endTime = "";
+		if (!isNull($("#declarationTime").val())) {
+			startTime = $("#declarationTime").val().split('~')[0].trim();
+			endTime = $("#declarationTime").val().split('~')[1].trim();
+		}
+		return {
+			orderNum: $("#orderNum").val(),
+			typeId: $("#typeId").val(),
+			customerName: $("#customerName").val(),
+			firstTime: startTime,
+			lastTime: endTime
+		};
 	}
 	
     exports('stateisstayreceiptlist', {});

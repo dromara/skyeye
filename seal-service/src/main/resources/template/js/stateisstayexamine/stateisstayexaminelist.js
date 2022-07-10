@@ -14,25 +14,14 @@ layui.config({
 		form = layui.form,
 		laydate = layui.laydate,
 		table = layui.table;
-	
-	//分类
-	showGrid({
-	 	id: "typeId",
-	 	url: flowableBasePath + "sealseservicetype008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function(j){
-	 		form.render('select');
-	 		initTable();
-	 	}
-	});
-	
+
+	// 售后服务类型
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "typeId", '', form);
+
 	// 跟单时间
 	laydate.render({elem: '#declarationTime', range: '~'});
-		
+
+	initTable();
 	// 待审核表格渲染
 	function initTable(){
 		table.render({
