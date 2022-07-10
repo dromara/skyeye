@@ -28,40 +28,18 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
+		 	ajaxSendLoadBefore: function(hdb){},
 		 	ajaxSendAfter: function (json) {
-		 		
 		 		// 实际开工时间
-		 		laydate.render({ 
-		 			elem: '#comStarTime',
-		 			type: 'datetime',
-		 			trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#comStarTime', type: 'datetime', trigger: 'click'});
 		 		
 		 		// 实际完工时间
-		 		laydate.render({ 
-		 			elem: '#comTime',
-		 			type: 'datetime',
-		 			trigger: 'click'
-		 		});
+		 		laydate.render({elem: '#comTime', type: 'datetime', trigger: 'click'});
+
+				// 故障类型
+				var defaultFaultTypeId = isNull(json.bean.faultTypeId) ? "" : json.bean.faultTypeId;
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceFaultType"]["key"], 'select', "faultTypeId", defaultFaultTypeId, form);
 		 		
-				showGrid({
-				 	id: "faultTypeId",
-				 	url: flowableBasePath + "sealseservicefaulttype008",
-				 	params: {},
-				 	pagination: false,
-				 	template: selOption,
-				 	ajaxSendLoadBefore: function(hdb){
-				 	},
-				 	ajaxSendAfter:function(data){
-				 		if(!isNull(json.bean.faultTypeId)){
-				 			$("#faultTypeId").val(json.bean.faultTypeId);
-				 		}
-				 		form.render("select");
-				 	}
-				});
-				
 				// 故障关键组件
 				if(!isNull(json.bean.faultKeyPartsId)){
 					faultKeyParts = {
