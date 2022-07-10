@@ -23,9 +23,6 @@ layui.config({
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter: function (json) {
-		 		matchingLanguage();
-		 		form.render();
-		 	    
 		 		//待完工或者待评价的工单可以进行反馈操作
 		 		if(json.bean.state != 4 && json.bean.state != 5){
 		 			$("#addBean").remove();
@@ -49,7 +46,10 @@ layui.config({
 				        { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 140 },
 				        { field: 'content', title: '反馈内容', align: 'left', width: 300 },
 				        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
-				    ]]
+				    ]],
+					done: function(){
+						matchingLanguage();
+					}
 				});
 				
 				table.on('tool(messageTable)', function (obj) {
@@ -63,7 +63,9 @@ layui.config({
 			        	details(data);
 			        }
 			    });
-		 		
+
+				matchingLanguage();
+				form.render();
 		 	}
 		});
 		

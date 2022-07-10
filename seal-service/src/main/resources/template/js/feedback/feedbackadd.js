@@ -10,7 +10,6 @@ layui.config({
 	layui.use(['form'], function(form) {
 		var index = parent.layer.getFrameIndex(window.name);
 		var $ = layui.$;
-		
 		var customerId = "",//客户id
 			productId = "";//产品id
 		
@@ -20,18 +19,10 @@ layui.config({
 			$("#productName").html(json.bean.productName);
 			productId = json.bean.productId;
 			customerId = json.bean.customerId;
-			showGrid({
-				id: "typeId",
-				url: flowableBasePath + "crmservicefeedbacktype008",
-				params: {},
-				pagination: false,
-				template: getFileContent('tpl/template/select-option.tpl'),
-				ajaxSendLoadBefore: function(hdb){
-				},
-				ajaxSendAfter:function(data){
-					form.render("select");
-				}
-			});
+
+			// 售后服务反馈类型
+			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceFeedbBackType"]["key"], 'select', "typeId", '', form);
+
 			matchingLanguage();
 		}});
 
