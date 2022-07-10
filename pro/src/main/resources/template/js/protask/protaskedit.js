@@ -70,37 +70,22 @@ layui.config({
 				}
 			});
 
-			//所属分类选择
-			showGrid({
-				id: "taskType",
-				url: flowableBasePath + "protasktype008",
-				params: {},
-				pagination: false,
-				template: selOption,
-				ajaxSendLoadBefore: function(hdb){
-				},
-				ajaxSendAfter: function(j){
-					$("#taskType").val(json.bean.taskType);
-					form.render('select');
-					proIdSelect();
-				}
-			});
+			// 任务分类
+			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmTaskType"]["key"], 'select', "taskType", json.bean.taskType, form);
 
 			// 获取我参与的项目列表
-			function proIdSelect(){
-				proUtil.queryMyProjectsList(function (data){
-					$("#proId").html(getDataUseHandlebars(selOption, data));
-					$("#proId").val(json.bean.proId);
-					form.render('select');
-				});
+			proUtil.queryMyProjectsList(function (data){
+				$("#proId").html(getDataUseHandlebars(selOption, data));
+				$("#proId").val(json.bean.proId);
+				form.render('select');
+			});
 
-				// 获取当前登录用户所属企业的所有部门信息
-				systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
-					$("#departments").html(getDataUseHandlebars(selOption, data));
-					$("#departments").val(json.bean.departments);
-					form.render('select');
-				});
-			}
+			// 获取当前登录用户所属企业的所有部门信息
+			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+				$("#departments").html(getDataUseHandlebars(selOption, data));
+				$("#departments").val(json.bean.departments);
+				form.render('select');
+			});
 
 			var performIdNames = "";
 			performIdList = [].concat(json.bean.performId);
