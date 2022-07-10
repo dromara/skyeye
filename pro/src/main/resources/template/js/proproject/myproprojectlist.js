@@ -113,7 +113,7 @@ layui.config({
 	        	}
 	        }else if (layEvent === 'proappoint') { //项目任命
 	        	proappoint(data);
-	        }else if (layEvent === 'end') { //信息完善
+	        }else if (layEvent === 'end') { //成果和总结
 	        	end(data);
 	        }else if (layEvent === 'discussList') { //讨论板
 	        	discussList(data);
@@ -181,12 +181,12 @@ layui.config({
 			}});
 	}
 	
-	// 信息完善
+	// 成果和总结
 	function end(data){
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proproject/properfectinformation.html", 
-			title: "信息完善",
+			title: "成果和总结",
 			pageId: "properfectinformation",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){

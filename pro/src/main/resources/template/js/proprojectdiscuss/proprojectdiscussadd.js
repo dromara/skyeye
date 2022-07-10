@@ -14,19 +14,10 @@ layui.config({
 	    	layedit = layui.layedit;
 	
 	    var rowId = parent.parent.rowId;
-	    showGrid({
-			id: "typeId",
-			url: flowableBasePath + "proprojectdiscusstype008",
-			params: {},
-			pagination: false,
-			template: getFileContent('tpl/template/select-option.tpl'),
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function (json) {
-				form.render('select');
-			}
-		});
-	    
+
+		// 项目讨论板分类
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmProjectDiscussType"]["key"], 'select', "typeId", '', form);
+
 	    layedit.set({
 	    	uploadImage: {
 	    		url: reqBasePath + "common003", //接口url
@@ -85,7 +76,6 @@ layui.config({
 	    
 	    matchingLanguage();
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
         			proId: rowId,

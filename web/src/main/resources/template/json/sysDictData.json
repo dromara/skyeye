@@ -28,6 +28,7 @@
 
     "pmFileType": {"name": "PM-项目文档分类", "key": "PM_FILE_TYPE"},
     "pmProjectType": {"name": "PM-项目分类", "key": "PM_PROJECT_TYPE"},
-    "pmCostExpenseType": {"name": "PM-项目成本费用支出分类", "key": "PM_COST_EXPENSE_TYPE"}
+    "pmCostExpenseType": {"name": "PM-项目成本费用支出分类", "key": "PM_COST_EXPENSE_TYPE"},
+    "pmProjectDiscussType": {"name": "PM-项目讨论板分类", "key": "PM_PROJECT_DISCUSS_TYPE"}
 
 }
