@@ -37,6 +37,7 @@ var customerJS = {
 	"arrayUtil": "../../assets/lib/layui/customer/arrayUtil.js", // 集合工具类
 	"initTableChooseUtil": "../../assets/lib/layui/customer/tableUtil/initTableChooseUtil.js", // 加载表格选择的表格插件
 	"sysDictDataUtil": "../../assets/lib/layui/customer/sysDictDataUtil.js", // 数据字典插件
+	"initTableSearchUtil": "../../assets/lib/layui/customer/tableUtil/initTableSearchUtil.js", // 表格高级查询插件
 };
 
 //系统基础信息

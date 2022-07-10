@@ -19,7 +19,7 @@ layui.config({
 	    method: 'post',
 	    url: reqBasePath + 'sys013',
 	    where: getTableParams(),
-	    even:true,
+	    even: true,
 	    page: true,
 		limits: getLimits(),
 		limit: getLimit(),
@@ -34,6 +34,16 @@ layui.config({
 	    ]],
 	    done: function(){
 	    	matchingLanguage();
+			var searchParams = {
+				"roleName": {
+					"type": "input",
+					"searchCondition": [{
+						"value": "<",
+						"title": "小于"
+					}]
+				}
+			};
+			initTableSearchUtil.initAdvancedSearch(this, searchParams, form);
 	    }
 	});
 	

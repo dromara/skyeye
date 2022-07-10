@@ -92,7 +92,7 @@ var languageType = isNull(getCookie("languageType")) ? "zh" : getCookie("languag
 // 系统中英文
 var systemLanguage = getAndWriteLocal('systemLanguage');
 // 系统单据类型
-var systemOrderType = getAndWriteLocal('systemLanguage');
+var systemOrderType = getAndWriteLocal('systemOrderType');
 // 动态表单关联json文件
 var sysDsFormWithCodeType = getAndWriteLocal('sysDsFormWithCodeType');
 // 工作流流程模型关联json文件

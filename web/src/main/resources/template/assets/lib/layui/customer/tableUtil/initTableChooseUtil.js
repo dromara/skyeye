@@ -190,6 +190,6 @@ var initTableChooseUtil = {
             result.push(rowIndexStr);
         });
         return result;
-    }
+    },
 
 }
