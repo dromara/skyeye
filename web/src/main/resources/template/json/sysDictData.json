@@ -19,6 +19,7 @@
     "crmOpportunityFrom": {"name": "CRM-商机来源", "key": "CRM_OPPORTUNITY_FROM"},
 
     "amsServiceMode": {"name": "AMS-售后服务方式", "key": "AMS_SERVICE_MODE"},
-    "amsServiceType": {"name": "AMS-售后服务类型", "key": "AMS_SERVICE_TYPE"}
+    "amsServiceType": {"name": "AMS-售后服务类型", "key": "AMS_SERVICE_TYPE"},
+    "amsServiceEvaluateType": {"name": "AMS-售后服务评价类型", "key": "AMS_SERVICE_EVALUATE_TYPE"}
 
 }

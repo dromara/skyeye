@@ -16,23 +16,12 @@ layui.config({
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
+		 	ajaxSendLoadBefore: function(hdb){},
 		 	ajaxSendAfter: function (json) {
-		 		
-		 		showGrid({
-				 	id: "evaluateType",
-				 	url: flowableBasePath + "sealseserviceevaluatetype008",
-				 	params: {},
-				 	pagination: false,
-				 	template: getFileContent('tpl/template/select-option.tpl'),
-				 	ajaxSendLoadBefore: function(hdb){
-				 	},
-				 	ajaxSendAfter:function(data){
-				 		form.render("select");
-				 	}
-				});
-		 		
+
+				// 售后服务类型
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceEvaluateType"]["key"], 'select', "evaluateType", '', form);
+
 				matchingLanguage();
 		 		form.render();
 		 	    form.on('submit(evaluate)', function (data) {
