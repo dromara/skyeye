@@ -49,8 +49,18 @@ layui.config({
 		       	customerMation.id = json.bean.customerId;
 		       	customerMation.customName = json.bean.customerName;
 		       	$("#customName").val(customerMation.customName);
-		       	
-				typeId(json);
+
+				// 售后服务类型
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "typeId", json.bean.typeId, form);
+
+				// 工单紧急程度
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceUrgency"]["key"], 'select', "urgencyId", json.bean.urgencyId, form);
+
+				// 售后服务方式
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceMode"]["key"], 'select', "modeId", json.bean.modeId, form);
+
+				// 加载省级行政区划
+				initArea(json.bean);
 		 		
 		 		//工单接收人
 		 		if(json.bean.serviceUserId.length > 0){
@@ -139,38 +149,6 @@ layui.config({
 		 	    });
 		 	}
 		});
-	    
-		// 服务类型
- 		function typeId(json){
-			// 售后服务类型
-			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "typeId", json.bean.typeId, form);
-			urgencyId(json);
- 		}
- 		
- 		//紧急程度
- 		function urgencyId(json){
- 	 		showGrid({
- 			 	id: "urgencyId",
- 			 	url: flowableBasePath + "sealseserviceurgency008",
- 			 	params: {},
- 			 	pagination: false,
- 			 	template: getFileContent('tpl/template/select-option.tpl'),
- 			 	ajaxSendLoadBefore: function(hdb){
- 			 	},
- 			 	ajaxSendAfter:function (d) {
- 			 		$("#urgencyId").val(json.bean.urgencyId);
- 			 		modeId(json);
- 			 	}
- 			});
- 		}
- 		
-		// 服务处理方式
- 		function modeId(json){
-			// 售后服务方式
-			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceMode"]["key"], 'select', "modeId", json.bean.modeId, form);
-			// 加载省级行政区划
-			initArea(json.bean);
- 		}
 
 	    //工单接收人选择
 		$("body").on("click", "#serviceUserIdSelPeople", function (e) {

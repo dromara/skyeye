@@ -35,21 +35,8 @@ layui.config({
 		// 售后服务类型
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceType"]["key"], 'select', "typeId", '', form);
 
-		urgencyId();
- 		//紧急程度
- 		function urgencyId(){
- 	 		showGrid({
- 			 	id: "urgencyId",
- 			 	url: flowableBasePath + "sealseserviceurgency008",
- 			 	params: {},
- 			 	pagination: false,
- 			 	template: getFileContent('tpl/template/select-option.tpl'),
- 			 	ajaxSendLoadBefore: function(hdb){
- 			 	},
- 			 	ajaxSendAfter:function (json) {
- 			 	}
- 			});
- 		}
+		// 工单紧急程度
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceUrgency"]["key"], 'select', "urgencyId", '', form);
 
 		// 售后服务方式
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceMode"]["key"], 'select', "modeId", '', form);
