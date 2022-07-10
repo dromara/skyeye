@@ -14,7 +14,6 @@ layui.config({
 
 	var rowNum = 1; //表格的序号
 	var costTypeList = "";//支出分类集合展示html
-	var start;
 
 	var usetableTemplate = $("#usetableTemplate").html();
 	var showTemplate = $("#showTemplate").html();
@@ -32,11 +31,7 @@ layui.config({
 			$(".typeOne").removeClass("layui-hide");
 		}
 
-		start = laydate.render({
-			elem: '#reimbursementTime', //指定元素
-			range: false,
-			btns: ['now', 'confirm']
-		});
+		laydate.render({elem: '#reimbursementTime', range: false, btns: ['now', 'confirm']});
 
 		// 附件回显
 		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
@@ -46,26 +41,24 @@ layui.config({
 			$("#proId").val(json.bean.proId);
 		});
 		form.render('select');
-		// 支出分类
-		AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', method: "POST", callback: function(data) {
-			departmentsSelect(json);
+		// 项目成本费用支出分类
+		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["pmCostExpenseType"]["key"], function (data) {
 			costTypeList = getDataUseHandlebars(selOption, data);
-			$.each(json.bean.purposes, function(i, item){
-				showRow(item);
-			});
-		}});
-		matchingLanguage();
-		form.render();
-	}});
+		});
+		$.each(json.bean.purposes, function(i, item){
+			showRow(item);
+		});
 
-	function departmentsSelect(j){
 		// 获取当前登录用户所属企业的所有部门信息
 		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
 			$("#departments").html(getDataUseHandlebars(selOption, data));
-			$("#departments").val(j.bean.departmentId);
+			$("#departments").val(json.bean.departmentId);
 			form.render('select');
 		});
-	}
+
+		matchingLanguage();
+		form.render();
+	}});
 
 	// 价格变化
 	$("body").on("input", ".priceInput", function() {

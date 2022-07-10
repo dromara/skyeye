@@ -18,11 +18,7 @@ layui.config({
 	var usetableTemplate = $("#usetableTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
-	var start = laydate.render({
-		elem: '#reimbursementTime',
-		range: false,
-		btns: ['now', 'confirm']
-	});
+	laydate.render({elem: '#reimbursementTime', range: false, btns: ['now', 'confirm']});
 
 	// 获取当前登录员工信息
 	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
@@ -30,25 +26,23 @@ layui.config({
 		$("#writePeople").html(data.bean.userName);
 	});
 
-	matchingLanguage();
-	//支出分类
-	AjaxPostUtil.request({url: flowableBasePath + "procostexpensetype008", params: {}, type: 'json', callback: function(data) {
+	// 项目成本费用支出分类
+	sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["pmCostExpenseType"]["key"], function (data) {
 		costTypeList = getDataUseHandlebars(selOption, data);
 		addRow();
-		proUtil.queryMyProjectsList(function (data){
-			$("#proId").html(getDataUseHandlebars(selOption, data));
-			form.render('select');
-		});
-		departmentsSelect();
-	}});
+	});
 
-	function departmentsSelect(){
-		// 获取当前登录用户所属企业的所有部门信息
-		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
-			$("#departments").html(getDataUseHandlebars(selOption, data));
-			form.render('select');
-		});
-	}
+	// 获取我参与的项目列表
+	proUtil.queryMyProjectsList(function (data){
+		$("#proId").html(getDataUseHandlebars(selOption, data));
+		form.render('select');
+	});
+
+	// 获取当前登录用户所属企业的所有部门信息
+	systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+		$("#departments").html(getDataUseHandlebars(selOption, data));
+		form.render('select');
+	});
 
 	//价格变化
 	$("body").on("input", ".priceInput", function() {
@@ -71,6 +65,8 @@ layui.config({
 	}
 
 	skyeyeEnclosure.init('enclosureUpload');
+	matchingLanguage();
+	form.render();
 	// 保存为草稿
 	form.on('submit(formAddBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {

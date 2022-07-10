@@ -43,4 +43,21 @@ var sysDictDataUtil = {
         }, async: false});
     },
 
+    /**
+     * 获取指定分类下的的数据字典
+     *
+     * @param dictTypeCode 数据字典所属分类的Code
+     * @param callback 回执函数
+     */
+    queryDictDataListByDictTypeCode: function (dictTypeCode, callback) {
+        var params = {
+            dictTypeCode: dictTypeCode
+        };
+        AjaxPostUtil.request({url: reqBasePath + "queryDictDataListByDictTypeCode", params: params, type: 'json', method: "GET", callback: function(json) {
+            if (typeof(callback) == "function") {
+                callback(json);
+            }
+        }, async: false});
+    },
+
 };
