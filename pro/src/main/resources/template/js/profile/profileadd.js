@@ -14,32 +14,14 @@ layui.config({
 
 	var ue = ueEditorUtil.initEditor('content');
 
-	taskTypeSelect();
-
-	//所属分类选择
-	function taskTypeSelect(){
-		showGrid({
-			id: "fileType",
-			url: flowableBasePath + "profiletype008",
-			params: {},
-			pagination: false,
-			template: selOption,
-			ajaxSendLoadBefore: function(hdb){
-			},
-			ajaxSendAfter: function (json) {
-				form.render('select');
-				proIdSelect();
-			}
-		});
-	}
+	// 项目文档分类
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmFileType"]["key"], 'select', "fileType", '', form);
 
 	// 获取我参与的项目列表
-	function proIdSelect(){
-		proUtil.queryMyProjectsList(function (data){
-			$("#proId").html(getDataUseHandlebars(selOption, data));
-			form.render('select');
-		});
-	}
+	proUtil.queryMyProjectsList(function (data){
+		$("#proId").html(getDataUseHandlebars(selOption, data));
+		form.render('select');
+	});
 
 	skyeyeEnclosure.init('enclosureUpload');
 	matchingLanguage();

@@ -1,3 +1,4 @@
+
 {
     "employeesPoliticalOutlook": {"name": "员工-政治面貌", "key": "EMPLOYEES_POLITICAL_OUTLOOK"},
     "employeeEducation": {"name": "员工-学历", "key": "EMPLOYEE_EDUCATION"},
@@ -23,6 +24,8 @@
     "amsServiceEvaluateType": {"name": "AMS-售后服务评价类型", "key": "AMS_SERVICE_EVALUATE_TYPE"},
     "amsServiceFaultType": {"name": "AMS-故障类型", "key": "AMS_SERVICE_FAULT_TYPE"},
     "amsServiceUrgency": {"name": "AMS-工单紧急程度", "key": "AMS_SERVICE_URGENCY"},
-    "amsServiceFeedbBackType": {"name": "AMS-售后服务反馈类型", "key": "AMS_SERVICE_FEEDB_BACK_TYPE"}
+    "amsServiceFeedbBackType": {"name": "AMS-售后服务反馈类型", "key": "AMS_SERVICE_FEEDB_BACK_TYPE"},
+
+    "pmFileType": {"name": "PM-项目文档分类", "key": "PM_FILE_TYPE"}
 
 }

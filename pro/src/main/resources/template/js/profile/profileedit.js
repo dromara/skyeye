@@ -34,30 +34,15 @@ layui.config({
 				ue.setContent(json.bean.content);
 			});
 
-			//所属分类选择
-			showGrid({
-				id: "fileType",
-				url: flowableBasePath + "profiletype008",
-				params: {},
-				pagination: false,
-				template: getFileContent('tpl/template/select-option.tpl'),
-				ajaxSendLoadBefore: function(hdb){
-				},
-				ajaxSendAfter: function(j){
-					$("#fileType").val(json.bean.typeId);
-					form.render('select');
-					proIdSelect();
-				}
-			});
+			// 项目文档分类
+			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmFileType"]["key"], 'select', "fileType", json.bean.typeId, form);
 
 			// 获取我参与的项目列表
-			function proIdSelect(){
-				proUtil.queryMyProjectsList(function (data){
-					$("#proId").html(getDataUseHandlebars(selOption, data));
-					$("#proId").val(json.bean.proId);
-					form.render('select');
-				});
-			}
+			proUtil.queryMyProjectsList(function (data){
+				$("#proId").html(getDataUseHandlebars(selOption, data));
+				$("#proId").val(json.bean.proId);
+				form.render('select');
+			});
 
 			matchingLanguage();
 			form.render();
