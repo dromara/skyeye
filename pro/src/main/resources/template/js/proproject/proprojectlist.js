@@ -9,21 +9,11 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
-	showGrid({
-	 	id: "typeId",
-	 	url: flowableBasePath + "proprojecttype008",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function (json) {
-	 		form.render('select');
-	 		initTable();
-	 	}
-	});
-	
+
+	// 项目分类
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmProjectType"]["key"], 'select', "typeId", '', form);
+
+	initTable();
 	function initTable(){
 		table.render({
 		    id: 'messageTable',

@@ -20,59 +20,35 @@ layui.config({
 		params: {rowId: parent.rowId},
 		pagination: false,
 		template: getFileContent('tpl/proproject/proprojecteditTemplate.tpl'),
-		ajaxSendLoadBefore: function(hdb){
-		},
+		ajaxSendLoadBefore: function(hdb){},
 		ajaxSendAfter: function (json) {
 			if(json.bean.state == 1){
 				$(".typeTwo").removeClass("layui-hide");
 			} else {
 				$(".typeOne").removeClass("layui-hide");
 			}
-			//计划开始时间
-			laydate.render({
-			  elem: '#startTime',
-			  type: 'date',
-			  trigger: 'click'
-			});
+			// 计划开始时间
+			laydate.render({elem: '#startTime', type: 'date', trigger: 'click'});
 
-			//计划完成时间
-			laydate.render({
-			  elem: '#endTime',
-			  type: 'date',
-			  trigger: 'click'
-			});
+			// 计划完成时间
+			laydate.render({elem: '#endTime', type: 'date', trigger: 'click'});
 
 			ue = ueEditorUtil.initEditor('container');
 			ue.addListener("ready", function () {
 				ue.setContent(json.bean.businessContent);
 			});
 
-			//项目分类
-			showGrid({
-				id: "typeId",
-				url: flowableBasePath + "proprojecttype008",
-				params: {},
-				pagination: false,
-				template: getFileContent('tpl/template/select-option.tpl'),
-				ajaxSendLoadBefore: function(hdb){
-				},
-				ajaxSendAfter:function(j){
-					$("#typeId").val(json.bean.typeId);
-					form.render('select');
-					departmentId();
-				}
+			// 项目分类
+			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmProjectType"]["key"], 'select', "typeId", json.bean.typeId, form);
+
+			// 获取当前登录用户所属企业的所有部门信息
+			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+				$("#departmentId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
+				$("#departmentId").val(json.bean.departmentId);
+				form.render('select');
 			});
 
-			function departmentId(){
-				// 获取当前登录用户所属企业的所有部门信息
-				systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
-					$("#departmentId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
-					$("#departmentId").val(json.bean.departmentId);
-					form.render('select');
-					customerId();
-				});
-			}
-
+			customerId();
 			function customerId(){
 				//客户
 				showGrid({

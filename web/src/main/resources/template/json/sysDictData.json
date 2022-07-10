@@ -26,6 +26,7 @@
     "amsServiceUrgency": {"name": "AMS-工单紧急程度", "key": "AMS_SERVICE_URGENCY"},
     "amsServiceFeedbBackType": {"name": "AMS-售后服务反馈类型", "key": "AMS_SERVICE_FEEDB_BACK_TYPE"},
 
-    "pmFileType": {"name": "PM-项目文档分类", "key": "PM_FILE_TYPE"}
+    "pmFileType": {"name": "PM-项目文档分类", "key": "PM_FILE_TYPE"},
+    "pmProjectType": {"name": "PM-项目分类", "key": "PM_PROJECT_TYPE"}
 
 }

@@ -15,47 +15,25 @@ layui.config({
 
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
-	//计划开始时间
-	laydate.render({
-	  elem: '#startTime',
-	  type: 'date',
-	  trigger: 'click'
-	});
+	// 计划开始时间
+	laydate.render({elem: '#startTime', type: 'date', trigger: 'click'});
 
-	//计划完成时间
-	laydate.render({
-	  elem: '#endTime',
-	  type: 'date',
-	  trigger: 'click'
-	});
+	// 计划完成时间
+	laydate.render({elem: '#endTime', type: 'date', trigger: 'click'});
 
 	var ue = ueEditorUtil.initEditor('container');
 
-	//项目分类
-	showGrid({
-		id: "typeId",
-		url: flowableBasePath + "proprojecttype008",
-		params: {},
-		pagination: false,
-		template: getFileContent('tpl/template/select-option.tpl'),
-		ajaxSendLoadBefore: function(hdb){
-		},
-		ajaxSendAfter:function (json) {
-			form.render('select');
-			departmentId();
-		}
+	// 项目分类
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmProjectType"]["key"], 'select', "typeId", '', form);
+
+	// 获取当前登录用户所属企业的所有部门信息
+	systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+		$("#departmentId").html(getDataUseHandlebars(selOption, data));
+		$("#departmentId").val(data.bean.departments);
+		form.render('select');
 	});
 
-	function departmentId(){
-		// 获取当前登录用户所属企业的所有部门信息
-		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
-			$("#departmentId").html(getDataUseHandlebars(selOption, data));
-			$("#departmentId").val(data.bean.departments);
-			form.render('select');
-		});
-		customerId();
-	}
-
+	customerId();
 	function customerId(){
 		//客户
 		showGrid({
