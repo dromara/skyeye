@@ -8,6 +8,10 @@
     color: #b2b2b2;
 }
 
+.filter-search-box{
+    width: 100%;
+}
+
 .search-form {
     height: 170px;
     z-index: 100;
@@ -15,6 +19,9 @@
     width: 200px;
     padding: 10px 5px;
     background-color: white;
+    border: 1px solid #e6e6e6;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px -2px rgb(0 0 0 / 20%);
 }
 
 .search-form .box {

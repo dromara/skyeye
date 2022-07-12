@@ -8,6 +8,9 @@ var initTableSearchUtil = {
     // 列ID后缀
     fileIdSuffix: "Search",
 
+    // 已选择的列筛选条件 {"tableId": {"key": {"operator": ">", "operatorName": "大于", "value": "张三"}}}
+    chooseMap: {},
+
     /**
      * 加载表格的高级查询
      *
@@ -46,6 +49,8 @@ var initTableSearchUtil = {
         });
         // 初始化监听事件
         initTableSearchUtil.initEvent(form);
+        // 加载筛选条件展示框
+        $("div[lay-id='" + tableId + "']").before('<div class="filter-search-box" id="filter' + tableId + '"></div>');
     },
 
     /**
@@ -66,13 +71,14 @@ var initTableSearchUtil = {
      * @param tableId 表格id
      * @param fieldId 字段列id
      * @param searchParam 高级查询的参数
+     * @param fieldName 字段列名称
      */
-    searchBox: function (tableId, fieldId, searchParam) {
+    searchBox: function (tableId, fieldId, searchParam, fieldName) {
         return '<form class="layui-form search-form" action="" id="searchBox">' +
             '<div class="box">' +
                 '<div class="layui-form-item layui-col-xs12">' +
                     '<div class="layui-input-block">' +
-                        '<select id="' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" win-verify="required">' +
+                        '<select id="sel' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" win-verify="required">' +
                             initTableSearchUtil.getOptions(searchParam) +
                         '</select>' +
                     '</div>' +
@@ -85,7 +91,8 @@ var initTableSearchUtil = {
                 '<div class="layui-form-item layui-col-xs12" style="margin-top: 30px; text-align: center">' +
                     '<div class="layui-input-block">' +
                         '<button type="button" class="layui-btn layui-btn-primary searchCancle">取消</button>' +
-                        '<button type="button" class="layui-btn layui-btn-normal" table-id="' + tableId + '">确定</button>' +
+                        '<button type="button" class="layui-btn layui-btn-normal searchDefine" table-id="' + tableId + '" field-id="' + fieldId + '"' +
+                        ' field-name="' + fieldName + '">确定</button>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
@@ -108,6 +115,7 @@ var initTableSearchUtil = {
 
     /**
      * 获取表单组件
+     *
      * @param fieldId 字段列id
      * @param searchParam 高级查询的参数
      */
@@ -119,6 +127,19 @@ var initTableSearchUtil = {
     },
 
     /**
+     * 获取表单组件的值
+     *
+     * @param fieldId 字段列id
+     * @param searchParam 高级查询的参数
+     */
+    getFormUnitValue: function (fieldId, searchParam) {
+        var type = searchParam.type;
+        if (type === 'input') {
+            return $("#" + fieldId).val();
+        }
+    },
+
+    /**
      * 初始化监听事件
      *
      * @param form form表单对象
@@ -126,17 +147,33 @@ var initTableSearchUtil = {
     initEvent: function (form) {
 
         // 筛选按钮点击
-        $("body").on("click", ".layui-table-search", function (e) {
+        $("body").on("click", ".layui-table-search", function (event) {
+            // 阻止事件冒泡
+            event.stopPropagation();
             $("#searchBox").remove();
             var tableId = $(this).attr("search-table-id");
             var fieldId = $(this).attr("search-sign");
-            var value = initTableSearchUtil.getPointSearchParams(tableId, fieldId);
+            var paramConfig = initTableSearchUtil.getPointSearchParams(tableId, fieldId);
+            var fieldName = $(this).parent().find('span').html();
             // 加载筛选框
-            $("body").append(initTableSearchUtil.searchBox(tableId, fieldId, value));
+            $("body").append(initTableSearchUtil.searchBox(tableId, fieldId, paramConfig, fieldName));
             // 设置位置
-            $("#searchBox").css("left", document.body.scrollLeft + event.clientX + 10);
-            $("#searchBox").css("top", document.body.scrollLeft + event.clientY + 18);
+            $("#searchBox").css("left", $(this).offset().left - 5);
+            $("#searchBox").css("top", $(this).offset().top + $(this).outerHeight());
             form.render();
+
+            // 点击空白处，下拉框隐藏-------开始
+            var tag = $("#searchBox");
+            var flag = true;
+            $(document).bind("click", function (e) {
+                // 点击空白处，设置的弹框消失
+                var target = $(e.target);
+                if (target.closest(tag).length == 0 && flag == true) {
+                    $(tag).remove();
+                    flag = false;
+                }
+            });
+            // 点击空白处，下拉框隐藏-------结束
         });
 
         // 取消
@@ -144,6 +181,43 @@ var initTableSearchUtil = {
             $(".search-form").hide();
         });
 
+        // 确定
+        $("body").on("click", ".searchDefine", function (e) {
+            var tableId = $(this).attr("table-id");
+            var fieldId = $(this).attr("field-id");
+            var paramConfig = initTableSearchUtil.getPointSearchParams(tableId, fieldId);
+            // 点击确定获取值
+            var confimValue = {
+                "fieldName": $(this).attr("field-name"),
+                "operator": $("#sel" + fieldId).val(),
+                "operatorName": $("#sel" + fieldId).find("option:selected").text(),
+                "value": initTableSearchUtil.getFormUnitValue(fieldId, paramConfig)
+            };
+
+            var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
+            tableChooseMap[fieldId] = confimValue;
+            // 设置选中的值
+            initTableSearchUtil.chooseMap[tableId] = tableChooseMap;
+            // 移除选择框
+            $("#searchBox").remove();
+            // 展示筛选内容
+            initTableSearchUtil.loadChooseHtml(tableId);
+        });
+
+    },
+
+    /**
+     * 加载选中列筛选条件的内容
+     *
+     * @param tableId 表格id
+     */
+    loadChooseHtml: function (tableId) {
+        var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
+        var str = "";
+        $.each(tableChooseMap, function (key, value) {
+            str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.fieldName + ' ' + value.operatorName + ' ' + value.value + '</span>';
+        });
+        $("#filter" + tableId).html(str);
     },
 
     /**
