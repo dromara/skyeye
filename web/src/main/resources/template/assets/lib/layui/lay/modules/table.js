@@ -295,11 +295,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 		that.setInit();
 
 		//开始插入替代元素
-		var othis = options.elem
-			,hasRender = othis.next('.' + ELEM_VIEW)
+		var othis = options.elem,
+			hasRender = othis.next('.' + ELEM_VIEW),
 
 			//主容器
-			,reElem = that.elem = $(laytpl(TPL_MAIN).render({
+			reElem = that.elem = $(laytpl(TPL_MAIN).render({
 				VIEW_CLASS: ELEM_VIEW
 				,data: options
 				,index: that.index //索引

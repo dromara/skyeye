@@ -19,6 +19,7 @@ var initTableSearchUtil = {
      * @param form form表单对象
      */
     initAdvancedSearch: function ($table, searchParams, form) {
+        // 同一个表格只加载一次
         if(isNull(initTableSearchUtil.tableMap[$table.id])){
             initTableSearchUtil.tableMap[$table.id] = {
                 table: $table,
@@ -50,7 +51,7 @@ var initTableSearchUtil = {
         // 初始化监听事件
         initTableSearchUtil.initEvent(form);
         // 加载筛选条件展示框
-        $("div[lay-id='" + tableId + "']").before('<div class="filter-search-box" id="filter' + tableId + '"></div>');
+        $("div[lay-id='" + tableId + "']").parent().prepend('<div class="filter-search-box" id="filter' + tableId + '"></div>');
     },
 
     /**
