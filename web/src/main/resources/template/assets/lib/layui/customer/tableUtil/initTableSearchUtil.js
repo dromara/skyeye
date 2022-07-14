@@ -305,7 +305,7 @@ var initTableSearchUtil = {
         var searchCondition = [];
         $.each(tableChooseMap, function (key, confimValue) {
             searchCondition.push({
-                "attributeKey": key,
+                "attributeKey": key.slice(0, key.lastIndexOf(initTableSearchUtil.fileIdSuffix)),
                 "operator": confimValue.operator,
                 "attributeValue": confimValue.value
             });
