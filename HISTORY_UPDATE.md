@@ -2,6 +2,7 @@
 ## 历史更新资讯
 
 - 2022年
+  - [2022-07-11 云办公系统 skyeye v3.7.20 发布，PM 模块以及 AMS 模块](https://mp.weixin.qq.com/s/F06JG6hrrnQnATo8nZcD3g)
   - [2022-07-09 云办公系统 skyeye v3.7.19 发布，CRM 模块以及手机端](https://mp.weixin.qq.com/s/oMuYR3U-OZe4Ur5LBt9jIQ)
   - [2022-07-03 云办公系统 skyeye v3.7.18发布](https://mp.weixin.qq.com/s/v9NY_y1xo3QAXcw7JPKe_w)
   - [2022-06-26 云办公系统 skyeye v3.7.17 前后台框架整改](https://mp.weixin.qq.com/s/uLnAIHF7KZuNsezb7V2yGw)
