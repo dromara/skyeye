@@ -27,23 +27,13 @@ layui.config({
 			}else if(json.bean.state == '5'){
 				json.bean.stateName = "<span class='state-error'>" + json.bean.stateName + "</span>";
 			}
+
+			$("#showForm").html(getDataUseHandlebars(useTemplate, json));
+
 			// 附件回显
-			var str = "暂无附件";
-			if(json.bean.enclosureInfo.length != 0 && !isNull(json.bean.enclosureInfo)){
-				str = "";
-				$.each([].concat(json.bean.enclosureInfo), function(i, item){
-					str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-				});
-			}
-			var _html = getDataUseHandlebars(useTemplate, json);//加载数据
-			$("#showForm").html(_html);
-			$("#enclosureUploadBtn").html(str);
+			skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
 			matchingLanguage();
 	    }});
-	    
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
-	    
+
 	});
 });

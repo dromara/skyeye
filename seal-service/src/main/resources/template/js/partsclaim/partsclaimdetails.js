@@ -22,14 +22,8 @@ layui.config({
 				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
 					$("#orderDetailTitle").html(data.bean.companyName + '配件申领订单');
 				});
-		 		//相关附件回显
-			    if(!isNull(json.bean.enclosureInfo) && json.bean.enclosureInfo.length > 0){
-			    	var str = "";
-	    			$.each(json.bean.enclosureInfo, function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#enclosureUpload").html(str);
- 	        	}
+				// 附件回显
+				skyeyeEnclosure.showDetails({"enclosureUpload": json.bean.enclosureInfo});
  	        	matchingLanguage();
 		 		form.render();
 		 	}
@@ -45,11 +39,6 @@ layui.config({
 				operaSupport: true//表示如果插件也必须支持歌opera浏览器，在这种情况下，它提供了建立一个临时的打印选项卡。默认是true
 			});
 		});
-		
-		//附件下载
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
-	    
+
 	});
 });

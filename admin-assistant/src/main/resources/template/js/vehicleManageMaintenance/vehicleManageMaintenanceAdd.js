@@ -26,12 +26,7 @@ layui.config({
 		});
 
  		// 维修保养时间段选择
-		laydate.render({
-			elem: '#maintenanceTime',
-			type: 'date',
-			range: true,
-			trigger: 'click'
-		});
+		laydate.render({elem: '#maintenanceTime', type: 'date', range: true, trigger: 'click'});
  		
 		matchingLanguage();
  		form.render();
@@ -56,11 +51,7 @@ layui.config({
  	        }
  	        return false;
  	    });
- 	    
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
- 	    
+
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

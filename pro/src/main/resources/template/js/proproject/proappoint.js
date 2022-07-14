@@ -33,11 +33,7 @@ layui.config({
 				});
 
 				// 业务需求和目标的附件回显
-				var str = "";
-				$.each([].concat(json.bean.businessEnclosureInfoList), function(i, item){
-					str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-				});
-				$("#businessEnclosureUpload").html(str);
+				skyeyeEnclosure.showDetails({"businessEnclosureUpload": json.bean.businessEnclosureInfoList});
 
 				ue = ueEditorUtil.initEditor('container');
 				planUe = ueEditorUtil.initEditor('planContainer');

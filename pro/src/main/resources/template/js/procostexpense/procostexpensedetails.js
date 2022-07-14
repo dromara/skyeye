@@ -11,21 +11,12 @@ layui.config({
 	var beanTemplate = $("#beanTemplate").html();
 	
 	AjaxPostUtil.request({url: flowableBasePath + "procostexpense003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
-		//附件回显
-		var str = "暂无附件";
-		if(json.bean.enclosureInfo.length != 0 && !isNull(json.bean.enclosureInfo)){
-			str = "";
-			$.each([].concat(json.bean.enclosureInfo), function(i, item){
-				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-			});
-		}
-		var _html = getDataUseHandlebars(beanTemplate, json);//加载数据
+		// 附件回显
+		skyeyeEnclosure.showDetails({"enclosureUploadBox": json.bean.enclosureInfo});
+
+		var _html = getDataUseHandlebars(beanTemplate, json);
 		$("#showForm").html(_html);
-		$("#enclosureUploadBox").html(str);
 		matchingLanguage();
     }});
-    
-    $("body").on("click", ".enclosureItem", function() {
-    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-    });
+
 });

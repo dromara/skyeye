@@ -26,11 +26,7 @@ layui.config({
 		});
 
  		// 加油日期
- 		laydate.render({ 
- 		  	elem: '#oilTime',
- 		  	type: 'date',
- 		  	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#oilTime', type: 'date', trigger: 'click'});
  		
  		matchingLanguage();
  		form.render();
@@ -52,11 +48,7 @@ layui.config({
  	        }
  	        return false;
  	    });
- 	    
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
- 	    
+
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

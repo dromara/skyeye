@@ -22,13 +22,9 @@ layui.config({
             ajaxSendAfter: function (json) {
                 // 附件回显
                 skyeyeEnclosure.showDetails({'enclosureUpload': json.bean.enclosureInfo});
-
                 matchingLanguage();
             }
         });
 
-        $("body").on("click", ".enclosureItem", function() {
-            download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-        });
     });
 });

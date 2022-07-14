@@ -25,18 +25,10 @@ layui.config({
 		});
 
  		// 本次年检时间
- 		laydate.render({ 
- 			elem: '#thisInspectionTime',
- 			type: 'date',
- 			trigger: 'click'
- 		});
+ 		laydate.render({elem: '#thisInspectionTime', type: 'date', trigger: 'click'});
  		
  		// 下次年检时间
- 		laydate.render({ 
- 			elem: '#nextInspectionTime',
- 			type: 'date',
- 			trigger: 'click'
- 		});
+ 		laydate.render({elem: '#nextInspectionTime', type: 'date', trigger: 'click'});
 
 		skyeyeEnclosure.init('enclosureUpload');
  		matchingLanguage();
@@ -78,10 +70,6 @@ layui.config({
  	        return false;
  	    });
 
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
- 	    
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

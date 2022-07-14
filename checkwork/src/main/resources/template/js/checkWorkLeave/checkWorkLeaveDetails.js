@@ -12,17 +12,10 @@ layui.config({
         AjaxPostUtil.request({url: flowableBasePath + "checkworkleave003", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(json) {
             json.bean.stateName = getStateNameByState(json.bean.state, json.bean.stateName);
 
-            var _html = getDataUseHandlebars($("#useTemplate").html(), json);
-            $("#showForm").html(_html);
+            $("#showForm").html(getDataUseHandlebars($("#useTemplate").html(), json));
+
             // 附件回显
-            var str = "暂无附件";
-            if(json.bean.enclosureInfo.length != 0 && !isNull(json.bean.enclosureInfo)){
-                str = "";
-                $.each([].concat(json.bean.enclosureInfo), function(i, item){
-                    str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-                });
-            }
-            $("#enclosureUpload").html(str);
+            skyeyeEnclosure.showDetails({"enclosureUpload": json.bean.enclosureInfo});
             form.render();
             matchingLanguage();
         }});

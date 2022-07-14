@@ -47,16 +47,7 @@ layui.config({
 	    			});
 	    			$("#sheetPicture").html(str);
  	        	}
-		 		
-		 		//相关附件回显
-			    if(!isNull(json.bean.enclosureInfo) && json.bean.enclosureInfo.length > 0){
-			    	var str = "";
-	    			$.each(json.bean.enclosureInfo, function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#enclosureUpload").html(str);
- 	        	}
- 	        	
+
  	        	//完工拍照回显
 		 		if(!isNull(json.bean.comPic) && json.bean.comPic.length > 0){
 			    	var str = "";
@@ -67,15 +58,12 @@ layui.config({
 	    			});
 	    			$("#comPic").html(str);
  	        	}
- 	        	
- 	        	//完工附件回显
-			    if(!isNull(json.bean.comEnclosureInfo) && json.bean.comEnclosureInfo.length > 0){
-			    	var str = "";
-	    			$.each(json.bean.comEnclosureInfo, function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#comEnclosureInfo").html(str);
- 	        	}
+
+				// 附件回显
+				skyeyeEnclosure.showDetails({
+					"enclosureUpload": json.bean.enclosureInfo, // 相关附件回显
+					"comEnclosureInfo": json.bean.comEnclosureInfo // 完工附件回显
+				});
  	        	
  	        	//客户详情
  	        	if(!isNull(json.bean.customerId)){
@@ -139,11 +127,6 @@ layui.config({
 				}});
 	    });
 		
-		//附件下载
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
-	    
 	    //图片查看
 	    $("body").on("click", ".pictureItem", function() {
 	    	var src = $(this).attr("src");

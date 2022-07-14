@@ -103,6 +103,20 @@ var skyeyeEnclosure = {
             btnHtml += getDataUseHandlebars(skyeyeEnclosure.enclosureBtnTemplate, {btnId: btnId});
         }
         $("#" + boxId).html(btnHtml + str);
+
+        // 加载点击下载事件
+        skyeyeEnclosure.initDownloadEvent();
+    },
+
+    /**
+     * 加载点击下载事件
+     */
+    initDownloadEvent: function () {
+
+        $("body").on("click", ".enclosureItem", function() {
+            download(fileBasePath + $(this).attr("rowpath"), $(this).html());
+        });
+
     },
 
     /**

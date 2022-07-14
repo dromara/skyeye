@@ -1,4 +1,3 @@
-var enclosureList = new Array();//附件
 
 layui.config({
 	base: basePath,
@@ -16,20 +15,14 @@ layui.config({
 			$("#customerName").html(json.bean.customerName);
 			$("#productName").html(json.bean.productName);
 
-			//获取反馈信息
+			// 获取反馈信息
 			AjaxPostUtil.request({url: flowableBasePath + "feedback007", params: {rowId: parent.rowId}, type: 'json', callback: function(j) {
 				$("#createName").html(j.bean.createName);
 				$("#typeName").html(j.bean.typeName);
 				$("#content").html(j.bean.content);
-				//附件回显
-				if(j.bean.enclosureInfo.length != 0 && j.bean.enclosureInfo != ""){
-					enclosureList = j.bean.enclosureInfo;
-					var str = "";
-					$.each([].concat(enclosureList), function(i, item){
-						str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-					});
-					$("#enclosureUploadBox").html(str);
-				}
+
+				// 附件回显
+				skyeyeEnclosure.showDetails({"enclosureUploadBox": j.bean.enclosureInfo});
 			}});
 			matchingLanguage();
 		}});

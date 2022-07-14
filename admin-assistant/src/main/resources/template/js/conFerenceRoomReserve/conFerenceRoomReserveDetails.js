@@ -13,7 +13,7 @@ layui.config({
 	    var reserveTemplate = $("#reserveTemplate").html();
 	    
 	    AjaxPostUtil.request({url: flowableBasePath + "conferenceroomreserve003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
-			//状态
+			// 状态
 			if(json.bean.state == '0'){
 				json.bean.stateName = "<span>" + json.bean.stateName + "</span>";
 			}else if(json.bean.state == '1'){
@@ -27,21 +27,13 @@ layui.config({
 			}else if(json.bean.state == '5'){
 				json.bean.stateName = "<span class='state-error'>" + json.bean.stateName + "</span>";
 			}
-			// 附件回显
-			var str = "";
-			if(json.bean.enclosureInfo.length != 0 && !isNull(json.bean.enclosureInfo)){
-				$.each([].concat(json.bean.enclosureInfo), function(i, item){
-					str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-				});
-			}
+
 			$("#showForm").append(getDataUseHandlebars(reserveTemplate, json));
-			$("#enclosureUploadBtn").html(str);
+
+			// 附件回显
+			skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
 			matchingLanguage();
 	    }});
-	    
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
-	    
+
 	});
 });

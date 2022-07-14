@@ -9,25 +9,17 @@ layui.config({
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
-	    
-	    var beanTemplate = $("#beanTemplate").html();
-	    
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "sealseservice028",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: beanTemplate,
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendAfter:function (json) {
-		 		//相关附件回显
-			    if(!isNull(json.bean.enclosureInfo) && json.bean.enclosureInfo.length > 0){
-			    	var str = "";
-	    			$.each(json.bean.enclosureInfo, function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#enclosureUpload").html(str);
- 	        	}
- 	        	
+				// 附件回显
+				skyeyeEnclosure.showDetails({"enclosureUpload": json.bean.enclosureInfo});
+
  	        	matchingLanguage();
  	        	form.on('submit(formSubBean)', function (data) {
 			        if (winui.verifyForm(data.elem)) {
@@ -51,11 +43,6 @@ layui.config({
 		 	}
 		});
 		
-		//附件下载
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
-	    
 	    $("body").on("click", "#cancle", function() {
 			parent.layer.close(index);
 		});

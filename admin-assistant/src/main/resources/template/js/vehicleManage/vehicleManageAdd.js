@@ -91,11 +91,7 @@ layui.config({
 				userList = [].concat(systemCommonUtil.tagEditorResetData('vehicleAdmin', userReturnList));
 			});
 		});
-		
-		$("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
- 	    
+
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

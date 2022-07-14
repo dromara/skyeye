@@ -224,11 +224,7 @@ layui.config({
 		 	    });
 		 	}
 		});
-	    
-	    $("body").on("click", ".enclosureItem", function() {
-            download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-        });
-	    
+
 	    // 取消
 	    $("body").on("click", "#weekCancle", function() {
 	    	parent.layer.close(index);

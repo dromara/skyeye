@@ -25,20 +25,13 @@ layui.config({
 		 		if(json.bean.termOfValidity == "永久"){
 		 			$("#termTime").addClass('layui-hide');
 		 		}
-		 		// 附件回显
-			    if(json.bean.enclosureInfo.length != 0 && json.bean.enclosureInfo != ""){
-			    	var str = "";
-	    			$.each([].concat(json.bean.enclosureInfo), function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#enclosureUploadBtn").html(str);
-		        }
+
+				// 附件回显
+				skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
+
 		        matchingLanguage();
 		 	}
 		});
 	    
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
 	});
 });

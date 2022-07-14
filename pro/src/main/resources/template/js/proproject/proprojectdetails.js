@@ -23,48 +23,19 @@ layui.config({
 				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
 					$("#orderDetailTitle").html(data.bean.companyName + '项目详情信息');
 				});
-		 		//业务需求和目标的附件回显
-			    if(json.bean.businessEnclosureInfoList.length != 0 && json.bean.businessEnclosureInfoList != ""){
-			    	var str = "";
-	    			$.each([].concat(json.bean.businessEnclosureInfoList), function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#businessEnclosureInfoListBox").html(str);
- 	        	}
- 	        	
- 	        	//项目组织和分工的附件回显
-			    if(json.bean.projectEnclosureInfoList.length != 0 && json.bean.projectEnclosureInfoList != ""){
-			    	var str = "";
-	    			$.each([].concat(json.bean.projectEnclosureInfoList), function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#projectEnclosureInfoListBox").html(str);
- 	        	}
- 	        	
- 	        	//实施计划和方案的附件回显
-			    if(json.bean.planEnclosureInfoList.length != 0 && json.bean.planEnclosureInfoList != ""){
-			    	var str = "";
-	    			$.each([].concat(json.bean.planEnclosureInfoList), function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#planEnclosureInfoListBox").html(str);
- 	        	}
- 	        	
- 	        	//项目成果和总结的附件回显
-			    if(json.bean.resultsEnclosureInfoList.length != 0 && json.bean.resultsEnclosureInfoList != ""){
-			    	var str = "";
-	    			$.each([].concat(json.bean.resultsEnclosureInfoList), function(i, item){
-	    				str += '<a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a><br>';
-	    			});
-	    			$("#resultsEnclosureInfoListBox").html(str);
- 	        	}
+
+				// 附件回显
+				skyeyeEnclosure.showDetails({
+					"businessEnclosureInfoListBox": json.bean.businessEnclosureInfoList, // 业务需求和目标的附件回显
+					"projectEnclosureInfoListBox": json.bean.projectEnclosureInfoList, // 项目组织和分工的附件回显
+					"planEnclosureInfoListBox": json.bean.planEnclosureInfoList, // 实施计划和方案的附件回显
+					"resultsEnclosureInfoListBox": json.bean.resultsEnclosureInfoList, // 项目成果和总结的附件回显
+				});
+
  	        	matchingLanguage();
 		 		form.render();
 		 	}
 		});
 	    
-	    $("body").on("click", ".enclosureItem", function() {
-	    	download(fileBasePath + $(this).attr("rowpath"), $(this).html());
-	    });
 	});
 });

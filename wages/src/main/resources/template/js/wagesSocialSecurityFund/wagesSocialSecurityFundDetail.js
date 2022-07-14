@@ -22,13 +22,9 @@ layui.config({
 			$('#company').html(getNameByList(json.bean.company).toString());
 			$('#department').html(getNameByList(json.bean.departMent).toString());
 			$('#userStaff').html(getNameByList(json.bean.userStaff).toString());
+
 			// 附件回显
-			enclosureList = json.bean.enclosureInfo;
-			var str = "";
-			$.each([].concat(enclosureList), function(i, item){
-				str += '<br><a rowid="' + item.id + '" class="enclosureItem" rowpath="' + item.fileAddress + '" href="javascript:;" style="color:blue;">' + item.name + '</a>';
-			});
-			$("#enclosureUploadBtn").parent().html(str);
+			skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
 
 			matchingLanguage();
 			form.render();
