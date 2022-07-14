@@ -17,16 +17,23 @@ var initTableSearchUtil = {
      * @param $table 表格对象
      * @param searchParams 高级查询的参数
      * @param form form表单对象
+     * @param callback 搜索条件点击确定时的回调，用来刷新表格
      */
-    initAdvancedSearch: function ($table, searchParams, form) {
+    initAdvancedSearch: function ($table, searchParams, form, callback) {
+        var tableId = $table.id;
         // 同一个表格只加载一次
-        if(isNull(initTableSearchUtil.tableMap[$table.id])){
-            initTableSearchUtil.tableMap[$table.id] = {
+        if(isNull(initTableSearchUtil.tableMap[tableId])){
+            initTableSearchUtil.tableMap[tableId] = {
                 table: $table,
-                searchParams: searchParams
+                searchParams: searchParams,
+                callback: callback
             };
+            // 加载筛选条件展示框
+            $("div[lay-id='" + tableId + "']").parent().prepend('<div class="filter-search-box" id="filter' + tableId + '"></div>');
+            // 初始化监听事件
+            initTableSearchUtil.initEvent(form);
         }
-        initTableSearchUtil.loadSearchSign($table.id, searchParams, form);
+        initTableSearchUtil.loadSearchSign(tableId, searchParams, form);
     },
 
     /**
@@ -48,10 +55,6 @@ var initTableSearchUtil = {
                 }
             });
         });
-        // 初始化监听事件
-        initTableSearchUtil.initEvent(form);
-        // 加载筛选条件展示框
-        $("div[lay-id='" + tableId + "']").parent().prepend('<div class="filter-search-box" id="filter' + tableId + '"></div>');
     },
 
     /**
@@ -109,7 +112,7 @@ var initTableSearchUtil = {
         var searchCondition = searchParam.searchCondition;
         var options = "";
         $.each(searchCondition, function (i, item) {
-            options += '<option value="' + item.value + '">' + item.title + '</option>';
+            options += '<option value="' + item.operator + '">' + item.operatorName + '</option>';
         });
         return options;
     },
@@ -121,7 +124,7 @@ var initTableSearchUtil = {
      * @param searchParam 高级查询的参数
      */
     getFormUnit: function (fieldId, searchParam) {
-        var type = searchParam.type;
+        var type = searchParam.dataType;
         if (type === 'input') {
             return '<input type="text" id="' + fieldId + '" name="' + fieldId + '" placeholder="请输入要搜索的内容" class="layui-input" />';
         }
@@ -134,9 +137,30 @@ var initTableSearchUtil = {
      * @param searchParam 高级查询的参数
      */
     getFormUnitValue: function (fieldId, searchParam) {
-        var type = searchParam.type;
+        var type = searchParam.dataType;
         if (type === 'input') {
             return $("#" + fieldId).val();
+        }
+    },
+
+    /**
+     * 回显筛选值
+     *
+     * @param tableId 表格id
+     * @param fieldId 字段列id
+     * @param searchParam 高级查询的参数
+     */
+    resetFormDefaultValue: function (tableId, fieldId, searchParam) {
+        // 判断是否有筛选历史，如果有，则回显
+        var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
+        var confimValue = tableChooseMap[fieldId];
+        if (!isNull(confimValue)) {
+            $("#sel" + fieldId).val(confimValue.operator);
+
+            var type = searchParam.dataType;
+            if (type === 'input') {
+                return $("#" + fieldId).val(confimValue.value);
+            }
         }
     },
 
@@ -161,6 +185,9 @@ var initTableSearchUtil = {
             // 设置位置
             $("#searchBox").css("left", $(this).offset().left - 5);
             $("#searchBox").css("top", $(this).offset().top + $(this).outerHeight());
+
+            // 设置默认值
+            initTableSearchUtil.resetFormDefaultValue(tableId, fieldId, paramConfig);
             form.render();
 
             // 点击空白处，下拉框隐藏-------开始
@@ -187,12 +214,19 @@ var initTableSearchUtil = {
             var tableId = $(this).attr("table-id");
             var fieldId = $(this).attr("field-id");
             var paramConfig = initTableSearchUtil.getPointSearchParams(tableId, fieldId);
+
+            var chooseValue = initTableSearchUtil.getFormUnitValue(fieldId, paramConfig);
+            if (isNull(chooseValue)) {
+                winui.window.msg('请输入筛选值.', {icon: 2, time: 2000});
+                return false;
+            }
+
             // 点击确定获取值
             var confimValue = {
                 "fieldName": $(this).attr("field-name"),
                 "operator": $("#sel" + fieldId).val(),
                 "operatorName": $("#sel" + fieldId).find("option:selected").text(),
-                "value": initTableSearchUtil.getFormUnitValue(fieldId, paramConfig)
+                "value": chooseValue
             };
 
             var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
@@ -202,7 +236,24 @@ var initTableSearchUtil = {
             // 移除选择框
             $("#searchBox").remove();
             // 展示筛选内容
-            initTableSearchUtil.loadChooseHtml(tableId);
+            initTableSearchUtil.loadChooseHtml(tableId, fieldId);
+            // 加载回调函数
+            var mation = initTableSearchUtil.tableMap[tableId];
+            if (typeof (mation.callback) == "function") {
+                mation.callback();
+            }
+        });
+
+        // 删除筛选条件
+        $("body").on("click", ".search-del", function (e) {
+            var tableId = $(this).attr("table-id");
+            var fieldId = $(this).attr("field-id");
+
+            var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
+            delete tableChooseMap[fieldId];
+            initTableSearchUtil.chooseMap[tableId] = tableChooseMap;
+
+            $(this).parent().remove();
         });
 
     },
@@ -211,18 +262,21 @@ var initTableSearchUtil = {
      * 加载选中列筛选条件的内容
      *
      * @param tableId 表格id
+     * @param fieldId 字段列id
      */
-    loadChooseHtml: function (tableId) {
+    loadChooseHtml: function (tableId, fieldId) {
         var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
         var str = "";
         $.each(tableChooseMap, function (key, value) {
-            str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.fieldName + ' ' + value.operatorName + ' ' + value.value + '</span>';
+            str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.fieldName + ' ' + value.operatorName + ' ' + value.value + '' +
+                '<i class="layui-icon layui-unselect layui-tab-close search-del" table-id="' + tableId + '" field-id="' + fieldId + '" title="删除">&#x1006;</i>' +
+                '</span>';
         });
         $("#filter" + tableId).html(str);
     },
 
     /**
-     * 获取指定表格，指定列的筛选条件信息
+     * 获取指定表格以及指定列的筛选条件信息
      *
      * @param tableId 表格id
      * @param fieldId 字段列id
@@ -239,6 +293,26 @@ var initTableSearchUtil = {
             }
         });
         return result;
+    },
+
+    /**
+     * 获取搜索内容进行表格刷新
+     *
+     * @param tableId 表格id
+     */
+    getSearchValue: function (tableId) {
+        var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
+        var searchCondition = [];
+        $.each(tableChooseMap, function (key, confimValue) {
+            searchCondition.push({
+                "attributeKey": key,
+                "operator": confimValue.operator,
+                "attributeValue": confimValue.value
+            });
+        });
+        return {
+            "dynamicCondition": JSON.stringify(searchCondition)
+        };
     }
 
 }

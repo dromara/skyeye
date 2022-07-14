@@ -36,14 +36,16 @@ layui.config({
 	    	matchingLanguage();
 			var searchParams = {
 				"roleName": {
-					"type": "input",
+					"dataType": "input",
 					"searchCondition": [{
-						"value": "<",
-						"title": "小于"
+						"operator": "<",
+						"operatorName": "小于"
 					}]
 				}
 			};
-			initTableSearchUtil.initAdvancedSearch(this, searchParams, form);
+			initTableSearchUtil.initAdvancedSearch(this, searchParams, form, function () {
+				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -139,9 +141,9 @@ layui.config({
     }
 
     function getTableParams() {
-    	return {
+    	return $.extend(true, {
 			roleName: $("#roleName").val()
-		};
+		}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('syseverolelist', {});

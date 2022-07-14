@@ -10,6 +10,24 @@
 
 .filter-search-box{
     width: 100%;
+    padding-top: 7px;
+}
+
+.filter-search-box .skyeye-badge {
+    margin-bottom: 0px;
+    background-color: #d9e7f9 !important;
+    border: 1px solid rgba(0,0,0,.07);
+    color: #2f73c8 !important;
+    padding: 5px 5px;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.filter-search-box .skyeye-badge .layui-tab-close {
+    margin-left: 5px;
+    font-size: 14px;
+    cursor: pointer;
 }
 
 .search-form {
