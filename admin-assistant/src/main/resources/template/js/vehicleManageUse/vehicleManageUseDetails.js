@@ -13,7 +13,7 @@ layui.config({
 	    var useTemplate = $("#useTemplate").html();
 	    
 	    AjaxPostUtil.request({url: flowableBasePath + "vehicle016", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
-			//状态
+			// 状态
 			if(json.bean.state == '0'){
 				json.bean.stateName = "<span>" + json.bean.stateName + "</span>";
 			}else if(json.bean.state == '1'){
@@ -46,16 +46,7 @@ layui.config({
 	    }});
 	    
 	    $("body").on("click", "#vehicleImg", function() {
-	    	var src = $(this).attr("src");
-	    	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + src + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
+			systemCommonUtil.showPicImg($(this).attr("src"));
 	    });
 
 	});

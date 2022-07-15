@@ -86,21 +86,13 @@ layui.config({
 		layui.table.on('tool(messageTable)', function (obj) {
 	        var data = obj.data;
 	        var layEvent = obj.event;
-	        if (layEvent === 'subBind') { //科目技能绑定
-	        	subBind(data);
-	        }else if (layEvent === 'userPhoto') { //头像预览
-	        	layer.open({
-	        		type:1,
-	        		title:false,
-	        		closeBtn:0,
-	        		skin: 'demo-class',
-	        		shadeClose:true,
-	        		content:'<img src="' + fileBasePath + data.userPhoto + '" style="max-height:600px;max-width:100%;">',
-	        		scrollbar:false
-	            });
-	        }else if (layEvent === 'details') { //教师详情
-	        	details(data);
-	        }
+			if (layEvent === 'subBind') { // 科目技能绑定
+				subBind(data);
+			} else if (layEvent === 'userPhoto') { // 头像预览
+				systemCommonUtil.showPicImg(fileBasePath + data.userPhoto);
+			} else if (layEvent === 'details') { // 教师详情
+				details(data);
+			}
 	    });
 	    
 	    form.render();

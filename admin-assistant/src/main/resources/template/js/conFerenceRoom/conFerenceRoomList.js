@@ -64,29 +64,21 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'repair') { //修复
-        	repair(data);
-        }else if (layEvent === 'roomImg') { //图片预览
-        	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + fileBasePath + data.roomImg + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
-        }else if (layEvent === 'details') { //详情
-        	details(data);
-        }else if (layEvent === 'scrap'){ //报废
-        	scrap(data);
-        }else if (layEvent === 'normal'){ //恢复正常
-        	normal(data);
-        }else if (layEvent === 'delet'){ //删除
-        	delet(data);
-        }else if (layEvent === 'edit'){	//编辑
-        	edit(data);
-        }
+		if (layEvent === 'repair') { // 修复
+			repair(data);
+		} else if (layEvent === 'roomImg') { // 图片预览
+			systemCommonUtil.showPicImg(fileBasePath + data.roomImg);
+		} else if (layEvent === 'details') { // 详情
+			details(data);
+		} else if (layEvent === 'scrap') { // 报废
+			scrap(data);
+		} else if (layEvent === 'normal') { // 恢复正常
+			normal(data);
+		} else if (layEvent === 'delet') { // 删除
+			delet(data);
+		} else if (layEvent === 'edit') {	// 编辑
+			edit(data);
+		}
     });
 	
 	form.render();

@@ -264,20 +264,12 @@ layui.config({
         }
     });
     
-    //图片预览
+    // 图片预览
     $('body').on('click', '.cursor', function() {
-    	layer.open({
-    		type:1,
-    		title:false,
-    		closeBtn:0,
-    		skin: 'demo-class',
-    		shadeClose:true,
-    		content:'<img src="' + $(this).attr("src") + '" style="max-height:600px;max-width:100%;">',
-    		scrollbar:false
-        });
+		systemCommonUtil.showPicImg($(this).attr("src"));
     });
     
-    //页面内组件选中组件项
+    // 页面内组件选中组件项
     $('body').on('click', '.check-item', function() {
     	$(".check-item").removeClass("show-operation");
     	$(".check-item").removeClass("check-item-shoose");//移除之前被选中的组件

@@ -28,16 +28,7 @@ layui.config({
 		});
 	    
 	    $("body").on("click", "#vehicleImg", function() {
-	    	var src = $(this).attr("src");
-	    	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + src + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
+			systemCommonUtil.showPicImg($(this).attr("src"));
 	    });
 	});
 });

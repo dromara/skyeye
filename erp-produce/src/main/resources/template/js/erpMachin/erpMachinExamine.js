@@ -49,20 +49,12 @@ layui.config({
 			}
 		});
 		
-		//图片预览
+		// 图片预览
 		$("body").on("click", ".barCode", function (e) {
-			layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + fileBasePath + $(this).attr("src") + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
+			systemCommonUtil.showPicImg(fileBasePath + $(this).attr("src"));
 		});
 		
-		//取消
+		// 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });

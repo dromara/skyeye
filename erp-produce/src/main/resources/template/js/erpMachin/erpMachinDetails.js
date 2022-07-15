@@ -85,16 +85,7 @@ layui.config({
 		
 		// 图片预览
 		$("body").on("click", ".barCode", function (e) {
-			var src = $(this).attr("src");
-			layer.open({
-        		type: 1,
-        		title: false,
-        		closeBtn: 0,
-        		skin: 'demo-class',
-        		shadeClose: true,
-        		content: '<img src="' + src + '" style="max-height:600px; max-width:100%;">',
-        		scrollbar: false
-            });
+			systemCommonUtil.showPicImg($(this).attr("src"));
 		});
 		
 		// 验收

@@ -35,18 +35,9 @@ layui.config({
 			matchingLanguage();
 	    }});
 
-	    //图片查看
+	    // 图片查看
 	    $("body").on("click", ".photo-img", function() {
-	    	var src = $(this).attr("src");
-	    	layer.open({
-	    		type:1,
-	    		title:false,
-	    		closeBtn:0,
-	    		skin: 'demo-class',
-	    		shadeClose:true,
-	    		content:'<img src="' + src + '" style="max-height:600px;max-width:100%;">',
-	    		scrollbar:false
-	        });
+			systemCommonUtil.showPicImg($(this).attr("src"));
 	    });
 	    
 	});

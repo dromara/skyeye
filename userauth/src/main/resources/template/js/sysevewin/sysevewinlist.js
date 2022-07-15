@@ -58,25 +58,17 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'del') { //删除
-        	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
-        	edit(data);
-        }else if (layEvent === 'authorization'){//授权
-        	authorization(data, obj);
-        }else if (layEvent === 'cancleauthorization'){//取消授权
-        	cancleauthorization(data, obj);
-        }else if (layEvent === 'sysPic'){
-        	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + fileBasePath + data.sysPic + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
-        }
+		if (layEvent === 'del') { // 删除
+			del(data, obj);
+		} else if (layEvent === 'edit') { // 编辑
+			edit(data);
+		} else if (layEvent === 'authorization') {// 授权
+			authorization(data, obj);
+		} else if (layEvent === 'cancleauthorization') {// 取消授权
+			cancleauthorization(data, obj);
+		} else if (layEvent === 'sysPic') {
+			systemCommonUtil.showPicImg(fileBasePath + data.sysPic);
+		}
     });
 	
 	//删除

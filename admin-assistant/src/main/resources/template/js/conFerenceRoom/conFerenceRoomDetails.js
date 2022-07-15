@@ -23,22 +23,12 @@ layui.config({
 
 				// 附件回显
 				skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
-
 		        matchingLanguage();
 		 	}
 		});
 	    
 	    $("body").on("click", "#roomImg", function() {
-	    	var src = $(this).attr("src");
-	    	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + src + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
+			systemCommonUtil.showPicImg($(this).attr("src"));
 	    });
 	});
 });

@@ -111,29 +111,21 @@ layui.config({
 		table.on('tool(messageTable)', function (obj) {
 	        var data = obj.data;
 	        var layEvent = obj.event;
-	        if (layEvent === 'del') { //删除
-	        	del(data, obj);
-	        }else if (layEvent === 'edit') { //编辑
-	        	edit(data);
-	        }else if (layEvent === 'top') { //上移
-	        	topOne(data);
-	        }else if (layEvent === 'lower') { //下移
-	        	lowerOne(data);
-	        }else if (layEvent === 'authpoint') { //权限点
-	        	authpoint(data);
-	        }else if(layEvent === 'menuIconPic'){ //图片
-	        	layer.open({
-	        		type:1,
-	        		title:false,
-	        		closeBtn:0,
-	        		skin: 'demo-class',
-	        		shadeClose:true,
-	        		content:'<img src="' + fileBasePath + data.menuIconPic + '" style="max-height:600px;max-width:100%;">',
-	        		scrollbar:false
-	            });
-	        }else if (layEvent === 'details') { //详情
-                details(data);
-            }
+			if (layEvent === 'del') { // 删除
+				del(data, obj);
+			} else if (layEvent === 'edit') { // 编辑
+				edit(data);
+			} else if (layEvent === 'top') { // 上移
+				topOne(data);
+			} else if (layEvent === 'lower') { // 下移
+				lowerOne(data);
+			} else if (layEvent === 'authpoint') { // 权限点
+				authpoint(data);
+			} else if (layEvent === 'menuIconPic') { // 图片
+				systemCommonUtil.showPicImg(fileBasePath + data.menuIconPic);
+			} else if (layEvent === 'details') { // 详情
+				details(data);
+			}
 	    });
 		
 	}

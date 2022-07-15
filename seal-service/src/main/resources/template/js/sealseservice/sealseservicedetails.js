@@ -91,7 +91,7 @@ layui.config({
 		 	}
 		});
 	    
-		//客户详情
+		// 客户详情
 		$("body").on("click", ".customerNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
@@ -103,7 +103,7 @@ layui.config({
 				}});
 	    });
 	    
-	    //产品详情
+	    // 产品详情
 		$("body").on("click", ".productNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
@@ -115,7 +115,7 @@ layui.config({
 				}});
 	    });
 	    
-	    //故障关键组件详情
+	    // 故障关键组件详情
 		$("body").on("click", ".faultKeyPartsNameMation", function() {
 	    	rowId = $(this).attr("rowid");
 			_openNewWindows({
@@ -127,21 +127,12 @@ layui.config({
 				}});
 	    });
 		
-	    //图片查看
+	    // 图片查看
 	    $("body").on("click", ".pictureItem", function() {
-	    	var src = $(this).attr("src");
-	    	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + src + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
+			systemCommonUtil.showPicImg($(this).attr("src"));
 	    });
 
-		//打印
+		// 打印
 		$("body").on("click", "#jprint", function (e) {
 			$("#showForm").jqprint({
 				title: '售后工单',
@@ -152,7 +143,7 @@ layui.config({
 			});
 		});
 	    
-	    //情况反馈详情
+	    // 情况反馈详情
 	    $("body").on("click", ".details", function() {
 	    	rowId = $(this).attr("rowid");
 	    	_openNewWindows({

@@ -42,17 +42,10 @@ layui.config({
 	        	}
 	        	matchingLanguage();
 		 		form.render();
+
 		 		$("body").on("click","#menuIconPic", function() {
-		 			layer.open({
-		        		type:1,
-		        		title:false,
-		        		closeBtn:0,
-		        		skin: 'demo-class',
-		        		shadeClose:true,
-		        		content:'<img src="' + fileBasePath + json.bean.menuIconPic + '" style="max-height:400px;max-width:100%;">',
-		        		scrollbar:false
-		            });
-		 		}) 
+					systemCommonUtil.showPicImg(fileBasePath + json.bean.menuIconPic);
+		 		})
 		 	}
 		});
 	    

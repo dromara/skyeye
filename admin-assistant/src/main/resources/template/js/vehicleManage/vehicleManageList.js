@@ -67,29 +67,21 @@ layui.config({
 	table.on('tool(vehicleTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'vehiclerepair') { //维修
-        	vehiclerepair(data);
-        }else if (layEvent === 'vehicleImg') { //图片预览
-        	layer.open({
-        		type:1,
-        		title:false,
-        		closeBtn:0,
-        		skin: 'demo-class',
-        		shadeClose:true,
-        		content:'<img src="' + fileBasePath + data.vehicleImg + '" style="max-height:600px;max-width:100%;">',
-        		scrollbar:false
-            });
-        }else if (layEvent === 'vehicledetails') { //详情
-        	vehicledetails(data);
-        }else if (layEvent === 'vehiclescrap'){ //报废
-        	vehiclescrap(data);
-        }else if (layEvent === 'vehiclenormal'){ //恢复正常
-        	vehiclenormal(data);
-        }else if (layEvent === 'vehicledelet'){ //删除
-        	vehicledelet(data);
-        }else if (layEvent === 'vehicleedit'){ //编辑
-        	vehicleedit(data);
-        }
+		if (layEvent === 'vehiclerepair') { // 维修
+			vehiclerepair(data);
+		} else if (layEvent === 'vehicleImg') { // 图片预览
+			systemCommonUtil.showPicImg(fileBasePath + data.vehicleImg);
+		} else if (layEvent === 'vehicledetails') { // 详情
+			vehicledetails(data);
+		} else if (layEvent === 'vehiclescrap') { // 报废
+			vehiclescrap(data);
+		} else if (layEvent === 'vehiclenormal') { // 恢复正常
+			vehiclenormal(data);
+		} else if (layEvent === 'vehicledelet') { // 删除
+			vehicledelet(data);
+		} else if (layEvent === 'vehicleedit') { // 编辑
+			vehicleedit(data);
+		}
     });
 	
 	// 车辆详情
