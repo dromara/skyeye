@@ -82,14 +82,13 @@ var initTableSearchUtil = {
             '<div class="box">' +
                 '<div class="layui-form-item layui-col-xs12">' +
                     '<div class="layui-input-block">' +
-                        '<select id="sel' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" win-verify="required">' +
+                        '<select id="sel' + fieldId + '" lay-filter="sel' + fieldId + '" lay-search="" win-verify="required">' +
                             initTableSearchUtil.getOptions(searchParam) +
                         '</select>' +
                     '</div>' +
                 '</div>' +
                 '<div class="layui-form-item layui-col-xs12">' +
-                    '<div class="layui-input-block">' +
-                        initTableSearchUtil.getFormUnit(fieldId, searchParam) +
+                    '<div class="layui-input-block" id="searchContent' + fieldId + '">' +
                     '</div>' +
                 '</div>' +
                 '<div class="layui-form-item layui-col-xs12" style="margin-top: 30px; text-align: center">' +
@@ -110,7 +109,7 @@ var initTableSearchUtil = {
      */
     getOptions: function (searchParam) {
         var searchCondition = searchParam.searchCondition;
-        var options = "";
+        var options = "<option value=''>请选择</option>";
         $.each(searchCondition, function (i, item) {
             options += '<option value="' + item.operator + '">' + item.operatorName + '</option>';
         });
@@ -126,19 +125,85 @@ var initTableSearchUtil = {
     getFormUnit: function (fieldId, searchParam) {
         var type = searchParam.dataType;
         if (type === 'input') {
+            // 文本
             return '<input type="text" id="' + fieldId + '" name="' + fieldId + '" placeholder="请输入要搜索的内容" class="layui-input" />';
+        } else if (type === 'date') {
+            // 日期
+            return '';
+        } else if (type === 'user') {
+            // 用户
+            return '';
+        } else if (type === 'userStaff') {
+            // 员工
+            return '';
+        } else if (type === 'virtualSelect') {
+            // 接口-下拉框  dataFrom: {"url": "", "valueKey": "", "showKey": ""}
+            return '';
+        } else if (type === 'constantSelect') {
+            // 常量-下拉框  dataFrom: [{"id": "", "name": ""}]
+            var dataFrom = searchParam.dataFrom;
+            var options = "";
+            $.each(dataFrom, function (i, item) {
+                options += '<option value="' + item.id + '">' + item.name + '</option>';
+            });
+            return  '<select id="' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" >' +
+                options +
+                '</select>';
         }
     },
 
     /**
-     * 获取表单组件的值
+     * 获取表单组件显示出来的值
      *
      * @param fieldId 字段列id
      * @param searchParam 高级查询的参数
      */
-    getFormUnitValue: function (fieldId, searchParam) {
+    getFormUnitShowValue: function (fieldId, searchParam) {
         var type = searchParam.dataType;
         if (type === 'input') {
+            return $("#" + fieldId).val();
+        } else if (type === 'date') {
+            // 日期
+            return '';
+        } else if (type === 'user') {
+            // 用户
+            return '';
+        } else if (type === 'userStaff') {
+            // 员工
+            return '';
+        } else if (type === 'virtualSelect') {
+            // 接口-下拉框  dataFrom: {"url": "", "valueKey": "", "showKey": ""}
+            return $("#" + fieldId).find("option:selected").text();
+        } else if (type === 'constantSelect') {
+            // 常量-下拉框  dataFrom: [{"id": "", "name": ""}]
+            return $("#" + fieldId).find("option:selected").text();
+        }
+    },
+
+    /**
+     * 获取表单组件没有显示出来的值,例如select等
+     *
+     * @param fieldId 字段列id
+     * @param searchParam 高级查询的参数
+     */
+    getFormUnitHideValue: function (fieldId, searchParam) {
+        var type = searchParam.dataType;
+        if (type === 'input') {
+            return $("#" + fieldId).val();
+        } else if (type === 'date') {
+            // 日期
+            return '';
+        } else if (type === 'user') {
+            // 用户
+            return '';
+        } else if (type === 'userStaff') {
+            // 员工
+            return '';
+        } else if (type === 'virtualSelect') {
+            // 接口-下拉框  dataFrom: {"url": "", "valueKey": "", "showKey": ""}
+            return $("#" + fieldId).val();
+        } else if (type === 'constantSelect') {
+            // 常量-下拉框  dataFrom: [{"id": "", "name": ""}]
             return $("#" + fieldId).val();
         }
     },
@@ -148,18 +213,36 @@ var initTableSearchUtil = {
      *
      * @param tableId 表格id
      * @param fieldId 字段列id
-     * @param searchParam 高级查询的参数
+     * @param paramConfig 高级查询的参数配置
      */
-    resetFormDefaultValue: function (tableId, fieldId, searchParam) {
+    resetFormDefaultValue: function (tableId, fieldId, paramConfig) {
         // 判断是否有筛选历史，如果有，则回显
         var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
         var confimValue = tableChooseMap[fieldId];
         if (!isNull(confimValue)) {
+            // 加载搜索框
+            $("#searchContent" + fieldId).html(initTableSearchUtil.getFormUnit(fieldId, paramConfig));
+            // 设置默认筛选条件
             $("#sel" + fieldId).val(confimValue.operator);
-
-            var type = searchParam.dataType;
+            // 根据类型设置默认值
+            var type = paramConfig.dataType;
             if (type === 'input') {
-                return $("#" + fieldId).val(confimValue.value);
+                return $("#" + fieldId).val(confimValue.showValue);
+            } else if (type === 'date') {
+                // 日期
+                return '';
+            } else if (type === 'user') {
+                // 用户
+                return '';
+            } else if (type === 'userStaff') {
+                // 员工
+                return '';
+            } else if (type === 'virtualSelect') {
+                // 接口-下拉框  dataFrom: {"url": "", "valueKey": "", "showKey": ""}
+                return $("#" + fieldId).val(confimValue.hideValue);
+            } else if (type === 'constantSelect') {
+                // 常量-下拉框  dataFrom: [{"id": "", "name": ""}]
+                return $("#" + fieldId).val(confimValue.hideValue);
             }
         }
     },
@@ -189,6 +272,11 @@ var initTableSearchUtil = {
             // 设置默认值
             initTableSearchUtil.resetFormDefaultValue(tableId, fieldId, paramConfig);
             form.render();
+            form.on('select(sel' + fieldId + ')', function (data) {
+                var value = data.value;
+                $("#searchContent" + fieldId).html(initTableSearchUtil.getFormUnit(fieldId, paramConfig));
+                form.render();
+            });
 
             // 点击空白处，下拉框隐藏-------开始
             var tag = $("#searchBox");
@@ -215,9 +303,13 @@ var initTableSearchUtil = {
             var fieldId = $(this).attr("field-id");
             var paramConfig = initTableSearchUtil.getPointSearchParams(tableId, fieldId);
 
-            var chooseValue = initTableSearchUtil.getFormUnitValue(fieldId, paramConfig);
+            if (isNull($("#sel" + fieldId).val())) {
+                winui.window.msg('请选择筛选条件.', {icon: 2, time: 2000});
+                return false;
+            }
+            var chooseValue = initTableSearchUtil.getFormUnitHideValue(fieldId, paramConfig);
             if (isNull(chooseValue)) {
-                winui.window.msg('请输入筛选值.', {icon: 2, time: 2000});
+                winui.window.msg('筛选值不能为空.', {icon: 2, time: 2000});
                 return false;
             }
 
@@ -226,7 +318,8 @@ var initTableSearchUtil = {
                 "fieldName": $(this).attr("field-name"),
                 "operator": $("#sel" + fieldId).val(),
                 "operatorName": $("#sel" + fieldId).find("option:selected").text(),
-                "value": chooseValue
+                "showValue": initTableSearchUtil.getFormUnitShowValue(fieldId, paramConfig),
+                "hideValue": chooseValue
             };
 
             var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
@@ -307,7 +400,7 @@ var initTableSearchUtil = {
             searchCondition.push({
                 "attributeKey": key.slice(0, key.lastIndexOf(initTableSearchUtil.fileIdSuffix)),
                 "operator": confimValue.operator,
-                "attributeValue": confimValue.value
+                "attributeValue": confimValue.hideValue
             });
         });
         return {
