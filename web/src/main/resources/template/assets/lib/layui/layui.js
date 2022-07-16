@@ -248,6 +248,7 @@ function isNull(str){
 			cookie: 'cookie',//cookie
 			fileUpload: 'jQuery.upload.min',//上传
 			dragula: 'dragula',//拖拽
+
 			codemirror: 'codemirror/codemirror',//代码格式编辑器
 			xml: 'codemirror/xml',//代码格式编辑器xml，html支持
 			clike: 'codemirror/clike',//代码格式编辑器clike支持C，C++，Objective-C，Java，Scala，Kotlin，Ceylon高亮
@@ -258,6 +259,17 @@ function isNull(str){
 			solr: 'codemirror/solr',//代码格式编辑器solr支持solr
 			sql: 'codemirror/sql',//代码格式编辑器sql支持sql
 			vue: 'codemirror/vue',//代码格式编辑器vue支持vue
+			foldcode: 'codemirror/fold/foldcode',// 支持各种代码折叠
+			foldgutter: 'codemirror/fold/foldgutter',// 支持各种代码折叠
+			braceFold: 'codemirror/fold/brace-fold',// 支持各种代码折叠
+			commentFold: 'codemirror/fold/comment-fold',// 支持各种代码折叠
+			matchbrackets: 'codemirror/edit/matchbrackets',// 支持括号自动匹配
+			closebrackets: 'codemirror/edit/closebrackets',// 支持括号自动匹配
+			showHint: 'codemirror/hint/show-hint',// 支持代码自动补全
+			anywordHint: 'codemirror/hint/anyword-hint',// 支持代码自动补全
+			lint: 'codemirror/lint/lint',// JSON错误检查
+			jsonLint: 'codemirror/lint/json-lint',// 需要依赖全局的jsonlint，不是很优雅
+
 			zclip: 'jquery.zclip',//复制插件
 			swiper: 'swiper/swiper.min',//滚动插件
 			tableSelect: 'tableSelect',//tableSelect 下拉表格选择器

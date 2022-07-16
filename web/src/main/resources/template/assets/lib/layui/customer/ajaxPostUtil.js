@@ -43,11 +43,14 @@ var AjaxPostUtil = {
     },
     // 设置基础选项
     setOptions: function(newOptions) {
-        for(var pro in newOptions) {
+        for (var pro in newOptions) {
             this.options[pro] = newOptions[pro];
         }
-        if(isNull(String(newOptions['method']))){
+        if (isNull(String(newOptions['method']))) {
             this.options['method'] = 'POST';
+        }
+        if (isNull(String(newOptions['errorCallback']))) {
+            this.options['errorCallback'] = undefined;
         }
     },
     // 格式化请求参数

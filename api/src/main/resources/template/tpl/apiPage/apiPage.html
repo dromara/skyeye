@@ -5,6 +5,7 @@
 	<title>开发API接口</title>
 	<link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
 	<link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
+	<link href="../../assets/lib/layui/css/codemirror.css" rel="stylesheet" />
 </head>
 <body class="corlor-36" style="overflow-x: hidden">
 	<div class="share-file-title">
@@ -36,12 +37,32 @@
 						<input type="text" id="menuName" placeholder="请输入名称或者链接" class="layui-input" data-search/>
 					</div>
 				</div>
-				<div class="app-list" id="appList">
+				<div class="app-list" id="appList" style="overflow: hidden">
 
 				</div>
 			</div>
-			<div class="api-right" id="contentDesc">
-
+			<div class="api-right" style="overflow: hidden">
+				<div class="layui-tab vertical-tab" lay-filter="docTabBrief">
+					<ul class="layui-tab-title">
+						<li class="layui-this">API配置信息</li>
+						<li lay-id="apiMationTab" class="apiLi" style="display: none">接口信息</li>
+						<li class="apiLi" style="display: none">出入参示例</li>
+						<li class="apiLi" style="display: none" id="advancedSearch">高级搜索配置</li>
+					</ul>
+					<div class="layui-tab-content">
+						<div class="layui-tab-item layui-show" id="contentDesc"></div>
+						<div class="layui-tab-item" id="apiMation"></div>
+						<div class="layui-tab-item">暂无</div>
+						<div class="layui-tab-item">
+							<div class="winui-toolbar layui-col-xs12">
+								<button type="button" class="layui-btn layui-btn-normal" id="saveAdvancedSearch" auth="1657962237576">保存</button>
+							</div>
+							<div class="layui-col-xs12 CodeMirrorBox">
+								<textarea id="jsonContent"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</form>
 	</div>

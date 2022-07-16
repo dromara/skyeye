@@ -9,7 +9,8 @@ var dsFormUtil = {
     dsFormBtnTemplate: '<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="{{btnId}}">表单选择</button>',
     customDsFormBox: '<div class="layui-form-item layui-col-xs12"><span class="hr-title">{{pageName}}</span><hr></div><div id="{{id}}" class="ds-form-page layui-col-xs12"></div>',
     // 必须包含的包
-    mastHaveImport: ['layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue', 'form'],
+    mastHaveImport: ['layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue',
+        'matchbrackets', 'closebrackets', 'showHint', 'anywordHint', 'lint', 'jsonLint', 'foldcode', 'foldgutter', 'braceFold', 'commentFold', 'form'],
     showType: {
         '1': '{{#bean}}<div class="layui-form-item {{defaultWidth}}"><label class="layui-form-label">{{labelContent}}：</label><div class="layui-input-block ver-center">{{text}}</div></div>{{/bean}}', // 文本展示
         '2': '{{#bean}}<div class="layui-form-item {{defaultWidth}}"><label class="layui-form-label">{{labelContent}}：</label><div class="layui-input-block ver-center">{{#each text}}<a rowid="{{id}}" class="enclosureItem" rowpath="{{fileAddress}}" href="javascript:;" style="color:blue;">{{name}}</a><br>{{/each}}</div></div>{{/bean}}', // 附件展示
