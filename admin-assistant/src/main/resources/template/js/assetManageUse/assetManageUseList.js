@@ -18,11 +18,8 @@ layui.config({
 	// 新增资产领用申请
 	authBtn('1597242249453');
 	
-	//'资产领用'页面的选取时间段表格
-	laydate.render({
-		elem: '#createTime',
-		range: '~'
-	});
+	// '资产领用'页面的选取时间段表格
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	// 资产领用管理开始
 	table.render({

@@ -220,17 +220,17 @@ layui.config({
 					var associatedDataTypes = item.associatedDataTypes;
 					$("#isAssociated").removeClass("layui-hide");
  					associatedDataTypesChange(associatedDataTypes);
- 					if(associatedDataTypes == "1"){
+					if (associatedDataTypes == "1") {
 						var obj = item.aData;
-						if(typeof item.aData != 'string'){
+						if (typeof item.aData != 'string') {
 							obj = JSON.stringify(item.aData);
 						}
- 						// json串
- 						$("#JsonData").val(obj);
- 					}else if(associatedDataTypes == "2"){
- 						// 接口
- 						$("#nterfac").val(item.aData);
- 					}
+						// json串
+						$("#JsonData").val(obj);
+					} else if (associatedDataTypes == "2") {
+						// 接口
+						$("#nterfac").val(item.aData);
+					}
 					$("input:radio[name=associatedDataTypes][value=" + associatedDataTypes + "]").attr("checked", true);
 				}
 				$("#defaultWidth").val(item.defaultWidth);

@@ -32,18 +32,9 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar' }
 	    ]],
-	    done: function(){
+	    done: function(json){
 	    	matchingLanguage();
-			var searchParams = {
-				"roleName": {
-					"dataType": "input",
-					"searchCondition": [{
-						"operator": "<",
-						"operatorName": "小于"
-					}]
-				}
-			};
-			initTableSearchUtil.initAdvancedSearch(this, searchParams, form, function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, function () {
 				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 	    }

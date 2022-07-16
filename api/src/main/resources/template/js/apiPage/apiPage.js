@@ -228,26 +228,28 @@ layui.config({
 					$("#advancedSearch").show();
 					if (!isNull(json.bean.searchParamsId)) {
 						searchParamsId = json.bean.searchParamsId;
-						$("#jsonContent").val(JSON.stringify(json.bean.searchParams, null, 4));
+						if (isNull(jsonEditor)) {
+							$("#jsonContent").val(JSON.stringify(json.bean.searchParams, null, 4));
+						} else {
+							jsonEditor.setValue(JSON.stringify(json.bean.searchParams, null, 4));
+						}
 					} else {
 						searchParamsId = "";
+						jsonEditor.setValue("");
 					}
 				} else {
 					$("#advancedSearch").hide();
 				}
 				// 切换到接口信息的Tab项
 				element.tabChange('docTabBrief', "apiMationTab");
-				loadCodeMirror = false;
 			}});
 		}
 	});
 
 	var jsonEditor;
-	var loadCodeMirror = false; // 判断是否需要重新加载高级查询的配置信息的tab页
 	var searchParamsId = ""; // 高级查询的配置页信息id
 	element.on('tab(docTabBrief)', function(obj){
-		if(obj.index == 3 && !loadCodeMirror){
-			loadCodeMirror = true;
+		if(obj.index == 3 && isNull(jsonEditor)){
 			jsonEditor = CodeMirror.fromTextArea(document.getElementById("jsonContent"), {
 				mode : "application/json",  // 模式
 				theme : "eclipse",  // CSS样式选择

@@ -16,10 +16,7 @@ layui.config({
 	authBtn('1596958747047');
 	
 	// '用品采购'页面的选取时间段表格
-	laydate.render({
-		elem: '#caigouCreateTime', //指定元素
-		range: '~'
-	});
+	laydate.render({elem: '#caigouCreateTime', range: '~'});
 	
 	// 展示用品采购列表
 	table.render({

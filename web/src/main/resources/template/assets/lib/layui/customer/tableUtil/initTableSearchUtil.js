@@ -129,7 +129,7 @@ var initTableSearchUtil = {
             return '<input type="text" id="' + fieldId + '" name="' + fieldId + '" placeholder="请输入要搜索的内容" class="layui-input" />';
         } else if (type === 'date') {
             // 日期
-            return '';
+            return '<input type="text" id="' + fieldId + '" name="' + fieldId + '" placeholder="请输入要搜索的内容" class="layui-input" />';
         } else if (type === 'user') {
             // 用户
             return '';
@@ -146,9 +146,33 @@ var initTableSearchUtil = {
             $.each(dataFrom, function (i, item) {
                 options += '<option value="' + item.id + '">' + item.name + '</option>';
             });
-            return  '<select id="' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" >' +
+            return '<select id="' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" >' +
                 options +
                 '</select>';
+        }
+    },
+
+    /**
+     * 初始化事件，例如：日期的要初始化后才能使用
+     *
+     * @param fieldId 字段列id
+     * @param searchParam 高级查询的参数
+     */
+    initFormUnitEvent: function (fieldId, searchParam) {
+        var type = searchParam.dataType;
+        // 获取筛选条件
+        var operator = $("#sel" + fieldId).val();
+        if (type === 'date') {
+            var jsCon = '<script>layui.define(["laydate"], function(exports) {' +
+                'var laydate = layui.laydate;laydate.render({elem: "#' + fieldId + '", type: "date", trigger: "click"});' +
+                '})</script>';
+            if (operator == 'between') {
+                // 区间
+                jsCon = '<script>layui.define(["laydate"], function(exports) {' +
+                    'var laydate = layui.laydate;laydate.render({elem: "#' + fieldId + '", range: "~", trigger: "click"});' +
+                    '})</script>';
+            }
+            $("#searchBox").append(jsCon);
         }
     },
 
@@ -164,7 +188,7 @@ var initTableSearchUtil = {
             return $("#" + fieldId).val();
         } else if (type === 'date') {
             // 日期
-            return '';
+            return $("#" + fieldId).val();
         } else if (type === 'user') {
             // 用户
             return '';
@@ -188,11 +212,20 @@ var initTableSearchUtil = {
      */
     getFormUnitHideValue: function (fieldId, searchParam) {
         var type = searchParam.dataType;
+        // 获取筛选条件
+        var operator = $("#sel" + fieldId).val();
         if (type === 'input') {
             return $("#" + fieldId).val();
         } else if (type === 'date') {
             // 日期
-            return '';
+            if (operator == 'between') {
+                var time = new Array();
+                time.push($("#" + fieldId).val().split('~')[0].trim());
+                time.push($("#" + fieldId).val().split('~')[1].trim());
+                return time;
+            }
+            // 日期
+            return $("#" + fieldId).val();
         } else if (type === 'user') {
             // 用户
             return '';
@@ -220,17 +253,20 @@ var initTableSearchUtil = {
         var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
         var confimValue = tableChooseMap[fieldId];
         if (!isNull(confimValue)) {
-            // 加载搜索框
-            $("#searchContent" + fieldId).html(initTableSearchUtil.getFormUnit(fieldId, paramConfig));
             // 设置默认筛选条件
             $("#sel" + fieldId).val(confimValue.operator);
+            // 加载搜索框
+            $("#searchContent" + fieldId).html(initTableSearchUtil.getFormUnit(fieldId, paramConfig));
+            // 初始化事件，例如：日期的要初始化后才能使用
+            initTableSearchUtil.initFormUnitEvent(fieldId, paramConfig);
+
             // 根据类型设置默认值
             var type = paramConfig.dataType;
             if (type === 'input') {
                 return $("#" + fieldId).val(confimValue.showValue);
             } else if (type === 'date') {
                 // 日期
-                return '';
+                return $("#" + fieldId).val(confimValue.showValue);
             } else if (type === 'user') {
                 // 用户
                 return '';
@@ -263,8 +299,9 @@ var initTableSearchUtil = {
             var fieldId = $(this).attr("search-sign");
             var paramConfig = initTableSearchUtil.getPointSearchParams(tableId, fieldId);
             var fieldName = $(this).parent().find('span').html();
-            // 加载筛选框
+            // 加载表单筛选框
             $("body").append(initTableSearchUtil.searchBox(tableId, fieldId, paramConfig, fieldName));
+
             // 设置位置
             $("#searchBox").css("left", $(this).offset().left - 5);
             $("#searchBox").css("top", $(this).offset().top + $(this).outerHeight());
@@ -273,8 +310,9 @@ var initTableSearchUtil = {
             initTableSearchUtil.resetFormDefaultValue(tableId, fieldId, paramConfig);
             form.render();
             form.on('select(sel' + fieldId + ')', function (data) {
-                var value = data.value;
                 $("#searchContent" + fieldId).html(initTableSearchUtil.getFormUnit(fieldId, paramConfig));
+                // 初始化事件，例如：日期的要初始化后才能使用
+                initTableSearchUtil.initFormUnitEvent(fieldId, paramConfig);
                 form.render();
             });
 
@@ -347,6 +385,11 @@ var initTableSearchUtil = {
             initTableSearchUtil.chooseMap[tableId] = tableChooseMap;
 
             $(this).parent().remove();
+            // 加载回调函数
+            var mation = initTableSearchUtil.tableMap[tableId];
+            if (typeof (mation.callback) == "function") {
+                mation.callback();
+            }
         });
 
     },
@@ -361,7 +404,7 @@ var initTableSearchUtil = {
         var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
         var str = "";
         $.each(tableChooseMap, function (key, value) {
-            str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.fieldName + ' ' + value.operatorName + ' ' + value.value + '' +
+            str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.fieldName + ' ' + value.operatorName + ' ' + value.showValue + '' +
                 '<i class="layui-icon layui-unselect layui-tab-close search-del" table-id="' + tableId + '" field-id="' + fieldId + '" title="删除">&#x1006;</i>' +
                 '</span>';
         });
