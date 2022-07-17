@@ -161,7 +161,12 @@ var initTableSearchUtil = {
             return '';
         } else if (type === 'virtualSelect') {
             // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
-            return '';
+            var dataFrom = initTableSearchUtil.getVirtualSelectData(searchParam);
+            var options = "<option value=''>全部</option>";
+            $.each(dataFrom, function (i, item) {
+                options += '<option value="' + item[searchParam.virtualDataFrom.valueKey] + '">' + item[searchParam.virtualDataFrom.showKey] + '</option>';
+            });
+            return initTableSearchUtil.setSelectBox(fieldId, operator, options);
         } else if (type === 'constantSelect') {
             // 常量-下拉框  constantDataFrom: [{"id": "", "name": ""}]
             var dataFrom = searchParam.constantDataFrom;
@@ -169,15 +174,42 @@ var initTableSearchUtil = {
             $.each(dataFrom, function (i, item) {
                 options += '<option value="' + item.id + '">' + item.name + '</option>';
             });
-            if (operator == 'in') {
-                return '<select id="' + fieldId + '" multiple lay-filter="' + fieldId + '" lay-search="" >' +
-                    options +
-                    '</select>';
-            }
-            return '<select id="' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" >' +
+            return initTableSearchUtil.setSelectBox(fieldId, operator, options);
+        }
+    },
+
+    /**
+     * 接口-下拉框 获取数据
+     *
+     * @param searchParam 高级查询的参数
+     * @returns {*[]}
+     */
+    getVirtualSelectData: function (searchParam) {
+        var url = "";
+        eval('url = ' + searchParam.virtualDataFrom.service + ' + "' + searchParam.virtualDataFrom.url + '"');
+        var dataFrom = [];
+        AjaxPostUtil.request({url: url, params: {}, type: 'json', method: searchParam.virtualDataFrom.method, callback: function(json) {
+            dataFrom = [].concat(json.rows);
+        }, async: false});
+        return dataFrom;
+    },
+
+    /**
+     * 设置下拉框的属性
+     *
+     * @param fieldId 字段列id
+     * @param operator 筛选条件
+     * @param options 可选项
+     */
+    setSelectBox: function (fieldId, operator, options) {
+        if (operator == 'in') {
+            return '<select id="' + fieldId + '" multiple lay-filter="' + fieldId + '" lay-search="" >' +
                 options +
                 '</select>';
         }
+        return '<select id="' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" >' +
+            options +
+            '</select>';
     },
 
     /**
@@ -225,11 +257,8 @@ var initTableSearchUtil = {
         } else if (type === 'userStaff') {
             // 员工
             return '';
-        } else if (type === 'virtualSelect') {
-            // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
-            return $("#" + fieldId).find("option:selected").text();
-        } else if (type === 'constantSelect') {
-            // 常量-下拉框  constantDataFrom: [{"id": "", "name": ""}]
+        } else if (type === 'virtualSelect' || type === 'constantSelect') {
+            // 接口-下拉框  virtualDataFrom / 常量-下拉框  constantDataFrom
             if (operator == 'in') {
                 var text = [];
                 $.each($("#" + fieldId).find("option:selected"), function (i, item) {
@@ -269,11 +298,8 @@ var initTableSearchUtil = {
         } else if (type === 'userStaff') {
             // 员工
             return '';
-        } else if (type === 'virtualSelect') {
-            // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
-            return $("#" + fieldId).val();
-        } else if (type === 'constantSelect') {
-            // 常量-下拉框  constantDataFrom: [{"id": "", "name": ""}]
+        } else if (type === 'virtualSelect' || type === 'constantSelect') {
+            // 接口-下拉框  virtualDataFrom / 常量-下拉框  constantDataFrom
             if (operator == 'in') {
                 var value = [];
                 $.each($("#" + fieldId).val(), function (i, item) {
@@ -317,11 +343,8 @@ var initTableSearchUtil = {
                 // 用户
             } else if (type === 'userStaff') {
                 // 员工
-            } else if (type === 'virtualSelect') {
-                // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
-                $("#" + fieldId).val(confimValue.hideValue);
-            } else if (type === 'constantSelect') {
-                // 常量-下拉框  constantDataFrom: [{"id": "", "name": ""}]
+            } else if (type === 'virtualSelect' || type === 'constantSelect') {
+                // 接口-下拉框  virtualDataFrom / 常量-下拉框  constantDataFrom
                 if (operator == 'in') {
                     $("#" + fieldId).val(confimValue.hideValue.replaceAll("'", "").split(','));
                 } else {
