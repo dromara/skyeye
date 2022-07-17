@@ -33,6 +33,9 @@ var initTableSearchUtil = {
             // 初始化监听事件
             initTableSearchUtil.initEvent(form);
         }
+        if (isNull(searchParams)) {
+            return;
+        }
         initTableSearchUtil.loadSearchSign(tableId, searchParams, form);
     },
 
@@ -44,17 +47,35 @@ var initTableSearchUtil = {
      * @param form form表单对象
      */
     loadSearchSign: function (tableId, searchParams, form) {
+        var fixTh = $("div[lay-id='" + tableId + "'] .layui-table-fixed").find("thead").eq(0).find("th");
         var th = $("div[lay-id='" + tableId + "'] .layui-table-header").find("thead").eq(0).find("th");
         $.each(searchParams, function (key, value) {
-            $.each(th, function (j, _th) {
-                var _this = $(_th);
-                if (_this.attr("data-field") == key) {
-                    var fieldId = key + initTableSearchUtil.fileIdSuffix;
-                    // 加载筛选标识
-                    _this.find(".layui-table-cell").append(initTableSearchUtil.searchSignHtml(tableId, fieldId));
+            // 现在固定的表头上找，没有找到的话，再去可移动的表头上找
+            var findIdent = false;
+            var fieldId = key + initTableSearchUtil.fileIdSuffix;
+            if ($("span[search-table-id='" + tableId + "'][search-sign='" + fieldId + "']").length == 0) {
+                // 固定的标头
+                $.each(fixTh, function (j, _th) {
+                    var _this = $(_th);
+                    if (_this.attr("data-field") == key) {
+                        // 加载筛选标识
+                        _this.find(".layui-table-cell").append(initTableSearchUtil.searchSignHtml(tableId, fieldId));
+                        findIdent = true;
+                    }
+                });
+                if (!findIdent) {
+                    $.each(th, function (j, _th) {
+                        var _this = $(_th);
+                        if (_this.attr("data-field") == key) {
+                            // 加载筛选标识
+                            _this.find(".layui-table-cell").append(initTableSearchUtil.searchSignHtml(tableId, fieldId));
+                        }
+                    });
                 }
-            });
+            }
         });
+        // 展示筛选内容
+        initTableSearchUtil.loadChooseHtml(tableId);
     },
 
     /**
@@ -124,6 +145,8 @@ var initTableSearchUtil = {
      */
     getFormUnit: function (fieldId, searchParam) {
         var type = searchParam.dataType;
+        // 获取筛选条件
+        var operator = $("#sel" + fieldId).val();
         if (type === 'input') {
             // 文本
             return '<input type="text" id="' + fieldId + '" name="' + fieldId + '" placeholder="请输入要搜索的内容" class="layui-input" />';
@@ -137,15 +160,20 @@ var initTableSearchUtil = {
             // 员工
             return '';
         } else if (type === 'virtualSelect') {
-            // 接口-下拉框  dataFrom: {"url": "", "valueKey": "", "showKey": ""}
+            // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
             return '';
         } else if (type === 'constantSelect') {
-            // 常量-下拉框  dataFrom: [{"id": "", "name": ""}]
-            var dataFrom = searchParam.dataFrom;
-            var options = "";
+            // 常量-下拉框  constantDataFrom: [{"id": "", "name": ""}]
+            var dataFrom = searchParam.constantDataFrom;
+            var options = "<option value=''>全部</option>";
             $.each(dataFrom, function (i, item) {
                 options += '<option value="' + item.id + '">' + item.name + '</option>';
             });
+            if (operator == 'in') {
+                return '<select id="' + fieldId + '" multiple lay-filter="' + fieldId + '" lay-search="" >' +
+                    options +
+                    '</select>';
+            }
             return '<select id="' + fieldId + '" lay-filter="' + fieldId + '" lay-search="" >' +
                 options +
                 '</select>';
@@ -184,6 +212,8 @@ var initTableSearchUtil = {
      */
     getFormUnitShowValue: function (fieldId, searchParam) {
         var type = searchParam.dataType;
+        // 获取筛选条件
+        var operator = $("#sel" + fieldId).val();
         if (type === 'input') {
             return $("#" + fieldId).val();
         } else if (type === 'date') {
@@ -196,10 +226,17 @@ var initTableSearchUtil = {
             // 员工
             return '';
         } else if (type === 'virtualSelect') {
-            // 接口-下拉框  dataFrom: {"url": "", "valueKey": "", "showKey": ""}
+            // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
             return $("#" + fieldId).find("option:selected").text();
         } else if (type === 'constantSelect') {
-            // 常量-下拉框  dataFrom: [{"id": "", "name": ""}]
+            // 常量-下拉框  constantDataFrom: [{"id": "", "name": ""}]
+            if (operator == 'in') {
+                var text = [];
+                $.each($("#" + fieldId).find("option:selected"), function (i, item) {
+                    text.push(item.outerText);
+                });
+                return text.toString();
+            }
             return $("#" + fieldId).find("option:selected").text();
         }
     },
@@ -233,10 +270,17 @@ var initTableSearchUtil = {
             // 员工
             return '';
         } else if (type === 'virtualSelect') {
-            // 接口-下拉框  dataFrom: {"url": "", "valueKey": "", "showKey": ""}
+            // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
             return $("#" + fieldId).val();
         } else if (type === 'constantSelect') {
-            // 常量-下拉框  dataFrom: [{"id": "", "name": ""}]
+            // 常量-下拉框  constantDataFrom: [{"id": "", "name": ""}]
+            if (operator == 'in') {
+                var value = [];
+                $.each($("#" + fieldId).val(), function (i, item) {
+                    value.push("'" + item + "'");
+                });
+                return value.toString();
+            }
             return $("#" + fieldId).val();
         }
     },
@@ -253,8 +297,10 @@ var initTableSearchUtil = {
         var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
         var confimValue = tableChooseMap[fieldId];
         if (!isNull(confimValue)) {
+            // 获取筛选条件
+            var operator = confimValue.operator;
             // 设置默认筛选条件
-            $("#sel" + fieldId).val(confimValue.operator);
+            $("#sel" + fieldId).val(operator);
             // 加载搜索框
             $("#searchContent" + fieldId).html(initTableSearchUtil.getFormUnit(fieldId, paramConfig));
             // 初始化事件，例如：日期的要初始化后才能使用
@@ -263,22 +309,24 @@ var initTableSearchUtil = {
             // 根据类型设置默认值
             var type = paramConfig.dataType;
             if (type === 'input') {
-                return $("#" + fieldId).val(confimValue.showValue);
+                $("#" + fieldId).val(confimValue.showValue);
             } else if (type === 'date') {
                 // 日期
-                return $("#" + fieldId).val(confimValue.showValue);
+                $("#" + fieldId).val(confimValue.showValue);
             } else if (type === 'user') {
                 // 用户
-                return '';
             } else if (type === 'userStaff') {
                 // 员工
-                return '';
             } else if (type === 'virtualSelect') {
-                // 接口-下拉框  dataFrom: {"url": "", "valueKey": "", "showKey": ""}
-                return $("#" + fieldId).val(confimValue.hideValue);
+                // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
+                $("#" + fieldId).val(confimValue.hideValue);
             } else if (type === 'constantSelect') {
-                // 常量-下拉框  dataFrom: [{"id": "", "name": ""}]
-                return $("#" + fieldId).val(confimValue.hideValue);
+                // 常量-下拉框  constantDataFrom: [{"id": "", "name": ""}]
+                if (operator == 'in') {
+                    $("#" + fieldId).val(confimValue.hideValue.replaceAll("'", "").split(','));
+                } else {
+                    $("#" + fieldId).val(confimValue.hideValue);
+                }
             }
         }
     },
@@ -353,6 +401,7 @@ var initTableSearchUtil = {
 
             // 点击确定获取值
             var confimValue = {
+                "fieldId": fieldId,
                 "fieldName": $(this).attr("field-name"),
                 "operator": $("#sel" + fieldId).val(),
                 "operatorName": $("#sel" + fieldId).find("option:selected").text(),
@@ -367,7 +416,7 @@ var initTableSearchUtil = {
             // 移除选择框
             $("#searchBox").remove();
             // 展示筛选内容
-            initTableSearchUtil.loadChooseHtml(tableId, fieldId);
+            initTableSearchUtil.loadChooseHtml(tableId);
             // 加载回调函数
             var mation = initTableSearchUtil.tableMap[tableId];
             if (typeof (mation.callback) == "function") {
@@ -398,12 +447,15 @@ var initTableSearchUtil = {
      * 加载选中列筛选条件的内容
      *
      * @param tableId 表格id
-     * @param fieldId 字段列id
      */
-    loadChooseHtml: function (tableId, fieldId) {
+    loadChooseHtml: function (tableId) {
+        $("#" + tableId)
+        $("div[lay-id='" + tableId + "'] .layui-table-search").removeClass("layui-table-choose");
         var tableChooseMap = isNull(initTableSearchUtil.chooseMap[tableId]) ? {} : initTableSearchUtil.chooseMap[tableId];
         var str = "";
         $.each(tableChooseMap, function (key, value) {
+            var fieldId = value.fieldId;
+            $("span[search-table-id='" + tableId + "'][search-sign='" + fieldId + "']").addClass('layui-table-choose');
             str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.fieldName + ' ' + value.operatorName + ' ' + value.showValue + '' +
                 '<i class="layui-icon layui-unselect layui-tab-close search-del" table-id="' + tableId + '" field-id="' + fieldId + '" title="删除">&#x1006;</i>' +
                 '</span>';

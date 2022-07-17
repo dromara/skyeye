@@ -61,9 +61,10 @@ layui.config({
         },
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers'},
-	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, fixed: 'left', templet: function (d) {
-	        	return '<a lay-event="details" class="notice-title-click">' + d.jobNumber + ' ' + d.userName + '</a>';
+	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 100, fixed: 'left', templet: function (d) {
+	        	return '<a lay-event="details" class="notice-title-click">' + d.userName + '</a>';
 	        }},
+			{ field: 'jobNumber', title: '工号', rowspan: '3', align: 'left', width: 100, fixed: 'left'},
 	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
 	        	if(d.staffType == 1){
 	        		return '普通员工';
@@ -90,7 +91,7 @@ layui.config({
 			}},
 	        { field: 'userIdCard', title: '身份证', rowspan: '3', align: 'center', width: 160 },
 			{ field: 'workTimeNum', title: '考勤班次', rowspan: '3', align: 'center', width: 80 },
-	        { field: 'userSex', title: '性别', width: 60, rowspan: '3', align: 'center', templet: function (d) {
+	        { field: 'userSex', title: '性别', width: 80, rowspan: '3', align: 'center', templet: function (d) {
 	        	if(d.userSex == '0'){
 	        		return "保密";
 	        	}else if(d.userSex == '1'){
@@ -115,12 +116,15 @@ layui.config({
 	        { field: 'jobName', title: '职位', align: 'left', width: 120}
 	       ]
 	    ],
-	    done: function(){
+	    done: function(json){
 	    	if(!loadCompany){
 	    		initCompany();
 	    	}
 	    	soulTable.render(this);
     		matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, function () {
+				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -151,6 +155,7 @@ layui.config({
 		systemCommonUtil.getSysCompanyList(function (json) {
 			// 加载企业数据
 			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
+			form.render('select');
 		});
 	}
 	
@@ -366,14 +371,14 @@ layui.config({
     }
 
     function getTableParams(){
-    	return {
+    	return $.extend(true, {
     		userName:$("#userName").val(),
     		userSex:$("#userSex").val(),
     		userIdCard:$("#userIdCard").val(),
     		companyName:companyId,
     		departmentName:departmentId,
     		jobName:jobId
-    	};
+    	}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
     exports('syseveuserstafflist', {});

@@ -282,7 +282,6 @@ layui.config({
 			paramsConfig: encodeURIComponent(JSON.stringify(JSON.parse(jsonEditor.getValue()))),
 			id: searchParamsId
 		};
-		console.log(params)
 		AjaxPostUtil.request({url: reqBasePath + "writeSearchConfigMation", params: params, type: 'json', method: "POST", callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 		}});

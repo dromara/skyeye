@@ -8,6 +8,10 @@
     color: #b2b2b2;
 }
 
+.layui-table-choose {
+    color: #1E9FFF !important;
+}
+
 .filter-search-box{
     width: 100%;
     padding-top: 7px;

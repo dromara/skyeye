@@ -400,8 +400,7 @@ layui.config({
     // 初始化限制条件
 	function initRequire(item){
 		AjaxPostUtil.request({url: flowableBasePath + "dsformlimitrequirement006", params:{}, type: 'json', callback: function (json) {
-			var contentModel = getFileContent('tpl/template/select-option.tpl');//获取html模板
-			var jsonStr = getDataUseHandlebars(contentModel, json);//模板和数据结合
+			var jsonStr = getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json);//模板和数据结合
 			$("#require").html(jsonStr);
 			if(!isNull(item.requireId)){
 				$("#require").val(item.requireId.split(","));//给这个元素赋值
