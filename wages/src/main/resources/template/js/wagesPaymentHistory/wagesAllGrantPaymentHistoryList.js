@@ -15,10 +15,7 @@ layui.config({
         laydate = layui.laydate;
     var selTemplate = getFileContent('tpl/template/select-option.tpl');
 
-    laydate.render({
-        elem: '#payMonth',
-        type: 'month'
-    });
+    laydate.render({elem: '#payMonth', type: 'month'});
 
     // 获取所有已发放薪资发放历史列表
     table.render({
@@ -32,11 +29,11 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'companyName', title: '公司', align: 'left', width: 150},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+            { field: 'companyName', title: '公司', align: 'left', width: 150 },
             { field: 'departmentName', title: '部门', align: 'left', width: 150 },
             { field: 'jobName', title: '职位', align: 'left', width: 120 },
-            { field: 'userName', title: '员工', align: 'left', width: 100},
+            { field: 'userName', title: '员工', align: 'left', width: 150 },
             { field: 'payMonth', title: '月份', align: 'center', width: 80, templet: function (d) {
                 return '<a  lay-event="details" class="notice-title-click">' + d.payMonth + '</p>';
             }},
@@ -50,11 +47,14 @@ layui.config({
             }},
             { field: 'createTime', title: '核算日期', align: 'center', width: 150 }
         ]],
-        done: function(){
+        done: function(json){
             if(!loadCompany){
                 initCompany();
             }
             matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, function () {
+                table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
         }
     });
 
@@ -73,6 +73,7 @@ layui.config({
         systemCommonUtil.getSysCompanyList(function (json) {
             // 加载企业数据
             $("#companyList").html(getDataUseHandlebars(selTemplate, json));
+            form.render('select');
         });
     }
 
@@ -110,14 +111,6 @@ layui.config({
         initJob();
     });
 
-    form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            refreshloadTable();
-        }
-        return false;
-    });
-
     // 详情
     function details(data){
         rowId = data.staffId;
@@ -132,6 +125,14 @@ layui.config({
         });
     }
 
+    form.render();
+    form.on('submit(formSearch)', function (data) {
+        if (winui.verifyForm(data.elem)) {
+            table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+        }
+        return false;
+    });
+
     // 刷新数据
     $("body").on("click", "#reloadTable", function() {
         loadTable();
@@ -141,19 +142,15 @@ layui.config({
         table.reload("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable(){
-        table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-
     function getTableParams(){
-        return {
+        return $.extend(true, {
             userName: $("#userName").val(),
             jobNumber: $("#jobNumber").val(),
             companyId: $("#companyList").val(),
             departmentId: $("#departmentList").val(),
             jobId: $("#jobList").val(),
             payMonth: $("#payMonth").val()
-        };
+        }, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('wagesAllGrantPaymentHistoryList', {});

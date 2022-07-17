@@ -159,7 +159,8 @@ var initTableSearchUtil = {
                 '<i class="fa fa-user-plus input-icon" id="userSearchSelPeople"></i>';
         } else if (type === 'userStaff') {
             // 员工
-            return '';
+            return '<div id="' + fieldId + '" class="layui-input search-user-staff"></div>' +
+                '<i class="fa fa-user-plus input-icon" id="userStaffSearchSelPeople"></i>';
         } else if (type === 'virtualSelect') {
             // 接口-下拉框  virtualDataFrom: {"url": "", "valueKey": "", "showKey": ""}
             var dataFrom = initTableSearchUtil.getVirtualSelectData(searchParam);
@@ -237,6 +238,13 @@ var initTableSearchUtil = {
         } else if (type === 'user') {
             systemCommonUtil.userReturnList = [];
             $("#" + fieldId).val('');
+        } else if (type === 'userStaff') {
+            if (operator == 'in') {
+                systemCommonUtil.checkStaffMation = [];
+            } else {
+                systemCommonUtil.checkStaffMation = {};
+            }
+            $("#" + fieldId).val('');
         }
     },
 
@@ -270,7 +278,17 @@ var initTableSearchUtil = {
             return systemCommonUtil.userReturnList[0].name;
         } else if (type === 'userStaff') {
             // 员工
-            return '';
+            if (systemCommonUtil.checkStaffMation.length == 0) {
+                return null;
+            }
+            if (operator == 'in') {
+                var text = [];
+                $.each(systemCommonUtil.checkStaffMation, function (i, item) {
+                    text.push(item.name);
+                });
+                return text.toString();
+            }
+            return systemCommonUtil.checkStaffMation.jobNumber + '_' + systemCommonUtil.checkStaffMation.userName;
         } else if (type === 'virtualSelect' || type === 'constantSelect') {
             // 接口-下拉框  virtualDataFrom / 常量-下拉框  constantDataFrom
             if (operator == 'in') {
@@ -321,7 +339,17 @@ var initTableSearchUtil = {
             return systemCommonUtil.userReturnList[0].id;
         } else if (type === 'userStaff') {
             // 员工
-            return '';
+            if (systemCommonUtil.checkStaffMation.length == 0) {
+                return null;
+            }
+            if (operator == 'in') {
+                var text = [];
+                $.each(systemCommonUtil.checkStaffMation, function (i, item) {
+                    text.push("'" + item.id + "'");
+                });
+                return text.toString();
+            }
+            return systemCommonUtil.checkStaffMation.id;
         } else if (type === 'virtualSelect' || type === 'constantSelect') {
             // 接口-下拉框  virtualDataFrom / 常量-下拉框  constantDataFrom
             if (operator == 'in') {
@@ -383,6 +411,30 @@ var initTableSearchUtil = {
                 $("#" + fieldId).html(str);
             } else if (type === 'userStaff') {
                 // 员工
+                var str = "";
+                if (operator == 'in') {
+                    systemCommonUtil.checkStaffMation = [];
+                    var staffIds = confimValue.hideValue.replaceAll("'", "").split(',');
+                    $.each(confimValue.showValue.split(','), function (i, value) {
+                        str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value + '' +
+                            '<i class="layui-icon layui-unselect layui-tab-close search-user-staff-del" staff-id="' + staffIds[i] + '" title="删除" operator="' + operator + '">&#x1006;</i>' +
+                            '</span>';
+                        systemCommonUtil.checkStaffMation.push({
+                            id: staffIds[i],
+                            name: value
+                        });
+                    });
+                } else {
+                    str = '<span class="layui-badge layui-bg-blue skyeye-badge">' + confimValue.showValue + '' +
+                        '<i class="layui-icon layui-unselect layui-tab-close search-user-staff-del" staff-id="' + confimValue.hideValue + '" title="删除" operator="' + operator + '">&#x1006;</i>' +
+                        '</span>';
+                    systemCommonUtil.checkStaffMation = {
+                        id: confimValue.hideValue,
+                        jobNumber: confimValue.showValue.split('_')[0],
+                        userName: confimValue.showValue.split('_')[1]
+                    };
+                }
+                $("#" + fieldId).html(str);
             } else if (type === 'virtualSelect' || type === 'constantSelect') {
                 // 接口-下拉框  virtualDataFrom / 常量-下拉框  constantDataFrom
                 if (operator == 'in') {
@@ -421,6 +473,9 @@ var initTableSearchUtil = {
             initTableSearchUtil.resetFormDefaultValue(tableId, fieldId, paramConfig);
             form.render();
             form.on('select(sel' + fieldId + ')', function (data) {
+                if (isNull(data.value)) {
+                    return;
+                }
                 $("#searchContent" + fieldId).html(initTableSearchUtil.getFormUnit(fieldId, paramConfig));
                 // 初始化事件，例如：日期的要初始化后才能使用
                 initTableSearchUtil.initFormUnitEvent(fieldId, paramConfig);
@@ -534,6 +589,45 @@ var initTableSearchUtil = {
             event.stopPropagation();
         });
 
+        // 员工选择
+        $("body").on("click", "#userStaffSearchSelPeople", function(e) {
+            var operator = $("#searchBox").find("#searchFilterCriteria").find("select").val();
+            var fieldId = $("#searchBox").find(".searchDefine").attr("field-id");
+            if (operator == 'in') {
+                systemCommonUtil.userStaffCheckType = true; // 选择类型，默认单选，true:多选，false:单选
+            } else {
+                systemCommonUtil.userStaffCheckType = false; // 选择类型，默认单选，true:多选，false:单选
+            }
+            systemCommonUtil.openSysAllUserStaffChoosePage(function (checkStaffMation){
+                var str = "";
+                if (operator == 'in') {
+                    $.each(checkStaffMation, function (key, value) {
+                        str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.name + '' +
+                            '<i class="layui-icon layui-unselect layui-tab-close search-user-staff-del" staff-id="' + value.id + '" title="删除" operator="' + operator + '">&#x1006;</i>' +
+                            '</span>';
+                    });
+                } else {
+                    str = '<span class="layui-badge layui-bg-blue skyeye-badge">' + checkStaffMation.jobNumber + '_' + checkStaffMation.userName + '' +
+                        '<i class="layui-icon layui-unselect layui-tab-close search-user-staff-del" staff-id="' + checkStaffMation.id + '" title="删除" operator="' + operator + '">&#x1006;</i>' +
+                        '</span>';
+                }
+                $("#" + fieldId).html(str);
+            });
+        });
+        // 【员工选择】删除
+        $("body").on("click", ".search-user-staff-del", function(event) {
+            var staffId = $(this).attr('staff-id');
+            var operator = $(this).attr('operator');
+            if (operator == 'in') {
+                systemCommonUtil.checkStaffMation = [].concat(arrayUtil.removeArrayPointKey(systemCommonUtil.checkStaffMation, 'id', staffId));
+            } else {
+                systemCommonUtil.checkStaffMation = {};
+            }
+            $(this).parent().remove();
+            // 阻止事件冒泡
+            event.stopPropagation();
+        });
+
     },
 
     /**
@@ -549,8 +643,8 @@ var initTableSearchUtil = {
         $.each(tableChooseMap, function (key, value) {
             var fieldId = value.fieldId;
             $("span[search-table-id='" + tableId + "'][search-sign='" + fieldId + "']").addClass('layui-table-choose');
-            str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.fieldName + ' ' + value.operatorName + ' ' + value.showValue + '' +
-                '<i class="layui-icon layui-unselect layui-tab-close search-del" table-id="' + tableId + '" field-id="' + fieldId + '" title="删除">&#x1006;</i>' +
+            str += '<span class="layui-badge layui-bg-blue skyeye-badge" title="' + value.showValue + '"><div>' + value.fieldName + ' ' + value.operatorName + ' ' + value.showValue + '' +
+                '</div><i class="layui-icon layui-unselect layui-tab-close search-del" table-id="' + tableId + '" field-id="' + fieldId + '" title="删除">&#x1006;</i>' +
                 '</span>';
         });
         $("#filter" + tableId).html(str);

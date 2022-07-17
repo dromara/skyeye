@@ -17,7 +17,8 @@
     padding-top: 7px;
 }
 
-.search-user .skyeye-badge {
+.search-user .skyeye-badge,
+.search-user-staff .skyeye-badge{
     margin-bottom: 0px;
     margin-top: 5px;
 }
@@ -31,6 +32,15 @@
     font-size: 12px;
     margin-top: 5px;
     margin-left: 5px;
+}
+
+.filter-search-box .skyeye-badge div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    box-sizing: border-box;
+    max-width: 300px;
+    float: left;
 }
 
 .filter-search-box .skyeye-badge .layui-tab-close {
@@ -64,6 +74,12 @@
 }
 
 .search-user {
+    height: auto;
+    padding-bottom: 5px;
+    min-height: 30px;
+}
+
+.search-user-staff {
     height: auto;
     padding-bottom: 5px;
     min-height: 30px;
