@@ -117,12 +117,9 @@ layui.config({
 	       ]
 	    ],
 	    done: function(json){
-	    	if(!loadCompany){
-	    		initCompany();
-	    	}
 	    	soulTable.render(this);
     		matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入员工姓名、员工工号", function () {
 				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 	    }
@@ -148,61 +145,6 @@ layui.config({
         }
     });
 	
-	var loadCompany = false;
-	// 初始化公司
-	function initCompany(){
-		loadCompany = true;
-		systemCommonUtil.getSysCompanyList(function (json) {
-			// 加载企业数据
-			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
-			form.render('select');
-		});
-	}
-	
-	// 初始化部门
-	function initDepartment(){
-		showGrid({
-		 	id: "departmentList",
-		 	url: reqBasePath + "companydepartment007",
-		 	params: {companyId: companyId},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	}
-	
-	function initJob(){
-		// 根据部门id获取岗位集合
-		systemCommonUtil.queryJobListByDepartmentId(departmentId, function(data) {
-			$("#jobList").html(getDataUseHandlebars(selTemplate, data));
-			form.render('select');
-		});
-	}
-	
-	// 公司监听事件
-	form.on('select(companyList)', function(data){
-		companyId = data.value;
-		departmentId = '';
-		jobId = '';
-		initDepartment();
-		initJob();
-	});
-	
-	// 部门监听事件
-	form.on('select(departmentList)', function(data){
-		departmentId = data.value;
-		jobId = '';
-		initJob();
-	});
-	
-	// 职位监听事件
-	form.on('select(jobList)', function(data){
-		jobId = data.value;
-	});
-
 	// 编辑
 	function edit(data){
 		rowId = data.id;
@@ -355,12 +297,6 @@ layui.config({
     });
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
-	});
 
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
@@ -371,13 +307,7 @@ layui.config({
     }
 
     function getTableParams(){
-    	return $.extend(true, {
-			userName: $("#userName").val(),
-			userIdCard: $("#userIdCard").val(),
-			companyName: companyId,
-			departmentName: departmentId,
-			jobName: jobId
-    	}, initTableSearchUtil.getSearchValue("messageTable"));
+    	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
     exports('syseveuserstafflist', {});

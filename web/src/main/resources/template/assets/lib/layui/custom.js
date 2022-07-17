@@ -205,7 +205,7 @@ function getLimit(){
 	var txtcenterHeight = $(".txtcenter").outerHeight(true);
 	var tabTtileHeight = $(".layui-tab-title").outerHeight(true);
 	// 计算表格tbody的高度
-	var realHeight = clientHeight - 100
+	var realHeight = clientHeight - 120
 		- (isNull(toolbarHeight) ? 0 : toolbarHeight)
 		- (isNull(txtcenterHeight) ? 0 : txtcenterHeight)
 		- (isNull(tabTtileHeight) ? 0 : tabTtileHeight);

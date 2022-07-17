@@ -1,8 +1,4 @@
 
-var companyId = "";
-var departmentId = "";
-var jobId = "";
-
 var rowId = "";
 layui.config({
 	base: basePath, 
@@ -14,8 +10,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	var selTemplate = getFileContent('tpl/template/select-option.tpl')
-	
+
 	authBtn('1552960199302');
 	table.render({
 	    id: 'messageTable',
@@ -56,11 +51,8 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
-	    	if(!loadCompany){
-	    		initCompany();
-	    	}
 	    	matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入账号、员工姓名、员工工号", function () {
 				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 	    }
@@ -82,68 +74,8 @@ layui.config({
 		}
     });
 	
-	var loadCompany = false;
-	// 初始化公司
-	function initCompany(){
-		loadCompany = true;
-		systemCommonUtil.getSysCompanyList(function (json) {
-			// 加载企业数据
-			$("#companyList").html(getDataUseHandlebars(selTemplate, json));
-		});
-	}
-	
-	// 初始化部门
-	function initDepartment(){
-		showGrid({
-		 	id: "departmentList",
-		 	url: reqBasePath + "companydepartment007",
-		 	params: {companyId: companyId},
-		 	pagination: false,
-		 	template: selTemplate,
-		 	ajaxSendLoadBefore: function(hdb){},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-	    });
-	}
-	
-	function initJob(){
-		// 根据部门id获取岗位集合
-		systemCommonUtil.queryJobListByDepartmentId(departmentId, function(data) {
-			$("#jobList").html(getDataUseHandlebars(selTemplate, data));
-			form.render('select');
-		});
-	}
-	
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	refreshTable();
-        }
-        return false;
-	});
-	
-	// 公司监听事件
-	form.on('select(companyList)', function(data){
-		companyId = data.value;
-		departmentId = '';
-		jobId = '';
-		initDepartment();
-		initJob();
-	});
-	
-	// 部门监听事件
-	form.on('select(departmentList)', function(data){
-		departmentId = data.value;
-		jobId = '';
-		initJob();
-	});
-	
-	// 职位监听事件
-	form.on('select(jobList)', function(data){
-		jobId = data.value;
-	});
-	
+
 	// 监听锁定操作
 	form.on('checkbox(lockDemo)', function(obj) {
 		if(obj.elem.checked){
@@ -230,18 +162,8 @@ layui.config({
     	table.reload("messageTable", {where: getTableParams()});
     }
     
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-    
     function getTableParams(){
-    	return $.extend(true, {
-			userCode: $("#userCode").val(),
-			userName: $("#userName").val(),
-			companyName: companyId,
-			departmentName: departmentId,
-			jobName: jobId
-    	}, initTableSearchUtil.getSearchValue("messageTable"));
+    	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
     exports('syseveuserlist', {});

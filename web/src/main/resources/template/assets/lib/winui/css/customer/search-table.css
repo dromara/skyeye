@@ -14,7 +14,6 @@
 
 .filter-search-box{
     width: 100%;
-    padding-top: 7px;
 }
 
 .search-user .skyeye-badge,
@@ -83,4 +82,22 @@
     height: auto;
     padding-bottom: 5px;
     min-height: 30px;
+}
+
+.search-table-btn-right {
+    float: right;
+    margin-top: -3px;
+}
+
+.keyword-box {
+    position: relative;
+    width: 450px;
+}
+
+.keyword-box .search-input-keyword {
+    padding-left: 10px;
+    padding-right: 35px;
+}
+
+.keyword-box .search-btn-keyword {
 }

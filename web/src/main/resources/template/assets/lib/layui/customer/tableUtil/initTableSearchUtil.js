@@ -17,21 +17,25 @@ var initTableSearchUtil = {
      * @param $table 表格对象
      * @param searchParams 高级查询的参数
      * @param form form表单对象
+     * @param keywordPlaceholder 关键字搜索的提示语
      * @param callback 搜索条件点击确定时的回调，用来刷新表格
      */
-    initAdvancedSearch: function ($table, searchParams, form, callback) {
+    initAdvancedSearch: function ($table, searchParams, form, keywordPlaceholder, callback) {
         var tableId = $table.id;
         // 同一个表格只加载一次
         if(isNull(initTableSearchUtil.tableMap[tableId])){
             initTableSearchUtil.tableMap[tableId] = {
                 table: $table,
                 searchParams: searchParams,
+                keywordPlaceholder: keywordPlaceholder,
                 callback: callback
             };
             // 加载筛选条件展示框
             $("div[lay-id='" + tableId + "']").parent().prepend('<div class="filter-search-box" id="filter' + tableId + '"></div>');
             // 初始化监听事件
             initTableSearchUtil.initEvent(form);
+            // 加载表格对应的关键字搜索信息
+            initTableSearchUtil.initTableKeyWordSearch(tableId, keywordPlaceholder);
         }
         if (isNull(searchParams)) {
             return;
@@ -76,6 +80,20 @@ var initTableSearchUtil = {
         });
         // 展示筛选内容
         initTableSearchUtil.loadChooseHtml(tableId);
+    },
+
+    /**
+     * 加载表格对应的关键字搜索信息
+     *
+     * @param tableId 表格id
+     * @param keywordPlaceholder 关键字搜索的提示语
+     */
+    initTableKeyWordSearch: function (tableId, keywordPlaceholder) {
+        var str = '<div class="keyword-box">' +
+                '<input type="text" id="' + tableId + 'KeyWord" placeholder="' + keywordPlaceholder + '" class="layui-input search-input-keyword" />' +
+                '<i class="fa fas fa-search input-icon search-btn-keyword" id="' + tableId + 'SearchTable" title="' + systemLanguage["com.skyeye.search2"][languageType] + '"></i>' +
+            '</div>';
+        $(".winui-tool").append(str);
     },
 
     /**
@@ -496,6 +514,16 @@ var initTableSearchUtil = {
             // 点击空白处，下拉框隐藏-------结束
         });
 
+        // 搜索
+        $("body").on("click", ".search-btn-keyword", function() {
+            var tableId = $(this).attr("id").replace('SearchTable', '');
+            // 加载回调函数
+            var mation = initTableSearchUtil.tableMap[tableId];
+            if (typeof (mation.callback) == "function") {
+                mation.callback();
+            }
+        });
+
         // 取消
         $("body").on("click", ".searchCancle", function (e) {
             $(".search-form").hide();
@@ -686,7 +714,8 @@ var initTableSearchUtil = {
             });
         });
         return {
-            "dynamicCondition": JSON.stringify(searchCondition)
+            "dynamicCondition": JSON.stringify(searchCondition),
+            "keyword": $("#" + tableId + "KeyWord").val(),
         };
     }
 

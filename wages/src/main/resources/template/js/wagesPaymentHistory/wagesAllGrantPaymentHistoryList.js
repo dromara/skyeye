@@ -7,15 +7,11 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        table = layui.table,
-        laydate = layui.laydate;
-    var selTemplate = getFileContent('tpl/template/select-option.tpl');
-
-    laydate.render({elem: '#payMonth', type: 'month'});
+        table = layui.table;
 
     // 获取所有已发放薪资发放历史列表
     table.render({
@@ -48,11 +44,8 @@ layui.config({
             { field: 'createTime', title: '核算日期', align: 'center', width: 150 }
         ]],
         done: function(json){
-            if(!loadCompany){
-                initCompany();
-            }
             matchingLanguage();
-            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, function () {
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入员工姓名、员工工号", function () {
                 table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
             });
         }
@@ -64,51 +57,6 @@ layui.config({
         if (layEvent === 'details') { //详情
             details(data);
         }
-    });
-
-    var loadCompany = false;
-    // 初始化公司
-    function initCompany(){
-        loadCompany = true;
-        systemCommonUtil.getSysCompanyList(function (json) {
-            // 加载企业数据
-            $("#companyList").html(getDataUseHandlebars(selTemplate, json));
-            form.render('select');
-        });
-    }
-
-    // 初始化部门
-    function initDepartment(){
-        showGrid({
-            id: "departmentList",
-            url: reqBasePath + "companydepartment007",
-            params: {companyId: $("#companyList").val()},
-            pagination: false,
-            template: selTemplate,
-            ajaxSendLoadBefore: function(hdb){},
-            ajaxSendAfter:function (json) {
-                form.render('select');
-            }
-        });
-    }
-
-    function initJob() {
-        // 根据部门id获取岗位集合
-        systemCommonUtil.queryJobListByDepartmentId($("#departmentList").val(), function(data) {
-            $("#jobList").html(getDataUseHandlebars(selTemplate, data));
-            form.render('select');
-        });
-    }
-
-    // 公司监听事件
-    form.on('select(companyList)', function(data){
-        initDepartment();
-        initJob();
-    });
-
-    // 部门监听事件
-    form.on('select(departmentList)', function(data){
-        initJob();
     });
 
     // 详情
@@ -126,12 +74,6 @@ layui.config({
     }
 
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-        }
-        return false;
-    });
 
     // 刷新数据
     $("body").on("click", "#reloadTable", function() {
@@ -143,14 +85,7 @@ layui.config({
     }
 
     function getTableParams(){
-        return $.extend(true, {
-            userName: $("#userName").val(),
-            jobNumber: $("#jobNumber").val(),
-            companyId: $("#companyList").val(),
-            departmentId: $("#departmentList").val(),
-            jobId: $("#jobList").val(),
-            payMonth: $("#payMonth").val()
-        }, initTableSearchUtil.getSearchValue("messageTable"));
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('wagesAllGrantPaymentHistoryList', {});

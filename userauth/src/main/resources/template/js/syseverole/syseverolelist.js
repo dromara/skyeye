@@ -34,7 +34,7 @@ layui.config({
 	    ]],
 	    done: function(json){
 	    	matchingLanguage();
-			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, function () {
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入角色名称", function () {
 				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 	    }
@@ -115,12 +115,6 @@ layui.config({
     });
 
 	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-		}
-		return false;
-	});
 
 	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
@@ -132,9 +126,7 @@ layui.config({
     }
 
     function getTableParams() {
-    	return $.extend(true, {
-			roleName: $("#roleName").val()
-		}, initTableSearchUtil.getSearchValue("messageTable"));
+    	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
     exports('syseverolelist', {});
