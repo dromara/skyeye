@@ -28,14 +28,15 @@ layui.config({
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'userCode', title: '账号', width: 120 },
-	        { field: 'userName', title: '员工姓名', width: 150, templet: function (d) {
-	        	return '<a lay-event="details" class="notice-title-click">' + d.jobNumber + ' ' + d.userName + '</a>';
-	        }},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', fixed: 'left' },
+	        { field: 'userCode', title: '账号', width: 120, fixed: 'left' },
+			{ field: 'userName', title: '姓名', align: 'left', width: 100, fixed: 'left', templet: function (d) {
+				return '<a lay-event="details" class="notice-title-click">' + d.userName + '</a>';
+			}},
+			{ field: 'jobNumber', title: '工号', align: 'left', width: 100, fixed: 'left'},
 	        { field: 'email', title: '邮箱', width: 100 },
 	        { field: 'sexName', title: '性别', width: 60, templet: function (d) {
-	        	if(d.sexName == '0'){
+	        	if(d.sexName == '0') {
 	        		return "保密";
 	        	}else if(d.sexName == '1'){
 	        		return "男";
@@ -54,11 +55,14 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	if(!loadCompany){
 	    		initCompany();
 	    	}
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, function () {
+				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -231,14 +235,13 @@ layui.config({
     }
     
     function getTableParams(){
-    	return {
-    		userCode:$("#userCode").val(),
-    		userName:$("#userName").val(),
-    		sexName:$("#userSex").val(),
-    		companyName:companyId,
-    		departmentName:departmentId,
-    		jobName:jobId
-    	};
+    	return $.extend(true, {
+			userCode: $("#userCode").val(),
+			userName: $("#userName").val(),
+			companyName: companyId,
+			departmentName: departmentId,
+			jobName: jobId
+    	}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
     exports('syseveuserlist', {});

@@ -102,7 +102,7 @@ var initTableSearchUtil = {
         return '<form class="layui-form search-form" action="" id="searchBox">' +
             '<div class="box">' +
                 '<div class="layui-form-item layui-col-xs12">' +
-                    '<div class="layui-input-block">' +
+                    '<div class="layui-input-block" id="searchFilterCriteria">' +
                         '<select id="sel' + fieldId + '" lay-filter="sel' + fieldId + '" lay-search="" win-verify="required">' +
                             initTableSearchUtil.getOptions(searchParam) +
                         '</select>' +
@@ -155,7 +155,8 @@ var initTableSearchUtil = {
             return '<input type="text" id="' + fieldId + '" name="' + fieldId + '" placeholder="请输入要搜索的内容" class="layui-input" />';
         } else if (type === 'user') {
             // 用户
-            return '';
+            return '<div id="' + fieldId + '" class="layui-input search-user"></div>' +
+                '<i class="fa fa-user-plus input-icon" id="userSearchSelPeople"></i>';
         } else if (type === 'userStaff') {
             // 员工
             return '';
@@ -233,6 +234,9 @@ var initTableSearchUtil = {
                     '})</script>';
             }
             $("#searchBox").append(jsCon);
+        } else if (type === 'user') {
+            systemCommonUtil.userReturnList = [];
+            $("#" + fieldId).val('');
         }
     },
 
@@ -253,7 +257,17 @@ var initTableSearchUtil = {
             return $("#" + fieldId).val();
         } else if (type === 'user') {
             // 用户
-            return '';
+            if (systemCommonUtil.userReturnList.length == 0) {
+                return null;
+            }
+            if (operator == 'in') {
+                var text = [];
+                $.each(systemCommonUtil.userReturnList, function (i, item) {
+                    text.push(item.name);
+                });
+                return text.toString();
+            }
+            return systemCommonUtil.userReturnList[0].name;
         } else if (type === 'userStaff') {
             // 员工
             return '';
@@ -294,13 +308,26 @@ var initTableSearchUtil = {
             return $("#" + fieldId).val();
         } else if (type === 'user') {
             // 用户
-            return '';
+            if (systemCommonUtil.userReturnList.length == 0) {
+                return null;
+            }
+            if (operator == 'in') {
+                var text = [];
+                $.each(systemCommonUtil.userReturnList, function (i, item) {
+                    text.push("'" + item.id + "'");
+                });
+                return text.toString();
+            }
+            return systemCommonUtil.userReturnList[0].id;
         } else if (type === 'userStaff') {
             // 员工
             return '';
         } else if (type === 'virtualSelect' || type === 'constantSelect') {
             // 接口-下拉框  virtualDataFrom / 常量-下拉框  constantDataFrom
             if (operator == 'in') {
+                if (isNull($("#" + fieldId).val())) {
+                    return null;
+                }
                 var value = [];
                 $.each($("#" + fieldId).val(), function (i, item) {
                     value.push("'" + item + "'");
@@ -341,6 +368,19 @@ var initTableSearchUtil = {
                 $("#" + fieldId).val(confimValue.showValue);
             } else if (type === 'user') {
                 // 用户
+                var str = "";
+                systemCommonUtil.userReturnList = [];
+                var userIds = confimValue.hideValue.replaceAll("'", "").split(',');
+                $.each(confimValue.showValue.split(','), function (i, value) {
+                    str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value + '' +
+                        '<i class="layui-icon layui-unselect layui-tab-close search-user-del" user-id="' + userIds[i] + '" title="删除">&#x1006;</i>' +
+                        '</span>';
+                    systemCommonUtil.userReturnList.push({
+                        id: userIds[i],
+                        name: value
+                    });
+                });
+                $("#" + fieldId).html(str);
             } else if (type === 'userStaff') {
                 // 员工
             } else if (type === 'virtualSelect' || type === 'constantSelect') {
@@ -462,6 +502,36 @@ var initTableSearchUtil = {
             if (typeof (mation.callback) == "function") {
                 mation.callback();
             }
+        });
+
+        // 用户选择
+        $("body").on("click", "#userSearchSelPeople", function(e) {
+            var operator = $("#searchBox").find("#searchFilterCriteria").find("select").val();
+            var fieldId = $("#searchBox").find(".searchDefine").attr("field-id");
+            if (operator == 'in') {
+                systemCommonUtil.checkType = "1"; // 人员选择类型，1.多选；其他。单选
+            } else {
+                systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
+            }
+            systemCommonUtil.chooseOrNotMy = "1"; // 人员列表中是否包含自己--1.包含；其他参数不包含
+            systemCommonUtil.chooseOrNotEmail = "2"; // 人员列表中是否必须绑定邮箱--1.必须；其他参数没必要
+            systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList) {
+                var str = "";
+                $.each(userReturnList, function (key, value) {
+                    str += '<span class="layui-badge layui-bg-blue skyeye-badge">' + value.name + '' +
+                        '<i class="layui-icon layui-unselect layui-tab-close search-user-del" user-id="' + value.id + '" title="删除">&#x1006;</i>' +
+                        '</span>';
+                });
+                $("#" + fieldId).html(str);
+            });
+        });
+        // 【用户选择】删除
+        $("body").on("click", ".search-user-del", function(event) {
+            var userId = $(this).attr('user-id');
+            systemCommonUtil.userReturnList = [].concat(arrayUtil.removeArrayPointKey(systemCommonUtil.userReturnList, 'id', userId));
+            $(this).parent().remove();
+            // 阻止事件冒泡
+            event.stopPropagation();
         });
 
     },

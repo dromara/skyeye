@@ -283,6 +283,7 @@ layui.config({
 			id: searchParamsId
 		};
 		AjaxPostUtil.request({url: reqBasePath + "writeSearchConfigMation", params: params, type: 'json', method: "POST", callback: function (json) {
+			searchParamsId = json.bean.id;
 			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 		}});
 	});

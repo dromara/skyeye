@@ -372,12 +372,11 @@ layui.config({
 
     function getTableParams(){
     	return $.extend(true, {
-    		userName:$("#userName").val(),
-    		userSex:$("#userSex").val(),
-    		userIdCard:$("#userIdCard").val(),
-    		companyName:companyId,
-    		departmentName:departmentId,
-    		jobName:jobId
+			userName: $("#userName").val(),
+			userIdCard: $("#userIdCard").val(),
+			companyName: companyId,
+			departmentName: departmentId,
+			jobName: jobId
     	}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     

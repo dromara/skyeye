@@ -17,6 +17,11 @@
     padding-top: 7px;
 }
 
+.search-user .skyeye-badge {
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
 .filter-search-box .skyeye-badge {
     margin-bottom: 0px;
     background-color: #d9e7f9 !important;
@@ -31,11 +36,14 @@
 .filter-search-box .skyeye-badge .layui-tab-close {
     margin-left: 5px;
     font-size: 14px;
+}
+
+.layui-tab-close {
     cursor: pointer;
 }
 
 .search-form {
-    height: 170px;
+    min-height: 170px;
     z-index: 100;
     position: fixed;
     width: 200px;
@@ -53,4 +61,10 @@
 
 .search-form .layui-input-block {
     margin-left: 0px;
+}
+
+.search-user {
+    height: auto;
+    padding-bottom: 5px;
+    min-height: 30px;
 }

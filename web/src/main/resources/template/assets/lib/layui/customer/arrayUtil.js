@@ -10,9 +10,20 @@ var arrayUtil = {
      * @param name 指定name
      */
     removeArrayPointName: function (list, name) {
+        return arrayUtil.removeArrayPointKey(list, 'name', name);
+    },
+
+    /**
+     * 移除集合中指定key的元素
+     *
+     * @param list 集合
+     * @param key 指定key
+     * @param value 指定的值
+     */
+    removeArrayPointKey: function (list, key, value) {
         var inArray = -1;
         $.each(list, function(i, item) {
-            if(name === item.name) {
+            if(value === item[key]) {
                 inArray = i;
                 return false;
             }
