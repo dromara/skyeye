@@ -13,11 +13,8 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 
-		// 获取已经上线的用品类别列表
-		adminAssistantUtil.queryAssetArticlesTypeUpStateList(function (data){
-			$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
-			form.render('select');
-		});
+		// 用品类别
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetArticlesType"]["key"], 'select', "typeId", '', form);
 
 		skyeyeEnclosure.init('enclosureUpload');
  		matchingLanguage();

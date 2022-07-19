@@ -29,12 +29,9 @@ layui.config({
 				});
 		 	},
 		 	ajaxSendAfter:function(json) {
-				// 获取已经上线的用品类别列表
-				adminAssistantUtil.queryAssetArticlesTypeUpStateList(function (data){
-					$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
-					$("#typeId").val(json.bean.typeId);
-					form.render('select');
-				});
+				// 用品类别
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetArticlesType"]["key"], 'select', "typeId", json.bean.typeId, form);
+
 		 		var userNames = [];
 		 		userList = [].concat(json.bean.assetAdmin);
 		 		$.each(json.bean.assetAdmin, function(i, item){

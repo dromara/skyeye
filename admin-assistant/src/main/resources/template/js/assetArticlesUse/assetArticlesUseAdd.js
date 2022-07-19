@@ -26,12 +26,12 @@ layui.config({
 		initTypeHtml();
 	});
 
-	// 初始化用品类别
 	function initTypeHtml() {
-		// 获取已经上线的用品类别列表
-		adminAssistantUtil.queryAssetArticlesTypeUpStateList(function (data){
+		// 用品类别
+		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetArticlesType"]["key"], function (data) {
 			typeHtml = getDataUseHandlebars(selOption, data);
 		});
+
 		matchingLanguage();
 		//渲染
 		form.render();

@@ -30,6 +30,8 @@
     "pmProjectType": {"name": "PM-项目分类", "key": "PM_PROJECT_TYPE"},
     "pmCostExpenseType": {"name": "PM-项目成本费用支出分类", "key": "PM_COST_EXPENSE_TYPE"},
     "pmProjectDiscussType": {"name": "PM-项目讨论板分类", "key": "PM_PROJECT_DISCUSS_TYPE"},
-    "pmTaskType": {"name": "PM-任务分类", "key": "PM_TASK_TYPE"}
+    "pmTaskType": {"name": "PM-任务分类", "key": "PM_TASK_TYPE"},
+
+    "admAssetArticlesType": {"name": "ADM-用品类别", "key": "ADM_ASSET_ARTICLES_TYPE"}
 
 }

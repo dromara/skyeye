@@ -10,44 +10,38 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	
-	// 获取已经上线的用品类别列表
-	adminAssistantUtil.queryAssetArticlesTypeUpStateList(function (data){
-		$("#typeId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
-		form.render('select');
+
+	// 用品类别
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetArticlesType"]["key"], 'select', "typeId", '', form);
+
+	// 用品列表
+	table.render({
+		id: 'liebiaoTable',
+		elem: '#liebiaoTable',
+		method: 'post',
+		url: flowableBasePath + 'assetarticles012',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			{ field: 'articlesName', title: '名称', width: 200, templet: function (d) {
+				return '<a lay-event="liebiaoDedails" class="notice-title-click">' + d.articlesName + '</a>';
+			}},
+			{ field: 'typeName', title: '类别', width: 200 },
+			{ field: 'articlesNum', title: '编号', width: 270},
+			{ field: 'specifications', title: '规格', width: 100},
+			{ field: 'residualNum', title: '库存数量', width: 100 },
+			{ field: 'company', title: '所属公司', width: 170 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#liebiaoTableBar'}
+		]],
+		done: function(){
+			matchingLanguage();
+		}
 	});
 
-	showliebiaoList();
-	// 展示用品列表
-	function showliebiaoList(){
-		table.render({
-		    id: 'liebiaoTable',
-		    elem: '#liebiaoTable',
-		    method: 'post',
-		    url: flowableBasePath + 'assetarticles012',
-		    where: getTableParams(),
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'articlesName', title: '名称', width: 200, templet: function (d) {
-		        	return '<a lay-event="liebiaoDedails" class="notice-title-click">' + d.articlesName + '</a>';
-		        }},
-		        { field: 'typeName', title: '类别', width: 200 },
-		        { field: 'articlesNum', title: '编号', width: 270},
-		        { field: 'specifications', title: '规格', width: 100},
-		        { field: 'residualNum', title: '库存数量', width: 100 },
-		        { field: 'company', title: '所属公司', width: 170 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#liebiaoTableBar'}
-		    ]],
-		    done: function(){
-		    	matchingLanguage();
-		    }
-		});
-	}
-	
 	// 用品列表的操作事件
 	table.on('tool(liebiaoTable)', function (obj) {
         var data = obj.data;
