@@ -8,7 +8,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'laydate', 'form', 'tableSelect'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		table = layui.table,
 		form = layui.form,
@@ -16,24 +15,11 @@ layui.config({
 		tableSelect = layui.tableSelect;
 	
 	// 审批日期选取时间段表格
-	laydate.render({
-		elem: '#checkDate',
-		range: '~'
-	});
-	
-	// 初始化申诉原因类型
-	showGrid({
-	 	id: "appealReasonId",
-	 	url: flowableBasePath + "checkworkreason010",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){},
-	 	ajaxSendAfter:function (json) {
-	 		form.render('select');
-	 	}
-    });
-	
+	laydate.render({elem: '#checkDate', range: '~'});
+
+	// 考勤申诉原因
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["hrCheckWorkReason"]["key"], 'select', "appealReasonId", '', form);
+
 	var createid = "";
 	tableSelect.render({
     	elem: '#createId',	//定义输入框input对象

@@ -35,6 +35,8 @@
     "admAssetArticlesType": {"name": "ADM-用品类别", "key": "ADM_ASSET_ARTICLES_TYPE"},
     "admAssetType": {"name": "ADM-资产类型", "key": "ADM_ASSET_TYPE"},
     "admAssetFrom": {"name": "ADM-资产来源", "key": "ADM_ASSET_FROM"},
-    "admVehicleCoverage": {"name": "ADM-车辆险种", "key": "ADM_VEHICLE_COVERAGE"}
+    "admVehicleCoverage": {"name": "ADM-车辆险种", "key": "ADM_VEHICLE_COVERAGE"},
+
+    "hrCheckWorkReason": {"name": "HR-考勤申诉原因", "key": "HR_CHECK_WORK_REASON"}
 
 }

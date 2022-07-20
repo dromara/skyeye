@@ -69,20 +69,11 @@ layui.config({
 		    });
 		}
 		
-		//初始化申诉原因类型
-		function initAppealReasonId(){
-			showGrid({
-			 	id: "appealReasonId",
-			 	url: flowableBasePath + "checkworkreason010",
-			 	params: {},
-			 	pagination: false,
-			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function (json) {
-			 		form.render('select');
-			 		initWorkId();
-			 	}
-		    });
+		function initAppealReasonId() {
+			// 考勤申诉原因
+			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["hrCheckWorkReason"]["key"], 'select', "appealReasonId", '', form);
+
+			initWorkId();
 		}
 	    
 	    //申诉类型监听事件
