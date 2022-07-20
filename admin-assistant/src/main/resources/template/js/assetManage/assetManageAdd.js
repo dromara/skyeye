@@ -27,19 +27,8 @@ layui.config({
 		// 资产类型
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], 'select', "typeId", '', form);
 
- 		//资产来源
- 		showGrid({
-		 	id: "fromId",
-		 	url: flowableBasePath + "assetfrom006",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option-must.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-		});
+		// 资产来源
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetFrom"]["key"], 'select', "fromId", '', form);
 
 		skyeyeEnclosure.init('enclosureUpload');
 		matchingLanguage();

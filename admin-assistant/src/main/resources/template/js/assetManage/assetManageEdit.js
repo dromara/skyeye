@@ -40,20 +40,8 @@ layui.config({
 				// 资产类型
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], 'select', "typeId", json.bean.typeId, form);
 
-		 		//资产来源
-		 		showGrid({
-				 	id: "fromId",
-				 	url: flowableBasePath + "assetfrom006",
-				 	params: {},
-				 	pagination: false,
-				 	template: getFileContent('tpl/template/select-option-must.tpl'),
-				 	ajaxSendLoadBefore: function(hdb){
-				 	},
-				 	ajaxSendAfter:function(j){
-				 		$("#fromId").val(json.bean.fromId);
-				 		form.render('select');
-				 	}
-				});
+				// 资产来源
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetFrom"]["key"], 'select', "fromId", json.bean.fromId, form);
 
 				// 初始化上传
 				$("#assetImg").upload(systemCommonUtil.uploadCommon003Config('assetImg', 6, json.bean.assetImg, 1));

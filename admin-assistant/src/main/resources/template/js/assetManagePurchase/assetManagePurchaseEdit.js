@@ -1,6 +1,4 @@
 
-var assetList = new Array(); //资产集合
-
 // 资产采购
 layui.config({
 	base: basePath,
@@ -12,8 +10,8 @@ layui.config({
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form;
-	var rowNum = 1; //表格的序号
-	var typeHtml = "";
+	var rowNum = 1;
+	var typeHtml = "", fromHtml = "";
 
 	var usetableTemplate = $("#usetableTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
@@ -33,31 +31,24 @@ layui.config({
 			$(".typeOne").removeClass("layui-hide");
 		}
 		sTableData = json.bean.goods;
-		initTypeHtml();
-		matchingLanguage();
-	}});
 
-	//初始化资产类别
-	function initTypeHtml() {
 		// 资产类型
 		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], function (data) {
 			typeHtml = getDataUseHandlebars(selOption, data);
 		});
+
+		// 资产来源
+		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetFrom"]["key"], function (data) {
+			fromHtml = getDataUseHandlebars(selOption, data);
+		});
+
 		// 加载表格数据
 		initTableAssetList();
+		matchingLanguage();
+		form.render();
+	}});
 
-		initFromHtml();
-	}
-
-	//初始化资产来源
-	function initFromHtml() {
-		AjaxPostUtil.request({url: flowableBasePath + "assetfrom006", params: {}, type: 'json', async:false, callback: function(json) {
-			fromHtml = getDataUseHandlebars(selOption, json); //加载资产来源数据
-			form.render();
-		}});
-	}
-
-	//加载表格数据
+	// 加载表格数据
 	function initTableAssetList() {
 		$.each(sTableData, function(i, item) {
 			addDataRow(item);

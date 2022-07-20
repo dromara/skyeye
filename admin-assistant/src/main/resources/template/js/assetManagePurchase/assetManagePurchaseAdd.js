@@ -1,6 +1,4 @@
 
-var assetList = new Array(); //资产集合
-
 // 资产采购
 layui.config({
 	base: basePath,
@@ -13,8 +11,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form;
 	var rowNum = 1; //表格的序号
-	var typeHtml = "";
-	var fromHtml = "";
+	var typeHtml = "", fromHtml = "";
 
 	var purchasetableTemplate = $("#purchasetableTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
@@ -30,16 +27,14 @@ layui.config({
 		typeHtml = getDataUseHandlebars(selOption, data);
 	});
 
-	initFromHtml();
-	// 初始化资产来源
-	function initFromHtml() {
-		AjaxPostUtil.request({url: flowableBasePath + "assetfrom006", params: {}, type: 'json', async:false, callback: function(json) {
-			fromHtml = getDataUseHandlebars(selOption, json); //加载资产来源数据
-			matchingLanguage();
-			addRow();
-			form.render();
-		}});
-	}
+	// 资产来源
+	sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetFrom"]["key"], function (data) {
+		fromHtml = getDataUseHandlebars(selOption, data);
+	});
+
+	addRow();
+	matchingLanguage();
+	form.render();
 
 	skyeyeEnclosure.init('enclosureUpload');
 	// 保存为草稿

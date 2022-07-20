@@ -33,6 +33,7 @@
     "pmTaskType": {"name": "PM-任务分类", "key": "PM_TASK_TYPE"},
 
     "admAssetArticlesType": {"name": "ADM-用品类别", "key": "ADM_ASSET_ARTICLES_TYPE"},
-    "admAssetType": {"name": "ADM-资产类型", "key": "ADM_ASSET_TYPE"}
+    "admAssetType": {"name": "ADM-资产类型", "key": "ADM_ASSET_TYPE"},
+    "admAssetFrom": {"name": "ADM-资产来源", "key": "ADM_ASSET_FROM"}
 
 }
