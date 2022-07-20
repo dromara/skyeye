@@ -70,9 +70,11 @@ layui.config({
 				laydate.render({elem: '#validityTime', type: 'date', range: true, trigger: 'click'});
 				
 		 		$("#insuranceAllPrice").html(json.bean.insuranceAllPrice);
-		 		AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function(thisjson){
-					var row = thisjson.rows;
-					for(var i = 0;i < thisjson.total; i++){
+
+				// 车辆险种
+				sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admVehicleCoverage"]["key"], function (data) {
+					var row = data.rows;
+					for(var i = 0;i < data.rows.length; i++){
 						var params = {
 							id: row[i].id,
 							name: row[i].name
@@ -167,15 +169,14 @@ layui.config({
 									}
 								}
 								AjaxPostUtil.request({url: flowableBasePath + "insurance005", params: params, type: 'json', callback: function (json) {
-									parent.layer.close(index);
-									parent.refreshCode = '0';
-								}});
+										parent.layer.close(index);
+										parent.refreshCode = '0';
+									}});
 							}
 						}
 						return false;
 					});
-				  }
-			    });
+				});
 		 	}
 		});
 

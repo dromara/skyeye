@@ -18,18 +18,19 @@ layui.config({
 			var userName = data.bean.userName;
 			$("#insuranceTitle").html("车辆保险登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random()*100);
 		});
-		
-		AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function (json) {
-			var row = json.rows;
-			for(var i = 0;i < json.total; i++){
+
+		// 车辆险种
+		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admVehicleCoverage"]["key"], function (data) {
+			var row = data.rows;
+			for(var i = 0;i < data.rows.length; i++){
 				var params = {
 					id: row[i].id,
 					name: row[i].name
 				};
 				$("#addTable").append(getDataUseHandlebars(insuranceaddtableTemplate, params));
-				form.render('checkbox');
 			}
-		}});
+			form.render('checkbox');
+		});
 
 		// 查询所有的车牌号用于下拉选择框
 		adminAssistantUtil.queryAllVehicleList(function (data){

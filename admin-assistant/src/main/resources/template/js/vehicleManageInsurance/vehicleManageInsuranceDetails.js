@@ -22,40 +22,25 @@ layui.config({
 		 	ajaxSendAfter:function (json) {
 		 		var coveragestr = "";
 		 		var arr = json.bean.coverageId.split(",");
-					for(var i = 0; i < arr.length; i++){
-						var str = arr[i].split("-");
-						for(var j = 0; j < str.length; j++){
-							coveragestr = coveragestr + str[0] + ",";
-						}
+				for(var i = 0; i < arr.length; i++){
+					var str = arr[i].split("-");
+					for(var j = 0; j < str.length; j++){
+						coveragestr = coveragestr + str[0] + ",";
 					}
-		 		//险种
-		 		showGrid({
-		 		 	id: "coverageChoose",
-		 		 	url: flowableBasePath + "coverage006",
-		 		 	params: {},
-		 		 	pagination: false,
-		 		 	template: getFileContent('tpl/template/checkbox-property.tpl'),
-		 		 	ajaxSendLoadBefore: function(hdb){
-		 		 	},
-		 		 	ajaxSendAfter:function(thisjson){
-		 		 		if(!isNull(json.bean.coverageId)){
-		 		 			var arr = json.bean.coverageId.split(",");
-							for(var i = 0; i < arr.length; i++){
-								$('input:checkbox[rowId="' + arr[i] + '"]').attr("checked", true);
-							}
-		 		 		}
-		 		 		form.render('checkbox');
-		 		 	}
-		 		});
+				}
+
+				// 车辆险种
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admVehicleCoverage"]["key"], 'checkbox', "coverageChoose", json.bean.coverageId, form);
 
 				// 附件回显
 				skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});
 
 		        matchingLanguage();
-			    AjaxPostUtil.request({url: flowableBasePath + "coverage006", params:{}, type: 'json', callback: function(thisjson){
-					var row = thisjson.rows;
+				// 车辆险种
+				sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admVehicleCoverage"]["key"], function (data) {
+					var row = data.rows;
 					var coveragearr = coveragestr.split(",");
-					for(var i = 0;i < thisjson.total; i++){
+					for(var i = 0;i < data.total; i++){
 						var params = {
 							id: row[i].id,
 							name: row[i].name
@@ -83,8 +68,7 @@ layui.config({
 							}
 						}
 					}
-			     }
-		      });
+				});
 		 	}
 		});
 

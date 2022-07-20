@@ -36,6 +36,15 @@ var sysDictDataUtil = {
                     $("#" + showBoxId).val(defaultId);
                 }
                 form.render('select');
+            } else if (showType == 'checkbox') {
+                $("#" + showBoxId).html(getDataUseHandlebars(getFileContent('tpl/template/checkbox-property.tpl'), json));
+                if (!isNull(defaultId)) {
+                    var arr = defaultId.split(",");
+                    for(var i = 0; i < arr.length; i++){
+                        $('input:checkbox[rowId="' + arr[i] + '"]').attr("checked", true);
+                    }
+                }
+                form.render('checkbox');
             }
             if (typeof (callback) == "function") {
                 callback(json);
