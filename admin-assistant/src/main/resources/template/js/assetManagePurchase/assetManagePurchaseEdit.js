@@ -39,14 +39,14 @@ layui.config({
 
 	//初始化资产类别
 	function initTypeHtml() {
-		AjaxPostUtil.request({url: flowableBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
-			initFromHtml();
-			typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-			//渲染
-			form.render();
-			//加载表格数据
-			initTableAssetList();
-		}});
+		// 资产类型
+		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], function (data) {
+			typeHtml = getDataUseHandlebars(selOption, data);
+		});
+		// 加载表格数据
+		initTableAssetList();
+
+		initFromHtml();
 	}
 
 	//初始化资产来源
@@ -101,7 +101,6 @@ layui.config({
 		var noError = false; //循环遍历表格数据时，是否有其他错误信息
 		$.each(rowTr, function(i, item) {
 			var rowNum = $(item).attr("trcusid").replace("tr", "");
-			var assetNum = parseInt($("#assetNum" + rowNum).html());
 			if(isNull($("#managementImg" + rowNum).find("input[type='hidden'][name='upload']").attr("oldurl"))){
 				winui.window.msg('资产图片不能为空！', {icon: 2, time: 2000});
 				noError = true;

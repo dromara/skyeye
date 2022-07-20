@@ -32,6 +32,7 @@
     "pmProjectDiscussType": {"name": "PM-项目讨论板分类", "key": "PM_PROJECT_DISCUSS_TYPE"},
     "pmTaskType": {"name": "PM-任务分类", "key": "PM_TASK_TYPE"},
 
-    "admAssetArticlesType": {"name": "ADM-用品类别", "key": "ADM_ASSET_ARTICLES_TYPE"}
+    "admAssetArticlesType": {"name": "ADM-用品类别", "key": "ADM_ASSET_ARTICLES_TYPE"},
+    "admAssetType": {"name": "ADM-资产类型", "key": "ADM_ASSET_TYPE"}
 
 }

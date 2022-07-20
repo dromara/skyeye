@@ -25,23 +25,18 @@ layui.config({
 		$("#useName").html(data.bean.userName);
 	});
 
-	initTypeHtml();
+	// 资产类型
+	sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], function (data) {
+		typeHtml = getDataUseHandlebars(selOption, data);
+	});
 
-	//初始化资产类别
-	function initTypeHtml() {
-		AjaxPostUtil.request({url: flowableBasePath + "assettype006", params: {}, type: 'json', callback: function(json) {
-			initFromHtml();
-			typeHtml = getDataUseHandlebars(selOption, json); //加载类别数据
-			//渲染
-			form.render();
-			addRow();
-		}});
-	}
-	//初始化资产来源
+	initFromHtml();
+	// 初始化资产来源
 	function initFromHtml() {
 		AjaxPostUtil.request({url: flowableBasePath + "assetfrom006", params: {}, type: 'json', async:false, callback: function(json) {
 			fromHtml = getDataUseHandlebars(selOption, json); //加载资产来源数据
 			matchingLanguage();
+			addRow();
 			form.render();
 		}});
 	}

@@ -36,22 +36,10 @@ layui.config({
 		 		
 		 		// 采购日期
 		 		laydate.render({elem: '#purchaseTime', type: 'date', max: getFormatDate(), trigger: 'click'});
-		 		
-		 		// 资产类型
-		 		showGrid({
-				 	id: "typeId",
-				 	url: flowableBasePath + "assettype006",
-				 	params: {},
-				 	pagination: false,
-				 	template: getFileContent('tpl/template/select-option-must.tpl'),
-				 	ajaxSendLoadBefore: function(hdb){
-				 	},
-				 	ajaxSendAfter:function(j){
-				 		$("#typeId").val(json.bean.typeId);
-				 		form.render('select');
-				 	}
-				});
-		 		
+
+				// 资产类型
+				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], 'select', "typeId", json.bean.typeId, form);
+
 		 		//资产来源
 		 		showGrid({
 				 	id: "fromId",
