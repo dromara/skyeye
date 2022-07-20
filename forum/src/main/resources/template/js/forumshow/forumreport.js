@@ -21,7 +21,6 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function (json) {
-		 		$("#reportType").append("<option value='other'>其他</option>")
 		 		form.render('select');
 		 	}
 		});

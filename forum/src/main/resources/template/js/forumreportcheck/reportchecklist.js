@@ -89,7 +89,6 @@ layui.config({
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
 	 	ajaxSendAfter:function (json) {
-	 		$("#reportType").append("<option value='other'>其他</option>")
 	 		form.render('select');
 	 	}
 	});
@@ -230,7 +229,6 @@ layui.config({
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
 	 	ajaxSendAfter:function (json) {
-	 		$("#checkedReportType").append("<option value='other'>其他</option>")
 	 		form.render('select');
 	 	}
 	});
