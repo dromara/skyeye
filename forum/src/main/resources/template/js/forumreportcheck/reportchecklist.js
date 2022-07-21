@@ -6,37 +6,19 @@ layui.config({
 }).extend({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'laydate'], function (exports) {
-	
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table,
 		laydate = layui.laydate;
 	
-	laydate.render({
-		elem: '#reportTime',
-		type: 'datetime',
-		range: true
-	});
+	laydate.render({elem: '#reportTime', type: 'datetime', range: true});
 	
-	laydate.render({
-		elem: '#examineTime',
-		type: 'datetime',
-		range: true
-	});
+	laydate.render({elem: '#examineTime', type: 'datetime', range: true});
 	
-	laydate.render({
-		elem: '#checkedreportTime',
-		type: 'datetime',
-		range: true
-	});
+	laydate.render({elem: '#checkedreportTime', type: 'datetime', range: true});
 	
-	laydate.render({
-		elem: '#checkedexamineTime',
-		type: 'datetime',
-		range: true
-	});
+	laydate.render({elem: '#checkedexamineTime', type: 'datetime', range: true});
 	
 	authBtn('1568077577288');//未审核
     authBtn('1568077598792');//已审核
@@ -78,21 +60,10 @@ layui.config({
     		}
 		}
 	});
-	
-	//举报类型
-	showGrid({
-	 	id: "reportType",
-	 	url: reqBasePath + "forumreporttype010",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function (json) {
-	 		form.render('select');
-	 	}
-	});
-	
+
+	// 举报类型
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["bbsForumReportType"]["key"], 'select', "reportType", '', form);
+
 	//未审核
 	function showNoCheckList(){
 		showNoCheckTable = true;
@@ -218,21 +189,10 @@ layui.config({
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
             }});
     };
-	
-	//举报类型
-	showGrid({
-	 	id: "checkedReportType",
-	 	url: reqBasePath + "forumreporttype010",
-	 	params: {},
-	 	pagination: false,
-	 	template: getFileContent('tpl/template/select-option.tpl'),
-	 	ajaxSendLoadBefore: function(hdb){
-	 	},
-	 	ajaxSendAfter:function (json) {
-	 		form.render('select');
-	 	}
-	});
-	
+
+	// 举报类型
+	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["bbsForumReportType"]["key"], 'select', "checkedReportType", '', form);
+
 	//已审核
 	function showCheckedList(){
 		showCheckedTable = true;

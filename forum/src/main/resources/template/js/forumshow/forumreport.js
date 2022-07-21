@@ -8,24 +8,11 @@ layui.config({
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
-	    var $ = layui.$,
-	    laydate = layui.laydate;
-	    
-	    //举报类型
- 		showGrid({
-		 	id: "reportType",
-		 	url: reqBasePath + "forumreporttype010",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option-must.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-		});
+	    var $ = layui.$;
 
- 		//下拉框监听，如果类型是其他，则显示举报内容输入框
+		// 举报类型
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["bbsForumReportType"]["key"], 'select', "reportType", '', form);
+ 		// 下拉框监听，如果类型是其他，则显示举报内容输入框
  		form.on('select(reportType)', function(data) {
 			if (data.value == 'other') {
 				$("#contentHide").removeClass("layui-hide");
