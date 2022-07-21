@@ -56,19 +56,6 @@ var shopUtil = {
     },
 
     /**
-     * 获取套餐订单已启用的退款原因列表
-     *
-     * @param callback 回执函数
-     */
-    queryRefundMealOrderReasonList: function (callback){
-        AjaxPostUtil.request({url: shopBasePath + "queryUseingMealRefundOrderReasonList", params: {}, type: 'json', method: "GET", callback: function(json) {
-            if(typeof(callback) == "function") {
-                callback(json);
-            }
-        }, async: false});
-    },
-
-    /**
      * 获取套餐订单是否赠送的字段信息
      *
      * @param data

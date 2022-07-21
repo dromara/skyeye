@@ -9,12 +9,9 @@ layui.config({
     layui.use(['form'], function (form) {
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
-        var selOption = getFileContent('tpl/template/select-option.tpl');
 
-        // 加载套餐订单退款原因
-        shopUtil.queryRefundMealOrderReasonList(function (json){
-            $("#mealRefundReasonId").html(getDataUseHandlebars(selOption, json));
-        });
+        // 套餐订单退款原因
+        sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["shopMealRefundOrderReason"]["key"], 'select', "mealRefundReasonId", '', form);
 
         if(parent.dataMation.mealNum == parent.dataMation.remainMealNum){
             // 套餐未使用

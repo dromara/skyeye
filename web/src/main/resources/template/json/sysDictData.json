@@ -37,6 +37,8 @@
     "admAssetFrom": {"name": "ADM-资产来源", "key": "ADM_ASSET_FROM"},
     "admVehicleCoverage": {"name": "ADM-车辆险种", "key": "ADM_VEHICLE_COVERAGE"},
 
-    "hrCheckWorkReason": {"name": "HR-考勤申诉原因", "key": "HR_CHECK_WORK_REASON"}
+    "hrCheckWorkReason": {"name": "HR-考勤申诉原因", "key": "HR_CHECK_WORK_REASON"},
+
+    "shopMealRefundOrderReason": {"name": "商城-套餐订单退款原因", "key": "SHOP_MEAL_REFUND_ORDER_REASON"}
 
 }
