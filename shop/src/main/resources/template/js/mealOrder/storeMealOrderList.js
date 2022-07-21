@@ -13,27 +13,20 @@ layui.config({
         form = layui.form,
         laydate = layui.laydate,
         table = layui.table;
-    var selOption = getFileContent('tpl/template/select-option.tpl');
 
     // 加载我所在的门店
     shopUtil.queryStaffBelongStoreList(function (json){
         $("#storeId").html(getDataUseHandlebars($("#selectTemplate").html(), json));
     });
 
-    // 加载套餐订单性质
-    shopUtil.queryMealOrderNatureList(function (json){
-        $("#natureId").html(getDataUseHandlebars(selOption, json));
-        form.render('select');
-    });
+    // 套餐订单性质
+    sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["shopMealOrderNature"]["key"], 'select', "natureId", '', form);
 
     form.on('select(storeId)', function(data) {
         table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
     });
 
-    laydate.render({
-        elem: '#createTime',
-        range: '~'
-    });
+    laydate.render({elem: '#createTime', range: '~'});
 
     table.render({
         id: 'messageTable',

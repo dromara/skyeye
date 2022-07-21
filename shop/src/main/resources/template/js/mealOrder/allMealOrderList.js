@@ -25,16 +25,10 @@ layui.config({
         });
     });
 
-    // 加载套餐订单性质
-    shopUtil.queryMealOrderNatureList(function (json){
-        $("#natureId").html(getDataUseHandlebars(selOption, json));
-        form.render('select');
-    });
+    // 套餐订单性质
+    sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["shopMealOrderNature"]["key"], 'select', "natureId", '', form);
 
-    laydate.render({
-        elem: '#createTime',
-        range: '~'
-    });
+    laydate.render({elem: '#createTime', range: '~'});
 
     table.render({
         id: 'messageTable',

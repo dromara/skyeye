@@ -11,7 +11,6 @@ layui.config({
         form = layui.form,
         laydate = layui.laydate,
         table = layui.table;
-    var selOption = getFileContent('tpl/template/select-option.tpl');
 
     // 加载我所在的门店
     shopUtil.queryStaffBelongStoreList(function (json){
@@ -21,16 +20,10 @@ layui.config({
         table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
     });
 
-    // 加载套餐订单性质
-    shopUtil.queryMealOrderNatureList(function (json){
-        $("#natureId").html(getDataUseHandlebars(selOption, json));
-        form.render('select');
-    });
+    // 套餐订单性质
+    sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["shopMealOrderNature"]["key"], 'select', "natureId", '', form);
 
-    laydate.render({
-        elem: '#refundTime',
-        range: '~'
-    });
+    laydate.render({elem: '#refundTime', range: '~'});
 
     table.render({
         id: 'messageTable',
@@ -46,8 +39,8 @@ layui.config({
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
             { field: 'orderNum', title: '订单号', align: 'left', width: 180, fixed: 'left', templet: function (d) {
-                    return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
-                }},
+                return '<a lay-event="select" class="notice-title-click">' + d.orderNum + '</a>';
+            }},
             { field: 'contacts', title: '会员名称', width: 100 },
             { field: 'phone', title: '会员手机号', width: 100, align: "center"},
             { field: 'refundCreateName', title: '服务顾问', width: 130, align: "left"},

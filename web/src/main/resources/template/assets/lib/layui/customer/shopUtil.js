@@ -43,19 +43,6 @@ var shopUtil = {
     },
 
     /**
-     * 获取套餐订单已启用的性质管理列表
-     *
-     * @param callback 回执函数
-     */
-    queryMealOrderNatureList: function (callback){
-        AjaxPostUtil.request({url: shopBasePath + "queryMealOrderNatureList", params: {enabled: 1}, type: 'json', method: "POST", callback: function(json) {
-            if(typeof(callback) == "function") {
-                callback(json);
-            }
-        }, async: false});
-    },
-
-    /**
      * 获取套餐订单是否赠送的字段信息
      *
      * @param data

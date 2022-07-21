@@ -39,6 +39,7 @@
 
     "hrCheckWorkReason": {"name": "HR-考勤申诉原因", "key": "HR_CHECK_WORK_REASON"},
 
-    "shopMealRefundOrderReason": {"name": "商城-套餐订单退款原因", "key": "SHOP_MEAL_REFUND_ORDER_REASON"}
+    "shopMealRefundOrderReason": {"name": "商城-套餐订单退款原因", "key": "SHOP_MEAL_REFUND_ORDER_REASON"},
+    "shopMealOrderNature": {"name": "商城-套餐订单性质", "key": "SHOP_MEAL_ORDER_NATURE"}
 
 }

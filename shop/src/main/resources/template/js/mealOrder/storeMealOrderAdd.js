@@ -48,11 +48,8 @@ layui.config({
             $("#allPrice").html("0 元");
         });
 
-        // 加载套餐订单性质
-        shopUtil.queryMealOrderNatureList(function (json){
-            $("#natureId").html(getDataUseHandlebars(selOption, json));
-            form.render('select');
-        });
+        // 套餐订单性质
+        sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["shopMealOrderNature"]["key"], 'select', "natureId", '', form);
 
         textool.init({eleId: 'remark', maxlength: 400});
 
