@@ -1,5 +1,5 @@
 {{#bean}}
-	<div class="layui-form-item">
+	<div class="layui-form-item layui-col-xs12">
         <label class="layui-form-label">商机<i class="red">*</i></label>
         <div class="layui-input-block">
 			<select id="opportunityId" name="opportunityId" win-verify="required" lay-filter="opportunityId" lay-search="">
@@ -7,7 +7,7 @@
 			</select>
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item layui-col-xs6">
         <label class="layui-form-label">分类<i class="red">*</i></label>
         <div class="layui-input-block">
 			<select id="typeId" name="typeId" win-verify="required" lay-filter="typeId" lay-search="">
@@ -15,7 +15,7 @@
 			</select>
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item layui-col-xs6">
         <label class="layui-form-label">跟单时间<i class="red">*</i></label>
         <div class="layui-input-block">
         	<input type="text" id="documentaryTime" name="documentaryTime" win-verify="required" placeholder="请输入跟单时间" class="layui-input" value="{{documentaryTime}}"/>
