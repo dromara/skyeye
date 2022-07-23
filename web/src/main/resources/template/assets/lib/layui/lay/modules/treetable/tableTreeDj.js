@@ -650,7 +650,7 @@ layui.define(['table', 'jquery'], function(exports) {
                 const title = this.getTitle();
                 const iconClose = this.getIconClose();
                 if(hasChild.indexOf(id) !== -1) {
-                    item[title] = '<span class="'+ iconClose +'"></span>' + item[title];
+                    item[title] = '<span class="'+ iconClose +'" style="font-size: 18px; width: 18px; height: 18px; text-align: center;"></span>' + item[title];
                 }
                 tmp.push(item);
             });
