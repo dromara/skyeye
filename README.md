@@ -21,6 +21,14 @@
 |------------------------------------------------------------------------------------------------------------------------------| ---- | ---- |----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | ![](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/%E5%BE%AE%E4%BF%A1.jpg) | ![](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/skyeye%E7%B3%BB%E5%88%97QQ%E7%BE%A4%E8%81%8A%E4%BA%8C%E7%BB%B4%E7%A0%81.png)| ![](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) | ![](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220626095834.jpg) |
 
+### 演示视频
+
+- 视频一：[https://www.bilibili.com/video/BV1yb41127oB/](https://www.bilibili.com/video/BV1yb41127oB/)
+- 视频二：[https://www.bilibili.com/video/BV11b41127FV/](https://www.bilibili.com/video/BV1yb41127oB/)
+- 视频三：[https://www.bilibili.com/video/BV1vb411i75M](https://www.bilibili.com/video/BV1yb41127oB/)
+- 视频四：[https://www.bilibili.com/video/BV1yA411e7mm/](https://www.bilibili.com/video/BV1yb41127oB/)
+- 视频五：[https://www.bilibili.com/video/BV1vR4y1p7ka](https://www.bilibili.com/video/BV1yb41127oB/)
+
 #### 功能介绍
 
 功能|简介|功能|简介
