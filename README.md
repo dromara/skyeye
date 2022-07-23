@@ -23,11 +23,11 @@
 
 ### 演示视频
 
-- 视频一：[https://www.bilibili.com/video/BV1yb41127oB/](https://www.bilibili.com/video/BV1yb41127oB/)
-- 视频二：[https://www.bilibili.com/video/BV11b41127FV/](https://www.bilibili.com/video/BV1yb41127oB/)
-- 视频三：[https://www.bilibili.com/video/BV1vb411i75M](https://www.bilibili.com/video/BV1yb41127oB/)
-- 视频四：[https://www.bilibili.com/video/BV1yA411e7mm/](https://www.bilibili.com/video/BV1yb41127oB/)
-- 视频五：[https://www.bilibili.com/video/BV1vR4y1p7ka](https://www.bilibili.com/video/BV1yb41127oB/)
+- 视频一：[多桌面任务](https://www.bilibili.com/video/BV1yb41127oB/)
+- 视频二：[聊天](https://www.bilibili.com/video/BV11b41127FV)
+- 视频三：[日程](https://www.bilibili.com/video/BV1vb411i75M)
+- 视频四：[ERP + 生产 202007版](https://www.bilibili.com/video/BV1yA411e7mm)
+- 视频五：[ERP + 生产 202109升级模块](https://www.bilibili.com/video/BV1vR4y1p7ka)
 
 #### 功能介绍
 
