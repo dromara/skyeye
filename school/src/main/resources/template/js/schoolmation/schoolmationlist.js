@@ -6,27 +6,20 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'treeGrid', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'tableTreeDj', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
-		treeGrid = layui.treeGrid;
+		tableTree = layui.tableTreeDj;
 	
 	authBtn('1585824465120');
-	
-	
-	treeGrid.render({
+
+	tableTree.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        idField: 'id',
         url: schoolBasePath + 'schoolmation001',
-        cellMinWidth: 100,
-        where:{schoolName: $("#schoolName").val()},
-        treeId: 'id',//树形id字段名称
-        treeUpId: 'pId',//树形父id字段名称
-        treeShowName: 'schoolName',//以树形式显示的字段
+        where: {schoolName: $("#schoolName").val()},
         cols: [[
             { field: 'schoolName', width: 300, title: '学校名称'},
             { field: 'schoolDesc', width: 80, title: '学校简介', align: 'center', templet: function (d) {
@@ -37,13 +30,16 @@ layui.config({
 	        { field:'powerName', width: 120, align: 'center', title: '数据权限'},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],
-        isPage:false,
 	    done: function(){
 	    	matchingLanguage();
 	    }
-    });
-	
-	treeGrid.on('tool(messageTable)', function (obj) {
+    }, {
+		keyId: 'id',
+		keyPid: 'pId',
+		title: 'schoolName',
+	});
+
+	tableTree.getTable().on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
@@ -64,7 +60,6 @@ layui.config({
 	
 	form.render();
 	form.on('submit(formSearch)', function (data) {
-    	
         if (winui.verifyForm(data.elem)) {
         	loadTable();
         }
@@ -115,7 +110,7 @@ layui.config({
     });
     
     function loadTable(){
-    	treeGrid.query("messageTable", {where:{schoolName: $("#schoolName").val()}});
+		tableTree.reload("messageTable", {where:{schoolName: $("#schoolName").val()}});
     }
     
     exports('schoolmationlist', {});

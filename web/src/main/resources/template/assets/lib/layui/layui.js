@@ -273,7 +273,7 @@ function isNull(str){
 			zclip: 'jquery.zclip',//复制插件
 			swiper: 'swiper/swiper.min',//滚动插件
 			tableSelect: 'tableSelect',//tableSelect 下拉表格选择器
-			treeGrid: 'treetable/treeGrid',//树表格
+			tableTreeDj: 'treetable/tableTreeDj',//树表格
 			g6: 'flowchart/g6.min',//流程图
 			g6Plugins: 'flowchart/g6-plugins.min',//流程图
 			dtree: 'dtree/dtree',//

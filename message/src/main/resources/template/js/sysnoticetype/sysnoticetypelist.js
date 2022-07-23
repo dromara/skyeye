@@ -5,25 +5,20 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'treeGrid', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'tableTreeDj', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		treeGrid = layui.treeGrid;
+		tableTree = layui.tableTreeDj;
 	
 	authBtn('1561106812907');
 	// 公告类型列表
-	treeGrid.render({
+	tableTree.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    idField: 'id',
 	    url: reqBasePath + 'noticetype001',
-	    cellMinWidth: 100,
 	    where: {name:$("#name").val(),parentId:$("#firstType").val()},
-	    treeId: 'id',//树形id字段名称
-        treeUpId: 'pId',//树形父id字段名称
-        treeShowName: 'name',//以树形式显示的字段
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'name', title: '类型名称', align: 'center', width: 120 },
@@ -49,16 +44,19 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 180 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar'}
 	    ]],
-	    isPage:false,
 	    done: function(){
 	    	matchingLanguage();
 	    	if(!loadFirstType){
 	    		initFirstType();
 	    	}
 	    }
+	}, {
+		keyId: 'id',
+		keyPid: 'pId',
+		title: 'name',
 	});
-	
-	treeGrid.on('tool(messageTable)', function (obj) {
+
+	tableTree.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
@@ -98,8 +96,7 @@ layui.config({
 	});
 	
 	form.render();
-	
-	
+
 	$("body").on("click", "#formSearch", function() {
 		loadTable();
 	});
@@ -190,7 +187,7 @@ layui.config({
     });
     
     function loadTable(){
-    	treeGrid.query("messageTable", {where:{name:$("#name").val(),parentId:$("#firstType").val()}});
+		tableTree.reload("messageTable", {where:{name:$("#name").val(),parentId:$("#firstType").val()}});
     }
     
     exports('sysnoticetypelist', {});

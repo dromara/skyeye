@@ -6,11 +6,11 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'treeGrid', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'tableTreeDj', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		treeGrid = layui.treeGrid;
+		tableTree = layui.tableTreeDj;
 	
 	authBtn('1586314893391');
 
@@ -22,17 +22,12 @@ layui.config({
 	});
 
 	function initTable(){
-		treeGrid.render({
+		tableTree.render({
 	        id: 'messageTable',
 	        elem: '#messageTable',
 	        method: 'post',
-	        idField: 'id',
 	        url: schoolBasePath + 'grademation001',
-	        cellMinWidth: 100,
 	        where: getTableParams(),
-	        treeId: 'id',//树形id字段名称
-	        treeUpId: 'pId',//树形父id字段名称
-	        treeShowName: 'gradeName',//以树形式显示的字段
 	        cols: [[
 	            { field: 'gradeName', width: 150, title: '年级名称'},
 	            { field: 'schoolName', width: 200, title: '所属学校'},
@@ -40,13 +35,16 @@ layui.config({
 		        { field:'typeName', width: 120, title: '年级状态'},
 	            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	        ]],
-	        isPage:false,
 		    done: function(){
 		    	matchingLanguage();
 		    }
-	    });
-		
-		treeGrid.on('tool(messageTable)', function (obj) {
+	    }, {
+			keyId: 'id',
+			keyPid: 'pId',
+			title: 'gradeName',
+		});
+
+		tableTree.getTable().on('tool(messageTable)', function (obj) {
 	        var data = obj.data;
 	        var layEvent = obj.event;
 	        if (layEvent === 'del') { //删除
@@ -130,7 +128,7 @@ layui.config({
 	}
     
     function loadTable(){
-    	treeGrid.query("messageTable", {where: getTableParams()});
+		tableTree.reload("messageTable", {where: getTableParams()});
     }
 
 	function getTableParams() {

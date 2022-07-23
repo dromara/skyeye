@@ -127,16 +127,7 @@ layui.config({
 				details(data);
 			}
 	    });
-		
 	}
-	
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-        }
-        return false;
-	});
 	
 	/********* tree 处理   start *************/
 	var trees = {};
@@ -264,29 +255,37 @@ layui.config({
     function authpoint(data){
 		menuId = data.id;
 		_openNewWindows({
-			url: "../../tpl/sysevemenuauthpoint/sysevemenuauthpointlist.html", 
+			url: "../../tpl/sysEveMenuAuthPoint/sysEveMenuAuthPointList.html",
 			title: systemLanguage["com.skyeye.authorityPointPage"][languageType],
-			pageId: "sysevemenuauthpoint",
+			pageId: "sysEveMenuAuthPointList",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				loadTable();
 			}});
 	}
+
+	form.render();
+	form.on('submit(formSearch)', function (data) {
+		if (winui.verifyForm(data.elem)) {
+			table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+		}
+		return false;
+	});
     
     function loadTable(){
     	table.reload("messageTable", {where: getTableParams()});
     }
     
     function getTableParams(){
-    	return {
-    		menuName:$("#menuName").val(),
-    		menuUrl:$("#menuUrl").val(),
-    		parentId:parentId,
-    		menuLevel:$("#menuLevel").val(),
-    		desktopId:$("#desktop").val(),
-    		isShare:$("#isShare").val(),
-    		parentMenuName:$("#parentMenuName").val()
-    	};
+		return {
+			menuName: $("#menuName").val(),
+			menuUrl: $("#menuUrl").val(),
+			parentId: parentId,
+			menuLevel: $("#menuLevel").val(),
+			desktopId: $("#desktop").val(),
+			isShare: $("#isShare").val(),
+			parentMenuName: $("#parentMenuName").val()
+		};
     }
     
     exports('sysevemenulist', {});

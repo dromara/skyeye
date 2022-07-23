@@ -6,11 +6,11 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'treeGrid', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'tableTreeDj', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		treeGrid = layui.treeGrid;
+		tableTree = layui.tableTreeDj;
 	
 	authBtn('1552962225700');
 	
@@ -21,18 +21,13 @@ layui.config({
         }
         return false;
 	});
-	
-	treeGrid.render({
+
+	tableTree.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        idField: 'id',
         url: reqBasePath + 'sysevewintype001',
-        cellMinWidth: 100,
         where: {typeName: $("#typeName").val(), state: $("#state").val()},
-        treeId: 'id',//树形id字段名称
-        treeUpId: 'pId',//树形父id字段名称
-        treeShowName: 'name',//以树形式显示的字段
         cols: [[
             { field:'name', width:300, title: '分类名称'},
             { field:'stateName', width:100, title: '状态'},
@@ -40,13 +35,16 @@ layui.config({
             { field:'orderBy', width:100, title: '排序'},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],
-        isPage:false,
 	    done: function(){
 	    	matchingLanguage();
 	    }
-    });
-	
-	treeGrid.on('tool(messageTable)', function (obj) {
+    }, {
+		keyId: 'id',
+		keyPid: 'pId',
+		title: 'name',
+	});
+
+	tableTree.getTable().on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
@@ -148,7 +146,7 @@ layui.config({
     });
 	
 	function loadTable(){
-    	treeGrid.query("messageTable", {where:{typeName: $("#typeName").val(), state: $("#state").val()}});
+		tableTree.reload("messageTable", {where:{typeName: $("#typeName").val(), state: $("#state").val()}});
     }
     
     exports('syswintypelist', {});

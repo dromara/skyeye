@@ -20,10 +20,12 @@ layui.config({
 					var params = {
 						authMenuName: $("#authMenuName").val(),
 						authMenu: $("#authMenu").val(),
-						rowId: parent.rowId,
-						menuId: parent.menuId
+						menuId: parent.menuId,
+						parentId: json.bean.parentId,
+						type: json.bean.type,
+						id: parent.rowId
 					};
-					AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint004", params: params, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "writeSysEveMenuAuthPointMation", params: params, type: 'json', callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 					}});
@@ -32,11 +34,9 @@ layui.config({
 			});
    		}});
 
-	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	});
-	    
 });

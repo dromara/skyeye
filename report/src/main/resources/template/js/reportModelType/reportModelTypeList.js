@@ -6,25 +6,20 @@ layui.config({
     version: skyeyeVersion
 }).extend({
     window: 'js/winui.window',
-}).define(['window', 'treeGrid', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'tableTreeDj', 'jquery', 'winui', 'form'], function (exports) {
     winui.renderColor();
     var $ = layui.$,
         form = layui.form,
-        treeGrid = layui.treeGrid;
+        tableTree = layui.tableTreeDj;
 
     authBtn('1635086167509');
 
-    treeGrid.render({
+    tableTree.render({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        idField: 'id',
         url: reportBasePath + 'reportmodeltype001',
-        cellMinWidth: 100,
         where: getTableParams(),
-        treeId: 'id',//树形id字段名称
-        treeUpId: 'parentId',//树形父id字段名称
-        treeShowName: 'name',//以树形式显示的字段
         cols: [[
             { field: 'name', width: 300, title: '名称'},
             { field: 'createName', title: '创建人', align: 'left', width: 100 },
@@ -35,11 +30,14 @@ layui.config({
         ]],
         done: function(){
             matchingLanguage();
-        },
-        isPage:false
+        }
+    }, {
+        keyId: 'id',
+        keyPid: 'parentId',
+        title: 'name',
     });
 
-    treeGrid.on('tool(messageTable)', function (obj) {
+    tableTree.getTable().on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
@@ -101,7 +99,7 @@ layui.config({
     });
 
     function loadTable(){
-        treeGrid.query("messageTable", {where: getTableParams()});
+        tableTree.reload("messageTable", {where: getTableParams()});
     }
 
     function getTableParams(){

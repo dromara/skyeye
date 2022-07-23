@@ -6,11 +6,11 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'treeGrid', 'jquery', 'winui', 'form'], function (exports) {
+}).define(['window', 'tableTreeDj', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
-		treeGrid = layui.treeGrid;
+		tableTree = layui.tableTreeDj;
 	var selTemplate = getFileContent('tpl/template/select-option.tpl')
 	
 	authBtn('1552962689111');
@@ -47,16 +47,12 @@ layui.config({
 	}
 	
 	function initLoadTable(){
-		treeGrid.render({
+		tableTree.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    idField: 'id',
 		    url: reqBasePath + 'companyjob001',
 		    where: getTableParams(),
-		    treeId: 'id',//树形id字段名称
-        	treeUpId: 'pId',//树形父id字段名称
-        	treeShowName: 'jobName',//以树形式显示的字段
 		    cols: [[
 		        { field: 'jobName', title: '职位名称', width: 180 },
 		        { field: 'id', title: '职位简介', width: 80, align: 'center', templet: function (d) {
@@ -68,14 +64,17 @@ layui.config({
 		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 		    ]],
-		    isPage:false,
 		    done: function(){
 		    	matchingLanguage();
 		    }
+		}, {
+			keyId: 'id',
+			keyPid: 'pId',
+			title: 'jobName',
 		});
 	}
 
-	treeGrid.on('tool(messageTable)', function (obj) {
+	tableTree.getTable().on('tool(messageTable)', function (obj) {
 		var data = obj.data;
 		var layEvent = obj.event;
 		if (layEvent === 'del') { //删除
@@ -99,7 +98,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
         if (winui.verifyForm(data.elem)) {
-        	refreshTable();
+			loadTable();
         }
         return false;
 	});
@@ -160,13 +159,9 @@ layui.config({
     });
     
     function loadTable(){
-    	treeGrid.query("messageTable", {where: getTableParams()});
+		tableTree.reload("messageTable", {where: getTableParams()});
     }
     
-    function refreshTable(){
-    	treeGrid.query("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-
     function getTableParams(){
     	return {
     		companyId: $("#companyId").val(),

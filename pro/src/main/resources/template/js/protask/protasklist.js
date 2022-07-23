@@ -9,32 +9,24 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'form', 'laydate', 'treeGrid'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'form', 'laydate', 'tableTreeDj'], function (exports) {
 	winui.renderColor();
 	var $ = layui.$,
 		form = layui.form,
 		laydate = layui.laydate,
-		treeGrid = layui.treeGrid;
+		tableTree = layui.tableTreeDj;
 
 	authBtn('1574644930825');
 	
-	//任务开始时间
-	laydate.render({
-		elem: '#startTime', //指定元素
-		range: '~'
-	});
+	// 任务开始时间
+	laydate.render({elem: '#startTime', range: '~'});
 
-	treeGrid.render({
+	tableTree.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    idField: 'id',
 	    url: flowableBasePath + 'protask011',
-	    cellMinWidth: 100,
 	    where: getTableParams(),
-	    treeId: 'id',//树形id字段名称
-        treeUpId: 'pId',//树形父id字段名称
-        treeShowName: 'taskName',//以树形式显示的字段
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2},
 	        { field: 'taskName', title: '名称', rowspan: 2, width: 200, templet: function (d) {
@@ -80,9 +72,13 @@ layui.config({
 	    done: function(){
 	    	matchingLanguage();
 	    }
+	}, {
+		keyId: 'id',
+		keyPid: 'pId',
+		title: 'taskName',
 	});
 
-	treeGrid.on('tool(messageTable)', function (obj) {
+	tableTree.getTable().on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'details'){ //详情
@@ -263,7 +259,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			treeGrid.query("messageTable", {page: {curr: 1}, where: getTableParams()});
+			loadTable();
 		}
 		return false;
 	});
@@ -274,12 +270,12 @@ layui.config({
     });
 
     function loadTable(){
-    	treeGrid.query("messageTable", {where: getTableParams()});
+		tableTree.reload("messageTable", {where: getTableParams()});
     }
 
     function getTableParams(){
 		var theStartTime = "", theEndTime = "";
-		if(!isNull($("#startTime").val())){
+		if (!isNull($("#startTime").val())) {
 			theStartTime = $("#startTime").val().split('~')[0].trim() + ' 00:00:00';
 			theEndTime = $("#startTime").val().split('~')[1].trim() + ' 23:59:59';
 		}
