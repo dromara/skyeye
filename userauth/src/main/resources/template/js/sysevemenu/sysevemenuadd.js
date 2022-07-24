@@ -10,7 +10,8 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    var colorpicker = layui.colorpicker;
-	    
+	    var selOption = getFileContent('tpl/template/select-option.tpl');
+
 	    var parentId = "0";
 
 	    // 加载图标信息
@@ -19,32 +20,24 @@ layui.config({
         matchingLanguage();
  		form.render();
  		
- 		//所属桌面
-        showGrid({
-            id: "desktop",
-            url: reqBasePath + "desktop011",
-            params: {language: languageType},
-            pagination: false,
-            template: getFileContent('tpl/template/select-option-must.tpl'),
-            ajaxSendLoadBefore: function(hdb){
-            },
-            ajaxSendAfter:function (json) {
-                form.render('select');
-                //所属系统
-                showGrid({
-                	id: "menuSysWinId",
-                	url: reqBasePath + "sys031",
-                	params: {},
-                	pagination: false,
-                	template: getFileContent('tpl/template/select-option.tpl'),
-                	ajaxSendLoadBefore: function(hdb){
-                	},
-                	ajaxSendAfter:function (json) {
-                		form.render('select');
-                	}
-                });
-            }
-        });
+ 		// 桌面信息
+		systemCommonUtil.getSysDesttop(function (json) {
+			$("#desktop").html(getDataUseHandlebars(selOption, json));
+			form.render('select');
+		});
+
+		// 所属系统
+		showGrid({
+			id: "menuSysWinId",
+			url: reqBasePath + "sys031",
+			params: {},
+			pagination: false,
+			template: selOption,
+			ajaxSendLoadBefore: function(hdb) {},
+			ajaxSendAfter:function (json) {
+				form.render('select');
+			}
+		});
 
  		//菜单级别变化事件
  		form.on('radio(menuLevel)', function (data) {

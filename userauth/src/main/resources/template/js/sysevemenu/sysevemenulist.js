@@ -32,20 +32,12 @@ layui.config({
 	 	}
 	});
 	
-	// 所属桌面
-    showGrid({
-         id: "desktop",
-         url: reqBasePath + "desktop011",
-         params: {},
-         pagination: false,
-         template: getFileContent('tpl/template/select-option.tpl'),
-         ajaxSendLoadBefore: function(hdb){
-         },
-         ajaxSendAfter:function (json) {
-             form.render('select');
-         }
-    });
-	
+	// 桌面信息
+	systemCommonUtil.getSysDesttop(function (json) {
+		$("#desktop").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), json));
+		form.render('select');
+	});
+
 	function initLoadTable(){
 		table.render({
 		    id: 'messageTable',

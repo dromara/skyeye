@@ -10,8 +10,9 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    var colorpicker = layui.colorpicker;
-	    
-	    var parentId = "0";
+		var selOption = getFileContent('tpl/template/select-option.tpl');
+
+		var parentId = "0";
 	    
 	    //初始化数据
 	    showGrid({
@@ -65,35 +66,28 @@ layui.config({
 				// 加载图标信息
 				systemCommonUtil.initEditIconChooseHtml('iconMation', form, colorpicker, 12, json.bean);
 
-		 		//所属桌面
-                showGrid({
-                    id: "desktop",
-                    url: reqBasePath + "desktop011",
-                    params: {language: languageType},
-                    pagination: false,
-                    template: getFileContent('tpl/template/select-option-must.tpl'),
-                    ajaxSendLoadBefore: function(hdb){
-                    },
-                    ajaxSendAfter:function(j){
-                        $("#desktop").val(json.bean.desktopId);
-                        form.render('select');
-                        //所属系统
-                        showGrid({
-                        	id: "menuSysWinId",
-                        	url: reqBasePath + "sys031",
-                        	params: {},
-                        	pagination: false,
-                        	template: getFileContent('tpl/template/select-option.tpl'),
-                        	ajaxSendLoadBefore: function(hdb){
-                        	},
-                        	ajaxSendAfter:function(j){
-                        		$("#menuSysWinId").val(json.bean.sysWinId);
-                        		form.render('select');
-                        	}
-                        });
-                    }
-                });
-		 		
+				// 桌面信息
+				systemCommonUtil.getSysDesttop(function (data) {
+					// 加载账户数据
+					$("#desktop").html(getDataUseHandlebars(selOption, data));
+					$("#desktop").val(json.bean.desktopId);
+					form.render('select');
+				});
+
+				// 所属系统
+				showGrid({
+					id: "menuSysWinId",
+					url: reqBasePath + "sys031",
+					params: {},
+					pagination: false,
+					template: selOption,
+					ajaxSendLoadBefore: function(hdb) {},
+					ajaxSendAfter: function(j) {
+						$("#menuSysWinId").val(json.bean.sysWinId);
+						form.render('select');
+					}
+				});
+
 		 		//菜单级别
 		 		if(json.bean.menuLevel == '0'){
 		 			$("#parentIdBox").addClass("layui-hide");

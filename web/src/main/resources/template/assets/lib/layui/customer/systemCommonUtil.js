@@ -15,6 +15,19 @@ var systemCommonUtil = {
     },
 
     /**
+     * 获取系统桌面信息
+     *
+     * @param callback 回执函数
+     */
+    getSysDesttop: function (callback){
+        AjaxPostUtil.request({url: reqBasePath + "desktop011", params: {}, type: 'json', method: "GET", callback: function(json) {
+            if(typeof(callback) == "function") {
+                callback(json);
+            }
+        }, async: false});
+    },
+
+    /**
      * 判断当前登录用户是否可以申请转正
      */
     judgeCurrentUserRegularWorker: function () {

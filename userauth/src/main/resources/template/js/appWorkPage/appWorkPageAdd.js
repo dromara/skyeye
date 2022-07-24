@@ -9,18 +9,32 @@ layui.config({
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
-	    
-	    showGrid({
-		 	id: "parentId",
-		 	url: reqBasePath + "appworkpage001",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
+		var selOption = getFileContent('tpl/template/select-option.tpl');
+
+		// 桌面信息
+		systemCommonUtil.getSysDesttop(function (json) {
+			$("#desktop").html(getDataUseHandlebars(selOption, json));
+			form.render('select');
+		});
+		form.on('select(desktop)', function(data) {
+			var value = data.value;
+			if (isNull(value)) {
+				$("#parentId").html("");
+				form.render('select');
+				return;
+			}
+			showGrid({
+				id: "parentId",
+				url: reqBasePath + "queryAppWorkPageListByParentId",
+				params: {parentId: '0', desktopId: value},
+				pagination: false,
+				method: "GET",
+				template: selOption,
+				ajaxSendLoadBefore: function (hdb) {},
+				ajaxSendAfter: function (json) {
+					form.render('select');
+				}
+			});
 		});
 
 		// 初始化上传
