@@ -740,7 +740,19 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
 				,error: function(e, msg){
 					//移除请求遮罩层
 					$("body").find(".mask-req-str").remove();
-					that.errorView('请求异常，错误提示：'+ msg);
+					var sessionstatus = e.getResponseHeader('SESSIONSTATUS');
+					if (sessionstatus == "TIMEOUT") {
+						// 超时跳转
+						var win = window;
+						while (win != win.top) {
+							win = win.top;
+						}
+						win.location.href = "../../tpl/index/login.html";
+					} else if (sessionstatus == "NOAUTHPOINT") {
+						that.errorView('您不具备该权限。');
+					} else {
+						that.errorView('请求异常，错误提示：' + msg);
+					}
 
 					that.renderForm();
 					that.setColsWidth();

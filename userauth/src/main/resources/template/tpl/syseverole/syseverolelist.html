@@ -9,25 +9,23 @@
 <body>
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn  search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-           	<button id="addBean" class="winui-toolbtn  search-table-btn-right" auth="1552954959607"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+           	<button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1552954959607"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
         </div>
     </div>
     <div style="margin:auto 10px;">
         <table id="messageTable" lay-filter="messageTable"></table>
         <script type="text/html" id="tableBar">
-			{{# if(auth('1552900944072')){ }}
+			{{# if(auth('1552900944072')) { }}
             	<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
-			{{# if(d.userNum == 0 && auth('1552877034665')){ }}
+			{{# if(d.userNum == 0 && auth('1552877034665')) { }}
 				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 			{{# } }}
-			{{# if(auth('1644726632357')){ }}
+			{{# if(auth('1644726632357')) { }}
 				<a class="layui-btn layui-btn-xs" lay-event="pcMenu">PC菜单授权</a>
 			{{# } }}
-			<!--			{{# if(auth('1644726632357')){ }}-->
-<!--			{{# } }}-->
-			{{# if(auth('1563605807171')){ }}
+			{{# if(auth('1563605807171')) { }}
                 <a class="layui-btn layui-btn-xs" lay-event="appmenu">APP菜单授权</a>
             {{# } }}
         </script>

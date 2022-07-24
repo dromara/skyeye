@@ -7,39 +7,15 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div class="txtcenter" style="margin:0 auto;padding-top:10px;">
-	    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-	        <div class="layui-form-item">
-	            <div class="layui-inline">
-	                <label class="layui-form-label">客户名称</label>
-	                <div class="layui-input-inline">
-	                    <input type="text" id="customerName" name="customerName" placeholder="请输入客户名称" class="layui-input" />
-	                </div>
-	                <label class="layui-form-label">客户分类</label>
-					<div class="layui-input-inline">
-						<select id="typeId" name="typeId" lay-filter="typeId" lay-search="">
-						</select>
-					</div>
-					<label class="layui-form-label">客户来源</label>
-					<div class="layui-input-inline">
-						<select id="fromId" name="fromId" lay-filter="fromId" lay-search="">
-						</select>
-					</div>
-					<label class="layui-form-label">所属行业</label>
-					<div class="layui-input-inline">
-						<select id="industryId" name="industryId" lay-filter="industryId" lay-search="">
-						</select>
-					</div>
-					<button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-	                <button class="layui-btn list-form-search" type="button" id="formSearch"><language showName="com.skyeye.search2"></language></button>
-	            </div>
-	        </div>
-	    </form>
+	<div style="margin: 0 auto; padding-top: 0px;" id="typeBox">
+		<button type="button" class="layui-btn layui-btn-primary type-btn" data-type="All" auth="1658637723975"><i class="layui-icon"></i>所有</button>
+		<button type="button" class="layui-btn layui-btn-primary type-btn" data-type="myCreate" auth="1658637741078"><i class="layui-icon"></i>我创建的</button>
+		<button type="button" class="layui-btn layui-btn-primary type-btn" data-type="myCharge" auth="1658637775025"><i class="layui-icon"></i>我负责的</button>
 	</div>
     <div class="winui-toolbar">
         <div class="winui-tool">
-            <button id="reloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-            <button id="addBean" class="winui-toolbtn" auth="1570454924611"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
+            <button id="reloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+            <button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1570454924611"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
         </div>
     </div>
     <div style="margin:auto 10px;">

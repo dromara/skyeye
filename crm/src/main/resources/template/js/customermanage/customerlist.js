@@ -11,18 +11,16 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	var selectOption = getFileContent('tpl/template/select-option.tpl');
-	
+	// 新增
 	authBtn('1570454924611');
+	// 所有客户
+	authBtn('1658637723975');
+	// 我创建的
+	authBtn('1658637741078');
+	// 我负责的
+	authBtn('1658637775025');
 
-	// 客户分类
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerType"]["key"], 'select', "typeId", '', form);
-
-	// 客户来源
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerFrom"]["key"], 'select', "fromId", '', form);
-
-	// 客户所属行业
-	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmCustomerIndustry"]["key"], 'select', "industryId", '', form);
+	$("#typeBox").find('button').eq(0).addClass(' plan-select');
 
 	// 表格渲染
 	table.render({
@@ -49,8 +47,11 @@ layui.config({
 	        { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 100},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入客户名称", function () {
+				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -65,8 +66,6 @@ layui.config({
         	details(data);
         }
     });
-	
-	form.render();
 	
 	// 新增
 	$("body").on("click", "#addBean", function() {
@@ -117,12 +116,16 @@ layui.config({
     		}});
 		});
 	}
-	
-	// 搜索表单
-	$("body").on("click", "#formSearch", function() {
-		refreshTable();
+
+	$("body").on("click", ".type-btn", function (e) {
+		$(".type-btn").removeClass("plan-select");
+		$(this).addClass("plan-select");
+		loadTable();
 	});
-	
+
+	form.render();
+
+	// 刷新数据
 	$("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
@@ -131,17 +134,10 @@ layui.config({
     	table.reload("messageTable", {where: getTableParams()});
     }
     
-    function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
-    }
-    
     function getTableParams(){
-    	return {
-    		name: $("#customerName").val(),
-    		typeId: $("#typeId").val(),
-    		fromId: $("#fromId").val(),
-    		industryId: $("#industryId").val()
-    	};
+    	return $.extend(true, {
+			type: $(".plan-select").data("type")
+    	}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 	
     exports('customerlist', {});

@@ -270,16 +270,32 @@ var postDownLoadFile = function(options) {
  */
 function auth(urlNum){
 	var authList = JSON.parse(localStorage.getItem("authpoints"));
-	if(!isNull(authList)){
-		for(var i = 0; i < authList.length; i++){
-			if(authList[i].menuNum === urlNum){
+	if (!isNull(authList)) {
+		for (var i = 0; i < authList.length; i++) {
+			if (authList[i].menuNum === urlNum) {
 				return true;
+			} else {
+				// 数据权限分组不为空
+				if (authList[i].children.length > 0) {
+					var dataGroup = authList[i].children;
+					for (var j = 0; j < dataGroup.length; j++) {
+						// 数据权限不为空
+						if (dataGroup[j].children.length > 0) {
+							var dataAuthPoint = dataGroup[j].children;
+							for (var k = 0; k < dataAuthPoint.length; k++) {
+								if (dataAuthPoint[k].menuNum === urlNum) {
+									return true;
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	} else {
-		winui.window.msg('登录超时，即将返回登录页面.', {icon: 2, time: 2000}, function() {
+		winui.window.msg('登录超时，即将返回登录页面.', {icon: 2, time: 2000}, function () {
 			var win = window;
-			while (win != win.top){
+			while (win != win.top) {
 				win = win.top;
 			}
 			win.location.href = "../../tpl/index/login.html";
