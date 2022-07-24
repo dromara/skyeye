@@ -32,9 +32,8 @@ layui.config({
 		 	url: reqBasePath + "appworkpage005",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/appworkpage/appworkpageeditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
+		 	template: $("#beanTemplate").html(),
+		 	ajaxSendLoadBefore: function(hdb) {},
 		 	ajaxSendAfter:function (json) {
 				$("input:radio[name=urlType][value=" + json.bean.urlType + "]").attr("checked", true);
 				// 初始化上传
