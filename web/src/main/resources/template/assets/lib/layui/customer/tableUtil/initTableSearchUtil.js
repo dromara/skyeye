@@ -207,6 +207,14 @@ var initTableSearchUtil = {
     getVirtualSelectData: function (searchParam) {
         var url = "";
         eval('url = ' + searchParam.virtualDataFrom.service + ' + "' + searchParam.virtualDataFrom.url + '"');
+        var paramsStr = "";
+        if (!isNull(searchParam.virtualDataFrom.params)) {
+            $.each(searchParam.virtualDataFrom.params, function (key, value) {
+                paramsStr += key + '=' + eval(value) + '&';
+            });
+        }
+        // 加上参数
+        url += '?' + paramsStr;
         var dataFrom = [];
         AjaxPostUtil.request({url: url, params: {}, type: 'json', method: searchParam.virtualDataFrom.method, callback: function(json) {
             dataFrom = [].concat(json.rows);
