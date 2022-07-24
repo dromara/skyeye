@@ -11,6 +11,17 @@ layui.config({
 		    form = layui.form;
 	    
 	    AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+			var type = json.bean.type;
+			if (type == 1) {
+				// 如果为1，则需要编辑权限点
+				$("#showForm").html($("#authPointTemplate").html());
+			} else if (type == 2) {
+				// 如果为2，则需要编辑数据权限分组
+				$("#showForm").html($("#groupTemplate").html());
+			} else if (type == 3) {
+				// 如果为3，写需要编辑数据权限
+				$("#showForm").html($("#dataAuthPointTemplate").html());
+			}
 			$("#authMenuName").val(json.bean.authMenuName);
 			$("#authMenu").val(json.bean.authMenu);
 			matchingLanguage();
@@ -22,7 +33,7 @@ layui.config({
 						authMenu: $("#authMenu").val(),
 						menuId: parent.menuId,
 						parentId: json.bean.parentId,
-						type: json.bean.type,
+						type: type,
 						id: parent.rowId
 					};
 					AjaxPostUtil.request({url: reqBasePath + "writeSysEveMenuAuthPointMation", params: params, type: 'json', callback: function (json) {

@@ -2,6 +2,10 @@
 var menuId = '';
 
 var rowId = "";
+
+var parentId = "";
+
+var parentType = "";
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -27,9 +31,14 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'authMenuName', title: '权限点名称', width: 120 },
 	        { field: 'authMenu', title: '接口url', width: 200 },
-	        { field: 'menuNum', title: '权限点编号', width: 150 },
+	        { field: 'menuNum', title: '权限点编号', align: 'center', width: 120 },
 	        { field: 'useNum', title: '使用数量', align: 'center', width: 80 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
+			{ field: 'typeName', title: '类型', align: 'center', width: 80 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){
 	    	matchingLanguage();
@@ -43,11 +52,13 @@ layui.config({
 	tableTree.getTable().on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'del') { //删除
-        	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
-        	edit(data);
-        }
+		if (layEvent === 'del') { // 删除
+			del(data, obj);
+		} else if (layEvent === 'edit') { // 编辑
+			edit(data);
+		} else if (layEvent === 'addChild') { // 新增分组/新增数据权限
+			addPage(data);
+		}
     });
 	
 	// 删除
@@ -64,9 +75,17 @@ layui.config({
 	// 编辑权限点
 	function edit(data){
 		rowId = data.id;
+		var title = '';
+		if (data.type == 1) {
+			title = '编辑权限点';
+		} else if (data.type == 2) {
+			title = '编辑分组';
+		} else if (data.type == 3) {
+			title = '编辑数据权限';
+		}
 		_openNewWindows({
 			url: "../../tpl/sysEveMenuAuthPoint/sysEveMenuAuthPointEdit.html",
-			title: "编辑权限点",
+			title: title,
 			pageId: "sysEveMenuAuthPointEdit",
 			area: ['500px', '300px'],
 			callBack: function(refreshCode){
@@ -77,16 +96,34 @@ layui.config({
 	
     // 新增权限点
     $("body").on("click", "#addBean", function() {
-    	_openNewWindows({
+		addPage(null);
+    });
+
+	function addPage(data) {
+		var title = '新增权限点';
+		parentId = "0";
+		parentType = "";
+		if (!isNull(data)) {
+			parentId = data.id;
+			parentType = data.type;
+			if (parentType == 1) {
+				// 如果是权限点，则新增分组
+				title = '新增分组';
+			} else if (parentType == 2) {
+				// 如果是分组，则新增数据权限
+				title = '新增数据权限';
+			}
+		}
+		_openNewWindows({
 			url: "../../tpl/sysEveMenuAuthPoint/sysEveMenuAuthPointAdd.html",
-			title: "新增权限点",
+			title: title,
 			pageId: "sysEveMenuAuthPointAdd",
 			area: ['500px', '300px'],
 			callBack: function(refreshCode){
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
-    });
+	}
 
 	form.render();
 	form.on('submit(formSearch)', function (data) {

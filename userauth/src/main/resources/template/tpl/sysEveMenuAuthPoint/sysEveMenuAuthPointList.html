@@ -41,7 +41,13 @@
 			{{# if(auth('1552958039634')){ }}
             	<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 			{{# } }}
-			{{# if(d.useNum == 0 && auth('1552958005402')){ }}
+			{{# if(auth('1552958039634') && d.type == 1){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="addChild">新增分组</a>
+			{{# } }}
+			{{# if(auth('1552958039634') && d.type == 2){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="addChild">新增数据权限</a>
+			{{# } }}
+			{{# if(d.useNum == 0 && auth('1552958005402') && d.childNum == 0){ }}
 				<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><language showName="com.skyeye.deleteBtn"></language></a>
 			{{# } }}
         </script>
