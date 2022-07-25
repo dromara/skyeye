@@ -2,6 +2,9 @@
 ## 历史更新资讯
 
 - 2022年
+  - [2022-07-25 智能制造云办公 v3.7.23 发布 数据权限](https://www.oschina.net/news/204027)
+  - [2022-07-22 智能制造云办公 v3.7.22 发布](https://www.oschina.net/news/203739)
+  - [2022-07-18 云办公系统 skyeye v3.7.21 发布](https://www.oschina.net/news/203224)
   - [2022-07-11 云办公系统 skyeye v3.7.20 发布，PM 模块以及 AMS 模块](https://www.oschina.net/news/202516)
   - [2022-07-09 云办公系统 skyeye v3.7.19 发布，CRM 模块以及手机端](https://www.oschina.net/news/202380/skyeye-3-7-19-released)
   - [2022-07-03 云办公系统 skyeye v3.7.18发布](https://www.oschina.net/news/201689)
