@@ -26,29 +26,39 @@ layui.config({
 		limit: getLimit(),
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-			{ field: 'title', title: '页面名称', align: 'left', width: 120 },
+			{ field: 'title', title: '名称', align: 'left', width: 120 },
 			{ field: 'logo', title: 'logo', width: 60, templet: function (d) {
 				var str = '';
-				if(isNull(d.logo)){
-				} else {
+				if(!isNull(d.logo)){
 					str = '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="iconPath">';
 				}
 				return str;
 			}},
-			{ field: 'url', title: '页面路径', align: 'left', width: 300},
-			{ field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
-				if(d.state == '1'){
-					return "<span class='state-new'>新建</span>";
-				}else if(d.state == '2'){
-					return "<span class='state-up'>上线</span>";
-				}else if(d.state == '3'){
-					return "<span class='state-down'>下线</span>";
-				} else {
-					return "参数错误";
+			{ field: 'type', title: '菜单类型', align: 'left', width: 100, align: 'center', templet: function (d) {
+				if (d.type == '1') {
+					return "目录";
+				} else if (d.type == '2') {
+					return "页面";
 				}
 			}},
-			{ field: 'createId', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120},
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140},
+			{ field: 'desktopName', title: '所属桌面', align: 'left', width: 120 },
+			{ field: 'parentTitle', title: '所属目录', align: 'left', width: 120 },
+			{ field: 'childNum', title: '子页面数量', align: 'left', width: 120 },
+			{ field: 'url', title: '页面路径', align: 'left', width: 300},
+			{ field: 'orderBy', title: '排序号', align: 'left', width: 80},
+			{ field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
+				if (d.state == '1') {
+					return "<span class='state-new'>新建</span>";
+				} else if (d.state == '2') {
+					return "<span class='state-up'>上线</span>";
+				} else if (d.state == '3') {
+					return "<span class='state-down'>下线</span>";
+				}
+			}},
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 320, toolbar: '#tableBar'}
 		]],
 		done: function(json) {
