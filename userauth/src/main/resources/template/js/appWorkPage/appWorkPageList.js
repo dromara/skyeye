@@ -46,15 +46,6 @@ layui.config({
 			{ field: 'childNum', title: '子页面数量', align: 'left', width: 120 },
 			{ field: 'url', title: '页面路径', align: 'left', width: 300},
 			{ field: 'orderBy', title: '排序号', align: 'left', width: 80},
-			{ field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
-				if (d.state == '1') {
-					return "<span class='state-new'>新建</span>";
-				} else if (d.state == '2') {
-					return "<span class='state-up'>上线</span>";
-				} else if (d.state == '3') {
-					return "<span class='state-down'>下线</span>";
-				}
-			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -80,10 +71,6 @@ layui.config({
         	topOne(data);
         }else if (layEvent === 'lower') { //下移
         	lowerOne(data);
-        }else if (layEvent === 'up') { //上线
-        	up(data);
-        }else if (layEvent === 'down') { //下线
-        	down(data);
         }else if (layEvent === 'authpoint') { //权限点
         	authpoint(data);
         }
@@ -143,30 +130,6 @@ layui.config({
 		}});
 	}
 	
-	// 上线
-	function up(data, obj){
-		var msg = obj ? '确认将【' + obj.data.title + '】上线吗？' : '确认将选中数据上线吗？';
-		layer.confirm(msg, { icon: 3, title: '上线操作' }, function (index) {
-			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "appworkpage010", params:{rowId: data.id}, type: 'json', callback: function (json) {
-				winui.window.msg("上线成功", {icon: 1, time: 2000});
-				loadTable();
-    		}});
-		});
-	}
-	
-	// 下线
-	function down(data, obj){
-		var msg = obj ? '确认将【' + obj.data.title + '】下线吗？' : '确认将选中数据下线吗？';
-		layer.confirm(msg, { icon: 3, title: '下线操作' }, function (index) {
-			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "appworkpage011", params:{rowId: data.id}, type: 'json', callback: function (json) {
-				winui.window.msg("下线成功", {icon: 1, time: 2000});
-				loadTable();
-    		}});
-		});
-	}
-	
 	// 权限点
     function authpoint(data){
 		menuId = data.id;
@@ -193,5 +156,5 @@ layui.config({
 		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
-    exports('appworkpage', {});
+    exports('appWorkPageList', {});
 });

@@ -18,18 +18,8 @@
 		{{# if(auth('1563602200836')){ }}
 			<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
 		{{# } }}
-		{{# if(d.state == 1 || d.state == 3){ }}
-			{{# if(auth('1563602242822') && d.childNum == 0){ }}
-				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
-			{{# } }}
-			{{# if(auth('1563602289002')){ }}
-				<a class="layui-btn layui-btn-xs" lay-event="up">上线</a>
-			{{# } }}
-		{{# } }}
-		{{# if(d.state == 2){ }}
-			{{# if(auth('1563602309298')){ }}
-				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="down">下线</a>
-			{{# } }}
+		{{# if(auth('1563602242822') && d.childNum == 0){ }}
+			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
 		{{# } }}
 		{{# if(d.orderBy != 1 && auth('1563602259975')){ }}
 			<a class="layui-btn layui-btn-xs" lay-event="top">上移</a>
