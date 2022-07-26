@@ -10,21 +10,34 @@ layui.config({
 	    var $ = layui.$,
 		    form = layui.form;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "appworkpageauthpoint003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: reqBasePath + "appworkpageauthpoint003", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
+			var type = json.bean.type;
+			if (type == 1) {
+				// 如果为1，则需要编辑权限点
+				$("#showForm").html($("#authPointTemplate").html());
+			} else if (type == 2) {
+				// 如果为2，则需要编辑数据权限分组
+				$("#showForm").html($("#groupTemplate").html());
+			} else if (type == 3) {
+				// 如果为3，写需要编辑数据权限
+				$("#showForm").html($("#dataAuthPointTemplate").html());
+			}
+
 			$("#authMenuName").val(json.bean.authMenuName);
 			$("#authMenu").val(json.bean.authMenu);
-
 			matchingLanguage();
 			form.render();
 			form.on('submit(formEditBean)', function (data) {
 				if (winui.verifyForm(data.elem)) {
 					var params = {
-						authMenuName: $("#authMenuName").val(),
+						title: $("#authMenuName").val(),
 						authMenu: $("#authMenu").val(),
-						rowId: parent.rowId,
-						menuId: parent.menuId
+						menuId: parent.menuId,
+						parentId: json.bean.parentId,
+						type: type,
+						id: parent.rowId
 					};
-					AjaxPostUtil.request({url: reqBasePath + "appworkpageauthpoint004", params: params, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "writeAppWorkPageAuthPointMation", params: params, type: 'json', callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 					}});
@@ -33,7 +46,7 @@ layui.config({
 			});
    		}});
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
