@@ -134,10 +134,10 @@ layui.config({
     function authpoint(data){
 		menuId = data.id;
 		_openNewWindows({
-			url: "../../tpl/appworkpageauthpoint/appworkpageauthpointlist.html", 
+			url: "../../tpl/appWorkPageAuthPoint/appWorkPageAuthPointList.html",
 			title: "权限点",
-			pageId: "appworkpageauthpoint",
-			maxmin: true,
+			pageId: "appWorkPageAuthPointList",
+			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 			}});
 	}
