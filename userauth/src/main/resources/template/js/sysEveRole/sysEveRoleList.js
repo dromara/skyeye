@@ -69,9 +69,9 @@ layui.config({
 	function edit(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseverole/syseveroleedit.html", 
+			url: "../../tpl/sysEveRole/sysEveRoleEdit.html",
 			title: "编辑角色",
-			pageId: "syseveroleedit",
+			pageId: "sysEveRoleEdit",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -83,9 +83,9 @@ layui.config({
     function appmenu(data){
         rowId = data.id;
         _openNewWindows({
-            url: "../../tpl/syseverole/syseveroleappmenu.html", 
+            url: "../../tpl/sysEveRole/sysEveRoleAppMenu.html",
             title: "手机端菜单授权",
-            pageId: "syseveroleappmenu",
+            pageId: "sysEveRoleAppMenu",
             area: ['90vw', '90vh'],
             callBack: function(refreshCode){}});
     }
@@ -94,7 +94,7 @@ layui.config({
 	function pcMenu(data){
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/syseverole/sysEveRolePCMenu.html",
+			url: "../../tpl/sysEveRole/sysEveRolePCMenu.html",
 			title: "PC端菜单授权",
 			pageId: "sysEveRolePCMenu",
 			area: ['90vw', '90vh'],
@@ -104,9 +104,9 @@ layui.config({
     // 新增角色
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
-			url: "../../tpl/syseverole/syseveroleadd.html", 
+			url: "../../tpl/sysEveRole/sysEveRoleAdd.html",
 			title: "新增角色",
-			pageId: "syseveroleadd",
+			pageId: "sysEveRoleAdd",
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
@@ -129,5 +129,5 @@ layui.config({
     	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
     
-    exports('syseverolelist', {});
+    exports('sysEveRoleList', {});
 });
