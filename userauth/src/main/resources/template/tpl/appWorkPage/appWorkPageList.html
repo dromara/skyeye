@@ -13,24 +13,26 @@
 			<button id="addBean" class="winui-toolbtn search-table-btn-right" auth="1563602200836"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
 		</div>
 	</div>
-	<table id="messageTable" lay-filter="messageTable"></table>
-	<script type="text/html" id="tableBar">
-		{{# if(auth('1563602200836')){ }}
-			<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
-		{{# } }}
-		{{# if(auth('1563602242822') && d.childNum == 0){ }}
-			<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
-		{{# } }}
-		{{# if(d.orderBy != 1 && auth('1563602259975')){ }}
-			<a class="layui-btn layui-btn-xs" lay-event="top">上移</a>
-		{{# } }}
-		{{# if(auth('1563602272986')){ }}
-			<a class="layui-btn layui-btn-xs" lay-event="lower">下移</a>
-		{{# } }}
-		{{# if(auth('1563602587596')){ }}
-			<a class="layui-btn layui-btn-xs" lay-event="authpoint">权限点</a>
-		{{# } }}
-	</script>
+	<div style="margin:auto 10px;">
+		<table id="messageTable" lay-filter="messageTable"></table>
+		<script type="text/html" id="tableBar">
+			{{# if(auth('1563602200836')){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="edit"><language showName="com.skyeye.editBtn"></language></a>
+			{{# } }}
+			{{# if(auth('1563602242822') && d.childNum == 0){ }}
+				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete"><language showName="com.skyeye.deleteBtn"></language></a>
+			{{# } }}
+			{{# if(d.orderBy != 1 && auth('1563602259975')){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="top">上移</a>
+			{{# } }}
+			{{# if(auth('1563602272986')){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="lower">下移</a>
+			{{# } }}
+			{{# if(auth('1563602587596')){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="authpoint">权限点</a>
+			{{# } }}
+		</script>
+	</div>
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">

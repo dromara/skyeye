@@ -29,13 +29,13 @@ layui.config({
                     var pointIds = "";//权限点
 	    	    	for(var i = 0; i < nodes.length; i++){
 	    	    		if(i == nodes.length-1){
-                            if(nodes[i].type == "authpoint"){
+                            if(nodes[i].type == "authPoint"){
                                 pointIds += nodes[i].id;
                             } else {
                                 menuIds += nodes[i].id;
                             }
                         } else {
-                            if(nodes[i].type == "authpoint"){
+                            if(nodes[i].type == "authPoint"){
                                 pointIds += nodes[i].id + ",";
                             } else {
                                 menuIds += nodes[i].id + ",";
@@ -45,7 +45,7 @@ layui.config({
 		        	var params = {
 	        			menuIds: menuIds,
 	        			pointIds: pointIds,
-	        			rowId: parent.rowId
+	        			id: parent.rowId
 		        	};
 		        	
 		        	AjaxPostUtil.request({url: reqBasePath + "sys039", params: params, type: 'json', callback: function (json) {
@@ -58,59 +58,48 @@ layui.config({
 	    });
 	    
 	    /********* tree 处理   start *************/
-	
-		var trees = {};
-		var treeDoms = $("ul.fsTree");
+		var tree;
 
 		AjaxPostUtil.request({url: reqBasePath + "sys038", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
 			$("#roleName").text(json.bean.roleName);
 			$("#roleDesc").text(json.bean.roleDesc);
 			checkeRows = json.rows;
-			if(treeDoms.length > 0) {
-				$(treeDoms).each(function(i) {
-					var treeId = $(this).attr("id");
-					var funcNo = $(this).attr("funcNo");
-					var url = $(this).attr("url");
-					var tree = fsTree.render({
-						id: treeId,
-						funcNo: funcNo,
-						url: reqBasePath + url,
-						getTree: getTree,
-						checkEnable: true,
-						loadEnable: false,
-						showLine: false,
-						showIcon: false,
-						addDiyDom: addDiyDom,
-						fontCss: setFontCss
-					}, function(id){
-						var zTreeObj = $.fn.zTree.getZTreeObj(id);
-						var zTree = zTreeObj.getCheckedNodes(false);
-						for (var i = 0; i < zTree.length; i++) {
-							for(var j = 0; j < checkeRows.length; j++){
-								if(zTree[i].id == checkeRows[j].menuId){
-									zTreeObj.checkNode(zTree[i], true);
-								}
-							}
+
+			tree = fsTree.render({
+				id: "treeDemo",
+				url: reqBasePath + "sys037",
+				getTree: getTree,
+				checkEnable: true,
+				loadEnable: false,
+				showLine: false,
+				showIcon: false,
+				addDiyDom: addDiyDom,
+				fontCss: setFontCss
+			}, function(id){
+				var zTreeObj = $.fn.zTree.getZTreeObj(id);
+				var zTree = zTreeObj.getCheckedNodes(false);
+				for (var i = 0; i < zTree.length; i++) {
+					for(var j = 0; j < checkeRows.length; j++){
+						if(zTree[i].id == checkeRows[j].menuId){
+							zTreeObj.checkNode(zTree[i], true);
 						}
-						var li_head = ' <li class="head"><a><div class="diy">所属系统</div><div class="diy">菜单权限</div><div class="diy">菜单类型</div></a></li>';
-						var rows = $("#" + treeId).find('li');
-						if(rows.length > 0) {
-							rows.eq(0).before(li_head)
-						} else {
-							$("#" + treeId).append(li_head);
-							$("#" + treeId).append('<li ><div style="text-align: center;line-height: 30px;" >无符合条件数据</div></li>')
-						}
-					});
-					if(treeDoms.length == 1) {
-						trees[treeId] = tree;
-					} else {
-						//深度拷贝对象
-						trees[treeId] = $.extend(true, {}, tree);
 					}
-				});
-				//绑定按钮事件
-				fsCommon.buttonEvent("tree", getTree);
-			}
+				}
+				var li_head = '<li class="head"><a>' +
+					'<div class="diy" style="width: 40%">菜单权限</div>' +
+					'<div class="diy">所属系统</div>' +
+					'<div class="diy">菜单类型</div>' +
+					'</a></li>';
+				var rows = $("#treeDemo").find('li');
+				if(rows.length > 0) {
+					rows.eq(0).before(li_head);
+				} else {
+					$("#" + treeId).append(li_head);
+					$("#" + treeId).append('<li ><div style="text-align: center;line-height: 30px;" >无符合条件数据</div></li>')
+				}
+			});
+			// 绑定按钮事件
+			fsCommon.buttonEvent("tree", getTree);
    		}});
 		
 		function getTree(treeId) {
@@ -130,51 +119,41 @@ layui.config({
 		 * 自定义DOM节点
 		 */
 		function addDiyDom(treeId, treeNode) {
-			var spaceWidth = 15;
-			var liObj = $("#" + treeNode.tId);
 			var aObj = $("#" + treeNode.tId + "_a");
 			var switchObj = $("#" + treeNode.tId + "_switch");
 			var icoObj = $("#" + treeNode.tId + "_ico");
 			var spanObj = $("#" + treeNode.tId + "_span");
 			aObj.attr('title', '');
-			aObj.append('<div class="diy swich"></div>');
-			var div = $(liObj).find('div').eq(0);
+			aObj.append('<div class="diy swich" style="width: 40%"></div>');
 			switchObj.remove();
 			spanObj.remove();
 			icoObj.remove();
+
+			var div = $("#" + treeNode.tId).find('.swich').eq(0);
 			div.append(switchObj);
 			div.append(spanObj);
-			var spaceStr = "<span style='height:1px;display: inline-block;width:" + (spaceWidth * treeNode.level) + "px'></span>";
-			switchObj.before(spaceStr);
-			var editStr = '';
-			editStr = '<div class="diy">' + (treeNode.sysName == null ? ' ' : treeNode.sysName) + '</div>';
-			aObj.before(editStr);
-			editStr = '<div class="diy">' + (treeNode.appType == null ? ' ' : treeNode.appType) + '</div>';
-			aObj.append(editStr);
-			editStr = '<div class="diy layui-hide">' + (treeNode.type == null ? ' ' : treeNode.type) + '</div>';
-            aObj.append(editStr);
+
+			switchObj.before("<span style='height:1px; display: inline-block; width:" + (15 * treeNode.level) + "px'></span>");
+			// 所属系统
+			aObj.append('<div class="diy">' + treeNode.sysName + '</div>');
+			// 菜单类型
+			aObj.append('<div class="diy">' + treeNode.pageType + '</div>');
 		}
 		
 		
-		var lastValue = "", nodeList = [], fontCss = {}, hiddenNodes = [];
+		var lastValue = "", nodeList = [], hiddenNodes = [];
 		$("#menuName").val('');
 		var key = $("#menuName");
-		key.bind("focus", focusKey)  
-	        .bind("blur", blurKey)  
-	        .bind("propertychange", searchNode) //property(属性)change(改变)的时候，触发事件  
-	        .bind("input", searchNode);
-		
-		function focusKey(e) {  
-		    if (key.hasClass("empty")) {  
-		        key.removeClass("empty");  
-		    }  
-		}  
-		
-		function blurKey(e) {  
-		    if (key.get(0).value === "") {  
-		        key.addClass("empty");  
-		    }  
-		} 
+		key.bind("focus", function(e) {
+			if (key.hasClass("empty")) {
+				key.removeClass("empty");
+			}
+		}).bind("blur",  function(e) {
+			if (key.get(0).value === "") {
+				key.addClass("empty");
+			}
+		}).bind("propertychange", searchNode) //property(属性)change(改变)的时候，触发事件
+		.bind("input", searchNode);
 		
 		//搜索树
 		function searchNode(e) {
