@@ -19,10 +19,7 @@ layui.config({
 	authBtn('1597243733271');
 	
 	// '资产归还'页面的选取时间段表格
-	laydate.render({
-		elem: '#returnCreateTime',
-		range: '~'
-	});
+	laydate.render({elem: '#returnCreateTime', range: '~'});
 	
 	// 资产归还管理开始
 	table.render({

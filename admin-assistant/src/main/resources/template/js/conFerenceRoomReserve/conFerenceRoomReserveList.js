@@ -16,10 +16,7 @@ layui.config({
 	// 新增预定
 	authBtn('1596947245794');
 
-	laydate.render({
-		elem: '#createTime',
-		range: '~'
-	});
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	// 会议室预定列表
 	table.render({

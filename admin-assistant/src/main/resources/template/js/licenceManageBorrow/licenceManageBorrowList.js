@@ -16,10 +16,7 @@ layui.config({
 	// 证照借用
 	authBtn('1596969413440');
     
-	laydate.render({
-		elem: '#createTime',
-		range: '~'
-	});
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	// 证照借用列表
 	table.render({

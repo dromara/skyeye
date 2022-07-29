@@ -16,10 +16,7 @@ layui.config({
 	authBtn('1597481948288');
 	
 	// '用车申请'页面的选取时间段表格
-	laydate.render({
-		elem: '#createTime',
-		range: '~'
-	});
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	// 用车申请列表
 	table.render({

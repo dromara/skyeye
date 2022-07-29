@@ -33,10 +33,7 @@ layui.config({
 	var lastYear = lastMonthDate.getYear();
 	var lastMonth = lastMonthDate.getMonth();
 		
-	laydate.render({
-		elem: '#timeRange',
-		range: '~'
-	});
+	laydate.render({elem: '#timeRange', range: '~'});
 	
 	initTable();
 	function initTable(){

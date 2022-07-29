@@ -36,11 +36,7 @@ layui.config({
 		template: $("#beanTemplate").html(),
 		ajaxSendLoadBefore: function(hdb){},
 		ajaxSendAfter:function (json) {
-			laydate.render({
-				elem: '#executeMonth',
-				type: 'month',
-				range: '~'
-			});
+			laydate.render({elem: '#executeMonth', type: 'month', range: '~'});
 
 			showGrid({
 				id: "typeId",

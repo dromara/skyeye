@@ -16,10 +16,7 @@ layui.config({
 	authBtn('1596957289917');
 	
 	// '用品领用'页面的选取时间段表格
-	laydate.render({
-		elem: '#createTime',
-		range: '~'
-	});
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	// 展示用品领用列表
 	table.render({

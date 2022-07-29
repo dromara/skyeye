@@ -20,13 +20,8 @@ layui.config({
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter: function (json) {
-		 		
-		 		//预约开始时间
-		 		laydate.render({ 
-		 		  elem: '#subscribeTime',
-		 		  type: 'datetime',
-		 		  trigger: 'click'
-		 		});
+		 		// 预约开始时间
+		 		laydate.render({elem: '#subscribeTime', type: 'datetime', trigger: 'click'});
 		 		
 		 		matchingLanguage();
 		 		form.render();

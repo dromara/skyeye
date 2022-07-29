@@ -21,11 +21,7 @@ layui.config({
 		form.render('select');
 	});
 
-	laydate.render({
-		elem: '#oilTime',
-		type: 'datetime',
-		range: true
-	});
+	laydate.render({elem: '#oilTime', type: 'datetime', range: true});
 	
 	showOilingList();
 	// 加油管理开始

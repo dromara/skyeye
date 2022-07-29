@@ -26,11 +26,7 @@ layui.config({
 	var usetableTemplate = $("#usetableTemplate").html();
 	var selTemplate = getFileContent('tpl/template/select-option.tpl');
 
-	laydate.render({
-		elem: '#executeMonth',
-		type: 'month',
-		range: '~'
-	});
+	laydate.render({elem: '#executeMonth', type: 'month', range: '~'});
 
 	showGrid({
 		id: "typeId",

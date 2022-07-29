@@ -15,10 +15,7 @@ layui.config({
 	// 印章借用
 	authBtn('1596961728905');
     
-	laydate.render({
-		elem: '#createTime',
-		range: '~'
-	});
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	// 印章借用列表
 	table.render({

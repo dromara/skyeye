@@ -16,10 +16,7 @@ layui.config({
 	// 归还新增
 	authBtn('1596972093939');
 	
-	laydate.render({
-		elem: '#revertTime',
-		range: '~'
-	});
+	laydate.render({elem: '#revertTime', range: '~'});
 	
 	// 证照归还列表
 	table.render({

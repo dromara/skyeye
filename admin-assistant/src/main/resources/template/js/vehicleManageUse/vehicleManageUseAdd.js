@@ -15,11 +15,7 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	var loadDriver = false;
 
-	laydate.render({
-		elem: '#departureTime',
-		type: 'datetime',
-		range: '~'
-	});
+	laydate.render({elem: '#departureTime', type: 'datetime', range: '~'});
 
 	// 乘车人数进行变动
 	$("body").on("change", "#passengerNum", function() {
