@@ -168,8 +168,6 @@ layui.config({
             memberPhone: $("#memberPhone").val(),
             plate: $("#plate").val(),
             vinCode: $("#vinCode").val(),
-            createName: $("#createName").val(),
-            consultantName: $("#consultantName").val(),
             state: $("#state").val(),
             type: $("#type").val(),
             whetherGive: $("#whetherGive").val(),

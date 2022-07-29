@@ -24,10 +24,7 @@ layui.config({
         form.render('select');
     });
 
-    laydate.render({
-        elem: '#createTime',
-        range: '~'
-    });
+    laydate.render({elem: '#createTime', range: '~'});
 
     form.on('select(storeId)', function(data) {
         table.reload("messageTable", {page: {curr: 1}, where: getTableParams()})
@@ -192,8 +189,6 @@ layui.config({
             vinCode: $("#vinCode").val(),
             memberCarPlate: $("#memberCarPlate").val(),
             type: $("#type").val(),
-            serviceTechnicianName: $("#serviceTechnicianName").val(),
-            createName: $("#createName").val(),
             mealByStoreId: $("#mealByStoreId").val(),
             storeId: storeId,
             startTime: startTime,

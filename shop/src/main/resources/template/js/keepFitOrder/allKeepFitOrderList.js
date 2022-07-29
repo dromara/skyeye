@@ -150,8 +150,6 @@ layui.config({
             memberCarPlate: $("#memberCarPlate").val(),
             areaId: $("#areaId").val(),
             type: $("#type").val(),
-            serviceTechnicianName: $("#serviceTechnicianName").val(),
-            createName: $("#createName").val(),
             mealByStoreId: $("#mealByStoreId").val(),
             storeId: $("#storeId").val(),
             startTime: startTime,

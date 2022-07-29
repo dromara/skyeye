@@ -122,8 +122,6 @@ layui.config({
             memberPhone: $("#memberPhone").val(),
             memberCarPlate: $("#memberCarPlate").val(),
             type: $("#type").val(),
-            serviceTechnicianName: $("#serviceTechnicianName").val(),
-            createName: $("#createName").val(),
             intercourseTime: intercourseTime,
             storeId: keepfiStoreId,
             mealByStoreId: mealByStoreId

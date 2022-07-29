@@ -202,7 +202,6 @@ layui.config({
             memberPhone: $("#memberPhone").val(),
             vinCode: $("#vinCode").val(),
             plate: $("#plate").val(),
-            createName: $("#createName").val(),
             type: $("#type").val(),
             natureId: $("#natureId").val(),
             state: $("#state").val(),
