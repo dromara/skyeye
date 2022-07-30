@@ -17,8 +17,7 @@ layui.config({
 		form = layui.form,
 		table = layui.table,
 		soulTable = layui.soulTable;
-	var selTemplate = getFileContent('tpl/template/select-option.tpl')
-	
+
 	authBtn('1555562812681');
 	
 	var bodyList = new Array();

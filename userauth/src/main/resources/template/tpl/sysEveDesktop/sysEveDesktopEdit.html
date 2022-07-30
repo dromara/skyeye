@@ -18,16 +18,29 @@
 			<div class="layui-form-item layui-col-xs12">
 				<span class="hr-title">基本信息</span><hr>
 			</div>
-			<div class="layui-form-item layui-col-xs12">
+			<div class="layui-form-item layui-col-xs6">
 				<label class="layui-form-label">中文名称<i class="red">*</i></label>
 				<div class="layui-input-block">
 					<input type="text" id="desktopName" name="desktopName" win-verify="required" placeholder="请输入桌面名称" class="layui-input" value="{{desktopName}}"/>
 				</div>
 			</div>
-			<div class="layui-form-item layui-col-xs12">
+			<div class="layui-form-item layui-col-xs6">
 				<label class="layui-form-label">英文名称<i class="red">*</i></label>
 				<div class="layui-input-block">
 					<input type="text" id="desktopCnName" name="desktopCnName" win-verify="required" placeholder="请输入英文名称" class="layui-input" value="{{desktopCnName}}"/>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">状态<i class="red">*</i></label>
+				<div class="layui-input-block winui-radio">
+					<input type="radio" name="state" value="1" title="启用" lay-filter="state" />
+					<input type="radio" name="state" value="2" title="禁用" lay-filter="state" />
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">logo<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<div class="upload" id="logo"></div>
 				</div>
 			</div>
 			<div class="layui-form-item layui-col-xs12">
