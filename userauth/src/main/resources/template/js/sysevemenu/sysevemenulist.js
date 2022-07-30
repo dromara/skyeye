@@ -122,45 +122,18 @@ layui.config({
 	}
 	
 	/********* tree 处理   start *************/
-	var trees = {};
-	var treeDoms = $("ul.fsTree");
-	if(treeDoms.length > 0) {
-		$(treeDoms).each(function(i) {
-			var treeId = $(this).attr("id");
-			var funcNo = $(this).attr("funcNo");
-			var url = $(this).attr("url");
-			var tree = fsTree.render({
-				id: treeId,
-				funcNo: funcNo,
-				url: reqBasePath + url,
-				clickCallback: onClickTree,
-				onDblClick: onClickTree,
-				getTree: getTree
-			}, function(id){
-				initLoadTable();
-			});
-			if(treeDoms.length == 1) {
-				trees[treeId] = tree;
-			} else {
-				//深度拷贝对象
-				trees[treeId] = $.extend(true, {}, tree);
-			}
-		});
-		//绑定按钮事件
-		fsCommon.buttonEvent("tree", getTree);
-	}
-	
-	function getTree(treeId) {
-		if($.isEmpty(trees)) {
-			fsCommon.warnMsg("未配置tree！");
-			return;
-		}
-		if($.isEmpty(treeId)) {
-			treeId = "treeDemo";
-		}
-		return trees[treeId];
-	}
-	
+	var tree = fsTree.render({
+		id: "treeDemo",
+		funcNo: funcNo,
+		url: reqBasePath + "querySysEveWinList",
+		clickCallback: onClickTree,
+		onDblClick: onClickTree
+	}, function(id){
+		initLoadTable();
+	});
+	// 绑定按钮事件
+	fsCommon.buttonEvent("tree", getTree);
+
 	//异步加载的方法
 	function onClickTree(event, treeId, treeNode) {
 		if(treeNode == undefined) {

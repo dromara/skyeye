@@ -29,7 +29,7 @@ layui.config({
 		// 所属系统
 		showGrid({
 			id: "menuSysWinId",
-			url: reqBasePath + "sys031",
+			url: reqBasePath + "querySysEveWinList",
 			params: {},
 			pagination: false,
 			template: selOption,

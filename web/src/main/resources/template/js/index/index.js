@@ -87,7 +87,7 @@ layui.config({
 			currentUserMation.winLockBgPicUrl = fileBasePath + currentUserMation.winLockBgPicUrl;
 		}
 
-		//获取桌面消息
+		// 获取桌面消息
 		AjaxPostUtil.request({url: reqBasePath + "login009", params: {language: languageType}, type: 'json', method: "GET", callback: function(l){
 			var deskTopName = new Array();
 			var defaultName = (languageType == "zh" ? "默认桌面" : "Default desktop");
