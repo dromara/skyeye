@@ -20,6 +20,7 @@ layui.config({
  	        		desktopName: $("#desktopName").val(),
  	        		desktopCnName: $("#desktopCnName").val(),
 					state: $("input[name='state']:checked").val(),
+					appPageUrl: $("#appPageUrl").val(),
 					logo: $("#logo").find("input[name='upload']").attr("oldurl")
  	        	};
 				if (isNull(params.logo)) {

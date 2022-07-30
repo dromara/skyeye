@@ -43,6 +43,7 @@ layui.config({
 	        		return "<span class='state-up'>启用</span>";
 	        	}
 	        }},
+			{ field: 'appPageUrl', title: 'APP跳转地址', align: 'left', width: 180 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },

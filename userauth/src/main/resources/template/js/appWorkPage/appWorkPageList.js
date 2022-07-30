@@ -27,7 +27,7 @@ layui.config({
 		cols: [[
 			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 			{ field: 'title', title: '名称', align: 'left', width: 120 },
-			{ field: 'logo', title: 'logo', width: 60, templet: function (d) {
+			{ field: 'logo', title: 'LOGO', width: 60, templet: function (d) {
 				var str = '';
 				if(!isNull(d.logo)){
 					str = '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="iconPath">';
@@ -62,18 +62,20 @@ layui.config({
 
 	table.on('tool(messageTable)', function (obj) { 
         var data = obj.data; 
-        var layEvent = obj.event; 
-        if (layEvent === 'delete') { //删除
-        	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
-        	edit(data);
-        }else if (layEvent === 'top') { //上移
-        	topOne(data);
-        }else if (layEvent === 'lower') { //下移
-        	lowerOne(data);
-        }else if (layEvent === 'authpoint') { //权限点
-        	authpoint(data);
-        }
+        var layEvent = obj.event;
+		if (layEvent === 'delete') { //删除
+			del(data, obj);
+		} else if (layEvent === 'edit') { //编辑
+			edit(data);
+		} else if (layEvent === 'top') { //上移
+			topOne(data);
+		} else if (layEvent === 'lower') { //下移
+			lowerOne(data);
+		} else if (layEvent === 'authpoint') { //权限点
+			authpoint(data);
+		} else if (layEvent === 'iconPath') { //logo预览
+			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.logo));
+		}
     });
 
 	// 新增菜单
