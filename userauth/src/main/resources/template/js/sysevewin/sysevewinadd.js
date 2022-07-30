@@ -71,53 +71,15 @@ layui.config({
     	 	}
 	    });
 	    
-	    //加载一级分类
-		showGrid({
-		 	id: "sysFirstType",
-		 	url: reqBasePath + "sysevewintype012",
-		 	params: {},
-		 	pagination: false,
-		 	template: getFileContent('tpl/template/select-option.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 	},
-		 	ajaxSendAfter:function (json) {
-		 		form.render('select');
-		 	}
-		});
-	    
 		matchingLanguage();
 	    form.render();
-	    form.on('select(sysFirstType)', function(data){
-	    	var firstSelTypeId;
-	    	if(isNull(data.value)){
-	    		firstSelTypeId = '111';
-	    	} else {
-	    		firstSelTypeId = data.value;
-	    	}
-	    	showGrid({
-			 	id: "sysSecondType",
-			 	url: reqBasePath + "sysevewintype013",
-			 	params: {rowId: firstSelTypeId},
-			 	pagination: false,
-			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){
-			 	},
-			 	ajaxSendAfter:function (json) {
-			 		form.render('select');
-			 	}
-			});
-		});
-		
 	    form.on('submit(formAddBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
     				sysName: $("#sysName").val(),
     				sysUrl: $("#sysUrl").val(),
     				sysDesc: encodeURIComponent(layedit.getContent(layContent)),
     				sysType: $("#sysType").val(),
-    				sysFirstType: data.field.sysFirstType,
-    				sysSecondType: data.field.sysSecondType,
         		};
         		params.sysPic = $("#sysPic").find("input[type='hidden'][name='upload']").attr("oldurl");
  	        	if(isNull(params.sysPic)){
@@ -132,11 +94,10 @@ layui.config({
 	        return false;
 	    });
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    
 	});
-	    
 });

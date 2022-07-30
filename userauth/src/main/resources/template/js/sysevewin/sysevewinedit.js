@@ -15,7 +15,7 @@ layui.config({
 	    var layContent;
 	    
 	    AjaxPostUtil.request({url: reqBasePath + "sysevewin003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
-			if(!isNull(json.bean)){
+			if(!isNull(json.bean)) {
 				rowId = json.bean.id;
 				// 初始化上传
 				$("#sysPic").upload(systemCommonUtil.uploadCommon003Config('sysPic', 8, json.bean.sysPic, 1));
@@ -23,34 +23,6 @@ layui.config({
 				$("#sysName").val(json.bean.sysName);
 				$("#sysUrl").val(json.bean.sysUrl);
 				$("#content").val(json.bean.sysDesc);
-
-				//加载一级分类
-				showGrid({
-					id: "sysFirstType",
-					url: reqBasePath + "sysevewintype012",
-					params: {},
-					pagination: false,
-					template: getFileContent('tpl/template/select-option.tpl'),
-					ajaxSendLoadBefore: function(hdb){
-					},
-					ajaxSendAfter:function(j){
-						$("#sysFirstType").val(json.bean.sysFirstType);
-						form.render('select');
-						showGrid({
-							id: "sysSecondType",
-							url: reqBasePath + "sysevewintype013",
-							params: {rowId: json.bean.sysFirstType},
-							pagination: false,
-							template: getFileContent('tpl/template/select-option.tpl'),
-							ajaxSendLoadBefore: function(hdb){
-							},
-							ajaxSendAfter:function(j){
-								$("#sysSecondType").val(json.bean.sysSecondType);
-								form.render('select');
-							}
-						});
-					}
-				});
 			}
 
 			layedit.set({
@@ -112,43 +84,19 @@ layui.config({
 	    
    		matchingLanguage();
 		form.render();
-		form.on('select(sysFirstType)', function(data){
-			var firstSelTypeId;
-	    	if(isNull(data.value)){
-	    		firstSelTypeId = '111';
-	    	} else {
-	    		firstSelTypeId = data.value;
-	    	}
-	    	showGrid({
-			 	id: "sysSecondType",
-			 	url: reqBasePath + "sysevewintype013",
-			 	params: {rowId: firstSelTypeId},
-			 	pagination: false,
-			 	template: getFileContent('tpl/template/select-option.tpl'),
-			 	ajaxSendLoadBefore: function(hdb){
-			 	},
-			 	ajaxSendAfter:function (json) {
-			 		form.render('select');
-			 	}
-			});
-		});
-		
 	    form.on('submit(formEditBean)', function (data) {
-	    	
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
     				sysName: $("#sysName").val(),
     				sysUrl: $("#sysUrl").val(),
     				sysDesc: encodeURIComponent(layedit.getContent(layContent)),
     				rowId: parent.rowId,
-    				sysFirstType: data.field.sysFirstType,
-    				sysSecondType: data.field.sysSecondType,
+					sysPic: $("#sysPic").find("input[type='hidden'][name='upload']").attr("oldurl")
         		};
-        		params.sysPic = $("#sysPic").find("input[type='hidden'][name='upload']").attr("oldurl");
- 	        	if(isNull(params.sysPic)){
- 	        		winui.window.msg('请上传系统图片', {icon: 2, time: 2000});
- 	        		return false;
- 	        	}
+				if (isNull(params.sysPic)) {
+					winui.window.msg('请上传系统图片', {icon: 2, time: 2000});
+					return false;
+				}
     			AjaxPostUtil.request({url: reqBasePath + "sysevewin004", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
