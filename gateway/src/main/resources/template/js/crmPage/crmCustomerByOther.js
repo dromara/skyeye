@@ -12,15 +12,18 @@ layui.config({
 		form = layui.form;
 	var charts1, charts2, charts3, charts4;
 	
-	initCustomNumByOtherType();
 	// 根据客户分类，客户来源，所属行业，客户分组统计客户数量
-	function initCustomNumByOtherType(){
-		AjaxPostUtil.request({url: reqBasePath + "crmpage002", params: {}, type: 'json', callback: function (json) {
-			renderCharts(json.bean);
-			matchingLanguage();
-   		}});
-	}
-	
+	var params = {
+		crmCustomerType: sysDictData["crmCustomerType"]["key"],
+		crmCustomerFrom: sysDictData["crmCustomerFrom"]["key"],
+		crmCustomerIndustry: sysDictData["crmCustomerIndustry"]["key"],
+		crmCustomerGroup: sysDictData["crmCustomerGroup"]["key"],
+	};
+	AjaxPostUtil.request({url: reqBasePath + "crmpage002", params: params, type: 'json', method: "POST", callback: function (json) {
+		renderCharts(json.bean);
+		matchingLanguage();
+	}});
+
 	function renderCharts(bean) {
 		charts1 = echarts.init(document.getElementById("charts1"));
 		charts2 = echarts.init(document.getElementById("charts2"));
@@ -31,7 +34,7 @@ layui.config({
 		var name = new Array();
 		$.each(bean.numType, function(i, item){
 			num.push(item.number);
-			name.push(item.typeName);
+			name.push(item.name);
 		});
 		charts1.setOption(getOption('客户类型分析', '根据客户类型统计客户数量', name, '客户数量', num, 'bar'));
 		
@@ -39,7 +42,7 @@ layui.config({
 		name = new Array();
 		$.each(bean.numFrom, function(i, item){
 			num.push(item.number);
-			name.push(item.fromName);
+			name.push(item.name);
 		});
 		charts2.setOption(getOption('客户来源分析', '根据客户来源统计客户数量', name, '客户数量', num, 'bar'));
 		
@@ -47,7 +50,7 @@ layui.config({
 		name = new Array();
 		$.each(bean.numIndustry, function(i, item){
 			num.push(item.number);
-			name.push(item.industryName);
+			name.push(item.name);
 		});
 		charts3.setOption(getOption('所属行业分析', '根据所属行业统计客户数量', name, '客户数量', num, 'bar'));
 		
@@ -55,7 +58,7 @@ layui.config({
 		name = new Array();
 		$.each(bean.numGroup, function(i, item){
 			num.push(item.number);
-			name.push(item.groupName);
+			name.push(item.name);
 		});
 		charts4.setOption(getOption('客户分组分析', '根据客户分组统计客户数量', name, '客户数量', num, 'bar'));
 	}
