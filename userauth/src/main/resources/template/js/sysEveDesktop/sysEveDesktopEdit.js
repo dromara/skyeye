@@ -29,6 +29,7 @@ layui.config({
 		 	        		id: parent.rowId,
 		 	        		desktopName: $("#desktopName").val(),
 		 	        		desktopCnName: $("#desktopCnName").val(),
+							desktopCode: $("#code").val(),
 							state: $("input[name='state']:checked").val(),
 							appPageUrl: $("#appPageUrl").val(),
 							logo: $("#logo").find("input[name='upload']").attr("oldurl")

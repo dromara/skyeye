@@ -16,14 +16,23 @@
 		        <label class="layui-form-label">中文名称<i class="red">*</i></label>
 		        <div class="layui-input-block">
 		        	<input type="text" id="desktopName" name="desktopName" win-verify="required" placeholder="请输入桌面名称" class="layui-input"/>
+					<div class="layui-form-mid layui-word-aux">该名称在系统中唯一。</div>
 		        </div>
 		    </div>
 		    <div class="layui-form-item layui-col-xs6">
 		        <label class="layui-form-label">英文名称<i class="red">*</i></label>
 		        <div class="layui-input-block">
 		        	<input type="text" id="desktopCnName" name="desktopCnName" win-verify="required" placeholder="请输入英文名称" class="layui-input"/>
-		        </div>
+					<div class="layui-form-mid layui-word-aux">该名称可重复。</div>
+				</div>
 		    </div>
+			<div class="layui-form-item layui-col-xs6">
+				<label class="layui-form-label">编码<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<input type="text" id="code" name="code" win-verify="required" placeholder="请输入编码" class="layui-input"/>
+					<div class="layui-form-mid layui-word-aux">该编码在系统中唯一。例如：ERP_DESKTOP</div>
+				</div>
+			</div>
 			<div class="layui-form-item layui-col-xs12">
 				<label class="layui-form-label">状态<i class="red">*</i></label>
 				<div class="layui-input-block winui-radio">
