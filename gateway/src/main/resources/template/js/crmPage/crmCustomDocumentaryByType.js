@@ -28,7 +28,11 @@ layui.config({
 	initCustomDocumentaryByType(year);
 	// 客户跟单方式分析
 	function initCustomDocumentaryByType(year){
-		AjaxPostUtil.request({url: reqBasePath + "crmpage003", params: {year: year}, type: 'json', callback: function (json) {
+		var params = {
+			year: year,
+			crmDocumentaryType: sysDictData["crmDocumentaryType"]["key"]
+		};
+		AjaxPostUtil.request({url: reqBasePath + "crmpage003", params: params, type: 'json', callback: function (json) {
 			renderCharts1(json.rows);
 			matchingLanguage();
    		}});
@@ -39,7 +43,7 @@ layui.config({
 		var name = new Array();
 		var num = new Array();
 		$.each(rows, function(i, item){
-			name.push(item.typeName);
+			name.push(item.name);
 			num.push(item.number);
 		});
 		charts1.setOption(getOption('客户跟单方式分析', '统计在指定年份不同的跟单方式的数量分析', name, '跟单数量', num, 'bar'));
@@ -47,7 +51,7 @@ layui.config({
 		// 加载表格
 		var allNum = 0;
 		$.each(rows, function(i, item){
-			allNum += item.number;
+			allNum += parseInt(item.number);
 		});
 		$.each(rows, function(i, item){
 			if(allNum == 0){
