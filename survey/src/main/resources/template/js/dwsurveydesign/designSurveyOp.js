@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "dwsurveydirectory004",
+		 	url: sysMainMation.surveyBasePath + "dwsurveydirectory004",
 		 	params: {rowId: parent.parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/dwsurveydesign/designSurveyOpTemplates.tpl'),
@@ -153,7 +153,7 @@ layui.config({
 			        		params.endTime = '';
 			        	}
 			        	
-			        	AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory005", params: params, type: 'json', callback: function (json) {
+			        	AjaxPostUtil.request({url: sysMainMation.surveyBasePath + "dwsurveydirectory005", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});

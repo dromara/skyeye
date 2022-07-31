@@ -15,14 +15,13 @@ layui.config({
 		table = layui.table;
 	
 	authBtn('1553649420346');
-	
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'dwsurveydirectory001',
-	    where:{surveyName: $("#surveyName").val(), surveyState: $("#surveyState").val()},
-	    even:true,
+	    url: sysMainMation.surveyBasePath + 'dwsurveydirectory001',
+	    where: {surveyName: $("#surveyName").val(), surveyState: $("#surveyState").val()},
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
@@ -73,7 +72,7 @@ layui.config({
 		var msg = obj ? '确认删除问卷【' + obj.data.surveyName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除问卷' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory025", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.surveyBasePath + "dwsurveydirectory025", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -139,7 +138,7 @@ layui.config({
 		var msg = obj ? '确认发布问卷【' + obj.data.surveyName + '】吗？' : '确认发布选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '问卷发布' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory023", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.surveyBasePath + "dwsurveydirectory023", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("发布成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -151,7 +150,7 @@ layui.config({
 		var msg = obj ? '确认结束问卷【' + obj.data.surveyName + '】的调查吗？' : '确认结束选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '结束调查' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "dwsurveydirectory030", params:{surveyId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.surveyBasePath + "dwsurveydirectory030", params: {surveyId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("结束成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
