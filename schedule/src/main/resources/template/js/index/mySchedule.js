@@ -146,8 +146,7 @@ layui.config({
 					scheduleTitle: event.title,
 					scheduleStartTime: event.start._d.format("yyyy-MM-dd hh:mm:ss"),
 					scheduleEndTime: event.end._d.format("yyyy-MM-dd hh:mm:ss"),
-					id: event.id,
-					rowId: event.id
+					id: event.id
 				};
 				AjaxPostUtil.request({url: reqBasePath + "syseveschedule005", params: params, type: 'json', callback: function (json) {
 					joinTodaySchedule(params);

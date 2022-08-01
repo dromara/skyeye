@@ -144,7 +144,7 @@ layui.config({
         			remindType: $("#remindType").val(),
         			type: $("#scheduleType").val(),
         			typeName: $("#scheduleType option:selected").text(),
-        			import: data.field.scheduleImport,
+					imported: data.field.scheduleImport,
  	        	};
 	        	if(data.field.allDay || data.field.allDay == 'true'){//全天
 	        		if(isNull($("#scheduleStartTime").val())){
