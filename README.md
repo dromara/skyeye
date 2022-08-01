@@ -75,7 +75,7 @@ webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.co
 Activiti|工作流引擎|https://www.activiti.org/
 spring mvc|视图框架|http://spring.io/
 quartz 2.2.2|定时任务|http://www.quartz-scheduler.org/
-ActiveMQ|消息队列|http://activemq.apache.org/replicated-leveldb-store.html
+RocketMQ|消息队列|https://rocketmq.apache.org/dowloading/releases/
 solr|企业级搜索应用服务器|https://lucene.apache.org/solr/
 Spring Cloud|微服务框架(目前用户APP端接口)|https://springcloud.cc/
 
