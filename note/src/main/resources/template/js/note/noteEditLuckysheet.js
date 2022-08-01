@@ -13,7 +13,7 @@ layui.config({
 	form.render();
 
 	// 显示编辑器内容
-	AjaxPostUtil.request({url: reqBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote008", params: {rowId: noteId}, type: 'json', callback: function (json) {
 		parent.$("#noteTitle").val(json.bean.title);
 		var param = {
 			container: 'luckysheet',

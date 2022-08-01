@@ -20,7 +20,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: reqBasePath + "mynote012?moveId=" + clickId,
+		url: sysMainMation.noteBasePath + "mynote012?moveId=" + clickId,
 		checkEnable: true,
 		chkStyle: "radio",
 		loadEnable: true,//异步加载
@@ -49,12 +49,12 @@ layui.config({
 		if(clickType == "folder"){
 			var arrId = new Array();
 			arrId[0] = clickId;
-			AjaxPostUtil.request({url: reqBasePath + "mynote010", params: {targetId: chooseId, arrId : arrId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote010", params: {targetId: chooseId, arrId : arrId}, type: 'json', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = chooseId;
 	   		}});
 		} else {
-			AjaxPostUtil.request({url: reqBasePath + "mynote011", params: {toId: chooseId, moveId : clickId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote011", params: {toId: chooseId, moveId : clickId}, type: 'json', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 	   		}});

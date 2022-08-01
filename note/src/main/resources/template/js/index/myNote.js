@@ -36,7 +36,7 @@ layui.config({
 	var ztree = null;
 	fsTree.render({
 		id: "treeDemo",
-		url: reqBasePath + "mynote001",
+		url: sysMainMation.noteBasePath + "mynote001",
 		checkEnable: false,
 		dragEnable: true,
 		loadEnable: true,//异步加载
@@ -168,7 +168,7 @@ layui.config({
 	
 	//编辑节点名称
 	function onRename(event, treeId, treeNode) {
-		AjaxPostUtil.request({url: reqBasePath + "mynote004", params: {catalogName: treeNode.name, fileType : 'folder', rowId : treeNode.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote004", params: {catalogName: treeNode.name, fileType : 'folder', rowId : treeNode.id}, type: 'json', callback: function (json) {
 			winui.window.msg("保存成功", {icon: 1, time: 2000});
 			folderId = treeNode.id;
 			showListById();//获取文件夹和笔记列表
@@ -206,7 +206,7 @@ layui.config({
 			}
 			arrId[i] = treeNodes[i].id;
 		}
-		AjaxPostUtil.request({url: reqBasePath + "mynote010", params: {targetId: targetId, arrId : arrId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote010", params: {targetId: targetId, arrId : arrId}, type: 'json', callback: function (json) {
 			winui.window.msg("保存成功", {icon: 1, time: 2000});
 			noteId = "";
 			folderId = targetId;
@@ -337,7 +337,7 @@ layui.config({
 					text: "输出为PDF",
 					img: "../../assets/images/decompression-now.png",
 					callback: function() {
-						AjaxPostUtil.request({url: reqBasePath + "mynote014", params: {rowId: clickId, type: "2"}, type: 'json', callback: function (json) {
+						AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote014", params: {rowId: clickId, type: "2"}, type: 'json', callback: function (json) {
 							layer.alert('笔记输出为PDF任务已创建，请前往 <a href="../../tpl/jobSpace/jobSpace.html" style="color: blue;" target="_blank">我的输出</a> 查看。');
 				   		}});
 					}
@@ -365,7 +365,7 @@ layui.config({
 								var nowhtml = "<span>" + value + "</span>";
 								obj.find("div[class='folder-item-title-content']").html(nowhtml);
 								if(html != value){
-									AjaxPostUtil.request({url: reqBasePath + "mynote004", params: {catalogName: value, fileType : clickType, rowId : clickId}, type: 'json', callback: function (json) {
+									AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote004", params: {catalogName: value, fileType : clickType, rowId : clickId}, type: 'json', callback: function (json) {
 										winui.window.msg("保存成功", {icon: 1, time: 2000});
 										if(clickType == "folder"){
 											//刷新节点
@@ -457,7 +457,7 @@ layui.config({
 			folderId = "2";
 		}
 		hideRMenu();
-		AjaxPostUtil.request({url: reqBasePath + "mynote002", params: {parentId: folderId, catalogName: '新建文件夹'}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote002", params: {parentId: folderId, catalogName: '新建文件夹'}, type: 'json', callback: function (json) {
 			//刷新节点
 			refreshTreePointNode();
 			folderId = json.bean.id;
@@ -512,7 +512,7 @@ layui.config({
 	// 树操作--输出压缩包
 	$("body").on("click", ".treereOutPutZIPContent", function (e) {
 		hideRMenu();
-		AjaxPostUtil.request({url: reqBasePath + "mynote014", params: {rowId: folderId, type: "1"}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote014", params: {rowId: folderId, type: "1"}, type: 'json', callback: function (json) {
 			layer.alert('笔记输出压缩包任务已创建，请前往 <a href="../../tpl/jobSpace/jobSpace.html" style="color: #0000ff;" target="_blank">我的输出</a> 查看。');
    		}});
 	});
@@ -551,7 +551,7 @@ layui.config({
 		}
 		var content = childframe.window.getContent();//调用子页面方法获取编辑器内容
 		var desc = childframe.window.getNoHtmlContent();//调用子页面方法获取编辑器纯文本内容
-		AjaxPostUtil.request({url: reqBasePath + "mynote009", params: {rowId: noteId, title: tilte, content: content, desc: encodeURIComponent(desc)}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote009", params: {rowId: noteId, title: tilte, content: content, desc: encodeURIComponent(desc)}, type: 'json', callback: function (json) {
 			winui.window.msg("保存成功", {icon: 1, time: 2000});
 			var obj = $("#folderChildList").find(".folder-item[id='" + noteId + "']");
 			obj.find("div[class='folder-item-title-content']").find("span").html(tilte);
@@ -593,7 +593,7 @@ layui.config({
             thisfolderId = folderId;
         }
         hideRMenu();
-        AjaxPostUtil.request({url: reqBasePath + "mynote007", params: {parentId: thisfolderId, title: title, type: type}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote007", params: {parentId: thisfolderId, title: title, type: type}, type: 'json', callback: function (json) {
 		   noteId = json.bean.id;
 		   showListById();// 获取文件夹和笔记列表
        }});
@@ -601,7 +601,7 @@ layui.config({
 	
 	// 删除指定文件夹或笔记
 	function deleteFileOrNote(id){
-        AjaxPostUtil.request({url: reqBasePath + "mynote003", params:{rowId: id, fileType: clickType}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote003", params:{rowId: id, fileType: clickType}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			if(clickType == "folder"){
 				var selNode = ztree.getNodeByParam("id", id, null);
@@ -623,7 +623,7 @@ layui.config({
 			scrollElem: "#folderChildList",
 			done: function(page, next) { //到达临界点（默认滚动触发），触发下一页
 				var lis = [];
-				AjaxPostUtil.request({url: reqBasePath + "mynote005", params:{page: page, limit: 15, search: searchTitle}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote005", params:{page: page, limit: 15, search: searchTitle}, type: 'json', callback: function (json) {
 					lis.push(getDataUseHandlebars(folderchildlisetTemplate, json));
 					next(lis.join(''), (page * 15) < json.total);
 					initRightMenu();
@@ -639,7 +639,7 @@ layui.config({
 			isNewNote = true;
 			showNewNoteList();//展示最新的笔记
 		} else {
-			AjaxPostUtil.request({url: reqBasePath + "mynote006", params: {parentId: folderId, search: searchTitle}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote006", params: {parentId: folderId, search: searchTitle}, type: 'json', callback: function (json) {
 				$("#folderChildList").html(getDataUseHandlebars(folderchildlisetTemplate, json));
 				initRightMenu();
 				showNoteContent(json.rows);
