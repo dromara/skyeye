@@ -20,9 +20,9 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'rmproperty001',
-	    where:{title: $("#title").val(), propertyTag: $("#propertyTag").val(), dsFormContentId: $("#dsFormContentId").val()},
-	    even:true,
+	    url: sysMainMation.rmprogramBasePath + 'rmproperty001',
+	    where: {title: $("#title").val(), propertyTag: $("#propertyTag").val(), dsFormContentId: $("#dsFormContentId").val()},
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
@@ -161,7 +161,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '删除样式属性' }, function (index) {
 			layer.close(index);
             
-            AjaxPostUtil.request({url: reqBasePath + "rmproperty003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmproperty003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});

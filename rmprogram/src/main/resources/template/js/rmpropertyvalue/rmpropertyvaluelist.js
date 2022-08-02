@@ -18,9 +18,9 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'rmpropertyvalue001',
-	    where:{title: $("#title").val(), propertyValue: $("#propertyValue").val(), propertyId: $("#propertyId").val()},
-	    even:true,
+	    url: sysMainMation.rmprogramBasePath + 'rmpropertyvalue001',
+	    where: {title: $("#title").val(), propertyValue: $("#propertyValue").val(), propertyId: $("#propertyId").val()},
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
@@ -50,7 +50,7 @@ layui.config({
 	//属性标签
 	showGrid({
 	 	id: "propertyId",
-	 	url: reqBasePath + "rmproperty006",
+	 	url: sysMainMation.rmprogramBasePath + "rmproperty006",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -75,7 +75,7 @@ layui.config({
 		var msg = obj ? '确认删除标签属性值【' + obj.data.title + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除标签属性值' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "rmpropertyvalue003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmpropertyvalue003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});

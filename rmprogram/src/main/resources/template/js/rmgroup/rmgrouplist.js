@@ -15,7 +15,7 @@ layui.config({
 	
 	showGrid({
 	 	id: "rmTypeId",
-	 	url: reqBasePath + "common001",
+	 	url: sysMainMation.rmprogramBasePath + "common001",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -39,9 +39,9 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'rmxcx008',
-	    where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()},
-	    even:true,
+	    url: sysMainMation.rmprogramBasePath + 'rmxcx008',
+	    where: {rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()},
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
@@ -81,7 +81,7 @@ layui.config({
 		var msg = obj ? '确认删除分组【' + obj.data.rmGroupName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除分组' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "rmxcx010", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx010", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -90,7 +90,7 @@ layui.config({
 	
 	//上移
 	function topOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "rmxcx013", params:{rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx013", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -98,7 +98,7 @@ layui.config({
 	
 	//下移
 	function lowerOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "rmxcx014", params:{rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx014", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});

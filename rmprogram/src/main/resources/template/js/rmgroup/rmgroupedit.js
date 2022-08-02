@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "rmxcx011",
+		 	url: sysMainMation.rmprogramBasePath + "rmxcx011",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmgroup/rmgroupeditTemplate.tpl'),
@@ -22,7 +22,7 @@ layui.config({
 		 	ajaxSendAfter:function (json) {
 		 		showGrid({
 				 	id: "rmTypeId",
-				 	url: reqBasePath + "common001",
+				 	url: sysMainMation.rmprogramBasePath + "common001",
 				 	params: {},
 				 	pagination: false,
 				 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -45,7 +45,7 @@ layui.config({
 				        			icon: $("#rmGroupIcon").val(),
 				        			rowId: parent.rowId
 					        	};
-					        	AjaxPostUtil.request({url: reqBasePath + "rmxcx012", params: params, type: 'json', callback: function (json) {
+					        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx012", params: params, type: 'json', callback: function (json) {
 									parent.layer.close(index);
 									parent.refreshCode = '0';
 					 	   		}});

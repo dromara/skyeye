@@ -14,7 +14,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "rmxcx020",
+		 	url: sysMainMation.rmprogramBasePath + "rmxcx020",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmgroupmember/rmgroupmembereditTemplate.tpl'),
@@ -123,7 +123,7 @@ layui.config({
 			 	   			
 			 	   			params.img = $("#printsPicUrl").find("input[type='hidden'][name='upload']").attr("oldurl");
 			 	   			
-				        	AjaxPostUtil.request({url: reqBasePath + "rmxcx021", params: params, type: 'json', callback: function (json) {
+				        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx021", params: params, type: 'json', callback: function (json) {
 								parent.layer.close(index);
 								parent.refreshCode = '0';
 				 	   		}});

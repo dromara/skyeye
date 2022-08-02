@@ -30,7 +30,7 @@ layui.config({
 	
 	showGrid({
 	 	id: "rmTypeId",
-	 	url: reqBasePath + "common001",
+	 	url: sysMainMation.rmprogramBasePath + "common001",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -65,7 +65,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'rmxcx015',
+	    url: sysMainMation.rmprogramBasePath + 'rmxcx015',
 	    where: getTableParams(),
 	    even:true,
 	    page: true,
@@ -228,7 +228,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "rmxcx019", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx019", params:{rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -237,7 +237,7 @@ layui.config({
 	
 	// 上移
 	function topOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "rmxcx017", params:{rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx017", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -245,7 +245,7 @@ layui.config({
 	
 	// 下移
 	function lowerOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "rmxcx018", params:{rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx018", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});

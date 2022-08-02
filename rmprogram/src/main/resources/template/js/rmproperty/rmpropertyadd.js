@@ -160,7 +160,7 @@ layui.config({
 	        		params.displayTemplateId = "";
 	        	}
 	        	
-	        	AjaxPostUtil.request({url: reqBasePath + "rmproperty002", params: params, type: 'json', callback: function (json) {
+	        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmproperty002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

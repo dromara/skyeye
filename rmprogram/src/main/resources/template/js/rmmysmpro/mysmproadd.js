@@ -20,7 +20,7 @@ layui.config({
         			proDesc: $("#proDesc").val()
 	        	};
 	        	
-	        	AjaxPostUtil.request({url: reqBasePath + "rmxcx023", params: params, type: 'json', callback: function (json) {
+	        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx023", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

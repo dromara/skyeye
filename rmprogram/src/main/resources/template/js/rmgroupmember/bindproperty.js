@@ -14,7 +14,7 @@ layui.config({
 	    // 加载标签属性
 	    showGrid({
 	     	id: "propertyList",
-	     	url: reqBasePath + "rmproperty006",
+	     	url: sysMainMation.rmprogramBasePath + "rmproperty006",
 	     	params: {},
 	     	pagination: false,
 	     	template: getFileContent('tpl/template/checkbox-property.tpl'),
@@ -25,7 +25,7 @@ layui.config({
 	     		var params = {
         			rowId: parent.rowId
         		};
-	     		AjaxPostUtil.request({url: reqBasePath + "rmxcx039", params: params, type: 'json', callback: function (json) {
+	     		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx039", params: params, type: 'json', callback: function (json) {
 					if(json.total != 0){
 						for(var i in json.rows){
 							$('input:checkbox[rowId="' + json.rows[i].propertyId + '"]').attr("checked", true);
@@ -51,7 +51,7 @@ layui.config({
 	        			rowId: parent.rowId,
 	        			propertyIds: propertyIds
 	        		};
-	        		AjaxPostUtil.request({url: reqBasePath + "rmxcx038", params: params, type: 'json', callback: function (json) {
+	        		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx038", params: params, type: 'json', callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 					}});

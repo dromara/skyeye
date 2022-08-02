@@ -24,7 +24,7 @@ layui.config({
 	//初始化加载该项目的所有页面
 	showGrid({
 	 	id: "pageList",
-	 	url: reqBasePath + "rmxcx029",
+	 	url: sysMainMation.rmprogramBasePath + "rmxcx029",
 	 	params: {rowId: parent.rowId},
 	 	pagination: false,
 	 	template: getFileContent('tpl/rmmysmpropage/pageTemplate.tpl'),
@@ -42,7 +42,7 @@ layui.config({
 	 		 				$("#pageList>li:eq(" + index + ")").addClass("check-item-shoose");
 	 		 				editPageModelSelectId = row.id;
 	 		 				editPageModelSelectChange = false;
-	 			 			AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+	 			 			AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx036", params: {pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 								showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 	 			 	   		}});
 	 		 			});
@@ -51,7 +51,7 @@ layui.config({
 	 					$("#pageList>li:eq(" + index + ")").addClass("check-item-shoose");
 	 					editPageModelSelectId = row.id;
 	 					editPageModelSelectChange = false;
-	 		 			AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+	 		 			AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx036", params: {pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 	 		 	   		}});
 	 				}
@@ -70,7 +70,7 @@ layui.config({
 						//重置中间模块
 						editPageModelSelectId = "";
 						editPageModelSelectChange = false;
-						AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+						AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx036", params: {pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 						}});
 	 				}});
@@ -80,12 +80,12 @@ layui.config({
         			proId: proId,
         			rowId: row.id
 	        	};
-	        	AjaxPostUtil.request({url: reqBasePath + "rmxcx031", params: params, type: 'json', callback: function (json) {
+	        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx031", params: params, type: 'json', callback: function (json) {
 					refreshGrid("pageList", {params:{rowId: proId}});
 					//重置中间模块
 					editPageModelSelectId = "";
 					editPageModelSelectChange = false;
-					AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx036", params: {pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 						showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 					}});
 	 	   		}});
@@ -95,12 +95,12 @@ layui.config({
         			proId: proId,
         			rowId: row.id
 	        	};
-	        	AjaxPostUtil.request({url: reqBasePath + "rmxcx032", params: params, type: 'json', callback: function (json) {
+	        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx032", params: params, type: 'json', callback: function (json) {
 					refreshGrid("pageList", {params:{rowId: proId}});
 					//重置中间模块
 					editPageModelSelectId = "";
 					editPageModelSelectChange = false;
-					AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx036", params: {pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 						showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 					}});
 	 	   		}});
@@ -113,13 +113,13 @@ layui.config({
 	 			layer.confirm(msg, { icon: 3, title: '删除小程序页面' }, function (index) {
 	 				layer.close(index);
 	 	            
-	 	            AjaxPostUtil.request({url: reqBasePath + "rmxcx035", params:{rowId: row.id}, type: 'json', callback: function (json) {
+	 	            AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx035", params: {rowId: row.id}, type: 'json', callback: function (json) {
 						winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 						refreshGrid("pageList", {params:{rowId: proId}});
 						//重置中间模块
 						editPageModelSelectId = "";
 						editPageModelSelectChange = false;
-						AjaxPostUtil.request({url: reqBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+						AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 						}});
 	 	    		}});
@@ -131,7 +131,7 @@ layui.config({
 	 		//初始化加载小程序组件分组
 	 		showGrid({
 	 		 	id: "groupMember",
-	 		 	url: reqBasePath + "rmxcx027",
+	 		 	url: sysMainMation.rmprogramBasePath + "rmxcx027",
 	 		 	params: {},
 	 		 	pagination: false,
 	 		 	template: getFileContent('tpl/rmmysmpropage/groupTemplate.tpl'),
@@ -179,7 +179,7 @@ layui.config({
         var title = $(this).data('name');
         showGrid({
     	 	id: "memberList",
-    	 	url: reqBasePath + "rmxcx028",
+    	 	url: sysMainMation.rmprogramBasePath + "rmxcx028",
     	 	params: {rowId: id},
     	 	pagination: false,
     	 	template: getFileContent('tpl/rmmysmpropage/groupMemberTemplate.tpl'),
@@ -279,7 +279,7 @@ layui.config({
     	$(this).parent().find(".check-item-operation").show();//显示当前选中的组件的操作
     	var memberId = $(this).parent().attr("rowId");
     	//获取组件的标签属性
-    	AjaxPostUtil.request({url: reqBasePath + "rmxcx040", params:{rowId: memberId}, type: 'json', callback: function (json) {
+    	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx040", params: {rowId: memberId}, type: 'json', callback: function (json) {
 			if(json.total != 0){
 				var str = "";
 				var jsRelyOn = "";
@@ -363,7 +363,7 @@ layui.config({
     			};
     			list.push(s);
     		});
-    		AjaxPostUtil.request({url: reqBasePath + "rmxcx037", params:{jsonData: JSON.stringify(list), pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+    		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx037", params: {jsonData: JSON.stringify(list), pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 				winui.window.msg("保存成功", {icon: 1, time: 2000});
     		}});
     	} else {
@@ -374,7 +374,7 @@ layui.config({
     //导出选中页为H5
     $('body').on('click', '#exportChoosePageToH5', function() {
     	if(!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
-    		AjaxPostUtil.request({url: reqBasePath + "rmxcx041", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+    		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx041", params: {pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 				winui.window.msg("导出成功", {icon: 1, time: 2000});
 				const link = document.createElement('a');
 				link.style.display = 'none';

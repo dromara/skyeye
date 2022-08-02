@@ -17,9 +17,9 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'rmxcx001',
-	    where:{rmTypeName:$("#rmTypeName").val()},
-	    even:true,
+	    url: sysMainMation.rmprogramBasePath + 'rmxcx001',
+	    where: {rmTypeName:$("#rmTypeName").val()},
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
@@ -62,7 +62,7 @@ layui.config({
 		var msg = obj ? '确认删除分类【' + obj.data.rmTypeName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除分类' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "rmxcx003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -71,7 +71,7 @@ layui.config({
 	
 	//上移
 	function topOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "rmxcx006", params:{rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx006", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -79,7 +79,7 @@ layui.config({
 	
 	//下移
 	function lowerOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "rmxcx007", params:{rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx007", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});

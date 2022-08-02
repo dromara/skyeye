@@ -21,7 +21,7 @@ layui.config({
         			rowId: parent.proId
 	        	};
 	        	
-	        	AjaxPostUtil.request({url: reqBasePath + "rmxcx030", params: params, type: 'json', callback: function (json) {
+	        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx030", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

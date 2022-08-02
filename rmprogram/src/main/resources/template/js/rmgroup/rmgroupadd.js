@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "rmTypeId",
-		 	url: reqBasePath + "common001",
+		 	url: sysMainMation.rmprogramBasePath + "common001",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -34,7 +34,7 @@ layui.config({
 		        			icon: $("#rmGroupIcon").val(),
 			        	};
 			        	
-			        	AjaxPostUtil.request({url: reqBasePath + "rmxcx009", params: params, type: 'json', callback: function (json) {
+			        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx009", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});
@@ -57,5 +57,4 @@ layui.config({
 	    });
 	    
 	});
-	    
 });

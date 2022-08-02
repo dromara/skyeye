@@ -15,7 +15,7 @@ showGrid({
 //下拉框模板 属性标签
 showGrid({
  	id: "propertyId",
- 	url: reqBasePath + "rmproperty006",
+ 	url: sysMainMation.rmprogramBasePath + "rmproperty006",
  	params: {},
  	pagination: false,
  	template: getFileContent('tpl/template/select-option.tpl'),
@@ -29,7 +29,7 @@ showGrid({
 //多选框模板 属性标签
 showGrid({
  	id: "limitRequire",
- 	url: reqBasePath + "rmproperty006",
+ 	url: sysMainMation.rmprogramBasePath + "rmproperty006",
  	params: {},
  	pagination: false,
  	template: getFileContent('tpl/template/checkbox-property.tpl'),

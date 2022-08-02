@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "rmxcx004",
+		 	url: sysMainMation.rmprogramBasePath + "rmxcx004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmtype/rmtypeeditTemplate.tpl'),
@@ -28,7 +28,7 @@ layui.config({
 		        			rmTypeName: $("#rmTypeName").val(),
 		        			rowId: parent.rowId
 			        	};
-			        	AjaxPostUtil.request({url: reqBasePath + "rmxcx005", params: params, type: 'json', callback: function (json) {
+			        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx005", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});

@@ -12,7 +12,7 @@ layui.config({
 	    
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "rmpropertyvalue004",
+		 	url: sysMainMation.rmprogramBasePath + "rmpropertyvalue004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/rmpropertyvalue/rmpropertyvalueeditTemplate.tpl'),
@@ -25,7 +25,7 @@ layui.config({
 		 		//属性标签
 		 		showGrid({
 		 		 	id: "propertyId",
-		 		 	url: reqBasePath + "rmproperty006",
+		 		 	url: sysMainMation.rmprogramBasePath + "rmproperty006",
 		 		 	params: {},
 		 		 	pagination: false,
 		 		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -47,7 +47,7 @@ layui.config({
 		        			rowId:parent.rowId,
 			        	};
 			        	
-			        	AjaxPostUtil.request({url: reqBasePath + "rmpropertyvalue005", params: params, type: 'json', callback: function (json) {
+			        	AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmpropertyvalue005", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});
