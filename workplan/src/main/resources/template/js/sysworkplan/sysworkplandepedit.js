@@ -34,7 +34,7 @@ layui.config({
 			}
 		});
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysworkplan007", params:{planId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: sysMainMation.workplanBasePath + "sysworkplan007", params: {planId: parent.rowId}, type: 'json', callback: function (json) {
 			nowCheckType = json.bean.planCycle;
 			timeSolt = json.bean.startTime + '~' + json.bean.endTime;
 			$("#title").val(json.bean.title);
@@ -235,7 +235,7 @@ layui.config({
 						params.notifyTime = null;
 					}
 
-					AjaxPostUtil.request({url: reqBasePath + "sysworkplan009", params: params, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: sysMainMation.workplanBasePath + "sysworkplan009", params: params, type: 'json', callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 					}});

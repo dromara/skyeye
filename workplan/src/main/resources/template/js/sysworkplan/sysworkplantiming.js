@@ -30,7 +30,7 @@ layui.config({
         			return false;
         		}
 	        	
-	        	AjaxPostUtil.request({url: reqBasePath + "sysworkplan010", params: {planId: parent.rowId, notifyTime: $("#notifyTime").val()}, type: 'json', callback: function (json) {
+	        	AjaxPostUtil.request({url: sysMainMation.workplanBasePath + "sysworkplan010", params: {planId: parent.rowId, notifyTime: $("#notifyTime").val()}, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

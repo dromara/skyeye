@@ -22,7 +22,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: reqBasePath + 'sysworkplan016',
+		url: sysMainMation.workplanBasePath + 'sysworkplan016',
 		where: getTableParams(),
 		even: true,
 		page: true,
