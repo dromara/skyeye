@@ -16,7 +16,7 @@ layui.config({
     var loadNum = 0;
     var interval = null;
 	
-	AjaxPostUtil.request({url: reqBasePath + "knowledgecontent006", params:{rowId: rowId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgecontent006", params: {rowId: rowId}, type: 'json', callback: function (json) {
 		$("#title").html(json.bean.title);
 		content = json.bean.content;
 		$("#knowledgecontentshowBox").attr("src", "contentshow.html");

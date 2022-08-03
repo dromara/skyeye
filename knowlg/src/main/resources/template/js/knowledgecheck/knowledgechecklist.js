@@ -14,23 +14,14 @@ layui.config({
 		laydate = layui.laydate,
 		eleTree = layui.eleTree;
 	
-	//未审核表的提交时间
-	laydate.render({
-		elem: '#createTime', //指定元素
-		range: '~'
-	});
+	// 未审核表的提交时间
+	laydate.render({elem: '#createTime', range: '~'});
 	
-	//已审核表的提交时间
-	laydate.render({
-		elem: '#checkedCreateTime',
-		range: '~'
-	});
+	// 已审核表的提交时间
+	laydate.render({elem: '#checkedCreateTime', range: '~'});
 	
 	//已审核表的审核时间
-	laydate.render({
-		elem: '#checkedExamineTime',
-		range: '~'
-	});
+	laydate.render({elem: '#checkedExamineTime', range: '~'});
 	
 	authBtn('1568973352669');//未审核
 	authBtn('1568973377977');//已审核
@@ -79,7 +70,7 @@ layui.config({
 		    id: 'messageNoCheckTable',
 		    elem: '#messageNoCheckTable',
 		    method: 'post',
-		    url: reqBasePath + 'knowledgecontent010',
+		    url: sysMainMation.knowlgBasePath + 'knowledgecontent010',
 		    where: getNoCheckTableParams(),
 		    even: true,
 		    page: true,
@@ -122,7 +113,7 @@ layui.config({
 		var el5;
 		el5 = eleTree.render({
 			elem: '.ele5',
-			url: "knowledgetype008",
+			url: sysMainMation.knowlgBasePath + "knowledgetype008",
 			defaultExpandAll: true,
 			expandOnClickNode: false,
 			highlightCurrent: true
@@ -213,7 +204,7 @@ layui.config({
 		    id: 'messageCheckedTable',
 		    elem: '#messageCheckedTable',
 		    method: 'post',
-		    url: reqBasePath + 'knowledgecontent013',
+		    url: sysMainMation.knowlgBasePath + 'knowledgecontent013',
 		    where: getCheckTableParams(),
 		    even: true,
 		    page: true,
@@ -263,7 +254,7 @@ layui.config({
 		var el2;
 		el2 = eleTree.render({
 			elem: '.ele2',
-			url: "knowledgetype008",
+			url: sysMainMation.knowlgBasePath + "knowledgetype008",
 			defaultExpandAll: true,
 			expandOnClickNode: false,
 			highlightCurrent: true

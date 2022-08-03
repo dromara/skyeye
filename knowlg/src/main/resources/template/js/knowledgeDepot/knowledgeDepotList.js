@@ -16,7 +16,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'knowledgecontent016',
+	    url: sysMainMation.knowlgBasePath + 'knowledgecontent016',
 	    cellMinWidth: 100,
 	    where: getTableParams(),
 	    even: true,
@@ -63,7 +63,7 @@ layui.config({
 		var el5;
 		el5 = eleTree.render({
 			elem: '.ele5',
-			url: "knowledgetype008",
+			url: sysMainMation.knowlgBasePath + "knowledgetype008",
 			defaultExpandAll: true,
 			expandOnClickNode: false,
 			highlightCurrent: true

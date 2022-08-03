@@ -13,7 +13,7 @@ layui.config({
     var loadNum = 0;
     var interval = null;
     
-    AjaxPostUtil.request({url: reqBasePath + "knowledgecontent015", params: {rowId:parent.rowId}, type: 'json', callback: function (json) {
+    AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgecontent015", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 		var str = getDataUseHandlebars(beanTemplate, json);
 		$("#showForm").html(str);
 		if(json.bean.state == 2){

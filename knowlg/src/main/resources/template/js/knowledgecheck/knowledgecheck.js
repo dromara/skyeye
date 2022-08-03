@@ -18,7 +18,7 @@ layui.config({
 	    var loadNum = 0;
 	    var interval = null;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "knowledgecontent011", params: {rowId:parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgecontent011", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			var str = getDataUseHandlebars(beanTemplate, json);
 			$("#checkDetails").html(str);
 			content = json.bean.content;
@@ -66,7 +66,7 @@ layui.config({
  						return false;
  					}
  				}
- 				AjaxPostUtil.request({url: reqBasePath + "knowledgecontent012", params: params, type: 'json', callback: function (json) {
+ 				AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgecontent012", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  				}});

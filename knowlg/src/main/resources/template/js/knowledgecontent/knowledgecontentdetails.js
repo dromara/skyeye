@@ -14,8 +14,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "knowledgecontent006",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.knowlgBasePath + "knowledgecontent006",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/knowledgecontent/knowledgecontentdetailsTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {

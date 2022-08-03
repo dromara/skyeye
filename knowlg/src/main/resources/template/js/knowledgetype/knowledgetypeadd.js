@@ -15,7 +15,7 @@ layui.config({
 	    var parentType;
 		fsTree.render({
 			id: "parentType",
-			url: reqBasePath + "knowledgetype001",
+			url: sysMainMation.knowlgBasePath + "knowledgetype001",
 			checkEnable: true,
 			loadEnable: false,//异步加载
 			chkStyle: "radio",
@@ -36,7 +36,7 @@ layui.config({
  	        		name: $("#typeName").val(),
 					parentId: checkNodes.length == 0 ? "0" : checkNodes[0].id
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "knowledgetype002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgetype002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

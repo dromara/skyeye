@@ -21,7 +21,7 @@ layui.config({
 			var el5;
 			el5 = eleTree.render({
 				elem: '.ele5',
-				url: reqBasePath + "knowledgetype008",
+				url: sysMainMation.knowlgBasePath + "knowledgetype008",
 				defaultExpandAll: true,
 				expandOnClickNode: false,
 				highlightCurrent: true
@@ -64,7 +64,7 @@ layui.config({
     				else
     					params.desc = encodeURI(ue.getContentTxt());
     			}
-    			AjaxPostUtil.request({url: reqBasePath + "knowledgecontent002", params: params, type: 'json', callback: function (json) {
+    			AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgecontent002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
     			}});

@@ -16,7 +16,7 @@ layui.config({
 			var el5;
 			el5 = eleTree.render({
 				elem: '.ele5',
-				url: reqBasePath + "knowledgetype008",
+				url: sysMainMation.knowlgBasePath + "knowledgetype008",
 				defaultExpandAll: true,
 				expandOnClickNode: false,
 				highlightCurrent: true
@@ -38,7 +38,7 @@ layui.config({
 
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "knowledgecontent003",
+		 	url: sysMainMation.knowlgBasePath + "knowledgecontent003",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/knowledgecontent/knowledgecontenteditTemplate.tpl'),
@@ -85,7 +85,7 @@ layui.config({
 		 						else
 		 							params.desc = encodeURI(ue.getContentTxt());
 		 					}
-		 					AjaxPostUtil.request({url: reqBasePath + "knowledgecontent004", params: params, type: 'json', callback: function (json) {
+		 					AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgecontent004", params: params, type: 'json', callback: function (json) {
 								parent.layer.close(index);
 								parent.refreshCode = '0';
 		 					}});

@@ -12,7 +12,7 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "knowledgetype006",
+		 	url: sysMainMation.knowlgBasePath + "knowledgetype006",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 			method: 'GET',
@@ -26,7 +26,7 @@ layui.config({
 		 	        		rowId: parent.rowId,
 		 	        		name: $("#typeName").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "knowledgetype007", params: params, type: 'json', method: "POST", callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgetype007", params: params, type: 'json', method: "POST", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});

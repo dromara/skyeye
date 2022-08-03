@@ -19,7 +19,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'knowledgecontent001',
+	    url: sysMainMation.knowlgBasePath + 'knowledgecontent001',
 	    cellMinWidth: 100,
 	    where: getTableParams(),
 	    even: true,
@@ -71,7 +71,7 @@ layui.config({
 		var el5;
 		el5 = eleTree.render({
 			elem: '.ele5',
-			url: "knowledgetype008",
+			url: sysMainMation.knowlgBasePath + "knowledgetype008",
 			defaultExpandAll: true,
 			expandOnClickNode: false,
 			highlightCurrent: true
@@ -128,7 +128,7 @@ layui.config({
 	function delet(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "knowledgecontent005", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.knowlgBasePath + "knowledgecontent005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
