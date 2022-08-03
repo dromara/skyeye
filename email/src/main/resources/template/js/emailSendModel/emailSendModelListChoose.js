@@ -19,7 +19,7 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: reqBasePath + 'emailsendmodel001',
+		url: sysMainMation.emailBasePath + 'emailsendmodel001',
 		where: getTableParams(),
 		even: true,
 		page: true,

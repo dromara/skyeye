@@ -17,9 +17,9 @@ layui.config({
 		id: 'messageTable',
 		elem: '#messageTable',
 		method: 'post',
-		url: reqBasePath + 'emailsendmodel001',
+		url: sysMainMation.emailBasePath + 'emailsendmodel001',
 		where: getTableParams(),
-		even:true,
+		even: true,
 		page: true,
 		limits: getLimits(),
 		limit: getLimit(),
@@ -93,7 +93,7 @@ layui.config({
 	function del(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "emailsendmodel004", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.emailBasePath + "emailsendmodel004", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});

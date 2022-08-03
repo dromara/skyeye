@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "emailsendmodel003",
+		 	url: sysMainMation.emailBasePath + "emailsendmodel003",
 		 	params: {id: parent.rowId},
 		 	pagination: false,
 			method: "GET",
@@ -51,7 +51,7 @@ layui.config({
 							toBcc: $('#toBcc').tagEditor('getTags')[0].tags,
 							id: parent.rowId
 						};
-						AjaxPostUtil.request({url: reqBasePath + "emailsendmodel005", params: params, type: 'json', method: "PUT", callback: function (json) {
+						AjaxPostUtil.request({url: sysMainMation.emailBasePath + "emailsendmodel005", params: params, type: 'json', method: "PUT", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 						}});

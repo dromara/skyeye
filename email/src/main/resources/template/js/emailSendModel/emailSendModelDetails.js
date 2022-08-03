@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "emailsendmodel003",
+		 	url: sysMainMation.emailBasePath + "emailsendmodel003",
 		 	params: {id: parent.rowId},
 		 	pagination: false,
 			method: "GET",
