@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "maillist010",
+		 	url: sysMainMation.mailBasePath + "maillist010",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 			method: "GET",
@@ -35,7 +35,7 @@ layui.config({
 		 		
 		 		showGrid({
 		 			id: "typeId",
-		 			url: reqBasePath + "mailGroup006",
+		 			url: sysMainMation.mailBasePath + "mailGroup006",
 		 			params: {},
 		 			pagination: false,
 		 			template: getFileContent('tpl/template/select-option.tpl'),
@@ -108,7 +108,7 @@ layui.config({
 		 					winui.window.msg("状态值错误。", {icon: 2, time: 2000});
 		 					return false;
 		 				}
-		 				AjaxPostUtil.request({url: reqBasePath + "maillist011", params: params, type: 'json', method: "PUT", callback: function (json) {
+		 				AjaxPostUtil.request({url: sysMainMation.mailBasePath + "maillist011", params: params, type: 'json', method: "PUT", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 				}});

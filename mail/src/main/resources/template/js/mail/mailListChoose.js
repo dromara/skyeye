@@ -24,7 +24,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'maillist001',
+	    url: sysMainMation.mailBasePath + 'maillist001',
 	    where: getTableParams(),
 		even: true,
 	    page: true,
