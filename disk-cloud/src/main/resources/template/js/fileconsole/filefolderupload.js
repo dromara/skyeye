@@ -101,7 +101,7 @@ function loadUploadMethod(){
 				//当前分块大小
 				"chunkSize": block.end - block.start
 			};
-			AjaxPostUtil.request({url: reqBasePath + "fileconsole008", params: params, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole008", params: params, type: 'json', callback: function (json) {
                 //分块存在，跳过
                 deferred.reject();
     		}, errorCallback: function (json) {
@@ -115,7 +115,7 @@ function loadUploadMethod(){
 		//时间点3：所有分块上传成功后调用此函数
 		afterSendFile: function (data) {
 			//如果分块上传成功，则通知后台合并分块
-			AjaxPostUtil.request({url: reqBasePath + "fileconsole007", params: {md5: md5, folderId: parent.folderId, name: data.name, size: data.size}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole007", params: {md5: md5, folderId: parent.folderId, name: data.name, size: data.size}, type: 'json', callback: function (json) {
     		}});
 		 }
 	});
@@ -142,7 +142,7 @@ function loadUploadMethod(){
 	    fileSizeLimit: 2000 * 1024 * 1024,//最大2GB
         fileSingleSizeLimit: 2000 * 1024 * 1024,
         resize: false,//不压缩
-	    server: reqBasePath + 'fileconsole006',
+	    server: sysMainMation.diskCloudBasePath + 'fileconsole006',
 	    fileNumLimit: 300,
 	});
 	// 添加“添加文件”的按钮，

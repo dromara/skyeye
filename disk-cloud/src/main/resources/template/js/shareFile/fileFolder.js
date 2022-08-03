@@ -16,7 +16,7 @@ layui.config({
 		var ztree = null;
 		fsTree.render({
 			id: "treeDemo",
-			url: reqBasePath + "fileconsole001",
+			url: sysMainMation.diskCloudBasePath + "fileconsole001",
 			checkEnable: true,
 			loadEnable: true,//异步加载
 			showLine: false,
@@ -47,7 +47,7 @@ layui.config({
 					};
 					saveBtn = false;
 					winui.window.msg("文件正在保存，期间请勿进行其他操作。", {icon: 7,time: 4000});
-					AjaxPostUtil.request({url: reqBasePath + "fileconsole023", params: params, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole023", params: params, type: 'json', callback: function (json) {
 						saveBtn = true;
 						parent.layer.close(index);
 						parent.refreshCode = '0';

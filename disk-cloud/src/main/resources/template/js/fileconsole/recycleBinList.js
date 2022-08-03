@@ -14,9 +14,9 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'fileconsole014',
-	    where:{},
-	    even:true,
+	    url: sysMainMation.diskCloudBasePath + 'fileconsole014',
+	    where: {},
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
@@ -46,7 +46,7 @@ layui.config({
 		layer.confirm(msg, { icon: 3, title: '还原文件' }, function (index) {
 			layer.close(index);
 			parent.refreshCode = '0';
-            AjaxPostUtil.request({url: reqBasePath + "fileconsole015", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole015", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("还原成功", {icon: 1, time: 2000});
 				loadTable();
     		}});

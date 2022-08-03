@@ -14,9 +14,9 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'fileconsole017',
-	    where:{reqBasePath: reqBasePath},
-	    even:true,
+	    url: sysMainMation.diskCloudBasePath + 'fileconsole017',
+	    where: {reqBasePath: reqBasePath},
+	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
@@ -53,7 +53,7 @@ layui.config({
 	function cancleShare(data, obj){
 		layer.confirm("取消分享链接将失效，确定不分享了吗？", { icon: 3, title: '系统提示', btn: ['取消分享','我再想想'] }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "fileconsole018", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole018", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("取消外链分享成功", {icon: 1, time: 2000});
 				loadTable();
     		}});

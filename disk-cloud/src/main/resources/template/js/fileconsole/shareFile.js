@@ -33,7 +33,7 @@ layui.config({
 				rowId: parent.shareId,
 				shareType: shareType
 			};
-			AjaxPostUtil.request({url: reqBasePath + "fileconsole016", params: params, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole016", params: params, type: 'json', callback: function (json) {
 				json.bean.shareUrl = reqBasePath + json.bean.shareUrl;
 				var str = "链接：" + json.bean.shareUrl;
 				if(json.bean.shareType === '1'){//无提取码

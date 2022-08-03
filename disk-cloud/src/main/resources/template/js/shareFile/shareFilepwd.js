@@ -12,7 +12,7 @@ layui.config({
 		
 		var rowId = GetUrlParam("id");
 	    
-		AjaxPostUtil.request({url: reqBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function (json) {
 			if(isNull(json.bean)){
 				$("#showForm").hide();
 				$("#showFormNone").show();
@@ -37,7 +37,7 @@ layui.config({
 				winui.window.msg("请输入提取码", {icon: 2, time: 2000});
 				return;
 			}
-			AjaxPostUtil.request({url: reqBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: $("#sharePassword").val()}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: $("#sharePassword").val()}, type: 'json', callback: function (json) {
 				if(isNull(json.bean)){
 					$("#showForm").hide();
 					$("#showFormNone").show();

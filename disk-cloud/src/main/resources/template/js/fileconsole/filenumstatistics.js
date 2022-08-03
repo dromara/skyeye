@@ -14,7 +14,7 @@ layui.config({
 		
 	var jsonData = new Array();
 		
-	AjaxPostUtil.request({url: reqBasePath + "fileconsole037", params: {}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole037", params: {}, type: 'json', callback: function (json) {
 		jsonData = json.bean;
 		$("#layer02_01 .layer02-data").find('span').eq(0).html(jsonData.allNum.fileNum);
 		drawLayer02Label($("#layer02_01 canvas").get(0), "文件总数量", 80, 200);

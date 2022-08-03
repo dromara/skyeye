@@ -22,7 +22,7 @@ layui.config({
 		$(".sys-logo").html(sysMainMation.mationTitle);
 		var rowId = GetUrlParam("id");
 	    
-		AjaxPostUtil.request({url: reqBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole019", params: {rowId: rowId}, type: 'json', callback: function (json) {
 			if(isNull(json.bean)){//文件不存在
 				location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
 			} else {
@@ -33,7 +33,7 @@ layui.config({
 					if(isNull(getCookie("file" + rowId))){//输入的提取码为空
 						location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
 					} else {//输入的提取码不为空
-						AjaxPostUtil.request({url: reqBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: getCookie("file" + rowId)}, type: 'json', callback: function (json) {
+						AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole020", params: {rowId: rowId, sharePassword: getCookie("file" + rowId)}, type: 'json', callback: function (json) {
 							if(isNull(json.bean)){//分享取消
 								location.href = "../../tpl/shareFile/shareFilepwd.html?id=" + rowId;
 							} else {//加载列表
@@ -70,7 +70,7 @@ layui.config({
 		//加载列表
 		function loadFileMation(){
 			//加载分享基础信息
-			AjaxPostUtil.request({url: reqBasePath + "fileconsole021", params: {rowId: rowId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole021", params: {rowId: rowId}, type: 'json', callback: function (json) {
 				var str = "";
 				if(json.bean.fileType == 1){//文件夹
 					str = '<img src="../../assets/images/share-folder.png"/>';
@@ -90,7 +90,7 @@ layui.config({
 			$("#checkAll").prop("checked", false);
 			showGrid({
 			 	id: "fileListContent",
-			 	url: reqBasePath + "fileconsole022",
+			 	url: sysMainMation.diskCloudBasePath + "fileconsole022",
 			 	params: {folderId: folderId, shareId: shareId},
 			 	pagination: false,
 			 	template: getFileContent('tpl/shareFile/shareFileItem.tpl'),
@@ -123,7 +123,7 @@ layui.config({
 				if(fileType === 'folder'){//文件夹
 					winui.window.msg('暂不提供文件夹的下载。', {icon: 2, time: 2000});
 				} else {//文件
-					AjaxPostUtil.request({url: reqBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: operaterId}, type: 'json', callback: function (json) {
 						if($.inArray(json.bean.fileType, imageType) >= 0){//图片
 							downloadImage(fileBasePath + json.bean.fileAddress, json.bean.fileName);
 						} else {

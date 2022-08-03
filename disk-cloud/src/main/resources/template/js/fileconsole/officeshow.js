@@ -75,19 +75,19 @@ layui.config({
 		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
 			currentUserMation = data.bean;
 		});
-		AjaxPostUtil.request({url: reqBasePath + "fileconsole036", params:{rowId: thisId}, type: 'json', callback: function(j){
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole036", params: {rowId: thisId}, type: 'json', callback: function(j){
 			if(!isNull(j.bean)){
 				window.docEditor = new DocsAPI.DocEditor("placeholder", {
 					"document": {
 						"fileType": selFileType,//定义源查看或编辑文档的文件类型
 						"key": thisId + "-" + j.bean.updateTime + "",//定义服务用于文档识别的唯一文档标识符。 如果发送已知密钥，文档将从缓存中获取。 每次文档被编辑和保存时，都必须重新生成密钥。 文档url可以用作密钥，但不包含特殊字符，长度限制为20个符号。（注意如果秘钥值不更换那么看到的文档还是最先加载的缓存文档）
 						"title": title,//为查看或编辑的文档定义所需的文件名，当文档被下载时它也将被用作文件名。
-						"url": "http://192.168.1.105:8081/" + fileUrl,//定义存储源查看或编辑文档的绝对URL
+						"url": sysMainMation.fileBasePath + fileUrl,//定义存储源查看或编辑文档的绝对URL
 						"userdata": thisId
 					},
 					"documentType": documentType,//文件编辑类型，根据文件的类型在客户端用不通的编辑器来编辑文件主要三种 文档类-text、表格类-spreadsheet、ppt类-presentation
 					"editorConfig": {
-						"callbackUrl": "http://192.168.1.105:8081/fileconsole010?id=" + thisId,//文件关闭后回调路劲 这个用来保存文件用的 文件编辑保存后 当你关闭窗口后 server端会请求把你在服务器上的编辑提交到这个路劲 ，所以这个路劲的代码 一般就是上传保存 ；
+						"callbackUrl": sysMainMation.diskCloudBasePath + "fileconsole010?id=" + thisId,//文件关闭后回调路劲 这个用来保存文件用的 文件编辑保存后 当你关闭窗口后 server端会请求把你在服务器上的编辑提交到这个路劲 ，所以这个路劲的代码 一般就是上传保存 ；
 						"lang": "zh-CN",//"en-US",汉化
 						"mode": mode,
 						"user": {

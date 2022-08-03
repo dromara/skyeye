@@ -10,7 +10,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 		var $ = layui.$;
 		
-		AjaxPostUtil.request({url: reqBasePath + "fileconsole031", params:{rowId: parent.shareId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole031", params: {rowId: parent.shareId}, type: 'json', callback: function (json) {
 			$("#fileName").html(json.bean.fileName);
 			$("#fileType").html(json.bean.fileType);
 			$("#createName").html(json.bean.createUserName);
