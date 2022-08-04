@@ -12,8 +12,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "forumreport005",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.forumBasePath + "forumreport005",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/forumreportcheck/reportcheckdetailsTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){

@@ -27,7 +27,7 @@ layui.config({
 		 		$("input:radio[name=noChargeId][value=" + json.bean.noChargeId + "]").attr("checked", true);
 		 		
 		 		// 获取上一次solr数据同步的时间
-		        AjaxPostUtil.request({url: reqBasePath + "forumcontent019", params: {}, type: 'json', callback: function (json) {
+		        AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent019", params: {}, type: 'json', callback: function (json) {
 					if(!isNull(json.bean.synchronousTime)){
 						$("#synchronousTime").text(json.bean.synchronousTime);
 					} else {
@@ -303,7 +303,7 @@ layui.config({
         // 同步solr数据
         $("body").on("click", "#formAddBean", function (e) {
             winui.window.msg("数据同步中...", {icon: 6,time: 2000});
-            AjaxPostUtil.request({url: reqBasePath + "forumcontent020", params: {}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent020", params: {}, type: 'json', callback: function (json) {
 				winui.window.msg("数据同步成功", {icon: 1, time: 2000});
 				if(!isNull(json.bean.synchronousTime)){
 					$("#synchronousTime").text(json.bean.synchronousTime);

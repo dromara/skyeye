@@ -31,7 +31,7 @@ layui.config({
 		$("#taglist").empty();
 	    showGrid({
 		 	id: "taglist",
-		 	url: reqBasePath + "forumtag010",
+		 	url: sysMainMation.forumBasePath + "forumtag010",
 		 	params: {},
 		 	pagination: false,
 		 	pagesize: 10,
@@ -56,7 +56,7 @@ layui.config({
 		$("#addList").empty();
 	    showGrid({
 		 	id: "addList",
-		 	url: reqBasePath + "forumcontent014",
+		 	url: sysMainMation.forumBasePath + "forumcontent014",
 		 	params: {tagId: tagId},
 		 	pagination: true,
 		 	pagesize: 12,

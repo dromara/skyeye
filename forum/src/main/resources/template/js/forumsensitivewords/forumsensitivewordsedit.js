@@ -12,8 +12,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sensitiveword004",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.forumBasePath + "sensitiveword004",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/forumsensitivewords/forumsensitivewordseditTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
@@ -24,7 +24,7 @@ layui.config({
 		 	        		rowId: parent.rowId,
 		 	        		sensitiveWord: $("#sensitiveWord").val(),
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "sensitiveword005", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.forumBasePath + "sensitiveword005", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});

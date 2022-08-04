@@ -17,7 +17,7 @@ layui.config({
  	        	var params = {
  	        		sensitiveWord: $("#sensitiveWord").val(),
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "sensitiveword002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.forumBasePath + "sensitiveword002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

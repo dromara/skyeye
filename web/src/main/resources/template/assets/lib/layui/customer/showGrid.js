@@ -422,13 +422,15 @@ dataGrid.prototype = {
                     var sessionstatus = XMLHttpRequest.getResponseHeader('SESSIONSTATUS');
                     if (sessionstatus == "TIMEOUT") {//超时跳转
                         var win = window;
-                        while (win != win.top){
+                        while (win != win.top) {
                             win = win.top;
                         }
                         result = eval('(' + '{"returnMessage":"登录超时。","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
                         win.location.href = "../../tpl/index/login.html";//XMLHttpRequest.getResponseHeader("CONTEXTPATH");
-                    }else if(sessionstatus == "NOAUTHPOINT"){
+                    } else if (sessionstatus == "NOAUTHPOINT") {
                         result = eval('(' + '{"returnMessage":"您不具备该权限。","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
+                    } else {
+                        result = eval('(' + '{"returnMessage": url + "服务不存在。","returnCode":-9999,"total":0,"rows":"","bean":""}' + ')');
                     }
                 }
             });

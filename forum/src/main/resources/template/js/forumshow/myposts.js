@@ -21,7 +21,7 @@ layui.config({
 		//初始化数据
 	    showGrid({
 		 	id: "addList",
-		 	url: reqBasePath + "forumcontent001",
+		 	url: sysMainMation.forumBasePath + "forumcontent001",
 		 	params: {},
 		 	pagination: true,
 		 	pagesize: 12,
@@ -71,7 +71,7 @@ layui.config({
 	function del(){
 		layer.confirm('确认删除该帖子吗？', { icon: 3, title: '删除帖子' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "forumcontent003", params:{rowId: rowId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent003", params: {rowId: rowId}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadList();
     		}});

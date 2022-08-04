@@ -9,7 +9,7 @@ layui.config({
 	var $ = layui.$;
 	
 	//帖子信息展示
-	AjaxPostUtil.request({url: reqBasePath + "forumcontent006", params: {rowId:parent.forumId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent006", params: {rowId: parent.forumId}, type: 'json', callback: function (json) {
 		$("#content").html(json.bean.content);
 		$("#title").html(json.bean.title);
 		$("#createTime").html(json.bean.createTime);

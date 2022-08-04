@@ -17,7 +17,7 @@ layui.config({
  	        	var params = {
  	        		tagName: $("#tagName").val()
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "forumtag002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumtag002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

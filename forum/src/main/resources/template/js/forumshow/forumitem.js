@@ -29,7 +29,7 @@ layui.config({
 	});
 
 	//帖子信息展示
-	AjaxPostUtil.request({url: reqBasePath + "forumcontent006", params: {rowId:rowId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent006", params: {rowId: rowId}, type: 'json', callback: function (json) {
 		if(json.bean.createId != currentUserId){
 			// 如果不是用户自己的帖子，则显示举报按钮
 			$("#forumReport").removeClass("layui-hide");
@@ -47,7 +47,7 @@ layui.config({
 		if(isNull(content)){
 			winui.window.msg("评论内容不能为空！", {icon: 2, time: 2000});
 		} else {
-			AjaxPostUtil.request({url: reqBasePath + "forumcontent008", params:{forumId:rowId, content:content}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent008", params: {forumId: rowId, content: content}, type: 'json', callback: function (json) {
 				loadCommentList();//刷新评论信息
 				$("#commentContent").val("");
  	   		}});
@@ -86,7 +86,7 @@ layui.config({
 		if(isNull(replyContent)){
 			winui.window.msg("回复内容不能为空！", {icon: 2, time: 2000});
 		} else {
-			AjaxPostUtil.request({url: reqBasePath + "forumcontent010", params:{forumId:rowId, belongCommentId:belongCommentId, content:replyContent, replyId:commentUserId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent010", params: {forumId: rowId, belongCommentId: belongCommentId, content: replyContent, replyId: commentUserId}, type: 'json', callback: function (json) {
 				$(".comment-text-textarea").empty();
 				$(".se-comment-text-textarea").empty();
 				var commentName = "";
@@ -142,15 +142,15 @@ layui.config({
 		$("#addCommentList").empty();
 		showGrid({
 		 	id: "addCommentList",
-		 	url: reqBasePath + "forumcontent009",
-		 	params: {forumId:rowId},
+		 	url: sysMainMation.forumBasePath + "forumcontent009",
+		 	params: {forumId: rowId},
 		 	pagination: false,
 		 	pagesize: 10,
 		 	template: commentTemplate,
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function(j){
-		 		AjaxPostUtil.request({url: reqBasePath + "forumcontent011", params:{forumId:rowId}, type: 'json', callback: function (json) {
+		 		AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent011", params: {forumId: rowId}, type: 'json', callback: function (json) {
 					var row = json.rows;
 					for(var i = 0;i < row.length; i++){
 						var belongCommentId = row[i].belongCommentId;

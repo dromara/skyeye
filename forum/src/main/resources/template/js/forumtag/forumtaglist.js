@@ -17,8 +17,8 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'forumtag001',
-	    where: {tagName:$("#tagName").val()},
+	    url: sysMainMation.forumBasePath + 'forumtag001',
+	    where: {tagName: $("#tagName").val()},
 	    even: true,
 	    page: true,
 	    limits: [8, 16, 24, 32, 40, 48, 56],
@@ -86,7 +86,7 @@ layui.config({
 		var msg = '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除论坛标签' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "forumtag003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumtag003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -98,7 +98,7 @@ layui.config({
 		var msg = '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '上线论坛标签' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "forumtag004", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumtag004", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("上线成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -110,7 +110,7 @@ layui.config({
 		var msg = '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '下线论坛标签' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "forumtag005", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumtag005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("下线成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -134,7 +134,7 @@ layui.config({
 	
 	//上移
 	function upMove(data){
-        AjaxPostUtil.request({url: reqBasePath + "forumtag008", params:{rowId: data.id}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumtag008", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -142,7 +142,7 @@ layui.config({
 	
 	//下移
 	function downMove(data){
-        AjaxPostUtil.request({url: reqBasePath + "forumtag009", params:{rowId: data.id}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumtag009", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});

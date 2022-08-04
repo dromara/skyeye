@@ -12,8 +12,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "forumtag006",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.forumBasePath + "forumtag006",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/forumtag/forumtageditTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
@@ -24,7 +24,7 @@ layui.config({
 		 	        		rowId: parent.rowId,
 		 	        		tagName: $("#tagName").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "forumtag007", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumtag007", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});

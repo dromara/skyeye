@@ -79,7 +79,7 @@ layui.config({
         		return false;
         	}
         	params.textConent = encodeURIComponent(ue.getContentTxt());
-        	AjaxPostUtil.request({url: reqBasePath + "forumcontent002", params: params, type: 'json', callback: function (json) {
+        	AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent002", params: params, type: 'json', callback: function (json) {
 				winui.window.msg("发布成功", {icon: 1, time: 2000}, function() {
 					location.href = '../../tpl/forumshow/myposts.html';
 				});

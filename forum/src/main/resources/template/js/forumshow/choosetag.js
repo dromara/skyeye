@@ -51,7 +51,7 @@ layui.config({
 	//标签
 	showGrid({
 	 	id: "choosetag",
-	 	url: reqBasePath + "forumtag010",
+	 	url: sysMainMation.forumBasePath + "forumtag010",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
