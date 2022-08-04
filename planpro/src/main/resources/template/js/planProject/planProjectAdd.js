@@ -34,7 +34,7 @@ layui.config({
 	        		params.isShare = '1';
 	        	}
 	        	
-	        	AjaxPostUtil.request({url: reqBasePath + "planproject002", params: params, type: 'json', method: "POST", callback: function (json) {
+	        	AjaxPostUtil.request({url: sysMainMation.businessFlowBasePath + "planproject002", params: params, type: 'json', method: "POST", callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

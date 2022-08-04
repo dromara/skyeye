@@ -12,8 +12,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "noticetype006",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.noticeBasePath + "noticetype006",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysnoticetype/sysnoticetypeeditTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
@@ -29,7 +29,7 @@ layui.config({
 		 	        		rowId: parent.rowId,
 		 	        		typeName: $("#typeName").val(),
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "noticetype007", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype007", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});

@@ -40,7 +40,7 @@ layui.config({
     function initTree(){
 		fsTree.render({
 			id: "treeDemo",
-			url: reqBasePath + 'planprojectflow001?projectId=' + parent.rowId,
+			url: sysMainMation.businessFlowBasePath + 'planprojectflow001?projectId=' + parent.rowId,
 			loadEnable: false,
 			clickCallback: onClickTree,
 			onDblClick: onClickTree,
@@ -56,7 +56,7 @@ layui.config({
 		if(!isNull(treeNode) && treeNode.type == 2) {
 			designId = treeNode.id;
 			$("#flowName").html(treeNode.title);
-			AjaxPostUtil.request({url: reqBasePath + "planprojectflow006", params: {rowId: treeNode.id}, type: 'json', method: "GET", callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.businessFlowBasePath + "planprojectflow006", params: {rowId: treeNode.id}, type: 'json', method: "GET", callback: function (json) {
 				$("#zzc").removeClass("zzc");
 				net.changeData();
 				if(isNull(json.bean.jsonContent)){
@@ -151,7 +151,7 @@ layui.config({
 	function del(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-			AjaxPostUtil.request({url: reqBasePath + "planprojectflow003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.businessFlowBasePath + "planprojectflow003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				if(data.id === designId){
 					$("#flowName").html("流程图");
@@ -387,7 +387,7 @@ layui.config({
 	$("body").on("click", "#consoleJSON", function (e) {//保存
 		const saveData = net.save();
 	    const json = JSON.stringify(saveData, null, 2);
-	    AjaxPostUtil.request({url: reqBasePath + "planprojectflow007", params: {rowId: designId, jsonContent: json}, type: 'json', method: "POST", callback: function (json) {
+	    AjaxPostUtil.request({url: sysMainMation.businessFlowBasePath + "planprojectflow007", params: {rowId: designId, jsonContent: json}, type: 'json', method: "POST", callback: function (json) {
 			winui.window.msg("保存成功", {icon: 1, time: 2000});
 		}});
 	});

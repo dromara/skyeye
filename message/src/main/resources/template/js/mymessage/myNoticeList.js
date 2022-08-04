@@ -16,7 +16,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'syseveusernotice001',
+	    url: sysMainMation.noticeBasePath + 'syseveusernotice001',
 	    where: {},
 	    even: true,
 	    page: true,
@@ -59,7 +59,7 @@ layui.config({
 	function sel(data){
 		rowId = data.id;
 		parentRowId = data.id;
-		AjaxPostUtil.request({url: reqBasePath + "syseveusernotice003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			_openNewWindows({
 				url: "../../tpl/index/noticeDetail.html",
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
@@ -80,7 +80,7 @@ layui.config({
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "syseveusernotice004", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice004", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -98,7 +98,7 @@ layui.config({
 			}
 		});
 		if(!isNull(idsStr)){
-			AjaxPostUtil.request({url: reqBasePath + "syseveusernotice005", params:{rowIds: idsStr}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice005", params: {rowIds: idsStr}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -122,7 +122,7 @@ layui.config({
 				$("#layui-layer-shade" + times).css({'z-index': zIndex});
 			}}, function (index) {
 				layer.close(index);
-				AjaxPostUtil.request({url: reqBasePath + "syseveusernotice006", params:{rowIds: idsStr}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice006", params: {rowIds: idsStr}, type: 'json', callback: function (json) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});

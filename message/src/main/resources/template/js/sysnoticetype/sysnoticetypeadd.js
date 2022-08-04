@@ -28,7 +28,7 @@ layui.config({
 		function initNoticeTypeId(){
 			showGrid({
 			 	id: "lockParentSel",
-			 	url: reqBasePath + "noticetype011",
+			 	url: sysMainMation.noticeBasePath + "noticetype011",
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -61,7 +61,7 @@ layui.config({
  	        	}else if($("input[name='level']:checked").val() === '1'){
  	        		params.parentId = '0';
  	        	}
- 	        	AjaxPostUtil.request({url: reqBasePath + "noticetype002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

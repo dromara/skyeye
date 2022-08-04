@@ -12,7 +12,7 @@ layui.config({
 	    	form = layui.form;
 		showGrid({
 		 	id: "notice-content",
-		 	url: reqBasePath + "syseveusernotice007",
+		 	url: sysMainMation.noticeBasePath + "syseveusernotice007",
 		 	params: {rowId: parent.parentRowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/index/noticeDetailTemplate.tpl'),

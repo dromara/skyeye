@@ -19,7 +19,7 @@ layui.config({
 		function initNoticeType(id){
 			showGrid({
 			 	id: "noticeTypeId",
-			 	url: reqBasePath + "noticetype011",
+			 	url: sysMainMation.noticeBasePath + "noticetype011",
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -34,7 +34,7 @@ layui.config({
 		function initSecondNoticeType(id){
 			showGrid({
 			 	id: "secondTypeId",
-			 	url: reqBasePath + "noticetype013",
+			 	url: sysMainMation.noticeBasePath + "noticetype013",
 			 	params: {parentId: $("#noticeTypeId").val()},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -48,8 +48,8 @@ layui.config({
 		
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "notice006",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.noticeBasePath + "notice006",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysnotice/sysnoticeeditTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
@@ -192,7 +192,7 @@ layui.config({
 		    				winui.window.msg('请填写公告内容', {icon: 2, time: 2000});
 		    				return false;
 		    			}
-		    			AjaxPostUtil.request({url: reqBasePath + "notice007", params: params, type: 'json', callback: function (json) {
+		    			AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "notice007", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		    			}});

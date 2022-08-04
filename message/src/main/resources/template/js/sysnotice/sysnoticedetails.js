@@ -12,8 +12,8 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "notice012",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.noticeBasePath + "notice012",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysnotice/sysnoticedetailsTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {

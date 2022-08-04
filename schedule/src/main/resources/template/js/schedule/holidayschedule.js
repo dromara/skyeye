@@ -20,9 +20,9 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'syseveschedule008',
+	    url: sysMainMation.scheduleBasePath + 'syseveschedule008',
 	    where: getTableParams(),
-	    even:true,
+	    even: true,
 	    page: true,
 	    limits: getLimits(),
 	    limit: getLimit(),
@@ -59,7 +59,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "syseveschedule011", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule011", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -71,7 +71,7 @@ layui.config({
 		var msg = '确认取消该节假日的提醒吗？';
 		layer.confirm(msg, { icon: 3, title: '取消日程提醒' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "syseveschedule014", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule014", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("取消成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -123,7 +123,7 @@ layui.config({
 	$("body").on("click", "#deleteThisYear", function() {
 		layer.confirm('确认清空本年度节假日日程吗？', { icon: 3, title: '删除节假日' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "syseveschedule012", params:{}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule012", params: {}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -133,7 +133,7 @@ layui.config({
 	// 下载模板
 	$("body").on("click", "#download", function() {
 		postDownLoadFile({
-			url : reqBasePath + 'syseveschedule009',
+			url : sysMainMation.scheduleBasePath + 'syseveschedule009',
 			method : 'post'
 		});
     });
@@ -149,7 +149,7 @@ layui.config({
 	    formData.append("file", $("#upfile")[0].files[0]);
 	    formData.append("name", name);
 	    $.ajax({
-	        url : reqBasePath + 'syseveschedule010',
+	        url : sysMainMation.scheduleBasePath + 'syseveschedule010',
 	        type : 'POST',
 	        async : false,
 	        data : formData,

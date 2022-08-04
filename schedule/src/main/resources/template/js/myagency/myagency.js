@@ -27,8 +27,8 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'myagency001',
-		    where:{myagencyType: $("#myagencyType").val(), myagencyName: $("#myagencyName").val()},
+		    url: sysMainMation.scheduleBasePath + 'myagency001',
+		    where: {myagencyType: $("#myagencyType").val(), myagencyName: $("#myagencyName").val()},
 		    even: true,
 		    page: true,
 		    limits: getLimits(),
@@ -67,7 +67,7 @@ layui.config({
 		var msg = obj ? '确认取消【' + obj.data.title + '】的提醒吗？' : '确认取消提醒吗？';
 		layer.confirm(msg, { icon: 3, title: '取消代办' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "myagency002", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "myagency002", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("取消成功", {icon: 1, time: 2000});
 				loadTable();
     		}});

@@ -15,7 +15,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "syseveschedule015",
+		 	url: sysMainMation.scheduleBasePath + "syseveschedule015",
 		 	params: {rowId:parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/schedule/editscheduleTemplate.tpl'),
@@ -38,7 +38,7 @@ layui.config({
 		 	        		startTime: theStartTime,
 		 	        		endTime: theEndTime
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "syseveschedule016", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule016", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});

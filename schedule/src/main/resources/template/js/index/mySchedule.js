@@ -148,7 +148,7 @@ layui.config({
 					scheduleEndTime: event.end._d.format("yyyy-MM-dd hh:mm:ss"),
 					id: event.id
 				};
-				AjaxPostUtil.request({url: reqBasePath + "syseveschedule005", params: params, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule005", params: params, type: 'json', callback: function (json) {
 					joinTodaySchedule(params);
 				}, errorCallback: function () {
 					revertFunc();
@@ -163,7 +163,7 @@ layui.config({
 			eventMouseover: function(event, jsEvent, view){//鼠标移入事件
 			},
 			events: function(start, end, timezone, callback){
-				AjaxPostUtil.request({url: reqBasePath + "syseveschedule002", params:{yearMonth: start._d.format("yyyy-MM"), checkWorkId: $("#checkTime").val()}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule002", params: {yearMonth: start._d.format("yyyy-MM"), checkWorkId: $("#checkTime").val()}, type: 'json', callback: function (json) {
 					callback(json.rows);
 				}});
 			}
@@ -172,7 +172,7 @@ layui.config({
 		//获取今日日程
 		showGrid({
 			id: "schedule-list",
-			url: reqBasePath + "syseveschedule003",
+			url: sysMainMation.scheduleBasePath + "syseveschedule003",
 			params: {},
 			pagination: false,
 			method: "GET",
@@ -218,7 +218,7 @@ layui.config({
 
 	// 加载日程详情
 	function loadScheduleDetails(id){
-		AjaxPostUtil.request({url: reqBasePath + "syseveschedule006", params:{rowId: id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule006", params: {rowId: id}, type: 'json', callback: function (json) {
 			json.bean.scheduleRemarks = stringManipulation.textAreaShow(json.bean.scheduleRemarks);
 			showDataUseHandlebars("schedule-detail", getFileContent('tpl/index/scheduleDetail.tpl'), json);
 		}});
@@ -233,7 +233,7 @@ layui.config({
 			$("#layui-layer-shade" + times).css({'z-index': zIndex});
 		}}, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url: reqBasePath + "syseveschedule007", params:{rowId: id}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule007", params: {rowId: id}, type: 'json', callback: function (json) {
 				$('div[rowid="' + id + '"]').parent().remove();
 				calendar.fullCalendar('removeEvents', [id]);
 	   		}});

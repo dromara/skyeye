@@ -30,7 +30,7 @@ layui.config({
  	        		startTime: theStartTime,
  	        		endTime: theEndTime
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "syseveschedule017", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule017", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

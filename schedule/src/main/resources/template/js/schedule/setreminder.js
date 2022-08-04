@@ -24,7 +24,7 @@ layui.config({
         			rowId: parent.rowId,
         			remindType: $("#remindType").val()
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "syseveschedule013", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.scheduleBasePath + "syseveschedule013", params: params, type: 'json', callback: function (json) {
 					parent.childParams = json.bean;
 					parent.layer.close(index);
 					parent.refreshCode = '0';

@@ -16,7 +16,7 @@ layui.config({
             id: 'messageTable',
             elem: '#messageTable',
             method: 'post',
-            url: reqBasePath + 'syseveschedule019',
+            url: sysMainMation.scheduleBasePath + 'syseveschedule019',
             where: getTableParams(),
             even: true,
             page: true,

@@ -12,7 +12,7 @@ layui.config({
 	    
 		showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "planprojectflow004",
+		 	url: sysMainMation.businessFlowBasePath + "planprojectflow004",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 			method: "GET",
@@ -63,7 +63,7 @@ layui.config({
 			        		params.isShare = '1';
 			        	}
 			        	
-			        	AjaxPostUtil.request({url: reqBasePath + "planprojectflow005", params: params, type: 'json', method: "PUT", callback: function (json) {
+			        	AjaxPostUtil.request({url: sysMainMation.businessFlowBasePath + "planprojectflow005", params: params, type: 'json', method: "PUT", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});

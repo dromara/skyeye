@@ -20,7 +20,7 @@ layui.config({
 	    url: sysMainMation.knowlgBasePath + 'knowledgetype001',
 	    where: getTableParams(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'name', title: '名称',  width: 360 },
 	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
 	        	if(d.state == '3'){
@@ -37,7 +37,6 @@ layui.config({
 			{ field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],
-	    isPage:false,
 	    done: function(){
 	    	matchingLanguage();
 	    }

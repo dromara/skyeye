@@ -25,7 +25,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'notice013',
+		    url: sysMainMation.noticeBasePath + 'notice013',
 		    where: {typeId: typeId, firstTime: startTime, lastTime: endTime, title:$("#titleName").val()},
 		    even: true,
 		    page: true,
@@ -70,7 +70,7 @@ layui.config({
 	//初始化左侧菜单数据
     showGrid({
 	 	id: "setting",
-	 	url: reqBasePath + "noticetype011",
+	 	url: sysMainMation.noticeBasePath + "noticetype011",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/sysnoticefront/sysnoticefrontTemplate.tpl'),

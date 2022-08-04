@@ -17,11 +17,11 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'noticetype001',
-	    where: {name:$("#name").val(),parentId:$("#firstType").val()},
+	    url: sysMainMation.noticeBasePath + 'noticetype001',
+	    where: {name: $("#name").val(), parentId: $("#firstType").val()},
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-	        { field: 'name', title: '类型名称', align: 'center', width: 120 },
+	        { field: 'name', title: '类型名称', width: 120 },
 	        { field: 'allNum', title: '总公告数量', align: 'center', width: 120 },
 	        { field: 'upStateNum', title: '上线公告数量', align: 'center', width: 120 },
 	        { field: 'state', title: '当前状态', width: 120, align: 'center', templet: function (d) {
@@ -56,7 +56,7 @@ layui.config({
 		title: 'name',
 	});
 
-	tableTree.on('tool(messageTable)', function (obj) {
+	tableTree.getTable().on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
@@ -80,7 +80,7 @@ layui.config({
 		loadFirstType = true;
 		showGrid({
 		 	id: "firstType",
-		 	url: reqBasePath + "noticetype012",
+		 	url: sysMainMation.noticeBasePath + "noticetype012",
 		 	params: {},
 		 	pagination: false,
 		 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -119,7 +119,7 @@ layui.config({
 		var msg = '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除公告类型' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "noticetype003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -131,7 +131,7 @@ layui.config({
 		var msg = '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '上线公告类型' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "noticetype004", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype004", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("上线成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -143,7 +143,7 @@ layui.config({
 		var msg = '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '下线公告类型' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "noticetype005", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("下线成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -167,7 +167,7 @@ layui.config({
 	
 	//上移
 	function upMove(data){
-        AjaxPostUtil.request({url: reqBasePath + "noticetype008", params:{rowId: data.id}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype008", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -175,7 +175,7 @@ layui.config({
 	
 	//下移
 	function downMove(data){
-        AjaxPostUtil.request({url: reqBasePath + "noticetype009", params:{rowId: data.id}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype009", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
