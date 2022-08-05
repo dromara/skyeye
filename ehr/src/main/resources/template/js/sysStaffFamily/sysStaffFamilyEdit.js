@@ -13,7 +13,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sysstafffamily003",
+		 	url: sysMainMation.ehrBasePath + "sysstafffamily003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	method: "GET",
@@ -49,7 +49,7 @@ layui.config({
 			 	        	rowId: parent.rowId
 		 	        	};
 		 	        	
-		 	        	AjaxPostUtil.request({url: reqBasePath + "sysstafffamily004", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstafffamily004", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});

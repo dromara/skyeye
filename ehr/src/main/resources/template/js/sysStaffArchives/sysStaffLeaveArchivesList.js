@@ -19,7 +19,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'sysstaffarchives002',
+		    url: sysMainMation.ehrBasePath + 'sysstaffarchives002',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,

@@ -21,7 +21,7 @@ layui.config({
                     typeName: $("#typeName").val(),
                     typeId: $("#typeId").val()
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "sysstafflanguagelevel002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstafflanguagelevel002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

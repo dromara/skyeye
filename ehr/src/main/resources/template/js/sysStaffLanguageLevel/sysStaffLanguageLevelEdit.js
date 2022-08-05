@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sysstafflanguagelevel003",
+		 	url: sysMainMation.ehrBasePath + "sysstafflanguagelevel003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/sysStaffLanguageLevel/sysStaffLanguageLevelEditTemplate.tpl'),
@@ -24,7 +24,7 @@ layui.config({
 		 	        		rowId: parent.rowId,
                             typeName: $("#typeName").val()
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "sysstafflanguagelevel004", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstafflanguagelevel004", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});

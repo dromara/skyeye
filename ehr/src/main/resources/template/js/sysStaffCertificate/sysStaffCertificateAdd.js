@@ -36,7 +36,7 @@ layui.config({
 	 	        	staffId: parent.staffId,
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "sysstaffcertificate002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstaffcertificate002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

@@ -28,7 +28,7 @@ layui.config({
 				// 语种等级
 				showGrid({
 				 	id: "levelId",
-				 	url: reqBasePath + "sysstafflanguagelevel008",
+				 	url: sysMainMation.ehrBasePath + "sysstafflanguagelevel008",
 				 	params: {typeId: data.value},
 				 	pagination: false,
 				 	template: selTemplate,
@@ -52,7 +52,7 @@ layui.config({
 	 	        	staffId: parent.staffId,
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "sysstafflanguage002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstafflanguage002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

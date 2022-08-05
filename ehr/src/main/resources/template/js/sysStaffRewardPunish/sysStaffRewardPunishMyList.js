@@ -25,7 +25,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'sysstaffrewardpunish006',
+		    url: sysMainMation.ehrBasePath + 'sysstaffrewardpunish006',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,

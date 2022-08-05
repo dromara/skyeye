@@ -18,7 +18,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'sysstafflanguage001',
+		    url: sysMainMation.ehrBasePath + 'sysstafflanguage001',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -84,7 +84,7 @@ layui.config({
     function deleteRow(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sysstafflanguage005", params:{rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstafflanguage005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
             }});

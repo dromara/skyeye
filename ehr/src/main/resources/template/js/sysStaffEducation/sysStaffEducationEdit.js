@@ -15,7 +15,7 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sysstaffeducation003",
+		 	url: sysMainMation.ehrBasePath + "sysstaffeducation003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	method: "GET",
@@ -72,7 +72,7 @@ layui.config({
 			 	        	rowId: parent.rowId,
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "sysstaffeducation004", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstaffeducation004", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});

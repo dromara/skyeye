@@ -25,7 +25,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'sysstaffcontract006',
+		    url: sysMainMation.ehrBasePath + 'sysstaffcontract006',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -86,7 +86,7 @@ layui.config({
     function signUp(data){
         layer.confirm('确认签约该合同吗？', { icon: 3, title: '签约操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sysstaffcontract007", params:{rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstaffcontract007", params: {rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
                 winui.window.msg("签约成功", {icon: 1, time: 2000});
                 loadTable();
             }});

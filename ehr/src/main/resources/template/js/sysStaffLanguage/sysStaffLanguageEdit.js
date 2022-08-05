@@ -17,7 +17,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "sysstafflanguage003",
+		 	url: sysMainMation.ehrBasePath + "sysstafflanguage003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	method: "GET",
@@ -31,7 +31,7 @@ layui.config({
 				// 语种等级
 				showGrid({
 					id: "levelId",
-					url: reqBasePath + "sysstafflanguagelevel008",
+					url: sysMainMation.ehrBasePath + "sysstafflanguagelevel008",
 					params: {typeId: $("#languageId").val()},
 					pagination: false,
 					template: selTemplate,
@@ -50,7 +50,7 @@ layui.config({
 						// 语种等级
 						showGrid({
 						 	id: "levelId",
-						 	url: reqBasePath + "sysstafflanguagelevel008",
+						 	url: sysMainMation.ehrBasePath + "sysstafflanguagelevel008",
 						 	params: {typeId: data.value},
 						 	pagination: false,
 						 	template: selTemplate,
@@ -76,7 +76,7 @@ layui.config({
 			 	        	rowId: parent.rowId,
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "sysstafflanguage004", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstafflanguage004", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});
