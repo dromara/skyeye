@@ -14,7 +14,7 @@ layui.config({
 		function initAppType(id){
 			showGrid({
 			 	id: "typeId",
-			 	url: reqBasePath + "lightapptype010",
+			 	url: sysMainMation.lightAppBasePath + "lightapptype010",
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -37,7 +37,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "lightapp003",
+		 	url: sysMainMation.lightAppBasePath + "lightapp003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/lightapp/lightappeditTemplate.tpl'),
@@ -65,11 +65,11 @@ layui.config({
 	 	        			typeId: $("#typeId").val()
 		 	        	};
 		 	        	params.appLogo = $("#appLogo").find("input[name='upload']").attr("oldurl");
-		 	        	if(isNull(params.appLogo)){
+		 	        	if (isNull(params.appLogo)) {
 		        			winui.window.msg("请选择应用logo", {icon: 2, time: 2000});
 		 	        		return false;
 		        	    }
-		 	        	AjaxPostUtil.request({url: reqBasePath + "lightapp004", params: params, type: 'json', callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapp004", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 			 	   		}});

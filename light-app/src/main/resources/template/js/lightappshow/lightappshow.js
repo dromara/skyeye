@@ -12,8 +12,8 @@ layui.config({
 	function showList(typeId){
         showGrid({
     	 	id: "appList",
-    	 	url: reqBasePath + "lightapp008",
-    	 	params: {typeId:typeId},
+    	 	url: sysMainMation.lightAppBasePath + "lightapp008",
+    	 	params: {typeId: typeId},
     	 	pagination: false,
     	 	template: getFileContent('tpl/lightappshow/lightappshowlistTemplate.tpl'),
     	 	ajaxSendLoadBefore: function(hdb){
@@ -26,7 +26,7 @@ layui.config({
 	//初始化左侧菜单数据
     showGrid({
 	 	id: "setting",
-	 	url: reqBasePath + "lightapptype010",
+	 	url: sysMainMation.lightAppBasePath + "lightapptype010",
 	 	params: {},
 	 	pagination: false,
 	 	template: getFileContent('tpl/lightappshow/lightappshowaTemplate.tpl'),
@@ -52,7 +52,7 @@ layui.config({
 	
 	$("body").on("click", ".app-list button", function (e) {
 		var id = $(this).attr("rowid");
-		AjaxPostUtil.request({url: reqBasePath + "lightapp009", params:{id:id}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapp009", params: {id: id}, type: 'json', callback: function (json) {
 			var data = json.bean;
 			top.winui.window.msg("添加成功，请刷新页面即可看到该应用。", {icon: 1,time: 3000});
 		}});

@@ -52,7 +52,7 @@ layui.config({
  	        		winui.window.msg("状态值错误。", {icon: 2, time: 2000});
  	        		return false;
  	        	}
- 	        	AjaxPostUtil.request({url: reqBasePath + "lightapptype002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapptype002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

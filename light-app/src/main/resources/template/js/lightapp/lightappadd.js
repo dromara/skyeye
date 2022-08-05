@@ -15,7 +15,7 @@ layui.config({
 		function initAppType(){
 			showGrid({
 			 	id: "typeId",
-			 	url: reqBasePath + "lightapptype010",
+			 	url: sysMainMation.lightAppBasePath + "lightapptype010",
 			 	params: {},
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
@@ -53,7 +53,7 @@ layui.config({
         			winui.window.msg("请选择应用logo", {icon: 2, time: 2000});
  	        		return false;
         	    }
- 	        	AjaxPostUtil.request({url: reqBasePath + "lightapp002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapp002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});
