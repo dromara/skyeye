@@ -31,7 +31,7 @@ layui.config({
 		    id: 'mysendTable',
 		    elem: '#mysendTable',
 		    method: 'post',
-		    url: reqBasePath + 'diary005',
+		    url: sysMainMation.jobdiaayBasePath + 'diary005',
 		    where: getTableParams(),
 		    even: true,
 		    page: true,
@@ -95,7 +95,7 @@ layui.config({
 	function repeal(data){
 		layer.confirm('确认撤回选中数据吗？', { icon: 3, title: '撤回操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "diary006", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary006", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("撤回成功", {icon: 1, time: 2000});
 				loadMySendTable();
     		}});
@@ -106,7 +106,7 @@ layui.config({
 	function mydel(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "diary015", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary015", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadMySendTable();
     		}});

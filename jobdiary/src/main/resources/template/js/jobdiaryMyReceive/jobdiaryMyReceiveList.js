@@ -21,8 +21,8 @@ layui.config({
     	searchKey: 'userName',	//搜索输入框的name值 默认keyword
     	searchPlaceholder: '发件人搜索',	//搜索输入框的提示文字 默认关键词搜索
     	table: {	//定义表格参数，与LAYUI的TABLE模块一致，只是无需再定义表格elem
-    		url: reqBasePath + 'diary003',
-    		where: {userName:$("#userName").val()},
+    		url: sysMainMation.jobdiaayBasePath + 'diary003',
+    		where: {userName: $("#userName").val()},
     		method: 'post',
     		page: true,
     	    limits: getLimits(),
@@ -66,7 +66,7 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: reqBasePath + 'diary001',
+	    url: sysMainMation.jobdiaayBasePath + 'diary001',
 	    where: getTableParams(),
 	    even: true,
 	    page: true,
@@ -152,7 +152,7 @@ layui.config({
 	function del(data){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "diary008", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary008", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -177,7 +177,7 @@ layui.config({
 	
     // 我收到的日志全部设置为已读
     function alreadyRead(){
-        AjaxPostUtil.request({url: reqBasePath + "diary024", type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary024", type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			loadTable();
         }});

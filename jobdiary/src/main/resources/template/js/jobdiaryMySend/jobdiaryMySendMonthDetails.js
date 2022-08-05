@@ -11,8 +11,8 @@ layui.config({
 	    var $ = layui.$;
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "diary013",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.jobdiaayBasePath + "diary013",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/jobdiaryMySend/jobdiaryMySendMonthDetailsTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {

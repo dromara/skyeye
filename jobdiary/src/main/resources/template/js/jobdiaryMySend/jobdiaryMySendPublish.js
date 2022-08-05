@@ -192,7 +192,7 @@ layui.config({
         			params.coordinaJob = encodeURIComponent($("#coordinatext").val());
         		}
         		
-        		AjaxPostUtil.request({url: reqBasePath + "diary002", params: params, type: 'json', callback: function (json) {
+        		AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
                 }});
@@ -301,7 +301,7 @@ layui.config({
         			params.thisWorkSummary = encodeURIComponent($("#weekWorkSummaryText").val());
         		}
         		
-        		AjaxPostUtil.request({url: reqBasePath + "diary009", params: params, type: 'json', callback: function (json) {
+        		AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary009", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
                 }});
@@ -409,7 +409,7 @@ layui.config({
         			params.thisWorkSummary = encodeURIComponent($("#monthWorkSummaryText").val());
         		}
         		
-        		AjaxPostUtil.request({url: reqBasePath + "diary012", params: params, type: 'json', callback: function (json) {
+        		AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary012", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
                 }});

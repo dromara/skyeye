@@ -74,8 +74,8 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "diary020",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.jobdiaayBasePath + "diary020",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/jobdiaryMySend/jobdiaryMySendMonthEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
@@ -215,7 +215,7 @@ layui.config({
 		        			params.thisWorkSummary = encodeURIComponent($("#monthWorkSummaryText").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		
-		        		AjaxPostUtil.request({url: reqBasePath + "diary021", params: params, type: 'json', callback: function (json) {
+		        		AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary021", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
                         }});

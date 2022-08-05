@@ -74,8 +74,8 @@ layui.config({
 
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "diary016",
-		 	params: {rowId:parent.rowId},
+		 	url: sysMainMation.jobdiaayBasePath + "diary016",
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 		 	template: getFileContent('tpl/jobdiaryMySend/jobdiaryMySendDayEditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
@@ -196,7 +196,7 @@ layui.config({
 		        			params.coordinaJob = encodeURIComponent($("#coordinatext").val().replace(/\n|\r\n/g, "<br>"));
 		        		}
 		        		
-		        		AjaxPostUtil.request({url: reqBasePath + "diary017", params: params, type: 'json', callback: function (json) {
+		        		AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary017", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
                         }});
