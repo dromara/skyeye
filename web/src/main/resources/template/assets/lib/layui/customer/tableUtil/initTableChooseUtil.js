@@ -16,8 +16,7 @@ var initTableChooseUtil = {
                             // verify: 'required|number',
                             // value: '默认值',
                             // valueKey: '回显时要展示数据里面的那个key',
-                            // layFilter: '可以方便指定监听事件',
-                            // saveKey: '保存数据时指定的那个key'}
+                            // layFilter: '可以方便指定监听事件'}
         deleteRowCallback: function () {trId}, // 删除行之后的回调函数
         addRowCallback: function (rowIndexStr) {}, // 新增行之后的回调函数
         form: null, // form表单对象
@@ -156,19 +155,16 @@ var initTableChooseUtil = {
             var rowIndexStr = trId.replace("tr", "");
             var row = {};
             $.each(options.cols, function (j, bean) {
-                if (!isNull(bean.saveKey)) {
-                    // saveKey不为空时，指定key-value
-                    var tdId = bean.id + rowIndexStr;
-                    var value = "";
-                    if (bean.formType == 'input') {
-                        value = $("#" + tdId).val();
-                    } else if (bean.formType == 'select') {
-                        value = $("#" + tdId).val();
-                    } else if (bean.formType == 'detail') {
-                        value = $("#" + tdId).html();
-                    }
-                    row[bean.saveKey] = value;
+                var tdId = bean.id + rowIndexStr;
+                var value = "";
+                if (bean.formType == 'input') {
+                    value = $("#" + tdId).val();
+                } else if (bean.formType == 'select') {
+                    value = $("#" + tdId).val();
+                } else if (bean.formType == 'detail') {
+                    value = $("#" + tdId).html();
                 }
+                row[bean.id] = value;
             });
             result.push(row);
         });
