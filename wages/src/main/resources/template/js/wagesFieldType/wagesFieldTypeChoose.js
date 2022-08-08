@@ -20,7 +20,7 @@ layui.config({
 		    id: 'messageTable',
 		    elem: '#messageTable',
 		    method: 'post',
-		    url: reqBasePath + 'wages008',
+		    url: sysMainMation.wagesBasePath + 'wages008',
 		    where: getTableParams(),
 			even: true,
 		    page: true,
@@ -81,7 +81,7 @@ layui.config({
 			}else if(fieldType == 2){
 				$(".customType").hide();
 				table.reload("messageTable", {
-					url: reqBasePath + 'wages009',
+					url: sysMainMation.wagesBasePath + 'wages009',
 					page: false
 				});
 			}
@@ -102,7 +102,7 @@ layui.config({
     
     function refreshTable(){
     	table.reload("messageTable", {
-			url: reqBasePath + 'wages008',
+			url: sysMainMation.wagesBasePath + 'wages008',
     		page: {curr: 1},
 			page: true,
 			where: getTableParams()

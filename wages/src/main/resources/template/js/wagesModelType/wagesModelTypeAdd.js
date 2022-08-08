@@ -18,7 +18,7 @@ layui.config({
 					nameCn: $("#nameCn").val(),
 					nameEn: $("#nameEn").val()
  	        	};
- 	        	AjaxPostUtil.request({url: reqBasePath + "wagesmodeltype002", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: sysMainMation.wagesBasePath + "wagesmodeltype002", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
  	        	}});

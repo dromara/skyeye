@@ -12,7 +12,7 @@ layui.config({
 
 	showGrid({
 		id: "showForm",
-		url: reqBasePath + "wagessocialsecurityfund008",
+		url: sysMainMation.wagesBasePath + "wagessocialsecurityfund008",
 		params: {rowId: parent.rowId},
 		pagination: false,
 		method: "GET",

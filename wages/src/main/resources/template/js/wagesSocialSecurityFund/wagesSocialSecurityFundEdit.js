@@ -23,7 +23,7 @@ layui.config({
 
 	showGrid({
 		id: "showForm",
-		url: reqBasePath + "wagessocialsecurityfund003",
+		url: sysMainMation.wagesBasePath + "wagessocialsecurityfund003",
 		params: {rowId: parent.rowId},
 		pagination: false,
 		method: "GET",
@@ -133,7 +133,7 @@ layui.config({
 						});
 					});
 					params.str = JSON.stringify(object);
-					AjaxPostUtil.request({url: reqBasePath + "wagessocialsecurityfund004", params: params, type: 'json', method: "PUT", callback: function (json) {
+					AjaxPostUtil.request({url: sysMainMation.wagesBasePath + "wagessocialsecurityfund004", params: params, type: 'json', method: "PUT", callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';
 					}});

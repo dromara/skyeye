@@ -15,7 +15,7 @@ layui.config({
 
 	showGrid({
 		id: "showForm",
-		url: reqBasePath + "wagesmodel003",
+		url: sysMainMation.wagesBasePath + "wagesmodel003",
 		params: {rowId: parent.rowId},
 		pagination: false,
 		method: "GET",

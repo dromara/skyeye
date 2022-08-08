@@ -30,7 +30,7 @@ layui.config({
 
 	showGrid({
 		id: "typeId",
-		url: reqBasePath + "wagesmodeltype008",
+		url: sysMainMation.wagesBasePath + "wagesmodeltype008",
 		params: {},
 		pagination: false,
 		template: selTemplate,
@@ -96,7 +96,7 @@ layui.config({
 				});
 			});
 			params.str = JSON.stringify(object);
-			AjaxPostUtil.request({url: reqBasePath + "wagesmodel002", params: params, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: sysMainMation.wagesBasePath + "wagesmodel002", params: params, type: 'json', callback: function (json) {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			}});

@@ -18,7 +18,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'wagespaymenthistory001',
+        url: sysMainMation.wagesBasePath + 'wagespaymenthistory001',
         where: getTableParams(),
         even: true,
         page: true,

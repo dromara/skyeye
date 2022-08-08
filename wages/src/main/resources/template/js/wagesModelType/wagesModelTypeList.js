@@ -18,7 +18,7 @@ layui.config({
         id: 'messageTable',
         elem: '#messageTable',
         method: 'post',
-        url: reqBasePath + 'wagesmodeltype001',
+        url: sysMainMation.wagesBasePath + 'wagesmodeltype001',
         where: getTableParams(),
         even: true,
         page: true,
@@ -85,7 +85,7 @@ layui.config({
     function delet(data){
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "wagesmodeltype005", params:{rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.wagesBasePath + "wagesmodeltype005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -96,7 +96,7 @@ layui.config({
     function down(data){
         layer.confirm(systemLanguage["com.skyeye.disableOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.disableOperation"][languageType]}, function(index) {
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "wagesmodeltype007", params:{rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.wagesBasePath + "wagesmodeltype007", params: {rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.disableOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -107,7 +107,7 @@ layui.config({
     function up(data){
         layer.confirm(systemLanguage["com.skyeye.enableOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.enableOperation"][languageType]}, function(index) {
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "wagesmodeltype006", params:{rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.wagesBasePath + "wagesmodeltype006", params: {rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.enableOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});

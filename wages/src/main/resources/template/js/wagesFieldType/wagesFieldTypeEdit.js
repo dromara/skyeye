@@ -12,7 +12,7 @@ layui.config({
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: reqBasePath + "wages003",
+		 	url: sysMainMation.wagesBasePath + "wages003",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 			method: "GET",
@@ -34,7 +34,7 @@ layui.config({
 							monthlyClearing: $("input[name='monthlyClearing']:checked").val(),
 							rowId: parent.rowId
 		 	        	};
-		 	        	AjaxPostUtil.request({url: reqBasePath + "wages004", params: params, type: 'json', method: "PUT", callback: function (json) {
+		 	        	AjaxPostUtil.request({url: sysMainMation.wagesBasePath + "wages004", params: params, type: 'json', method: "PUT", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 		 	        	}});
