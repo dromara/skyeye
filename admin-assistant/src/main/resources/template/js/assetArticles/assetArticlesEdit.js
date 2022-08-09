@@ -18,10 +18,10 @@ layui.config({
 		 	url: flowableBasePath + "assetarticles015",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/assetArticles/assetArticlesEditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 		hdb.registerHelper("compare1", function(v1, options){
-					if(isNull(v1)){
+		 	template: $("#beanTemplate").html(),
+		 	ajaxSendLoadBefore: function(hdb) {
+		 		hdb.registerHelper("compare1", function(v1, options) {
+					if (isNull(v1)) {
 						return path + "assets/img/uploadPic.png";
 					} else {
 						return basePath + v1;
@@ -54,19 +54,19 @@ layui.config({
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
-	 	        			rowId: parent.rowId,
+	 	        			id: parent.rowId,
 	 	        			articlesName: $("#articlesName").val(),
 	 	        			typeId: $("#typeId").val(),
 	 	        			specifications: $("#specifications").val(),
 	 	        			unitOfMeasurement: $("#unitOfMeasurement").val(),
-	 	        			initialNum: $("#initialNum").val(),
+	 	        			initialNum: json.bean.initialNum,
 	 	        			residualNum: $("#residualNum").val(),
 	 	        			storageArea: $("#storageArea").val(),
 	 	        			roomAddDesc: $("#roomAddDesc").val(),
 							enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
 							assetAdmin: systemCommonUtil.tagEditorGetItemData('assetAdmin', userList)
 	 	 	        	};
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles016", params: params, type: 'json', callback: function (json) {
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "writeAssetArticlesMation", params: params, type: 'json', method: "POST", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 	 		 	   		}});

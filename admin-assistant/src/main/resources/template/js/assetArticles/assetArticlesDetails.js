@@ -13,9 +13,9 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "assetarticles013",
-		 	params: {rowId:parent.rowId},
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/assetArticles/assetArticlesDetailsTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 	},
 		 	ajaxSendAfter:function (json) {

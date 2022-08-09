@@ -32,7 +32,7 @@ layui.config({
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
 					assetAdmin: systemCommonUtil.tagEditorGetItemData('assetAdmin', userList)
  	        	};
- 	        	AjaxPostUtil.request({url: flowableBasePath + "assetarticles011", params: params, type: 'json', callback: function (json) {
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "writeAssetArticlesMation", params: params, type: 'json', method: "POST", callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});
