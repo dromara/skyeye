@@ -16,15 +16,6 @@
 		                <div class="layui-input-inline">
 		                    <input type="text" id="assetName" name="assetName" placeholder="请输入资产名称" class="layui-input" />
 		                </div>
-		                <label class="layui-form-label">状态</label>
-		                <div class="layui-input-inline">
-		                	<select id="state" name="state">
-		                		<option value="">全部</option>
-		                		<option value="1">正常</option>
-		                		<option value="2">维修</option>
-		                		<option value="3">报废</option>
-		                	</select>
-		                </div>
 		                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
 		                <button class="layui-btn list-form-search" type="button" id="assetlistSearch"><language showName="com.skyeye.search2"></language></button>
 		            </div>
@@ -40,30 +31,6 @@
 	    <div style="margin:auto 10px;">
 	        <table id="assetlistTable" lay-filter="assetlistTable"></table>
 	        <script type="text/html" id="assetlisttableBar">
-				{{# if(d.state == 1){ }}
-					{{# if(auth('1566466025361')){ }}
-            			<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="assetlistrepair">维修</a>
-					{{# } }}
-					{{# if(auth('1566466057757')){ }}
-						<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="assetlistscrap">报废</a>
-					{{# } }}
-				{{# } }}
-				{{# if(d.state == 2){ }}
-					{{# if(auth('1566466091879')){ }}
-						<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="assetlistnormal">恢复正常</a>
-					{{# } }}
-					{{# if(auth('1566466057757')){ }}
-						<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="assetlistscrap">报废</a>
-					{{# } }}
-				{{# } }}
-				{{# if(d.state == 3){ }}
-					{{# if(auth('1566466091879')){ }}
-						<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="assetlistnormal">恢复正常</a>
-					{{# } }}
-					{{# if(auth('1566466025361')){ }}
-						<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="assetlistrepair">维修</a>
-					{{# } }}
-				{{# } }}
 				{{# if(auth('1566465526122')){ }}
 					<a class="layui-btn layui-btn-xs" lay-event="assetlistedit"><language showName="com.skyeye.editBtn"></language></a>
 				{{# } }}

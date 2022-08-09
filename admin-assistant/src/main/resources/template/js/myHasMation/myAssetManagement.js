@@ -12,34 +12,30 @@ layui.config({
 		form = layui.form,
 		table = layui.table;
 
-	showList();
 	// 我名下的资产列表
-	function showList(){
-		table.render({
-		    id: 'messageTable',
-		    elem: '#messageTable',
-		    method: 'post',
-		    url: flowableBasePath + 'myhasmation001',
-		    where: getTableParams(),
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-				{ field: 'companyName', title: '所属公司', align: 'left', width: 170 },
-				{ field: 'assetName', title: '资产名称', align: 'left', width: 120 },
-				{ field: 'typeName', title: '资产类型', align: 'left', width: 100 },
-				{ field: 'assetNum', title: '资产编号', align: 'left', width: 100 },
-				{ field: 'specifications', title: '资产规格', align: 'left', width: 120 },
-				{ field: 'employeeName', title: '领用人', align: 'left', width: 80 },
-				{ field: 'assetAdmin', title: '管理员', align: 'left', width: 80 },
-		    ]],
-		    done: function(){
-		    	matchingLanguage();
-		    }
-		});
-	}
+	table.render({
+		id: 'messageTable',
+		elem: '#messageTable',
+		method: 'post',
+		url: flowableBasePath + 'myhasmation001',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'assetName', title: '资产名称', align: 'left', width: 120 },
+			{ field: 'typeName', title: '资产类型', align: 'left', width: 100 },
+			{ field: 'assetNum', title: '资产编号', align: 'left', width: 100 },
+			{ field: 'specifications', title: '资产规格', align: 'left', width: 120 },
+			{ field: 'employeeName', title: '领用人', align: 'left', width: 120 },
+			{ field: 'assetAdmin', title: '管理员', align: 'left', width: 120 },
+		]],
+		done: function(){
+			matchingLanguage();
+		}
+	});
 
     $("body").on("click", "#reloadmessageTable", function() {
     	loadTable();
