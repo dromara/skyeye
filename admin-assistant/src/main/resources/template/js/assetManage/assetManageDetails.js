@@ -15,11 +15,11 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "asset006",
-		 	params: {rowId:parent.rowId},
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/assetManage/assetManageDetailsTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 		hdb.registerHelper("compare2", function(v1, options){
+			template: $("#beanTemplate").html(),
+		 	ajaxSendLoadBefore: function(hdb) {
+				hdb.registerHelper("compare2", function (v1, options) {
 					return v1.replace(reg, "\n");
 				});
 		 	},

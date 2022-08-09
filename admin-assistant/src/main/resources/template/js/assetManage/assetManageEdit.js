@@ -18,19 +18,19 @@ layui.config({
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "asset004",
-		 	params: {rowId:parent.rowId},
+		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/assetManage/assetManageEditTemplate.tpl'),
-		 	ajaxSendLoadBefore: function(hdb){
-		 		hdb.registerHelper("compare1", function(v1, options){
-					if(isNull(v1)){
+		 	template: $("#beanTemplate").html(),
+		 	ajaxSendLoadBefore: function(hdb) {
+				hdb.registerHelper("compare1", function (v1, options) {
+					if (isNull(v1)) {
 						return path + "assets/img/uploadPic.png";
 					} else {
 						return basePath + v1;
 					}
 				});
 		 	},
-		 	ajaxSendAfter:function (json) {
+		 	ajaxSendAfter: function (json) {
 		 		// 生产日期
 		 		laydate.render({elem: '#manufacturerTime', type: 'date', max: getFormatDate(), trigger: 'click'});
 		 		
@@ -84,7 +84,7 @@ layui.config({
 		 	    form.on('submit(formEditBean)', function (data) {
 		 	        if (winui.verifyForm(data.elem)) {
 		 	        	var params = {
-	 	        			rowId: parent.rowId,
+	 	        			id: parent.rowId,
 	 	        			assetName: $("#assetName").val(),
 	 	        			assetNum: $("#assetNum").val(),
 	 	        			specifications: $("#specifications").val(),
@@ -102,11 +102,11 @@ layui.config({
 							employeeId: systemCommonUtil.tagEditorGetItemData('employeeId', employeeuserList),
 							assetImg: $("#assetImg").find("input[type='hidden'][name='upload']").attr("oldurl")
 	 	 	        	};
-	 	 	        	if(isNull(params.assetImg)) {
-	 	 	        		winui.window.msg('请上传资产图片', {icon: 2, time: 2000});
-	 	 	        		return false;
-	 	 	        	}
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "asset005", params: params, type: 'json', callback: function (json) {
+						if (isNull(params.assetImg)) {
+							winui.window.msg('请上传资产图片', {icon: 2, time: 2000});
+							return false;
+						}
+	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "writeAssetMation", params: params, type: 'json', method: "POST", callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
 	 		 	   		}});

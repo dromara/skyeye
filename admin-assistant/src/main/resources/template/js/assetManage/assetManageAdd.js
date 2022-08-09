@@ -53,11 +53,11 @@ layui.config({
 					employeeId: systemCommonUtil.tagEditorGetItemData('employeeId', employeeuserList),
 					assetImg: $("#assetImg").find("input[type='hidden'][name='upload']").attr("oldurl")
  	        	};
- 	        	if(isNull(params.assetImg)){
- 	        		winui.window.msg('请上传资产图片', {icon: 2, time: 2000});
- 	        		return false;
- 	        	}
- 	        	AjaxPostUtil.request({url: flowableBasePath + "asset002", params: params, type: 'json', callback: function (json) {
+				if (isNull(params.assetImg)) {
+					winui.window.msg('请上传资产图片', {icon: 2, time: 2000});
+					return false;
+				}
+ 	        	AjaxPostUtil.request({url: flowableBasePath + "writeAssetMation", params: params, type: 'json', method: "POST", callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});
