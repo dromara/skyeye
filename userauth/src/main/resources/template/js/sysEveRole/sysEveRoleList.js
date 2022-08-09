@@ -32,7 +32,7 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar' }
 	    ]],
-	    done: function(json){
+	    done: function(json) {
 	    	matchingLanguage();
 			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入角色名称", function () {
 				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});

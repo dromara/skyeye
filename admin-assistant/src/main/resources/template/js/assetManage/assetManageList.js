@@ -1,7 +1,5 @@
-var rowId = "";
 
-var taskType = "";//流程详情的主标题
-var processInstanceId = "";//流程id
+var rowId = "";
 
 layui.config({
 	base: basePath,
@@ -17,38 +15,42 @@ layui.config({
 	// 新增资产
 	authBtn('1566465526122');
 
-	showAssetList();
 	// 资产列表管理开始
-	function showAssetList(){
-		table.render({
-		    id: 'assetlistTable',
-		    elem: '#assetlistTable',
-		    method: 'post',
-		    url: flowableBasePath + 'asset001',
-		    where: getTableParams(),
-		    even: true,
-		    page: true,
-		    limits: getLimits(),
-	    	limit: getLimit(),
-		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-		        { field: 'companyName', title: '所属公司', align: 'center', width: 170 },
-		        { field: 'assetName', title: '名称', width: 120, templet: function (d) {
-		        	return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.assetName + '</a>';
-		        }},
-		        { field: 'typeId', title: '资产所属类型', align: 'center', width: 100 },
-		        { field: 'assetNum', title: '资产编号', width: 100 },
-		        { field: 'unitPrice', title: '资产单价', align: 'center', width: 80 },
-		        { field: 'employeeId', title: '领用人', align: 'center', width: 80 },
-		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#assetlisttableBar' }
-		    ]],
-		    done: function(){
-		    	matchingLanguage();
-		    }
-		});
-	}
+	table.render({
+		id: 'assetlistTable',
+		elem: '#assetlistTable',
+		method: 'post',
+		url: flowableBasePath + 'asset001',
+		where: getTableParams(),
+		even: true,
+		page: true,
+		limits: getLimits(),
+		limit: getLimit(),
+		cols: [[
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+			{ field: 'assetName', title: '资产名称', width: 120, templet: function (d) {
+				return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.assetName + '</a>';
+			}},
+			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
+				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
+			}},
+			{ field: 'typeId', title: '资产类型', width: 100 },
+			{ field: 'numberPrefix', title: '资产编号前缀', width: 140 },
+			{ field: 'readPrice', title: '参考价', width: 80 },
+			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
+			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#assetlisttableBar' }
+		]],
+		done: function(json) {
+			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入资产名称", function () {
+				table.reload("assetlistTable", {page: {curr: 1}, where: getTableParams()});
+			});
+		}
+	});
 
-	// 资产的操作事件
 	table.on('tool(assetlistTable)', function (obj) {
 		var data = obj.data;
 		var layEvent = obj.event;
@@ -58,12 +60,12 @@ layui.config({
 			assetlistdelet(data);
 		} else if (layEvent === 'assetlistedit') {	// 编辑
 			assetlistedit(data);
+		} else if (layEvent === 'assetImg') { // 图片预览
+			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.assetImg));
 		}
     });
 
-	form.render();
-
-	// 资产详情
+	// 详情
 	function assetlistdetails(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -86,7 +88,7 @@ layui.config({
 		});
 	}
 
-	// 新增资产
+	// 新增
 	$("body").on("click", "#assetlistaddBean", function() {
     	_openNewWindows({
 			url: "../../tpl/assetManage/assetManageAdd.html",
@@ -99,7 +101,7 @@ layui.config({
 			}});
     });
 
-	// 编辑资产
+	// 编辑
 	function assetlistedit(data){
 		rowId = data.id;
 		_openNewWindows({
@@ -113,6 +115,8 @@ layui.config({
 			}});
 	}
 
+	form.render();
+	// 刷新数据
     $("body").on("click", "#assetlistreloadTable", function() {
     	loadassetTable();
     });
@@ -121,15 +125,8 @@ layui.config({
     	table.reload("assetlistTable", {where: getTableParams()});
     }
 
-    // 搜索表单
-	$("body").on("click", "#assetlistSearch", function() {
-    	table.reload("assetlistTable", {page: {curr: 1}, where: getTableParams()});
-	});
-
     function getTableParams(){
-    	return {
-    		assetName: $("#assetName").val()
-    	};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("assetlistTable"));
     }
 
     exports('assetManageList', {});

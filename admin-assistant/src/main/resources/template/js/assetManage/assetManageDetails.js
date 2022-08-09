@@ -10,18 +10,15 @@ layui.config({
 	layui.use(['form'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
-	    var reg = new RegExp("<br>", "g");
-	    
+
 	    showGrid({
 		 	id: "showForm",
 		 	url: flowableBasePath + "asset006",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
 			template: $("#beanTemplate").html(),
-		 	ajaxSendLoadBefore: function(hdb) {
-				hdb.registerHelper("compare2", function (v1, options) {
-					return v1.replace(reg, "\n");
-				});
+		 	ajaxSendLoadBefore: function(hdb, json) {
+				json.bean.describe = stringManipulation.textAreaShow(json.bean.describe);
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		$("#assetImg").attr("src", fileBasePath + json.bean.assetImg);

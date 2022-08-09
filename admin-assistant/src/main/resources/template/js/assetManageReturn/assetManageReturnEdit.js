@@ -139,8 +139,7 @@ layui.config({
 				return false;
 			}
 			var row = {
-				typeId: $("#typeId" + rowNum).val(),
-				assetId: $("#assetId" + rowNum).val(),
+				assetReportId: $("#assetId" + rowNum).val(),
 				remark: $("#remark" + rowNum).val()
 			};
 			tableData.push(row);

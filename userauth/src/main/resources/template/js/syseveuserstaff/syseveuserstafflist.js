@@ -127,21 +127,21 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'edit') { //编辑
-        	edit(data);
-        }else if (layEvent === 'userPhoto') { //头像预览
+		if (layEvent === 'edit') { //编辑
+			edit(data);
+		} else if (layEvent === 'userPhoto') { //头像预览
 			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.userPhoto));
-        }else if (layEvent === 'details') { //员工详情
-        	details(data);
-        }else if (layEvent === 'leave'){ //离职
-        	leave(data);
-        }else if (layEvent === 'turnTeacher'){ //转教职工
-        	turnTeacher(data);
-        }else if (layEvent === 'addCertificate'){ //录入证书
-        	addCertificate(data);
-        }else if (layEvent === 'addEducation'){ //录入教育背景
-        	addEducation(data);
-        }
+		} else if (layEvent === 'details') { //员工详情
+			details(data);
+		} else if (layEvent === 'leave') { //离职
+			leave(data);
+		} else if (layEvent === 'turnTeacher') { //转教职工
+			turnTeacher(data);
+		} else if (layEvent === 'addCertificate') { //录入证书
+			addCertificate(data);
+		} else if (layEvent === 'addEducation') { //录入教育背景
+			addEducation(data);
+		}
     });
 	
 	// 编辑

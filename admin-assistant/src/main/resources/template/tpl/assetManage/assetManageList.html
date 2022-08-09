@@ -7,39 +7,24 @@
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
 </head>
 <body>
-	<div style="margin:0 auto; height: 100%;">
-		<div class="txtcenter" style=" margin: 0 auto; padding-top: 10px;">
-		    <form class="layui-form layui-form-pane" action="" autocomplete="off">
-		        <div class="layui-form-item">
-		            <div class="layui-inline">
-		                <label class="layui-form-label">资产名称</label>
-		                <div class="layui-input-inline">
-		                    <input type="text" id="assetName" name="assetName" placeholder="请输入资产名称" class="layui-input" />
-		                </div>
-		                <button type="reset" class="layui-btn layui-btn-primary list-form-search"><language showName="com.skyeye.reset"></language></button>
-		                <button class="layui-btn list-form-search" type="button" id="assetlistSearch"><language showName="com.skyeye.search2"></language></button>
-		            </div>
-		        </div>
-		    </form>
+	<div class="winui-toolbar">
+		<div class="winui-tool">
+			<button id="assetlistreloadTable" class="winui-toolbtn search-table-btn-right"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
+			<button id="assetlistaddBean" class="winui-toolbtn search-table-btn-right" auth="1566465526122"><i class="fa fa-plus" aria-hidden="true"></i><language showName="com.skyeye.addBtn"></language></button>
 		</div>
-	    <div class="winui-toolbar">
-	        <div class="winui-tool" style="text-align: left;">
-	            <button id="assetlistreloadTable" class="winui-toolbtn"><i class="fa fa-refresh" aria-hidden="true"></i><language showName="com.skyeye.refreshDataBtn"></language></button>
-	            <button id="assetlistaddBean" class="winui-toolbtn" auth="1566465526122"><i class="fa fa-plus" aria-hidden="true"></i>新增资产</button>
-	        </div>
-	    </div>
-	    <div style="margin:auto 10px;">
-	        <table id="assetlistTable" lay-filter="assetlistTable"></table>
-	        <script type="text/html" id="assetlisttableBar">
-				{{# if(auth('1566465526122')){ }}
-					<a class="layui-btn layui-btn-xs" lay-event="assetlistedit"><language showName="com.skyeye.editBtn"></language></a>
-				{{# } }}
-				{{# if(auth('1566466151326')){ }}
-					<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="assetlistdelet"><language showName="com.skyeye.deleteBtn"></language></a>
-				{{# } }}
-        	</script>
-	    </div>
 	</div>
+	<div style="margin:auto 10px;">
+		<table id="assetlistTable" lay-filter="assetlistTable"></table>
+		<script type="text/html" id="assetlisttableBar">
+			{{# if(auth('1566465526122')){ }}
+				<a class="layui-btn layui-btn-xs" lay-event="assetlistedit"><language showName="com.skyeye.editBtn"></language></a>
+			{{# } }}
+			{{# if(auth('1566466151326')){ }}
+				<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="assetlistdelet"><language showName="com.skyeye.deleteBtn"></language></a>
+			{{# } }}
+		</script>
+	</div>
+
     <script src="../../assets/lib/layui/layui.js"></script>
     <script src="../../assets/lib/layui/custom.js"></script>
     <script type="text/javascript">
