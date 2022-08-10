@@ -17,8 +17,8 @@ var initTableChooseUtil = {
                             // value: '默认值',
                             // valueKey: '回显时要展示数据里面的那个key',
                             // layFilter: '可以方便指定监听事件'}
-        deleteRowCallback: function () {trId}, // 删除行之后的回调函数
-        addRowCallback: function (rowIndexStr) {}, // 新增行之后的回调函数
+        deleteRowCallback: function () {trcusid}, // 删除行之后的回调函数
+        addRowCallback: function (trcusid) {}, // 新增行之后的回调函数
         form: null, // form表单对象
     }, // 表格参数数据
 
@@ -67,32 +67,33 @@ var initTableChooseUtil = {
     /**
      * 初始化点击事件
      *
-     * @param id
+     * @param tableDivId 表格外层div的id
      */
-    initEvent: function (id) {
+    initEvent: function (tableDivId) {
         // 新增行
-        $("body").on("click", "#addRow" + id, function() {
-            var pointBtnBoxId = $(this).attr("id").replace("addRow", "");
-            initTableChooseUtil.addRow(pointBtnBoxId);
+        $("body").on("click", "#addRow" + tableDivId, function() {
+            var tableDivId = $(this).attr("id").replace("addRow", "");
+            initTableChooseUtil.addRow(tableDivId);
         });
 
         // 删除行
-        $("body").on("click", "#deleteRow" + id, function() {
-            var pointBtnBoxId = $(this).attr("id").replace("addRow", "");
-            initTableChooseUtil.deleteRow(pointBtnBoxId);
+        $("body").on("click", "#deleteRow" + tableDivId, function() {
+            var tableDivId = $(this).attr("id").replace("deleteRow", "");
+            initTableChooseUtil.deleteRow(tableDivId);
         });
     },
 
     /**
      * 新增行
      *
-     * @param id
+     * @param tableDivId 表格外层div的id
      */
-    addRow: function (id) {
+    addRow: function (tableDivId) {
         // 获取配置
-        var options = initTableChooseUtil.setting[id];
-        var rowIndexStr = id + options.indexRow.toString();
-        var tbodyStr = '<tr trcusid="tr' + rowIndexStr + '"><td><input type="checkbox" rowId="row' + rowIndexStr + '" name="tableCheckRow"/></td>';
+        var options = initTableChooseUtil.setting[tableDivId];
+        var rowIndexStr = tableDivId + options.indexRow.toString();
+        var trcusid = 'tr' + rowIndexStr;
+        var tbodyStr = '<tr trcusid="' + trcusid + '"><td><input type="checkbox" rowId="row' + rowIndexStr + '" name="tableCheckRow"/></td>';
         $.each(options.cols, function (i, item) {
             var tdId = item.id + rowIndexStr;
             var value = isNull(item.value) ? "" : item.value;
@@ -110,27 +111,29 @@ var initTableChooseUtil = {
             }
         });
         tbodyStr += '</tr>';
-        $("#table" + id).append(tbodyStr);
+        $("#table" + tableDivId).append(tbodyStr);
         options.form.render();
         options.indexRow = options.indexRow + 1;
-        initTableChooseUtil.setting[id] = options;
-        if(typeof(initTableChooseUtil.addRowCallback) == "function") {
-            initTableChooseUtil.addRowCallback(rowIndexStr);
+        initTableChooseUtil.setting[tableDivId] = options;
+        if(typeof(options.addRowCallback) == "function") {
+            options.addRowCallback(trcusid);
         }
+        return trcusid;
     },
 
     /**
      * 删除行
      *
-     * @param id
+     * @param tableDivId 表格外层div的id
      */
-    deleteRow: function (id) {
-        var checkRow = $("#table" + id + " input[type='checkbox'][name='tableCheckRow']:checked");
+    deleteRow: function (tableDivId) {
+        var checkRow = $("#table" + tableDivId + " input[type='checkbox'][name='tableCheckRow']:checked");
         if (checkRow.length > 0) {
+            var options = initTableChooseUtil.setting[tableDivId];
             $.each(checkRow, function (i, item) {
-                var trId = $(item).parent().parent().attr("trcusid");
-                if (typeof (initTableChooseUtil.deleteRowCallback) == "function") {
-                    initTableChooseUtil.deleteRowCallback(trId);
+                var trcusid = $(item).parent().parent().attr("trcusid");
+                if (typeof (options.deleteRowCallback) == "function") {
+                    options.deleteRowCallback(trcusid);
                 }
                 // 移除界面上的信息
                 $(item).parent().parent().remove();
@@ -141,19 +144,39 @@ var initTableChooseUtil = {
     },
 
     /**
+     * 删除所有行
+     *
+     * @param tableDivId 表格外层div的id
+     */
+    deleteAllRow: function (tableDivId) {
+        var trRow = $("#table" + tableDivId + " tr");
+        var options = initTableChooseUtil.setting[tableDivId];
+        $.each(trRow, function (i, item) {
+            var trId = $(item).attr("trcusid");
+            if (typeof (options.deleteRowCallback) == "function") {
+                options.deleteRowCallback(trId);
+            }
+            // 移除界面上的信息
+            $(item).remove();
+        });
+    },
+
+    /**
      * 获取数据
      *
-     * @param id
+     * @param tableDivId 表格外层div的id
      */
-    getDataList: function (id) {
+    getDataList: function (tableDivId) {
         // 获取配置
-        var options = initTableChooseUtil.setting[id];
+        var options = initTableChooseUtil.setting[tableDivId];
         var result = [];
-        var rowTr = $("#table" + id + " tr");
+        var rowTr = $("#table" + tableDivId + " tr");
         $.each(rowTr, function (i, item) {
-            var trId = $(item).attr("trcusid");
-            var rowIndexStr = trId.replace("tr", "");
-            var row = {};
+            var trcusid = $(item).attr("trcusid");
+            var rowIndexStr = trcusid.replace("tr", "");
+            var row = {
+                "trcusid": trcusid
+            };
             $.each(options.cols, function (j, bean) {
                 var tdId = bean.id + rowIndexStr;
                 var value = "";
@@ -174,18 +197,75 @@ var initTableChooseUtil = {
     /**
      * 获取指定表格每一行的rowIndex
      *
-     * @param id
+     * @param tableDivId 表格外层div的id
      */
-    getDataRowIndex: function (id) {
+    getDataRowIndex: function (tableDivId) {
         // 获取配置
         var result = [];
-        var rowTr = $("#table" + id + " tr");
+        var rowTr = $("#table" + tableDivId + " tr");
         $.each(rowTr, function (i, item) {
-            var trId = $(item).attr("trcusid");
-            var rowIndexStr = trId.replace("tr", "");
-            result.push(rowIndexStr);
+            var trcusid = $(item).attr("trcusid");
+            var thisRowKey = trcusid.replace("tr", "");
+            result.push(thisRowKey);
         });
         return result;
     },
+
+    /**
+     * 重置数据
+     *
+     * @param tableDivId 表格外层div的id
+     * @param data 数据集合[]
+     */
+    resetDataList: function (tableDivId, data) {
+        // 清空数据
+        initTableChooseUtil.deleteAllRow(tableDivId);
+        // 获取配置
+        var options = initTableChooseUtil.setting[tableDivId];
+        $.each(data, function (i, item) {
+            var trcusid = initTableChooseUtil.addRow(tableDivId);
+            initTableChooseUtil.setCols(options.cols, item, trcusid);
+        });
+    },
+
+    /**
+     * 重置单条数据
+     *
+     * @param tableDivId 表格外层div的id
+     * @param data 数据对象{}
+     */
+    resetData: function (tableDivId, data) {
+        // 获取配置
+        var options = initTableChooseUtil.setting[tableDivId];
+        var trcusid = initTableChooseUtil.addRow(tableDivId);
+        initTableChooseUtil.setCols(options.cols, data, trcusid);
+        return trcusid;
+    },
+
+    /**
+     * 设置每一列的值
+     *
+     * @param cols 列集合
+     * @param data 数据对象{}
+     * @param trcusid 行id
+     */
+    setCols: function (cols, data, trcusid) {
+        var rowIndexStr = trcusid.replace("tr", "");
+        $.each(cols, function (j, bean) {
+            var value = data[bean.id];
+            var tdId = bean.id + rowIndexStr;
+            var formType = bean.formType;
+            if (formType == 'input') {
+                $("#" + tdId).val(value);
+            } else if (formType == 'chooseInput') {
+                $("#" + tdId).val(value);
+            } else if (formType == 'select') {
+                $("#" + tdId).html(value["html"]);
+                $("#" + tdId).val(value["value"]);
+            } else if (formType == 'detail') {
+                $("#" + tdId).html(value);
+            }
+        });
+    }
 
 }

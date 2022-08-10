@@ -4,8 +4,6 @@ var productionMation = {};
 
 // 根据那一列的值进行变化,默认根据数量
 var showTdByEdit = 'rkNum';
-// 表格的序号
-var rowNum = 1;
 
 // 兼容动态表单
 var layedit, form;
@@ -61,12 +59,12 @@ layui.config({
 			{id: 'taxLastMoney', title: '合计价税', formType: 'input', width: '80', className: 'change-input taxLastMoney', verify: 'required|money'},
 			{id: 'remark', title: '备注', formType: 'input', width: '100'}
 		],
-		deleteRowCallback: function (trId) {
-			allChooseProduct[trId] = undefined;
+		deleteRowCallback: function (trcusid) {
+			delete allChooseProduct[trcusid];
 			// 计算价格
 			calculatedTotalPrice();
 		},
-		addRowCallback: function (rowIndexStr) {
+		addRowCallback: function (trcusid) {
 			// 设置根据某列变化的颜色
 			$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
 		},
@@ -80,26 +78,27 @@ layui.config({
 	// 商品规格加载变化事件
 	form.on('select(selectUnitProperty)', function(data) {
 		var thisRowValue = data.value;
-		var thisRowNum = data.elem.id.replace("unitId", "");//获取当前行
+		var thisRowKey = data.elem.id.replace("mUnitId", "").toString();
 		// 当前当前行选中的商品信息
-		if(!isNull(thisRowValue) && thisRowValue != '请选择') {
-			var product = allChooseProduct["tr" + thisRowNum.toString()];
-			$.each(product.unitList, function(j, bean) {
-				if(thisRowValue == bean.id){//获取规格
-					//获取当前行数量
-					var rkNum = parseInt($("#rkNum" + thisRowNum).val());
-					$("#unitPrice" + thisRowNum).val(bean.estimatePurchasePrice.toFixed(2));//单价
-					$("#amountOfMoney" + thisRowNum).val((rkNum * parseFloat(bean.estimatePurchasePrice)).toFixed(2));//金额
+		if (!isNull(thisRowValue)) {
+			var product = allChooseProduct["tr" + thisRowKey];
+			$.each(product.unitList, function (j, bean) {
+				if (thisRowValue == bean.id) {
+					var rkNum = parseInt($("#rkNum" + thisRowKey).val());
+					// 设置单价和金额
+					$("#unitPrice" + thisRowKey).val(bean.estimatePurchasePrice.toFixed(2));
+					$("#amountOfMoney" + thisRowKey).val((rkNum * parseFloat(bean.estimatePurchasePrice)).toFixed(2));
 					return false;
 				}
 			});
 		} else {
-			$("#unitPrice" + thisRowNum).val("0.00");//重置单价为空
-			$("#amountOfMoney" + thisRowNum).val("0.00");//重置金额为空
+			// 重置单价以及金额为空
+			$("#unitPrice" + thisRowKey).val("0.00");
+			$("#amountOfMoney" + thisRowKey).val("0.00");
 		}
 
 		// 加载库存
-		loadTockByDepotAndMUnit(thisRowNum, "");
+		loadTockByDepotAndMUnit(thisRowKey, "");
 		// 计算价格
 		calculatedTotalPrice();
 	});
@@ -130,48 +129,31 @@ layui.config({
 		return false;
 	});
 
-	function saveData(subType, approvalId){
-		//获取已选商品数据
-		var rowTr = $("#useTable tr");
-		if(rowTr.length == 0) {
-			winui.window.msg('请选择商品.', {icon: 2, time: 2000});
-			return false;
-		}
-		var tableData = new Array();
-		var noError = false; //循环遍历表格数据时，是否有其他错误信息
-		$.each(rowTr, function(i, item) {
+	function saveData(subType, approvalId) {
+		var dataList = initTableChooseUtil.getDataList('productList');
+		var noError = false;
+		var tableData = [];
+		$.each(dataList, function(i, item) {
 			//获取行编号
-			var rowNum = $(item).attr("trcusid").replace("tr", "");
-			//表格数量对象
-			var rkNum = $("#rkNum" + rowNum);
-			if(parseInt(rkNum.val()) == 0) {
-				rkNum.addClass("layui-form-danger");
-				rkNum.focus();
+			var thisRowKey = item["trcusid"].replace("tr", "");
+			if (parseInt(item.rkNum) == 0) {
+				$("#rkNum" + thisRowKey).addClass("layui-form-danger");
+				$("#rkNum" + thisRowKey).focus();
 				winui.window.msg('数量不能为0', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
 			//商品对象
-			var product = allChooseProduct["tr" + rowNum.toString()];
-			if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
+			var product = allChooseProduct["tr" + thisRowKey];
+			if (inTableDataArrayByAssetarId(product.productId, item.mUnitId, tableData)) {
 				winui.window.msg('一张单中不允许出现相同单位的商品信息.', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
-			var row = {
-				materialId: product.productId,
-				mUnitId: $("#unitId" + rowNum).val(),
-				rkNum: rkNum.val(),
-				unitPrice: $("#unitPrice" + rowNum).val(),
-				taxRate: $("#taxRate" + rowNum).val(),
-				taxMoney: $("#taxMoney" + rowNum).val(),
-				taxUnitPrice: $("#taxUnitPrice" + rowNum).val(),
-				taxLastMoney: $("#taxLastMoney" + rowNum).val(),
-				remark: $("#remark" + rowNum).val()
-			};
-			tableData.push(row);
+			item["materialId"] = product.productId;
+			tableData.push(item);
 		});
-		if(noError) {
+		if (noError) {
 			return false;
 		}
 
@@ -200,69 +182,63 @@ layui.config({
 
 	// 供应商选择
 	$("body").on("click", "#supplierNameSel", function (e) {
-		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation){
+		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation) {
 			$("#supplierName").val(supplierMation.supplierName);
 		});
 	});
 
-	//商品选择
+	// 商品选择
 	$("body").on("click", ".chooseProductBtn", function (e) {
 		var trId = $(this).parent().parent().attr("trcusid");
 		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
-			//获取表格行号
-			var thisRowNum = trId.replace("tr", "");
-			//商品赋值
+			// 获取表格行号
+			var thisRowKey = trId.replace("tr", "");
+			// 商品赋值
 			allChooseProduct[trId] = chooseProductMation;
-			//表格商品名称赋值
-			$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
-			//表格单位赋值
-			$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
+			// 表格商品名称赋值
+			$("#materialId" + thisRowKey.toString()).val(chooseProductMation.productName + "(" + chooseProductMation.productModel + ")");
+			// 表格单位赋值
+			$("#mUnitId" + thisRowKey.toString()).html(getDataUseHandlebars(selOption, {rows: chooseProductMation.unitList}));
 			form.render('select');
 			//计算价格
 			calculatedTotalPrice();
 		});
 	});
 
-	//生产计划单选择
+	// 生产计划单选择
 	$("body").on("click", "#productionOrderSel", function (e) {
 		_openNewWindows({
 			url: "../../tpl/erpProduction/erpProductionNoSuccessChoose.html",
 			title: "选择生产计划单",
 			pageId: "erpProductionNoSuccessChoose",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				$("#productionOrder").val(productionMation.defaultNumber);
-				//移除之前填写的所有行
-				var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']");
-				$.each(checkRow, function(i, item) {
-					//删除allChooseProduct已选择的商品信息
-					var trId = $(item).parent().parent().attr("trcusid");
-					allChooseProduct[trId] = undefined;
-					//移除界面上的信息
-					$(item).parent().parent().remove();
+				initTableChooseUtil.deleteAllRow('productList');
+				$.each(productionMation.norms, function(i, item) {
+					var params = {
+						"materialId": item.product.productName + "(" + item.product.productModel + ")",
+						"mUnitId": {
+							"html": getDataUseHandlebars(selOption, {rows: item.product.unitList}),
+							"value": item.normsId
+						},
+						"currentTock": item.currentTock,
+						"rkNum": item.needNum,
+						"unitPrice": item.unitPrice.toFixed(2),
+						"amountOfMoney": item.allPrice.toFixed(2),
+						"taxRate": item.taxRate.toFixed(2),
+						"taxMoney": item.taxMoney.toFixed(2),
+						"taxUnitPrice": item.taxUnitPrice.toFixed(2),
+						"taxLastMoney": item.taxLastMoney.toFixed(2)
+					};
+					var trcusid = initTableChooseUtil.resetData('productList', params);
+					// 将规格所属的商品信息加入到对象中存储
+					allChooseProduct[trcusid] = item.product;
 				});
-				$.each(productionMation.norms, function(i, item){
-					addRow();
-					//将规格所属的商品信息加入到对象中存储
-					allChooseProduct["tr" + (rowNum - 1)] = item.product;
-					//单位回显
-					$("#unitId" + (rowNum - 1)).html(getDataUseHandlebars(selOption, {rows: item.product.unitList}));
-					$("#unitId" + (rowNum - 1)).val(item.normsId);
-					//商品回显
-					$("#materialId" + (rowNum - 1)).val(item.product.productName + "(" + item.product.productModel + ")");
-					$("#currentTock" + (rowNum - 1)).html(item.currentTock);//库存回显
-					$("#rkNum" + (rowNum - 1)).val(item.needNum);
-					$("#unitPrice" + (rowNum - 1)).val(item.unitPrice.toFixed(2));
-					$("#amountOfMoney" + (rowNum - 1)).val(item.allPrice.toFixed(2));
-					$("#taxRate" + (rowNum - 1)).val(item.taxRate.toFixed(2));
-					$("#taxMoney" + (rowNum - 1)).val(item.taxMoney.toFixed(2));
-					$("#taxUnitPrice" + (rowNum - 1)).val(item.taxUnitPrice.toFixed(2));
-					$("#taxLastMoney" + (rowNum - 1)).val(item.taxLastMoney.toFixed(2));
-				});
-				//渲染
+				// 渲染
 				form.render();
 
-				//计算价格
+				// 计算价格
 				calculatedTotalPrice();
 			}});
 	});
