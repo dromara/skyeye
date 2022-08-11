@@ -16,6 +16,8 @@ var initTableChooseUtil = {
                             // verify: 'required|number',
                             // value: '默认值',
                             // valueKey: '回显时要展示数据里面的那个key',
+                            // modelHtml: '当formType=select时，可以设定select的内容',
+                            // colHeaderId: '可以指定所在列的header的id'
                             // layFilter: '可以方便指定监听事件'}
         deleteRowCallback: function () {trcusid}, // 删除行之后的回调函数
         addRowCallback: function (trcusid) {}, // 新增行之后的回调函数
@@ -33,7 +35,7 @@ var initTableChooseUtil = {
             winui.window.msg('id 不能为空', {icon: 2, time: 2000});
             return false;
         }
-        var newOptions = $.extend(true, initTableChooseUtil.options, _options);
+        var newOptions = $.extend(true, {}, initTableChooseUtil.options, _options);
         initTableChooseUtil.setting[_options.id] = newOptions;
         initTableChooseUtil.initTableHtml(newOptions);
         initTableChooseUtil.initEvent(_options.id);
@@ -60,7 +62,8 @@ var initTableChooseUtil = {
         $("#" + newOptions.id).html(table);
         var headerStr = '<th style="width: 30px;"></th>';
         $.each(newOptions.cols, function (i, item) {
-            headerStr += '<th style="width: ' + item.width + 'px; white-space: nowrap;">' + item.title + '</th>';
+            var colHeaderId = isNull(item.colHeaderId) ? "" : ("id = " + item.colHeaderId);
+            headerStr += '<th style="width: ' + item.width + 'px; white-space: nowrap;" ' + colHeaderId + '>' + item.title + '</th>';
         });
         $("#header" + newOptions.id).html(headerStr);
     },
@@ -106,7 +109,8 @@ var initTableChooseUtil = {
                 tbodyStr += '<td><input type="text" class="layui-input ' + className + '" value="' + value + '" id="' + tdId + '" win-verify="' + verify + '" readonly="readonly"/>' +
                     '<i class="fa fa-plus-circle input-icon ' + item.iconClassName + '" style="top: 12px;"></i></td>';
             } else if (item.formType == 'select') {
-                tbodyStr += '<td><select id="' + tdId + '" lay-filter="' + item.layFilter + '" lay-search win-verify="' + verify + '"></select></td>';
+                var modelHtml = isNull(item.modelHtml) ? "" : item.modelHtml;
+                tbodyStr += '<td><select id="' + tdId + '" lay-filter="' + item.layFilter + '" lay-search win-verify="' + verify + '">' + modelHtml + '</select></td>';
             } else if (item.formType == 'detail') {
                 tbodyStr += '<td id="' + tdId + '" class="' + className + '"></td>';
             }
@@ -270,7 +274,9 @@ var initTableChooseUtil = {
             } else if (formType == 'chooseInput') {
                 $("#" + tdId).val(value);
             } else if (formType == 'select') {
-                $("#" + tdId).html(value["html"]);
+                if (!isNull(value["html"])) {
+                    $("#" + tdId).html(value["html"]);
+                }
                 $("#" + tdId).val(value["value"]);
             } else if (formType == 'detail') {
                 $("#" + tdId).html(value);

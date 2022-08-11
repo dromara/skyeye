@@ -247,6 +247,14 @@ layui.define(["jquery"], function(exports) {
 			$("#arrears").html((discountLastMoney - changeAmount).toFixed(2));
 		});
 
+		// 其他费用变化
+		$("body").on("input", ".otherPrice", function() {
+			calculationPrice();
+		});
+		$("body").on("change", ".otherPrice", function() {
+			calculationPrice();
+		});
+
 	})(jQuery);
 });
 
@@ -260,4 +268,15 @@ function inTableDataArrayByAssetarId(materialId, unitId, array) {
 		}
 	});
 	return isIn;
+}
+
+// 计算其他费用总价格
+function calculationPrice(){
+	var allPrice = 0;
+	$.each(initTableChooseUtil.getDataRowIndex('otherPriceTableList'), function(i, item) {
+		// 获取行坐标
+		var thisRowKey = item;
+		allPrice += parseFloat(isNull($("#otherPrice" + thisRowKey).val()) ? 0 : $("#otherPrice" + thisRowKey).val());
+	});
+	$("#otherPriceTotal").html("费用合计：" + allPrice.toFixed(2));
 }

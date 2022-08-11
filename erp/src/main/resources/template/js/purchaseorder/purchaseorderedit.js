@@ -142,7 +142,7 @@ layui.config({
 	}
 
 	// 商品规格加载变化事件
-	mUnitChangeEvent(form);
+	mUnitChangeEvent(form, allChooseProduct);
 
 	// 保存为草稿
 	form.on('submit(formEditBean)', function(data) {

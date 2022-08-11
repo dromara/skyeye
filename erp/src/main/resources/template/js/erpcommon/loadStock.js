@@ -79,7 +79,7 @@ function getStockAjaxByDepotAndNormsId(normsIds, depotId, callBack) {
  *
  * @param form 表单对象
  */
-function mUnitChangeEvent(form) {
+function mUnitChangeEvent(form, allChooseProduct) {
     // 商品规格加载变化事件
     form.on('select(selectUnitProperty)', function(data) {
         var thisRowValue = data.value;
@@ -116,6 +116,7 @@ function mUnitChangeEvent(form) {
  * @param callback 回调函数
  */
 function initChooseProductBtnEnent (form, callback) {
+    var selOptionHtml = getFileContent('tpl/template/select-option.tpl');
     $("body").on("click", ".chooseProductBtn", function (e) {
         var trId = $(this).parent().parent().attr("trcusid");
         erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
@@ -124,7 +125,7 @@ function initChooseProductBtnEnent (form, callback) {
             // 表格商品名称赋值
             $("#materialId" + thisRowKey.toString()).val(chooseProductMation.productName + "(" + chooseProductMation.productModel + ")");
             // 表格单位赋值
-            $("#mUnitId" + thisRowKey.toString()).html(getDataUseHandlebars(selOption, {rows: chooseProductMation.unitList}));
+            $("#mUnitId" + thisRowKey.toString()).html(getDataUseHandlebars(selOptionHtml, {rows: chooseProductMation.unitList}));
             form.render('select');
             if (typeof callback == "function") {
                 callback(trId, chooseProductMation);

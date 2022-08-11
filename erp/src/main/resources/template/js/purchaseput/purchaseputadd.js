@@ -22,7 +22,6 @@ layui.config({
 
 	var inoutitemHtml = "";//支出项目
 
-	var otherTemplate = $("#otherTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	//已经选择的商品集合key：表格的行trId，value：商品信息
 	var allChooseProduct = {};
@@ -53,6 +52,7 @@ layui.config({
 		$("#depotId").html(getDataUseHandlebars(selOption, json));
 	});
 
+	// 商品
 	initTableChooseUtil.initTable({
 		id: "productList",
 		cols: [
@@ -81,13 +81,29 @@ layui.config({
 		minData: 1
 	});
 
+	// 其他费用
+	initTableChooseUtil.initTable({
+		id: "otherPriceTableList",
+		cols: [
+			{id: 'inoutitemId', title: '支出项目', formType: 'select', width: '120', verify: 'required', modelHtml: inoutitemHtml},
+			{id: 'otherPrice', title: '费用合计：0.00', formType: 'input', width: '120', className: 'otherPrice', verify: 'required|money', colHeaderId: 'otherPriceTotal'}
+		],
+		deleteRowCallback: function (trcusid) {
+			calculationPrice();
+		},
+		addRowCallback: function (trcusid) {
+			calculationPrice();
+		},
+		form: form
+	});
+
 	// 加载动态表单
 	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsPurchase"]["code"], null);
 
 	matchingLanguage();
 
 	// 商品规格加载变化事件
-	mUnitChangeEvent(form);
+	mUnitChangeEvent(form, allChooseProduct);
 
 	// 仓库变化事件
 	form.on('select(depotId)', function(data) {
@@ -152,19 +168,11 @@ layui.config({
 			return false;
 		}
 
-		//获取其他费用
-		var rowPriceTr = $("#otherPriceTable tr");
-		var tablePriceData = new Array();
+		// 其他费用
+		var otherPriceResult = initTableChooseUtil.getDataList('otherPriceTableList');
 		var otherMoney = 0;
-		$.each(rowPriceTr, function(i, item) {
-			//获取行编号
-			var rowNum = $(item).attr("trcusid").replace("tr", "");
-			var row = {
-				inoutitemId: $("#inoutitemId" + rowNum).val(),
-				otherPrice: $("#otherPrice" + rowNum).val()
-			};
-			otherMoney += parseFloat(isNull($("#otherPrice" + rowNum).val()) ? 0 : $("#otherPrice" + rowNum).val());
-			tablePriceData.push(row);
+		$.each(otherPriceResult.dataList, function(i, item) {
+			otherMoney += parseFloat(isNull(item.otherPrice) ? 0 : item.otherPrice);
 		});
 
 		var params = {
@@ -178,7 +186,7 @@ layui.config({
 			changeAmount: isNull($("#changeAmount").val()) ? "0.00" : $("#changeAmount").val(),
 			depotheadStr: JSON.stringify(tableData),
 			otherMoney: otherMoney.toFixed(2),
-			otherMoneyList: JSON.stringify(tablePriceData),
+			otherMoneyList: JSON.stringify(otherPriceResult.dataList),
 			submitType: submitType,
 			subType: subType,
 			approvalId: approvalId
@@ -190,7 +198,6 @@ layui.config({
 		}});
 	}
 
-/*********************** 商品表格操作 start ****************************/
 	// 供应商选择
 	$("body").on("click", "#supplierNameSel", function (e) {
 		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation){
@@ -198,79 +205,11 @@ layui.config({
 		});
 	});
 
+	// 加载选品选择事件
 	initChooseProductBtnEnent(form, function(trId, chooseProductMation) {
 		// 商品赋值
 		allChooseProduct[trId] = chooseProductMation;
 	});
-/*********************** 商品表格操作 end ****************************/
-
-/*********************** 其他费用表格操作 start ****************************/
-
-	//其他费用变化
-	$("body").on("input", ".otherPrice", function() {
-		//计算价格
-		calculationPrice();
-	});
-	$("body").on("change", ".otherPrice", function() {
-		//计算价格
-		calculationPrice();
-	});
-
-	//计算其他费用总价格
-	function calculationPrice(){
-		var rowTr = $("#otherPriceTable tr");
-		var allPrice = 0;
-		$.each(rowTr, function(i, item) {
-			//获取行坐标
-			var rowNum = $(item).attr("trcusid").replace("tr", "");
-			//获取
-			var otherPrice = parseFloat(isNull($("#otherPrice" + rowNum).val()) ? 0 : $("#otherPrice" + rowNum).val());
-			allPrice += otherPrice;
-		});
-		$("#otherPriceTotal").html("费用合计：" + allPrice.toFixed(2));
-	}
-
-	var priceNum = 1;
-	//新增行
-	$("body").on("click", "#addPriceRow", function() {
-		addPriceRow();
-	});
-
-	//删除行
-	$("body").on("click", "#deletePriceRow", function() {
-		deletePriceRow();
-	});
-
-	//新增行
-	function addPriceRow() {
-		var par = {
-			id: "row" + priceNum.toString(), //checkbox的id
-			trId: "tr" + priceNum.toString(), //行的id
-			inoutitemId: "inoutitemId" + priceNum.toString(), //支出项目id
-			otherPrice: "otherPrice" + priceNum.toString() //金额id
-		};
-		$("#otherPriceTable").append(getDataUseHandlebars(otherTemplate, par));
-		//赋值给支出项目
-		$("#" + "inoutitemId" + priceNum.toString()).html(inoutitemHtml);
-		form.render('select');
-		form.render('checkbox');
-		priceNum++;
-	}
-
-	//删除行
-	function deletePriceRow() {
-		var checkRow = $("#otherPriceTable input[type='checkbox'][name='tableCheckRow']:checked");
-		if(checkRow.length > 0) {
-			$.each(checkRow, function(i, item) {
-				$(item).parent().parent().remove();
-			});
-		} else {
-			winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
-		}
-		//计算价格
-		calculationPrice();
-	}
-/*********************** 其他费用表格操作 end ****************************/
 
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);
