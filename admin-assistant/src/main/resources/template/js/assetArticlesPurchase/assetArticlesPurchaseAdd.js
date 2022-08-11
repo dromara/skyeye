@@ -96,7 +96,7 @@ layui.config({
 		return false;
 	});
 
-	function saveData(subType, approvalId){
+	function saveData(subType, approvalId) {
 		// 获取已选用品数据
 		var rowTr = $("#purchaseTable tr");
 		if(rowTr.length == 0) {

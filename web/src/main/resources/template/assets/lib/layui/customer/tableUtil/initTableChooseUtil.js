@@ -20,6 +20,7 @@ var initTableChooseUtil = {
         deleteRowCallback: function () {trcusid}, // 删除行之后的回调函数
         addRowCallback: function (trcusid) {}, // 新增行之后的回调函数
         form: null, // form表单对象
+        minData: 0, // 允许的最小数据数
     }, // 表格参数数据
 
     /**
@@ -169,7 +170,7 @@ var initTableChooseUtil = {
     getDataList: function (tableDivId) {
         // 获取配置
         var options = initTableChooseUtil.setting[tableDivId];
-        var result = [];
+        var dataList = [];
         var rowTr = $("#table" + tableDivId + " tr");
         $.each(rowTr, function (i, item) {
             var trcusid = $(item).attr("trcusid");
@@ -189,9 +190,18 @@ var initTableChooseUtil = {
                 }
                 row[bean.id] = value;
             });
-            result.push(row);
+            dataList.push(row);
         });
-        return result;
+        var checkResult = true;
+        if (dataList.length < options.minData) {
+            checkResult = false;
+            winui.window.msg('请最少填写' + options.minData + '条信息', {icon: 2, time: 2000});
+        }
+
+        return {
+            checkResult: checkResult,
+            dataList: dataList
+        };
     },
 
     /**

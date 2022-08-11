@@ -197,7 +197,7 @@ layui.config({
 		return false;
 	});
 
-	function saveData(subType, approvalId){
+	function saveData(subType, approvalId) {
 		var rowTr = $("#useTable tr");
 		var tableData = new Array();
 		$.each(rowTr, function(i, item) {

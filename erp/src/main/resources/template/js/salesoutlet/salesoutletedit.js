@@ -206,7 +206,7 @@ layui.config({
 		return false;
 	});
 
-	function saveData(subType, approvalId){
+	function saveData(subType, approvalId) {
 		if(isNull(customerMation.id)){
 			winui.window.msg('请选择客户.', {icon: 2, time: 2000});
 			return false;

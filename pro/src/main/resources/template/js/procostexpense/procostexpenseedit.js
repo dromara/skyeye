@@ -106,7 +106,7 @@ layui.config({
 		return false;
 	});
 
-	function saveData(subType, approvalId){
+	function saveData(subType, approvalId) {
 		// 获取数据
 		var rowTr = $("#useTable tr");
 		var tableData = new Array();

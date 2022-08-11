@@ -76,7 +76,7 @@ layui.config({
         return false;
     });
 
-    function saveData(subType, approvalId){
+    function saveData(subType, approvalId) {
         if(isNull(organizationUtil.getCompanyMation(dtree)['nodeId'])){
             winui.window.msg('请选择企业', {icon: 2, time: 2000});
             return false;

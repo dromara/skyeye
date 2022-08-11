@@ -81,7 +81,7 @@ layui.config({
         return false;
     });
 
-    function saveData(subType, approvalId){
+    function saveData(subType, approvalId) {
         // 获取出差日期数据
         var rowTr = $("#beanTable tr");
         if(rowTr.length == 0) {

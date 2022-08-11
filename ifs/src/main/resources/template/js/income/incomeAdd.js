@@ -66,7 +66,7 @@ layui.config({
         return false;
     });
 
-    function saveData(subType, approvalId){
+    function saveData(subType, approvalId) {
         var result = voucherUtil.getData();
         if(result.length < 2){
             return false;

@@ -130,10 +130,13 @@ layui.config({
 	});
 
 	function saveData(subType, approvalId) {
-		var dataList = initTableChooseUtil.getDataList('productList');
+		var result = initTableChooseUtil.getDataList('productList');
+		if (!result.checkResult) {
+			return false;
+		}
 		var noError = false;
 		var tableData = [];
-		$.each(dataList, function(i, item) {
+		$.each(result.dataList, function(i, item) {
 			//获取行编号
 			var thisRowKey = item["trcusid"].replace("tr", "");
 			if (parseInt(item.rkNum) == 0) {

@@ -86,7 +86,7 @@ layui.config({
 		return false;
 	});
 
-	function saveData(subType, approvalId){
+	function saveData(subType, approvalId) {
 		var params = {
 			taskName: $("#taskName").val(),
 			taskType: $("#taskType").val(),
