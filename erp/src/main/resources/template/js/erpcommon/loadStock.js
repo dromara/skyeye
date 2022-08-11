@@ -73,3 +73,65 @@ function getStockAjaxByDepotAndNormsId(normsIds, depotId, callBack) {
         }
     }});
 }
+
+/**
+ * 商品规格加载变化事件
+ *
+ * @param form 表单对象
+ */
+function mUnitChangeEvent(form) {
+    // 商品规格加载变化事件
+    form.on('select(selectUnitProperty)', function(data) {
+        var thisRowValue = data.value;
+        var thisRowKey = data.elem.id.replace("mUnitId", "").toString();
+        // 当前当前行选中的商品信息
+        if (!isNull(thisRowValue)) {
+            var product = allChooseProduct["tr" + thisRowKey];
+            $.each(product.unitList, function (j, bean) {
+                if (thisRowValue == bean.id) {
+                    var rkNum = parseInt($("#rkNum" + thisRowKey).val());
+                    // 设置单价和金额
+                    $("#unitPrice" + thisRowKey).val(bean.estimatePurchasePrice.toFixed(2));
+                    $("#amountOfMoney" + thisRowKey).val((rkNum * parseFloat(bean.estimatePurchasePrice)).toFixed(2));
+                    return false;
+                }
+            });
+        } else {
+            // 重置单价以及金额为空
+            $("#unitPrice" + thisRowKey).val("0.00");
+            $("#amountOfMoney" + thisRowKey).val("0.00");
+        }
+        var depotId = isNull($("#depotId").val()) ? "" : $("#depotId").val();
+        // 加载库存
+        loadTockByDepotAndMUnit(thisRowKey, depotId);
+        // 计算价格
+        calculatedTotalPrice();
+    });
+}
+
+/**
+ * 初始化商品选择的监听事件
+ *
+ * @param form 表单对象
+ * @param callback 回调函数
+ */
+function initChooseProductBtnEnent (form, callback) {
+    $("body").on("click", ".chooseProductBtn", function (e) {
+        var trId = $(this).parent().parent().attr("trcusid");
+        erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
+            // 获取表格行号
+            var thisRowKey = trId.replace("tr", "");
+            // 表格商品名称赋值
+            $("#materialId" + thisRowKey.toString()).val(chooseProductMation.productName + "(" + chooseProductMation.productModel + ")");
+            // 表格单位赋值
+            $("#mUnitId" + thisRowKey.toString()).html(getDataUseHandlebars(selOption, {rows: chooseProductMation.unitList}));
+            form.render('select');
+            if (typeof callback == "function") {
+                callback(trId, chooseProductMation);
+            }
+            // 计算价格
+            calculatedTotalPrice();
+        });
+    });
+}
+

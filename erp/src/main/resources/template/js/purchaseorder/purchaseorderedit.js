@@ -136,37 +136,13 @@ layui.config({
 				// 设置根据某列变化的颜色
 				$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
 			},
-			form: form
+			form: form,
+			minData: 1
 		});
 	}
 
-	//商品规格加载变化事件
-	form.on('select(selectUnitProperty)', function(data) {
-		var thisRowValue = data.value;
-		var thisRowKey = data.elem.id.replace("mUnitId", "").toString();
-		// 当前当前行选中的商品信息
-		if (!isNull(thisRowValue)) {
-			var product = allChooseProduct["tr" + thisRowKey];
-			$.each(product.unitList, function (j, bean) {
-				if (thisRowValue == bean.id) {
-					var rkNum = parseInt($("#rkNum" + thisRowKey).val());
-					// 设置单价和金额
-					$("#unitPrice" + thisRowKey).val(bean.estimatePurchasePrice.toFixed(2));
-					$("#amountOfMoney" + thisRowKey).val((rkNum * parseFloat(bean.estimatePurchasePrice)).toFixed(2));
-					return false;
-				}
-			});
-		} else {
-			// 重置单价以及金额为空
-			$("#unitPrice" + thisRowKey).val("0.00");
-			$("#amountOfMoney" + thisRowKey).val("0.00");
-		}
-
-		// 加载库存
-		loadTockByDepotAndMUnit(thisRowKey, "");
-		// 计算价格
-		calculatedTotalPrice();
-	});
+	// 商品规格加载变化事件
+	mUnitChangeEvent(form);
 
 	// 保存为草稿
 	form.on('submit(formEditBean)', function(data) {
@@ -264,22 +240,9 @@ layui.config({
 		});
 	});
 
-	// 商品选择
-	$("body").on("click", ".chooseProductBtn", function (e) {
-		var trId = $(this).parent().parent().attr("trcusid");
-		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
-			// 获取表格行号
-			var thisRowKey = trId.replace("tr", "");
-			// 商品赋值
-			allChooseProduct[trId] = chooseProductMation;
-			// 表格商品名称赋值
-			$("#materialId" + thisRowKey.toString()).val(chooseProductMation.productName + "(" + chooseProductMation.productModel + ")");
-			// 表格单位赋值
-			$("#mUnitId" + thisRowKey.toString()).html(getDataUseHandlebars(selOption, {rows: chooseProductMation.unitList}));
-			form.render('select');
-			//计算价格
-			calculatedTotalPrice();
-		});
+	initChooseProductBtnEnent(form, function(trId, chooseProductMation) {
+		// 商品赋值
+		allChooseProduct[trId] = chooseProductMation;
 	});
 
 	// 生产计划单选择

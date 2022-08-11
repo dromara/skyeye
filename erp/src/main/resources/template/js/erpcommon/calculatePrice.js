@@ -165,7 +165,7 @@ function calculatedTotalPrice() {
 layui.define(["jquery"], function(exports) {
 	var jQuery = layui.jquery;
 	(function($) {
-		//数量变化,税率变化
+		// 数量变化,税率变化
 		$("body").on("input", ".rkNum, .unitPrice, .amountOfMoney, .taxRate, .taxMoney, .taxUnitPrice, .taxLastMoney", function() {
 			if($(this).attr("class").replace("layui-input change-input ", "") != showTdByEdit){
 				showTdByEdit = $(this).attr("class").replace("layui-input change-input ", "");
@@ -183,7 +183,7 @@ layui.define(["jquery"], function(exports) {
 			calculatedTotalPrice();
 		});
 		
-		//优惠率变化
+		// 优惠率变化
 		$("body").on("input", "#discount", function() {
 			//获取价格合计
 			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
@@ -207,7 +207,7 @@ layui.define(["jquery"], function(exports) {
 			$("#changeAmount").val((taxLastMoneyPrice - (taxLastMoneyPrice * discount / 100)).toFixed(2));
 		});
 		
-		//优惠金额变化
+		// 优惠金额变化
 		$("body").on("input", "#discountMoney", function() {
 			//获取价格合计
 			var taxLastMoneyPrice = parseFloat(isNull($("#taxLastMoneyPrice").html()) ? 0 : $("#taxLastMoneyPrice").html());
@@ -231,7 +231,7 @@ layui.define(["jquery"], function(exports) {
 			$("#changeAmount").val((taxLastMoneyPrice - discountMoney).toFixed(2));
 		});
 		
-		//本次付款变化
+		// 本次付款变化
 		$("body").on("input", "#changeAmount", function() {
 			//获取优惠后的金额
 			var discountLastMoney = parseFloat(isNull($("#discountLastMoney").html()) ? 0 : $("#discountLastMoney").html());
@@ -246,10 +246,11 @@ layui.define(["jquery"], function(exports) {
 			//输出欠款金额
 			$("#arrears").html((discountLastMoney - changeAmount).toFixed(2));
 		});
+
 	})(jQuery);
 });
 
-//判断选中的商品是否也在数组中
+// 判断选中的商品是否也在数组中
 function inTableDataArrayByAssetarId(materialId, unitId, array) {
 	var isIn = false;
 	$.each(array, function(i, item) {

@@ -1,8 +1,6 @@
 
-//根据那一列的值进行变化,默认根据数量
+// 根据那一列的值进行变化,默认根据数量
 var showTdByEdit = 'rkNum';
-//表格的序号
-var rowNum = 1;
 
 // 兼容动态表单
 var layedit, form;
@@ -24,8 +22,7 @@ layui.config({
 
 	var inoutitemHtml = "";//支出项目
 
-	var usetableTemplate = $("#usetableTemplate").html(),
-		otherTemplate = $("#otherTemplate").html();
+	var otherTemplate = $("#otherTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 	//已经选择的商品集合key：表格的行trId，value：商品信息
 	var allChooseProduct = {};
@@ -54,38 +51,43 @@ layui.config({
 	erpOrderUtil.getDepotList(function (json){
 		// 加载仓库数据
 		$("#depotId").html(getDataUseHandlebars(selOption, json));
-		// 初始化一行数据
-		addRow();
+	});
+
+	initTableChooseUtil.initTable({
+		id: "productList",
+		cols: [
+			{id: 'materialId', title: '商品(型号)', formType: 'chooseInput', width: '150', iconClassName: 'chooseProductBtn', verify: 'required'},
+			{id: 'mUnitId', title: '单位', formType: 'select', width: '50', verify: 'required', layFilter: 'selectUnitProperty'},
+			{id: 'currentTock', title: '库存', formType: 'detail', width: '80'},
+			{id: 'rkNum', title: '数量', formType: 'input', width: '80', className: 'change-input rkNum', verify: 'required|number', value: '1'},
+			{id: 'unitPrice', title: '单价', formType: 'input', width: '80', className: 'change-input unitPrice', verify: 'required|money'},
+			{id: 'amountOfMoney', title: '金额', formType: 'input', width: '80', className: 'change-input amountOfMoney', verify: 'required|money'},
+			{id: 'taxRate', title: '税率(%)', formType: 'input', width: '80', className: 'change-input taxRate', verify: 'required|double', value: '0.00'},
+			{id: 'taxMoney', title: '税额', formType: 'input', width: '80', className: 'change-input taxMoney', verify: 'required|money'},
+			{id: 'taxUnitPrice', title: '含税单价', formType: 'input', width: '80', className: 'change-input taxUnitPrice', verify: 'required|money'},
+			{id: 'taxLastMoney', title: '合计价税', formType: 'input', width: '80', className: 'change-input taxLastMoney', verify: 'required|money'},
+			{id: 'remark', title: '备注', formType: 'input', width: '100'}
+		],
+		deleteRowCallback: function (trcusid) {
+			delete allChooseProduct[trcusid];
+			// 计算价格
+			calculatedTotalPrice();
+		},
+		addRowCallback: function (trcusid) {
+			// 设置根据某列变化的颜色
+			$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
+		},
+		form: form,
+		minData: 1
 	});
 
 	// 加载动态表单
 	dsFormUtil.loadPageByCode("dsFormShow", sysDsFormWithCodeType["putIsPurchase"]["code"], null);
 
 	matchingLanguage();
-	//商品规格加载变化事件
-	form.on('select(selectUnitProperty)', function(data) {
-		var thisRowValue = data.value;
-		var thisRowNum = data.elem.id.replace("unitId", "");//获取当前行
-		//当前当前行选中的商品信息
-		if(!isNull(thisRowValue) && thisRowValue != '请选择') {
-			var product = allChooseProduct["tr" + thisRowNum.toString()];
-			$.each(product.unitList, function(j, bean) {
-				if(thisRowValue == bean.id){//获取规格
-					//获取当前行数量
-					var rkNum = parseInt($("#rkNum" + thisRowNum).val());
-					$("#unitPrice" + thisRowNum).val(bean.estimatePurchasePrice.toFixed(2));//单价
-					return false;
-				}
-			});
-		} else {
-			$("#unitPrice" + thisRowNum).val("0.00");//重置单价为空
-		}
 
-		//加载库存
-		loadTockByDepotAndMUnit(thisRowNum, $("#depotId").val());
-		//计算价格
-		calculatedTotalPrice();
-	});
+	// 商品规格加载变化事件
+	mUnitChangeEvent(form);
 
 	// 仓库变化事件
 	form.on('select(depotId)', function(data) {
@@ -119,50 +121,37 @@ layui.config({
 	});
 
 	function saveData(subType, approvalId) {
-		//获取已选商品数据
-		var rowTr = $("#useTable tr");
-		if(rowTr.length == 0) {
-			winui.window.msg('请选择商品.', {icon: 2, time: 2000});
+		var result = initTableChooseUtil.getDataList('productList');
+		if (!result.checkResult) {
 			return false;
 		}
-		var tableData = new Array();
-		var noError = false; //循环遍历表格数据时，是否有其他错误信息
-		$.each(rowTr, function(i, item) {
+		var noError = false;
+		var tableData = [];
+		$.each(result.dataList, function(i, item) {
 			//获取行编号
-			var rowNum = $(item).attr("trcusid").replace("tr", "");
-			//表格数量对象
-			var rkNum = $("#rkNum" + rowNum);
-			if(parseInt(rkNum.val()) == 0) {
-				rkNum.addClass("layui-form-danger");
-				rkNum.focus();
+			var thisRowKey = item["trcusid"].replace("tr", "");
+			if (parseInt(item.rkNum) == 0) {
+				$("#rkNum" + thisRowKey).addClass("layui-form-danger");
+				$("#rkNum" + thisRowKey).focus();
 				winui.window.msg('数量不能为0', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
 			//商品对象
-			var product = allChooseProduct["tr" + rowNum.toString()];
-			if(inTableDataArrayByAssetarId(product.productId, $("#unitId" + rowNum).val(), tableData)) {
+			var product = allChooseProduct["tr" + thisRowKey];
+			if (inTableDataArrayByAssetarId(product.productId, item.mUnitId, tableData)) {
 				winui.window.msg('一张单中不允许出现相同单位的商品信息.', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
-			var row = {
-				depotId: $("#depotId").val(),
-				materialId: $("#materialId" + rowNum).val(),
-				mUnitId: $("#unitId" + rowNum).val(),
-				rkNum: rkNum.val(),
-				unitPrice: $("#unitPrice" + rowNum).val(),
-				taxRate: $("#taxRate" + rowNum).val(),
-				taxMoney: $("#taxMoney" + rowNum).val(),
-				taxUnitPrice: $("#taxUnitPrice" + rowNum).val(),
-				taxLastMoney: $("#taxLastMoney" + rowNum).val(),
-				remark: $("#remark" + rowNum).val()
-			};
-			tableData.push(row);
+			item["materialId"] = product.productId;
+			item["depotId"] = $("#depotId").val();
+			tableData.push(item);
 		});
-		if(noError) {
+		if (noError) {
 			return false;
 		}
+
 		//获取其他费用
 		var rowPriceTr = $("#otherPriceTable tr");
 		var tablePriceData = new Array();
@@ -202,58 +191,6 @@ layui.config({
 	}
 
 /*********************** 商品表格操作 start ****************************/
-	//新增行
-	$("body").on("click", "#addRow", function() {
-		addRow();
-	});
-
-	//删除行
-	$("body").on("click", "#deleteRow", function() {
-		deleteRow();
-		//计算价格
-		calculatedTotalPrice();
-	});
-
-	//新增行
-	function addRow() {
-		var par = {
-			id: "row" + rowNum.toString(), //checkbox的id
-			trId: "tr" + rowNum.toString(), //行的id
-			materialId: "materialId" + rowNum.toString(), //商品id
-			unitId: "unitId" + rowNum.toString(), //规格id
-			currentTock: "currentTock" + rowNum.toString(), //库存id
-			rkNum: "rkNum" + rowNum.toString(), //数量id
-			unitPrice: "unitPrice"  + rowNum.toString(), //单价id
-			amountOfMoney: "amountOfMoney"  + rowNum.toString(), //金额id
-			taxRate: "taxRate"  + rowNum.toString(), //税率id
-			taxMoney: "taxMoney"  + rowNum.toString(), //税额id
-			taxUnitPrice: "taxUnitPrice"  + rowNum.toString(), //含税单价id
-			taxLastMoney: "taxLastMoney"  + rowNum.toString(), //含税合计id
-			remark: "remark" + rowNum.toString() //备注id
-		};
-		$("#useTable").append(getDataUseHandlebars(usetableTemplate, par));
-		form.render();
-		rowNum++;
-		//设置根据某列变化的颜色
-		$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
-	}
-
-	//删除行
-	function deleteRow() {
-		var checkRow = $("#useTable input[type='checkbox'][name='tableCheckRow']:checked");
-		if(checkRow.length > 0) {
-			$.each(checkRow, function(i, item) {
-				//删除allChooseProduct已选择的商品信息
-				var trId = $(item).parent().parent().attr("trcusid");
-				allChooseProduct[trId] = undefined;
-				//移除界面上的信息
-				$(item).parent().parent().remove();
-			});
-		} else {
-			winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
-		}
-	}
-
 	// 供应商选择
 	$("body").on("click", "#supplierNameSel", function (e) {
 		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation){
@@ -261,22 +198,9 @@ layui.config({
 		});
 	});
 
-	//商品选择
-	$("body").on("click", ".chooseProductBtn", function (e) {
-		var trId = $(this).parent().parent().attr("trcusid");
-		erpOrderUtil.openMaterialChooseChoosePage(function (chooseProductMation) {
-			//获取表格行号
-			var thisRowNum = trId.replace("tr", "");
-			//商品赋值
-			allChooseProduct[trId] = chooseProductMation;
-			//表格商品名称赋值
-			$("#materialId" + thisRowNum.toString()).val(allChooseProduct[trId].productName + "(" + allChooseProduct[trId].productModel + ")");
-			//表格单位赋值
-			$("#unitId" + thisRowNum.toString()).html(getDataUseHandlebars(selOption, {rows: allChooseProduct[trId].unitList}));
-			form.render('select');
-			//计算价格
-			calculatedTotalPrice();
-		});
+	initChooseProductBtnEnent(form, function(trId, chooseProductMation) {
+		// 商品赋值
+		allChooseProduct[trId] = chooseProductMation;
 	});
 /*********************** 商品表格操作 end ****************************/
 
