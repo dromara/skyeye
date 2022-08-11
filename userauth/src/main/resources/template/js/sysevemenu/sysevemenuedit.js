@@ -80,6 +80,7 @@ layui.config({
 					url: reqBasePath + "querySysEveWinList",
 					params: {},
 					pagination: false,
+					method: "GET",
 					template: selOption,
 					ajaxSendLoadBefore: function(hdb) {},
 					ajaxSendAfter: function(j) {

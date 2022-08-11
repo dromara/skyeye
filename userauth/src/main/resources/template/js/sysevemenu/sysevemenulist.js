@@ -124,15 +124,12 @@ layui.config({
 	/********* tree 处理   start *************/
 	var tree = fsTree.render({
 		id: "treeDemo",
-		funcNo: funcNo,
 		url: reqBasePath + "querySysEveWinList",
 		clickCallback: onClickTree,
 		onDblClick: onClickTree
-	}, function(id){
+	}, function(id) {
 		initLoadTable();
 	});
-	// 绑定按钮事件
-	fsCommon.buttonEvent("tree", getTree);
 
 	//异步加载的方法
 	function onClickTree(event, treeId, treeNode) {
