@@ -1,7 +1,4 @@
 
-var companyId = "";
-var departmentId = "";
-var jobId = "";
 var rowId = "";
 
 var staffId = "";
