@@ -80,11 +80,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where: {orderNum: $("#orderNum").val(), state: $("#state").val(), contacts: $("#contacts").val(), receiver: $("#receiver").val()}});
+    	table.reloadData("messageTable", {where: {orderNum: $("#orderNum").val(), state: $("#state").val(), contacts: $("#contacts").val(), receiver: $("#receiver").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), state: $("#state").val(), contacts: $("#contacts").val(), receiver: $("#receiver").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), state: $("#state").val(), contacts: $("#contacts").val(), receiver: $("#receiver").val()}});
     }
 
 	//编辑

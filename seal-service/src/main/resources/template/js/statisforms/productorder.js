@@ -94,7 +94,7 @@ layui.config({
     		startTime = $("#timeRange").val().split('~')[0].trim();
     		endTime = $("#timeRange").val().split('~')[1].trim();
     	}
-    	table.reload("messageTable", {page: {curr: 1}, where: {productName: $("#productName").val(), startTime: startTime, endTime: endTime}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {productName: $("#productName").val(), startTime: startTime, endTime: endTime}});
     }
     
     $("body").on("click", ".plan-type-btn", function (e) {

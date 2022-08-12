@@ -241,7 +241,7 @@ layui.config({
 
     //上线时间搜索条件
     function loadTable(){
-    	table.reload("messageTable", {where: getTableParams()});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
 
     function getTableParams(){

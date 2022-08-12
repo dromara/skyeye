@@ -79,11 +79,11 @@ layui.config({
     });
 
     function loadTable(){
-    	table.reload("messageTable", {where: {rowId: rowId}});
+    	table.reloadData("messageTable", {where: {rowId: rowId}});
     }
 
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: {rowId: rowId}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {rowId: rowId}});
     }
 
     exports('proprojectdiscusslist', {});

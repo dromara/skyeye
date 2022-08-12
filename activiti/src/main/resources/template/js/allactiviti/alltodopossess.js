@@ -86,7 +86,7 @@ layui.config({
 	});
 	
     function reloadAllConductTable(){
-    	table.reload("messageAllConductTable", {where:{}});
+    	table.reloadData("messageAllConductTable", {where:{}});
     }
     
     exports('alltodopossess', {});

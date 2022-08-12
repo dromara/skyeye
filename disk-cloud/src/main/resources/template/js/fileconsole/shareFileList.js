@@ -66,7 +66,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{reqBasePath: reqBasePath}});
+    	table.reloadData("messageTable", {where:{reqBasePath: reqBasePath}});
     }
     
     exports('shareFileListPage', {});

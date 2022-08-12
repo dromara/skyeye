@@ -130,7 +130,7 @@ layui.config({
 
     // 搜索表单
     $("body").on("click", "#formSearch", function() {
-        table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+        table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     });
 
 	// 刷新数据
@@ -139,7 +139,7 @@ layui.config({
     });
 
     function loadTable(){
-        table.reload("messageTable", {where: getTableParams()});
+        table.reloadData("messageTable", {where: getTableParams()});
     }
 
     function getTableParams(){

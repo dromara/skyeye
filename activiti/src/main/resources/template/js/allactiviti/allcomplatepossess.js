@@ -52,7 +52,7 @@ layui.config({
 	});
 	
     function reloadAllComplateTable(){
-    	table.reload("messageAllComplateTable", {where:{}});
+    	table.reloadData("messageAllComplateTable", {where:{}});
     }
     
     exports('allcomplatepossess', {});

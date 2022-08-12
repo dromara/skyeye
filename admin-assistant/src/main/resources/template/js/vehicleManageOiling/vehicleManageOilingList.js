@@ -120,7 +120,7 @@ layui.config({
 	
 	// 搜索表单
 	$("body").on("click", "#oilingformSearch", function() {
-    	table.reload("oilingTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("oilingTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
     $("body").on("click", "#reloadOilingTable", function() {
@@ -128,7 +128,7 @@ layui.config({
     });
     
     function loadOilingTable(){
-    	table.reload("oilingTable", {where: getTableParams()});
+    	table.reloadData("oilingTable", {where: getTableParams()});
     }
     
     function getTableParams(){

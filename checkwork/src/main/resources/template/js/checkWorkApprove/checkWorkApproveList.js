@@ -141,7 +141,7 @@ layui.config({
 	
 	// 搜索员工考勤申诉审批
 	$("body").on("click", "#searchForm2", function() {
-    	table.reload("myGetTable", {page: {curr: 1}, where: getTablePatams()});
+    	table.reloadData("myGetTable", {page: {curr: 1}, where: getTablePatams()});
 	});
     
     // 刷新员工考勤申诉审批
@@ -150,7 +150,7 @@ layui.config({
     });
     
     function reloadMyGetTable(){
-    	table.reload("myGetTable", {where: getTablePatams()});
+    	table.reloadData("myGetTable", {where: getTablePatams()});
     }
     
     function getTablePatams(){

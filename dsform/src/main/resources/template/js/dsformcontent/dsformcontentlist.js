@@ -152,11 +152,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{contentName:$("#contentName").val()}});
+    	table.reloadData("messageTable", {where:{contentName:$("#contentName").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{contentName:$("#contentName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{contentName:$("#contentName").val()}});
     }
     
     exports('dsformcontentlist', {});

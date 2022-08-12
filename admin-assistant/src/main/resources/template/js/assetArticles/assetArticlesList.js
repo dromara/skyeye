@@ -116,12 +116,12 @@ layui.config({
     
     // 刷新用品列表数据
     function loadTable(){
-    	table.reload("liebiaoTable", {where: getTableParams()});
+    	table.reloadData("liebiaoTable", {where: getTableParams()});
     }
     
 	// 搜索列表表单
 	$("body").on("click", "#liebiaoSearch", function() {
-    	table.reload("liebiaoTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("liebiaoTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
     function getTableParams(){

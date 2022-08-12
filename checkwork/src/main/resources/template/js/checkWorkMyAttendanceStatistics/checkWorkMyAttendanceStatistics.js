@@ -163,7 +163,7 @@ layui.config({
 	
 	// 搜索我的考勤统计
 	$("body").on("click", "#searchForm", function() {
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
 	// 刷新我的考勤信息
@@ -172,7 +172,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where: getTableParams()});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
     
     function getTableParams(){

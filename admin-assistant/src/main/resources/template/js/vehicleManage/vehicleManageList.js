@@ -172,11 +172,11 @@ layui.config({
     });
 	
     $("body").on("click", "#vehicleformSearch", function() {
-    	table.reload("vehicleTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("vehicleTable", {page: {curr: 1}, where: getTableParams()});
     });
     
     function loadVehicleTable(){
-    	table.reload("vehicleTable", {where: getTableParams()});
+    	table.reloadData("vehicleTable", {where: getTableParams()});
     }
     
     function getTableParams(){

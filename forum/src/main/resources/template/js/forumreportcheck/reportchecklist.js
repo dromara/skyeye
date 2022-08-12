@@ -137,7 +137,7 @@ layui.config({
 	    		reportstartTime = $("#reportTime").val().split(' - ')[0].trim();
 	    		reportendTime = $("#reportTime").val().split(' - ')[1].trim();
 	    	}
-	    	table.reload("messageNoCheckTable", {where: {title: $("#title").val(), reportTypeId: $("#reportType").val(), reportstartTime: reportstartTime, reportendTime: reportendTime}});
+	    	table.reloadData("messageNoCheckTable", {where: {title: $("#title").val(), reportTypeId: $("#reportType").val(), reportstartTime: reportstartTime, reportendTime: reportendTime}});
 	    }
 	    
 	    function refreshTable(){
@@ -145,7 +145,7 @@ layui.config({
 	    		reportstartTime = $("#reportTime").val().split(' - ')[0].trim();
 	    		reportendTime = $("#reportTime").val().split(' - ')[1].trim();
 	    	}
-	    	table.reload("messageNoCheckTable", {page: {curr: 1}, where: {title: $("#title").val(), reportTypeId: $("#reportType").val(), reportstartTime: reportstartTime, reportendTime: reportendTime}});
+	    	table.reloadData("messageNoCheckTable", {page: {curr: 1}, where: {title: $("#title").val(), reportTypeId: $("#reportType").val(), reportstartTime: reportstartTime, reportendTime: reportendTime}});
 	    }
 
 		//审核
@@ -276,7 +276,7 @@ layui.config({
 				checkedexaminestartTime = $("#checkedexamineTime").val().split(' - ')[0].trim();
 				checkedexamineendTime = $("#checkedexamineTime").val().split(' - ')[1].trim();
 	    	}
-	    	table.reload("messageCheckedTable", {where: {title: $("#checkedtitle").val(), reportTypeId: $("#checkedReportType").val(), reportstartTime: checkedreportstartTime, reportendTime: checkedreportendTime, examinestartTime: checkedexaminestartTime, examineendTime: checkedexamineendTime}});
+	    	table.reloadData("messageCheckedTable", {where: {title: $("#checkedtitle").val(), reportTypeId: $("#checkedReportType").val(), reportstartTime: checkedreportstartTime, reportendTime: checkedreportendTime, examinestartTime: checkedexaminestartTime, examineendTime: checkedexamineendTime}});
 	    }
 	    
 	    function refreshCheckedTable(){
@@ -288,7 +288,7 @@ layui.config({
 				checkedexaminestartTime = $("#checkedexamineTime").val().split(' - ')[0].trim();
 				checkedexamineendTime = $("#checkedexamineTime").val().split(' - ')[1].trim();
 	    	}
-	    	table.reload("messageCheckedTable", {page: {curr: 1}, where: {title: $("#checkedtitle").val(), reportTypeId: $("#checkedReportType").val(), reportstartTime: checkedreportstartTime, reportendTime: checkedreportendTime, examinestartTime: checkedexaminestartTime, examineendTime: checkedexamineendTime}});
+	    	table.reloadData("messageCheckedTable", {page: {curr: 1}, where: {title: $("#checkedtitle").val(), reportTypeId: $("#checkedReportType").val(), reportstartTime: checkedreportstartTime, reportendTime: checkedreportendTime, examinestartTime: checkedexaminestartTime, examineendTime: checkedexamineendTime}});
 	    }
 	    
 	    //详情

@@ -71,11 +71,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where: {userName: $("#userName").val()}});
+    	table.reloadData("messageTable", {where: {userName: $("#userName").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: {userName: $("#userName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {userName: $("#userName").val()}});
     }
 
     exports('sealseservicecheckworklist', {});

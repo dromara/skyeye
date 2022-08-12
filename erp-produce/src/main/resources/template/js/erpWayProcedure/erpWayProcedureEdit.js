@@ -109,7 +109,7 @@ layui.config({
 		function addRow() {
 			procedureList = [].concat(table.cache.messageTable);
 			procedureList.push({id: rowNum});
-			table.reload("messageTable", {data: procedureList});
+			table.reloadData("messageTable", {data: procedureList});
 			rowNum++;
 		}
 
@@ -126,7 +126,7 @@ layui.config({
 				});
 				procedureList = [].concat(list);
 			}
-			table.reload("messageTable", {data: procedureList});
+			table.reloadData("messageTable", {data: procedureList});
 		}
 	    
 	    // 工序选择
@@ -156,7 +156,7 @@ layui.config({
 				procedure.farmName = '';
 				procedureList[inIndex] = procedure;
 			}
-	    	table.reload("messageTable", {data: procedureList});
+	    	table.reloadData("messageTable", {data: procedureList});
 	    }
 	    
 	    // 车间选择
@@ -192,7 +192,7 @@ layui.config({
 				farm.farmName = farmMation.farmName;
 				procedureList[inIndex] = farm;
 			}
-	    	table.reload("messageTable", {data: procedureList});
+	    	table.reloadData("messageTable", {data: procedureList});
 	    }
 	    
 	    function getProcedureMation(trId){

@@ -104,7 +104,7 @@ layui.config({
 	});
 	
     function reloadMyHistoryTaskTable(){
-    	table.reload("messageMyHistoryTaskTable", {where:{}});
+    	table.reloadData("messageMyHistoryTaskTable", {where:{}});
     }
     
     exports('processedProcess', {});

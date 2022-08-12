@@ -76,11 +76,11 @@ layui.config({
     });
 
     function loadTable(){
-    	table.reload("messageTable", {where: {title: $("#title").val(), opportunityTitle: $("#opportunityTitle").val()}});
+    	table.reloadData("messageTable", {where: {title: $("#title").val(), opportunityTitle: $("#opportunityTitle").val()}});
     }
 
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: {title: $("#title").val(), opportunityTitle: $("#opportunityTitle").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {title: $("#title").val(), opportunityTitle: $("#opportunityTitle").val()}});
     }
 
     exports('alldiscusslist', {});

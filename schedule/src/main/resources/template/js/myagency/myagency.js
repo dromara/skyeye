@@ -75,7 +75,7 @@ layui.config({
 	}
 	
     function loadTable(){
-    	table.reload("messageTable", {where:{myagencyType:$("#myagencyType").val(), myagencyName:$("#myagencyName").val()}});
+    	table.reloadData("messageTable", {where:{myagencyType:$("#myagencyType").val(), myagencyName:$("#myagencyName").val()}});
     }
     
     exports('myagency', {});

@@ -287,7 +287,7 @@ layui.config({
     		startTime = $("#checkTime").val().split('~')[0].trim();
     		endTime = $("#checkTime").val().split('~')[1].trim();
     		$("#title").text(startTime + "至" + endTime + " 考勤情况统计");
-    		table.reload("messageTable", {where: getTableParams()});
+    		table.reloadData("messageTable", {where: getTableParams()});
     	}
     }
     

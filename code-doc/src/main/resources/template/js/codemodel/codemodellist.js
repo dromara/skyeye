@@ -132,11 +132,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{groupId:groupId}});
+    	table.reloadData("messageTable", {where:{groupId:groupId}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{groupId:groupId}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{groupId:groupId}});
     }
     
     exports('codemodellist', {});

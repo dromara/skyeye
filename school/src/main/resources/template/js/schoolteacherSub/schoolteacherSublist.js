@@ -133,11 +133,11 @@ layui.config({
     });
     
     function loadTable(){
-    	layui.table.reload("messageTable", {where: getTableParams()});
+    	layui.table.reloadData("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	layui.table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+    	layui.table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
 	function getTableParams() {

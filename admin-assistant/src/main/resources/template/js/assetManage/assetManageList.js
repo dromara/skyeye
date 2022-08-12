@@ -46,7 +46,7 @@ layui.config({
 		done: function(json) {
 			matchingLanguage();
 			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入资产名称", function () {
-				table.reload("assetlistTable", {page: {curr: 1}, where: getTableParams()});
+				table.reloadData("assetlistTable", {page: {curr: 1}, where: getTableParams()});
 			});
 		}
 	});
@@ -122,7 +122,7 @@ layui.config({
     });
 
     function loadassetTable(){
-    	table.reload("assetlistTable", {where: getTableParams()});
+    	table.reloadData("assetlistTable", {where: getTableParams()});
     }
 
     function getTableParams(){

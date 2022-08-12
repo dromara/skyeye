@@ -168,7 +168,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("lingyongTable", {page: {curr: 1}, where: getTableParams()});
+			table.reloadData("lingyongTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -180,7 +180,7 @@ layui.config({
     
 	// 刷新领用列表数据
     function loadLingyongTable(){
-    	table.reload("lingyongTable", {where: getTableParams()});
+    	table.reloadData("lingyongTable", {where: getTableParams()});
     }
 	
     function getTableParams(){

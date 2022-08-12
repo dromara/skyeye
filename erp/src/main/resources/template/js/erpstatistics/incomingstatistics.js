@@ -82,7 +82,7 @@ layui.config({
     		winui.window.msg("请选择日期.", {icon: 2, time: 2000});
     	}else {
     		operTime = $("#operTime").val();
-	        table.reload("messageTable", {where:{materialName: $("#materialName").val(), operTime: operTime}});
+	        table.reloadData("messageTable", {where:{materialName: $("#materialName").val(), operTime: operTime}});
     	}
     }
 
@@ -92,7 +92,7 @@ layui.config({
     		winui.window.msg("请选择日期.", {icon: 2, time: 2000});
     	}else {
     		operTime = $("#operTime").val();
-	        table.reload("messageTable", {page: {curr: 1}, where:{materialName: $("#materialName").val(), operTime: operTime}})
+	        table.reloadData("messageTable", {page: {curr: 1}, where:{materialName: $("#materialName").val(), operTime: operTime}})
     	}
     }
 

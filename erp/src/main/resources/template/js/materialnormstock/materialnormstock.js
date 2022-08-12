@@ -52,7 +52,7 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				table.reload("messageTable", {data: $.extend(true, [], normsStock)});
+				table.reloadData("messageTable", {data: $.extend(true, [], normsStock)});
 			}});
     });
 	
@@ -70,7 +70,7 @@ layui.config({
 	    	if(removeIndex >= 0 ){
 	    		normsStock.splice(removeIndex, 1);
 	    		winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-				table.reload("messageTable", {data: $.extend(true, [], normsStock)});
+				table.reloadData("messageTable", {data: $.extend(true, [], normsStock)});
 	    	} else {
 	    		winui.window.msg("删除失败", {icon: 2, time: 2000});
 	    	}
@@ -87,7 +87,7 @@ layui.config({
 			area: ['90vw', '90vh'],
 			callBack: function(refreshCode){
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
-				table.reload("messageTable", {data: $.extend(true, [], normsStock)});
+				table.reloadData("messageTable", {data: $.extend(true, [], normsStock)});
 			}
 		});
 	}

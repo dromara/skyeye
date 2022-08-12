@@ -101,11 +101,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{groupName: $("#groupName").val()}});
+    	table.reloadData("messageTable", {where:{groupName: $("#groupName").val()}});
     }
     
     function refreshloadTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{groupName: $("#groupName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{groupName: $("#groupName").val()}});
     }
     
     exports('materialunitlist', {});

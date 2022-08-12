@@ -142,7 +142,7 @@ layui.config({
 	
 	// 搜索我的申诉申请
 	$("body").on("click", "#searchForm1", function() {
-    	table.reload("myAppealTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("myAppealTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
 	// 刷新我的申诉申请
@@ -151,7 +151,7 @@ layui.config({
     });
     
     function reloadMyAppealTable(){
-    	table.reload("myAppealTable", {where: getTableParams()});
+    	table.reloadData("myAppealTable", {where: getTableParams()});
     }
     
     function getTableParams(){

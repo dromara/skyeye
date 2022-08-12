@@ -128,11 +128,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{templateName: $("#templateName").val()}});
+    	table.reloadData("messageTable", {where:{templateName: $("#templateName").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{templateName: $("#templateName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{templateName: $("#templateName").val()}});
     }
     
     exports('dsformdisplaytemplatelist', {});

@@ -119,11 +119,11 @@ layui.config({
     
     // 搜索表单
 	$("body").on("click", "#seallistformSearch", function() {
-    	table.reload("seallistTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("seallistTable", {page: {curr: 1}, where: getTableParams()});
 	});
     
     function loadTable(){
-    	table.reload("seallistTable", {where: getTableParams()});
+    	table.reloadData("seallistTable", {where: getTableParams()});
     }
     
     function getTableParams(){

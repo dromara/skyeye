@@ -137,11 +137,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()}});
+    	table.reloadData("messageTable", {where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()}});
     }
     
     exports('rmgrouplist', {});

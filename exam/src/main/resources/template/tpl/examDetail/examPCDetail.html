@@ -1214,7 +1214,7 @@
 			 	   	    });
 			 	   		
 			 	   		table.on('sort(messageTable)', function(obj){
-				 	   		table.reload("messageTable", {initSort: obj, where: {
+				 	   		table.reloadData("messageTable", {initSort: obj, where: {
 				 	   			field: obj.field,
 				 	   			order: obj.type
 				 	   		}});

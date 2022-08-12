@@ -91,7 +91,7 @@ layui.config({
             delete tem["isMandatory"];
         }
         chooseUserList[rowIndex] = tem;
-        table.reload("messageTable", {data: chooseUserList});
+        table.reloadData("messageTable", {data: chooseUserList});
     });
 
     form.render();
@@ -162,7 +162,7 @@ layui.config({
             // 并行
             chooseUserList.push({id: rowNum});
         }
-        table.reload("messageTable", {data: chooseUserList});
+        table.reloadData("messageTable", {data: chooseUserList});
         rowNum++;
     }
 
@@ -179,7 +179,7 @@ layui.config({
             });
             chooseUserList = [].concat(list);
         }
-        table.reload("messageTable", {data: chooseUserList});
+        table.reloadData("messageTable", {data: chooseUserList});
     }
 
     // 人员选择
@@ -191,7 +191,7 @@ layui.config({
         systemCommonUtil.checkType = "2"; // 人员选择类型，1.多选；其他。单选
         systemCommonUtil.openSysUserStaffChoosePage(function (userReturnList){
             chooseUserList[rowIndex] = userReturnList[0];
-            table.reload("messageTable", {data: chooseUserList});
+            table.reloadData("messageTable", {data: chooseUserList});
         });
     });
 

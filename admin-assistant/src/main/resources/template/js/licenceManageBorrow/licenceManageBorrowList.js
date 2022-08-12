@@ -170,7 +170,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("borrowTable", {page: {curr: 1}, where: getTableParams()});
+			table.reloadData("borrowTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -182,7 +182,7 @@ layui.config({
     
     // 刷新证照借用列表数据
     function loadBorrowTable(){
-    	table.reload("borrowTable", {where: getTableParams()});
+    	table.reloadData("borrowTable", {where: getTableParams()});
     }
     
     function getTableParams(){

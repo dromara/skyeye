@@ -149,11 +149,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{title: $("#title").val(), parentId: parentId}});
+    	table.reloadData("messageTable", {where:{title: $("#title").val(), parentId: parentId}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{title: $("#title").val(), parentId: parentId}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{title: $("#title").val(), parentId: parentId}});
     }
     
     exports('sysdevelopdocconsolelist', {});

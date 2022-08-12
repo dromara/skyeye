@@ -190,12 +190,12 @@ layui.config({
     
 	// 我收到的日志点击搜索
 	$("body").on("click", "#searchMyReceived", function() {
-    	table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
 	//加载'看日志'列表
     function loadTable(){
-    	table.reload("messageTable", {where: getTableParams()});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
     
 	function getTableParams(){

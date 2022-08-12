@@ -173,7 +173,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("reserveTable", {page: {curr: 1}, where: getTableParams()});
+			table.reloadData("reserveTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -185,7 +185,7 @@ layui.config({
     
     // 刷新会议室预定列表数据
     function loadReserveTable(){
-    	table.reload("reserveTable", {where: getTableParams()});
+    	table.reloadData("reserveTable", {where: getTableParams()});
     }
     
     function getTableParams(){

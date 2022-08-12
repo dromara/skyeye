@@ -106,7 +106,7 @@ layui.config({
     		startTime = $("#upTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#upTime").val().split('~')[1].trim() + ' 23:59:59';
     	}
-    	table.reload("messageTable", {where:{typeId: typeId, firstTime: startTime, lastTime: endTime, title:$("#titleName").val()}});
+    	table.reloadData("messageTable", {where:{typeId: typeId, firstTime: startTime, lastTime: endTime, title:$("#titleName").val()}});
     }
     exports('sysnoticefrontlist', {});
 });

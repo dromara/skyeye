@@ -410,10 +410,10 @@ layui.config({
 	});
 	//搜索条件
     function loadTable(){
-    	table.reload("messageTable", {where:{typeId: clickId, title: $("#title").val()}});
+    	table.reloadData("messageTable", {where:{typeId: clickId, title: $("#title").val()}});
     }
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{typeId: clickId, title: $("#title").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{typeId: clickId, title: $("#title").val()}});
     }
   	//刷新申请类型实体
 	$("body").on("click", "#reloadTable", function() {

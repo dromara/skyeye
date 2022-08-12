@@ -57,11 +57,11 @@ layui.config({
 	});
     
     function loadTable(){
-    	table.reload("messageTable", {where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()}});
+    	table.reloadData("messageTable", {where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()}});
     }
 
     exports('myusepartslist', {});

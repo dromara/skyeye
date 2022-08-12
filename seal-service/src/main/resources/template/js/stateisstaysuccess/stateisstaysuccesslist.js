@@ -76,7 +76,7 @@ layui.config({
     		startTime = $("#declarationTime").val().split('~')[0].trim();
     		endTime = $("#declarationTime").val().split('~')[1].trim();
     	}
-    	table.reload("messageTable", {where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: startTime, lastTime: endTime}});
+    	table.reloadData("messageTable", {where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: startTime, lastTime: endTime}});
     }
     
     function refreshTable(){
@@ -87,7 +87,7 @@ layui.config({
     		startTime = $("#declarationTime").val().split('~')[0].trim();
     		endTime = $("#declarationTime").val().split('~')[1].trim();
     	}
-    	table.reload("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: startTime, lastTime: endTime}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), typeId: $("#typeId").val(), customerName: $("#customerName").val(), firstTime: startTime, lastTime: endTime}});
     }
 
 	//详情

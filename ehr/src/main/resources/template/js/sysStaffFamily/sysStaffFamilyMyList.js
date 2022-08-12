@@ -131,7 +131,7 @@ layui.config({
     });
 
     function loadTable(){
-        table.reload("messageTable", {where: getTableParams()});
+        table.reloadData("messageTable", {where: getTableParams()});
     }
 
     function getTableParams(){

@@ -74,7 +74,7 @@ layui.config({
 	    });
 	    
 	    function loadTable(){
-	    	table.reload("messageTable", {where: {serviceId: serviceId}});
+	    	table.reloadData("messageTable", {where: {serviceId: serviceId}});
 	    }
 		
 	    //新增

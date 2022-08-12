@@ -179,11 +179,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where: getTablePatams()});
+    	table.reloadData("messageTable", {where: getTablePatams()});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTablePatams()});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()});
     }
     
     function getTablePatams() {

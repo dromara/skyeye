@@ -115,11 +115,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{title: $("#title").val(), propertyValue: $("#propertyValue").val(), propertyId: $("#propertyId").val()}});
+    	table.reloadData("messageTable", {where:{title: $("#title").val(), propertyValue: $("#propertyValue").val(), propertyId: $("#propertyId").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{title: $("#title").val(), propertyValue: $("#propertyValue").val(), propertyId: $("#propertyId").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{title: $("#title").val(), propertyValue: $("#propertyValue").val(), propertyId: $("#propertyId").val()}});
     }
     
     exports('rmpropertyvaluelist', {});

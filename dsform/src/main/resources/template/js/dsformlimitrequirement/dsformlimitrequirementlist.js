@@ -100,11 +100,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{requireName:$("#requireName").val(), formerRequirement:$("#formerRequirement").val(), afterRequirement:$("#afterRequirement").val()}});
+    	table.reloadData("messageTable", {where:{requireName:$("#requireName").val(), formerRequirement:$("#formerRequirement").val(), afterRequirement:$("#afterRequirement").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{requireName:$("#requireName").val(), formerRequirement:$("#formerRequirement").val(), afterRequirement:$("#afterRequirement").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{requireName:$("#requireName").val(), formerRequirement:$("#formerRequirement").val(), afterRequirement:$("#afterRequirement").val()}});
     }
     
     exports('dsformlimitrequirementlist', {});

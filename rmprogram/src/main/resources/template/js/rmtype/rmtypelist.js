@@ -118,11 +118,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{rmTypeName:$("#rmTypeName").val()}});
+    	table.reloadData("messageTable", {where:{rmTypeName:$("#rmTypeName").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{rmTypeName:$("#rmTypeName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{rmTypeName:$("#rmTypeName").val()}});
     }
     
     exports('rmtypelist', {});

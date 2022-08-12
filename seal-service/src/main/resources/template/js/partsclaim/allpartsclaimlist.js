@@ -68,11 +68,11 @@ layui.config({
 	});
     
     function loadTable(){
-    	table.reload("messageTable", {where: {orderNum: $("#orderNum").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()}});
+    	table.reloadData("messageTable", {where: {orderNum: $("#orderNum").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: {orderNum: $("#orderNum").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()}});
     }
 
 	//工单详情

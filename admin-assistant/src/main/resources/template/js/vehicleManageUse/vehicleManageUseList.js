@@ -164,7 +164,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("vehicleUseTable", {page: {curr: 1}, where: getTableParams()});
+			table.reloadData("vehicleUseTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -174,7 +174,7 @@ layui.config({
     });
 
     function loadTable(){
-    	table.reload("vehicleUseTable", {where: getTableParams()});
+    	table.reloadData("vehicleUseTable", {where: getTableParams()});
     }
     
     function getTableParams(){

@@ -176,11 +176,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{surveyName: $("#surveyName").val(), surveyState: $("#surveyState").val()}});
+    	table.reloadData("messageTable", {where:{surveyName: $("#surveyName").val(), surveyState: $("#surveyState").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{surveyName: $("#surveyName").val(), surveyState: $("#surveyState").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{surveyName: $("#surveyName").val(), surveyState: $("#surveyState").val()}});
     }
     
     exports('dwsurveydesignlist', {});

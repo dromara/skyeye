@@ -62,7 +62,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("messageTable", {page: {curr: 1}, where: getTablePatams()})
+			table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()})
 		}
 		return false;
 	});
@@ -72,7 +72,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where: getTablePatams()});
+    	table.reloadData("messageTable", {where: getTablePatams()});
     }
 
 	function getTablePatams(){

@@ -117,7 +117,7 @@ layui.config({
 	
 	// 搜索表单
 	$("body").on("click", "#accidentformSearch", function() {
-    	table.reload("accidentTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("accidentTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
     $("body").on("click", "#reloadAccidentTable", function() {
@@ -125,7 +125,7 @@ layui.config({
     });
     
     function loadAccidentTable(){
-    	table.reload("accidentTable", {where: getTableParams()});
+    	table.reloadData("accidentTable", {where: getTableParams()});
     }
     
     function getTableParams(){

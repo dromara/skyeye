@@ -118,11 +118,11 @@ layui.config({
     
     // 搜索表单
 	$("body").on("click", "#licencelistformSearch", function() {
-    	table.reload("licencelistTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("licencelistTable", {page: {curr: 1}, where: getTableParams()});
 	});
     
     function loadTable(){
-    	table.reload("licencelistTable", {where: getTableParams()});
+    	table.reloadData("licencelistTable", {where: getTableParams()});
     }
     
     function getTableParams(){

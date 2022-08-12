@@ -39,11 +39,11 @@ layui.config({
 	});
 	
 	function loadTable(){
-    	table.reload("messageTable", {where:{userName: $("#userName").val(), realPath: $("#realPath").val()}});
+    	table.reloadData("messageTable", {where:{userName: $("#userName").val(), realPath: $("#realPath").val()}});
     }
 	
 	function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{userName: $("#userName").val(), realPath: $("#realPath").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{userName: $("#userName").val(), realPath: $("#realPath").val()}});
     }
 	
     exports('sysworkloglist', {});

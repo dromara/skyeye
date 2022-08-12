@@ -148,7 +148,7 @@ layui.config({
 	});
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where: getTablePatams()});
+    	table.reloadData("messageTable", {page: {curr: 1}, where: getTablePatams()});
     }
     
     function getTablePatams(){

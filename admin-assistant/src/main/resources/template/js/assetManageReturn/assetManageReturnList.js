@@ -169,7 +169,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("returnTable", {page: {curr: 1}, where: getTableParams()});
+			table.reloadData("returnTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -181,7 +181,7 @@ layui.config({
     
 	// 刷新归还列表数据
     function loadReturnTable(){
-    	table.reload("returnTable", {where: getTableParams()});
+    	table.reloadData("returnTable", {where: getTableParams()});
     }
 
     function getTableParams(){

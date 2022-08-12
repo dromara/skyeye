@@ -130,11 +130,11 @@ layui.config({
 	});
 	
     function reloadMyStartTable(){
-    	table.reload("messageMyStartTable", {where: getTableParams()});
+    	table.reloadData("messageMyStartTable", {where: getTableParams()});
     }
     
     function searchMyStartTable(){
-    	table.reload("messageMyStartTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("messageMyStartTable", {page: {curr: 1}, where: getTableParams()});
     }
 
     function getTableParams(){

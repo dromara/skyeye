@@ -164,7 +164,7 @@ layui.config({
     })
     //刷新
     function loadTable(){
-        table.reload("messageTable", {where:{supplierName:$("#supplierName").val(),
+        table.reloadData("messageTable", {where:{supplierName:$("#supplierName").val(),
                 telephone: $("#telephone").val(),
                 email: $("#email").val(),
                 fax: $("#fax").val(),
@@ -173,7 +173,7 @@ layui.config({
 
     //搜索
     function refreshTable(){
-        table.reload("messageTable", {page: {curr: 1}, where:{supplierName:$("#supplierName").val(),
+        table.reloadData("messageTable", {page: {curr: 1}, where:{supplierName:$("#supplierName").val(),
                 telephone: $("#telephone").val(),
                 email: $("#email").val(),
                 fax: $("#fax").val(),

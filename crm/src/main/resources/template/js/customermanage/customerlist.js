@@ -50,7 +50,7 @@ layui.config({
 	    done: function(json) {
 	    	matchingLanguage();
 			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入客户名称", function () {
-				table.reload("messageTable", {page: {curr: 1}, where: getTableParams()});
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
 	    }
 	});
@@ -131,7 +131,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where: getTableParams()});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
     
     function getTableParams(){

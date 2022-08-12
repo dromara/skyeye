@@ -101,11 +101,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{colorClass:$("#colorClass").val()}});
+    	table.reloadData("messageTable", {where:{colorClass:$("#colorClass").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{colorClass:$("#colorClass").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{colorClass:$("#colorClass").val()}});
     }
     
     exports('sysevewinthemecolorlist', {});

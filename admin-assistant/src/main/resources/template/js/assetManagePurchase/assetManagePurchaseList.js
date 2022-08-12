@@ -165,7 +165,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("caigouTable", {page: {curr: 1}, where: getTableParams()});
+			table.reloadData("caigouTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -177,7 +177,7 @@ layui.config({
     
 	// 刷新采购列表数据
     function loadCaigouTable(){
-    	table.reload("caigouTable", {where: getTableParams()});
+    	table.reloadData("caigouTable", {where: getTableParams()});
     }
 
     function getTableParams(){

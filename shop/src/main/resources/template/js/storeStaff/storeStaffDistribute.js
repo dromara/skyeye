@@ -101,7 +101,7 @@ layui.config({
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "storeStaff002", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
-                table.reload("messageTable", {page: {curr: 1}, where: {storeId: chooseStoreId}})
+                table.reloadData("messageTable", {page: {curr: 1}, where: {storeId: chooseStoreId}})
             }});
         });
     }

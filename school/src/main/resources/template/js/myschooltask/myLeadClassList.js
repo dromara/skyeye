@@ -92,11 +92,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val()}});
+    	table.reloadData("messageTable", {where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val()}});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {page: {curr: 1}, where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val()}});
+    	table.reloadData("messageTable", {page: {curr: 1}, where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val()}});
     }
     
     exports('myLeadClassList', {});

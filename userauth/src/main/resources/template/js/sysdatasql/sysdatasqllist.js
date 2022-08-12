@@ -72,7 +72,7 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where:{}});
+    	table.reloadData("messageTable", {where:{}});
     }
     
     exports('sysdatasqllist', {});

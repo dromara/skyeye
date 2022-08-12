@@ -80,7 +80,7 @@ layui.config({
 				refreshTable();
 			}else if(fieldType == 2){
 				$(".customType").hide();
-				table.reload("messageTable", {
+				table.reloadData("messageTable", {
 					url: sysMainMation.wagesBasePath + 'wages009',
 					page: false
 				});
@@ -97,11 +97,11 @@ layui.config({
     });
     
     function loadTable(){
-    	table.reload("messageTable", {where: getTableParams()});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
     
     function refreshTable(){
-    	table.reload("messageTable", {
+    	table.reloadData("messageTable", {
 			url: sysMainMation.wagesBasePath + 'wages008',
     		page: {curr: 1},
 			page: true,

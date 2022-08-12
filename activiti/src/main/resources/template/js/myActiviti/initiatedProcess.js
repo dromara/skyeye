@@ -141,7 +141,7 @@ layui.config({
     		startTime = "";
     		endTime = "";
     	}
-    	table.reload("messageMyStartTable", {where:{startTime: startTime, endTime: endTime, processInstanceId: $("#processInstanceId").val()}});
+    	table.reloadData("messageMyStartTable", {where:{startTime: startTime, endTime: endTime, processInstanceId: $("#processInstanceId").val()}});
     }
     
     function searchMyStartTable(){
@@ -152,7 +152,7 @@ layui.config({
     		startTime = "";
     		endTime = "";
     	}
-    	table.reload("messageMyStartTable", {page: {curr: 1}, where:{startTime: startTime, endTime: endTime, processInstanceId: $("#processInstanceId").val()}});
+    	table.reloadData("messageMyStartTable", {page: {curr: 1}, where:{startTime: startTime, endTime: endTime, processInstanceId: $("#processInstanceId").val()}});
     }
     
     $("body").on("click", "#stateDesc", function() {

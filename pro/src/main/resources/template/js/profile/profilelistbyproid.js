@@ -63,7 +63,7 @@ layui.config({
     });
 
     function loadTable(){
-    	table.reload("messageTable", {where:{rowId: parent.rowId}});
+    	table.reloadData("messageTable", {where:{rowId: parent.rowId}});
     }
 
     exports('profilelistbyproid', {});

@@ -91,7 +91,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("messageMyNeedDealtTable", {page: {curr: 1}, where: getTableParams()});
+			table.reloadData("messageMyNeedDealtTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -102,7 +102,7 @@ layui.config({
 	});
 
 	function loadMyNeedDealtTable(){
-		table.reload("messageMyNeedDealtTable", {where: getTableParams()});
+		table.reloadData("messageMyNeedDealtTable", {where: getTableParams()});
 	}
 
     function getTableParams(){

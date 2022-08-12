@@ -145,11 +145,11 @@ layui.config({
 	});
 	
 	function loadTable(){
-		table.reload("messageNoCheckTable", {where: getNoCheckTableParams()});
+		table.reloadData("messageNoCheckTable", {where: getNoCheckTableParams()});
 	};
 	
 	function refreshTable(){
-		table.reload("messageNoCheckTable", {page: {curr: 1}, where: getNoCheckTableParams()});
+		table.reloadData("messageNoCheckTable", {page: {curr: 1}, where: getNoCheckTableParams()});
 	};
 
 	function getNoCheckTableParams(){
@@ -296,11 +296,11 @@ layui.config({
     });
     
     function loadCheckedTable(){
-    	table.reload("messageCheckedTable", {where: getCheckTableParams()});
+    	table.reloadData("messageCheckedTable", {where: getCheckTableParams()});
     };
     
     function refreshCheckedTable(){
-    	table.reload("messageCheckedTable", {page: {curr: 1}, where: getCheckTableParams()});
+    	table.reloadData("messageCheckedTable", {page: {curr: 1}, where: getCheckTableParams()});
     };
 
     function getCheckTableParams(){

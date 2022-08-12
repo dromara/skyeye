@@ -192,12 +192,12 @@ layui.config({
 	
 	// '我发出的'页面的点击搜索
 	$("body").on("click", "#searchMySend", function() {
-    	table.reload("mysendTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("mysendTable", {page: {curr: 1}, where: getTableParams()});
     });
     
     // 加载'我发出的'列表
     function loadMySendTable(){
-    	table.reload("mysendTable", {where: getTableParams()});
+    	table.reloadData("mysendTable", {where: getTableParams()});
     }
     
     function getTableParams(){

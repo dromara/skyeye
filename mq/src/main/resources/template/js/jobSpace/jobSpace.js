@@ -105,7 +105,7 @@ layui.config({
 		
 		// 我的输出刷新表单
 		$("body").on("click", "#refreshMyOutput", function() {
-			table.reload("outputTable", {page: {curr: 1}, where: {bigType: 1}});
+			table.reloadData("outputTable", {page: {curr: 1}, where: {bigType: 1}});
 		});
 		
 		// 我的输出下载
@@ -183,7 +183,7 @@ layui.config({
 		
 		// 我的发送刷新表单
 		$("body").on("click", "#refreshMySend", function() {
-			table.reload("sendTable", {page: {curr: 1}, where: {bigType: 2}});
+			table.reloadData("sendTable", {page: {curr: 1}, where: {bigType: 2}});
 		});
 	}
 	
@@ -239,7 +239,7 @@ layui.config({
 		
 		// 我的获取刷新表单
 		$("body").on("click", "#refreshMyAccess", function() {
-			table.reload("accessTable", {page: {curr: 1}, where: {bigType: 3}});
+			table.reloadData("accessTable", {page: {curr: 1}, where: {bigType: 3}});
 		});
 	}
 	

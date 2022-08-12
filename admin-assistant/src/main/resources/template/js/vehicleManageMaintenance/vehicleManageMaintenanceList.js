@@ -117,7 +117,7 @@ layui.config({
 	
 	// 搜索表单
 	$("body").on("click", "#maintenanceformSearch", function() {
-    	table.reload("maintenanceTable", {page: {curr: 1}, where: getTableParams()});
+    	table.reloadData("maintenanceTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
     $("body").on("click", "#reloadMaintenanceTable", function() {
@@ -125,7 +125,7 @@ layui.config({
     });
     
     function loadMaintenanceTable(){
-    	table.reload("maintenanceTable", {where: getTableParams()});
+    	table.reloadData("maintenanceTable", {where: getTableParams()});
     }
     
     function getTableParams(){

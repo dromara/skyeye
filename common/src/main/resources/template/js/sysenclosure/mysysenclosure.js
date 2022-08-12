@@ -108,7 +108,7 @@ layui.config({
 		        }
 		    });
 		} else {
-			table.reload("messageTable", {where:{parentId: folderId}});
+			table.reloadData("messageTable", {where:{parentId: folderId}});
 		}
 		
 	}

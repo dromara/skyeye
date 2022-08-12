@@ -170,7 +170,7 @@ layui.config({
 	form.render();
 	form.on('submit(formSearch)', function (data) {
 		if (winui.verifyForm(data.elem)) {
-			table.reload("revertTable", {page: {curr: 1}, where: getTableParams()});
+			table.reloadData("revertTable", {page: {curr: 1}, where: getTableParams()});
 		}
 		return false;
 	});
@@ -182,7 +182,7 @@ layui.config({
     
     // 刷新证照归还列表数据
     function loadRevertTable(){
-    	table.reload("revertTable", {where: getTableParams()});
+    	table.reloadData("revertTable", {where: getTableParams()});
     }
     
     function getTableParams(){
