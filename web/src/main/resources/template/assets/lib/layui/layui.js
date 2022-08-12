@@ -25,7 +25,7 @@ if(!getCookiesByUrl){//跨域获取
 		if(isNull(GetUrlParam("userToken"))){//如果url后面没有跟usertoken，返回404页面
 			location.href = '../../tpl/sysmessage/500.html';
 		} else {
-			setCookie('userToken', GetUrlParam("userToken"), 's1800');
+			setCookie('userToken', GetUrlParam("userToken"));
 		}
 	}
 }
@@ -101,9 +101,9 @@ var sysActivitiModel = getAndWriteLocal('sysActivitiModel');
 var sysDictData = getAndWriteLocal('sysDictData');
 
 function getAndWriteLocal(key) {
-	if(isNull(localStorage.getItem(key))){
+	if (isNull(localStorage.getItem(key))) {
 		var url = lacolMap[key];
-		jsGetJsonFile(url, function(data) {
+		jsGetJsonFile(url, function (data) {
 			localStorage.setItem(key, JSON.stringify(data));
 			return data;
 		});
@@ -176,9 +176,9 @@ var getFileContent = function(url){
 	return content;
 }
 
-//判断内容是否为空
-function isNull(str){
-	if(str == null || str == "" || str == '' || str == "null" || str == "undefined"){
+// 判断内容是否为空
+function isNull(str) {
+	if (str == null || str == "" || str == '' || str == "null" || str == "undefined") {
 		return true;
 	} else {
 		return false;
@@ -841,20 +841,6 @@ function isNull(str){
 			if(isNum.test(v2)) v2 = parseFloat(v2);
 
 			return v1 - v2;
-
-			/*if(v1 && !v2) {
-				return 1;
-			} else if(!v1 && v2) {
-				return -1;
-			}
-
-			if(v1 > v2) {
-				return 1;
-			} else if(v1 < v2) {
-				return -1;
-			} else {
-				return 0;
-			}*/
 		});
 
 		desc && clone.reverse(); // 倒序
@@ -946,23 +932,8 @@ function isNull(str){
  * h是指小时，如12小时则是：h12
  * d是天数，30天则：d30
  */
-function setCookie(name, value, time) {
-	var strsec = getsec(time);
-	var exp = new Date();
-	exp.setTime(exp.getTime() + strsec * 1);
-	document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString() + ";path=/";
-}
-
-function getsec(str) {
-	var str1 = str.substring(1, str.length) * 1;
-	var str2 = str.substring(0, 1);
-	if(str2 == "s") {
-		return str1 * 1000;
-	} else if(str2 == "h") {
-		return str1 * 60 * 60 * 1000;
-	} else if(str2 == "d") {
-		return str1 * 24 * 60 * 60 * 1000;
-	}
+function setCookie(name, value) {
+	localStorage.setItem(name, value);
 }
 
 /**
@@ -970,17 +941,8 @@ function getsec(str) {
  * @param name
  * @returns
  */
-function getCookie(name){
-	var strcookie = document.cookie;//获取cookie字符串
-	var arrcookie = strcookie.split("; ");//分割
-	//遍历匹配
-	for ( var i = 0; i < arrcookie.length; i++) {
-		var arr = arrcookie[i].split("=");
-		if (arr[0] == name){
-			return arr[1];
-		}
-	}
-	return "";
+function getCookie(name) {
+	return localStorage.getItem(name);
 }
 
 

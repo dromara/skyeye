@@ -1,19 +1,6 @@
 
 var basePath = getBaseRootPath();//上传文件展示路径
 
-function getBaseRootPath(){
-	var curWwwPath = window.document.location.href;  
-    var pathName = window.document.location.pathname;  
-    var pos = curWwwPath.indexOf(pathName);  
-    var localhostPaht = curWwwPath.substring(0, pos);  
-    var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);  
-    return(localhostPaht + "/");//http://127.0.0.1:8080/
-}
-
-/**
- * Created by HANZO on 2016/6/17.
- */
-
 /**
  *
  * @param url
@@ -21,8 +8,6 @@ function getBaseRootPath(){
  * @param callback
  * @returns {*}
  */
-//(function ($) {
-
 function loadPage(url, container) {
     if (!container)
         container = "#mainDiv";
@@ -142,33 +127,6 @@ function deleteEmptyProp(obj) {
         }
     }
     return obj;
-}
-
-/**
- * 获取cookie值
- * @param name
- * @returns
- */
-function getCookie(name){
-	var strcookie = document.cookie;//获取cookie字符串
-	var arrcookie = strcookie.split("; ");//分割
-	//遍历匹配
-	for ( var i = 0; i < arrcookie.length; i++) {
-		var arr = arrcookie[i].split("=");
-		if (arr[0] == name){
-			return arr[1];
-		}
-	}
-	return "";
-}
-
-//判断内容是否为空
-function isNull(str){
-	if(str == null || str == "" || str == '' || str == "null" || str == "undefined"){
-		return true;
-	} else {
-		return false;
-	}
 }
 
 function ajaxPost(url, params, callback) {
@@ -341,27 +299,6 @@ function getNextCode(prefix, maxCode, length) {
 
 }
 
-/**
- * 收缩左边栏时，触发markdown编辑的resize
- */
-/*$("[data-toggle='offcanvas']").click(function () {
- if (editor) {
- setTimeout(function () {
- editor.resize()
- }, 500);
- }
- });*/
-
-
-//获取布尔值
-/*String.prototype.BoolValue=function(){
- if(this==undefined)
- return false;
- if(this=="false"||this=="0")
- return false;
- return true;
- }*/
-
 var HtmlUtil = {
     /*1.用浏览器内部转换器实现html转码*/
     htmlEncode: function (html) {
@@ -407,6 +344,3 @@ String.prototype.format = function () {
         s = s.replace(new RegExp("\\{" + i + "\\}", "g"), arguments[i]);
     return s;
 };
-
-
-//})(jQuery)

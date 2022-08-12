@@ -252,7 +252,7 @@ layui.config({
         }}, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "login003", params: {}, type: 'json', method: "POST", callback: function (json) {
-                $.cookie('userToken', "", {path: '/' });
+				localStorage.setItem('userToken', "");
                 location.href = "../../tpl/index/login.html?url=" + escape("../../tpl/note/shareNote.html?id=" + rowId);
             }});
         });

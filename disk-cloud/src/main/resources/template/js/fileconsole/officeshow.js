@@ -35,7 +35,7 @@ layui.config({
 		//手机端加载该页面时加载userToken
 		var userToken = GetUrlParam("userToken");
 		if(!isNull(userToken)){
-			setCookie('userToken', userToken, 's1800');
+			setCookie('userToken', userToken);
 		}
 		var fileUrl = GetUrlParam("fileUrl");
 		var title = decodeURIComponent(GetUrlParam("title"));

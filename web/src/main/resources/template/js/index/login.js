@@ -59,40 +59,40 @@ layui.config({
 		
 		$(".lock-body").css({'background-image': 'url("/images/upload/winbgpic/default.jpg")'});
 		
-		$.cookie('userToken', "", {path: '/' });
+		localStorage.setItem('userToken', "");
 
 		matchingLanguage();
 		form.render();
 		form.on('submit(login)', function (data) {
  	        if (winui.verifyForm(data.elem)) {
  	        	$("#loginBtn").find("i").attr("class", "fa fa-spin fa-spinner fa-fw");
- 	        	if(!isLogin){
-	 	        	if(isNull($("#userCode").val())){
-	 	        		top.winui.window.msg("请输入用户名", {icon: 2, time: 2000});
-	 	        	}else if(isNull($("#password").val())){
-	 	        		top.winui.window.msg("请输入密码", {icon: 2, time: 2000});
-	 	        	} else {
-	 	        		var params = {
-	 	        			userCode:$("#userCode").val(),
-	 	        			password:$("#password").val()
-	 	        		};
-	 	        		isLogin = true;
-	 	        		AjaxPostUtil.request({url: reqBasePath + "login001", params: params, type: 'json', callback: function (json) {
-	 	        			isLogin = false;
- 	        				$("#loginBtn").find("i").attr("class", "fa fa-arrow-right");
-							if(json.rows != null){
+ 	        	if (!isLogin) {
+					if (isNull($("#userCode").val())) {
+						top.winui.window.msg("请输入用户名", {icon: 2, time: 2000});
+					} else if (isNull($("#password").val())) {
+						top.winui.window.msg("请输入密码", {icon: 2, time: 2000});
+					} else {
+						var params = {
+							userCode: $("#userCode").val(),
+							password: $("#password").val()
+						};
+						isLogin = true;
+						AjaxPostUtil.request({url: reqBasePath + "login001", params: params, type: 'json', callback: function (json) {
+							isLogin = false;
+							$("#loginBtn").find("i").attr("class", "fa fa-arrow-right");
+							if (json.rows != null) {
 								localStorage.setItem("authpoints", JSON.stringify(json.rows));
 							}
-							$.cookie('userToken', json.bean.userToken, {path: '/' });
-							if(!isNull(json.bean.id)){
-								if(checkURL(url)){
+							localStorage.setItem('userToken', json.bean.userToken);
+							if (!isNull(json.bean.id)) {
+								if (checkURL(url)) {
 									location.href = url;
 								} else {
 									location.href = "index.html";
 								}
 							}
-	 		 	   		}});
-	 	        	}
+						}});
+					}
  	        	}
  	        }
 			return false;

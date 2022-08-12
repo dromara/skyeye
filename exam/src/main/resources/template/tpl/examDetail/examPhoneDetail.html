@@ -739,9 +739,9 @@
 					var $ = layui.$,
 						form = layui.form;
 					//手机端加载该页面时加载userToken
-					var userToken = GetUrlParam("userToken") + '-APP';
+					var userToken = GetUrlParam("userToken");
 					if(!isNull(userToken)){
-						setCookie('userToken', userToken, 's1800');
+						setCookie('userToken', userToken);
 					}
 	 	   			showGrid({
 						id: "wrap",

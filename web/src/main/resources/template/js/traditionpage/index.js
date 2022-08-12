@@ -354,10 +354,10 @@ layui.config({
         var nowType = isNull(getCookie("languageType")) ? "zh" : getCookie("languageType");
         if(nowType == "zh"){
         	// 中文，设置为英文
-            setCookie('languageType', "cn", 'd30');
+            setCookie('languageType', "cn");
 		} else {
             // 英文，设置为中文
-            setCookie('languageType', "zh", 'd30');
+            setCookie('languageType', "zh");
 		}
         window.location.reload();
     });

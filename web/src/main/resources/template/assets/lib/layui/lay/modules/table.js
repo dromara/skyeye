@@ -752,7 +752,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
                             ('返回的数据不符合规范，正确的成功状态码应为："' + response.statusName + '": ' + response.statusCode)
                         );
                     } else {
-                        that.renderData(res, curr, res[response.countName]), sort();
+                        that.renderData(res, curr, res[response.countName], opts.type), sort();
                         options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
                     }
                     that.setColsWidth();
@@ -761,19 +761,19 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
                 , error: function (e, msg) {
                     //移除请求遮罩层
                     $("body").find(".mask-req-str").remove();
-                    var sessionstatus = e.getResponseHeader('SESSIONSTATUS');
-                    if (sessionstatus == "TIMEOUT") {
-                        // 超时跳转
-                        var win = window;
-                        while (win != win.top) {
-                            win = win.top;
-                        }
-                        win.location.href = "../../tpl/index/login.html";
-                    } else if (sessionstatus == "NOAUTHPOINT") {
-                        that.errorView('您不具备该权限。');
-                    } else {
+                    // var sessionstatus = e.getResponseHeader('SESSIONSTATUS');
+                    // if (sessionstatus == "TIMEOUT") {
+                    //     // 超时跳转
+                    //     var win = window;
+                    //     while (win != win.top) {
+                    //         win = win.top;
+                    //     }
+                    //     win.location.href = "../../tpl/index/login.html";
+                    // } else if (sessionstatus == "NOAUTHPOINT") {
+                    //     that.errorView('您不具备该权限。');
+                    // } else {
                         that.errorView('请求异常，错误提示：' + msg);
-                    }
+                    // }
 
                     that.renderForm();
                     that.setColsWidth();
@@ -793,7 +793,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
                 res[response.totalRowName] = $.extend({}, options.totalRow);
             }
 
-            that.renderData(res, curr, res[response.countName]), sort();
+            that.renderData(res, curr, res[response.countName], opts.type), sort();
             that.setColsWidth();
             typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
@@ -807,7 +807,7 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
     };
 
     //数据渲染
-    Class.prototype.renderData = function (res, curr, count, sort) {
+    Class.prototype.renderData = function (res, curr, count, sort, type) {
         var that = this
             , options = that.config
             , data = res[options.response.dataName] || [] //列表数据
@@ -913,7 +913,14 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function (exports) 
                     trs_fixed_r.push('<tr data-index="' + i1 + '">' + tds_fixed_r.join('') + '</tr>');
                 });
 
-                that.layBody.scrollTop(0);
+                // 容器的滚动条位置
+                if(!(options.scrollPos === 'fixed' && type === 'reloadData')){
+                    that.layBody.scrollTop(0);
+                }
+                if(options.scrollPos === 'reset'){
+                    that.layBody.scrollLeft(0);
+                }
+
                 that.layMain.find('.' + NONE).remove();
                 that.layMain.find('tbody').html(trs.join(''));
                 that.layFixLeft.find('tbody').html(trs_fixed.join(''));
