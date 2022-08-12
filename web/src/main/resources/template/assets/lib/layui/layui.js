@@ -185,6 +185,22 @@ function isNull(str) {
 	}
 }
 
+/**
+ * 存入cookie
+ */
+function setCookie(name, value) {
+	localStorage.setItem(name, value);
+}
+
+/**
+ * 获取cookie值
+ * @param name
+ * @returns
+ */
+function getCookie(name) {
+	return localStorage.getItem(name);
+}
+
 ;!function(win){
 	"use strict";
 	var doc = document, config = {
@@ -926,23 +942,5 @@ function isNull(str) {
 
 }(window);
 
-/**
- * 存入cookie
- * s20是代表20秒
- * h是指小时，如12小时则是：h12
- * d是天数，30天则：d30
- */
-function setCookie(name, value) {
-	localStorage.setItem(name, value);
-}
-
-/**
- * 获取cookie值
- * @param name
- * @returns
- */
-function getCookie(name) {
-	return localStorage.getItem(name);
-}
 
 
