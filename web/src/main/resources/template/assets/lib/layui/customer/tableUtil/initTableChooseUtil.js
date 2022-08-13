@@ -253,6 +253,9 @@ var initTableChooseUtil = {
         var options = initTableChooseUtil.setting[tableDivId];
         var trcusid = initTableChooseUtil.addRow(tableDivId);
         initTableChooseUtil.setCols(options.cols, data, trcusid);
+        if (typeof (options.addRowCallback) == "function") {
+            options.addRowCallback(trcusid);
+        }
         return trcusid;
     },
 
