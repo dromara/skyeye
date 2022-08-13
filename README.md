@@ -24,8 +24,8 @@
 
 ### 联系作者
 
-| QQ交流群/或者搜索 1016439713 | 企业版设计思路知识星球 | 扫码进微信群畅聊(禁止发广告) |
-| ---- | ---- | ---- |
+| QQ交流群/或者搜索 1016439713(禁止发广告，进群后自行修改备注：岗位-城市-备注，不改者五分钟内自动请出。) | 企业版设计思路知识星球 | 扫码进微信群畅聊(禁止发广告，进群后自行修改备注：岗位-城市-备注，不改者五分钟内自动请出。)|
+| ---- | ---- |---------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | ![](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/skyeye%E7%B3%BB%E5%88%97QQ%E7%BE%A4%E8%81%8A%E4%BA%8C%E7%BB%B4%E7%A0%81.png)| ![](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/%E7%9F%A5%E8%AF%86%E6%98%9F%E7%90%83.png) | ![](https://gitee.com/doc_wei01/skyeye/raw/company_server/web/src/main/resources/template/tpl/common/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20220626095834.jpg) |
 
 #### 功能介绍
