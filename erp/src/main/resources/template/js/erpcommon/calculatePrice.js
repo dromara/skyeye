@@ -11,7 +11,6 @@ function calculatedTotalPrice() {
 		var unitPrice = parseFloat(isNull($("#unitPrice" + thisRowKey).val()) ? 0 : $("#unitPrice" + thisRowKey).val());
 		// 获取税率
 		var taxRate = parseFloat(isNull($("#taxRate" + thisRowKey).val()) ? 0 : $("#taxRate" + thisRowKey).val()) / 100;
-
 		if ('rkNum' === showTdByEdit) {//数量
 			//输出金额
 			$("#amountOfMoney" + thisRowKey).val((rkNum * unitPrice).toFixed(2));
@@ -149,16 +148,16 @@ function calculatedTotalPrice() {
 	$("#allPrice").html(allPrice.toFixed(2));
 	$("#taxLastMoneyPrice").html(taxLastMoneyPrice.toFixed(2));
 
-	//优惠率计算
+	// 优惠率计算
 	var discount = parseFloat(isNull($("#discount").val()) ? 0 : $("#discount").val());
-	//输出优惠金额
+	// 输出优惠金额
 	var discountMoney = (taxLastMoneyPrice * discount / 100).toFixed(2);
 	$("#discountMoney").val(discountMoney);
-	//输出优惠后的金额
+	// 输出优惠后的金额
 	$("#discountLastMoney").html((taxLastMoneyPrice - discountMoney).toFixed(2));
-	//输出本次付款
+	// 输出本次付款
 	$("#changeAmount").val((taxLastMoneyPrice - discountMoney).toFixed(2));
-	//输出欠款金额
+	// 输出欠款金额
 	$("#arrears").html('0.00');
 }
 
@@ -258,25 +257,14 @@ layui.define(["jquery"], function(exports) {
 	})(jQuery);
 });
 
-// 判断选中的商品是否也在数组中
-function inTableDataArrayByAssetarId(materialId, unitId, array) {
-	var isIn = false;
-	$.each(array, function(i, item) {
-		if(item.mUnitId === unitId && item.materialId === materialId) {
-			isIn = true;
-			return false;
-		}
-	});
-	return isIn;
-}
-
 // 计算其他费用总价格
 function calculationPrice(){
 	var allPrice = 0;
 	$.each(initTableChooseUtil.getDataRowIndex('otherPriceTableList'), function(i, item) {
 		// 获取行坐标
 		var thisRowKey = item;
-		allPrice += parseFloat(isNull($("#otherPrice" + thisRowKey).val()) ? 0 : $("#otherPrice" + thisRowKey).val());
+		var otherPrice = $("#otherPrice" + thisRowKey).val();
+		allPrice += parseFloat(isNull(otherPrice) ? 0 : otherPrice);
 	});
 	$("#otherPriceTotal").html("费用合计：" + allPrice.toFixed(2));
 }

@@ -154,6 +154,7 @@ layui.config({
 			addRowCallback: function (trcusid) {
 				// 设置根据某列变化的颜色
 				$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
+				calculatedTotalPrice();
 			},
 			form: form,
 			minData: 1
@@ -177,7 +178,7 @@ layui.config({
 	}
 
 	// 商品规格加载变化事件
-	mUnitChangeEvent(form, allChooseProduct);
+	mUnitChangeEvent(form, allChooseProduct, "estimatePurchasePrice");
 
 	// 仓库变化事件
 	form.on('select(depotId)', function(data) {

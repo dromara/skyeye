@@ -29,16 +29,15 @@ function loadTockByDepotAndMUnit(rowNum, depotId) {
  * @param depotId 仓库id
  */
 function loadMaterialDepotStockByDepotId(depotId) {
-    var rowTr = $("#useTable tr");
     var normsIds = new Array();
     var normsIdsNum = new Array();
-    $.each(rowTr, function (i, item) {
+    $.each(initTableChooseUtil.getDataRowIndex('productList'), function (i, item) {
         // 获取行坐标
-        var rowNum = $(item).attr("trcusid").replace("tr", "");
-        var unitId = $("#unitId" + rowNum).val();
+        var thisRowKey = item;
+        var unitId = $("#mUnitId" + thisRowKey).val();
         if (!isNull(unitId)) {
             normsIds.push(unitId);
-            normsIdsNum.push(rowNum);
+            normsIdsNum.push(thisRowKey);
         }
     });
     if (normsIds.length == 0) {
@@ -74,12 +73,27 @@ function getStockAjaxByDepotAndNormsId(normsIds, depotId, callBack) {
     }});
 }
 
+// 判断选中的商品是否也在数组中
+function inTableDataArrayByAssetarId(materialId, unitId, array) {
+    var isIn = false;
+    $.each(array, function(i, item) {
+        if(item.mUnitId === unitId && item.materialId === materialId) {
+            isIn = true;
+            return false;
+        }
+    });
+    return isIn;
+}
+
 /**
  * 商品规格加载变化事件
  *
  * @param form 表单对象
+ * @param allChooseProduct 商品对象
+ * @param unitPriceKey 单价显示的key，不用的单据类型展示不同的商品价格类型(零售价，最低售价，销售价等)
+ * @param calcPriceCallback 计算价格回调的函数
  */
-function mUnitChangeEvent(form, allChooseProduct) {
+function mUnitChangeEvent(form, allChooseProduct, unitPriceKey, calcPriceCallback) {
     // 商品规格加载变化事件
     form.on('select(selectUnitProperty)', function(data) {
         var thisRowValue = data.value;
@@ -91,8 +105,9 @@ function mUnitChangeEvent(form, allChooseProduct) {
                 if (thisRowValue == bean.id) {
                     var rkNum = parseInt($("#rkNum" + thisRowKey).val());
                     // 设置单价和金额
-                    $("#unitPrice" + thisRowKey).val(bean.estimatePurchasePrice.toFixed(2));
-                    $("#amountOfMoney" + thisRowKey).val((rkNum * parseFloat(bean.estimatePurchasePrice)).toFixed(2));
+                    var unitPrice = bean[unitPriceKey].toFixed(2);
+                    $("#unitPrice" + thisRowKey).val(unitPrice);
+                    $("#amountOfMoney" + thisRowKey).val((rkNum * parseFloat(unitPrice)).toFixed(2));
                     return false;
                 }
             });
@@ -104,8 +119,12 @@ function mUnitChangeEvent(form, allChooseProduct) {
         var depotId = isNull($("#depotId").val()) ? "" : $("#depotId").val();
         // 加载库存
         loadTockByDepotAndMUnit(thisRowKey, depotId);
-        // 计算价格
-        calculatedTotalPrice();
+        if (typeof calcPriceCallback == "function") {
+            calcPriceCallback();
+        } else {
+            // 计算价格
+            calculatedTotalPrice();
+        }
     });
 }
 
@@ -114,8 +133,9 @@ function mUnitChangeEvent(form, allChooseProduct) {
  *
  * @param form 表单对象
  * @param callback 回调函数
+ * @param calcPriceCallback 计算价格回调的函数
  */
-function initChooseProductBtnEnent (form, callback) {
+function initChooseProductBtnEnent (form, callback, calcPriceCallback) {
     var selOptionHtml = getFileContent('tpl/template/select-option.tpl');
     $("body").on("click", ".chooseProductBtn", function (e) {
         var trId = $(this).parent().parent().attr("trcusid");
@@ -130,8 +150,12 @@ function initChooseProductBtnEnent (form, callback) {
             if (typeof callback == "function") {
                 callback(trId, chooseProductMation);
             }
-            // 计算价格
-            calculatedTotalPrice();
+            if (typeof calcPriceCallback == "function") {
+                calcPriceCallback();
+            } else {
+                // 计算价格
+                calculatedTotalPrice();
+            }
         });
     });
 }

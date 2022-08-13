@@ -78,7 +78,7 @@ layui.config({
 	matchingLanguage();
 
 	// 商品规格加载变化事件
-	mUnitChangeEvent(form, allChooseProduct);
+	mUnitChangeEvent(form, allChooseProduct, "estimatePurchasePrice");
 
 	// 保存为草稿
 	form.on('submit(formAddBean)', function(data) {
