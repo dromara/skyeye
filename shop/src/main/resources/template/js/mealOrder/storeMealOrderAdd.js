@@ -158,7 +158,7 @@ layui.config({
                 title: "选择套餐",
                 pageId: "mealChoose",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode){
+                callBack: function(refreshCode) {
                     // 获取表格行号
                     var thisRowNum = trId.replace("tr", "");
 

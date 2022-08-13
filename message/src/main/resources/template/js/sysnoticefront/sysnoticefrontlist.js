@@ -63,7 +63,7 @@ layui.config({
 			title: "公告详情",
 			pageId: "sysnoticefrontdetails",
 			area: ['80vw', '80vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	

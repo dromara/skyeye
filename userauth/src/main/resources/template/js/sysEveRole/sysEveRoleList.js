@@ -73,7 +73,7 @@ layui.config({
 			title: "编辑角色",
 			pageId: "sysEveRoleEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -87,7 +87,7 @@ layui.config({
             title: "手机端菜单授权",
             pageId: "sysEveRoleAppMenu",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){}});
+            callBack: function(refreshCode) {}});
     }
 
 	// PC端菜单授权
@@ -98,7 +98,7 @@ layui.config({
 			title: "PC端菜单授权",
 			pageId: "sysEveRolePCMenu",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){}});
+			callBack: function(refreshCode) {}});
 	}
 	
     // 新增角色
@@ -108,7 +108,7 @@ layui.config({
 			title: "新增角色",
 			pageId: "sysEveRoleAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

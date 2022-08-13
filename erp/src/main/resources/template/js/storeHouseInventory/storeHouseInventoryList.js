@@ -163,7 +163,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "materialdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -176,7 +176,7 @@ layui.config({
 			title: "盘点历史",
 			pageId: "storeHouseInventoryHistory",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	

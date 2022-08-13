@@ -285,7 +285,7 @@ layui.config({
 					title: json.bean.fileName,
 					pageId: "vedioShow",
 					area: ['80vw', '80vh'],
-					callBack: function(refreshCode){}});
+					callBack: function(refreshCode) {}});
     		}});
 		}else if($.inArray(fileType, officeType) >= 0){//office文件
 			var thisId = $(this).attr("rowid");
@@ -301,7 +301,7 @@ layui.config({
 				title: '在线预览',
 				pageId: "aceShow",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){}});
+				callBack: function(refreshCode) {}});
 		}else if($.inArray(fileType, epubType) >= 0){//电子书
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
 				fileUrl = json.bean.fileAddress;
@@ -311,7 +311,7 @@ layui.config({
 					title: json.bean.fileName,
 					pageId: "epubShow",
 					area: ['90vw', '90vh'],
-					callBack: function(refreshCode){}});
+					callBack: function(refreshCode) {}});
     		}});
 		}else if($.inArray(fileType, packageType) >= 0){//压缩包
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
@@ -323,7 +323,7 @@ layui.config({
 					pageId: "epubShow",
 					area: ['630px', '450px'],
 					skin: "zip-show",
-					callBack: function(refreshCode){}});
+					callBack: function(refreshCode) {}});
     		}});
 		}
 	});
@@ -471,7 +471,7 @@ layui.config({
 			pageId: "fileMation",
 			area: ['400px', '350px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	});
 	
@@ -617,7 +617,7 @@ layui.config({
 			pageId: "fileconsoleupload",
 			area: ['400px', '350px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				loadFileSizeCS = false;//重置让系统加载文件大小
 				loadThisFolderChild();
 			}});
@@ -631,7 +631,7 @@ layui.config({
 			pageId: "filefolderupload",
 			area: ['400px', '350px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				loadFileSizeCS = false;//重置让系统加载文件大小
 				loadThisFolderChild();
 			}});
@@ -645,7 +645,7 @@ layui.config({
 			pageId: "recycleBinListPage",
 			area: ['650px', '480px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				if(folderId === '2'){
 					refreshTreePointNode();
 					loadThisFolderChild();
@@ -661,7 +661,7 @@ layui.config({
 			pageId: "shateFileListPage",
 			area: ['700px', '480px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){}});
+			callBack: function(refreshCode) {}});
 	});
 	
 	// 分享
@@ -673,7 +673,7 @@ layui.config({
 			pageId: "shareFile",
 			area: ['500px', '400px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				loadThisFolderChild();
 			}});
 	});
@@ -686,7 +686,7 @@ layui.config({
 			pageId: "showFileInLinePage",
 			area: ['650px', '480px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){}});
+			callBack: function(refreshCode) {}});
 	});
 	
 	// 新建文件夹
@@ -762,7 +762,7 @@ layui.config({
 			pageId: "shareFile",
 			area: ['500px', '400px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				loadThisFolderChild();
 			}});
 	});
@@ -777,7 +777,7 @@ layui.config({
 			pageId: "fileMation",
 			area: ['400px', '350px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){}});
+			callBack: function(refreshCode) {}});
 	});
 	
 	var orderBy = '3';
@@ -1443,7 +1443,7 @@ layui.config({
 								pageId: "fileconsoleupload",
 								area: ['400px', '350px'],
 								skin: 'add-schedule-mation',
-								callBack: function(refreshCode){
+								callBack: function(refreshCode) {
 									loadFileSizeCS = false;//重置让系统加载文件大小
 									loadThisFolderChild();
 								}});
@@ -1458,7 +1458,7 @@ layui.config({
 								pageId: "filefolderupload",
 								area: ['400px', '350px'],
 								skin: 'add-schedule-mation',
-								callBack: function(refreshCode){
+								callBack: function(refreshCode) {
 									loadFileSizeCS = false;//重置让系统加载文件大小
 									loadThisFolderChild();
 								}});
@@ -1510,7 +1510,7 @@ layui.config({
 							pageId: "showFileInLinePage",
 							area: ['650px', '480px'],
 							skin: 'add-schedule-mation',
-							callBack: function(refreshCode){
+							callBack: function(refreshCode) {
 							}});
 					}
 				}, {

@@ -97,7 +97,7 @@ layui.config({
 			title: "定时发送",
 			pageId: "sysworkplantiming",
 			area: ['40vw', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -112,7 +112,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysworkplantiming",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 
@@ -136,7 +136,7 @@ layui.config({
 			title: title,
 			pageId: "sysworkplancomedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

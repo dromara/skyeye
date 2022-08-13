@@ -176,7 +176,7 @@ layui.config({
 			title: "编辑小程序样式属性",
 			pageId: "rmpropertyedit",
 			area: ['700px', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -194,7 +194,7 @@ layui.config({
 			title: "新增小程序样式属性",
 			pageId: "rmpropertyadd",
 			area: ['700px', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

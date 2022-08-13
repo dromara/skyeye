@@ -216,7 +216,7 @@ layui.config({
 				title: "工序选择",
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					var str = "";
 					$.each(procedureMationList, function(i, item){
 						str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
@@ -333,7 +333,7 @@ layui.config({
  				title: "选择生产计划单",
  				pageId: "erpProductionNoSuccessChooseProcedure",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					$("#productionOrder").val(productionMation.defaultNumber);
 					//加工产品信息
 					machinPro = {

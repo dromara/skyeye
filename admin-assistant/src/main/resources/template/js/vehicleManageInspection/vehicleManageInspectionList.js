@@ -73,7 +73,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageInspectionDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -95,7 +95,7 @@ layui.config({
 			title: "车辆年检登记单",
 			pageId: "vehicleManageInspectionAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadInspectionTable();
 			}});
@@ -109,7 +109,7 @@ layui.config({
 			title: "编辑车辆年检信息",
 			pageId: "vehicleManageInspectionEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadInspectionTable();
 			}});

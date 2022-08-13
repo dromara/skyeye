@@ -58,7 +58,7 @@ layui.config({
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "areaEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -83,7 +83,7 @@ layui.config({
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "areaInfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
             }
         });
     }
@@ -95,7 +95,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "areaAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});

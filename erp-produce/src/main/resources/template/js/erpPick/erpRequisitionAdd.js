@@ -198,7 +198,7 @@ layui.config({
  				title: "选择加工单",
  				pageId: "erpMachinStateIsPassNoComplateChoose",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					$("#machinOrder").val(machinMation.orderNum);
 
 					//移除之前填写的所有行

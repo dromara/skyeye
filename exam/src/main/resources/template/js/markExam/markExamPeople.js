@@ -58,7 +58,7 @@ layui.config({
  				title: "选择阅卷人",
  				pageId: "teacherChoose",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					var str = "";
 					$.each(chooseTeacherList, function(i, row){
 						str += row.userName + '(' + row.userSex + ')，';

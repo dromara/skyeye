@@ -100,7 +100,7 @@ layui.config({
 			title: "阅卷",
 			pageId: "examMarkingDetail",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -114,7 +114,7 @@ layui.config({
 			title: "试卷信息",
 			pageId: "examPCDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 

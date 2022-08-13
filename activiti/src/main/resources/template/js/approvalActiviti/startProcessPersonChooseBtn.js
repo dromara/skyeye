@@ -20,7 +20,7 @@ layui.config({
 				title: "审批人选择",
 				pageId: "startProcessPersonChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					$("#approvalPersonName").val(activitiUtil.chooseApprovalPersonMation.jobNumber + "_" + activitiUtil.chooseApprovalPersonMation.userName);
 					$("#approvalPersonName").attr("chooseData", JSON.stringify(activitiUtil.chooseApprovalPersonMation));
 				}

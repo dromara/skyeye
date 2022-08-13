@@ -56,7 +56,7 @@ layui.config({
 			title: "社区发帖",
 			pageId: "discussadd",
 			area: ['80vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -70,7 +70,7 @@ layui.config({
 			title: data.title,
 			pageId: "discussdetailpage",
 			maxmin: true,
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
 	}

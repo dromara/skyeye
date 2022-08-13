@@ -86,7 +86,7 @@ layui.config({
 			title: "单据详情",
 			pageId: "otherwarehousdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	

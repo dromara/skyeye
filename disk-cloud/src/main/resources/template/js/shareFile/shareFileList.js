@@ -165,7 +165,7 @@ layui.config({
 					pageId: "filefolderpage",
 					area: ['300px', '400px'],
 					skin: 'add-schedule-mation',
-					callBack: function(refreshCode){
+					callBack: function(refreshCode) {
 						winui.window.msg("保存成功", {icon: 1, time: 2000});
 					}});
 			} else {

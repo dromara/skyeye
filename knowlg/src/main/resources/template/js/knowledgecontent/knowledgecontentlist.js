@@ -106,7 +106,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "knowledgecontentadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -119,7 +119,7 @@ layui.config({
 			title: "批量上传知识库",
 			pageId: "filefolderupload",
 			area: ['400px', '350px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				loadTable();
 			}});
     });
@@ -143,7 +143,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "knowledgecontentedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -158,7 +158,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "knowledgecontentdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 

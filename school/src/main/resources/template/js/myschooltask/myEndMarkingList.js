@@ -109,7 +109,7 @@ layui.config({
 			title: "试卷信息",
 			pageId: "examPCDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	

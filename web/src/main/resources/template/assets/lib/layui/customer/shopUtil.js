@@ -193,7 +193,7 @@ var shopUtil = {
             title: "选择店员",
             pageId: "storeStaffChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(shopUtil.staffMation);
                 }

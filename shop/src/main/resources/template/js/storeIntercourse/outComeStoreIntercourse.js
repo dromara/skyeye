@@ -92,7 +92,7 @@ layui.config({
             title: '明细',
             pageId: "dayKeepFitOrderList",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
             }
         });
     }

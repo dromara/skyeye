@@ -163,7 +163,7 @@ layui.config({
 			title: "设计试卷",
 			pageId: "examDesign",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -178,7 +178,7 @@ layui.config({
 			title: "复制试卷",
 			pageId: "examDesignCopy",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -192,7 +192,7 @@ layui.config({
 			title: "分析报告",
 			pageId: "examReport",
 			maxmin: true,
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -228,7 +228,7 @@ layui.config({
 			title: "试卷信息",
 			pageId: "examPCDetail",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -240,7 +240,7 @@ layui.config({
 			title: "阅卷人",
 			pageId: "markExamPeople",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -256,7 +256,7 @@ layui.config({
 			title: "新增试卷",
 			pageId: "examDesignAdd",
 			area: ['70vw', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

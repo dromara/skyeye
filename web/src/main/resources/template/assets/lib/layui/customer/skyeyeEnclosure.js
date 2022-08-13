@@ -55,7 +55,7 @@ var skyeyeEnclosure = {
                 title: "上传附件",
                 pageId: "enclosureuploadpage",
                 area: ['420px', '420px'],
-                callBack: function(refreshCode){
+                callBack: function(refreshCode) {
                     // 重新加载dom对象
                     skyeyeEnclosure.loadEnclosureHTML(id, btnId, 1);
                     if(typeof(callback) == "function") {

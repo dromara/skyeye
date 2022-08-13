@@ -132,7 +132,7 @@ layui.config({
 			title: "帖子举报",
 			pageId: "forumreport",
 			area: ['40vw', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg("举报成功", {icon: 1, time: 2000});
 			}});
 	});

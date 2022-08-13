@@ -57,7 +57,7 @@ layui.config({
 				title: "库存明细",
 				pageId: "materialstocklist",
 				area: ['100vw', '100vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 		});
 		

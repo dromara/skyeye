@@ -104,7 +104,7 @@ layui.config({
 			title: "编辑印章归还申请",
 			pageId: "sealManageRevertEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadRevertTable();
 			}
@@ -148,7 +148,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealManageRevertDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}
 		});
 	}
@@ -160,7 +160,7 @@ layui.config({
 			title: "印章归还申请",
 			pageId: "sealManageRevertAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadRevertTable();
 			}});

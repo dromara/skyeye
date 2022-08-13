@@ -98,7 +98,7 @@ layui.config({
 			title: "分班",
 			pageId: "assignmentClass",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -112,7 +112,7 @@ layui.config({
 			title: "学生信息",
 			pageId: "schoolStudentDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	

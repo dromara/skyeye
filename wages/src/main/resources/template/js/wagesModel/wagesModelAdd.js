@@ -119,7 +119,7 @@ layui.config({
 			title: "选择企业",
 			pageId: "companyChooseList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				// 重置数据
 				companyList = [].concat(systemCommonUtil.tagEditorResetData('company', companyList));
 			}});
@@ -211,7 +211,7 @@ layui.config({
 			title: "选择薪资字段",
 			pageId: "productlist",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				// 获取表格行号
 				var thisRowNum = trId.replace("tr", "");
 				// 表格名称赋值

@@ -93,7 +93,7 @@ layui.config({
 			title: "编辑分类",
 			pageId: "rmtypeedit",
 			area: ['500px', '30vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -111,7 +111,7 @@ layui.config({
 			title: "新增分类",
 			pageId: "rmtypeadd",
 			area: ['500px', '30vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

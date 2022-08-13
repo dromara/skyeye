@@ -87,7 +87,7 @@ layui.config({
 			title: "添加用品领用申请",
 			pageId: "assetArticlesUseAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLingyongTable();
 			}});
@@ -113,7 +113,7 @@ layui.config({
 			title: "编辑用品领用申请",
 			pageId: "assetArticlesUseEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLingyongTable();
 			}
@@ -157,7 +157,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetArticlesUseDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}
 		});
 	}

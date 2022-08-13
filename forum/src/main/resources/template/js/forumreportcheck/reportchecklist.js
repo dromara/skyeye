@@ -157,7 +157,7 @@ layui.config({
 				title: "审核",
 				pageId: "reportcheck",
 				area: ['80vw', '95vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 					loadCheckedTable();
@@ -172,7 +172,7 @@ layui.config({
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "reportcheckdetail",
 				area: ['50vw', '80vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 		};
 	};
@@ -185,7 +185,7 @@ layui.config({
             title: "帖子详情",
             pageId: "forumdetails",
             area: ['80vw', '95vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
             }});
     };
@@ -299,7 +299,7 @@ layui.config({
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "reportcheckdetail",
 				area: ['50vw', '80vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 		};
 	};

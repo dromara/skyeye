@@ -148,7 +148,7 @@ layui.config({
 			title: "薪资设定",
 			pageId: "wagesStaffMationDesign",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

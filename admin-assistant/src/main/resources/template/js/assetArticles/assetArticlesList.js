@@ -64,7 +64,7 @@ layui.config({
 			title: "新增用品",
 			pageId: "assetarticlesadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLiebiaoTable();
 			}});
@@ -78,7 +78,7 @@ layui.config({
 			title: "用品详情",
 			pageId: "assetarticlesdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}
 		});
 	}
@@ -102,7 +102,7 @@ layui.config({
 			title: "编辑用品",
 			pageId: "assetarticlesedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}

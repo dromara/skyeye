@@ -64,7 +64,7 @@ layui.config({
 	 				title: "重命名页面",
 	 				pageId: "editpagebeanitem",
 	 				area: ['700px', '60vh'],
-	 				callBack: function(refreshCode){
+	 				callBack: function(refreshCode) {
 						refreshGrid("pageList", {params:{rowId: proId}});
 						winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 						//重置中间模块
@@ -345,7 +345,7 @@ layui.config({
 			title: "新增页面",
 			pageId: "addpagebeanitem",
 			area: ['700px', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				refreshGrid("pageList", {params:{rowId: proId}});
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});

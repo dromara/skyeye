@@ -89,7 +89,7 @@ layui.config({
             title: "销假申请",
             pageId: "checkWorkCancelLeaveAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -114,7 +114,7 @@ layui.config({
             title: "销假申请",
             pageId: "checkWorkCancelLeaveEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -157,7 +157,7 @@ layui.config({
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "checkWorkCancelLeaveDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
             }
         });
     }

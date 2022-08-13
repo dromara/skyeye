@@ -75,7 +75,7 @@ layui.config({
 			title: "新增标签",
 			pageId: "forumtagadd",
 			area: ['500px', '20vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -125,7 +125,7 @@ layui.config({
 			title: "编辑论坛标签",
 			pageId: "forumtagedit",
 			area: ['500px', '20vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}

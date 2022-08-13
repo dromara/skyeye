@@ -149,7 +149,7 @@ layui.config({
 			title: "编辑员工",
 			pageId: "sysEveUserStaffEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -163,7 +163,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -175,7 +175,7 @@ layui.config({
 			title: "员工离职",
 			pageId: "syseveuserstaffleave",
 			area: ['50vw', '55vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -189,7 +189,7 @@ layui.config({
 			title: "转教职工",
 			pageId: "syseveuserstaffleave",
 			area: ['50vw', '55vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg("操作成功，请通知该员工重新登录帐号。", {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -203,7 +203,7 @@ layui.config({
 			title: "录入证书",
 			pageId: "sysStaffCertificateAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -217,7 +217,7 @@ layui.config({
 			title: "录入教育背景",
 			pageId: "sysStaffEducationAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -231,7 +231,7 @@ layui.config({
 			title: "录入家庭成员",
 			pageId: "sysStaffFamilyAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -245,7 +245,7 @@ layui.config({
 			title: "录入工作履历",
 			pageId: "sysStaffJobResumeAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -259,7 +259,7 @@ layui.config({
 			title: "录入语言能力",
 			pageId: "sysStaffLanguageAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -273,7 +273,7 @@ layui.config({
 			title: "录入合同信息",
 			pageId: "sysStaffContractAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -286,7 +286,7 @@ layui.config({
 			title: "新增员工",
 			pageId: "sysEveUserStaffAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

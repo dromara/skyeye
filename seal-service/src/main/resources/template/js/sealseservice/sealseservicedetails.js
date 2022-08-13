@@ -99,7 +99,7 @@ layui.config({
 				title: "客户详情",
 				pageId: "customerdetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 	    });
 	    
@@ -111,7 +111,7 @@ layui.config({
 				title: "产品详情",
 				pageId: "licencedetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 	    });
 	    
@@ -123,7 +123,7 @@ layui.config({
 				title: "组件详情",
 				pageId: "licencedetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 	    });
 		
@@ -151,7 +151,7 @@ layui.config({
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "feedbackdetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 	    });
 	    

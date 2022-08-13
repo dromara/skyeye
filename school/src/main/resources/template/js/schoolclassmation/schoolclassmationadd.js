@@ -104,7 +104,7 @@ layui.config({
  				title: "选择教师",
  				pageId: "teacherChoose",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					$("#masterStaffName").val(teacherMation.userName);
  				}});
  	    });

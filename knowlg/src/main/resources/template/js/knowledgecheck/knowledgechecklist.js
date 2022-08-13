@@ -178,7 +178,7 @@ layui.config({
 			title: "审核",
 			pageId: "knowledgecheck",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 				loadCheckedTable();
@@ -193,7 +193,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "knowledgeuncheckdetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	};
 	
@@ -282,7 +282,7 @@ layui.config({
 			title: "详情",
 			pageId: "knowledgecheckeddetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	};
     

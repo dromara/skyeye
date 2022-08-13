@@ -284,7 +284,7 @@ layui.config({
 				title: "选择邮件模板",
 				pageId: "emailSendModelListChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					$("#typeName").val(emailSendModel.title);
 					$('#toPeople').tagEditor('destroy')
 					$('#toPeople').tagEditor({

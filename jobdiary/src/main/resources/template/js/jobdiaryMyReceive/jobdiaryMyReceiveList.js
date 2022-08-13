@@ -119,7 +119,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMyReceiveDayDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					if(data.state == '1')
 						loadTable();
 				}});
@@ -130,7 +130,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMyReceiveWeekDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					if(data.state == '1')
 						loadTable();
 				}});
@@ -141,7 +141,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMyReceiveMonthDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					if(data.state == '1')
 						loadTable();
 				}});
@@ -171,7 +171,7 @@ layui.config({
             title: "日志时间线",
             pageId: "jobdiaryMyReceiveTimeLine",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
             }});
     });
 	

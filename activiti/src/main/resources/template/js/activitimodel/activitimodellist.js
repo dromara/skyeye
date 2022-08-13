@@ -100,7 +100,7 @@ layui.config({
 			title: "绘制流程",
 			pageId: "canveractivitimodeledit",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -168,7 +168,7 @@ layui.config({
 				title: "绘制流程",
 				pageId: "canveractivitimodel",
 				area: ['100vw', '100vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});

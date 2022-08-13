@@ -213,7 +213,7 @@ layui.config({
 		}});
 	}
 
-	// 加载选品选择事件
+	// 加载商品选择事件
 	initChooseProductBtnEnent(form, function(trId, chooseProductMation) {
 		// 商品赋值
 		allChooseProduct[trId] = chooseProductMation;

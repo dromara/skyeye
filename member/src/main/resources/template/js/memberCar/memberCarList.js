@@ -80,7 +80,7 @@ layui.config({
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "memberCarEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -125,7 +125,7 @@ layui.config({
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "memberCarInfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
             }
         });
     }
@@ -137,7 +137,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "memberCarAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -151,7 +151,7 @@ layui.config({
             title: '车辆过户',
             pageId: "memberCarTransfer",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});

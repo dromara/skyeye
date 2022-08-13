@@ -119,7 +119,7 @@ layui.config({
 					pageId: "addScheduleMation",
 					area: ['70vw', '80vh'],
 					skin: 'add-schedule-mation',
-					callBack: function(refreshCode){
+					callBack: function(refreshCode) {
 						if(refreshCode == '0') {
 							winui.window.msg('日程创建成功', { shift: 6, skin: 'msg-skin-message'});
 							calendar.fullCalendar('refetchEvents');
@@ -202,7 +202,7 @@ layui.config({
 			pageId: "addScheduleMation",
 			area: ['70vw', '80vh'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
                 if(refreshCode == '0') {
                 	winui.window.msg('日程创建成功', { shift: 6, skin: 'msg-skin-message'});
 					calendar.fullCalendar('refetchEvents');

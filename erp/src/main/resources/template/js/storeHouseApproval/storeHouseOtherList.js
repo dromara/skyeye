@@ -123,7 +123,7 @@ layui.config({
 			title: "审核",
 			pageId: "storeHouseOtherExamine",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -138,7 +138,7 @@ layui.config({
 			title: "单据详情",
 			pageId: "storeHouseApprovalOrderDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 

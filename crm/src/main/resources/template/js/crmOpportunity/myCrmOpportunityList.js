@@ -113,7 +113,7 @@ layui.config({
 			title: "新增商机",
 			pageId: "crmopportunityadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -144,7 +144,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmopportunitydetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -157,7 +157,7 @@ layui.config({
 			pageId: "discussDetails",
 			area: ['90vw', '90vh'],
 			maxmin: true,
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 
@@ -169,7 +169,7 @@ layui.config({
 			title: "编辑商机",
 			pageId: "crmopportunityedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -184,7 +184,7 @@ layui.config({
 			title: "状态变更",
 			pageId: "stateChange",
 			area: ['80vw', '50vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}

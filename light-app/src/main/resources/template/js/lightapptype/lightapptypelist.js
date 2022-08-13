@@ -105,7 +105,7 @@ layui.config({
 			title: "新增轻应用类型",
 			pageId: "lightapptypeadd",
 			area: ['800px', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -119,7 +119,7 @@ layui.config({
 			title: "编辑轻应用类型",
 			pageId: "lightapptypeedit",
 			area: ['800px', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

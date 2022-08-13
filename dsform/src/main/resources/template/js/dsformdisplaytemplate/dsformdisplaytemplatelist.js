@@ -103,7 +103,7 @@ layui.config({
 			title: "编辑动态表单数据展示模板",
 			pageId: "dsformdisplaytemplateedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -121,7 +121,7 @@ layui.config({
 			title: "新增动态表单数据展示模板",
 			pageId: "dsformdisplaytemplateadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

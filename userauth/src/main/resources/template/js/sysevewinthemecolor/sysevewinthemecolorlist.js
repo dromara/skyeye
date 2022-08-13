@@ -76,7 +76,7 @@ layui.config({
 			title: "编辑主题",
 			pageId: "sysevewinthemecoloredit",
 			area: ['400px', '400px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -94,7 +94,7 @@ layui.config({
 			title: "新增主题",
 			pageId: "sysevewinthemecoloradd",
 			area: ['400px', '400px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

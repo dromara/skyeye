@@ -107,7 +107,7 @@ layui.config({
 			title: "会议室预定申请",
 			pageId: "conFerenceRoomReserveEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadReserveTable();
 			}
@@ -151,7 +151,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "conFerenceRoomReserveDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}
 		});
 	}
@@ -163,7 +163,7 @@ layui.config({
 			title: "会议室预定申请",
 			pageId: "addreserve",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadReserveTable();
 			}});

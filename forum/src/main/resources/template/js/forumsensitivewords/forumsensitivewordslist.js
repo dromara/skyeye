@@ -60,7 +60,7 @@ layui.config({
 			title: "新增敏感词",
 			pageId: "forumsensitivewordsadd",
 			area: ['500px', '20vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -86,7 +86,7 @@ layui.config({
 			title: "编辑论坛敏感词",
 			pageId: "forumsensitivewordsedit",
 			area: ['500px', '20vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}

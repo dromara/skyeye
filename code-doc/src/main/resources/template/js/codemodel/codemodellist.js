@@ -108,7 +108,7 @@ layui.config({
 			url: "../../tpl/codemodel/codemodeledit.html", 
 			title: "编辑模板",
 			pageId: "codemodeledit",
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -125,7 +125,7 @@ layui.config({
 			url: "../../tpl/codemodel/codemodeladd.html", 
 			title: "新增模板",
 			pageId: "codemodeladd",
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

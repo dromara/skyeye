@@ -114,7 +114,7 @@ layui.config({
 			title: "知识点信息",
 			pageId: "schoolKnowledgePointsDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	

@@ -287,7 +287,7 @@ layui.config({
  				title: "选择商品",
  				pageId: "materialChooseToProduce",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					$.each(productMationList, function(i, item){
 						if(!inZtreeNode(item.productId)){
 							ztreeNode.push(item);
@@ -315,7 +315,7 @@ layui.config({
 					title: "工序选择",
 					pageId: "erpWorkProcedureChoose",
 					area: ['90vw', '90vh'],
-					callBack: function(refreshCode){
+					callBack: function(refreshCode) {
 						ztreeNode[selIndex].procedureMationList = [].concat(procedureMationList);
 						var str = "";
 						var title = "";

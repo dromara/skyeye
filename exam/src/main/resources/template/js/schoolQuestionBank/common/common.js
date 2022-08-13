@@ -672,7 +672,7 @@ layui.define(["jquery", 'form'], function(exports) {
 				title: "知识点选择",
 				pageId: "schoolKnowledgePointsChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					var str = "";
 					$.each(schoolKnowledgeMationList, function(i, item){
 						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.title + '</span>';

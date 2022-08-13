@@ -95,7 +95,7 @@ layui.config({
 			title: "新增轻应用",
 			pageId: "lightappadd",
 			area: ['800px', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -109,7 +109,7 @@ layui.config({
 			title: "编辑轻应用",
 			pageId: "lightappedit",
 			area: ['800px', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

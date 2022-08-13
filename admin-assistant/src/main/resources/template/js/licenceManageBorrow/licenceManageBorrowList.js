@@ -104,7 +104,7 @@ layui.config({
 			title: "编辑证照借用申请",
 			pageId: "licenceManageBorrowEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadBorrowTable();
 			}
@@ -148,7 +148,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "licenceManageBorrowDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}
 		});
 	}
@@ -160,7 +160,7 @@ layui.config({
 			title: "证照借用申请",
 			pageId: "licenceManageBorrowAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadBorrowTable();
 			}});

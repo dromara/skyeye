@@ -431,7 +431,7 @@ layui.config({
 				title: "知识点选择",
 				pageId: "schoolKnowledgePointsChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					var strIds = new Array();
 					$.each(schoolKnowledgeMationList, function(i, item){
 						strIds.push(item.id);
@@ -458,7 +458,7 @@ layui.config({
 				title: "试题选择",
 				pageId: "schoolQuestionBankChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					initPageJson(function(){
 						quIndex = 0, quLeftIndex = 0;
 						$.each(questionMationList, function(i, item){

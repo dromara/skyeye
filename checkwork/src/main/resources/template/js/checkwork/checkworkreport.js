@@ -196,7 +196,7 @@ layui.config({
 			title: title,
 			pageId: "detail",
 			area: ['80vw', '70vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}
 		});
 	}
@@ -458,7 +458,7 @@ layui.config({
     			title: title,
     			pageId: "detail",
     			area: ['80vw', '70vh'],
-    			callBack: function(refreshCode){
+    			callBack: function(refreshCode) {
                     
     			}
     		});

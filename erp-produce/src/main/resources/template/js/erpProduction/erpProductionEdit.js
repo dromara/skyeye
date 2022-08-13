@@ -207,7 +207,7 @@ layui.config({
 				title: "工序选择",
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					wayProcedureMation = {};
 					loadProcedureMation();
 				}});
@@ -220,7 +220,7 @@ layui.config({
 				title: "工艺选择",
 				pageId: "erpWayProcedureChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure008", params: {rowId: wayProcedureMation.id}, type: 'json', method: "GET", callback: function (json) {
 						procedureMationList = [].concat(json.bean.procedureList);
 						loadProcedureMation();
@@ -259,7 +259,7 @@ layui.config({
  				title: "选择销售单据",
  				pageId: "salesOrderChoose",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					erpOrderUtil.chooseProductMation = {
 						productName: salesOrder.materialName,
 						productModel: salesOrder.materialModel,

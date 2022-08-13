@@ -14,7 +14,7 @@ var mailUtil = {
             title: "通讯录选择",
             pageId: "mailListChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(mailUtil.mailChooseList);
                 }

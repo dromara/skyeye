@@ -87,7 +87,7 @@ layui.config({
 			title: "设计问卷",
 			pageId: "dwsurveydesign",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -102,7 +102,7 @@ layui.config({
 			title: "复制问卷",
 			pageId: "dwsurveydesigncopy",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -117,7 +117,7 @@ layui.config({
 			title: "收集问卷",
 			pageId: "surveyRelove",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -129,7 +129,7 @@ layui.config({
 			title: "分析报告",
 			pageId: "surveyReport",
 			maxmin: true,
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -169,7 +169,7 @@ layui.config({
 			title: "新增问卷",
 			pageId: "dwsurveydesignadd",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

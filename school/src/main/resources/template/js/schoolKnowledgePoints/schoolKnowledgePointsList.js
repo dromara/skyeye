@@ -142,7 +142,7 @@ layui.config({
 			title: "编辑知识点",
 			pageId: "schoolKnowledgePointsEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -156,7 +156,7 @@ layui.config({
 			title: "知识点信息",
 			pageId: "schoolKnowledgePointsDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -172,7 +172,7 @@ layui.config({
 			title: "新增知识点",
 			pageId: "schoolKnowledgePointsAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

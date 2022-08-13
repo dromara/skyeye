@@ -91,7 +91,7 @@ layui.config({
 			title: "任务详情",
 			pageId: "protaskdetails",
 			area: ['70vw', '70vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
 	}

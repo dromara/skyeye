@@ -74,7 +74,7 @@ layui.config({
 			title: "客户详情",
 			pageId: "customerdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	

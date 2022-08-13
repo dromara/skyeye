@@ -130,7 +130,7 @@ layui.config({
 			title: _title,
 			pageId: "editenclosurepage",
 			area: ['400px', '200px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTreePointNode();
 				loadThisFolderChild();
@@ -157,7 +157,7 @@ layui.config({
 			title: "新增文件夹",
 			pageId: "addenclosurepage",
 			area: ['400px', '200px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTreePointNode();
 				loadThisFolderChild();
@@ -171,7 +171,7 @@ layui.config({
 			title: "上传附件",
 			pageId: "enclosureuploadpage",
 			area: ['400px', '350px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
     			loadThisFolderChild();
 			}});
 	});

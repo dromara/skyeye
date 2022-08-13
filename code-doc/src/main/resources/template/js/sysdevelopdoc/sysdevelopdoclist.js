@@ -123,7 +123,7 @@ layui.config({
 			title: "编辑目录信息",
 			pageId: "sysdevelopdocedit",
 			area: ['600px', '50vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -137,7 +137,7 @@ layui.config({
 			title: "文档管理",
 			pageId: "sysdevelopdocconsole",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -155,7 +155,7 @@ layui.config({
 			title: "新增目录信息",
 			pageId: "sysdevelopdocadd",
 			area: ['600px', '50vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

@@ -165,7 +165,7 @@ layui.config({
 			title: "定时发送",
 			pageId: "sysworkplantiming",
 			area: ['40vw', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -179,7 +179,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysworkplantiming",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -192,7 +192,7 @@ layui.config({
 				title: "编辑个人计划",
 				pageId: "sysworkplanedit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -202,7 +202,7 @@ layui.config({
 				title: "编辑部门计划",
 				pageId: "sysworkplandepedit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -212,7 +212,7 @@ layui.config({
 				title: "编辑公司计划",
 				pageId: "sysworkplancomedit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -523,7 +523,7 @@ layui.config({
 			title: "新增个人计划",
 			pageId: "sysworkplanaddpage",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTable();
 			}});
@@ -537,7 +537,7 @@ layui.config({
 			title: "新增部门计划",
 			pageId: "sysworkplandepaddpage",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTable();
 			}});
@@ -555,7 +555,7 @@ layui.config({
 			title: "新增公司计划",
 			pageId: "sysworkplancomaddpage",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTable();
 			}});

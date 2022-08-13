@@ -122,7 +122,7 @@ layui.config({
 			title: "试题信息",
 			pageId: "",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	

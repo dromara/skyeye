@@ -110,7 +110,7 @@ layui.config({
 			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
 			title: "新增目录",
 			pageId: "companyjobedit",
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -125,7 +125,7 @@ layui.config({
 			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
 			title: "新增流程图",
 			pageId: "companyjobedit",
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -174,7 +174,7 @@ layui.config({
 			url: "../../tpl/planprojectflow/planprojectflowedit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "rmgroupedit",
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

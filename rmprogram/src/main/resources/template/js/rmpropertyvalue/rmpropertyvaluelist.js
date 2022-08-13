@@ -90,7 +90,7 @@ layui.config({
 			title: "编辑标签属性值",
 			pageId: "rmpropertyvalueedit",
 			area: ['700px', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -108,7 +108,7 @@ layui.config({
 			title: "新增标签属性值",
 			pageId: "rmpropertyvalueadd",
 			area: ['700px', '60vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

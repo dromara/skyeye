@@ -67,7 +67,7 @@ layui.config({
 				area: ['600px', '400px'],
 				shade: false,
 				skin: 'msg-skin-message',
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 			}});
    		}});
 	}

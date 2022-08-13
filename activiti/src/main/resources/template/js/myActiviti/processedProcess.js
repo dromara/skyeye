@@ -81,7 +81,7 @@ layui.config({
 			title: "撤回",
 			pageId: "activitiwithdraw",
 			area: ['70vw', '40vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				reloadMyHistoryTaskTable();
 			}

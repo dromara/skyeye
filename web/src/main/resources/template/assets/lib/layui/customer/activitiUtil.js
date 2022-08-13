@@ -39,7 +39,7 @@ var activitiUtil = {
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "myactivitidetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
             }
         });
     },
@@ -95,7 +95,7 @@ var activitiUtil = {
             title: "审批人选择",
             pageId: "approvalPersonChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 $("#approvalPersonName").val(activitiUtil.chooseApprovalPersonMation.jobNumber + "_" + activitiUtil.chooseApprovalPersonMation.userName);
                 $("#approvalPersonName").attr("chooseData", JSON.stringify(activitiUtil.chooseApprovalPersonMation));
             }
@@ -127,7 +127,7 @@ var activitiUtil = {
             title: "审批人选择",
             pageId: "startProcessPersonChooseBtn",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 if (typeof callback === 'function') {
                     callback(activitiUtil.chooseApprovalPersonMation.id);
                 }
@@ -236,7 +236,7 @@ var activitiUtil = {
                 title: "前加签",
                 pageId: "beforeAddSignTaskPage",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode){
+                callBack: function(refreshCode) {
                     if (typeof callback === 'function') {
                         callback();
                     }
@@ -251,7 +251,7 @@ var activitiUtil = {
                 title: "后加签",
                 pageId: "afterAddSignTaskPage",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode){
+                callBack: function(refreshCode) {
                     if (typeof callback === 'function') {
                         callback();
                     }
@@ -266,7 +266,7 @@ var activitiUtil = {
                 title: "会签设定",
                 pageId: "jointlySignPage",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode){
+                callBack: function(refreshCode) {
                     if (typeof callback === 'function') {
                         callback();
                     }

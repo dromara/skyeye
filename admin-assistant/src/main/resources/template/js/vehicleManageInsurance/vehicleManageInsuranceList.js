@@ -73,7 +73,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageInsuranceDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -95,7 +95,7 @@ layui.config({
 			title: "车辆保险登记单",
 			pageId: "vehicleManageInsuranceAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadInsuranceTable();
 			}});
@@ -109,7 +109,7 @@ layui.config({
 			title: "编辑车辆保险信息",
 			pageId: "vehicleManageInsuranceEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadInsuranceTable();
 			}});

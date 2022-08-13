@@ -73,7 +73,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageAccidentDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
@@ -95,7 +95,7 @@ layui.config({
 			title: "车辆事故登记单",
 			pageId: "vehicleManageAccidentAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadAccidentTable();
 			}});
@@ -109,7 +109,7 @@ layui.config({
 			title: "编辑车辆事故信息",
 			pageId: "vehicleManageAccidentEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadAccidentTable();
 			}});

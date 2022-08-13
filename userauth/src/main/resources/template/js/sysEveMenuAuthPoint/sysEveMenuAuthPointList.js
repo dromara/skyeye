@@ -88,7 +88,7 @@ layui.config({
 			title: title,
 			pageId: "sysEveMenuAuthPointEdit",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -119,7 +119,7 @@ layui.config({
 			title: title,
 			pageId: "sysEveMenuAuthPointAdd",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

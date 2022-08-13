@@ -43,7 +43,7 @@ layui.config({
 				title: "单据详情",
 				pageId: "orderDetails",
 				area: ['100vw', '100vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 		});
 	}});

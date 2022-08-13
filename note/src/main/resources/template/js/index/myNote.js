@@ -392,7 +392,7 @@ layui.config({
 							title: "移动到",
 							pageId: "noteFileTree",
 							area: ['300px', '400px'],
-							callBack: function(refreshCode){
+							callBack: function(refreshCode) {
 								if(refreshCode != "" && refreshCode != undefined){
 									if(refreshCode != "-9999"){
 										winui.window.msg("保存成功", {icon: 1, time: 2000});

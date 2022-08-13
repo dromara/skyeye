@@ -85,7 +85,7 @@ layui.config({
 			title: "新增菜单",
 			pageId: "appWorkPageAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -99,7 +99,7 @@ layui.config({
 			title: "编辑菜单",
 			pageId: "appWorkPageEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -140,7 +140,7 @@ layui.config({
 			title: "权限点",
 			pageId: "appWorkPageAuthPointList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 

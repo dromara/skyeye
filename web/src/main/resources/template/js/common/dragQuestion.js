@@ -115,7 +115,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				title: "内容",
 				area: ['500px', '500px'],
 				pageId: "designSurveyEditor",
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					setCurEditContent(ueEditObj);
 					curEditCallback();
@@ -789,7 +789,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				title: "问卷设置",
 				area: ['500px', '500px'],
 				pageId: "designSurveyOp",
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				}});
 	    });
@@ -1285,7 +1285,7 @@ function showUIDialog(thDialogObj) {
 		title: "选项设置",
 		area: ['500px', '500px'],
 		pageId: "modelUIDialog",
-		callBack: function(refreshCode){
+		callBack: function(refreshCode) {
 			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 		}});
 }

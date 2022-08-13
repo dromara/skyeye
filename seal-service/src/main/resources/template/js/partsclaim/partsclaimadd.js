@@ -186,7 +186,7 @@ layui.config({
  				title: "选取工单",
  				pageId: "mytocompletedlist",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					$("#serviceId").val(chooseOrderNum);
  				}});
  	    });
@@ -244,7 +244,7 @@ layui.config({
  				title: "选择客户",
  				pageId: "customerchooselist",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					$("#customName").val(customerMation.customName);
  				}});
  	    });

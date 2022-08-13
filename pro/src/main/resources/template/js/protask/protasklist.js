@@ -150,7 +150,7 @@ layui.config({
 			title: "新增任务",
 			pageId: "protaskadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -166,7 +166,7 @@ layui.config({
 			title: '<span style="color: blue; font-size:21px">' + data.taskName + '</span><span style="font-size:12px">[拆分子任务]</span>',
 			pageId: "protaskadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -180,7 +180,7 @@ layui.config({
 			title: '执行信息',
 			pageId: "protaskexecution",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -223,7 +223,7 @@ layui.config({
 			title: "任务详情",
 			pageId: "protaskdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
 	}
@@ -236,7 +236,7 @@ layui.config({
 			title: "编辑任务",
 			pageId: "protaskedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}

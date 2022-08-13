@@ -108,7 +108,7 @@ layui.config({
 			title: "新增类型",
 			pageId: "sysnoticetypeadd",
 			area: ['500px', '40vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -158,7 +158,7 @@ layui.config({
 			title: "编辑类型",
 			pageId: "sysnoticetypeedit",
 			area: ['500px', '40vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}

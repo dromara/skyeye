@@ -121,7 +121,7 @@ layui.config({
 			skin: 'update-password-html',
 			pageId: "editpassword",
 			area: ['700px', '300px'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
 	});

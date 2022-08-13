@@ -65,7 +65,7 @@ layui.config({
 			title: "数据备份",
 			pageId: "sysdatatablelistpage",
 			maxmin: true,
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

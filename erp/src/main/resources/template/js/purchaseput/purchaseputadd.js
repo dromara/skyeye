@@ -23,7 +23,7 @@ layui.config({
 	var inoutitemHtml = "";//支出项目
 
 	var selOption = getFileContent('tpl/template/select-option.tpl');
-	//已经选择的商品集合key：表格的行trId，value：商品信息
+	// 已经选择的商品集合key：表格的行trId，value：商品信息
 	var allChooseProduct = {};
 
 	// 获取单据提交类型
@@ -205,7 +205,7 @@ layui.config({
 		});
 	});
 
-	// 加载选品选择事件
+	// 加载商品选择事件
 	initChooseProductBtnEnent(form, function(trId, chooseProductMation) {
 		// 商品赋值
 		allChooseProduct[trId] = chooseProductMation;

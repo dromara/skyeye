@@ -318,7 +318,7 @@ layui.config({
 			title: "新增申请类型实体",
 			pageId: "actmodletypeadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -367,7 +367,7 @@ layui.config({
 			title: "编辑类型实体",
 			pageId: "actmodleedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -382,7 +382,7 @@ layui.config({
 			title: "详情",
 			pageId: "actmodleedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}
 		});
 	}

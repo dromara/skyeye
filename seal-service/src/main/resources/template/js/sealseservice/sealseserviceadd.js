@@ -111,7 +111,7 @@ layui.config({
  				title: "选择接收人",
  				pageId: "serviceworkershowlist",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					$("#serviceUserId").val(serviceUser.userName);
  				}});
 		});
@@ -226,7 +226,7 @@ layui.config({
  				title: "选择客户",
  				pageId: "customerchooselist",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode){
+ 				callBack: function(refreshCode) {
 					$("#customName").val(customerMation.customName);
 					$("#contacts").val(customerMation.contacts);
 					$("#phone").val(customerMation.mobilePhone);

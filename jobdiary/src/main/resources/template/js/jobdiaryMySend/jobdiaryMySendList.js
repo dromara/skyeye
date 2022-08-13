@@ -85,7 +85,7 @@ layui.config({
 			title: "发表日志",
 			pageId: "jobdiaryMySendPublish",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadMySendTable();
 			}});
@@ -123,7 +123,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMySendDayDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 		}else if(data.diaryType == 2){
 			// 周报
@@ -132,7 +132,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMySendWeekDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 		}else if(data.diaryType == 3){
 			// 周报
@@ -141,7 +141,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMySendMonthDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 				}});
 		}
 	}
@@ -156,7 +156,7 @@ layui.config({
 				title: "编辑日报",
 				pageId: "jobdiaryMySendDayEdit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg("发送成功", {icon: 1, time: 2000});
 					loadMySendTable();
 				}});
@@ -167,7 +167,7 @@ layui.config({
 				title: "编辑周报",
 				pageId: "jobdiaryMySendWeekEdit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg("发送成功", {icon: 1, time: 2000});
 					loadMySendTable();
 				}});
@@ -178,7 +178,7 @@ layui.config({
 				title: "编辑月报",
 				pageId: "jobdiaryMySendMonthEdit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode){
+				callBack: function(refreshCode) {
 					winui.window.msg("发送成功", {icon: 1, time: 2000});
 					loadMySendTable();
 				}});

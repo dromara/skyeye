@@ -108,7 +108,7 @@ layui.config({
 			title: "选择企业",
 			pageId: "companyChooseList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				// 重置数据
 				companyList = [].concat(systemCommonUtil.tagEditorResetData('company', companyList));
 			}});
@@ -129,7 +129,7 @@ layui.config({
 			title: "选择部门",
 			pageId: "companyDepartmentChooseList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 				// 重置数据
 				departmentList = [].concat(systemCommonUtil.tagEditorResetData('department', departmentList));
 			}});

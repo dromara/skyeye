@@ -285,7 +285,7 @@ layui.config({
 								pageId: "createMenuBoxDialog",
 								area: ['600px', '200px'],
 								skin: 'top-message-mation',
-								callBack: function(refreshCode){
+								callBack: function(refreshCode) {
 									var boxStr = '<div class="winui-desktop-item win-menu-group" id="' + childParams.id + '" win-id="' + childParams.id + '" win-url="--" win-title="' + childParams.menuBoxName + '" win-opentype="2" win-maxopen="-1" win-menuiconbg="#44adb1">'
 													+ '<div class="winui-icon winui-icon-font">'
 														+ '<div class="icon-drawer"></div>'
@@ -321,7 +321,7 @@ layui.config({
 								pageId: "createMenuDialog",
 								area: ['700px', '450px'],
 								skin: 'top-message-mation',
-								callBack: function(refreshCode){
+								callBack: function(refreshCode) {
 									var str = '';
 									var iconTypeI = '';
 									var menuIcon = '';
@@ -859,7 +859,7 @@ layui.config({
 							pageId: "noticeDetail" + (new Date()).valueOf(),
 							area: ['600px', '400px'],
 							shade: false,
-							callBack: function(refreshCode){
+							callBack: function(refreshCode) {
 						}});
 						_this.animate({'margin-left': '390px'}, 500, function() {
 							_this.remove();
@@ -1312,7 +1312,7 @@ layui.config({
 								pageId: "editMenuDialog",
 								area: ['700px', '450px'],
 								skin: 'top-message-mation',
-								callBack: function(refreshCode){
+								callBack: function(refreshCode) {
 									//此处不需要去获取当前滚动展示的模块
 									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-title", childParams.titleName);
 									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-url", childParams.menuUrl);
@@ -1356,7 +1356,7 @@ layui.config({
 								pageId: "editMenuBoxDialog",
 								area: ['600px', '200px'],
 								skin: 'top-message-mation',
-								callBack: function(refreshCode){
+								callBack: function(refreshCode) {
 									$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').attr("win-title", childParams.menuBoxName);
 									$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').find('p').html(childParams.menuBoxName);
 									top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});

@@ -29,7 +29,7 @@ var dsFormUtil = {
             title: "表单选择",
             pageId: "dsFormPageListChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(dsFormUtil.dsFormChooseList);
                 }
@@ -348,7 +348,7 @@ var dsFormUtil = {
             title: "单据类型",
             pageId: "dsFormObjectRelationChooseByFirstTypeCodePage",
             area: ['480px', '500px'],
-            callBack: function(refreshCode){
+            callBack: function(refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(dsFormUtil.dsFormObjectRelationChoose);
                 }

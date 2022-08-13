@@ -58,7 +58,7 @@ layui.config({
 			title: data.title,
 			pageId: "discussdetailpage",
 			maxmin: true,
-			callBack: function(refreshCode){
+			callBack: function(refreshCode) {
 			}});
 	}
 	
