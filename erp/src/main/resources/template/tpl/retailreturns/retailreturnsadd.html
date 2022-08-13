@@ -51,29 +51,8 @@
 		    </div>
 		    <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">列表项<i class="red">*</i></label>
-		        <div class="layui-input-block">
-		        	<div class="winui-toolbar">
-				        <div class="winui-tool" style="text-align: left;">
-				            <button id="addRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
-				            <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
-				        </div>
-				    </div>
-		            <table class="layui-table">
-		                <thead>
-		                    <tr>
-		                    	<th style="width: 30px;"></th>
-		                        <th style="width: 150px;">商品(型号)</th>
-		                        <th style="width: 50px;">单位</th>
-		                        <th style="width: 80px;">库存</th>
-		                        <th style="width: 80px;">数量</th>
-		                        <th style="width: 80px;">单价</th>
-		                        <th style="width: 80px;">金额</th>
-		                        <th style="min-width: 100px;">备注</th>
-		                    </tr>
-		                </thead>
-		                <tbody id="useTable" class="insurance-table">
-		                </tbody>
-					</table>
+		        <div class="layui-input-block" id="productList">
+
 		        </div>
 		    </div>
 		    <div class="layui-form-item layui-col-xs4">
@@ -113,23 +92,6 @@
 		    </div>
 	    </form>
 	</div>
-	
-	<!-- usetableTemplate -->
-	<script type="text/x-handlebars-template" id="usetableTemplate">
-		<tr trcusid="{{trId}}">
-			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
-			<td>
-				<input type="text" id="{{materialId}}" name="{{materialId}}" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
-		        <i class="fa fa-plus-circle input-icon chooseProductBtn" style="top: 12px;"></i>
-			</td>
-			<td><select id="{{unitId}}" lay-filter="selectUnitProperty" lay-search win-verify="required"></select></td>
-			<td id="{{currentTock}}"></td>
-			<td><input type="text" class="layui-input change-input rkNum" value="1" id="{{rkNum}}" win-verify="required|number"/></td>
-			<td><input type="text" class="layui-input change-input unitPrice" id="{{unitPrice}}" win-verify="required|money"/></td>
-			<td><input type="text" class="layui-input change-input amountOfMoney" id="{{amountOfMoney}}" win-verify="required|money"/></td>
-			<td><input type="text" class="layui-input" id="{{remark}}"/></td>
-		</tr>
-	</script>
 	
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>

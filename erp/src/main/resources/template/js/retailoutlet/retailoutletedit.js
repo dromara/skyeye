@@ -20,13 +20,13 @@ layui.config({
 	var showTdByEdit = 'rkNum';//根据那一列的值进行变化,默认根据数量
 	var beanTemplate = $("#beanTemplate").html();
 	var selOption = getFileContent('tpl/template/select-option.tpl');
-	//已经选择的商品集合key：表格的行trId，value：商品信息
+	// 已经选择的商品集合key：表格的行trId，value：商品信息
 	var allChooseProduct = {};
 
 	// 获取单据提交类型
 	var submitType = "";
 
-	//加载单据数据
+	// 加载单据数据
 	var orderObject = [];
 	showGrid({
 		id: "showForm",
@@ -139,7 +139,7 @@ layui.config({
 	}
 
 	// 商品规格加载变化事件
-	mUnitChangeEvent(form, allChooseProduct, "retailPrice");
+	mUnitChangeEvent(form, allChooseProduct, "retailPrice", calculatedTotalPrice);
 
 	// 仓库变化事件
 	form.on('select(depotId)', function(data) {
@@ -293,7 +293,7 @@ layui.config({
 	initChooseProductBtnEnent(form, function(trId, chooseProductMation) {
 		// 商品赋值
 		allChooseProduct[trId] = chooseProductMation;
-	});
+	}, calculatedTotalPrice);
 
 	// 会员选择
 	$("body").on("click", ".chooseMemberBtn", function (e) {
