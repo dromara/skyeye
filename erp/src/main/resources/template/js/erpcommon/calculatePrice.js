@@ -165,17 +165,19 @@ layui.define(["jquery"], function(exports) {
 	var jQuery = layui.jquery;
 	(function($) {
 		// 数量变化,税率变化
-		$("body").on("input", ".rkNum, .unitPrice, .amountOfMoney, .taxRate, .taxMoney, .taxUnitPrice, .taxLastMoney", function() {
-			if($(this).attr("class").replace("layui-input change-input ", "") != showTdByEdit){
-				showTdByEdit = $(this).attr("class").replace("layui-input change-input ", "");
+		$("body").on("input", ".rkNum, .unitPrice, .amountOfMoney, .taxRate, .taxMoney, .taxUnitPrice, .taxLastMoney", function () {
+			var clazz = $(this).attr("class").replace("layui-input", "").replace("change-input", "").replace("layui-form-danger", "").replace(/\s+/g, "");
+			if (clazz != showTdByEdit) {
+				showTdByEdit = clazz;
 				$(".change-input").parent().removeAttr("style");
 				$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
 			}
 			calculatedTotalPrice();
 		});
-		$("body").on("change", ".rkNum, .unitPrice, .amountOfMoney, .taxRate, .taxMoney, .taxUnitPrice, .taxLastMoney", function() {
-			if($(this).attr("class").replace("layui-input change-input ", "") != showTdByEdit){
-				showTdByEdit = $(this).attr("class").replace("layui-input change-input ", "");
+		$("body").on("change", ".rkNum, .unitPrice, .amountOfMoney, .taxRate, .taxMoney, .taxUnitPrice, .taxLastMoney", function () {
+			var clazz = $(this).attr("class").replace("layui-input", "").replace("change-input", "").replace("layui-form-danger", "").replace(/\s+/g, "");
+			if (clazz != showTdByEdit) {
+				showTdByEdit = clazz;
 				$(".change-input").parent().removeAttr("style");
 				$("." + showTdByEdit).parent().css({'background-color': '#e6e6e6'});
 			}

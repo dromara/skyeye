@@ -38,7 +38,7 @@
 		    </div>
 		    <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">列表项<i class="red">*</i></label>
-		        <div class="layui-input-block">
+		        <div class="layui-input-block" id="productList">
 		        	<div class="winui-toolbar">
 				        <div class="winui-tool" style="text-align: left;">
 				            <button id="deleteRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
@@ -133,24 +133,8 @@
 		    </div>
 		    <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">其他费用</label>
-		        <div class="layui-input-block">
-		            <div class="winui-toolbar">
-				        <div class="winui-tool" style="text-align: left;">
-				            <button id="addPriceRow" class="winui-toolbtn" type="button"><i class="fa fa-plus" aria-hidden="true"></i>新增行</button>
-				            <button id="deletePriceRow" class="winui-toolbtn" type="button"><i class="fa fa-trash-o" aria-hidden="true"></i>删除行</button>
-				        </div>
-				    </div>
-		            <table class="layui-table">
-		                <thead>
-		                    <tr>
-		                    	<th style="width: 30px;"></th>
-		                        <th style="width: 120px;">支出项目：</th>
-		                        <th id="otherPriceTotal" style="width: 120px;">费用合计：0.00</th>
-		                    </tr>
-		                </thead>
-		                <tbody id="otherPriceTable" class="insurance-table">
-		                </tbody>
-					</table>
+		        <div class="layui-input-block" id="otherPriceTableList">
+
 		        </div>
 		    </div>
 			<div id="dsFormShow">
@@ -186,15 +170,6 @@
 			<td><input type="text" class="layui-input change-input taxUnitPrice" id="{{taxUnitPrice}}" win-verify="required|money"/></td>
 			<td><input type="text" class="layui-input change-input taxLastMoney" id="{{taxLastMoney}}" win-verify="required|money"/></td>
 			<td><input type="text" class="layui-input" id="{{remark}}"/></td>
-		</tr>
-	</script>
-	
-	<!-- otherTemplate -->
-	<script type="text/x-handlebars-template" id="otherTemplate">
-		<tr trcusid="{{trId}}">
-			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
-			<td><select id="{{inoutitemId}}" lay-search win-verify="required"></select></td>
-			<td><input type="text" class="layui-input otherPrice" id="{{otherPrice}}" win-verify="required||money"/></td>
 		</tr>
 	</script>
 	
