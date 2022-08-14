@@ -50,24 +50,6 @@
 	    </form>
 	</div>
 	
-	<!-- usetableTemplate -->
-	<script type="text/x-handlebars-template" id="usetableTemplate">
-		<tr trcusid="{{trId}}">
-			<td><input type="checkbox" rowId="{{id}}" lay-filter="checkboxProperty" name="tableCheckRow"/></td>
-			<td><select id="{{materialTypeId}}" lay-search win-verify="required"><option value="1">组合件</option><option value="2">普通子件</option></select></td>
-			<td>
-				<input type="text" id="{{materialId}}" name="{{materialId}}" placeholder="请选择商品" class="layui-input" readonly="readonly"/>
-		        <i class="fa fa-plus-circle input-icon chooseProductBtn" style="top: 12px;"></i>
-			</td>
-			<td><select id="{{unitId}}" lay-filter="selectUnitProperty" lay-search win-verify="required"></select></td>
-			<td id="{{currentTock}}"></td>
-			<td><input type="text" class="layui-input change-input rkNum" value="1" id="{{rkNum}}" win-verify="required|number"/></td>
-			<td><input type="text" class="layui-input change-input unitPrice" id="{{unitPrice}}" win-verify="required|money"/></td>
-			<td><input type="text" class="layui-input change-input amountOfMoney" id="{{amountOfMoney}}" win-verify="required|money"/></td>
-			<td><input type="text" class="layui-input" id="{{remark}}"/></td>
-		</tr>
-	</script>
-
 	<script src="../../assets/lib/layui/layui.js"></script>
    	<script src="../../assets/lib/layui/custom.js"></script>
 	<script src="../../js/erpcommon/loadStock.js"></script>
