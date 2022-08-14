@@ -36,19 +36,16 @@ layui.config({
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {
-		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
 
 	// 初始化支出项目
 	systemCommonUtil.getSysInoutitemListByType(2, function (json) {
-		// 加载支出项目
 		inoutitemHtml = getDataUseHandlebars(selOption, json);
 	});
 
 	// 初始化仓库
 	erpOrderUtil.getDepotList(function (json){
-		// 加载仓库数据
 		$("#depotId").html(getDataUseHandlebars(selOption, json));
 	});
 

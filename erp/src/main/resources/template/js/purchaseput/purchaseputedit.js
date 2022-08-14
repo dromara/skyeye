@@ -34,25 +34,22 @@ layui.config({
 
 	// 初始化账户
 	systemCommonUtil.getSysAccountListByType(function (json) {
-		// 加载账户数据
 		$("#accountId").html(getDataUseHandlebars(selOption, json));
 	});
 
 	// 初始化支出项目
 	systemCommonUtil.getSysInoutitemListByType(2, function (json) {
-		// 加载支出项目
 		inoutitemHtml = getDataUseHandlebars(selOption, json);
 	});
 
 	// 初始化仓库
 	erpOrderUtil.getDepotList(function (json){
-		// 加载仓库数据
 		$("#depotId").html(getDataUseHandlebars(selOption, json));
 		// 初始化回显数据
 		initDataShow();
 	});
 
-	//初始化回显数据
+	// 初始化回显数据
 	function initDataShow(){
 		AjaxPostUtil.request({url: flowableBasePath + "purchaseput003", params: {rowId: parent.rowId}, type: 'json', method: "GET", callback: function(json) {
 			submitType = json.bean.submitType;
