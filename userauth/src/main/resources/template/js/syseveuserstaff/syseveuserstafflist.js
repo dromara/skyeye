@@ -112,7 +112,7 @@ layui.config({
 	        { field: 'jobName', title: '职位', align: 'left', width: 120}
 	       ]
 	    ],
-	    done: function(json){
+	    done: function(json) {
 	    	soulTable.render(this);
     		matchingLanguage();
 			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入员工姓名、员工工号", function () {

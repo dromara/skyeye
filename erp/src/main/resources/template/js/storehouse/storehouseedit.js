@@ -15,8 +15,8 @@ layui.config({
         
         showGrid({
             id: "showForm",
-            url: flowableBasePath + "storehouse003",
-            params: {rowId: parent.rowId},
+            url: flowableBasePath + "queryStoreHouseById",
+            params: {id: parent.rowId},
             pagination: false,
             method: 'GET',
             template: $("#beanTemplate").html(),
@@ -50,8 +50,8 @@ layui.config({
                 form.on('submit(formEditBean)', function (data) {
                     if (winui.verifyForm(data.elem)) {
                         var params = {
-                            rowId: parent.rowId,
-                            houseName: $("#houseName").val(),
+                            id: parent.rowId,
+                            name: $("#houseName").val(),
                             address: $("#address").val(),
                             warehousing: $("#warehousing").val(),
                             truckage: $("#truckage").val(),
@@ -60,7 +60,7 @@ layui.config({
                             principal: systemCommonUtil.tagEditorGetAllData('principal', chooseUser) // 仓库负责人
                         };
 
-                        AjaxPostUtil.request({url: flowableBasePath + "storehouse005", params: params, type: 'json', callback: function(json) {
+                        AjaxPostUtil.request({url: flowableBasePath + "writeDepotMation", params: params, type: 'json', method: "POST", callback: function(json) {
                             parent.layer.close(index);
                             parent.refreshCode = '0';
                         }});

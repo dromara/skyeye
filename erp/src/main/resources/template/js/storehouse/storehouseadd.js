@@ -20,7 +20,7 @@ layui.config({
         form.on('submit(formAddBean)', function (data) {
             if (winui.verifyForm(data.elem)) {
                 var params = {
-                    houseName: $("#houseName").val(),
+                    name: $("#houseName").val(),
                     address: $("#address").val(),
                     warehousing: $("#warehousing").val(),
                     truckage: $("#truckage").val(),
@@ -29,7 +29,7 @@ layui.config({
                     principal: systemCommonUtil.tagEditorGetAllData('principal', chooseUser) // 仓库负责人
                 };
                 
-                AjaxPostUtil.request({url: flowableBasePath + "storehouse002", params: params, type: 'json', callback: function (json) {
+                AjaxPostUtil.request({url: flowableBasePath + "writeDepotMation", params: params, type: 'json', method: "POST", callback: function (json) {
                     parent.layer.close(index);
                     parent.refreshCode = '0';
                 }});

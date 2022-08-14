@@ -1,3 +1,4 @@
+
 layui.config({
     base: basePath,
     version: skyeyeVersion
@@ -8,13 +9,14 @@ layui.config({
     layui.use(['form'], function (form) {
         var index = parent.layer.getFrameIndex(window.name);
         var $ = layui.$;
-        var simpleTemplate = $("#simpleTemplate").html();
+
         showGrid({
             id: "showForm",
-            url: flowableBasePath + "storehouse007",
-            params: {rowId: parent.rowId},
+            url: flowableBasePath + "queryStoreHouseById",
+            params: {id: parent.rowId},
             pagination: false,
-            template: simpleTemplate,
+            method: "GET",
+            template: $("#simpleTemplate").html(),
             ajaxSendAfter:function (json) {
                 $("#isDefault").html(json.bean.isDefault == "1" ? "<span class='state-up'>是</span>" : "<span class='state-down'>否</span>");
                 matchingLanguage();

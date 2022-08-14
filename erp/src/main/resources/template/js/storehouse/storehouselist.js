@@ -23,13 +23,13 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'houseName', title: '仓库名称', align: 'left',width: 200,templet: function(d) {
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
+            { field: 'houseName', title: '仓库名称', align: 'left',width: 200, templet: function(d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.houseName + '</a>';
             }},
-            { field: 'address', title: '仓库地址', align: 'left',width: 300},
-            { field: 'warehousing', title: '仓储费', align: 'left',width: 100},
-            { field: 'truckage', title: '搬运费', align: 'left',width: 100},
+            { field: 'address', title: '仓库地址', align: 'left',width: 300 },
+            { field: 'warehousing', title: '仓储费', align: 'left',width: 100 },
+            { field: 'truckage', title: '搬运费', align: 'left',width: 100 },
             { field: 'isDefault', title: '默认仓库', align: 'center',width: 80, templet: function(d) {
                 if (d.isDefault == '1') {
                     return "<span class='state-up'>是</span>";
@@ -45,27 +45,28 @@ layui.config({
             { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
+            initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入仓库名称", function () {
+                table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+            });
 	    }
     });
 
     table.on('tool(messageTable)', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-        if (layEvent === 'edit') { //编辑
+        if (layEvent === 'edit') { // 编辑
             edit(data);
-        }else if (layEvent === 'delete') { //删除
+        } else if (layEvent === 'delete') { // 删除
             deleteHouse(data);
-        }else if (layEvent === 'default') { //设置默认
-            defaultHouse(data);
-        }else if (layEvent === 'select') {
+        } else if (layEvent === 'select') {
             selectHouse(data);
         }
     });
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/storehouse/storehouseedit.html",
@@ -79,33 +80,20 @@ layui.config({
     }
 
     // 删除仓库
-    function deleteHouse(data){
+    function deleteHouse(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index) {
             layer.close(index);
             var params = {
-                rowId: data.id
+                id: data.id
             };
-            AjaxPostUtil.request({url: flowableBasePath + "storehouse004", params: params, type: 'json', callback: function(json) {
+            AjaxPostUtil.request({url: flowableBasePath + "storehouse004", params: params, type: 'json', method: "DELETE", callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
         });
     }
 
-    // 设置是否默认
-    function defaultHouse(data){
-        layer.confirm('确认要设置该仓库为默认状态吗？', { icon: 3, title: '设置仓库状态' }, function (index) {
-            var params = {
-                rowId: data.id
-            };
-            AjaxPostUtil.request({url: flowableBasePath + "storehouse006", params: params, type: 'json', callback: function(json) {
-                winui.window.msg("设置成功。", {icon: 1, time: 2000});
-                loadTable();
-            }});
-        });
-    }
-
-    function selectHouse(data){
+    function selectHouse(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/storehouse/storehouseinfo.html",
@@ -132,26 +120,17 @@ layui.config({
     });
 
     form.render();
-    form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-            table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
-        }
-        return false;
-    });
 
     $("body").on("click", "#reloadTable", function() {
         loadTable();
     });
 
-    // 刷新
     function loadTable(){
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
     function getTableParams(){
-        return {
-            houseName: $("#houseName").val()
-        };
+        return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
     exports('storehouselist', {});

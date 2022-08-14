@@ -28,7 +28,7 @@ layui.config({
 	initDepotHtml();
 	//初始化仓库
 	function initDepotHtml() {
-		AjaxPostUtil.request({url: flowableBasePath + "storehouse009", params: {}, type: 'json', callback: function(json) {
+		AjaxPostUtil.request({url: flowableBasePath + "storehouse009", params: {}, type: 'json', method: "GET", callback: function(json) {
 			//加载仓库数据
 			$("#depotId").html(getDataUseHandlebars(selOption, json));
 			form.render();
