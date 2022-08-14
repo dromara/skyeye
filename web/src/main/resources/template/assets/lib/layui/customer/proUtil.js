@@ -7,7 +7,7 @@ var proUtil = {
      *
      * @param callback 回执函数
      */
-    queryMyProjectsList: function (callback){
+    queryMyProjectsList: function (callback) {
         AjaxPostUtil.request({url: flowableBasePath + "queryMyProjectsList", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);

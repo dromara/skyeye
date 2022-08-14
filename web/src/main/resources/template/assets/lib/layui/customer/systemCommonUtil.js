@@ -6,7 +6,7 @@ var systemCommonUtil = {
      *
      * @param callback 回执函数
      */
-    getSysAccountListByType: function (callback){
+    getSysAccountListByType: function (callback) {
         AjaxPostUtil.request({url: flowableBasePath + "account009", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
@@ -19,7 +19,7 @@ var systemCommonUtil = {
      *
      * @param callback 回执函数
      */
-    getSysDesttop: function (callback){
+    getSysDesttop: function (callback) {
         AjaxPostUtil.request({url: reqBasePath + "desktop011", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
@@ -54,7 +54,7 @@ var systemCommonUtil = {
      *
      * @param callback 回执函数
      */
-    queryDepartmentListByCurrentUserBelong: function (callback){
+    queryDepartmentListByCurrentUserBelong: function (callback) {
         AjaxPostUtil.request({url: reqBasePath + "queryDepartmentListByCurrentUserBelong", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
@@ -100,7 +100,7 @@ var systemCommonUtil = {
      *
      * @param callback 回执函数
      */
-    getSysCompanyList: function (callback){
+    getSysCompanyList: function (callback) {
         AjaxPostUtil.request({url: reqBasePath + "companymation008", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
@@ -213,7 +213,7 @@ var systemCommonUtil = {
      */
     userStaffCheckType: false, // 选择类型，默认单选，true:多选，false:单选
     checkStaffMation: [], // 选择时返回的对象
-    openSysAllUserStaffChoosePage: function (callback){
+    openSysAllUserStaffChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/syseveuserstaff/sysEveUserStaffChoose.html",
             title: "员工选择",

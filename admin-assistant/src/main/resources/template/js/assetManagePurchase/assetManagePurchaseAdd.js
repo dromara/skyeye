@@ -10,10 +10,9 @@ layui.config({
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form;
-	var rowNum = 1; //表格的序号
-	var typeHtml = "", fromHtml = "";
+	var fromHtml = "";
 
-	var purchasetableTemplate = $("#purchasetableTemplate").html();
+	var allChooseAsset = {};
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	// 获取当前登录员工信息
@@ -22,21 +21,63 @@ layui.config({
 		$("#useName").html(data.bean.userName);
 	});
 
-	// 资产类型
-	sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], function (data) {
-		typeHtml = getDataUseHandlebars(selOption, data);
-	});
-
 	// 资产来源
 	sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetFrom"]["key"], function (data) {
 		fromHtml = getDataUseHandlebars(selOption, data);
 	});
 
-	addRow();
+	skyeyeEnclosure.init('enclosureUpload');
+
+	// 资产
+	initTableChooseUtil.initTable({
+		id: "assetList",
+		cols: [
+			{id: 'assetId', title: '资产', formType: 'chooseInput', width: '150', iconClassName: 'chooseAssetBtn', verify: 'required'},
+			{id: 'fromId', title: '来源', formType: 'select', width: '100', verify: 'required', modelHtml: fromHtml},
+			{id: 'number', title: '采购数量', formType: 'input', width: '100', className: 'change-input number', verify: 'required|number', value: '1'},
+			{id: 'unitPrice', title: '采购单价', formType: 'input', width: '100', className: 'change-input unitPrice', verify: 'required|money'},
+			{id: 'amountOfMoney', title: '采购金额', formType: 'detail', width: '100'},
+			{id: 'remark', title: '备注', formType: 'input', width: '100'}
+		],
+		deleteRowCallback: function (trcusid) {
+			delete allChooseAsset[trcusid];
+			calculatedTotalPrice();
+		},
+		addRowCallback: function (trcusid) {
+			calculatedTotalPrice();
+		},
+		form: form,
+		minData: 1
+	});
+
 	matchingLanguage();
 	form.render();
 
-	skyeyeEnclosure.init('enclosureUpload');
+	// 数量，单价变化
+	$("body").on("input", ".number, .unitPrice", function () {
+		calculatedTotalPrice();
+	});
+	$("body").on("change", ".number, .unitPrice", function () {
+		calculatedTotalPrice();
+	});
+
+	// 计算总价
+	function calculatedTotalPrice() {
+		var allPrice = 0;
+		$.each(initTableChooseUtil.getDataRowIndex('assetList'), function (i, item) {
+			// 获取行坐标
+			var thisRowKey = item;
+			// 获取数量
+			var number = parseInt(isNull($("#number" + thisRowKey).val()) ? "0" : $("#number" + thisRowKey).val());
+			// 获取单价
+			var unitPrice = parseFloat(isNull($("#unitPrice" + thisRowKey).val()) ? "0" : $("#unitPrice" + thisRowKey).val());
+			// 输出金额
+			$("#amountOfMoney" + thisRowKey).html((number * unitPrice).toFixed(2));
+			allPrice += parseFloat($("#amountOfMoney" + thisRowKey).html());
+		});
+		$("#allPrice").html(allPrice.toFixed(2));
+	}
+
 	// 保存为草稿
 	form.on('submit(formAddBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
@@ -56,38 +97,33 @@ layui.config({
 	});
 
 	function saveData(subType, approvalId) {
-		// 获取已选资产数据
-		var rowTr = $("#purchaseTable tr");
-		if(rowTr.length == 0) {
-			winui.window.msg('请选择需要采购的资产~', {icon: 2, time: 2000});
+		var result = initTableChooseUtil.getDataList('assetList');
+		if (!result.checkResult) {
 			return false;
 		}
 		var tableData = new Array();
-		var noError = false; //循环遍历表格数据时，是否有其他错误信息
-		$.each(rowTr, function(i, item) {
-			var rowNum = $(item).attr("trcusid").replace("tr", "");
-			if(isNull($("#managementImg" + rowNum).find("input[type='hidden'][name='upload']").attr("oldurl"))){
-				winui.window.msg('资产图片不能为空！', {icon: 2, time: 2000});
+		var noError = false;
+		$.each(result.dataList, function(i, item) {
+			//获取行编号
+			var thisRowKey = item["trcusid"].replace("tr", "");
+			if (parseInt(item.rkNum) == 0) {
+				$("#number" + thisRowKey).addClass("layui-form-danger");
+				$("#number" + thisRowKey).focus();
+				winui.window.msg('数量不能为0', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
-			if(inTableDataArrayByAssetarId($("#managementName" + rowNum).val(), $("#assetNum" + rowNum).val(), tableData)){
-				winui.window.msg('采购单存在相同的资产', {icon: 2, time: 2000});
+
+			var product = allChooseAsset["tr" + thisRowKey];
+			item["assetId"] = product.id;
+			if (inTableDataArrayByAssetarId(item.assetId, item.fromId, tableData)) {
+				winui.window.msg('一张单中不允许出现相同来源的资产信息.', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
-			var row = {
-				typeId: $("#typeId" + rowNum).val(),
-				managementName: $("#managementName" + rowNum).val(),
-				assetNum: $("#assetNum" + rowNum).val(),
-				fromId: $("#fromId" + rowNum).val(),
-				unitPrice: $("#unitPrice" + rowNum).val(),
-				remark: $("#remark" + rowNum).val(),
-				managementImg: $("#managementImg" + rowNum).find("input[type='hidden'][name='upload']").attr("oldurl")
-			};
-			tableData.push(row);
+			tableData.push(item);
 		});
-		if(noError) {
+		if (noError) {
 			return false;
 		}
 
@@ -96,6 +132,7 @@ layui.config({
 			remark: $("#remark").val(),
 			assetListStr: JSON.stringify(tableData),
 			enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload'),
+			allPrice: $("#allPrice").html(),
 			subType: subType, // 表单类型 1.保存草稿  2.提交审批
 			approvalId: approvalId
 		};
@@ -105,66 +142,30 @@ layui.config({
 		}});
 	}
 
-	//新增行
-	$("body").on("click", "#addRow", function() {
-		addRow();
-	});
-
-	//删除行
-	$("body").on("click", "#deleteRow", function() {
-		deleteRow();
-	});
-
-	//新增行
-	function addRow() {
-		var par = {
-			id: "row" + rowNum.toString(), //checkbox的id
-			trId: "tr" + rowNum.toString(), //行的id
-			typeId: "typeId" + rowNum.toString(), //类型id
-			managementName: "managementName" + rowNum.toString(), //资产id
-			managementImg: "managementImg" + rowNum.toString(), //图片
-			assetNum: "assetNum" + rowNum.toString(),//编号
-			fromId: "fromId" + rowNum.toString(), //来源id
-			unitPrice: "unitPrice" + rowNum.toString(), //单价
-			remark: "remark" + rowNum.toString() //备注id
-		};
-		$("#purchaseTable").append(getDataUseHandlebars(purchasetableTemplate, par));
-		// 赋值给资产类别
-		$("#" + "typeId" + rowNum.toString()).html(typeHtml);
-		// 赋值给资产来源
-		$("#" + "fromId" + rowNum.toString()).html(fromHtml);
-
-		// 初始化上传
-		$("#" + "managementImg" + rowNum.toString()).upload(systemCommonUtil.uploadCommon003Config("managementImg" + rowNum.toString(), 6, '', 1));
-
-		form.render('select');
-		form.render('checkbox');
-		rowNum++;
-	}
-
-	//删除行
-	function deleteRow() {
-		var checkRow = $("#purchaseTable input[type='checkbox'][name='tableCheckRow']:checked");
-		if(checkRow.length > 0) {
-			$.each(checkRow, function(i, item) {
-				$(item).parent().parent().remove();
-			});
-		} else {
-			winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
-		}
-	}
-
-	//判断选中的资产是否也在数组中
-	function inTableDataArrayByAssetarId(str1, str2, array) {
+	// 判断选中的资产以及来源是否也在数组中
+	function inTableDataArrayByAssetarId(assetId, fromId, array) {
 		var isIn = false;
 		$.each(array, function(i, item) {
-			if(item.managementName === str1 && item.assetNum === str2) {
+			if(item.assetId === assetId && item.fromId === fromId) {
 				isIn = true;
 				return false;
 			}
 		});
 		return isIn;
 	}
+
+	$("body").on("click", ".chooseAssetBtn", function() {
+		var trId = $(this).parent().parent().attr("trcusid");
+		adminAssistantUtil.assetCheckType = false; // 选择类型，默认单选，true:多选，false:单选
+		adminAssistantUtil.openAssetChoosePage(function (checkAssetMation){
+			// 获取表格行号
+			var thisRowKey = trId.replace("tr", "");
+			$("#assetId" + thisRowKey.toString()).val(checkAssetMation.assetName);
+			$("#unitPrice" + thisRowKey.toString()).val(checkAssetMation.readPrice);
+			allChooseAsset[trId] = checkAssetMation;
+			calculatedTotalPrice();
+		});
+	});
 
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);

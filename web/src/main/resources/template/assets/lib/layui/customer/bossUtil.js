@@ -8,7 +8,7 @@ var bossUtil = {
      * @param callback 回调函数
      */
     bossIntervieweeFromChooseMation: {}, // 已经选择的面试者来源信息
-    openBossIntervieweeFromChoosePage: function (callback){
+    openBossIntervieweeFromChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/bossIntervieweeFrom/bossIntervieweeFromListChoose.html",
             title: "面试者来源",
@@ -86,7 +86,7 @@ var bossUtil = {
      * @param callback 回调函数
      */
     bossIntervieweeChooseMation: {}, // 已经选择的面试者信息
-    openBossIntervieweeChoosePage: function (callback){
+    openBossIntervieweeChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/bossInterviewee/myChargeBossIntervieweeListChoose.html",
             title: "面试者",
@@ -105,7 +105,7 @@ var bossUtil = {
      * @param callback 回调函数
      */
     bossPersonRequireChooseMation: {}, // 已经选择的人员需求信息
-    openBossPersonRequireChoosePage: function (callback){
+    openBossPersonRequireChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/bossPersonRequire/bossPersonRequireMyChargeListChoose.html",
             title: "人员需求",

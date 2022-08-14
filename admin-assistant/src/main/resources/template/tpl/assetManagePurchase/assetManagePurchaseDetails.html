@@ -54,10 +54,10 @@
 		                    <tr>
 		                        <th>资产类别</th>
 		                        <th>资产名称</th>
-		                        <th style="min-width: 50px;">图片</th>
-		                        <th style="min-width: 50px;">资产编号</th>
-		                        <th style="min-width: 50px;">资产来源</th>
-		                        <th style="min-width: 50px;">资产单价</th>
+		                        <th>来源</th>
+								<th>采购数量</th>
+								<th>采购单价</th>
+								<th>采购金额</th>
 								<th>状态</th>
 								<th>备注</th>
 		                    </tr>
@@ -66,11 +66,11 @@
 							{{#each goods}}
 								<tr>
 									<td>{{typeName}}</td>
-									<td>{{managementName}}</td>
-									<td><img src="{{managementImg}}" class="photo-img"></td>
-									<td>{{assetNum}}</td>
+									<td>{{assetName}}</td>
 									<td>{{fromId}}</td>
+									<td>{{number}}</td>
 									<td>{{unitPrice}}</td>
+									<td>{{amountOfMoney}}</td>
 									<td>{{stateName}}</td>
 									<td>{{remark}}</td>
 								</tr>
@@ -79,6 +79,12 @@
 					</table>
 		        </div>
 		    </div>
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">共计金额：</label>
+				<div class="layui-input-block ver-center">
+					{{allPrice}}
+				</div>
+			</div>
 		    <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">相关描述：</label>
 		        <div class="layui-input-block ver-center">

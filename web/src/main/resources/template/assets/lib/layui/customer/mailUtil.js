@@ -8,7 +8,7 @@ var mailUtil = {
      *
      * @param callback 回调函数
      */
-    openMailChoosePage: function (callback){
+    openMailChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/mail/mailListChoose.html",
             title: "通讯录选择",

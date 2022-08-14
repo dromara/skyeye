@@ -78,7 +78,7 @@ var Kickstart = {
 		//console.profile("loading");
 		if(!Kickstart.started) {
 			Kickstart.started = true;
-			Kickstart.callbacks.each(function(callback){
+			Kickstart.callbacks.each(function(callback) {
 				// call the registered callback asynchronously.
 				window.setTimeout(callback, 1);
 			});
@@ -12532,7 +12532,7 @@ ORYX.Editor.Cookie = {
 			
 			if( currentString != document.cookie ){
 				currentString = document.cookie;
-				this.callbacks.each(function(callback){ callback(this.getParams()) }.bind(this));
+				this.callbacks.each(function(callback) { callback(this.getParams()) }.bind(this));
 			}
 			
 		}.bind(this), ( interval || 10000 ) / 1000);	

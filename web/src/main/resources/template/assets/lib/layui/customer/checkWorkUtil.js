@@ -8,7 +8,7 @@ var checkWorkUtil = {
      *
      * @param callback 回执函数
      */
-    getCurrentUserCheckWorkTimeList: function (callback){
+    getCurrentUserCheckWorkTimeList: function (callback) {
         AjaxPostUtil.request({url: flowableBasePath + "checkworktime007", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);

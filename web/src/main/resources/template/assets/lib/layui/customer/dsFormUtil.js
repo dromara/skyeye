@@ -23,7 +23,7 @@ var dsFormUtil = {
      *
      * @param callback 回调函数
      */
-    openDsFormPageChoosePage: function (callback){
+    openDsFormPageChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/dsFormPage/dsFormPageListChoose.html",
             title: "表单选择",

@@ -13,18 +13,18 @@ layui.config({
 	    var useTemplate = $("#useTemplate").html();
 	    
 	    AjaxPostUtil.request({url: flowableBasePath + "asset021", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
-			//状态
-			if(json.bean.state == '0'){
+			// 状态
+			if (json.bean.state == '0') {
 				json.bean.stateName = "<span>" + json.bean.stateName + "</span>";
-			}else if(json.bean.state == '1'){
+			} else if (json.bean.state == '1') {
 				json.bean.stateName = "<span class='state-new'>" + json.bean.stateName + "</span>";
-			}else if(json.bean.state == '2'){
+			} else if (json.bean.state == '2') {
 				json.bean.stateName = "<span class='state-up'>" + json.bean.stateName + "</span>";
-			}else if(json.bean.state == '3'){
+			} else if (json.bean.state == '3') {
 				json.bean.stateName = "<span class='state-down'>" + json.bean.stateName + "</span>";
-			}else if(json.bean.state == '4'){
+			} else if (json.bean.state == '4') {
 				json.bean.stateName = "<span class='state-down'>" + json.bean.stateName + "</span>";
-			}else if(json.bean.state == '5'){
+			} else if (json.bean.state == '5') {
 				json.bean.stateName = "<span class='state-error'>" + json.bean.stateName + "</span>";
 			}
 
@@ -35,10 +35,5 @@ layui.config({
 			matchingLanguage();
 	    }});
 
-	    // 图片查看
-	    $("body").on("click", ".photo-img", function() {
-			systemCommonUtil.showPicImg($(this).attr("src"));
-	    });
-	    
 	});
 });

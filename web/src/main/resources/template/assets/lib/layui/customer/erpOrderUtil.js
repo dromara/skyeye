@@ -194,7 +194,7 @@ var erpOrderUtil = {
      *
      * @param callback 回执函数
      */
-    getDepotList: function (callback){
+    getDepotList: function (callback) {
         AjaxPostUtil.request({url: flowableBasePath + "storehouse008", params: {}, type: 'json', method: "GET", callback: function(json) {
             if (typeof(callback) == "function") {
                 callback(json);

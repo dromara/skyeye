@@ -92,7 +92,7 @@ layui.config({
 				var rkNum = parseInt(isNull($("#rkNum" + thisRowKey).val()) ? "0" : $("#rkNum" + thisRowKey).val());
 				// 获取单价
 				var unitPrice = parseFloat(isNull($("#unitPrice" + thisRowKey).val()) ? "0" : $("#unitPrice" + thisRowKey).val());
-				// 获取单价
+				// 获取金额
 				var amountOfMoney = parseFloat(isNull($("#amountOfMoney" + thisRowKey).val()) ? "0" : $("#amountOfMoney" + thisRowKey).val());
 				if ("rkNum" === showTdByEdit) {//数量
 					// 输出金额

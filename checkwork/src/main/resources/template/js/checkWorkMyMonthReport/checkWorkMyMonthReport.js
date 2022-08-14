@@ -128,7 +128,7 @@ layui.config({
     form.render();
 	
 	// 判断显示打上班卡或者下班卡
-    function initIsCheck(callBack){
+    function initIsCheck(callback) {
     	checkWorkDescShow = true;
         AjaxPostUtil.request({url: flowableBasePath + "checkwork013", params: {timeId: $("#checkTime").val()}, type: 'json', callback: function (json) {
 			clockOut = json.bean.clockOut;

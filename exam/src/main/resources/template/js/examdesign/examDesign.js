@@ -31,7 +31,7 @@ layui.config({
 	    var loadPageJson;
 	    
 	    initPageJson();
-	    function initPageJson(callback){
+	    function initPageJson(callback) {
 		    AjaxPostUtil.request({url:schoolBasePath + "exam003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
 				$.each(json.rows, function(i, item){
 					item.saveTag = 1;
@@ -496,7 +496,7 @@ layui.config({
 			});
 	    }
 	    
-	    function saveSurvey(callback){
+	    function saveSurvey(callback) {
 			isSaveProgress = true;
 			var fristQuItemBody = $("#dwSurveyQuContent .li_surveyQuItemBody").first();
 			saveQus(fristQuItemBody, callback);

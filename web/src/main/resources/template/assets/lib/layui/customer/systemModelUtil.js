@@ -45,7 +45,7 @@ var systemModelUtil = {
      *
      * @param callback 回调函数
      */
-    openSystemModelPageChoosePage: function (callback){
+    openSystemModelPageChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/sysEveModel/sysEveModelChoose.html",
             title: "编辑器模板选择",

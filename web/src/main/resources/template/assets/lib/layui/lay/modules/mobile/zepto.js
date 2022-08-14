@@ -436,7 +436,7 @@ layui.define(function(exports){
       return $(slice.apply(this, arguments))
     },
 
-    ready: function(callback){
+    ready: function(callback) {
       // need to check if document.body exists for IE as that browser reports
       // document ready when it hasn't yet created the body element
       if (readyRE.test(document.readyState) && document.body) callback($)
@@ -456,7 +456,7 @@ layui.define(function(exports){
           this.parentNode.removeChild(this)
       })
     },
-    each: function(callback){
+    each: function(callback) {
       emptyArray.every.call(this, function(el, idx){
         return callback.call(el, idx, el) !== false
       })

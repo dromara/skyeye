@@ -113,7 +113,7 @@ var shopUtil = {
      *
      * @param callback 回执函数
      */
-    getShopAreaMation: function (callback){
+    getShopAreaMation: function (callback) {
         AjaxPostUtil.request({url: shopBasePath + "queryAreaList", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
@@ -126,7 +126,7 @@ var shopUtil = {
      *
      * @param callback 回执函数
      */
-    queryStaffBelongAreaList: function (callback){
+    queryStaffBelongAreaList: function (callback) {
         AjaxPostUtil.request({url: shopBasePath + "storeStaff004", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
@@ -139,7 +139,7 @@ var shopUtil = {
      *
      * @param callback 回执函数
      */
-    queryStaffBelongStoreList: function (callback){
+    queryStaffBelongStoreList: function (callback) {
         AjaxPostUtil.request({url: shopBasePath + "storeStaff005", params: {}, type: 'json', method: "GET", callback: function(json) {
             if(typeof(callback) == "function") {
                 callback(json);
@@ -169,7 +169,7 @@ var shopUtil = {
      *
      * @param callback 回执函数
      */
-    queryAllStoreList: function (callback){
+    queryAllStoreList: function (callback) {
         var params = {
             limit: 1000,
             page: 1
@@ -187,7 +187,7 @@ var shopUtil = {
      * @param callback 回调函数
      */
     staffMation: {},
-    openStoreStaffChoosePage: function (callback){
+    openStoreStaffChoosePage: function (callback) {
         _openNewWindows({
             url: "../../tpl/storeStaff/storeStaffChoose.html",
             title: "选择店员",

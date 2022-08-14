@@ -290,7 +290,7 @@ layui.config({
 			});
 	    });
 	    
-	    function saveSurvey(callback){
+	    function saveSurvey(callback) {
 			isSaveProgress = true;
 			var fristQuItemBody = $("#dwSurveyQuContent .li_surveyQuItemBody").first();
 			saveQus(fristQuItemBody, callback);

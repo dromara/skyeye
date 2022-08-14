@@ -257,7 +257,7 @@ layui.define(['jquery', 'element', 'layer', 'winui'], function (exports) {
 	        });
 	    },
 	    //给桌面按钮添加单击事件
-        reloadOnClick: function(callback){
+        reloadOnClick: function(callback) {
         	if (typeof callback !== "function") return;
             //重置单击事件
             common.resetEvent('.winui-desktop-item', 'click', function (event) {
