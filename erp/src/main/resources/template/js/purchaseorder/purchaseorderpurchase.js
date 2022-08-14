@@ -234,7 +234,7 @@ layui.config({
 				noError = true;
 				return false;
 			}
-			if(parseInt($("#rkNum" + thisRowKey).val()) > parseInt($("#nowNum" + thisRowKey).html())){
+			if (parseInt($("#rkNum" + thisRowKey).val()) > parseInt($("#nowNum" + thisRowKey).html())) {
 				isStandard = true;
 			}
 
@@ -278,8 +278,8 @@ layui.config({
 			subType: subType,
 			approvalId: approvalId
 		};
-		if(isStandard){
-			layer.confirm('该入库单已超出采购单数量，是否继续？', { icon: 3, title: '超标提示' }, function (i) {
+		if (isStandard) {
+			layer.confirm('该入库单已超出采购单数量，是否继续？', {icon: 3, title: '超标提示'}, function (i) {
 				sendRequest(params);
 			});
 		} else {
@@ -287,7 +287,7 @@ layui.config({
 		}
 	}
 
-	function sendRequest(params){
+	function sendRequest(params) {
 		AjaxPostUtil.request({url: flowableBasePath + "purchaseorder009", params: params, type: 'json', method: "POST", callback: function(json) {
 			dsFormUtil.savePageData("dsFormShow", json.bean.id);
 			parent.layer.close(index);
@@ -297,7 +297,7 @@ layui.config({
 
 	// 供应商选择
 	$("body").on("click", "#supplierNameSel", function (e) {
-		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation){
+		sysSupplierUtil.openSysSupplierChoosePage(function (supplierMation) {
 			$("#supplierName").val(supplierMation.supplierName);
 		});
 	});
