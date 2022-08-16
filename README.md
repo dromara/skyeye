@@ -71,9 +71,9 @@ Druid|数据库连接池|https://github.com/alibaba/druid
 Maven|项目构建管理|http://maven.apache.org/
 redis|key-value存储系统|https://redis.io/
 webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.com/html/html5-websocket.html
-Activiti|工作流引擎|https://www.activiti.org/
+Flowable|工作流引擎|https://www.flowable.com/open-source/
 spring mvc|视图框架|http://spring.io/
-quartz 2.2.2|定时任务|http://www.quartz-scheduler.org/
+xxl-job|定时任务|https://gitee.com/xuxueli0323/xxl-job?_from=gitee_search/
 RocketMQ|消息队列|https://rocketmq.apache.org/dowloading/releases/
 solr|企业级搜索应用服务器|https://lucene.apache.org/solr/
 Spring Cloud|微服务框架(目前用户APP端接口)|https://springcloud.cc/
