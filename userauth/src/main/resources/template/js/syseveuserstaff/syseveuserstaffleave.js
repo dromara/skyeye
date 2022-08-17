@@ -12,11 +12,8 @@ layui.config({
 	    	laydate = layui.laydate,
 		    form = layui.form;
 	    
-	    //选择离职时间
-		laydate.render({
-			elem: '#quitTime',
-			range: false
-		});
+	    // 选择离职时间
+		laydate.render({elem: '#quitTime', range: false});
 	    
 		matchingLanguage();
 	    form.render();

@@ -20,12 +20,8 @@ layui.config({
 		 	pagination: false,
 		 	template: getFileContent('tpl/schedule/editscheduleTemplate.tpl'),
 		 	ajaxSendAfter:function (json) {
-		 		//编辑节假日选取时间段
-				laydate.render({
-					elem: '#holidayTime', //指定元素
-					range: '~',
-					value: json.bean.scheduleStartTime + ' ~ ' + json.bean.scheduleEndTime
-				});
+		 		// 编辑节假日选取时间段
+				laydate.render({elem: '#holidayTime', range: '~', value: json.bean.scheduleStartTime + ' ~ ' + json.bean.scheduleEndTime});
 				matchingLanguage();
 				form.render();
 		 	    form.on('submit(formBean)', function (data) {

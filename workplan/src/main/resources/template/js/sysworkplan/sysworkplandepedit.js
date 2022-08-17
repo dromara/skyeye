@@ -26,13 +26,7 @@ layui.config({
 	    layedit = layui.layedit;
 	    
 	    var myDate = new Date();  //获取当前时间
-	    laydate.render({
-			elem: '#notifyTime',
-			type: 'datetime',
-			min: myDate.toLocaleString(),
-			done: function(value, date, endDate){
-			}
-		});
+	    laydate.render({elem: '#notifyTime', type: 'datetime', min: myDate.toLocaleString(), done: function(value, date, endDate) {}});
 	    
 	    AjaxPostUtil.request({url: sysMainMation.workplanBasePath + "sysworkplan007", params: {planId: parent.rowId}, type: 'json', callback: function (json) {
 			nowCheckType = json.bean.planCycle;

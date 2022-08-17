@@ -79,11 +79,8 @@ layui.config({
 			        }
 			    });
 
-		 		//定时通知时间选择器
-		 		laydate.render({
-		 		  elem: '#delayedTime'
-		 		  ,type: 'datetime'
-		 		});
+		 		// 定时通知时间选择器
+		 		laydate.render({elem: '#delayedTime', type: 'datetime'});
 		 		
 		 		//设置群发类型
 		 		$("input:radio[name=sendType][value=" + json.bean.sendType + "]").attr("checked", true);

@@ -21,11 +21,7 @@ layui.config({
 		form = layui.form,
 		laydate = layui.laydate;
 
-	laydate.render({
-		elem: '#executeMonth',
-		type: 'month',
-		range: '~'
-	});
+	laydate.render({elem: '#executeMonth', type: 'month', range: '~'});
 
 	skyeyeEnclosure.init('enclosureUpload');
 	matchingLanguage();

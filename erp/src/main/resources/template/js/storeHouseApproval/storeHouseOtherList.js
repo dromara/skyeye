@@ -20,10 +20,7 @@ layui.config({
         
     var selOption = getFileContent('tpl/template/select-option-must.tpl');
         
-    laydate.render({
-		elem: '#operTime', //指定元素
-		range: '~'
-	});
+    laydate.render({elem: '#operTime', range: '~'});
 	
 	initDepotHtml();
 	//初始化仓库

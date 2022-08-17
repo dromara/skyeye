@@ -11,10 +11,7 @@ layui.config({
 		table = layui.table,
 		laydate = layui.laydate;
 
-	laydate.render({
-		elem: '#monthTime',
-		type: 'month'
-	});
+	laydate.render({elem: '#monthTime', type: 'month' });
 
 	table.render({
 	    id: 'messageTable',

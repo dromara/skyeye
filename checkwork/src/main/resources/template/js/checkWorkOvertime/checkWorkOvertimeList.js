@@ -19,10 +19,7 @@ layui.config({
     authBtn('1618046226263');
 
     // 申请时间
-    laydate.render({
-        elem: '#applyTime',
-        range: '~'
-    });
+    laydate.render({elem: '#applyTime', range: '~'});
 
     // 我的加班申请列表
     table.render({

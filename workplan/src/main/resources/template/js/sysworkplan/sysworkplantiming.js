@@ -13,13 +13,7 @@ layui.config({
 	    	laydate = layui.laydate;
 	    
 	    var myDate = new Date();  //获取当前时间
-	    laydate.render({
-			elem: '#notifyTime',
-			type: 'datetime',
-			min: myDate.toLocaleString(),
-			done: function(value, date, endDate){
-			}
-		});
+	    laydate.render({elem: '#notifyTime', type: 'datetime', min: myDate.toLocaleString(), done: function(value, date, endDate) {}});
 		
 	    matchingLanguage();
 		form.render();

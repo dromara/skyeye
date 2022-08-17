@@ -13,10 +13,7 @@ layui.config({
 		flow = layui.flow;
 	
 	// 选取时间段表格
-    laydate.render({
-        elem: '#createTime',
-        range: '~'
-    });
+    laydate.render({elem: '#createTime', range: '~'});
 	
 	// 时间线日志列表模板
 	var timeTreeJobDiary = $("#timeTreeJobDiary").html();

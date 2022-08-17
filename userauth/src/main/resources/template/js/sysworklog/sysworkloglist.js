@@ -6,7 +6,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		table = layui.table;
 	

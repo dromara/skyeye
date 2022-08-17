@@ -77,11 +77,8 @@ layui.config({
 	    	}
         });
  		
- 		//定时通知时间选择器
- 		laydate.render({
- 		  elem: '#delayedTime'
- 		  ,type: 'datetime'
- 		});
+ 		// 定时通知时间选择器
+ 		laydate.render({elem: '#delayedTime', type: 'datetime'});
  		
 	    //公告内容富文本框
 	    var content = layedit.build('content', {

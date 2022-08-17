@@ -24,10 +24,7 @@ layui.config({
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
     });
 
-    laydate.render({
-        elem: '#intercourseTime',
-        range: '~'
-    });
+    laydate.render({elem: '#intercourseTime', range: '~'});
 
     table.render({
         id: 'messageTable',

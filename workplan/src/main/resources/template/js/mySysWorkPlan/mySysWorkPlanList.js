@@ -13,10 +13,7 @@ layui.config({
 		table = layui.table,
 		laydate = layui.laydate;
 
-	laydate.render({
-		elem: '#executeTime',
-		range: '~'
-	});
+	laydate.render({elem: '#executeTime', range: '~'});
 
 	// 获取我的任务计划列表
 	table.render({

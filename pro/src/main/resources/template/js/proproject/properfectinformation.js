@@ -60,15 +60,9 @@ layui.config({
 			    		ue.setContent("在此处填写您的[项目成果和总结]");
 			    });
 			    
-			    laydate.render({
-					elem: '#actualStartTime',
-					value: json.bean.actualStartTime
-				});
+			    laydate.render({elem: '#actualStartTime', value: json.bean.actualStartTime});
 				
-				laydate.render({
-					elem: '#actualEndTime',
-					value: json.bean.actualEndTime
-				});
+				laydate.render({elem: '#actualEndTime', value: json.bean.actualEndTime});
  	        	
 				matchingLanguage();
 		 		form.render();

@@ -47,11 +47,7 @@ layui.config({
 		 		});
 		 		
 		 		// 生日
-		 		laydate.render({
-		 			elem: '#birthday', //指定元素
-		 			range: false,
-		 			max: getNowFormatDate()
-		 		});
+		 		laydate.render({elem: '#birthday', range: false, max: getNowFormatDate()});
 		 		
 		 		// 通讯录类型变化事件
 		 		form.on('radio(category)', function (data) {

@@ -10,7 +10,7 @@ layui.config({
         var $ = layui.$;
 
         AjaxPostUtil.request({url: flowableBasePath + "checkworkbusinesstrip003", params: {rowId: parent.rowId}, type: 'json', method: 'GET', callback: function(json) {
-            json.bean.stateName = getStateNameByState(json.bean.state, json.bean.stateName);
+            json.bean.stateName = activitiUtil.showStateName2(json.bean.state, 1);
 
             $("#showForm").html(getDataUseHandlebars($("#useTemplate").html(), json));
 

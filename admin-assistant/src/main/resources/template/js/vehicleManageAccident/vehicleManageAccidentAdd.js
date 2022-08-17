@@ -25,20 +25,10 @@ layui.config({
 		});
 
  		// 事故时间
- 		laydate.render({ 
- 		  	elem: '#accidentTime',
- 		  	type: 'date',
- 		  	max: getYMDFormatDate(),// 设置最大可选的日期
- 	 	  	trigger: 'click'
- 		});
+ 		laydate.render({elem: '#accidentTime', type: 'date', max: getYMDFormatDate(), trigger: 'click'});
  		
  		// 送修时间段选择
-		laydate.render({
-			elem: '#repairTime',
-			type: 'date',
-			range: true,
-			trigger: 'click'
-		});
+		laydate.render({elem: '#repairTime', type: 'date', range: true, trigger: 'click'});
 
 		skyeyeEnclosure.init('enclosureUpload');
 		matchingLanguage();

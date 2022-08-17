@@ -13,11 +13,8 @@ layui.config({
 	    var $ = layui.$;
 	    laydate = layui.laydate;
 	    
- 		//新增节假日选取时间段
-		laydate.render({
-			elem: '#holidayTime',
-			range: '~'
-		});
+ 		// 新增节假日选取时间段
+		laydate.render({elem: '#holidayTime', range: '~'});
 		
 		matchingLanguage();
 		form.render();

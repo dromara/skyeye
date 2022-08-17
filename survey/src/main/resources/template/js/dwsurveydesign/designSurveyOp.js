@@ -42,13 +42,7 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		
-		 		laydate.render({
-		 			elem: '#endTime', //指定元素
-		 			format: 'yyyy-MM-dd HH:mm:ss',
-		 			type: 'datetime',
-		 			min:minDate(),
-		 			theme: 'grid'
-		 		});
+		 		laydate.render({elem: '#endTime', format: 'yyyy-MM-dd HH:mm:ss', type: 'datetime', min: minDate(), theme: 'grid'});
 		 		
 		 		if(json.bean.ynEndTime == '1'){
 		 			$("#endTimeHide").hide();
@@ -93,7 +87,6 @@ layui.config({
 		        });
 				
 			    form.on('submit(formAddBean)', function (data) {
-			    	
 			        if (winui.verifyForm(data.elem)) {
 			        	var params = {
 			        		rowId: parent.parent.rowId

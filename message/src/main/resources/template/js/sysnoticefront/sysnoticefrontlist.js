@@ -14,11 +14,8 @@ layui.config({
 		laydate = layui.laydate,
 		table = layui.table;
 	
-	//公告上线时间时间段表格
-	laydate.render({
-		elem: '#upTime', //指定元素
-		range: '~'
-	});
+	// 公告上线时间时间段表格
+	laydate.render({elem: '#upTime', range: '~'});
 	
 	function showList(){
 		table.render({

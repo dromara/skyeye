@@ -17,10 +17,7 @@ layui.config({
     authBtn('1571638020191');//新增
     authBtn('1572313776196');//导出
 
-    laydate.render({
-        elem: '#billTime',
-        range: '~'
-    });
+    laydate.render({elem: '#billTime', range: '~'});
 
     function initloadTable() {
         table.render({

@@ -30,11 +30,7 @@ layui.config({
 		template: $("#beanTemplate").html(),
 		ajaxSendLoadBefore: function(hdb){},
 		ajaxSendAfter:function (json) {
-			laydate.render({
-				elem: '#executeMonth',
-				type: 'month',
-				range: '~'
-			});
+			laydate.render({elem: '#executeMonth', type: 'month', range: '~'});
 
 			if (!isNull(json.bean.company)){
 				companyList = json.bean.company;

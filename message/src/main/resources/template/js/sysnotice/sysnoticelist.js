@@ -14,11 +14,8 @@ layui.config({
 		soulTable = layui.soulTable,
 		table = layui.table;
 	
-	//公告上线时间时间段表格
-	laydate.render({
-		elem: '#upTime',
-		range: '~'
-	});
+	// 公告上线时间时间段表格
+	laydate.render({elem: '#upTime', range: '~'});
 	
 	authBtn('1561973831412');
 	

@@ -54,10 +54,7 @@ layui.config({
     })
 	
 	// '看日报'页面的选取时间段表格
-	laydate.render({
-		elem: '#receivedTime',
-		range: '~'
-	});
+	laydate.render({elem: '#receivedTime', range: '~'});
 	
 	form.render();
 	

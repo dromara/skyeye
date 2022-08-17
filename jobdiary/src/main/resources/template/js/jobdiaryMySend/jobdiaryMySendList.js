@@ -17,10 +17,7 @@ layui.config({
 	authBtn('1555748167744');
 	
 	// '我发出的'页面的选取时间段表格
-	laydate.render({
-		elem: '#createTime',
-		range: '~'
-	});
+	laydate.render({elem: '#createTime', range: '~'});
 	
 	form.render();
 	

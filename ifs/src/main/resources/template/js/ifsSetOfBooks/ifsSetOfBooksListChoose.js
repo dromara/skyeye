@@ -16,15 +16,9 @@ layui.config({
 
     $("#showInfo").html("账套选择规则：双击指定行即可选中。");
 
-    laydate.render({
-        elem: '#startTime',
-        range: '~'
-    });
+    laydate.render({elem: '#startTime', range: '~'});
 
-    laydate.render({
-        elem: '#endTime',
-        range: '~'
-    });
+    laydate.render({elem: '#endTime', range: '~'});
 
     table.render({
         id: 'messageTable',

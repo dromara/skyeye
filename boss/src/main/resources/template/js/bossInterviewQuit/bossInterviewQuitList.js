@@ -16,10 +16,7 @@ layui.config({
     // 新增
     authBtn('1650894715778');
 
-    laydate.render({
-        elem: '#createTime',
-        range: '~'
-    });
+    laydate.render({elem: '#createTime', range: '~'});
 
     table.render({
         id: 'messageTable',

@@ -14,10 +14,7 @@ layui.config({
 		laydate = layui.laydate;
 
 	// 考勤日期选取时间段表格
-	laydate.render({
-		elem: '#checkDate',
-		range: '~'
-	});
+	laydate.render({elem: '#checkDate', range: '~'});
 
 	// 获取当前登陆人的考勤班次
 	checkWorkUtil.getCurrentUserCheckWorkTimeList(function (json) {

@@ -14,10 +14,7 @@ layui.config({
         table = layui.table,
         laydate = layui.laydate;
 
-    laydate.render({
-        elem: '#payMonth',
-        type: 'month'
-    });
+    laydate.render({elem: '#payMonth', type: 'month'});
 
     // 获取我的薪资发放历史列表
     table.render({

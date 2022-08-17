@@ -21,13 +21,8 @@ layui.config({
     var selOption = getFileContent('tpl/template/select-option.tpl');
     var handsPersonList = new Array();//经手人员
 
-    //单据时间
-    laydate.render({
-        elem: '#operTime',
-        type: 'datetime',
-        value: getFormatDate(),
-        trigger: 'click'
-    });
+    // 单据时间
+    laydate.render({elem: '#operTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
     // 初始化账户
     systemCommonUtil.getSysAccountListByType(function (json) {

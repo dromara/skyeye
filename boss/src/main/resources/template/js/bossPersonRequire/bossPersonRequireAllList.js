@@ -13,10 +13,7 @@ layui.config({
         laydate = layui.laydate,
         table = layui.table;
 
-    laydate.render({
-        elem: '#createTime',
-        range: '~'
-    });
+    laydate.render({elem: '#createTime', range: '~'});
 
     table.render({
         id: 'messageTable',

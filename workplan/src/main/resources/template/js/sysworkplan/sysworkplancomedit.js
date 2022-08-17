@@ -26,13 +26,7 @@ layui.config({
 	    layedit = layui.layedit;
 	    
 	    var myDate = new Date();  //获取当前时间
-	    laydate.render({
-			elem: '#notifyTime',
-			type: 'datetime',
-			min: myDate.toLocaleString(),
-			done: function(value, date, endDate){
-			}
-		});
+	    laydate.render({elem: '#notifyTime', type: 'datetime', min: myDate.toLocaleString(), done: function(value, date, endDate) {}});
 	    
 	    var carryPeople = "";//指定人员id
 

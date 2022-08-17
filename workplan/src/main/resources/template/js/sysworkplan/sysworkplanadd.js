@@ -25,13 +25,7 @@ layui.config({
 	    layedit = layui.layedit;
 	    
 	    var myDate = new Date();  //获取当前时间
-	    laydate.render({
-			elem: '#notifyTime',
-			type: 'datetime',
-			min: myDate.toLocaleString(),
-			done: function(value, date, endDate){
-			}
-		});
+	    laydate.render({elem: '#notifyTime', type: 'datetime', min: myDate.toLocaleString(), done: function(value, date, endDate) {}});
 	    
 	    if (!isNull(parent.timeSolt)){
 			// 如果父页面传递时间段
@@ -41,10 +35,7 @@ layui.config({
 		} else {
 			$(".hand-down-time").addClass("layui-hide");
 			$(".choose-time").removeClass("layui-hide");
-			laydate.render({
-				elem: '#executeTime',
-				range: '~'
-			});
+			laydate.render({elem: '#executeTime', range: '~'});
 		}
 
 	    if (!isNull(parent.nowCheckType)){
