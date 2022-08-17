@@ -49,11 +49,11 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'del') { //删除
 	        	del(data, obj);
-	        }else if (layEvent === 'edit') { //编辑
+	        } else if (layEvent === 'edit') { //编辑
 	        	edit(data);
-	        }else if (layEvent === 'upMove') { //上移
+	        } else if (layEvent === 'upMove') { //上移
 	        	upMove(data);
-	        }else if (layEvent === 'downMove') { //下移
+	        } else if (layEvent === 'downMove') { //下移
 	        	downMove(data);
 	        }
 	    });
@@ -72,7 +72,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:schoolBasePath + "grademation003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:schoolBasePath + "grademation003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -80,14 +80,14 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schoolgrademation/schoolgrademationedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "grademationedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -105,29 +105,29 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "grademationadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
     //上移
-	function upMove(data){
-        AjaxPostUtil.request({url:schoolBasePath + "grademation007", params:{rowId: data.id}, type: 'json', callback: function (json) {
+	function upMove(data) {
+        AjaxPostUtil.request({url:schoolBasePath + "grademation007", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
 	}
 	
 	//下移
-	function downMove(data){
-        AjaxPostUtil.request({url:schoolBasePath + "grademation008", params:{rowId: data.id}, type: 'json', callback: function (json) {
+	function downMove(data) {
+        AjaxPostUtil.request({url:schoolBasePath + "grademation008", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
 	}
     
-    function loadTable(){
+    function loadTable() {
 		tableTree.reload("messageTable", {where: getTableParams()});
     }
 

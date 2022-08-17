@@ -85,22 +85,22 @@ layui.config({
     });
 	
 	// 车辆详情
-	function vehicledetails(data){
+	function vehicledetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManage/vehicleManageDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 车辆维修
-	function vehiclerepair(data){
+	function vehiclerepair(data) {
 		layer.confirm('确认维修该车辆吗？', {icon: 3, title: '维修操作'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "vehicle005", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "vehicle005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadVehicleTable();
     		}});
@@ -108,10 +108,10 @@ layui.config({
 	}
 	
 	// 车辆报废
-	function vehiclescrap(data){
+	function vehiclescrap(data) {
 		layer.confirm('确认报废该车辆吗？', { icon: 3, title: '报废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "vehicle006", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "vehicle006", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadVehicleTable();
     		}});
@@ -119,10 +119,10 @@ layui.config({
 	}
 	
 	// 车辆恢复正常
-	function vehiclenormal(data){
+	function vehiclenormal(data) {
 		layer.confirm('确认对该车辆恢复正常吗？', { icon: 3, title: '恢复操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "vehicle004", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "vehicle004", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadVehicleTable();
     		}});
@@ -130,10 +130,10 @@ layui.config({
 	}
 
 	// 删除车辆
-	function vehicledelet(data){
+	function vehicledelet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "vehicle003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "vehicle003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadVehicleTable();
     		}});
@@ -147,21 +147,21 @@ layui.config({
 			title: "登记车辆",
 			pageId: "vehicleManageAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadVehicleTable();
 			}});
     });
 	
 	// 编辑车辆
-	function vehicleedit(data){
+	function vehicleedit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManage/vehicleManageEdit.html", 
 			title: "编辑车辆",
 			pageId: "vehicleManageEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadVehicleTable();
 			}});
@@ -179,7 +179,7 @@ layui.config({
     	table.reloadData("vehicleTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		vehicleName:$("#vehicleName").val(),
     		licensePlate:$("#licensePlate").val(),

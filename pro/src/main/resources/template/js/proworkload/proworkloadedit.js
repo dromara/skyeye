@@ -51,7 +51,7 @@ layui.config({
 		// 附件回显
 		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 		// 获取我参与的项目列表
-		proUtil.queryMyProjectsList(function (data){
+		proUtil.queryMyProjectsList(function (data) {
 			$("#proId").html(getDataUseHandlebars(selOption, data));
 			$("#proId").val(json.bean.proId);
 			proList = data.rows;
@@ -71,7 +71,7 @@ layui.config({
 	//所属项目变化事件
 	form.on('select(proIdProperty)', function(data) {
 		var thisRowValue = data.value;
-		if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+		if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 			$.each(proList, function(i, item){
 				if(item.id == thisRowValue){
 					$("#projectNumber").html(item.projectNumber);

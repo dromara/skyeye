@@ -14,7 +14,7 @@ layui.config({
 	    var insuranceaddtableTemplate = $('#insuranceaddtableTemplate').html();
 
 		// 获取当前登录员工信息
-		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 			var userName = data.bean.userName;
 			$("#insuranceTitle").html("车辆保险登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random()*100);
 		});
@@ -33,7 +33,7 @@ layui.config({
 		});
 
 		// 查询所有的车牌号用于下拉选择框
-		adminAssistantUtil.queryAllVehicleList(function (data){
+		adminAssistantUtil.queryAllVehicleList(function (data) {
 			$("#licensePlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), data));
 			form.render('select');
 		});
@@ -44,7 +44,7 @@ layui.config({
 		skyeyeEnclosure.init('enclosureUpload');
 		matchingLanguage();
  		form.render();
- 		form.on('checkbox(checkboxProperty)', function(data){
+ 		form.on('checkbox(checkboxProperty)', function(data) {
  			var rowId = $(this).attr("rowId");
  			var fu = $("#addTable").find("input[rowId=" + rowId + "]").parent();
  			if (data.elem.checked == true){
@@ -80,7 +80,7 @@ layui.config({
             	var fu = $("#addTable").find("input[rowId=" + rowId + "]").parent();
             	var bf = "";
             	bf = fu.next().find("input").val();//对应的保费
-            	if(!isNull(bf)){
+            	if (!isNull(bf)){
             		bftotal = parseFloat(bftotal) + parseFloat(bf);
 	            	bftotal = bftotal.toFixed(2); 
             	}

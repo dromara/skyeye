@@ -20,7 +20,7 @@ layui.config({
 		 	},
 		 	ajaxSendAfter:function (json) {
 		 		
-		 		if(!isNull(json.bean.userPhoto)){
+		 		if (!isNull(json.bean.userPhoto)){
 			 		$("#userPhoto").attr("src", fileBasePath + json.bean.userPhoto);
 		 		} else {
 		 			$("#userPhoto").attr("src", "../../assets/images/no-userphoto.png");

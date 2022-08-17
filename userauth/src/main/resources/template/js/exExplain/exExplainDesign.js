@@ -17,7 +17,7 @@ layui.config({
 
 		var ue
 	    AjaxPostUtil.request({url: reqBasePath + "exexplain002", params: {type: type}, type: 'json', callback: function(json) {
-			if(!isNull(json.bean)){
+			if (!isNull(json.bean)){
 				rowId = json.bean.id;
 				$("#title").val(json.bean.title);
 				$("#content").val(json.bean.content);

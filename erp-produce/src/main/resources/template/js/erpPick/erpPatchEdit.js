@@ -40,7 +40,7 @@ layui.config({
  		function loadData(){
 			AjaxPostUtil.request({url:flowableBasePath + "erppick010", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 				var data = json.bean;
-				if(!isNull(data.machinId)){
+				if (!isNull(data.machinId)){
 					$("#machinOrder").val(data.machinNum);
 					machinMation = {
 						id: data.machinId,
@@ -78,7 +78,7 @@ layui.config({
 			var thisRowValue = data.value;
 			var thisRowNum = data.elem.id.replace("unitId", "");//获取当前行
 			//当前当前行选中的商品信息
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				var product = allChooseProduct["tr" + thisRowNum.toString()];
 				$.each(product.unitList, function(j, bean) {
 					if(thisRowValue == bean.id){//获取规格
@@ -231,7 +231,7 @@ layui.config({
  				title: "选择加工单",
  				pageId: "erpMachinStateIsPassNoComplateChoose",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode) {
+ 				callBack: function (refreshCode) {
 					$("#machinOrder").val(machinMation.orderNum);
 
 					//移除之前填写的所有行

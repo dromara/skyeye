@@ -17,7 +17,7 @@ layui.config({
     });
 	
 	var num = 0;
-	form.on('checkbox(checkboxProperty)', function(data){
+	form.on('checkbox(checkboxProperty)', function(data) {
 		if (data.elem.checked == true){
 			if(num < 3){
 				num++;

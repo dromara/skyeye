@@ -994,12 +994,12 @@ function resetWordModel(boxId){
 
 function getDataChooseMation(boxId){
 	var _object = inPageEcharts[boxId];
-	if(!isNull(_object)){
+	if (!isNull(_object)){
 		_object.menuType = 'echartsModel';
 	}
 	if(isNull(_object)){
 		_object = inPageWordMation[boxId];
-		if(!isNull(_object)){
+		if (!isNull(_object)){
 			_object.menuType = 'wordModel';
 		}
 	}
@@ -1066,7 +1066,7 @@ function getEchartsOptions(echartsMation){
 function getWordStyleStr(propertyList){
 	var styleStr = "";
 	$.each(propertyList, function (key, value){
-		if(!isNull(value) && key.indexOf("custom.") < 0){
+		if (!isNull(value) && key.indexOf("custom.") < 0){
 			styleStr += value.attrCode + ":" + value.value + ";";
 		}
 	});

@@ -1237,7 +1237,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 					dHistory = n.history;
 				var reGroupId = l.data("id").replace("layim-", "");//获取id类型 --group + id
 				var reId = reGroupId.replace("group", "");//获取id类型 --id
-				AjaxPostUtil.request({url: reqBasePath + "companytalkgroup010", params:{groupId: reId}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: reqBasePath + "companytalkgroup010", params: {groupId: reId}, type: 'json', callback: function (json) {
 					//删除对应的对象群聊
 					var groupIndex = -1;
 					e.each(j.group, function(i, item){
@@ -1254,11 +1254,11 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 						type: 13,
 					};
 					etiger.socket.send(JSON.stringify(sendMessage));//通知群员
-					if(!isNull(d)){
+					if (!isNull(d)){
 						delete d[reGroupId];//删除群聊消息
 						n.chatlog = d;
 					}
-					if(!isNull(dHistory)){
+					if (!isNull(dHistory)){
 						delete dHistory[reGroupId];//删除群聊历史信息
 						n.history = dHistory;
 					}
@@ -1298,7 +1298,7 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 					dHistory = n.history;
 				var reGroupId = l.data("id").replace("layim-", "");//获取id类型 --group + id
 				var reId = reGroupId.replace("group", "");//获取id类型 --id
-				AjaxPostUtil.request({url: reqBasePath + "companytalkgroup009", params:{groupId: reId}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: reqBasePath + "companytalkgroup009", params: {groupId: reId}, type: 'json', callback: function (json) {
 					//删除对应的对象群聊
 					var groupIndex = -1;
 					e.each(j.group, function(i, item){
@@ -1315,11 +1315,11 @@ layui.define(["layer", "laytpl", "upload"], function(i) {
 						type: 12,
 					};
 					etiger.socket.send(JSON.stringify(sendMessage));//通知群主
-					if(!isNull(d)){
+					if (!isNull(d)){
 						delete d[reGroupId];//删除群聊消息
 						n.chatlog = d;
 					}
-					if(!isNull(dHistory)){
+					if (!isNull(dHistory)){
 						delete dHistory[reGroupId];//删除群聊历史信息
 						n.history = dHistory;
 					}

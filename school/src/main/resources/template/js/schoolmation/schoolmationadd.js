@@ -110,7 +110,7 @@ layui.config({
 	        if (winui.verifyForm(data.elem)) {
 	        	var pId = '0';
 	        	if($("input[name='schoolType']:checked").val() == '2'){
-	        		if(isNull($("#OverAllSchool").val())){
+	        		if(isNull($("#OverAllSchool").val())) {
 	        			winui.window.msg('请选择父学校', {icon: 2, time: 2000});
 	        			return false;
 	        		} else {
@@ -149,7 +149,7 @@ layui.config({
 	    //加载地图
 	    initMap();
  	    function initMap(){
- 	    	if(!isNull(latitude) && !isNull(longitude)){
+ 	    	if (!isNull(latitude) && !isNull(longitude)){
 				map = new AMap.Map('container', {
 					resizeEnable: true,
 					zoom: 11,
@@ -264,7 +264,7 @@ layui.config({
 		        var contentSub = new Option('--请选择--');
 		        var curlevel = subList[0].level;
 		        var curList =  document.querySelector('#' + curlevel);
-		        if(!isNull(curList)){
+		        if (!isNull(curList)){
 		        	curList.add(contentSub);
 		        }
 		        for (var i = 0, l = subList.length; i < l; i++) {
@@ -275,7 +275,7 @@ layui.config({
 		            contentSub.setAttribute("value", levelSub + i);
 		            contentSub.center = subList[i].center;
 		            contentSub.adcode = subList[i].adcode;
-		            if(!isNull(curList)){
+		            if (!isNull(curList)){
 			            curList.add(contentSub);
 		            }
 		            if(level != 'district'){
@@ -324,18 +324,18 @@ layui.config({
 		    form.render("select");
 		}
 		
-		form.on('select(province)', function(data){
+		form.on('select(province)', function(data) {
 			citySelect.innerHTML = '';
 	        districtSelect.innerHTML = '';
 	        form.render("select");
 			search(document.getElementById('province'));
 		});
-		form.on('select(city)', function(data){
+		form.on('select(city)', function(data) {
 	        districtSelect.innerHTML = '';
 	        form.render("select");
 			search(document.getElementById('city'));
 		});
-		form.on('select(district)', function(data){
+		form.on('select(district)', function(data) {
 			search(document.getElementById('district'));
 		});
 		

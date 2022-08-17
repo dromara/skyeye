@@ -10,7 +10,7 @@ layui.config({
 	    var $ = layui.$,
 	    	form = layui.form;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop006", params:{rowId: parent.parentRowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop006", params: {rowId: parent.parentRowId}, type: 'json', callback: function (json) {
 			$("#menuBoxName").val(json.bean.menuBoxName);
 			matchingLanguage();
 			form.on('submit(formEditBean)', function (data) {

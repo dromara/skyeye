@@ -57,7 +57,7 @@ layui.config({
 		 		initSecondNoticeType(json.bean.secondTypeId);
 		 		
 		 		//一级公告类型监听事件
-				form.on('select(noticeTypeId)', function(data){
+				form.on('select(noticeTypeId)', function(data) {
 					initSecondNoticeType("");
 				});
 
@@ -179,7 +179,7 @@ layui.config({
 		 	        		params.userInfo = "";
 		 	        	}
 		 	        	if($("input[name='timeSend']:checked").val() === '2'){	//设置定时通知
-		 	        		if(isNull($("#delayedTime").val())){
+		 	        		if(isNull($("#delayedTime").val())) {
 		 	        			winui.window.msg('请选择定时通知时间', {icon: 2, time: 2000});
 		 	 	        		return false;
 		 	        		} else {

@@ -48,7 +48,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'edit') { //编辑
 	        	edit(data);
-	        }else if (layEvent === 'delet') { //删除
+	        } else if (layEvent === 'delet') { //删除
 	        	delet(data);
 	        }
 	    });
@@ -66,17 +66,17 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "schooltransportationadd",
 			area: ['60vw', '40vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	//删除
-	function delet(data){
+	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:schoolBasePath + "schooltransportation005", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:schoolBasePath + "schooltransportation005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -84,14 +84,14 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schooltransportation/schooltransportationedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "schooltransportationedit",
 			area: ['60vw', '40vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -103,7 +103,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     

@@ -78,33 +78,33 @@ layui.config({
 		var layEvent = obj.event;
 		if (layEvent === 'edit') { //编辑
 			edit(data);
-		}else if (layEvent === 'del') { //删除
+		} else if (layEvent === 'del') { //删除
 			del(data, obj);
-		}else if (layEvent === 'timingSend') { //定时发送
+		} else if (layEvent === 'timingSend') { //定时发送
 			timingSend(data);
-		}else if (layEvent === 'cancleTiming') { //取消定时发送
+		} else if (layEvent === 'cancleTiming') { //取消定时发送
 			cancleTiming(data);
-		}else if (layEvent === 'details'){ // 详情
+		} else if (layEvent === 'details'){ // 详情
 			details(data);
 		}
 	});
 
 	// 定时发送
-	function timingSend(data){
+	function timingSend(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysworkplan/sysworkplantiming.html",
 			title: "定时发送",
 			pageId: "sysworkplantiming",
 			area: ['40vw', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		executorId = data.executorId;
 		_openNewWindows({
@@ -112,12 +112,12 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysworkplantiming",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		var title = "";
 		var url = "";
@@ -136,14 +136,14 @@ layui.config({
 			title: title,
 			pageId: "sysworkplancomedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 
 	// 取消定时发送
-	function cancleTiming(data){
+	function cancleTiming(data) {
 		layer.confirm("确定取消定时发送吗？", { icon: 3, title: '取消定时发送' }, function (index) {
 			layer.close(index);
 			AjaxPostUtil.request({url: sysMainMation.workplanBasePath + "sysworkplan005", params: {planId: data.id}, type: 'json', callback: function (json) {
@@ -180,14 +180,14 @@ layui.config({
 		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 	}
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
 		var startTime = "";
 		var endTime = "";
-		if(isNull($("#executeTime").val())){
+		if(isNull($("#executeTime").val())) {
 			startTime = "";
 			endTime = "";
 		} else {

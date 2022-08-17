@@ -88,13 +88,13 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-	function getTableParams(){
+	function getTableParams() {
     	var storeId = "-";
-    	if(!isNull($("#storeId").val())){
+    	if (!isNull($("#storeId").val())) {
 			storeId = $("#storeId").val();
 		}
 		return {

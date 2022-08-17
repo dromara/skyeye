@@ -18,7 +18,7 @@ if (userAgent.indexOf('AlipayClient') > -1) {
 	document.write('<script type="text/javascript" src="https://b.bdstatic.com/searchbox/icms/searchbox/js/swan-2.0.18.js"><\/script>');
 }
 if (!/toutiaomicroapp/i.test(userAgent)) {
-	if(!isNull(document.querySelector('.post-message-section'))){
+	if (!isNull(document.querySelector('.post-message-section'))){
 		document.querySelector('.post-message-section').style.visibility = 'visible';
 	}
 }
@@ -34,7 +34,7 @@ layui.config({
 		var $ = layui.$;
 		//手机端加载该页面时加载userToken
 		var userToken = GetUrlParam("userToken");
-		if(!isNull(userToken)){
+		if (!isNull(userToken)){
 			setCookie('userToken', userToken);
 		}
 		var fileUrl = GetUrlParam("fileUrl");
@@ -72,11 +72,11 @@ layui.config({
 		$("title").html(title);
 		// 获取当前登录员工信息
 		var currentUserMation = {};
-		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 			currentUserMation = data.bean;
 		});
 		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole036", params: {rowId: thisId}, type: 'json', callback: function(j){
-			if(!isNull(j.bean)){
+			if (!isNull(j.bean)){
 				window.docEditor = new DocsAPI.DocEditor("placeholder", {
 					"document": {
 						"fileType": selFileType,//定义源查看或编辑文档的文件类型

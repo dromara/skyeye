@@ -75,7 +75,7 @@ layui.config({
 			title: "流程审批",
 			pageId: "approvalProcess",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadMyNeedDealtTable();
 			}});
@@ -105,7 +105,7 @@ layui.config({
 		table.reloadData("messageMyNeedDealtTable", {where: getTableParams()});
 	}
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		taskName: $("#taskName").val(),
 			processInstanceId: $("#processInstanceId").val()

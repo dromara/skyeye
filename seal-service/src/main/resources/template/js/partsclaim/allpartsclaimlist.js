@@ -45,7 +45,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details'){ //详情
         	details(data);
-        }else if (layEvent === 'appDetails'){ //申领单详情
+        } else if (layEvent === 'appDetails'){ //申领单详情
         	appDetails(data);
         }
     });
@@ -67,7 +67,7 @@ layui.config({
         return false;
 	});
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: {orderNum: $("#orderNum").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()}});
     }
     
@@ -76,26 +76,26 @@ layui.config({
     }
 
 	//工单详情
-	function details(data){
+	function details(data) {
 		rowId = data.serviceId;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//申领单详情
-	function appDetails(data){
+	function appDetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/partsclaim/partsclaimdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	

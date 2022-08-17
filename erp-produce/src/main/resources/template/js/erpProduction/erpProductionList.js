@@ -64,13 +64,13 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'details') { //详情
+        } else if (layEvent === 'details') { //详情
         	details(data);
-        }else if (layEvent === 'subExamine') { //提交审核
+        } else if (layEvent === 'subExamine') { //提交审核
         	subExamine(data);
-        }else if (layEvent === 'examine') { //审核
+        } else if (layEvent === 'examine') { //审核
         	examine(data);
         }
     });
@@ -87,7 +87,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "erpproduction005", params:{orderId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "erpproduction005", params: {orderId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -95,33 +95,33 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/erpProduction/erpProductionEdit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "erpProductionEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/erpProduction/erpProductionDetail.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "erpProductionDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//提交审批
-	function subExamine(data){
+	function subExamine(data) {
         layer.confirm('确认要提交审核吗？', { icon: 3, title: '提交审核操作' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "erpproduction007", params: {orderId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("提交成功。", {icon: 1, time: 2000});
@@ -131,14 +131,14 @@ layui.config({
     }
     
     //审核
-	function examine(data){
+	function examine(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/erpProduction/erpProductionExamine.html", 
 			title: "审核",
 			pageId: "erpProductionExamine",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -156,13 +156,13 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "erpProductionAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -171,7 +171,7 @@ layui.config({
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		materialName: $("#materialName").val(),
     		materialModel: $("#materialModel").val(),

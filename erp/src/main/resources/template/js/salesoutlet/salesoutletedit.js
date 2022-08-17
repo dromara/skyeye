@@ -326,7 +326,7 @@ layui.config({
 			title: "选择客户",
 			pageId: "customerchooselist",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				$("#customName").val(customerMation.customName);
 			}});
 	});

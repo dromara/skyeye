@@ -73,7 +73,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: {userName: $("#userName").val()}});
     }
     

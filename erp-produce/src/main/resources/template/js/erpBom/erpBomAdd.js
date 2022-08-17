@@ -173,7 +173,7 @@ layui.config({
 			});
 			//"inner"：成为子节点，"prev"：成为同级前一个节点，"next"：成为同级后一个节点
 			//如果 moveType = null，表明拖拽无效
-			if(!isNull(moveType)){
+			if (!isNull(moveType)){
 				if('inner' == moveType){
 					//依然为父节点
 					if(nodesIndex >= 0){
@@ -213,7 +213,7 @@ layui.config({
 			if(treeNodeIndex >= 0){
 				ztreeNode.splice(treeNodeIndex, 1);
 			}
-			if(!isNull(treeNode.children) && treeNode.children.length > 0){
+			if (!isNull(treeNode.children) && treeNode.children.length > 0){
 				$.each(treeNode.children, function(i, item){
 					deleteNode(item);
 				});
@@ -268,7 +268,7 @@ layui.config({
  				title: "选择商品",
  				pageId: "materialChooseToProduce",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode) {
+ 				callBack: function (refreshCode) {
 					$.each(productMationList, function(i, item){
 						if(!inZtreeNode(item.productId)){
 							ztreeNode.push(item);
@@ -296,7 +296,7 @@ layui.config({
 					title: "工序选择",
 					pageId: "erpWorkProcedureChoose",
 					area: ['90vw', '90vh'],
-					callBack: function(refreshCode) {
+					callBack: function (refreshCode) {
 						ztreeNode[selIndex].procedureMationList = [].concat(procedureMationList);
 						var str = "";
 						var title = "";

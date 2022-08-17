@@ -43,11 +43,11 @@ layui.config({
     });
 	
 	//还原数据库
-	function reduction(data){
+	function reduction(data) {
 		var msg = '确认还原该版本吗？';
 		layer.confirm(msg, { icon: 3, title: '数据库还原' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sysdatasqlbackups004", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "sysdatasqlbackups004", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("还原成功", {icon: 1, time: 2000});
     		}});
 		});
@@ -65,13 +65,13 @@ layui.config({
 			title: "数据备份",
 			pageId: "sysdatatablelistpage",
 			maxmin: true,
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{}});
     }
     

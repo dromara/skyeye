@@ -22,7 +22,7 @@ layui.config({
 			loadParentGrade();
 		});
 
-	    form.on('select(OverAllSchool)', function(data){
+	    form.on('select(OverAllSchool)', function(data) {
     		loadParentGrade();
  		});
 	    
@@ -61,7 +61,7 @@ layui.config({
 	        	var pId = '0';
 	        	var yearN = 0;
 	        	if($("input[name='type']:checked").val() == '2'){
-	        		if(isNull($("#OverAllGrade").val())){
+	        		if(isNull($("#OverAllGrade").val())) {
 	        			winui.window.msg('请选择正常年级', {icon: 2, time: 2000});
 	        			return false;
 	        		} else {

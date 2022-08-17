@@ -158,7 +158,7 @@ layui.config({
                 title: "选择套餐",
                 pageId: "mealChoose",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode) {
+                callBack: function (refreshCode) {
                     // 获取表格行号
                     var thisRowNum = trId.replace("tr", "");
 
@@ -178,7 +178,7 @@ layui.config({
                 // 获取行编号
                 var rowNum = $(item).attr("trcusid").replace("tr", "");
                 var mealMationJson = $("#mealId" + rowNum.toString()).attr("mealMaion");
-                if(!isNull(mealMationJson)){
+                if (!isNull(mealMationJson)){
                     var mealMation = JSON.parse(mealMationJson);
                     allPrice = sum(allPrice, mealMation.unformatPrice);
                 }

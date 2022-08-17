@@ -48,9 +48,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'liebiaoDedails') { //用品详情
         	liebiaoDedails(data);
-        }else if (layEvent === 'liebiaoEdit') { //用品编辑
+        } else if (layEvent === 'liebiaoEdit') { //用品编辑
         	liebiaoEdit(data);
-        }else if (layEvent === 'liebiaoDelete') { //删除用品
+        } else if (layEvent === 'liebiaoDelete') { //删除用品
         	liebiaoDelete(data);
         }
     });
@@ -64,27 +64,27 @@ layui.config({
 			title: "新增用品",
 			pageId: "assetarticlesadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLiebiaoTable();
 			}});
     });
 	
 	// 用品详情
-	function liebiaoDedails(data){
+	function liebiaoDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetarticles/assetarticlesdetails.html", 
 			title: "用品详情",
 			pageId: "assetarticlesdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
 	
 	// 删除用品
-	function liebiaoDelete(data){
+	function liebiaoDelete(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "assetarticles014", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -95,14 +95,14 @@ layui.config({
 	}
     
 	// 编辑用品
-	function liebiaoEdit(data){
+	function liebiaoEdit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetarticles/assetarticlesedit.html", 
 			title: "编辑用品",
 			pageId: "assetarticlesedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -115,7 +115,7 @@ layui.config({
     });
     
     // 刷新用品列表数据
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("liebiaoTable", {where: getTableParams()});
     }
     
@@ -124,7 +124,7 @@ layui.config({
     	table.reloadData("liebiaoTable", {page: {curr: 1}, where: getTableParams()});
 	});
 	
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		articlesName: $("#articlesName").val(),
     		typeId: $("#typeId").val()

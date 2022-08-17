@@ -239,7 +239,7 @@ var systemCommonUtil = {
             title: "图标选择",
             pageId: "sysEveIconListChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(systemCommonUtil.sysIconChooseClass);
                 }

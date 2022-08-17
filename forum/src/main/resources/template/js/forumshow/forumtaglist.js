@@ -44,7 +44,7 @@ layui.config({
 	}
 	
 	tagId = GetUrlParam("id");
-	if(!isNull(tagId)){
+	if (!isNull(tagId)){
 		$("#taglist").find("li").removeClass('layui-this');
 		$("#taglist").find("li[rowid='" + tagId + "']").addClass('layui-this');
 		loadList();
@@ -68,7 +68,7 @@ layui.config({
 		 		for(var i = 0;i < row.length; i++){
 		 			var id = row[i].id;
 		 			var tagName = row[i].tagName;
-		 			if(!isNull(tagName)){
+		 			if (!isNull(tagName)){
 		 				var tagArr = tagName.split(",");
 			 			var tagStr = "";
 			 			for(var j = 0;j < tagArr.length; j++){

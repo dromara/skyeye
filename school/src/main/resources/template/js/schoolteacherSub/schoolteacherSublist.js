@@ -103,28 +103,28 @@ layui.config({
 	});
 	
 	//科目技能绑定
-	function subBind(data){
+	function subBind(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schoolteacherSub/schoolteacherSubBind.html", 
 			title: "科目技能绑定",
 			pageId: "schoolteacherSubBind",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//教师详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schoolteacher/schoolteacherdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "schoolteacherdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -132,7 +132,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	layui.table.reloadData("messageTable", {where: getTableParams()});
     }
     

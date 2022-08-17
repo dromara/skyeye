@@ -164,7 +164,7 @@ layui.config({
 		        			}
 		 	        	}
 						if(data.field.menuIconType == '1'){
-							if(isNull($("#menuIcon").val())){
+							if(isNull($("#menuIcon").val())) {
 								winui.window.msg("请选择图标", {icon: 2, time: 2000});
 								return false;
 							}

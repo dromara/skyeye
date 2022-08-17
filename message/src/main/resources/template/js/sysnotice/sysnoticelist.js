@@ -104,19 +104,19 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'delet') { //删除
+        } else if (layEvent === 'delet') { //删除
         	delet(data);
-        }else if (layEvent === 'up') { //上线
+        } else if (layEvent === 'up') { //上线
         	up(data);
-        }else if (layEvent === 'down') { //下线
+        } else if (layEvent === 'down') { //下线
         	down(data);
-        }else if (layEvent === 'upMove') { //上移
+        } else if (layEvent === 'upMove') { //上移
         	upMove(data);
-        }else if (layEvent === 'downMove') { //下移
+        } else if (layEvent === 'downMove') { //下移
         	downMove(data);
-        }else if (layEvent === 'timeup') { //定时上线
+        } else if (layEvent === 'timeup') { //定时上线
         	timeup(data);
-        }else if (layEvent === 'details') { //公告详情
+        } else if (layEvent === 'details') { //公告详情
         	details(data);
         }
     });
@@ -128,14 +128,14 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "sysnoticeadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	//定时上线
-	function timeup(data){
+	function timeup(data) {
 		rowId = data.id;
 		title = data.title;
 		_openNewWindows({
@@ -143,7 +143,7 @@ layui.config({
 			title: "定时上线",
 			pageId: "sysnoticetimeup",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -151,7 +151,7 @@ layui.config({
 	}
 	
 	//删除
-	function delet(data){
+	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], { icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType] }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "notice003", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -162,7 +162,7 @@ layui.config({
 	}
 	
 	//上线
-	function up(data){
+	function up(data) {
 		var msg = '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '上线公告' }, function (index) {
 			layer.close(index);
@@ -174,7 +174,7 @@ layui.config({
 	}
 	
 	//下线
-	function down(data){
+	function down(data) {
 		var msg = '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '下线公告' }, function (index) {
 			layer.close(index);
@@ -186,14 +186,14 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysnotice/sysnoticeedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sysnoticeedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -201,7 +201,7 @@ layui.config({
 	}
 	
 	//上移
-	function upMove(data){
+	function upMove(data) {
         AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "notice008", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -209,7 +209,7 @@ layui.config({
 	}
 	
 	//下移
-	function downMove(data){
+	function downMove(data) {
         AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "notice009", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -217,14 +217,14 @@ layui.config({
 	}
 	
 	//公告详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysnotice/sysnoticedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysnoticedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -240,13 +240,13 @@ layui.config({
     });
 
     //上线时间搜索条件
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
 		var startTime = "", endTime = "";
-		if(!isNull($("#upTime").val())){
+		if (!isNull($("#upTime").val())) {
 			startTime = $("#upTime").val().split('~')[0].trim() + ' 00:00:00';
 			endTime = $("#upTime").val().split('~')[1].trim() + ' 23:59:59';
 		}

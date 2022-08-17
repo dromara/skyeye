@@ -16,7 +16,7 @@ layui.config({
 		soulTable = layui.soulTable;
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		staffId = data.bean.staffId;
 	});
 	initTable();
@@ -76,11 +76,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		staffId: staffId
     	};

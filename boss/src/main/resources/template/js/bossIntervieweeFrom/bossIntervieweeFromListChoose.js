@@ -64,11 +64,11 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             title: $("#title").val()
         };

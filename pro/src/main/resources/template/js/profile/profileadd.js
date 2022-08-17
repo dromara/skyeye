@@ -18,7 +18,7 @@ layui.config({
 	sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmFileType"]["key"], 'select', "fileType", '', form);
 
 	// 获取我参与的项目列表
-	proUtil.queryMyProjectsList(function (data){
+	proUtil.queryMyProjectsList(function (data) {
 		$("#proId").html(getDataUseHandlebars(selOption, data));
 		form.render('select');
 	});

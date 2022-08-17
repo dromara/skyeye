@@ -65,7 +65,7 @@ layui.config({
 	            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	            { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function (d) {
 			        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
-			        if(!isNull(d.linkNumber)){
+			        if (!isNull(d.linkNumber)){
 			        	str += '<span class="state-new">[转]</span>';
 				        if(d.status == 2){
 				        	str += '<span class="state-up"> [正常]</span>';
@@ -76,7 +76,7 @@ layui.config({
 			        return str;
 			    }},
 			    { field: 'subTypeName', title: '单据类型', align: 'left', width: 100},
-	            { field: 'materialName', title: '商品名称', align: 'left', width: 150},
+	            { field: 'materialName', title: '商品名称', align: 'left', width: 150 },
 	            { field: 'materialModel', title: '商品型号', align: 'left', width: 100},
 	            { field: 'unitPrice', title: '单价', align: 'left', width: 120},
 	            { field: 'operNumber', title: '出库数量', align: 'left', width: 100},
@@ -106,7 +106,7 @@ layui.config({
     });
 
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.headerId;
 		var url = erpOrderUtil.getErpDetailUrl({subType: data.subType});
 		_openNewWindows({
@@ -114,7 +114,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "outgoingdetailschildpage",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -123,14 +123,14 @@ layui.config({
     });
     
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	// 单据的开始时间、结束时间
 		var startTime = "", endTime = "";
-    	if(!isNull($("#operTime").val())){
+    	if (!isNull($("#operTime").val())) {
     		startTime = $("#operTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#operTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

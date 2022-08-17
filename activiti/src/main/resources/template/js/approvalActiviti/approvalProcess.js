@@ -52,13 +52,13 @@ layui.config({
 			if((!isNull(editableNodeId) && ("," + item.editableNodeId + ",").indexOf("," + editableNodeId + ",") > -1)
 				|| (!isNull(editableNodeName) && ("," + item.editableNodeName + ",").indexOf("," + editableNodeName + ",") > -1)){
 				var formItem = item.formItem;
-				if(!isNull(formItem)){
+				if (!isNull(formItem)){
 					if(formItem.associatedDataTypes == 1){//json串
 						var obj = formItem.aData;
 						tplContent = getDataUseHandlebars(formItem.templateContent, obj);
 						formItem.context = tplContent;
 					}else if(formItem.associatedDataTypes == 2){//接口
-						AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params:{interfa: formItem.aData}, type: 'json', callback: function(j){
+						AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: formItem.aData}, type: 'json', callback: function(j){
 							var obj = JSON.parse(j.bean.aData);
 							tplContent = getDataUseHandlebars(formItem.templateContent, obj);
 							formItem.context = tplContent;
@@ -124,7 +124,7 @@ layui.config({
 						str = getDataUseHandlebars(eichTextTemplate, jsonStr);
 					}else if(item.showType == 4){//图片展示
 						var photoValue = [];
-						if(!isNull(jsonStr.bean.text)){
+						if (!isNull(jsonStr.bean.text)){
 							photoValue = item.value.split(",");
 						}
 						var rows = [];
@@ -165,7 +165,7 @@ layui.config({
 					str = getDataUseHandlebars(eichTextTemplate, jsonStr);
 				}else if(item.showType == 4){//图片展示
 					var photoValue = [];
-					if(!isNull(jsonStr.bean.text)){
+					if (!isNull(jsonStr.bean.text)){
 						photoValue = item.value.split(",");
 					}
 					var rows = [];
@@ -235,7 +235,7 @@ layui.config({
 					}
 					$("#multiInstanceState").html('进行中');
 				}
-				if(!isNull(j.bean.approvalResult + "")){
+				if (!isNull(j.bean.approvalResult + "")){
 					// 如果已经获得会签结果，则可以进行提交到下一步
 					if(j.bean.approvalResult){
 						$("input:radio[name=flag][value='1']").attr("checked", true);
@@ -359,7 +359,7 @@ layui.config({
 			done: function(page, next) { //到达临界点（默认滚动触发），触发下一页
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params:{processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params: {processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
 					var jsonStr = "";//实体json对象
 					$.each(json.rows, function(index, bean) {
 						bean.showClass = 'date02';

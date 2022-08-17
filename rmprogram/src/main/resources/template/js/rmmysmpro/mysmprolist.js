@@ -43,9 +43,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'consolePro') { //管理项目
+        } else if (layEvent === 'consolePro') { //管理项目
         	consolePro(data);
         }
     });
@@ -71,28 +71,28 @@ layui.config({
 	}
 	
 	//管理项目
-	function consolePro(data){
+	function consolePro(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/rmmysmpropage/mysmpropagelist.html", 
 			title: "管理项目",
 			pageId: "rmmysmproconsolePro",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/rmmysmpro/mysmproedit.html", 
 			title: "编辑项目",
 			pageId: "rmmysmproedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -110,13 +110,13 @@ layui.config({
 			title: "新增项目",
 			pageId: "rmmysmproadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{proName:$("#proName").val()}});
     }
     

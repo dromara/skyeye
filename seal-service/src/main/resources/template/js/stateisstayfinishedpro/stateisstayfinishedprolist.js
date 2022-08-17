@@ -55,9 +55,9 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'finishedPro') { //完工
 	        	finishedPro(data);
-	        }else if (layEvent === 'details'){ //详情
+	        } else if (layEvent === 'details'){ //详情
 	        	details(data);
-	        }else if (layEvent === 'feedBack'){ //情况反馈
+	        } else if (layEvent === 'feedBack'){ //情况反馈
 	        	feedBack(data);
 	        }
 	    });
@@ -73,8 +73,8 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
-    	if(isNull($("#declarationTime").val())){
+    function loadTable() {
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -85,7 +85,7 @@ layui.config({
     }
     
     function refreshTable(){
-    	if(isNull($("#declarationTime").val())){
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -96,40 +96,40 @@ layui.config({
     }
 
 	//完工
-	function finishedPro(data){
+	function finishedPro(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstayfinishedpro/stateisstayfinished.html", 
 			title: "完工",
 			pageId: "stateisstayfinished",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//情况反馈
-	function feedBack(data){
+	function feedBack(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/feedback/feedbacklist.html", 
 			title: "情况反馈",
 			pageId: "feedbacklist",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	

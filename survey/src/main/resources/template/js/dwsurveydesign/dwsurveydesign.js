@@ -205,7 +205,7 @@ layui.config({
 			layer.confirm("确认要删除此题吗？", { icon: 3, title: '删除题目' }, function (index) {
 				layer.close(index);
 				var quId = quBody.find("input[name='quId']").val();
-				if(!isNull(quId)){
+				if (!isNull(quId)){
 					AjaxPostUtil.request({url: sysMainMation.surveyBasePath + "dwsurveydirectory015", params: {quId: quId}, type: 'json', callback: function (json) {
 						quBody.hide("slow", function() {
 							$(this).parent().remove();
@@ -248,7 +248,7 @@ layui.config({
 			var optionParent = null;
 			optionParent = $(curEditObj).parents("td.quChenColumnTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
-			if(!isNull(quOptionId) && quOptionId != "0" ){
+			if (!isNull(quOptionId) && quOptionId != "0" ){
 				AjaxPostUtil.request({url: sysMainMation.surveyBasePath + "dwsurveydirectory016", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 	 	   		}});
@@ -263,7 +263,7 @@ layui.config({
 			var optionParent = null;
 			optionParent = $(curEditObj).parents("td.quChenRowTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
-			if(!isNull(quOptionId) && quOptionId != "0" ){
+			if (!isNull(quOptionId) && quOptionId != "0" ){
 				AjaxPostUtil.request({url: sysMainMation.surveyBasePath + "dwsurveydirectory017", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 	 	   		}});
@@ -599,7 +599,7 @@ layui.config({
 					quItemBody.find("input[name='quId']").val(quId);
 					//同步logic Id信息
 					var quLogics = json.bean.quLogics;
-					if(!isNull(quLogics)){
+					if (!isNull(quLogics)){
 						$.each(quLogics, function(i, item) {
 							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
 							logicItem.find("input[name='quLogicId']").val(item.id);
@@ -928,7 +928,7 @@ layui.config({
 					quItemBody.find("input[name='quId']").val(quId);
 					//列选项
 					var quColumnItems = json.bean.quColumnItems;
-					if(!isNull(quColumnItems)){
+					if (!isNull(quColumnItems)){
 						$.each(quColumnItems, function(i, item) {
 							var quItemOption = quItemBody.find(".quColumnOption_" + item.title);
 							quItemOption.find("input[name='quItemId']").val(item.id);
@@ -937,7 +937,7 @@ layui.config({
 					}
 					//行选项
 					var quRowItems = json.bean.quRowItems;
-					if(!isNull(quRowItems)){
+					if (!isNull(quRowItems)){
 						$.each(quRowItems, function(i, item) {
 							var quItemOption = quItemBody.find(".quRowOption_" + item.title);
 							quItemOption.find("input[name='quItemId']").val(item.id);
@@ -946,7 +946,7 @@ layui.config({
 					}
 					//同步logic Id信息
 					var quLogics = json.bean.quLogics;
-					if(!isNull(quLogics)){
+					if (!isNull(quLogics)){
 						$.each(quLogics, function(i, item) {
 							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
 							logicItem.find("input[name='quLogicId']").val(item.id);

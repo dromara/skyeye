@@ -39,7 +39,7 @@ var codeDocUtil = {
      */
     replaceModelContent: function (str){
         $.each(codeDocUtil.replaceModelRelationship, function (key, value){
-            if(!isNull(codeDocUtil.tableColumnData[key])){
+            if (!isNull(codeDocUtil.tableColumnData[key])){
                 str = str.replace(value, codeDocUtil.tableColumnData[key]);
             } else {
                 str = str.replace(value, $("#" + key).val());

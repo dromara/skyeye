@@ -32,7 +32,7 @@ layui.config({
 					pagination: false,
 					template: getFileContent('tpl/template/select-option.tpl'),
 					ajaxSendLoadBefore: function(hdb){},
-					ajaxSendAfter:function(data){
+					ajaxSendAfter:function(data) {
 						$("#gradeId").val(json.bean.gradeId);
 						form.render('select');
 						//科目
@@ -43,7 +43,7 @@ layui.config({
 							pagination: false,
 							template: getFileContent('tpl/template/select-option.tpl'),
 							ajaxSendLoadBefore: function(hdb){},
-							ajaxSendAfter:function(data){
+							ajaxSendAfter:function(data) {
 								$("#subjectId").val(json.bean.subjectId);
 								form.render('select');
 							}
@@ -51,7 +51,7 @@ layui.config({
 					}
 				});
 			    //学校监听事件
-				form.on('select(schoolId)', function(data){
+				form.on('select(schoolId)', function(data) {
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#schoolId").html("");
 						form.render('select');
@@ -70,13 +70,13 @@ layui.config({
 					 	pagination: false,
 					 	template: getFileContent('tpl/template/select-option.tpl'),
 					 	ajaxSendLoadBefore: function(hdb){},
-					 	ajaxSendAfter:function(data){
+					 	ajaxSendAfter:function(data) {
 					 		form.render('select');
 					 	}
 				    });
 				}
 				//年级监听事件
-				form.on('select(gradeId)', function(data){
+				form.on('select(gradeId)', function(data) {
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#subjectId").html("");
 						form.render('select');
@@ -95,7 +95,7 @@ layui.config({
 					 	pagination: false,
 					 	template: getFileContent('tpl/template/select-option.tpl'),
 					 	ajaxSendLoadBefore: function(hdb){},
-					 	ajaxSendAfter:function(data){
+					 	ajaxSendAfter:function(data) {
 					 		form.render('select');
 					 	}
 				    });

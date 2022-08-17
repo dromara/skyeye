@@ -27,7 +27,7 @@ layui.config({
         initEchartsData(widthScale, heightScale);
         initWordMationData(widthScale, heightScale);
 
-        if(!isNull(initData.bgImage)){
+        if (!isNull(initData.bgImage)){
             content.css({
                 "background-image": "url(" + initData.bgImage + ")",
                 "background-size": content.width() + "px " + content.height() + "px"
@@ -80,7 +80,7 @@ layui.config({
     }
 
     function getContentStr(str){
-        if(!isNull(str)){
+        if (!isNull(str)){
             str = str.replace(/%/g, '%25');
             return decodeURIComponent(str);
         }
@@ -93,7 +93,7 @@ layui.config({
         $.each(attr, function(key, value){
             if(value.editor == 9){
                 var pointValue = attr[key].pointValue;
-                if(!isNull(pointValue)){
+                if (!isNull(pointValue)){
                     needGetData[pointValue] = attr[key].value;
                 }
             }
@@ -110,7 +110,7 @@ layui.config({
                 $.each(attr, function(key1, value1){
                     if(value1.editor == 9){
                         var pointValue = attr[key1].pointValue;
-                        if(!isNull(pointValue) && key == pointValue){
+                        if (!isNull(pointValue) && key == pointValue){
                             attr[key1].value = value;
                         }
                     }
@@ -121,7 +121,7 @@ layui.config({
     }
 
     function addNewModel(modelId, echartsMation){
-        if(!isNull(echartsMation)){
+        if (!isNull(echartsMation)){
             var option = getEchartsOptions(echartsMation);
             // 获取boxId
             var boxId = modelId + getRandomValueToString();
@@ -196,7 +196,7 @@ layui.config({
         div.dataset.modelId = modelId;
         div.style.top = "0px";
         div.style.left = "0px";
-        if(!isNull(otherStyle)){
+        if (!isNull(otherStyle)){
             $.each(otherStyle, function (key, value){
                 div.style[key] = value;
             });

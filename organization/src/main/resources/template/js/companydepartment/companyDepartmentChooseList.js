@@ -111,7 +111,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -119,7 +119,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			companyName: $("companyName").val(),
 			departmentName: $("departmentName").val()

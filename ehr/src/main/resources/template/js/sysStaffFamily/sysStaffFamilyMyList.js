@@ -16,7 +16,7 @@ layui.config({
 	
 	authBtn('1601785417437');
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		staffId = data.bean.staffId;
 	});
 	initTable();
@@ -46,7 +46,7 @@ layui.config({
                     }
                 }},
 		        { field: 'cardTypeName', title: '证件类型', width: 100},
-		        { field: 'cardNumber', title: '证件编号', width: 150},
+		        { field: 'cardNumber', title: '证件编号', width: 150 },
                 { field: 'politicName', title: '政治面貌', width: 100},
                 { field: 'workUnit', title: '工作单位', width: 140},
                 { field: 'job', title: '职务', width: 120},
@@ -78,7 +78,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'edit') { // 编辑
 	        	edit(data);
-	        }else if (layEvent === 'delete') { // 删除
+	        } else if (layEvent === 'delete') { // 删除
 	        	deleteRow(data);
 	        }
 	    });
@@ -93,21 +93,21 @@ layui.config({
 			title: "录入家庭成员",
 			pageId: "sysStaffFamilyAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	});
 	
 	// 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
 			url: "../../tpl/sysStaffFamily/sysStaffFamilyEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sysStaffFamilyEdit",
             area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -115,7 +115,7 @@ layui.config({
 	}
 	
 	// 删除
-    function deleteRow(data){
+    function deleteRow(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstafffamily005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
@@ -130,11 +130,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		staffId: staffId
     	};

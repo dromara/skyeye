@@ -16,7 +16,7 @@ layui.config({
 		
 	var checkType = '1';//工序选择类型：1.单选；2.多选
 	
-	if(!isNull(parent.procedureCheckType)){
+	if (!isNull(parent.procedureCheckType)){
 		checkType = parent.procedureCheckType;
 	}
 	
@@ -132,7 +132,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -140,7 +140,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			name:$("#name").val(), 
     		number: $("#number").val()

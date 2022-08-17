@@ -29,16 +29,16 @@ layui.config({
 	        { field: 'userNum', title: '员工数', width: 100 },
             { field:'id', width:400, title: '公司地址', templet: function (d) {
             	var str = d.provinceName + " ";
-            	if(!isNull(d.cityName)){
+            	if (!isNull(d.cityName)){
             		str += d.cityName + " ";
             	}
-            	if(!isNull(d.areaName)){
+            	if (!isNull(d.areaName)){
             		str += d.areaName + " ";
             	}
-            	if(!isNull(d.townshipName)){
+            	if (!isNull(d.townshipName)){
             		str += d.townshipName + " ";
             	}
-            	if(!isNull(d.addressDetailed)){
+            	if (!isNull(d.addressDetailed)){
             		str += d.addressDetailed;
             	}
 	        	return str;
@@ -61,9 +61,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'companyDesc') { //公司简介
+        } else if (layEvent === 'companyDesc') { //公司简介
         	layer.open({
 	            id: '公司简介',
 	            type: 1,
@@ -87,7 +87,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "companymation003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "companymation003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -95,14 +95,14 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/companymation/companymationedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "companymationedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -120,13 +120,13 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "companymationadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
 		tableTree.reload("messageTable", {where:{companyName: $("#companyName").val()}});
     }
     

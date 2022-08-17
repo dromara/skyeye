@@ -40,7 +40,7 @@ layui.config({
     }, async: false});
 
     function getContentStr(str){
-        if(!isNull(str)){
+        if (!isNull(str)){
             str = str.replace(/%/g, '%25');
             return decodeURIComponent(str);
         }

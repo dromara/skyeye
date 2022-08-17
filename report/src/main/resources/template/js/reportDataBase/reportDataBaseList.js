@@ -26,7 +26,7 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'name', title: '数据库名称', align: 'left', width: 150},
+            { field: 'name', title: '数据库名称', align: 'left', width: 150 },
             { field: 'jdbcUrl', title: '连接串', align: 'left', width: 150 },
             { field: 'user', title: '用户名', align: 'left', width: 100 },
             { field: 'password', title: '密码', align: 'left', width: 100 },
@@ -49,7 +49,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
             edit(data);
-        }else if (layEvent === 'delet') { //删除
+        } else if (layEvent === 'delet') { //删除
             delet(data);
         }
     });
@@ -69,17 +69,17 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "reportDataBaseAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });
 
     // 删除
-    function delet(data){
+    function delet(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: reportBasePath + "reportdatabase003", params:{id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
+            AjaxPostUtil.request({url: reportBasePath + "reportdatabase003", params: {id: data.id}, type: 'json', method: "DELETE", callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -87,14 +87,14 @@ layui.config({
     }
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/reportDataBase/reportDataBaseEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "reportDataBaseEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -106,15 +106,15 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable(){
+    function refreshloadTable() {
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             name: $("#name").val()
         };

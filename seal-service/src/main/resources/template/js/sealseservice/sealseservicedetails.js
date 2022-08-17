@@ -25,11 +25,11 @@ layui.config({
 		 	},
 		 	ajaxSendAfter: function (json) {
 				// 获取当前登录员工信息
-				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+				systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 					$("#orderDetailTitle").html(data.bean.companyName + '售后工单');
 				});
 		 		//工单协助人
-		 		if(!isNull(json.bean.cooperationUserId) && json.bean.cooperationUserId.length > 0){
+		 		if (!isNull(json.bean.cooperationUserId) && json.bean.cooperationUserId.length > 0){
 			    	var str = "";
 	    			$.each(json.bean.cooperationUserId, function(i, item){
 	    				str += item.name + ',';
@@ -38,10 +38,10 @@ layui.config({
  	        	}
 		 		
 		 		//相关照片回显
-		 		if(!isNull(json.bean.sheetPicture) && json.bean.sheetPicture.length > 0){
+		 		if (!isNull(json.bean.sheetPicture) && json.bean.sheetPicture.length > 0){
 			    	var str = "";
 	    			$.each(json.bean.sheetPicture.split(','), function(i, item){
-	    				if(!isNull(item)){
+	    				if (!isNull(item)){
 		    				str += '<img src="' + item + '" class="photo-img pictureItem">';
 	    				}
 	    			});
@@ -49,10 +49,10 @@ layui.config({
  	        	}
 
  	        	//完工拍照回显
-		 		if(!isNull(json.bean.comPic) && json.bean.comPic.length > 0){
+		 		if (!isNull(json.bean.comPic) && json.bean.comPic.length > 0){
 			    	var str = "";
 	    			$.each(json.bean.comPic.split(','), function(i, item){
-	    				if(!isNull(item)){
+	    				if (!isNull(item)){
 	    					str += '<img src="' + item + '" class="photo-img pictureItem">';
 	    				}
 	    			});
@@ -66,17 +66,17 @@ layui.config({
 				});
  	        	
  	        	//客户详情
- 	        	if(!isNull(json.bean.customerId)){
+ 	        	if (!isNull(json.bean.customerId)){
  	        		$("#customerName").html('<a class="customerNameMation notice-title-click" rowid="' + json.bean.customerId + '">' + $("#customerName").html() + '</a>');
  	        	}
  	        	
  	        	//产品详情
- 	        	if(!isNull(json.bean.productId)){
+ 	        	if (!isNull(json.bean.productId)){
  	        		$("#productName").html('<a class="productNameMation notice-title-click" rowid="' + json.bean.productId + '">' + $("#productName").html() + '</a>');
  	        	}
  	        	
  	        	//故障关键组件详情
- 	        	if(!isNull(json.bean.faultKeyPartsId)){
+ 	        	if (!isNull(json.bean.faultKeyPartsId)){
  	        		$("#faultKeyPartsName").html('<a class="faultKeyPartsNameMation notice-title-click" rowid="' + json.bean.faultKeyPartsId + '">' + $("#faultKeyPartsName").html() + '</a>');
  	        	}
  	        	
@@ -99,7 +99,7 @@ layui.config({
 				title: "客户详情",
 				pageId: "customerdetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 	    });
 	    
@@ -111,7 +111,7 @@ layui.config({
 				title: "产品详情",
 				pageId: "licencedetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 	    });
 	    
@@ -123,7 +123,7 @@ layui.config({
 				title: "组件详情",
 				pageId: "licencedetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 	    });
 		
@@ -151,7 +151,7 @@ layui.config({
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "feedbackdetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 	    });
 	    

@@ -17,7 +17,7 @@ layui.config({
 
 	var checkType = '1';//商品选择类型：1.单选；2.多选
 	
-	if(!isNull(parent.erpOrderUtil.productCheckType)){
+	if (!isNull(parent.erpOrderUtil.productCheckType)){
 		checkType = parent.erpOrderUtil.productCheckType;
 	}
 	
@@ -163,14 +163,14 @@ layui.config({
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.productId;
 		_openNewWindows({
 			url: "../../tpl/material/materialdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "materialdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -195,7 +195,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -203,7 +203,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			materialName: $("#materialName").val(), 
     		model: $("#model").val(), 

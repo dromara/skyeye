@@ -32,7 +32,7 @@ layui.config({
 			title: "标签选择",
 			pageId: "choosetagpage",
 			area: ['600px', '500px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				// 重置数据
 				tagList = [].concat(systemCommonUtil.tagEditorResetData('tagId', tagReturnList));
 			}});

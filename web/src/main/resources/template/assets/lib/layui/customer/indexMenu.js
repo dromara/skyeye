@@ -16,7 +16,7 @@ var indexMenu = {
             url += '?userToken=' + getCookie("userToken");
             return url;
         } else {
-            if(!isNull(menuSysWinUrl)){
+            if (!isNull(menuSysWinUrl)){
                 url = menuSysWinUrl + url + '?userToken=' + getCookie("userToken");
             }
         }

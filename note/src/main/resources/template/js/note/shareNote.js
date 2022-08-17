@@ -21,7 +21,7 @@ layui.config({
 	loadUserMation();
 	function loadUserMation(){
 		// 获取当前登录员工信息
-		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 			var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
 				+ '<font>' + data.bean.userName + '</font>'
 				+ '<font id="consoleDesk">控制台</font>'
@@ -64,7 +64,7 @@ layui.config({
 					enableAddCol: false,
 					lang: 'zh'
 				};
-				if(!isNull(json.bean.content)){
+				if (!isNull(json.bean.content)){
 					param["data"] = JSON.parse(json.bean.content);
 				}
 				luckysheet.create(param);

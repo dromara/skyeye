@@ -106,7 +106,7 @@ layui.config({
 		 		matchingLanguage();
 		 		form.render();
 		 		//小程序分类变化事件
-		 		form.on('select(selectParent)', function(data){
+		 		form.on('select(selectParent)', function(data) {
 		 			showGrid({
 		 	    	 	id: "rmGroupId",
 		 	    	 	url: reqBasePath + "common002",
@@ -132,7 +132,7 @@ layui.config({
 		        		} else {
 		        			var oCanvas = document.getElementById("thecanvas");
 		        			var imgData = oCanvas.toDataURL();
-		        			AjaxPostUtil.request({url: reqBasePath + "common004", params:{images:imgData, type:1}, type: 'json', callback: function(json1){
+		        			AjaxPostUtil.request({url: reqBasePath + "common004", params: {images:imgData, type:1}, type: 'json', callback: function(json1){
 								var params = {
 									rmTypeId: $("#rmTypeId").val(),
 									rmGroupId: $("#rmGroupId").val(),

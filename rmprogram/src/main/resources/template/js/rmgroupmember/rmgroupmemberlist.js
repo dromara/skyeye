@@ -38,7 +38,7 @@ layui.config({
 	 	},
 	 	ajaxSendAfter:function (json) {
 	 		form.render();
-	 		form.on('select(selectParent)', function(data){
+	 		form.on('select(selectParent)', function(data) {
 	 			showGrid({
 	 	    	 	id: "rmGroupId",
 	 	    	 	url: reqBasePath + "common002",
@@ -80,7 +80,7 @@ layui.config({
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        }},
 	        { field: 'id', title: 'HTML-JS内容', width: 150, align: 'center', templet: function (d) {
-	        	if(!isNull(d.htmlJsContent)){
+	        	if (!isNull(d.htmlJsContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlJsContent"></i>';
 	        	} else {
 	        		return '无';
@@ -90,21 +90,21 @@ layui.config({
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlContent"></i>';
 	        }},
 	        { field: 'id', title: 'WXML-JS数据内容', width: 150, align: 'center', templet: function (d) {
-	        	if(!isNull(d.wxmlJsDataContent)){
+	        	if (!isNull(d.wxmlJsDataContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsDataContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
 	        { field: 'id', title: 'WXML-JS方法内容', width: 150, align: 'center', templet: function (d) {
-	        	if(!isNull(d.wxmlJsMethodContent)){
+	        	if (!isNull(d.wxmlJsMethodContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsMethodContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
 	        { field: 'id', title: 'WXML-JS初始化方法内容', width: 150, align: 'center', templet: function (d) {
-	        	if(!isNull(d.wxmlJsMethodCreateContent)){
+	        	if (!isNull(d.wxmlJsMethodCreateContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="wxmlJsMethodCreateContent"></i>';
 	        	} else {
 	        		return '无';
@@ -127,15 +127,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'bindProperty') { //绑定属性
+        } else if (layEvent === 'bindProperty') { //绑定属性
         	bindProperty(data);
-        }else if (layEvent === 'top') { //上移
+        } else if (layEvent === 'top') { //上移
         	topOne(data);
-        }else if (layEvent === 'lower') { //下移
+        } else if (layEvent === 'lower') { //下移
         	lowerOne(data);
-        }else if (layEvent === 'htmlContent') { //HTML内容
+        } else if (layEvent === 'htmlContent') { //HTML内容
         	var mode = returnModel('html');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -149,7 +149,7 @@ layui.config({
 	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html()
 	        });
-        }else if (layEvent === 'htmlJsContent') { //HTML-JS内容
+        } else if (layEvent === 'htmlJsContent') { //HTML-JS内容
         	var mode = returnModel('javascript');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -163,7 +163,7 @@ layui.config({
 	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html()
 	        });
-        }else if (layEvent === 'wxmlContent') { //WXML内容
+        } else if (layEvent === 'wxmlContent') { //WXML内容
         	var mode = returnModel('html');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -177,7 +177,7 @@ layui.config({
 	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html()
 	        });
-        }else if (layEvent === 'wxmlJsDataContent') { //WXML-JS数据内容
+        } else if (layEvent === 'wxmlJsDataContent') { //WXML-JS数据内容
         	var mode = returnModel('javascript');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -191,7 +191,7 @@ layui.config({
 	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html()
 	        });
-        }else if (layEvent === 'wxmlJsMethodContent') { //WXML-JS方法内容
+        } else if (layEvent === 'wxmlJsMethodContent') { //WXML-JS方法内容
         	var mode = returnModel('javascript');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -205,7 +205,7 @@ layui.config({
 	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html()
 	        });
-        }else if (layEvent === 'wxmlJsMethodCreateContent') { //WXML-JS初始化方法内容
+        } else if (layEvent === 'wxmlJsMethodCreateContent') { //WXML-JS初始化方法内容
         	var mode = returnModel('javascript');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -219,7 +219,7 @@ layui.config({
 	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html()
 	        });
-        }else if (layEvent === 'printsPicUrl') { //图片预览
+        } else if (layEvent === 'printsPicUrl') { //图片预览
 			systemCommonUtil.showPicImg(fileBasePath + data.printsPicUrl);
         }
     });
@@ -228,7 +228,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx019", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx019", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -236,7 +236,7 @@ layui.config({
 	}
 	
 	// 上移
-	function topOne(data){
+	function topOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx017", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -244,7 +244,7 @@ layui.config({
 	}
 	
 	// 下移
-	function lowerOne(data){
+	function lowerOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx018", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -252,28 +252,28 @@ layui.config({
 	}
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/rmgroupmember/rmgroupmemberedit.html", 
 			title: "编辑组件",
 			pageId: "rmgroupmemberedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 绑定属性
-	function bindProperty(data){
+	function bindProperty(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/rmgroupmember/bindproperty.html", 
 			title: "绑定属性",
 			pageId: "bindproperty",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -291,13 +291,13 @@ layui.config({
 			title: "新增组件",
 			pageId: "rmgroupmemberadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -305,7 +305,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		rmGroupId:$("#rmGroupId").val(),
 			rmTypeId:$("#rmTypeId").val()

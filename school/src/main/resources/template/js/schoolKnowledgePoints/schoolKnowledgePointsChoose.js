@@ -14,7 +14,7 @@ layui.config({
 		
 	var checkType = '1';//知识点选择类型：1.单选；2.多选
 	
-	if(!isNull(parent.schoolKnowledgeCheckType)){
+	if (!isNull(parent.schoolKnowledgeCheckType)){
 		checkType = parent.schoolKnowledgeCheckType;
 	}
 	
@@ -38,7 +38,7 @@ layui.config({
 		initGradeId();
 		initTable();
 	});
-	form.on('select(schoolId)', function(data){
+	form.on('select(schoolId)', function(data) {
 		//加载年级
  		initGradeId();
 	});
@@ -59,7 +59,7 @@ layui.config({
         });
     }
     
-    form.on('select(gradeId)', function(data){
+    form.on('select(gradeId)', function(data) {
 		if(isNull(data.value) || data.value === '请选择'){
 			$("#subjectId").html("");
 			form.render('select');
@@ -189,7 +189,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -197,7 +197,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			title: $("#title").val(), 
     		schoolId: $("#schoolId").val(), 

@@ -41,7 +41,7 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'templateName', title: '模板标题', width: 180 },
 	        { field: 'id', title: '模板内容', align: 'center', width: 80, templet: function (d) {
-	        	if(!isNull(d.templateContent)){
+	        	if (!isNull(d.templateContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="templateContent"></i>';
 	        	} else {
 	        		return '无';
@@ -60,9 +60,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'templateContent') { //模板内容
+        } else if (layEvent === 'templateContent') { //模板内容
         	editor.setValue(data.templateContent);
         	layer.open({
 	            id: '模板内容',
@@ -88,7 +88,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "dsformdisplaytemplate003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -96,14 +96,14 @@ layui.config({
 	}
 	
 	//编辑分类
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/dsformdisplaytemplate/dsformdisplaytemplateedit.html", 
 			title: "编辑动态表单数据展示模板",
 			pageId: "dsformdisplaytemplateedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -121,13 +121,13 @@ layui.config({
 			title: "新增动态表单数据展示模板",
 			pageId: "dsformdisplaytemplateadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{templateName: $("#templateName").val()}});
     }
     

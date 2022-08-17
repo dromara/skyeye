@@ -155,15 +155,15 @@ layui.config({
 			var layEvent = obj.event;
 			if (layEvent === 'fullTime') { 
 				detail(data, '1');
-			}else if(layEvent === 'absenteeism'){ 
+			} else if (layEven === 'absenteeism'){ 
 				detail(data, '2');
-			}else if(layEvent === 'lackTime'){ 
+			} else if (layEven === 'lackTime'){ 
 				detail(data, '3');
-			}else if(layEvent === 'late'){ 
+			} else if (layEven === 'late'){ 
 				detail(data, '4');
-			}else if(layEvent === 'leaveEarly'){ 
+			} else if (layEven === 'leaveEarly'){ 
 				detail(data, '5');
-			}else if(layEvent === 'missing'){ 
+			} else if (layEven === 'missing'){ 
 				detail(data, '6');
 			}
 		});
@@ -196,7 +196,7 @@ layui.config({
 			title: title,
 			pageId: "detail",
 			area: ['80vw', '70vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -205,11 +205,11 @@ layui.config({
 	function initCompany(){
 		var companyId = "";
 		// 获取当前登录员工信息
-		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 			companyId = data.bean.companyId;
 		});
 		// 加载企业数据
-		systemCommonUtil.getSysCompanyList(function(data){
+		systemCommonUtil.getSysCompanyList(function(data) {
 			$("#companyList").html(getDataUseHandlebars(selTemplate, data));
 			$("#companyList").val(companyId);
 			form.render('select');
@@ -244,13 +244,13 @@ layui.config({
 	form.render();
 	
 	// 公司监听事件
-	form.on('select(companyList)', function(data){
+	form.on('select(companyList)', function(data) {
 		initDepartment();
 		initJob();
 	});
 	
 	// 部门监听事件
-	form.on('select(departmentList)', function(data){
+	form.on('select(departmentList)', function(data) {
 		initJob();
 	});
 	
@@ -280,8 +280,8 @@ layui.config({
 		});
     });
     
-    function loadTable(){
-    	if(isNull($("#checkTime").val())){//一定要记得，当createTime为空时
+    function loadTable() {
+    	if(isNull($("#checkTime").val())) {//一定要记得，当createTime为空时
     		winui.window.msg("请选择时间段", {icon: 2, time: 2000});
     	}else {
     		startTime = $("#checkTime").val().split('~')[0].trim();
@@ -458,14 +458,14 @@ layui.config({
     			title: title,
     			pageId: "detail",
     			area: ['80vw', '70vh'],
-    			callBack: function(refreshCode) {
+    			callBack: function (refreshCode) {
                     
     			}
     		});
     	});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		userName: $("#userName").val(),
     		companyName: $("#companyList").val(), 

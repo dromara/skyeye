@@ -79,7 +79,7 @@ layui.config({
 	        	}
 	        }},
 			{ field: 'userId', title: '系统账号', rowspan: '3', align: 'center', width: 80, templet: function (d) {
-				if(!isNull(d.userId)){
+				if (!isNull(d.userId)){
 					return "<span class='state-up'>已分配</span>";
 				} else {
 					return "<span class='state-down'>未分配</span>";
@@ -142,138 +142,138 @@ layui.config({
     });
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/syseveuserstaff/sysEveUserStaffEdit.html",
 			title: "编辑员工",
 			pageId: "sysEveUserStaffEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 员工详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/syseveuserstaff/sysEveUserStaffDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//离职
-	function leave(data){
+	function leave(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/syseveuserstaff/syseveuserstaffleave.html", 
 			title: "员工离职",
 			pageId: "syseveuserstaffleave",
 			area: ['50vw', '55vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 转教职工
-	function turnTeacher(data){
+	function turnTeacher(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/syseveuserstaff/turnTeacher.html", 
 			title: "转教职工",
 			pageId: "syseveuserstaffleave",
 			area: ['50vw', '55vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg("操作成功，请通知该员工重新登录帐号。", {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 录入证书
-	function addCertificate(data){
+	function addCertificate(data) {
     	staffId = data.id;
     	_openNewWindows({
 			url: "../../tpl/sysStaffCertificate/sysStaffCertificateAdd.html",
 			title: "录入证书",
 			pageId: "sysStaffCertificateAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     }
     
     // 录入教育背景
-	function addEducation(data){
+	function addEducation(data) {
     	staffId = data.id;
     	_openNewWindows({
 			url: "../../tpl/sysStaffEducation/sysStaffEducationAdd.html",
 			title: "录入教育背景",
 			pageId: "sysStaffEducationAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     }
     
     // 录入家庭成员
-	function addFamily(data){
+	function addFamily(data) {
     	staffId = data.id;
     	_openNewWindows({
 			url: "../../tpl/sysStaffFamily/sysStaffFamilyAdd.html",
 			title: "录入家庭成员",
 			pageId: "sysStaffFamilyAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     }
     
     // 录入工作履历
-	function addJobResume(data){
+	function addJobResume(data) {
     	staffId = data.id;
     	_openNewWindows({
 			url: "../../tpl/sysStaffJobResume/sysStaffJobResumeAdd.html",
 			title: "录入工作履历",
 			pageId: "sysStaffJobResumeAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     }
     
     // 录入语言能力
-	function addLanguage(data){
+	function addLanguage(data) {
     	staffId = data.id;
     	_openNewWindows({
 			url: "../../tpl/sysStaffLanguage/sysStaffLanguageAdd.html",
 			title: "录入语言能力",
 			pageId: "sysStaffLanguageAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     }
     
     // 录入合同信息
-	function addContract(data){
+	function addContract(data) {
     	staffId = data.id;
     	_openNewWindows({
 			url: "../../tpl/sysStaffContract/sysStaffContractAdd.html",
 			title: "录入合同信息",
 			pageId: "sysStaffContractAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -286,7 +286,7 @@ layui.config({
 			title: "新增员工",
 			pageId: "sysEveUserStaffAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -298,11 +298,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     

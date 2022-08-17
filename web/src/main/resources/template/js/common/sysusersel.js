@@ -38,13 +38,13 @@ layui.config({
 	}
 
 	// 如果父页面有这个参数，则赋值
-	if(!isNull(parent.systemCommonUtil.chooseOrNotMy)){
+	if (!isNull(parent.systemCommonUtil.chooseOrNotMy)){
 		chooseOrNotMy = parent.systemCommonUtil.chooseOrNotMy;
 	}
-	if(!isNull(parent.systemCommonUtil.chooseOrNotEmail)){
+	if (!isNull(parent.systemCommonUtil.chooseOrNotEmail)){
 		chooseOrNotEmail = parent.systemCommonUtil.chooseOrNotEmail;
 	}
-	if(!isNull(parent.systemCommonUtil.checkType)){
+	if (!isNull(parent.systemCommonUtil.checkType)){
 		checkType = parent.systemCommonUtil.checkType;
 	}
 
@@ -134,37 +134,37 @@ layui.config({
 		var _tabId = $('.layui-tab-title').find("li[class='layui-this']").attr("id");
 		if(_tabId === 'allPeople'){//所有人员
 			var node = allPeopleTree.getNodeByParam("id", id);
-			if(!isNull(node)){
+			if (!isNull(node)){
 				expantNodeParentNode(allPeopleTree, node);
 				allPeopleTree.selectNode(node);//选中指定节点
 			}
 		}else if(_tabId === 'accordingCompany'){//按公司
 			var node = accordingCompanyTree.getNodeByParam("id", id);
-			if(!isNull(node)){
+			if (!isNull(node)){
 				expantNodeParentNode(accordingCompanyTree, node);
 				accordingCompanyTree.selectNode(node);//选中指定节点
 			}
 		}else if(_tabId === 'accordingDepartment'){//按部门
 			var node = accordingDepartmentTree.getNodeByParam("id", id);
-			if(!isNull(node)){
+			if (!isNull(node)){
 				expantNodeParentNode(accordingDepartmentTree, node);
 				accordingDepartmentTree.selectNode(node);//选中指定节点
 			}
 		}else if(_tabId === 'accordingJob'){//按岗位
 			var node = accordingJobTree.getNodeByParam("id", id);
-			if(!isNull(node)){
+			if (!isNull(node)){
 				expantNodeParentNode(accordingJobTree, node);
 				accordingJobTree.selectNode(node);//选中指定节点
 			}
 		}else if(_tabId === 'accordingSimpleDepartment'){//同部门人员
 			var node = accordingSimpleDepartmentTree.getNodeByParam("id", id);
-			if(!isNull(node)){
+			if (!isNull(node)){
 				expantNodeParentNode(accordingSimpleDepartmentTree, node);
 				accordingSimpleDepartmentTree.selectNode(node);//选中指定节点
 			}
 		}else if(_tabId === 'accordingGroup'){//按联系组
 			var node = accordingGroupTree.getNodeByParam("id", id);
-			if(!isNull(node)){
+			if (!isNull(node)){
 				expantNodeParentNode(accordingGroupTree, node);
 				accordingGroupTree.selectNode(node);//选中指定节点
 			}
@@ -454,34 +454,34 @@ layui.config({
 
 	//设置所有的树的指定节点选中或者不选中
 	function setUpTreeNodeCheckOrNot(id, checked){
-		if(!isNull(allPeopleTree)){
+		if (!isNull(allPeopleTree)){
 			var node = allPeopleTree.getNodeByParam("id", id);
-			if(!isNull(node))
+			if (!isNull(node))
 				allPeopleTree.checkNode(node, checked, true);
 		}
-		if(!isNull(accordingCompanyTree)){
+		if (!isNull(accordingCompanyTree)){
 			var node = accordingCompanyTree.getNodeByParam("id", id);
-			if(!isNull(node))
+			if (!isNull(node))
 				accordingCompanyTree.checkNode(node, checked, true);
 		}
-		if(!isNull(accordingDepartmentTree)){
+		if (!isNull(accordingDepartmentTree)){
 			var node = accordingDepartmentTree.getNodeByParam("id", id);
-			if(!isNull(node))
+			if (!isNull(node))
 				accordingDepartmentTree.checkNode(node, checked, true);
 		}
-		if(!isNull(accordingJobTree)){
+		if (!isNull(accordingJobTree)){
 			var node = accordingJobTree.getNodeByParam("id", id);
-			if(!isNull(node))
+			if (!isNull(node))
 				accordingJobTree.checkNode(node, checked, true);
 		}
-		if(!isNull(accordingSimpleDepartmentTree)){
+		if (!isNull(accordingSimpleDepartmentTree)){
 			var node = accordingSimpleDepartmentTree.getNodeByParam("id", id);
-			if(!isNull(node))
+			if (!isNull(node))
 				accordingSimpleDepartmentTree.checkNode(node, checked, true);
 		}
-		if(!isNull(accordingGroupTree)){
+		if (!isNull(accordingGroupTree)){
 			var node = accordingGroupTree.getNodeByParam("id", id);
-			if(!isNull(node))
+			if (!isNull(node))
 				accordingGroupTree.checkNode(node, checked, true);
 		}
 	}
@@ -565,7 +565,7 @@ layui.config({
 			return true;
 		};
 
-		if(!isNull(allPeopleTree)){
+		if (!isNull(allPeopleTree)){
 			allPeopleTree.showNodes(allPeopleHiddenNodes);
 			//获取不符合条件的叶子结点
 			allPeopleHiddenNodes = allPeopleTree.getNodesByFilter(filterFunc);
@@ -573,7 +573,7 @@ layui.config({
 			allPeopleTree.hideNodes(allPeopleHiddenNodes);
 			expandNodes(allPeopleTree, allPeopleTree.getNodes());
 		}
-		if(!isNull(accordingCompanyTree)){
+		if (!isNull(accordingCompanyTree)){
 			accordingCompanyTree.showNodes(accordingCompanyHiddenNodes);
 			//获取不符合条件的叶子结点
 			accordingCompanyHiddenNodes = accordingCompanyTree.getNodesByFilter(filterFunc);
@@ -581,7 +581,7 @@ layui.config({
 			accordingCompanyTree.hideNodes(accordingCompanyHiddenNodes);
 			expandNodes(accordingCompanyTree, accordingCompanyTree.getNodes());
 		}
-		if(!isNull(accordingDepartmentTree)){
+		if (!isNull(accordingDepartmentTree)){
 			accordingDepartmentTree.showNodes(accordingDepartmentHiddenNodes);
 			//获取不符合条件的叶子结点
 			accordingDepartmentHiddenNodes = accordingDepartmentTree.getNodesByFilter(filterFunc);
@@ -589,7 +589,7 @@ layui.config({
 			accordingDepartmentTree.hideNodes(accordingDepartmentHiddenNodes);
 			expandNodes(accordingDepartmentTree, accordingDepartmentTree.getNodes());
 		}
-		if(!isNull(accordingJobTree)){
+		if (!isNull(accordingJobTree)){
 			accordingJobTree.showNodes(accordingJobHiddenNodes);
 			//获取不符合条件的叶子结点
 			accordingJobHiddenNodes = accordingJobTree.getNodesByFilter(filterFunc);
@@ -597,7 +597,7 @@ layui.config({
 			accordingJobTree.hideNodes(accordingJobHiddenNodes);
 			expandNodes(accordingJobTree, accordingJobTree.getNodes());
 		}
-		if(!isNull(accordingSimpleDepartmentTree)){
+		if (!isNull(accordingSimpleDepartmentTree)){
 			accordingSimpleDepartmentTree.showNodes(accordingSimpleDepartmentHiddenNodes);
 			//获取不符合条件的叶子结点
 			accordingSimpleDepartmentHiddenNodes = accordingSimpleDepartmentTree.getNodesByFilter(filterFunc);
@@ -605,7 +605,7 @@ layui.config({
 			accordingSimpleDepartmentTree.hideNodes(accordingSimpleDepartmentHiddenNodes);
 			expandNodes(accordingSimpleDepartmentTree, accordingSimpleDepartmentTree.getNodes());
 		}
-		if(!isNull(accordingGroupTree)){
+		if (!isNull(accordingGroupTree)){
 			accordingGroupTree.showNodes(accordingGroupHiddenNodes);
 			//获取不符合条件的叶子结点
 			accordingGroupHiddenNodes = accordingGroupTree.getNodesByFilter(filterFunc);

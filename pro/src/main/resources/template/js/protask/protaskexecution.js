@@ -36,7 +36,7 @@ layui.config({
 
 				var ue = ueEditorUtil.initEditor('executionResult');
 			    ue.addListener("ready", function () {
-			    	if(!isNull(json.bean.executionResult))
+			    	if (!isNull(json.bean.executionResult))
 			    		ue.setContent(json.bean.executionResult);
 			    });
 			    

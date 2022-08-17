@@ -64,7 +64,7 @@ layui.config({
 	 				title: "重命名页面",
 	 				pageId: "editpagebeanitem",
 	 				area: ['700px', '60vh'],
-	 				callBack: function(refreshCode) {
+	 				callBack: function (refreshCode) {
 						refreshGrid("pageList", {params:{rowId: proId}});
 						winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 						//重置中间模块
@@ -119,7 +119,7 @@ layui.config({
 						//重置中间模块
 						editPageModelSelectId = "";
 						editPageModelSelectChange = false;
-						AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx036", params:{pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
+						AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx036", params: {pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 							showDataUseHandlebars("centerText", getFileContent('tpl/rmmysmpropage/pagemodelTemplate.tpl'), json);
 						}});
 	 	    		}});
@@ -345,7 +345,7 @@ layui.config({
 			title: "新增页面",
 			pageId: "addpagebeanitem",
 			area: ['700px', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				refreshGrid("pageList", {params:{rowId: proId}});
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
@@ -353,7 +353,7 @@ layui.config({
     
     //保存页面
     $('body').on('click', '#savePageModelBean', function() {
-    	if(!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
+    	if (!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
     		editPageModelSelectChange = false;
     		var list = [];//存储模板生成集合
     		$('#centerText').find('.import-item').each(function() {
@@ -373,7 +373,7 @@ layui.config({
     
     //导出选中页为H5
     $('body').on('click', '#exportChoosePageToH5', function() {
-    	if(!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
+    	if (!isNull(editPageModelSelectId)){//要编辑的模板页面id不为空
     		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx041", params: {pageId: editPageModelSelectId}, type: 'json', callback: function (json) {
 				winui.window.msg("导出成功", {icon: 1, time: 2000});
 				const link = document.createElement('a');

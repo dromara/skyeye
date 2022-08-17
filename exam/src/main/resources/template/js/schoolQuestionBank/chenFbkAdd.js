@@ -30,7 +30,7 @@ layui.config({
 			loadData();
 		});
 	    // 学校监听事件
-		form.on('select(schoolId)', function(data){
+		form.on('select(schoolId)', function(data) {
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#schoolId").html("");
 				form.render('select');
@@ -55,7 +55,7 @@ layui.config({
 		    });
 		}
 		// 年级监听事件
-		form.on('select(gradeId)', function(data){
+		form.on('select(gradeId)', function(data) {
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#subjectId").html("");
 				form.render('select');
@@ -82,7 +82,7 @@ layui.config({
 		
 		function loadData(){
 			// 如果问题id不为空，则说明是编辑，加载编辑信息
-			if(!isNull(parent.rowId)){
+			if (!isNull(parent.rowId)){
 				AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank016", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 					$("#schoolId").val(json.bean.schoolId);
 					showGrid({
@@ -92,7 +92,7 @@ layui.config({
 						pagination: false,
 						template: getFileContent('tpl/template/select-option.tpl'),
 						ajaxSendLoadBefore: function(hdb){},
-						ajaxSendAfter:function(data){
+						ajaxSendAfter:function(data) {
 							$("#gradeId").val(json.bean.gradeId);
 							showGrid({
 								id: "subjectId",
@@ -101,7 +101,7 @@ layui.config({
 								pagination: false,
 								template: getFileContent('tpl/template/select-option.tpl'),
 								ajaxSendLoadBefore: function(hdb){},
-								ajaxSendAfter:function(data){
+								ajaxSendAfter:function(data) {
 									$("#subjectId").val(json.bean.subjectId);
 									form.render();
 								}

@@ -21,7 +21,7 @@ layui.config({
 		initTable();
 	});
 
-	form.on('select(schoolId)', function(data){
+	form.on('select(schoolId)', function(data) {
 		//加载年级
  		initGradeId();
 	});
@@ -91,7 +91,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{gradeId: $("#gradeId").val(), schoolId: $("#schoolId").val()}});
     }
     

@@ -19,7 +19,7 @@ layui.config({
 		 	template: $("#showBaseTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 				hdb.registerHelper('compare1', function(v1, v2, options) {
-					if(!isNull(v1) && !isNull(v2) && v1 != 0 && v2 != 0){
+					if (!isNull(v1) && !isNull(v2) && v1 != 0 && v2 != 0){
 						return '建议范围：' + v1 + ' ~ ' + v2;
 					}
 					return '';

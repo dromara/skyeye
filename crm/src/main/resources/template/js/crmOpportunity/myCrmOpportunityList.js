@@ -78,28 +78,28 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details'){ //详情
         	details(data);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'delete'){ //删除
+        } else if (layEvent === 'delete'){ //删除
         	del(data, obj);
-        }else if (layEvent === 'discussDetails'){ //讨论版数详情
+        } else if (layEvent === 'discussDetails'){ //讨论版数详情
         	discussDetails(data);
-        }else if (layEvent === 'subApproval') { //提交审批
+        } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        }else if(layEvent === 'processDetails') {//流程详情
+        } else if (layEven === 'processDetails') {//流程详情
 			activitiUtil.activitiDetails(data);
-        }else if(layEvent === 'stateChange') {//审核通过后的状态变更
+        } else if (layEven === 'stateChange') {//审核通过后的状态变更
         	stateChange(data);
-        }else if(layEvent === 'revoke') {//撤销商机审批申请
+        } else if (layEven === 'revoke') {//撤销商机审批申请
         	revoke(data);
         }
     });
 
 	// 撤销商机审批申请
-	function revoke(data){
+	function revoke(data) {
 		layer.confirm('确认撤销该商机审批申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "opportunity027", params:{rowId: data.id, processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "opportunity027", params: {rowId: data.id, processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -113,14 +113,14 @@ layui.config({
 			title: "新增商机",
 			pageId: "crmopportunityadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 商机提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["crmOpportUnity"]["key"], function (approvalId) {
@@ -137,19 +137,19 @@ layui.config({
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmOpportunity/crmopportunitydetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmopportunitydetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 讨论版数详情
-	function discussDetails(data){
+	function discussDetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmdiscuss/discussnumlist.html", 
@@ -157,19 +157,19 @@ layui.config({
 			pageId: "discussDetails",
 			area: ['90vw', '90vh'],
 			maxmin: true,
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmOpportunity/crmopportunityedit.html",
 			title: "编辑商机",
 			pageId: "crmopportunityedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -177,14 +177,14 @@ layui.config({
 	}
 	
 	// 状态变更
-	function stateChange(data){
+	function stateChange(data) {
 		stateChangeData = data;
 		_openNewWindows({
 			url: "../../tpl/crmOpportunity/stateChange.html",
 			title: "状态变更",
 			pageId: "stateChange",
 			area: ['80vw', '50vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -216,11 +216,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		myRole: $("#myRole").val(),
     		documentaryState: $("#documentaryState").val(),

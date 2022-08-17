@@ -33,7 +33,7 @@ layui.config({
 	//节点点击事件
 	function zTreeOnClick(event, treeId, treeNode) {
 		salesOrderId = treeNode.id == 0 ? '' : treeNode.id;
-		if(!isNull(salesOrderId)){
+		if (!isNull(salesOrderId)){
 			refreshTable();
 		}
 	}
@@ -74,8 +74,8 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio'},
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-		        { field: 'materialName', title: '商品', align: 'left', width: 150},
-		        { field: 'materialModel', title: '型号', align: 'left', width: 150},
+		        { field: 'materialName', title: '商品', align: 'left', width: 150 },
+		        { field: 'materialModel', title: '型号', align: 'left', width: 150 },
 		        { field: 'materialUnitName', title: '单位', align: 'left', width: 70 },
 		        { field: 'operNum', title: '数量', align: 'left', width: 80 },
 		        { field: 'unitPrice', title: '单价', align: 'left', width: 80 },
@@ -114,7 +114,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -122,7 +122,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {orderId: salesOrderId};
 	}
 	

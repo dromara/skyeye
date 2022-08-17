@@ -10,7 +10,7 @@ layui.config({
 	    var $ = layui.$,
 		    form = layui.form;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: reqBasePath + "sysevemenuauthpoint003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			var type = json.bean.type;
 			if (type == 1) {
 				// 如果为1，则需要编辑权限点

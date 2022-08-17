@@ -31,7 +31,7 @@ layui.config({
 		 		 	template: getFileContent('tpl/template/select-option.tpl'),
 		 		 	ajaxSendLoadBefore: function(hdb){
 		 		 	},
-		 		 	ajaxSendAfter:function(data){
+		 		 	ajaxSendAfter:function(data) {
 		 		 		$("#propertyId").val(json.bean.propertyId);
 		 		 		form.render('select');
 		 		 	}

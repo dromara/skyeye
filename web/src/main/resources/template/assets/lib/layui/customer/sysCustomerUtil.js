@@ -18,7 +18,7 @@ var sysCustomerUtil = {
             title: "客户选择",
             pageId: "customerChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(sysCustomerUtil.customerMation);
                 }

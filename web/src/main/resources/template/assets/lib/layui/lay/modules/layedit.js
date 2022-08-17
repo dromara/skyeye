@@ -240,7 +240,7 @@ layui.define(['layer', 'form', 'code'], function(exports) {
 					//触发图片删除回调函数 p标签内图片
 					if(container.hasChildNodes() && container.tagName != "BODY") {
 						var callDel = set.calldel;
-						if(!isNull(callDel) && callDel.url != "") {
+						if (!isNull(callDel) && callDel.url != "") {
 							if(range.commonAncestorContainer.childNodes[(range.startOffset - 1)].tagName != "IMG") {
 								//alert("error-无法找到图片路径");
 							} else {

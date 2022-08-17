@@ -20,7 +20,7 @@ layui.config({
 			initSemester();
 		});
 	    //学校监听事件
-		form.on('select(schoolId)', function(data){
+		form.on('select(schoolId)', function(data) {
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#schoolId").html("");
 				form.render('select');
@@ -47,7 +47,7 @@ layui.config({
 		    });
 		}
 		//年级监听事件
-		form.on('select(gradeId)', function(data){
+		form.on('select(gradeId)', function(data) {
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#subjectId").html("");
 				$("#sessionYear").html("");
@@ -100,7 +100,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/checkbox-property.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(data){
+			 	ajaxSendAfter:function(data) {
 			 		$("#sessionYear").html(data.bean.year + '届学生');
 			 		form.render('checkbox');
 			 	},

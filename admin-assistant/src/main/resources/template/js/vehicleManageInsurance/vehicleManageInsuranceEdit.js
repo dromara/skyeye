@@ -13,7 +13,7 @@ layui.config({
 	    	laydate = layui.laydate;
 	    var insuranceaddtableTemplate = $('#insuranceaddtableTemplate').html();
 	    
-		form.on('checkbox(checkboxProperty)', function(data){
+		form.on('checkbox(checkboxProperty)', function(data) {
  			var rowId = $(this).attr("rowId");
  			var fu = $("#addTable").find("input[rowId=" + rowId + "]").parent();
  			if (data.elem.checked == true){
@@ -49,7 +49,7 @@ layui.config({
             	var fu = $("#addTable").find("input[rowId=" + rowId + "]").parent();
             	var bf = "";
             	bf = fu.next().find("input").val();//对应的保费
-            	if(!isNull(bf)){
+            	if (!isNull(bf)){
             		bftotal = parseFloat(bftotal) + parseFloat(bf);
 	            	bftotal = bftotal.toFixed(2); 
             	}

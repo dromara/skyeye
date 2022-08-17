@@ -50,7 +50,7 @@ layui.config({
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
         ]],
 	    done: function(){
@@ -63,31 +63,31 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { // 编辑
             edit(data);
-        }else if (layEvent === 'delete') { // 删除
+        } else if (layEvent === 'delete') { // 删除
             delet(data);
-        }else if(layEvent == 'select'){ // 详情
+        } else if (layEven == 'select'){ // 详情
             select(data)
-        }else if (layEvent === 'logo') { // logo预览
+        } else if (layEvent === 'logo') { // logo预览
             systemCommonUtil.showPicImg(fileBasePath + data.logo);
         }
     });
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/meal/mealEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "mealEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     // 删除
-    function delet(data){
+    function delet(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "meal004", params: {rowId: data.id}, type: 'json', method: "POST", callback: function (json) {
@@ -98,14 +98,14 @@ layui.config({
     }
 
     // 详情
-    function select(data){
+    function select(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/meal/mealInfo.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "mealInfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -117,7 +117,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "mealAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -136,11 +136,11 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             title: $("#title").val()
         };

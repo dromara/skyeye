@@ -57,32 +57,32 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'overPlan') { //统筹
             overPlan(data);
-        }else if (layEvent === 'details') { //详情
+        } else if (layEvent === 'details') { //详情
         	details(data);
         }
     });
 
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.orderId;
 		_openNewWindows({
 			url: "../../tpl/salesorder/salesorderdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "salesorderdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
     // 统筹
-    function overPlan(data){
+    function overPlan(data) {
         rowId = data.orderId;
         _openNewWindows({
             url: "../../tpl/salesOrderOverPlan/salesOrderOverPlan.html",
             title: '统筹',
             pageId: "salesOrderOverPlan",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -102,7 +102,7 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -111,10 +111,10 @@ layui.config({
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
     }
 
-    function getTableParams(){
+    function getTableParams() {
         // 单据的开始时间、结束时间
         var startTime = "", endTime = "";
-        if(isNull($("#operTime").val())){//一定要记得，当createTime为空时
+        if(isNull($("#operTime").val())) {//一定要记得，当createTime为空时
             startTime = "";
             endTime = "";
         }else {

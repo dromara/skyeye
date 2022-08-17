@@ -54,7 +54,7 @@ layui.config({
 		    });
  		}
  		//数据展示模板监听事件
-		form.on('select(dataShowTpl)', function(data){
+		form.on('select(dataShowTpl)', function(data) {
 			dataShowTplValue = $('#dataShowTpl').val();
 			if(dataShowTplValue.length == 0){
 				$("#templateContent").html("");

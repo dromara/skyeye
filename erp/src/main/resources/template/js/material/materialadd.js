@@ -77,7 +77,7 @@ layui.config({
 			 	}
 		    });
 		    
-		    form.on('select(unitGroupId)', function(data){
+		    form.on('select(unitGroupId)', function(data) {
 		    	//初始化仓库库存集合列表
 		    	normsStockList = new Array();
 				if(isNull(data.value)){
@@ -219,7 +219,7 @@ layui.config({
 				title: "库存信息",
 				pageId: "materialnormstock",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					var str = "";
 					normsStockItem = [].concat(normsStock);
 					$.each(normsStockItem, function(i, item){
@@ -251,7 +251,7 @@ layui.config({
 				title: "库存信息",
 				pageId: "materialnormstock",
 				area: ['70vw', '70vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					var str = "";
 					if(thisRowHasList >= 0){
 						normsStockList[thisRowHasList]["list"] = [].concat(normsStock);
@@ -270,7 +270,7 @@ layui.config({
  	    
  	    //自定义校验是否必填
  	    function subVerifyForm(id){
- 	    	if(isNull($("#" + id).val())){
+ 	    	if(isNull($("#" + id).val())) {
  	    		$("#" + id).addClass("layui-form-danger");
 				$("#" + id).focus();
 				winui.window.msg('必填项不能为空', {icon: 5, shift: 6});
@@ -359,7 +359,7 @@ layui.config({
 				title: "工序选择",
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					var str = "";
 					$.each(procedureMationList, function(i, item){
 						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.procedureName + '<span class="layui-badge layui-bg-gray">' + item.number + '</span></span>';

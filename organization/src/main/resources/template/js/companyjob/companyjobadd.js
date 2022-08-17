@@ -77,7 +77,7 @@ layui.config({
 		});
 		
 		// 公司监听事件
-		form.on('select(companyId)', function(data){
+		form.on('select(companyId)', function(data) {
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#departmentId").html("");
 				form.render('select');
@@ -102,7 +102,7 @@ layui.config({
 		}
 		
 		//部门监听事件
-		form.on('select(departmentId)', function(data){
+		form.on('select(departmentId)', function(data) {
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#pIdBox").html("");
 				form.render('select');
@@ -113,7 +113,7 @@ layui.config({
 			}
 		});
 		
-		form.on('select(selectParent)', function(data){
+		form.on('select(selectParent)', function(data) {
 			if(data.value != parentId){
 				if(isNull(data.value) || data.value == '请选择'){
 					layui.$(data.elem).parent('dd').nextAll().remove();
@@ -153,7 +153,7 @@ layui.config({
 	        	var $menu = layui.$('.menuParent');
  	    		var str = "";
  	    		for(var i = 0; i < $menu.length; i++){
- 	    			if(!isNull($menu[i].value) && $menu[i].value != '请选择'){
+ 	    			if (!isNull($menu[i].value) && $menu[i].value != '请选择'){
  	    				str += $menu[i].value + ",";
  	    			}
  	    		}

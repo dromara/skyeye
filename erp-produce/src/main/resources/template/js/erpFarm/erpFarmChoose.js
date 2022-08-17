@@ -14,7 +14,7 @@ layui.config({
 		
 	var checkType = '1';// 车间选择类型：1.单选；2.多选
 	
-	if(!isNull(parent.farmCheckType)){
+	if (!isNull(parent.farmCheckType)){
 		checkType = parent.farmCheckType;
 	}
 	
@@ -23,7 +23,7 @@ layui.config({
 	AjaxPostUtil.request({url: flowableBasePath + "erpworkprocedure009", params: {}, type: 'json', callback: function(json) {
 		// 加载工序数据
 		$("#procedureId").html(getDataUseHandlebars(selOption, json));
-		if(!isNull(parent.procedureId)){
+		if (!isNull(parent.procedureId)){
 			$("#procedureId").val(parent.procedureId);
 		}
 		// 初始化表格
@@ -150,7 +150,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -158,7 +158,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			farmNumber: $("#farmNumber").val(),
             farmName: $("#farmName").val(),

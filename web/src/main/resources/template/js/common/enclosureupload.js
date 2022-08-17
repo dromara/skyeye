@@ -72,7 +72,7 @@ layui.config({
 	    	//获取选中节点
 	    	var zTree = ztree.getCheckedNodes(true);
 	    	for (var i = 0; i < zTree.length; i++) {
-	    		if(!isNull(zTree[i].fileType) && zTree[i].fileType != "folder"){
+	    		if (!isNull(zTree[i].fileType) && zTree[i].fileType != "folder"){
     				addToArray({
     					id: zTree[i].id,
     					name: zTree[i].name,
@@ -83,7 +83,7 @@ layui.config({
 	    	//获取未选中节点
 	    	zTree = ztree.getCheckedNodes(false);
 	    	for (var i = 0; i < zTree.length; i++) {
-	    		if(!isNull(zTree[i].fileType) && zTree[i].fileType != "folder"){
+	    		if (!isNull(zTree[i].fileType) && zTree[i].fileType != "folder"){
     				removeToArray(zTree[i].id);
 	    		}
 	    	}
@@ -101,7 +101,7 @@ layui.config({
 	    	var nodes = ztree.getCheckedNodes(true);
 	    	for(var i = 0; i < nodes.length; i++){
 	    		var node = nodes[i];
-				if(!isNull(node.fileType) && node.fileType != "folder"){
+				if (!isNull(node.fileType) && node.fileType != "folder"){
 					addToArray({
 						id: node.id,
 						name: node.name,
@@ -119,7 +119,7 @@ layui.config({
 
 //向集合中添加元素
 //参数为json
-function addToArray(data){
+function addToArray(data) {
 	var inArray = false;
 	$.each(enclosureList, function(i, item){
 		if(item.id === data.id){

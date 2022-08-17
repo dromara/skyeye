@@ -2189,7 +2189,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 				area: _this.toolbarStyle.area,
 				content: content,
 				success: function(layero, index){
-					form.on("submit(dtree_addNode_form)",function(data){
+					form.on("submit(dtree_addNode_form)",function(data) {
 						var data = data.field;
 						var parentId = $div.attr("data-id"),
 							id = $div.attr("data-id")+"_node_"+$ul[0].childNodes.length,
@@ -2250,7 +2250,7 @@ layui.define(['jquery','layer','element','form'], function(exports) {
 				success: function(layero, index){
 					_this.toolbarFun.editTreeLoad(_this.getRequestParam(node));
 					
-					form.on("submit(dtree_editNode_form)",function(data){
+					form.on("submit(dtree_editNode_form)",function(data) {
 						var data = data.field;
 						$cite.html(data.editNodeName);
 						node = _this.getNodeParam($div);

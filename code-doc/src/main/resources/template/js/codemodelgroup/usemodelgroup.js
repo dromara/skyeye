@@ -151,7 +151,7 @@ layui.config({
 	
 	// 检索数据
 	$("body").on("click", "#jsCreate", function (e) {
-		AjaxPostUtil.request({url: reqBasePath + "codemodel011", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(data){
+		AjaxPostUtil.request({url: reqBasePath + "codemodel011", params: {tableName: $("#tableName").val()}, type: 'json', callback: function(data) {
 			codeDocUtil.setTableColumnData(data.rows);
 			AjaxPostUtil.request({url: reqBasePath + "codemodel012", params: {tableName: $("#tableName").val()}, type: 'json', callback: function (json) {
 				jsCreateClick = true;

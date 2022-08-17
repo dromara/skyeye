@@ -53,7 +53,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'stayReceipt') { //接单
 	        	stayReceipt(data);
-	        }else if (layEvent === 'details'){ //详情
+	        } else if (layEvent === 'details'){ //详情
 	        	details(data);
 	        }
 	    });
@@ -69,7 +69,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -78,28 +78,28 @@ layui.config({
     }
 
 	// 接单
-	function stayReceipt(data){
+	function stayReceipt(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstayreceipt/receipt.html", 
 			title: "接单",
 			pageId: "receipt",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 

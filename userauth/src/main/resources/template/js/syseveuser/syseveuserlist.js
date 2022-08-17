@@ -41,7 +41,7 @@ layui.config({
 	        		return "参数错误";
 	        	}
 	        }},
-	        { field: 'companyName', title: '所属公司', width: 150},
+	        { field: 'companyName', title: '所属公司', width: 150 },
 	        { field: 'departmentName', title: '所属部门', width: 120},
 	        { field: 'jobName', title: '担任职位', width: 120},
 	        { field: 'userLock', title: '是否锁定', align: 'center', width: 90, templet: '#checkboxTpl', unresize: true},
@@ -102,28 +102,28 @@ layui.config({
 	}
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/syseveuser/sysEveUserPasswordEdit.html",
 			title: "重置密码",
 			pageId: "syseveuseredit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 绑定角色
-	function bindRole(data){
+	function bindRole(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/syseveuser/syseveuserrolebind.html", 
 			title: "绑定角色",
 			pageId: "syseveuserrolebind",
 			area: ['450px', '300px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -136,21 +136,21 @@ layui.config({
 			title: "新增用户",
 			pageId: "syseveuseradd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
     // 员工详情
-	function details(data){
+	function details(data) {
 		rowId = data.staffId;
 		_openNewWindows({
 			url: "../../tpl/syseveuserstaff/sysEveUserStaffDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysEveUserStaffDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -158,11 +158,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     

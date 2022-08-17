@@ -46,11 +46,11 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'cancleRemind') { //取消提醒
+        } else if (layEvent === 'cancleRemind') { //取消提醒
         	cancleRemind(data);
-        }else if (layEvent === 'addRemind') { //添加提醒
+        } else if (layEvent === 'addRemind') { //添加提醒
         	addRemind(data);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
         }
     });
@@ -67,7 +67,7 @@ layui.config({
 	}
 	
 	// 取消提醒
-	function cancleRemind(data){
+	function cancleRemind(data) {
 		var msg = '确认取消该节假日的提醒吗？';
 		layer.confirm(msg, { icon: 3, title: '取消日程提醒' }, function (index) {
 			layer.close(index);
@@ -79,28 +79,28 @@ layui.config({
 	}
 	
 	// 添加提醒
-	function addRemind(data){
+	function addRemind(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schedule/setreminder.html", 
 			title: "设置节假日提醒",
 			pageId: "sysevewinedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 编辑节假日
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schedule/editschedule.html", 
 			title: "编辑节假日",
 			pageId: "editschedule",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -113,7 +113,7 @@ layui.config({
 			title: "新增节假日",
 			pageId: "scheduleadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -186,7 +186,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -194,7 +194,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		scheduleTitle: $("#scheduleTitle").val()
     	};

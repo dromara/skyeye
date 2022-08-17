@@ -20,7 +20,7 @@ layui.config({
     var beanTemplate = $("#beanTemplate").html();
 
     // 获取当前登录员工信息
-    systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+    systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
         $("#useTitle").html("用户加班申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
         $("#useName").html(data.bean.userName);
     });
@@ -199,7 +199,7 @@ layui.config({
     function calcOvertimeHour(num){
         var startTime = $("#overtimeStartTime" + num).val();
         var endTime = $("#overtimeEndTime" + num).val();
-        if(!isNull(startTime) && !isNull(endTime)){
+        if (!isNull(startTime) && !isNull(endTime)){
             var hour = division(timeDifference(startTime, endTime), 60);
             $("#overtimeHour" + num).html(hour);
         }

@@ -51,7 +51,7 @@ var systemModelUtil = {
             title: "编辑器模板选择",
             pageId: "sysEveModelChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(systemModelUtil.chooseSysModel);
                 }

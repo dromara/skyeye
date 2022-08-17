@@ -41,7 +41,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'delet') { //删除
+        } else if (layEvent === 'delet') { //删除
         	delet(data);
         }
     });
@@ -60,14 +60,14 @@ layui.config({
 			title: "新增敏感词",
 			pageId: "forumsensitivewordsadd",
 			area: ['500px', '20vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	//删除
-	function delet(data){
+	function delet(data) {
 		var msg = '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除论坛敏感词' }, function (index) {
 			layer.close(index);
@@ -79,14 +79,14 @@ layui.config({
 	}
 
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/forumsensitivewords/forumsensitivewordsedit.html", 
 			title: "编辑论坛敏感词",
 			pageId: "forumsensitivewordsedit",
 			area: ['500px', '20vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -98,7 +98,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{sensitiveWord:$("#sensitiveWord").val()}});
     }
     

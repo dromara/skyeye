@@ -125,7 +125,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 		 * 更新form表单数据
 		 */
 		autofill: function(elem, data) {
-			if(!isNull(elem) && !isNull(data)) {
+			if (!isNull(elem) && !isNull(data)) {
 				$(elem)[0].reset();
 				$(elem).autofill(data);
 				form.render(); //更新全部
@@ -193,7 +193,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 
 			var selectTreeId = _this.attr("selectTreeId");
 
-			if(!isNull(selectTreeId)) {
+			if (!isNull(selectTreeId)) {
 
 				var value = $("#" + selectTreeId).val();
 				if(isNull(value)) {
@@ -208,7 +208,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 			switch(_function) {
 				case "refresh":
 					var obj = getDatagrid(_tableId);
-					if(!isNull(obj)) {
+					if (!isNull(obj)) {
 						//刷新
 						obj.refresh(tid);
 					}
@@ -242,7 +242,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 						//获取参数
 						var inputs = _this.attr("inputs");
 
-						if(!isNull(inputs)) {
+						if (!isNull(inputs)) {
 							//获取选中的数据
 							var data = getDatagrid(_tableId).getCheckData(tid);
 							var param2 = fsCommon.getParamByInputs(inputs, data);
@@ -290,7 +290,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 				case "query":
 					//查询
 					var obj = getDatagrid(_tableId);
-					if(!isNull(obj)) {
+					if (!isNull(obj)) {
 						var formData = _this.parentsUntil('form').parent().getFormData();
 						obj.query(formData);
 					}
@@ -318,7 +318,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 
 					var inputs = _this.attr("inputs");
 
-					if(!isNull(inputs)) {
+					if (!isNull(inputs)) {
 						//获取选中的数据
 						var data = getDatagrid(_tableId).getCheckData(tid);
 						_url = fsCommon.getUrlByInputs(_url, inputs, data[0]);
@@ -334,7 +334,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 
 					//弹出的方式
 					var _mode = _this.attr("topMode");
-					if(!isNull(_mode)) {
+					if (!isNull(_mode)) {
 						if(_url.indexOf('?') == -1) {
 							_url += "?";
 						} else {
@@ -364,22 +364,22 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 
 					var inputs = _this.attr("inputs");
 
-					if(!isNull(inputs)) {
+					if (!isNull(inputs)) {
 						_url = fsCommon.getUrlByInputs(_url, inputs, null);
 					}
 
 					var fileParam = {};
-					if(!isNull(_this.attr("fileAccept"))) {
+					if (!isNull(_this.attr("fileAccept"))) {
 						fileParam["fileAccept"] = _this.attr("fileAccept");
 					}
-					if(!isNull(_this.attr("fileExts"))) {
+					if (!isNull(_this.attr("fileExts"))) {
 						fileParam["fileExts"] = _this.attr("fileExts");
 					}
-					if(!isNull(_this.attr("fileSize"))) {
+					if (!isNull(_this.attr("fileSize"))) {
 						fileParam["fileSize"] = _this.attr("fileSize");
 					}
 
-					if(!isNull(fileParam)) {
+					if (!isNull(fileParam)) {
 						if(_url.indexOf('?') == -1) {
 							_url += "?";
 						} else {
@@ -391,8 +391,8 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 					fsCommon.open(_title, _width, _height, _url, function() {
 						var uploadFilePath = top.$('meta[name="uploadFilePath"]').attr("content");
 
-						if(!isNull(uploadFilePath)) {
-							if(!isNull(_this.attr("fileElem"))) {
+						if (!isNull(uploadFilePath)) {
+							if (!isNull(_this.attr("fileElem"))) {
 								$(_this.attr("fileElem")).val(uploadFilePath);
 							}
 						}
@@ -419,7 +419,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 
 					$("table.fsDatagrid,form").each(function(index, elem) {
 						var _groupId = $(this).attr("groupId");
-						if(!isNull(_groupId) && groupId == _groupId) {
+						if (!isNull(_groupId) && groupId == _groupId) {
 							if("FORM" == elem.tagName.toUpperCase()) {
 								var isVerify = form.verifyForm($(this));
 								if(isVerify != false) { //验证通过
@@ -457,7 +457,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 						//获取参数
 						var inputs = _this.attr("inputs");
 
-						if(!isNull(inputs)) {
+						if (!isNull(inputs)) {
 							var param2 = fsCommon.getParamByInputs(inputs);
 							$.extend(param, param2);
 						}
@@ -500,11 +500,11 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 					}
 					break;
 				default:
-					if(!isNull(_function)) {
+					if (!isNull(_function)) {
 						try {
 							var obj = null;
 
-							if(!isNull(getDatagrid)) {
+							if (!isNull(getDatagrid)) {
 								obj = getDatagrid(_tableId)
 							}
 
@@ -512,10 +512,10 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 							if(null != obj) {
 								data = obj.getCheckData();
 							}
-							if(!isNull(fsButtonCommon[_function])) {
+							if (!isNull(fsButtonCommon[_function])) {
 								//执行
 								fsButtonCommon[_function](_this, data, obj, fsCommon);
-							} else if(!isNull(layui.fsButton[_function])) {
+							} else if (!isNull(layui.fsButton[_function])) {
 								layui.fsButton[_function](_this, data, obj, fsCommon);
 							}
 
@@ -530,20 +530,20 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 		/**获取参数对象**/
 		getParamByInputs: function(inputs, data) {
 			var param = {}; //参数
-			if(!isNull(inputs)) {
+			if (!isNull(inputs)) {
 				var inputArr = inputs.split(',');
 				$.each(inputArr, function(i, value) {
 					var paramArr = value.split(':', 2);
-					if(!isNull(paramArr[0])) {
+					if (!isNull(paramArr[0])) {
 						//获取参数值，如果值为空，获取datagrid选中行数据
 						var _vaule = paramArr[1];
 						if(isNull(_vaule)) {
 							//多结果集,分割
 							var newValue = "";
-							if(!isNull(data)) {
+							if (!isNull(data)) {
 								//如果多选，获取多选数据
 								$(data).each(function(index, dom) {
-									if(!isNull(newValue)) {
+									if (!isNull(newValue)) {
 										newValue += ",";
 									}
 									var __value = dom[paramArr[0]];
@@ -558,10 +558,10 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 							var xxxx = _vaule.substring(1);
 							//多结果集,分割
 							var newValue = "";
-							if(!isNull(data)) {
+							if (!isNull(data)) {
 								//如果多选，获取多选数据
 								$(data).each(function(index, dom) {
-									if(!isNull(newValue)) {
+									if (!isNull(newValue)) {
 										newValue += ",";
 									}
 									var __value = dom[xxxx];
@@ -586,13 +586,13 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 		},
 		/**返回url组装参数**/
 		getUrlByInputs: function(_url, inputs, data) {
-			if(!isNull(inputs)) {
+			if (!isNull(inputs)) {
 				var urlStr = "";
 				var inputArr = inputs.split(',');
 				$.each(inputArr, function(i, value) {
 					var paramArr = value.split(':', 2);
-					if(!isNull(paramArr[0])) {
-						if(!isNull(urlStr)) {
+					if (!isNull(paramArr[0])) {
+						if (!isNull(urlStr)) {
 							urlStr += '&';
 						}
 
@@ -607,7 +607,7 @@ layui.define(['layer', 'form', 'fsButtonCommon'], function(exports) {
 							_vaule = $(_vaule).val();
 						}
 
-						if(!isNull(_vaule)) {
+						if (!isNull(_vaule)) {
 							urlStr += paramArr[0] + "=" + _vaule;
 						}
 					}

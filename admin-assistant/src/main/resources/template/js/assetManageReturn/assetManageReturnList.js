@@ -70,38 +70,38 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'returnDedails') { //归还详情
         	returnDedails(data);
-        }else if (layEvent === 'returnEdit') { //编辑归还申请
+        } else if (layEvent === 'returnEdit') { //编辑归还申请
         	returnEdit(data);
-        }else if (layEvent === 'returnSubApproval') { //归还提交审批
+        } else if (layEvent === 'returnSubApproval') { //归还提交审批
         	returnSubApproval(data);
-        }else if(layEvent === 'returnCancellation') {//归还作废
+        } else if (layEven === 'returnCancellation') {//归还作废
         	returnCancellation(data);
-        }else if(layEvent === 'returnProcessDetails') {//归还流程详情
+        } else if (layEven === 'returnProcessDetails') {//归还流程详情
 			activitiUtil.activitiDetails(data);
-        }else if(layEvent === 'returnRevoke') {//撤销归还申请
+        } else if (layEven === 'returnRevoke') {//撤销归还申请
         	returnRevoke(data);
         }
     });
 	
 	// 资产归还详情
-	function returnDedails(data){
+	function returnDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetManageReturn/assetManageReturnDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetManageReturnDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
 	
 	// 撤销资产归还
-	function returnRevoke(data){
+	function returnRevoke(data) {
 		var msg = '确认撤销该资产归还申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "asset038", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "asset038", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadReturnTable();
     		}});
@@ -115,21 +115,21 @@ layui.config({
 			title: "资产归还申请",
 			pageId: "assetManageReturnAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadReturnTable();
 			}});
     });
 	
 	// 编辑资产归还申请
-	function returnEdit(data){
+	function returnEdit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetManageReturn/assetManageReturnEdit.html", 
 			title: "编辑资产归还申请",
 			pageId: "assetManageReturnEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadReturnTable();
 			}
@@ -137,11 +137,11 @@ layui.config({
 	}
 	
 	// 资产归还作废
-	function returnCancellation(data){
+	function returnCancellation(data) {
 		var msg = '确认作废该条归还申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "asset030", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "asset030", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadReturnTable();
     		}});
@@ -149,7 +149,7 @@ layui.config({
 	}
 	
 	// 资产归还提交审批
-	function returnSubApproval(data){
+	function returnSubApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["assetManageReturn"]["key"], function (approvalId) {
@@ -184,9 +184,9 @@ layui.config({
     	table.reloadData("returnTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-		if(!isNull($("#returnCreateTime").val())){
+		if (!isNull($("#returnCreateTime").val())) {
     		startTime = $("#returnCreateTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#returnCreateTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

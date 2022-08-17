@@ -40,11 +40,11 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'top') { //上移
+        } else if (layEvent === 'top') { //上移
         	topOne(data);
-        }else if (layEvent === 'lower') { //下移
+        } else if (layEvent === 'lower') { //下移
         	lowerOne(data);
         }
     });
@@ -70,7 +70,7 @@ layui.config({
 	}
 	
 	//上移
-	function topOne(data){
+	function topOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx006", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -78,7 +78,7 @@ layui.config({
 	}
 	
 	//下移
-	function lowerOne(data){
+	function lowerOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx007", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -86,14 +86,14 @@ layui.config({
 	}
 	
 	//编辑分类
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/rmtype/rmtypeedit.html", 
 			title: "编辑分类",
 			pageId: "rmtypeedit",
 			area: ['500px', '30vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -111,13 +111,13 @@ layui.config({
 			title: "新增分类",
 			pageId: "rmtypeadd",
 			area: ['500px', '30vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{rmTypeName:$("#rmTypeName").val()}});
     }
     

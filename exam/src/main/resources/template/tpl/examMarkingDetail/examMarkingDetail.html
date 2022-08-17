@@ -1060,9 +1060,9 @@
 					// 加载答案附件上传
 					function loadUploadPic(qBodyItem, bean){
 						var str = "";
-						if(!isNull(bean.url)){
+						if (!isNull(bean.url)){
 							$.each(bean.url.split(','), function(i, item){
-								if(!isNull(item)){
+								if (!isNull(item)){
 									str += '<img src="' + item + '" class="photo-img pictureItem">';
 								}
 							});
@@ -1197,7 +1197,7 @@
 				    	var _this = $(this);
 				    	var val = _this.val();
 				    	var fraction = _this.attr("fraction");
-				    	if(!isNull(val)){
+				    	if (!isNull(val)){
 					    	if(parseInt(val) > parseInt(fraction)){
 					    		_this.val(fraction);
 					    		winui.window.msg('该题目所得分数不得大于总分数.', {icon: 2, time: 2000});
@@ -1208,7 +1208,7 @@
 				    	var _this = $(this);
 				    	var val = _this.val();
 				    	var fraction = _this.attr("fraction");
-				    	if(!isNull(val)){
+				    	if (!isNull(val)){
 				    		if(parseInt(val) > parseInt(fraction)){
 					    		_this.val(fraction);
 					    		winui.window.msg('该题目所得分数不得大于总分数.', {icon: 2, time: 2000});

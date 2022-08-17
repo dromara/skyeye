@@ -84,7 +84,7 @@ layui.config({
 			    });
 			    
 			    // 加载公司和部门
-				systemCommonUtil.getSysCompanyList(function(data){
+				systemCommonUtil.getSysCompanyList(function(data) {
 					// 加载企业数据
 					$("#companyId").html(getDataUseHandlebars(selTemplate, data));
 					$("#companyId").val(json.bean.companyId);
@@ -105,7 +105,7 @@ layui.config({
 				});
 
 			    //公司监听事件
-				form.on('select(companyId)', function(data){
+				form.on('select(companyId)', function(data) {
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#departmentId").html("");
 						form.render('select');
@@ -115,7 +115,7 @@ layui.config({
 				});
 				
 				//部门监听事件
-				form.on('select(departmentId)', function(data){
+				form.on('select(departmentId)', function(data) {
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#pIdBox").html("");
 						form.render('select');
@@ -126,7 +126,7 @@ layui.config({
 					}
 				});
 				
-				form.on('select(selectParent)', function(data){
+				form.on('select(selectParent)', function(data) {
 					if(data.value != parentId){
 						if(isNull(data.value) || data.value == '请选择'){
 							layui.$(data.elem).parent('dd').nextAll().remove();
@@ -150,7 +150,7 @@ layui.config({
 			        	var $menu = layui.$('.menuParent');
 		 	    		var str = "";
 		 	    		for(var i = 0; i < $menu.length; i++){
-		 	    			if(!isNull($menu[i].value) && $menu[i].value != '请选择'){
+		 	    			if (!isNull($menu[i].value) && $menu[i].value != '请选择'){
 		 	    				str += $menu[i].value + ",";
 		 	    			}
 		 	    		}
@@ -183,7 +183,7 @@ layui.config({
 	    //初始化当前职位的父职位
 	    function loadChildJobAll(pid){
 	    	if(pid.length > 0 && pid[0] != '0'){
-	    		if(!isNull(pid[0])){
+	    		if (!isNull(pid[0])){
 	    			var params = {pId: parentId, departmentId: $("#departmentId").val(), rowId: parent.rowId};
 		    		AjaxPostUtil.request({url: reqBasePath + "companyjob008", params: params, method: "POST", type: 'json', callback: function (json) {
 						var str = '<dd style="margin-left: ' + (leftMargin * $("#pIdBox").children("dd").length) + 'px"><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';

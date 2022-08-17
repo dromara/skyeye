@@ -38,7 +38,7 @@ layui.config({
             { field: 'state', title: '面试状态', width: 160, templet: function (d) {
                 return bossUtil.showArrangeInterviewerStateName(d.state);
             }},
-            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 150},
+            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
         ]],
         done: function(){
@@ -51,20 +51,20 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details') { // 详情
             details(data);
-        }else if (layEvent === 'interview') { // 面试
+        } else if (layEvent === 'interview') { // 面试
             interview(data);
         }
     });
 
     // 面试
-    function interview(data){
+    function interview(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossInterviewer/interviewerResult.html",
             title: '面试',
             pageId: "interviewerResult",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -72,14 +72,14 @@ layui.config({
     }
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementDetails.html?type=interviewerResult",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossInterviewArrangementDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -97,13 +97,13 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "", endTime = "";
-        if(!isNull($("#createTime").val())){
+        if (!isNull($("#createTime").val())) {
             startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
         }

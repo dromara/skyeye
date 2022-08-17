@@ -92,13 +92,13 @@ layui.config({
 		var layEvent = obj.event;
 		if (layEvent === 'details'){ // 详情
 			details(data);
-		}else if(layEvent === 'stateChange'){// 状态变更
+		} else if (layEven === 'stateChange'){// 状态变更
 			stateChange(data);
 		}
 	});
 
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		executorId = data.executorId;
 		_openNewWindows({
@@ -106,19 +106,19 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysworkplantiming",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
 	// 状态变更
-	function stateChange(data){
+	function stateChange(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/mySysWorkPlan/workPlanStateChange.html",
 			title: "状态变更",
 			pageId: "workPlanStateChange",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTable();
 			}});
@@ -140,14 +140,14 @@ layui.config({
 		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 	}
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
 		var startTime = "";
 		var endTime = "";
-		if(isNull($("#executeTime").val())){
+		if(isNull($("#executeTime").val())) {
 			startTime = "";
 			endTime = "";
 		} else {

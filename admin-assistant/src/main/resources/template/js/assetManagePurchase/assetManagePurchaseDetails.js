@@ -12,7 +12,7 @@ layui.config({
 	    
 	    var useTemplate = $("#useTemplate").html();
 	    
-	    AjaxPostUtil.request({url: flowableBasePath + "asset021", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: flowableBasePath + "asset021", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			// 状态
 			if (json.bean.state == '0') {
 				json.bean.stateName = "<span>" + json.bean.stateName + "</span>";

@@ -36,7 +36,7 @@ layui.config({
 			}},
 			{ field: 'oddNum', title: '单号', width: 200, align: 'center' },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-				if(!isNull(d.processInstanceId)){
+				if (!isNull(d.processInstanceId)){
 					return '<a lay-event="revertProcessDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 				} else {
 					return "";
@@ -71,25 +71,25 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'revertdedails') { //归还详情
         	revertDedails(data);
-        }else if (layEvent === 'revertProcessDetails') { //流程详情
+        } else if (layEvent === 'revertProcessDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
-        }else if (layEvent === 'revertedit') { //编辑归还申请
+        } else if (layEvent === 'revertedit') { //编辑归还申请
         	revertEdit(data);
-        }else if (layEvent === 'revertsubapproval') { //提交审批
+        } else if (layEvent === 'revertsubapproval') { //提交审批
         	revertSubApproval(data);
-        }else if(layEvent === 'revertcancellation') {//归还作废
+        } else if (layEven === 'revertcancellation') {//归还作废
         	revertCancellation(data);
-        }else if(layEvent === 'revertrevoke') {//撤销
+        } else if (layEven === 'revertrevoke') {//撤销
         	revertrevoke(data);
         }
     });
 	
 	// 撤销
-	function revertrevoke(data){
+	function revertrevoke(data) {
 		var msg = '确认撤销该归还申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "sealrevert010", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "sealrevert010", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadRevertTable();
     		}});
@@ -97,14 +97,14 @@ layui.config({
 	}
 	
 	// 编辑印章归还申请
-	function revertEdit(data){
+	function revertEdit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealManageRevert/sealManageRevertEdit.html", 
 			title: "编辑印章归还申请",
 			pageId: "sealManageRevertEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadRevertTable();
 			}
@@ -112,7 +112,7 @@ layui.config({
 	}
 
 	// 印章归还提交审批
-	function revertSubApproval(data){
+	function revertSubApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["sealManageRevert"]["key"], function (approvalId) {
@@ -129,11 +129,11 @@ layui.config({
 	}
 	
 	// 印章归还作废
-	function revertCancellation(data){
+	function revertCancellation(data) {
 		var msg = '确认作废该条归还申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "sealrevert007", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "sealrevert007", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadRevertTable();
     		}});
@@ -141,14 +141,14 @@ layui.config({
 	}
 	
 	// 印章归还详情
-	function revertDedails(data){
+	function revertDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealManageRevert/sealManageRevertDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealManageRevertDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -160,7 +160,7 @@ layui.config({
 			title: "印章归还申请",
 			pageId: "sealManageRevertAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadRevertTable();
 			}});
@@ -185,9 +185,9 @@ layui.config({
     	table.reloadData("revertTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-		if(!isNull($("#revertTime").val())){
+		if (!isNull($("#revertTime").val())) {
     		startTime = $("#revertTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#revertTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

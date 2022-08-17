@@ -59,7 +59,7 @@ layui.define(["jquery", 'form'], function(exports) {
 		function setCurEditContent(dwEditHtml){
 			var thClass = $(curEditObj).attr("class");
 			if(dwEditHtml == ""){
-				if(!isNull(curEditObj)){
+				if (!isNull(curEditObj)){
 					deleteDwOption();
 				}
 			}else if(dwEditHtml != curEditObjOldHtml){
@@ -71,7 +71,7 @@ layui.define(["jquery", 'form'], function(exports) {
 		
 		// 删除选项
 		function deleteDwOption(){
-			if(!isNull(curEditObj)){
+			if (!isNull(curEditObj)){
 				var quItemBody = $(curEditObj).parents(".surveyQuItemBody");
 				var quType = quItemBody.find("input[name='quType']").val();
 				if(quType == "RADIO"){
@@ -646,7 +646,7 @@ layui.define(["jquery", 'form'], function(exports) {
 			var optionParent = null;
 			optionParent = $(curEditObj).parents("td.quChenColumnTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
-			if(!isNull(quOptionId) && quOptionId != "0" ){
+			if (!isNull(quOptionId) && quOptionId != "0" ){
 				deleteColumnList.push(quOptionId);
 			} else {
 				delQuOptionCallBack(optionParent);
@@ -659,7 +659,7 @@ layui.define(["jquery", 'form'], function(exports) {
 			var optionParent = null;
 			optionParent = $(curEditObj).parents("td.quChenRowTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
-			if(!isNull(quOptionId) && quOptionId != "0" ){
+			if (!isNull(quOptionId) && quOptionId != "0" ){
 				deleteRowList.push(quOptionId);
 			}
 			delQuOptionCallBack(optionParent);
@@ -672,7 +672,7 @@ layui.define(["jquery", 'form'], function(exports) {
 				title: "知识点选择",
 				pageId: "schoolKnowledgePointsChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					var str = "";
 					$.each(schoolKnowledgeMationList, function(i, item){
 						str += '<br><span class="layui-badge layui-bg-blue" style="height: 25px !important; line-height: 25px !important; margin: 5px 0px;">' + item.title + '</span>';

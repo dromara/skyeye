@@ -33,7 +33,7 @@ layui.config({
                 procedureMationList = [].concat(json.bean.procedureList);
 
                 // 获取当前登录用户所属企业的所有部门信息
-                systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+                systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
                     $("#departmentId").html(getDataUseHandlebars(selOption, data));
                     $("#departmentId").val(json.bean.departmentId);
                     form.render('select');
@@ -84,7 +84,7 @@ layui.config({
 				title: "工序选择",
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
                     var str = "";
                     $.each(procedureMationList, function(i, item){
                         str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';

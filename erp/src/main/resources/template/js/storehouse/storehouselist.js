@@ -73,7 +73,7 @@ layui.config({
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "storehouseedit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -100,7 +100,7 @@ layui.config({
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "storehouseinfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -113,7 +113,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "storehouseadd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -125,11 +125,11 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 

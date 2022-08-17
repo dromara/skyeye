@@ -20,7 +20,7 @@ layui.config({
 
 	skyeyeEnclosure.init('enclosureUpload');
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$("#useTitle").html("用品领用申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
 		$("#useName").html(data.bean.userName);
 		initTypeHtml();
@@ -39,7 +39,7 @@ layui.config({
 		form.on('select(selectTypeProperty)', function(data) {
 			var thisRowNum = data.elem.id.replace("typeId", "");
 			var thisRowValue = data.value;
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				if(inPointArray(thisRowValue, assetArticles)) {
 					//类型对应的用品存在js对象中
 					var list = getListPointArray(thisRowValue, assetArticles);
@@ -62,7 +62,7 @@ layui.config({
 			var thisRowNum = data.elem.id.replace("assetarId", "");
 			var thisRowValue = data.value;
 			var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				var list = getListPointArray(thisRowTypeChooseId, assetArticles);
 				$.each(list, function(i, item) {
 					if(item.id === thisRowValue) {

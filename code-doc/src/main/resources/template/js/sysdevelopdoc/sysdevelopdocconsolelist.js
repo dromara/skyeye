@@ -44,15 +44,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'up') { //上线
+        } else if (layEvent === 'up') { //上线
         	up(data, obj);
-        }else if (layEvent === 'down') { //下线
+        } else if (layEvent === 'down') { //下线
         	down(data, obj);
-        }else if (layEvent === 'upmove') { //上移
+        } else if (layEvent === 'upmove') { //上移
         	upmove(data);
-        }else if (layEvent === 'downmove') { //下移
+        } else if (layEvent === 'downmove') { //下移
         	downmove(data);
         }
     });
@@ -69,7 +69,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc015", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc015", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -77,14 +77,14 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysdevelopdoc/sysdevelopdocconsoleedit.html", 
 			title: "编辑文档",
 			pageId: "sysdocconsoleedit",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -95,7 +95,7 @@ layui.config({
 		var msg = obj ? '确认上线文档【' + obj.data.title + '】吗？' : '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '文档上线' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc016", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc016", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("上线成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -107,7 +107,7 @@ layui.config({
 		var msg = obj ? '确认下线文档【' + obj.data.title + '】吗？' : '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '文档下线' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc017", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc017", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("下线成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -115,16 +115,16 @@ layui.config({
 	}
 	
 	//上移
-	function upmove(data){
-        AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc018", params:{rowId: data.id}, type: 'json', callback: function (json) {
+	function upmove(data) {
+        AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc018", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
 	}
 	
 	//下移
-	function downmove(data){
-        AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc019", params:{rowId: data.id}, type: 'json', callback: function (json) {
+	function downmove(data) {
+        AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc019", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -137,7 +137,7 @@ layui.config({
 			title: "新增文档",
 			pageId: "sysdocconsoleadd",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -148,7 +148,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{title: $("#title").val(), parentId: parentId}});
     }
     

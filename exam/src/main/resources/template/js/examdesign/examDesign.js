@@ -32,7 +32,7 @@ layui.config({
 	    
 	    initPageJson();
 	    function initPageJson(callback) {
-		    AjaxPostUtil.request({url:schoolBasePath + "exam003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+		    AjaxPostUtil.request({url:schoolBasePath + "exam003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 				$.each(json.rows, function(i, item){
 					item.saveTag = 1;
 				});
@@ -347,8 +347,8 @@ layui.config({
 			layer.confirm("确认要删除此题吗？", { icon: 3, title: '删除题目' }, function (index) {
 				layer.close(index);
 				var quId = quBody.find("input[name='quId']").val();
-				if(!isNull(quId)){
-					AjaxPostUtil.request({url:schoolBasePath + "exam015", params:{quId: quId}, type: 'json', callback: function (json) {
+				if (!isNull(quId)){
+					AjaxPostUtil.request({url:schoolBasePath + "exam015", params: {quId: quId}, type: 'json', callback: function (json) {
 						quBody.hide("slow", function() {
 							$(this).parent().remove();
 							// 重置序号
@@ -390,8 +390,8 @@ layui.config({
 			var optionParent = null;
 			optionParent = $(curEditObj).parents("td.quChenColumnTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
-			if(!isNull(quOptionId) && quOptionId != "0" ){
-				AjaxPostUtil.request({url:schoolBasePath + "exam016", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
+			if (!isNull(quOptionId) && quOptionId != "0" ){
+				AjaxPostUtil.request({url:schoolBasePath + "exam016", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 	 	   		}});
 			} else {
@@ -405,8 +405,8 @@ layui.config({
 			var optionParent = null;
 			optionParent = $(curEditObj).parents("td.quChenRowTd");
 			var quOptionId = $(optionParent).find("input[name='quItemId']").val();
-			if(!isNull(quOptionId) && quOptionId != "0" ){
-				AjaxPostUtil.request({url:schoolBasePath + "exam017", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
+			if (!isNull(quOptionId) && quOptionId != "0" ){
+				AjaxPostUtil.request({url:schoolBasePath + "exam017", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 	 	   		}});
 			} else {
@@ -419,7 +419,7 @@ layui.config({
 			var _this = this;
 			var oldKnowIds = $(_this).attr("knowledgeIds");
 			schoolKnowledgeMationList = new Array();
-			if(!isNull(oldKnowIds)){
+			if (!isNull(oldKnowIds)){
 				$.each(oldKnowIds.split(','), function(i, item){
 					schoolKnowledgeMationList.push({
 						id: item
@@ -431,7 +431,7 @@ layui.config({
 				title: "知识点选择",
 				pageId: "schoolKnowledgePointsChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					var strIds = new Array();
 					$.each(schoolKnowledgeMationList, function(i, item){
 						strIds.push(item.id);
@@ -458,7 +458,7 @@ layui.config({
 				title: "试题选择",
 				pageId: "schoolQuestionBankChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					initPageJson(function(){
 						quIndex = 0, quLeftIndex = 0;
 						$.each(questionMationList, function(i, item){
@@ -660,7 +660,7 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam018", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam018", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 	 	   		}});
 	    	} else {
@@ -746,7 +746,7 @@ layui.config({
 	    	}
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam019", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam019", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 	 	   		}});
 	    	} else {
@@ -843,7 +843,7 @@ layui.config({
 					quItemBody.find("input[name='quId']").val(quId);
 					// 同步logic Id信息
 					var quLogics = json.bean.quLogics;
-					if(!isNull(quLogics)){
+					if (!isNull(quLogics)){
 						$.each(quLogics, function(i, item) {
 							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
 							logicItem.find("input[name='quLogicId']").val(item.id);
@@ -919,7 +919,7 @@ layui.config({
 	    	optionParent = $(curEditObj).parents("tr.quScoreOptionTr");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam020", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam020", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 	 	   		}});
 	    	} else {
@@ -984,7 +984,7 @@ layui.config({
 	    	var rmQuOrderTableTr = quItemBody.find(".quOrderByRight table.quOrderByTable tr:last");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam021", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam021", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 					rmQuOrderTableTr.remove();
 	 	   		}});
@@ -1113,7 +1113,7 @@ layui.config({
 	    	optionParent = $(curEditObj).parents("tr.mFillblankTableTr");
 	    	var quOptionId = $(optionParent).find("input[name='quItemId']").val();
 	    	if(quOptionId != "" && quOptionId != "0") {
-	    		AjaxPostUtil.request({url:schoolBasePath + "exam022", params:{quItemId: quOptionId}, type: 'json', callback: function (json) {
+	    		AjaxPostUtil.request({url:schoolBasePath + "exam022", params: {quItemId: quOptionId}, type: 'json', callback: function (json) {
 					delQuOptionCallBack(optionParent);
 	 	   		}});
 	    	} else {
@@ -1261,7 +1261,7 @@ layui.config({
 					quItemBody.find("input[name='quId']").val(quId);
 					// 列选项
 					var quColumnItems = json.bean.quColumnItems;
-					if(!isNull(quColumnItems)){
+					if (!isNull(quColumnItems)){
 						$.each(quColumnItems, function(i, item) {
 							var quItemOption = quItemBody.find(".quColumnOption_" + item.title);
 							quItemOption.find("input[name='quItemId']").val(item.id);
@@ -1270,7 +1270,7 @@ layui.config({
 					}
 					// 行选项
 					var quRowItems = json.bean.quRowItems;
-					if(!isNull(quRowItems)){
+					if (!isNull(quRowItems)){
 						$.each(quRowItems, function(i, item) {
 							var quItemOption = quItemBody.find(".quRowOption_" + item.title);
 							quItemOption.find("input[name='quItemId']").val(item.id);
@@ -1279,7 +1279,7 @@ layui.config({
 					}
 					// 同步logic Id信息
 					var quLogics = json.bean.quLogics;
-					if(!isNull(quLogics)){
+					if (!isNull(quLogics)){
 						$.each(quLogics, function(i, item) {
 							var logicItem = quItemBody.find(".quLogicItem_" + item.title);
 							logicItem.find("input[name='quLogicId']").val(item.id);

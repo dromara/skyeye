@@ -66,22 +66,22 @@ layui.config({
     });
 
 	// 详情
-	function assetlistdetails(data){
+	function assetlistdetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetManage/assetManageDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetManageDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
 	// 删除
-	function assetlistdelet(data){
+	function assetlistdelet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "asset003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "asset003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadassetTable();
     		}});
@@ -95,21 +95,21 @@ layui.config({
 			title: "新增资产",
 			pageId: "assetManageAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadassetTable();
 			}});
     });
 
 	// 编辑
-	function assetlistedit(data){
+	function assetlistedit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetManage/assetManageEdit.html",
 			title: "编辑资产",
 			pageId: "assetManageEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadassetTable();
 			}});
@@ -125,7 +125,7 @@ layui.config({
     	table.reloadData("assetlistTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
 		return $.extend(true, {}, initTableSearchUtil.getSearchValue("assetlistTable"));
     }
 

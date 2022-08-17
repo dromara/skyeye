@@ -39,7 +39,7 @@ layui.config({
             { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
             { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
             { field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
+            { field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
         ]],
 	    done: function(){
@@ -52,33 +52,33 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { // 编辑
             edit(data);
-        }else if (layEvent === 'delete') { // 删除
+        } else if (layEvent === 'delete') { // 删除
             delet(data);
-        }else if(layEvent == 'select'){ // 详情
+        } else if (layEven == 'select'){ // 详情
             select(data)
-        }else if (layEvent === 'enabled') { // 启用
+        } else if (layEvent === 'enabled') { // 启用
             editEnabled(data);
-        }else if(layEvent == 'unenabled'){ // 禁用
+        } else if (layEven == 'unenabled'){ // 禁用
             editNotEnabled(data)
         }
     });
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/store/storeEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "storeEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     // 删除
-    function delet(data){
+    function delet(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "store004", params: {rowId: data.id}, type: 'json', method: "POST", callback: function (json) {
@@ -89,7 +89,7 @@ layui.config({
     }
 
     // 设置启用状态
-    function editEnabled(data){
+    function editEnabled(data) {
         layer.confirm('确认要更改为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: shopBasePath + "editStoreEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["enable"]["type"]}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("设置成功。", {icon: 1, time: 2000});
@@ -99,7 +99,7 @@ layui.config({
     }
 
     // 设置禁用状态
-    function editNotEnabled(data){
+    function editNotEnabled(data) {
         layer.confirm('确认要更改为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: shopBasePath + "editStoreEnabledState", params: {rowId: data.id, enabled: shopUtil.enableState["disable"]["type"]}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("设置成功。", {icon: 1, time: 2000});
@@ -109,14 +109,14 @@ layui.config({
     }
 
     // 详情
-    function select(data){
+    function select(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/store/storeInfo.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "storeInfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -128,7 +128,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "storeAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -147,11 +147,11 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             name: $("#name").val(),
             areaId: $("#areaId").val(),

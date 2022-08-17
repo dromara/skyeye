@@ -56,14 +56,14 @@ layui.config({
     });
 	
 	//公告详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysnoticefront/sysnoticefrontdetails.html", 
 			title: "公告详情",
 			pageId: "sysnoticefrontdetails",
 			area: ['80vw', '80vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -98,8 +98,8 @@ layui.config({
 		loadTable();
 	});
 	//上线时间搜索条件
-    function loadTable(){
-    	if(isNull($("#upTime").val())){
+    function loadTable() {
+    	if(isNull($("#upTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {

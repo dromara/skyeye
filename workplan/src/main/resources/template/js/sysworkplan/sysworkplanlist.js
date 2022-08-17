@@ -145,46 +145,46 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'edit') { //编辑
 	        	edit(data);
-	        }else if (layEvent === 'del') { //删除
+	        } else if (layEvent === 'del') { //删除
 	        	del(data, obj);
-	        }else if (layEvent === 'timingSend') { //定时发送
+	        } else if (layEvent === 'timingSend') { //定时发送
 	        	timingSend(data);
-	        }else if (layEvent === 'cancleTiming') { //取消定时发送
+	        } else if (layEvent === 'cancleTiming') { //取消定时发送
 	        	cancleTiming(data);
-	        }else if (layEvent === 'details') { //详情
+	        } else if (layEvent === 'details') { //详情
 	        	details(data);
 	        }
 	    });
 	}
 	
 	//定时发送
-	function timingSend(data){
+	function timingSend(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysworkplan/sysworkplantiming.html", 
 			title: "定时发送",
 			pageId: "sysworkplantiming",
 			area: ['40vw', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysworkplan/sysworkplandetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysworkplantiming",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		if(data.planType === '1' || data.planType == 1){//个人计划
 			_openNewWindows({
@@ -192,7 +192,7 @@ layui.config({
 				title: "编辑个人计划",
 				pageId: "sysworkplanedit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -202,7 +202,7 @@ layui.config({
 				title: "编辑部门计划",
 				pageId: "sysworkplandepedit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -212,7 +212,7 @@ layui.config({
 				title: "编辑公司计划",
 				pageId: "sysworkplancomedit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
@@ -222,7 +222,7 @@ layui.config({
 	}
 	
 	//取消定时发送
-	function cancleTiming(data){
+	function cancleTiming(data) {
 		var msg = "确定取消定时发送吗？";
 		layer.confirm(msg, { icon: 3, title: '取消定时发送' }, function (index) {
 			layer.close(index);
@@ -523,7 +523,7 @@ layui.config({
 			title: "新增个人计划",
 			pageId: "sysworkplanaddpage",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTable();
 			}});
@@ -537,7 +537,7 @@ layui.config({
 			title: "新增部门计划",
 			pageId: "sysworkplandepaddpage",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTable();
 			}});
@@ -555,7 +555,7 @@ layui.config({
 			title: "新增公司计划",
 			pageId: "sysworkplancomaddpage",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTable();
 			}});
@@ -629,7 +629,7 @@ layui.config({
 		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 	}
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 

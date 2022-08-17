@@ -56,7 +56,7 @@ layui.config({
             }},
             { field: 'isActive', title: '状态', align: 'center', width: 100, templet: function (d) {
                 if(d.type != 1) {
-                    if(!isNull(d.isActive + "")){
+                    if (!isNull(d.isActive + "")){
                         if (!d.isActive) {
                             return "<span class='state-up'>已评审</span>";
                         } else {

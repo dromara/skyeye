@@ -399,7 +399,7 @@ dataGrid.prototype = {
     getAjaxDate: function(url, parms, method) {
         //定义一个全局变量来接受$post的返回值
         var result;
-        if(!isNull(url)){
+        if (!isNull(url)){
             //用ajax的同步方式
             layui.$.ajax({
                 url: url,
@@ -444,7 +444,7 @@ dataGrid.prototype = {
 var showGrid = function (options) {
     var showGrid = new dataGrid(this, options);
     layui.$.each(dataGrid_setting, function(index, item){
-        if(!isNull(item)){
+        if (!isNull(item)){
             if(item.settings.id == showGrid.settings.id){
                 dataGrid_setting.splice(index, 1);
                 return;

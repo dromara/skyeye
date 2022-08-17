@@ -57,16 +57,16 @@ layui.config({
 				{ field: 'userNum', title: '员工数', width: 100 },
 				{ field:'id', width:400, title: '公司地址', templet: function (d) {
 					var str = d.provinceName + " ";
-					if(!isNull(d.cityName)){
+					if (!isNull(d.cityName)){
 						str += d.cityName + " ";
 					}
-					if(!isNull(d.areaName)){
+					if (!isNull(d.areaName)){
 						str += d.areaName + " ";
 					}
-					if(!isNull(d.townshipName)){
+					if (!isNull(d.townshipName)){
 						str += d.townshipName + " ";
 					}
-					if(!isNull(d.addressDetailed)){
+					if (!isNull(d.addressDetailed)){
 						str += d.addressDetailed;
 					}
 					return str;
@@ -127,7 +127,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -135,7 +135,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			companyName: $("companyName").val()
 		};

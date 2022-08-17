@@ -37,7 +37,7 @@ layui.config({
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
 	    ]],
 	    done: function(){
@@ -65,7 +65,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "appworkpageauthpoint005", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "appworkpageauthpoint005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -73,7 +73,7 @@ layui.config({
 	}
 	
 	// 编辑权限点
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		var title = '';
 		if (data.type == 1) {
@@ -88,7 +88,7 @@ layui.config({
 			title: title,
 			pageId: "appWorkPageAuthPointEdit",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -119,7 +119,7 @@ layui.config({
 			title: title,
 			pageId: "appWorkPageAuthPointAdd",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -138,11 +138,11 @@ layui.config({
 		loadTable();
 	});
 
-	function loadTable(){
+	function loadTable() {
 		tableTree.reload("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			authMenuName: $("#authMenuName").val(),
 			authMenu: $("#authMenu").val(),

@@ -25,16 +25,16 @@ layui.config({
         form.on('submit(formAddBean)', function (data) {
             if (winui.verifyForm(data.elem)) {
                 var provinceId = "", cityId = "", addressAreaId = "", townshipId = "";
-                if(!isNull($("#provinceId").val())){
+                if (!isNull($("#provinceId").val())) {
                     provinceId = $("#provinceId").val();
                 }
-                if(!isNull($("#cityId").val())){
+                if (!isNull($("#cityId").val())) {
                     cityId = $("#cityId").val();
                 }
-                if(!isNull($("#addressAreaId").val())){
+                if (!isNull($("#addressAreaId").val())) {
                     addressAreaId = $("#addressAreaId").val();
                 }
-                if(!isNull($("#townshipId").val())){
+                if (!isNull($("#townshipId").val())) {
                     townshipId = $("#townshipId").val();
                 }
                 var params = {
@@ -55,21 +55,21 @@ layui.config({
             return false;
         });
 
-        form.on('select(areaProvince)', function(data){
+        form.on('select(areaProvince)', function(data) {
             layui.$(data.elem).parent('dd').nextAll().remove();
             if(isNull(data.value) || data.value == '请选择'){
             } else {
                 loadChildCityArea();
             }
         });
-        form.on('select(areaCity)', function(data){
+        form.on('select(areaCity)', function(data) {
             layui.$(data.elem).parent('dd').nextAll().remove();
             if(isNull(data.value) || data.value == '请选择'){
             } else {
                 loadChildArea();
             }
         });
-        form.on('select(area)', function(data){
+        form.on('select(area)', function(data) {
             layui.$(data.elem).parent('dd').nextAll().remove();
             if(isNull(data.value) || data.value == '请选择'){
             } else {
@@ -79,7 +79,7 @@ layui.config({
 
         // 省级行政区划
         function loadChildProvinceArea(){
-            AjaxPostUtil.request({url: reqBasePath + "commontarea001", params:{}, type: 'json', method: "POST", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "commontarea001", params: {}, type: 'json', method: "POST", callback: function (json) {
                 var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
                 for(var i = 0; i < json.rows.length; i++){
                     str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -92,7 +92,7 @@ layui.config({
 
         // 市级行政区划
         function loadChildCityArea(){
-            AjaxPostUtil.request({url: reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type: 'json', method: "POST", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "commontarea002", params: {rowId: $("#provinceId").val()}, type: 'json', method: "POST", callback: function (json) {
                 var str = '<dd class="layui-col-xs3"><select id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
                 for(var i = 0; i < json.rows.length; i++){
                     str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -105,7 +105,7 @@ layui.config({
 
         // 县级行政区划
         function loadChildArea(){
-            AjaxPostUtil.request({url: reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type: 'json', method: "POST", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "commontarea003", params: {rowId: $("#cityId").val()}, type: 'json', method: "POST", callback: function (json) {
                 var str = '<dd class="layui-col-xs3"><select id="addressAreaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
                 for(var i = 0; i < json.rows.length; i++){
                     str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -118,7 +118,7 @@ layui.config({
 
         // 镇级行政区划
         function loadChildAreaTownShip(){
-            AjaxPostUtil.request({url: reqBasePath + "commontarea004", params:{rowId: $("#addressAreaId").val()}, type: 'json', method: "POST", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "commontarea004", params: {rowId: $("#addressAreaId").val()}, type: 'json', method: "POST", callback: function (json) {
                 var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
                 for(var i = 0; i < json.rows.length; i++){
                     str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';

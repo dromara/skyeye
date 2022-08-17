@@ -25,7 +25,7 @@ layui.config({
 
 	element.on('tab(jobDetail)', function(obj){
 		var mation = tabTable["tab" + obj.index];
-		if(!isNull(mation)){
+		if (!isNull(mation)){
 			if(!mation.load){
 				tabTable["tab" + obj.index].load = true;
 				mation.initMethod();
@@ -34,7 +34,7 @@ layui.config({
 	});
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
 			+ '<font>' + data.bean.userName + '</font>'
 			+ '<font id="consoleDesk">控制台</font>'

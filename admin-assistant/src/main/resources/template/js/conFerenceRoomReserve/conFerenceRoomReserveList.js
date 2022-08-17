@@ -36,7 +36,7 @@ layui.config({
 	        }},
 	        { field: 'oddNum', title: '单号', width: 200, align: 'center' },
 	        { field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-	        	if(!isNull(d.processInstanceId)){
+	        	if (!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        	} else {
 	        		return "";
@@ -71,21 +71,21 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'reserveDedails') { //预定详情
         	reserveDedails(data);
-        }else if (layEvent === 'processDetails') { //流程详情
+        } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
-        }else if (layEvent === 'reserveedit') { //编辑预定申请
+        } else if (layEvent === 'reserveedit') { //编辑预定申请
         	reserveEdit(data);
-        }else if (layEvent === 'subApproval') { //提交审批
+        } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        }else if(layEvent === 'cancellation') {//预定作废
+        } else if (layEven === 'cancellation') {//预定作废
         	cancellation(data);
-        }else if (layEvent === 'revoke') { //撤销
+        } else if (layEvent === 'revoke') { //撤销
         	revoke(data);
         }
     });
 	
 	// 撤销
-	function revoke(data){
+	function revoke(data) {
 		var msg = '确认撤销该预定申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
@@ -100,14 +100,14 @@ layui.config({
 	}
 	
 	// 编辑会议室预定申请
-	function reserveEdit(data){
+	function reserveEdit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/conFerenceRoomReserve/conFerenceRoomReserveEdit.html", 
 			title: "会议室预定申请",
 			pageId: "conFerenceRoomReserveEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadReserveTable();
 			}
@@ -115,7 +115,7 @@ layui.config({
 	}
 	
 	// 会议室预定提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["conFerenceRoomReserve"]["key"], function (approvalId) {
@@ -132,7 +132,7 @@ layui.config({
 	}
 	
 	// 会议室预定作废
-	function cancellation(data){
+	function cancellation(data) {
 		var msg = '确认作废该条预定申请吗？';
 		layer.confirm(msg, { icon: 3, title: '申请作废操作' }, function (index) {
 			layer.close(index);
@@ -144,14 +144,14 @@ layui.config({
 	}
 	
 	// 会议室预定详情
-	function reserveDedails(data){
+	function reserveDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/conFerenceRoomReserve/conFerenceRoomReserveDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "conFerenceRoomReserveDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -163,7 +163,7 @@ layui.config({
 			title: "会议室预定申请",
 			pageId: "addreserve",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadReserveTable();
 			}});
@@ -188,9 +188,9 @@ layui.config({
     	table.reloadData("reserveTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-		if(!isNull($("#createTime").val())){
+		if (!isNull($("#createTime").val())) {
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

@@ -91,14 +91,14 @@ layui.config({
     });
 
     // 详情
-    function select(data){
+    function select(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/mealOrder/storeMealOrderDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "storeMealOrderDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -116,13 +116,13 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "", endTime = "";
-        if(!isNull($("#createTime").val())){
+        if (!isNull($("#createTime").val())) {
             startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
         }

@@ -94,14 +94,14 @@ layui.config({
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/member/memberInfo.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "memberinfo",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -118,11 +118,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-	function getTableParams(){
+	function getTableParams() {
 		var contacts = $("#contacts").val();
 		var phone = $("#phone").val();
 		var email = $("#email").val();

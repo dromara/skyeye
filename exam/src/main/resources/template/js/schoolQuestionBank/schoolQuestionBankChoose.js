@@ -31,7 +31,7 @@ layui.config({
 		initTable();
 	});
 
-	form.on('select(schoolId)', function(data){
+	form.on('select(schoolId)', function(data) {
 		// 加载年级
  		initGradeId();
 	});
@@ -52,7 +52,7 @@ layui.config({
         });
     }
     
-    form.on('select(gradeId)', function(data){
+    form.on('select(gradeId)', function(data) {
 		if(isNull(data.value) || data.value === '请选择'){
 			$("#subjectId").html("");
 			form.render('select');
@@ -144,14 +144,14 @@ layui.config({
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.productId;
 		_openNewWindows({
 			url: "", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -185,7 +185,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -193,7 +193,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			quTitle: $("#quTitle").val(), 
     		schoolId: $("#schoolId").val(), 

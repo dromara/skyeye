@@ -285,15 +285,15 @@ layui.config({
     function calcLeaveHour(num){
         var startTime = $("#cancelStartTime" + num).val();
         var endTime = $("#cancelEndTime" + num).val();
-        if(!isNull(startTime) && !isNull(endTime)){
+        if (!isNull(startTime) && !isNull(endTime)){
             var timeId = $("#timeId" + num).val();
-            if(!isNull(timeId)){
+            if (!isNull(timeId)){
                 var hour = "0";
                 var timeMation = getInPoingArr(checkWorkTime, "id", timeId);
                 startTime = startTime + ":00";
                 endTime = endTime + ":00";
                 // 作息时间是否为空
-                if(!isNull(timeMation.restStartTime) && !isNull(timeMation.restEndTime)){
+                if (!isNull(timeMation.restStartTime) && !isNull(timeMation.restEndTime)){
                     var restStartTime = timeMation.restStartTime + ":00";
                     var restEndTime = timeMation.restEndTime + ":00";
                     if(compare_HHmmss(restStartTime, endTime) || compare_HHmmss(startTime, restEndTime)){

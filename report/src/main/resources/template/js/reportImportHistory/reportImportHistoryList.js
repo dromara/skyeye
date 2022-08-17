@@ -84,15 +84,15 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable(){
+    function refreshloadTable() {
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             fileName: $("#fileName").val()
         };

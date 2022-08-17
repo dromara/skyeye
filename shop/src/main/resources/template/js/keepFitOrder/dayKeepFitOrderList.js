@@ -86,14 +86,14 @@ layui.config({
     });
 
     // 详情
-    function select(data){
+    function select(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/keepFitOrder/keepFitOrderDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "keepFitOrderDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -111,11 +111,11 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             orderNum: $("#orderNum").val(),
             memberName: $("#memberName").val(),

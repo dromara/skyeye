@@ -192,7 +192,7 @@ layui.config({
 		        				params.completedJob = encodeURIComponent(layedit.getContent(monthCompletedContent));
 		        			}
 		        		} else {
-		        			if(isNull($("#monthCompletedText").val())){
+		        			if(isNull($("#monthCompletedText").val())) {
 		        				winui.window.msg('请填写本月已完成工作', {icon: 2, time: 2000});
 		        				return false;
 		        			} else {

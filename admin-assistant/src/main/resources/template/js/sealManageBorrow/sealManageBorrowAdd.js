@@ -19,7 +19,7 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$("#useTitle").html("印章借用申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
 		$("#useName").html(data.bean.userName);
 	});

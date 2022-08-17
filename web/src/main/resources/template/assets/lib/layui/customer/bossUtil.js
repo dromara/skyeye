@@ -14,7 +14,7 @@ var bossUtil = {
             title: "面试者来源",
             pageId: "bossIntervieweeFromListChoosePage",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(bossUtil.bossIntervieweeFromChooseMation);
                 }
@@ -92,7 +92,7 @@ var bossUtil = {
             title: "面试者",
             pageId: "myChargeBossIntervieweeListChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(bossUtil.bossIntervieweeChooseMation);
                 }
@@ -111,7 +111,7 @@ var bossUtil = {
             title: "人员需求",
             pageId: "bossPersonRequireMyChargeListChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(bossUtil.bossPersonRequireChooseMation);
                 }

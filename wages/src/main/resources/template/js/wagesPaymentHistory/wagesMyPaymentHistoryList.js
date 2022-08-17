@@ -32,7 +32,7 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'companyName', title: '公司', align: 'left', width: 150},
+            { field: 'companyName', title: '公司', align: 'left', width: 150 },
             { field: 'departmentName', title: '部门', align: 'left', width: 150 },
             { field: 'jobName', title: '职位', align: 'left', width: 120 },
             { field: 'userName', title: '员工', align: 'left', width: 100},
@@ -78,7 +78,7 @@ layui.config({
     });
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.staffId;
         payMonth = data.payMonth;
         _openNewWindows({
@@ -86,7 +86,7 @@ layui.config({
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "wagesStaffPaymentDetail",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -96,15 +96,15 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable(){
+    function refreshloadTable() {
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             payMonth: $("#payMonth").val()
         };

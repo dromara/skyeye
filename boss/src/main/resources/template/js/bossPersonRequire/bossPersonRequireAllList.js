@@ -48,7 +48,7 @@ layui.config({
                     return activitiUtil.showStateName2(d.state, 1);
                 }
             }},
-            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], width: 150},
+            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
         ]],
         done: function(){
@@ -61,22 +61,22 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details') { // 详情
             details(data);
-        }else if(layEvent === 'processDetails') { // 流程详情
+        } else if (layEven === 'processDetails') { // 流程详情
             activitiUtil.activitiDetails(data);
-        }else if(layEvent === 'setPersonLiable') { // 设置责任人
+        } else if (layEven === 'setPersonLiable') { // 设置责任人
             setPersonLiable(data);
         }
     });
 
     // 设置责任人
-    function setPersonLiable(data){
+    function setPersonLiable(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossPersonRequire/bossPersonRequirePersonLiable.html",
             title: '设置责任人',
             pageId: "bossPersonRequirePersonLiable",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -84,14 +84,14 @@ layui.config({
     }
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossPersonRequire/bossPersonRequireDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossPersonRequireDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -109,13 +109,13 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "", endTime = "";
-        if(!isNull($("#createTime").val())){
+        if (!isNull($("#createTime").val())) {
             startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
         }

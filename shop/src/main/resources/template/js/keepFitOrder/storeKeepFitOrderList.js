@@ -96,17 +96,17 @@ layui.config({
         var layEvent = obj.event;
         if(layEvent == 'select'){ // 详情
             select(data)
-        }else if(layEvent == 'complateKeepFit'){ // 完成保养
+        } else if (layEven == 'complateKeepFit'){ // 完成保养
             complateKeepFit(data)
-        }else if(layEvent == 'verification'){ // 核销
+        } else if (layEven == 'verification'){ // 核销
             verification(data)
-        }else if(layEvent == 'cancleOrder'){ // 取消订单
+        } else if (layEven == 'cancleOrder'){ // 取消订单
             cancleOrder(data)
         }
     });
 
     // 核销
-    function verification(data){
+    function verification(data) {
         layer.confirm("确认对该单据进行核销吗？", {icon: 3, title: "核销操作"}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "verificationKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
@@ -117,7 +117,7 @@ layui.config({
     }
 
     // 取消订单
-    function cancleOrder(data){
+    function cancleOrder(data) {
         layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "cancleKeepFitOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
@@ -128,27 +128,27 @@ layui.config({
     }
 
     // 详情
-    function select(data){
+    function select(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/keepFitOrder/keepFitOrderDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "keepFitOrderDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
 
     // 保养完成
-    function complateKeepFit(data){
+    function complateKeepFit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/keepFitOrder/complateKeepFitOrder.html",
             title: '保养完成',
             pageId: "complateKeepFitOrder",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -167,17 +167,17 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var storeId = $("#storeId").val();
         if(isNull(storeId)){
             storeId = "-";
         }
         var startTime = "", endTime = "";
-        if(!isNull($("#createTime").val())){
+        if (!isNull($("#createTime").val())) {
             startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
         }

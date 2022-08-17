@@ -54,7 +54,7 @@ layui.config({
 
 				ue = ueEditorUtil.initEditor('resultsContent');
 			    ue.addListener("ready", function () {
-			    	if(!isNull(json.bean.resultsContent))
+			    	if (!isNull(json.bean.resultsContent))
 			    		ue.setContent(json.bean.resultsContent);
 			    	else
 			    		ue.setContent("在此处填写您的[项目成果和总结]");

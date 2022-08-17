@@ -61,15 +61,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'delet') { //删除
+        } else if (layEvent === 'delet') { //删除
         	delet(data);
-        }else if (layEvent === 'up') { //上线
+        } else if (layEvent === 'up') { //上线
         	up(data);
-        }else if (layEvent === 'down') { //下线
+        } else if (layEvent === 'down') { //下线
         	down(data);
-        }else if (layEvent === 'upMove') { //上移
+        } else if (layEvent === 'upMove') { //上移
         	upMove(data);
-        }else if (layEvent === 'downMove') { //下移
+        } else if (layEvent === 'downMove') { //下移
         	downMove(data);
         }
     });
@@ -91,7 +91,7 @@ layui.config({
 	    });
 	}
 	//一级类型监听事件
-	form.on('select(firstType)', function(data){
+	form.on('select(firstType)', function(data) {
 		firstType = data.value;
 	});
 	
@@ -108,14 +108,14 @@ layui.config({
 			title: "新增类型",
 			pageId: "sysnoticetypeadd",
 			area: ['500px', '40vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	//删除
-	function delet(data){
+	function delet(data) {
 		var msg = '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除公告类型' }, function (index) {
 			layer.close(index);
@@ -127,7 +127,7 @@ layui.config({
 	}
 	
 	//上线
-	function up(data){
+	function up(data) {
 		var msg = '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '上线公告类型' }, function (index) {
 			layer.close(index);
@@ -139,7 +139,7 @@ layui.config({
 	}
 	
 	//下线
-	function down(data){
+	function down(data) {
 		var msg = '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '下线公告类型' }, function (index) {
 			layer.close(index);
@@ -151,14 +151,14 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysnoticetype/sysnoticetypeedit.html", 
 			title: "编辑类型",
 			pageId: "sysnoticetypeedit",
 			area: ['500px', '40vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -166,7 +166,7 @@ layui.config({
 	}
 	
 	//上移
-	function upMove(data){
+	function upMove(data) {
         AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype008", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -174,7 +174,7 @@ layui.config({
 	}
 	
 	//下移
-	function downMove(data){
+	function downMove(data) {
         AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "noticetype009", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -186,7 +186,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
 		tableTree.reload("messageTable", {where:{name:$("#name").val(),parentId:$("#firstType").val()}});
     }
     

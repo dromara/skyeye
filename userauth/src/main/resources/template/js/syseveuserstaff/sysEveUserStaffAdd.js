@@ -158,7 +158,7 @@ layui.config({
  	        		return false;
  	        	}
 	            var state = $("#state").val();
-	            if(state == '4' && isNull($("#trialTime").val())){
+	            if(state == '4' && isNull($("#trialTime").val())) {
 					winui.window.msg('请选择预计试用结束日期', {icon: 2, time: 2000});
 					return false;
 				}

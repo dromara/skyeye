@@ -44,17 +44,17 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //设计
+        } else if (layEvent === 'edit') { //设计
         	edit(data);
-        }else if (layEvent === 'fzWj') { //复制问卷
+        } else if (layEvent === 'fzWj') { //复制问卷
         	fzWj(data);
-        }else if (layEvent === 'resolveWj') { //收集问卷
+        } else if (layEvent === 'resolveWj') { //收集问卷
         	resolveWj(data);
-        }else if (layEvent === 'fxWj') { //分析报告
+        } else if (layEvent === 'fxWj') { //分析报告
         	fxWj(data);
-        }else if (layEvent === 'showFb') { //发布
+        } else if (layEvent === 'showFb') { //发布
         	showFb(data, obj);
-        }else if (layEvent === 'endSurvey') { //结束调查
+        } else if (layEvent === 'endSurvey') { //结束调查
         	endSurvey(data, obj);
         }
     });
@@ -80,21 +80,21 @@ layui.config({
 	}
 	
 	//设计
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/dwsurveydesign/dwsurveydesign.html", 
 			title: "设计问卷",
 			pageId: "dwsurveydesign",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//复制问卷
-	function fzWj(data){
+	function fzWj(data) {
 		rowId = data.id;
 		surveyName = data.surveyName;
 		_openNewWindows({
@@ -102,14 +102,14 @@ layui.config({
 			title: "复制问卷",
 			pageId: "dwsurveydesigncopy",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//收集问卷
-	function resolveWj(data){
+	function resolveWj(data) {
 		rowId = data.id;
 		surveyName = data.surveyName;
 		_openNewWindows({
@@ -117,19 +117,19 @@ layui.config({
 			title: "收集问卷",
 			pageId: "surveyRelove",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//分析报告
-	function fxWj(data){
+	function fxWj(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/dwsurveydesign/surveyReport.html", 
 			title: "分析报告",
 			pageId: "surveyReport",
 			maxmin: true,
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -169,13 +169,13 @@ layui.config({
 			title: "新增问卷",
 			pageId: "dwsurveydesignadd",
 			area: ['500px', '300px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{surveyName: $("#surveyName").val(), surveyState: $("#surveyState").val()}});
     }
     

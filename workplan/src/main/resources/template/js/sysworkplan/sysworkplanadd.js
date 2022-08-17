@@ -33,7 +33,7 @@ layui.config({
 			}
 		});
 	    
-	    if(!isNull(parent.timeSolt)){
+	    if (!isNull(parent.timeSolt)){
 			// 如果父页面传递时间段
 			timeSolt = parent.timeSolt;
 			// 计划时间段展示
@@ -47,7 +47,7 @@ layui.config({
 			});
 		}
 
-	    if(!isNull(parent.nowCheckType)){
+	    if (!isNull(parent.nowCheckType)){
 			nowCheckType = parent.nowCheckType;
 			// 计划周期名称展示
 			$("#nowCheckTypeBox").html(getNowCheckTypeName(nowCheckType));
@@ -171,11 +171,11 @@ layui.config({
 					planEnclosure: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
 	        	};
 	        	// 执行时间
-	        	if(!isNull(timeSolt)){
+	        	if (!isNull(timeSolt)){
 					params.startTime = timeSolt.split('~')[0] + " 00:00:00";
 					params.endTime = timeSolt.split('~')[1] + " 23:59:59";
 				} else {
-					if(isNull($("#executeTime").val())){
+					if(isNull($("#executeTime").val())) {
 						winui.window.msg('请选择执行时间', {icon: 2, time: 2000});
 						return false;
 					}
@@ -184,10 +184,10 @@ layui.config({
 				}
 
 	        	// 计划周期
-				if(!isNull(nowCheckType)){
+				if (!isNull(nowCheckType)){
 					params.nowCheckType = nowCheckType;
 				} else {
-					if(isNull($("#planCycle").val())){
+					if(isNull($("#planCycle").val())) {
 						winui.window.msg('请选择计划周期', {icon: 2, time: 2000});
 						return false;
 					}
@@ -225,7 +225,7 @@ layui.config({
  	        		params.whetherTime = '2';
  	        	}
 	        	if(params.whetherTime === '1'){
-	        		if(isNull($("#notifyTime").val())){
+	        		if(isNull($("#notifyTime").val())) {
 	        			winui.window.msg('请选择通知时间', {icon: 2, time: 2000});
 	        			return false;
 	        		} else {

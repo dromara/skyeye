@@ -13,13 +13,13 @@ layui.config({
 	    	laydate = layui.laydate;
 
 		// 获取当前登录员工信息
-		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 			var userName = data.bean.userName;
 			$("#accidentTitle").html("车辆事故登记单-" + userName + "-" + (new Date()).getTime()) + Math.floor(Math.random()*100);
 		});
 
 		// 查询所有的车牌号用于下拉选择框
-		adminAssistantUtil.queryAllVehicleList(function (data){
+		adminAssistantUtil.queryAllVehicleList(function (data) {
 			$("#licensePlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option-must.tpl'), data));
 			form.render('select');
 		});

@@ -21,7 +21,7 @@ layui.config({
         page: false,
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'nameCn', title: '中文名称', align: 'left', width: 150},
+            { field: 'nameCn', title: '中文名称', align: 'left', width: 150 },
             { field: 'nameEn', title: '英文名称', align: 'left', width: 200},
             { field: 'key', title: '字段key', align: 'left', width: 300 },
             { field: 'desc', title: '描述', align: 'left', width: 300}

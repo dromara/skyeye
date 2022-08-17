@@ -21,7 +21,7 @@ layui.config({
 	laydate.render({elem: '#reimbursementTime', range: false, btns: ['now', 'confirm']});
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$("#title").val('费用报销-' + data.bean.userName + '-' + getYMDFormatDate());
 		$("#writePeople").html(data.bean.userName);
 	});
@@ -33,13 +33,13 @@ layui.config({
 	});
 
 	// 获取我参与的项目列表
-	proUtil.queryMyProjectsList(function (data){
+	proUtil.queryMyProjectsList(function (data) {
 		$("#proId").html(getDataUseHandlebars(selOption, data));
 		form.render('select');
 	});
 
 	// 获取当前登录用户所属企业的所有部门信息
-	systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+	systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
 		$("#departments").html(getDataUseHandlebars(selOption, data));
 		form.render('select');
 	});

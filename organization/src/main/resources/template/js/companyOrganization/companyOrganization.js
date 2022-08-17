@@ -9,7 +9,7 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form;
 	// 企业组织机构图
-	AjaxPostUtil.request({url: reqBasePath + "companymation009", params:{}, type: 'json', method: "GET", callback: function (json) {
+	AjaxPostUtil.request({url: reqBasePath + "companymation009", params: {}, type: 'json', method: "GET", callback: function (json) {
 		$('#chart-container').orgchart({
 			'data' : json.rows[0],
 			'nodeTitle': 'title',

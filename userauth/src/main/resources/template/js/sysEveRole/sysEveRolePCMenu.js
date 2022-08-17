@@ -183,7 +183,7 @@ layui.config({
 	function CheckChildNodesIsContainKeyword(pNode) {
 		var childs = pNode.children;
 		var isexit = true;
-		if(!isNull(childs)){
+		if (!isNull(childs)){
 			for(var i = 0; i < childs.length; i++) {
 				if(childs[i].isParent) {
 					isexit = CheckChildNodesIsContainKeyword(childs[i]);

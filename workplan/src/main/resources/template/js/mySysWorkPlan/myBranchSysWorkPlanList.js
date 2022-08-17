@@ -96,7 +96,7 @@ layui.config({
 	});
 
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		executorId = data.executorId;
 		_openNewWindows({
@@ -104,7 +104,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sysworkplantiming",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -124,14 +124,14 @@ layui.config({
 		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 	}
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
 		var startTime = "";
 		var endTime = "";
-		if(isNull($("#executeTime").val())){
+		if(isNull($("#executeTime").val())) {
 			startTime = "";
 			endTime = "";
 		} else {

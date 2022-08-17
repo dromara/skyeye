@@ -392,7 +392,7 @@ layui.config({
 							title: "移动到",
 							pageId: "noteFileTree",
 							area: ['300px', '400px'],
-							callBack: function(refreshCode) {
+							callBack: function (refreshCode) {
 								if(refreshCode != "" && refreshCode != undefined){
 									if(refreshCode != "-9999"){
 										winui.window.msg("保存成功", {icon: 1, time: 2000});
@@ -601,7 +601,7 @@ layui.config({
 	
 	// 删除指定文件夹或笔记
 	function deleteFileOrNote(id){
-        AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote003", params:{rowId: id, fileType: clickType}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote003", params: {rowId: id, fileType: clickType}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			if(clickType == "folder"){
 				var selNode = ztree.getNodeByParam("id", id, null);
@@ -623,7 +623,7 @@ layui.config({
 			scrollElem: "#folderChildList",
 			done: function(page, next) { //到达临界点（默认滚动触发），触发下一页
 				var lis = [];
-				AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote005", params:{page: page, limit: 15, search: searchTitle}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url: sysMainMation.noteBasePath + "mynote005", params: {page: page, limit: 15, search: searchTitle}, type: 'json', callback: function (json) {
 					lis.push(getDataUseHandlebars(folderchildlisetTemplate, json));
 					next(lis.join(''), (page * 15) < json.total);
 					initRightMenu();
@@ -648,9 +648,9 @@ layui.config({
 	}
 	
 	//显示笔记内容
-	function showNoteContent(data){
+	function showNoteContent(data) {
 		if(data.length > 0){
-			if(!isNull(noteId)){
+			if (!isNull(noteId)){
 				$(".note-operator").removeClass("layui-hide");//显示保存按钮
 				var noteItem =$("#folderChildList").find(".folder-item[id='" + noteId + "']");
 				showContentByItem(noteItem);

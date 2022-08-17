@@ -60,7 +60,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'edit') { // 编辑
 	        	edit(data);
-	        }else if (layEvent === 'delete') { // 删除
+	        } else if (layEvent === 'delete') { // 删除
 	        	deleteRow(data);
 	        }
 	    });
@@ -69,14 +69,14 @@ layui.config({
 	form.render();
 	
 	// 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
 			url: "../../tpl/sysStaffJobResume/sysStaffJobResumeEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sysStaffJobResumeEdit",
             area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -84,7 +84,7 @@ layui.config({
 	}
 	
 	// 删除
-    function deleteRow(data){
+    function deleteRow(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstaffjobresume005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
@@ -104,11 +104,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		workUnit: $("#workUnit").val(),
 			department: $("#department").val(),

@@ -29,7 +29,7 @@ var dsFormUtil = {
             title: "表单选择",
             pageId: "dsFormPageListChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(dsFormUtil.dsFormChooseList);
                 }
@@ -136,7 +136,7 @@ var dsFormUtil = {
                 }
                 item.context = getDataUseHandlebars(item.templateContent, obj);
             }else if(item.associatedDataTypes == 2){//接口
-                AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params:{interfa: item.aData}, type: 'json', callback: function(j){
+                AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j){
                     var obj = JSON.parse(j.bean.aData);
                     item.context = getDataUseHandlebars(item.templateContent, obj);
                 }, async: false});
@@ -149,7 +149,7 @@ var dsFormUtil = {
 
             $("#" + item.id).val(item.value); //给能通过id赋值的控件赋值
             var _this = $("#" + customBoxId + " .layui-form-item").eq(i);//当前控件
-            if(!isNull(item.require) && item.require.indexOf("required") >= 0){
+            if (!isNull(item.require) && item.require.indexOf("required") >= 0){
                 _this.find(".layui-form-label").append('<i class="red">*</i>');
             }
             _this.attr("controId", item.id);
@@ -167,7 +167,7 @@ var dsFormUtil = {
                 _this.find("input").attr('lay-filter', item.id);
             }else if(vid === 'radio'){//类型为单选框
                 _this.find("input:radio").attr("name", item.id);
-                if(!isNull(item.value))
+                if (!isNull(item.value))
                     _this.find("input:radio[value=" + item.value + "]").attr("checked", true);
             }else if(vid === 'richtextarea'){//类型为富文本框
                 _this.find('iframe[textarea="' + item.id + '"]').contents().find("body").html(item.value);
@@ -309,7 +309,7 @@ var dsFormUtil = {
             }else if(item.showType == 3){//富文本展示
             }else if(item.showType == 4){//图片展示
                 var photoValue = [];
-                if(!isNull(jsonStr.bean.text)){
+                if (!isNull(jsonStr.bean.text)){
                     photoValue = item.text.split(",");
                 }
                 var rows = [];
@@ -348,7 +348,7 @@ var dsFormUtil = {
             title: "单据类型",
             pageId: "dsFormObjectRelationChooseByFirstTypeCodePage",
             area: ['480px', '500px'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(dsFormUtil.dsFormObjectRelationChoose);
                 }

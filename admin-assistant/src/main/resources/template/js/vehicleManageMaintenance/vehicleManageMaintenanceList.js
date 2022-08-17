@@ -16,7 +16,7 @@ layui.config({
 	authBtn('1597478766486');
 
 	// 查询所有的车牌号用于下拉选择框
-	adminAssistantUtil.queryAllVehicleList(function (data){
+	adminAssistantUtil.queryAllVehicleList(function (data) {
 		$("#maintenancePlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
 		form.render('select');
 	});
@@ -56,9 +56,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'maintenancedetails') { //详情
         	maintenancedetails(data);
-        }else if (layEvent === 'maintenancedelet'){ //删除
+        } else if (layEvent === 'maintenancedelet'){ //删除
         	maintenancedelet(data);
-        }else if (layEvent === 'maintenanceedit'){	//编辑
+        } else if (layEvent === 'maintenanceedit'){	//编辑
         	maintenanceedit(data);
         }
     });
@@ -66,19 +66,19 @@ layui.config({
 	form.render();
 	
 	// 维修保养信息详情
-	function maintenancedetails(data){
+	function maintenancedetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageMaintenance/vehicleManageMaintenanceDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageMaintenanceDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 删除维修保养信息
-	function maintenancedelet(data){
+	function maintenancedelet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "maintenance003", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -95,21 +95,21 @@ layui.config({
 			title: "车辆维修保养登记单",
 			pageId: "vehicleManageMaintenanceAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadMaintenanceTable();
 			}});
     });
 	
 	// 编辑维修保养信息
-	function maintenanceedit(data){
+	function maintenanceedit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageMaintenance/vehicleManageMaintenanceEdit.html", 
 			title: "编辑车辆维修保养信息",
 			pageId: "vehicleManageMaintenanceEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadMaintenanceTable();
 			}});
@@ -128,7 +128,7 @@ layui.config({
     	table.reloadData("maintenanceTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		maintenanceTitle: $("#maintenanceTitle").val(),
     		maintenancePlate: $("#maintenancePlate").val()

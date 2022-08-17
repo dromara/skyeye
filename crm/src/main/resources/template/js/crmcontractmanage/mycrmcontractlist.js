@@ -47,7 +47,7 @@ layui.config({
 	        { field: 'signingTime', title: '签约日期', align: 'center', width: 100 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
 	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-	        	if(!isNull(d.processInstanceId)){
+	        	if (!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        	} else {
 	        		return "";
@@ -84,23 +84,23 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'details'){ //详情
+        } else if (layEvent === 'details'){ //详情
         	details(data);
-        }else if (layEvent === 'processDetails') { //流程详情
+        } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
-        }else if (layEvent === 'subApproval') { //提交审批
+        } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        }else if (layEvent === 'del') { //删除
+        } else if (layEvent === 'del') { //删除
         	del(data);
-        }else if (layEvent === 'perform') { //执行
+        } else if (layEvent === 'perform') { //执行
         	perform(data);
-        }else if (layEvent === 'close') { //关闭
+        } else if (layEvent === 'close') { //关闭
         	close(data);
-        }else if (layEvent === 'shelve') { //搁置
+        } else if (layEvent === 'shelve') { //搁置
         	shelve(data);
-        }else if (layEvent === 'recovery') { //恢复
+        } else if (layEvent === 'recovery') { //恢复
         	recovery(data);
-        }else if (layEvent === 'revoke') { //撤销
+        } else if (layEvent === 'revoke') { //撤销
         	revoke(data);
         }
     });
@@ -112,40 +112,40 @@ layui.config({
 			title: "新增合同",
 			pageId: "crmcontractadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmcontractmanage/mycrmcontractedit.html", 
 			title: "编辑合同",
 			pageId: "crmcontractedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmcontractmanage/mycrmcontractdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmcontractdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
 	// 提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["myCrmContract"]["key"], function (approvalId) {
@@ -173,11 +173,11 @@ layui.config({
 	}
 	
 	// 执行
-	function perform(data){
+	function perform(data) {
 		var msg = '确认执行该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '执行申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract010", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract010", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -185,11 +185,11 @@ layui.config({
 	}
 	
 	// 关闭
-	function close(data){
+	function close(data) {
 		var msg = '确认关闭该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '关闭申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract011", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract011", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -197,11 +197,11 @@ layui.config({
 	}
 	
 	// 搁置
-	function shelve(data){
+	function shelve(data) {
 		var msg = '确认搁置该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '搁置申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract012", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract012", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -209,11 +209,11 @@ layui.config({
 	}
 	
 	// 恢复
-	function recovery(data){
+	function recovery(data) {
 		var msg = '确认恢复该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '恢复申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract013", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract013", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -221,11 +221,11 @@ layui.config({
 	}
 	
 	// 撤销
-	function revoke(data){
+	function revoke(data) {
 		var msg = '确认撤销该合同吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销申请提交' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract016", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "mycrmcontract016", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -245,11 +245,11 @@ layui.config({
 		loadTable();
 	});
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			title: $("#title").val(),
 			customer: $("#customer").val(),

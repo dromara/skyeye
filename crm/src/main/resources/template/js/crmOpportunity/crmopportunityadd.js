@@ -30,7 +30,7 @@ layui.config({
     sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["crmOpportunityFrom"]["key"], 'select', "fromId", '', form);
 
     // 获取当前登录用户所属企业的所有部门信息
-    systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+    systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
         $("#subDepartments").html(getDataUseHandlebars(selOption, data));
         form.render('select');
     });
@@ -166,7 +166,7 @@ layui.config({
 			title: "选择客户",
 			pageId: "customerchooselist",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
                 $("#customName").val(customerMation.customName);
                 $("#industryName").html(customerMation.industryName);
                 $("#city").val(customerMation.city);

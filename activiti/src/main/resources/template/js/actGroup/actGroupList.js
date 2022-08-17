@@ -58,7 +58,7 @@ layui.config({
 				    obj.find("input").select();
 			    	obj.find("input").blur(function(){
 			    		var value = obj.find("input").val();
-			    		if(!isNull(value)){
+			    		if (!isNull(value)){
 			    			if(html != value){
 				    			AjaxPostUtil.request({url: flowableBasePath + "actgroup004", params: {rowId: clickId, groupName: value}, type: 'json', method: "POST", callback: function (json) {
 									obj.find("a[rowid='" + clickId + "']").html(value);
@@ -208,7 +208,7 @@ layui.config({
 	
 	//一键移除指定用户组下的所有用户
 	$("body").on("click", "#delUser", function (e) {
-		if(!isNull(clickId)){
+		if (!isNull(clickId)){
 			var msg = '确认一键移除该用户组下的所有用户吗？';
 			layer.confirm(msg, { icon: 3, title: '一键移除所有用户' }, function (index) {
 				layer.close(index);
@@ -223,7 +223,7 @@ layui.config({
 	});
 	
 	//移除用户
-	function del(data){
+	function del(data) {
 		var msg = '确认移除该用户吗？';
 		layer.confirm(msg, { icon: 3, title: '删除用户' }, function (index) {
 			layer.close(index);
@@ -250,7 +250,7 @@ layui.config({
 		refreshTable();
 	});
 	//搜索条件
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     function refreshTable(){

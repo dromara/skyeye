@@ -40,11 +40,11 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'delet') { //删除
+        } else if (layEvent === 'delet') { //删除
         	delet(data);
-        }else if (layEvent === 'upMove') { //上移
+        } else if (layEvent === 'upMove') { //上移
         	upMove(data);
-        }else if (layEvent === 'downMove') { //下移
+        } else if (layEvent === 'downMove') { //下移
         	downMove(data);
         }
     });
@@ -56,14 +56,14 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "materialCategoryAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 删除
-	function delet(data){
+	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "materialcategory003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
@@ -74,14 +74,14 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/materialCategory/materialCategoryEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "materialCategoryEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -89,7 +89,7 @@ layui.config({
 	}
 	
 	// 上移
-	function upMove(data){
+	function upMove(data) {
         AjaxPostUtil.request({url: flowableBasePath + "materialcategory006", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -97,7 +97,7 @@ layui.config({
 	}
 	
 	// 下移
-	function downMove(data){
+	function downMove(data) {
         AjaxPostUtil.request({url: flowableBasePath + "materialcategory007", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -117,11 +117,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
 		tableTree.reload("messageTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		name: $("#name").val()
     	};

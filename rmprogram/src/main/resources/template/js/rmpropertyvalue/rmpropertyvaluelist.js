@@ -42,7 +42,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
         }
     });
@@ -83,14 +83,14 @@ layui.config({
 	}
 	
 	//编辑分类
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/rmpropertyvalue/rmpropertyvalueedit.html", 
 			title: "编辑标签属性值",
 			pageId: "rmpropertyvalueedit",
 			area: ['700px', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -108,13 +108,13 @@ layui.config({
 			title: "新增标签属性值",
 			pageId: "rmpropertyvalueadd",
 			area: ['700px', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{title: $("#title").val(), propertyValue: $("#propertyValue").val(), propertyId: $("#propertyId").val()}});
     }
     

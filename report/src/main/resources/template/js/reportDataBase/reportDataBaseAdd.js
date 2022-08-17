@@ -30,7 +30,7 @@ layui.config({
             method: "GET",
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter: function(data){
+            ajaxSendAfter: function(data) {
                 dataBaseFrom = [].concat(data.rows);
                 form.render('select');
             }
@@ -46,7 +46,7 @@ layui.config({
             method: "GET",
             ajaxSendLoadBefore: function(hdb){
             },
-            ajaxSendAfter: function(data){
+            ajaxSendAfter: function(data) {
                 poolList = [].concat(data.rows);
                 form.render('select');
             }

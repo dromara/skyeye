@@ -82,7 +82,7 @@ layui.config({
 		table.reloadData("messageTable", {where: getTableParams()});
     });
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			category: $("#category").val(),
 			userName: $("#userName").val(),

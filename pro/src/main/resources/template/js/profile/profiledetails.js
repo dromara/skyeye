@@ -11,7 +11,7 @@ layui.config({
 	    var $ = layui.$;
 	    var useTemplate = $("#useTemplate").html();
 	    
-	    AjaxPostUtil.request({url: flowableBasePath + "profile003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: flowableBasePath + "profile003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			$("#showForm").html(getDataUseHandlebars(useTemplate, json));
 
 			// 附件回显

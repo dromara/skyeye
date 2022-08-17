@@ -23,7 +23,7 @@ layui.config({
 		initGradeId();
 		initTable();
 	});
-	form.on('select(schoolId)', function(data){
+	form.on('select(schoolId)', function(data) {
 		// 加载年级
  		initGradeId();
  		gradeId = "";
@@ -115,14 +115,14 @@ layui.config({
     }
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "", 
 			title: "试题信息",
 			pageId: "",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	

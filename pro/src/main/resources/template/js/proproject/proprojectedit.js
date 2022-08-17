@@ -42,7 +42,7 @@ layui.config({
 			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmProjectType"]["key"], 'select', "typeId", json.bean.typeId, form);
 
 			// 获取当前登录用户所属企业的所有部门信息
-			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
 				$("#departmentId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
 				$("#departmentId").val(json.bean.departmentId);
 				form.render('select');
@@ -62,15 +62,15 @@ layui.config({
 					ajaxSendAfter:function(j){
 						customerList = j.rows;
 						$("#customerId").val(json.bean.customerId);
-						if(!isNull(json.bean.customerId)){
+						if (!isNull(json.bean.customerId)){
 							contractId(json.bean.customerId, 1);
 						}
 						form.render('select');
 					}
 				});
 
-				form.on('select(customerId)', function(data){
-					if(!isNull(data.value) && data.value != '请选择') {
+				form.on('select(customerId)', function(data) {
+					if (!isNull(data.value) && data.value != '请选择') {
 						contractId(data.value, 2);
 						$.each(customerList, function(i, item){
 							if(data.value == item.id){

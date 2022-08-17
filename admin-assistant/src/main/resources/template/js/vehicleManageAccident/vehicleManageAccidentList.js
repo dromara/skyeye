@@ -17,7 +17,7 @@ layui.config({
 	authBtn('1597468393714');
 	
 	// 查询所有的车牌号用于下拉选择框
-	adminAssistantUtil.queryAllVehicleList(function (data){
+	adminAssistantUtil.queryAllVehicleList(function (data) {
 		$("#accidentPlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
 		form.render('select');
 	});
@@ -56,9 +56,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'accidentdetails') { //详情
         	accidentdetails(data);
-        }else if (layEvent === 'accidentdelet'){ //删除
+        } else if (layEvent === 'accidentdelet'){ //删除
         	accidentdelet(data);
-        }else if (layEvent === 'accidentedit'){	//编辑
+        } else if (layEvent === 'accidentedit'){	//编辑
         	accidentedit(data);
         }
     });
@@ -66,19 +66,19 @@ layui.config({
 	form.render();
 	
 	// 事故信息详情
-	function accidentdetails(data){
+	function accidentdetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageAccident/vehicleManageAccidentDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageAccidentDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 删除事故信息
-	function accidentdelet(data){
+	function accidentdelet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "accident003", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -95,21 +95,21 @@ layui.config({
 			title: "车辆事故登记单",
 			pageId: "vehicleManageAccidentAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadAccidentTable();
 			}});
     });
 	
 	// 编辑事故信息
-	function accidentedit(data){
+	function accidentedit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageAccident/vehicleManageAccidentEdit.html", 
 			title: "编辑车辆事故信息",
 			pageId: "vehicleManageAccidentEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadAccidentTable();
 			}});
@@ -128,7 +128,7 @@ layui.config({
     	table.reloadData("accidentTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		accidentTitle: $("#accidentTitle").val(),
     		accidentPlate: $("#accidentPlate").val()

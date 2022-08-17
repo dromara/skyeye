@@ -32,10 +32,10 @@ layui.define(["jquery"], function(exports) {
 									iconStr = '<i class="' + 'fa' + '"></i>';
 								else
 									iconStr = '<i class="' + n.icon + '"></i>';
-								if(!isNull(n.img))
+								if (!isNull(n.img))
 									iconStr = '<img src="' + n.img + '"/>';
 								i += '<li class="';
-								if(!isNull(n.children)){
+								if (!isNull(n.children)){
 									i += 'ui-context-mouse-menu-item';
 								} else {
 									i += 'ui-context-menu-item';
@@ -43,11 +43,11 @@ layui.define(["jquery"], function(exports) {
 								var id = _getRandomString(32);
 								n.id = id;
 								i += '" id="' + id + '"><a href="javascript:void(0);">' + iconStr + '<span>' + n.text + '</span>';
-								if(!isNull(n.children)){
+								if (!isNull(n.children)){
 									i += '<i class="fa fa-caret-right menu-right"></i>';
 								}
 								i += '</a>';
-								if(!isNull(n.children)){
+								if (!isNull(n.children)){
 									i += '<ul class="child-context-menu" style="left: ' + n.width + '">';
 									e.each(n.children, function(index, item) {
 										if(item.text != '--'){
@@ -57,7 +57,7 @@ layui.define(["jquery"], function(exports) {
 												iconChildStr = '<i class="' + 'fa' + '"></i>';
 											else
 												iconChildStr = '<i class="' + item.icon + '"></i>';
-											if(!isNull(item.img))
+											if (!isNull(item.img))
 												iconChildStr = '<img src="' + item.img + '"/>';
 											item.id = id;
 											i += '<li class="ui-context-menu-item';
@@ -83,7 +83,7 @@ layui.define(["jquery"], function(exports) {
 						e.each(menuClick, function(index, item) {
 							//遍历menu json串
 							e.each(menu, function(menuIndex, m) {
-								if(!isNull(m.children)){
+								if (!isNull(m.children)){
 									//遍历子菜单
 									e.each(m.children, function(childIndex, child) {
 										if(child.id === $(item).attr("id")){

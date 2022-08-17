@@ -50,7 +50,7 @@ layui.config({
 	        { field: 'createName', title: '填报人', align: 'left', width: 100},
 	        { field: 'createTime', title: '填报时间', align: 'left', width: 100},
 	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-	        	if(!isNull(d.processInstanceId)){
+	        	if (!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        	} else {
 	        		return "";
@@ -68,27 +68,27 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details'){ //详情
         	details(data);
-        }else if (layEvent === 'processDetails') { //流程详情
+        } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'subApproval') { //提交审批
+        } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data, obj);
-        }else if (layEvent === 'cancellation') { //作废
+        } else if (layEvent === 'cancellation') { //作废
         	cancellation(data, obj);
-        }else if (layEvent === 'del') { //删除
+        } else if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'revoke') { //撤销
+        } else if (layEvent === 'revoke') { //撤销
         	revoke(data);
         }
     });
 
 	// 撤销工作量审批申请
-	function revoke(data){
+	function revoke(data) {
 		var msg = '确认从工作流中撤销选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销任务审批申请' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "proworkload005", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "proworkload005", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -102,7 +102,7 @@ layui.config({
 			title: "新增工作量",
 			pageId: "proworkloadadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -130,7 +130,7 @@ layui.config({
 		var msg = obj ? '确认作废【' + obj.data.title + '】吗？' : '确认作废该任务信息吗？';
 		layer.confirm(msg, { icon: 3, title: '工作量作废' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "proworkload011", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "proworkload011", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -138,26 +138,26 @@ layui.config({
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proworkload/proworkloaddetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "protaskdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proworkload/proworkloadedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "proworkloadedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -188,11 +188,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		proName: $("#proName").val(),
 			workloadName: $("#workloadName").val(),

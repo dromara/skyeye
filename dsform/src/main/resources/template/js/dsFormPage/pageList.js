@@ -49,9 +49,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'control') { // 表单设计
         	control(data);
-        }else if(layEvent === 'delet'){ // 删除
+        } else if (layEven === 'delet'){ // 删除
         	delet(data);
-        }else if(layEvent === 'edit'){ // 编辑
+        } else if (layEven === 'edit'){ // 编辑
         	edit(data);
         }
     });
@@ -63,29 +63,29 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "pageAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 
 	// 表单控件
-	function control(data){
+	function control(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/dsFormPage/dsFormPageDesign.html",
 			title: "表单设计",
 			pageId: "dsFormPageDesign",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
 	// 删除
-	function delet(data){
+	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "dsformpage005", params:{rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "dsformpage005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -93,14 +93,14 @@ layui.config({
 	}
 
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/dsFormPage/pageEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "pageEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -119,11 +119,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
 			pageName: $("#pageName").val(),
 			firstTypeId: $("#firstTypeId").val(),

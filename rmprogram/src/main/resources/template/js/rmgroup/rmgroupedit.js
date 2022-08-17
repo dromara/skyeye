@@ -33,7 +33,7 @@ layui.config({
 				 		
 				 		matchingLanguage();
 				 		form.render();
-				 		form.on('select(selectParent)', function(data){
+				 		form.on('select(selectParent)', function(data) {
 				 			
 				 		});
 				 		

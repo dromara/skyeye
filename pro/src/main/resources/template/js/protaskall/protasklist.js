@@ -84,14 +84,14 @@ layui.config({
     });
 
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/protask/protaskdetails.html", 
 			title: "任务详情",
 			pageId: "protaskdetails",
 			area: ['70vw', '70vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
 	}
@@ -110,11 +110,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
 		tableTree.reload("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
 		var theStartTime = "", theEndTime = "";
 		if (!isNull($("#startTime").val())) {
 			theStartTime = $("#startTime").val().split('~')[0].trim() + ' 00:00:00';

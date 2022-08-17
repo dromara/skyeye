@@ -109,7 +109,7 @@ layui.config({
     });
 
     //详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		var url = erpOrderUtil.getErpDetailUrl(data);
 		_openNewWindows({
@@ -117,7 +117,7 @@ layui.config({
 			title: "单据详情",
 			pageId: "storeHouseApprovalOrderDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -130,7 +130,7 @@ layui.config({
     });
     
     //刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -139,8 +139,8 @@ layui.config({
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
     }
     
-    function getTableParams(){
-    	if(isNull($("#operTime").val())){//一定要记得，当createTime为空时
+    function getTableParams() {
+    	if(isNull($("#operTime").val())) {//一定要记得，当createTime为空时
     		startTime = "";
     		endTime = "";
     	}else {

@@ -24,7 +24,7 @@ layui.config({
 
 	var currentUserId = "";
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		currentUserId = data.bean.id;
 	});
 
@@ -92,7 +92,7 @@ layui.config({
 				var commentName = "";
 				var commentUserId = "";
 				// 获取当前登录员工信息
-				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+				systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 					commentName =  data.bean.userName;
 					commentUserId =  data.bean.id;
 				});
@@ -132,7 +132,7 @@ layui.config({
 			title: "帖子举报",
 			pageId: "forumreport",
 			area: ['40vw', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg("举报成功", {icon: 1, time: 2000});
 			}});
 	});

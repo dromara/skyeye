@@ -32,7 +32,7 @@ layui.config({
 
 	var currentUserId = "";
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		currentUserId = data.bean.id;
 	});
 
@@ -285,7 +285,7 @@ layui.config({
 					title: json.bean.fileName,
 					pageId: "vedioShow",
 					area: ['80vw', '80vh'],
-					callBack: function(refreshCode) {}});
+					callBack: function (refreshCode) {}});
     		}});
 		}else if($.inArray(fileType, officeType) >= 0){//office文件
 			var thisId = $(this).attr("rowid");
@@ -301,7 +301,7 @@ layui.config({
 				title: '在线预览',
 				pageId: "aceShow",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {}});
+				callBack: function (refreshCode) {}});
 		}else if($.inArray(fileType, epubType) >= 0){//电子书
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
 				fileUrl = json.bean.fileAddress;
@@ -311,7 +311,7 @@ layui.config({
 					title: json.bean.fileName,
 					pageId: "epubShow",
 					area: ['90vw', '90vh'],
-					callBack: function(refreshCode) {}});
+					callBack: function (refreshCode) {}});
     		}});
 		}else if($.inArray(fileType, packageType) >= 0){//压缩包
 			AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
@@ -323,7 +323,7 @@ layui.config({
 					pageId: "epubShow",
 					area: ['630px', '450px'],
 					skin: "zip-show",
-					callBack: function(refreshCode) {}});
+					callBack: function (refreshCode) {}});
     		}});
 		}
 	});
@@ -336,7 +336,7 @@ layui.config({
 	
 	// 文件名保存
 	$("body").on("click", ".filename-edit-save", function (e) {
-		if(isNull($(this).parent().find('textarea').val())){
+		if(isNull($(this).parent().find('textarea').val())) {
 			winui.window.msg('请填写文件名', {icon: 2, time: 2000});
 		} else {
 			$(this).parent().parent().css({"z-index": 0});
@@ -364,7 +364,7 @@ layui.config({
 	function initFolderName(folderId){
 		var node = ztree.getNodeByParam("id", folderId, null);
 		var folderName = "";
-		if(!isNull(node)){
+		if (!isNull(node)){
 			// 如果节点不展开，则展开
 			if(!node.open){
 				ztree.expandNode(node);
@@ -471,7 +471,7 @@ layui.config({
 			pageId: "fileMation",
 			area: ['400px', '350px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	});
 	
@@ -512,7 +512,7 @@ layui.config({
 	$("body").on("click", ".openByOnlyOffice", function (e) {
 		var thisId = operaterId;
 		$(".layui-dropdown-menu").hide();
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params:{rowId: thisId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: thisId}, type: 'json', callback: function (json) {
 			fileUrl = json.bean.fileAddress;
 			selFileType = json.bean.fileType;
 			window.open(sysMainMation.homePagePath + "/tpl/fileconsole/officeshow.html?fileUrl=" + fileUrl + "&selFileType=" + selFileType + "&title=" + json.bean.fileName + "&thisId=" + thisId);
@@ -522,7 +522,7 @@ layui.config({
 	// 通过微软office打开office文件
 	$("body").on("click", ".openByMicrosoftOffice", function (e) {
 		$(".layui-dropdown-menu").hide();
-		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params:{rowId: operaterId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole009", params: {rowId: operaterId}, type: 'json', callback: function (json) {
 			window.open('https://view.officeapps.live.com/op/view.aspx?src=http://gzwp.free.idcfengye.com/' + json.bean.fileAddress);
 		}});
 	});
@@ -617,7 +617,7 @@ layui.config({
 			pageId: "fileconsoleupload",
 			area: ['400px', '350px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				loadFileSizeCS = false;//重置让系统加载文件大小
 				loadThisFolderChild();
 			}});
@@ -631,7 +631,7 @@ layui.config({
 			pageId: "filefolderupload",
 			area: ['400px', '350px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				loadFileSizeCS = false;//重置让系统加载文件大小
 				loadThisFolderChild();
 			}});
@@ -645,7 +645,7 @@ layui.config({
 			pageId: "recycleBinListPage",
 			area: ['650px', '480px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				if(folderId === '2'){
 					refreshTreePointNode();
 					loadThisFolderChild();
@@ -661,7 +661,7 @@ layui.config({
 			pageId: "shateFileListPage",
 			area: ['700px', '480px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {}});
+			callBack: function (refreshCode) {}});
 	});
 	
 	// 分享
@@ -673,7 +673,7 @@ layui.config({
 			pageId: "shareFile",
 			area: ['500px', '400px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				loadThisFolderChild();
 			}});
 	});
@@ -686,7 +686,7 @@ layui.config({
 			pageId: "showFileInLinePage",
 			area: ['650px', '480px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {}});
+			callBack: function (refreshCode) {}});
 	});
 	
 	// 新建文件夹
@@ -762,7 +762,7 @@ layui.config({
 			pageId: "shareFile",
 			area: ['500px', '400px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				loadThisFolderChild();
 			}});
 	});
@@ -777,7 +777,7 @@ layui.config({
 			pageId: "fileMation",
 			area: ['400px', '350px'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {}});
+			callBack: function (refreshCode) {}});
 	});
 	
 	var orderBy = '3';
@@ -1005,7 +1005,7 @@ layui.config({
 				} else {
 					direction.vertical = "";
 				}
-				if(!isNull(direction.horizontal + direction.vertical)){
+				if (!isNull(direction.horizontal + direction.vertical)){
 					directionOperation[direction.horizontal + direction.vertical](e);
 					div.checkC();
 				}
@@ -1443,7 +1443,7 @@ layui.config({
 								pageId: "fileconsoleupload",
 								area: ['400px', '350px'],
 								skin: 'add-schedule-mation',
-								callBack: function(refreshCode) {
+								callBack: function (refreshCode) {
 									loadFileSizeCS = false;//重置让系统加载文件大小
 									loadThisFolderChild();
 								}});
@@ -1458,7 +1458,7 @@ layui.config({
 								pageId: "filefolderupload",
 								area: ['400px', '350px'],
 								skin: 'add-schedule-mation',
-								callBack: function(refreshCode) {
+								callBack: function (refreshCode) {
 									loadFileSizeCS = false;//重置让系统加载文件大小
 									loadThisFolderChild();
 								}});
@@ -1481,7 +1481,7 @@ layui.config({
 						} else {
 							if(isJsonFormat(pastedText.replace(/'/g, '"'))){//判断是否是json
 								var pastedJson = JSON.parse(pastedText.replace(/'/g, '"'));//粘贴板数据
-								if(!isNull(pastedJson.id) && !isNull(pastedJson.fileType) && !isNull(pastedJson.name)){
+								if (!isNull(pastedJson.id) && !isNull(pastedJson.fileType) && !isNull(pastedJson.name)){
 									layer.open({
 							            id: '剪贴板内容',
 							            type: 1,
@@ -1510,7 +1510,7 @@ layui.config({
 							pageId: "showFileInLinePage",
 							area: ['650px', '480px'],
 							skin: 'add-schedule-mation',
-							callBack: function(refreshCode) {
+							callBack: function (refreshCode) {
 							}});
 					}
 				}, {
@@ -1532,7 +1532,7 @@ layui.config({
 		} else {
 			if(isJsonFormat(pastedText.replace(/'/g, '"'))){//判断是否是json
 				var pastedJson = JSON.parse(pastedText.replace(/'/g, '"'));//粘贴板数据
-				if(!isNull(pastedJson.id) && !isNull(pastedJson.fileType) && !isNull(pastedJson.type)){
+				if (!isNull(pastedJson.id) && !isNull(pastedJson.fileType) && !isNull(pastedJson.type)){
 					var pastedSaveIds = new Array();//粘贴板数据存储
 					var params = {
 						rowId: pastedJson.id,
@@ -1557,7 +1557,7 @@ layui.config({
 					}else if(pastedJson.type === '2' || pastedJson.type == 2){
 						AjaxPostUtil.request({url: sysMainMation.diskCloudBasePath + "fileconsole035", params: params, type: 'json', callback: function (json) {
 							var selNode = ztree.getNodeByParam("id", pastedJson.id, null);
-							if(!isNull(selNode)){
+							if (!isNull(selNode)){
 								ztree.removeNode(selNode);//移除节点
 							}
 							winui.window.msg("文件粘贴成功", {icon: 1, time: 2000});

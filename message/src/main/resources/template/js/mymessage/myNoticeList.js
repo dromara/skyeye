@@ -41,7 +41,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data);
-        }else if (layEvent === 'sel') { //查看
+        } else if (layEvent === 'sel') { //查看
         	sel(data);
         }
     });
@@ -56,7 +56,7 @@ layui.config({
 	});
 	
 	//查看
-	function sel(data){
+	function sel(data) {
 		rowId = data.id;
 		parentRowId = data.id;
 		AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice003", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -67,7 +67,7 @@ layui.config({
 				area: ['600px', '400px'],
 				shade: false,
 				skin: 'msg-skin-message',
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 			}});
    		}});
 	}
@@ -97,7 +97,7 @@ layui.config({
 				idsStr += item.id + ",";
 			}
 		});
-		if(!isNull(idsStr)){
+		if (!isNull(idsStr)){
 			AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice005", params: {rowIds: idsStr}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
@@ -115,7 +115,7 @@ layui.config({
 		$.each(data, function(i, item){
 			idsStr += item.id + ",";
 		});
-		if(!isNull(idsStr)){
+		if (!isNull(idsStr)){
 			layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {id: "delAllNoticeList", icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType], skin: 'msg-skin-message', success: function(layero, index){
 				var times = $("#delAllNoticeList").parent().attr("times");
 				var zIndex = $("#delAllNoticeList").parent().css("z-index");
@@ -137,7 +137,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{}});
     }
     

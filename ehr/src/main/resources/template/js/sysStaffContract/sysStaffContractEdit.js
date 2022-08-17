@@ -50,7 +50,7 @@ layui.config({
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 
-				systemCommonUtil.getSysCompanyList(function(data){
+				systemCommonUtil.getSysCompanyList(function(data) {
 					// 加载企业数据
 					$("#companyId").html(getDataUseHandlebars(selTemplate, data));
 					$("#companyId").val(json.bean.companyId);

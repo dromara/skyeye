@@ -62,7 +62,7 @@ layui.config({
 	                    }
 	                }},
 			        { field: 'cardTypeName', title: '证件类型', width: 100},
-			        { field: 'cardNumber', title: '证件编号', width: 150},
+			        { field: 'cardNumber', title: '证件编号', width: 150 },
 	                { field: 'politicName', title: '政治面貌', width: 100},
 	                { field: 'workUnit', title: '工作单位', width: 140},
 	                { field: 'job', title: '职务', width: 120},
@@ -358,7 +358,7 @@ layui.config({
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "checkWorkTimeDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 	    });
 	    

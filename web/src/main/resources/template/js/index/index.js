@@ -69,7 +69,7 @@ layui.config({
     	}, 10);
     	var currentUserMation = {};
 		// 获取当前登录员工信息
-		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 			currentUserMation = data.bean;
 		});
 		$("#userPhoto").attr("src", fileBasePath + currentUserMation.userPhoto);
@@ -152,18 +152,18 @@ layui.config({
 								$(_this).parent().prev().remove();
 								$(_this).remove();
 							} else {
-								AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function (json) {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params: {rowId: id}, type: 'json', callback: function (json) {
 									$(_this).parent().prev().remove();
 									$(_this).remove();
 								}});
 							}
 						} else {
 							if(isNull(id)){
-								AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function (json) {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params: {content: content}, type: 'json', callback: function (json) {
 									$(_this).attr("rowid", json.bean.id);
 								}});
 							} else {
-								AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function (json) {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params: {rowId: id,content: content}, type: 'json', callback: function (json) {
 								}});
 							}
 						}
@@ -193,18 +193,18 @@ layui.config({
 								$(_this).parent().prev().remove();
 								$(_this).remove();
 							} else {
-								AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params:{rowId: id}, type: 'json', callback: function (json) {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes004", params: {rowId: id}, type: 'json', callback: function (json) {
 									$(_this).parent().prev().remove();
 									$(_this).remove();
 								}});
 							}
 						} else {
 							if(isNull(id)){
-								AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params:{content: content}, type: 'json', callback: function (json) {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes001", params: {content: content}, type: 'json', callback: function (json) {
 									$(_this).attr("rowid", json.bean.id);
 								}});
 							} else {
-								AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params:{rowId: id,content: content}, type: 'json', callback: function (json) {
+								AjaxPostUtil.request({url: reqBasePath + "stickynotes003", params: {rowId: id,content: content}, type: 'json', callback: function (json) {
 								}});
 							}
 						}
@@ -224,7 +224,7 @@ layui.config({
 			// 判断是否显示锁屏（这个要放在最后执行）
 			if(window.localStorage.getItem("lockscreen") == "true") {
 				winui.lockScreen(function(password) {
-					if(!isNull(password)) {
+					if (!isNull(password)) {
 						var pJudge = false;
 						AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function(json) {
 							pJudge = true;
@@ -285,7 +285,7 @@ layui.config({
 								pageId: "createMenuBoxDialog",
 								area: ['600px', '200px'],
 								skin: 'top-message-mation',
-								callBack: function(refreshCode) {
+								callBack: function (refreshCode) {
 									var boxStr = '<div class="winui-desktop-item win-menu-group" id="' + childParams.id + '" win-id="' + childParams.id + '" win-url="--" win-title="' + childParams.menuBoxName + '" win-opentype="2" win-maxopen="-1" win-menuiconbg="#44adb1">'
 													+ '<div class="winui-icon winui-icon-font">'
 														+ '<div class="icon-drawer"></div>'
@@ -321,7 +321,7 @@ layui.config({
 								pageId: "createMenuDialog",
 								area: ['700px', '450px'],
 								skin: 'top-message-mation',
-								callBack: function(refreshCode) {
+								callBack: function (refreshCode) {
 									var str = '';
 									var iconTypeI = '';
 									var menuIcon = '';
@@ -379,7 +379,7 @@ layui.config({
 					icon: "fa fa-fw fa-power-off",
 					callback: function() {
 						winui.lockScreen(function (password) {
-	   		            	if(!isNull(password)){
+	   		            	if (!isNull(password)){
 		   		         		var pJudge = false;
 		   		         		AjaxPostUtil.request({url: reqBasePath + "login008", params: {password: password}, type: 'json', method: "POST", callback: function (json) {
 									pJudge = true;
@@ -527,7 +527,7 @@ layui.config({
 				returnCallback: function(){
 					var toStrId = friendChooseList.split(",");
 					$.each(toStrId, function(i, item){
-						if(!isNull(item)){
+						if (!isNull(item)){
 							var sendMessage = {
 								to: item,//收信人id
 								type: 7//群组邀请消息
@@ -559,7 +559,7 @@ layui.config({
 		
 		//监听签名修改
 		layim.on('sign', function(value) {
-			AjaxPostUtil.request({url: reqBasePath + "companychat002", params:{userSign: value}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "companychat002", params: {userSign: value}, type: 'json', callback: function (json) {
 				winui.window.msg('保存成功', {icon: 1, skin: 'msg-skin-message'});
  	   		}});
 		});
@@ -682,7 +682,7 @@ layui.config({
                         	icon: ' fa-copy', 
                         	text: '发送到桌面',
                         	callBack: function (id, elem) {
-                        		AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop010", params:{rowId: id}, type: 'json', callback: function (json) {
+                        		AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop010", params: {rowId: id}, type: 'json', callback: function (json) {
 									top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 									var thisMenuIcon = json.bean.icon;
 									var thisMenuBg = json.bean.menuIconBg;
@@ -835,7 +835,7 @@ layui.config({
 		 			});
 		 			$("#showMyNoticeNum").hide();
                     $("#showMyNoticeNum").html("0");
-		 			if(!isNull(idsStr)){
+		 			if (!isNull(idsStr)){
 		 				AjaxPostUtil.request({url: sysMainMation.noticeBasePath + "syseveusernotice006", params: {rowIds: idsStr}, type: 'json', callback: function (json) {
 							$.each(noticeList, function(index, item){
 								setTimeout(function (e) {
@@ -859,7 +859,7 @@ layui.config({
 							pageId: "noticeDetail" + (new Date()).valueOf(),
 							area: ['600px', '400px'],
 							shade: false,
-							callBack: function(refreshCode) {
+							callBack: function (refreshCode) {
 						}});
 						_this.animate({'margin-left': '390px'}, 500, function() {
 							_this.remove();
@@ -939,17 +939,17 @@ layui.config({
         if(menuIcon.indexOf('fa-') != -1){//icon图标
 	        str = '<i class="fa fa-fw title-icon ';//图标+文字
 	        iconStr = '<i class="fa fa-fw title-icon-big ';//图标
-	        if(!isNull(menuIcon)){
+	        if (!isNull(menuIcon)){
 	        	str += menuIcon;
 	        	iconStr += menuIcon;
 	        }
 	        str += '" style="';
 	        iconStr += '" style="';
-	        if(!isNull(menuIconBg)){
+	        if (!isNull(menuIconBg)){
 	        	str += 'background-color: ' + menuIconBg + ';';
 	        	iconStr += 'background-color: ' + menuIconBg + ';';
 	        }
-	        if(!isNull(menuIconColor)){
+	        if (!isNull(menuIconColor)){
 	        	str += 'color: ' + menuIconColor + ';';
 	        	iconStr += 'color: ' + menuIconColor + ';';
 	        }
@@ -1067,7 +1067,7 @@ layui.config({
         					OpenWindow(elem);
         				}
         			});
-        			AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: ""}, type: 'json', callback: function (json) {
+        			AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop004", params: {rowId: thisMenuId, parentId: ""}, type: 'json', callback: function (json) {
     				}});
         			
             	}).on('cancel', function (el, container) {//拖拽取消
@@ -1095,7 +1095,7 @@ layui.config({
     });
     //盒子标题保存
     $("body").on('click', '#saveChildWindow', function (e) {
-    	if(isNull($("#childWindowInput").val())){
+    	if(isNull($("#childWindowInput").val())) {
     		winui.window.msg('请输入盒子标题', {shift: 6, skin: 'msg-skin-message'});
     	} else {
     		var rowId = $(this).attr("rowid");
@@ -1219,7 +1219,7 @@ layui.config({
                                 OpenWindow(elem);
                             }
                         });
-                        AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop004", params:{rowId: thisMenuId, parentId: boxId}, type: 'json', callback: function (json) {
+                        AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop004", params: {rowId: thisMenuId, parentId: boxId}, type: 'json', callback: function (json) {
                         }});
                     }
 					
@@ -1312,7 +1312,7 @@ layui.config({
 								pageId: "editMenuDialog",
 								area: ['700px', '450px'],
 								skin: 'top-message-mation',
-								callBack: function(refreshCode) {
+								callBack: function (refreshCode) {
 									//此处不需要去获取当前滚动展示的模块
 									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-title", childParams.titleName);
 									$("#winui-desktop").find('div[win-id="' + childParams.rowId + '"]').attr("win-url", childParams.menuUrl);
@@ -1356,7 +1356,7 @@ layui.config({
 								pageId: "editMenuBoxDialog",
 								area: ['600px', '200px'],
 								skin: 'top-message-mation',
-								callBack: function(refreshCode) {
+								callBack: function (refreshCode) {
 									$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').attr("win-title", childParams.menuBoxName);
 									$("#winui-desktop").find('div[id="' + childParams.rowId + '"]').find('p').html(childParams.menuBoxName);
 									top.winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});

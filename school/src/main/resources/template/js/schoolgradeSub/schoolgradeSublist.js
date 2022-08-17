@@ -77,14 +77,14 @@ layui.config({
 	});
 	
 	//科目绑定
-	function subBind(data){
+	function subBind(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schoolgradeSub/schoolgradeSubBind.html", 
 			title: "科目绑定",
 			pageId: "schoolgradeSubBind",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -94,7 +94,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	layui.table.reloadData("messageTable", {where: getTableParams()});
     }
     

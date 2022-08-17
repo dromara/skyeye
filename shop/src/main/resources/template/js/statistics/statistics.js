@@ -59,7 +59,7 @@ layui.config({
 
     function getParams(){
         var startTime = "", endTime = "";
-        if(!isNull($("#createTime").val())){
+        if (!isNull($("#createTime").val())) {
             startTime = $("#createTime").val().split('~')[0].trim();
             endTime = $("#createTime").val().split('~')[1].trim();
         }

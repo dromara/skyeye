@@ -98,7 +98,7 @@ layui.config({
         $("body").on("click", "#createPic", function() {
             var styleStr = "";
             $.each(choosePropertyList, function (key, value){
-                if(!isNull(value)){
+                if (!isNull(value)){
                     styleStr += value.code + ":" + value.defaultValue + ";";
                 }
             });
@@ -182,7 +182,7 @@ layui.config({
                 title: "选择属性",
                 pageId: "reportPropertyChoose",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode) {
+                callBack: function (refreshCode) {
                     // 获取表格行号
                     var thisRowNum = trId.replace("tr", "");
                     // 商品赋值

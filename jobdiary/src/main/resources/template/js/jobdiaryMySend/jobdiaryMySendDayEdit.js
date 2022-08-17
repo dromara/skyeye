@@ -178,7 +178,7 @@ layui.config({
 		        				params.completedJob = encodeURIComponent(layedit.getContent(completedContent));
 		        			}
 		        		} else {
-		        			if(isNull($("#completedtext").val())){
+		        			if(isNull($("#completedtext").val())) {
 		        				winui.window.msg('请填写今日已完成工作', {icon: 2, time: 2000});
 		        				return false;
 		        			} else {

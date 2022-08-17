@@ -51,7 +51,7 @@ layui.config({
                     return activitiUtil.showStateName2(d.state, 1);
                 }
             }},
-            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], width: 150},
+            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
         ]],
         done: function(){
@@ -64,15 +64,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details') { // 详情
             details(data);
-        }else if (layEvent === 'edit') { // 编辑
+        } else if (layEvent === 'edit') { // 编辑
             edit(data);
-        }else if (layEvent === 'subApproval') { // 提交审批
+        } else if (layEvent === 'subApproval') { // 提交审批
             subApproval(data);
-        }else if(layEvent === 'cancellation') { // 作废
+        } else if (layEven === 'cancellation') { // 作废
             cancellation(data);
-        }else if(layEvent === 'processDetails') { // 流程详情
+        } else if (layEven === 'processDetails') { // 流程详情
             activitiUtil.activitiDetails(data);
-        }else if(layEvent === 'revoke') { // 撤销申请
+        } else if (layEven === 'revoke') { // 撤销申请
             revoke(data);
         }
     });
@@ -84,14 +84,14 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "bossPersonRequireAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });
 
     // 撤销
-    function revoke(data){
+    function revoke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "revokeBossPersonRequire", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
@@ -102,14 +102,14 @@ layui.config({
     }
 
     // 编辑申请
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossPersonRequire/bossPersonRequireEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "bossPersonRequireEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -117,7 +117,7 @@ layui.config({
     }
 
     // 提交审批
-    function subApproval(data){
+    function subApproval(data) {
         layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
             layer.close(index);
             activitiUtil.startProcess(sysActivitiModel["assetArticlesPurchase"]["key"], function (approvalId) {
@@ -134,7 +134,7 @@ layui.config({
     }
 
     // 作废
-    function cancellation(data){
+    function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "updateBossPersonRequireToCancellation", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
@@ -145,14 +145,14 @@ layui.config({
     }
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossPersonRequire/bossPersonRequireDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossPersonRequireDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -170,13 +170,13 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "", endTime = "";
-        if(!isNull($("#createTime").val())){
+        if (!isNull($("#createTime").val())) {
             startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
         }

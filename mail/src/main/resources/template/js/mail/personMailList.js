@@ -42,41 +42,41 @@ layui.config({
 		var layEvent = obj.event;
 		if (layEvent === 'edit') { //编辑
 			edit(data);
-		}else if (layEvent === 'del') { //删除
+		} else if (layEvent === 'del') { //删除
 			del(data);
-		}else if (layEvent === 'details') { //详情
+		} else if (layEvent === 'details') { //详情
 			details(data);
 		}
 	});
 
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/mail/mailEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "mailEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/mail/mailDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "mailDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 删除
-	function del(data){
+	function del(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.mailBasePath + "maillist009", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
@@ -104,11 +104,11 @@ layui.config({
 		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 	}
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			category: 1,
 			userName: $("#userName").val(),

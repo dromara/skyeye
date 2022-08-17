@@ -87,13 +87,13 @@
                         dialog.buttons[0].setDisabled(false);         //没有选择图片时重新点亮按钮
                     }
                 },
-                uploadCompleteCallback: function(data){               // 单个文件上传完成的回调
+                uploadCompleteCallback: function(data) {               // 单个文件上传完成的回调
                     try{var info = eval("(" + data.info + ")");
                     info && imageUrls.push(info);
                     selectedImageCount--;
                     }catch(e){}
                 },
-                uploadErrorCallback: function (data){         // 单个文件上传失败的回调,
+                uploadErrorCallback: function (data) {         // 单个文件上传失败的回调,
                     console && console.log(data);
                 },
                 allCompleteCallback: function(){              // 全部上传完成时的回调

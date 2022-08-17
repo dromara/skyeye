@@ -25,7 +25,7 @@ layui.config({
             ajaxSendLoadBefore: function(hdb){
             },
             ajaxSendAfter:function(j){
-                skyeyeReportUtil.getReportEditorType('', selOption, function (data){
+                skyeyeReportUtil.getReportEditorType('', selOption, function (data) {
                     var name = getInPoingArr(data, 'id', j.bean.editorType, 'name');
                     $("#editorType").html(name);
                 });

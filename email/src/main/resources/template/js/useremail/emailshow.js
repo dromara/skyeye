@@ -13,13 +13,13 @@ layui.config({
 	var emailContentMobel = $("#emailContentMobel").html();
 	
 	AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail005", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
-		if(!isNull(json.bean.toPeople)){
+		if (!isNull(json.bean.toPeople)){
 			json.bean.toPeople = json.bean.toPeople.split(',');
 		}
-		if(!isNull(json.bean.toCc)){
+		if (!isNull(json.bean.toCc)){
 			json.bean.toCc = json.bean.toCc.split(',');
 		}
-		if(!isNull(json.bean.toBcc)){
+		if (!isNull(json.bean.toBcc)){
 			json.bean.toBcc = json.bean.toBcc.split(',');
 		}
 		var str = getDataUseHandlebars(emailContentMobel, json);

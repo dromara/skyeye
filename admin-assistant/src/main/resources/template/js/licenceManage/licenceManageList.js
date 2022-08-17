@@ -52,9 +52,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details') { //详情
         	details(data);
-        }else if (layEvent === 'delet'){ //删除
+        } else if (layEvent === 'delet'){ //删除
         	delet(data);
-        }else if (layEvent === 'edit'){	//编辑
+        } else if (layEvent === 'edit'){	//编辑
         	edit(data);
         }
     });
@@ -62,23 +62,23 @@ layui.config({
 	form.render();
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/licenceManage/licenceManageDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "licencedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 删除
-	function delet(data){
+	function delet(data) {
 		var msg = '确认删除该证照吗？';
 		layer.confirm(msg, { icon: 3, title: '删除证照' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "licence003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "licence003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -92,21 +92,21 @@ layui.config({
 			title: "新增证照",
 			pageId: "licenceManageAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/licenceManage/licenceManageEdit.html", 
 			title: "编辑证照",
 			pageId: "licenceManageEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -121,11 +121,11 @@ layui.config({
     	table.reloadData("licencelistTable", {page: {curr: 1}, where: getTableParams()});
 	});
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("licencelistTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		licenceName: $("#licenceName").val()
     	};

@@ -23,7 +23,7 @@ layui.config({
 	 	},
 	 	ajaxSendAfter:function (json) {
 	 		form.render();
-	 		form.on('select(selectParent)', function(data){
+	 		form.on('select(selectParent)', function(data) {
 	 			
 	 		});
 	 		form.on('submit(formSearch)', function (data) {
@@ -67,11 +67,11 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'top') { //上移
+        } else if (layEvent === 'top') { //上移
         	topOne(data);
-        }else if (layEvent === 'lower') { //下移
+        } else if (layEvent === 'lower') { //下移
         	lowerOne(data);
         }
     });
@@ -89,7 +89,7 @@ layui.config({
 	}
 	
 	//上移
-	function topOne(data){
+	function topOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx013", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -97,7 +97,7 @@ layui.config({
 	}
 	
 	//下移
-	function lowerOne(data){
+	function lowerOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmxcx014", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -105,14 +105,14 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/rmgroup/rmgroupedit.html", 
 			title: "编辑分组",
 			pageId: "rmgroupedit",
 			area: ['600px', '50vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -130,13 +130,13 @@ layui.config({
 			title: "新增分组",
 			pageId: "rmgroupadd",
 			area: ['600px', '50vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{rmGroupName:$("#rmGroupName").val(), rmTypeId:$("#rmTypeId").val()}});
     }
     

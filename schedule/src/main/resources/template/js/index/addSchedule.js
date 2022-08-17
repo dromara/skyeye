@@ -89,7 +89,7 @@ layui.config({
  		});
 	    
 	    //选中日程日历进行添加日程
-	    if(!isNull(parent.childParams)){
+	    if (!isNull(parent.childParams)){
 	    	if(!parent.childParams.allDay){//不是全天
 	    		$("#allDay").attr("checked", false);
 	    		$("#allDay").val(false);
@@ -147,11 +147,11 @@ layui.config({
 					imported: data.field.scheduleImport,
  	        	};
 	        	if(data.field.allDay || data.field.allDay == 'true'){//全天
-	        		if(isNull($("#scheduleStartTime").val())){
+	        		if(isNull($("#scheduleStartTime").val())) {
 	        			layer.msg("请选择开始时间", {icon: 5, shift: 6});
 	        			return false;
 	        		}
-	        		if(isNull($("#scheduleEndTime").val())){
+	        		if(isNull($("#scheduleEndTime").val())) {
 	        			layer.msg('请选择结束时间', {icon: 5, shift: 6});
 	        			return false;
 	        		}
@@ -159,15 +159,15 @@ layui.config({
 	        		params.scheduleStartTime = $("#scheduleStartTime").val() + " 00:00:00";
 	        		params.scheduleEndTime = $("#scheduleEndTime").val() + " 23:59:59";
 	        	} else {
-	        		if(isNull($("#scheduleDayTime").val())){
+	        		if(isNull($("#scheduleDayTime").val())) {
 	        			layer.msg('请填写日程日期', {icon: 5, shift: 6});
 	        			return false;
 	        		}
-	        		if(isNull($("#scheduleDayStartTime").val())){
+	        		if(isNull($("#scheduleDayStartTime").val())) {
 	        			layer.msg('请填写日程开始时间', {icon: 5, shift: 6});
 	        			return false;
 	        		}
-	        		if(isNull($("#scheduleDayEndTime").val())){
+	        		if(isNull($("#scheduleDayEndTime").val())) {
 	        			layer.msg('请填写日程结束时间', {icon: 5, shift: 6});
 	        			return false;
 	        		}
@@ -176,7 +176,7 @@ layui.config({
 	        		params.scheduleEndTime = $("#scheduleDayTime").val() + " " + $("#scheduleDayEndTime").val() + ":00";
 	        	}
 	        	if(params.type == '5'){
-	        		if(isNull($("#scheduleTypeName").val())){
+	        		if(isNull($("#scheduleTypeName").val())) {
 	        			layer.msg('请填写日程类型', {icon: 5, shift: 6});
 	        			return false;
 	        		}

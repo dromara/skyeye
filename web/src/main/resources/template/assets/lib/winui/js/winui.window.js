@@ -64,7 +64,7 @@ layui.define(['layer', 'winui'], function (exports) {
         if(isNull(options.addToButtomMenu) && options.addToButtomMenu != false){
         	options.addToButtomMenu = true;
         }
-        if(!isNull(options.move) || options.move == false){
+        if (!isNull(options.move) || options.move == false){
         	MOVE = options.move;
         }
         if(isNull(options.fixed) && options.fixed != false){
@@ -173,7 +173,7 @@ layui.define(['layer', 'winui'], function (exports) {
             }
         });
         var windowDom = common.getWindow(options.id);
-        if(!isNull(windowDom)){
+        if (!isNull(windowDom)){
         	//重新获取window
             if (((options.type || this.settings.type) == 2) && (options.refresh === undefined ? this.settings.refresh : options.refresh)) {
                 $(windowDom).find('.layui-layer-setwin').prepend('<a class="layui-layer-ico layui-layer-refresh"><i class="layui-icon" style="font-size:14px;left:17px;font-weight:600;">&#x1002;<i></a>');
@@ -417,20 +417,20 @@ layui.define(['layer', 'winui'], function (exports) {
         	var body = $(window).find('iframe').contents().find('body');
             if (body) {
             	var str = '<div class="page-load" ';
-            	if(!isNull(options.loadBgColor)){
+            	if (!isNull(options.loadBgColor)){
             		str += 'style="background-color:' + options.loadBgColor + ';';
-            		if(!isNull(options.zIndex)){
+            		if (!isNull(options.zIndex)){
             			var zIndex = options.zIndex + 1;
             			str += 'z-index:' + zIndex;
             		}
             		str += '"';
             	}
             	str += '>';
-            	if(!isNull(options.loadIcon)){
+            	if (!isNull(options.loadIcon)){
             		str += '<div class="page-icon">';
             		if(options.loadIcon.indexOf('fa-') != -1){//icon
 	            		str += '<i class="fa page-icon-title fa-fw ' + options.loadIcon + '" ';
-	            		if(!isNull(options.loadIconColor)){
+	            		if (!isNull(options.loadIconColor)){
 	                    	str += 'style="color: ' + options.loadIconColor + '" ';
 	                    } else {
 	                    	str += 'style="color: white" ';
@@ -593,7 +593,7 @@ layui.define(['layer', 'winui'], function (exports) {
             options = {};
         }
         options.zIndex = layer.zIndex;
-        if(!isNull(options.skin))
+        if (!isNull(options.skin))
         	options.skin += ' layer-ext-winconfirm';
         else
         	options.skin = 'layer-ext-winconfirm';

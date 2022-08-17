@@ -40,7 +40,7 @@ layui.config({
 			initBodyMindId();
 		});
         // 学校监听事件
-		form.on('select(schoolId)', function(data){
+		form.on('select(schoolId)', function(data) {
 			// 加载年级
 	 		initGradeId();
 	 		// 加载交通方式
@@ -116,7 +116,7 @@ layui.config({
 	    }
 	    
 	    //年级监听事件
-		form.on('select(gradeId)', function(data){
+		form.on('select(gradeId)', function(data) {
 			if(isNull(data.value) || data.value === '请选择'){
 		 		$("#classId").html("");
 				form.render('select');
@@ -127,7 +127,7 @@ layui.config({
 		});
 		
 		//学前教育变化事件
-		form.on('radio(preschoolEducation)', function(data){
+		form.on('radio(preschoolEducation)', function(data) {
 			if(data.value == 1){
 				$("#preschoolSchoolBox").show();
 			} else {
@@ -144,7 +144,7 @@ layui.config({
 			 	pagination: false,
 			 	template: getFileContent('tpl/template/select-option.tpl'),
 			 	ajaxSendLoadBefore: function(hdb){},
-			 	ajaxSendAfter:function(data){
+			 	ajaxSendAfter:function(data) {
 			 		form.render('select');
 			 	},
 			 	ajaxSendErrorAfter: function (json) {

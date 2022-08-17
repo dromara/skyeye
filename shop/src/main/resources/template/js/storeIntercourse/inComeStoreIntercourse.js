@@ -71,7 +71,7 @@ layui.config({
         }
     });
 
-    function confirmPay(data){
+    function confirmPay(data) {
         var msg = "是否收到（" + data.mealByStoreName + "）支付的：" + data.mealAllSinglePrice + "元保养往来费用？";
         layer.confirm(msg, { icon: 3, title: '提示' }, function (index) {
             var params = {
@@ -85,7 +85,7 @@ layui.config({
         });
     }
 
-    function queryDetail(data){
+    function queryDetail(data) {
         intercourseTime = data.intercourseTime;
         keepfiStoreId = data.keepfiStoreId;
         mealByStoreId = data.mealByStoreId;
@@ -94,7 +94,7 @@ layui.config({
             title: '明细',
             pageId: "dayKeepFitOrderList",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -112,13 +112,13 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "", endTime = "";
-        if(!isNull($("#intercourseTime").val())){
+        if (!isNull($("#intercourseTime").val())) {
             startTime = $("#intercourseTime").val().split('~')[0].trim();
             endTime = $("#intercourseTime").val().split('~')[1].trim();
         }

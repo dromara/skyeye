@@ -84,19 +84,19 @@ layui.config({
 	form.render();
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/conFerenceRoom/conFerenceRoomDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "conFerenceRoomDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 维修
-	function repair(data){
+	function repair(data) {
 		var msg = '确认维修该会议室吗？';
 		layer.confirm(msg, { icon: 3, title: '维修会议室' }, function (index) {
 			layer.close(index);
@@ -108,7 +108,7 @@ layui.config({
 	}
 	
 	// 报废
-	function scrap(data){
+	function scrap(data) {
 		var msg = '确认报废该会议室吗？';
 		layer.confirm(msg, { icon: 3, title: '报废会议室' }, function (index) {
 			layer.close(index);
@@ -120,7 +120,7 @@ layui.config({
 	}
 	
 	// 恢复正常
-	function normal(data){
+	function normal(data) {
 		var msg = '确认对该会议室恢复正常吗？';
 		layer.confirm(msg, { icon: 3, title: '恢复正常操作' }, function (index) {
 			layer.close(index);
@@ -132,7 +132,7 @@ layui.config({
 	}
 
 	// 删除
-	function delet(data){
+	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "conferenceroom003", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -149,21 +149,21 @@ layui.config({
 			title: "新增会议室",
 			pageId: "conFerenceRoomAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/conFerenceRoom/conFerenceRoomEdit.html", 
 			title: "编辑会议室",
 			pageId: "conFerenceRoomEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -178,7 +178,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -186,7 +186,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		roomName:$("#roomName").val(),
     		state:$("#state").val()

@@ -18,7 +18,7 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$("#useTitle").html("资产领用申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
 		$("#useName").html(data.bean.userName);
 	});
@@ -36,7 +36,7 @@ layui.config({
 		form.on('select(selectTypeProperty)', function(data) {
 			var thisRowNum = data.elem.id.replace("typeId", "");
 			var thisRowValue = data.value;
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				if(inPointArray(thisRowValue, assetList)) {
 					//类型对应的资产存在js对象中
 					var list = getListPointArray(thisRowValue, assetList);
@@ -59,7 +59,7 @@ layui.config({
 			var thisRowNum = data.elem.id.replace("assetId", "");
 			var thisRowValue = data.value;
 			var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				var list = getListPointArray(thisRowTypeChooseId, assetList);
 				$.each(list, function(i, item) {
 					if(item.id === thisRowValue) {

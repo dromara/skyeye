@@ -226,7 +226,7 @@ layui.config({
     function calcOvertimeHour(num){
         var startTime = $("#overtimeStartTime" + num).val();
         var endTime = $("#overtimeEndTime" + num).val();
-        if(!isNull(startTime) && !isNull(endTime)){
+        if (!isNull(startTime) && !isNull(endTime)){
             var hour = division(timeDifference(startTime, endTime), 60);
             $("#overtimeHour" + num).html(hour);
         }

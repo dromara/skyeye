@@ -20,7 +20,7 @@ layui.config({
  		// 语种
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["employeeLanguages"]["key"], 'select', "languageId", '', form);
 
-	    form.on('select(languageId)', function(data){
+	    form.on('select(languageId)', function(data) {
 			if(isNull(data.value) || data.value === '请选择'){
 				$("#levelId").html("");
 				form.render('select');

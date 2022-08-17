@@ -41,7 +41,7 @@ layui.config({
             cols: [[
                 { type: 'radio'},
                 { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-                { field: 'name', title: '名称', align: 'left', width: 150},
+                { field: 'name', title: '名称', align: 'left', width: 150 },
                 { field: 'typeName', title: '来源', align: 'left', width: 100 },
                 { field: 'remark', title: '备注', align: 'left', width: 150 },
                 { field: 'createName', title: '创建人', align: 'left', width: 100 },
@@ -89,15 +89,15 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable(){
+    function refreshloadTable() {
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             name: $("#name").val(),
             type: $("#dataFromType").val()

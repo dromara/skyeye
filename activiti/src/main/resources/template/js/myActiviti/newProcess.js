@@ -66,7 +66,7 @@ layui.config({
             title: title,
             pageId: "openLaunchTaskPage",
 			area: ['100vw', '100vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
             }});
     });

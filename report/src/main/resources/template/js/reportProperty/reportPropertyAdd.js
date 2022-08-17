@@ -54,7 +54,7 @@ layui.config({
                         return false;
                     }
                 } else {
-                    if(isNull($("#defaultValue").val())){
+                    if(isNull($("#defaultValue").val())) {
                         winui.window.msg('请填写默认值', {icon: 2, time: 2000});
                         return false;
                     }

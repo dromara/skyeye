@@ -27,7 +27,7 @@ layui.config({
 				}
 			}
 		};
-		if(!isNull(json.bean.content)){
+		if (!isNull(json.bean.content)){
 			param["data"] = JSON.parse(json.bean.content);
 		}
 		luckysheet.create(param);

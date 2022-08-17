@@ -21,7 +21,7 @@ layui.config({
 		initTable();
 	});
 	//学校监听事件
-	form.on('select(schoolId)', function(data){
+	form.on('select(schoolId)', function(data) {
 		//加载年级
  		initGradeId();
 	});
@@ -79,7 +79,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'assignmentClass') { //分班
 	        	assignmentClass(data);
-	        }else if (layEvent === 'details') { //详情
+	        } else if (layEvent === 'details') { //详情
 	        	details(data);
 	        }
 	    });
@@ -91,28 +91,28 @@ layui.config({
 	});
 	
 	//分班
-	function assignmentClass(data){
+	function assignmentClass(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schoolstudentmation/assignmentClass.html", 
 			title: "分班",
 			pageId: "assignmentClass",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schoolstudentmation/schoolStudentDetail.html", 
 			title: "学生信息",
 			pageId: "schoolStudentDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -121,7 +121,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     

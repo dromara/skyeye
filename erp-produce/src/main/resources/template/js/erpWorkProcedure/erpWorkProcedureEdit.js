@@ -29,7 +29,7 @@ layui.config({
             	textool.init({eleId: 'content', maxlength: 200});
 
                 // 获取当前登录用户所属企业的所有部门信息
-                systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+                systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
                     $("#departmentId").html(getDataUseHandlebars(selOption, data));
                     $("#departmentId").val(json.bean.departmentId);
                     form.render('select');
@@ -44,7 +44,7 @@ layui.config({
                     template: selOption,
                     ajaxSendLoadBefore: function(hdb){
                     },
-                    ajaxSendAfter: function(data){
+                    ajaxSendAfter: function(data) {
                         $("#procedureType").val(json.bean.procedureType);
                         form.render('select');
                     }

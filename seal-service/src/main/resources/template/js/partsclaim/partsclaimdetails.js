@@ -19,7 +19,7 @@ layui.config({
 		 	template: beanTemplate,
 		 	ajaxSendAfter:function (json) {
 				// 获取当前登录员工信息
-				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+				systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 					$("#orderDetailTitle").html(data.bean.companyName + '配件申领订单');
 				});
 				// 附件回显

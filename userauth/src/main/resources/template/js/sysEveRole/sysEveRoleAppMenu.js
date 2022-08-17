@@ -60,7 +60,7 @@ layui.config({
 	    /********* tree 处理   start *************/
 		var tree;
 
-		AjaxPostUtil.request({url: reqBasePath + "sys038", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "sys038", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			$("#roleName").text(json.bean.roleName);
 			$("#roleDesc").text(json.bean.roleDesc);
 			checkeRows = json.rows;
@@ -202,7 +202,7 @@ layui.config({
 	    function CheckChildNodesIsContainKeyword(pNode) {
 	    	var childs = pNode.children;
 	    	var isexit = true;
-	    	if(!isNull(childs)){
+	    	if (!isNull(childs)){
 	    		for(var i = 0; i < childs.length; i++) {
 	    			if(childs[i].isParent) {
 	    				isexit = CheckChildNodesIsContainKeyword(childs[i]);

@@ -119,7 +119,7 @@ layui.config({
 				title: "工序选择",
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					loadUseTableMation(trId, procedureMation);
 				}});
 	    });
@@ -155,7 +155,7 @@ layui.config({
 				title: "车间选择",
 				pageId: "erpFarmChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					loadFarmUseTableMation(trId, farmMation);
 				}});
 	    });

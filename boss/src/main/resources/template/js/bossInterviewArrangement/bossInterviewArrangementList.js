@@ -38,7 +38,7 @@ layui.config({
             { field: 'state', title: '面试状态', width: 160, templet: function (d) {
                 return bossUtil.showStateName(d.state);
             }},
-            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 150},
+            { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
         ]],
         done: function(){
@@ -51,13 +51,13 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details') { // 详情
             details(data);
-        }else if (layEvent === 'edit') { // 编辑
+        } else if (layEvent === 'edit') { // 编辑
             edit(data);
-        }else if (layEvent === 'sub') { // 提交
+        } else if (layEvent === 'sub') { // 提交
             sub(data);
-        }else if(layEvent === 'cancellation') { // 作废
+        } else if (layEven === 'cancellation') { // 作废
             cancellation(data);
-        }else if(layEvent === 'inductionResult') { // 入职
+        } else if (layEven === 'inductionResult') { // 入职
             inductionResult(data);
         }
     });
@@ -69,21 +69,21 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "bossInterviewArrangementAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "bossInterviewArrangementEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -91,14 +91,14 @@ layui.config({
     }
 
     // 入职
-    function inductionResult(data){
+    function inductionResult(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossInterviewArrangement/inductionResult.html",
             title: '入职',
             pageId: "inductionResult",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -106,7 +106,7 @@ layui.config({
     }
 
     // 提交
-    function sub(data){
+    function sub(data) {
         layer.confirm('确认提交该数据吗？', {icon: 3, title: '提交操作'}, function (index) {
             layer.close(index);
             var params = {
@@ -120,7 +120,7 @@ layui.config({
     }
 
     // 作废
-    function cancellation(data){
+    function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "nullifyBossInterviewArrangement", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
@@ -131,14 +131,14 @@ layui.config({
     }
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/bossInterviewArrangement/bossInterviewArrangementDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "bossInterviewArrangementDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -156,13 +156,13 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "", endTime = "";
-        if(!isNull($("#createTime").val())){
+        if (!isNull($("#createTime").val())) {
             startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
         }

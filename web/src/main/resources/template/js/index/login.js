@@ -11,7 +11,7 @@ layui.config({
 		var $ = layui.$;
 
 		// 系统配置文件
-		jsGetJsonFile("../../configRation.json", function(data){
+		jsGetJsonFile("../../configRation.json", function(data) {
 			sysMainMation = data;
 			localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
 		});

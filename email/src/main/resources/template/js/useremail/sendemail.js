@@ -20,7 +20,7 @@ layui.config({
 		var enclosureList = [];
 		var toPeopleList = [], toCcList = [], toBccList = [];
 
-	    if(!isNull(id)){
+	    if (!isNull(id)){
 	    	// 草稿箱获取数据
 			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail014", params: {rowId: id}, type: 'json', callback: function (json) {
 				$("#typeName").val(json.bean.title);
@@ -43,7 +43,7 @@ layui.config({
 
 
 				$.each(json.bean.emailEnclosureList, function(i, item){
-					if(!isNull(item.sysEnclosureId)){
+					if (!isNull(item.sysEnclosureId)){
 						enclosureList.push({
 							id: item.sysEnclosureId,
 							name: item.fileName,
@@ -60,7 +60,7 @@ layui.config({
 			}, async: false});
 		}
 
-		if(!isNull(forwardId)){
+		if (!isNull(forwardId)){
 			// 邮件回复获取数据
 			AjaxPostUtil.request({url: sysMainMation.emailBasePath + "useremail017", params: {rowId: forwardId}, type: 'json', callback: function (json) {
 				$("#typeName").val(json.bean.title);
@@ -84,7 +84,7 @@ layui.config({
 
 
 				$.each(json.bean.emailEnclosureList, function(i, item){
-					if(!isNull(item.sysEnclosureId)){
+					if (!isNull(item.sysEnclosureId)){
 						enclosureList.push({
 							id: item.sysEnclosureId,
 							name: item.fileName,
@@ -179,11 +179,11 @@ layui.config({
  	    	if(isNull(id) && isNull(forwardId)){
 				save(data, "useremail013");
 			}
- 	    	if(!isNull(id)){
+ 	    	if (!isNull(id)){
 				// 草稿箱保存
 				save(data, "useremail015");
 			}
-			if(!isNull(forwardId)){
+			if (!isNull(forwardId)){
 				// 转发保存
 				save(data, "useremail015");
 			}
@@ -194,11 +194,11 @@ layui.config({
 			if(isNull(id) && isNull(forwardId)){
 				save(data, "useremail012");
 			}
-			if(!isNull(id)){
+			if (!isNull(id)){
 				// 草稿箱发送
 				save(data, "useremail016");
 			}
-			if(!isNull(forwardId)){
+			if (!isNull(forwardId)){
 				// 转发发送
 				save(data, "useremail019");
 			}
@@ -216,7 +216,7 @@ layui.config({
 				   	return false;
 			   	}
 			   	var typeName = "(无主题)";
-			   	if(!isNull($("#typeName").val())){
+			   	if (!isNull($("#typeName").val())) {
 				   	typeName = $("#typeName").val();
 			   	}
 
@@ -284,7 +284,7 @@ layui.config({
 				title: "选择邮件模板",
 				pageId: "emailSendModelListChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					$("#typeName").val(emailSendModel.title);
 					$('#toPeople').tagEditor('destroy')
 					$('#toPeople').tagEditor({
@@ -312,9 +312,9 @@ layui.config({
 			str += '<div><b>发件人:</b>&nbsp;' + sendEmail + '&gt;;</div>';
 			str += '<div><b>发送时间:</b>&nbsp;' + sendTime + '</div>';
 			str += '<div><b>收件人:</b>&nbsp;' + toPeople + 'com&gt;;<wbr></div>';
-			if(!isNull(toCc))
+			if (!isNull(toCc))
 				str += '<div><b>抄送人:</b>&nbsp;' + toCc + 'com&gt;;<wbr></div>';
-			if(!isNull(toBcc))
+			if (!isNull(toBcc))
 				str += '<div><b>暗送人:</b>&nbsp;' + toBcc + 'com&gt;;<wbr></div>';
 			str += '<div></div><div><b>主题:</b>&nbsp;' + title + '</div>';
 			str += '</div>';

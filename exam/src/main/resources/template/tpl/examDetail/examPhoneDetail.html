@@ -740,7 +740,7 @@
 						form = layui.form;
 					//手机端加载该页面时加载userToken
 					var userToken = GetUrlParam("userToken");
-					if(!isNull(userToken)){
+					if (!isNull(userToken)){
 						setCookie('userToken', userToken);
 					}
 	 	   			showGrid({
@@ -1006,9 +1006,9 @@
 					// 加载答案附件上传
 					function loadUploadPic(qBodyItem, bean){
 						var str = "";
-						if(!isNull(bean.url)){
+						if (!isNull(bean.url)){
 							$.each(bean.url.split(','), function(i, item){
-								if(!isNull(item)){
+								if (!isNull(item)){
 									str += '<img src="' + item + '" class="photo-img pictureItem">';
 								}
 							});

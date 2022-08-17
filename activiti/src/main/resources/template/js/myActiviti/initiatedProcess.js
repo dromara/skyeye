@@ -41,7 +41,7 @@ layui.config({
 	        { field: 'processInstanceId', title: '流程ID', width: 100 },
 	        { field: 'taskType', title: '类型', width: 100 },
 	        { field: 'createName', title: '申请人', width: 100},
-	        { field: 'createTime', title: '申请时间', align: 'center', width: 150},
+	        { field: 'createTime', title: '申请时间', align: 'center', width: 150 },
 	        { field: 'name', title: '当前节点', width: 130, templet: function (d) {
 	        	return '[' + d.name + ']';
 	        }},
@@ -82,7 +82,7 @@ layui.config({
     });
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		sequenceId = data.sequenceId;
 		taskId = data.id;
 		processInstanceId = data.processInstanceId;
@@ -92,21 +92,21 @@ layui.config({
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "myactivitiedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}
 		});
 	}
 
 	//撤销
-	function revoke(data){
+	function revoke(data) {
 		if(isNull(data.revokeMapping)){//撤销接口为空
 			winui.window.msg('撤销接口调用失败', {icon: 2, time: 2000});
 			return false;
 		}
 		layer.confirm('确定撤销该流程吗？', { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-	        AjaxPostUtil.request({url: flowableBasePath + data.revokeMapping, params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+	        AjaxPostUtil.request({url: flowableBasePath + data.revokeMapping, params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("撤销成功", {icon: 1, time: 2000});
 				reloadMyStartTable();
 			}});
@@ -114,7 +114,7 @@ layui.config({
 	}
 	
 	//刷新流程图
-	function refreshPic(data){
+	function refreshPic(data) {
 		layer.confirm('确认重新生成流程图吗？', { icon: 3, title: '刷新流程图操作' }, function (i) {
 			layer.close(i);
             AjaxPostUtil.request({url:flowableBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
@@ -134,7 +134,7 @@ layui.config({
 	});
 	
     function reloadMyStartTable(){
-    	if(!isNull($("#createTime").val())){//一定要记得，当createTime为空时
+    	if (!isNull($("#createTime").val())) {//一定要记得，当createTime为空时
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
     	} else {
@@ -145,7 +145,7 @@ layui.config({
     }
     
     function searchMyStartTable(){
-    	if(!isNull($("#createTime").val())){//一定要记得，当createTime为空时
+    	if (!isNull($("#createTime").val())) {//一定要记得，当createTime为空时
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
     	} else {

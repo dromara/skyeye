@@ -50,7 +50,7 @@ layui.config({
 		if (winui.verifyForm(data.elem)) {
 			var pId = '0';
 			if($("input[name='companyType']:checked").val() == '2'){
-				if(isNull($("#OverAllCompany").val())){
+				if(isNull($("#OverAllCompany").val())) {
 					winui.window.msg('请选择总公司', {icon: 2, time: 2000});
 					return false;
 				} else {
@@ -58,16 +58,16 @@ layui.config({
 				}
 			}
 			var provinceId = "", cityId = "", areaId = "", townshipId = "";
-			if(!isNull($("#provinceId").val())){
+			if (!isNull($("#provinceId").val())) {
 				provinceId = $("#provinceId").val();
 			}
-			if(!isNull($("#cityId").val())){
+			if (!isNull($("#cityId").val())) {
 				cityId = $("#cityId").val();
 			}
-			if(!isNull($("#areaId").val())){
+			if (!isNull($("#areaId").val())) {
 				areaId = $("#areaId").val();
 			}
-			if(!isNull($("#townshipId").val())){
+			if (!isNull($("#townshipId").val())) {
 				townshipId = $("#townshipId").val();
 			}
 			var params = {
@@ -114,21 +114,21 @@ layui.config({
 		return false;
 	});
 
-	form.on('select(areaProvince)', function(data){
+	form.on('select(areaProvince)', function(data) {
 		layui.$(data.elem).parent('dd').nextAll().remove();
 		if(isNull(data.value) || data.value == '请选择'){
 		} else {
 			loadChildCityArea();
 		}
 	});
-	form.on('select(areaCity)', function(data){
+	form.on('select(areaCity)', function(data) {
 		layui.$(data.elem).parent('dd').nextAll().remove();
 		if(isNull(data.value) || data.value == '请选择'){
 		} else {
 			loadChildArea();
 		}
 	});
-	form.on('select(area)', function(data){
+	form.on('select(area)', function(data) {
 		layui.$(data.elem).parent('dd').nextAll().remove();
 		if(isNull(data.value) || data.value == '请选择'){
 		} else {
@@ -138,7 +138,7 @@ layui.config({
 
 	//省级行政区划
 	function loadChildProvinceArea(){
-		AjaxPostUtil.request({url: reqBasePath + "commontarea001", params:{}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "commontarea001", params: {}, type: 'json', callback: function (json) {
 			var str = '<dd class="layui-col-xs3"><select id="provinceId" win-verify="required" lay-filter="areaProvince" lay-search=""><option value="">请选择</option>';
 			for(var i = 0; i < json.rows.length; i++){
 				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -151,7 +151,7 @@ layui.config({
 
 	//市级行政区划
 	function loadChildCityArea(){
-		AjaxPostUtil.request({url: reqBasePath + "commontarea002", params:{rowId: $("#provinceId").val()}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "commontarea002", params: {rowId: $("#provinceId").val()}, type: 'json', callback: function (json) {
 			var str = '<dd class="layui-col-xs3"><select id="cityId" lay-filter="areaCity" lay-search=""><option value="">请选择</option>';
 			for(var i = 0; i < json.rows.length; i++){
 				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -164,7 +164,7 @@ layui.config({
 
 	//县级行政区划
 	function loadChildArea(){
-		AjaxPostUtil.request({url: reqBasePath + "commontarea003", params:{rowId: $("#cityId").val()}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "commontarea003", params: {rowId: $("#cityId").val()}, type: 'json', callback: function (json) {
 			var str = '<dd class="layui-col-xs3"><select id="areaId" lay-filter="area" lay-search=""><option value="">请选择</option>';
 			for(var i = 0; i < json.rows.length; i++){
 				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';
@@ -177,7 +177,7 @@ layui.config({
 
 	//镇级行政区划
 	function loadChildAreaTownShip(){
-		AjaxPostUtil.request({url: reqBasePath + "commontarea004", params:{rowId: $("#areaId").val()}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "commontarea004", params: {rowId: $("#areaId").val()}, type: 'json', callback: function (json) {
 			var str = '<dd class="layui-col-xs3"><select id="townshipId" lay-filter="areaTownShip" lay-search=""><option value="">请选择</option>';
 			for(var i = 0; i < json.rows.length; i++){
 				str += '<option value="' + json.rows[i].id + '">' + json.rows[i].name + '</option>';

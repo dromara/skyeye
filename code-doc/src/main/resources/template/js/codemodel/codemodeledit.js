@@ -47,7 +47,7 @@ layui.config({
 		 		
 		 		matchingLanguage();
 		 		form.render();
-		 		form.on('select(selectParent)', function(data){
+		 		form.on('select(selectParent)', function(data) {
 					var mode = returnModel($("#modelType").val());
 					if (!isNull(mode.length)) {
 						editor.setOption('mode', mode)

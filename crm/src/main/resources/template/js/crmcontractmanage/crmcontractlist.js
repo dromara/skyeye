@@ -48,7 +48,7 @@ layui.config({
 	        { field: 'signingTime', title: '签约日期', align: 'center', width: 100 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 },
 	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-	        	if(!isNull(d.processInstanceId)){
+	        	if (!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        	} else {
 	        		return "";
@@ -84,7 +84,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details'){ //详情
         	details(data);
-        }else if (layEvent === 'processDetails') { //流程详情
+        } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
         }
     });
@@ -92,14 +92,14 @@ layui.config({
 	form.render();
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmcontractmanage/mycrmcontractdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmcontractdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -111,7 +111,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -119,7 +119,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		title: $("#title").val(),
     		customer: $("#customer").val(),

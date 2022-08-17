@@ -51,9 +51,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { // 编辑
         	edit(data);
-        }else if (layEvent === 'delete'){ // 删除
+        } else if (layEvent === 'delete'){ // 删除
         	del(data);
-        }else if (layEvent === 'details'){ // 详情
+        } else if (layEvent === 'details'){ // 详情
         	details(data);
         }
     });
@@ -65,35 +65,35 @@ layui.config({
 			title: "新增跟单",
 			pageId: "documentaryAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/documentarymanage/documentaryedit.html", 
 			title: "编辑跟单",
 			pageId: "documentaryedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/documentarymanage/documentaryDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "documentaryDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -120,14 +120,14 @@ layui.config({
 		loadTable();
 	});
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
 		var startTime = "";
 		var endTime = "";
-		if(!isNull($("#documentaryTime").val())){
+		if (!isNull($("#documentaryTime").val())) {
 			startTime = $("#documentaryTime").val().split('~')[0].trim();
 			endTime = $("#documentaryTime").val().split('~')[1].trim();
 		}

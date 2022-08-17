@@ -47,37 +47,37 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
             editmember(data);
-        }else if (layEvent === 'delete') { //删除
+        } else if (layEvent === 'delete') { //删除
             deletemember(data);
-        }else if (layEvent === 'enabled') { //启用
+        } else if (layEvent === 'enabled') { //启用
             editEnabled(data);
-        }else if(layEvent == 'unenabled'){ //禁用
+        } else if (layEven == 'unenabled'){ //禁用
             editNotEnabled(data)
-        }else if(layEvent == 'select'){ //详情
+        } else if (layEven == 'select'){ //详情
             selectMember(data)
-        }else if(layEvent == 'memberCar'){ //车辆信息
+        } else if (layEven == 'memberCar'){ //车辆信息
             memberCar(data)
-        }else if(layEvent == 'mealList'){ //套餐购买信息
+        } else if (layEven == 'mealList'){ //套餐购买信息
             mealList(data)
         }
     });
 
     // 编辑
-    function editmember(data){
+    function editmember(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/member/memberEdit.html",
             title: "编辑会员",
             pageId: "memberEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     // 删除会员
-    function deletemember(data){
+    function deletemember(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "member004", params: {rowId: data.id}, type: 'json', method: "POST", callback: function (json) {
@@ -88,7 +88,7 @@ layui.config({
     }
 
     // 设置启用状态
-    function editEnabled(data){
+    function editEnabled(data) {
         layer.confirm('确认要更改该会员为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: shopBasePath + "member006", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("设置成功。", {icon: 1, time: 2000});
@@ -98,7 +98,7 @@ layui.config({
     }
     
     // 设置禁用状态
-    function editNotEnabled(data){
+    function editNotEnabled(data) {
         layer.confirm('确认要更改该会员为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: shopBasePath + "member007", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("设置成功。", {icon: 1, time: 2000});
@@ -108,33 +108,33 @@ layui.config({
     }
 	
     // 详情
-    function selectMember(data){
+    function selectMember(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/member/memberInfo.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "memberinfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
 
     // 车辆信息
-    function memberCar(data){
+    function memberCar(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/memberCar/memberCarList.html",
             title: '车辆信息',
             pageId: "memberCarList",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
 
     // 套餐购买信息
-    function mealList(data){
+    function mealList(data) {
         rowId = data.id;
         memberMation = data;
         _openNewWindows({
@@ -142,7 +142,7 @@ layui.config({
             title: '套餐购买信息',
             pageId: "memberMealOrderList",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -154,7 +154,7 @@ layui.config({
             title: "新增会员",
             pageId: "memberAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -173,11 +173,11 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var contacts = $("#contacts").val();
         var phone = $("#phone").val();
         var email = $("#email").val();

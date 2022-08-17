@@ -48,11 +48,11 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'details'){ //工单详情
+        } else if (layEvent === 'details'){ //工单详情
         	details(data);
-        }else if (layEvent === 'appDetails'){ //申领单详情
+        } else if (layEvent === 'appDetails'){ //申领单详情
         	appDetails(data);
-        }else if (layEvent === 'delete'){ //删除
+        } else if (layEvent === 'delete'){ //删除
         	deleteRow(data);
         }
     });
@@ -74,7 +74,7 @@ layui.config({
         return false;
 	});
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: {orderNum: $("#orderNum").val(), state: $("#state").val(), applyNum: $("#applyNum").val(), customerName: $("#customerName").val()}});
     }
     
@@ -83,45 +83,45 @@ layui.config({
     }
 
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/partsclaim/partsclaimedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "partsclaimedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//工单详情
-	function details(data){
+	function details(data) {
 		rowId = data.serviceId;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//申领单详情
-	function appDetails(data){
+	function appDetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/partsclaim/partsclaimdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//删除
-	function deleteRow(data){
+	function deleteRow(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             
@@ -139,7 +139,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "partsclaimadd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
             }});

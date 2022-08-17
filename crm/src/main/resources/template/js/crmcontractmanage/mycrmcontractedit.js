@@ -68,7 +68,7 @@ layui.config({
 			};
 
 			// 获取当前登录用户所属企业的所有部门信息
-			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
 				$("#departmentId").html(getDataUseHandlebars(selOption, data));
 				$("#departmentId").val(json.bean.departmentId);
 				form.render('select');
@@ -101,7 +101,7 @@ layui.config({
 			title: "选择客户",
 			pageId: "customerchooselist",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				$("#customName").val(customerMation.customName);
 				$("#contacts").val(customerMation.contacts);
 				$("#city").val(customerMation.city);

@@ -126,8 +126,8 @@ layui.config({
 	    	}
         });
       	
-      	form.on('select(selectParent)', function(data){
-      		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params:{rowId: data.value}, type: 'json', callback: function (json) {
+      	form.on('select(selectParent)', function(data) {
+      		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params: {rowId: data.value}, type: 'json', callback: function (json) {
 				htmlModelContent.setValue(json.bean.htmlContent);
 				jsModelContent.setValue(json.bean.jsContent);
 				htmlContent.setValue(json.bean.htmlContent);
@@ -150,7 +150,7 @@ layui.config({
 	        	};
 	        	
 	        	if(data.field.selChildData == '1'){
-	        		if(isNull($("#displayTemplateId").val())){
+	        		if(isNull($("#displayTemplateId").val())) {
 	        			winui.window.msg('请选择子查询数据展示模板', {icon: 2, time: 2000});
 	        			return false;
 	        		} else {

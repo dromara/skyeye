@@ -33,7 +33,7 @@ layui.config({
                  for(var i = 0;i < row.length; i++){
                      var commentId = row[i].commentId;
                      var tagName = row[i].tagName;
-                     if(!isNull(tagName)){
+                     if (!isNull(tagName)){
                          var tagArr = tagName.split(",");
                          var tagStr = "";
                          for(var j = 0;j < tagArr.length; j++){
@@ -43,7 +43,7 @@ layui.config({
                              var thisId  = $(this).parents('div[class^="my-forum-main"]').eq(0).attr("commentId");
                              if(thisId == commentId){
                                  $(this).append(tagStr);
-                                 if(!isNull(row[i].replyName)){
+                                 if (!isNull(row[i].replyName)){
                                      $(this).parents('div[class^="my-forum-main"]').eq(0).find(".replyperson").append("<span>&nbsp;&nbsp;回复&nbsp;&nbsp;</span><span class='name-span'>" + row[i].replyName + "</span>");
                                  }
                              }

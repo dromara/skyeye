@@ -55,26 +55,26 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
             edit(data);
-        }else if (layEvent === 'delete') { //删除
+        } else if (layEvent === 'delete') { //删除
             deleteAccount(data);
-        }else if (layEvent === 'default') { //设置默认
+        } else if (layEvent === 'default') { //设置默认
             defaultAccount(data);
-        }else if (layEvent === 'select'){//查看详情
+        } else if (layEvent === 'select'){//查看详情
             selectAccount(data);
-        }else if (layEvent === 'item'){
+        } else if (layEvent === 'item'){
             selectItem(data);
         }
     });
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/account/accountEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "accountEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -82,7 +82,7 @@ layui.config({
     }
 
     // 删除
-    function deleteAccount(data){
+    function deleteAccount(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({ url: flowableBasePath + "account004", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
@@ -93,7 +93,7 @@ layui.config({
     }
 
     // 设置是否默认
-    function defaultAccount(data){
+    function defaultAccount(data) {
         layer.confirm('确认要设置该结算账户为默认状态吗？', { icon: 3, title: '设置结算账户状态' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "account006", params: {rowId: data.id}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("设置成功。", {icon: 1, time: 2000});
@@ -102,14 +102,14 @@ layui.config({
         });
     }
 
-    function selectAccount(data){
+    function selectAccount(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/account/accountInfo.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "accountInfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -121,21 +121,21 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "accountAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });
 
     // 查看流水
-    function selectItem(data){
+    function selectItem(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/account/accountItem.html",
             title: "流水详情",
             pageId: "accountitem",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -153,7 +153,7 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -162,7 +162,7 @@ layui.config({
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             accountName:$("#accountName").val(),
             serialNo: $("#serialNo").val(),

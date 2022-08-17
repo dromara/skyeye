@@ -68,8 +68,8 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
-    	if(isNull($("#declarationTime").val())){
+    function loadTable() {
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -80,7 +80,7 @@ layui.config({
     }
     
     function refreshTable(){
-    	if(isNull($("#declarationTime").val())){
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -91,14 +91,14 @@ layui.config({
     }
 
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	

@@ -28,7 +28,7 @@ layui.config({
 		 		
 		 		// 获取上一次solr数据同步的时间
 		        AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent019", params: {}, type: 'json', callback: function (json) {
-					if(!isNull(json.bean.synchronousTime)){
+					if (!isNull(json.bean.synchronousTime)){
 						$("#synchronousTime").text(json.bean.synchronousTime);
 					} else {
 						$("#synchronousTime").text("无");
@@ -272,7 +272,7 @@ layui.config({
 		}
 
 	    function getAbnormalMoney(rowNum){
-	    	if(isNull($("#abnormalMoney" + rowNum).val())){
+	    	if(isNull($("#abnormalMoney" + rowNum).val())) {
 	    		return "0";
 			}
 	    	return $("#abnormalMoney" + rowNum).val();
@@ -305,7 +305,7 @@ layui.config({
             winui.window.msg("数据同步中...", {icon: 6,time: 2000});
             AjaxPostUtil.request({url: sysMainMation.forumBasePath + "forumcontent020", params: {}, type: 'json', callback: function (json) {
 				winui.window.msg("数据同步成功", {icon: 1, time: 2000});
-				if(!isNull(json.bean.synchronousTime)){
+				if (!isNull(json.bean.synchronousTime)){
 					$("#synchronousTime").text(json.bean.synchronousTime);
 				}
             }});

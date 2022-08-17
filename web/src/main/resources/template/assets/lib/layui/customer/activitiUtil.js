@@ -31,7 +31,7 @@ var activitiUtil = {
      *
      * @param data
      */
-    activitiDetails: function (data){
+    activitiDetails: function (data) {
         taskType = data.taskType;
         processInstanceId = data.processInstanceId;
         _openNewWindows({
@@ -39,7 +39,7 @@ var activitiUtil = {
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "myactivitidetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     },
@@ -63,7 +63,7 @@ var activitiUtil = {
         };
         // 优先请求一次获取下个用户节点的信息，如果没有审批节点信息，则不加载审批人选项
         AjaxPostUtil.request({url: flowableBasePath + "activitiProcess001", params: params, type: 'json', callback: function(json) {
-            if(!isNull(json.bean)){
+            if (!isNull(json.bean)){
                 var approvalPersonChooseDom = '<div class="layui-form-item layui-col-xs12">' +
                     '<label class="layui-form-label">下一个审批人<i class="red">*</i></label>' +
                     '<div class="layui-input-block">' +
@@ -95,7 +95,7 @@ var activitiUtil = {
             title: "审批人选择",
             pageId: "approvalPersonChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 $("#approvalPersonName").val(activitiUtil.chooseApprovalPersonMation.jobNumber + "_" + activitiUtil.chooseApprovalPersonMation.userName);
                 $("#approvalPersonName").attr("chooseData", JSON.stringify(activitiUtil.chooseApprovalPersonMation));
             }
@@ -127,7 +127,7 @@ var activitiUtil = {
             title: "审批人选择",
             pageId: "startProcessPersonChooseBtn",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if (typeof callback === 'function') {
                     callback(activitiUtil.chooseApprovalPersonMation.id);
                 }
@@ -236,7 +236,7 @@ var activitiUtil = {
                 title: "前加签",
                 pageId: "beforeAddSignTaskPage",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode) {
+                callBack: function (refreshCode) {
                     if (typeof callback === 'function') {
                         callback();
                     }
@@ -251,7 +251,7 @@ var activitiUtil = {
                 title: "后加签",
                 pageId: "afterAddSignTaskPage",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode) {
+                callBack: function (refreshCode) {
                     if (typeof callback === 'function') {
                         callback();
                     }
@@ -266,7 +266,7 @@ var activitiUtil = {
                 title: "会签设定",
                 pageId: "jointlySignPage",
                 area: ['90vw', '90vh'],
-                callBack: function(refreshCode) {
+                callBack: function (refreshCode) {
                     if (typeof callback === 'function') {
                         callback();
                     }

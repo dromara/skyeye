@@ -33,7 +33,7 @@ layui.config({
    		}});
 		
 		$("body").on("click", "#tqShareFile", function (e) {
-			if(isNull($("#sharePassword").val())){
+			if(isNull($("#sharePassword").val())) {
 				winui.window.msg("请输入提取码", {icon: 2, time: 2000});
 				return;
 			}

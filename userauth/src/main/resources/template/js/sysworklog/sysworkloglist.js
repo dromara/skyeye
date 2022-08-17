@@ -38,7 +38,7 @@ layui.config({
 		refreshTable();
 	});
 	
-	function loadTable(){
+	function loadTable() {
     	table.reloadData("messageTable", {where:{userName: $("#userName").val(), realPath: $("#realPath").val()}});
     }
 	

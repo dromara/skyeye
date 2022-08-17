@@ -179,7 +179,7 @@ layui.config({
 			title: "选择生产计划单",
 			pageId: "erpProductionNoSuccessChoose",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				$("#productionOrder").val(productionMation.defaultNumber);
 				initTableChooseUtil.deleteAllRow('productList');
 				$.each(productionMation.norms, function(i, item) {

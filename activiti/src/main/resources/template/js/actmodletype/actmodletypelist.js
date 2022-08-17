@@ -94,7 +94,7 @@ layui.config({
 				    obj.find("input").select();
 			    	obj.find("input").blur(function(){
 			    		var value = obj.find("input").val();
-			    		if(!isNull(value)){
+			    		if (!isNull(value)){
 			    			if(html != value){
 				    			AjaxPostUtil.request({url:flowableBasePath + "actmodletype004", params: {rowId: clickId, title: value}, type: 'json', callback: function (json) {
 									obj.find("a[rowid='" + clickId + "']").find("span").html(value);
@@ -129,7 +129,7 @@ layui.config({
 	function deleteModleType(){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-	        AjaxPostUtil.request({url:flowableBasePath + "actmodletype005", params:{rowId: clickId}, type: 'json', callback: function (json) {
+	        AjaxPostUtil.request({url:flowableBasePath + "actmodletype005", params: {rowId: clickId}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				$("#setting").find("a[rowid='" + clickId + "']").remove();
 				var _obj = $("#setting").find("a[class='setting-a']");
@@ -148,7 +148,7 @@ layui.config({
 		var msg = '确认上线该申请类型吗？';
 		layer.confirm(msg, { icon: 3, title: '上线申请类型实体' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:flowableBasePath + "actmodletype015", params:{rowId: clickId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:flowableBasePath + "actmodletype015", params: {rowId: clickId}, type: 'json', callback: function (json) {
 				$("#setting").find("a[rowid='" + clickId + "']").find("div").remove();
 				$("#setting").find("a[rowid='" + clickId + "']").find("span").after('<div class="up-state-point"></div>');
 				winui.window.msg("上线成功", {icon: 1, time: 2000});
@@ -161,7 +161,7 @@ layui.config({
 		var msg = '确认下线该申请类型吗？';
 		layer.confirm(msg, { icon: 3, title: '下线申请类型实体' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:flowableBasePath + "actmodletype016", params:{rowId: clickId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:flowableBasePath + "actmodletype016", params: {rowId: clickId}, type: 'json', callback: function (json) {
 				$("#setting").find("a[rowid='" + clickId + "']").find("div").remove();
 				$("#setting").find("a[rowid='" + clickId + "']").find("span").after('<div class="down-state-point"></div>');
 				winui.window.msg("下线成功", {icon: 1, time: 2000});
@@ -171,7 +171,7 @@ layui.config({
 	
 	//上移申请类型
 	function upMoveModleType(){
-        AjaxPostUtil.request({url:flowableBasePath + "actmodletype017", params:{rowId: clickId}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url:flowableBasePath + "actmodletype017", params: {rowId: clickId}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			var a = $("#setting").find("a[rowid='" + clickId + "']").prev();
 			$("#setting").find(a).remove();
@@ -181,7 +181,7 @@ layui.config({
 	
 	//下移申请类型
 	function downMoveModleType(){
-        AjaxPostUtil.request({url:flowableBasePath + "actmodletype018", params:{rowId: clickId}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url:flowableBasePath + "actmodletype018", params: {rowId: clickId}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			var a = $("#setting").find("a[rowid='" + clickId + "']").next();
 			$("#setting").find(a).remove();
@@ -295,17 +295,17 @@ layui.config({
 		var layEvent = obj.event;
 		if(layEvent === 'del'){  //移除
 			del(data);
-		}else if (layEvent === 'edit') { //编辑
+		} else if (layEvent === 'edit') { //编辑
 			edit(data);
-		}else if (layEvent === 'up') { //上线
+		} else if (layEvent === 'up') { //上线
 			up(data);
-		}else if (layEvent === 'down') { //下线
+		} else if (layEvent === 'down') { //下线
 			down(data);
-		}else if (layEvent === 'upMove') { //上移
+		} else if (layEvent === 'upMove') { //上移
 			upMove(data);
-		}else if (layEvent === 'downMove') { //下移
+		} else if (layEvent === 'downMove') { //下移
 			downMove(data);
-		}else if (layEvent === 'dedails') { //详情
+		} else if (layEvent === 'dedails') { //详情
 			dedails(data);
 		}
 	});
@@ -318,14 +318,14 @@ layui.config({
 			title: "新增申请类型实体",
 			pageId: "actmodletypeadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	});
 	
 	//移除申请类型实体
-	function del(data){
+	function del(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url:flowableBasePath + "actmodletype006", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -336,11 +336,11 @@ layui.config({
 	}
 	
 	//上线申请类型实体
-	function up(data){
+	function up(data) {
 		var msg = '确认上线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '上线申请类型实体' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:flowableBasePath + "actmodletype009", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:flowableBasePath + "actmodletype009", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("上线成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -348,11 +348,11 @@ layui.config({
 	}
 	
 	//下线申请类型实体
-	function down(data){
+	function down(data) {
 		var msg = '确认下线选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '下线申请类型实体' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:flowableBasePath + "actmodletype010", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:flowableBasePath + "actmodletype010", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("下线成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -360,14 +360,14 @@ layui.config({
 	}
 	
 	//编辑申请类型实体
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/actmodletype/actmodleedit.html", 
 			title: "编辑类型实体",
 			pageId: "actmodleedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -375,29 +375,29 @@ layui.config({
 	}
 
 	// 详情
-	function dedails(data){
+	function dedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/actmodletype/actModleDetails.html",
 			title: "详情",
 			pageId: "actmodleedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
 	
 	//上移申请类型实体
-	function upMove(data){
-        AjaxPostUtil.request({url:flowableBasePath + "actmodletype013", params:{rowId: data.id, typeId: data.typeId}, type: 'json', callback: function (json) {
+	function upMove(data) {
+        AjaxPostUtil.request({url:flowableBasePath + "actmodletype013", params: {rowId: data.id, typeId: data.typeId}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
 	}
 	
 	//下移申请类型实体
-	function downMove(data){
-        AjaxPostUtil.request({url:flowableBasePath + "actmodletype014", params:{rowId: data.id, typeId: data.typeId}, type: 'json', callback: function (json) {
+	function downMove(data) {
+        AjaxPostUtil.request({url:flowableBasePath + "actmodletype014", params: {rowId: data.id, typeId: data.typeId}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -409,7 +409,7 @@ layui.config({
 		refreshTable();
 	});
 	//搜索条件
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{typeId: clickId, title: $("#title").val()}});
     }
     function refreshTable(){

@@ -176,13 +176,13 @@ layui.config({
 	}
 	
 	// 公司监听事件
-	form.on('select(companyList)', function(data){
+	form.on('select(companyList)', function(data) {
 		initDepartment();
 		initJob();
 	});
 	
 	// 部门监听事件
-	form.on('select(departmentList)', function(data){
+	form.on('select(departmentList)', function(data) {
 		initJob();
 	});
 	
@@ -214,7 +214,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -222,7 +222,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			userName: $("#userName").val(),
     		userSex: $("#userSex").val(),

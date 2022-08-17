@@ -48,7 +48,7 @@ var shopUtil = {
      * @param data
      * @returns {string}
      */
-    getMealOrderWhetherGiveName: function (data){
+    getMealOrderWhetherGiveName: function (data) {
         if (data.whetherGive == 1) {
             return "是";
         } else if (data.whetherGive == 2) {
@@ -64,7 +64,7 @@ var shopUtil = {
      * @param data
      * @returns {string}
      */
-    getMealOrderStateName: function (data){
+    getMealOrderStateName: function (data) {
         if(data.cancleState == 1) {
             if (data.state == 1) {
                 return "<span class='state-down'>待支付</span>";
@@ -94,7 +94,7 @@ var shopUtil = {
      * @param data
      * @returns {string}
      */
-    getKeepFitOrderStateName: function (data){
+    getKeepFitOrderStateName: function (data) {
         if(data.cancleState == 1){
             if(data.state == 1){
                 return "<span class='state-down'>保养中</span>";
@@ -193,7 +193,7 @@ var shopUtil = {
             title: "选择店员",
             pageId: "storeStaffChoose",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 if(typeof(callback) == "function") {
                     callback(shopUtil.staffMation);
                 }

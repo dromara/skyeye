@@ -23,7 +23,7 @@ layui.config({
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 	        { field: 'defaultNumber', title: '单据编号', align: 'left', width: 250, templet: function (d) {
 		        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
-		        if(!isNull(d.linkNumber)){
+		        if (!isNull(d.linkNumber)){
 		        	str += '<span class="state-new">[转]</span>';
 			        if(d.status == 2){
 			        	str += '<span class="state-up"> [正常]</span>';
@@ -73,7 +73,7 @@ layui.config({
     });
     
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		var url = erpOrderUtil.getErpDetailUrl(data);
 		_openNewWindows({
@@ -81,7 +81,7 @@ layui.config({
 			title: "单据详情",
 			pageId: "otherwarehousdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	

@@ -131,25 +131,25 @@ layui.config({
 	}
 
 	// 公司监听事件
-	form.on('select(companyList)', function(data){
+	form.on('select(companyList)', function(data) {
 		initDepartment();
 		initJob();
 	});
 
 	// 部门监听事件
-	form.on('select(departmentList)', function(data){
+	form.on('select(departmentList)', function(data) {
 		initJob();
 	});
 
 	// 薪资变更
-	function wagesDesign(data){
+	function wagesDesign(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/wagesStaffMation/wagesStaffMationDesign.html",
 			title: "薪资变更",
 			pageId: "wagesStaffMationDesign",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -167,7 +167,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -175,7 +175,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
 			companyId: $("#companyList").val(),
 			departmentId: $("#departmentList").val(),

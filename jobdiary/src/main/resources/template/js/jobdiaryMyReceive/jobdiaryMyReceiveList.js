@@ -104,13 +104,13 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'read') { //阅读
         	read(data);
-        }else if(layEvent === 'del'){  //删除
+        } else if (layEven === 'del'){  //删除
         	del(data);
         }
     });
 
 	// 阅读收到的日志
-	function read(data){
+	function read(data) {
 		rowId = data.id;
 		if(data.diaryType == 1){
 			// 日报
@@ -119,7 +119,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMyReceiveDayDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					if(data.state == '1')
 						loadTable();
 				}});
@@ -130,7 +130,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMyReceiveWeekDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					if(data.state == '1')
 						loadTable();
 				}});
@@ -141,7 +141,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMyReceiveMonthDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					if(data.state == '1')
 						loadTable();
 				}});
@@ -149,7 +149,7 @@ layui.config({
 	}
 	
 	// 删除日志
-	function del(data){
+	function del(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary008", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -171,7 +171,7 @@ layui.config({
             title: "日志时间线",
             pageId: "jobdiaryMyReceiveTimeLine",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }});
     });
 	
@@ -194,13 +194,13 @@ layui.config({
 	});
 	
 	//加载'看日志'列表
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-	function getTableParams(){
+	function getTableParams() {
 		var startTime = "", endTime = "";
-		if(!isNull($("#receivedTime").val())){
+		if (!isNull($("#receivedTime").val())) {
     		startTime = $("#receivedTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#receivedTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

@@ -55,7 +55,7 @@ layui.config({
  				title: "选择接收人",
  				pageId: "serviceworkershowlist",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode) {
+ 				callBack: function (refreshCode) {
 					$("#serviceUserId").val(serviceUser.userName);
  				}});
 		});

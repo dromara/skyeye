@@ -16,7 +16,7 @@ layui.config({
 	authBtn('1597479769139');
 
 	// 查询所有的车牌号用于下拉选择框
-	adminAssistantUtil.queryAllVehicleList(function (data){
+	adminAssistantUtil.queryAllVehicleList(function (data) {
 		$("#insurancePlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
 		form.render('select');
 	});
@@ -56,9 +56,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'insurancedetails') { //详情
         	insurancedetails(data);
-        }else if (layEvent === 'insurancedelet'){ //删除
+        } else if (layEvent === 'insurancedelet'){ //删除
         	insurancedelet(data);
-        }else if (layEvent === 'insuranceedit'){ //编辑
+        } else if (layEvent === 'insuranceedit'){ //编辑
         	insuranceedit(data);
         }
     });
@@ -66,19 +66,19 @@ layui.config({
 	form.render();
 	
 	// 保险详情
-	function insurancedetails(data){
+	function insurancedetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageInsurance/vehicleManageInsuranceDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageInsuranceDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 删除保险
-	function insurancedelet(data){
+	function insurancedelet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "insurance003", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -95,21 +95,21 @@ layui.config({
 			title: "车辆保险登记单",
 			pageId: "vehicleManageInsuranceAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadInsuranceTable();
 			}});
     });
 	
 	// 编辑保险
-	function insuranceedit(data){
+	function insuranceedit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageInsurance/vehicleManageInsuranceEdit.html", 
 			title: "编辑车辆保险信息",
 			pageId: "vehicleManageInsuranceEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadInsuranceTable();
 			}});
@@ -128,7 +128,7 @@ layui.config({
 		table.reloadData("insuranceTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		insuranceTitle: $("#insuranceTitle").val(),
     		insurancePlate: $("#insurancePlate").val()

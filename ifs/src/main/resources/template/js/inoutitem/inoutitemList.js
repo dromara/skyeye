@@ -52,29 +52,29 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { // 编辑
             editInoutitem(data);
-        }else if (layEvent === 'delete') { // 删除
+        } else if (layEvent === 'delete') { // 删除
             deleteInoutitem(data);
-        }else if (layEvent === 'select') {
+        } else if (layEvent === 'select') {
             selectInoutitem(data);
         }
     });
 
     // 编辑
-    function editInoutitem(data){
+    function editInoutitem(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/inoutitem/inoutitemEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "inoutitemEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     // 删除收支项目
-    function deleteInoutitem(data){
+    function deleteInoutitem(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "inoutitem004", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
@@ -84,14 +84,14 @@ layui.config({
         });
     }
 
-    function selectInoutitem(data){
+    function selectInoutitem(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/inoutitem/inoutitemInfo.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "inoutitemInfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -105,7 +105,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "inoutitemAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -124,7 +124,7 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -133,7 +133,7 @@ layui.config({
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             inoutitemName: $("#inoutitemName").val(),
             inoutitemType: $("#inoutitemType").val(),

@@ -65,7 +65,7 @@ layui.config({
 	        		return '<a lay-event="discussList" class="notice-title-click">' + d.discussNum + '</a>';
 		        }},
 		        { field: 'processInstanceId', title: '流程ID', align: 'center', rowspan: 2, width: 100, templet: function (d) {
-		        	if(!isNull(d.processInstanceId)){
+		        	if (!isNull(d.processInstanceId)){
 		        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 		        	} else {
 		        		return "";
@@ -86,25 +86,25 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'details'){ //详情
 	        	details(data);
-	        }else if (layEvent === 'processDetails') { //流程详情
+	        } else if (layEvent === 'processDetails') { //流程详情
 				activitiUtil.activitiDetails(data);
-	        }else if (layEvent === 'discussList') { //讨论板
+	        } else if (layEvent === 'discussList') { //讨论板
 	        	discussList(data);
-	        }else if (layEvent === 'fileNumList') { //文档
+	        } else if (layEvent === 'fileNumList') { //文档
 	        	fileNumList(data);
 	        }
 	    });
 	}
 
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proproject/proprojectdetails.html", 
 			title: "项目详情",
 			pageId: "proprojectdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -118,7 +118,7 @@ layui.config({
 			title : "讨论板",
 			pageId : "proprojectdiscusslist",
 			area : [ '100vw', '100vh' ],
-			callBack : function(refreshCode) {
+			callBack : function (refreshCode) {
 			}
 		});
 	}
@@ -131,7 +131,7 @@ layui.config({
 			title : "文档",
 			pageId : "profilelistbyproid",
 			area : [ '100vw', '100vh' ],
-			callBack : function(refreshCode) {
+			callBack : function (refreshCode) {
 			}
 		});
 	}
@@ -149,11 +149,11 @@ layui.config({
 		loadTable();
 	});
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
     	return {
     		typeId: $("#typeId").val(),
 			state: $("#state").val(),

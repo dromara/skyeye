@@ -46,7 +46,7 @@ layui.config({
 		form.on('select(selectTypeProperty)', function(data) {
 			var thisRowNum = data.elem.id.replace("typeId", "");
 			var thisRowValue = data.value;
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				if(inPointArray(thisRowValue, assetList)) {
 					//类型对应的资产存在js对象中
 					var list = getListPointArray(thisRowValue, assetList);
@@ -69,7 +69,7 @@ layui.config({
 			var thisRowNum = data.elem.id.replace("assetId", "");
 			var thisRowValue = data.value;
 			var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				var list = getListPointArray(thisRowTypeChooseId, assetList);
 				$.each(list, function(i, item) {
 					if(item.id === thisRowValue) {
@@ -206,7 +206,7 @@ layui.config({
 		$("#remark" + thisRowNum).val(item.remark);
 		$("#assetNum" + thisRowNum).html(item.assetNum);
 		var thisRowValue = item.typeId;
-		if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+		if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 			if(inPointArray(thisRowValue, assetList)) {
 				//类型对应的资产存在js对象中
 				var list = getListPointArray(thisRowValue, assetList);

@@ -68,11 +68,11 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'repeal') { //撤回
 	        	repeal(data);
-	        }else if(layEvent === 'reading'){ //阅读日志详情
+	        } else if (layEven === 'reading'){ //阅读日志详情
 	        	reading(data);
-	        }else if(layEvent === 'mydel'){ //删除我发送的日志
+	        } else if (layEven === 'mydel'){ //删除我发送的日志
 	        	mydel(data);
-	        }else if(layEvent === 'send'){ //发送我撤回的日志
+	        } else if (layEven === 'send'){ //发送我撤回的日志
 	        	send(data);
 	        }
 	    });
@@ -85,14 +85,14 @@ layui.config({
 			title: "发表日志",
 			pageId: "jobdiaryMySendPublish",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadMySendTable();
 			}});
     });
 	
 	// 撤回日志
-	function repeal(data){
+	function repeal(data) {
 		layer.confirm('确认撤回选中数据吗？', { icon: 3, title: '撤回操作' }, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary006", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -103,7 +103,7 @@ layui.config({
 	}
 	
 	// 删除我发出的日志
-	function mydel(data){
+	function mydel(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.jobdiaayBasePath + "diary015", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -114,7 +114,7 @@ layui.config({
 	}
 	
 	// 我发出的日志详情
-	function reading(data){
+	function reading(data) {
 		rowId = data.id;
 		if(data.diaryType == 1){
 			// 日报
@@ -123,7 +123,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMySendDayDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 		}else if(data.diaryType == 2){
 			// 周报
@@ -132,7 +132,7 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMySendWeekDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 		}else if(data.diaryType == 3){
 			// 周报
@@ -141,13 +141,13 @@ layui.config({
 				title: "日志内容",
 				pageId: "jobdiaryMySendMonthDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 		}
 	}
 	
 	// 发送撤回的日志
-	function send(data){
+	function send(data) {
 		rowId = data.id;
 		if(data.diaryType == 1){
 			// 日报
@@ -156,7 +156,7 @@ layui.config({
 				title: "编辑日报",
 				pageId: "jobdiaryMySendDayEdit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg("发送成功", {icon: 1, time: 2000});
 					loadMySendTable();
 				}});
@@ -167,7 +167,7 @@ layui.config({
 				title: "编辑周报",
 				pageId: "jobdiaryMySendWeekEdit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg("发送成功", {icon: 1, time: 2000});
 					loadMySendTable();
 				}});
@@ -178,7 +178,7 @@ layui.config({
 				title: "编辑月报",
 				pageId: "jobdiaryMySendMonthEdit",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg("发送成功", {icon: 1, time: 2000});
 					loadMySendTable();
 				}});
@@ -200,9 +200,9 @@ layui.config({
     	table.reloadData("mysendTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-    	if(!isNull($("#createTime").val())){
+    	if (!isNull($("#createTime").val())) {
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

@@ -46,14 +46,14 @@ layui.config({
     form.render();
 
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/profile/profiledetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "profiledetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -62,7 +62,7 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{rowId: parent.rowId}});
     }
 

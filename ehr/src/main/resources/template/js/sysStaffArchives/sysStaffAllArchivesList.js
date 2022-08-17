@@ -27,9 +27,9 @@ layui.config({
 		    cols: [[
 		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 		        { field: 'archivesNumber', title: '档案编号', align: 'left', width: 160 },
-		        { field: 'companyName', title: '管理单位', width: 150},
-		        { field: 'custodyPlace', title: '档案保管地', width: 150},
-		        { field: 'archivesCenter', title: '档案室', width: 150},
+		        { field: 'companyName', title: '管理单位', width: 150 },
+		        { field: 'custodyPlace', title: '档案保管地', width: 150 },
+		        { field: 'archivesCenter', title: '档案室', width: 150 },
 		        { field: 'educationName', title: '档案学历', width: 120},
                 { field: 'archivesState', title: '状态', width: 60, align: 'center', templet: function (d) {
                     if(d.archivesState == '1'){
@@ -74,14 +74,14 @@ layui.config({
 	form.render();
 	
 	// 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
 			url: "../../tpl/sysStaffArchives/sysStaffArchivesEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sysStaffArchivesEdit",
             area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -98,11 +98,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		archivesNumber: $("#archivesNumber").val(),
 			archivesState: $("#archivesState").val(),

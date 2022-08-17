@@ -18,7 +18,7 @@ layui.config({
             method: "GET",
             template: $("#beanTemplate").html(),
             ajaxSendLoadBefore: function(hdb){},
-            ajaxSendAfter:function(data){
+            ajaxSendAfter:function(data) {
                 memberId = data.bean.memberId;
             	textool.init({eleId: 'remark', maxlength: 400});
                 $("input:radio[name=insure][value=" + data.bean.insure + "]").attr("checked", true);

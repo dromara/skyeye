@@ -16,7 +16,7 @@ layui.config({
 	var forumTemplate = $('#forumTemplate').html();
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$(".layadmin-homepage-pad-img").attr("src", fileBasePath + data.bean.userPhoto);
 		$(".layadmin-homepage-font").html(data.bean.jobNumber + " " + data.bean.userName);
 		$(".layadmin-homepage-min-font").html(data.bean.companyName + " " + data.bean.departmentName + " " + data.bean.jobName);
@@ -58,7 +58,7 @@ layui.config({
  		for(var i = 0;i < rows.length; i++){
  			var id = rows[i].id;
  			var tagName = rows[i].tagName;
- 			if(!isNull(tagName)){
+ 			if (!isNull(tagName)){
  				var tagArr = tagName.split(",");
  				var tagStr = "";
 	 			for(var j = 0;j < tagArr.length; j++){
@@ -121,7 +121,7 @@ layui.config({
 			skin: 'update-password-html',
 			pageId: "editpassword",
 			area: ['700px', '300px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
 	});

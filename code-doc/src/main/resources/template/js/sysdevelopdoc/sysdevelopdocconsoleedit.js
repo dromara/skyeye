@@ -12,7 +12,7 @@ layui.config({
 		    layedit = layui.layedit;
 	    var layEditor;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc013", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc013", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			$("#title").val(json.bean.title);
 
 			layEditor = editormd("content", {

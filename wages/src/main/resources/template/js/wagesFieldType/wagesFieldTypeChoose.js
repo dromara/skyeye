@@ -29,7 +29,7 @@ layui.config({
 		    cols: [[
 		    	{ type: 'radio'},
 				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-				{ field: 'nameCn', title: '名称（中文）', align: 'left', width: 150},
+				{ field: 'nameCn', title: '名称（中文）', align: 'left', width: 150 },
 				{ field: 'nameEn', title: '名称（英文）', align: 'left', width: 150 },
 				{ field: 'key', title: '字段key', align: 'left', width: 120 },
 				{ field: 'monthlyClearing', title: '月度清零', align: 'center', width: 80, templet: function (d) {
@@ -73,7 +73,7 @@ layui.config({
 		    }
 		});
 		form.render();
-		form.on('select(fieldType)', function(data){
+		form.on('select(fieldType)', function(data) {
 			var fieldType = data.value;
 			if(fieldType == 1){
 				$(".customType").show();
@@ -96,7 +96,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -109,7 +109,7 @@ layui.config({
     	});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			name: $("#name").val(),
 			key: $("#key").val()

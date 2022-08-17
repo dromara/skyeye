@@ -68,7 +68,7 @@ layui.config({
 	        		return '<a lay-event="discussList" class="notice-title-click">' + d.discussNum + '</a>';
 		        }},
 		        { field: 'processInstanceId', title: '流程ID', align: 'center', rowspan: 2, width: 100, templet: function (d) {
-		        	if(!isNull(d.processInstanceId)){
+		        	if (!isNull(d.processInstanceId)){
 		        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 		        	} else {
 		        		return "";
@@ -90,20 +90,20 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'edit') { //编辑
 	        	edit(data);
-	        }else if (layEvent === 'details'){ //详情
+	        } else if (layEvent === 'details'){ //详情
 	        	details(data);
-	        }else if (layEvent === 'processDetails') { //流程详情
+	        } else if (layEvent === 'processDetails') { //流程详情
 				activitiUtil.activitiDetails(data);
-	        }else if (layEvent === 'subApproval') { //提交审批
+	        } else if (layEvent === 'subApproval') { //提交审批
 	        	subApproval(data);
-	        }else if (layEvent === 'del') { //删除
+	        } else if (layEvent === 'del') { //删除
 	        	del(data);
-	        }else if (layEvent === 'revoke') { //撤销
+	        } else if (layEvent === 'revoke') { //撤销
 	        	revoke(data);
-	        }else if (layEvent === 'nullify') { //作废
+	        } else if (layEvent === 'nullify') { //作废
 	        	nullify(data);
-	        }else if (layEvent === 'execute') { //开始执行
-	        	if(!isNull(data.projectManager) && !isNull(data.projectMembers) && !isNull(data.projectContent)){
+	        } else if (layEvent === 'execute') { //开始执行
+	        	if (!isNull(data.projectManager) && !isNull(data.projectMembers) && !isNull(data.projectContent)){
 		        	execute(data);
 	        	} else {
 	        		layer.confirm("该项目还未进行项目任命，是否立即任命？", {btn: ['立即任命', '取消'], icon: 3, title: '操作提醒'}, function (index) {
@@ -111,20 +111,20 @@ layui.config({
 			            proappoint(data);
 					});
 	        	}
-	        }else if (layEvent === 'proappoint') { //项目任命
+	        } else if (layEvent === 'proappoint') { //项目任命
 	        	proappoint(data);
-	        }else if (layEvent === 'end') { //成果和总结
+	        } else if (layEvent === 'end') { //成果和总结
 	        	end(data);
-	        }else if (layEvent === 'discussList') { //讨论板
+	        } else if (layEvent === 'discussList') { //讨论板
 	        	discussList(data);
-	        }else if (layEvent === 'fileNumList') { //文档
+	        } else if (layEvent === 'fileNumList') { //文档
 	        	fileNumList(data);
 	        }
 	    });
 	}
 	
     // 删除
-	function del(data){
+	function del(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "proproject009", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -135,7 +135,7 @@ layui.config({
 	}
 	
 	// 撤销
-	function revoke(data){
+	function revoke(data) {
 		layer.confirm("确定撤销申请吗？", {icon: 3, title: '撤销操作'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "proproject010", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
@@ -146,7 +146,7 @@ layui.config({
 	}
 	
 	// 作废
-	function nullify(data){
+	function nullify(data) {
 		layer.confirm("确定作废该项目吗？", {icon: 3, title: '作废操作'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "proproject011", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -157,7 +157,7 @@ layui.config({
 	}
 	
 	// 开始执行
-	function execute(data){
+	function execute(data) {
 		layer.confirm("确定开始执行该项目吗？", {icon: 3, title: '执行操作'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "proproject012", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -168,28 +168,28 @@ layui.config({
 	}
 	
 	// 项目任命
-	function proappoint(data){
+	function proappoint(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proproject/proappoint.html", 
 			title: "项目任命",
 			pageId: "proappoint",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 成果和总结
-	function end(data){
+	function end(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proproject/properfectinformation.html", 
 			title: "成果和总结",
 			pageId: "properfectinformation",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -202,42 +202,42 @@ layui.config({
 			title: "新增项目",
 			pageId: "proprojectadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proproject/proprojectedit.html", 
 			title: "编辑项目",
 			pageId: "proprojectedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proproject/proprojectdetails.html", 
 			title: "项目详情",
 			pageId: "proprojectdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 
 	// 提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["proProject"]["key"], function (approvalId) {
@@ -261,7 +261,7 @@ layui.config({
 			title : "讨论板",
 			pageId : "proprojectdiscusslist",
 			area : [ '100vw', '100vh' ],
-			callBack : function(refreshCode) {
+			callBack : function (refreshCode) {
 			}
 		});
 	}
@@ -274,7 +274,7 @@ layui.config({
 			title : "文档",
 			pageId : "profilelistbyproid",
 			area : [ '100vw', '100vh' ],
-			callBack : function(refreshCode) {
+			callBack : function (refreshCode) {
 			}
 		});
 	}
@@ -292,11 +292,11 @@ layui.config({
 		loadTable();
 	});
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			typeId: $("#typeId").val(),
 			state: $("#state").val(),

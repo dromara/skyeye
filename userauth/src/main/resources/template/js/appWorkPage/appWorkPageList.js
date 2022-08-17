@@ -29,7 +29,7 @@ layui.config({
 			{ field: 'title', title: '名称', align: 'left', width: 120 },
 			{ field: 'logo', title: 'LOGO', width: 60, templet: function (d) {
 				var str = '';
-				if(!isNull(d.logo)){
+				if (!isNull(d.logo)){
 					str = '<img src="' + fileBasePath + d.logo + '" class="photo-img" lay-event="iconPath">';
 				}
 				return str;
@@ -49,7 +49,7 @@ layui.config({
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 320, toolbar: '#tableBar'}
 		]],
 		done: function(json) {
@@ -85,21 +85,21 @@ layui.config({
 			title: "新增菜单",
 			pageId: "appWorkPageAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	});
 	
 	// 编辑菜单
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/appWorkPage/appWorkPageEdit.html", 
 			title: "编辑菜单",
 			pageId: "appWorkPageEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -109,7 +109,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "appworkpage007", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "appworkpage007", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -117,30 +117,30 @@ layui.config({
 	}
 	
 	// 上移
-	function topOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "appworkpage008", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
+	function topOne(data) {
+		AjaxPostUtil.request({url: reqBasePath + "appworkpage008", params: {rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
 	}
 	
 	// 下移
-	function lowerOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "appworkpage009", params:{rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
+	function lowerOne(data) {
+		AjaxPostUtil.request({url: reqBasePath + "appworkpage009", params: {rowId: data.id, parentId: data.parentId}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
 	}
 	
 	// 权限点
-    function authpoint(data){
+    function authpoint(data) {
 		menuId = data.id;
 		_openNewWindows({
 			url: "../../tpl/appWorkPageAuthPoint/appWorkPageAuthPointList.html",
 			title: "权限点",
 			pageId: "appWorkPageAuthPointList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -150,7 +150,7 @@ layui.config({
 		loadTable();
 	});
 
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageTable", {where: getTableParams()});
 	}
 

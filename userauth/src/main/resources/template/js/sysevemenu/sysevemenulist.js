@@ -38,7 +38,7 @@ layui.config({
 		form.render('select');
 	});
 
-	function initLoadTable(){
+	function initloadTable() {
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
@@ -54,7 +54,7 @@ layui.config({
 		        { field: 'menuName', title: '菜单名称', width: 120, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.menuName + '</a>';
 		        }},
-		        { field: 'menuNameEn', title: '英文名称', width: 150},
+		        { field: 'menuNameEn', title: '英文名称', width: 150 },
 		        { field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
 		        	var str = '';
 		        	if(d.menuIconType == '1'){
@@ -151,7 +151,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "sys011", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "sys011", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -159,42 +159,42 @@ layui.config({
 	}
 	
 	// 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/sysevemenu/sysevemenudetails.html", 
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "sysevemenudetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }});
     }
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysevemenu/sysevemenuedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sysevemenuedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 上移
-	function topOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "sys022", params:{rowId: data.id}, type: 'json', callback: function (json) {
+	function topOne(data) {
+		AjaxPostUtil.request({url: reqBasePath + "sys022", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
 	}
 	
 	// 下移
-	function lowerOne(data){
-		AjaxPostUtil.request({url: reqBasePath + "sys023", params:{rowId: data.id}, type: 'json', callback: function (json) {
+	function lowerOne(data) {
+		AjaxPostUtil.request({url: reqBasePath + "sys023", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -207,21 +207,21 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "sysevemenuadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
     // 权限点
-    function authpoint(data){
+    function authpoint(data) {
 		menuId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysEveMenuAuthPoint/sysEveMenuAuthPointList.html",
 			title: systemLanguage["com.skyeye.authorityPointPage"][languageType],
 			pageId: "sysEveMenuAuthPointList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				loadTable();
 			}});
 	}
@@ -234,11 +234,11 @@ layui.config({
 		return false;
 	});
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
 		return {
 			menuName: $("#menuName").val(),
 			menuUrl: $("#menuUrl").val(),

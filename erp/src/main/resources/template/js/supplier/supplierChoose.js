@@ -71,14 +71,14 @@ layui.config({
     });
 
 	// 详情
-	function selectSupplier(data){
+	function selectSupplier(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/supplier/supplierinfo.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "supplierinfo",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -95,11 +95,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			supplierName:$("#supplierName").val(),
             telephone: $("#telephone").val(),

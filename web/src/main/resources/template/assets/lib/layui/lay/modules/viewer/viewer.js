@@ -2817,7 +2817,7 @@ layui.define(["jquery"], function(exports) {
 								});
 							} else {
 								addListener(element, EVENT_CLICK, this.onStart = function(_ref) {
-									if(!isNull(_ref.target.getAttribute(options.url))){
+									if (!isNull(_ref.target.getAttribute(options.url))){
 										var target = _ref.target;
 										if(target.tagName.toLowerCase() === 'img' && (!isFunction(options.filter) || options.filter.call(_this, target))) {
 											_this.view(_this.images.indexOf(target));

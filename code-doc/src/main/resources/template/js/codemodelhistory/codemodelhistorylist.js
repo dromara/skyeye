@@ -42,21 +42,21 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'download') { //下载
         	download(data, obj);
-        }else if(layEvent === 'creatFile') { //同步文件
+        } else if (layEven === 'creatFile') { //同步文件
         	creatFile(data, obj);
         }
     });
 	
 	//下载
-	function download(data){
+	function download(data) {
 		filePath = data.filePath;
 		window.open(reqBasePath + "codemodel017?filePath=" + filePath);
 	}
 	
 	//同步文件
-	function creatFile(data){
+	function creatFile(data) {
 		filePath = data.filePath;
-		AjaxPostUtil.request({url: reqBasePath + "codemodel016", params:{filePath:filePath}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: reqBasePath + "codemodel016", params: {filePath:filePath}, type: 'json', callback: function (json) {
 			winui.window.msg('生成完成，请下载。', {icon: 1, time: 2000});
 			loadTable();
 		}});
@@ -76,7 +76,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{groupId:groupId}});
     }
     

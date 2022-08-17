@@ -65,13 +65,13 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
             editSupplier(data);
-        }else if (layEvent === 'delete') { //删除
+        } else if (layEvent === 'delete') { //删除
             deleteSupplier(data);
-        }else if (layEvent === 'enabled') { //启用
+        } else if (layEvent === 'enabled') { //启用
             editEnabled(data);
-        }else if(layEvent == 'unenabled'){ //禁用
+        } else if (layEven == 'unenabled'){ //禁用
             editNotEnabled(data)
-        }else if(layEvent == 'select'){ //详情
+        } else if (layEven == 'select'){ //详情
             selectSupplier(data)
         }
     });
@@ -85,21 +85,21 @@ layui.config({
     });
 
     //编辑
-    function editSupplier(data){
+    function editSupplier(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/supplier/supplieredit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "supplieredit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     //删除供应商
-    function deleteSupplier(data){
+    function deleteSupplier(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "supplier004", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -110,7 +110,7 @@ layui.config({
     }
 
     //设置启用状态
-    function editEnabled(data){
+    function editEnabled(data) {
         layer.confirm('确认要更改该供应商为启用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "supplier006", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg("设置成功。", {icon: 1, time: 2000});
@@ -120,7 +120,7 @@ layui.config({
     }
     
     //设置禁用状态
-    function editNotEnabled(data){
+    function editNotEnabled(data) {
         layer.confirm('确认要更改该供应商为禁用状态吗？', { icon: 3, title: '状态变更' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "supplier007", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg("设置成功。", {icon: 1, time: 2000});
@@ -130,14 +130,14 @@ layui.config({
     }
 
     //详情
-    function selectSupplier(data){
+    function selectSupplier(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/supplier/supplierinfo.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "supplierinfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -149,7 +149,7 @@ layui.config({
             title: "新增供应商",
             pageId: "supplieradd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -163,7 +163,7 @@ layui.config({
         refreshTable();
     })
     //刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where:{supplierName:$("#supplierName").val(),
                 telephone: $("#telephone").val(),
                 email: $("#email").val(),

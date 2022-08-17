@@ -32,7 +32,7 @@ layui.config({
 			// 加载教学楼
 			initFloorId();
 		});
-        form.on('select(schoolId)', function(data){
+        form.on('select(schoolId)', function(data) {
     		//加载年级
 	 		initGradeId();
 	 		//加载教学楼
@@ -85,7 +85,7 @@ layui.config({
 	        	};
 	        	
 	        	//选中的教师赋值
-	        	if(!isNull(teacherMation.staffId)){
+	        	if (!isNull(teacherMation.staffId)){
 	        		params.masterStaffId = teacherMation.staffId;
 	        	}
 	        	
@@ -104,7 +104,7 @@ layui.config({
  				title: "选择教师",
  				pageId: "teacherChoose",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode) {
+ 				callBack: function (refreshCode) {
 					$("#masterStaffName").val(teacherMation.userName);
  				}});
  	    });

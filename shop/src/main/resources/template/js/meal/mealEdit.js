@@ -23,7 +23,7 @@ layui.config({
             method: "GET",
             template: $("#beanTemplate").html(),
             ajaxSendLoadBefore: function(hdb){},
-            ajaxSendAfter:function(data){
+            ajaxSendAfter:function(data) {
 
                 $("input:radio[name=type][value=" + data.bean.type + "]").attr("checked", true);
                 $("input:radio[name=state][value=" + data.bean.state + "]").attr("checked", true);
@@ -33,7 +33,7 @@ layui.config({
                 // 初始化上传
                 $("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 22, data.bean.logo, 1));
 
-                if(!isNull(data.bean.mealConsumeMationList)){
+                if (!isNull(data.bean.mealConsumeMationList)){
                     $.each(data.bean.mealConsumeMationList, function(i, item) {
                         addRow();
                         $("#consumeExplain" + (rowNum - 1)).val(item.consumeExplain);

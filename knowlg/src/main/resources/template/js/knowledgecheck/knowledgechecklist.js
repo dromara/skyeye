@@ -101,7 +101,7 @@ layui.config({
 		var layEvent = obj.event;
 		if (layEvent === 'check') { //审核
 			check(data);
-		}else if (layEvent === 'detail') { //详情
+		} else if (layEvent === 'detail') { //详情
 			detail(data);
 		}
 	});
@@ -144,7 +144,7 @@ layui.config({
 		loadTable();
 	});
 	
-	function loadTable(){
+	function loadTable() {
 		table.reloadData("messageNoCheckTable", {where: getNoCheckTableParams()});
 	};
 	
@@ -154,7 +154,7 @@ layui.config({
 
 	function getNoCheckTableParams(){
 		var startTime = "", endTime = "";
-		if(!isNull($("#createTime").val())){
+		if (!isNull($("#createTime").val())) {
 			startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
 			endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
 		}else {
@@ -171,14 +171,14 @@ layui.config({
 	}
 	
 	// 审核
-	function check(data){
+	function check(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/knowledgecheck/knowledgecheck.html", 
 			title: "审核",
 			pageId: "knowledgecheck",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 				loadCheckedTable();
@@ -186,14 +186,14 @@ layui.config({
 	};
 	
 	// 未审核详情
-	function detail(data){
+	function detail(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/knowledgecheck/knowledgeuncheckdetail.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "knowledgeuncheckdetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	};
 	
@@ -275,14 +275,14 @@ layui.config({
 	}
 	
 	// 已审核详情
-	function checkeddetail(data){
+	function checkeddetail(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/knowledgecheck/knowledgecheckeddetail.html", 
 			title: "详情",
 			pageId: "knowledgecheckeddetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	};
     
@@ -306,14 +306,14 @@ layui.config({
     function getCheckTableParams(){
 		var firstTime = "", lastTime = "";
 		var theFirstTime = "", theLastTime = "";
-		if(!isNull($("#checkedCreateTime").val())){
+		if (!isNull($("#checkedCreateTime").val())) {
 			firstTime = $("#checkedCreateTime").val().split('~')[0].trim() + ' 00:00:00';
 			lastTime = $("#checkedCreateTime").val().split('~')[1].trim() + ' 23:59:59';
 		}else {
 			firstTime = "";
 			lastTime = "";
 		}
-		if(!isNull($("#checkedExamineTime").val())){
+		if (!isNull($("#checkedExamineTime").val())) {
 			theFirstTime = $("#checkedExamineTime").val().split('~')[0].trim() + ' 00:00:00';
 			theLastTime = $("#checkedExamineTime").val().split('~')[1].trim() + ' 23:59:59';
 		}else {

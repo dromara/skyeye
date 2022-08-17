@@ -21,7 +21,7 @@ layui.config({
 
 		 		var str = '无';
 		 		var defaultNumber = json.bean.defaultNumber;
-		        if(!isNull(json.bean.linkNumber)){
+		        if (!isNull(json.bean.linkNumber)){
 		        	str = '<a lay-event="details" class="notice-title-click">' + json.bean.linkNumber + '</a>';
 		        	defaultNumber += '<span class="state-new">[转]</span>';
 		        }

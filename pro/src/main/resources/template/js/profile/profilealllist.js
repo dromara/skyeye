@@ -46,7 +46,7 @@ layui.config({
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120},
 	        { field: 'updateTime', title: '更新时间', align: 'center', width: 140},
 	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-	        	if(!isNull(d.processInstanceId)){
+	        	if (!isNull(d.processInstanceId)){
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        	} else {
 	        		return "";
@@ -63,20 +63,20 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details'){ //详情
         	details(data);
-        }else if (layEvent === 'processDetails') { //流程详情
+        } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
         }
     });
 
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/profile/profiledetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "profiledetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -94,11 +94,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		projectName: $("#proName").val(),
 			title: $("#fileName").val(),

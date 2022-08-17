@@ -12,7 +12,7 @@ layui.config({
 	    	form = layui.form;
 	    var colorpicker = layui.colorpicker;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop008", params:{rowId: parent.parentRowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: reqBasePath + "sysevewindragdrop008", params: {rowId: parent.parentRowId}, type: 'json', callback: function (json) {
 			$("#menuName").val(json.bean.menuName);
 			$("#menuNameEn").val(json.bean.menuNameEn);
 			$("#menuIcon").val(json.bean.menuIcon);
@@ -90,7 +90,7 @@ layui.config({
 					};
 
 					if(data.field.menuIconType == '1'){
-						if(isNull($("#menuIcon").val())){
+						if(isNull($("#menuIcon").val())) {
 							winui.window.msg("请选择菜单图标", {icon: 2, time: 2000});
 							return false;
 						}

@@ -129,7 +129,7 @@ layui.config({
 		table.reloadData("messageTable", {where: getTableParams()});
     });
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			pageName: $("#pageName").val(),
 			firstTypeId: $("#firstTypeId").val(),

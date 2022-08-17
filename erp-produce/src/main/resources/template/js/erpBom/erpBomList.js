@@ -30,8 +30,8 @@ layui.config({
             { field: 'title', title: 'bom方案名称', align: 'left',width: 150, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		    }},
-		    { field: 'materialName', title: '商品名称', align: 'left',width: 150},
-            { field: 'materialModel', title: '商品型号', align: 'left',width: 150},
+		    { field: 'materialName', title: '商品名称', align: 'left',width: 150 },
+            { field: 'materialModel', title: '商品型号', align: 'left',width: 150 },
             { field: 'unitName', title: '计量单位', align: 'center',width: 100},
             { field: 'makeNum', title: '数量', align: 'center',width: 80},
             { field: 'consumablesPrice', title: '耗材总费用', align: 'right',width: 100},
@@ -51,9 +51,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
             edit(data);
-        }else if (layEvent === 'delete') { //删除
+        } else if (layEvent === 'delete') { //删除
             deleteAccount(data);
-        }else if (layEvent === 'details') { //详情
+        } else if (layEvent === 'details') { //详情
         	details(data);
         }
     });
@@ -69,14 +69,14 @@ layui.config({
     });
 
     //编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/erpBom/erpBomEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "erpBomEdit",
             area: ['100vw', '100vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -84,7 +84,7 @@ layui.config({
     }
 
     // 删除
-    function deleteAccount(data){
+    function deleteAccount(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "erpbom004", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -101,21 +101,21 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "erpBomAdd",
             area: ['100vw', '100vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });
     
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/erpBom/erpBomDetail.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "erpBomDetails",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -124,7 +124,7 @@ layui.config({
     });
 
     //刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -133,7 +133,7 @@ layui.config({
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		materialName:$("#materialName").val(), 
     		materialModel: $("#materialModel").val()

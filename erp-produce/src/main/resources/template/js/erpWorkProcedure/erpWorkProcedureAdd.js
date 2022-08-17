@@ -19,7 +19,7 @@ layui.config({
         textool.init({eleId: 'content', maxlength: 200});
 
         // 获取当前登录用户所属企业的所有部门信息
-        systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+        systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
             $("#departmentId").html(getDataUseHandlebars(selOption, data));
             form.render('select');
         });

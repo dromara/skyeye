@@ -178,7 +178,7 @@ layui.config({
                 // Rest接口数据源
                 $("#restUrl").val(bean.restUrl);
                 $("#restMethod").val(bean.restMethod);
-                if(!isNull(bean.restHeader)) {
+                if (!isNull(bean.restHeader)) {
                     $.each(JSON.parse(bean.restHeader), function (i, item) {
                         addRow();
                         $("#headerKey" + (rowNum - 1)).val(item.headerKey);
@@ -190,7 +190,7 @@ layui.config({
                     mode: "xml",
                     theme: "default"
                 }));
-                if(!isNull(bean.restContent)){
+                if (!isNull(bean.restContent)){
                     restRequestBodyContent.setValue(bean.restContent);
                 }
             } else if(dataFromType == 4){
@@ -285,7 +285,7 @@ layui.config({
                 };
             } else if(dataFromType == 3){
                 // Rest接口数据源
-                if(isNull($("#restUrl").val())){
+                if(isNull($("#restUrl").val())) {
                     winui.window.msg('请填写url', {icon: 2, time: 2000});
                     return null;
                 }
@@ -297,7 +297,7 @@ layui.config({
                 };
             } else if(dataFromType == 4){
                 // SQL数据源
-                if(isNull($("#sqlDataBase").val())){
+                if(isNull($("#sqlDataBase").val())) {
                     winui.window.msg('请选择数据库', {icon: 2, time: 2000});
                     return null;
                 }
@@ -345,7 +345,7 @@ layui.config({
          *
          * @param data 数据
          */
-        function loadFieldResolution(data){
+        function loadFieldResolution(data) {
             $("#analysisTable").html("");
             $.each(data, function (i, item){
                 addAnalysisRow();

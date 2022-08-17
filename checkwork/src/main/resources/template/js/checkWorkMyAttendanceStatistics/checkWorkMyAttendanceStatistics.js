@@ -46,7 +46,7 @@ layui.config({
 		        	if(isNull(d.timeId)){
 		        		return "";
 		        	}
-		        	if(!isNull(d.startTime) && !isNull(d.endTime)){
+		        	if (!isNull(d.startTime) && !isNull(d.endTime)){
 						return '<a lay-event="details" class="notice-title-click">' + d.title + '[' + d.startTime + '~' + d.endTime + ']' + '</a>';
 					} else {
 						return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
@@ -139,14 +139,14 @@ layui.config({
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.timeId;
 		_openNewWindows({
 			url: "../../tpl/checkWorkTime/checkWorkTimeDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "checkWorkTimeDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -171,13 +171,13 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-    	if(!isNull($("#checkDate").val())){
+    	if (!isNull($("#checkDate").val())) {
     		startTime = $("#checkDate").val().split('~')[0].trim();
     		endTime = $("#checkDate").val().split('~')[1].trim();
     	}

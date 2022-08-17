@@ -36,7 +36,7 @@ layui.config({
 		// 附件回显
 		skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});
 		// 获取我参与的项目列表
-		proUtil.queryMyProjectsList(function (data){
+		proUtil.queryMyProjectsList(function (data) {
 			$("#proId").html(getDataUseHandlebars(selOption, data));
 			$("#proId").val(json.bean.proId);
 		});
@@ -50,7 +50,7 @@ layui.config({
 		});
 
 		// 获取当前登录用户所属企业的所有部门信息
-		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
 			$("#departments").html(getDataUseHandlebars(selOption, data));
 			$("#departments").val(json.bean.departmentId);
 			form.render('select');

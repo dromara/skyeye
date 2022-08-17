@@ -36,13 +36,13 @@ layui.config({
 					pagination: false,
 					template: selTemplate,
 					ajaxSendLoadBefore: function(hdb){},
-					ajaxSendAfter:function(data){
+					ajaxSendAfter:function(data) {
 						$("#levelId").val(json.bean.levelId);
 						form.render('select');
 					}
 				});
 
-			    form.on('select(languageId)', function(data){
+			    form.on('select(languageId)', function(data) {
 					if(isNull(data.value) || data.value === '请选择'){
 						$("#levelId").html("");
 						form.render('select');

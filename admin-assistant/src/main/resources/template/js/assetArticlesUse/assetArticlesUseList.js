@@ -53,7 +53,7 @@ layui.config({
 					return "<span class='state-error'>" + d.stateName + "</span>";
 				}
 			}},
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150},
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#lingyongTableBar'}
 		]],
 		done: function(){
@@ -67,15 +67,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'lingyongDedails') { //领用详情
         	lingyongDedails(data);
-        }else if (layEvent === 'edit') { //编辑领用申请
+        } else if (layEvent === 'edit') { //编辑领用申请
         	useedit(data);
-        }else if (layEvent === 'subApproval') { //提交审批
+        } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        }else if(layEvent === 'cancellation') {//领用作废
+        } else if (layEven === 'cancellation') {//领用作废
         	cancellation(data);
-        }else if(layEvent === 'lingyongProcessDetails') {//领用流程详情
+        } else if (layEven === 'lingyongProcessDetails') {//领用流程详情
 			activitiUtil.activitiDetails(data);
-        }else if (layEvent === 'revoke') { //撤销领用申请
+        } else if (layEvent === 'revoke') { //撤销领用申请
         	revoke(data);
         }
     });
@@ -87,14 +87,14 @@ layui.config({
 			title: "添加用品领用申请",
 			pageId: "assetArticlesUseAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLingyongTable();
 			}});
     });
 	
 	// 撤销用品领用
-	function revoke(data){
+	function revoke(data) {
 		var msg = '确认撤销该用品领用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
@@ -106,14 +106,14 @@ layui.config({
 	}
 	
 	// 编辑用品领用申请
-	function useedit(data){
+	function useedit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetArticlesUse/assetArticlesUseEdit.html", 
 			title: "编辑用品领用申请",
 			pageId: "assetArticlesUseEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLingyongTable();
 			}
@@ -121,7 +121,7 @@ layui.config({
 	}
 	
 	// 用品领用提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["assetArticlesUse"]["key"], function (approvalId) {
@@ -138,7 +138,7 @@ layui.config({
 	}
 	
 	// 用品领用作废
-	function cancellation(data){
+	function cancellation(data) {
 		var msg = '确认作废该条领用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
@@ -150,14 +150,14 @@ layui.config({
 	}
 	
 	// 用品领用详情
-	function lingyongDedails(data){
+	function lingyongDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetArticlesUse/assetArticlesUseDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetArticlesUseDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -180,9 +180,9 @@ layui.config({
     	table.reloadData("lingyongTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-		if(!isNull($("#createTime").val())){
+		if (!isNull($("#createTime").val())) {
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

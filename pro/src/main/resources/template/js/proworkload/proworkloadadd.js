@@ -20,12 +20,12 @@ layui.config({
 	var selOption = getFileContent('tpl/template/select-option.tpl');
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$("#writePeople").html(data.bean.userName);
 	});
 
 	$("#title").val(getYMDFormatDate());
-	proUtil.queryMyProjectsList(function (data){
+	proUtil.queryMyProjectsList(function (data) {
 		proList = data.rows;
 		$("#proId").html(getDataUseHandlebars(selOption, data));
 		form.render('select');
@@ -36,7 +36,7 @@ layui.config({
 	//所属项目变化事件
 	form.on('select(proIdProperty)', function(data) {
 		var thisRowValue = data.value;
-		if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+		if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 			$.each(proList, function(i, item){
 				if(item.id == thisRowValue){
 					$("#projectNumber").html(item.projectNumber);

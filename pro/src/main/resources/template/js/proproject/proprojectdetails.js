@@ -20,7 +20,7 @@ layui.config({
 		 	},
 		 	ajaxSendAfter: function (json) {
 				// 获取当前登录员工信息
-				systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+				systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 					$("#orderDetailTitle").html(data.bean.companyName + '项目详情信息');
 				});
 

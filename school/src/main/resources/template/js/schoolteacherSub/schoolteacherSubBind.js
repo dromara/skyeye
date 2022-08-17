@@ -23,7 +23,7 @@ layui.config({
 				pagination: false,
 				template: getFileContent('tpl/template/checkbox-property.tpl'),
 				ajaxSendLoadBefore: function(hdb){},
-				ajaxSendAfter:function(data){
+				ajaxSendAfter:function(data) {
 					var skill = json.bean.skill;
 					for(var i = 0; i < skill.length; i++){
 						$('input:checkbox[rowId="' + skill[i].id + '"]').attr("checked", true);

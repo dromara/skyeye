@@ -16,7 +16,7 @@ layui.config({
 	authBtn('1597470685417');
 
 	// 查询所有的车牌号用于下拉选择框
-	adminAssistantUtil.queryAllVehicleList(function (data){
+	adminAssistantUtil.queryAllVehicleList(function (data) {
 		$("#inspectionPlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
 		form.render('select');
 	});
@@ -56,9 +56,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'inspectiondetails') { //详情
         	inspectiondetails(data);
-        }else if (layEvent === 'inspectiondelet'){ //删除
+        } else if (layEvent === 'inspectiondelet'){ //删除
         	inspectiondelet(data);
-        }else if (layEvent === 'inspectionedit'){	//编辑
+        } else if (layEvent === 'inspectionedit'){	//编辑
         	inspectionedit(data);
         }
     });
@@ -66,19 +66,19 @@ layui.config({
 	form.render();
 	
 	// 年检信息详情
-	function inspectiondetails(data){
+	function inspectiondetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageInspection/vehicleManageInspectionDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageInspectionDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 删除年检信息
-	function inspectiondelet(data){
+	function inspectiondelet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "inspection003", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -95,21 +95,21 @@ layui.config({
 			title: "车辆年检登记单",
 			pageId: "vehicleManageInspectionAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadInspectionTable();
 			}});
     });
 	
 	// 编辑年检信息
-	function inspectionedit(data){
+	function inspectionedit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageInspection/vehicleManageInspectionEdit.html", 
 			title: "编辑车辆年检信息",
 			pageId: "vehicleManageInspectionEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadInspectionTable();
 			}});
@@ -128,7 +128,7 @@ layui.config({
     	table.reloadData("inspectionTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		inspectionTitle: $("#inspectionTitle").val(),
     		inspectionPlate: $("#inspectionPlate").val()

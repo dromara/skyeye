@@ -52,7 +52,7 @@ layui.config({
         });
     }
     
-    form.on('select(gradeId)', function(data){
+    form.on('select(gradeId)', function(data) {
 		if(isNull(data.value) || data.value === '请选择'){
 			$("#subjectId").html("");
 			form.render('select');
@@ -117,7 +117,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'del') { //删除
 	        	del(data, obj);
-	        }else if (layEvent === 'edit') { //编辑
+	        } else if (layEvent === 'edit') { //编辑
 	        	edit(data);
 	        }
 	    });
@@ -135,7 +135,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:schoolBasePath + "schoolquestionbank003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -143,7 +143,7 @@ layui.config({
 	}
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		var url = "";
 		var title = "编辑";
@@ -174,7 +174,7 @@ layui.config({
 			title: title,
 			pageId: "editQuestionBankMation",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -193,7 +193,7 @@ layui.config({
 			title: "新增单选题",
 			pageId: "radioAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -207,7 +207,7 @@ layui.config({
 			title: "新增多选题",
 			pageId: "checkBoxAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -221,7 +221,7 @@ layui.config({
 			title: "新增填空题",
 			pageId: "fillblankAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -235,7 +235,7 @@ layui.config({
 			title: "新增评分题",
 			pageId: "scoreAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -249,7 +249,7 @@ layui.config({
 			title: "新增排序题",
 			pageId: "orderbyAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -263,7 +263,7 @@ layui.config({
 			title: "新增多项排序题",
 			pageId: "multiFillblankAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -277,7 +277,7 @@ layui.config({
 			title: "新增矩阵单选题",
 			pageId: "chenRadioAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -291,7 +291,7 @@ layui.config({
 			title: "新增矩阵多选题",
 			pageId: "chenCheckBoxAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -305,7 +305,7 @@ layui.config({
 			title: "新增矩阵评分题",
 			pageId: "chenScoreAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -319,13 +319,13 @@ layui.config({
 			title: "新增矩阵填空题",
 			pageId: "chenFbkAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTablePatams()});
     }
     

@@ -25,7 +25,7 @@ layui.config({
 		form.render();
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
-        		if(isNull($("#notifyTime").val())){
+        		if(isNull($("#notifyTime").val())) {
         			winui.window.msg('请选择通知时间', {icon: 2, time: 2000});
         			return false;
         		}

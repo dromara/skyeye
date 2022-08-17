@@ -90,7 +90,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{typeName:$("#typeName").val(),state:$("#state").val()}});
     }
     
@@ -105,21 +105,21 @@ layui.config({
 			title: "新增轻应用类型",
 			pageId: "lightapptypeadd",
 			area: ['800px', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/lightapptype/lightapptypeedit.html", 
 			title: "编辑轻应用类型",
 			pageId: "lightapptypeedit",
 			area: ['800px', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -162,7 +162,7 @@ layui.config({
 	}
 	
 	//上移
-	function topOne(data){
+	function topOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapptype005", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -170,7 +170,7 @@ layui.config({
 	}
 	
 	//下移
-	function lowerOne(data){
+	function lowerOne(data) {
 		AjaxPostUtil.request({url: sysMainMation.lightAppBasePath + "lightapptype006", params: {rowId: data.id}, type: 'json', callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();

@@ -81,7 +81,7 @@ layui.config({
 		}});
 	});
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
 			title: "",
 			firstTypeId: firstType == "0" ? "" : firstType,

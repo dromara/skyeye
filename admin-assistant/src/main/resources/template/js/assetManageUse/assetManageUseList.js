@@ -70,38 +70,38 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'lingyongDedails') { //领用详情
         	lingyongDedails(data);
-        }else if (layEvent === 'lingyongEdit') { //编辑领用申请
+        } else if (layEvent === 'lingyongEdit') { //编辑领用申请
         	lingyongEdit(data);
-        }else if (layEvent === 'subApproval') { //提交审批
+        } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        }else if(layEvent === 'cancellation') {//领用作废
+        } else if (layEven === 'cancellation') {//领用作废
         	cancellation(data);
-        }else if(layEvent === 'lingyongProcessDetails') {//领用流程详情
+        } else if (layEven === 'lingyongProcessDetails') {//领用流程详情
 			activitiUtil.activitiDetails(data);
-        }else if(layEvent === 'revoke') {//撤销领用申请
+        } else if (layEven === 'revoke') {//撤销领用申请
         	revoke(data);
         }
     });
 	
 	// 资产领用详情
-	function lingyongDedails(data){
+	function lingyongDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetManageUse/assetManageUseDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetManageUseDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
 	
 	// 撤销资产领用
-	function revoke(data){
+	function revoke(data) {
 		var msg = '确认撤销该资产领用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "asset036", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "asset036", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadLingyongTable();
     		}});
@@ -115,21 +115,21 @@ layui.config({
 			title: "资产领用申请",
 			pageId: "assetManageUseAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLingyongTable();
 			}});
     });
 	
 	// 编辑资产领用申请
-	function lingyongEdit(data){
+	function lingyongEdit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetManageUse/assetManageUseEdit.html", 
 			title: "编辑资产领用申请",
 			pageId: "assetManageUseEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLingyongTable();
 			}
@@ -137,11 +137,11 @@ layui.config({
 	}
 	
 	// 资产领用作废
-	function cancellation(data){
+	function cancellation(data) {
 		var msg = '确认作废该条领用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "asset016", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "asset016", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadLingyongTable();
     		}});
@@ -149,7 +149,7 @@ layui.config({
 	}
 	
 	// 资产领用提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["assetManageUse"]["key"], function (approvalId) {
@@ -183,9 +183,9 @@ layui.config({
     	table.reloadData("lingyongTable", {where: getTableParams()});
     }
 	
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-		if(!isNull($("#createTime").val())){
+		if (!isNull($("#createTime").val())) {
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

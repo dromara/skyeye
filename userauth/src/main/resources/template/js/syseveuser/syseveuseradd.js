@@ -76,13 +76,13 @@ layui.config({
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "sysEveUserStaffDetails",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 		});
  	    
 	    matchingLanguage();
  		form.render();
- 		form.on('submit(formAddBean)', function(data){
+ 		form.on('submit(formAddBean)', function(data) {
 			if (winui.verifyForm(data.elem)) {
 				var params = {
 					staffId: staffId,

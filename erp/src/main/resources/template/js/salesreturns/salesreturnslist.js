@@ -31,7 +31,7 @@ layui.config({
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
             { field: 'defaultNumber', title: '单据编号', align: 'left', rowspan: '2', width: 250, templet: function (d) {
 		        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
-		        if(!isNull(d.linkNumber)){
+		        if (!isNull(d.linkNumber)){
 		        	str += '<span class="state-new">[转]</span>';
 			        if(d.status == 2){
 			        	str += '<span class="state-up"> [正常]</span>';
@@ -41,7 +41,7 @@ layui.config({
 		        }
 		        return str;
 		    }},
-            { field: 'supplierName', title: '客户', align: 'left', rowspan: '2', width: 150},
+            { field: 'supplierName', title: '客户', align: 'left', rowspan: '2', width: 150 },
             { title: '审批模式', align: 'center', colspan: '2'},
             { field: 'state', title: '状态', align: 'left', rowspan: '2', width: 80, templet: function (d) {
                 return activitiUtil.showStateName(d.state, d.submitType);
@@ -71,17 +71,17 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'delete') { //删除
             deletemember(data);
-        }else if (layEvent === 'details') { //详情
+        } else if (layEvent === 'details') { //详情
         	details(data);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'submitToSave') { //提交
+        } else if (layEvent === 'submitToSave') { //提交
             subExamine(data);
-        }else if (layEvent === 'subExamine') { //提交审核
+        } else if (layEvent === 'subExamine') { //提交审核
             subExamine(data);
-        }else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
+        } else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
-        }else if (layEvent === 'revoke') { //撤销
+        } else if (layEvent === 'revoke') { //撤销
             erpOrderUtil.revokeOrderMation(data.processInstanceId, systemOrderType["putIsSalesReturns"]["orderType"], function() {
                 loadTable();
             });
@@ -89,42 +89,42 @@ layui.config({
     });
 
     // 删除
-    function deletemember(data){
+    function deletemember(data) {
         erpOrderUtil.deleteOrderMation(data.id, systemOrderType["putIsSalesReturns"]["orderType"], function() {
             loadTable();
         });
     }
     
     // 提交数据
-	function subExamine(data){
+	function subExamine(data) {
         erpOrderUtil.submitOrderMation(data.id, systemOrderType["putIsSalesReturns"]["orderType"], data.submitType, sysActivitiModel["putIsSalesReturns"]["key"], function() {
             loadTable();
         });
     }
     
     // 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/salesreturns/salesreturnsedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "salesreturnsedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
 			}});
 	}
     
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/salesreturns/salesReturnsDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "salesReturnsDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -135,7 +135,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "salesreturnsadd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -154,7 +154,7 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -167,10 +167,10 @@ layui.config({
 		});
     });
     
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "";
         var endTime = "";
-    	if(!isNull($("#operTime").val())){
+    	if (!isNull($("#operTime").val())) {
             startTime = $("#operTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#operTime").val().split('~')[1].trim() + ' 23:59:59';
         }

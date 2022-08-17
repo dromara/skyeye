@@ -13,7 +13,7 @@ layui.config({
 	    
 	    var type;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysevemodel004", params:{id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
+	    AjaxPostUtil.request({url: reqBasePath + "sysevemodel004", params: {id: parent.rowId}, type: 'json', method: "GET", callback: function (json) {
 			// 初始化上传
 			$("#logo").upload(systemCommonUtil.uploadCommon003Config('logo', 20, json.bean.logo, 1));
 

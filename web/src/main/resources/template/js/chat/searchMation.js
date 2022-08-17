@@ -35,7 +35,7 @@ layui.config({
 		 		});
 		 		
 		 		hdb.registerHelper('compare2', function(v1, v2, v3, v4, options) {
-		 			if(!isNull(v1)){
+		 			if (!isNull(v1)){
 		        		return '<font class="in-this-group">已在该群聊</font>';
 		        	} else {
 		        		if(v3 < v4){
@@ -58,7 +58,7 @@ layui.config({
 	    
 	    //查找
 	    $("body").on("click", "#reSearch", function() {
-	    	if(isNull($("#groupNameOrNum").val())){
+	    	if(isNull($("#groupNameOrNum").val())) {
 	    		winui.window.msg('请输入搜索内容', {icon: 2, time: 2000});
 	    	} else {
 	    		refreshGrid("search-group-list", {params:{groupNameOrNum:$("#groupNameOrNum").val()}});
@@ -68,7 +68,7 @@ layui.config({
 	    //加入群聊
 	    $("body").on("click", ".inGroup", function (e) {
 	    	var _this = $(this);
-	    	AjaxPostUtil.request({url: reqBasePath + "companytalkgroup006", params:{groupId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
+	    	AjaxPostUtil.request({url: reqBasePath + "companytalkgroup006", params: {groupId: $(this).attr("rowid")}, type: 'json', callback: function (json) {
 				_this.parent().html('<font>等待审核</font>');
 				winui.window.msg('等待管理员审核', {icon: 1, time: 2000});
 				if(json.total == '1'){

@@ -83,7 +83,7 @@ layui.config({
 	});
 	
     function refreshTable(){
-    	if(isNull($("#timeRange").val())){
+    	if(isNull($("#timeRange").val())) {
     		startTime = "";
     		endTime = "";
     	} else {

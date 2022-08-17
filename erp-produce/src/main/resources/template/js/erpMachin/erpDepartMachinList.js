@@ -69,7 +69,7 @@ layui.config({
 	    	{ field: 'unitName', title: '规格', align: 'center', width: 80},
 	        { field: 'needNum', title: '加工数量', align: 'center', width: 80},
 	        { field: 'departmentName', title: '部门', align: 'left', width: 100},
-	    	{ field: 'startTime', title: '开始时间', align: 'center', width: 150},
+	    	{ field: 'startTime', title: '开始时间', align: 'center', width: 150 },
 	        { field: 'endTime', title: '结束时间', align: 'center', width: 150}
         ]],
         done: function(){
@@ -97,14 +97,14 @@ layui.config({
     });
     
     //详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/erpMachin/erpMachinDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "erpMachinDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -113,7 +113,7 @@ layui.config({
     });
 
     //刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTablePatams()});
     }
 

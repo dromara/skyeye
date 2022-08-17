@@ -43,7 +43,7 @@ var customerJS = {
 //系统基础信息
 var sysMainMation = {}; // 系统基础信息json
 if(isNull(localStorage.getItem("sysMainMation"))){
-	jsGetJsonFile("../../configRation.json", function(data){
+	jsGetJsonFile("../../configRation.json", function(data) {
 		sysMainMation = data;
 		localStorage.setItem("sysMainMation", JSON.stringify(sysMainMation));
 		initBaseParams();
@@ -120,7 +120,7 @@ function _openNewWindows(mation){
 	if(isNull(mation.title)){
 		mation.title = "窗口";
 	}
-	if(!isNull(mation.params)){
+	if (!isNull(mation.params)){
 		var s = "";
 		for(var param in mation.params)
 			s += "&" + param + "=" + mation.params[param];
@@ -247,14 +247,14 @@ var postDownLoadFile = function(options) {
 	var $iframe = layui.$('<iframe id="down-file-iframe" />');
 	var $form = layui.$('<form target="down-file-iframe" method="' + config.method + '" />');
 	$form.attr('action', config.url);
-	if(!isNull(config.params)){
+	if (!isNull(config.params)){
 		for (var key in config.params) {
 			$form.append('<input type="hidden" name="' + key + '" value="' + config.params[key] + '" />');
 		}
 		$form.append('<input type="hidden" name="userToken" value="' + getCookie('userToken') + '" />');
 	}
 	// 图片
-	if(!isNull(config.data)){
+	if (!isNull(config.data)){
 		$form.append('<input type="hidden" name="base64Info" value="' + config.data + '" />');
 	}
 
@@ -577,7 +577,7 @@ function matchingLanguage(){
 		$.each(list, function(i, item){
 			try{
 				var jsonStr = $(item).attr("matchLanguage");
-				if(!isNull(jsonStr)){
+				if (!isNull(jsonStr)){
 					jsonStr = jsonStr.replace(/\'/g,"\"");
 					var _json = JSON.parse(jsonStr);
 					$.each(_json, function(key, value){
@@ -829,7 +829,7 @@ function resetCustomizeDay(days, id){
 	resetCustomize(id);
 	$.each(days, function(i, item){
 		var _this = $("span[value='" + item.day + "']");
-		if(!isNull(id)){
+		if (!isNull(id)){
 			_this = $("#" + id).find("span[value='" + item.day + "']");
 		}
 		var clas = getArrIndexOfPointStr(checkWorkTimeColor, _this.attr("class"));
@@ -1119,7 +1119,7 @@ function isJsonFormat(str) {
  * @param str
  */
 function judgeStrInStrs(strs, str){
-	if(!isNull(strs) && !isNull(str)){
+	if (!isNull(strs) && !isNull(str)){
 		var ss = strs.split(',');
 		var strIndex = -1;
 		layui.$.each(ss, function(i, item){

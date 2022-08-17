@@ -14637,7 +14637,7 @@ ORYX.Core.Node = {
         return result;
     },
     
-    deserialize: function(data){
+    deserialize: function(data) {
     	arguments.callee.$.deserialize.apply(this, arguments);
 		
 	    try {
@@ -16648,7 +16648,7 @@ ORYX.Core.Edge = {
         return result;
     },
     
-    deserialize: function(data){
+    deserialize: function(data) {
         try {
             //data = this.getStencil().deserialize(this, data);
 			

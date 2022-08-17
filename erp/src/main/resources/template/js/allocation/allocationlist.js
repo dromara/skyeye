@@ -63,17 +63,17 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'delete') { //删除
             deletemember(data);
-        }else if (layEvent === 'details') { //详情
+        } else if (layEvent === 'details') { //详情
         	details(data);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'subExamine') { //提交审核
+        } else if (layEvent === 'subExamine') { //提交审核
         	subExamine(data);
         }
     });
 
     // 删除
-    function deletemember(data){
+    function deletemember(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             AjaxPostUtil.request({url: flowableBasePath + "delcommon011", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -83,7 +83,7 @@ layui.config({
     }
     
     // 提交审批
-	function subExamine(data){
+	function subExamine(data) {
         layer.confirm('确认要提交审核吗？', { icon: 3, title: '提交审核操作' }, function (index) {
             AjaxPostUtil.request({url: flowableBasePath + "allocation006", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg("提交成功。", {icon: 1, time: 2000});
@@ -93,28 +93,28 @@ layui.config({
     }
     
     // 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/allocation/allocationedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "allocationedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
 			}});
 	}
     
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/allocation/allocationdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "allocationdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -125,7 +125,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "allocationadd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -153,14 +153,14 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
         // 单据的开始时间、结束时间
         var startTime = "", endTime = "";
-    	if(!isNull($("#operTime").val())){
+    	if (!isNull($("#operTime").val())) {
             startTime = $("#operTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#operTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

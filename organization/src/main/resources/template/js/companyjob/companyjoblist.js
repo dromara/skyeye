@@ -22,7 +22,7 @@ layui.config({
 	});
 
 	//公司监听事件
-	form.on('select(companyId)', function(data){
+	form.on('select(companyId)', function(data) {
 		if(isNull(data.value) || data.value === '请选择'){
 			$("#departmentId").html("");
 			form.render('select');
@@ -46,7 +46,7 @@ layui.config({
 	    });
 	}
 	
-	function initLoadTable(){
+	function initloadTable() {
 		tableTree.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
@@ -79,9 +79,9 @@ layui.config({
 		var layEvent = obj.event;
 		if (layEvent === 'del') { //删除
 			del(data, obj);
-		}else if (layEvent === 'edit') { //编辑
+		} else if (layEvent === 'edit') { //编辑
 			edit(data);
-		}else if (layEvent === 'jobDesc') { //职位简介
+		} else if (layEvent === 'jobDesc') { //职位简介
 			layer.open({
 				id: '职位简介',
 				type: 1,
@@ -90,7 +90,7 @@ layui.config({
 				area: ['90vw', '90vh'],
 				content: data.jobDesc
 			});
-		}else if (layEvent === 'jobScore') { //岗位定级
+		} else if (layEvent === 'jobScore') { //岗位定级
 			jobScore(data);
 		}
 	});
@@ -107,7 +107,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "companyjob003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "companyjob003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -115,28 +115,28 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/companyjob/companyjobedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "companyjobedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 
 	// 岗位定级
-	function jobScore(data){
+	function jobScore(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/companyJobScore/companyJobScoreList.html",
 			title: '岗位定级',
 			pageId: "companyJobScoreList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -152,17 +152,17 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "companyjobadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
 		tableTree.reload("messageTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		companyId: $("#companyId").val(),
 			departmentId: $("#departmentId").val(),

@@ -38,21 +38,21 @@ layui.config({
 	        { field: 'propertyValueNum', title: '属性值数量', width: 100 },
 	        { field: 'useNum', title: '使用数量', width: 100 },
 	        { field: 'id', title: 'HTML内容', width: 100, templet: function (d) {
-	        	if(!isNull(d.htmlContent)){
+	        	if (!isNull(d.htmlContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
 	        { field: 'id', title: 'JS内容', width: 80, templet: function (d) {
-	        	if(!isNull(d.jsContent)){
+	        	if (!isNull(d.jsContent)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsContent"></i>';
 	        	} else {
 	        		return '无';
 	        	}
 	        }},
 	        { field: 'id', title: 'JS依赖文件', width: 120, templet: function (d) {
-	        	if(!isNull(d.jsRelyOn)){
+	        	if (!isNull(d.jsRelyOn)){
 	        		return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsRelyOn"></i>';
 	        	} else {
 	        		return '无';
@@ -84,9 +84,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'htmlContent') { //HTML内容
+        } else if (layEvent === 'htmlContent') { //HTML内容
         	var mode = returnModel('html');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -100,7 +100,7 @@ layui.config({
 	            area: ['700px', '90vh'],
 	            content: $("#modelContentDiv").html(),
 	        });
-        }else if (layEvent === 'jsContent') { //JS内容
+        } else if (layEvent === 'jsContent') { //JS内容
         	var mode = returnModel('javascript');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -114,7 +114,7 @@ layui.config({
 	            area: ['700px', '90vh'],
 	            content: $("#modelContentDiv").html(),
 	        });
-        }else if (layEvent === 'jsRelyOn') { //JS依赖文件
+        } else if (layEvent === 'jsRelyOn') { //JS依赖文件
         	var mode = returnModel('javascript');
         	if (!isNull(mode.length)) {
 				editor.setOption('mode', mode)
@@ -169,14 +169,14 @@ layui.config({
 	}
 	
 	//编辑分类
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/rmproperty/rmpropertyedit.html", 
 			title: "编辑小程序样式属性",
 			pageId: "rmpropertyedit",
 			area: ['700px', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -194,13 +194,13 @@ layui.config({
 			title: "新增小程序样式属性",
 			pageId: "rmpropertyadd",
 			area: ['700px', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{title: $("#title").val(), propertyTag: $("#propertyTag").val(), dsFormContentId: $("#dsFormContentId").val()}});
     }
     

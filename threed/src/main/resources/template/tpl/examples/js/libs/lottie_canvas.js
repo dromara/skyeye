@@ -3407,7 +3407,7 @@ var ShapeModifiers = (function(){
 function ShapeModifier(){}
 ShapeModifier.prototype.initModifierProperties = function(){};
 ShapeModifier.prototype.addShapeToModifier = function(){};
-ShapeModifier.prototype.addShape = function(data){
+ShapeModifier.prototype.addShape = function(data) {
     if (!this.closed) {
         // Adding shape to dynamic properties. It covers the case where a shape has no effects applied, to reset it's _mdf state on every tick.
         data.sh.container.addDynamicProperty(data.sh);
@@ -5293,7 +5293,7 @@ TextProperty.prototype.copyData = function(obj, data) {
     return obj;
 }
 
-TextProperty.prototype.setCurrentData = function(data){
+TextProperty.prototype.setCurrentData = function(data) {
     if(!data.__complete) {
         this.completeTextData(data);
     }
@@ -6029,7 +6029,7 @@ BaseRenderer.prototype.createCamera = function(){
     throw new Error('You\'re using a 3d camera. Try the html renderer.');
 };
 
-BaseRenderer.prototype.createAudio = function(data){
+BaseRenderer.prototype.createAudio = function(data) {
     return new AudioElement(data, this.globalData, this);
 };
 

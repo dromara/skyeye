@@ -40,7 +40,7 @@ layui.config({
 
         	element.on('tab(customerOtherDetail)', function(obj){
 				var mation = tabTable["tab" + obj.index];
-				if(!isNull(mation)){
+				if (!isNull(mation)){
 					if(!mation.load){
 						tabTable["tab" + obj.index].load = true;
 						mation.initMethod();
@@ -96,14 +96,14 @@ layui.config({
 	}
 	
 	// 商机详情
-	function opportunityDetails(data){
+	function opportunityDetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmOpportunity/crmopportunitydetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmopportunitydetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -159,14 +159,14 @@ layui.config({
 	}
 	
 	// 合同详情
-	function contractDetails(data){
+	function contractDetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmcontractmanage/mycrmcontractdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "crmcontractdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -221,14 +221,14 @@ layui.config({
 	}
 	
 	// 售后服务详情
-	function serviceDetails(data){
+	function serviceDetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -278,14 +278,14 @@ layui.config({
 	}
 	
 	// 跟单详情
-	function documentaryDetails(data){
+	function documentaryDetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/documentarymanage/documentaryDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "documentaryDetails",
 			area: ['70vw', '70vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -388,7 +388,7 @@ layui.config({
 	}
 	
 	// 讨论板详情
-	function discussDetails(data){
+	function discussDetails(data) {
 		// 商机id
 		disRowId = data.id;
 		// 讨论板id
@@ -398,7 +398,7 @@ layui.config({
 			title: data.title,
 			pageId: "discussdetailpage",
 			maxmin: true,
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	

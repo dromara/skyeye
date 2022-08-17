@@ -93,14 +93,14 @@ layui.config({
         }
     });
 
-    function selectDetails(data){
+    function selectDetails(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/ifsSetOfBooks/ifsSetOfBooksDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "ifsSetOfBooksDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -118,18 +118,18 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime1 = "", startTime2 = "";
-        if(!isNull($("#startTime").val())){
+        if (!isNull($("#startTime").val())) {
             startTime1 = $("#startTime").val().split('~')[0].trim();
             startTime2 = $("#startTime").val().split('~')[1].trim();
         }
         var endTime1 = "", endTime2 = "";
-        if(!isNull($("#endTime").val())){
+        if (!isNull($("#endTime").val())) {
             endTime1 = $("#endTime").val().split('~')[0].trim();
             endTime2 = $("#endTime").val().split('~')[1].trim();
         }

@@ -34,7 +34,7 @@ layui.config({
 	
     $(function () {
 		// 获取当前登录员工信息
-		systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+		systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 			userId = data.bean.id;
 			$("#userPhoto").attr("src", fileBasePath + data.bean.userPhoto);
 			$("#userName").html(data.bean.userCode + '(' + data.bean.userName + ')');
@@ -83,7 +83,7 @@ layui.config({
 			initDeskTopMenuBox();
 
 			// 加载菜单
-			AjaxPostUtil.request({url: reqBasePath + "login005", params:{}, type: 'json', method: "GET", callback: function (json) {
+			AjaxPostUtil.request({url: reqBasePath + "login005", params: {}, type: 'json', method: "GET", callback: function (json) {
 				var menuStr;
 				$.each(json.rows, function(i, row){
 					menuStr = "";
@@ -106,7 +106,7 @@ layui.config({
 						data.push({id: row.id, name: row.name, pageURL: row.pageURL, winName: isNull(row.deskTopId) ? defaultName : $(".desktop-menu-box").find("li[rowid='" + row.deskTopId + "']").find('span').html()});
 					} else {
 						//二级菜单
-						if(!isNull(row.childs)){
+						if (!isNull(row.childs)){
 							$.each(row.childs, function(j, child){
 								if(child.menuIconType === 1){//icon
 									child.icon = '<i class="fa ' + child.icon + ' fa-fw"></i>';
@@ -143,7 +143,7 @@ layui.config({
 						return filterData;
 					},
 					onchange: function() {
-						if(!isNull(text2.id())){
+						if (!isNull(text2.id())){
 							var dataMenu = $("#sysMenuListBox").find("a[data-id='" + text2.id() + "']");
 							indexMenu.loadTraditionPage(dataMenu);
 						}

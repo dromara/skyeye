@@ -56,13 +56,13 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
             edit(data);
-        }else if (layEvent === 'delet') { //删除
+        } else if (layEvent === 'delet') { //删除
             delet(data);
-        }else if (layEvent === 'up') { //启用
+        } else if (layEvent === 'up') { //启用
             up(data);
-        }else if (layEvent === 'down') { //禁用
+        } else if (layEvent === 'down') { //禁用
             down(data);
-        }else if (layEvent === 'details') { //详情
+        } else if (layEvent === 'details') { //详情
             details(data);
         }
     });
@@ -82,17 +82,17 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "companyJobScoreAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });
 
     // 删除
-    function delet(data){
+    function delet(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "companyjobscore005", params:{rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "companyjobscore005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -100,10 +100,10 @@ layui.config({
     }
 
     // 禁用
-    function down(data){
+    function down(data) {
         layer.confirm(systemLanguage["com.skyeye.disableOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.disableOperation"][languageType]}, function(index) {
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "companyjobscore007", params:{rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "companyjobscore007", params: {rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.disableOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -111,10 +111,10 @@ layui.config({
     }
 
     // 启用
-    function up(data){
+    function up(data) {
         layer.confirm(systemLanguage["com.skyeye.enableOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.enableOperation"][languageType]}, function(index) {
             layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "companyjobscore006", params:{rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "companyjobscore006", params: {rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.enableOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -122,14 +122,14 @@ layui.config({
     }
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/companyJobScore/companyJobScoreEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "companyJobScoreEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -137,14 +137,14 @@ layui.config({
     }
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/companyJobScore/companyJobScoreDetail.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "companyJobScoreDetail",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -154,15 +154,15 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable(){
+    function refreshloadTable() {
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             name: $("#name").val(),
             state: $("#state").val(),

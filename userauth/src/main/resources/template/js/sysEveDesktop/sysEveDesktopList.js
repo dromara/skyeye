@@ -48,7 +48,7 @@ layui.config({
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
-			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150},
+			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
@@ -84,17 +84,17 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "sysEveDesktopAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 删除
-	function delet(data){
+	function delet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: reqBasePath + "desktop003", params:{id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
+            AjaxPostUtil.request({url: reqBasePath + "desktop003", params: {id: data.id}, type: 'json', method: "DELETE", callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -102,7 +102,7 @@ layui.config({
 	}
 	
 	// 一键移除菜单
-    function remove(data){
+    function remove(data) {
         var msg = '确认一键移除菜单选择该桌面的所有菜单吗？';
         layer.confirm(msg, { icon: 3, title: '一键移除菜单' }, function (index) {
             layer.close(index);
@@ -114,14 +114,14 @@ layui.config({
     }
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysEveDesktop/sysEveDesktopEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sysEveDesktopEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -129,7 +129,7 @@ layui.config({
 	}
 	
 	// 上移
-	function upMove(data){
+	function upMove(data) {
         AjaxPostUtil.request({url: reqBasePath + "desktop008", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveUpOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -137,7 +137,7 @@ layui.config({
 	}
 	
 	// 下移
-	function downMove(data){
+	function downMove(data) {
         AjaxPostUtil.request({url: reqBasePath + "desktop009", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
 			winui.window.msg(systemLanguage["com.skyeye.moveDownOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 			loadTable();
@@ -151,7 +151,7 @@ layui.config({
     	loadTable();
     });
 
-	function loadTable(){
+	function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 

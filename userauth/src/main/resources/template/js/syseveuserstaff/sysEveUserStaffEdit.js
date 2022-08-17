@@ -147,7 +147,7 @@ layui.config({
 			     	template: $("#checkTimeStrTemplate").html(),
 			     	ajaxSendLoadBefore: function(hdb){
 			     	},
-			     	ajaxSendAfter:function(data){
+			     	ajaxSendAfter:function(data) {
 			     		for(var i in json.bean.checkTimeStr){
 							$('input:checkbox[rowId="' + json.bean.checkTimeStr[i].timeId + '"]').attr("checked", true);
 						}

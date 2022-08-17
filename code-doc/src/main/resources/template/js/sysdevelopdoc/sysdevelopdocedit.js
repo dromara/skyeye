@@ -10,7 +10,7 @@ layui.config({
 	    var $ = layui.$,
 		    form = layui.form;
 	    
-	    AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			$("#typeName").val(json.bean.title);
 
 			showGrid({
@@ -53,7 +53,7 @@ layui.config({
 				if (winui.verifyForm(data.elem)) {
 					var pId = '0';
 					if($("input[name='docType']:checked").val() == '2'){
-						if(isNull($("#docFirstType").val())){
+						if(isNull($("#docFirstType").val())) {
 							winui.window.msg('请选择一级目录', {icon: 2, time: 2000});
 							return false;
 						} else {

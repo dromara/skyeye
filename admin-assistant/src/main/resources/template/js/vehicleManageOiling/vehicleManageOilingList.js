@@ -16,7 +16,7 @@ layui.config({
 	authBtn('1597469406320');
 
 	// 查询所有的车牌号用于下拉选择框
-	adminAssistantUtil.queryAllVehicleList(function (data){
+	adminAssistantUtil.queryAllVehicleList(function (data) {
 		$("#oilPlate").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
 		form.render('select');
 	});
@@ -59,9 +59,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'oilingdetails') { //详情
         	oilingdetails(data);
-        }else if (layEvent === 'oilingdelet'){ //删除
+        } else if (layEvent === 'oilingdelet'){ //删除
         	oilingdelet(data);
-        }else if (layEvent === 'oilingedit'){	//编辑
+        } else if (layEvent === 'oilingedit'){	//编辑
         	oilingedit(data);
         }
     });
@@ -69,19 +69,19 @@ layui.config({
 	form.render();
 	
 	// 加油信息详情
-	function oilingdetails(data){
+	function oilingdetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageOiling/vehicleManageOilingDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageOilingDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 删除加油信息
-	function oilingdelet(data){
+	function oilingdelet(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "oiling003", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -98,21 +98,21 @@ layui.config({
 			title: "车辆加油登记单",
 			pageId: "vehicleManageOilingAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadOilingTable();
 			}});
     });
 	
 	// 编辑加油信息
-	function oilingedit(data){
+	function oilingedit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageOiling/vehicleManageOilingEdit.html", 
 			title: "编辑车辆加油信息",
 			pageId: "vehicleManageOilingEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadOilingTable();
 			}});
@@ -131,9 +131,9 @@ layui.config({
     	table.reloadData("oilingTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-    	if(!isNull($("#oilTime").val())){
+    	if (!isNull($("#oilTime").val())) {
     		startTime = $("#oilTime").val().split(' - ')[0].trim();
     		endTime = $("#oilTime").val().split(' - ')[1].trim();
     	}

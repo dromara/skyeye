@@ -104,7 +104,7 @@ layui.config({
     }
 
     // 往来单位变化监听
-    form.on('select(correspondentUnitType)', function(data){
+    form.on('select(correspondentUnitType)', function(data) {
         $("#customName").val("");
     });
 

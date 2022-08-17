@@ -192,7 +192,7 @@ layui.config({
 		        				params.completedJob = encodeURIComponent(layedit.getContent(weekCompletedContent));
 		        			}
 		        		} else {
-		        			if(isNull($("#weekCompletedText").val())){
+		        			if(isNull($("#weekCompletedText").val())) {
 		        				winui.window.msg('请填写本周已完成工作', {icon: 2, time: 2000});
 		        				return false;
 		        			} else {

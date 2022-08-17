@@ -53,7 +53,7 @@ layui.config({
 
 	// 异步加载的方法
 	function onClickTree(event, treeId, treeNode) {
-		if(!isNull(treeNode) && treeNode.type == 2) {
+		if (!isNull(treeNode) && treeNode.type == 2) {
 			designId = treeNode.id;
 			$("#flowName").html(treeNode.title);
 			AjaxPostUtil.request({url: sysMainMation.businessFlowBasePath + "planprojectflow006", params: {rowId: treeNode.id}, type: 'json', method: "GET", callback: function (json) {
@@ -110,7 +110,7 @@ layui.config({
 			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
 			title: "新增目录",
 			pageId: "companyjobedit",
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -125,7 +125,7 @@ layui.config({
 			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
 			title: "新增流程图",
 			pageId: "companyjobedit",
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -148,7 +148,7 @@ layui.config({
 	});
 
 	// 删除
-	function del(data){
+	function del(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
 			AjaxPostUtil.request({url: sysMainMation.businessFlowBasePath + "planprojectflow003", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
@@ -166,7 +166,7 @@ layui.config({
 	}
 
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		folderId = data.pId;
 		type = data.type;
@@ -174,13 +174,13 @@ layui.config({
 			url: "../../tpl/planprojectflow/planprojectflowedit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "rmgroupedit",
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
     
-    function loadTable(){
+    function loadTable() {
 		initTree();
     }
     

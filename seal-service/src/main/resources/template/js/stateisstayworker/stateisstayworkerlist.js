@@ -55,11 +55,11 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'stayWork') { //派工
 	        	stayWork(data);
-	        }else if (layEvent === 'details'){ //详情
+	        } else if (layEvent === 'details'){ //详情
 	        	details(data);
-	        }else if (layEvent === 'edit') { //编辑
+	        } else if (layEvent === 'edit') { //编辑
 	        	edit(data);
-	        }else if (layEvent === 'delete'){ //删除
+	        } else if (layEvent === 'delete'){ //删除
 	        	deleteRow(data);
 	        }
 	    });
@@ -75,8 +75,8 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
-    	if(isNull($("#declarationTime").val())){
+    function loadTable() {
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -87,7 +87,7 @@ layui.config({
     }
     
     function refreshTable(){
-    	if(isNull($("#declarationTime").val())){
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -98,47 +98,47 @@ layui.config({
     }
 
 	//派工
-	function stayWork(data){
+	function stayWork(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstayworker/dispatchedworker.html", 
 			title: "派工",
 			pageId: "dispatchedworker",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseserviceedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sealseserviceedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//删除
-	function deleteRow(data){
+	function deleteRow(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "sealseservice020", params: {rowId: data.id}, type: 'json', callback: function (json) {

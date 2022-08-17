@@ -80,7 +80,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{appName:$("#appName").val(),state:$("#state").val()}});
     }
     
@@ -95,21 +95,21 @@ layui.config({
 			title: "新增轻应用",
 			pageId: "lightappadd",
 			area: ['800px', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/lightapp/lightappedit.html", 
 			title: "编辑轻应用",
 			pageId: "lightappedit",
 			area: ['800px', '60vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});

@@ -42,7 +42,7 @@ layui.config({
  		laydate.render({elem: '#endTime', type: 'datetime', value: getFormatDate(), trigger: 'click'});
 
 		// 获取当前登录用户所属企业的所有部门信息
-		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+		systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
 			$("#departmentId").html(getDataUseHandlebars(selOption, data));
 			form.render('select');
 		});
@@ -52,7 +52,7 @@ layui.config({
 			var thisRowValue = data.value;
 			var thisRowNum = data.elem.id.replace("unitId", "");//获取当前行
 			//当前当前行选中的商品信息
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				var product = allChooseProduct["tr" + thisRowNum.toString()];
 				$.each(product.unitList, function(j, bean) {
 					if(thisRowValue == bean.id){//获取规格
@@ -148,7 +148,7 @@ layui.config({
 				title: "工序选择",
 				pageId: "erpWorkProcedureChoose",
 				area: ['90vw', '90vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					var str = "";
 					$.each(procedureMationList, function(i, item){
 						str += '<tr><td>' + item.number + '</td><td>' + item.procedureName + '</td><td>' + item.unitPrice + '</td><td>' + item.departmentName + '</td></tr>';
@@ -265,7 +265,7 @@ layui.config({
  				title: "选择生产计划单",
  				pageId: "erpProductionNoSuccessChooseProcedure",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode) {
+ 				callBack: function (refreshCode) {
 					$("#productionOrder").val(productionMation.defaultNumber);
 					//加工产品信息
 					machinPro = {

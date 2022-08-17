@@ -35,7 +35,7 @@ layui.config({
 			}},
 			{ field: 'oddNum', title: '单号', width: 200, align: 'center' },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-				if(!isNull(d.processInstanceId)){
+				if (!isNull(d.processInstanceId)){
 					return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 				} else {
 					return "";
@@ -70,25 +70,25 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'borrowDedails') { //借用详情
         	borrowDedails(data);
-        }else if (layEvent === 'processDetails') { //流程详情
+        } else if (layEvent === 'processDetails') { //流程详情
 			activitiUtil.activitiDetails(data);
-        }else if (layEvent === 'borrowedit') { //编辑借用申请
+        } else if (layEvent === 'borrowedit') { //编辑借用申请
         	borrowEdit(data);
-        }else if (layEvent === 'subApproval') { //提交审批
+        } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        }else if(layEvent === 'cancellation') {//借用作废
+        } else if (layEven === 'cancellation') {//借用作废
         	cancellation(data);
-        }else if(layEvent === 'revoke') {//撤销
+        } else if (layEven === 'revoke') {//撤销
         	revoke(data);
         }
     });
 	
 	// 撤销
-	function revoke(data){
+	function revoke(data) {
 		var msg = '确认撤销该借用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作'}, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "sealborrow010", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "sealborrow010", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadBorrowTable();
     		}});
@@ -96,14 +96,14 @@ layui.config({
 	}
 	
 	// 编辑印章借用申请
-	function borrowEdit(data){
+	function borrowEdit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealManageBorrow/sealManageBorrowEdit.html", 
 			title: "编辑印章借用申请",
 			pageId: "sealManageBorrowEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadBorrowTable();
 			}
@@ -111,7 +111,7 @@ layui.config({
 	}
 	
 	// 印章借用提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["sealManageBorrow"]["key"], function (approvalId) {
@@ -128,11 +128,11 @@ layui.config({
 	}
 	
 	// 印章借用作废
-	function cancellation(data){
+	function cancellation(data) {
 		var msg = '确认作废该条借用申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "sealborrow007", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "sealborrow007", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadBorrowTable();
     		}});
@@ -140,14 +140,14 @@ layui.config({
 	}
 	
 	// 印章借用详情
-	function borrowDedails(data){
+	function borrowDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealManageBorrow/sealManageBorrowDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealManageBorrowDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -159,7 +159,7 @@ layui.config({
 			title: "印章借用申请",
 			pageId: "sealManageBorrowAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadBorrowTable();
 			}});
@@ -184,9 +184,9 @@ layui.config({
     	table.reloadData("borrowTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-		if(!isNull($("#createTime").val())){//一定要记得，当createTime为空时
+		if (!isNull($("#createTime").val())) {//一定要记得，当createTime为空时
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

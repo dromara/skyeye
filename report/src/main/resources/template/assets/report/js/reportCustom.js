@@ -18,7 +18,7 @@ var skyeyeReportUtil = {
                     name: value.name
                 });
             });
-            if(!isNull(showDomId)){
+            if (!isNull(showDomId)){
                 $("#" + showDomId).html(getDataUseHandlebars(template, {rows: rows}));
             }
             if(typeof(callBack) == "function") {

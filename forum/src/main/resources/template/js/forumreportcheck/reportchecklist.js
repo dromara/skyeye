@@ -69,7 +69,7 @@ layui.config({
 		showNoCheckTable = true;
 		var reportstartTime = "";
 		var reportendTime = "";
-		if(!isNull($("#reportTime").val())){
+		if (!isNull($("#reportTime").val())) {
     		reportstartTime = $("#reportTime").val().split(' - ')[0].trim();
     		reportendTime = $("#reportTime").val().split(' - ')[1].trim();
     	}
@@ -115,9 +115,9 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'check') { //审核
 	        	check(data);
-	        }else if (layEvent === 'detail') { //举报详情
+	        } else if (layEvent === 'detail') { //举报详情
 	        	detail(data);
-	        }else if (layEvent === 'forumdetails') { //帖子详情
+	        } else if (layEvent === 'forumdetails') { //帖子详情
                 forumdetails(data);
             }
 	    });
@@ -132,8 +132,8 @@ layui.config({
 	    	loadTable();
 	    });
 	    
-	    function loadTable(){
-			if(!isNull($("#reportTime").val())){
+	    function loadTable() {
+			if (!isNull($("#reportTime").val())) {
 	    		reportstartTime = $("#reportTime").val().split(' - ')[0].trim();
 	    		reportendTime = $("#reportTime").val().split(' - ')[1].trim();
 	    	}
@@ -141,7 +141,7 @@ layui.config({
 	    }
 	    
 	    function refreshTable(){
-			if(!isNull($("#reportTime").val())){
+			if (!isNull($("#reportTime").val())) {
 	    		reportstartTime = $("#reportTime").val().split(' - ')[0].trim();
 	    		reportendTime = $("#reportTime").val().split(' - ')[1].trim();
 	    	}
@@ -149,7 +149,7 @@ layui.config({
 	    }
 
 		//审核
-		function check(data){
+		function check(data) {
 			rowId = data.id;
 			forumId = data.forumId;
 			_openNewWindows({
@@ -157,7 +157,7 @@ layui.config({
 				title: "审核",
 				pageId: "reportcheck",
 				area: ['80vw', '95vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 					loadCheckedTable();
@@ -165,27 +165,27 @@ layui.config({
 		}
 		
 		//详情
-		function detail(data){
+		function detail(data) {
 			rowId = data.id;
 			_openNewWindows({
 				url: "../../tpl/forumreportcheck/reportcheckdetail.html", 
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "reportcheckdetail",
 				area: ['50vw', '80vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 		};
 	};
 	
 	//帖子详情
-    function forumdetails(data){
+    function forumdetails(data) {
         forumId = data.forumId;
         _openNewWindows({
             url: "../../tpl/forumreportcheck/forumdetail.html", 
             title: "帖子详情",
             pageId: "forumdetails",
             area: ['80vw', '95vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
             }});
     };
@@ -198,13 +198,13 @@ layui.config({
 		showCheckedTable = true;
 		var checkedreportstartTime = "";
 		var checkedreportendTime = "";
-		if(!isNull($("#checkedreportTime").val())){
+		if (!isNull($("#checkedreportTime").val())) {
 			checkedreportstartTime = $("#checkedreportTime").val().split(' - ')[0].trim();
 			checkedreportendTime = $("#checkedreportTime").val().split(' - ')[1].trim();
     	}
 		var checkedexaminestartTime = "";
 		var checkedexamineendTime = "";
-		if(!isNull($("#checkedexamineTime").val())){
+		if (!isNull($("#checkedexamineTime").val())) {
 			checkedexaminestartTime = $("#checkedexamineTime").val().split(' - ')[0].trim();
 			checkedexamineendTime = $("#checkedexamineTime").val().split(' - ')[1].trim();
     	}
@@ -253,7 +253,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'detail') { //审核详情
                 checkeddetail(data);
-            }else if (layEvent === 'forumdetails') { //帖子详情
+            } else if (layEvent === 'forumdetails') { //帖子详情
                 forumdetails(data);
             }
 	    });
@@ -268,11 +268,11 @@ layui.config({
 	    });
 	    
 	    function loadCheckedTable(){
-			if(!isNull($("#checkedreportTime").val())){
+			if (!isNull($("#checkedreportTime").val())) {
 				checkedreportstartTime = $("#checkedreportTime").val().split(' - ')[0].trim();
 				checkedreportendTime = $("#checkedreportTime").val().split(' - ')[1].trim();
 	    	}
-			if(!isNull($("#checkedexamineTime").val())){
+			if (!isNull($("#checkedexamineTime").val())) {
 				checkedexaminestartTime = $("#checkedexamineTime").val().split(' - ')[0].trim();
 				checkedexamineendTime = $("#checkedexamineTime").val().split(' - ')[1].trim();
 	    	}
@@ -280,11 +280,11 @@ layui.config({
 	    }
 	    
 	    function refreshCheckedTable(){
-			if(!isNull($("#checkedreportTime").val())){
+			if (!isNull($("#checkedreportTime").val())) {
 				checkedreportstartTime = $("#checkedreportTime").val().split(' - ')[0].trim();
 				checkedreportendTime = $("#checkedreportTime").val().split(' - ')[1].trim();
 	    	}
-			if(!isNull($("#checkedexamineTime").val())){
+			if (!isNull($("#checkedexamineTime").val())) {
 				checkedexaminestartTime = $("#checkedexamineTime").val().split(' - ')[0].trim();
 				checkedexamineendTime = $("#checkedexamineTime").val().split(' - ')[1].trim();
 	    	}
@@ -292,14 +292,14 @@ layui.config({
 	    }
 	    
 	    //详情
-		function checkeddetail(data){
+		function checkeddetail(data) {
 			rowId = data.id;
 			_openNewWindows({
 				url: "../../tpl/forumreportcheck/reportcheckdetail.html", 
 				title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 				pageId: "reportcheckdetail",
 				area: ['50vw', '80vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 		};
 	};

@@ -32,7 +32,7 @@ layui.config({
 		var str = "";
 		$.each(j.rows, function(i, item){
 			//如果展示文本不为空，则展示展示文本
-			if(!isNull(item.text))
+			if (!isNull(item.text))
 				item.value = item.text;
 			jsonStr = {
 				bean: item
@@ -45,7 +45,7 @@ layui.config({
 				str = getDataUseHandlebars(eichTextTemplate, jsonStr);
 			}else if(item.showType == 4){//图片展示
 				var photoValue = [];
-				if(!isNull(jsonStr.bean.value)){
+				if (!isNull(jsonStr.bean.value)){
 					photoValue = item.value.split(",");
 				}
 				var rows = [];
@@ -107,7 +107,7 @@ layui.config({
 			done: function(page, next) { //到达临界点（默认滚动触发），触发下一页
 				var lis = [];
 				//以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params:{processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
+				AjaxPostUtil.request({url:flowableBasePath + "activitimode017", params: {processInstanceId: parent.processInstanceId}, type: 'json', callback: function (json) {
 					$.each(json.rows, function(index, bean) {
 						bean.showClass = 'date02';
 						lis.push(getDataUseHandlebars(timeTreeApprovalHistory, {bean: bean}));

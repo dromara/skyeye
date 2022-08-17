@@ -104,11 +104,11 @@ layui.config({
 		loadTable();
 	});
     
-    function loadTable(){
+    function loadTable() {
     	refreshGrid("showForm", {params: getTableParams()});
     }
 
-	function getTableParams(){
+	function getTableParams() {
 		return {
 			state: $("#state").val(),
 		};

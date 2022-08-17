@@ -83,7 +83,7 @@ layui.config({
 			    	 	template: getFileContent('tpl/template/select-option.tpl'),
 			    	 	ajaxSendLoadBefore: function(hdb){
 			    	 	},
-			    	 	ajaxSendAfter:function(data){
+			    	 	ajaxSendAfter:function(data) {
 			    	 		$("#gradeId").val(json.bean.gradeId);
 			    	 		loadThisGradeNowYear();
 			    	 		form.render('select');
@@ -101,7 +101,7 @@ layui.config({
 			    	 	template: getFileContent('tpl/template/select-option.tpl'),
 			    	 	ajaxSendLoadBefore: function(hdb){
 			    	 	},
-			    	 	ajaxSendAfter:function(data){
+			    	 	ajaxSendAfter:function(data) {
 			    	 		$("#modeOfTransportation").val(json.bean.modeOfTransportation);
 			    	 		form.render('select');
 			    	 	}
@@ -118,7 +118,7 @@ layui.config({
 			    	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
 			    	 	ajaxSendLoadBefore: function(hdb){
 			    	 	},
-			    	 	ajaxSendAfter:function(data){
+			    	 	ajaxSendAfter:function(data) {
 			    	 		var homeSituation = json.bean.homeSituation;
 					 		for(var i = 0; i < homeSituation.length; i++){
 								$('#homeSituation input:checkbox[rowId="' + homeSituation[i].situationId + '"]').attr("checked", true);
@@ -138,7 +138,7 @@ layui.config({
 			    	 	template: getFileContent('tpl/template/checkbox-property.tpl'),
 			    	 	ajaxSendLoadBefore: function(hdb){
 			    	 	},
-			    	 	ajaxSendAfter:function(data){
+			    	 	ajaxSendAfter:function(data) {
 			    	 		var bodyMind = json.bean.bodyMind;
 					 		for(var i = 0; i < bodyMind.length; i++){
 								$('#bodyMind input:checkbox[rowId="' + bodyMind[i].bodyMindId + '"]').attr("checked", true);
@@ -149,7 +149,7 @@ layui.config({
 			    }
 			    
 			    //年级监听事件
-				form.on('select(gradeId)', function(data){
+				form.on('select(gradeId)', function(data) {
 					if(isNull(data.value) || data.value === '请选择'){
 				 		$("#classId").html("");
 						form.render('select');
@@ -160,7 +160,7 @@ layui.config({
 				});
 				
 				//学前教育变化事件
-				form.on('radio(preschoolEducation)', function(data){
+				form.on('radio(preschoolEducation)', function(data) {
 					if(data.value == 1){
 						$("#preschoolSchoolBox").show();
 					} else {
@@ -177,7 +177,7 @@ layui.config({
 					 	pagination: false,
 					 	template: getFileContent('tpl/template/select-option.tpl'),
 					 	ajaxSendLoadBefore: function(hdb){},
-					 	ajaxSendAfter:function(data){
+					 	ajaxSendAfter:function(data) {
 					 		$("#classId").val(json.bean.classId);
 					 		form.render('select');
 					 	},

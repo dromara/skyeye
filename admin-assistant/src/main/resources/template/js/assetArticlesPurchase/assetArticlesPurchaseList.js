@@ -41,7 +41,7 @@ layui.config({
 			{ field: 'stateName', title: '状态', width: 90, templet: function (d) {
 				return activitiUtil.showStateName2(d.state, 1);
 			}},
-			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150},
+			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#caigouTableBar'}
 		]],
 		done: function(){
@@ -55,15 +55,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'caigouDedails') { //采购详情
         	caigouDedails(data);
-        }else if (layEvent === 'caigouEdit') { //编辑采购申请
+        } else if (layEvent === 'caigouEdit') { //编辑采购申请
         	caigouEdit(data);
-        }else if (layEvent === 'caigouSubApproval') { //采购提交审批
+        } else if (layEvent === 'caigouSubApproval') { //采购提交审批
         	caigouSubApproval(data);
-        }else if(layEvent === 'caigouCancellation') {//采购作废
+        } else if (layEven === 'caigouCancellation') {//采购作废
         	caigouCancellation(data);
-        }else if(layEvent === 'caigouProcessDetails') {//采购流程详情
+        } else if (layEven === 'caigouProcessDetails') {//采购流程详情
 			activitiUtil.activitiDetails(data);
-        }else if(layEvent === 'caigouRevoke') {//撤销采购申请
+        } else if (layEven === 'caigouRevoke') {//撤销采购申请
         	caigouRevoke(data);
         }
     });
@@ -75,14 +75,14 @@ layui.config({
 			title: "用品采购申请",
 			pageId: "assetArticlesPurchaseAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadCaigouTable();
 			}});
     });
 	
 	// 撤销用品采购
-	function caigouRevoke(data){
+	function caigouRevoke(data) {
 		var msg = '确认撤销该用品采购申请吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销操作' }, function (index) {
 			layer.close(index);
@@ -94,14 +94,14 @@ layui.config({
 	}
 	
 	// 编辑用品采购申请
-	function caigouEdit(data){
+	function caigouEdit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetArticlesPurchase/assetArticlesPurchaseEdit.html", 
 			title: "编辑用品采购申请",
 			pageId: "assetArticlesPurchaseEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadCaigouTable();
 			}
@@ -109,7 +109,7 @@ layui.config({
 	}
 	
 	// 用品采购提交审批
-	function caigouSubApproval(data){
+	function caigouSubApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["assetArticlesPurchase"]["key"], function (approvalId) {
@@ -126,7 +126,7 @@ layui.config({
 	}
 
 	// 用品采购作废
-	function caigouCancellation(data){
+	function caigouCancellation(data) {
 		var msg = '确认作废该条采购申请吗？';
 		layer.confirm(msg, { icon: 3, title: '作废操作' }, function (index) {
 			layer.close(index);
@@ -138,14 +138,14 @@ layui.config({
 	}
 	
 	// 用品采购详情
-	function caigouDedails(data){
+	function caigouDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/assetArticlesPurchase/assetArticlesPurchaseDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetArticlesPurchaseDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -168,9 +168,9 @@ layui.config({
     	table.reloadData("caigouTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-		if(!isNull($("#caigouCreateTime").val())){
+		if (!isNull($("#caigouCreateTime").val())) {
     		startTime = $("#caigouCreateTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#caigouCreateTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

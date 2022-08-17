@@ -13,7 +13,7 @@ layui.config({
 	form = layui.form;
 	
 	// 获取动态表单内容用于编辑申请类型实体
-	AjaxPostUtil.request({url:flowableBasePath + "activitimode023", params:{rowId: parent.sequenceId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url:flowableBasePath + "activitimode023", params: {rowId: parent.sequenceId}, type: 'json', callback: function (json) {
 		dsFormUtil.loadDsFormItemToEdit("showForm", json.rows);
 		$("#showForm").append('<div class="layui-form-item layui-col-xs12"><div class="layui-input-block">' +
 				'<button class="winui-btn" id="cancle">' + systemLanguage["com.skyeye.cancel"][languageType] + '</button>' +

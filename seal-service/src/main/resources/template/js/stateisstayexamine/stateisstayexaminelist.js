@@ -55,7 +55,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'stayExamine') { //审核
 	        	stayExamine(data);
-	        }else if (layEvent === 'details'){ //详情
+	        } else if (layEvent === 'details'){ //详情
 	        	details(data);
 	        }
 	        
@@ -72,8 +72,8 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
-    	if(isNull($("#declarationTime").val())){
+    function loadTable() {
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -84,7 +84,7 @@ layui.config({
     }
     
     function refreshTable(){
-    	if(isNull($("#declarationTime").val())){
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -95,7 +95,7 @@ layui.config({
     }
 
 	//审核
-	function stayExamine(data){
+	function stayExamine(data) {
 		layer.confirm('确认审核该数据吗？', {icon: 3, title: '审核操作'}, function (index) {
 			layer.close(index);
             
@@ -107,14 +107,14 @@ layui.config({
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	

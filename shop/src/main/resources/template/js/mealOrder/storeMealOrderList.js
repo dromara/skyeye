@@ -82,21 +82,21 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'delete') { // 删除
             delet(data);
-        }else if(layEvent == 'select'){ // 详情
+        } else if (layEven == 'select'){ // 详情
             select(data)
-        }else if(layEvent == 'complatePay'){ // 完成支付
+        } else if (layEven == 'complatePay'){ // 完成支付
             complatePay(data)
-        }else if(layEvent == 'cancleOrder'){ // 取消订单
+        } else if (layEven == 'cancleOrder'){ // 取消订单
             cancleOrder(data)
-        }else if(layEvent == 'refundMealOrder'){ // 退款
+        } else if (layEven == 'refundMealOrder'){ // 退款
             refundMealOrder(data)
-        }else if(layEvent == 'cancleRefundMealOrder'){ // 取消退款
+        } else if (layEven == 'cancleRefundMealOrder'){ // 取消退款
             cancleRefundMealOrder(data)
         }
     });
 
     // 删除
-    function delet(data){
+    function delet(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "deleteMealOrder", params: {id: data.id}, type: 'json', method: "POST", callback: function (json) {
@@ -107,7 +107,7 @@ layui.config({
     }
 
     // 取消订单
-    function cancleOrder(data){
+    function cancleOrder(data) {
         layer.confirm('确认取消该订单吗？', {icon: 3, title: '取消确认'}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "cancleMealOrder", params: {id: data.id}, type: 'json', method: "PUT", callback: function (json) {
@@ -118,7 +118,7 @@ layui.config({
     }
 
     // 取消退款
-    function cancleRefundMealOrder(data){
+    function cancleRefundMealOrder(data) {
         layer.confirm('确认取消退款申请吗？', {icon: 3, title: '取消退款'}, function(index){
             layer.close(index);
             AjaxPostUtil.request({url: shopBasePath + "approvelRefundMealOrder", params: {id: data.refundOrderId, state: 4}, type: 'json', method: "POST", callback: function (json) {
@@ -129,41 +129,41 @@ layui.config({
     }
 
     // 详情
-    function select(data){
+    function select(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/mealOrder/storeMealOrderDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "storeMealOrderDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
 
     // 退款
-    function refundMealOrder(data){
+    function refundMealOrder(data) {
         dataMation = data;
         _openNewWindows({
             url: "../../tpl/refundMealOrder/refundMealOrder.html",
             title: '退款',
             pageId: "refundMealOrder",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     // 完成支付
-    function complatePay(data){
+    function complatePay(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/mealOrder/complatePayMealOrder.html",
             title: '完成支付',
             pageId: "complatePayMealOrder",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -182,17 +182,17 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var storeId = $("#storeId").val();
         if(isNull(storeId)){
             storeId = "-";
         }
         var startTime = "", endTime = "";
-        if(!isNull($("#createTime").val())){
+        if (!isNull($("#createTime").val())) {
             startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
         }

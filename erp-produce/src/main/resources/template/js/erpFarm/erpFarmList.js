@@ -63,13 +63,13 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'delete') { // 删除
             deletemember(data);
-        }else if (layEvent === 'details') { // 详情
+        } else if (layEvent === 'details') { // 详情
             details(data);
-        }else if (layEvent === 'edit') { // 编辑
+        } else if (layEvent === 'edit') { // 编辑
             edit(data);
-        }else if (layEvent === 'norms') { // 正常
+        } else if (layEvent === 'norms') { // 正常
             norms(data);
-        }else if (layEvent === 'rectification') { // 维修整改
+        } else if (layEvent === 'rectification') { // 维修整改
             rectification(data);
         }
     });
@@ -84,21 +84,21 @@ layui.config({
     });
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/erpFarm/erpFarmEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "erpFarmEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     // 删除
-    function deletemember(data){
+    function deletemember(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             AjaxPostUtil.request({url:flowableBasePath + "erpfarm005", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -108,19 +108,19 @@ layui.config({
     }
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/erpFarm/erpFarmDetail.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "erpFarmDetail",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }});
     }
 
     // 恢复正常
-    function norms(data){
+    function norms(data) {
         layer.confirm('确认要恢复正常吗？', { icon: 3, title: '恢复操作' }, function (index) {
             AjaxPostUtil.request({url:flowableBasePath + "erpfarm008", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg("提交成功。", {icon: 1, time: 2000});
@@ -130,7 +130,7 @@ layui.config({
     }
 
     // 维修整改
-    function rectification(data){
+    function rectification(data) {
         layer.confirm('确认要维修整改吗？', { icon: 3, title: '维修整改操作' }, function (index) {
             AjaxPostUtil.request({url:flowableBasePath + "erpfarm009", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg("提交成功。", {icon: 1, time: 2000});
@@ -146,7 +146,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "erpFarmAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -157,7 +157,7 @@ layui.config({
     });
 
     //刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTablePatams()});
     }
 

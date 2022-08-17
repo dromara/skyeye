@@ -41,7 +41,7 @@ layui.config({
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["amsServiceFaultType"]["key"], 'select', "faultTypeId", defaultFaultTypeId, form);
 		 		
 				// 故障关键组件
-				if(!isNull(json.bean.faultKeyPartsId)){
+				if (!isNull(json.bean.faultKeyPartsId)){
 					faultKeyParts = {
 						productId: json.bean.faultKeyPartsId,
 						productName: json.bean.faultKeyPartsName
@@ -58,7 +58,7 @@ layui.config({
 				form.on('select(selectUnitProperty)', function(data) {
 					var thisRowValue = data.value;
 					var thisRowNum = data.elem.id.replace("unitId", "");//获取当前行
-					if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+					if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 						// 当前当前行选中的商品信息
 						var product = allChooseProduct["tr" + thisRowNum.toString()];
 						$.each(product.unitList, function(j, bean) {
@@ -218,11 +218,11 @@ layui.config({
 			//获取当前选中的规格
 			var chooseUnitId = $("#unitId" + rowNum).val();
 			//当两个都不为空时
-			if(!isNull(chooseUnitId)){
+			if (!isNull(chooseUnitId)){
 				//获取库存
 				AjaxPostUtil.request({url: flowableBasePath + "sealseservice034", params: {mUnitId: chooseUnitId}, type: 'json', callback: function(json) {
 					var currentTock = 0;
-					if(!isNull(json.bean)){
+					if (!isNull(json.bean)){
 						currentTock = json.bean.stockNum;
 					}
 					$("#currentTock" + rowNum).html(currentTock);

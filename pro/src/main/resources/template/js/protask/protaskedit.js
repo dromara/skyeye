@@ -74,14 +74,14 @@ layui.config({
 			sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmTaskType"]["key"], 'select', "taskType", json.bean.taskType, form);
 
 			// 获取我参与的项目列表
-			proUtil.queryMyProjectsList(function (data){
+			proUtil.queryMyProjectsList(function (data) {
 				$("#proId").html(getDataUseHandlebars(selOption, data));
 				$("#proId").val(json.bean.proId);
 				form.render('select');
 			});
 
 			// 获取当前登录用户所属企业的所有部门信息
-			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data){
+			systemCommonUtil.queryDepartmentListByCurrentUserBelong(function(data) {
 				$("#departments").html(getDataUseHandlebars(selOption, data));
 				$("#departments").val(json.bean.departments);
 				form.render('select');

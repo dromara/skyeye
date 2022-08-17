@@ -115,7 +115,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				title: "内容",
 				area: ['500px', '500px'],
 				pageId: "designSurveyEditor",
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					setCurEditContent(ueEditObj);
 					curEditCallback();
@@ -712,7 +712,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 	    		var setContactsField = $("#dwCommonDialog select[name='setContactsField']").val();
 	    		var oldHv = quItemBody.find("input[name='hv']").val();
 	    		var oldCellCount = quItemBody.find("input[name='cellCount']").val();
-	    		if(!isNull(setIsRequired)){
+	    		if (!isNull(setIsRequired)){
 		    		quItemBody.find("input[name='isRequired']").val(setIsRequired[0] ? 1 : 0);
 	    		}
 	    		quItemBody.find("input[name='hv']").val(setHv);
@@ -789,7 +789,7 @@ layui.define(["jquery", "form", "element"], function(exports) {
 				title: "问卷设置",
 				area: ['500px', '500px'],
 				pageId: "designSurveyOp",
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				}});
 	    });
@@ -1285,7 +1285,7 @@ function showUIDialog(thDialogObj) {
 		title: "选项设置",
 		area: ['500px', '500px'],
 		pageId: "modelUIDialog",
-		callBack: function(refreshCode) {
+		callBack: function (refreshCode) {
 			winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 		}});
 }
@@ -1323,7 +1323,7 @@ function showDialog(thDialogObj){
 		$("#dwCommonDialog .scoreMinMax").hide();
 		$("#dwCommonDialog .minMaxLi").hide();
 		// 问卷才有这个判断
-		if(!isNull(isRequired)){
+		if (!isNull(isRequired)){
 			$("#dwCommonDialog input[name='setIsRequired']").prop("checked", false);
 			if(isRequired == 1){
 				$("#dwCommonDialog input[name='setIsRequired']").prop("checked", true);
@@ -1427,7 +1427,7 @@ function getNameCheckIn(quItemBody){
 			item = quItemBody.find(".surveyQuItemBody");
 		}
 	}
-	if(isNull(item.find("input[name='quId']").val())){
+	if(isNull(item.find("input[name='quId']").val())) {
 		return item.attr("checkNameIn");
 	} else {
 		return item.find("input[name='quId']").val();
@@ -2023,7 +2023,7 @@ function notify(msg, delayHid) {
  */
 function resetLogicAndItem(quItemBody, json){
 	var quItems = json.bean.quItems;
-	if(!isNull(quItems)){
+	if (!isNull(quItems)){
 		$.each(quItems, function(i, item) {
 			var quItemOption = quItemBody.find(".quOption_" + item.title);
 			quItemOption.find("input[name='quItemId']").val(item.id);
@@ -2032,7 +2032,7 @@ function resetLogicAndItem(quItemBody, json){
 	}
 	//同步logic Id信息
 	var quLogics = json.bean.quLogics;
-	if(!isNull(quLogics)){
+	if (!isNull(quLogics)){
 		$.each(quLogics, function(i, item) {
 			var logicItem = quItemBody.find(".quLogicItem_" + item.title);
 			logicItem.find("input[name='quLogicId']").val(item.id);

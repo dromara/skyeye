@@ -105,7 +105,7 @@ layui.config({
 			var thisRowValue = data.value;
 			var thisRowNum = data.elem.id.replace("unitId", "");// 获取当前行
 			// 当前当前行选中的商品信息
-			if(!isNull(thisRowValue) && thisRowValue != '请选择') {
+			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
 				var product = allChooseProduct["tr" + thisRowNum.toString()];
 				$.each(product.unitList, function(j, bean) {
 					if(thisRowValue == bean.id){// 获取规格
@@ -244,7 +244,7 @@ layui.config({
  				title: "选取工单",
  				pageId: "mytocompletedlist",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode) {
+ 				callBack: function (refreshCode) {
 					$("#serviceId").val(chooseOrderNum);
  				}});
  	    });
@@ -302,7 +302,7 @@ layui.config({
  				title: "选择客户",
  				pageId: "customerchooselist",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode) {
+ 				callBack: function (refreshCode) {
 					$("#customName").val(customerMation.customName);
  				}});
  	    });

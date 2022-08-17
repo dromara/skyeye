@@ -22,7 +22,7 @@ layui.config({
 	});
 	
 	initLoadTable();
-	function initLoadTable(){
+	function initloadTable() {
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
@@ -74,7 +74,7 @@ layui.config({
 		});
 	}
 	
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where:{myagencyType:$("#myagencyType").val(), myagencyName:$("#myagencyName").val()}});
     }
     

@@ -119,7 +119,7 @@ layui.config({
 					pageId: "addScheduleMation",
 					area: ['70vw', '80vh'],
 					skin: 'add-schedule-mation',
-					callBack: function(refreshCode) {
+					callBack: function (refreshCode) {
 						if(refreshCode == '0') {
 							winui.window.msg('日程创建成功', { shift: 6, skin: 'msg-skin-message'});
 							calendar.fullCalendar('refetchEvents');
@@ -202,7 +202,7 @@ layui.config({
 			pageId: "addScheduleMation",
 			area: ['70vw', '80vh'],
 			skin: 'add-schedule-mation',
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
                 if(refreshCode == '0') {
                 	winui.window.msg('日程创建成功', { shift: 6, skin: 'msg-skin-message'});
 					calendar.fullCalendar('refetchEvents');
@@ -266,7 +266,7 @@ layui.config({
 								+ '<p>' + bean.scheduleTitle + '<i class="fa fa-trash schrdule-del" title="删除日程"></i></p>'
 							+ '</div>'
 						+ '</li>';
-			if(!isNull(liIndex) || liIndex == 0)
+			if (!isNull(liIndex) || liIndex == 0)
 				if(liIndex < 0)
 					$(".schedule-list ul").find("li").eq(0).before(itemHtml);
 				else

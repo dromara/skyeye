@@ -152,7 +152,7 @@ layui.config({
 	// 乘车人数进行变动
 	$("body").on("change", "#passengerNum", function() {
 		var passengerNum = $(this).val();
-		if(!isNull(passengerNum)){
+		if (!isNull(passengerNum)){
 			initDesignatedVehicle(passengerNum);
 		} else {
 			$("#designatedVehicleId").html("");

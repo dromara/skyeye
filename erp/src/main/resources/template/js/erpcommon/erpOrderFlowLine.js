@@ -43,7 +43,7 @@ layui.config({
 				title: "单据详情",
 				pageId: "orderDetails",
 				area: ['100vw', '100vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 				}});
 		});
 	}});
@@ -54,7 +54,7 @@ layui.config({
 			'<div class="orgIcon"><font class="left-font">状态：</font>' + getStateIcon(bean.subType, bean.state) + '</div>' +
 			'<div class="fontMation"><font class="left-font">计划完成时间：</font><font class="right-font">' + getDataMation(bean.planComplateDate) + '</font></div>' +
 			'<div class="fontMation"><font class="left-font">实际完成时间：</font><font class="right-font">' + getDataMation(bean.realComplateDate) + '</font></div>';
-		if(!isNull(bean.children) && bean.children.length > 0) {
+		if (!isNull(bean.children) && bean.children.length > 0) {
 			$.each(bean.children, function (i, item) {
 				bean.children[i] = dealWithData(item);
 			});
@@ -86,7 +86,7 @@ layui.config({
 		return icon;
 	}
 
-	function getDataMation(data){
+	function getDataMation(data) {
 		if (isNull(data)){
 			return '';
 		}

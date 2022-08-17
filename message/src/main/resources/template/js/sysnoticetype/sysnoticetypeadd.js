@@ -40,7 +40,7 @@ layui.config({
 		}
 		
 		//一级类型监听事件
-		form.on('select(lockParentSel)', function(data){
+		form.on('select(lockParentSel)', function(data) {
 			parentId = data.value;
 		});
 	    

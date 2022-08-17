@@ -29,7 +29,7 @@ layui.config({
 		 	ajaxSendAfter:function (json) {
 		 		
 		 		//教师赋值
-		 		if(!isNull(json.bean.masterStaffId)){
+		 		if (!isNull(json.bean.masterStaffId)){
 		 			teacherMation = {
 		 				staffId: json.bean.masterStaffId,
 		 				userName: json.bean.userName
@@ -56,7 +56,7 @@ layui.config({
 			        	};
 			        	
 			        	//选中的教师赋值
-			        	if(!isNull(teacherMation.staffId)){
+			        	if (!isNull(teacherMation.staffId)){
 			        		params.masterStaffId = teacherMation.staffId;
 			        	}
 			        	
@@ -95,7 +95,7 @@ layui.config({
  				title: "选择教师",
  				pageId: "teacherChoose",
  				area: ['90vw', '90vh'],
- 				callBack: function(refreshCode) {
+ 				callBack: function (refreshCode) {
 					$("#masterStaffName").val(teacherMation.userName);
  				}});
  	    });

@@ -46,13 +46,13 @@ layui.config({
 				template: selTemplate,
 				method: 'GET',
 				ajaxSendLoadBefore: function(hdb){},
-				ajaxSendAfter:function(data){
+				ajaxSendAfter:function(data) {
 					$("#typeId").val(json.bean.typeId);
 					form.render('select');
 				}
 			});
 
-			if(!isNull(json.bean.company)){
+			if (!isNull(json.bean.company)){
 				companyList = json.bean.company;
 			}
 			$('#company').tagEditor({
@@ -64,7 +64,7 @@ layui.config({
 				}
 			});
 
-			if(!isNull(json.bean.departMent)){
+			if (!isNull(json.bean.departMent)){
 				departmentList = json.bean.departMent;
 			}
 			$('#department').tagEditor({
@@ -76,7 +76,7 @@ layui.config({
 				}
 			});
 
-			if(!isNull(json.bean.userStaff)){
+			if (!isNull(json.bean.userStaff)){
 				checkStaffList = json.bean.userStaff;
 			}
 			$('#userStaff').tagEditor({
@@ -183,7 +183,7 @@ layui.config({
 			title: "选择企业",
 			pageId: "companyChooseList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				// 重置数据
 				companyList = [].concat(systemCommonUtil.tagEditorResetData('company', companyList));
 			}});
@@ -196,7 +196,7 @@ layui.config({
 			title: "选择部门",
 			pageId: "companyDepartmentChooseList",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				// 重置数据
 				departmentList = [].concat(systemCommonUtil.tagEditorResetData('department', departmentList));
 			}});
@@ -259,7 +259,7 @@ layui.config({
 			title: "选择薪资字段",
 			pageId: "productlist",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				// 获取表格行号
 				var thisRowNum = trId.replace("tr", "");
 				// 表格名称赋值

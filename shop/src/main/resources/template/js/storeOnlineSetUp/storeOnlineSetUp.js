@@ -44,7 +44,7 @@ layui.config({
                     json.bean.onlineBookJson = JSON.parse(json.bean.onlineBookJson);
                 }
             },
-            ajaxSendAfter:function(data){
+            ajaxSendAfter:function(data) {
 
                 var startTime = laydate.render({
                     elem: '#businessStartTime',
@@ -101,7 +101,7 @@ layui.config({
                         var onlineBookAppoint = $("input[name='onlineBookAppoint']:checked").val();
                         if(onlineBookAppoint == 1){
                             // 开启预约
-                            if(isNull($("#onlineBookRadix").val())){
+                            if(isNull($("#onlineBookRadix").val())) {
                                 winui.window.msg('请输入维修基数', {icon: 2, time: 2000});
                                 return false;
                             }
@@ -109,7 +109,7 @@ layui.config({
                                 winui.window.msg('请计算时间段', {icon: 2, time: 2000});
                                 return false;
                             }
-                            if(isNull($("input[name='onlineBookType']:checked").val())){
+                            if(isNull($("input[name='onlineBookType']:checked").val())) {
                                 winui.window.msg('请选择类型', {icon: 2, time: 2000});
                                 return false;
                             }

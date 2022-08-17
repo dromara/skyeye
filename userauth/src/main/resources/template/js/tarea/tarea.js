@@ -44,7 +44,7 @@ layui.config({
     	loadTable();
     });
 	
-	function loadTable(){
+	function loadTable() {
         tableTree.reload("messageTable", {where:{addressName: $("#addressName").val()}});
     }
     

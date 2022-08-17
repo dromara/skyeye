@@ -20,7 +20,7 @@ layui.config({
 	skyeyeEnclosure.init('enclosureUpload');
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$("#useTitle").html("证照借用申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
 		$("#useName").html(data.bean.userName);
 	});

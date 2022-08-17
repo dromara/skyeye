@@ -10,7 +10,7 @@ layui.config({
 	var $ = layui.$;
 	var beanTemplate = $("#beanTemplate").html();
 	
-	AjaxPostUtil.request({url: flowableBasePath + "procostexpense003", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+	AjaxPostUtil.request({url: flowableBasePath + "procostexpense003", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 		// 附件回显
 		skyeyeEnclosure.showDetails({"enclosureUploadBox": json.bean.enclosureInfo});
 

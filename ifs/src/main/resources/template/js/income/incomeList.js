@@ -22,7 +22,7 @@ layui.config({
         range: '~'
     });
 
-    function initLoadTable(){
+    function initloadTable() {
         table.render({
             id: 'messageTable',
             elem: '#messageTable',
@@ -44,7 +44,7 @@ layui.config({
                 }},
                 { field: 'typeName', title: '类型', rowspan: '2', align: 'left', width: 80},
                 { field: 'organTypeName', title: '往来单类型', rowspan: '2', align: 'left', width: 100},
-                { field: 'supplierName', title: '往来单位', rowspan: '2', align: 'left', width: 150},
+                { field: 'supplierName', title: '往来单位', rowspan: '2', align: 'left', width: 150 },
                 { field: 'totalPrice', title: '合计金额', rowspan: '2', align: 'left', width: 120},
                 { field: 'handsPersonName', title: '经手人', rowspan: '2', align: 'left', width: 120},
                 { field: 'operTime', title: '单据日期', rowspan: '2', align: 'center', width: 140 },
@@ -70,17 +70,17 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'delete') { //删除
             deleteIncome(data);
-        }else if (layEvent === 'details') { //详情
+        } else if (layEvent === 'details') { //详情
             details(data);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
             edit(data);
-        }else if (layEvent === 'submitToSave') { //提交
+        } else if (layEvent === 'submitToSave') { //提交
             subExamine(data, 'submitToSave');
-        }else if (layEvent === 'subExamine') { //提交审核
+        } else if (layEvent === 'subExamine') { //提交审核
             subExamine(data, 'subExamine');
-        }else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
+        } else if (layEvent === 'activitiProcessDetails') { // 工作流流程详情查看
             activitiUtil.activitiDetails(data);
-        }else if (layEvent === 'revoke') { //撤销
+        } else if (layEvent === 'revoke') { //撤销
             revorke(data);
         }
     });
@@ -114,21 +114,21 @@ layui.config({
     /********* tree 处理   end *************/
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/income/incomeEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "incomeEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     // 删除
-    function deleteIncome(data){
+    function deleteIncome(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             AjaxPostUtil.request({url: flowableBasePath + "income005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -138,19 +138,19 @@ layui.config({
     }
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/income/incomeInfo.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "incomeInfo",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }});
     }
 
     // 撤销申请
-    function revorke(data){
+    function revorke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "income009", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
@@ -197,7 +197,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "incomeAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -216,7 +216,7 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -229,10 +229,10 @@ layui.config({
 		});
     });
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "";
         var endTime = "";
-        if(!isNull($("#billTime").val())){
+        if (!isNull($("#billTime").val())) {
             startTime = $("#billTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#billTime").val().split('~')[1].trim() + ' 23:59:59';
         }

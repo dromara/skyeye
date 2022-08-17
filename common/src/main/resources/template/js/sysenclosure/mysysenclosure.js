@@ -90,7 +90,7 @@ layui.config({
 			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
 			        { field: 'name', title: '文件名', align: 'left', width: 400 },
 			        { field: 'fileSize', title: '文件大小', align: 'center', width: 120},
-			        { field: 'createTime', title: '上传时间', align: 'center', width: 150},
+			        { field: 'createTime', title: '上传时间', align: 'center', width: 150 },
 			        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 			    ]],
 			    done: function(){
@@ -103,7 +103,7 @@ layui.config({
 		        var layEvent = obj.event;
 		        if (layEvent === 'edit') { //编辑
 		        	edit(data);
-		        }else if (layEvent === 'download'){ //下载
+		        } else if (layEvent === 'download'){ //下载
 		        	download(fileBasePath + data.fileAddress, data.name);
 		        }
 		    });
@@ -114,7 +114,7 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		var node = ztree.getNodeByParam("id", folderId, null);
 		folderName = getFilePath(node);
 		fileType = data.fileType;
@@ -130,7 +130,7 @@ layui.config({
 			title: _title,
 			pageId: "editenclosurepage",
 			area: ['400px', '200px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTreePointNode();
 				loadThisFolderChild();
@@ -157,7 +157,7 @@ layui.config({
 			title: "新增文件夹",
 			pageId: "addenclosurepage",
 			area: ['400px', '200px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				refreshTreePointNode();
 				loadThisFolderChild();
@@ -171,7 +171,7 @@ layui.config({
 			title: "上传附件",
 			pageId: "enclosureuploadpage",
 			area: ['400px', '350px'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
     			loadThisFolderChild();
 			}});
 	});

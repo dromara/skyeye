@@ -54,7 +54,7 @@ layui.config({
 		//加载用户信息
 		function loadUserMation(){
 			// 获取当前登录员工信息
-			systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+			systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 				var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
 					+ '<font>' + data.bean.userName + '</font>'
 					+ '<font id="consoleDesk">控制台</font>'
@@ -165,7 +165,7 @@ layui.config({
 					pageId: "filefolderpage",
 					area: ['300px', '400px'],
 					skin: 'add-schedule-mation',
-					callBack: function(refreshCode) {
+					callBack: function (refreshCode) {
 						winui.window.msg("保存成功", {icon: 1, time: 2000});
 					}});
 			} else {

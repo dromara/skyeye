@@ -92,7 +92,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'details') { //详情
 	        	details(data);
-	        }else if(layEvent === 'historyDetails'){ // 盘点历史
+	        } else if (layEven === 'historyDetails'){ // 盘点历史
 	        	historyDetails(data);
 	        }
 	    });
@@ -156,19 +156,19 @@ layui.config({
     });
     
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/material/materialdetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "materialdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 盘点历史详情
-	function historyDetails(data){
+	function historyDetails(data) {
 		normsId = data.normsId;
 		depotId = data.depotId;
 		_openNewWindows({
@@ -176,7 +176,7 @@ layui.config({
 			title: "盘点历史",
 			pageId: "storeHouseInventoryHistory",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -185,15 +185,15 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-    function refreshloadTable(){
+    function refreshloadTable() {
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		materialName: $("#materialName").val(), 
     		model: $("#model").val(), 

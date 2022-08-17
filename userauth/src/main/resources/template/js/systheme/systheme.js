@@ -109,7 +109,7 @@ layui.config({
 	    	 	options: {'click .del':function(index, row){
 		    	 		winui.window.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
 		    	 			winui.window.close(index);
-	    		            AjaxPostUtil.request({url: reqBasePath + "sysevewinbgpic007", params:{rowId: row.id}, type: 'json', callback: function (json) {
+	    		            AjaxPostUtil.request({url: reqBasePath + "sysevewinbgpic007", params: {rowId: row.id}, type: 'json', callback: function (json) {
 								winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 								refreshGrid("cus-background-choose", {params:{}});
 	    		    		}});
@@ -143,14 +143,14 @@ layui.config({
 	    	 	options: {'click .lockDel':function(index, row){
 		    	 		winui.window.confirm('确认删除选中数据吗？', { icon: 3, title: '删除win系统桌面图片' }, function (index) {
 		    	 			winui.window.close(index);
-	    		            AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic007", params:{rowId: row.id}, type: 'json', callback: function (json) {
+	    		            AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic007", params: {rowId: row.id}, type: 'json', callback: function (json) {
 								winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 								refreshGrid("cus-lockscreen-choose", {params:{}});
 	    		    		}});
 	    				});
 	    	 		}, 'click .lockBgPicItem1':function(index, row){
 	    	 			var bgSrc = row.picUrl;
-	    	 			AjaxPostUtil.request({url: reqBasePath + "sys026", params:{winLockBgPicUrl: bgSrc}, type: 'json', callback: function (json) {
+	    	 			AjaxPostUtil.request({url: reqBasePath + "sys026", params: {winLockBgPicUrl: bgSrc}, type: 'json', callback: function (json) {
 							$('.lockscreen-preview').css('background-image', 'url(' + bgSrc + ')');
 							winui.resetLockBg(bgSrc);
 			 	   		}});
@@ -169,7 +169,7 @@ layui.config({
 			done: function(json) {
 				// 上传完毕回调
 				if (json.returnCode == 0) {
-					AjaxPostUtil.request({url: reqBasePath + "sysevewinbgpic005", params:{picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "sysevewinbgpic005", params: {picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
 						winui.window.msg("上传成功", {icon: 1, time: 2000});
 						refreshGrid("cus-background-choose", {params:{}});
 		    		}});
@@ -191,7 +191,7 @@ layui.config({
 			done: function(json) {
 				// 上传完毕回调
 				if (json.returnCode == 0) {
-					AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic005", params:{picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
+					AjaxPostUtil.request({url: reqBasePath + "sysevewinlockbgpic005", params: {picUrl: json.bean.picUrl}, type: 'json', callback: function (json) {
 						winui.window.msg("上传成功", {icon: 1, time: 2000});
 						refreshGrid("cus-lockscreen-choose", {params:{}});
 		    		}});
@@ -207,13 +207,13 @@ layui.config({
 	    
 	    //任务栏位置
 	    form.on('radio(taskPosition)', function (data) {
-	    	AjaxPostUtil.request({url: reqBasePath + "sys028", params:{winTaskPosition: data.value}, type: 'json', callback: function (json) {
+	    	AjaxPostUtil.request({url: reqBasePath + "sys028", params: {winTaskPosition: data.value}, type: 'json', callback: function (json) {
 				winui.resetTaskbar(data.value);
  	   		}});
 	    });
 	    //开始菜单尺寸
 	    form.on('radio(startSize)', function (data) {
-	    	AjaxPostUtil.request({url: reqBasePath + "sys027", params:{winStartMenuSize: data.value}, type: 'json', callback: function (json) {
+	    	AjaxPostUtil.request({url: reqBasePath + "sys027", params: {winStartMenuSize: data.value}, type: 'json', callback: function (json) {
 				winui.resetStartSize(data.value);
  	   		}});
 	    });
@@ -221,7 +221,7 @@ layui.config({
 	    form.on('radio(loadBottomMenuIcon)', function (data) {
 	    	var parent$ = window.parent.layui.jquery;
 	    	winuiTaskbarTask = parent$(".winui-taskbar-task");
-	    	AjaxPostUtil.request({url: reqBasePath + "sys030", params:{loadBottomMenuIcon: data.value}, type: 'json', callback: function (json) {
+	    	AjaxPostUtil.request({url: reqBasePath + "sys030", params: {loadBottomMenuIcon: data.value}, type: 'json', callback: function (json) {
 				parent.loadBottomMenuIcon = data.value;
 				if(data.value === '1'){//只显示图标
 					winuiTaskbarTask.each(function () {

@@ -15,7 +15,7 @@ layui.config({
 		table = layui.table;
 
     // 获取当前登录员工信息
-    systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+    systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
         staffId = data.bean.staffId;
     });
     initTable();
@@ -83,7 +83,7 @@ layui.config({
 	form.render();
 	
 	// 签约
-    function signUp(data){
+    function signUp(data) {
         layer.confirm('确认签约该合同吗？', { icon: 3, title: '签约操作' }, function (index) {
             layer.close(index);
             AjaxPostUtil.request({url: sysMainMation.ehrBasePath + "sysstaffcontract007", params: {rowId: data.id}, type: 'json', method: "GET", callback: function (json) {
@@ -98,11 +98,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		staffId: staffId
     	};

@@ -26,7 +26,7 @@ layui.config({
         limit: getLimit(),
         cols: [[
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
-            { field: 'nameCh', title: '页面中文名称', align: 'left', width: 150},
+            { field: 'nameCh', title: '页面中文名称', align: 'left', width: 150 },
             { field: 'nameEn', title: '页面英文名称', align: 'left', width: 150 },
             { field: 'createName', title: '创建人', align: 'left', width: 100 },
             { field: 'createTime', title: '创建时间', align: 'center', width: 140 },
@@ -44,11 +44,11 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
             edit(data);
-        }else if (layEvent === 'delet') { //删除
+        } else if (layEvent === 'delet') { //删除
             delet(data);
-        }else if (layEvent === 'design') { //设计
+        } else if (layEvent === 'design') { //设计
             design(data);
-        }else if (layEvent === 'showPage') { //预览
+        } else if (layEvent === 'showPage') { //预览
             showPage(data);
         }
     });
@@ -68,17 +68,17 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "reportPageAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });
 
     // 删除
-    function delet(data){
+    function delet(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             layer.close(index);
-            AjaxPostUtil.request({url: reportBasePath + "reportpage005", params:{rowId: data.id}, type: 'json', method: "DELETE", callback: function(json) {
+            AjaxPostUtil.request({url: reportBasePath + "reportpage005", params: {rowId: data.id}, type: 'json', method: "DELETE", callback: function(json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -86,14 +86,14 @@ layui.config({
     }
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/reportPage/reportPageEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "reportPageEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -101,13 +101,13 @@ layui.config({
     }
 
     // 设计
-    function design(data){
+    function design(data) {
         parent._openNewWindows({
             url: "../../tpl/pageReportDesign/pageReportDesign.html?rowId=" + data.id,
             title: '报表设计',
             pageId: "pageReportDesign",
             area: ['100vw', '100vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -115,7 +115,7 @@ layui.config({
     }
 
     // 预览
-    function showPage(data){
+    function showPage(data) {
         window.open("../../tpl/reportPage/reportPageShow.html?rowId=" + data.id, "_blank");
     }
 
@@ -124,15 +124,15 @@ layui.config({
         loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshloadTable(){
+    function refreshloadTable() {
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         return {
             name: $("#name").val()
         };

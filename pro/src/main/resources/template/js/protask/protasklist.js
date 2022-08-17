@@ -93,15 +93,15 @@ layui.config({
 			activitiUtil.activitiDetails(data);
         } else if (layEvent === 'executionBegin') {//开始执行
         	executionBegin(data, obj);
-        }else if(layEvent === 'revoke') {//撤销任务审批申请
+        } else if (layEven === 'revoke') {//撤销任务审批申请
         	revoke(data);
-        }else if(layEvent === 'taskSplit') {//拆分任务
+        } else if (layEven === 'taskSplit') {//拆分任务
         	taskSplit(data);
-        }else if(layEvent === 'cancellation') {//作废
+        } else if (layEven === 'cancellation') {//作废
         	cancellation(data, obj);
-        }else if(layEvent === 'executionOver') {//执行完成
+        } else if (layEven === 'executionOver') {//执行完成
         	executionOver(data);
-        }else if(layEvent === 'executionClose') {//任务关闭
+        } else if (layEven === 'executionClose') {//任务关闭
         	executionClose(data, obj);
         }
     });
@@ -111,7 +111,7 @@ layui.config({
 		var msg = obj ? '确认开始执行【' + obj.data.taskName + '】吗？' : '确认开始执行该任务吗？';
 		layer.confirm(msg, { icon: 3, title: '任务开始执行' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "protask012", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "protask012", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -123,7 +123,7 @@ layui.config({
 		var msg = obj ? '确认关闭【' + obj.data.taskName + '】吗？' : '确认关闭该任务吗？';
 		layer.confirm(msg, { icon: 3, title: '关闭任务' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "protask014", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "protask014", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -131,11 +131,11 @@ layui.config({
 	}
 	
 	// 撤销任务审批申请
-	function revoke(data){
+	function revoke(data) {
 		var msg = '确认从工作流中撤销选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '撤销任务审批申请' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "protask007", params:{processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "protask007", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {
 				winui.window.msg("提交成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -150,14 +150,14 @@ layui.config({
 			title: "新增任务",
 			pageId: "protaskadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 拆分任务
-	function taskSplit(data){
+	function taskSplit(data) {
 		isSplitTask = true;
 		rowId = data.id;
 		restWorkload = data.restWorkload;
@@ -166,21 +166,21 @@ layui.config({
 			title: '<span style="color: blue; font-size:21px">' + data.taskName + '</span><span style="font-size:12px">[拆分子任务]</span>',
 			pageId: "protaskadd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 执行完成
-	function executionOver(data){
+	function executionOver(data) {
 		rowId = data.id;
     	_openNewWindows({
 			url: "../../tpl/protask/protaskexecution.html",
 			title: '执行信息',
 			pageId: "protaskexecution",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -208,7 +208,7 @@ layui.config({
 		var msg = obj ? '确认作废【' + obj.data.taskName + '】吗？' : '确认作废该任务信息吗？';
 		layer.confirm(msg, { icon: 3, title: '任务作废' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "protask009", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "protask009", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -216,27 +216,27 @@ layui.config({
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/protask/protaskdetails.html", 
 			title: "任务详情",
 			pageId: "protaskdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
 	}
 
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/protask/protaskedit.html",
 			title: "编辑任务",
 			pageId: "protaskedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -269,11 +269,11 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
 		tableTree.reload("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
 		var theStartTime = "", theEndTime = "";
 		if (!isNull($("#startTime").val())) {
 			theStartTime = $("#startTime").val().split('~')[0].trim() + ' 00:00:00';

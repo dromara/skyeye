@@ -133,7 +133,7 @@ layui.config({
 		 		});
 		 		
 		 		//父菜单变化事件
-		 		form.on('select(selectParent)', function(data){
+		 		form.on('select(selectParent)', function(data) {
 					if(data.value != parentId){
 						if(isNull(data.value) || data.value == '请选择'){
 							layui.$(data.elem).parent('dd').nextAll().remove();
@@ -174,7 +174,7 @@ layui.config({
 		 	 	    		var $menu = layui.$('.menuParent');
 		 	 	    		var str = "";
 		 	 	    		for(var i = 0; i < $menu.length; i++){
-		 	 	    			if(!isNull($menu[i].value) && $menu[i].value != '请选择'){
+		 	 	    			if (!isNull($menu[i].value) && $menu[i].value != '请选择'){
 		 	 	    				str += $menu[i].value + ",";
 		 	 	    			}
 		 	 	    		}
@@ -212,8 +212,8 @@ layui.config({
 	    //初始化当前子菜单的父菜单
 	    function loadChildMenuAll(pid){
 	    	if(pid.length > 0){
-	    		if(!isNull(pid[0])){
-		    		AjaxPostUtil.request({url: reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function (json) {
+	    		if (!isNull(pid[0])){
+		    		AjaxPostUtil.request({url: reqBasePath + "sys009", params: {parentId: parentId}, type: 'json', callback: function (json) {
 						var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 						for(var i = 0; i < json.rows.length; i++){
 							if(json.rows[i].id != parent.rowId){
@@ -242,7 +242,7 @@ layui.config({
 	    
  	    //加载同级菜单
  	    function loadChildMenu(){
- 	    	AjaxPostUtil.request({url: reqBasePath + "sys009", params:{parentId: parentId}, type: 'json', callback: function (json) {
+ 	    	AjaxPostUtil.request({url: reqBasePath + "sys009", params: {parentId: parentId}, type: 'json', callback: function (json) {
 				var str = '<dd><select class="menuParent" lay-filter="selectParent" lay-search=""><option value="">请选择</option>';
 				for(var i = 0; i < json.rows.length; i++){
 					if(json.rows[i].id != parent.rowId){

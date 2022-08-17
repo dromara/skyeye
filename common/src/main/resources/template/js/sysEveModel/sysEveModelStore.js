@@ -76,7 +76,7 @@ layui.config({
 		console.log(rowId);
 	});
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
 			title: "",
 			firstTypeId: firstType == "0" ? "" : firstType,

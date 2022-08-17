@@ -29,7 +29,7 @@ layui.config({
 	$(".sys-logo").html(sysMainMation.mationTitle);
 
 	// 获取当前登录员工信息
-	systemCommonUtil.getSysCurrentLoginUserMation(function (data){
+	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		var str = '<img alt="' + data.bean.userName + '" src="' + fileBasePath + data.bean.userPhoto + '"/>'
 			+ '<font>' + data.bean.userName + '</font>'
 			+ '<font id="consoleDesk">控制台</font>'
@@ -119,7 +119,7 @@ layui.config({
 			var thisModelIndex = getModelIndex(model, item.modelName);
 			if(model[thisModelIndex].id === modelId){
 				var groupName = "未分类接口";
-				if(!isNull(item.groupName)) {
+				if (!isNull(item.groupName)) {
 					groupName = item.groupName;
 				}
 				var boxIndex = getBoxIndex(groupList, groupName, item.modelName);
@@ -179,7 +179,7 @@ layui.config({
 		});
 		// 获取已分类接口
 		$.each(json.rows, function(i, item){
-			if(!isNull(item.groupName) && getBoxIndex(box, item.groupName, item.modelName) == -1){
+			if (!isNull(item.groupName) && getBoxIndex(box, item.groupName, item.modelName) == -1){
 				box.push({
 					boxId: getRandomValueToString(),
 					modelId: model[getModelIndex(model, item.modelName)].id,

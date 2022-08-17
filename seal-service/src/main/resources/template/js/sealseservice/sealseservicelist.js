@@ -48,23 +48,23 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'details'){ //详情
+        } else if (layEvent === 'details'){ //详情
         	details(data);
-        }else if (layEvent === 'delete'){ //删除
+        } else if (layEvent === 'delete'){ //删除
         	deleteRow(data);
-        }else if (layEvent === 'stayworker'){ //派工
+        } else if (layEvent === 'stayworker'){ //派工
         	stayWork(data);
-        }else if (layEvent === 'receipt'){ //接单
+        } else if (layEvent === 'receipt'){ //接单
         	stayReceipt(data);
-        }else if (layEvent === 'signIn'){ //签到
+        } else if (layEvent === 'signIn'){ //签到
         	signIn(data);
-        }else if (layEvent === 'finished'){ //完工
+        } else if (layEvent === 'finished'){ //完工
         	finishedPro(data);
-        }else if (layEvent === 'evaluate'){ //评价
+        } else if (layEvent === 'evaluate'){ //评价
         	evaluate(data);
-        }else if (layEvent === 'examine'){ //审核
+        } else if (layEvent === 'examine'){ //审核
         	examine(data);
-        }else if (layEvent === 'feedBack'){ //情况反馈
+        } else if (layEvent === 'feedBack'){ //情况反馈
         	feedBack(data);
         }
     });
@@ -79,7 +79,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: {orderNum: $("#orderNum").val(), state: $("#state").val(), contacts: $("#contacts").val(), receiver: $("#receiver").val()}});
     }
     
@@ -88,103 +88,103 @@ layui.config({
     }
 
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseserviceedit.html", 
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sealseserviceedit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	// 派工
-	function stayWork(data){
+	function stayWork(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstayworker/dispatchedworker.html", 
 			title: "派工",
 			pageId: "dispatchedworker",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 接单
-	function stayReceipt(data){
+	function stayReceipt(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstayreceipt/receipt.html", 
 			title: "接单",
 			pageId: "receipt",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//签到
-	function signIn(data){
+	function signIn(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstaysignin/signin.html", 
 			title: "签到",
 			pageId: "signin",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//完工
-	function finishedPro(data){
+	function finishedPro(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstayfinishedpro/stateisstayfinished.html", 
 			title: "完工",
 			pageId: "stateisstayfinished",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//评价
-	function evaluate(data){
+	function evaluate(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstayevaluate/stateisstayevaluate.html", 
 			title: "评价",
 			pageId: "stateisstayevaluate",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//审核
-	function examine(data){
+	function examine(data) {
 		layer.confirm('确认审核该数据吗？', {icon: 3, title: '审核操作'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "sealseservice038", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -195,19 +195,19 @@ layui.config({
 	}
 	
 	//情况反馈
-	function feedBack(data){
+	function feedBack(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/feedback/feedbacklist.html", 
 			title: "情况反馈",
 			pageId: "feedbacklist",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
 	//删除
-	function deleteRow(data){
+	function deleteRow(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "sealseservice020", params: {rowId: data.id}, type: 'json', callback: function (json) {

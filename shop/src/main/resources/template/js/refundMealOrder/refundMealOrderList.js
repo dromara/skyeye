@@ -92,15 +92,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'rejection') { // 驳回
             rejection(data);
-        }else if(layEvent == 'select'){ // 详情
+        } else if (layEven == 'select'){ // 详情
             select(data)
-        }else if(layEvent == 'pass'){ // 退款
+        } else if (layEven == 'pass'){ // 退款
             pass(data)
         }
     });
 
     // 驳回
-    function rejection(data){
+    function rejection(data) {
         var msg = '确定驳回退款金额为：' + data.refundPrice + '元的退款申请吗';
         layer.confirm(msg, {icon: 3, title: '驳回'}, function(index){
             layer.close(index);
@@ -112,7 +112,7 @@ layui.config({
     }
 
     // 退款
-    function pass(data){
+    function pass(data) {
         var msg = '此次退款金额为：' + data.refundPrice + '元 ';
         layer.confirm(msg, {icon: 3, title: '退款'}, function(index){
             layer.close(index);
@@ -124,14 +124,14 @@ layui.config({
     }
 
     // 详情
-    function select(data){
+    function select(data) {
         rowId = data.mealOrderId;
         _openNewWindows({
             url: "../../tpl/mealOrder/storeMealOrderDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "storeMealOrderDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -149,17 +149,17 @@ layui.config({
     });
 
     // 刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var storeId = $("#storeId").val();
         if(isNull(storeId)){
             storeId = "-";
         }
         var startTime = "", endTime = "";
-        if(!isNull($("#refundTime").val())){
+        if (!isNull($("#refundTime").val())) {
             startTime = $("#refundTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#refundTime").val().split('~')[1].trim() + ' 23:59:59';
         }

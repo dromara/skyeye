@@ -22,7 +22,7 @@ layui.config({
 		initGradeId();
 		initTable();
 	});
-	form.on('select(schoolId)', function(data){
+	form.on('select(schoolId)', function(data) {
 		// 加载年级
  		initGradeId();
 	});
@@ -43,7 +43,7 @@ layui.config({
         });
     }
     
-    form.on('select(gradeId)', function(data){
+    form.on('select(gradeId)', function(data) {
 		if(isNull(data.value) || data.value === '请选择'){
 			$("#subjectId").html("");
 			form.render('select');
@@ -107,9 +107,9 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'del') { //删除
 	        	del(data, obj);
-	        }else if (layEvent === 'edit') { //编辑
+	        } else if (layEvent === 'edit') { //编辑
 	        	edit(data);
-	        }else if (layEvent === 'details') { //详情
+	        } else if (layEvent === 'details') { //详情
 	        	details(data);
 	        }
 	    });
@@ -127,7 +127,7 @@ layui.config({
 	function del(data, obj){
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints003", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:schoolBasePath + "knowledgepoints003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -135,28 +135,28 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schoolKnowledgePoints/schoolKnowledgePointsEdit.html", 
 			title: "编辑知识点",
 			pageId: "schoolKnowledgePointsEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/schoolKnowledgePoints/schoolKnowledgePointsDetails.html", 
 			title: "知识点信息",
 			pageId: "schoolKnowledgePointsDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -172,13 +172,13 @@ layui.config({
 			title: "新增知识点",
 			pageId: "schoolKnowledgePointsAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTablePatams()});
     }
     

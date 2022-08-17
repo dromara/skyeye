@@ -49,7 +49,7 @@ layui.config({
     });
 	
 	//讨论版详情
-	function discussDetails(data){
+	function discussDetails(data) {
 		disRowId = data.id;
 		rowId = data.proId;
 		_openNewWindows({
@@ -57,7 +57,7 @@ layui.config({
 			title: data.title,
 			pageId: "discussdetailpage",
 			maxmin: true,
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -74,7 +74,7 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: {title: $("#title").val(), projectName: $("#projectName").val()}});
     }
 

@@ -45,11 +45,11 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { // 删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { // 编辑
+        } else if (layEvent === 'edit') { // 编辑
         	edit(data);
-        }else if (layEvent === 'appmenu') { // 手机端菜单授权
+        } else if (layEvent === 'appmenu') { // 手机端菜单授权
             appmenu(data);
-        }else if (layEvent === 'pcMenu') { // PC端菜单授权
+        } else if (layEvent === 'pcMenu') { // PC端菜单授权
 			pcMenu(data);
 		}
     });
@@ -66,39 +66,39 @@ layui.config({
 	}
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysEveRole/sysEveRoleEdit.html",
 			title: "编辑角色",
 			pageId: "sysEveRoleEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	// 手机端菜单授权
-    function appmenu(data){
+    function appmenu(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/sysEveRole/sysEveRoleAppMenu.html",
             title: "手机端菜单授权",
             pageId: "sysEveRoleAppMenu",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {}});
+            callBack: function (refreshCode) {}});
     }
 
 	// PC端菜单授权
-	function pcMenu(data){
+	function pcMenu(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysEveRole/sysEveRolePCMenu.html",
 			title: "PC端菜单授权",
 			pageId: "sysEveRolePCMenu",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {}});
+			callBack: function (refreshCode) {}});
 	}
 	
     // 新增角色
@@ -108,7 +108,7 @@ layui.config({
 			title: "新增角色",
 			pageId: "sysEveRoleAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -120,7 +120,7 @@ layui.config({
 		loadTable();
 	});
 
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 

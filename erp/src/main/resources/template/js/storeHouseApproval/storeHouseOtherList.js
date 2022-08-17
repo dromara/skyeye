@@ -99,7 +99,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'details') { //详情
 	        	details(data);
-	        }else if (layEvent === 'examine') { //审核
+	        } else if (layEvent === 'examine') { //审核
 	        	examine(data);
 	        }
 	    });
@@ -115,7 +115,7 @@ layui.config({
     });
     
     //审核
-	function examine(data){
+	function examine(data) {
 		rowId = data.id;
 		subType = data.subType;
 		_openNewWindows({
@@ -123,14 +123,14 @@ layui.config({
 			title: "审核",
 			pageId: "storeHouseOtherExamine",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     }
 
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		var url = erpOrderUtil.getErpDetailUrl(data);
 		_openNewWindows({
@@ -138,7 +138,7 @@ layui.config({
 			title: "单据详情",
 			pageId: "storeHouseApprovalOrderDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -151,7 +151,7 @@ layui.config({
     });
     
     //刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -160,8 +160,8 @@ layui.config({
         table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
     }
     
-    function getTableParams(){
-    	if(isNull($("#operTime").val())){//一定要记得，当createTime为空时
+    function getTableParams() {
+    	if(isNull($("#operTime").val())) {//一定要记得，当createTime为空时
     		startTime = "";
     		endTime = "";
     	}else {

@@ -93,7 +93,7 @@ layui.config({
 		        	}
 		        }},
 		        { field: 'userName', title: '申诉人', align: 'left', width: 80},
-		        { field: 'approvalTime', title: '审批时间', align: 'center', width: 150},
+		        { field: 'approvalTime', title: '审批时间', align: 'center', width: 150 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar2'}
 		    ]],
 		    done: function(){
@@ -105,7 +105,7 @@ layui.config({
 			var layEvent = obj.event;
 			if (layEvent === 'approve') { //审批员工的申诉申请
 				approve(data);
-			}else if(layEvent === 'appealdetails'){ //员工的申诉申请详情
+			} else if (layEven === 'appealdetails'){ //员工的申诉申请详情
 				appealdetails(data);
 			}
 		});
@@ -114,28 +114,28 @@ layui.config({
 	form.render();
 	
 	// 审批员工的申诉申请
-	function approve(data){
+	function approve(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/checkWorkApprove/checkWorkApprove.html", 
 			title: "审批申诉申请",
 			pageId: "checkWorkApprove",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				reloadMyGetTable();
 			}});
 	}
 	
 	// 员 工的申诉申请详情
-	function appealdetails(data){
+	function appealdetails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/checkWorkAbnormalAttendance/checkWorkAbnormalAttendanceDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "checkWorkAbnormalAttendanceDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -154,11 +154,11 @@ layui.config({
     }
     
     function getTablePatams(){
-    	if(isNull($("#createId").val())){
+    	if(isNull($("#createId").val())) {
     		createid = "";
     	}
     	var startTime = "", endTime = "";
-    	if(!isNull($("#checkDate").val())){
+    	if (!isNull($("#checkDate").val())) {
     		startTime = $("#checkDate").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#checkDate").val().split('~')[1].trim() + ' 23:59:59';
     	}

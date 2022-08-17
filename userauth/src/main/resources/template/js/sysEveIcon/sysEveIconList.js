@@ -26,7 +26,7 @@ layui.config({
 	 	options: {'click .del':function(index, row){
 				layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 					layer.close(index);
-		            AjaxPostUtil.request({url: reqBasePath + "icon003", params:{rowId: row.id}, type: 'json', callback: function (json) {
+		            AjaxPostUtil.request({url: reqBasePath + "icon003", params: {rowId: row.id}, type: 'json', callback: function (json) {
 						winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 						loadTable();
 		    		}});
@@ -51,14 +51,14 @@ layui.config({
 	});
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sysEveIcon/sysEveIconEdit.html",
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "sysEveIconEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -71,7 +71,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.addPageTitle"][languageType],
 			pageId: "sysEveIconAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -81,11 +81,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	refreshGrid("showForm", {params: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		iconClass: $("#iconClass").val()
     	};

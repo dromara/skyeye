@@ -61,34 +61,34 @@ layui.config({
     });
 	
 	// 编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: '../../tpl/dsFormPageSequence/dsFormPageSequenceDraftProcessEdit.html',
 			title: systemLanguage["com.skyeye.editPageTitle"][languageType],
 			pageId: "dsFormPageSequenceDraftProcessEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}
 		});
 	}
 	
 	// 表单详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/dsFormPageSequence/dsFormPageSequenceDraftProcessDetail.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "dsFormPageSequenceDraftProcessDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
 	
 	// 提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm('确认提交进行审批吗？', { icon: 3, title: '提交审批' }, function (i) {
 			layer.close(i);
 			activitiUtil.startProcess(data.pageId, function (approvalId) {
@@ -106,7 +106,7 @@ layui.config({
 	}
 	
 	// 删除
-	function deleteRow(data){
+	function deleteRow(data) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "pagesequence002", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -137,10 +137,10 @@ layui.config({
     	table.reloadData("messageMyStartTable", {page: {curr: 1}, where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
 		var startTime = "";
 		var endTime = "";
-		if(!isNull($("#createTime").val())){//一定要记得，当createTime为空时
+		if (!isNull($("#createTime").val())) {//一定要记得，当createTime为空时
 			startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
 			endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
 		}

@@ -67,14 +67,14 @@ layui.config({
 	form.render();
 	
 	// 详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/customermanage/customerdetails.html", 
 			title: "客户详情",
 			pageId: "customerdetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -86,7 +86,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -94,7 +94,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		name: $("#customerName").val(),
     		typeId: $("#typeId").val(),

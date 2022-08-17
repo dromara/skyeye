@@ -77,19 +77,19 @@ layui.config({
 		}
 	    
 	    //申诉类型监听事件
-		form.on('select(appealType)', function(data){
+		form.on('select(appealType)', function(data) {
 			appealType = data.value;
 			workId = '';
 			initWorkId();
 		});
 		
 		//申诉内容监听事件
-		form.on('select(workId)', function(data){
+		form.on('select(workId)', function(data) {
 			workId = data.value;
 		});
 		
 		//申诉原因类型监听事件
-		form.on('select(appealReasonId)', function(data){
+		form.on('select(appealReasonId)', function(data) {
 			appealReasonId = data.value;
 		});
 		
@@ -112,7 +112,7 @@ layui.config({
  	        		appealReason: encodeURIComponent($("#appealReason").val()),
  	        		approvalId: ids
  	        	};
- 	        	if(!isNull($("#approvalId").val()) && !isNull(ids)){
+ 	        	if (!isNull($("#approvalId").val()) && !isNull(ids)){
  	        		AjaxPostUtil.request({url: flowableBasePath + "checkwork005", params: params, type: 'json', callback: function (json) {
 						parent.layer.close(index);
 						parent.refreshCode = '0';

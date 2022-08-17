@@ -97,7 +97,7 @@ layui.config({
 	            title: "工序验收",
 	            pageId: "erpMachinAcceptance",
 	            area: ['60vw', '60vh'],
-	            callBack: function(refreshCode) {
+	            callBack: function (refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					initData();
 	            }});

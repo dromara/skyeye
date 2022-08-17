@@ -67,21 +67,21 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'UseDedails') { //用车申请详情
         	UseDedails(data);
-        }else if (layEvent === 'vehicleEdit') { //编辑用车申请
+        } else if (layEvent === 'vehicleEdit') { //编辑用车申请
         	vehicleEdit(data);
-        }else if (layEvent === 'subApproval') { //提交审批
+        } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        }else if(layEvent === 'cancellation') { //用车申请作废
+        } else if (layEven === 'cancellation') { //用车申请作废
         	cancellation(data);
-        }else if(layEvent === 'processDetails') { //用车申请详情
+        } else if (layEven === 'processDetails') { //用车申请详情
 			activitiUtil.activitiDetails(data);
-        }else if(layEvent === 'revoke') { //撤销用车申请
+        } else if (layEven === 'revoke') { //撤销用车申请
         	revoke(data);
         }
     });
 	
 	// 撤销用车申请
-	function revoke(data){
+	function revoke(data) {
 		layer.confirm('确认撤销该用车申请吗？', {icon: 3, title: '撤销操作'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "vehicle022", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
@@ -92,7 +92,7 @@ layui.config({
 	}
 	
 	// 用车申请提交审批
-	function subApproval(data){
+	function subApproval(data) {
 		layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
 			layer.close(index);
 			activitiUtil.startProcess(sysActivitiModel["vehicleManageUse"]["key"], function (approvalId) {
@@ -109,7 +109,7 @@ layui.config({
 	}
 	
 	// 用车申请作废
-	function cancellation(data){
+	function cancellation(data) {
 		layer.confirm('确认作废该条用车申请吗？', {icon: 3, title: '作废操作'}, function (index) {
 			layer.close(index);
             AjaxPostUtil.request({url: flowableBasePath + "vehicle018", params: {rowId: data.id}, type: 'json', callback: function (json) {
@@ -120,14 +120,14 @@ layui.config({
 	}
 
 	// 编辑用车申请
-	function vehicleEdit(data){
+	function vehicleEdit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageUse/vehicleManageUseEdit.html", 
 			title: "编辑用车申请",
 			pageId: "vehicleManageUseEdit",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}
@@ -141,21 +141,21 @@ layui.config({
 			title: "车辆申请",
 			pageId: "vehicleManageUseAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	// 用车申请详情
-	function UseDedails(data){
+	function UseDedails(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/vehicleManageUse/vehicleManageUseDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "vehicleManageUseDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}
 		});
 	}
@@ -173,13 +173,13 @@ layui.config({
 		loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("vehicleUseTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	var startTime = "", endTime = "";
-		if(!isNull($("#createTime").val())){
+		if (!isNull($("#createTime").val())) {
     		startTime = $("#createTime").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#createTime").val().split('~')[1].trim() + ' 23:59:59';
     	}

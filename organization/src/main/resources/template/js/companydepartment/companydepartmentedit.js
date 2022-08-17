@@ -82,7 +82,7 @@ layui.config({
 			    });
 		 		
 			    // 加载公司数据
-				systemCommonUtil.getSysCompanyList(function(data){
+				systemCommonUtil.getSysCompanyList(function(data) {
 					// 加载企业数据
 					$("#companyId").html(getDataUseHandlebars(getFileContent('tpl/template/select-option.tpl'), data));
 					$("#companyId").val(json.bean.companyId);

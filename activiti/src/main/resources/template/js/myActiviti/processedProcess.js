@@ -36,7 +36,7 @@ layui.config({
 	        }},
 	        { field: 'agencyName', title: '受理人', width: 80},
 	        { field: 'endTime', title: '受理时间', align: 'center', width: 140, templet: function (d) {
-	        	if(!isNull(d.endTime)){
+	        	if (!isNull(d.endTime)){
 		        	var str = d.endTime.toString();
 		        	str = str.substring(0, str.length - 3);
 		        	return date('Y-m-d H:i', str);
@@ -71,7 +71,7 @@ layui.config({
     });
 
 	//撤回
-	function withdraw(data){
+	function withdraw(data) {
 		//流程id
 		processInstanceId = data.processInstanceId;
 		//历史审批任务id
@@ -81,7 +81,7 @@ layui.config({
 			title: "撤回",
 			pageId: "activitiwithdraw",
 			area: ['70vw', '40vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				reloadMyHistoryTaskTable();
 			}
@@ -89,7 +89,7 @@ layui.config({
 	}
 	
 	//刷新流程图
-	function refreshPic(data){
+	function refreshPic(data) {
 		layer.confirm('确认重新生成流程图吗？', { icon: 3, title: '刷新流程图操作' }, function (i) {
 			layer.close(i);
             AjaxPostUtil.request({url:flowableBasePath + "activitimode027", params: {processInstanceId: data.processInstanceId}, type: 'json', callback: function (json) {

@@ -102,9 +102,9 @@ layui.config({
     }
     
     function loadThisMonthHis(callback, start){
-        AjaxPostUtil.request({url: flowableBasePath + "checkwork014", params:{monthMation: start._d.format("yyyy-MM"), timeId: $("#checkTime").val()}, type: 'json', callback: function (json) {
+        AjaxPostUtil.request({url: flowableBasePath + "checkwork014", params: {monthMation: start._d.format("yyyy-MM"), timeId: $("#checkTime").val()}, type: 'json', callback: function (json) {
 			var event = [];
-			if(!isNull(json.rows)){
+			if (!isNull(json.rows)){
 				$.each(json.rows, function(i, item) {
 					event.push({
 						title: ($.inArray(item.type.toString(), topLeftDayType) > -1) ? item.title : item.title + ":" + item.clockIn,
@@ -236,7 +236,7 @@ layui.config({
 		if(dayType == 2){
 			timeId = "-";
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "checkwork001", params:{timeId: timeId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: flowableBasePath + "checkwork001", params: {timeId: timeId}, type: 'json', callback: function (json) {
 			$("#clockInBtn").hide();
 			calendar.fullCalendar('refetchEvents');
 			winui.window.msg("上班打卡成功", {icon: 1, time: 2000});
@@ -261,7 +261,7 @@ layui.config({
 		if(dayType == 2){
 			timeId = "-";
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "checkwork002", params:{timeId: timeId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: flowableBasePath + "checkwork002", params: {timeId: timeId}, type: 'json', callback: function (json) {
 			$("#clockOutBtn").hide();
 			calendar.fullCalendar('refetchEvents');
 			winui.window.msg("下班打卡成功", {icon: 1, time: 2000});

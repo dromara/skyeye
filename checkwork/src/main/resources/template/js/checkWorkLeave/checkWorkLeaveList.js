@@ -56,7 +56,7 @@ layui.config({
                         return "<span class='state-error'>" + d.stateName + "</span>";
                     }
                 }},
-            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150},
+            { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#messageTableBar'}
         ]],
         done: function(){
@@ -69,15 +69,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'dedails') { // 详情
             dedails(data);
-        }else if (layEvent === 'edit') { // 编辑
+        } else if (layEvent === 'edit') { // 编辑
             edit(data);
-        }else if (layEvent === 'subApproval') { // 提交审批
+        } else if (layEvent === 'subApproval') { // 提交审批
             subApproval(data);
-        }else if(layEvent === 'cancellation') {// 作废
+        } else if (layEven === 'cancellation') {// 作废
             cancellation(data);
-        }else if(layEvent === 'processDetails') {// 流程详情
+        } else if (layEven === 'processDetails') {// 流程详情
             activitiUtil.activitiDetails(data);
-        }else if(layEvent === 'revoke') {// 撤销申请
+        } else if (layEven === 'revoke') {// 撤销申请
             revoke(data);
         }
     });
@@ -89,17 +89,17 @@ layui.config({
             title: "请假申请",
             pageId: "checkWorkLeaveAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     });
 
     // 撤销请假申请
-    function revoke(data){
+    function revoke(data) {
         layer.confirm('确认撤销该申请吗？', { icon: 3, title: '撤销操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "checkworkleave009", params:{processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "checkworkleave009", params: {processInstanceId: data.processInstanceId}, type: 'json', method: "PUT", callback: function (json) {
                 winui.window.msg("提交成功", {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -107,14 +107,14 @@ layui.config({
     }
 
     // 编辑请假申请
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/checkWorkLeave/checkWorkLeaveEdit.html",
             title: "请假申请",
             pageId: "checkWorkLeaveEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }
@@ -122,7 +122,7 @@ layui.config({
     }
 
     // 请假申请提交审批
-    function subApproval(data){
+    function subApproval(data) {
         layer.confirm(systemLanguage["com.skyeye.approvalOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.approvalOperation"][languageType]}, function (index) {
             layer.close(index);
             activitiUtil.startProcess(sysActivitiModel["checkWorkLeave"]["key"], function (approvalId) {
@@ -139,10 +139,10 @@ layui.config({
     }
 
     // 请假申请作废
-    function cancellation(data){
+    function cancellation(data) {
         layer.confirm('确认作废该申请吗？', { icon: 3, title: '作废操作' }, function (index) {
             layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "checkworkleave007", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "checkworkleave007", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -150,14 +150,14 @@ layui.config({
     }
 
     // 请假申请详情
-    function dedails(data){
+    function dedails(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/checkWorkLeave/checkWorkLeaveDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "checkWorkLeaveDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }
         });
     }
@@ -176,13 +176,13 @@ layui.config({
     });
 
     // 刷新数据
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
         var startTime = "", endTime = "";
-        if(!isNull($("#applyTime").val())){
+        if (!isNull($("#applyTime").val())) {
             startTime = $("#applyTime").val().split('~')[0].trim() + ' 00:00:00';
             endTime = $("#applyTime").val().split('~')[1].trim() + ' 23:59:59';
         }

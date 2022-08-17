@@ -26,7 +26,7 @@ layui.config({
 				pagination: false,
 				template: getFileContent('tpl/template/select-option.tpl'),
 				ajaxSendLoadBefore: function(hdb){},
-				ajaxSendAfter:function(data){
+				ajaxSendAfter:function(data) {
 					gradePointYear = data.bean.year
 					$("#gradeSessionYear").val(gradePointYear);
 					$("#gradeSessionYearSpan").html(gradePointYear);

@@ -77,8 +77,8 @@ layui.config({
     })
     
     //刷新
-    function loadTable(){
-    	if(isNull($("#operTime").val())){//一定要记得，当createTime为空时
+    function loadTable() {
+    	if(isNull($("#operTime").val())) {//一定要记得，当createTime为空时
     		winui.window.msg("请选择日期.", {icon: 2, time: 2000});
     	}else {
     		operTime = $("#operTime").val();
@@ -88,7 +88,7 @@ layui.config({
 
     //搜索
     function refreshTable(){
-    	if(isNull($("#operTime").val())){//一定要记得，当createTime为空时
+    	if(isNull($("#operTime").val())) {//一定要记得，当createTime为空时
     		winui.window.msg("请选择日期.", {icon: 2, time: 2000});
     	}else {
     		operTime = $("#operTime").val();

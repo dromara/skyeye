@@ -278,7 +278,7 @@ layui.config({
                 };
             } else if(dataFromType == 3){
                 // Rest接口数据源
-                if(isNull($("#restUrl").val())){
+                if(isNull($("#restUrl").val())) {
                     winui.window.msg('请填写url', {icon: 2, time: 2000});
                     return null;
                 }
@@ -290,7 +290,7 @@ layui.config({
                 };
             } else if(dataFromType == 4){
                 // SQL数据源
-                if(isNull($("#sqlDataBase").val())){
+                if(isNull($("#sqlDataBase").val())) {
                     winui.window.msg('请选择数据库', {icon: 2, time: 2000});
                     return null;
                 }

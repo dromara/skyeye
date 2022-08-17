@@ -119,7 +119,7 @@ layui.config({
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetManageDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -145,11 +145,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-	function getTableParams(){
+	function getTableParams() {
 		return $.extend(true, {}, initTableSearchUtil.getSearchValue("assetlistTable"));
 	}
 	

@@ -56,7 +56,7 @@ layui.config({
         return false;
 	});
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: {materialName: $("#materialName").val(), materialModel: $("#materialModel").val()}});
     }
     

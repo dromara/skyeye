@@ -24,7 +24,7 @@ layui.config({
 		initTable();
 	});
 
-	form.on('select(schoolId)', function(data){
+	form.on('select(schoolId)', function(data) {
 		//加载年级
  		initGradeId();
 	});
@@ -84,7 +84,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'examMarkingDetail') { //阅卷
 	        	examMarkingDetail(data);
-	        }else if (layEvent === 'details') { //详情
+	        } else if (layEvent === 'details') { //详情
 	        	details(data);
 	        }
 	    });
@@ -93,28 +93,28 @@ layui.config({
 	}
 	
 	// 阅卷
-	function examMarkingDetail(data){
+	function examMarkingDetail(data) {
 		rowId = data.answerId;
 		_openNewWindows({
 			url: "../../tpl/examMarkingDetail/examMarkingDetail.html", 
 			title: "阅卷",
 			pageId: "examMarkingDetail",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
     // 详情
-	function details(data){
+	function details(data) {
 		rowId = data.surveyId;
 		_openNewWindows({
 			url: "../../tpl/examDetail/examPCDetail.html", 
 			title: "试卷信息",
 			pageId: "examPCDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 
@@ -130,11 +130,11 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		gradeId: $("#gradeId").val(), 
     		schoolId: $("#schoolId").val(), 

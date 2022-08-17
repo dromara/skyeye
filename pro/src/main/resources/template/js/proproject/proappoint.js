@@ -38,14 +38,14 @@ layui.config({
 				ue = ueEditorUtil.initEditor('container');
 				planUe = ueEditorUtil.initEditor('planContainer');
 			    ue.addListener("ready", function () {
-			    	if(!isNull(json.bean.projectContent))
+			    	if (!isNull(json.bean.projectContent))
 			    		ue.setContent(json.bean.projectContent);
 			    	else
 			    		ue.setContent("在此处填写您的[分工明细]");
 			    });
 			    
 			    planUe.addListener("ready", function () {
-			    	if(!isNull(json.bean.planContent))
+			    	if (!isNull(json.bean.planContent))
 			    		planUe.setContent(json.bean.planContent);
 			    	else
 			    		planUe.setContent("在此处填写您的[实施计划和方案]");

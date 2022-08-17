@@ -35,7 +35,7 @@ layui.config({
                     limit: 12,
                     createName: $("#createName").val(),
                 };
-                if(isNull($("#createTime").val())){//一定要记得，当createTime为空时
+                if(isNull($("#createTime").val())) {//一定要记得，当createTime为空时
                     params.firstTime = "";
                     params.lastTime = "";
                 }else {
@@ -53,27 +53,27 @@ layui.config({
 						}
 						$.each(bean.dayChild, function(i, item){
 							var content = "已完成工作：" + item.completedJob + "<br>";
-							if(!isNull(item.incompleteJob)){//未完成工作
+							if (!isNull(item.incompleteJob)){//未完成工作
 								content += "未完成工作：" + item.incompleteJob + "<br>";
 							}
-							if(!isNull(item.workSummary)){//工作总结
+							if (!isNull(item.workSummary)){//工作总结
 								if(item.jobType === '2'){//周报
 									content += "本周工作总结：" + item.workSummary + "<br>";
 								}else if(item.jobType === '3'){//月报
 									content += "本月工作总结：" + item.workSummary + "<br>";
 								}
 							}
-							if(!isNull(item.nextPlan)){//工作计划
+							if (!isNull(item.nextPlan)){//工作计划
 								if(item.jobType === '2'){//周报
 									content += "下周工作计划：" + item.nextPlan + "<br>";
 								}else if(item.jobType === '3'){//月报
 									content += "下月工作计划：" + item.nextPlan + "<br>";
 								}
 							}
-							if(!isNull(item.coordinaJob)){//需协调工作
+							if (!isNull(item.coordinaJob)){//需协调工作
 								content += "需协调工作：" + item.coordinaJob + "<br>";
 							}
-							if(!isNull(item.jobRemark)){//备注
+							if (!isNull(item.jobRemark)){//备注
 								content += "备注：" + item.jobRemark + "<br>";
 							}
 							item.content = content;

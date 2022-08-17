@@ -10,7 +10,7 @@ layui.config({
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$;
 	    
-	    AjaxPostUtil.request({url: sysMainMation.mailBasePath + "mailGroup004", params:{rowId: parent.rowId}, type: 'json', callback: function (json) {
+	    AjaxPostUtil.request({url: sysMainMation.mailBasePath + "mailGroup004", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			$("#name").val(json.bean.name);
 			$("#desc").val(json.bean.desc);
 

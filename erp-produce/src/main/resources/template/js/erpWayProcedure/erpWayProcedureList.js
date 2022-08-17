@@ -63,13 +63,13 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'delete') { // 删除
             deletemember(data);
-        }else if (layEvent === 'details') { // 详情
+        } else if (layEvent === 'details') { // 详情
             details(data);
-        }else if (layEvent === 'edit') { // 编辑
+        } else if (layEvent === 'edit') { // 编辑
             edit(data);
-        }else if (layEvent === 'norms') { // 正常
+        } else if (layEvent === 'norms') { // 正常
             norms(data);
-        }else if (layEvent === 'rectification') { // 维修整改
+        } else if (layEvent === 'rectification') { // 维修整改
             rectification(data);
         }
     });
@@ -84,21 +84,21 @@ layui.config({
     });
 
     // 编辑
-    function edit(data){
+    function edit(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/erpWayProcedure/erpWayProcedureEdit.html",
             title: systemLanguage["com.skyeye.editPageTitle"][languageType],
             pageId: "erpWayProcedureEdit",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
     }
 
     // 删除
-    function deletemember(data){
+    function deletemember(data) {
         layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
             AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure007", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -108,19 +108,19 @@ layui.config({
     }
 
     // 详情
-    function details(data){
+    function details(data) {
         rowId = data.id;
         _openNewWindows({
             url: "../../tpl/erpWayProcedure/erpWayProcedureDetails.html",
             title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
             pageId: "erpWayProcedureDetails",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
             }});
     }
 
     // 启用
-    function norms(data){
+    function norms(data) {
         layer.confirm(systemLanguage["com.skyeye.enableOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.enableOperation"][languageType]}, function(index) {
             AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure006", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.enableOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -130,7 +130,7 @@ layui.config({
     }
 
     // 禁用
-    function rectification(data){
+    function rectification(data) {
         layer.confirm(systemLanguage["com.skyeye.disableOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.disableOperation"][languageType]}, function(index) {
             AjaxPostUtil.request({url:flowableBasePath + "erpwayprocedure005", params: {rowId: data.id}, type: 'json', callback: function (json) {
                 winui.window.msg(systemLanguage["com.skyeye.disableOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
@@ -146,7 +146,7 @@ layui.config({
             title: systemLanguage["com.skyeye.addPageTitle"][languageType],
             pageId: "erpWayProcedureAdd",
             area: ['90vw', '90vh'],
-            callBack: function(refreshCode) {
+            callBack: function (refreshCode) {
                 winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
                 loadTable();
             }});
@@ -157,7 +157,7 @@ layui.config({
     });
 
     //刷新
-    function loadTable(){
+    function loadTable() {
         table.reloadData("messageTable", {where: getTablePatams()});
     }
 

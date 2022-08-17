@@ -38,7 +38,7 @@ layui.config({
 	        }},
 	        { field: 'deploymentId', title: '部署id', width: 100},
 	        { field: 'processDefinitionVersion', title: '部署版本', width: 100},
-	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150},
+	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 	        { field: 'metaInfo', title: '元数据', width: 120},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 340, toolbar: '#tableBar'}
 	    ]],
@@ -52,17 +52,17 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'del') { //删除
         	del(data, obj);
-        }else if (layEvent === 'edit') { //编辑
+        } else if (layEvent === 'edit') { //编辑
         	edit(data);
-        }else if (layEvent === 'copyModel') { //模型拷贝
+        } else if (layEvent === 'copyModel') { //模型拷贝
 			copyModel(data);
-		}else if (layEvent === 'fb') { //发布
+		} else if (layEvent === 'fb') { //发布
         	fb(data);
-        }else if (layEvent === 'versionLevel') { //版本升级
+        } else if (layEvent === 'versionLevel') { //版本升级
         	versionLevel(data);
-        }else if (layEvent === 'qxfb') { //取消发布
+        } else if (layEvent === 'qxfb') { //取消发布
         	qxfb(data);
-        }else if (layEvent === 'ecportXML') { //导出xml
+        } else if (layEvent === 'ecportXML') { //导出xml
         	ecportXML(data);
         }
     });
@@ -85,7 +85,7 @@ layui.config({
 		var msg = obj ? '确认删除模型【' + obj.data.name + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除模型' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:flowableBasePath + "activitimode006", params:{rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:flowableBasePath + "activitimode006", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -93,26 +93,26 @@ layui.config({
 	}
 	
 	//编辑
-	function edit(data){
+	function edit(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../static/modeler.html?modelId=" + rowId,
 			title: "绘制流程",
 			pageId: "canveractivitimodeledit",
 			area: ['100vw', '100vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//发布
-	function fb(data){
+	function fb(data) {
 		rowId = data.id;
 		var msg = data ? '确认发布模型【' + data.name + '】吗？' : '确认发布选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '发布模型' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params:{modelId: rowId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params: {modelId: rowId}, type: 'json', callback: function (json) {
 				winui.window.msg("发布成功", {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -120,12 +120,12 @@ layui.config({
 	}
 	
 	//版本升级
-	function versionLevel(data){
+	function versionLevel(data) {
 		rowId = data.id;
 		var msg = data ? '确认升级模型【' + data.name + '】版本吗？' : '确认升级选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '版本升级' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params:{modelId: rowId}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url:flowableBasePath + "activitimode003", params: {modelId: rowId}, type: 'json', callback: function (json) {
 				winui.window.msg("升级成功", {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -137,7 +137,7 @@ layui.config({
 		var msg = obj ? '确认取消发布【' + obj.data.name + '】吗？' : '确认取消发布选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '取消发布' }, function (index) {
 			layer.close(index);
-            AjaxPostUtil.request({url:flowableBasePath + "activitimode007", params:{deploymentId: data.deploymentId}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url:flowableBasePath + "activitimode007", params: {deploymentId: data.deploymentId}, type: 'json', callback: function (json) {
 				winui.window.msg("取消发布成功", {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -145,10 +145,10 @@ layui.config({
 	}
 
 	// 拷贝模型
-	function copyModel(data){
+	function copyModel(data) {
 		layer.confirm('确认拷贝选中数据吗？', { icon: 3, title: '模型拷贝' }, function (index) {
 			layer.close(index);
-			AjaxPostUtil.request({url:flowableBasePath + "activitimode028", params:{modelId: data.id}, type: 'json', callback: function (json) {
+			AjaxPostUtil.request({url:flowableBasePath + "activitimode028", params: {modelId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg("拷贝成功", {icon: 1, time: 2000});
 				loadTable();
 			}});
@@ -156,26 +156,26 @@ layui.config({
 	}
 	
 	// 导出xml
-	function ecportXML(data){
+	function ecportXML(data) {
 		window.open(flowableBasePath + "activitimode010?modelId=" + data.id);
     }
 	
     //新增
     $("body").on("click", "#addBean", function() {
-    	AjaxPostUtil.request({url:flowableBasePath + "activitimode001", params:{}, type: 'json', callback: function (json) {
+    	AjaxPostUtil.request({url:flowableBasePath + "activitimode001", params: {}, type: 'json', callback: function (json) {
 			_openNewWindows({
 				url: "../../static/modeler.html?modelId=" + json.bean.id,
 				title: "绘制流程",
 				pageId: "canveractivitimodel",
 				area: ['100vw', '100vh'],
-				callBack: function(refreshCode) {
+				callBack: function (refreshCode) {
 					winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 					loadTable();
 				}});
 		}});
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
@@ -184,7 +184,7 @@ layui.config({
 		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()})
 	}
 
-    function getTableParams(){
+    function getTableParams() {
     	return {
 			modelName: $("#modelName").val()
 		};

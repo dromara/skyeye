@@ -96,7 +96,7 @@ layui.config({
 		        	}
 		        }},
 		        { field: 'userName', title: '审批人', align: 'center', width: 80},
-		        { field: 'approvalTime', title: '审批时间', align: 'center', width: 150},
+		        { field: 'approvalTime', title: '审批时间', align: 'center', width: 150 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar1'}
 		    ]],
 		    done: function(){
@@ -122,21 +122,21 @@ layui.config({
 			title: "新增申诉",
 			pageId: "checkWorkAbnormalAttendanceAdd",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				reloadMyAppealTable();
 			}});
     });
 	
 	// 我的申诉申请详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/checkWorkAbnormalAttendance/checkWorkAbnormalAttendanceDetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "checkWorkAbnormalAttendanceDetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -154,12 +154,12 @@ layui.config({
     	table.reloadData("myAppealTable", {where: getTableParams()});
     }
     
-    function getTableParams(){
-    	if(isNull($("#approvalId").val())){
+    function getTableParams() {
+    	if(isNull($("#approvalId").val())) {
     		ids = "";
     	}
     	var startTime = "", endTime = "";
-    	if(!isNull($("#checkDate").val())){
+    	if (!isNull($("#checkDate").val())) {
     		startTime = $("#checkDate").val().split('~')[0].trim() + ' 00:00:00';
     		endTime = $("#checkDate").val().split('~')[1].trim() + ' 23:59:59';
     	}

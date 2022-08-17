@@ -56,21 +56,21 @@ layui.config({
 			title: "社区发帖",
 			pageId: "discussadd",
 			area: ['80vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
     });
 	
 	//讨论版详情
-	function discussDetails(data){
+	function discussDetails(data) {
 		disRowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/crmdiscuss/discussdetail.html", 
 			title: data.title,
 			pageId: "discussdetailpage",
 			maxmin: true,
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
 	}
@@ -80,7 +80,7 @@ layui.config({
     	loadTable();
     });
 
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: {rowId: rowId}});
     }
 

@@ -23,7 +23,7 @@ layui.config({
 		initGradeId();
 		initTable();
 	});
-	form.on('select(schoolId)', function(data){
+	form.on('select(schoolId)', function(data) {
 		//加载年级
  		initGradeId();
 	});
@@ -102,14 +102,14 @@ layui.config({
     });
     
     //详情
-	function details(data){
+	function details(data) {
 		rowId = data.surveyId;
 		_openNewWindows({
 			url: "../../tpl/examDetail/examPCDetail.html", 
 			title: "试卷信息",
 			pageId: "examPCDetail",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
@@ -118,7 +118,7 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
+    function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
     
@@ -126,7 +126,7 @@ layui.config({
     	table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
     }
     
-    function getTableParams(){
+    function getTableParams() {
     	return {
     		gradeId: $("#gradeId").val(), 
     		schoolId: $("#schoolId").val(), 

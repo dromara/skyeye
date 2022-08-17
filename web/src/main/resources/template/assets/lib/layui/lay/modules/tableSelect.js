@@ -184,7 +184,7 @@ layui.define(['table', 'jquery', 'form'], function (exports) {
 			    overWidth && tableBox.css({'left':'auto','right':'5px'})
 			
             //关键词搜索
-            form.on('submit(tableSelect_btn_search)', function(data){
+            form.on('submit(tableSelect_btn_search)', function(data) {
                 tableSelect_table.reload({
                     where: data.field,
                     page: {

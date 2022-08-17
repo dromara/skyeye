@@ -17,7 +17,7 @@ layui.config({
  	        return false;
  	    });
 
- 	   	function save(data){
+ 	   	function save(data) {
 		   	if (winui.verifyForm(data.elem)) {
 			   	if(isNull($('#toPeople').tagEditor('getTags')[0].tags)){
 				   	winui.window.msg('请填写收件人', {icon: 2, time: 2000});

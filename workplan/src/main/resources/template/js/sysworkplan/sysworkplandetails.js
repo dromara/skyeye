@@ -11,7 +11,7 @@ layui.config({
 	    var $ = layui.$,
 	    	form = layui.form;
 	    var executorId = "";
-	    if(!isNull(parent.executorId)){
+	    if (!isNull(parent.executorId)){
 			executorId = parent.executorId;
 		}
 	    AjaxPostUtil.request({url: sysMainMation.workplanBasePath + "sysworkplan011", params: {planId: parent.rowId, executorId: executorId}, type: 'json', callback: function (json) {
@@ -37,7 +37,7 @@ layui.config({
 			$("#enclosureUploadBtn").html(str);
 
 			// 执行情况
-			if(!isNull(executorId)){
+			if (!isNull(executorId)){
 				$(".myExecutor").removeClass("layui-hide");
 				$("#state").html(getWorkPlanStateNameExecutor(json.bean));
 			}

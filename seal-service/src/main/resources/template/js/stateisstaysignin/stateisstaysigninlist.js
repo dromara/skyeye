@@ -55,7 +55,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'signIn') { //签到
 	        	signIn(data);
-	        }else if (layEvent === 'details'){ //详情
+	        } else if (layEvent === 'details'){ //详情
 	        	details(data);
 	        }
 	        
@@ -72,8 +72,8 @@ layui.config({
     	loadTable();
     });
     
-    function loadTable(){
-    	if(isNull($("#declarationTime").val())){
+    function loadTable() {
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -84,7 +84,7 @@ layui.config({
     }
     
     function refreshTable(){
-    	if(isNull($("#declarationTime").val())){
+    	if(isNull($("#declarationTime").val())) {
     		startTime = "";
     		endTime = "";
     	} else {
@@ -95,28 +95,28 @@ layui.config({
     }
 
 	//签到
-	function signIn(data){
+	function signIn(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/stateisstaysignin/signin.html", 
 			title: "签到",
 			pageId: "signin",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
 	//详情
-	function details(data){
+	function details(data) {
 		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/sealseservice/sealseservicedetails.html", 
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "sealseservicedetails",
 			area: ['90vw', '90vh'],
-			callBack: function(refreshCode) {
+			callBack: function (refreshCode) {
 			}});
 	}
 	
