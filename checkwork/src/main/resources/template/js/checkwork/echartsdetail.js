@@ -24,7 +24,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'userName', title: '姓名', align: 'center', width: 100},
 		        { field: 'checkDate', title: '考勤日期', align: 'center', width: 120},
 		        { title: '星期几', align: 'center', width: 100, templet: function (d) {

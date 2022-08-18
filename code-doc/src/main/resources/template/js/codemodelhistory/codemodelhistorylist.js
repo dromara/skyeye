@@ -25,7 +25,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'tableName', title: '表名', width: 180 },
 	        { field: 'filePath', title: '文件名', width: 300 },
 	        { field: 'isExist', title: '是否可下载', width: 120 },

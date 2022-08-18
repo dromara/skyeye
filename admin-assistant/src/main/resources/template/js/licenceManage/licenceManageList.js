@@ -29,7 +29,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'licenceName', title: '证照名称', width: 170, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.licenceName + '</a>';
 		        }},

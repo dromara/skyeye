@@ -24,7 +24,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'createTime', title: '签到时间', align: 'center', width: 140 },
 	        { field: 'userName', title: '签到人', width: 80, align: 'left'},
 	        { field: 'departmentName', title: '签到部门', align: 'left', width: 100},

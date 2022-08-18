@@ -87,7 +87,7 @@ layui.config({
 			    even: true,
 			    page: false,
 			    cols: [[
-			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			        { field: 'name', title: '文件名', align: 'left', width: 400 },
 			        { field: 'fileSize', title: '文件大小', align: 'center', width: 120},
 			        { field: 'createTime', title: '上传时间', align: 'center', width: 150 },

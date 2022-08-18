@@ -69,7 +69,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', title: '商机名称', align: 'left', width: 300, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
@@ -132,7 +132,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', title: '合同名称', align: 'left', width: 300, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
@@ -195,7 +195,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'orderNum', title: '单号', align: 'center', width: 220, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 		        }},
@@ -257,7 +257,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'detail', title: '详细内容', align: 'center', width: 220, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.detail + '</a>';
 		        }},
@@ -314,7 +314,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'contacts', title: '联系人', align: 'left', width: 100 },
 		        { field: 'department', title: '部门', align: 'left', width: 100 },
 		        { field: 'job', title: '职位', align: 'left', width: 100 },
@@ -361,7 +361,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', title: '主题', align: 'left', width: 300, templet: function (d) {
 		        	return '<a lay-event="discussDetails" class="notice-title-click">' + d.title + '</a>';
 		        }},

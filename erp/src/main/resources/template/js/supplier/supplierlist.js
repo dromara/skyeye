@@ -28,7 +28,7 @@ layui.config({
         limits: [8, 16, 24, 32, 40, 48, 56],
         limit: 8,
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'supplierName', title: '供应商名称', align: 'left', width: 140,templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.supplierName + '</a>';
             }},

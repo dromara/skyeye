@@ -20,7 +20,7 @@ layui.config({
 	    limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'userName', title: '操作人', width: 120 },
 	        { field: 'ip', title: '操作ip', width: 150 },
 	        { field: 'message', title: '日志信息', width: 250 },

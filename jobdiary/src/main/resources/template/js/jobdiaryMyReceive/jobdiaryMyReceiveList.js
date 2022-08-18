@@ -29,7 +29,7 @@ layui.config({
 	    	limit: getLimit(),
     		cols: [[
     		    { type: 'radio'},
-				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 				{ field: 'userName', title: '发件人', width: 100 },
 				{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
 		        	if(d.userSex == '0'){
@@ -70,7 +70,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'jobTitle', title: '主题', width: 250, templet: function (d) {
 		        	return '<a lay-event="read" class="notice-title-click">' + d.jobTitle + '</a>';
 	        }},

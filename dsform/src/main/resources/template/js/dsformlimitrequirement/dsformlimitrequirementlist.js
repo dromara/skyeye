@@ -25,7 +25,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'requireName', title: '限制标题', width: 120 },
 	        { field: 'formerRequirement', title: '前端限制标签', width: 140 },
 	        { field: 'afterRequirement', title: '后端限制标签', width: 140 },

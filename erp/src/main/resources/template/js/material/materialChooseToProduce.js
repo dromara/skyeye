@@ -99,7 +99,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		    	{ type: 'checkbox'},
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'productName', title: '商品名称', align: 'left', width: 150, templet: function (d) {
 			        	return '<a lay-event="details" class="notice-title-click">' + d.productName + '</a>';
 			    }},

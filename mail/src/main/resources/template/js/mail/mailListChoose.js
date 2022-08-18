@@ -32,7 +32,7 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	    	{ type: 'checkbox', fixed: 'left'},
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'userName', title: '姓名', width: 100, templet: function (d) {
 					return '<a lay-event="details" class="notice-title-click">' + d.userName + '</a>';
 				}},

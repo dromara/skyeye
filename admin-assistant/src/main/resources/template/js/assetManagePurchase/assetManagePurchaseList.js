@@ -30,7 +30,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 		cols: [[
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'title', title: '标题', width: 300, templet: function (d) {
 				return '<a lay-event="caigouDedails" class="notice-title-click">' + d.title + '</a>';
 			}},
@@ -38,20 +38,8 @@ layui.config({
 			{ field: 'processInstanceId', title: '流程ID', width: 100, templet: function (d) {
 				return '<a lay-event="caigouProcessDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 			}},
-			{ field: 'stateName', title: '状态', width: 90, templet: function (d) {
-				if(d.state == '0'){
-					return "<span>" + d.stateName + "</span>";
-				}else if(d.state == '1'){
-					return "<span class='state-new'>" + d.stateName + "</span>";
-				}else if(d.state == '2'){
-					return "<span class='state-up'>" + d.stateName + "</span>";
-				}else if(d.state == '3'){
-					return "<span class='state-down'>" + d.stateName + "</span>";
-				}else if(d.state == '4'){
-					return "<span class='state-down'>" + d.stateName + "</span>";
-				}else if(d.state == '5'){
-					return "<span class='state-error'>" + d.stateName + "</span>";
-				}
+			{ field: 'state', title: '状态', width: 90, templet: function (d) {
+				return activitiUtil.showStateName2(d.state, 1);
 			}},
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#caigouTableBar'}

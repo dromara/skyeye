@@ -25,7 +25,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'nameCh', title: '页面中文名称', align: 'left', width: 150 },
             { field: 'nameEn', title: '页面英文名称', align: 'left', width: 150 },
             { field: 'createName', title: '创建人', align: 'left', width: 100 },

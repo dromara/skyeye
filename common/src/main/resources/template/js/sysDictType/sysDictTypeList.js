@@ -25,7 +25,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 		cols: [[
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'dictName', title: '标题', width: 200 },
 			{ field: 'dictCode', title: 'Code', width: 300 },
 			{ field: 'dictType', title: '字典类型', align: 'center', width: 100, templet: function (d) {

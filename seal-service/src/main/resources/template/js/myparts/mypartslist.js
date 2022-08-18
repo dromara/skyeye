@@ -22,7 +22,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'materialName', title: '配件名称', align: 'left', width: 200 },
 	        { field: 'unitName', title: '计量单位', align: 'left', width: 80 },
 	        { field: 'materialModel', title: '配件规格', align: 'left', width: 150 },

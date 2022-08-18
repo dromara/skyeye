@@ -40,7 +40,7 @@ layui.config({
             limit: getLimit(),
             cols: [[
                 { type: 'radio'},
-                { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+                { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
                 { field: 'name', title: '名称', align: 'left', width: 150 },
                 { field: 'typeName', title: '来源', align: 'left', width: 100 },
                 { field: 'remark', title: '备注', align: 'left', width: 150 },

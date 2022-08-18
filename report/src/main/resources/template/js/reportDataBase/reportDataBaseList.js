@@ -25,7 +25,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'name', title: '数据库名称', align: 'left', width: 150 },
             { field: 'jdbcUrl', title: '连接串', align: 'left', width: 150 },
             { field: 'user', title: '用户名', align: 'left', width: 100 },

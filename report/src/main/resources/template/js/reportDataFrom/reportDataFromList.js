@@ -42,7 +42,7 @@ layui.config({
             limits: getLimits(),
             limit: getLimit(),
             cols: [[
-                { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+                { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
                 { field: 'name', title: '名称', align: 'left', width: 150 },
                 { field: 'typeName', title: '来源', align: 'left', width: 150 },
                 { field: 'remark', title: '备注', align: 'left', width: 150 },

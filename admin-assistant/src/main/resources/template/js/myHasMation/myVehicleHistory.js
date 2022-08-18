@@ -26,7 +26,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', type: 'numbers' },
 				{ field: 'vehicleName', title: '车辆名称', align: 'left', rowspan: '3', width: 120 },
 				{ field: 'licensePlate', title: '车牌', align: 'left', rowspan: '3', width: 120 },
 				{ field: 'passengerNum', title: '乘车人数', align: 'left', rowspan: '3', width: 100 },

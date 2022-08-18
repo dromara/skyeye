@@ -26,7 +26,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'fileName', title: 'Echarts名称', align: 'left', width: 250},
             { field: 'modelId', title: '模型ID', align: 'left', width: 250 },
             { field: 'firstTypeName', title: '一级分类', align: 'left', width: 120 },

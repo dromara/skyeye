@@ -33,7 +33,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'name', title: '名称', align: 'left', width: 100 },
 		        { field: 'relationshipName', title: '与本人关系', width: 100},
 		        { field: 'sex', title: '性别', width: 80, templet: function (d) {

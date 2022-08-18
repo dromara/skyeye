@@ -37,7 +37,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
             { field: 'keepfiStoreName', title: '保养门店', width: 150 },
             { field: 'mealByStoreName', title: '缴费门店', width: 150 },
             { field: 'mealAllSinglePrice', title: '往来费用', align: 'center', width: 100},

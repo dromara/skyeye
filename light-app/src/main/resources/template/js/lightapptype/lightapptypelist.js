@@ -22,7 +22,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'typeName', title: '类型名称', align: 'center', width: 120 },
 	        { field: 'iconPath', title: 'logo', width: 60, templet: function (d) {
 	        	if(isNull(d.iconPath)){

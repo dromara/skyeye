@@ -57,7 +57,7 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	    	{ type: userStaffCheckType ? 'checkbox' : 'radio', rowspan: '3', fixed: 'left'},
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers' },
 	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, fixed: 'left', templet: function (d) {
 	        	return d.jobNumber + ' ' + d.userName;
 	        }},

@@ -87,7 +87,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		    	{ type: checkType == '1' ? 'radio' : 'checkbox'},
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, templet: function (d) {
 		        	return d.jobNumber + ' ' + d.userName;
 		        }},

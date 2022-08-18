@@ -37,7 +37,7 @@ layui.config({
 	            total: true
 	        },
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'name', title: '名称', align: 'left', width: 160 },
 		        { field: 'price', title: '奖惩金额', align: 'left', width: 100},
 		        { field: 'content', title: '奖惩内容', align: 'left', width: 160},

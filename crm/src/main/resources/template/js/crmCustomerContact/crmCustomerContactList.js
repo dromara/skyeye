@@ -23,7 +23,7 @@ layui.config({
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'contacts', title: '联系人', align: 'left', width: 100 },
 	        { field: 'customerName', title: '所属客户', align: 'left', width: 180 },
 	        { field: 'department', title: '部门', align: 'left', width: 100 },

@@ -86,7 +86,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'surveyName', width:250, title: '试卷名称', templet: function (d) {
 			        return '<a lay-event="details" class="notice-title-click">' + d.surveyName + '</a>';
 			    }},

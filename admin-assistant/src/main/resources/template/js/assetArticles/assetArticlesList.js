@@ -26,7 +26,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 		cols: [[
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'articlesName', title: '名称', width: 200, templet: function (d) {
 				return '<a lay-event="liebiaoDedails" class="notice-title-click">' + d.articlesName + '</a>';
 			}},

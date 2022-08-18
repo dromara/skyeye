@@ -73,7 +73,7 @@ layui.config({
 		    page: false,
 		    cols: [[
 		    	{ type: 'radio'},
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'materialName', title: '商品', align: 'left', width: 150 },
 		        { field: 'materialModel', title: '型号', align: 'left', width: 150 },
 		        { field: 'materialUnitName', title: '单位', align: 'left', width: 70 },

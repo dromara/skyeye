@@ -23,7 +23,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '标题', align: 'left', width: 200 },
 	        { field: 'classUrl', title: '类名', align: 'left', width: 400 },
 	        { field: 'desc', title: '描述', align: 'left', width: 400 },

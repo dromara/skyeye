@@ -26,7 +26,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'modelName', title: '模板后缀', width: 120 },
 	        { field: 'modelType', title: '模板类型', width: 120 },
 	        { field: 'id', title: '模板内容', width: 120, templet: function (d) {

@@ -24,7 +24,7 @@ layui.config({
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
 	        { field: 'companyName', title: '公司名称', align: 'left', width: 150, fixed: 'left'},
 	        { field: 'departmentName', title: '部门名称', align: 'left', width: 140},
 	        { field: 'monthTime', title: '未结算月份', align: 'center', width: 120 },

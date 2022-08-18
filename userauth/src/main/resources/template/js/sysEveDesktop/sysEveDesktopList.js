@@ -24,7 +24,7 @@ layui.config({
 	    limits: getLimits(),
     	limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'desktopName', title: '桌面名称', align: 'left', width: 150 },
 	        { field: 'desktopCnName', title: '英文名称', align: 'left', width: 150 },
 			{ field: 'code', title: '编码', align: 'left', width: 120 },

@@ -33,7 +33,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'graductionSchool', title: '毕业院校', align: 'left', width: 160 },
 		        { field: 'admissionTime', title: '入学时间', align: 'center', width: 100},
 		        { field: 'graduationTime', title: '毕业时间', align: 'center', width: 100},

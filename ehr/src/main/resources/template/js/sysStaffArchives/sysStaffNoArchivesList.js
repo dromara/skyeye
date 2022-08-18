@@ -30,7 +30,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
                 { field: 'jobNumber', title: '员工工号', align: 'left', width: 80 },
                 { field: 'userName', title: '员工姓名', align: 'left', width: 100 },
                 { field: 'companyName', title: '所属企业', align: 'left', width: 150 },

@@ -36,7 +36,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'userName', title: '姓名', align: 'left', width: 100},
 		        { field: 'checkDate', title: '考勤日期', align: 'center', width: 100},
 		        { field: 'title', title: '班次', align: 'left', width: 270, templet: function (d) {

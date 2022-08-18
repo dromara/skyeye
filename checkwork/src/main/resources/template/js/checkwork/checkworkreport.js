@@ -94,7 +94,7 @@ layui.config({
 			limits: [10, 20, 30, 40, 50, 100],
 			limit: 10,
 			cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        {field: 'userId', title: 'ID', width: 50,style:'display:none;'},
 		        { field: 'companyName', title: '公司', align: 'left', width: 200 },
 		        { field: 'departmentName', title: '部门', align: 'left', width: 120 },

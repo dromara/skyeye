@@ -29,7 +29,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'vehicleName', title: '名称', width: 170, templet: function (d) {
 		        	return '<a lay-event="vehicledetails" class="notice-title-click">' + d.vehicleName + '</a>';
 		        }},

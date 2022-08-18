@@ -20,7 +20,7 @@ layui.config({
 	    url: sysMainMation.noticeBasePath + 'noticetype001',
 	    where: {name: $("#name").val(), parentId: $("#firstType").val()},
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'name', title: '类型名称', width: 120 },
 	        { field: 'allNum', title: '总公告数量', align: 'center', width: 120 },
 	        { field: 'upStateNum', title: '上线公告数量', align: 'center', width: 120 },

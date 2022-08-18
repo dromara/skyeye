@@ -20,7 +20,7 @@ layui.config({
 	    url: flowableBasePath + 'materialcategory001',
 	    where: getTableParams(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'name', title: '名称', align: 'left', width: 360 },
 	        { field: 'orderBy', title: systemLanguage["com.skyeye.serialNumber"][languageType], align: 'center', width: 80 },
 	        { field: 'remark', title: '备注', align: 'left', width: 200 },

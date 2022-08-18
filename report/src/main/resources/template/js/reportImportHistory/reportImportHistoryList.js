@@ -23,7 +23,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'fileName', title: '文件名称', align: 'left', width: 200},
             { field: 'fileSize', title: '文件大小', align: 'left', width: 100 },
             { field: 'createName', title: '上传人', align: 'left', width: 100 },

@@ -41,7 +41,7 @@ layui.config({
  	    	    limit: 8,
  	    		cols: [[
  	    		    { type: 'radio'},
- 					{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+ 					{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 					{ field: 'jobNumber', title: '员工工号', width: 100, templet: function (d) {
 						return '<a rowId="' + d.id + '" class="notice-title-click">' + d.jobNumber + '</a>';
 					}},

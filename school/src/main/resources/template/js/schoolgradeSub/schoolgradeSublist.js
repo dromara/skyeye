@@ -31,7 +31,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		    	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		    	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		    	{ field: 'gradeName', width: 150, title: '年级名称'},
 		    	{ field: 'subjectNum', title: '科目数', align: 'center', width: 100 },
 	            { field: 'schoolName', width: 200, title: '所属学校'},

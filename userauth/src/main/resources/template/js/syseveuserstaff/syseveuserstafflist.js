@@ -56,7 +56,7 @@ layui.config({
         	body: bodyList
         },
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers' },
 	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 100, fixed: 'left', templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.userName + '</a>';
 	        }},

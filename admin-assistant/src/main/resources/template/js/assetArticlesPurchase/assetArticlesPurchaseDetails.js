@@ -8,13 +8,12 @@ layui.config({
 	winui.renderColor();
 	layui.use(['form'], function (form) {
 	    var $ = layui.$;
-	    var useTemplate = $("#useTemplate").html();
-	    
+
 	    AjaxPostUtil.request({url: flowableBasePath + "assetarticles026", params: {rowId: parent.rowId}, type: 'json', callback: function (json) {
 			// 状态
-			json.bean.stateName = getStateNameByState(json.bean.state, json.bean.stateName);
+			json.bean.stateName = activitiUtil.showStateName2(json.bean.state, 1);
 
-			$("#showForm").html(getDataUseHandlebars(useTemplate, json));
+			$("#showForm").html(getDataUseHandlebars($("#useTemplate").html(), json));
 
 			// 附件回显
 			skyeyeEnclosure.showDetails({"enclosureUploadBtn": json.bean.enclosureInfo});

@@ -25,7 +25,7 @@ layui.config({
 	    limit: 8,
 	    cols: [[
 	    	{ type: 'radio'},
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'userName', title: '用户姓名', align: 'left', width: 80 },
 	        { field: 'proName', title: '所在省', align: 'left', width: 80 },
 	        { field: 'cityName', title: '所在市', align: 'left', width: 80 },

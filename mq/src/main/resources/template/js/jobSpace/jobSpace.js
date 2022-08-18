@@ -57,7 +57,7 @@ layui.config({
 		    limits: [15, 30, 45, 60, 100, 150],
 		    limit: 15,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
@@ -144,7 +144,7 @@ layui.config({
 		    limits: [15, 30, 45, 60, 100, 150],
 		    limit: 15,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},
@@ -200,7 +200,7 @@ layui.config({
 		    limits: [15, 30, 45, 60, 100, 150],
 		    limit: 15,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', title: '标题', align: 'left', width: 250, templet: function (d) {
 		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		        }},

@@ -25,7 +25,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'proName', title: '项目名称', width: 120 },
 	        { field: 'proDesc', title: '项目描述', width: 520 },
 	        { field: 'pageNum', title: '页面数量', width: 120 },

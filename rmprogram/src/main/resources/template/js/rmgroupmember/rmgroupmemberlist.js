@@ -72,7 +72,7 @@ layui.config({
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'printsPicUrl', title: '效果图', width: 200, align: 'center', templet: function (d) {
 	        	return '<img src="' + fileBasePath + d.printsPicUrl + '" style="width:100%;height:auto" class="cursor" lay-event="printsPicUrl">';
 	        }},

@@ -35,7 +35,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'insuranceTitle', title: '主题', align: 'left', width: 300, templet: function (d) {
 		        	return '<a lay-event="insurancedetails" class="notice-title-click">' + d.insuranceTitle + '</a>';
 		        }},

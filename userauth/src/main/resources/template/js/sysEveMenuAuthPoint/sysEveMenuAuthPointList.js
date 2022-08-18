@@ -28,7 +28,7 @@ layui.config({
 	    url: reqBasePath + 'sysevemenuauthpoint001',
 	    where: getTableParams(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'authMenuName', title: '权限点名称', width: 120 },
 	        { field: 'authMenu', title: '接口url', width: 200 },
 	        { field: 'menuNum', title: '权限点编号', align: 'center', width: 120 },

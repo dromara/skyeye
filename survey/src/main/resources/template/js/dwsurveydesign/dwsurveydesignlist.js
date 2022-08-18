@@ -26,7 +26,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'surveyName', width: 300, title: '问卷名称'},
 	        { field: 'answerNum', width: 140, title: '答卷'},
 	        { field: 'surveyState', width: 120, title: '状态'},

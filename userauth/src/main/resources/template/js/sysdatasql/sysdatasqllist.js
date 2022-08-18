@@ -22,7 +22,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'sqlTitle', title: '文件名称', align: 'center', width: 240 },
 	        { field: 'fileSize', title: '文件大小', align: 'center', width: 120 },
 	        { field: 'mysqlVersion', title: '数据库版本', align: 'center', width: 150 },

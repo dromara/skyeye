@@ -26,7 +26,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'name', title: '名称', align: 'left', width: 160 },
                 { field: 'state', title: '状态', rowspan: 2, width: 90, templet: function (d) {
                     if(d.state == '1'){

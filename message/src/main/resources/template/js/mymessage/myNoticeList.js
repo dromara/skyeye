@@ -24,7 +24,7 @@ layui.config({
 	    limit: getLimit(),
 	    cols: [[
 	        { type: 'checkbox', fixed: 'left'},
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '标题', width: 120 },
 	        { field: 'desc', title: '信息', width: 300 },
 	        { field: 'state', title: '状态', width: 100 },

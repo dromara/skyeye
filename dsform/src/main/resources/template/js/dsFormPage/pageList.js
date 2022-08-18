@@ -31,7 +31,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'pageName', title: '页面名称', align: 'left', width: 120 },
 			{ field: 'firstTypeName', title: '一级分类', align: 'left', width: 120 },
 			{ field: 'secondTypeName', title: '二级分类', align: 'left', width: 120 },

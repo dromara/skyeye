@@ -26,7 +26,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'interviewName', title: '面试者', width: 100},
             { field: 'departmentName', title: '面试部门', width: 140},
             { field: 'jobName', title: '面试岗位', width: 150 },

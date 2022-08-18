@@ -32,7 +32,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'subjectName', title: '科目', align: 'left', width: 160 },
 		        { field: 'subjectNo', title: '编号', align: 'left', width: 140 },
 		        { field: 'desc', title: '简介', align: 'left', width: 80, templet: function (d) {

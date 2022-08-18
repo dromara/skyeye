@@ -27,7 +27,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '属性别名', width: 180 },
 	        { field: 'propertyTag', title: '属性标签', width: 100 },
 	        { field: 'propertyUnit', title: '属性单位', width: 100 },

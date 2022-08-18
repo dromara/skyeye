@@ -23,7 +23,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'contractNumber', title: '合同编号', align: 'left', width: 160 },
             { field: 'companyName', title: '签属企业', width: 180},
             { field: 'startTime', title: '开始日期', align: 'center', width: 100},

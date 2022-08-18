@@ -21,7 +21,7 @@ layui.config({
 	    url: flowableBasePath + 'dsformpagetype001',
 	    where: getTableParams(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'typeName', title: '中文名称', width: 180 },
 			{ field: 'typeNameEn', title: '英文名称', width: 180 },
 			{ field: 'code', title: '编码', align: 'left', width: 100 },

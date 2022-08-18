@@ -25,7 +25,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'archivesNumber', title: '档案编号', align: 'left', width: 160 },
 		        { field: 'companyName', title: '管理单位', width: 150 },
 		        { field: 'custodyPlace', title: '档案保管地', width: 150 },

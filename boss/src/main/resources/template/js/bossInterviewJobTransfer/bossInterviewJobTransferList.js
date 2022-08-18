@@ -29,7 +29,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
             { field: 'transferStaffName', title: '申请人', rowspan: '2', width: 140},
             { title: '原岗位信息', align: 'center', colspan: '4'},
             { title: '申请岗位信息', align: 'center', colspan: '4'},

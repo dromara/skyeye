@@ -19,7 +19,7 @@ layui.config({
 	    even:true,
 	    page: false,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'tableName', title: '表名称', align: 'center', width: 150 },
 	        { field: 'tableComment', title: '表备注', align: 'center', width: 150 },
 	        { field: 'tablesRows', title: '记录条数', align: 'center', width: 150 },

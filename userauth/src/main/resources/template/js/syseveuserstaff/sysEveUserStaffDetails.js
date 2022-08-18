@@ -49,7 +49,7 @@ layui.config({
 			    limits: getLimits(),
 		    	limit: getLimit(),
 			    cols: [[
-			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			        { field: 'name', title: '名称', align: 'left', width: 100 },
 			        { field: 'relationshipName', title: '与本人关系', width: 100},
 			        { field: 'sex', title: '性别', width: 80, templet: function (d) {
@@ -100,7 +100,7 @@ layui.config({
 			    limits: getLimits(),
 		    	limit: getLimit(),
 			    cols: [[
-			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			        { field: 'graductionSchool', title: '毕业院校', align: 'left', width: 160 },
 			        { field: 'admissionTime', title: '入学时间', align: 'center', width: 100},
 			        { field: 'graduationTime', title: '毕业时间', align: 'center', width: 100},
@@ -142,7 +142,7 @@ layui.config({
 			    limits: getLimits(),
 		    	limit: getLimit(),
 			    cols: [[
-			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			        { field: 'workUnit', title: '任职单位', align: 'left', width: 160 },
 			        { field: 'department', title: '任职部门', width: 120},
 			        { field: 'job', title: '职务', width: 120},
@@ -183,7 +183,7 @@ layui.config({
 			    limits: getLimits(),
 		    	limit: getLimit(),
 			    cols: [[
-			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			        { field: 'languageTypeName', title: '语种类型', align: 'left', width: 160 },
 			        { field: 'levelName', title: '语种等级', width: 120},
 			        { field: 'getTime', title: '获取时间', align: 'center', width: 100},
@@ -221,7 +221,7 @@ layui.config({
 			    limits: getLimits(),
 		    	limit: getLimit(),
 			    cols: [[
-			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			        { field: 'certificateNumber', title: '证书编号', align: 'left', width: 160 },
 			        { field: 'certificateName', title: '证书名称', width: 120},
 			        { field: 'certificateTypeName', title: '证书类型', width: 120},
@@ -269,7 +269,7 @@ layui.config({
 			    limits: getLimits(),
 		    	limit: getLimit(),
 			    cols: [[
-			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			        { field: 'name', title: '名称', align: 'left', width: 160 },
 			        { field: 'price', title: '奖惩金额', align: 'left', width: 100},
 			        { field: 'content', title: '奖惩内容', align: 'left', width: 160},
@@ -311,7 +311,7 @@ layui.config({
 			    limits: getLimits(),
 		    	limit: getLimit(),
 			    cols: [[
-			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			        { field: 'contractNumber', title: '合同编号', align: 'left', width: 160 },
 					{ field: 'companyName', title: '签属企业', width: 180},
 			        { field: 'startTime', title: '开始日期', align: 'center', width: 100},

@@ -26,7 +26,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'projectName', width:300, title: '项目名称'},
             { field: 'id', width:100, title: '项目简介', templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="projectDesc"></i>';

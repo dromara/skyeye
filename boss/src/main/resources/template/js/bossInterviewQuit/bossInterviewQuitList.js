@@ -29,7 +29,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'createName', title: '申请人', width: 120},
             { field: 'leaveType', title: '离职类型', width: 100, templet: function (d) {
                 return bossUtil.getLeaveTypeNameById(d.leaveType);

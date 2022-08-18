@@ -56,7 +56,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 	        cols: [[
-	        	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        	{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	            { field: 'schoolName', width: 200, title: '学校'},
 	            { field: 'className', width: 150, title: '班级', align: 'center', templet: function (d) {
 	        		return d.sessionYear + '届' + d.gradeName + d.className;

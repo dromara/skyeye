@@ -43,7 +43,7 @@ layui.config({
 			        	done: function(obj) {}
 			        },
 			        cols: [[
-			            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			            { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			            { field: 'number', title: '工序编号', align: 'left', width: 120},
 			            { field: 'procedureName', title: '工序名称', align: 'left', width: 120},
 			            { field: 'unitPrice', title: '加工单价', align: 'left', width: 120},

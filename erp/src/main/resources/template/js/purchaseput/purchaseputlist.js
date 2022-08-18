@@ -35,7 +35,7 @@ layui.config({
             maxWidth: 500 // 最大宽度
         },
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '2', type: 'numbers' },
             { field: 'defaultNumber', title: '单据编号', align: 'left', rowspan: '2', width: 220, templet: function (d) {
 		        var str = '<a lay-event="details" class="notice-title-click">' + d.defaultNumber + '</a>';
 		        if (!isNull(d.linkNumber)){

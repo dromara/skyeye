@@ -35,7 +35,7 @@ layui.config({
     	    limit: 8,
     		cols: [[
     		    { type: 'radio'},
-				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+				{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 				{ field: 'userName', title: '申诉人', width: 100 },
 				{ field: 'userSex', title: '性别', width: 60, templet: function (d) {
 		        	if(d.userSex == '0'){
@@ -73,7 +73,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'checkDate', title: '申诉内容', align: 'left', width: 160, templet: function (d) {
 		        	var text = d.checkDate;
 		        	return text += d.situation;

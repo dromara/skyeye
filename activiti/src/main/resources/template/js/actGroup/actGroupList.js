@@ -167,7 +167,7 @@ layui.config({
 			limits: getLimits(),
 			limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'userName', title: '员工姓名', align: 'left', width: 120},
 		        { field: 'companyName', title: '公司', align: 'left', width: 200 },
 		        { field: 'departmentName', title: '部门', align: 'left', width: 150 },

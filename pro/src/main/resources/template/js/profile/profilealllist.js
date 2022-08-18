@@ -23,7 +23,7 @@ layui.config({
 		imits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '名称', align: 'left', width: 250, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 	        }},
@@ -46,7 +46,7 @@ layui.config({
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120},
 	        { field: 'updateTime', title: '更新时间', align: 'center', width: 140},
 	        { field: 'processInstanceId', title: '流程ID', align: 'center', width: 100, templet: function (d) {
-	        	if (!isNull(d.processInstanceId)){
+	        	if (!isNull(d.processInstanceId)) {
 	        		return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        	} else {
 	        		return "";

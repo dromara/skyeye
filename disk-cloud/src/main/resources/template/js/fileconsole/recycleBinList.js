@@ -21,7 +21,7 @@ layui.config({
 	    limits: [8, 16, 24, 32, 40, 48, 56],
 	    limit: 8,
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'recycleName', title: '文件名', width: 150 },
 	        { field: 'fileType', title: '文件类型', width: 120 },
 	        { field: 'createTime', title: '删除时间', width: 180 },

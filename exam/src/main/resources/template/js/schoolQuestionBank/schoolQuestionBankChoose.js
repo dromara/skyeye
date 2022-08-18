@@ -107,7 +107,7 @@ layui.config({
 	    	limit: getLimit(),
 		    cols: [[
 		    	{ type: 'checkbox'},
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'quTitle', width:250, title: '题目', templet: function (d) {
 			        return d.quTitle;
 			    }},

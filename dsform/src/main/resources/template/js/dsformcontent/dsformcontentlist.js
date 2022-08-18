@@ -26,7 +26,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'contentName', title: '模板标题', width: 120 },
 	        { title: 'HTML内容', align: 'center', width: 90, templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';

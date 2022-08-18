@@ -115,7 +115,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		    	{ type: checkType == '1' ? 'radio' : 'checkbox'},
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', width:250, title: '标题', templet: function (d) {
 			        return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 			    }},

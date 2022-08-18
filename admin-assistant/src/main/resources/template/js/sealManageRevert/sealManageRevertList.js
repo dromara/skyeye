@@ -30,13 +30,13 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 		cols: [[
-			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+			{ title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 			{ field: 'title', title: '标题', width: 300, templet: function (d) {
 				return '<a lay-event="revertdedails" class="notice-title-click">' + d.title + '</a>';
 			}},
 			{ field: 'oddNum', title: '单号', width: 200, align: 'center' },
 			{ field: 'processInstanceId', title: '流程ID', width: 80, align: 'center', templet: function (d) {
-				if (!isNull(d.processInstanceId)){
+				if (!isNull(d.processInstanceId)) {
 					return '<a lay-event="revertProcessDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 				} else {
 					return "";

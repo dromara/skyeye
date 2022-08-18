@@ -31,7 +31,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		    	{ type: 'radio'},
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 				{ field: 'title', title: '套餐名称', align: 'left', width: 200, templet: function (d) {
 						return '<a lay-event="select" class="notice-title-click">' + d.title + '</a>';
 					}},

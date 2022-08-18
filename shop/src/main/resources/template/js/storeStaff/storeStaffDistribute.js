@@ -39,7 +39,7 @@ layui.config({
             limits: getLimits(),
             limit: getLimit(),
             cols: [[
-                { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
+                { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
                 { field: 'name', title: '门店', align: 'left', width: 150, templet: function (d) {
                     return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
                 }}
@@ -73,7 +73,7 @@ layui.config({
             limits: getLimits(),
             limit: getLimit(),
             cols: [[
-                { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
+                { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
                 { field: 'jobNumber', title: '工号', align: 'left', width: 140 },
                 { field: 'userName', title: '姓名', width: 120 },
                 { field: 'companyName', title: '企业', width: 150 },

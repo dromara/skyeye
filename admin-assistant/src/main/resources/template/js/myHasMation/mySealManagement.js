@@ -26,7 +26,7 @@ layui.config({
 		    limits: getLimits(),
 	    	limit: getLimit(),
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 				{ field: 'companyName', title: '所属公司', align: 'left', width: 170 },
 				{ field: 'sealName', title: '印章名称', align: 'left', width: 120 },
 				{ field: 'borrowName', title: '领用人', align: 'left', width: 80 },

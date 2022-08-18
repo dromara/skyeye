@@ -27,7 +27,7 @@ layui.config({
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '标题', width: 180 },
 	        { field: 'start', title: '开始日期', width: 150, align: 'center' },
 	        { field: 'end', title: '结束日期', width: 150, align: 'center' },

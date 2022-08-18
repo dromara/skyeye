@@ -22,7 +22,7 @@ layui.config({
         limits: getLimits(),
         limit: getLimit(),
         cols: [[
-            { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers'},
+            { title: systemLanguage["com.skyeye.serialNumber"][languageType], fixed: 'left', type: 'numbers' },
             { field: 'contacts', title: '会员称呼', align: 'left', width: 140, fixed: 'left', templet: function (d) {
                 return '<a lay-event="select" class="notice-title-click">' + d.contacts + '</a>';
             }},

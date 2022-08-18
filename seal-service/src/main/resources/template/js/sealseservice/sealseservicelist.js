@@ -24,7 +24,7 @@ layui.config({
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'orderNum', title: '工单号', align: 'center', width: 220, templet: function (d) {
 	        	return '<a lay-event="details" class="notice-title-click">' + d.orderNum + '</a>';
 	        }},

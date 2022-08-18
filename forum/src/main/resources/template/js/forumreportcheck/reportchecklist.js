@@ -85,7 +85,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', title: '帖子标题', align: 'center', width: 250, templet: function (d) {
                     return '<a lay-event="forumdetails" class="notice-title-click">' + d.title + '</a>';
                 }},
@@ -221,7 +221,7 @@ layui.config({
 		    limits: [8, 16, 24, 32, 40, 48, 56],
 		    limit: 8,
 		    cols: [[
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 		        { field: 'title', title: '帖子标题', align: 'center', width: 250, templet: function (d) {
                     return '<a lay-event="forumdetails" class="notice-title-click">' + d.title + '</a>';
                 }},

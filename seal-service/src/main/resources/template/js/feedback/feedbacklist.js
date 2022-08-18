@@ -40,7 +40,7 @@ layui.config({
 				    limits: [8, 16, 24, 32, 40, 48, 56],
 				    limit: 8,
 				    cols: [[
-				        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+				        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 				        { field: 'typeName', title: '反馈类型', align: 'left', width: 120},
 				        { field: 'createName', title: '反馈人', align: 'left', width: 80 },
 				        { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 140 },

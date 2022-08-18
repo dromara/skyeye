@@ -52,7 +52,7 @@ var activitiUtil = {
      * @param taskId 任务id
      * @param flag 审批结果,是否通过：1.通过2.不通过
      */
-    initApprovalPerson: function (appendDomId, processInstanceId, taskId, flag){
+    initApprovalPerson: function (appendDomId, processInstanceId, taskId, flag) {
         activitiUtil.processInstanceId = processInstanceId;
         activitiUtil.taskId = taskId;
         activitiUtil.flag = flag;
@@ -63,7 +63,7 @@ var activitiUtil = {
         };
         // 优先请求一次获取下个用户节点的信息，如果没有审批节点信息，则不加载审批人选项
         AjaxPostUtil.request({url: flowableBasePath + "activitiProcess001", params: params, type: 'json', callback: function(json) {
-            if (!isNull(json.bean)){
+            if (!isNull(json.bean)) {
                 var approvalPersonChooseDom = '<div class="layui-form-item layui-col-xs12">' +
                     '<label class="layui-form-label">下一个审批人<i class="red">*</i></label>' +
                     '<div class="layui-input-block">' +
@@ -80,7 +80,7 @@ var activitiUtil = {
     /**
      * 初始化审批人选择按钮事件
      */
-    initApprovalPersonChooseBtnEvent: function (){
+    initApprovalPersonChooseBtnEvent: function () {
         $("body").on("click", ".chooseApprovalPersonBtn", function() {
             activitiUtil.openApprovalPersonChoosePage();
         });
@@ -89,7 +89,7 @@ var activitiUtil = {
     /**
      * 打开审批人选择页面
      */
-    openApprovalPersonChoosePage: function (){
+    openApprovalPersonChoosePage: function () {
         _openNewWindows({
             url: "../../tpl/approvalActiviti/approvalPersonChoose.html",
             title: "审批人选择",
@@ -105,9 +105,9 @@ var activitiUtil = {
     /**
      * 获取选择的审批人
      */
-    getApprovalPersonId: function (){
+    getApprovalPersonId: function () {
         var chooseDataStr = $("#approvalPersonName").attr("chooseData");
-        if(isNull(chooseDataStr)){
+        if (isNull(chooseDataStr)) {
             return "";
         }
         var chooseData = JSON.parse(chooseDataStr);
@@ -120,7 +120,7 @@ var activitiUtil = {
      * @param pageUrl 该地址为activitiNameKey.json的key
      * @param callback 回调函数
      */
-    startProcess: function (pageUrl, callback){
+    startProcess: function (pageUrl, callback) {
         activitiUtil.pageUrl = pageUrl;
         _openNewWindows({
             url: "../../tpl/approvalActiviti/startProcessPersonChooseBtn.html",
@@ -142,7 +142,7 @@ var activitiUtil = {
      * @param taskId 任务id
      * @param callback 回调函数
      */
-    turnMultiInstance: function (processInstanceId, taskId, callback){
+    turnMultiInstance: function (processInstanceId, taskId, callback) {
         var params = {
             processInstanceId: processInstanceId,
             taskId: taskId,
@@ -163,9 +163,9 @@ var activitiUtil = {
      * @param task 任务信息
      * @param callback 回调函数
      */
-    activitiMenuOperator: function (boxId, task, callback){
+    activitiMenuOperator: function (boxId, task, callback) {
         var operatorBtnHtml = '';
-        if((task.nrOfInstances == 0 && !isNull(task.nrOfInstances)) || isNull(task.nrOfInstances)) {
+        if ((task.nrOfInstances == 0 && !isNull(task.nrOfInstances)) || isNull(task.nrOfInstances)) {
             // 不是多实例会签||是会签但是还没有设定会签人
             if (!task.delegation) {
                 // 不是委派任务节点可以委派
@@ -175,7 +175,7 @@ var activitiUtil = {
             operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="beforeAddSignTask" style="height: 30px; line-height: 30px; padding: 0 15px;">前加签</a>';
             operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="afterAddSignTask" style="height: 30px; line-height: 30px; padding: 0 15px;">后加签</a>';
         }
-        if(task.isMultiInstance){
+        if (task.isMultiInstance) {
             // 会签节点进行加签
             operatorBtnHtml += '<a class="layui-btn layui-btn-normal" id="jointlySign" style="height: 30px; line-height: 30px; padding: 0 15px;">会签设定</a>';
         }
@@ -190,7 +190,7 @@ var activitiUtil = {
      * @param task 任务信息
      * @param callback 回调函数
      */
-    activitiMenuEvent: function (task, callback){
+    activitiMenuEvent: function (task, callback) {
         // 委派
         $("body").on("click", "#delegate", function() {
             systemCommonUtil.userReturnList = [];
@@ -276,29 +276,29 @@ var activitiUtil = {
 
     },
 
-    showStateName: function (state, submitType){
-        if(submitType == 1){
-            if(state == '0'){
+    showStateName: function (state, submitType) {
+        if (submitType == 1) {
+            if (state == '0') {
                 return "<span class='state-down'>未审核</span>";
-            }else if(state == '1'){
+            } else if (state == '1') {
                 return "<span class='state-up'>审核中</span>";
-            }else if(state == '2'){
+            } else if (state == '2') {
                 return "<span class='state-new'>审核通过</span>";
-            }else if(state == '3'){
+            } else if (state == '3') {
                 return "<span class='state-down'>拒绝通过</span>";
-            }else if(state == '4'){
+            } else if (state == '4') {
                 return "<span class='state-new'>已完成</span>";
-            }else if(state == '5'){
+            } else if (state == '5') {
                 return "<span class='state-error'>撤销</span>";
             } else {
                 return "参数错误";
             }
-        } else if(submitType == 2){
-            if(state == '0'){
+        } else if (submitType == 2) {
+            if (state == '0') {
                 return "<span class='state-down'>未提交</span>";
-            }else if(state == '2'){
+            } else if (state == '2') {
                 return "<span class='state-new'>已提交</span>";
-            }else if(state == '4'){
+            } else if (state == '4') {
                 return "<span class='state-new'>已完成</span>";
             } else {
                 return "参数错误";
@@ -306,29 +306,29 @@ var activitiUtil = {
         }
     },
 
-    showStateName2: function (state, submitType){
-        if(submitType == 1){
-            if(state == '0'){
+    showStateName2: function (state, submitType) {
+        if (submitType == 1) {
+            if (state == '0') {
                 return "<span>草稿</span>";
-            }else if(state == '1'){
+            } else if (state == '1') {
                 return "<span class='state-up'>审核中</span>";
-            }else if(state == '2'){
+            } else if (state == '2') {
                 return "<span class='state-new'>审核通过</span>";
-            }else if(state == '3'){
+            } else if (state == '3') {
                 return "<span class='state-down'>拒绝通过</span>";
-            }else if(state == '4'){
+            } else if (state == '4') {
                 return "<span class='state-down'>作废</span>";
-            }else if(state == '5'){
+            } else if (state == '5') {
                 return "<span class='state-error'>撤销</span>";
             } else {
                 return "参数错误";
             }
-        } else if(submitType == 2){
-            if(state == '0'){
+        } else if (submitType == 2) {
+            if (state == '0') {
                 return "<span>草稿</span>";
-            }else if(state == '2'){
+            } else if (state == '2') {
                 return "<span class='state-new'>已提交</span>";
-            }else if(state == '4'){
+            } else if (state == '4') {
                 return "<span class='state-new'>作废</span>";
             } else {
                 return "参数错误";

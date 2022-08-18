@@ -31,7 +31,7 @@ layui.config({
             total: true
         },
 	    cols: [[
-	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers'},
+	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers' },
 	        { field: 'userName', title: '姓名', rowspan: '3', align: 'left', width: 150, fixed: 'left', templet: function (d) {
 	        	return d.jobNumber + '_' + d.userName;
 	        }},

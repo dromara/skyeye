@@ -34,7 +34,7 @@ layui.config({
 		    limit: 8,
 		    cols: [[
 		    	{ type: 'radio'},
-		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers'},
+		        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 				{ field: 'title', title: '标题', align: 'left', width: 150, templet: function (d) {
 					return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 				}},
