@@ -107,9 +107,9 @@ layui.config({
     	type = "1";
 		$("#treeRight").hide();
 		_openNewWindows({
-			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
+			url: "../../tpl/planProjectFlow/planProjectFlowAdd.html",
 			title: "新增目录",
-			pageId: "companyjobedit",
+			pageId: "planProjectFlowAdd",
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
@@ -122,9 +122,9 @@ layui.config({
     	type = "2";
 		$("#treeRight").hide();
 		_openNewWindows({
-			url: "../../tpl/planprojectflow/planprojectflowadd.html", 
+			url: "../../tpl/planProjectFlow/planProjectFlowAdd.html",
 			title: "新增流程图",
-			pageId: "companyjobedit",
+			pageId: "planProjectFlowAdd",
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
