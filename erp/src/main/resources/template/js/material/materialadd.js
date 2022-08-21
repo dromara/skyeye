@@ -168,7 +168,6 @@ layui.config({
  	        		if(!subVerifyForm("estimatePurchasePrice"))return false;//预计采购价非空校验
  	        		if(!subVerifyForm("salePrice"))return false;//销售价非空校验
  	        		var row = {
-						unitName: $("#unitName").val(),
 						safetyTock: $("#safetyTock").val(),
 						retailPrice: $("#retailPrice").val(),
 						lowPrice: $("#lowPrice").val(),
@@ -181,14 +180,15 @@ layui.config({
 				var params = {
         			materialName: $("#materialName").val(),
  	        		model: $("#model").val(),
+					unitName: $("#unitName").val(),
  	        		categoryId: checkNodes[0].id,
  	        		remark: $("#remark").val(),
- 	        		unit: $("#unit").val() === 'true' ? '2' : '1',
+ 	        		unit: $("#unit").val() === 'true' ? 2 : 1,
  	        		unitGroupId: $("#unitGroupId").val(),
  	        		firstInUnit: $("#firstInUnit").val(),
  	        		firstOutUnit: $("#firstOutUnit").val(),
-	 	        	materialNormsStr: JSON.stringify(tableData),
-	 	        	type: $("#fromType").val() === 'true' ? '1' : '2',
+	 	        	materialNorms: JSON.stringify(tableData),
+	 	        	type: $("#fromType").val() === 'true' ? 1 : 2,
 					enclosureInfo: skyeyeEnclosure.getEnclosureIdsByBoxId('enclosureUpload')
  	        	};
 
@@ -202,7 +202,7 @@ layui.config({
  	        	});
  	        	params.extendData = JSON.stringify(extendData);
  	        	//工序信息
- 	        	params.procedureJsonStr = JSON.stringify(procedureMationList);
+ 	        	params.materialProcedure = JSON.stringify(procedureMationList);
  	        	AjaxPostUtil.request({url: flowableBasePath + "material003", params: params, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
