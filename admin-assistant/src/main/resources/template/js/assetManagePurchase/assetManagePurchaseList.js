@@ -59,11 +59,11 @@ layui.config({
         	caigouEdit(data);
         } else if (layEvent === 'caigouSubApproval') { //采购提交审批
         	caigouSubApproval(data);
-        } else if (layEven === 'caigouCancellation') {//采购作废
+        } else if (layEvent === 'caigouCancellation') { //采购作废
         	caigouCancellation(data);
-        } else if (layEven === 'caigouProcessDetails') {//采购流程详情
+        } else if (layEvent === 'caigouProcessDetails') { //采购流程详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEven === 'caigouRevoke') {//撤销采购申请
+        } else if (layEvent === 'caigouRevoke') { //撤销采购申请
         	caigouRevoke(data);
         }
     });

@@ -29,7 +29,6 @@ layui.config({
 			{ field: 'typeName', title: '资产类型', align: 'left', width: 100 },
 			{ field: 'assetNum', title: '资产编号', align: 'left', width: 100 },
 			{ field: 'specifications', title: '资产规格', align: 'left', width: 120 },
-			{ field: 'employeeName', title: '领用人', align: 'left', width: 120 },
 			{ field: 'assetAdmin', title: '管理员', align: 'left', width: 120 },
 		]],
 		done: function(){
