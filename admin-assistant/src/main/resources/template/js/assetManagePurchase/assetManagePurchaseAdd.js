@@ -104,7 +104,7 @@ layui.config({
 		var tableData = new Array();
 		var noError = false;
 		$.each(result.dataList, function(i, item) {
-			//获取行编号
+			// 获取行编号
 			var thisRowKey = item["trcusid"].replace("tr", "");
 			if (parseInt(item.rkNum) == 0) {
 				$("#number" + thisRowKey).addClass("layui-form-danger");

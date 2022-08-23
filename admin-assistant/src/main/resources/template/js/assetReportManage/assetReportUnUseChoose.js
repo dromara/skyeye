@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -15,17 +13,17 @@ layui.config({
 		tableCheckBoxUtil = layui.tableCheckBoxUtil;
 
 	// 选择类型，默认单选，true:多选，false:单选
-	var assetCheckType = isNull(parent.adminAssistantUtil.assetCheckType) ? false : parent.adminAssistantUtil.assetCheckType;
+	var assetReportCheckType = isNull(parent.adminAssistantUtil.assetReportCheckType) ? false : parent.adminAssistantUtil.assetReportCheckType;
 
 	// 设置提示信息
-	var s = '资产选择规则：';
-	if(assetCheckType){
-		s += '1.多选；如没有查到要选择的资产，请检查资产信息是否满足当前规则。';
+	var s = '资产明细选择规则：';
+	if(assetReportCheckType){
+		s += '1.多选；如没有查到要选择的资产信息，请检查资产信息是否满足当前规则。';
 		// 多选保存的资产对象信息
-		var checkAssetMation = [].concat(parent.adminAssistantUtil.checkAssetMation);
+		var checkAssetReportMation = [].concat(parent.adminAssistantUtil.checkAssetReportMation);
 		// 初始化值
 		var ids = [];
-		$.each(checkAssetMation, function(i, item) {
+		$.each(checkAssetReportMation, function(i, item) {
 			ids.push(item.id);
 		});
 		tableCheckBoxUtil.setIds({
@@ -48,32 +46,31 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'queryAllAssetMationToChoose',
+	    url: flowableBasePath + 'queryUnUseAssetReportList',
 	    where: getTableParams(),
 		even: true,
 	    page: true,
 	    limits: getLimits(),
 	    limit: getLimit(),
 	    cols: [[
-	    	{ type: assetCheckType ? 'checkbox' : 'radio', rowspan: '3', fixed: 'left'},
+	    	{ type: assetReportCheckType ? 'checkbox' : 'radio', rowspan: '3', fixed: 'left' },
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], rowspan: '3', fixed: 'left', type: 'numbers' },
-			{ field: 'assetName', title: '资产名称', width: 120, templet: function (d) {
-				return '<a lay-event="assetlistdetails" class="notice-title-click">' + d.assetName + '</a>';
-			}},
+			{ field: 'assetName', title: '资产名称', width: 120 },
 			{ field: 'assetImg', title: '图片', align: 'center', width: 60, templet: function (d) {
 				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
-			{ field: 'typeId', title: '资产类型', width: 100 },
-			{ field: 'numberPrefix', title: '资产编号前缀', width: 140 },
-			{ field: 'readPrice', title: '参考价', width: 80 },
+			{ field: 'typeName', title: '资产类型', width: 100 },
+			{ field: 'assetNum', title: '资产编号', width: 160 },
+			{ field: 'storageArea', title: '存放区域', width: 80 },
+			{ field: 'assetAdmin', title: '负责人', width: 120 }
 		]],
 	    done: function(res) {
 	    	matchingLanguage();
 
-			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入资产名称", function () {
+			initTableSearchUtil.initAdvancedSearch(this, res.searchFilter, form, "请输入资产名称，资产编号", function () {
 				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
 			});
-			if (assetCheckType) {
+			if (assetReportCheckType) {
 				// 设置选中
 				tableCheckBoxUtil.checkedDefault({
 					gridId: 'messageTable',
@@ -86,7 +83,7 @@ layui.config({
 					form.render();
 					var chooseIndex = JSON.stringify(dubClick.data('index'));
 					var obj = res.rows[chooseIndex];
-					parent.adminAssistantUtil.checkAssetMation = obj;
+					parent.adminAssistantUtil.checkAssetReportMation = obj;
 
 					parent.refreshCode = '0';
 					parent.layer.close(index);
@@ -104,25 +101,11 @@ layui.config({
 	table.on('tool(messageTable)', function (obj) {
 		var data = obj.data;
 		var layEvent = obj.event;
-		if (layEvent === 'assetlistdetails') { // 详情
-			assetlistdetails(data);
-		} else if (layEvent === 'assetImg') { // 图片预览
+		if (layEvent === 'assetImg') { // 图片预览
 			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.assetImg));
 		}
 	});
 
-	// 详情
-	function assetlistdetails(data) {
-		rowId = data.id;
-		_openNewWindows({
-			url: "../../tpl/assetManage/assetManageDetails.html",
-			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
-			pageId: "assetManageDetails",
-			area: ['90vw', '90vh'],
-			callBack: function (refreshCode) {
-			}});
-	}
-	
 	// 保存
 	$("body").on("click", "#saveCheckBox", function() {
 		var selectedData = tableCheckBoxUtil.getValue({
@@ -132,8 +115,8 @@ layui.config({
 			winui.window.msg("请选择资产", {icon: 2, time: 2000});
 			return false;
 		}
-		AjaxPostUtil.request({url: flowableBasePath + "queryAssetListByIds", params: {ids: selectedData.toString()}, type: 'json', method: "POST", callback: function (json) {
-			parent.adminAssistantUtil.checkAssetMation = [].concat(json.rows);
+		AjaxPostUtil.request({url: flowableBasePath + "queryAssetReportListByIds", params: {ids: selectedData.toString()}, type: 'json', method: "POST", callback: function (json) {
+			parent.adminAssistantUtil.checkAssetReportMation = [].concat(json.rows);
 			parent.layer.close(index);
 			parent.refreshCode = '0';
 		}});
@@ -153,5 +136,5 @@ layui.config({
 		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
 	}
 	
-    exports('assetManageChoose', {});
+    exports('assetReportUnUseChoose', {});
 });

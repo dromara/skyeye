@@ -36,4 +36,25 @@ var adminAssistantUtil = {
         });
     },
 
+    /**
+     * 未申领资产明细选择页面
+     *
+     * @param callback 回调函数
+     */
+    assetReportCheckType: false, // 选择类型，默认单选，true:多选，false:单选
+    checkAssetReportMation: [], // 选择时返回的对象
+    openAssetReportChoosePage: function (callback) {
+        _openNewWindows({
+            url: "../../tpl/assetReportManage/assetReportUnUseChoose.html",
+            title: "资产选择",
+            pageId: "assetReportUnUseChoose",
+            area: ['90vw', '90vh'],
+            callBack: function (refreshCode) {
+                if (typeof (callback) == "function") {
+                    callback(adminAssistantUtil.checkAssetReportMation);
+                }
+            }
+        });
+    },
+
 };

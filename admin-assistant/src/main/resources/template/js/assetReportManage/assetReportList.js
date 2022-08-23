@@ -82,5 +82,5 @@ layui.config({
 		return $.extend(true, {assetId: parent.rowId}, initTableSearchUtil.getSearchValue("messageTable"));
     }
 
-    exports('assetReportUnUseList', {});
+    exports('assetReportList', {});
 });

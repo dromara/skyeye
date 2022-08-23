@@ -86,9 +86,9 @@ layui.config({
 	function assetReport(data) {
 		rowId = data.id;
 		_openNewWindows({
-			url: "../../tpl/assetReportManage/assetReportUnUseList.html",
+			url: "../../tpl/assetReportManage/assetReportList.html",
 			title: '资产明细',
-			pageId: "assetReportUnUseList",
+			pageId: "assetReportList",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
