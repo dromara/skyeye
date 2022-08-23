@@ -35,6 +35,9 @@ layui.config({
 				return '<img src="' + systemCommonUtil.getFilePath(d.assetImg) + '" class="photo-img" lay-event="assetImg">';
 			}},
 			{ field: 'typeId', title: '资产类型', width: 100 },
+			{ field: 'id', title: '明细', align: 'center', width: 80, templet: function (d) {
+				return '<a lay-event="assetReport" class="notice-title-click">明细</a>';
+			}},
 			{ field: 'numberPrefix', title: '资产编号前缀', width: 140 },
 			{ field: 'readPrice', title: '参考价', width: 80 },
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
@@ -62,6 +65,8 @@ layui.config({
 			assetlistedit(data);
 		} else if (layEvent === 'assetImg') { // 图片预览
 			systemCommonUtil.showPicImg(systemCommonUtil.getFilePath(data.assetImg));
+		} else if (layEvent === 'assetReport') { // 资产明细
+			assetReport(data);
 		}
     });
 
@@ -72,6 +77,18 @@ layui.config({
 			url: "../../tpl/assetManage/assetManageDetails.html",
 			title: systemLanguage["com.skyeye.detailsPageTitle"][languageType],
 			pageId: "assetManageDetails",
+			area: ['90vw', '90vh'],
+			callBack: function (refreshCode) {
+			}});
+	}
+
+	// 资产明细
+	function assetReport(data) {
+		rowId = data.id;
+		_openNewWindows({
+			url: "../../tpl/assetReportManage/assetReportUnUseList.html",
+			title: '资产明细',
+			pageId: "assetReportUnUseList",
 			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 			}});
