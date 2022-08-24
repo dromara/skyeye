@@ -16,14 +16,6 @@
 - **五人团已凑齐三人，差两人开团**
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
 
-### 演示视频
-
-- 视频一：[多桌面任务](https://www.bilibili.com/video/BV1yb41127oB/)
-- 视频二：[聊天](https://www.bilibili.com/video/BV11b41127FV)
-- 视频三：[日程](https://www.bilibili.com/video/BV1vb411i75M)
-- 视频四：[ERP + 生产 202007版](https://www.bilibili.com/video/BV1yA411e7mm)
-- 视频五：[ERP + 生产 202109升级模块](https://www.bilibili.com/video/BV1vR4y1p7ka)
-
 ### 联系作者
 
 | QQ交流群/或者搜索 1016439713(禁止发广告，进群后自行修改备注：岗位-城市-备注，不改者五分钟内自动请出。) | 企业版设计思路知识星球 | 扫码进微信群畅聊(禁止发广告，进群后自行修改备注：岗位-城市-备注，不改者五分钟内自动请出。)|
