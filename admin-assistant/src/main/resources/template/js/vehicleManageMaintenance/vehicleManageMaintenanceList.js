@@ -45,7 +45,7 @@ layui.config({
 		        { field: 'maintenancePrice', title: '费用（元）', width: 150 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#maintenancetableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

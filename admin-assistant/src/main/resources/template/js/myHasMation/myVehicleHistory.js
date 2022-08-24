@@ -41,7 +41,7 @@ layui.config({
 				{ field: 'oddNumber', title: '单据编号', align: 'center', width: 180},
 				{ field: 'oddCreateTime', title: '单据日期', align: 'center', width: 140}
 			]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

@@ -13,8 +13,6 @@ layui.config({
 	    	form = layui.form;
 	    	layedit = layui.layedit;
 	
-	    var rowId = parent.parent.rowId;
-
 		// 项目讨论板分类
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["pmProjectDiscussType"]["key"], 'select', "typeId", '', form);
 
@@ -78,7 +76,7 @@ layui.config({
 	    form.on('submit(formAddBean)', function (data) {
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
-        			proId: rowId,
+        			proId: parent.proId,
         			title: $("#title").val(),
         			typeId: $("typeId").val()
         		};

@@ -95,7 +95,7 @@ layui.config({
 		        { field: 'menuUrl', title: '菜单链接', width: 160 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 300, toolbar: '#tableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

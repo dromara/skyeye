@@ -105,7 +105,7 @@ layui.config({
 		        { field: 'reportTime', title: '举报时间', align: 'center', width: 200},
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#tableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});
@@ -243,7 +243,7 @@ layui.config({
 		        { field: 'examineTime', title: '审核时间', align: 'center', width: 200},
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#checkedTableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

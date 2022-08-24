@@ -26,7 +26,7 @@ layui.config({
             { field: 'key', title: '字段key', align: 'left', width: 300 },
             { field: 'desc', title: '描述', align: 'left', width: 300}
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

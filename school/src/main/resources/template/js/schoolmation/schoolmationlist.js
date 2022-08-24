@@ -30,7 +30,7 @@ layui.config({
 	        { field:'powerName', width: 120, align: 'center', title: '数据权限'},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
     }, {

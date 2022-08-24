@@ -52,7 +52,7 @@ layui.config({
 	            { field: 'currentTock', title: '入库数量', align: 'left', width: 100},
 	            { field: 'currentTockMoney', title: '入库金额', align: 'left', width: 120}
 	        ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 	    });

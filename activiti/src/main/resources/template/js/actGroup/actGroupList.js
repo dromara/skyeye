@@ -175,7 +175,7 @@ layui.config({
 		        { field: 'email', title: '邮箱', align: 'left', width: 200 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 80, toolbar: '#tableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

@@ -78,7 +78,7 @@ layui.config({
 		    	{ field: 'initialTock', title: '初始库存', align: 'center', width: 80},
 		        { field: 'stockNum', title: '可盘点库存', align: 'center', width: 120, edit: 'text'}
 	        ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    	soulTable.render(this);
 		    	if(!loadFirstType){

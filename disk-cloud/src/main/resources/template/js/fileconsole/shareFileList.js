@@ -28,7 +28,7 @@ layui.config({
 	        { field: 'createTime', title: '分享时间', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    	//复制
 	    	clipboard = new ClipboardJS('.copyUrl');

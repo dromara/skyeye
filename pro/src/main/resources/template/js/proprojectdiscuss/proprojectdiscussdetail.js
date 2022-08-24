@@ -13,7 +13,7 @@ layui.config({
 	    	form = layui.form;
 	    	layedit = layui.layedit;
 	
-	    var rowId = parent.disRowId;//讨论板id
+	    var rowId = parent.rowId;//讨论板id
 	    var leftTemplate = $("#leftTemplate").html();
 	    var rightTemplate = $("#rightTemplate").html();
 	    
@@ -97,9 +97,9 @@ layui.config({
 	        if (winui.verifyForm(data.elem)) {
         		var params = {
         			discussId: rowId,//讨论板id
-        			proId: parent.rowId//项目id
+        			proId: parent.proId//项目id
         		};
-				if (isNull(layedit.getContent(completedContent))){
+				if (isNull(layedit.getContent(completedContent))) {
 					winui.window.msg('请填写回复内容', {icon: 2, time: 2000});
 					return false;
 				} else {

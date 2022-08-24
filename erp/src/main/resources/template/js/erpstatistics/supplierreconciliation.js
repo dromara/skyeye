@@ -63,7 +63,7 @@ layui.config({
 	            { field: 'changeAmount', title: '实际支付', align: 'left', width: 120},
 	            { field: 'operTime', title: '退货数量', align: 'center', width: 150}
 	        ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 	    });

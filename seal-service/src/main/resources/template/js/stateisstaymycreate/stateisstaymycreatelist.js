@@ -46,7 +46,7 @@ layui.config({
 		        { field: 'stateName', title: '状态', align: 'left', width: 80 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

@@ -78,7 +78,7 @@ layui.config({
 	        { field: 'jobName', title: '职位', align: 'left', width: 120}
 	       ]
 	    ],
-	    done: function(){
+	    done: function(json) {
 	    	if(!loadCompany){
 	    		initCompany();
 	    	}

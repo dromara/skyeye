@@ -59,7 +59,7 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], width: 150, align: 'center'},
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#borrowTableBar'}
 		]],
-		done: function(){
+		done: function(json) {
 			matchingLanguage();
 		}
 	});

@@ -45,7 +45,7 @@ layui.config({
                 { field: 'insuranceCompany', title: '投保公司', width: 170 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#insurancetableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

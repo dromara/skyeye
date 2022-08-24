@@ -79,7 +79,7 @@ layui.config({
 			{ field: 'userName', title: '计划下达人', width: 100 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 100 }
 		]],
-		done: function(){
+		done: function(json) {
 			matchingLanguage();
 		}
 	});

@@ -33,7 +33,7 @@ layui.config({
 	        { field: 'agencyName', title: '审批人', width: 120},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#myAllComplateTableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

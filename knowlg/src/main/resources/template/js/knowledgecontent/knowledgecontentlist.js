@@ -44,7 +44,7 @@ layui.config({
 	        { field: 'createTime', title: '最后编辑时间', align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 160, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    	if(!loadKnowlgType){
 				initKnowlgType();

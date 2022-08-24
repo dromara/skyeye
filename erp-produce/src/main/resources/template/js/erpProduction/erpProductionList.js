@@ -54,7 +54,7 @@ layui.config({
 	        { field: 'planComplateDate', width: 140, align: 'center', title: '计划结束时间'},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
         ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
     });

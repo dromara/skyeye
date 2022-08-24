@@ -26,7 +26,7 @@ layui.config({
 	        { field: 'tableSize', title: '数据大小', align: 'center', width: 150 },
 	        { field: 'indexSize', title: '索引大小', align: 'center', width: 150 },
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

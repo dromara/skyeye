@@ -72,7 +72,7 @@ layui.config({
             { field: 'createName', title: '服务顾问', width: 120 },
             { field: 'createTime', title: '操作时间', align: 'center', width: 150 }
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

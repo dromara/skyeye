@@ -59,7 +59,7 @@ layui.config({
 	        { field: 'taxLastMoney', title: '含税合计(元)', align: 'left', width: 100 },
 	        { field: 'operTime', title: '单据日期', align: 'center', width: 140 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

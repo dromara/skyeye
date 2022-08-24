@@ -145,7 +145,7 @@ layui.config({
 		        }}
 		        ]
 			],
-	        done: function(){
+	        done: function(json) {
 	        	matchingLanguage();
 	        	$('table.layui-table thead tr th:eq(1)').addClass('layui-hide');
 	        }

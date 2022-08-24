@@ -57,7 +57,7 @@ layui.config({
 		    	{ field: 'safetyTock', title: '安全存量', align: 'center', width: 80},
 		        { field: 'allTock', title: '当前库存', align: 'center', width: 120}
 	        ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    	soulTable.render(this);
 		    	if(!loadFirstType){

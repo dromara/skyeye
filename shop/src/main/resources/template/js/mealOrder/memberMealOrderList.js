@@ -53,7 +53,7 @@ layui.config({
             { field: 'createName', title: '专属顾问', width: 120 },
             { field: 'createTime', title: '创建时间', align: 'center', width: 150 },
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

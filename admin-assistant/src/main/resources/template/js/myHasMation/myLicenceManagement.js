@@ -32,7 +32,7 @@ layui.config({
 				{ field: 'borrowName', title: '领用人', align: 'left', width: 80 },
 				{ field: 'licenceAdmin', title: '管理员', align: 'left', width: 80 },
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

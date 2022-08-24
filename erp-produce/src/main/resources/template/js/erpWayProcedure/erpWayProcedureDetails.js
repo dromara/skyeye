@@ -50,7 +50,7 @@ layui.config({
 			            { field: 'departmentName', title: '加工部门', align: 'left', width: 120},
 			            { field: 'farmName', title: '加工车间', align: 'left', width: 120}
 			        ]],
-			        done: function(){
+			        done: function(json) {
 			        }
 			    });
 				

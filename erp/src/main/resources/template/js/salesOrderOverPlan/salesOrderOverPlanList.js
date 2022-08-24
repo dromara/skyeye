@@ -47,7 +47,7 @@ layui.config({
             { field: 'overPlanTime', title: '统筹日期', align: 'center', width: 140 },
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
     });

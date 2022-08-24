@@ -69,7 +69,7 @@ layui.config({
 		        { field: 'phone', title: '手机号', align: 'center', width: 100},
 		        { field: 'qq', title: 'QQ', align: 'center', width: 100}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

@@ -28,7 +28,7 @@ layui.config({
             { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 140},
             { title: '操作', fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar'}
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     }, {

@@ -67,7 +67,7 @@ layui.config({
 				        			'<i class="fa fa-plus-circle input-icon chooseFarmBtn" style="top: 8px;"></i>';
 					    }}
 			        ]],
-			        done: function(){
+			        done: function(json) {
 			        	matchingLanguage();
 				    	soulTable.render(this);
 			        }

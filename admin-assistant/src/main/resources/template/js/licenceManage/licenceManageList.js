@@ -41,7 +41,7 @@ layui.config({
 		        { field: 'borrowName', title: '借用人', align: 'center', width: 100 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#licencelisttableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

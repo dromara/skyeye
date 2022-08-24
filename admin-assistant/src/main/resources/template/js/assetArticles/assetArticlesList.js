@@ -37,7 +37,7 @@ layui.config({
 			{ field: 'company', title: '所属公司', width: 170 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#liebiaoTableBar'}
 		]],
-		done: function(){
+		done: function(json) {
 			matchingLanguage();
 		}
 	});

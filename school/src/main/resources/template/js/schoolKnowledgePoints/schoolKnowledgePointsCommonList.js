@@ -84,7 +84,7 @@ layui.config({
 	            { field: 'subjectName', width: 80, align: 'center', title: '科目'},
 		        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 140 }
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

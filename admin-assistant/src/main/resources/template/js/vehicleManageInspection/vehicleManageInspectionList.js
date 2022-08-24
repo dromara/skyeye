@@ -45,7 +45,7 @@ layui.config({
 		        { field: 'inspectionPrice', title: '年检费用（元）', width: 120},
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#inspectiontableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

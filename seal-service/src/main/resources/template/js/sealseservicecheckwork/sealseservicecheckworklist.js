@@ -34,7 +34,7 @@ layui.config({
 	        { field: 'address', title: '签到地址', align: 'left', width: 160},
 	        { field: 'remark', title: '备注', align: 'left', width: 200}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

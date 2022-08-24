@@ -37,7 +37,7 @@ layui.config({
 		        { field: 'linesTime', title: '发送时间', align: 'center', width: 150 },
 		        { field: 'createName', title: '发送人', align: 'left', width: 90 }
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

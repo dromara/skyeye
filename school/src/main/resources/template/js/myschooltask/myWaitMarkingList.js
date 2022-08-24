@@ -74,7 +74,7 @@ layui.config({
 		        { field: 'totalTime', title: '耗时(分钟)', align: 'center', width: 100}
 		       ]
 		    ],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 	    });

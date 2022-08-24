@@ -86,7 +86,7 @@ layui.config({
 		        { field: 'createTime', title: '最后编辑时间', align: 'center', width: 200},
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#tableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    	soulTable.render(this);
 		    	if(!loadType){
@@ -230,7 +230,7 @@ layui.config({
 		        { field: 'examineUser', title: '审核人', width: 80},
 		        { field: 'examineTime', title: '审核时间', align: 'center', width: 130}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	soulTable.render(this);
 		    	if(!loadCheckedType){
 		    		initCheckedType();

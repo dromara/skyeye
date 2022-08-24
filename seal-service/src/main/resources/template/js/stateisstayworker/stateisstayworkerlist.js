@@ -45,7 +45,7 @@ layui.config({
 		        { field: 'productName', title: '产品名称', align: 'left', width: 120 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

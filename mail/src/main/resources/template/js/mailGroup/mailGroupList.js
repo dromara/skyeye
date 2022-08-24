@@ -31,7 +31,7 @@ layui.config({
 			{ field: 'perpleNum', title: '人数', width: 80 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 120, toolbar: '#tableBar' }
 		]],
-		done: function(){
+		done: function(json) {
 			matchingLanguage();
 		}
 	});

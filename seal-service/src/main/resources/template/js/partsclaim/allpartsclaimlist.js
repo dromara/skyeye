@@ -35,7 +35,7 @@ layui.config({
 	        { field: 'applyUserName', title: '申领人', align: 'center', width: 140 },
 	        { field: 'applyTime', title: '申领时间', align: 'center', width: 140 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

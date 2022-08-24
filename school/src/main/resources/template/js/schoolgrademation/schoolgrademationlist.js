@@ -35,7 +35,7 @@ layui.config({
 		        { field:'typeName', width: 120, title: '年级状态'},
 	            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	        ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 	    }, {

@@ -33,7 +33,7 @@ layui.config({
 			{ field: 'unitName', title: '单位', width: 270 },
 			{ title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 		]],
-		done: function(){
+		done: function(json) {
 			matchingLanguage();
 		}
 	});

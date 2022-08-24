@@ -44,7 +44,7 @@ layui.config({
 		        { field: 'customerName', title: '客户名称', align: 'left', width: 120 },
 		        { field: 'productName', title: '产品名称', align: 'left', width: 120 }
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});
