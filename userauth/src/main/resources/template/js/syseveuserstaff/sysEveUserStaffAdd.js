@@ -49,7 +49,7 @@ layui.config({
  			elem: "#demoTree1",
  			url: reqBasePath + 'queryCompanyMationListTree',
  			dataStyle: 'layuiStyle',
- 			done: function(){
+ 			done: function(json) {
  				if($("#demoTree1 li").length > 0){
  					$("#demoTree1 li").eq(0).children('div').click();
  				}
@@ -63,7 +63,7 @@ layui.config({
  				elem: "#demoTree2",
  				url: reqBasePath + 'companydepartment006?companyId=' + companyId,
  				dataStyle: 'layuiStyle',
- 				done: function(){
+ 				done: function(json) {
  					departmentId = "";
  					if($("#demoTree2 li").length > 0){
  						$("#demoTree2 li").eq(0).children('div').click();
@@ -74,7 +74,7 @@ layui.config({
  			 				elem: "#demoTree3",  //绑定元素
  			 				url: reqBasePath + 'companyjob006?departmentId=0',
  			 				dataStyle: 'layuiStyle',
- 			 				done: function(){
+ 			 				done: function(json) {
  			 				}
  			 			});
  					}
@@ -89,7 +89,7 @@ layui.config({
  				elem: "#demoTree3",
  				url: reqBasePath + 'companyjob006?departmentId=' + departmentId,
  				dataStyle: 'layuiStyle',
- 				done: function(){
+ 				done: function(json) {
  					jobId = "";
  					if($("#demoTree3 li").length > 0){
  						$("#demoTree3 li").eq(0).children('div').click();
@@ -106,7 +106,7 @@ layui.config({
 				url: reqBasePath + 'companyjobscore008?jobId=' + jobId,
 				dataStyle: 'layuiStyle',
 				method: 'GET',
-				done: function(){
+				done: function(json) {
 					jobScoreId = "";
 					if($("#demoTree4 li").length > 0){
 						$("#demoTree4 li").eq(0).children('div').click();

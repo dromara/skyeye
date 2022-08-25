@@ -28,7 +28,7 @@ layui.config({
 	        { field: 'initialTock', title: '初始数量', align: 'left', width: 80},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

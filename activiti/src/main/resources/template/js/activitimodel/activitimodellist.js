@@ -42,7 +42,7 @@ layui.config({
 	        { field: 'metaInfo', title: '元数据', width: 120},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 340, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

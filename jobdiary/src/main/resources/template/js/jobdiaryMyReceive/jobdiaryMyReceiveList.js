@@ -91,7 +91,7 @@ layui.config({
 	        { field: 'userName', title: '发件人', align: 'center', width: 110 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

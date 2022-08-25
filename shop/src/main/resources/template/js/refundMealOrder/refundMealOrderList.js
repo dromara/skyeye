@@ -82,7 +82,7 @@ layui.config({
             { field: 'refundReasonName', title: '退款原因', width: 120, align: "left"},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

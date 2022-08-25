@@ -80,7 +80,7 @@ layui.config({
 		        { field: 'actualEndTime', title: '实际', align: 'center', width: 85}
 		       ]
 		    ],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

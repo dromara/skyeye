@@ -59,7 +59,7 @@ layui.config({
                 { field: 'currentJobScoreName', title: '岗位定级', align: 'left', width: 150}
             ]
         ],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

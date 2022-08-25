@@ -96,7 +96,7 @@ layui.config({
 		        { field: 'approvalTime', title: '审批时间', align: 'center', width: 150 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar2'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

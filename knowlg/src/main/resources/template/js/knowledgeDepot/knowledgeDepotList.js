@@ -40,7 +40,7 @@ layui.config({
 			{ field: 'createName', title: '上传人', align: 'left', width: 100 },
 	        { field: 'createTime', title: '最后编辑时间', align: 'center', width: 120 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    	if(!loadKnowlgType){
 				initKnowlgType();

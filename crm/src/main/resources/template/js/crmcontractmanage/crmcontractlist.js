@@ -74,7 +74,7 @@ layui.config({
 	        	}
 	        }}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

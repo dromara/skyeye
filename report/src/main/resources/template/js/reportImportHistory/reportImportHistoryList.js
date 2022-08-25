@@ -29,7 +29,7 @@ layui.config({
             { field: 'createName', title: '上传人', align: 'left', width: 100 },
             { field: 'createTime', title: '上传时间', align: 'center', width: 140 }
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

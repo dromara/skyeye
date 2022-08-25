@@ -30,7 +30,7 @@ layui.config({
             {field:'pId', title: 'pId'},
         ]],
         isPage:false,
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
     }, {

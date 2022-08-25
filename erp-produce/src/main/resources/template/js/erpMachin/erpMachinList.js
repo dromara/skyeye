@@ -65,7 +65,7 @@ layui.config({
 	    	{ field: 'startTime', title: '开始时间', align: 'center', width: 150 },
 	        { field: 'endTime', title: '结束时间', align: 'center', width: 150}
         ]],
-        done: function(){
+        done: function(json) {
         	matchingLanguage();
 	    	soulTable.render(this);
         }

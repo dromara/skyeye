@@ -58,7 +58,7 @@ layui.config({
 		        { field: 'prevMaintainTime', title: '上次保养日期', align: 'center', width: 100 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 220, toolbar: '#vehicletableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

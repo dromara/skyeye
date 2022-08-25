@@ -50,7 +50,7 @@ layui.config({
 	        }},
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 100, toolbar: '#myNeedDealtTableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

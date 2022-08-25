@@ -62,7 +62,7 @@ layui.config({
                 }},
                 { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], align: 'center', width: 100}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    	soulTable.render(this);
 		    }

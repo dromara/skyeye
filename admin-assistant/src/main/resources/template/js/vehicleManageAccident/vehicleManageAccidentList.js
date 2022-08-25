@@ -45,7 +45,7 @@ layui.config({
 		        { field: 'accidentArea', title: '事故地点', width: 300 },
 		        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#accidenttableBar'}
 		    ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

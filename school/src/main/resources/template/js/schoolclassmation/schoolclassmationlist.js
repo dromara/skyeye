@@ -80,7 +80,7 @@ layui.config({
 	            { field: 'floorName', width: 120, title: '教学楼'},
 	            { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
 	        ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 	    });

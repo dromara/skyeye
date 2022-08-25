@@ -39,7 +39,7 @@ layui.config({
 	        { field: 'createName', title: '跟单人', align: 'center', width: 120 },
 	        { field: 'detail', title: '详细内容', align: 'center', width: 220 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

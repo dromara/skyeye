@@ -59,7 +59,7 @@ layui.config({
             }},
             { field: 'operTime', title: '单据日期', align: 'center', width: 180 }
         ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
     });

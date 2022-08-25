@@ -28,7 +28,7 @@ layui.config({
 	        { field: 'logLevel', title: '日志类型', width: 150 },
 	        { field: 'createTime', title: '访问时间', width: 180 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

@@ -84,7 +84,7 @@ layui.config({
 	            { field: 'depotName', title: '仓库', align: 'left', width: 140 },
 	            { field: 'operTime', title: '出库日期', align: 'center', width: 140 }
 	        ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 	    });

@@ -29,7 +29,7 @@ layui.config({
 	        { field: 'desc', title: '描述', align: 'left', width: 400 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 257, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

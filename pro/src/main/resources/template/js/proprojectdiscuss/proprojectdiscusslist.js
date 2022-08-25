@@ -1,6 +1,6 @@
 
-var disRowId = "";//讨论板id
-var rowId = "";//项目id
+var rowId = ""; // 讨论板id
+var proId = ""; // 项目id
 
 layui.config({
 	base: basePath, 
@@ -12,18 +12,18 @@ layui.config({
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
-	rowId = parent.rowId;
+	proId = parent.rowId;
 	
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
 	    url: flowableBasePath + 'prodiscuss001',
-	    where: {rowId: rowId},
+	    where: getTableParams(),
 	    even: true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '主题', align: 'left', width: 300, templet: function (d) {
@@ -34,8 +34,11 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 120 },
 	        { field: 'recoveryTime', title: '最后回复时间', align: 'center', width: 120 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入主题", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -47,7 +50,7 @@ layui.config({
         }
     });
 	
-	//社区发帖
+	// 社区发帖
 	$("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/proprojectdiscuss/proprojectdiscussadd.html",
@@ -60,9 +63,9 @@ layui.config({
 			}});
     });
 	
-	//讨论版详情
+	// 讨论版详情
 	function discussDetails(data) {
-		disRowId = data.id;
+		rowId = data.id;
 		_openNewWindows({
 			url: "../../tpl/proprojectdiscuss/proprojectdiscussdetail.html", 
 			title: data.title,
@@ -73,18 +76,19 @@ layui.config({
 			}});
 	}
 
-	//刷新数据
+	form.render();
+	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
 
     function loadTable() {
-    	table.reloadData("messageTable", {where: {rowId: rowId}});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where: {rowId: rowId}});
-    }
+	function getTableParams() {
+		return $.extend(true, {proId: parent.rowId}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
 
     exports('proprojectdiscusslist', {});
 });

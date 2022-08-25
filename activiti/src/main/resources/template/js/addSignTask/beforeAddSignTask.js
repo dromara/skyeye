@@ -36,7 +36,7 @@ layui.config({
             }},
             { field: 'email', title: '邮箱', align: 'left', width: 200}
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
             soulTable.render(this);
         }

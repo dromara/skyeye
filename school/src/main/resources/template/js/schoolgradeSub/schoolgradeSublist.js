@@ -56,7 +56,7 @@ layui.config({
         			success({skillName: str})
         		}
 		    },
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 		});

@@ -92,7 +92,7 @@ layui.config({
             { field: 'areaName', title: '区域', align: 'left', width: 120},
             { field: 'storeName', title: '保养门店', align: 'left', width: 120}
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

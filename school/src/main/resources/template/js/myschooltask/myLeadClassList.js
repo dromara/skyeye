@@ -69,7 +69,7 @@ layui.config({
 		        }},
 	            { field: 'floorName', width: 120, title: '教学楼'}
 	        ]],
-		    done: function(){
+		    done: function(json) {
 		    	matchingLanguage();
 		    }
 	    });

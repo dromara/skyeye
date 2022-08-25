@@ -18,7 +18,7 @@ var organizationUtil = {
             elem: "#demoTree1",
             url: reqBasePath + 'queryCompanyMationListTree',
             dataStyle: 'layuiStyle',
-            done: function(){
+            done: function(json) {
                 if($("#demoTree1 li").length > 0){
                     $("#demoTree1 li").eq(0).children('div').click();
                 }
@@ -32,7 +32,7 @@ var organizationUtil = {
                 elem: "#demoTree2",
                 url: reqBasePath + 'companydepartment006?companyId=' + choose.nodeId,
                 dataStyle: 'layuiStyle',
-                done: function(){
+                done: function(json) {
                     if($("#demoTree2 li").length > 0){
                         $("#demoTree2 li").eq(0).children('div').click();
                     }
@@ -47,7 +47,7 @@ var organizationUtil = {
                 elem: "#demoTree3",
                 url: reqBasePath + 'companyjob006?departmentId=' + choose.nodeId,
                 dataStyle: 'layuiStyle',
-                done: function(){
+                done: function(json) {
                     if($("#demoTree3 li").length > 0){
                         $("#demoTree3 li").eq(0).children('div').click();
                     }
@@ -63,7 +63,7 @@ var organizationUtil = {
                 url: reqBasePath + 'companyjobscore008?jobId=' + choose.nodeId,
                 dataStyle: 'layuiStyle',
                 method: 'GET',
-                done: function(){
+                done: function(json) {
                     if($("#demoTree4 li").length > 0){
                         $("#demoTree4 li").eq(0).children('div').click();
                     }
@@ -79,7 +79,7 @@ var organizationUtil = {
             elem: "#demoTree1",
             url: reqBasePath + 'queryCompanyMationListTree',
             dataStyle: 'layuiStyle',
-            done: function(){
+            done: function(json) {
                 if($("#demoTree1 li").length > 0){
                     for(var i = 0; i < $("#demoTree1 li").length; i++){
                         if($("#demoTree1 li").eq(i).attr("data-id") == mation.companyId){
@@ -98,7 +98,7 @@ var organizationUtil = {
                 elem: "#demoTree2",
                 url: reqBasePath + 'companydepartment006?companyId=' + choose.nodeId,
                 dataStyle: 'layuiStyle',
-                done: function(){
+                done: function(json) {
                     if($("#demoTree2 li").length > 0){
                         for(var i = 0; i < $("#demoTree2 li").length; i++){
                             if($("#demoTree2 li").eq(i).attr("data-id") == mation.departmentId){
@@ -118,7 +118,7 @@ var organizationUtil = {
                 elem: "#demoTree3",
                 url: reqBasePath + 'companyjob006?departmentId=' + choose.nodeId,
                 dataStyle: 'layuiStyle',
-                done: function(){
+                done: function(json) {
                     if($("#demoTree3 li").length > 0){
                         for(var i = 0; i < $("#demoTree3 li").length; i++){
                             if($("#demoTree3 li").eq(i).attr("data-id") == mation.jobId){
@@ -139,7 +139,7 @@ var organizationUtil = {
                 url: reqBasePath + 'companyjobscore008?jobId=' + choose.nodeId,
                 dataStyle: 'layuiStyle',
                 method: 'GET',
-                done: function(){
+                done: function(json) {
                     if($("#demoTree4 li").length > 0){
                         for(var i = 0; i < $("#demoTree4 li").length; i++){
                             if($("#demoTree4 li").eq(i).attr("data-id") == mation.jobScoreId){

@@ -39,7 +39,7 @@ layui.config({
             }},
             { field: 'createTime', title: systemLanguage["com.skyeye.entryTime"][languageType], width: 150}
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

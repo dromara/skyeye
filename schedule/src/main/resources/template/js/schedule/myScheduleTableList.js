@@ -33,7 +33,7 @@ layui.config({
                 { field: 'scheduleRemindTime', title: '提醒时间', align: 'center', width: 150 },
                 { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 }
             ]],
-            done: function(){
+            done: function(json) {
                 matchingLanguage();
             }
         });

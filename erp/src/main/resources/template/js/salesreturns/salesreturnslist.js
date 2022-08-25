@@ -61,7 +61,7 @@ layui.config({
                 return erpOrderUtil.getProcessInstanceIdBySubmitType(d);
             }}
         ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
     });

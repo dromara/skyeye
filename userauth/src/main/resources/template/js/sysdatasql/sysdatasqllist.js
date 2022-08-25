@@ -29,7 +29,7 @@ layui.config({
 	        { field: 'createTime', title: '备份时间', align: 'center', width: 150 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 220, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

@@ -31,7 +31,7 @@ layui.config({
 			{ field: 'specifications', title: '资产规格', align: 'left', width: 120 },
 			{ field: 'assetAdmin', title: '管理员', align: 'left', width: 120 },
 		]],
-		done: function(){
+		done: function(json) {
 			matchingLanguage();
 		}
 	});

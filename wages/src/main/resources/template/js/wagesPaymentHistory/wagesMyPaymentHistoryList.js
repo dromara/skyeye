@@ -53,7 +53,7 @@ layui.config({
             }},
             { field: 'createTime', title: '核算日期', align: 'center', width: 150 }
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

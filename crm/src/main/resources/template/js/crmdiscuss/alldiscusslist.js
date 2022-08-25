@@ -36,7 +36,7 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 120 },
 	        { field: 'recoveryTime', title: '最后回复时间', align: 'center', width: 120 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

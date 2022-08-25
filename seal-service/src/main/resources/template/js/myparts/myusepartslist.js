@@ -31,7 +31,7 @@ layui.config({
 	        { field: 'unitPrice', title: '单价', align: 'left', width: 100 },
 	        { field: 'operNumber', title: '已用数量', align: 'left', width: 100 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

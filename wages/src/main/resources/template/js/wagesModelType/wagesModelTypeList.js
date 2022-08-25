@@ -41,7 +41,7 @@ layui.config({
             { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 100},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 200, toolbar: '#tableBar'}
         ]],
-        done: function(){
+        done: function(json) {
             matchingLanguage();
         }
     });

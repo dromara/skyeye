@@ -51,7 +51,7 @@ layui.config({
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType],  width: 120 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType],  width: 150 }
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

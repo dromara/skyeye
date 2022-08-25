@@ -38,7 +38,7 @@ layui.config({
 	        { field: 'applyTime', title: '申领时间', align: 'center', width: 140 },
 	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
 	    ]],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	});

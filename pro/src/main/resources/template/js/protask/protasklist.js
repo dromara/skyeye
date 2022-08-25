@@ -69,7 +69,7 @@ layui.config({
     		 	{ field: 'actualWorkload', title: '实际', align: 'center', width: 50}
 			]	    
 	    ],
-	    done: function(){
+	    done: function(json) {
 	    	matchingLanguage();
 	    }
 	}, {

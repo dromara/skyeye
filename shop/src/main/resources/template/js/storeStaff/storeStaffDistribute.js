@@ -44,7 +44,7 @@ layui.config({
                     return '<a lay-event="select" class="notice-title-click">' + d.name + '</a>';
                 }}
             ]],
-            done: function(){
+            done: function(json) {
                 matchingLanguage();
             }
         });
@@ -81,7 +81,7 @@ layui.config({
                 { field: 'jobName', title: '职位', width: 140 },
                 { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 150, toolbar: '#tableBar'}
             ]],
-            done: function(){
+            done: function(json) {
                 matchingLanguage();
             }
         });
