@@ -24,9 +24,7 @@ layui.config({
 	    where: getTableParams(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2},
-	        { field: 'taskName', title: '名称', rowspan: 2, width: 200, templet: function (d) {
-	        	return '<a lay-event="details" class="notice-title-click">' + d.taskName + '</a>';
-	        }},
+	        { field: 'taskName', title: '名称', rowspan: 2, width: 200 },
 	        { field: 'processInstanceId', title: '流程ID', rowspan: 2, width: 70 , templet: function (d) {
 	        	return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        }},

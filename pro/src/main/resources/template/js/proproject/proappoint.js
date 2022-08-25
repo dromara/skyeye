@@ -36,14 +36,14 @@ layui.config({
 				skyeyeEnclosure.showDetails({"businessEnclosureUpload": json.bean.businessEnclosureInfoList});
 
 				ue = ueEditorUtil.initEditor('container');
-				planUe = ueEditorUtil.initEditor('planContainer');
 			    ue.addListener("ready", function () {
 			    	if (!isNull(json.bean.projectContent))
 			    		ue.setContent(json.bean.projectContent);
 			    	else
 			    		ue.setContent("在此处填写您的[分工明细]");
 			    });
-			    
+
+				planUe = ueEditorUtil.initEditor('planContainer');
 			    planUe.addListener("ready", function () {
 			    	if (!isNull(json.bean.planContent))
 			    		planUe.setContent(json.bean.planContent);
@@ -101,10 +101,10 @@ layui.config({
 			    
 			    matchingLanguage();
 		 		form.render();
-		 	    form.on('submit(formAppointBean)', function (data) {
-		 	        if (winui.verifyForm(data.elem)) {
-		 	        	var params = {
-	 	        			rowId: parent.rowId,
+				form.on('submit(formAppointBean)', function (data) {
+					if (winui.verifyForm(data.elem)) {
+						var params = {
+							rowId: parent.rowId,
 							toProjectManager: systemCommonUtil.tagEditorGetAllData('projectManager', toProjectManager), // 项目经理
 							toProjectSponsor: systemCommonUtil.tagEditorGetAllData('projectSponsor', toProjectSponsor), // 项目赞助人
 							toProjectMembers: systemCommonUtil.tagEditorGetAllData('projectMembers', toProjectMembers), // 项目组成员
@@ -112,18 +112,26 @@ layui.config({
 							planEnclosureInfoStr: skyeyeEnclosure.getEnclosureIdsByBoxId('planEnclosureUpload'),
 							projectContent: encodeURIComponent(ue.getContent()),
 							planContent: encodeURIComponent(planUe.getContent())
-	 	 	        	};
-		 	        	if(isNull(params.projectContent)){
-			        		winui.window.msg("请填写业务需求和目标", {icon: 2, time: 2000});
-			        		return false;
-			        	}
-	 	 	        	AjaxPostUtil.request({url: flowableBasePath + "proproject014", params: params, type: 'json', callback: function(json) {
+						};
+						if (isNull(params.toProjectManager)) {
+							winui.window.msg("请选择项目经理", {icon: 2, time: 2000});
+							return false;
+						}
+						if (isNull(params.toProjectMembers)) {
+							winui.window.msg("请选择项目成员", {icon: 2, time: 2000});
+							return false;
+						}
+						if (isNull(params.projectContent)) {
+							winui.window.msg("请填写业务需求和目标", {icon: 2, time: 2000});
+							return false;
+						}
+						AjaxPostUtil.request({url: flowableBasePath + "proproject014", params: params, type: 'json', callback: function (json) {
 							parent.layer.close(index);
 							parent.refreshCode = '0';
-	 		 	   		}});
-		 	        }
-		 	        return false;
-		 	    });
+						}});
+					}
+					return false;
+				});
 		 	}
 		});
 		

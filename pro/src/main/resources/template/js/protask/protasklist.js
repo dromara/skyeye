@@ -29,32 +29,30 @@ layui.config({
 	    where: getTableParams(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers', rowspan: 2},
-	        { field: 'taskName', title: '名称', rowspan: 2, width: 200, templet: function (d) {
-	        	return '<a lay-event="details" class="notice-title-click">' + d.taskName + '</a>';
-	        }},
+	        { field: 'taskName', title: '名称', rowspan: 2, width: 200 },
 	        { field: 'processInstanceId', title: '流程ID', rowspan: 2, width: 70 , templet: function (d) {
 	        	return '<a lay-event="processDetails" class="notice-title-click">' + d.processInstanceId + '</a>';
 	        }},
 	        { field: 'state', title: '审批状态', rowspan: 2, width: 80, templet: function (d) {
-	        	if (d.state == '0'){
-	        		return "草稿";
-	        	} else if (d.state == '1'){
-	        		return "<span class='state-new'>审核中</span>";
-	        	} else if (d.state == '2'){
-	        		return "<span class='state-new'>执行中</span>";
-	        	} else if (d.state == '3'){
-	        		return "<span class='state-new'>执行完成</span>";
-	        	} else if (d.state == '4'){
-	        		return "<span class='state-error'>关闭</span>";
-	        	} else if (d.state == '5'){
-	        		return "<span class='state-error'>撤销</span>";
-	        	} else if (d.state == '6'){
-	        		return "<span class='state-down'>作废</span>";
-	        	} else if (d.state == '11'){
-	        		return "<span class='state-up'>审核通过</span>";
-	        	} else if (d.state == '12'){
-	        		return "<span class='state-down'>审核不通过</span>";
-	        	} 
+				if (d.state == '0') {
+					return "草稿";
+				} else if (d.state == '1') {
+					return "<span class='state-new'>审核中</span>";
+				} else if (d.state == '2') {
+					return "<span class='state-new'>执行中</span>";
+				} else if (d.state == '3') {
+					return "<span class='state-new'>执行完成</span>";
+				} else if (d.state == '4') {
+					return "<span class='state-error'>关闭</span>";
+				} else if (d.state == '5') {
+					return "<span class='state-error'>撤销</span>";
+				} else if (d.state == '6') {
+					return "<span class='state-down'>作废</span>";
+				} else if (d.state == '11') {
+					return "<span class='state-up'>审核通过</span>";
+				} else if (d.state == '12') {
+					return "<span class='state-down'>审核不通过</span>";
+				}
 	        }},
 	        { field: 'projectName', title: '所属项目', rowspan: 2, width: 120 },
 	        { field: 'performId', title: '执行人', rowspan: 2, width: 200 },
