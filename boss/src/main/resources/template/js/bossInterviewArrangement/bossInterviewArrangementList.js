@@ -55,9 +55,9 @@ layui.config({
             edit(data);
         } else if (layEvent === 'sub') { // 提交
             sub(data);
-        } else if (layEven === 'cancellation') { // 作废
+        } else if (layEvent === 'cancellation') { // 作废
             cancellation(data);
-        } else if (layEven === 'inductionResult') { // 入职
+        } else if (layEvent === 'inductionResult') { // 入职
             inductionResult(data);
         }
     });

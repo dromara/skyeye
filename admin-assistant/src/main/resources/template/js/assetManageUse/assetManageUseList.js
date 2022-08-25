@@ -62,11 +62,11 @@ layui.config({
         	lingyongEdit(data);
         } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        } else if (layEven === 'cancellation') {//领用作废
+        } else if (layEvent === 'cancellation') {//领用作废
         	cancellation(data);
-        } else if (layEven === 'lingyongProcessDetails') {//领用流程详情
+        } else if (layEvent === 'lingyongProcessDetails') {//领用流程详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEven === 'revoke') {//撤销领用申请
+        } else if (layEvent === 'revoke') {//撤销领用申请
         	revoke(data);
         }
     });

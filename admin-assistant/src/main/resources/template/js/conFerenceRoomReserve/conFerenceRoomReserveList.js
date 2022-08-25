@@ -65,7 +65,7 @@ layui.config({
         	reserveEdit(data);
         } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        } else if (layEven === 'cancellation') {//预定作废
+        } else if (layEvent === 'cancellation') {//预定作废
         	cancellation(data);
         } else if (layEvent === 'revoke') { //撤销
         	revoke(data);

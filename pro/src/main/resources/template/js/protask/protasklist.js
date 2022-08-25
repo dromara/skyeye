@@ -93,15 +93,15 @@ layui.config({
 			activitiUtil.activitiDetails(data);
         } else if (layEvent === 'executionBegin') {//开始执行
         	executionBegin(data, obj);
-        } else if (layEven === 'revoke') {//撤销任务审批申请
+        } else if (layEvent === 'revoke') {//撤销任务审批申请
         	revoke(data);
-        } else if (layEven === 'taskSplit') {//拆分任务
+        } else if (layEvent === 'taskSplit') {//拆分任务
         	taskSplit(data);
-        } else if (layEven === 'cancellation') {//作废
+        } else if (layEvent === 'cancellation') {//作废
         	cancellation(data, obj);
-        } else if (layEven === 'executionOver') {//执行完成
+        } else if (layEvent === 'executionOver') {//执行完成
         	executionOver(data);
-        } else if (layEven === 'executionClose') {//任务关闭
+        } else if (layEvent === 'executionClose') {//任务关闭
         	executionClose(data, obj);
         }
     });

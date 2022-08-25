@@ -62,21 +62,21 @@ layui.config({
 	        }},
 			{ field: 'jobNumber', title: '工号', rowspan: '3', align: 'left', width: 100, fixed: 'left'},
 	        { field: 'staffType', title: '类型', rowspan: '3', align: 'left', width: 90, templet: function (d) {
-	        	if(d.staffType == 1){
-	        		return '普通员工';
-	        	}else if(d.staffType == 2){
-	        		return '教职工';
-	        	} else {
-	        		return '参数错误';
-	        	}
+				if (d.staffType == 1) {
+					return '普通员工';
+				} else if (d.staffType == 2) {
+					return '教职工';
+				} else {
+					return '参数错误';
+				}
 	        }},
 	        { field: 'email', title: '邮箱', rowspan: '3', align: 'left', width: 170 },
 	        { field: 'userPhoto', title: '头像', rowspan: '3', align: 'center', width: 60, templet: function (d) {
-	        	if(isNull(d.userPhoto)){
-	        		return '<img src="../../assets/images/os_windows.png" class="photo-img">';
-	        	} else {
-	        		return '<img src="' + systemCommonUtil.getFilePath(d.userPhoto) + '" class="photo-img" lay-event="userPhoto">';
-	        	}
+				if (isNull(d.userPhoto)) {
+					return '<img src="../../assets/images/os_windows.png" class="photo-img">';
+				} else {
+					return '<img src="' + systemCommonUtil.getFilePath(d.userPhoto) + '" class="photo-img" lay-event="userPhoto">';
+				}
 	        }},
 			{ field: 'userId', title: '系统账号', rowspan: '3', align: 'center', width: 80, templet: function (d) {
 				if (!isNull(d.userId)){

@@ -201,17 +201,19 @@ layui.config({
 		});
 
 		// 加载流程图片
-		$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date()/3600000));
+		$("#processInstanceIdImg").attr("src", fileBasePath + 'images/upload/activiti/' + processInstanceId + ".png?cdnversion=" + Math.ceil(new Date() / 3600000));
 
-		// 是否委派，如果是委派||并行会签的子实例，则不需要选择下一个节点的审批人
-		if(!j.bean.delegation && !isNull(String(j.bean.multilnStanceExecttionChild)) && !j.bean.multilnStanceExecttionChild){
+		// 如果是多实体会签 && 该节点已经是最后一个人审批则可以选择审批人
+		// 如果是单实例节点 && 当前节点不是委派节点 && 有下个节点则可以选择审批人
+		if ((j.bean.isMultiInstance && !isNull(String(j.bean.multilnStanceExecttionChild)) && !j.bean.multilnStanceExecttionChild)
+			|| (!j.bean.delegation && !j.bean.isMultiInstance && !isNull(String(j.bean.nextTask)) && j.bean.nextTask)) {
 			// 加载下个节点审批人选择信息
 			activitiUtil.initApprovalPerson("approvalOpinionDom", processInstanceId, taskId, $("input[name='flag']:checked").val());
 		}
 
 		// 并行会签的子实例，不支持工作流的其他操作
-		if(!j.bean.multilnStanceExecttionChild){
-			activitiUtil.activitiMenuOperator("otherMenuOperator", j.bean, function (){
+		if (!j.bean.multilnStanceExecttionChild) {
+			activitiUtil.activitiMenuOperator("otherMenuOperator", j.bean, function () {
 				parent.layer.close(index);
 				parent.refreshCode = '0';
 			});
@@ -220,7 +222,7 @@ layui.config({
 		}
 
 		// 加载会签信息
-		if(j.bean.isMultiInstance){
+		if (j.bean.isMultiInstance) {
 			$("#multiInstanceBox").html(getDataUseHandlebars($("#multiInstance").html(), j));
 			$("#multiInstanceState").html('已开启');
 			if(j.bean.nrOfInstances != 0){
@@ -341,7 +343,7 @@ layui.config({
 	    			pageTypes: pageTypes,
 					approverId: activitiUtil.getApprovalPersonId()
 	            };
-	            AjaxPostUtil.request({url:flowableBasePath + "activitimode005", params: jStr, type: 'json', callback: function (json) {
+	            AjaxPostUtil.request({url: flowableBasePath + "activitimode005", params: jStr, type: 'json', callback: function (json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';
 	 	   		}});

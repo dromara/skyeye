@@ -26,6 +26,7 @@ layui.config({
 		id: "assetReportList",
 		cols: [
 			{id: 'assetReportId', title: '资产', formType: 'chooseInput', width: '150', iconClassName: 'chooseAssetReportBtn', verify: 'required'},
+			{id: 'specifications', title: '规格', formType: 'detail', width: '150'},
 			{id: 'assetNum', title: '编号', formType: 'detail', width: '150'},
 			{id: 'assetImg', title: '图片', formType: 'detail', width: '80'},
 			{id: 'storageArea', title: '存放区域', formType: 'detail', width: '150'},
@@ -106,6 +107,7 @@ layui.config({
 			// 获取表格行号
 			var thisRowKey = trId.replace("tr", "");
 			$("#assetReportId" + thisRowKey.toString()).val(checkAssetReportMation.assetName);
+			$("#specifications" + thisRowKey.toString()).html(checkAssetReportMation.specifications);
 			$("#assetNum" + thisRowKey.toString()).html(checkAssetReportMation.assetNum);
 			$("#assetImg" + thisRowKey.toString()).html('<img src="' + systemCommonUtil.getFilePath(checkAssetReportMation.assetImg) + '" class="photo-img">');
 			$("#storageArea" + thisRowKey.toString()).html(checkAssetReportMation.storageArea);

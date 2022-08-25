@@ -342,6 +342,9 @@ var systemCommonUtil = {
      * @param url
      */
     getFilePath: function (url) {
+        if (isNull(url)) {
+            return "";
+        }
         if (url.startsWith("../../assets/")) {
             return homePagePath + url;
         } else {

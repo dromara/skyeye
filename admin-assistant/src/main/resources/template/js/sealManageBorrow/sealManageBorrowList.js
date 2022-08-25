@@ -64,9 +64,9 @@ layui.config({
         	borrowEdit(data);
         } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        } else if (layEven === 'cancellation') {//借用作废
+        } else if (layEvent === 'cancellation') {//借用作废
         	cancellation(data);
-        } else if (layEven === 'revoke') {//撤销
+        } else if (layEvent === 'revoke') {//撤销
         	revoke(data);
         }
     });

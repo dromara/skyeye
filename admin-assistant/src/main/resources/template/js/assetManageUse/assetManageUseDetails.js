@@ -20,5 +20,10 @@ layui.config({
 			matchingLanguage();
 	    }});
 
+		// 图片查看
+		$("body").on("click", ".photo-img", function() {
+			systemCommonUtil.showPicImg($(this).attr("src"));
+		});
+
 	});
 });
