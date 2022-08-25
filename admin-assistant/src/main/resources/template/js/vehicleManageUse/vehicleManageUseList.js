@@ -59,11 +59,11 @@ layui.config({
         	vehicleEdit(data);
         } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        } else if (layEven === 'cancellation') { //用车申请作废
+        } else if (layEvent === 'cancellation') { //用车申请作废
         	cancellation(data);
-        } else if (layEven === 'processDetails') { //用车申请详情
+        } else if (layEvent === 'processDetails') { //用车申请详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEven === 'revoke') { //撤销用车申请
+        } else if (layEvent === 'revoke') { //撤销用车申请
         	revoke(data);
         }
     });

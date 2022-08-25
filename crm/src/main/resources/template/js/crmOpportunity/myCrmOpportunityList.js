@@ -86,11 +86,11 @@ layui.config({
         	discussDetails(data);
         } else if (layEvent === 'subApproval') { //提交审批
         	subApproval(data);
-        } else if (layEven === 'processDetails') {//流程详情
+        } else if (layEvent === 'processDetails') {//流程详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEven === 'stateChange') {//审核通过后的状态变更
+        } else if (layEvent === 'stateChange') {//审核通过后的状态变更
         	stateChange(data);
-        } else if (layEven === 'revoke') {//撤销商机审批申请
+        } else if (layEvent === 'revoke') {//撤销商机审批申请
         	revoke(data);
         }
     });
@@ -156,7 +156,6 @@ layui.config({
 			title: data.title + "-讨论版",
 			pageId: "discussDetails",
 			area: ['90vw', '90vh'],
-			maxmin: true,
 			callBack: function (refreshCode) {
 			}});
 	}

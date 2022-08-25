@@ -38,52 +38,52 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '公告标题', align: 'left', width: 180, templet: function (d) {
-		        	return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
+				return '<a lay-event="details" class="notice-title-click">' + d.title + '</a>';
 		    }},
 	        { field: 'state', title: '状态', width: 80, align: 'center', templet: function (d) {
-	        	if(d.state == '3'){
-	        		return "<span class='state-down'>下线</span>";
-	        	}else if(d.state == '2'){
-	        		return "<span class='state-up'>上线</span>";
-	        	}else if(d.state == '1'){
-	        		return "<span class='state-new'>新建</span>";
-	        	}
+				if (d.state == '3') {
+					return "<span class='state-down'>下线</span>";
+				} else if (d.state == '2') {
+					return "<span class='state-up'>上线</span>";
+				} else if (d.state == '1') {
+					return "<span class='state-new'>新建</span>";
+				}
 	        }},
 	        { field: 'typeName', title: '一级分类', align: 'center', width: 120 },
 	        { field: 'secondTypeName', title: '二级分类', align: 'center', width: 120 },
 	        { field: 'whetherEmail', title: '邮件通知', width: 80, align: 'center', templet: function (d) {
-	        	if(d.whetherEmail == '1'){
-	        		return "否";
-	        	}else if(d.whetherEmail == '2'){
-	        		return "是";
-	        	}
+				if (d.whetherEmail == '1') {
+					return "否";
+				} else if (d.whetherEmail == '2') {
+					return "是";
+				}
 	        }},
 	        { field: 'timeSend', title: '定时任务', width: 80, align: 'center', templet: function (d) {
-	        	if(d.timeSend == '1'){
-	        		return "-";
-	        	}else if(d.timeSend == '2'){
-	        		return d.delayedTime;
-	        	}else if(d.timeSend == '3'){
-	        		return "已失效";
-	        	}else if(d.timeSend == '4'){
-	        		return "已执行";
-	        	}
+				if (d.timeSend == '1') {
+					return "-";
+				} else if (d.timeSend == '2') {
+					return d.delayedTime;
+				} else if (d.timeSend == '3') {
+					return "已失效";
+				} else if (d.timeSend == '4') {
+					return "已执行";
+				}
 	        }},
-	        { field: 'sendType', title: '群发类型', width: 80, align: 'center', templet: function (d) {
-	        	if(d.sendType == '1'){
-	        		return "群发所有人";
-	        	}else if(d.sendType == '2'){
-	        		return "选择性群发";
-	        	}
+	        { field: 'sendType', title: '群发类型', width: 120, align: 'center', templet: function (d) {
+				if (d.sendType == '1') {
+					return "群发所有人";
+				} else if (d.sendType == '2') {
+					return "选择性群发";
+				}
 	        }},
 	        { field: 'realLinesType', title: '上线类型', width: 80, align: 'center', templet: function (d) {
-	        	if(d.realLinesType == '1'){
-	        		return "手动上线";
-	        	}else if(d.realLinesType == '2'){
-	        		return "定时上线";
-	        	} else {
-	        		return "";
-	        	}
+				if (d.realLinesType == '1') {
+					return "手动上线";
+				} else if (d.realLinesType == '2') {
+					return "定时上线";
+				} else {
+					return "";
+				}
 	        }},
 	        { field: 'realLinesTime', title: '上线时间', align: 'center', width: 150 },
 	        { field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], align: 'left', width: 120 },

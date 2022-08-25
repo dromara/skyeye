@@ -58,9 +58,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'details') { // 详情
             details(data);
-        } else if (layEven === 'processDetails') { // 流程详情
+        } else if (layEvent === 'processDetails') { // 流程详情
             activitiUtil.activitiDetails(data);
-        } else if (layEven === 'setPersonLiable') { // 设置责任人
+        } else if (layEvent === 'setPersonLiable') { // 设置责任人
             setPersonLiable(data);
         }
     });

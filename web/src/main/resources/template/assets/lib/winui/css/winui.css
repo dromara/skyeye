@@ -7766,13 +7766,13 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 }
 
 .disreplay .user-info{
-	width: 70px;
+	width: 90px;
 	height: 80px;
 	float: left;
 }
 
 .disreplay .user-info .user-photo{
-	width: 70px;
+	width: 100%;
 	height: 70px;
 	float: left;
 	text-align: center;
@@ -7782,18 +7782,17 @@ select[multiple]+.layui-form-select .layui-form-checkbox[lay-skin=primary] i{ po
 	width: 60px;
 	height: 60px;
 	margin-top: 5px;
-	float: left;
 }
 
 .disreplay .user-info .user-name{
-	width: 70px;
+	width: 100%;
 	height: 10px;
 	float: left;
 	text-align: center;
 }
 
 .disreplay .replay-content{
-	width: calc(100% - 170px);
+	width: calc(100% - 190px);
 	float: left;
 	height: auto;
 	min-height: 80px;

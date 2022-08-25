@@ -9,7 +9,6 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
@@ -31,7 +30,7 @@ layui.config({
 	        { field: 'title', title: '主题', align: 'left', width: 300, templet: function (d) {
 	        	return '<a lay-event="discussDetails" class="notice-title-click">' + d.title + '</a>';
 	        }},
-	        { field: 'createName', title: '作者', align: 'left', width: 80 },
+	        { field: 'createName', title: '作者', align: 'left', width: 120 },
 	        { field: 'replyNum', title: '回复', align: 'left', width: 80 },
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 120 },
 	        { field: 'recoveryTime', title: '最后回复时间', align: 'center', width: 120 }
@@ -55,7 +54,7 @@ layui.config({
 			url: "../../tpl/crmdiscuss/discussadd.html",
 			title: "社区发帖",
 			pageId: "discussadd",
-			area: ['80vw', '90vh'],
+			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
@@ -69,7 +68,7 @@ layui.config({
 			url: "../../tpl/crmdiscuss/discussdetail.html", 
 			title: data.title,
 			pageId: "discussdetailpage",
-			maxmin: true,
+			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 			}});
