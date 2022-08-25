@@ -38,7 +38,7 @@ layui.config({
 		form.render('select');
 	});
 
-	function initloadTable() {
+	function initLoadTable() {
 		table.render({
 		    id: 'messageTable',
 		    elem: '#messageTable',
