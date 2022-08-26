@@ -55,7 +55,8 @@ layui.config({
 	        { field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], rowspan: 2, width: 115 },
 	        { field: 'startTime', title: '开始时间', rowspan: 2, width: 80 },
 	        { field: 'startTime', title: '结束时间', rowspan: 2, width: 80 },
-	        { title: '工作量(天)', width: 150, align: 'center', colspan: '2' }
+	        { title: '工作量(天)', width: 150, align: 'center', colspan: '2' },
+			{ title: systemLanguage["com.skyeye.operation"][languageType], align: 'center', width: 100, rowspan: 2, toolbar: '#tableBar' }
 	    ],
 	    	[
 				{ field: 'estimatedWorkload', title: '预估', align: 'center', width: 60},
