@@ -155,15 +155,15 @@ layui.config({
 			var layEvent = obj.event;
 			if (layEvent === 'fullTime') { 
 				detail(data, '1');
-			} else if (layEven === 'absenteeism'){ 
+			} else if (layEvent === 'absenteeism'){
 				detail(data, '2');
-			} else if (layEven === 'lackTime'){ 
+			} else if (layEvent === 'lackTime'){
 				detail(data, '3');
-			} else if (layEven === 'late'){ 
+			} else if (layEvent === 'late'){
 				detail(data, '4');
-			} else if (layEven === 'leaveEarly'){ 
+			} else if (layEvent === 'leaveEarly'){
 				detail(data, '5');
-			} else if (layEven === 'missing'){ 
+			} else if (layEvent === 'missing'){
 				detail(data, '6');
 			}
 		});

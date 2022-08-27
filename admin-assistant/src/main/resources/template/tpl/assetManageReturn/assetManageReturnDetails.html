@@ -49,29 +49,31 @@
 		    <div class="layui-form-item layui-col-xs12">
 		        <label class="layui-form-label">资产：</label>
 		        <div class="layui-input-block">
-		            <table class="layui-table">
-		                <thead>
-		                    <tr>
-		                        <th>资产类别</th>
-		                        <th>资产名称</th>
-		                        <th style="min-width: 100px;">规格</th>
-		                        <th style="min-width: 100px;">编号</th>
-								<th>状态</th>
-								<th>备注</th>
-		                    </tr>
-		                </thead>
-		                <tbody id="useTable" class="insurance-table">
-							{{#each goods}}
-								<tr>
-									<td>{{typeName}}</td>
-									<td>{{assetName}}</td>
-									<td>{{specificationsName}}</td>
-									<td>{{assetNum}}</td>
-									<td>{{stateName}}</td>
-									<td>{{remark}}</td>
-								</tr>
-							{{/each}}
-		                </tbody>
+					<table class="layui-table">
+						<thead>
+						<tr>
+							<th>资产</th>
+							<th style="width: 150px;">规格</th>
+							<th style="width: 150px;">编号</th>
+							<th style="width: 80px;">图片</th>
+							<th style="width: 150px;">存放区域</th>
+							<th>状态</th>
+							<th>备注</th>
+						</tr>
+						</thead>
+						<tbody id="useTable" class="insurance-table">
+						{{#each goods}}
+						<tr>
+							<td>{{assetName}}</td>
+							<td>{{specifications}}</td>
+							<td>{{assetNum}}</td>
+							<td><img src="{{assetImg}}" class="photo-img"></td>
+							<td>{{storageArea}}</td>
+							<td>{{stateName}}</td>
+							<td>{{remark}}</td>
+						</tr>
+						{{/each}}
+						</tbody>
 					</table>
 		        </div>
 		    </div>

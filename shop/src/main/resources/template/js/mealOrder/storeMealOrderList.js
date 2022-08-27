@@ -82,15 +82,15 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'delete') { // 删除
             delet(data);
-        } else if (layEven == 'select'){ // 详情
+        } else if (layEvent == 'select'){ // 详情
             select(data)
-        } else if (layEven == 'complatePay'){ // 完成支付
-            complatePay(data)
-        } else if (layEven == 'cancleOrder'){ // 取消订单
+        } else if (layEvent == 'complatePay'){ // 完成支付
+            layEvent(data)
+        } else if (layEvent == 'cancleOrder'){ // 取消订单
             cancleOrder(data)
-        } else if (layEven == 'refundMealOrder'){ // 退款
+        } else if (layEvent == 'refundMealOrder'){ // 退款
             refundMealOrder(data)
-        } else if (layEven == 'cancleRefundMealOrder'){ // 取消退款
+        } else if (layEvent == 'cancleRefundMealOrder'){ // 取消退款
             cancleRefundMealOrder(data)
         }
     });

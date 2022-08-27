@@ -62,11 +62,11 @@ layui.config({
         	returnEdit(data);
         } else if (layEvent === 'returnSubApproval') { //归还提交审批
         	returnSubApproval(data);
-        } else if (layEven === 'returnCancellation') {//归还作废
+        } else if (layEvent === 'returnCancellation') {//归还作废
         	returnCancellation(data);
-        } else if (layEven === 'returnProcessDetails') {//归还流程详情
+        } else if (layEvent === 'returnProcessDetails') {//归还流程详情
 			activitiUtil.activitiDetails(data);
-        } else if (layEven === 'returnRevoke') {//撤销归还申请
+        } else if (layEvent === 'returnRevoke') {//撤销归还申请
         	returnRevoke(data);
         }
     });

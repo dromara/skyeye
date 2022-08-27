@@ -92,9 +92,9 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'rejection') { // 驳回
             rejection(data);
-        } else if (layEven == 'select'){ // 详情
+        } else if (layEvent == 'select'){ // 详情
             select(data)
-        } else if (layEven == 'pass'){ // 退款
+        } else if (layEvent == 'pass'){ // 退款
             pass(data)
         }
     });

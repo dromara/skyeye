@@ -105,7 +105,7 @@ layui.config({
 			var layEvent = obj.event;
 			if (layEvent === 'approve') { //审批员工的申诉申请
 				approve(data);
-			} else if (layEven === 'appealdetails'){ //员工的申诉申请详情
+			} else if (layEvent === 'appealdetails'){ //员工的申诉申请详情
 				appealdetails(data);
 			}
 		});

@@ -56,7 +56,7 @@ layui.config({
         var layEvent = obj.event;
         if(layEvent === 'delet'){ // 删除
             delet(data);
-        } else if (layEven === 'edit'){ // 编辑
+        } else if (layEvent === 'edit'){ // 编辑
             edit(data);
         } else if (layEvent === 'details') { // 详情
             details(data);

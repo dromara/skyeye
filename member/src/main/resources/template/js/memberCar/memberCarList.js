@@ -61,13 +61,13 @@ layui.config({
             editmember(data);
         } else if (layEvent === 'delete') { //删除
             deletemember(data);
-        } else if (layEven == 'select'){ //详情
+        } else if (layEvent == 'select'){ //详情
             selectMember(data)
         } else if (layEvent === 'enabled') { // 启用
             editEnabled(data);
-        } else if (layEven == 'unenabled'){ // 禁用
+        } else if (layEvent == 'unenabled'){ // 禁用
             editNotEnabled(data)
-        } else if (layEven == 'transferCar'){ // 过户
+        } else if (layEvent == 'transferCar'){ // 过户
             transferCar(data)
         }
     });

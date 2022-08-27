@@ -1,6 +1,4 @@
 
-var assetList = new Array(); //资产集合
-
 // 资产归还
 layui.config({
 	base: basePath,
@@ -12,72 +10,40 @@ layui.config({
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
 		form = layui.form;
-	var rowNum = 1; //表格的序号
-	var typeHtml = "";
 
-	var returntableTemplate = $("#returntableTemplate").html();
-	var selOption = getFileContent('tpl/template/select-option.tpl');
+	var allChooseAssetReport = {};
 
 	// 获取当前登录员工信息
 	systemCommonUtil.getSysCurrentLoginUserMation(function (data) {
 		$("#useTitle").html("资产归还申请单-" + getYMDFormatDate() + '-' + data.bean.userName);
 		$("#useName").html(data.bean.userName);
 	});
-	initTypeHtml();
-
-	function initTypeHtml() {
-		// 资产类型
-		sysDictDataUtil.queryDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], function (data) {
-			typeHtml = getDataUseHandlebars(selOption, data);
-		});
-		form.render();
-		//类型加载变化事件
-		form.on('select(selectTypeProperty)', function(data) {
-			var thisRowNum = data.elem.id.replace("typeId", "");
-			var thisRowValue = data.value;
-			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
-				if(inPointArray(thisRowValue, assetList)) {
-					//类型对应的资产存在js对象中
-					var list = getListPointArray(thisRowValue, assetList);
-					resetAssetList(thisRowNum, list); //重置选择行的资产列表
-				} else {
-					//类型对应的资产不存在js对象中
-					AjaxPostUtil.request({url: flowableBasePath + "asset026", params: {typeId: thisRowValue}, type: 'json', callback: function(json) {
-						assetList.push({
-							id: thisRowValue,
-							list: json.rows
-						});
-						resetAssetList(thisRowNum, json.rows); //重置选择行的资产列表
-					}});
-				}
-			}
-		});
-
-		//商品加载变化事件
-		form.on('select(selectAssetarProperty)', function(data) {
-			var thisRowNum = data.elem.id.replace("assetId", "");
-			var thisRowValue = data.value;
-			var thisRowTypeChooseId = $("#typeId" + thisRowNum).val();
-			if (!isNull(thisRowValue) && thisRowValue != '请选择') {
-				var list = getListPointArray(thisRowTypeChooseId, assetList);
-				$.each(list, function(i, item) {
-					if(item.id === thisRowValue) {
-						$("#specificationsName" + thisRowNum).html(item.specificationsName);
-						$("#assetNum" + thisRowNum).html(item.assetNum);
-						return false;
-					}
-				});
-			} else {
-				$("#specificationsName" + thisRowNum).html(""); //重置规格为空
-				$("#assetNum" + thisRowNum).html(""); //重置编号为空
-			}
-		});
-		// 初始化一行数据
-		addRow();
-		matchingLanguage();
-	}
 
 	skyeyeEnclosure.init('enclosureUpload');
+
+	// 资产
+	initTableChooseUtil.initTable({
+		id: "assetReportList",
+		cols: [
+			{id: 'assetReportId', title: '资产', formType: 'chooseInput', width: '150', iconClassName: 'chooseMyUseAssetReportBtn', verify: 'required'},
+			{id: 'specifications', title: '规格', formType: 'detail', width: '150'},
+			{id: 'assetNum', title: '编号', formType: 'detail', width: '150'},
+			{id: 'assetImg', title: '图片', formType: 'detail', width: '80'},
+			{id: 'storageArea', title: '存放区域', formType: 'detail', width: '150'},
+			{id: 'remark', title: '备注', formType: 'input', width: '100'}
+		],
+		deleteRowCallback: function (trcusid) {
+			delete allChooseAssetReport[trcusid];
+		},
+		addRowCallback: function (trcusid) {
+		},
+		form: form,
+		minData: 1
+	});
+
+	matchingLanguage();
+	form.render();
+
 	// 保存为草稿
 	form.on('submit(formAddBean)', function(data) {
 		if(winui.verifyForm(data.elem)) {
@@ -97,29 +63,26 @@ layui.config({
 	});
 
 	function saveData(subType, approvalId) {
-		// 获取已选资产数据
-		var rowTr = $("#returnTable tr");
-		if(rowTr.length == 0) {
-			winui.window.msg('请选择需要归还的资产~', {icon: 2, time: 2000});
+		var result = initTableChooseUtil.getDataList('assetReportList');
+		if (!result.checkResult) {
 			return false;
 		}
 		var tableData = new Array();
-		var noError = false; //循环遍历表格数据时，是否有其他错误信息
-		$.each(rowTr, function(i, item) {
-			var rowNum = $(item).attr("trcusid").replace("tr", "");
-			if(inTableDataArrayByAssetarId($("#assetId" + rowNum).val(), tableData)){
-				winui.window.msg('归还单存在相同的资产', {icon: 2, time: 2000});
+		var noError = false;
+		$.each(result.dataList, function(i, item) {
+			// 获取行编号
+			var thisRowKey = item["trcusid"].replace("tr", "");
+
+			var assetReport = allChooseAssetReport["tr" + thisRowKey];
+			if (judgeInPoingArr(tableData, "assetReportId", assetReport.id)) {
+				winui.window.msg('领用单存在相同的资产', {icon: 2, time: 2000});
 				noError = true;
 				return false;
 			}
-			var row = {
-				typeId: $("#typeId" + rowNum).val(),
-				assetId: $("#assetId" + rowNum).val(),
-				remark: $("#remark" + rowNum).val()
-			};
-			tableData.push(row);
+			item["assetReportId"] = assetReport.id;
+			tableData.push(item);
 		});
-		if(noError) {
+		if (noError) {
 			return false;
 		}
 
@@ -137,93 +100,25 @@ layui.config({
 		}});
 	}
 
-	//判断选中的资产是否也在数组中
-	function inTableDataArrayByAssetarId(str, array) {
-		var isIn = false;
-		$.each(array, function(i, item) {
-			if(item.assetId === str) {
-				isIn = true;
-				return false;
-			}
+	$("body").on("click", ".chooseMyUseAssetReportBtn", function() {
+		var trId = $(this).parent().parent().attr("trcusid");
+		adminAssistantUtil.myUseAssetReportCheckType = false; // 选择类型，默认单选，true:多选，false:单选
+		adminAssistantUtil.openMyUseAssetReportChoosePage(function (checkMyUseAssetReportMation) {
+			// 获取表格行号
+			var thisRowKey = trId.replace("tr", "");
+			$("#assetReportId" + thisRowKey.toString()).val(checkMyUseAssetReportMation.assetName);
+			$("#specifications" + thisRowKey.toString()).html(checkMyUseAssetReportMation.specifications);
+			$("#assetNum" + thisRowKey.toString()).html(checkMyUseAssetReportMation.assetNum);
+			$("#assetImg" + thisRowKey.toString()).html('<img src="' + systemCommonUtil.getFilePath(checkMyUseAssetReportMation.assetImg) + '" class="photo-img">');
+			$("#storageArea" + thisRowKey.toString()).html(checkMyUseAssetReportMation.storageArea);
+			allChooseAssetReport[trId] = checkMyUseAssetReportMation;
 		});
-		return isIn;
-	}
-
-	//新增行
-	$("body").on("click", "#addRow", function() {
-		addRow();
 	});
 
-	//删除行
-	$("body").on("click", "#deleteRow", function() {
-		deleteRow();
+	// 图片查看
+	$("body").on("click", ".photo-img", function() {
+		systemCommonUtil.showPicImg($(this).attr("src"));
 	});
-
-	//新增行
-	function addRow() {
-		var par = {
-			id: "row" + rowNum.toString(), //checkbox的id
-			trId: "tr" + rowNum.toString(), //行的id
-			typeId: "typeId" + rowNum.toString(), //类型id
-			assetId: "assetId" + rowNum.toString(), //资产id
-			specificationsName: "specificationsName" + rowNum.toString(), //规格id
-			assetNum: "assetNum" + rowNum.toString(), //库存id
-			remark: "remark" + rowNum.toString() //备注id
-		};
-		$("#returnTable").append(getDataUseHandlebars(returntableTemplate, par));
-		//赋值给资产类别
-		$("#" + "typeId" + rowNum.toString()).html(typeHtml);
-		form.render('select');
-		form.render('checkbox');
-		rowNum++;
-	}
-
-	//删除行
-	function deleteRow() {
-		var checkRow = $("#returnTable input[type='checkbox'][name='tableCheckRow']:checked");
-		if(checkRow.length > 0) {
-			$.each(checkRow, function(i, item) {
-				$(item).parent().parent().remove();
-			});
-		} else {
-			winui.window.msg('请选择要删除的行', {icon: 2, time: 2000});
-		}
-	}
-
-	//根据类型重置资产列表
-	function resetAssetList(thisRowNum, list) {
-		var sHtml = getDataUseHandlebars(selOption, {
-			rows: list
-		});
-		$("#assetId" + thisRowNum).html(sHtml); //重置商品列表下拉框
-		$("#specificationsName" + thisRowNum).html(""); //重置规格为空
-		$("#assetNum" + thisRowNum).html(""); //重置编号为空
-		form.render('select');
-	}
-
-	//判断是否在数组中
-	function inPointArray(str, array) {
-		var isIn = false;
-		$.each(array, function(i, item) {
-			if(item.id === str) {
-				isIn = true;
-				return false;
-			}
-		});
-		return isIn;
-	}
-
-	//获取指定key对应的集合
-	function getListPointArray(str, array) {
-		var isList = [];
-		$.each(array, function(i, item) {
-			if(item.id === str) {
-				$.extend(true, isList, item.list);
-				return false;
-			}
-		});
-		return isList;
-	}
 
 	$("body").on("click", "#cancle", function() {
 		parent.layer.close(index);

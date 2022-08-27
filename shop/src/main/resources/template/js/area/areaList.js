@@ -45,7 +45,7 @@ layui.config({
             edit(data);
         } else if (layEvent === 'delete') { // 删除
             delet(data);
-        } else if (layEven == 'select'){ // 详情
+        } else if (layEvent == 'select'){ // 详情
             select(data)
         }
     });

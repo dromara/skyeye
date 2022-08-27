@@ -65,11 +65,11 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'repeal') { //撤回
 	        	repeal(data);
-	        } else if (layEven === 'reading'){ //阅读日志详情
+	        } else if (layEvent === 'reading'){ //阅读日志详情
 	        	reading(data);
-	        } else if (layEven === 'mydel'){ //删除我发送的日志
+	        } else if (layEvent === 'mydel'){ //删除我发送的日志
 	        	mydel(data);
-	        } else if (layEven === 'send'){ //发送我撤回的日志
+	        } else if (layEvent === 'send'){ //发送我撤回的日志
 	        	send(data);
 	        }
 	    });

@@ -89,7 +89,7 @@ layui.config({
 		var layEvent = obj.event;
 		if (layEvent === 'details'){ // 详情
 			details(data);
-		} else if (layEven === 'stateChange'){// 状态变更
+		} else if (layEvent === 'stateChange'){// 状态变更
 			stateChange(data);
 		}
 	});

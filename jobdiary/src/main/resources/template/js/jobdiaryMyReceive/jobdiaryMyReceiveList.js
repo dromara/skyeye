@@ -101,7 +101,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'read') { //阅读
         	read(data);
-        } else if (layEven === 'del'){  //删除
+        } else if (layEvent === 'del'){  //删除
         	del(data);
         }
     });

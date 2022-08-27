@@ -65,9 +65,9 @@ layui.config({
         	revertEdit(data);
         } else if (layEvent === 'revertsubapproval') { //提交审批
         	revertSubApproval(data);
-        } else if (layEven === 'revertcancellation') {//归还作废
+        } else if (layEvent === 'revertcancellation') {//归还作废
         	revertCancellation(data);
-        } else if (layEven === 'revertrevoke') {//撤销
+        } else if (layEvent === 'revertrevoke') {//撤销
         	revertrevoke(data);
         }
     });

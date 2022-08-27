@@ -1,6 +1,4 @@
 
-var rowId = "";
-
 layui.config({
 	base: basePath, 
 	version: skyeyeVersion
@@ -37,6 +35,9 @@ layui.config({
 		]],
 		done: function(json) {
 			matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入资产名称，资产编号", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 		}
 	});
 
@@ -48,31 +49,17 @@ layui.config({
 		}
 	});
 
-    $("body").on("click", "#reloadmessageTable", function() {
+	form.render();
+	$("body").on("click", "#reloadmessageTable", function() {
     	loadTable();
     });
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-		if (winui.verifyForm(data.elem)) {
-			refreshTable();
-		}
-		return false;
-	});
 
     function loadTable() {
     	table.reloadData("messageTable", {where: getTableParams()});
     }
 
-	function refreshTable(){
-		table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
-	}
-    
     function getTableParams() {
-    	return {
-			assetName: $("#assetName").val(),
-			assetNum: $("#assetNum").val(),
-			specifications: $("#specifications").val()
-    	};
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
     }
     
     exports('myAssetManagement', {});

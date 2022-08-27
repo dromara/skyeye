@@ -11,7 +11,6 @@
 - [项目功能结构](https://docs.qq.com/flowchart/DYUFQQnlCUm9Ua2FI)
 - [企业版信息以及价格表](https://docs.qq.com/doc/DQlRxcVRMWWVjbU1i?_from=1&disableReturnList=1)
 - `企业版所有功能部署包`以及`设计思路`获取方式：扫码进入知识星球
-- **最低1.8W即可获得企业版所有源代码**
 - **五人团已凑齐三人，差两人开团**
 - 作者本人承诺，知识星球人数达到1000人，即开放所有功能模块源代码(仅供星球内部成员使用)
 

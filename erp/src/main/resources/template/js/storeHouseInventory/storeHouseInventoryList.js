@@ -92,7 +92,7 @@ layui.config({
 	        var layEvent = obj.event;
 	        if (layEvent === 'details') { //详情
 	        	details(data);
-	        } else if (layEven === 'historyDetails'){ // 盘点历史
+	        } else if (layEvent === 'historyDetails'){ // 盘点历史
 	        	historyDetails(data);
 	        }
 	    });

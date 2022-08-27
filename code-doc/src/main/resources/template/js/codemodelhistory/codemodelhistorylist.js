@@ -42,7 +42,7 @@ layui.config({
         var layEvent = obj.event;
         if (layEvent === 'download') { //下载
         	download(data, obj);
-        } else if (layEven === 'creatFile') { //同步文件
+        } else if (layEvent === 'creatFile') { //同步文件
         	creatFile(data, obj);
         }
     });

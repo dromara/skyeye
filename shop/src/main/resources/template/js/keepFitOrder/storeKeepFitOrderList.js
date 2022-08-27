@@ -96,11 +96,11 @@ layui.config({
         var layEvent = obj.event;
         if(layEvent == 'select'){ // 详情
             select(data)
-        } else if (layEven == 'complateKeepFit'){ // 完成保养
+        } else if (layEvent == 'complateKeepFit'){ // 完成保养
             complateKeepFit(data)
-        } else if (layEven == 'verification'){ // 核销
+        } else if (layEvent == 'verification'){ // 核销
             verification(data)
-        } else if (layEven == 'cancleOrder'){ // 取消订单
+        } else if (layEvent == 'cancleOrder'){ // 取消订单
             cancleOrder(data)
         }
     });
