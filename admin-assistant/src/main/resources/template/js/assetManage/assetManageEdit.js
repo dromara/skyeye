@@ -31,7 +31,7 @@ layui.config({
 				sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], 'select', "typeId", json.bean.typeId, form);
 
 				// 初始化上传
-				$("#assetImg").upload(systemCommonUtil.uploadCommon003Config('assetImg', 6, json.bean.assetImg, 1));
+				$("#assetImg").upload(systemCommonUtil.uploadCommon003Config('assetImg', 27, json.bean.assetImg, 1));
 
 				// 附件回显
 				skyeyeEnclosure.initTypeISData({'enclosureUpload': json.bean.enclosureInfo});

@@ -12,7 +12,7 @@ layui.config({
 	    var $ = layui.$;
 
 		// 初始化上传
-		$("#assetImg").upload(systemCommonUtil.uploadCommon003Config('assetImg', 6, '', 1));
+		$("#assetImg").upload(systemCommonUtil.uploadCommon003Config('assetImg', 27, '', 1));
 
 		// 资产类型
 		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["admAssetType"]["key"], 'select', "typeId", '', form);
