@@ -4,7 +4,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'cookie', 'orgChart', 'element', 'table'].concat(dsFormUtil.mastHaveImport), function (exports) {
+}).define(['window', 'jquery', 'winui', 'cookie', 'orgChart', 'element', 'table', 'jsonEditor'].concat(dsFormUtil.mastHaveImport), function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
@@ -242,6 +242,16 @@ layui.config({
 				}
 				// 切换到接口信息的Tab项
 				element.tabChange('docTabBrief', "apiMationTab");
+				// 加载接口参数
+				$("#apiListParams").find(".layui-tab-title").html("");
+				$("#apiListParams").find(".layui-tab-content").html("");
+				$.each(json.bean.apiParamsList, function (i, item) {
+					item.requestBody = JSON.stringify(item.requestBody);
+					item.responseBody = JSON.stringify(item.responseBody);
+					addTabPatams({
+						rows: [item]
+					});
+				});
 			}});
 		}
 	});
@@ -345,6 +355,93 @@ layui.config({
 			var str = getDataUseHandlebars(getFileContent('tpl/apiPage/mdModelFile.tpl'), json);
 			sysFileUtil.saveAs(new Blob([str]), fileName);
 		}});
+	});
+
+	var requestBody = {};
+	var responseBody = {};
+	// 新增出入参示例
+	$("body").on("click", "#tabAdd", function() {
+		addTabPatams(null);
+	});
+
+	function addTabPatams(params) {
+		var tabParams = params == null ? {
+			rows: [{
+				id: "RM" + new Date().getTime(),
+				title: '新出入参' + (Math.random() * 1000 | 0)
+			}]
+		} : params;
+		element.tabAdd('apiListParams', {
+			title: tabParams.rows[0].title,
+			content: getDataUseHandlebars($("#apiParamsListTabContent").html(), tabParams),
+			id: tabParams.rows[0].id
+		});
+		$("#apiListParams").find('.layui-tab-title').find('li').append('<i class="layui-icon layui-unselect layui-tab-close">&#x1006;</i>');
+
+		requestBody[tabParams.rows[0].id] = new JsonEditor('#requestBody' + tabParams.rows[0].id, params == null ? {} : JSON.parse(tabParams.rows[0].requestBody));
+		responseBody[tabParams.rows[0].id] = new JsonEditor('#responseBody' + tabParams.rows[0].id, params == null ? {} : JSON.parse(tabParams.rows[0].responseBody));
+
+		form.render();
+		saveApiParamsBtn(tabParams.rows[0].id);
+		element.tabChange('apiListParams', tabParams.rows[0].id);
+	}
+
+	function saveApiParamsBtn(id) {
+		form.on('submit(formAddBean' + id + ')', function (data) {
+			if (winui.verifyForm(data.elem)) {
+				var _this = $(this);
+				// formId如果是新增，需要新增成功后替换id
+				var formId = _this.parents(".apiParamsForm").attr("id");
+				var dataId = formId;
+				if(formId.startsWith('RM')){
+					dataId = "";
+				}
+				var params = {
+					id: dataId,
+					title: $("#title" + id).val(),
+					requestUrl: $("#appList .active").attr("rowid"),
+					requestBody: JSON.stringify(requestBody[id].get()),
+					responseBody: JSON.stringify(responseBody[id].get()),
+					appId: $("#apiMicroservicesId").val()
+				};
+				AjaxPostUtil.request({url: reqBasePath + "writeApiMation", params: params, type: 'json', method: "POST", callback: function(json) {
+					winui.window.msg("保存成功", {icon: 1, time: 2000});
+					if (formId.startsWith('RM')) {
+						_this.parents(".apiParamsForm").attr("id", json.bean.id);
+						_this.parents(".layui-tab").eq(0).find('li[lay-id="' + id + '"]').attr("lay-id", json.bean.id);
+					}
+					_this.parents(".layui-tab").eq(0).find('li[lay-id="' + json.bean.id + '"]').html(json.bean.title + '<i class="layui-icon layui-unselect layui-tab-close">&#x1006;</i>');
+				}});
+			}
+			return false;
+		});
+	}
+
+	// 请求入参内容变化事件
+	$("body").on("input", ".requestBodyText", function (e) {
+		var id = $(this).attr("id").replace("requestBodyText", "");
+		var value = $(this).val();
+		try {
+			requestBody[id].load(JSON.parse(value));
+		} catch (ex) {}
+	});
+	// 请求出参内容变化事件
+	$("body").on("input", ".responseBodyText", function (e) {
+		var id = $(this).attr("id").replace("responseBodyText", "");
+		var value = $(this).val();
+		try {
+			requestBody[id].load(JSON.parse(value));
+		} catch (ex) {}
+	});
+	$("body").on("click", ".layui-tab-close", function (e) {
+		var formId = $(this).parents(".layui-tab").eq(0).find('.layui-show').find('form').attr("id");
+		element.tabDelete('apiListParams', formId);
+		$("#" + formId).parent().remove();
+		winui.window.msg("删除成功", {icon: 1, time: 2000});
+		if (!formId.startsWith('RM')) {
+			AjaxPostUtil.request({url: reqBasePath + "deleteApiMationById", params: {id: formId}, type: 'json', method: "DELETE", callback: function(json) {
+			}});
+		}
 	});
 
 	// 获取前端限制条件

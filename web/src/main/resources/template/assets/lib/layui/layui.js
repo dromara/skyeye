@@ -322,7 +322,8 @@ function getCookie(name) {
 			excel: 'ext/excel', //soulTable 依赖的插件
 			weixinAudio: 'audio/weixinAudio', //音频播放插件
 			spop: 'spop/spop', //气泡提示
-			orgChart: "orgChart/js/jquery.orgchart" //组织结构图
+			orgChart: "orgChart/js/jquery.orgchart", //组织结构图
+			jsonEditor: 'jsonEditor/jquery.json-editor.min', //json格式的数据编辑器
 		};
 
 	// 记录基础数据

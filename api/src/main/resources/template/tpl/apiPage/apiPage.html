@@ -43,16 +43,27 @@
 			</div>
 			<div class="api-right" style="overflow: hidden">
 				<div class="layui-tab vertical-tab" lay-filter="docTabBrief">
-					<ul class="layui-tab-title">
+					<ul class="layui-tab-title layui-tab-title-customer">
 						<li class="layui-this">API配置信息</li>
 						<li lay-id="apiMationTab" class="apiLi" style="display: none">接口信息</li>
 						<li class="apiLi" style="display: none">出入参示例</li>
 						<li class="apiLi" style="display: none" id="advancedSearch">高级搜索配置</li>
 					</ul>
-					<div class="layui-tab-content">
+					<div class="layui-tab-content layui-tab-content-customer">
 						<div class="layui-tab-item layui-show" id="contentDesc"></div>
 						<div class="layui-tab-item" id="apiMation"></div>
-						<div class="layui-tab-item">暂无</div>
+						<div class="layui-tab-item">
+							<!-- 接口参数信息 -->
+							<button class="layui-btn layui-btn-xs layui-btn-normal" type="button" id="tabAdd">新增</button>
+							<div class="layui-tab" lay-filter="apiListParams" id="apiListParams">
+								<ul class="layui-tab-title">
+
+								</ul>
+								<div class="layui-tab-content">
+
+								</div>
+							</div>
+						</div>
 						<div class="layui-tab-item">
 							<div class="winui-toolbar layui-col-xs12">
 								<button type="button" class="layui-btn layui-btn-normal" id="saveAdvancedSearch" auth="1657962237576">保存</button>
@@ -66,6 +77,36 @@
 			</div>
 		</form>
 	</div>
+
+	<script type="text/x-handlebars-template" id="apiParamsListTabContent">
+		{{#each rows}}
+			<form class="layui-form apiParamsForm" action="" id="{{id}}">
+				<div class="api-right-params">
+					<font class="method-color">标题<i class="red">*</i>：</font>
+					<input type="text" id="title{{id}}" name="title{{id}}" win-verify="required" placeholder="请输入标题" class="layui-input" value="{{title}}"/>
+				</div>
+				<div class="api-right-params">
+					<font class="method-color">请求入参：</font>
+					<div class="layui-col-xs12">
+						<textarea id="requestBodyText{{id}}" class="layui-textarea requestBodyText layui-col-xs6" style="height: 260px; width: 50%">{{requestBody}}</textarea>
+						<pre id="requestBody{{id}}" class="layui-col-xs6" style="height: 260px"></pre>
+					</div>
+				</div>
+				<div class="api-right-params">
+					<font class="method-color">请求出参：</font>
+					<div class="layui-col-xs12">
+						<textarea id="responseBodyText{{id}}" class="layui-textarea responseBodyText layui-col-xs6" style="height: 260px; width: 50%">{{responseBody}}</textarea>
+						<pre id="responseBody{{id}}" class="layui-col-xs6" style="height: 260px"></pre>
+					</div>
+				</div>
+				<div class="layui-form-item layui-col-xs12">
+					<div class="layui-input-block">
+						<button class="winui-btn" lay-submit lay-filter="formAddBean{{id}}">保存</button>
+					</div>
+				</div>
+			</form>
+		{{/each}}
+	</script>
 
 	<script type="text/x-handlebars-template" id="defaultTemplate">
 		{{#bean}}

@@ -64,12 +64,12 @@
 
 /***************************竖向选项卡开始********************************/
 
-.vertical-tab .layui-tab-title li {
+.vertical-tab .layui-tab-title-customer li {
     display: block;
     padding: 0 8px;
 }
 
-.vertical-tab .layui-tab-title {
+.vertical-tab .layui-tab-title-customer {
     float: left;
     border-bottom-width: 0px;
     border-right-width: 1px;
@@ -78,7 +78,7 @@
     width: 100px;
 }
 
-.vertical-tab .layui-tab-title .layui-this:after {
+.vertical-tab .layui-tab-title-customer .layui-this:after {
     position: absolute;
     left: 1px;
     top: 0;
@@ -94,24 +94,24 @@
     pointer-events: none;
 }
 
-.vertical-tab .layui-tab-content {
+.vertical-tab .layui-tab-content-customer {
     float: left;
     width: calc(100% - 121px);
     height: 100%;
 }
 
-.vertical-tab .layui-tab-content .layui-tab-item {
+.vertical-tab .layui-tab-content-customer .layui-tab-item {
     width: 100%;
     height: calc(100% - 15px);
     overflow-x: auto;
 }
 
-.vertical-tab .layui-tab-content .layui-tab-item .CodeMirrorBox {
+.vertical-tab .layui-tab-content-customer .layui-tab-item .CodeMirrorBox {
     height: calc(100% - 50px) !important;
     float: left;
 }
 
-.vertical-tab .layui-tab-content .layui-tab-item .CodeMirror {
+.vertical-tab .layui-tab-content-customer .layui-tab-item .CodeMirror {
     margin-top: 0px;
 }
 
