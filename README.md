@@ -80,7 +80,6 @@ winui|win10风格UI|https://gitee.com/doc_wei01_admin/skyeye
 codemirror|codemirror代码编辑器|https://codemirror.net/
 handlebars|js模板引擎|http://www.ghostchina.com/introducing-the-handlebars-js-templating-engine/
 webSocket|浏览器与服务器全双工(full-duplex)通信|http://www.runoob.com/html/html5-websocket.html
-G6|流程图开发|https://antv.alipay.com/zh-cn/index.html
 FullCalendar|日历插件|https://blog.csdn.net/qw_xingzhe/article/details/44920943
 
 #### 效果图
