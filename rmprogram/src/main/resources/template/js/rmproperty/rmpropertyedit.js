@@ -138,9 +138,10 @@ layui.config({
 		 		//展现形式
 		      	showGrid({
 		    	 	id: "dsFormContentId",
-		    	 	url: flowableBasePath + "dsform006",
+		    	 	url: flowableBasePath + "queryDsFormContentMationToShow",
 		    	 	params: {},
 		    	 	pagination: false,
+					method: 'GET',
 		    	 	template: getFileContent('tpl/template/select-option.tpl'),
 		    	 	ajaxSendLoadBefore: function(hdb){
 		    	 	},
@@ -157,7 +158,7 @@ layui.config({
 				});
 
               	form.on('select(selectParent)', function(data) {
-              		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params: {rowId: data.value}, type: 'json', callback: function (json) {
+              		AjaxPostUtil.request({url: flowableBasePath + "queryDsFormContentMationById", params: {id: data.value}, type: 'json', method: 'GET', callback: function (json) {
 						htmlModelContent.setValue(json.bean.htmlContent);
 						jsModelContent.setValue(json.bean.jsContent);
 						htmlContent.setValue(json.bean.htmlContent);

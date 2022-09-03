@@ -73,7 +73,7 @@ layui.config({
 	}
 	
 	//删除
-	function del(data, obj){
+	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {id: "delNoticeList", icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType], skin: 'msg-skin-message', success: function(layero, index){
 			var times = $("#delNoticeList").parent().attr("times");
 			var zIndex = $("#delNoticeList").parent().css("z-index");

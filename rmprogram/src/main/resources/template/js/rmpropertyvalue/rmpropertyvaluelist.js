@@ -71,7 +71,7 @@ layui.config({
 	});
 	
 	//删除
-	function del(data, obj){
+	function del(data, obj) {
 		var msg = obj ? '确认删除标签属性值【' + obj.data.title + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除标签属性值' }, function (index) {
 			layer.close(index);

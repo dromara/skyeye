@@ -19,15 +19,15 @@ layui.config({
 	    id: 'messageTable',
 	    elem: '#messageTable',
 	    method: 'post',
-	    url: flowableBasePath + 'dsform001',
-	    where:{contentName:$("#contentName").val()},
-	    even:true,
+	    url: flowableBasePath + 'queryDsFormContentList',
+	    where: getTableParams(),
+	    even: true,
 	    page: true,
 		limits: getLimits(),
 		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
-	        { field: 'contentName', title: '模板标题', width: 120 },
+	        { field: 'contentName', title: '组件名称', width: 120 },
 	        { title: 'HTML内容', align: 'center', width: 90, templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        }},
@@ -42,10 +42,13 @@ layui.config({
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
 			{ field: 'lastUpdateTime', title: systemLanguage["com.skyeye.lastUpdateTime"][languageType], align: 'center', width: 150 },
-	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 240, toolbar: '#tableBar'}
+	        { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 140, toolbar: '#tableBar'}
 	    ]],
 	    done: function(json) {
 	    	matchingLanguage();
+			initTableSearchUtil.initAdvancedSearch(this, json.searchFilter, form, "请输入组件名称", function () {
+				table.reloadData("messageTable", {page: {curr: 1}, where: getTableParams()});
+			});
 	    }
 	});
 	
@@ -100,19 +103,11 @@ layui.config({
         }
     });
 	
-	form.render();
-	form.on('submit(formSearch)', function (data) {
-        if (winui.verifyForm(data.elem)) {
-        	refreshTable();
-        }
-        return false;
-	});
-	
 	//删除
-	function del(data, obj){
+	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
-            AjaxPostUtil.request({url: flowableBasePath + "dsform003", params: {rowId: data.id}, type: 'json', callback: function (json) {
+            AjaxPostUtil.request({url: flowableBasePath + "deleteDsFormContentMationById", params: {id: data.id}, type: 'json', method: 'DELETE', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();
     		}});
@@ -132,12 +127,7 @@ layui.config({
 				loadTable();
 			}});
 	}
-	
-	//刷新数据
-    $("body").on("click", "#reloadTable", function() {
-    	loadTable();
-    });
-    
+
     //新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
@@ -150,14 +140,20 @@ layui.config({
 				loadTable();
 			}});
     });
-    
+
+	form.render();
+	//刷新数据
+	$("body").on("click", "#reloadTable", function() {
+		loadTable();
+	});
+	
     function loadTable() {
-    	table.reloadData("messageTable", {where:{contentName:$("#contentName").val()}});
+    	table.reloadData("messageTable", {where: getTableParams()});
     }
     
-    function refreshTable(){
-    	table.reloadData("messageTable", {page: {curr: 1}, where:{contentName:$("#contentName").val()}});
-    }
+	function getTableParams() {
+		return $.extend(true, {}, initTableSearchUtil.getSearchValue("messageTable"));
+	}
     
     exports('dsformcontentlist', {});
 });

@@ -6,21 +6,23 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'table', 'jquery', 'winui', 'element'], function (exports) {
+}).define(['window', 'table', 'jquery', 'winui', 'element', 'colorpicker', 'fileUpload'], function (exports) {
 	winui.renderColor();
 	layui.use(['form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx',
 	           'solr', 'sql', 'vue'], function (form) {
 		var index = parent.layer.getFrameIndex(window.name);
 	    var $ = layui.$,
 			element = layui.element,
+			colorpicker = layui.colorpicker,
 	    	form = layui.form;
 	    var htmlEditor, jsEditor;
 	    
 	    showGrid({
 		 	id: "showForm",
-		 	url: flowableBasePath + "dsform004",
-		 	params: {rowId: parent.rowId},
+		 	url: flowableBasePath + "queryDsFormContentMationById",
+		 	params: {id: parent.rowId},
 		 	pagination: false,
+			method: 'GET',
 		 	template: getFileContent('tpl/dsformcontent/dsformcontenteditTemplate.tpl'),
 		 	ajaxSendLoadBefore: function(hdb){
 		 		//是否为系统菜单
@@ -44,6 +46,9 @@ layui.config({
 				});
 		 	},
 		 	ajaxSendAfter: function(json) {
+				// 加载图标信息
+				systemCommonUtil.initEditIconChooseHtml('iconMation', form, colorpicker, 12, json.bean);
+
 				// 根据类型获取部分功能的使用说明
 				systemCommonUtil.queryExplainMationByType(2, function (json) {
 					$(".layui-colla-title").html(json.bean.title);
@@ -137,53 +142,7 @@ layui.config({
 				 		});
 					}
 				});
-				function removeByValue(arr, val){
-					for(var i = 0; i < arr.length; i++){
-						if(arr[i] == val) {
-							arr.splice(i, 1);
-							break;
-						}
-					}
-				}
-				
-				//取出json串的键
-				function getOutKey(arr){
-					var jsonObj = $.parseJSON(arr);
-					var a = [];
-					var b = [];
-					for(var i = 0; i < jsonObj.length; i++){
-						for (var key in jsonObj[i])
-							a.push(key); 
-						b.push(a);
-						a = [];
-					}
-					return b;
-				}
-				
-				//B的子集是否是A的子集
-				function subset(A,B){
-					for(var i = 0; i < B.length; i++){
-						if(!isContained(B[i], A)){
-							return false;
-						}
-					}
-					return true;
-				}
-				
-				//b是否被a包含,是返回true,不是返回false
-				isContained =(a, b)=>{
-					if(!(a instanceof Array) || !(b instanceof Array)) 
-				    	return false;
-				    if(a.length < b.length) 
-				    	return false;
-				    var aStr = a.toString();
-				    for(var i = 0, len = b.length; i < len; i++){
-				    	if(aStr.indexOf(b[i]) == -1) 
-				    		return false;
-				    }
-				    return true;
-				}
-				
+
 				matchingLanguage();
 		 		form.render();
 		 		form.on('submit(formEditBean)', function (data) {
@@ -197,7 +156,7 @@ layui.config({
 		        				htmlType: $("#htmlType").val(),
 		        				jsContent: encodeURIComponent(jsEditor.getValue()),
 		        				jsType: $("#jsType").val(),
-		        				rowId: parent.rowId
+		        				id: parent.rowId
 			        		};
 			        		if($("#linkedData").val() == 'true'){
 			 	        		params.linkedData = '1';
@@ -229,7 +188,14 @@ layui.config({
 			 	        		params.dataShowTpl = '';
 			 	        		params.defaultData = "";
 			 	        	}
-				        	AjaxPostUtil.request({url: flowableBasePath + "dsform005", params: params, type: 'json', callback: function (json) {
+
+							// 获取图标信息
+							params = systemCommonUtil.getIconChoose(params);
+							if (!params["iconChooseResult"]) {
+								return false;
+							}
+
+				        	AjaxPostUtil.request({url: flowableBasePath + "writeDsFormContent", params: params, type: 'json', method: 'POST', callback: function (json) {
 								parent.layer.close(index);
 								parent.refreshCode = '0';
 				 	   		}});
@@ -241,11 +207,10 @@ layui.config({
 		 	}
 	    });
 	    
-	    //取消
+	    // 取消
 	    $("body").on("click", "#cancle", function() {
 	    	parent.layer.close(index);
 	    });
 	    
 	});
-	    
 });

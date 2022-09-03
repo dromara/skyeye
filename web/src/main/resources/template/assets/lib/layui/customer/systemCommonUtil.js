@@ -441,6 +441,7 @@ var systemCommonUtil = {
             $(".iconTypeIsTwo").removeClass("layui-hide");
             $(".iconTypeIsOne").addClass("layui-hide");
         }
+        // 设置图标颜色
         if (isNull(params.iconColor)) {
             $("#iconShow").css({'color': 'white'});
         } else {
@@ -448,8 +449,9 @@ var systemCommonUtil = {
             $("#iconShow").css({'color': params.iconColor});
         }
 
+        // 设置图标背景颜色
         if (isNull(params.iconBg)) {
-            $("#iconShow").css({'color': 'white'});
+            $("#iconShow").css({'background-color': 'white'});
         } else {
             $('#iconBginput').val(params.iconBg);
             $("#iconShow").parent().css({'background-color': params.iconBg});

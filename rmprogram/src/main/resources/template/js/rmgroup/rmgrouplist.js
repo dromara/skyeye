@@ -77,7 +77,7 @@ layui.config({
     });
 	
 	//删除
-	function del(data, obj){
+	function del(data, obj) {
 		var msg = obj ? '确认删除分组【' + obj.data.rmGroupName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除分组' }, function (index) {
 			layer.close(index);

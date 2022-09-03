@@ -90,9 +90,10 @@ layui.config({
  	function loadLeftBoxItem(){
  		showGrid({
 		 	id: "btnBox",
-		 	url: flowableBasePath + "dsform006",
-		 	params: {rowId: parent.rowId},
+		 	url: flowableBasePath + "queryDsFormContentMationToShow",
+		 	params: {},
 		 	pagination: false,
+			method: 'GET',
 		 	template: $("#leftBoxItem").html(),
 		 	ajaxSendAfter:function (json) {
 		 		formPageControl = [].concat(json.rows);
@@ -186,7 +187,7 @@ layui.config({
 	
 	// 获取该控件的脚本信息
 	function getDataScript(params){
-		AjaxPostUtil.request({url: flowableBasePath + "dsform007", params: {rowId: params.formContentId}, type: 'json', callback: function (json) {
+		AjaxPostUtil.request({url: flowableBasePath + "queryDsFormContentMationById", params: {id: params.formContentId}, type: 'json', method: 'GET', callback: function (json) {
 			params.htmlContent = encodeURIComponent(json.bean.htmlContent);
 			params.jsContent = encodeURIComponent(json.bean.jsContent);
     	}, async: false});

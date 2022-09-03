@@ -116,7 +116,7 @@ layui.config({
 	}
 	
 	//删除
-	function del(data, obj){
+	function del(data, obj) {
 		var msg = obj ? '确认删除【' + obj.data.appName + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除轻应用' }, function (index) {
 			layer.close(index);

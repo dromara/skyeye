@@ -8,14 +8,12 @@ layui.config({
     window: 'js/winui.window'
 }).define(['window', 'table', 'jquery', 'winui', 'form', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue'], function (exports) {
 	winui.renderColor();
-	
 	var $ = layui.$,
 		form = layui.form,
 		table = layui.table;
 	
 	authBtn('1560828282644');
-	
-	
+
 	table.render({
 	    id: 'messageTable',
 	    elem: '#messageTable',
@@ -131,10 +129,8 @@ layui.config({
         }
     });
 	
-	
 	form.render();
 	form.on('submit(formSearch)', function (data) {
-    	
         if (winui.verifyForm(data.elem)) {
         	refreshTable();
         }
@@ -144,9 +140,10 @@ layui.config({
 	//展现形式
   	showGrid({
 	 	id: "dsFormContentId",
-	 	url: flowableBasePath + "dsform006",
+	 	url: flowableBasePath + "queryDsFormContentMationToShow",
 	 	params: {},
 	 	pagination: false,
+		method: 'GET',
 	 	template: getFileContent('tpl/template/select-option.tpl'),
 	 	ajaxSendLoadBefore: function(hdb){
 	 	},
@@ -156,11 +153,10 @@ layui.config({
     });
 	
 	//删除
-	function del(data, obj){
+	function del(data, obj) {
 		var msg = obj ? '确认删除样式属性【' + obj.data.title + '】吗？' : '确认删除选中数据吗？';
 		layer.confirm(msg, { icon: 3, title: '删除样式属性' }, function (index) {
 			layer.close(index);
-            
             AjaxPostUtil.request({url: sysMainMation.rmprogramBasePath + "rmproperty003", params: {rowId: data.id}, type: 'json', callback: function (json) {
 				winui.window.msg(systemLanguage["com.skyeye.deleteOperationSuccessMsg"][languageType], {icon: 1, time: 2000});
 				loadTable();

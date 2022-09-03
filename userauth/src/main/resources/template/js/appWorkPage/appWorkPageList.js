@@ -106,7 +106,7 @@ layui.config({
 	}
 	
 	// 删除菜单
-	function del(data, obj){
+	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "appworkpage007", params: {rowId: data.id}, type: 'json', callback: function (json) {

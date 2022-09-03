@@ -65,7 +65,7 @@ layui.config({
 	});
 	
 	//删除
-	function del(data, obj){
+	function del(data, obj) {
 		layer.confirm(systemLanguage["com.skyeye.deleteOperationMsg"][languageType], {icon: 3, title: systemLanguage["com.skyeye.deleteOperation"][languageType]}, function(index){
 			layer.close(index);
             AjaxPostUtil.request({url: reqBasePath + "sysdevelopdoc005", params: {rowId: data.id}, type: 'json', callback: function (json) {
