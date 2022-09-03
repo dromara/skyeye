@@ -106,30 +106,30 @@ layui.config({
  	 	    	}else if(data.field.menuLevel == '2'){//子菜单
  	 	    		var $menu = layui.$('.menuParent');
  	 	    		var str = "";
- 	 	    		for(var i = 0; i < $menu.length; i++){
- 	 	    			if (!isNull($menu[i].value) && $menu[i].value != '请选择'){
- 	 	    				str += $menu[i].value + ",";
- 	 	    			}
- 	 	    		}
- 	 	    		if(isNull(str)){//父菜单为空
- 	 	    			winui.window.msg("请至少选择一级父菜单", {icon: 2, time: 2000});
- 	 	    			return false;
- 	 	    		} else {
- 	 	    			params.parentId = str;
- 	 	    		}
+					for (var i = 0; i < $menu.length; i++) {
+						if (!isNull($menu[i].value) && $menu[i].value != '请选择') {
+							str += $menu[i].value + ",";
+						}
+					}
+					if (isNull(str)) {//父菜单为空
+						winui.window.msg("请至少选择一级父菜单", {icon: 2, time: 2000});
+						return false;
+					} else {
+						params.parentId = str;
+					}
  	 	    	} else {
  	 	    		winui.window.msg('状态值错误', {icon: 2, time: 2000});
  	 	    	}
- 	        	if($("#menuSysType").val() == 'true'){
- 	        		params.menuSysType = '1';
- 	        	} else {
- 	        		params.menuSysType = '2';
- 	        	}
- 	        	if($("#isShare").val() == 'true'){
- 	        		params.isShare = '1';
- 	        	} else {
- 	        		params.isShare = '0';
- 	        	}
+				if ($("#menuSysType").val() == 'true') {
+					params.menuSysType = '1';
+				} else {
+					params.menuSysType = '2';
+				}
+				if ($("#isShare").val() == 'true') {
+					params.isShare = '1';
+				} else {
+					params.isShare = '0';
+				}
  	        	AjaxPostUtil.request({url: reqBasePath + "sys007", params: params, type: 'json', callback: function(json) {
 					parent.layer.close(index);
 					parent.refreshCode = '0';

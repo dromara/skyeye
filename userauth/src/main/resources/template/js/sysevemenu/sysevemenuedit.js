@@ -14,13 +14,12 @@ layui.config({
 
 		var parentId = "0";
 	    
-	    //初始化数据
 	    showGrid({
 		 	id: "showForm",
 		 	url: reqBasePath + "sys008",
 		 	params: {rowId: parent.rowId},
 		 	pagination: false,
-		 	template: getFileContent('tpl/sysevemenu/sysevemenueditTemplate.tpl'),
+		 	template: $("#beanTemplate").html(),
 		 	ajaxSendLoadBefore: function(hdb){
 		 		//是否为系统菜单
 		 		hdb.registerHelper("compare2", function(v1, options){
@@ -62,7 +61,6 @@ layui.config({
 				});
 		 	},
 		 	ajaxSendAfter:function (json) {
-
 				// 加载图标信息
 				systemCommonUtil.initEditIconChooseHtml('iconMation', form, colorpicker, 12, json.bean);
 
@@ -159,7 +157,7 @@ layui.config({
 							desktopId: data.field.desktop,
 		        			menuUrl: $("#menuUrl").val(),
 		        			menuType: data.field.menuType,
-		        			rowId: parent.rowId,
+		        			id: parent.rowId,
 		 	        	};
 
 						// 获取图标信息

@@ -28,9 +28,9 @@ layui.config({
             { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
             { field: 'nameCh', title: '页面中文名称', align: 'left', width: 150 },
             { field: 'nameEn', title: '页面英文名称', align: 'left', width: 150 },
-            { field: 'createName', title: '创建人', align: 'left', width: 100 },
+            { field: 'createName', title: '创建人', align: 'left', width: 120 },
             { field: 'createTime', title: '创建时间', align: 'center', width: 140 },
-            { field: 'lastUpdateName', title: '最后修改人', align: 'left', width: 100 },
+            { field: 'lastUpdateName', title: '最后修改人', align: 'left', width: 120 },
             { field: 'lastUpdateTime', title: '最后修改时间', align: 'center', width: 140},
             { title: systemLanguage["com.skyeye.operation"][languageType], fixed: 'right', align: 'center', width: 250, toolbar: '#tableBar'}
         ]],
