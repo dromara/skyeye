@@ -1,0 +1,102 @@
+.left-box-form {
+    min-height: calc(100% - 60px);
+    top: 55px;
+    background-color: white;
+    position: fixed;
+    width: 266px;
+}
+
+.btntext {
+    display: inline-block;
+    background: #fff;
+    color: #000;
+    width: 85px;
+    height: 70px;
+    line-height: 1;
+    text-align: center;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.btntext:hover {
+    background-color: #2e73ff;
+    color: #ffffff;
+}
+
+.btntext:hover .fa {
+    color: #ffffff !important;
+}
+
+.btntext .icon {
+    padding: 10px 5px 12px;
+    font-size: 22px;
+    height: 22px;
+}
+
+.btntext label {
+    font-size: 12px;
+}
+
+.btntext img {
+    width: 34px;
+    float: right;
+}
+
+#showForm .layui-form-item {
+    z-index: 2;
+}
+
+#showForm .layui-form-item:hover {
+    border: 1px dashed blue;
+}
+
+.center-box-form {
+    width: calc(100% - 610px);
+    margin-left: 280px;
+    min-height: calc(100% - 60px);
+    top: 55px;
+    background-color: white;
+    z-index: 1;
+    position: absolute;
+    overflow: auto;
+}
+
+.right-box-form {
+    min-height: calc(100% - 60px);
+    top: 55px;
+    background-color: white;
+    position: fixed;
+    width: 320px;
+    right: 0px;
+    padding-right: 5px;
+    padding-top: 5px;
+}
+
+.droppable-active {
+    background-color: #eaeaf6 !important;
+}
+
+.center-box-form .layui-form {
+    float: left;
+    margin-top: 10px;
+    position: absolute;
+    margin: 5px;
+    width: calc(100% - 10px);
+    height: auto;
+    min-height: 600px;
+}
+
+.ui-sortable-placeholder {
+    border: 1px dashed #cecece !important;
+    visibility: visible !important;
+    background: #e7eaec
+}
+
+.ui-sortable-placeholder-choose {
+    visibility: visible !important;
+    border: 1px #d9534f dashed;
+}
+
+.ibox.ui-sortable-placeholder {
+    margin: 0 0 23px !important
+}

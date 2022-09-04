@@ -56,23 +56,7 @@ layui.config({
 		        }},
 		        { field: 'menuNameEn', title: '英文名称', width: 150 },
 		        { field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
-		        	var str = '';
-		        	if(d.menuIconType == '1'){
-			        	if(isNull(d.menuIconBg)){
-			        		str += '<div class="winui-icon winui-icon-font" style="text-align: center;">';
-			        	} else {
-			        		str += '<div class="winui-icon winui-icon-font" style="text-align: center; background-color:' + d.menuIconBg + '">';
-			        	}
-			        	if(isNull(d.menuIconColor)){
-			        		str += '<i class="fa fa-fw ' + d.menuIcon + '" style="color: white"></i>';
-			        	} else {
-			        		str += '<i class="fa fa-fw ' + d.menuIcon + '" style="color: ' + d.menuIconColor + '"></i>';
-			        	}
-			        	str += '</div>';
-		        	}else if(d.menuIconType = '2'){
-		        		str = '<img src="' + fileBasePath + d.menuIconPic + '" class="photo-img" lay-event="menuIconPic">';
-		        	}
-		        	return str;
+		        	return systemCommonUtil.initIconShow(d);
 		        }},
 		        { field: 'menuLevel', title: '菜单级别', width: 140, templet: function (d) {
 		        	if(d.parentId == '0'){
@@ -117,8 +101,8 @@ layui.config({
 				lowerOne(data);
 			} else if (layEvent === 'authpoint') { // 权限点
 				authpoint(data);
-			} else if (layEvent === 'menuIconPic') { // 图片
-				systemCommonUtil.showPicImg(fileBasePath + data.menuIconPic);
+			} else if (layEvent === 'iconPic') { // 图片
+				systemCommonUtil.showPicImg(fileBasePath + data.iconPic);
 			} else if (layEvent === 'details') { // 详情
 				details(data);
 			}

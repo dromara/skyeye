@@ -95,6 +95,13 @@ layui.config({
 		 	pagination: false,
 			method: 'GET',
 		 	template: $("#leftBoxItem").html(),
+			ajaxSendLoadBefore: function (hdb, json) {
+				$.each(json.bean, function (key, value) {
+					$.each(value, function (j, bean) {
+						bean.logo = systemCommonUtil.initIconShow(bean);
+					});
+				});
+			},
 		 	ajaxSendAfter:function (json) {
 		 		formPageControl = [].concat(json.rows);
 		 		form.render();

@@ -533,6 +533,26 @@ var systemCommonUtil = {
         }
         return params;
     },
+    // 获取图标显示脚本
+    initIconShow: function (bean) {
+        var str = '';
+        if (bean.iconType == '1') {
+            if (isNull(bean.iconBg)) {
+                str += '<div class="winui-icon winui-icon-font" style="text-align: center;">';
+            } else {
+                str += '<div class="winui-icon winui-icon-font" style="text-align: center; background-color:' + bean.iconBg + '">';
+            }
+            if (isNull(bean.iconColor)) {
+                str += '<i class="fa fa-fw ' + bean.icon + '" style="color: white"></i>';
+            } else {
+                str += '<i class="fa fa-fw ' + bean.icon + '" style="color: ' + bean.iconColor + '"></i>';
+            }
+            str += '</div>';
+        } else if (bean.iconType = '2') {
+            str = '<img src="' + fileBasePath + bean.iconPic + '" class="photo-img" lay-event="iconPic">';
+        }
+        return str;
+    },
 
     /**
      * 统一上传到common003接口文件的配置信息

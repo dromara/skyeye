@@ -19,6 +19,9 @@ layui.config({
 		// 加载图标信息
 		systemCommonUtil.initIconChooseHtml('iconMation', form, colorpicker, 12);
 
+		// 组件分类
+		sysDictDataUtil.showDictDataListByDictTypeCode(sysDictData["dsFormContentType"]["key"], 'select', "dsFormContentType", '', form);
+
 	    // 根据类型获取部分功能的使用说明
 		systemCommonUtil.queryExplainMationByType(2, function(json) {
 			$(".layui-colla-title").html(json.bean.title);
@@ -115,6 +118,7 @@ layui.config({
         				htmlType: $("#htmlType").val(),
         				jsContent: encodeURIComponent(jsEditor.getValue()),
         				jsType: $("#jsType").val(),
+						typeId: $("#dsFormContentType").val(),
 	        		};
 	        		if($("#linkedData").val() == 'true'){
 	 	        		params.linkedData = '1';

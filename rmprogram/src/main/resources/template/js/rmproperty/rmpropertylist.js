@@ -22,8 +22,8 @@ layui.config({
 	    where: {title: $("#title").val(), propertyTag: $("#propertyTag").val(), dsFormContentId: $("#dsFormContentId").val()},
 	    even: true,
 	    page: true,
-	    limits: [8, 16, 24, 32, 40, 48, 56],
-	    limit: 8,
+		limits: getLimits(),
+		limit: getLimit(),
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'title', title: '属性别名', width: 180 },
@@ -171,25 +171,25 @@ layui.config({
 			url: "../../tpl/rmproperty/rmpropertyedit.html", 
 			title: "编辑小程序样式属性",
 			pageId: "rmpropertyedit",
-			area: ['700px', '90vh'],
+			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();
 			}});
 	}
 	
-	//刷新数据
+	// 刷新数据
     $("body").on("click", "#reloadTable", function() {
     	loadTable();
     });
     
-    //新增
+    // 新增
     $("body").on("click", "#addBean", function() {
     	_openNewWindows({
 			url: "../../tpl/rmproperty/rmpropertyadd.html", 
 			title: "新增小程序样式属性",
 			pageId: "rmpropertyadd",
-			area: ['700px', '90vh'],
+			area: ['90vw', '90vh'],
 			callBack: function (refreshCode) {
 				winui.window.msg(systemLanguage["com.skyeye.successfulOperation"][languageType], {icon: 1, time: 2000});
 				loadTable();

@@ -6,98 +6,7 @@
     <link href="../../assets/lib/layui/css/layui.css" rel="stylesheet" />
     <link href="../../assets/lib/winui/css/winui.css" rel="stylesheet" />
     <link href="../../assets/lib/layui/css/codemirror.css" rel="stylesheet" />
-    <style type="text/css">
-    	.left-box-form{
-    		min-height: calc(100% - 60px);
-    		top: 55px;
-    		background-color: white;
-    		position: fixed;
-    		width: 266px;
-    	}
-    	
-    	.btntext {
-			display: inline-block;
-			background: #fff;
-			color: #000;
-			width: 85px;
-			height: 70px;
-			line-height: 1;
-			text-align: center;
-			cursor: pointer;
-			z-index: 2;
-		}
-
-		.btntext:hover {
-			background-color: #2e73ff;
-			color: white;
-		}
-
-		.btntext .icon{
-			padding: 10px 5px 12px;
-		}
-
-		.btntext label {
-			font-size: 12px;
-			cursor: move;
-		}
-		
-		.btntext img {
-			width: 34px;
-			float: right;
-		}
-    	#showForm .layui-form-item{
-    		z-index: 2;
-    	}
-		#showForm .layui-form-item:hover{
-			border: 1px dashed blue;
-		}
-
-    	.center-box-form{
-    		width: calc(100% - 610px);
-    		margin-left: 280px;
-    		min-height: calc(100% - 60px);
-    		top: 55px;
-    		background-color: white;
-    		z-index: 1;
-    		position: absolute;
-    		overflow: auto;
-    	}
-    	.right-box-form{
-    		min-height: calc(100% - 60px);
-    		top: 55px;
-    		background-color: white;
-    		position: fixed;
-    		width: 320px;
-    		right: 0px;
-			padding-right: 5px;
-			padding-top: 5px;
-    	}
-    	.droppable-active {
-			background-color: #eaeaf6!important;
-		}
-		.center-box-form .layui-form{
-			float: left;
-			margin-top: 10px;
-			position: absolute;
-			margin: 5px;
-			width: calc(100% - 10px);
-			height: auto;
-			min-height: 600px;
-		}
-		.ui-sortable-placeholder {
-			border: 1px dashed #cecece!important;
-			visibility: visible!important;
-			background: #e7eaec
-		}
-		.ui-sortable-placeholder-choose {
-			visibility: visible!important;
-			border: 1px #d9534f dashed;
-		}
-		
-		.ibox.ui-sortable-placeholder {
-			margin: 0 0 23px!important
-		}
-	</style>
+	<link href="dsFormPageDesign.css" rel="stylesheet" />
 </head>
 	<body style="background-color: rgb(234, 234, 234)">
 		<div class="winui-toolbar" style="position: fixed; width: 100%; z-index: 100;">
@@ -118,110 +27,115 @@
 				
 		    </form>
 		</div>
-		<script type="text/html" id="leftBoxItem">
-			{{#each rows}}
+	</body>
+
+	<script type="text/html" id="leftBoxItem">
+		{{#each bean}}
+			<div class="layui-form-item layui-col-xs12">
+				<span class="hr-title">{{@key}}</span><hr>
+			</div>
+			{{#each @this}}
 				<div class="form-group draggable ui-draggable btntext" rowid="{{id}}">
 					<div class="icon">
-						<i class="fa fa-arrows"></i>
+						{{{logo}}}
 					</div>
 					<label class="col-sm-12">
-		    			{{name}}
-		    		</label>
-		    	</div>
+						{{name}}
+					</label>
+				</div>
 			{{/each}}
-		</script>
-		
-		<script type="text/html" id="controlItemEdit">
-			{{#bean}}
-				<div class="layui-form-item layui-col-xs12">
-			        <label class="layui-form-label">名称<i class="red">*</i></label>
-			        <div class="layui-input-block">
-			        	<input type="text" id="title" name="title" win-verify="required" placeholder="请输入控件名称" class="layui-input" maxlength="18" value="{{labelContent}}"/>
-			        </div>
-			    </div>
-			    <div id="isAssociated" class="layui-hide">
-				    <div class="layui-form-item layui-col-xs12">
-			            <label class="layui-form-label">关联数据类型<i class="red">*</i></label>
-			            <div class="layui-input-block winui-radio">
-			                <input type="radio" name="associatedDataTypes" value="1" title="Json串" lay-filter="associatedDataTypes" />
-			                <input type="radio" name="associatedDataTypes" value="2" title="接口" lay-filter="associatedDataTypes" />
-			            </div>
-			        </div>
-			        <div class="layui-form-item layui-col-xs12 TypeIsOne">
-			            <label class="layui-form-label">Json串<i class="red">*</i></label>
-			            <div class="layui-input-block">
-			            	<textarea id="JsonData" name="JsonData" class="layui-textarea"></textarea>
-			            </div>
-			        </div>
-			        <div class="layui-form-item layui-col-xs12 TypeIsTwo layui-hide">
-			            <label class="layui-form-label">接口<i class="red">*</i></label>
-			            <div class="layui-input-block">
-			                <input type="text" id="nterfac" name="nterfac" class="layui-input" placeholder="例如：http://localhost:8081/queryDsFormContentMationToShow"/>
-			            </div>
-			        </div>
-			    </div>   
-			    <div class="layui-form-item layui-col-xs12">
-			        <label class="layui-form-label">提示语</label>
-			        <div class="layui-input-block winui-radio">
-			            <input type="text" id="placeholder" name="placeholder" win-verify="" placeholder="请输入控件提示语" class="layui-input" maxlength="30" value="{{placeholder}}"/>
-			        </div>
-			    </div>
-			    <div class="layui-form-item layui-col-xs12">
-			        <label class="layui-form-label">限制条件</label>
-			        <div class="layui-input-block">
-			        	<select lay-filter="require" multiple lay-search="" id="require" name="require">
-			            
-			            </select>
-			        </div>
-			    </div>
-			    <div class="layui-form-item layui-col-xs12">
-		            <label class="layui-form-label">默认值</label>
-		            <div class="layui-input-block">
-	                	<input type="text" id="defaultValue" name="defaultValue" win-verify="" placeholder="请输入默认值" class="layui-input" maxlength="50" value="{{value}}"/>
-	                </div>
-		        </div>
-		        <div class="layui-form-item layui-col-xs12">
-			        <label class="layui-form-label">宽度<i class="red">*</i></label>
-			        <div class="layui-input-block">
-			            <select lay-filter="defaultWidth" lay-search="" id="defaultWidth" name="defaultWidth">
-	                    	<option value="layui-col-xs9">3/4</option>
-	                    	<option value="layui-col-xs4">1/3</option>
-	                    	<option value="layui-col-xs6">1/2</option>
-	                    	<option value="layui-col-xs12">1</option>
-	                    </select>
-			        </div>
-			    </div>
-			    <div class="layui-form-item layui-col-xs12">
-		            <label class="layui-form-label">控件Id</label>
-		            <div class="layui-input-block">
-	                	<input type="text" id="keyId" name="keyId" placeholder="只接受英文、数字" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" class="layui-input" maxlength="30" value="{{keyId}}"/>
-	                </div>
-		        </div>
-		        <div class="layui-form-item layui-col-xs12">
-	                <label class="layui-form-label">可编辑节点Id</label>
-	                <div class="layui-input-block">
-						<input type="text" id="editableNodeId" name="editableNodeId" placeholder="可编辑节点Id" class="layui-input" value="{{editableNodeId}}" />
-	                </div>
-	            </div>
-	            <div class="layui-form-item layui-col-xs12">
-	                <label class="layui-form-label">可编辑节点名称</label>
-	                <div class="layui-input-block">
-						<input type="text" id="editableNodeName" name="editableNodeName" placeholder="可编辑节点名称" class="layui-input" value="{{editableNodeName}}" />
-	                </div>
-	            </div>
-			    <div class="layui-form-item layui-col-xs12">
-			        <div class="layui-input-block">
-						<button class="winui-btn" type="button" id="deleteBtn"><language showName="com.skyeye.deleteBtn"></language></button>
-			            <button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
-			        </div>
-			    </div>
-			{{/bean}}
-		</script>
-		
-		<script src="../../assets/lib/layui/layui.js"></script>
-	   	<script src="../../assets/lib/layui/custom.js"></script>
-	   	<script type="text/javascript">
-			layui.config({base: '../../js/dsFormPage/'}).use('dsFormPageDesign');
-		</script>
-	</body>
+		{{/each}}
+	</script>
+
+	<script type="text/html" id="controlItemEdit">
+		{{#bean}}
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">名称<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<input type="text" id="title" name="title" win-verify="required" placeholder="请输入控件名称" class="layui-input" maxlength="18" value="{{labelContent}}"/>
+			</div>
+		</div>
+		<div id="isAssociated" class="layui-hide">
+			<div class="layui-form-item layui-col-xs12">
+				<label class="layui-form-label">关联数据类型<i class="red">*</i></label>
+				<div class="layui-input-block winui-radio">
+					<input type="radio" name="associatedDataTypes" value="1" title="Json串" lay-filter="associatedDataTypes" />
+					<input type="radio" name="associatedDataTypes" value="2" title="接口" lay-filter="associatedDataTypes" />
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12 TypeIsOne">
+				<label class="layui-form-label">Json串<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<textarea id="JsonData" name="JsonData" class="layui-textarea"></textarea>
+				</div>
+			</div>
+			<div class="layui-form-item layui-col-xs12 TypeIsTwo layui-hide">
+				<label class="layui-form-label">接口<i class="red">*</i></label>
+				<div class="layui-input-block">
+					<input type="text" id="nterfac" name="nterfac" class="layui-input" placeholder="例如：http://localhost:8081/queryDsFormContentMationToShow"/>
+				</div>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">提示语</label>
+			<div class="layui-input-block winui-radio">
+				<input type="text" id="placeholder" name="placeholder" win-verify="" placeholder="请输入控件提示语" class="layui-input" maxlength="30" value="{{placeholder}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">限制条件</label>
+			<div class="layui-input-block">
+				<select lay-filter="require" multiple lay-search="" id="require" name="require">
+
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">默认值</label>
+			<div class="layui-input-block">
+				<input type="text" id="defaultValue" name="defaultValue" win-verify="" placeholder="请输入默认值" class="layui-input" maxlength="50" value="{{value}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">宽度<i class="red">*</i></label>
+			<div class="layui-input-block">
+				<select lay-filter="defaultWidth" lay-search="" id="defaultWidth" name="defaultWidth">
+					<option value="layui-col-xs9">3/4</option>
+					<option value="layui-col-xs4">1/3</option>
+					<option value="layui-col-xs6">1/2</option>
+					<option value="layui-col-xs12">1</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">控件Id</label>
+			<div class="layui-input-block">
+				<input type="text" id="keyId" name="keyId" placeholder="只接受英文、数字" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" class="layui-input" maxlength="30" value="{{keyId}}"/>
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">可编辑节点Id</label>
+			<div class="layui-input-block">
+				<input type="text" id="editableNodeId" name="editableNodeId" placeholder="可编辑节点Id" class="layui-input" value="{{editableNodeId}}" />
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<label class="layui-form-label">可编辑节点名称</label>
+			<div class="layui-input-block">
+				<input type="text" id="editableNodeName" name="editableNodeName" placeholder="可编辑节点名称" class="layui-input" value="{{editableNodeName}}" />
+			</div>
+		</div>
+		<div class="layui-form-item layui-col-xs12">
+			<div class="layui-input-block">
+				<button class="winui-btn" type="button" id="deleteBtn"><language showName="com.skyeye.deleteBtn"></language></button>
+				<button class="winui-btn" lay-submit lay-filter="formAddBean"><language showName="com.skyeye.save"></language></button>
+			</div>
+		</div>
+		{{/bean}}
+	</script>
+	<script src="../../assets/lib/layui/layui.js"></script>
+	<script src="../../assets/lib/layui/custom.js"></script>
+	<script type="text/javascript">
+		layui.config({base: '../../js/dsFormPage/'}).use('dsFormPageDesign');
+	</script>
 </html>

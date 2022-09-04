@@ -109,7 +109,7 @@ layui.config({
 		 		form.on('select(selectParent)', function(data) {
 		 			showGrid({
 		 	    	 	id: "rmGroupId",
-		 	    	 	url: reqBasePath + "common002",
+		 	    	 	url: sysMainMation.rmprogramBasePath + "common002",
 		 	    	 	params: {parentId: data.value},
 		 	    	 	pagination: false,
 		 	    	 	template: getFileContent('tpl/template/select-option.tpl'),

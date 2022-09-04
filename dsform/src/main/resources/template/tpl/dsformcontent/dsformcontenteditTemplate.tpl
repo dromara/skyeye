@@ -16,8 +16,16 @@
         	<input type="text" id="contentName" name="contentName" win-verify="required" placeholder="请输入组件标题" class="layui-input" maxlength="20" value="{{contentName}}"/>
         </div>
     </div>
+    <div class="layui-form-item layui-col-xs6">
+        <label class="layui-form-label">分类<i class="red">*</i></label>
+        <div class="layui-input-block">
+            <select id="dsFormContentType" name="dsFormContentType" lay-filter="dsFormContentType" lay-search="" win-verify="required">
+
+            </select>
+        </div>
+    </div>
     <div class="layui-form-item layui-col-xs12">
-        <label class="layui-form-label">HTML内容类型<i class="red">*</i></label>
+        <label class="layui-form-label">HTML脚本类型<i class="red">*</i></label>
         <div class="layui-input-block">
         	<select id="htmlType" name="htmlType" class="layui-input" win-verify="required" lay-filter="selectParent">
                 <option value="html">html</option>
@@ -25,13 +33,13 @@
         </div>
     </div>
     <div class="layui-form-item layui-col-xs12">
-        <label class="layui-form-label">HTML模板内容<i class="red">*</i></label>
+        <label class="layui-form-label">HTML脚本<i class="red">*</i></label>
         <div class="layui-input-block">
         	<textarea id="htmlContent">{{htmlContent}}</textarea>
         </div>
     </div>
     <div class="layui-form-item layui-col-xs12">
-        <label class="layui-form-label">JS内容类型<i class="red">*</i></label>
+        <label class="layui-form-label">JS脚本类型<i class="red">*</i></label>
         <div class="layui-input-block">
         	<select id="jsType" name="jsType" class="layui-input" win-verify="required" lay-filter="selectParent">
                 <option value="javascript">javascript</option>
@@ -39,7 +47,7 @@
         </div>
     </div>
     <div class="layui-form-item layui-col-xs12">
-        <label class="layui-form-label">JS模板内容</label>
+        <label class="layui-form-label">JS脚本</label>
         <div class="layui-input-block">
         	<textarea id="jsContent">{{jsContent}}</textarea>
         </div>

@@ -28,16 +28,20 @@ layui.config({
 	    cols: [[
 	        { title: systemLanguage["com.skyeye.serialNumber"][languageType], type: 'numbers' },
 	        { field: 'contentName', title: '组件名称', width: 120 },
-	        { title: 'HTML内容', align: 'center', width: 90, templet: function (d) {
+			{ field: 'typeName', title: '分类', width: 120 },
+	        { title: 'HTML脚本', align: 'center', width: 90, templet: function (d) {
 	        	return '<i class="fa fa-fw fa-html5 cursor" lay-event="htmlContent"></i>';
 	        }},
-	        { title: 'JS内容', align: 'center', width: 80, templet: function (d) {
+	        { title: 'JS脚本', align: 'center', width: 80, templet: function (d) {
 				if (!isNull(d.jsContent)) {
 					return '<i class="fa fa-fw fa-html5 cursor" lay-event="jsContent"></i>';
 				} else {
 					return '-';
 				}
 	        }},
+			{ field: 'id', title: '图标', align: 'center', width: 60, templet: function (d) {
+				return systemCommonUtil.initIconShow(d);
+			}},
 			{ field: 'createName', title: systemLanguage["com.skyeye.createName"][languageType], width: 120 },
 			{ field: 'createTime', title: systemLanguage["com.skyeye.createTime"][languageType], align: 'center', width: 150 },
 			{ field: 'lastUpdateName', title: systemLanguage["com.skyeye.lastUpdateName"][languageType], align: 'left', width: 120 },
@@ -100,7 +104,9 @@ layui.config({
 	            area: ['90vw', '90vh'],
 	            content: $("#modelContentDiv").html()
 	        });
-        }
+        } else if (layEvent === 'iconPic') { // 图片
+			systemCommonUtil.showPicImg(fileBasePath + data.iconPic);
+		}
     });
 	
 	//删除
