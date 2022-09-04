@@ -9,7 +9,7 @@ var dsFormUtil = {
     dsFormBtnTemplate: '<button type="button" class="layui-btn layui-btn-primary layui-btn-xs" id="{{btnId}}">表单选择</button>',
     customDsFormBox: '<div class="layui-form-item layui-col-xs12"><span class="hr-title">{{pageName}}</span><hr></div><div id="{{id}}" class="ds-form-page layui-col-xs12"></div>',
     // 必须包含的包
-    mastHaveImport: ['layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue',
+    mastHaveImport: ['laydate', 'layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml', 'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue',
         'matchbrackets', 'closebrackets', 'showHint', 'anywordHint', 'lint', 'jsonLint', 'foldcode', 'foldgutter', 'braceFold', 'commentFold', 'form'],
     showType: {
         '1': '{{#bean}}<div class="layui-form-item {{defaultWidth}}"><label class="layui-form-label">{{labelContent}}：</label><div class="layui-input-block ver-center">{{text}}</div></div>{{/bean}}', // 文本展示
@@ -127,16 +127,16 @@ var dsFormUtil = {
         form.render();
     },
 
-    loadDsFormItemToEdit: function (customBoxId, rows){
-        $.each(rows, function(i, item){
-            if(item.associatedDataTypes == 1){//json串
+    loadDsFormItemToEdit: function (customBoxId, rows) {
+        $.each(rows, function(i, item) {
+            if (item.associatedDataTypes == 1) {//json串
                 var obj = item.aData;
                 if(typeof item.aData == 'string'){
                     obj = JSON.parse(item.aData);
                 }
                 item.context = getDataUseHandlebars(item.templateContent, obj);
-            }else if(item.associatedDataTypes == 2){//接口
-                AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j){
+            } else if (item.associatedDataTypes == 2) {//接口
+                AjaxPostUtil.request({url: flowableBasePath + "dsformpage011", params: {interfa: item.aData}, type: 'json', callback: function(j) {
                     var obj = JSON.parse(j.bean.aData);
                     item.context = getDataUseHandlebars(item.templateContent, obj);
                 }, async: false});
@@ -147,37 +147,38 @@ var dsFormUtil = {
             var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + html_js + '})(jQuery);});</script>';
             $("#" + customBoxId).append(html + jsCon);
 
-            $("#" + item.id).val(item.value); //给能通过id赋值的控件赋值
+            // 给能通过id赋值的控件赋值
+            $("#" + item.id).val(item.value);
             var _this = $("#" + customBoxId + " .layui-form-item").eq(i);//当前控件
             if (!isNull(item.require) && item.require.indexOf("required") >= 0){
                 _this.find(".layui-form-label").append('<i class="red">*</i>');
             }
             _this.attr("controId", item.id);
             var vid = _this.attr("controlType");//控件类型
-            if(vid === 'color'){//类型为颜色选择器
+            if (vid === 'color') {//类型为颜色选择器
                 _this.find("input").val(item.value);
                 _this.find('div[id="' + item.id + '"]').find("span .layui-colorpicker-trigger-span").attr("style", "background:" + item.value);
-            }else if(vid === 'switchedradio'){//类型为开关式单选框
+            } else if (vid === 'switchedradio') {//类型为开关式单选框
                 _this.find("input").val(item.value);
-                if(item.value === 'true' || item.value == true){
+                if (item.value === 'true' || item.value == true) {
                     _this.find("input").prop("checked", true);
                 }
                 _this.find("input").attr('id', item.id);
                 _this.find("input").attr('name', item.id);
                 _this.find("input").attr('lay-filter', item.id);
-            }else if(vid === 'radio'){//类型为单选框
+            } else if (vid === 'radio') {//类型为单选框
                 _this.find("input:radio").attr("name", item.id);
                 if (!isNull(item.value))
                     _this.find("input:radio[value=" + item.value + "]").attr("checked", true);
-            }else if(vid === 'richtextarea'){//类型为富文本框
+            } else if (vid === 'richtextarea') {//类型为富文本框
                 _this.find('iframe[textarea="' + item.id + '"]').contents().find("body").html(item.value);
-            }else if(vid === 'checkbox'){//类型为多选框
+            } else if (vid === 'checkbox') {//类型为多选框
                 var checkArray = item.value.split(",");
                 var checkBoxAll = _this.find("input:checkbox");
                 checkBoxAll.attr("name", item.id);
-                for(var k = 0; k < checkArray.length; k++){
-                    $.each(checkBoxAll, function(j, item){
-                        if(checkArray[k] == $(this).val()){
+                for (var k = 0; k < checkArray.length; k++) {
+                    $.each(checkBoxAll, function (j, item) {
+                        if (checkArray[k] == $(this).val()) {
                             $(this).prop("checked", true);
                         }
                     });
@@ -209,67 +210,63 @@ var dsFormUtil = {
             var _this = _item.find(".layui-form-item").eq(i);
             var vid = _this.attr("controlType"),//控件类型
                 showType = "", text = "", value = "";
-            if(isNull(vid)){
+            if (isNull(vid)) {
                 continue;
             }
-            if(vid === 'input'){//类型为输入框
-                text = _this.find("input").val();
-                value = _this.find("input").val();
-                showType = "1";
-            }else if(vid === 'textarea'){//类型为文本框
+            if (vid === 'textarea') {//类型为文本框
                 text = _this.find("textarea").val();
                 value = _this.find("textarea").val();
                 showType = "1";
-            }else if(vid === 'select'){//类型为下拉框
+            } else if (vid === 'select') {//类型为下拉框
                 text = _this.find("select").find("option:selected").text();
                 value = _this.find("select").val();
                 showType = "1";
-            }else if(vid === 'checkbox'){//类型为多选框
+            } else if (vid === 'checkbox') {//类型为多选框
                 var checkName = _this.find("input:first").attr("name");
                 var texts = [], values = [];
                 var arr = _this.find("input:checkbox[name='" + checkName + "']:checked");
-                $.each(arr, function(i, item){
+                $.each(arr, function (i, item) {
                     texts[i] = $(this).attr("title");
                     values[i] = $(this).attr("value");
                 });
                 text = texts.join(",");
                 value = values.join(",");
                 showType = "1";
-            }else if(vid === 'radio'){//类型为单选框
+            } else if (vid === 'radio') {//类型为单选框
                 text = _this.find("input:radio:checked").attr("title");
                 value = _this.find("input:radio:checked").val();
                 showType = "1";
-            }else if(vid === 'upload'){//类型为图片上传
+            } else if (vid === 'upload') {//类型为图片上传
                 var uploadId = _this.find(".upload").attr("id");
                 text = $("#" + uploadId).find("input[type='hidden'][name='upload']").attr("oldurl");
                 value = $("#" + uploadId).find("input[type='hidden'][name='upload']").attr("oldurl");
-                if(isNull(text))
+                if (isNull(text))
                     text = "";
-                if(isNull(value))
+                if (isNull(value))
                     value = "";
                 showType = "4";
-            }else if(vid === 'color'){//类型为颜色选择器
-                text = _this.find("input").val();
-                value = _this.find("input").val();
-                showType = "1";
-            }else if(vid === 'range'){//类型为滑块
+            } else if (vid === 'range') {//类型为滑块
                 text = _this.find(".layui-slider-tips").html();
                 value = _this.find(".layui-slider-tips").html();
                 showType = "1";
-            }else if(vid === 'richtextarea'){//类型为富文本框
+            } else if (vid === 'richtextarea') {//类型为富文本框
                 var textareaId = _this.find("textarea").attr("id");
                 var content = encodeURIComponent(_this.find('iframe[textarea="' + textareaId + '"]').contents().find("body").html());
                 text = content;
                 value = content;
                 showType = "3";
-            }else if(vid === 'switchedradio'){//类型为开关式单选框
+            } else if (vid === 'switchedradio') {//类型为开关式单选框
                 value = _this.find("input").val();
                 var layText = _this.find("input").attr('lay-text');
-                if(value == "true"){
+                if (value == "true") {
                     text = layText.split('|')[0];
                 } else {
                     text = layText.split('|')[1];
                 }
+                showType = "1";
+            } else {
+                text = _this.find("input").val();
+                value = _this.find("input").val();
                 showType = "1";
             }
             list.push({

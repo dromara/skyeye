@@ -10,8 +10,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
     window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'layedit', 'colorpicker', 'slider', 'fileUpload', 'codemirror', 'xml',
-	'clike', 'css', 'htmlmixed', 'javascript', 'nginx', 'solr', 'sql', 'vue', 'form', 'jqueryUI', 'tagEditor'], function (exports) {
+}).define(['window', 'jquery', 'winui', 'jqueryUI', 'tagEditor'].concat(dsFormUtil.mastHaveImport), function (exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
     var $ = layui.$;
@@ -43,12 +42,10 @@ layui.config({
 				item.context = getDataUseHandlebars(item.templateContent, obj);
 	   		}, async: false});
 		}
-		jsonStr = {
-			bean: item
-		};
+		var jsonStr = {bean: item};
 		var html = getDataUseHandlebars('{{#bean}}' + item.htmlContent + '{{/bean}}', jsonStr);
-		var js = getDataUseHandlebars('{{#bean}}' + item.jsContent + '{{/bean}}', jsonStr);
-		var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + js + '})(jQuery);});</script>';
+		var html_js = getDataUseHandlebars('{{#bean}}' + item.jsContent + '{{/bean}}', jsonStr);
+		var jsCon = '<script>layui.define(["jquery"], function(exports) {var jQuery = layui.jquery;(function($) {' + html_js + '})(jQuery);});</script>';
 		$(html).appendTo($("#showForm").get(0)).attr("rowid", item.id);
 		$("#showForm").append(jsCon);
 		jsonArray.push(item);
@@ -125,7 +122,6 @@ layui.config({
 	        helper: "clone",
 	        hoverClass: "droppable-active",
 			drop: function(event, ui) {
-	        	//
 	        	$(".empty-form").remove();
 	        	var _this = $(ui.draggable);
 	            if (!_this.hasClass("dropped")) {
@@ -140,7 +136,7 @@ layui.config({
 	    }).sortable();
 	};
 	
-	function getFormPageControlContent(id){
+	function getFormPageControlContent(id) {
 		var linkedData; //控件关联的数据
 		var defaultData; //选择事件的默认数据
 		var tplContentVal; //数据展示模板的内容的值
@@ -149,7 +145,7 @@ layui.config({
 			if(item.id == id){
 				linkedData = item.linkedData;
 				templateContent = item.templateContent;
-				if (!isNull(item.templateContent)){
+				if (!isNull(item.templateContent)) {
 					tplContentVal = strMatchAllByTwo(item.templateContent, '{{','}}');//取出数据模板中用{{}}包裹的词
 	 				removeByValue(tplContentVal, "#each this");
 	 				removeByValue(tplContentVal, "/each");
@@ -223,11 +219,11 @@ layui.config({
 			if(item.id === rowid){
 				$("#btnBoxDesignForm").html(getDataUseHandlebars($("#controlItemEdit").html(), {bean: item}));
 				$("#deleteBtn").attr("rowid", rowid);
-				if(item.linkedData == 1){
+				if (item.linkedData == 1) {
 					// 允许关联数据
 					var associatedDataTypes = item.associatedDataTypes;
 					$("#isAssociated").removeClass("layui-hide");
- 					associatedDataTypesChange(associatedDataTypes);
+					associatedDataTypesChange(associatedDataTypes);
 					if (associatedDataTypes == "1") {
 						var obj = item.aData;
 						if (typeof item.aData != 'string') {
@@ -294,73 +290,73 @@ layui.config({
     	if(inDataIndex == -1){
     		return;
     	}
-    	var newParams = jsonArray[inDataIndex];
-    	newParams.labelContent = $("#title").val();
-    	newParams.placeholder = $("#placeholder").val();
-    	newParams.requireId = arr.join(",");
-    	newParams.value = $("#defaultValue").val();
-    	newParams.defaultWidth = $("#defaultWidth").val();
-    	newParams.keyId = $("#keyId").val();
-    	newParams.editableNodeId = data.field.editableNodeId;
-    	newParams.editableNodeName = data.field.editableNodeName;
-    	var linkedData; //控件关联的数据
+		var newParams = jsonArray[inDataIndex];
+		newParams.labelContent = $("#title").val();
+		newParams.placeholder = $("#placeholder").val();
+		newParams.requireId = arr.join(",");
+		newParams.value = $("#defaultValue").val();
+		newParams.defaultWidth = $("#defaultWidth").val();
+		newParams.keyId = $("#keyId").val();
+		newParams.editableNodeId = data.field.editableNodeId;
+		newParams.editableNodeName = data.field.editableNodeName;
+		var linkedData; //控件关联的数据
 		var defaultData; //选择事件的默认数据
 		var tplContentVal; //数据展示模板的内容的值
 		var templateContent; //数据展示模板的内容
-		$.each(formPageControl, function(i, item){
-			if(item.id == newParams.formContentId){
+		$.each(formPageControl, function (i, item) {
+			if (item.id == newParams.formContentId) {
 				linkedData = item.linkedData;
 				templateContent = item.templateContent;
-				if (!isNull(item.templateContent)){
-					tplContentVal = strMatchAllByTwo(item.templateContent, '{{','}}');//取出数据模板中用{{}}包裹的词
-	 				removeByValue(tplContentVal, "#each this");
-	 				removeByValue(tplContentVal, "/each");
+				if (!isNull(item.templateContent)) {
+					tplContentVal = strMatchAllByTwo(item.templateContent, '{{', '}}');//取出数据模板中用{{}}包裹的词
+					removeByValue(tplContentVal, "#each this");
+					removeByValue(tplContentVal, "/each");
 				}
-				if (!isNull(item.defaultData)){
+				if (!isNull(item.defaultData)) {
 					defaultData = item.defaultData;
 				}
 			}
 		});
-    	if(newParams.linkedData == 1){
-    		newParams.associatedDataTypes = data.field.associatedDataTypes;
-    		if(newParams.associatedDataTypes == 1){
-    			var defaultDataStr = $("#JsonData").val();
-    			if(isNull(defaultDataStr)){
-    				winui.window.msg("请填写Json串！", {icon: 2, time: 2000});
-	        		return false;
-    			} else {
-    				if(isJSON(defaultDataStr)){
-        				var defaultKey = getOutKey(defaultDataStr);//取出json串的键
-        				if(subset(tplContentVal, defaultKey)){
-        					newParams.aData = defaultDataStr;
-        				} else {
-        					winui.window.msg('json串内容有误，请重新填写!', {icon: 2, time: 2000});
-	 	 	        		return false;
-        				}
-        			} else {
-        				winui.window.msg('json串格式不正确，请重新填写!', {icon: 2, time: 2000});
- 	 	        		return false;
-        			}
-    			}
-    		}else if(newParams.associatedDataTypes == 2){
-    			var interfa = $("#nterfac").val();
-    			if(interfa.length == 0){
-    				winui.window.msg("请填写接口！", {icon: 2, time: 2000});
-	        		return false;
-    			}
-    			if(!checkURL(interfa)){
-    				winui.window.msg("接口请填写为URL类型！", {icon: 2, time: 2000});
-	        		return false;
-    			}
-    			newParams.aData = interfa;
-    		} else {
-    			winui.window.msg("状态值错误。", {icon: 2, time: 2000});
-        		return false;
-    		}
-    	}else if(newParams.linkedData == 2){
-    		newParams.associatedDataTypes = "";
-    		newParams.aData = "";
-    	}
+		if (newParams.linkedData == 1) {
+			newParams.associatedDataTypes = data.field.associatedDataTypes;
+			if (newParams.associatedDataTypes == 1) {
+				var defaultDataStr = $("#JsonData").val();
+				if (isNull(defaultDataStr)) {
+					winui.window.msg("请填写Json串！", {icon: 2, time: 2000});
+					return false;
+				} else {
+					if (isJSON(defaultDataStr)) {
+						var defaultKey = getOutKey(defaultDataStr);//取出json串的键
+						if (subset(tplContentVal, defaultKey)) {
+							newParams.aData = defaultDataStr;
+						} else {
+							winui.window.msg('json串内容有误，请重新填写!', {icon: 2, time: 2000});
+							return false;
+						}
+					} else {
+						winui.window.msg('json串格式不正确，请重新填写!', {icon: 2, time: 2000});
+						return false;
+					}
+				}
+			} else if (newParams.associatedDataTypes == 2) {
+				var interfa = $("#nterfac").val();
+				if (interfa.length == 0) {
+					winui.window.msg("请填写接口！", {icon: 2, time: 2000});
+					return false;
+				}
+				if (!checkURL(interfa)) {
+					winui.window.msg("接口请填写为URL类型！", {icon: 2, time: 2000});
+					return false;
+				}
+				newParams.aData = interfa;
+			} else {
+				winui.window.msg("状态值错误。", {icon: 2, time: 2000});
+				return false;
+			}
+		} else if (newParams.linkedData == 2) {
+			newParams.associatedDataTypes = "";
+			newParams.aData = "";
+		}
     	jsonArray = jsonArray.map(t => {
     		return t.id === rowid ? newParams : t;
     	});

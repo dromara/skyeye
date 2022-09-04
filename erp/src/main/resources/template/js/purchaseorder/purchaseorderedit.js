@@ -14,7 +14,7 @@ layui.config({
 	version: skyeyeVersion
 }).extend({
 	window: 'js/winui.window'
-}).define(['window', 'jquery', 'winui', 'laydate', 'textool'].concat(dsFormUtil.mastHaveImport), function(exports) {
+}).define(['window', 'jquery', 'winui', 'textool'].concat(dsFormUtil.mastHaveImport), function(exports) {
 	winui.renderColor();
 	var index = parent.layer.getFrameIndex(window.name);
 	var $ = layui.$,
