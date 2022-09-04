@@ -23,8 +23,12 @@
     color: #ffffff;
 }
 
-.btntext:hover .fa {
+.btntext:hover .skyeye-fa {
     color: #ffffff !important;
+}
+
+.btntext:hover .skyeye-svg {
+    filter: drop-shadow(#ffffff 80px 0) !important;
 }
 
 .btntext .icon {

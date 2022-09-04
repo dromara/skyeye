@@ -401,7 +401,9 @@ var systemCommonUtil = {
         '            <div class="layui-input-block">' +
         '                <div class="layui-col-xs12">' +
         '                <div class="layui-col-xs2">' +
-        '                <div class="winui-icon winui-icon-font" style="width: 60px; height: 60px;"><i id="iconShow" class="" style="font-size: 48px; line-height: 65px;"></i></div>' +
+        '                   <div class="winui-icon winui-icon-font" style="width: 60px; height: 60px; overflow: hidden">' +
+        '                       <i id="iconShow" class="" style="font-size: 48px; line-height: 65px;"></i>' +
+        '                   </div>' +
         '                </div>' +
         '                <div class="layui-col-xs5">' +
         '                <div class="layui-input-inline" style="width: 120px;">' +
@@ -448,10 +450,17 @@ var systemCommonUtil = {
             $('#iconColorinput').val(params.iconColor);
             $("#iconShow").css({'color': params.iconColor});
         }
+        // 自定义svg图标时
+        if (params.icon.indexOf('skyeye-') >= 0) {
+            $("#iconShow").css({
+                'filter': 'drop-shadow(' + params.iconColor + ' 80px 0)',
+                'transform': 'translateX(-80px)',
+            });
+        }
 
         // 设置图标背景颜色
         if (isNull(params.iconBg)) {
-            $("#iconShow").css({'background-color': 'white'});
+            $("#iconShow").parent().css({'background-color': 'white'});
         } else {
             $('#iconBginput').val(params.iconBg);
             $("#iconShow").parent().css({'background-color': params.iconBg});
@@ -491,10 +500,30 @@ var systemCommonUtil = {
             color: iconColor,
             done: function(color) {
                 $('#iconColorinput').val(color);
-                $("#iconShow").css({'color': color});
+                var icon = $("#icon").val();
+                $("#iconShow").css({
+                    'color': color,
+                });
+                // 自定义svg图标时
+                if (icon.indexOf('skyeye-') >= 0) {
+                    $("#iconShow").css({
+                        'filter': 'drop-shadow(' + color + ' 80px 0)',
+                        'transform': 'translateX(-80px)',
+                    });
+                }
             },
             change: function(color) {
-                $("#iconShow").css({'color': color});
+                var icon = $("#icon").val();
+                $("#iconShow").css({
+                    'color': color,
+                });
+                // 自定义svg图标时
+                if (icon.indexOf('skyeye-') >= 0) {
+                    $("#iconShow").css({
+                        'filter': 'drop-shadow(' + color + ' 80px 0)',
+                        'transform': 'translateX(-80px)',
+                    });
+                }
             }
         });
 
@@ -538,14 +567,23 @@ var systemCommonUtil = {
         var str = '';
         if (bean.iconType == '1') {
             if (isNull(bean.iconBg)) {
-                str += '<div class="winui-icon winui-icon-font" style="text-align: center;">';
+                str += '<div class="winui-icon winui-icon-font" style="text-align: center; overflow: hidden">';
             } else {
-                str += '<div class="winui-icon winui-icon-font" style="text-align: center; background-color:' + bean.iconBg + '">';
+                str += '<div class="winui-icon winui-icon-font" style="text-align: center; overflow: hidden; background-color:' + bean.iconBg + '">';
             }
-            if (isNull(bean.iconColor)) {
-                str += '<i class="fa fa-fw ' + bean.icon + '" style="color: white"></i>';
+            // 自定义svg图标时
+            if (bean.icon.indexOf('skyeye-') >= 0) {
+                if (isNull(bean.iconColor)) {
+                    str += '<i class="fa fa-fw skyeye-svg ' + bean.icon + '" style="filter: drop-shadow(white 80px 0); transform: translateX(-80px)"></i>';
+                } else {
+                    str += '<i class="fa fa-fw skyeye-svg ' + bean.icon + '" style="filter: drop-shadow(' + bean.iconColor + ' 80px 0); transform: translateX(-80px)"></i>';
+                }
             } else {
-                str += '<i class="fa fa-fw ' + bean.icon + '" style="color: ' + bean.iconColor + '"></i>';
+                if (isNull(bean.iconColor)) {
+                    str += '<i class="fa fa-fw skyeye-fa ' + bean.icon + '" style="color: white"></i>';
+                } else {
+                    str += '<i class="fa fa-fw skyeye-fa ' + bean.icon + '" style="color: ' + bean.iconColor + '"></i>';
+                }
             }
             str += '</div>';
         } else if (bean.iconType = '2') {
